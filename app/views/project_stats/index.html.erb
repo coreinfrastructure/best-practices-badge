@@ -25,10 +25,10 @@
 <%=
   # Show a chart with just total # projects.
   # This gets its own chart because its scale hides everything else.
-  series_dataset = ProjectStat.all.reduce({}) do |h,e|
-    h.merge(e.created_at => e.percent_ge_0)
-  end
-  line_chart series_dataset,
+  # This causes loading the JSON data as a separate request.
+  # Doing it this way means that the page we send is smaller, and
+  # the JSON data can be easily cached by the CDN.
+  line_chart total_projects_project_stats_path(format: :json),
     library: ProjectStatsHelper::DATE_CHART_OPTIONS, defer: true
 %>
 
@@ -48,7 +48,7 @@
     {name: '>=' + minimum.to_s + '%', data: series_dataset}
   end
   # Done transforming data; display it.
-  line_chart dataset,
+  line_chart nontrivial_projects_project_stats_path(format: :json),
     library: ProjectStatsHelper::DATE_CHART_OPTIONS, defer: true
 %>
 
@@ -56,33 +56,7 @@
 
 <h2><%= t '.projects_activity_30' %></h2>
 <%=
-  dataset = []
-  # Active projects
-  active_dataset = ProjectStat.all.reduce({}) do |h,e|
-    h.merge(e.created_at => e.active_projects)
-  end
-  dataset << {name: t('.active_projects'),
-              data: active_dataset}
-  # Active in-progress projects
-  active_in_progress_dataset = ProjectStat.all.reduce({}) do |h,e|
-    h.merge(e.created_at => e.active_in_progress)
-  end
-  dataset << {name: t('.active_in_progress'),
-              data: active_in_progress_dataset}
-  # Active edited projects
-  active_edited_dataset = ProjectStat.all.reduce({}) do |h,e|
-    h.merge(e.created_at => e.active_edited_projects)
-  end
-  dataset << {name: t('.active_edited'),
-              data: active_edited_dataset}
-  # Active edited in-progress projects
-  active_edited_in_progress_dataset = ProjectStat.all.reduce({}) do |h,e|
-    h.merge(e.created_at => e.active_edited_in_progress)
-  end
-  dataset << {name: t('.active_edited_in_progress'),
-              data: active_edited_in_progress_dataset}
-  # Done transforming data; display it.
-  line_chart dataset,
+  line_chart activity_project_stats_path(format: :json),
     library: ProjectStatsHelper::DATE_CHART_OPTIONS, defer: true
 %>
 

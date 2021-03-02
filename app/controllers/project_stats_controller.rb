@@ -36,9 +36,104 @@ class ProjectStatsController < ApplicationController
 
   # GET /project_stats/1
   # GET /project_stats/1.json
+  # We may someday remove this, as it's not very useful.
   def show
     set_project_stat
   end
+
+  # Use separate JSON endpoints for charts.
+  # This greatly speeds graph display & makes it easy to cache the data on the CDN
+  # (we can't use the CDN on the HTML, because it varies by who's logged in)
+  # For more information, see:
+  # https://chartkick.com/
+
+  # GET /project_stats/total_projects.json
+  # Dataset of total number of project entries.
+  # Path is total_projects_project_stats_path
+  def total_projects
+    series_dataset =
+      ProjectStat.all.reduce({}) do |h, e|
+        h.merge(e.created_at => e.percent_ge_0)
+      end
+    render json: series_dataset
+  end
+
+  # GET /project_stats/nontrivial_projects.json
+  # Dataset of nontrivial project entries
+  # rubocop:disable Metrics/MethodLength
+  # I "freeze" when I can to prevent some errors - allow that:
+  # rubocop:disable Style/MethodCalledOnDoEndBlock
+  def nontrivial_projects
+    # Show project counts, but skip <25% because that makes chart scale unusable
+    gt0_stats = ProjectStat::STAT_VALUES.select do |e|
+      e.to_i.positive?
+    end.freeze
+
+    dataset =
+      gt0_stats.map do |minimum|
+        desired_field = 'percent_ge_' + minimum.to_s
+        series_dataset =
+          ProjectStat.all.reduce({}) do |h, e|
+            h.merge(e.created_at => e[desired_field])
+          end
+        { name: '>=' + minimum.to_s + '%', data: series_dataset }
+      end
+
+    render json: dataset
+  end
+  # rubocop:enable Style/MethodCalledOnDoEndBlock
+  # rubocop:enable Metrics/MethodLength
+
+  # GET /:locale/project_stats/activity.json
+  # Dataset of activity
+  # Note: The names of the datasets are translated
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  def activity
+    dataset = []
+
+    # Active projects
+    active_dataset =
+      ProjectStat.all.reduce({}) do |h, e|
+        h.merge(e.created_at => e.active_projects)
+      end
+    dataset << {
+      name: I18n.t('project_stats.index.active_projects'),
+                data: active_dataset
+    }
+
+    # Active in-progress projects
+    active_in_progress_dataset =
+      ProjectStat.all.reduce({}) do |h, e|
+        h.merge(e.created_at => e.active_in_progress)
+      end
+    dataset << {
+      name: I18n.t('project_stats.index.active_in_progress'),
+                data: active_in_progress_dataset
+    }
+
+    # Active edited projects
+    active_edited_dataset =
+      ProjectStat.all.reduce({}) do |h, e|
+        h.merge(e.created_at => e.active_edited_projects)
+      end
+    dataset << {
+      name: I18n.t('project_stats.index.active_edited'),
+                data: active_edited_dataset
+    }
+
+    # Active edited in-progress projects
+    active_edited_in_progress_dataset =
+      ProjectStat.all.reduce({}) do |h, e|
+        h.merge(e.created_at => e.active_edited_in_progress)
+      end
+    dataset << {
+      name: I18n.t('project_stats.index.active_edited_in_progress'),
+                data: active_edited_in_progress_dataset
+    }
+
+    render json: dataset
+  end
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   # Forbidden:
   # GET /project_stats/new

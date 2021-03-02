@@ -75,27 +75,25 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
   # rubocop:enable Metrics/BlockLength
 
   test 'should NOT be able to get new' do
-    assert_raises AbstractController::ActionNotFound do
-      get '/en/project_stats/new'
-    end
+    get '/en/project_stats/new'
+    assert_response :not_found # 404
   end
 
   test 'should NOT be able create project_stat' do
     log_in_as(users(:admin_user))
-    assert_raises AbstractController::ActionNotFound do
-      post '/en/project_stats', params: {
-        project_stat: {
-          percent_ge_0: @project_stat.percent_ge_0,
-          percent_ge_25: @project_stat.percent_ge_25,
-          percent_ge_50: @project_stat.percent_ge_50,
-          percent_ge_75: @project_stat.percent_ge_75,
-          percent_ge_90: @project_stat.percent_ge_90,
-          percent_ge_100: @project_stat.percent_ge_100,
-          created_since_yesterday: @project_stat.created_since_yesterday,
-          updated_since_yesterday: @project_stat.updated_since_yesterday
-        }
+    post '/en/project_stats', params: {
+      project_stat: {
+        percent_ge_0: @project_stat.percent_ge_0,
+        percent_ge_25: @project_stat.percent_ge_25,
+        percent_ge_50: @project_stat.percent_ge_50,
+        percent_ge_75: @project_stat.percent_ge_75,
+        percent_ge_90: @project_stat.percent_ge_90,
+        percent_ge_100: @project_stat.percent_ge_100,
+        created_since_yesterday: @project_stat.created_since_yesterday,
+        updated_since_yesterday: @project_stat.updated_since_yesterday
       }
-    end
+    }
+    assert_response :not_found # 404
   end
 
   test 'should show project_stat' do
@@ -104,35 +102,32 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should NOT get edit' do
-    assert_raises AbstractController::ActionNotFound do
-      get "/de/project_stats/#{@project_stat.id}/edit"
-    end
+    get "/de/project_stats/#{@project_stat.id}/edit"
+    assert_response :not_found # 404
   end
 
   test 'should NOT update project_stat' do
     log_in_as(users(:admin_user))
-    assert_raises AbstractController::ActionNotFound do
-      patch "/en/project_stats/#{@project_stat.id}", params: {
-        id: @project_stat,
-        project_stat: {
-          percent_ge_0: @project_stat.percent_ge_0,
-          percent_ge_25: @project_stat.percent_ge_25,
-          percent_ge_50: @project_stat.percent_ge_50,
-          percent_ge_75: @project_stat.percent_ge_75,
-          percent_ge_90: @project_stat.percent_ge_90,
-          percent_ge_100: @project_stat.percent_ge_100,
-          created_since_yesterday: @project_stat.created_since_yesterday,
-          updated_since_yesterday: @project_stat.updated_since_yesterday
-        }
+    patch "/en/project_stats/#{@project_stat.id}", params: {
+      id: @project_stat,
+      project_stat: {
+        percent_ge_0: @project_stat.percent_ge_0,
+        percent_ge_25: @project_stat.percent_ge_25,
+        percent_ge_50: @project_stat.percent_ge_50,
+        percent_ge_75: @project_stat.percent_ge_75,
+        percent_ge_90: @project_stat.percent_ge_90,
+        percent_ge_100: @project_stat.percent_ge_100,
+        created_since_yesterday: @project_stat.created_since_yesterday,
+        updated_since_yesterday: @project_stat.updated_since_yesterday
       }
-    end
+    }
+    assert_response :not_found # 404
   end
 
   test 'should NOT destroy project_stat' do
     log_in_as(users(:admin_user))
-    assert_raises AbstractController::ActionNotFound do
-      delete "/en/project_stats/#{@project_stat.id}"
-    end
+    delete "/en/project_stats/#{@project_stat.id}"
+    assert_response :not_found # 404
   end
 end
 # rubocop:enable Metrics/ClassLength

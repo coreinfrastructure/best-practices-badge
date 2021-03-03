@@ -80,6 +80,9 @@ Rails.application.routes.draw do
     get '/project_stats/activity_30', to: 'project_stats#activity_30',
       as: 'activity_30_project_stats',
       constraints: ->(req) { req.format == :json }
+    get '/project_stats/daily_activity', to: 'project_stats#daily_activity',
+      as: 'daily_activity_project_stats',
+      constraints: ->(req) { req.format == :json }
     # The following route isn't very useful; we may remove it in the future:
     get '/project_stats/:id', to: 'project_stats#show',
         constraints: { id: VALID_ID }

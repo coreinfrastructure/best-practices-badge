@@ -170,6 +170,14 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 4, contents.length
   end
 
+  test 'Test /en/project_stats/daily_activity.json' do
+    get daily_activity_project_stats_path(format: :json)
+    contents = JSON.parse(@response.body)
+    assert_equal 4, contents.length
+    assert_equal 'projects created since day before', contents[0]['name']
+    assert_equal 2, contents[0]['data']['2013-05-19 17:44:18 UTC']
+  end
+
   test 'Unit test of cache_time' do
     # Ensure that cache_time() produces correct answers
     controller = ProjectStatsController.new

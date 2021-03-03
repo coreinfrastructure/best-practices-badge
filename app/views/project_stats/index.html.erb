@@ -63,37 +63,8 @@
 
 <h2><%= t '.daily_activity' %></h2>
 <%=
-  # Show new and edited projects
-  # These are expected to be smaller numbers, and show detailed activity,
-  # so showring them separately will let us use scales that show more info.
-  dataset = []
-  ndays = 7
-  actions = ['created', 'updated'].freeze
-  actions.each do |action|
-    desired_field = action + '_since_yesterday'
-    series_dataset = ProjectStat.all.reduce({}) do |h,e|
-      h.merge(e.created_at => e[desired_field])
-    end
-    dataset << {name: t(".projects_#{action}_since_yesterday"),
-                data: series_dataset}
-    # Calculate moving average over ndays
-    series_counts = ProjectStat.all.map { |e| e[desired_field] }
-    series_moving_average = series_counts.each_cons(ndays).map do |e|
-      e.reduce(&:+).to_f/ndays
-    end
-    moving_average_dataset = {}
-    ProjectStat.all.each_with_index do |e, index|
-      if index >= ndays
-        moving_average_dataset[e.created_at] =
-          series_moving_average[index-ndays]
-      end
-    end
-    dataset << {name: t(".projects_#{action}_average_7_days"),
-                data: moving_average_dataset,
-                library: {borderDash: [5,5]}}
-  end
-  line_chart dataset, colors: ['green', 'darkgreen', 'blue', 'darkblue',
-                               'red', 'purple'],
+  line_chart daily_activity_project_stats_path(format: :json),
+    colors: ['green', 'darkgreen', 'blue', 'darkblue', 'red', 'purple'],
     library: ProjectStatsHelper::DATE_CHART_OPTIONS, defer: true
 %>
 

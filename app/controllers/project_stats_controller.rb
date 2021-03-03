@@ -241,9 +241,46 @@ class ProjectStatsController < ApplicationController
         library: { borderDash: [5, 5] }
       }
     end
+
     render json: dataset
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize, Metrics/BlockLength
+
+  # GET /:locale/project_stats/reminders.json
+  # Reminders sent, reactivated after reminders
+  # Note: The names of the datasets are translated
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  def reminders
+    cache_until_next_stat
+    dataset = []
+
+    # Retrieve just the data we need
+    stat_data = ProjectStat.select(
+      :created_at, :reminders_sent, :reactivated_after_reminder
+    )
+
+    # Reminders sent
+    reminders_dataset =
+      stat_data.reduce({}) do |h, e|
+        h.merge(e.created_at => e.reminders_sent)
+      end
+    dataset << {
+      name: t('project_stats.index.reminders_sent_since_yesterday'),
+      data: reminders_dataset
+    }
+    # Reactivated after reminders
+    reactivated_dataset =
+      stat_data.reduce({}) do |h, e|
+        h.merge(e.created_at => e.reactivated_after_reminder)
+      end
+    dataset << {
+      name: I18n.t('project_stats.index.reactivated_projects'),
+      data: reactivated_dataset
+    }
+
+    render json: dataset
+  end
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   # Forbidden:
   # GET /project_stats/new

@@ -75,22 +75,8 @@
 
 <h2><%= t '.reminders' %></h2>
 <%=
-  # Show reminders sent, reactivated after reminders
-  dataset = []
-  # Reminders sent
-  reminders_dataset = ProjectStat.all.reduce({}) do |h,e|
-    h.merge(e.created_at => e.reminders_sent)
-  end
-  dataset << {name: t('.reminders_sent_since_yesterday'),
-              data: reminders_dataset}
-  # Reactivated after reminders
-  reactivated_dataset = ProjectStat.all.reduce({}) do |h,e|
-    h.merge(e.created_at => e.reactivated_after_reminder)
-  end
-  dataset <<
-    {name: t('.reactivated_projects'),
-     data: reactivated_dataset}
-  line_chart dataset, colors: ['green', 'blue'],
+  line_chart reminders_project_stats_path(format: :json),
+    colors: ['green', 'blue'],
     library: ProjectStatsHelper::DATE_CHART_OPTIONS, defer: true
 %>
 <br><br><br>

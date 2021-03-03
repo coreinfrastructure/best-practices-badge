@@ -36,8 +36,8 @@ class ProjectStatsController < ApplicationController
   # and thus do not cache statistics for long.
   LOG_TIME_SLOP = 5 * 60 # 5 minutes
 
-  # Only cache for 60 seconds if we're within the slop time.
-  CACHE_TIME_WITHIN_SLOP = 60
+  # Only cache for 120 seconds if we're within the slop time.
+  CACHE_TIME_WITHIN_SLOP = 120
 
   SECONDS_IN_A_DAY = 24 * 60 * 60 # 24 hours, 60 minutes, 60 seconds
 

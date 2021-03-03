@@ -16,5 +16,6 @@ json.array!(@project_stats) do |project_stat|
   project_stat.attributes.each do |key, value|
     json.set!(key, value) unless value.nil?
   end
-  json.url project_stats_url(project_stat, format: :json)
+  # Historically we included a per-stat URL, but we'd like to drop
+  # that functionality so we won't include that URL
 end

@@ -73,7 +73,10 @@ class ProjectStatsController < ApplicationController
       # { render :show, status: :created, location: @project_stat }
       format.html do
         @is_normal = (params[:type] != 'uncommon')
-        @project_stats = ProjectStat.all unless @is_normal
+        # We don't get project stats when generating HTML, but instead
+        # send that separately via JSON. If you needed to get that in
+        # some case, you could get it this way:
+        # @project_stats = ProjectStat.all unless @is_normal
         render
       end
     end

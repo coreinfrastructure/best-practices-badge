@@ -1,15 +1,10 @@
 <%= javascript_include_tag 'project-stats', defer: true%>
 
 <%
-  # Force deletion of the obsolete cached information, if it exists.
-  # It will age out eventually anyway, but this is a large cache entry
-  # and we can easily determine what the previous one was. Immediately
-  # forcing its deletion provides more cache space for other (useful) things.
-  Rails.cache.delete ActiveSupport::Cache.expand_cache_key(
-    ['project_stats', locale, @is_normal, ProjectStat.all.size-1]
-  )
-
-  # Cache the page, it's somewhat expensive to create.
+  # Cache the page. This is a relatively small page and does not
+  # embed data (that is sent separately in JSON format),
+  # so it's not expensive to create. That said, caching it produces
+  # results even more quickly.
   cache ['project_stats', locale, @is_normal, ProjectStat.all.size] do
 %>
 
@@ -35,17 +30,6 @@
 
 <h2><%= t '.projects_nontrivial' %></h2>
 <%=
-  # Show project counts, but skip <25% because that makes chart scale unusable
-  gt0_stats = ProjectStat::STAT_VALUES.select do |e|
-    e.to_i > 0
-  end.freeze
-  dataset = gt0_stats.map do |minimum|
-    desired_field = 'percent_ge_' + minimum.to_s
-    series_dataset = ProjectStat.all.reduce({}) do |h,e|
-     h.merge(e.created_at => e[desired_field])
-    end
-    {name: '>=' + minimum.to_s + '%', data: series_dataset}
-  end
   # Done transforming data; display it.
   line_chart nontrivial_projects_project_stats_path(format: :json),
     library: ProjectStatsHelper::DATE_CHART_OPTIONS, defer: true

@@ -92,6 +92,9 @@ Rails.application.routes.draw do
     get '/project_stats/gold', to: 'project_stats#gold',
       as: 'gold_project_stats',
       constraints: ->(req) { req.format == :json }
+    get '/project_stats/silver_and_gold', to: 'project_stats#silver_and_gold',
+      as: 'silver_and_gold_project_stats',
+      constraints: ->(req) { req.format == :json }
     # The following route isn't very useful; we may remove it in the future:
     get '/project_stats/:id', to: 'project_stats#show',
         constraints: { id: VALID_ID }

@@ -202,6 +202,12 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
     assert_not contents[0].empty?
   end
 
+  test 'Test /en/project_stats/silver_and_gold.json' do
+    get silver_and_gold_project_stats_path(format: :json)
+    # Verify that we can parse the result as JSON
+    _contents = JSON.parse(@response.body)
+  end
+
   test 'Unit test of cache_time' do
     # Ensure that cache_time() produces correct answers
     controller = ProjectStatsController.new

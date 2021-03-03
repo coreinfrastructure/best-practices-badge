@@ -342,7 +342,33 @@ class ProjectStatsController < ApplicationController
 
     render json: dataset
   end
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
+  # GET /:locale/project_stats/silver_and_gold.json
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  def silver_and_gold
+    cache_until_next_stat
+
+    # Retrieve just the data we need
+    stat_data = ProjectStat.select(
+      :created_at, :percent_1_ge_100, :percent_2_ge_100
+    )
+
+    dataset =
+      %w[1 2].map do |level|
+        desired_field = "percent_#{level}_ge_100"
+        series_dataset =
+          stat_data.reduce({}) do |h, e|
+            h.merge(e.created_at => e[desired_field])
+          end
+        {
+          name: I18n.t("projects.form_early.level.#{level}"),
+          data: series_dataset
+        }
+      end
+
+    render json: dataset
+  end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   # Forbidden:

@@ -71,11 +71,15 @@ Rails.application.routes.draw do
 
     get '/project_stats', to: 'project_stats#index', as: 'project_stats'
     get '/project_stats/total_projects', to: 'project_stats#total_projects',
-      as: 'total_projects_project_stats', constraints: ->(req) { req.format == :json }
-    get '/project_stats/nontrivial_projects', to: 'project_stats#nontrivial_projects',
-      as: 'nontrivial_projects_project_stats', constraints: ->(req) { req.format == :json }
-    get '/project_stats/activity', to: 'project_stats#activity',
-      as: 'activity_project_stats', constraints: ->(req) { req.format == :json }
+      as: 'total_projects_project_stats',
+      constraints: ->(req) { req.format == :json }
+    get '/project_stats/nontrivial_projects',
+        to: 'project_stats#nontrivial_projects',
+        as: 'nontrivial_projects_project_stats',
+        constraints: ->(req) { req.format == :json }
+    get '/project_stats/activity_30', to: 'project_stats#activity_30',
+      as: 'activity_30_project_stats',
+      constraints: ->(req) { req.format == :json }
     # The following route isn't very useful; we may remove it in the future:
     get '/project_stats/:id', to: 'project_stats#show',
         constraints: { id: VALID_ID }

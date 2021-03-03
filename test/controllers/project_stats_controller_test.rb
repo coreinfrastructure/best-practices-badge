@@ -152,16 +152,16 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 18, contents[0]['data']['2013-05-19 17:44:18 UTC']
   end
 
-  test 'Test /en/project_stats/activity.json' do
-    get activity_project_stats_path(format: :json)
+  test 'Test /en/project_stats/activity_30.json' do
+    get activity_30_project_stats_path(format: :json)
     contents = JSON.parse(@response.body)
     assert_equal 'Active projects (created/updated within 30 days)',
                  contents[0]['name']
     assert_equal 4, contents.length
   end
 
-  test 'Test /fr/project_stats/activity.json' do
-    get activity_project_stats_path(format: :json, locale: 'fr')
+  test 'Test /fr/project_stats/activity_30.json' do
+    get activity_30_project_stats_path(format: :json, locale: 'fr')
     contents = JSON.parse(@response.body)
     assert_equal(
       'Projets actifs (créés / mis à jour dans les 30 derniers jours)',

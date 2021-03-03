@@ -136,7 +136,7 @@ class ProjectStatsController < ApplicationController
   # Dataset of activity
   # Note: The names of the datasets are translated
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-  def activity
+  def activity_30
     cache_until_next_stat
     dataset = []
 
@@ -190,6 +190,11 @@ class ProjectStatsController < ApplicationController
     render json: dataset
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+
+  # GET /:locale/project_stats/activity.json
+  # Dataset of activity
+  # Note: The names of the datasets are translated
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
 
   # Forbidden:
   # GET /project_stats/new

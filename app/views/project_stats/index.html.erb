@@ -5,7 +5,7 @@
   # embed data (that is sent separately in JSON format),
   # so it's not expensive to create. That said, caching it produces
   # results even more quickly.
-  cache ['project_stats', locale, @is_normal, ProjectStat.all.size] do
+  cache ['project_stats', locale, @is_normal] do
 %>
 
 <p id="notice"><%= notice %></p>

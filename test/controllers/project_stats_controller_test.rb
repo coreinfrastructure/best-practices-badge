@@ -208,6 +208,12 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
     _contents = JSON.parse(@response.body)
   end
 
+  test 'Test /en/project_stats/percent_earning.json' do
+    get percent_earning_project_stats_path(format: :json)
+    # Verify that we can parse the result as JSON
+    _contents = JSON.parse(@response.body)
+  end
+
   test 'Unit test of cache_time' do
     # Ensure that cache_time() produces correct answers
     controller = ProjectStatsController.new

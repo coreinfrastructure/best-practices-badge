@@ -107,16 +107,7 @@
 
 <h2><%= t '.percent_projects_earning_badges' %></h2>
 <%=
-  dataset = [0, 1, 2].map do |level|
-    desired_field = "percent#{level > 0 ? '_' + level.to_s : '' }_ge_100"
-    series_dataset = ProjectStat.all.reduce({}) do |h,e|
-     h.merge(e.created_at =>
-       e[desired_field].to_i*100.0/(e['percent_ge_0'].to_i))
-    end
-    {name: t("projects.form_early.level.#{level}"), data: series_dataset}
-  end
-  # Done transforming data; display it.
-  line_chart dataset,
+  line_chart percent_earning_project_stats_path(format: :json),
     library: ProjectStatsHelper::DATE_CHART_OPTIONS, defer: true
 %>
 

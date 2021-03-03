@@ -26,25 +26,4 @@ module ProjectStatsHelper
         ]
       }
   }.freeze
-
-  # Create line chart of daily stats from ProjectStat
-  # for the provided list of fields
-  # rubocop: disable Metrics/MethodLength
-  def create_line_chart(fields)
-    dataset = []
-    fields.each do |field|
-      # Add "field" to dataset
-      active_dataset =
-        ProjectStat.all.reduce({}) do |h, e|
-          h.merge(e.created_at => e[field])
-        end
-      dataset << {
-        name: t('.' + field),
-        data: active_dataset
-      }
-    end
-    # Done transforming data; return display.
-    line_chart dataset, library: DATE_CHART_OPTIONS, defer: true
-  end
-  # rubocop: enable Metrics/MethodLength
 end

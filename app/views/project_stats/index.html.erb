@@ -115,21 +115,8 @@
 
 <h2><%= t '.user_statistics' %></h2>
 <%=
-  create_line_chart(
-    [
-      "users",
-      "github_users",
-      "local_users",
-      "users_created_since_yesterday",
-      "users_updated_since_yesterday",
-      "users_with_projects",
-      "users_without_projects",
-      "users_with_multiple_projects",
-      "users_with_passing_projects",
-      "users_with_silver_projects",
-      "users_with_gold_projects"
-    ]
-  )
+  line_chart user_statistics_project_stats_path(format: :json),
+    library: ProjectStatsHelper::DATE_CHART_OPTIONS, defer: true
 %>
 
 <%   end # uncommon %>

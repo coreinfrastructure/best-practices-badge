@@ -396,6 +396,57 @@ class ProjectStatsController < ApplicationController
     render json: dataset
   end
 
+  # Return JSON-formatted chart data with the given fields
+  # rubocop: disable Metrics/MethodLength
+  def create_line_chart(fields)
+    # Retrieve just the data we need
+    database_fields =
+      [:created_at] +
+      fields.map(&:to_sym)
+    stat_data = ProjectStat.select(*database_fields)
+
+    dataset = []
+    fields.each do |field|
+      # Add "field" to dataset
+      active_dataset =
+        stat_data.reduce({}) do |h, e|
+          h.merge(e.created_at => e[field])
+        end
+      dataset << {
+        name: I18n.t("project_stats.index.#{field}"),
+        data: active_dataset
+      }
+    end
+    dataset
+  end
+  # rubocop: end Metrics/MethodLength
+
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+  # GET /:locale/project_stats/percent_earning.json
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  def user_statistics
+    cache_until_next_stat
+
+    dataset =
+      create_line_chart(
+        %w[
+          users
+          github_users
+          local_users
+          users_created_since_yesterday
+          users_updated_since_yesterday
+          users_with_projects
+          users_without_projects
+          users_with_multiple_projects
+          users_with_passing_projects
+          users_with_silver_projects
+          users_with_gold_projects
+        ]
+      )
+
+    render json: dataset
+  end
+
   # Forbidden:
   # GET /project_stats/new
   # def new

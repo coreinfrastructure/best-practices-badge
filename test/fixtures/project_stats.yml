@@ -46,3 +46,141 @@ two:
   reactivated_after_reminder: 0
   created_since_yesterday: 4
   updated_since_yesterday: 0
+
+three:
+  created_at: 2014-05-20 23:30:19
+  percent_ge_0: 19
+  percent_ge_25: 18
+  percent_ge_50: 13
+  percent_ge_75: 9
+  percent_ge_90: 5
+  percent_ge_100: 2
+  percent_1_ge_25: 2
+  percent_1_ge_50: 2
+  percent_1_ge_75: 2
+  percent_1_ge_90: 2
+  percent_1_ge_100: 2
+  percent_2_ge_25: 2
+  percent_2_ge_50: 1
+  percent_2_ge_75: 1
+  percent_2_ge_90: 1
+  percent_2_ge_100: 1
+  reminders_sent: 0
+  reactivated_after_reminder: 0
+  created_since_yesterday: 0
+  updated_since_yesterday: 0
+
+four:
+  created_at: 2014-05-21 23:30:19
+  percent_ge_0: 19
+  percent_ge_25: 18
+  percent_ge_50: 13
+  percent_ge_75: 9
+  percent_ge_90: 5
+  percent_ge_100: 2
+  percent_1_ge_25: 2
+  percent_1_ge_50: 2
+  percent_1_ge_75: 2
+  percent_1_ge_90: 2
+  percent_1_ge_100: 2
+  percent_2_ge_25: 2
+  percent_2_ge_50: 1
+  percent_2_ge_75: 1
+  percent_2_ge_90: 1
+  percent_2_ge_100: 1
+  reminders_sent: 0
+  reactivated_after_reminder: 0
+  created_since_yesterday: 0
+  updated_since_yesterday: 0
+
+five:
+  created_at: 2014-05-22 23:30:19
+  percent_ge_0: 19
+  percent_ge_25: 18
+  percent_ge_50: 13
+  percent_ge_75: 9
+  percent_ge_90: 5
+  percent_ge_100: 2
+  percent_1_ge_25: 2
+  percent_1_ge_50: 2
+  percent_1_ge_75: 2
+  percent_1_ge_90: 2
+  percent_1_ge_100: 2
+  percent_2_ge_25: 2
+  percent_2_ge_50: 1
+  percent_2_ge_75: 1
+  percent_2_ge_90: 1
+  percent_2_ge_100: 1
+  reminders_sent: 0
+  reactivated_after_reminder: 0
+  created_since_yesterday: 0
+  updated_since_yesterday: 0
+
+six:
+  created_at: 2014-05-23 23:30:19
+  percent_ge_0: 19
+  percent_ge_25: 18
+  percent_ge_50: 13
+  percent_ge_75: 9
+  percent_ge_90: 5
+  percent_ge_100: 2
+  percent_1_ge_25: 2
+  percent_1_ge_50: 2
+  percent_1_ge_75: 2
+  percent_1_ge_90: 2
+  percent_1_ge_100: 2
+  percent_2_ge_25: 2
+  percent_2_ge_50: 1
+  percent_2_ge_75: 1
+  percent_2_ge_90: 1
+  percent_2_ge_100: 1
+  reminders_sent: 0
+  reactivated_after_reminder: 0
+  created_since_yesterday: 0
+  updated_since_yesterday: 0
+
+seven:
+  created_at: 2014-05-24 23:30:19
+  percent_ge_0: 19
+  percent_ge_25: 18
+  percent_ge_50: 13
+  percent_ge_75: 9
+  percent_ge_90: 5
+  percent_ge_100: 2
+  percent_1_ge_25: 2
+  percent_1_ge_50: 2
+  percent_1_ge_75: 2
+  percent_1_ge_90: 2
+  percent_1_ge_100: 2
+  percent_2_ge_25: 2
+  percent_2_ge_50: 1
+  percent_2_ge_75: 1
+  percent_2_ge_90: 1
+  percent_2_ge_100: 1
+  reminders_sent: 0
+  reactivated_after_reminder: 0
+  created_since_yesterday: 0
+  updated_since_yesterday: 0
+
+eight:
+  created_at: 2014-05-25 23:30:19
+  percent_ge_0: 19
+  percent_ge_25: 18
+  percent_ge_50: 13
+  percent_ge_75: 9
+  percent_ge_90: 5
+  percent_ge_100: 2
+  percent_1_ge_25: 2
+  percent_1_ge_50: 2
+  percent_1_ge_75: 2
+  percent_1_ge_90: 2
+  percent_1_ge_100: 2
+  percent_2_ge_25: 2
+  percent_2_ge_50: 1
+  percent_2_ge_75: 1
+  percent_2_ge_90: 1
+  percent_2_ge_100: 1
+  reminders_sent: 0
+  reactivated_after_reminder: 0
+  created_since_yesterday: 0
+  updated_since_yesterday: 0

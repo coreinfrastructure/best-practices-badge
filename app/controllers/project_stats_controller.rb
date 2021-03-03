@@ -194,7 +194,7 @@ class ProjectStatsController < ApplicationController
   # GET /:locale/project_stats/daily_activity.json
   # Dataset of daily activity
   # Note: The names of the datasets are translated
-  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/BlockLength
   def daily_activity
     # Show new and edited projects
     # These are expected to be smaller numbers, and show detailed activity,
@@ -211,37 +211,39 @@ class ProjectStatsController < ApplicationController
       :created_since_yesterday, :updated_since_yesterday
     )
 
-    actions = ['created', 'updated'].freeze
+    actions = %w[created updated].freeze
     actions.each do |action|
       desired_field = action + '_since_yesterday'
-      series_dataset = stat_data.reduce({}) do |h,e|
-        h.merge(e.created_at => e[desired_field])
-      end
+      series_dataset =
+        stat_data.reduce({}) do |h, e|
+          h.merge(e.created_at => e[desired_field])
+        end
       dataset << {
         name: I18n.t("project_stats.index.projects_#{action}_since_yesterday"),
         data: series_dataset
       }
       # Calculate moving average over ndays
       series_counts = stat_data.map { |e| e[desired_field] }
-      series_moving_average = series_counts.each_cons(ndays).map do |e|
-        e.reduce(&:+).to_f/ndays
-      end
+      series_moving_average =
+        series_counts.each_cons(ndays).map do |e|
+          e.reduce(&:+).to_f / ndays
+        end
       moving_average_dataset = {}
       stat_data.each_with_index do |e, index|
         if index >= ndays
           moving_average_dataset[e.created_at] =
-            series_moving_average[index-ndays]
+            series_moving_average[index - ndays]
         end
       end
       dataset << {
         name: I18n.t("project_stats.index.projects_#{action}_average_7_days"),
         data: moving_average_dataset,
-        library: { borderDash: [5,5] }
+        library: { borderDash: [5, 5] }
       }
     end
     render json: dataset
   end
-  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize, Metrics/BlockLength
 
   # Forbidden:
   # GET /project_stats/new

@@ -67,7 +67,7 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
     ]
     assert_equal expected_headers, contents.headers
 
-    assert_equal 2, contents.size
+    assert_equal 8, contents.size
     assert_equal '13', contents[0]['percent_ge_50']
     assert_equal '20', contents[0]['percent_ge_0']
     assert_equal '19', contents[1]['percent_ge_0']

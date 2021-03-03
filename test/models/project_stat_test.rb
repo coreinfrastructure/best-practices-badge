@@ -31,7 +31,8 @@ class ProjectStatTest < ActiveSupport::TestCase
   end
 
   test 'count including fixtures' do
-    assert_equal 3, ProjectStat.count
+    # This includes the statistic created during setup
+    assert_equal 9, ProjectStat.count
   end
 
   test 'ProjectStat.percent_field_name() works correctly' do

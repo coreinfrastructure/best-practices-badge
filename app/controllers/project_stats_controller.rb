@@ -16,6 +16,16 @@ class ProjectStatsController < ApplicationController
     config.csp[:style_src] = ["'self'", "'unsafe-inline'"]
   end
 
+  # These actions (endpoints) are special and do NOT take a locale.
+  # These actions report JSON that is locale-independent; by always
+  # omitting the locale, we create a single cacheable URL
+  # that is used regardless of the locale. As a result, users who
+  # use these are more likely to get a quick answer, and we also
+  # save a few cycles on the server.
+  # This is *only* acceptable if the called routine never calls I18n.t.
+  skip_before_action :redir_missing_locale,
+                     only: %i[total_projects nontrivial_projects silver gold]
+
   # The time, in number of seconds since midnight, when we log
   # project statistics. This is currently 23:30 UTC, set by Heroku scheduler;
   # change this value if you change the time of day we log statistics.
@@ -99,6 +109,7 @@ class ProjectStatsController < ApplicationController
   # GET /project_stats/total_projects.json
   # Dataset of total number of project entries.
   # Path is total_projects_project_stats_path
+  # Note that this does NOT take a locale.
   def total_projects
     cache_until_next_stat
 
@@ -111,6 +122,7 @@ class ProjectStatsController < ApplicationController
 
   # GET /project_stats/nontrivial_projects.json
   # Dataset of nontrivial project entries
+  # Note that this does NOT take a locale.
   # rubocop:disable Metrics/MethodLength
   # I "freeze" when I can to prevent some errors - allow that:
   # rubocop:disable Style/MethodCalledOnDoEndBlock
@@ -268,7 +280,7 @@ class ProjectStatsController < ApplicationController
         h.merge(e.created_at => e.reminders_sent)
       end
     dataset << {
-      name: t('project_stats.index.reminders_sent_since_yesterday'),
+      name: I18n.t('project_stats.index.reminders_sent_since_yesterday'),
       data: reminders_dataset
     }
     # Reactivated after reminders
@@ -285,7 +297,7 @@ class ProjectStatsController < ApplicationController
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
-  # GET /:locale/project_stats/silver.json
+  # GET /project_stats/silver.json
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def silver
     # Show project counts, but skip 25% because that makes chart scale unusable
@@ -316,7 +328,7 @@ class ProjectStatsController < ApplicationController
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
-  # GET /:locale/project_stats/gold.json
+  # GET /project_stats/gold.json
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def gold
     # Show project counts, but skip 25% because that makes chart scale unusable
@@ -393,7 +405,10 @@ class ProjectStatsController < ApplicationController
             h.merge(e.created_at =>
               e[desired_field].to_i * 100.0 / e['percent_ge_0'].to_i)
           end
-        { name: t("projects.form_early.level.#{level}"), data: series_dataset }
+        {
+          name: I18n.t("projects.form_early.level.#{level}"),
+           data: series_dataset
+        }
       end
 
     render json: dataset

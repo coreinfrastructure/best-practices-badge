@@ -137,13 +137,17 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found # 404
   end
 
-  test 'Test /en/project_stats/total_projects.json' do
-    get total_projects_project_stats_path(format: :json)
+  test 'Test /project_stats/total_projects.json' do
+    assert '/project_stats/total_projects.json',
+           total_projects_project_stats_path(format: :json, locale: nil)
+    get total_projects_project_stats_path(format: :json, locale: nil)
     contents = JSON.parse(@response.body)
     assert 20, contents['2013-05-19 17:44:18 UTC']
   end
 
-  test 'Test /en/project_stats/nontrivial_projects.json' do
+  test 'Test /project_stats/nontrivial_projects.json' do
+    assert '/project_stats/nontrivial_projects.json',
+           nontrivial_projects_project_stats_path(format: :json, locale: nil)
     get nontrivial_projects_project_stats_path(format: :json)
     contents = JSON.parse(@response.body)
     levels = contents.map { |entry| entry['name'] } # levels reported
@@ -186,16 +190,20 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
     assert_not contents.empty?
   end
 
-  test 'Test /en/project_stats/silver.json' do
-    get silver_project_stats_path(format: :json)
+  test 'Test /project_stats/silver.json' do
+    assert '/project_stats/silver.json',
+           silver_project_stats_path(format: :json, locale: nil)
+    get silver_project_stats_path(format: :json, locale: nil)
     # Verify that we can parse the result as JSON
     contents = JSON.parse(@response.body)
     assert_equal 4, contents.length
     assert_not contents[0].empty?
   end
 
-  test 'Test /en/project_stats/gold.json' do
-    get gold_project_stats_path(format: :json)
+  test 'Test /project_stats/gold.json' do
+    assert '/project_stats/gold.json',
+           gold_project_stats_path(format: :json, locale: nil)
+    get gold_project_stats_path(format: :json, locale: nil)
     # Verify that we can parse the result as JSON
     contents = JSON.parse(@response.body)
     assert_equal 4, contents.length
@@ -205,19 +213,22 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
   test 'Test /en/project_stats/silver_and_gold.json' do
     get silver_and_gold_project_stats_path(format: :json)
     # Verify that we can parse the result as JSON
-    _contents = JSON.parse(@response.body)
+    contents = JSON.parse(@response.body)
+    assert_not contents.empty?
   end
 
   test 'Test /en/project_stats/percent_earning.json' do
     get percent_earning_project_stats_path(format: :json)
     # Verify that we can parse the result as JSON
-    _contents = JSON.parse(@response.body)
+    contents = JSON.parse(@response.body)
+    assert_not contents.empty?
   end
 
   test 'Test /en/project_stats/user_statistics.json' do
     get user_statistics_project_stats_path(format: :json)
     # Verify that we can parse the result as JSON
-    _contents = JSON.parse(@response.body)
+    contents = JSON.parse(@response.body)
+    assert_not contents.empty?
   end
 
   test 'Unit test of cache_time' do
@@ -228,6 +239,7 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 60, controller.cache_time(log_time - 70)
     assert_equal 60, controller.cache_time(log_time + 70)
     assert_equal log_time, controller.cache_time(0)
+    assert_equal log_time - 300, controller.cache_time(300)
   end
 end
 # rubocop:enable Metrics/ClassLength

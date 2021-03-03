@@ -22,7 +22,7 @@
   # This causes loading the JSON data as a separate request.
   # Doing it this way means that the page we send is smaller, and
   # the JSON data can be easily cached by the CDN.
-  line_chart total_projects_project_stats_path(format: :json),
+  line_chart total_projects_project_stats_path(format: :json, locale: nil),
     library: ProjectStatsHelper::DATE_CHART_OPTIONS, defer: true
 %>
 
@@ -31,7 +31,7 @@
 <h2><%= t '.projects_nontrivial' %></h2>
 <%=
   # Done transforming data; display it.
-  line_chart nontrivial_projects_project_stats_path(format: :json),
+  line_chart nontrivial_projects_project_stats_path(format: :json, locale: nil),
     library: ProjectStatsHelper::DATE_CHART_OPTIONS, defer: true
 %>
 
@@ -67,7 +67,7 @@
 
 <h2><%= t '.projects_silver' %></h2>
 <%=
-  line_chart silver_project_stats_path(format: :json),
+  line_chart silver_project_stats_path(format: :json, locale: nil),
     library: ProjectStatsHelper::DATE_CHART_OPTIONS, defer: true
 %>
 
@@ -75,7 +75,7 @@
 
 <h2><%= t '.projects_gold' %></h2>
 <%=
-  line_chart gold_project_stats_path(format: :json),
+  line_chart gold_project_stats_path(format: :json, locale: nil),
     library: ProjectStatsHelper::DATE_CHART_OPTIONS, defer: true
 %>
 

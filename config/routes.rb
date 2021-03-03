@@ -47,6 +47,21 @@ Rails.application.routes.draw do
   get '/badge_static/:value' => 'badge_static#show',
       defaults: { format: 'svg' }
 
+  # These routes never use locales, so that the cache is shared across locales.
+  get '/project_stats/total_projects', to: 'project_stats#total_projects',
+    as: 'total_projects_project_stats',
+    constraints: ->(req) { req.format == :json }
+  get '/project_stats/nontrivial_projects',
+      to: 'project_stats#nontrivial_projects',
+      as: 'nontrivial_projects_project_stats',
+      constraints: ->(req) { req.format == :json }
+  get '/project_stats/silver', to: 'project_stats#silver',
+    as: 'silver_project_stats',
+    constraints: ->(req) { req.format == :json }
+  get '/project_stats/gold', to: 'project_stats#gold',
+    as: 'gold_project_stats',
+    constraints: ->(req) { req.format == :json }
+
   # Weird special case: for David A. Wheeler to get log issues from Google,
   # we have to let Google verify this.  Locale is irrelevant.
   # It isn't really HTML, even though the filename extension is .html. See:
@@ -70,13 +85,6 @@ Rails.application.routes.draw do
     root to: 'static_pages#home'
 
     get '/project_stats', to: 'project_stats#index', as: 'project_stats'
-    get '/project_stats/total_projects', to: 'project_stats#total_projects',
-      as: 'total_projects_project_stats',
-      constraints: ->(req) { req.format == :json }
-    get '/project_stats/nontrivial_projects',
-        to: 'project_stats#nontrivial_projects',
-        as: 'nontrivial_projects_project_stats',
-        constraints: ->(req) { req.format == :json }
     get '/project_stats/activity_30', to: 'project_stats#activity_30',
       as: 'activity_30_project_stats',
       constraints: ->(req) { req.format == :json }
@@ -85,12 +93,6 @@ Rails.application.routes.draw do
       constraints: ->(req) { req.format == :json }
     get '/project_stats/reminders', to: 'project_stats#reminders',
       as: 'reminders_project_stats',
-      constraints: ->(req) { req.format == :json }
-    get '/project_stats/silver', to: 'project_stats#silver',
-      as: 'silver_project_stats',
-      constraints: ->(req) { req.format == :json }
-    get '/project_stats/gold', to: 'project_stats#gold',
-      as: 'gold_project_stats',
       constraints: ->(req) { req.format == :json }
     get '/project_stats/silver_and_gold', to: 'project_stats#silver_and_gold',
       as: 'silver_and_gold_project_stats',

@@ -236,8 +236,8 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
     controller = ProjectStatsController.new
     # We'll presume that logs are sent at 23:30 daily
     log_time = (23 * 60 + 30) * 60
-    assert_equal 60, controller.cache_time(log_time - 70)
-    assert_equal 60, controller.cache_time(log_time + 70)
+    assert_equal 120, controller.cache_time(log_time - 70)
+    assert_equal 120, controller.cache_time(log_time + 70)
     assert_equal log_time, controller.cache_time(0)
     assert_equal log_time - 300, controller.cache_time(300)
   end

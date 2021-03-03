@@ -313,6 +313,38 @@ class ProjectStatsController < ApplicationController
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
+  # GET /:locale/project_stats/gold.json
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  def gold
+    # Show project counts, but skip 25% because that makes chart scale unusable
+    # The 25% value is a little misleading (because of overlaps), and messes
+    # the scale, so show starting at 50%.
+
+    cache_until_next_stat
+
+    gt25_fields =
+      ProjectStat::STAT_VALUES_GT25.map do |e|
+        "percent_2_ge_#{e}".to_sym
+      end
+
+    # Retrieve just the data we need
+    stat_data = ProjectStat.select(:created_at, *gt25_fields)
+
+    dataset =
+      ProjectStat::STAT_VALUES_GT25.map do |minimum|
+        desired_field = "percent_2_ge_#{minimum}"
+        series_dataset =
+          stat_data.reduce({}) do |h, e|
+            h.merge(e.created_at => e[desired_field])
+          end
+        { name: ">=#{minimum}%", data: series_dataset }
+      end
+
+    render json: dataset
+  end
+
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+
   # Forbidden:
   # GET /project_stats/new
   # def new

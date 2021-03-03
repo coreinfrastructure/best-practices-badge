@@ -20,6 +20,9 @@ class ProjectStat < ApplicationRecord
   STAT_VALUES_GT0 = STAT_VALUES.select do |e|
     e.to_i.positive?
   end.freeze
+  STAT_VALUES_GT25 = STAT_VALUES.select do |e|
+    e.to_i > 25
+  end.freeze
   # rubocop:enable Style/MethodCalledOnDoEndBlock
 
   # Note: The constants below are for clarity.  Don't just change them,

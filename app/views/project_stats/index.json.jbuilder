@@ -16,5 +16,5 @@ json.array!(@project_stats) do |project_stat|
   project_stat.attributes.each do |key, value|
     json.set!(key, value) unless value.nil?
   end
-  json.url project_stat_url(project_stat, format: :json)
+  json.url project_stats_url(project_stat, format: :json)
 end

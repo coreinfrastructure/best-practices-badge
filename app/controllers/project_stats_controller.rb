@@ -4,6 +4,7 @@
 # CII Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
+# rubocop:disable Metrics/ClassLength
 class ProjectStatsController < ApplicationController
   # Our graphing component (chartkick) requires exceptions in our
   # content security policy (CSP), so poke holes in the policy.
@@ -15,21 +16,66 @@ class ProjectStatsController < ApplicationController
     config.csp[:style_src] = ["'self'", "'unsafe-inline'"]
   end
 
+  # The time, in number of seconds since midnight, when we log
+  # project statistics. This is currently 23:30 UTC, set by Heroku scheduler;
+  # change this value if you change the time of day we log statistics.
+  LOG_TIME = (23 * 60 + 30) * 60
+
+  # If the "current time" is within this number of seconds to
+  # seconds_since_midnight_log_time, presume that we're about to change
+  # and thus do not cache statistics for long.
+  LOG_TIME_SLOP = 5 * 60 # 5 minutes
+
+  # Only cache for 60 seconds if we're within the slop time.
+  CACHE_TIME_WITHIN_SLOP = 60
+
+  SECONDS_IN_A_DAY = 24 * 60 * 60 # 24 hours, 60 minutes, 60 seconds
+
+  # Report the time we should cache, given seconds since midnight and
+  # the fact that a log event will occur at "log_time". If the current
+  # time and log time are within CACHE_TIME_WITHIN_SLOP, return a small
+  # cache value.
+  def cache_time(seconds_since_midnight)
+    time_left = LOG_TIME - seconds_since_midnight
+    if time_left.abs < LOG_TIME_SLOP
+      CACHE_TIME_WITHIN_SLOP
+    else
+      time_left += SECONDS_IN_A_DAY if time_left.negative?
+      time_left
+    end
+  end
+
+  # Set the cache (including the CDN) to be used for cache_time
+  def cache_until_next_stat
+    seconds_left = cache_time(Time.now.utc.seconds_since_midnight)
+    headers['Cache-Control'] = "max-age=#{seconds_left}"
+  end
+
   # GET /project_stats
   # GET /project_stats.json
   # rubocop:disable Metrics/MethodLength
   def index
     use_secure_headers_override :headers_stats_index
-    @project_stats = ProjectStat.all
+    # Only load the full set of project stats if we need to
     respond_to do |format|
       format.csv do
+        cache_until_next_stat
         headers['Content-Disposition'] =
           'attachment; filename="project_stats.csv"'
+        @project_stats = ProjectStat.all
         render csv: @project_stats, filename: @project_stats.name
       end
-      format.json
+      format.json do
+        cache_until_next_stat
+        @project_stats = ProjectStat.all
+        render format: :json
+      end
       # { render :show, status: :created, location: @project_stat }
-      format.html
+      format.html do
+        @is_normal = (params[:type] != 'uncommon')
+        @project_stats = ProjectStat.all unless @is_normal
+        render
+      end
     end
   end
   # rubocop:enable Metrics/MethodLength
@@ -51,8 +97,10 @@ class ProjectStatsController < ApplicationController
   # Dataset of total number of project entries.
   # Path is total_projects_project_stats_path
   def total_projects
+    cache_until_next_stat
+
     series_dataset =
-      ProjectStat.all.reduce({}) do |h, e|
+      ProjectStat.select(:created_at, :percent_ge_0).reduce({}) do |h, e|
         h.merge(e.created_at => e.percent_ge_0)
       end
     render json: series_dataset
@@ -64,16 +112,16 @@ class ProjectStatsController < ApplicationController
   # I "freeze" when I can to prevent some errors - allow that:
   # rubocop:disable Style/MethodCalledOnDoEndBlock
   def nontrivial_projects
-    # Show project counts, but skip <25% because that makes chart scale unusable
-    gt0_stats = ProjectStat::STAT_VALUES.select do |e|
-      e.to_i.positive?
-    end.freeze
+    cache_until_next_stat
 
+    # Show project counts; skip 0% because that makes chart scale unusable
+    # We could turn this into one database query; unclear it's worth doing.
     dataset =
-      gt0_stats.map do |minimum|
+      ProjectStat::STAT_VALUES_GT0.map do |minimum|
         desired_field = 'percent_ge_' + minimum.to_s
         series_dataset =
-          ProjectStat.all.reduce({}) do |h, e|
+          ProjectStat.select(:created_at, desired_field.to_sym)
+                     .reduce({}) do |h, e|
             h.merge(e.created_at => e[desired_field])
           end
         { name: '>=' + minimum.to_s + '%', data: series_dataset }
@@ -89,11 +137,19 @@ class ProjectStatsController < ApplicationController
   # Note: The names of the datasets are translated
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def activity
+    cache_until_next_stat
     dataset = []
+
+    # Ask the database *once* for the data we need, then reorganize it
+    stat_data = ProjectStat.select(
+      :created_at,
+      :active_projects, :active_in_progress,
+      :active_edited_projects, :active_edited_in_progress
+    )
 
     # Active projects
     active_dataset =
-      ProjectStat.all.reduce({}) do |h, e|
+      stat_data.reduce({}) do |h, e|
         h.merge(e.created_at => e.active_projects)
       end
     dataset << {
@@ -103,7 +159,7 @@ class ProjectStatsController < ApplicationController
 
     # Active in-progress projects
     active_in_progress_dataset =
-      ProjectStat.all.reduce({}) do |h, e|
+      stat_data.reduce({}) do |h, e|
         h.merge(e.created_at => e.active_in_progress)
       end
     dataset << {
@@ -113,7 +169,7 @@ class ProjectStatsController < ApplicationController
 
     # Active edited projects
     active_edited_dataset =
-      ProjectStat.all.reduce({}) do |h, e|
+      stat_data.reduce({}) do |h, e|
         h.merge(e.created_at => e.active_edited_projects)
       end
     dataset << {
@@ -123,7 +179,7 @@ class ProjectStatsController < ApplicationController
 
     # Active edited in-progress projects
     active_edited_in_progress_dataset =
-      ProjectStat.all.reduce({}) do |h, e|
+      stat_data.reduce({}) do |h, e|
         h.merge(e.created_at => e.active_edited_in_progress)
       end
     dataset << {
@@ -173,3 +229,4 @@ class ProjectStatsController < ApplicationController
   #     :percent_ge_50, :percent_ge_75, :percent_ge_90, :percent_ge_100)
   # end
 end
+# rubocop:enable Metrics/ClassLength

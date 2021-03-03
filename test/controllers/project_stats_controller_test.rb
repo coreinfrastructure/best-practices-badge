@@ -74,6 +74,13 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
   end
   # rubocop:enable Metrics/BlockLength
 
+  test 'should get index, JSON format' do
+    get '/en/project_stats.json'
+    assert_response :success
+    # Check if we can parse it.
+    _contents = JSON.parse(@response.body)
+  end
+
   test 'should NOT be able to get new' do
     get '/en/project_stats/new'
     assert_response :not_found # 404
@@ -128,6 +135,49 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
     log_in_as(users(:admin_user))
     delete "/en/project_stats/#{@project_stat.id}"
     assert_response :not_found # 404
+  end
+
+  test 'Test /en/project_stats/total_projects.json' do
+    get total_projects_project_stats_path(format: :json)
+    contents = JSON.parse(@response.body)
+    assert 20, contents['2013-05-19 17:44:18 UTC']
+  end
+
+  test 'Test /en/project_stats/nontrivial_projects.json' do
+    get nontrivial_projects_project_stats_path(format: :json)
+    contents = JSON.parse(@response.body)
+    levels = contents.map { |entry| entry['name'] } # levels reported
+    assert_equal ['>=25%', '>=50%', '>=75%', '>=90%', '>=100%'], levels
+    assert_equal '>=25%', contents[0]['name']
+    assert_equal 18, contents[0]['data']['2013-05-19 17:44:18 UTC']
+  end
+
+  test 'Test /en/project_stats/activity.json' do
+    get activity_project_stats_path(format: :json)
+    contents = JSON.parse(@response.body)
+    assert_equal 'Active projects (created/updated within 30 days)',
+                 contents[0]['name']
+    assert_equal 4, contents.length
+  end
+
+  test 'Test /fr/project_stats/activity.json' do
+    get activity_project_stats_path(format: :json, locale: 'fr')
+    contents = JSON.parse(@response.body)
+    assert_equal(
+      'Projets actifs (créés / mis à jour dans les 30 derniers jours)',
+      contents[0]['name']
+    )
+    assert_equal 4, contents.length
+  end
+
+  test 'Unit test of cache_time' do
+    # Ensure that cache_time() produces correct answers
+    controller = ProjectStatsController.new
+    # We'll presume that logs are sent at 23:30 daily
+    log_time = (23 * 60 + 30) * 60
+    assert_equal 60, controller.cache_time(log_time - 70)
+    assert_equal 60, controller.cache_time(log_time + 70)
+    assert_equal log_time, controller.cache_time(0)
   end
 end
 # rubocop:enable Metrics/ClassLength

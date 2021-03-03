@@ -5,18 +5,17 @@
   # It will age out eventually anyway, but this is a large cache entry
   # and we can easily determine what the previous one was. Immediately
   # forcing its deletion provides more cache space for other (useful) things.
-  is_normal = (params[:type] != 'uncommon')
   Rails.cache.delete ActiveSupport::Cache.expand_cache_key(
-    ['project_stats', locale, is_normal, ProjectStat.all.size-1]
+    ['project_stats', locale, @is_normal, ProjectStat.all.size-1]
   )
 
   # Cache the page, it's somewhat expensive to create.
-  cache ['project_stats', locale, is_normal, ProjectStat.all.size] do
+  cache ['project_stats', locale, @is_normal, ProjectStat.all.size] do
 %>
 
 <p id="notice"><%= notice %></p>
 
-<% if is_normal %>
+<% if @is_normal %>
 
 <h1><%= t('.project_stats_header') %></h1>
 

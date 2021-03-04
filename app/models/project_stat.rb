@@ -15,6 +15,16 @@ class ProjectStat < ApplicationRecord
   # # # next if !level.zero? && percentage.zero?
   STAT_VALUES = %w[0 25 50 75 90 100].freeze
 
+  # Percentage values *without* "0"
+  # rubocop:disable Style/MethodCalledOnDoEndBlock
+  STAT_VALUES_GT0 = STAT_VALUES.select do |e|
+    e.to_i.positive?
+  end.freeze
+  STAT_VALUES_GT25 = STAT_VALUES.select do |e|
+    e.to_i > 25
+  end.freeze
+  # rubocop:enable Style/MethodCalledOnDoEndBlock
+
   # Note: The constants below are for clarity.  Don't just change them,
   # or trend lines will be recording different cutoffs.
   # See below for their meaning.

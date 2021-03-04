@@ -1,22 +1,16 @@
 <%= javascript_include_tag 'project-stats', defer: true%>
 
 <%
-  # Force deletion of the obsolete cached information, if it exists.
-  # It will age out eventually anyway, but this is a large cache entry
-  # and we can easily determine what the previous one was. Immediately
-  # forcing its deletion provides more cache space for other (useful) things.
-  is_normal = (params[:type] != 'uncommon')
-  Rails.cache.delete ActiveSupport::Cache.expand_cache_key(
-    ['project_stats', locale, is_normal, ProjectStat.all.size-1]
-  )
-
-  # Cache the page, it's somewhat expensive to create.
-  cache ['project_stats', locale, is_normal, ProjectStat.all.size] do
+  # Cache the page. This is a relatively small page and does not
+  # embed data (that is sent separately in JSON format),
+  # so it's not expensive to create. That said, caching it produces
+  # results even more quickly.
+  cache ['project_stats', locale, @is_normal] do
 %>
 
 <p id="notice"><%= notice %></p>
 
-<% if is_normal %>
+<% if @is_normal %>
 
 <h1><%= t('.project_stats_header') %></h1>
 
@@ -25,10 +19,10 @@
 <%=
   # Show a chart with just total # projects.
   # This gets its own chart because its scale hides everything else.
-  series_dataset = ProjectStat.all.reduce({}) do |h,e|
-    h.merge(e.created_at => e.percent_ge_0)
-  end
-  line_chart series_dataset,
+  # This causes loading the JSON data as a separate request.
+  # Doing it this way means that the page we send is smaller, and
+  # the JSON data can be easily cached by the CDN.
+  line_chart total_projects_project_stats_path(format: :json, locale: nil),
     library: ProjectStatsHelper::DATE_CHART_OPTIONS, defer: true
 %>
 
@@ -36,19 +30,8 @@
 
 <h2><%= t '.projects_nontrivial' %></h2>
 <%=
-  # Show project counts, but skip <25% because that makes chart scale unusable
-  gt0_stats = ProjectStat::STAT_VALUES.select do |e|
-    e.to_i > 0
-  end.freeze
-  dataset = gt0_stats.map do |minimum|
-    desired_field = 'percent_ge_' + minimum.to_s
-    series_dataset = ProjectStat.all.reduce({}) do |h,e|
-     h.merge(e.created_at => e[desired_field])
-    end
-    {name: '>=' + minimum.to_s + '%', data: series_dataset}
-  end
   # Done transforming data; display it.
-  line_chart dataset,
+  line_chart nontrivial_projects_project_stats_path(format: :json, locale: nil),
     library: ProjectStatsHelper::DATE_CHART_OPTIONS, defer: true
 %>
 
@@ -56,33 +39,7 @@
 
 <h2><%= t '.projects_activity_30' %></h2>
 <%=
-  dataset = []
-  # Active projects
-  active_dataset = ProjectStat.all.reduce({}) do |h,e|
-    h.merge(e.created_at => e.active_projects)
-  end
-  dataset << {name: t('.active_projects'),
-              data: active_dataset}
-  # Active in-progress projects
-  active_in_progress_dataset = ProjectStat.all.reduce({}) do |h,e|
-    h.merge(e.created_at => e.active_in_progress)
-  end
-  dataset << {name: t('.active_in_progress'),
-              data: active_in_progress_dataset}
-  # Active edited projects
-  active_edited_dataset = ProjectStat.all.reduce({}) do |h,e|
-    h.merge(e.created_at => e.active_edited_projects)
-  end
-  dataset << {name: t('.active_edited'),
-              data: active_edited_dataset}
-  # Active edited in-progress projects
-  active_edited_in_progress_dataset = ProjectStat.all.reduce({}) do |h,e|
-    h.merge(e.created_at => e.active_edited_in_progress)
-  end
-  dataset << {name: t('.active_edited_in_progress'),
-              data: active_edited_in_progress_dataset}
-  # Done transforming data; display it.
-  line_chart dataset,
+  line_chart activity_30_project_stats_path(format: :json),
     library: ProjectStatsHelper::DATE_CHART_OPTIONS, defer: true
 %>
 
@@ -90,37 +47,8 @@
 
 <h2><%= t '.daily_activity' %></h2>
 <%=
-  # Show new and edited projects
-  # These are expected to be smaller numbers, and show detailed activity,
-  # so showring them separately will let us use scales that show more info.
-  dataset = []
-  ndays = 7
-  actions = ['created', 'updated'].freeze
-  actions.each do |action|
-    desired_field = action + '_since_yesterday'
-    series_dataset = ProjectStat.all.reduce({}) do |h,e|
-      h.merge(e.created_at => e[desired_field])
-    end
-    dataset << {name: t(".projects_#{action}_since_yesterday"),
-                data: series_dataset}
-    # Calculate moving average over ndays
-    series_counts = ProjectStat.all.map { |e| e[desired_field] }
-    series_moving_average = series_counts.each_cons(ndays).map do |e|
-      e.reduce(&:+).to_f/ndays
-    end
-    moving_average_dataset = {}
-    ProjectStat.all.each_with_index do |e, index|
-      if index >= ndays
-        moving_average_dataset[e.created_at] =
-          series_moving_average[index-ndays]
-      end
-    end
-    dataset << {name: t(".projects_#{action}_average_7_days"),
-                data: moving_average_dataset,
-                library: {borderDash: [5,5]}}
-  end
-  line_chart dataset, colors: ['green', 'darkgreen', 'blue', 'darkblue',
-                               'red', 'purple'],
+  line_chart daily_activity_project_stats_path(format: :json),
+    colors: ['green', 'darkgreen', 'blue', 'darkblue', 'red', 'purple'],
     library: ProjectStatsHelper::DATE_CHART_OPTIONS, defer: true
 %>
 
@@ -131,43 +59,15 @@
 
 <h2><%= t '.reminders' %></h2>
 <%=
-  # Show reminders sent, reactivated after reminders
-  dataset = []
-  # Reminders sent
-  reminders_dataset = ProjectStat.all.reduce({}) do |h,e|
-    h.merge(e.created_at => e.reminders_sent)
-  end
-  dataset << {name: t('.reminders_sent_since_yesterday'),
-              data: reminders_dataset}
-  # Reactivated after reminders
-  reactivated_dataset = ProjectStat.all.reduce({}) do |h,e|
-    h.merge(e.created_at => e.reactivated_after_reminder)
-  end
-  dataset <<
-    {name: t('.reactivated_projects'),
-     data: reactivated_dataset}
-  line_chart dataset, colors: ['green', 'blue'],
+  line_chart reminders_project_stats_path(format: :json),
+    colors: ['green', 'blue'],
     library: ProjectStatsHelper::DATE_CHART_OPTIONS, defer: true
 %>
 <br><br><br>
 
 <h2><%= t '.projects_silver' %></h2>
 <%=
-  # Show project counts, but skip <25% because that makes chart scale unusable
-  # The 25% value is a little misleading (because of overlaps), and messes
-  # the scale, so show starting at 50%.
-  gt25_stats = ProjectStat::STAT_VALUES.select do |e|
-    e.to_i > 25
-  end.freeze
-  dataset = gt25_stats.map do |minimum|
-    desired_field = 'percent_1_ge_' + minimum.to_s
-    series_dataset = ProjectStat.all.reduce({}) do |h,e|
-     h.merge(e.created_at => e[desired_field])
-    end
-    {name: '>=' + minimum.to_s + '%', data: series_dataset}
-  end
-  # Done transforming data; display it.
-  line_chart dataset,
+  line_chart silver_project_stats_path(format: :json, locale: nil),
     library: ProjectStatsHelper::DATE_CHART_OPTIONS, defer: true
 %>
 
@@ -175,17 +75,7 @@
 
 <h2><%= t '.projects_gold' %></h2>
 <%=
-  # Show project counts, but skip <25% because that makes chart scale unusable
-  # We already calculated "gt25_stats", just reuse it.
-  dataset = gt25_stats.map do |minimum|
-    desired_field = 'percent_2_ge_' + minimum.to_s
-    series_dataset = ProjectStat.all.reduce({}) do |h,e|
-     h.merge(e.created_at => e[desired_field])
-    end
-    {name: '>=' + minimum.to_s + '%', data: series_dataset}
-  end
-  # Done transforming data; display it.
-  line_chart dataset,
+  line_chart gold_project_stats_path(format: :json, locale: nil),
     library: ProjectStatsHelper::DATE_CHART_OPTIONS, defer: true
 %>
 
@@ -193,15 +83,7 @@
 
 <h2><%= t '.projects_completed_silver_and_gold' %></h2>
 <%=
-  dataset = ['1', '2'].map do |level|
-    desired_field = "percent_#{level}_ge_100"
-    series_dataset = ProjectStat.all.reduce({}) do |h,e|
-     h.merge(e.created_at => e[desired_field])
-    end
-    {name: t("projects.form_early.level.#{level}"), data: series_dataset}
-  end
-  # Done transforming data; display it.
-  line_chart dataset,
+  line_chart silver_and_gold_project_stats_path(format: :json),
     library: ProjectStatsHelper::DATE_CHART_OPTIONS, defer: true
 %>
 
@@ -209,16 +91,7 @@
 
 <h2><%= t '.percent_projects_earning_badges' %></h2>
 <%=
-  dataset = [0, 1, 2].map do |level|
-    desired_field = "percent#{level > 0 ? '_' + level.to_s : '' }_ge_100"
-    series_dataset = ProjectStat.all.reduce({}) do |h,e|
-     h.merge(e.created_at =>
-       e[desired_field].to_i*100.0/(e['percent_ge_0'].to_i))
-    end
-    {name: t("projects.form_early.level.#{level}"), data: series_dataset}
-  end
-  # Done transforming data; display it.
-  line_chart dataset,
+  line_chart percent_earning_project_stats_path(format: :json),
     library: ProjectStatsHelper::DATE_CHART_OPTIONS, defer: true
 %>
 
@@ -226,21 +99,8 @@
 
 <h2><%= t '.user_statistics' %></h2>
 <%=
-  create_line_chart(
-    [
-      "users",
-      "github_users",
-      "local_users",
-      "users_created_since_yesterday",
-      "users_updated_since_yesterday",
-      "users_with_projects",
-      "users_without_projects",
-      "users_with_multiple_projects",
-      "users_with_passing_projects",
-      "users_with_silver_projects",
-      "users_with_gold_projects"
-    ]
-  )
+  line_chart user_statistics_project_stats_path(format: :json),
+    library: ProjectStatsHelper::DATE_CHART_OPTIONS, defer: true
 %>
 
 <%   end # uncommon %>

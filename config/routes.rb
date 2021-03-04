@@ -16,6 +16,9 @@ LEGAL_LOCALE = /(?:#{I18n.available_locales.join("|")})/.freeze
 # This regex is used to verify criteria levels in routes:
 VALID_CRITERIA_LEVEL = /[0-2]/.freeze
 
+# Confirm that number-only id is provided
+VALID_ID = /[1-9][0-9]+/.freeze
+
 Rails.application.routes.draw do
   # First, handle routing of special cases.
   # Warning: Routes that don't take a :locale value must include a
@@ -44,6 +47,21 @@ Rails.application.routes.draw do
   get '/badge_static/:value' => 'badge_static#show',
       defaults: { format: 'svg' }
 
+  # These routes never use locales, so that the cache is shared across locales.
+  get '/project_stats/total_projects', to: 'project_stats#total_projects',
+    as: 'total_projects_project_stats',
+    constraints: ->(req) { req.format == :json }
+  get '/project_stats/nontrivial_projects',
+      to: 'project_stats#nontrivial_projects',
+      as: 'nontrivial_projects_project_stats',
+      constraints: ->(req) { req.format == :json }
+  get '/project_stats/silver', to: 'project_stats#silver',
+    as: 'silver_project_stats',
+    constraints: ->(req) { req.format == :json }
+  get '/project_stats/gold', to: 'project_stats#gold',
+    as: 'gold_project_stats',
+    constraints: ->(req) { req.format == :json }
+
   # Weird special case: for David A. Wheeler to get log issues from Google,
   # we have to let Google verify this.  Locale is irrelevant.
   # It isn't really HTML, even though the filename extension is .html. See:
@@ -66,7 +84,28 @@ Rails.application.routes.draw do
     # The system itself always generates root URLs *without* a trailing slash.
     root to: 'static_pages#home'
 
-    resources :project_stats
+    get '/project_stats', to: 'project_stats#index', as: 'project_stats'
+    get '/project_stats/activity_30', to: 'project_stats#activity_30',
+      as: 'activity_30_project_stats',
+      constraints: ->(req) { req.format == :json }
+    get '/project_stats/daily_activity', to: 'project_stats#daily_activity',
+      as: 'daily_activity_project_stats',
+      constraints: ->(req) { req.format == :json }
+    get '/project_stats/reminders', to: 'project_stats#reminders',
+      as: 'reminders_project_stats',
+      constraints: ->(req) { req.format == :json }
+    get '/project_stats/silver_and_gold', to: 'project_stats#silver_and_gold',
+      as: 'silver_and_gold_project_stats',
+      constraints: ->(req) { req.format == :json }
+    get '/project_stats/percent_earning', to: 'project_stats#percent_earning',
+      as: 'percent_earning_project_stats',
+      constraints: ->(req) { req.format == :json }
+    get '/project_stats/user_statistics', to: 'project_stats#user_statistics',
+      as: 'user_statistics_project_stats',
+      constraints: ->(req) { req.format == :json }
+    # The following route isn't very useful; we may remove it in the future:
+    get '/project_stats/:id', to: 'project_stats#show',
+        constraints: { id: VALID_ID }
 
     get 'sessions/new'
 

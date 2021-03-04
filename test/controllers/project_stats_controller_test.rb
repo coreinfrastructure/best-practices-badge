@@ -67,35 +67,40 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
     ]
     assert_equal expected_headers, contents.headers
 
-    assert_equal 2, contents.size
+    assert_equal 8, contents.size
     assert_equal '13', contents[0]['percent_ge_50']
     assert_equal '20', contents[0]['percent_ge_0']
     assert_equal '19', contents[1]['percent_ge_0']
   end
   # rubocop:enable Metrics/BlockLength
 
+  test 'should get index, JSON format' do
+    get '/en/project_stats.json'
+    assert_response :success
+    # Check if we can parse it.
+    _contents = JSON.parse(@response.body)
+  end
+
   test 'should NOT be able to get new' do
-    assert_raises AbstractController::ActionNotFound do
-      get '/en/project_stats/new'
-    end
+    get '/en/project_stats/new'
+    assert_response :not_found # 404
   end
 
   test 'should NOT be able create project_stat' do
     log_in_as(users(:admin_user))
-    assert_raises AbstractController::ActionNotFound do
-      post '/en/project_stats', params: {
-        project_stat: {
-          percent_ge_0: @project_stat.percent_ge_0,
-          percent_ge_25: @project_stat.percent_ge_25,
-          percent_ge_50: @project_stat.percent_ge_50,
-          percent_ge_75: @project_stat.percent_ge_75,
-          percent_ge_90: @project_stat.percent_ge_90,
-          percent_ge_100: @project_stat.percent_ge_100,
-          created_since_yesterday: @project_stat.created_since_yesterday,
-          updated_since_yesterday: @project_stat.updated_since_yesterday
-        }
+    post '/en/project_stats', params: {
+      project_stat: {
+        percent_ge_0: @project_stat.percent_ge_0,
+        percent_ge_25: @project_stat.percent_ge_25,
+        percent_ge_50: @project_stat.percent_ge_50,
+        percent_ge_75: @project_stat.percent_ge_75,
+        percent_ge_90: @project_stat.percent_ge_90,
+        percent_ge_100: @project_stat.percent_ge_100,
+        created_since_yesterday: @project_stat.created_since_yesterday,
+        updated_since_yesterday: @project_stat.updated_since_yesterday
       }
-    end
+    }
+    assert_response :not_found # 404
   end
 
   test 'should show project_stat' do
@@ -104,35 +109,137 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should NOT get edit' do
-    assert_raises AbstractController::ActionNotFound do
-      get "/de/project_stats/#{@project_stat.id}/edit"
-    end
+    get "/de/project_stats/#{@project_stat.id}/edit"
+    assert_response :not_found # 404
   end
 
   test 'should NOT update project_stat' do
     log_in_as(users(:admin_user))
-    assert_raises AbstractController::ActionNotFound do
-      patch "/en/project_stats/#{@project_stat.id}", params: {
-        id: @project_stat,
-        project_stat: {
-          percent_ge_0: @project_stat.percent_ge_0,
-          percent_ge_25: @project_stat.percent_ge_25,
-          percent_ge_50: @project_stat.percent_ge_50,
-          percent_ge_75: @project_stat.percent_ge_75,
-          percent_ge_90: @project_stat.percent_ge_90,
-          percent_ge_100: @project_stat.percent_ge_100,
-          created_since_yesterday: @project_stat.created_since_yesterday,
-          updated_since_yesterday: @project_stat.updated_since_yesterday
-        }
+    patch "/en/project_stats/#{@project_stat.id}", params: {
+      id: @project_stat,
+      project_stat: {
+        percent_ge_0: @project_stat.percent_ge_0,
+        percent_ge_25: @project_stat.percent_ge_25,
+        percent_ge_50: @project_stat.percent_ge_50,
+        percent_ge_75: @project_stat.percent_ge_75,
+        percent_ge_90: @project_stat.percent_ge_90,
+        percent_ge_100: @project_stat.percent_ge_100,
+        created_since_yesterday: @project_stat.created_since_yesterday,
+        updated_since_yesterday: @project_stat.updated_since_yesterday
       }
-    end
+    }
+    assert_response :not_found # 404
   end
 
   test 'should NOT destroy project_stat' do
     log_in_as(users(:admin_user))
-    assert_raises AbstractController::ActionNotFound do
-      delete "/en/project_stats/#{@project_stat.id}"
-    end
+    delete "/en/project_stats/#{@project_stat.id}"
+    assert_response :not_found # 404
+  end
+
+  test 'Test /project_stats/total_projects.json' do
+    assert '/project_stats/total_projects.json',
+           total_projects_project_stats_path(format: :json, locale: nil)
+    get total_projects_project_stats_path(format: :json, locale: nil)
+    contents = JSON.parse(@response.body)
+    assert 20, contents['2013-05-19 17:44:18 UTC']
+  end
+
+  test 'Test /project_stats/nontrivial_projects.json' do
+    assert '/project_stats/nontrivial_projects.json',
+           nontrivial_projects_project_stats_path(format: :json, locale: nil)
+    get nontrivial_projects_project_stats_path(format: :json)
+    contents = JSON.parse(@response.body)
+    levels = contents.map { |entry| entry['name'] } # levels reported
+    assert_equal ['>=25%', '>=50%', '>=75%', '>=90%', '>=100%'], levels
+    assert_equal '>=25%', contents[0]['name']
+    assert_equal 18, contents[0]['data']['2013-05-19 17:44:18 UTC']
+  end
+
+  test 'Test /en/project_stats/activity_30.json' do
+    get activity_30_project_stats_path(format: :json)
+    contents = JSON.parse(@response.body)
+    assert_equal 'Active projects (created/updated within 30 days)',
+                 contents[0]['name']
+    assert_equal 4, contents.length
+  end
+
+  test 'Test /fr/project_stats/activity_30.json' do
+    get activity_30_project_stats_path(format: :json, locale: 'fr')
+    contents = JSON.parse(@response.body)
+    assert_equal(
+      'Projets actifs (créés / mis à jour dans les 30 derniers jours)',
+      contents[0]['name']
+    )
+    assert_equal 4, contents.length
+  end
+
+  test 'Test /en/project_stats/daily_activity.json' do
+    get daily_activity_project_stats_path(format: :json)
+    contents = JSON.parse(@response.body)
+    assert_equal 4, contents.length
+    assert_equal 'projects created since day before', contents[0]['name']
+    assert_equal 2, contents[0]['data']['2013-05-19 17:44:18 UTC']
+  end
+
+  test 'Test /en/project_stats/reminders.json' do
+    get reminders_project_stats_path(format: :json)
+    # Verify that we can parse the result as JSON
+    contents = JSON.parse(@response.body)
+    # A lame simple sanity test
+    assert_not contents.empty?
+  end
+
+  test 'Test /project_stats/silver.json' do
+    assert '/project_stats/silver.json',
+           silver_project_stats_path(format: :json, locale: nil)
+    get silver_project_stats_path(format: :json, locale: nil)
+    # Verify that we can parse the result as JSON
+    contents = JSON.parse(@response.body)
+    assert_equal 4, contents.length
+    assert_not contents[0].empty?
+  end
+
+  test 'Test /project_stats/gold.json' do
+    assert '/project_stats/gold.json',
+           gold_project_stats_path(format: :json, locale: nil)
+    get gold_project_stats_path(format: :json, locale: nil)
+    # Verify that we can parse the result as JSON
+    contents = JSON.parse(@response.body)
+    assert_equal 4, contents.length
+    assert_not contents[0].empty?
+  end
+
+  test 'Test /en/project_stats/silver_and_gold.json' do
+    get silver_and_gold_project_stats_path(format: :json)
+    # Verify that we can parse the result as JSON
+    contents = JSON.parse(@response.body)
+    assert_not contents.empty?
+  end
+
+  test 'Test /en/project_stats/percent_earning.json' do
+    get percent_earning_project_stats_path(format: :json)
+    # Verify that we can parse the result as JSON
+    contents = JSON.parse(@response.body)
+    assert_not contents.empty?
+  end
+
+  test 'Test /en/project_stats/user_statistics.json' do
+    get user_statistics_project_stats_path(format: :json)
+    # Verify that we can parse the result as JSON
+    contents = JSON.parse(@response.body)
+    assert_not contents.empty?
+  end
+
+  test 'Unit test of cache_time' do
+    # Ensure that cache_time() produces correct answers
+    controller = ProjectStatsController.new
+    # We'll presume that logs are sent at 23:30 daily
+    log_time = (23 * 60 + 30) * 60
+    assert_equal 120, controller.cache_time(log_time - 70)
+    assert_equal 120, controller.cache_time(log_time + 70)
+    assert_equal log_time, controller.cache_time(0)
+    assert_equal log_time - 300, controller.cache_time(300)
   end
 end
 # rubocop:enable Metrics/ClassLength

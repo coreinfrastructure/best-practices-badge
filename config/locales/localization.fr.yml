@@ -31,6 +31,7 @@ fr:
       format:
         delimiter: ''
         format: "%n%"
+        precision: 1
     precision:
       format:
         delimiter: ''

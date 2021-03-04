@@ -1759,8 +1759,8 @@ ja:
     terminology_p10_html: >-
       <li><em>プロジェクトのセキュリティ メカニズム</em>提供されたプロジェクトのソフトウェアによって提供されるセキュリティ
       メカニズムです。</ul>
-    noncriteria_p01_html: "<p></p> <h2 id='criteria_noncriteria'>Non-criteria（非基準）</h2>"
-    noncriteria_p02_html: "<p> 基準：<ul>"
+    noncriteria_p01_html: "<p></p> <h2 id='criteria_noncriteria'>基準に含まれないもの</h2>"
+    noncriteria_p02_html: "<p> 基準とは：<ul>"
     noncriteria_p03_html: >-
       <li>特定のテクノロジー、製品、またはサービスを<em>必要としません</em>。たとえば、git、GitHub、GitLabは<em>必要ありません</em>。基準は、一般的なケースのガイダンスとヘルプを<em>提供します</em>。その情報は、人々が基準を理解して満たすのに役立つためです。
       gitまたはGitHubを使用するプロジェクトには、これらの一般的なケースでユーザーを支援するための特別な自動化がいくつかありますが、<em>必須ではありません</em>。したがって、新しいツールと機能が利用可能になると、プロジェクトはすぐにそれらに切り替えることができます。例外として、基準にはプロジェクトのWebページとTLSが必要です。
@@ -1776,11 +1776,11 @@ ja:
     noncriteria_p08_html: >-
       <li>すべての基準を一度に実装する<em>必要はありません</em>。ほとんどのプロジェクトは、時間をかけて実装しています。</ul>
     noncriteria_p09_html: >-
-      <p> 合格レベルのdoeeには、1人のプロジェクトには実用的ではない基準、たとえば、かなりの金額が必要な基準は含まれていません。多くのFLOSSプロジェクトは小規模であり、彼らの権利を奪うことは避けたいと考えています。
+      <p> 合格レベルの基準には、たとえば多額の資金を必要とするものなど、1人で行うプロジェクトでは現実的ではないような基準は含まれていません。多くのFLOSSプロジェクトは小規模であり、彼らの権利を奪うことは避けたいと考えています。
     identify_p01_html: "<p></p> <h2 id='criteria_id_project'>プロジェクトの特定</h2>"
     identify_p02_html: >-
       <p> 私たちのアプリケーションはすべてのプロジェクトエントリに一意のIDを与えますが、それはプロジェクトを検索する人々を助けません。アプリケーションにとって、プロジェクトの<em>実</em>名はそのリポジトリのURLであり、それが利用できない場合は、プロジェクトの「フロントページ」のURLです。このURLへの変更をレート制限して、無意味な変更を防止しています。通常、プロジェクトには人間が読める名前が付いていますが、これらの名前は一意ではありません。<p></p>
-    criteria_why_p01_html: "<p></p> <h2 id='criteria_why'>なぜ基準があるのか?</h2>i"
+    criteria_why_p01_html: "<p></p> <h2 id='criteria_why'>なぜ基準があるのか?</h2>"
     criteria_why_p02_html: >-
       <p>論文<a href="http://www.researchinlearningtechnology.net/index.php/rlt/article/view/23563"
       rel="nofollow">Open badges for education: what are the implications

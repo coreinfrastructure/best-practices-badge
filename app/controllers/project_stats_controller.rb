@@ -120,6 +120,14 @@ class ProjectStatsController < ApplicationController
     render json: series_dataset
   end
 
+  # Database fieldnames >0% for level 0 (passing)
+  # rubocop: disable Style/MethodCalledOnDoEndBlock
+  LEVEL0_GT0_FIELDS =
+    ProjectStat::STAT_VALUES_GT0.map do |e|
+      "percent_ge_#{e}".to_sym
+    end.freeze
+  # rubocop: enable Style/MethodCalledOnDoEndBlock
+
   # GET /project_stats/nontrivial_projects.json
   # Dataset of nontrivial project entries
   # Note that this does NOT take a locale.
@@ -129,14 +137,15 @@ class ProjectStatsController < ApplicationController
   def nontrivial_projects
     cache_until_next_stat
 
+    # Ask the database *once* for the data we need, then reorganize it
+    stat_data = ProjectStat.select(:created_at, *LEVEL0_GT0_FIELDS)
+
     # Show project counts; skip 0% because that makes chart scale unusable
-    # We could turn this into one database query; unclear it's worth doing.
     dataset =
       ProjectStat::STAT_VALUES_GT0.map do |minimum|
         desired_field = 'percent_ge_' + minimum.to_s
         series_dataset =
-          ProjectStat.select(:created_at, desired_field.to_sym)
-                     .reduce({}) do |h, e|
+          stat_data.reduce({}) do |h, e|
             h.merge(e.created_at => e[desired_field])
           end
         { name: '>=' + minimum.to_s + '%', data: series_dataset }
@@ -297,6 +306,14 @@ class ProjectStatsController < ApplicationController
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
+  # Level 1 (silver) database fields that are more than 25%
+  # rubocop: disable Style/MethodCalledOnDoEndBlock
+  LEVEL1_GT25_FIELDS =
+    ProjectStat::STAT_VALUES_GT25.map do |e|
+      "percent_1_ge_#{e}".to_sym
+    end.freeze
+  # rubocop: enable Style/MethodCalledOnDoEndBlock
+
   # GET /project_stats/silver.json
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def silver
@@ -306,13 +323,8 @@ class ProjectStatsController < ApplicationController
 
     cache_until_next_stat
 
-    gt25_fields =
-      ProjectStat::STAT_VALUES_GT25.map do |e|
-        "percent_1_ge_#{e}".to_sym
-      end
-
     # Retrieve just the data we need
-    stat_data = ProjectStat.select(:created_at, *gt25_fields)
+    stat_data = ProjectStat.select(:created_at, *LEVEL1_GT25_FIELDS)
 
     dataset =
       ProjectStat::STAT_VALUES_GT25.map do |minimum|
@@ -328,6 +340,14 @@ class ProjectStatsController < ApplicationController
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
+  # Level 2 (gold) database fields that are more than 25%
+  # rubocop: disable Style/MethodCalledOnDoEndBlock
+  LEVEL2_GT25_FIELDS =
+    ProjectStat::STAT_VALUES_GT25.map do |e|
+      "percent_2_ge_#{e}".to_sym
+    end.freeze
+  # rubocop: enable Style/MethodCalledOnDoEndBlock
+
   # GET /project_stats/gold.json
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def gold
@@ -337,13 +357,8 @@ class ProjectStatsController < ApplicationController
 
     cache_until_next_stat
 
-    gt25_fields =
-      ProjectStat::STAT_VALUES_GT25.map do |e|
-        "percent_2_ge_#{e}".to_sym
-      end
-
     # Retrieve just the data we need
-    stat_data = ProjectStat.select(:created_at, *gt25_fields)
+    stat_data = ProjectStat.select(:created_at, *LEVEL2_GT25_FIELDS)
 
     dataset =
       ProjectStat::STAT_VALUES_GT25.map do |minimum|
@@ -399,7 +414,8 @@ class ProjectStatsController < ApplicationController
 
     dataset =
       [0, 1, 2].map do |level|
-        desired_field = "percent#{level.positive? ? '_' + level.to_s : ''}_ge_100"
+        desired_field =
+          "percent#{level.positive? ? '_' + level.to_s : ''}_ge_100"
         series_dataset =
           stat_data.reduce({}) do |h, e|
             h.merge(e.created_at =>

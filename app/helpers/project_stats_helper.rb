@@ -33,7 +33,7 @@ module ProjectStatsHelper
         # https://www.chartjs.org/docs/latest/general/performance.html
         line:
           {
-                tension: 0
+            tension: 0
           }
       }
   }.freeze

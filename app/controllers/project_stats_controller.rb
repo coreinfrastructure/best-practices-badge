@@ -61,6 +61,37 @@ class ProjectStatsController < ApplicationController
     headers['Cache-Control'] = "max-age=#{seconds_left}"
   end
 
+  # These controllers often generate a lot of JSON. More info:
+  # https://guides.rubyonrails.org/layouts_and_rendering.html
+  # https://buttercms.com/blog/json-serialization-in-rails-a-complete-guide
+  # https://dev.to/caicindy87/rendering-json-in-a-rails-api-25fd
+  # We *could* use other gems to speed JSON generation further
+  # (e.g., oj), but that would add yet more dependencies; we think
+  # the performance we get with "boring built-in tools" is adequate.
+
+  # *Rapidly* render a JSON dataset which must *NOT* have cycles.
+  # The default JSON renderer implements cycle-checking for safety.
+  # We *know* that there are no cycles in the JSON datasets we create,
+  # so we can use "fast_generate" instead of the default JSON generator.
+  # This improves performance by skipping an unnecessary complicated check.
+  # We justify doing this via benchmarks. We used:
+  # require 'benchmark' ...
+  # time = Benchmark.measure do {render} end ; puts "Time = #{time.real}"
+  # Benchmark of nontrivial_projects of `render json: dataset` had averages:
+  # - render time: 226ms (200,252)
+  # - total service allocations: 171986 (171988,171983)
+  # Benchmark of this `render body: JSON.fast_generate(dataset)` approach:
+  # - render time: 53ms (39,33)
+  # - total service allocations: 129562 (129561,129562)
+  # So these samples average 173ms less time with 42K fewer allocations
+  # on a development environment.
+  # Technically this method is a view, not a controller, but this method is
+  # so small that for simplicity we include this method in this controller.
+  def render_json_fast(dataset)
+    headers['Content-Type'] = 'application/json'
+    render body: JSON.fast_generate(dataset)
+  end
+
   # GET /project_stats
   # GET /project_stats.json
   # rubocop:disable Metrics/MethodLength
@@ -78,6 +109,7 @@ class ProjectStatsController < ApplicationController
       format.json do
         cache_until_next_stat
         @project_stats = ProjectStat.all
+        # We use a special jbuilder view, so we can't use render_json_fast
         render format: :json
       end
       # { render :show, status: :created, location: @project_stat }
@@ -113,11 +145,11 @@ class ProjectStatsController < ApplicationController
   def total_projects
     cache_until_next_stat
 
-    series_dataset =
+    dataset =
       ProjectStat.select(:created_at, :percent_ge_0).reduce({}) do |h, e|
         h.merge(e.created_at => e.percent_ge_0)
       end
-    render json: series_dataset
+    render_json_fast dataset
   end
 
   # Database fieldnames >0% for level 0 (passing)
@@ -151,7 +183,7 @@ class ProjectStatsController < ApplicationController
         { name: '>=' + minimum.to_s + '%', data: series_dataset }
       end
 
-    render json: dataset
+    render_json_fast dataset
   end
   # rubocop:enable Style/MethodCalledOnDoEndBlock
   # rubocop:enable Metrics/MethodLength
@@ -211,7 +243,7 @@ class ProjectStatsController < ApplicationController
                 data: active_edited_in_progress_dataset
     }
 
-    render json: dataset
+    render_json_fast dataset
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
@@ -266,7 +298,7 @@ class ProjectStatsController < ApplicationController
       }
     end
 
-    render json: dataset
+    render_json_fast dataset
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize, Metrics/BlockLength
 
@@ -302,7 +334,7 @@ class ProjectStatsController < ApplicationController
       data: reactivated_dataset
     }
 
-    render json: dataset
+    render_json_fast dataset
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
@@ -336,7 +368,7 @@ class ProjectStatsController < ApplicationController
         { name: ">=#{minimum}%", data: series_dataset }
       end
 
-    render json: dataset
+    render_json_fast dataset
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
@@ -370,7 +402,7 @@ class ProjectStatsController < ApplicationController
         { name: ">=#{minimum}%", data: series_dataset }
       end
 
-    render json: dataset
+    render_json_fast dataset
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
@@ -397,7 +429,7 @@ class ProjectStatsController < ApplicationController
         }
       end
 
-    render json: dataset
+    render_json_fast dataset
   end
 
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
@@ -427,7 +459,7 @@ class ProjectStatsController < ApplicationController
         }
       end
 
-    render json: dataset
+    render_json_fast dataset
   end
 
   # Return JSON-formatted chart data with the given fields
@@ -478,7 +510,7 @@ class ProjectStatsController < ApplicationController
         ]
       )
 
-    render json: dataset
+    render_json_fast dataset
   end
 
   # Forbidden:

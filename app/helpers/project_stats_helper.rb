@@ -14,7 +14,9 @@ module ProjectStatsHelper
             type: 'time',
             unit: 'day',
             unitStepSize: 1,
-            ticks: { minRotation: 20 },
+            # Setting min & max rotation speeds diplay. See:
+            # https://www.chartjs.org/docs/latest/general/performance.html
+            ticks: { minRotation: 30, maxRotation: 30 },
             time: {
               # Use these ISO 8601 formats so we're language-neutral
               displayFormats: {
@@ -24,6 +26,15 @@ module ProjectStatsHelper
             }
           }
         ]
+      },
+    elements:
+      {
+        # Disable bezier curves because simple lines are faster. See:
+        # https://www.chartjs.org/docs/latest/general/performance.html
+        line:
+          {
+                tension: 0
+          }
       }
   }.freeze
 end

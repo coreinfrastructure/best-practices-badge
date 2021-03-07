@@ -54,6 +54,27 @@ class ApplicationController < ActionController::Base
     payload[:uid] = current_user.id if logged_in?
   end
 
+  # How long (in seconds) will the badge be stored on the CDN before being
+  # re-requested? This is used by set_cache_control_header.
+  # A longer time reduces server load, but if we produce a wrong/obsolete
+  # answer it will be wrong/obsolete for this long unless we explictly purge.
+  # 86400 = 1 day, 864000 = 10 days
+  BADGE_CACHE_MAX_AGE = (ENV['BADGEAPP_BADGE_CACHE_MAX_AGE'] || '864000').to_i
+
+  # How long (in seconds) will the badge be served by the CDN if it can't
+  # get a response from us?
+  # This provides a safety measure if the site goes down;
+  # the CDN will keep serving *some* data for a while.
+  # 864000 = 10 days, 1728000 = 20 days, 8640000 = 100 days
+  # We force it to be at least twice the BADGE_CACHE_MAX_AGE.
+  BADGE_CACHE_STALE_AGE = [
+    (ENV['BADGEAPP_BADGE_CACHE_MAX_AGE'] || '8640000').to_i,
+    2 * BADGE_CACHE_MAX_AGE
+  ].max
+
+  BADGE_CACHE_SURROGATE_CONTROL =
+    "max_age=#{BADGE_CACHE_MAX_AGE}, stale-if-error=#{BADGE_CACHE_STALE_AGE}"
+
   # Set the cache control headers
   # More info:
   # https://docs.fastly.com/en/guides/configuring-caching
@@ -68,8 +89,7 @@ class ApplicationController < ActionController::Base
     # serve old data if the system has an error for some reason.
     # In deployment this heading is *only* used by the CDN, and is stripped
     # so that it does *not* go to client browsers.
-    response.headers['Surrogate-Control'] =
-      'max_age=86400, stale-if-error=864000'
+    response.headers['Surrogate-Control'] = BADGE_CACHE_SURROGATE_CONTROL
     # Set the cache values for ordinary browsers (all *other* than the CDN).
     # The "no-cache" term is a little misleading, it *is* cached, but
     # the cache value must be verified (via the CDN) before its use.

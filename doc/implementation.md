@@ -134,6 +134,21 @@ The application is configured by various environment variables:
   robots won't be fooled into following a link to a banned page.
 * `LOCAL_LOGIN_COOLOFF_TIME` : Time (in seconds) after creating a local
   account before login is permitted. This is an anti-spam measure.
+* `BADGE_CACHE_MAX_AGE` : Time (in seconds) badges are cached by the CDN.
+  Default 864000 (10 days). Browsers will check the CDN every time it
+  wants to serve a badge image. We purge badges every time their
+  corresponding project entries are changed.
+  NOTE: If a user *directly* views the BadgeApp project entry on our website
+  (instead of just requesting the badge image) AND the project entry has
+  recently changed, we DO NOT display the "normal" badge image. Instead,
+  when showing a project entry that's recently changed, we embed
+  a static image that corresponds to the project's *current* status. That way
+  we always show the current project status, even if it just changed.
+  This eliminates the race conditions caused because it takes time for
+  the CDN to distribute updated badge data to all its servers.
+* `BADGE_CACHE_STALE_AGE` : Time (in seconds) badges are served by the CDN
+  if it can't get a new value from us.
+  Default 8640000 (100 days), is forced to be at least 2x`BADGE_CACHE_MAX_AGE`
 
 You can make cryptographically random values (such as keys)
 using "rails secret".  E.g., to create 64 random hexadecimal digits, use:

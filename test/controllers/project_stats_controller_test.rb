@@ -21,6 +21,9 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
     )
     # This isn't normally shown:
     assert_not @response.body.include?('Percentage of projects earning badges')
+    # Do *NOT* include "Accept" in the Vary heading.
+    # Note: "Origin" will be added to the Vary headers outside this test.
+    assert 'Accept-Encoding', @response.headers['Vary']
   end
 
   test 'should get index as admin' do
@@ -71,6 +74,9 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
     assert_equal '13', contents[0]['percent_ge_50']
     assert_equal '20', contents[0]['percent_ge_0']
     assert_equal '19', contents[1]['percent_ge_0']
+
+    # Do *NOT* include "Accept" in the Vary heading.
+    assert 'Accept-Encoding', @response.headers['Vary']
   end
   # rubocop:enable Metrics/BlockLength
 
@@ -79,6 +85,8 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     # Check if we can parse it.
     _contents = JSON.parse(@response.body)
+    # Do *NOT* include "Accept" in the Vary heading.
+    assert 'Accept-Encoding', @response.headers['Vary']
   end
 
   test 'should NOT be able to get new' do
@@ -143,6 +151,9 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
     get total_projects_project_stats_path(format: :json, locale: nil)
     contents = JSON.parse(@response.body)
     assert 20, contents['2013-05-19 17:44:18 UTC']
+    # Do *NOT* include "Accept" in the Vary heading.
+    # Note: "Origin" will be added to the Vary headers outside this test.
+    assert 'Accept-Encoding', @response.headers['Vary']
   end
 
   test 'Test /project_stats/nontrivial_projects.json' do

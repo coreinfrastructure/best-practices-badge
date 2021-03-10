@@ -52,7 +52,7 @@ Rails.application.config.action_dispatch.ignore_accept_header = true
 CORS_ALLOWED_METHODS = %i[get options].freeze
 
 # Many resources we allow CORS requests for *might* differ depending on
-# who is asking. In these cases were use the default CORS value for
+# who is asking. In these cases we use the default CORS value for
 # the HTTP Header 'Vary', which is 'Accept-Encoding, Origin':
 # * 'Accept-Encoding' is necessary because different browsers accept
 # different compression algorithms. Fastly normalizes this when we pass
@@ -75,9 +75,9 @@ CORS_ALLOWED_METHODS = %i[get options].freeze
 # this would let browser caches know to check the 'Accept' HTTP value.
 
 CORS_DIFFERENTIATED_RESOURCE_PATTERNS = [
-  '/projects', '/projects.json', '/projects/*',
+  '/projects', '/projects/*',
   '/projects/**/*', '/project_stats*',
-  '/en/projects', '/en/projects.json', '/en/projects/*',
+  '/en/projects', '/en/projects/*',
   '/en/projects/**/*', '/en/project_stats*',
   '/users/*.json', '/en/users/*.json'
 ].freeze
@@ -92,7 +92,7 @@ CORS_DIFFERENTIATED_RESOURCE_PATTERNS = [
 # across all users. By omitting "Origin" for these, we significantly
 # optimize use because any Origin will share the same CDN cache entry.
 #
-# Note: we don't need to include 'Accept' in the HTTP Header 'Vary' for
+# Note: we do not include 'Accept' in the HTTP Header 'Vary' for
 # /projects/:id/badge(.:format) resource because we *always* ignored
 # the HTTP 'Accept' heading for selecting its data format (due to
 # the way it gets routed). This is the most important case
@@ -101,11 +101,19 @@ CORS_DIFFERENTIATED_RESOURCE_PATTERNS = [
 #
 # Note: This cannot be exploited to be misinterpreted as something else.
 # The "*" does not match an embedded "/". Even if an attacker used "..",
-# that would just produce the useless "/badge" and "/badge.json".
+# that would just produce useless "/badge" and "/badge.json" and so on.
 
 CORS_UNDIFFERENTIATED_RESOURCE_PATTERNS = [
+  # Badge information about one project (image and JSON)
   '/projects/*/badge', '/projects/*/badge.json',
-  '/project_stats/*.json', '/*/project_stats/*.json', '/project_stats.json'
+  # Information about one project (JSON)
+  '/??/projects/*.json', '/??-??/projects/*.json',
+  # Information about a set of projects (JSON)
+  '/??/projects.json', '/??-??/projects.json',
+  # Project statistics (JSON); some have no locale, some have a locale
+  '/project_stats/*.json',
+  '/??/project_stats/*.json', '/??-??/project_stats/*.json',
+  '/??/project_stats.json', '/??-??/project_stats.json'
 ].freeze
 CORS_UNDIFFERENTIATED_VARY = ['Accept-Encoding'].freeze
 

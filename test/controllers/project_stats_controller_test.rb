@@ -154,6 +154,10 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
     # Do *NOT* include "Accept" in the Vary heading.
     # Note: "Origin" will be added to the Vary headers outside this test.
     assert 'Accept-Encoding', @response.headers['Vary']
+    cache_control = @response.headers['Cache-Control']
+    assert_includes cache_control, 'max-age='
+    assert_includes cache_control, 'public'
+    assert_not_includes cache_control, 'private'
   end
 
   test 'Test /project_stats/nontrivial_projects.json' do

@@ -6,10 +6,10 @@
 
 require 'ipaddr'
 
-# rubocop:disable Metrics/ClassLength
 class ApplicationController < ActionController::Base
   include Pagy::Backend
 
+  # Record the original session value in "original_session".
   # That way we tell if the session value has changed, and potentially
   # omit it if it has not changed.
   before_action :record_original_session
@@ -46,20 +46,6 @@ class ApplicationController < ActionController::Base
   # Use the new HTTP security header, "permissions policy", to disable things
   # we don't need.
   before_action :add_http_permissions_policy
-
-  def log_json_without_suffix(request)
-    logger.warn 'JSON request without json path extension, ' \
-      "url=#{request&.url}"
-  end
-
-  # Warn about a JSON request without a .json suffix.
-  # E.g., because someone used the Accept: header to specially request it
-  before_action :json_without_suffix
-  def json_without_suffix
-    weird = request.format.to_s == 'application/json' &&
-            request.path !~ /.json\z/
-    log_json_without_suffix(request) if weird
-  end
 
   # Record user_id, e.g., so it can be recorded in logs
   # https://github.com/roidrage/lograge/issues/23
@@ -300,4 +286,3 @@ class ApplicationController < ActionController::Base
 
   include SessionsHelper
 end
-# rubocop:enable Metrics/ClassLength

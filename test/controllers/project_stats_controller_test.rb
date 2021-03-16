@@ -164,22 +164,6 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 4, contents.length
   end
 
-  # This doesn't affect the HTTP Accept header for some reason,
-  # so this is commented out & we use a unit test.
-  # test 'Test Warning /en/project_stats using accept to get JSON' do
-  #   get '/project_stats',
-  #       headers: { 'Accept': 'application/json' }
-  #   follow_redirect!
-  #   contents = JSON.parse(@response.body)
-  #   assert_equal 4, contents.length
-  # end
-
-  test 'Test special JSON logger' do
-    app = ApplicationController.new
-    # Make sure we can run log_json_without_suffix
-    app.log_json_without_suffix(nil)
-  end
-
   test 'Test /fr/project_stats/activity_30.json' do
     get activity_30_project_stats_path(format: :json, locale: 'fr')
     contents = JSON.parse(@response.body)

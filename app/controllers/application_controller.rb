@@ -92,8 +92,8 @@ class ApplicationController < ActionController::Base
     response.headers['Surrogate-Control'] = BADGE_CACHE_SURROGATE_CONTROL
     # Set the cache values for ordinary browsers (all *other* than the CDN).
     # The "no-cache" term is a little misleading, it *is* cached, but
-    # the cache value must be verified (via the CDN) before its use.
-    response.headers['Cache-Control'] = 'public, no-cache'
+    # the cache value must be revalidated (via the CDN) before its use.
+    response.headers['Cache-Control'] = 'no-cache'
   end
 
   # Set headers for a CDN surrogate key. See:

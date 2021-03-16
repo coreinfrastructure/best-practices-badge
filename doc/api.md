@@ -41,17 +41,13 @@ and ".svg") to the URL before the parameters (if any).
 When using "." + format, the format name must be all lowercase.
 
 WARNING: Do *not* use the HTTP header "Accept" to select a format;
-doing that is *deprecated*. Instead, please use the URL itself to request
+that *no longer works* (it was previously deprecated).
+Instead, please use the URL itself to request
 the format (e.g., use a URL with ".json" if you want JSON format).
-We currently support using the HTTP header Accept (such as "Accept:
-application/json") to select a format in several cases.
-However, the problem is that this
-interferes with caching. Caches normally just use the URL to determine
+At one time we allowed this, but that interferes with CDN caching.
+Caches normally just use the URL to determine
 what to cache, and caches work much less well if they have to use other
-parameters to examine the cache. There are also various problems in practice.
-The "Accept" HTTP header is ignored in badge requests of the form
-`/projects/:id/badge(.:format)` , and we expect that to be eventually
-true for all other resources as well.
+parameters to examine the cache.
 
 A GET just retrieves information, and since most information is public,
 in most cases you don't need to log in for a GET.

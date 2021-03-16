@@ -4,8 +4,34 @@
 # CII Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
-# Allow client-side JavaScript of other systems to make GET requests,
-# but *only* get requests, from us.  We do *not* share credentials.
+# Enable CORS to allow client-side JavaScript of other systems to
+# make GET requests, but *only* get requests, from us.
+# This is especially useful when requesting JSON.
+# We do *not* share credentials using CORS.
+# This configuration file also disables considering the "Accept:" HTTP header
+# (the URL itself must be used to choose a format).
+
+# Both are done in this same configuration file because
+# Rails requires setting these configuration options in a particular order.
+# I suspect the reason is that both affect the HTTP header attribute "Vary".
+
+# Do *NOT* use the HTTP Accept header to decide what to send as output,
+# because that interferes with using the CDN. Without this setting,
+# Rails will produce different values (in some cases) depending on the
+# HTTP "Accept" value, and thus will generate "Vary: Accept" (correctly).
+# However, since different browsers will have
+# different Accept header values, this Vary: Accept will mean that
+# different browsers will not share a CDN cached value.
+# By setting ignore_accept_user, users *must* use the URL to request a
+# non-default format. In compensation, this setting
+# speeds average response time & reduces server load by better using the CDN.
+# See:
+# https://www.smashingmagazine.com/2017/11/understanding-vary-header/
+# https://www.fastly.com/blog/getting-most-out-vary-fastly
+# https://developer.mozilla.org/en-US/docs/Web/HTTP/
+# Content_negotiation/List_of_default_Accept_values
+
+Rails.application.config.action_dispatch.ignore_accept_header = true
 
 # Typically CORS users will request the JSON files, e.g., by using
 # using the suffix ".json" on the resource. We do allow requests to
@@ -26,7 +52,7 @@
 CORS_ALLOWED_METHODS = %i[get options].freeze
 
 # Many resources we allow CORS requests for *might* differ depending on
-# who is asking. In these cases were use the default CORS value for
+# who is asking. In these cases we use the default CORS value for
 # the HTTP Header 'Vary', which is 'Accept-Encoding, Origin':
 # * 'Accept-Encoding' is necessary because different browsers accept
 # different compression algorithms. Fastly normalizes this when we pass
@@ -40,12 +66,6 @@ CORS_ALLOWED_METHODS = %i[get options].freeze
 # This does mean different origins cannot share any caches.
 #
 # We do not include 'Accept' in the default Vary setting in CORS.
-# In theory we should include 'Accept' sometimes, because for several
-# resources the format we return varies depending on the 'Accept'
-# HTTP header (e.g., if it is application/json we'll sometimes return a
-# JSON format). However, we're *deprecating* using the HTTP header 'Accept'
-# to select the data format.
-#
 # We instead want people to use different URLs for different
 # output formats. This behaves *much* better with various caching systems
 # in the web ecosystem. If we wanted to seriously support using 'Accept'
@@ -55,9 +75,9 @@ CORS_ALLOWED_METHODS = %i[get options].freeze
 # this would let browser caches know to check the 'Accept' HTTP value.
 
 CORS_DIFFERENTIATED_RESOURCE_PATTERNS = [
-  '/projects', '/projects.json', '/projects/*',
+  '/projects', '/projects/*',
   '/projects/**/*', '/project_stats*',
-  '/en/projects', '/en/projects.json', '/en/projects/*',
+  '/en/projects', '/en/projects/*',
   '/en/projects/**/*', '/en/project_stats*',
   '/users/*.json', '/en/users/*.json'
 ].freeze
@@ -72,7 +92,7 @@ CORS_DIFFERENTIATED_RESOURCE_PATTERNS = [
 # across all users. By omitting "Origin" for these, we significantly
 # optimize use because any Origin will share the same CDN cache entry.
 #
-# Note: we don't need to include 'Accept' in the HTTP Header 'Vary' for
+# Note: we do not include 'Accept' in the HTTP Header 'Vary' for
 # /projects/:id/badge(.:format) resource because we *always* ignored
 # the HTTP 'Accept' heading for selecting its data format (due to
 # the way it gets routed). This is the most important case
@@ -81,12 +101,27 @@ CORS_DIFFERENTIATED_RESOURCE_PATTERNS = [
 #
 # Note: This cannot be exploited to be misinterpreted as something else.
 # The "*" does not match an embedded "/". Even if an attacker used "..",
-# that would just produce the useless "/badge" and "/badge.json".
+# that would just produce useless "/badge" and "/badge.json" and so on.
 
 CORS_UNDIFFERENTIATED_RESOURCE_PATTERNS = [
-  '/projects/*/badge', '/projects/*/badge.json'
+  # Badge information about one project (image and JSON)
+  '/projects/*/badge', '/projects/*/badge.json',
+  # Information about one project (JSON)
+  '/??/projects/*.json', '/??-??/projects/*.json',
+  # Information about a set of projects (JSON)
+  '/??/projects.json', '/??-??/projects.json',
+  # Project statistics (JSON); some have no locale, some have a locale
+  '/project_stats/*.json',
+  '/??/project_stats/*.json', '/??-??/project_stats/*.json',
+  '/??/project_stats.json', '/??-??/project_stats.json'
 ].freeze
 CORS_UNDIFFERENTIATED_VARY = ['Accept-Encoding'].freeze
+
+# Note: "Vary: Accept-Encoding" will still happen, but Fastly CDN
+# normalizes this to one of a few values per:
+# https://docs.fastly.com/en/guides/enabling-automatic-gzipping
+# As a result, "Vary: Accept-Encoding" does *not* significantly impede
+# CDN caching.
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do

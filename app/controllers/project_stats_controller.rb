@@ -56,9 +56,15 @@ class ProjectStatsController < ApplicationController
   end
 
   # Set the cache (including the CDN) to be used for cache_time
+  # Sets HTTP header 'Cache-Control' to "max-age=#{seconds_left}, public"
   def cache_until_next_stat
     seconds_left = cache_time(Time.now.utc.seconds_since_midnight)
-    headers['Cache-Control'] = "max-age=#{seconds_left}"
+    # We can't just set Cache-Control directly like this:
+    # headers['Cache-Control'] = "max-age=#{seconds_left}"
+    # The problem is that Rails will quietly add 'private'
+    # to the value of Cache-Control value. An easy solution is to
+    # just use the built-in Rails mechanism for setting Cache-Control:
+    expires_in seconds_left, public: true
   end
 
   # These controllers often generate a lot of JSON. More info:

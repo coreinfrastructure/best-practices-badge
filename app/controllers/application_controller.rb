@@ -73,7 +73,7 @@ class ApplicationController < ActionController::Base
   ].max
 
   BADGE_CACHE_SURROGATE_CONTROL =
-    "max_age=#{BADGE_CACHE_MAX_AGE}, stale-if-error=#{BADGE_CACHE_STALE_AGE}"
+    "max-age=#{BADGE_CACHE_MAX_AGE}, stale-if-error=#{BADGE_CACHE_STALE_AGE}"
 
   # Set the cache control headers
   # More info:

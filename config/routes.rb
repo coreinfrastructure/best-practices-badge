@@ -17,7 +17,10 @@ LEGAL_LOCALE = /(?:#{I18n.available_locales.join("|")})/.freeze
 VALID_CRITERIA_LEVEL = /[0-2]/.freeze
 
 # Confirm that number-only id is provided
-VALID_ID = /[1-9][0-9]+/.freeze
+VALID_ID = /[1-9][0-9]*/.freeze
+
+# Valid values for static badge display
+VALID_STATIC_VALUE = /0|[1-9]{1,2}|passing|silver|gold/.freeze
 
 Rails.application.routes.draw do
   # First, handle routing of special cases.
@@ -45,6 +48,7 @@ Rails.application.routes.draw do
   # Beware: This route produces a result unconnected to a project's status.
   # Do NOT use this route on a project's README.md page!
   get '/badge_static/:value' => 'badge_static#show',
+      constraints: { value: VALID_STATIC_VALUE },
       defaults: { format: 'svg' }
 
   # These routes never use locales, so that the cache is shared across locales.
@@ -120,7 +124,7 @@ Rails.application.routes.draw do
     get 'feed' => 'projects#feed', defaults: { format: 'atom' }
     get 'reminders' => 'projects#reminders_summary'
 
-    resources :projects do
+    resources :projects, constraints: { id: VALID_ID } do
       member do
         get 'delete_form' => 'projects#delete_form'
         get '' => 'projects#show_json',

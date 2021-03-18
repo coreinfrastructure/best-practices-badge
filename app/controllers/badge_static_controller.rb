@@ -17,23 +17,26 @@ class BadgeStaticController < ApplicationController
   def show
     # Show the badge static display given a value.
     # "Value" must be 0..99, passing, silver, or gold
-    # TODO: have a way to show "no such project"
+    # TODO: have a way to show "no such value"
     value = params[:value]
     begin
-      value = Integer(value, 10)
-    rescue ArgumentError # not an integer
+      value = Integer(value, 10) # Switch to integer type if it is
+    rescue ArgumentError # not an integer - don't change "value"
     end
-    if Badge.valid?(value)
-      set_surrogate_key_header "/badge_percent/#{value}"
-      send_data Badge[value],
-                type: 'image/svg+xml', disposition: 'inline'
-    else
-      # Value isn't valid, return a 404
-      render(
-        template: 'static_pages/error_404',
-        formats: [:html], layout: false, status: :not_found # 404
-      )
-    end
+
+    # Defensive programming: check if it's valid before displaying it.
+    # The router should prevent invalid values from reaching here.
+    return unless Badge.valid?(value)
+
+    set_surrogate_key_header "/badge_percent/#{value}"
+    send_data Badge[value],
+              type: 'image/svg+xml', disposition: 'inline'
+    # Our application router now prevents invalid values. Before we did that,
+    # we had an "else" clause that sent a 404 by doing this:
+    # render(
+    #   template: 'static_pages/error_404',
+    #   formats: [:html], layout: false, status: :not_found # 404
+    # )
   end
   # rubocop:enable Metrics/MethodLength
 end

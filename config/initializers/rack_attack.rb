@@ -194,16 +194,22 @@ class Rack::Attack
   # so we have more time to deal with other things.
   # "/admin" is a common admin URL. "/wp-" handles attacks on WordPress.
   # "/cgi" includes "cgi-bin", a standard prefix for old-school CGI programs.
-  # (?:...) is a non-capturing regexp group - we don't need to capture it.
+  # The pattern near the end that finishes with [%&] is to catch
+  # various naive attacks that append nonsense encoded characters after
+  # project IDs; we see a lot of these in the wild.
+  # (?:...) is a non-capturing regexp group - we don't need to capture this.
   FAIL2BAN_PATH = Regexp.compile(
     ENV['FAIL2BAN_PATH'] ||
-    '^/(?:admin|backup|cgi|command|common|config|' \
+    '\A/(?:admin|backup|cgi|command|common|config|' \
     'data|dbadmin|dump|error_message|install|joomla|' \
     'muieblackcat|myadmin|mysql|onvif|options|' \
     'phpadmin|phpmanager|phpmyadmin|phpMyAdmin|PHPMYADMIN|' \
     'scripts|setup|sqladmin|sql-admin|submitticket|' \
     'temp|upload|w00tw00t|webadmin|' \
-    'wootwoot|WootWoot|WooTWooT|wp-|xmlrpc)'
+    'wootwoot|WootWoot|WooTWooT|wp-|xmlrpc|' \
+    '(?:[a-z]{2}(?:-[A-Z]{2})?/)?' \
+    'projects(?:/[1-9][0-9]*(?:/[1-9][0-9]*)?)?(?:\.json)?[%&]' \
+    ')'
   )
   # FAIL2BAN_QUERY = Regexp.compile(ENV['FAIL2BAN_QUERY'] || '\/etc\/passwd')
   Rack::Attack.blocklist('fail2ban pentesters') do |req|

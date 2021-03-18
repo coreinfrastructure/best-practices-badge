@@ -42,6 +42,7 @@ Rails.application.routes.draw do
   # Therefore, instead of redirecting the badge image to a locale if
   # one is not listed, we do *NOT* support locale URLs in this case.
   get '/projects/:id/badge' => 'projects#badge',
+      constraints: { id: VALID_ID },
       defaults: { format: 'svg' }
 
   # The /badge_static/:value route needs speed and never uses a locale.

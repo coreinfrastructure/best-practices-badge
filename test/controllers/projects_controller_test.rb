@@ -173,6 +173,11 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'Accept-Encoding, Origin', @response.headers['Vary']
   end
 
+  test 'should NOT show project if invalid id given' do
+    get "/en/projects/#{@project.id}junk"
+    assert_response :missing
+  end
+
   # DEPRECATED CAPABILITY. We eventually want to require people to use
   # "/en/projects/:id.json" if they want JSON. However, as long as this
   # capability exists, we should test that it works. We also want to test

@@ -74,12 +74,15 @@ CORS_ALLOWED_METHODS = %i[get options].freeze
 # response.set_header('Vary', 'Accept')
 # this would let browser caches know to check the 'Accept' HTTP value.
 
+# We use regular expressions to define the patterns;
+# the library also supports string matching, but it's not very precise
+# and there's no way to express priority.
+# With regular expressions we can express the patterns unambiguously.
+
 CORS_DIFFERENTIATED_RESOURCE_PATTERNS = [
-  '/projects', '/projects/*',
-  '/projects/**/*', '/project_stats*',
-  '/en/projects', '/en/projects/*',
-  '/en/projects/**/*', '/en/project_stats*',
-  '/users/*.json', '/en/users/*.json'
+  %r{\A/([a-z]{2}(-[A-Z]{2})?/)?projects(/[1-9][0-9]*(/[1-9][0-9]*)?)?\z},
+  %r{\A/([a-z]{2}(-[A-Z]{2})?/)?project_stats\z},
+  %r{\A/([a-z]{2}(-[A-Z]{2})?/)?users/[1-9][0-9]*\.json\z}
 ].freeze
 
 # For some resources we are absolutely *certain* that their results
@@ -104,16 +107,9 @@ CORS_DIFFERENTIATED_RESOURCE_PATTERNS = [
 # that would just produce useless "/badge" and "/badge.json" and so on.
 
 CORS_UNDIFFERENTIATED_RESOURCE_PATTERNS = [
-  # Badge information about one project (image and JSON)
-  '/projects/*/badge', '/projects/*/badge.json',
-  # Information about one project (JSON)
-  '/??/projects/*.json', '/??-??/projects/*.json',
-  # Information about a set of projects (JSON)
-  '/??/projects.json', '/??-??/projects.json',
-  # Project statistics (JSON); some have no locale, some have a locale
-  '/project_stats/*.json',
-  '/??/project_stats/*.json', '/??-??/project_stats/*.json',
-  '/??/project_stats.json', '/??-??/project_stats.json'
+  %r{\A/([a-z]{2}(-[A-Z]{2})?/)?projects/[1-9][0-9]*/badge\z},
+  %r{\A/([a-z]{2}(-[A-Z]{2})?/)?projects(/[1-9][0-9]*)?\.json\z},
+  %r{\A/([a-z]{2}(-[A-Z]{2})?/)?project_stats(/[a-z0-9_]+)?\.json\z}
 ].freeze
 CORS_UNDIFFERENTIATED_VARY = ['Accept-Encoding'].freeze
 

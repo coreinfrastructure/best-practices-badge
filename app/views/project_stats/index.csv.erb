@@ -1,16 +1,40 @@
 <% require 'csv' -%>
-<%# See: http://nithinbekal.com/posts/rails-csv-export/ -%>
-<%=
-  # Generate headers. This presumes that ActiveRecord's "column_names"
-  # returns a list in the same order that "attributes.values" will.
-  # This code just generates whatever order is convenient, presuming that
-  # receivers will use the CSV heading name (not field position) if they care
-  # about which field they get.
-  # We could use @project_stats[0].attributes.keys, but that would fail
-  # if the database was empty.
-  columns = @project_stats.column_names
-  CSV.generate_line(columns)
+<%#
+  Efficiently generate CSV files.
+
+  We normally access the database using ActiveRecord, the Rails ORM.
+  However, while that's convenient, ActiveRecord imposes a big overhead
+  if used on the *entire* database, because it has to first convert *all*
+  of the records and all data of each record into objects.
+  That is what we used to do following advice such as
+  http://nithinbekal.com/posts/rails-csv-export/
+
+  The code below works differently. Instead of using ActiveRecord
+  to load the entire database and convert everything into many objects,
+  we directly call the database and process each row ourselves, following:
+  See: https://stackoverflow.com/questions/29567863/
+  dreadfully-slow-csv-generation
+
+  Generating CSV turns out to be a killer for time and memory allocations.
+  Real-world calls can take >3seconds. In benchmarks this optimization
+  reduced time 572ms->209ms, allocations 408339->80127.
+
+  Note: we surround this with "raw" because we aren't generating HTML,
+  we're generating CSV, which has its own escape mechanism that is
+  handled by CSV.generate.
+
+  To make this reusable, we use @model (not ProjectStat).
 -%>
-<%- @project_stats.each do |stat| -%>
-<%=   CSV.generate_line(stat.attributes.values) -%>
-<%- end -%>
+<%=
+  raw(
+    CSV.generate do |csv|
+      # Generate headers as first row
+      csv << @model.column_names
+      @model.connection.select_all(
+        "select * from #{@model.table_name}"
+      ).each do |row|
+        csv << row.values
+      end
+    end
+  )
+-%>

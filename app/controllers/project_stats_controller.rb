@@ -26,6 +26,8 @@ class ProjectStatsController < ApplicationController
   skip_before_action :redir_missing_locale,
                      only: %i[total_projects nontrivial_projects silver gold]
 
+  CSV_FILENAME = 'project_stats.csv'
+
   # The time, in number of seconds since midnight, when we log
   # project statistics. This is currently 23:30 UTC, set by Heroku scheduler;
   # change this value if you change the time of day we log statistics.
@@ -108,9 +110,10 @@ class ProjectStatsController < ApplicationController
       format.csv do
         cache_until_next_stat
         headers['Content-Disposition'] =
-          'attachment; filename="project_stats.csv"'
-        @project_stats = ProjectStat.all
-        render csv: @project_stats, filename: @project_stats.name
+          "attachment; filename=\"#{CSV_FILENAME}\""
+        # No longer need this: @project_stats = ProjectStat.all
+        @model = ProjectStat
+        render format: :csv, filename: CSV_FILENAME
       end
       format.json do
         cache_until_next_stat

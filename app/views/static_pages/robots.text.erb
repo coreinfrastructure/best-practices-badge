@@ -73,8 +73,19 @@ Disallow: /WootWoot
 Disallow: /WooTWooT
 Disallow: /wp-
 Disallow: /xmlrpc
-#
-#
+
+# Don't crawl /projects URLs with "&" or "%".
+# We get many attacks that use these characters, and in some cases
+# temporarily block sites that use them in ways that look like attacks.
+# There's no need to crawl them, and by saying "do not crawl them"
+# we protect web crawlers from accidentally looking like attackers.
+# Ideally we'd only prevent crawling if these were not part of the query,
+# but robots.txt doesn't have any way to do that.
+<% all_prefixes.each do |prefix| %>
+Disallow: <%= prefix %>/projects/*&
+Disallow: <%= prefix %>/projects/*%
+<% end %>
+
 # Don't crawl sorts or most queries.
 # They have the same data, and crawling all the variants will produce
 # slow crawl times.

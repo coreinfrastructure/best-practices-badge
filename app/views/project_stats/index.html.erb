@@ -116,6 +116,8 @@
 <br>
 <%= t '.raw_data' %>
 <ul>
-<li><%= link_to t('.json_format'), project_stats_path(format: :json) %>
-<li><%= link_to t('.csv_format'), project_stats_path(format: :csv) %>.
+<li><%=
+  link_to t('.json_format'), project_stats_path(format: :json, locale: nil) %>
+<li><%=
+  link_to t('.csv_format'), project_stats_path(format: :csv, locale: nil) %>.
 </ul>

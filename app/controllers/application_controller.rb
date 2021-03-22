@@ -199,17 +199,19 @@ class ApplicationController < ActionController::Base
     I18n.default_locale
   end
 
+  # Special case: If the requested format is JSON or CSV, don't bother
+  # redirecting, because JSON and CSV are normally the same in any locale.
+  DO_NOT_REDIRECT_LOCALE = %w[json csv].freeze
+
   # If locale is not provided in the URL, redirect to best option.
   # NOTE: This is intentionally skipped by some calls, e.g., session create.
   # See <http://guides.rubyonrails.org/i18n.html>.
   def redir_missing_locale
     explicit_locale = params[:locale]
     return if explicit_locale.present?
-    #
-    # Special case: If the requested format is JSON, don't bother
-    # redirecting, because JSON is the same in any locale.
-    #
-    return if params[:format] == 'json'
+
+    # Don't bother redirecting some formats
+    return if DO_NOT_REDIRECT_LOCALE.include?(params[:format])
 
     #
     # No locale, determine the best locale and redirect.

@@ -686,6 +686,10 @@ class ProjectsController < ApplicationController
     format = request&.format&.symbol
     if !format || format == :html
       @projects = @projects.select(HTML_INDEX_FIELDS)
+    # JSON includes additional_rights; load them at one time to prevent
+    # and N+1 query (do this for CSV also if we ever add that field to CSV)
+    elsif format == :json
+      @projects = @projects.includes(:additional_rights)
     end
     @pagy, @projects = pagy(@projects.includes(:user))
     # We want to know the *total* count, even if we're paging.

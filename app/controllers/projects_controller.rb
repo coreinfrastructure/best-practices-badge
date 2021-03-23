@@ -615,6 +615,7 @@ class ProjectsController < ApplicationController
   # that might lead to a timeout), so we prioritize recently pushed repos.
   # We omit repos that are already pursuing a badge.
   # rubocop:disable Style/MethodCalledOnDoEndBlock, Metrics/MethodLength
+  # rubocop:disable Metrics/AbcSize
   def repo_data
     github = Octokit::Client.new access_token: session[:user_token]
     # Take extra steps to prevent a timeout when retrieving repo data.
@@ -634,11 +635,12 @@ class ProjectsController < ApplicationController
     )
     return if repos.blank?
 
-    # Only include repos not already in our database.  This willl cause
-    # a quick flurry of checks on the database, but they are indexed and
-    # limited by the number of records we request from GitHub.
+    # Find & remove the repos already in our database.
     # We do this to make the user's job easier.
-    repos = repos.reject { |repo| Project.exists?(repo_url: repo.html_url) }
+    repo_urls = repos.pluck(:html_url) # URLs of all of this user's repos
+    already = Project.where(repo_url: repo_urls).pluck(:repo_url).to_set
+    repos = repos.reject { |repo| already.member?(repo.html_url) }
+
     # Sort by name for user convenience:
     repos.sort_by! { |v| v['full_name'] }
 
@@ -646,6 +648,7 @@ class ProjectsController < ApplicationController
       [repo.full_name, repo.fork, repo.homepage, repo.html_url]
     end.compact
   end
+  # rubocop:enable Metrics/AbcSize
   # rubocop:enable Style/MethodCalledOnDoEndBlock, Metrics/MethodLength
 
   HTML_INDEX_FIELDS = 'projects.id, projects.name, description, ' \

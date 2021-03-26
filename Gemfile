@@ -104,7 +104,7 @@ group :development, :test do
   gem 'pronto-rubocop', '0.11.1'
   # gem 'railroader', '4.3.8' # Security static analyzer. OSS fork of Brakeman
   gem 'rubocop', '0.91.1', require: false # Style checker
-  gem 'rubocop-performance', '1.8.0', require: false # Performance cops
+  gem 'rubocop-performance', '1.10.2', require: false # Performance cops
   gem 'rubocop-rails', '2.8.0', require: false # Rails-specific cops
   gem 'ruby-graphviz', '1.2.5' # This is used for bundle viz
   gem 'spring', '2.1.1' # Preloads app so console, rake, and tests run faster

@@ -160,7 +160,7 @@ jobs:
         path: test/html_reports
     - store_artifacts:
         path: /tmp/circleci-test-results
-  deploy-master:
+  deploy-main:
     docker:
       - image: buildpack-deps:bionic
     environment:
@@ -225,12 +225,12 @@ workflows:
   build-deploy:
     jobs:
       - build
-      - deploy-master:
+      - deploy-main:
           requires:
             - build
           filters:
             branches:
-              only: master
+              only: main
       - deploy-staging:
           requires:
             - build

@@ -225,16 +225,16 @@ task :bundle_viz do
   sh 'bundle viz --version --requirements --format svg'
 end
 
-desc 'Deploy current origin/master to staging'
+desc 'Deploy current origin/main to staging'
 task deploy_staging: :production_to_staging do
   sh 'git checkout staging && git pull && ' \
-     'git merge --ff-only origin/master && git push && git checkout master'
+     'git merge --ff-only origin/main && git push && git checkout main'
 end
 
 desc 'Deploy current origin/staging to production'
 task :deploy_production do
   sh 'git checkout production && git pull && ' \
-     'git merge --ff-only origin/staging && git push && git checkout master'
+     'git merge --ff-only origin/staging && git push && git checkout main'
 end
 
 rule '.html' => '.md' do |t|
@@ -323,9 +323,9 @@ task :pull_production_alternative do
      '           -d development db/latest.dump'
 end
 
-desc 'Copy active master database into development (requires access privs)'
-task :pull_master do
-  puts 'Getting master database'
+desc 'Copy active main database into development (requires access privs)'
+task :pull_main do
+  puts 'Getting main database'
   Rake::Task['drop_database'].reenable
   Rake::Task['drop_database'].invoke
   sh 'heroku pg:pull DATABASE_URL development --app master-bestpractices'
@@ -338,8 +338,8 @@ end
 # unnecessarily.  If you want the current active database, you can
 # force a backup with:
 # heroku pg:backups:capture --app production-bestpractices
-desc 'Copy production database backup to master, overwriting master database'
-task :production_to_master do
+desc 'Copy production database backup to main stage, overwriting main database'
+task :production_to_main do
   sh 'heroku pg:backups:restore $(heroku pg:backups:public-url ' \
      '--app production-bestpractices) DATABASE_URL --app master-bestpractices'
   sh 'heroku run:detached bundle exec rake db:migrate ' \
@@ -448,12 +448,12 @@ def normalize_yaml(path)
   end
 end
 
-desc "Ensure you're on master branch"
-task :ensure_master do
-  raise StandardError, 'Must be on master branch to proceed' unless
-    `git rev-parse --abbrev-ref HEAD` == "master\n"
+desc "Ensure you're on the main branch"
+task :ensure_main do
+  raise StandardError, 'Must be on main branch to proceed' unless
+    `git rev-parse --abbrev-ref HEAD` == "main\n"
 
-  puts 'On master branch, proceeding...'
+  puts 'On main branch, proceeding...'
 end
 
 desc 'Reformat en.yml'
@@ -488,7 +488,7 @@ end
 # We save and restore the en version around the sync to resolve.
 # Ths task only runs in development, since the gem is only loaded then.
 if Rails.env.development?
-  Rake::Task['translation:sync'].enhance %w[ensure_master backup_en] do
+  Rake::Task['translation:sync'].enhance %w[ensure_main backup_en] do
     at_exit do
       Rake::Task['restore_en'].invoke
       Rake::Task['fix_localizations'].invoke
@@ -751,11 +751,11 @@ task :test_dev_install do
   puts 'Updating test-dev-install branch'
   sh <<-TEST_BRANCH_SHELL
     git checkout test-dev-install
-    git merge --no-commit master
+    git merge --no-commit main
     git checkout HEAD circle.yml
-    git commit -a -s -m "Merge master into test-dev-install"
+    git commit -a -s -m "Merge main into test-dev-install"
     git push origin test-dev-install
-    git checkout master
+    git checkout main
   TEST_BRANCH_SHELL
 end
 

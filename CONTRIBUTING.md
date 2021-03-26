@@ -13,8 +13,9 @@ Here's help on how to make contributions, divided into the following sections:
 * criteria changes,
 * code changes,
 * how to check proposed changes before submitting them,
-* reuse (supply chain for third-party components, including updating them), and
-* keeping up with external changes.
+* reuse (supply chain for third-party components, including updating them),
+* keeping up with external changes, and
+* handling the rename of the "master" branch to "main".
 
 ## General information
 
@@ -55,7 +56,7 @@ For more about how to create a pull request, see
 <https://help.github.com/articles/using-pull-requests/>.
 
 We recommend creating different branches for different (logical)
-changes, and creating a pull request when you're done into the master branch.
+changes, and creating a pull request when you're done into the main branch.
 See the GitHub documentation on
 [creating branches](https://help.github.com/articles/creating-and-deleting-branches-within-your-repository/)
 and
@@ -1017,7 +1018,7 @@ it can be checked in as a new commit.
 ## Keeping up with external changes
 
 The installer adds a git remote named 'upstream'.
-Running 'git pull upstream master' will pull the current version from
+Running 'git pull upstream main' will pull the current version from
 upstream, enabling you to sync with upstream.
 
 You can reset this, if something has happened to it, using:
@@ -1031,3 +1032,16 @@ If the version of Ruby has changed (in the Gemfile),
 use the 'Ruby itself can be updated' instructions.
 If gems have been added or their versions changed, run
 "bundle install" to install the new ones.
+
+## Renaming "master" to "main"
+
+We have renamed our "master" branch to "main".
+If you have a copy of our code that uses a "master" branch,
+you can switch by doing the following:
+
+~~~~sh
+git branch -m master main
+git fetch origin
+git branch -u origin/main main
+git remote set-head origin -a
+~~~~

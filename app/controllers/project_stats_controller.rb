@@ -291,7 +291,7 @@ class ProjectStatsController < ApplicationController
       series_counts = stat_data.map { |e| e[desired_field] }
       series_moving_average =
         series_counts.each_cons(ndays).map do |e|
-          e.reduce(&:+).to_f / ndays
+          e.sum.to_f / ndays
         end
       moving_average_dataset = {}
       stat_data.each_with_index do |e, index|

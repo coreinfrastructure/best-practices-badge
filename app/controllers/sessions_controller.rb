@@ -98,7 +98,7 @@ class SessionsController < ApplicationController
     successful_login(user)
   end
 
-  # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def local_login_procedure(user)
     if !user.activated?
       flash[:warning] = t('sessions.not_activated')
@@ -109,7 +109,12 @@ class SessionsController < ApplicationController
     else
       successful_login(user)
       params[:session][:remember_me] == '1' ? remember(user) : forget(user)
+      # Support a special make_old testing parameter in non-production.
+      if !Rails.env.production? && params[:make_old] == 'true'
+        session[:time_last_used] = 1000.days.ago
+        session[:make_old] = true
+      end
     end
   end
-  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 end

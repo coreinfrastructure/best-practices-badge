@@ -169,6 +169,8 @@ module ActiveSupport
       # This is based on "Ruby on Rails Tutorial" by Michael Hargle, chapter 8,
       # https://www.railstutorial.org/book
       if integration_test?
+        # This fails in Ruby 3.0.0. See:
+        # ~/.rbenv/versions/3.0.0/lib/ruby/gems/3.0.0/gems/rails-controller-testing-1.0.4/lib/rails/controller/testing/integration.rb
         post login_path, params: {
           session: {
             email:  user.email, password: password,

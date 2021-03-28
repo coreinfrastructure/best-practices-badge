@@ -25,5 +25,5 @@ installed on your computer (Install instructions are
     docker push <username>/cii-bestpractices:<tag>
     ~~~~
 
-Once completed you can then update `.circleci/conifg.yml` to use the new image.
-You should also add your new Dockerfile to vesion control.
+Once completed you can then update `.circleci/config.yml` to use the new image.
+You should also add your new Dockerfile to version control.

@@ -105,7 +105,9 @@ class UserTest < ActiveSupport::TestCase
     # Check if rekey results are correct
     assert email_address, user1.email
     new_blind_index = BlindIndex.generate_bidx( # Recalc so test's less fragile
-      email_address, User.blind_indexes[:email]
+      email_address,
+      key: [User::TEST_EMAIL_BLIND_INDEX_KEY].pack('H*'),
+      options: User.blind_indexes[:email]
     )
     assert new_blind_index, user1.email_bidx
   end

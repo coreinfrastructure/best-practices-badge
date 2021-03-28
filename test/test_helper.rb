@@ -168,22 +168,22 @@ module ActiveSupport
     )
       # This is based on "Ruby on Rails Tutorial" by Michael Hargle, chapter 8,
       # https://www.railstutorial.org/book
-      if integration_test?
-        # This fails in Ruby 3.0.0. See:
-        # ~/.rbenv/versions/3.0.0/lib/ruby/gems/3.0.0/gems/rails-controller-testing-1.0.4/lib/rails/controller/testing/integration.rb
-        post login_path, params: {
-          session: {
-            email:  user.email, password: password,
-            provider: provider, remember_me: remember_me,
-            time_last_used: time_last_used
-          }
+      # if true # integration_test?
+      # This fails in Ruby 3.0.0. See:
+      # ~/.rbenv/versions/3.0.0/lib/ruby/gems/3.0.0/gems/rails-controller-testing-1.0.4/lib/rails/controller/testing/integration.rb
+      post login_path, params: {
+        session: {
+          email:  user.email, password: password,
+          provider: provider, remember_me: remember_me,
+          time_last_used: time_last_used
         }
-        # Do this instead, it at least checks the password:
-        # session[:user_id] = user.id if user.try(:authenticate, password)
-      else
-        session[:user_id] = user.id
-        session[:time_last_used] = time_last_used
-      end
+      }
+      # Do this instead, it at least checks the password:
+      # session[:user_id] = user.id if user.try(:authenticate, password)
+      # else
+      #   @controller.session[:user_id] = user.id
+      #   @controller.session[:time_last_used] = time_last_used
+      # end
     end
     # rubocop:enable Metrics/MethodLength
 

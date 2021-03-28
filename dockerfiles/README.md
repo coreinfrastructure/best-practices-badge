@@ -9,8 +9,10 @@ To upgrade the docker image you must have an account on DockerHub and docker
 installed on your computer (Install instructions are
 [here](https://docs.docker.com/install/). You can then run the following steps.
 
-1. Copy the existing file and directory as described above.
-2. Modify the Dockerfile to point to the correct base image.
+1. Create a new directory and copy an existing Dockerfile into the new
+   directory as described above.
+2. "cd" into that directory and modify the Dockerfile
+   to point to the correct base image.
 3. Log in to DockerHub
     ~~~~sh
     docker login -u <username>

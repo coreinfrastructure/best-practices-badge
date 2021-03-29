@@ -233,7 +233,9 @@ module SessionsHelper
   end
 
   def persist_session_timestamp
-    session[:time_last_used] = Time.now.utc if logged_in?
+    return unless logged_in? && !session.key?(:make_old)
+
+    session[:time_last_used] = Time.now.utc
   end
 
   private

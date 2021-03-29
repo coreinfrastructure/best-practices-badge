@@ -6,28 +6,14 @@
 
 require 'test_helper'
 
-# TODO: ActionController::TestCase is obsolete. This should switch to using
-# ActionDispatch::IntegrationTest and then remove rails-controller-testing.
-# See: https://github.com/rails/rails/issues/22496
-# However, these tests are hard to transition, so these remain.
-class ProjectsControllerSpecialTest < ActionController::TestCase
-  tests ProjectsController
-
+class ProjectsControllerSpecialTest < ActionDispatch::IntegrationTest
   setup do
     @project = projects(:one)
   end
 
   test 'should fail to edit due to old session' do
-    log_in_as(@project.user, time_last_used: 1000.days.ago.utc)
-    get :edit, params: { id: @project, locale: :en }
-    assert_response 302
-    assert_redirected_to login_path
-  end
-
-  test 'should fail to edit due to session time missing' do
-    log_in_as(@project.user, time_last_used: 1000.days.ago.utc)
-    session.delete(:time_last_used)
-    get :edit, params: { id: @project, locale: :en }
+    log_in_as(@project.user, make_old: true)
+    get "/en/projects/#{@project.id}/edit"
     assert_response 302
     assert_redirected_to login_path
   end

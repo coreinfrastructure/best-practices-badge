@@ -164,24 +164,18 @@ module ActiveSupport
     # existing accounts, even if we make the password rules harsher later.
     def log_in_as(
       user, password: 'password', provider: 'local', remember_me: '1',
-      time_last_used: Time.now.utc
+      make_old: false
     )
       # This is based on "Ruby on Rails Tutorial" by Michael Hargle, chapter 8,
       # https://www.railstutorial.org/book
-      if integration_test?
-        post login_path, params: {
-          session: {
-            email:  user.email, password: password,
-            provider: provider, remember_me: remember_me,
-            time_last_used: time_last_used
-          }
+      time_last_used = Time.now.utc
+      post "#{login_path}#{'?make_old=true' if make_old}", params: {
+        session: {
+          email:  user.email, password: password,
+          provider: provider, remember_me: remember_me,
+          time_last_used: time_last_used
         }
-        # Do this instead, it at least checks the password:
-        # session[:user_id] = user.id if user.try(:authenticate, password)
-      else
-        session[:user_id] = user.id
-        session[:time_last_used] = time_last_used
-      end
+      }
     end
     # rubocop:enable Metrics/MethodLength
 

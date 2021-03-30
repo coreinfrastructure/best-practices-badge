@@ -613,8 +613,10 @@ class Project < ApplicationRecord
 
   def to_percentage(portion, total)
     return 0 if portion.zero?
+    return 100 if portion >= total
 
-    ((portion * 100.0) / total).round
+    # Give percentage, but only up to 99% (so "100%" always means "complete")
+    [((portion * 100.0) / total).round, 99].min
   end
 
   # Update achieved_..._at & lost_..._at fields given level as number

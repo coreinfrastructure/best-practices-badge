@@ -616,7 +616,9 @@ class Project < ApplicationRecord
     return 100 if portion >= total
 
     # Give percentage, but only up to 99% (so "100%" always means "complete")
-    [((portion * 100.0) / total).round, 99].min
+    # The tertiary operator is clearer & faster than using [...].min
+    result = ((portion * 100.0) / total).round
+    result > 99 ? 99 : result
   end
 
   # Update achieved_..._at & lost_..._at fields given level as number

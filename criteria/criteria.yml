@@ -184,6 +184,29 @@
             We can use more general tools to detect the natural language,
             or simple mechanisms like using dictionaries/spellcheckers to
             see if it's mostly English.
+      - maintained:
+          category: MUST
+          autofill: >
+            Look at the repo page.
+            To detect projects that have expressly stated that they are
+            not maintained,
+            look for “DEPRECATED” as the first heading of its README title,
+            “DEPRECATED” to the beginning of its GitHub project description
+            (if it is on GitHub), a
+            <a href="https://unmaintained.tech/“>no-maintenance-intended badge</a>
+            in its README, and/or
+            the code repository's marking system (e.g.,
+            GitHub’s <a href="https://docs.github.com/en/enterprise-server@2.21/github/creating-cloning-and-archiving-repositories/archiving-a-github-repository">”archive” setting</a>,
+            GitLab’s <a href="https://docs.gitlab.com/ee/user/project/settings/#archiving-a-project”>“archived” marking</a>,
+            Gerrit’s “readonly” status, or
+            SourceForge’s “abandoned” project status).
+            Additional discussion can be found <a href="https://medium.com/maintainer-io/how-to-deprecate-a-repository-on-github-8f0ceb9155e">here</a>.
+            To detect projects that have simply stopped being maintained,
+            look for projects more than X lines of code (or size) that
+            have had no response activity in more than Y months (in either the
+            project or badge). Creating issues & pull requests do not count
+            as responses (since they may be from those outside the project);
+            commits and releases *do* count as response activity.
   - 'Change Control': !!omap
     - Public version-controlled source repository: !!omap
       - repo_public:

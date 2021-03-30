@@ -7,6 +7,7 @@
 # rubocop:disable Metrics/ModuleLength
 module SessionsHelper
   SESSION_TTL = 48.hours # Automatically log off session if inactive this long
+  RESET_SESSION_TIMER = 1.hour # Active sessions older than this reset timer
   PRODUCTION_HOSTNAME = 'bestpractices.coreinfrastructure.org'
   GITHUB_PATTERN = %r{
     \Ahttps://github.com/([A-Za-z0-9_.-]+)/([A-Za-z0-9_.-]+)/?\Z
@@ -232,10 +233,17 @@ module SessionsHelper
     redirect_to login_path
   end
 
+  # Set session timestamp. For efficiency, we only do this if the last
+  # session timestamp is more than RESET_SESSION_TIMER ago.
+  # This efficiency measure avoids constantly updating the session cookie
+  # for many closely-related interactions (as is typical).
   def persist_session_timestamp
     return unless logged_in? && !session.key?(:make_old)
 
-    session[:time_last_used] = Time.now.utc
+    old = !session.key?(:time_last_used) ||
+          (session[:time_last_used] < RESET_SESSION_TIMER.ago.utc)
+
+    session[:time_last_used] = Time.now.utc if old
   end
 
   private

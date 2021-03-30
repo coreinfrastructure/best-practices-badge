@@ -216,8 +216,8 @@ class ProjectTest < ActiveSupport::TestCase
 
   test 'test get_satisfaction_data' do
     basics = @unjustified_project.get_satisfaction_data('0', 'basics')
-    assert_equal '9/12', basics[:text]
-    assert_equal 'hsl(90, 100%, 50%)', basics[:color]
+    assert_equal '10/13', basics[:text]
+    assert_equal 'hsl(92, 100%, 50%)', basics[:color]
     reporting = @unjustified_project.get_satisfaction_data('0', 'reporting')
     assert_equal '5/8', reporting[:text]
     assert_equal 'hsl(75, 100%, 50%)', reporting[:color]

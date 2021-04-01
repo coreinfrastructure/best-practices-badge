@@ -7,19 +7,18 @@ CII Best Practices Badge Project.
 
 ## Overall
 
-This project is a Linux Foundation (LF) Core Infrastructure Initiative (CII)
-project.
-The CII is led by a steering committee who represent a variety of
-organizations; see the
-[CII FAQ](https://www.coreinfrastructure.org/faq) for more information.
+This project is a Linux Foundation (LF)
+[Open Source Security Foundation (OpenSSF)](https://openssf.org/) project.
+The OpenSSF is essentially the successor of the
+Core Infrastructure Initiative (CII) project.
 
 In terms of
 ["Governance models" (Gardler and Hanganu)](http://oss-watch.ac.uk/resources/governancemodels) the badging project is a bazaar -
 contributions are gladly welcomed from anyone.
-The project is led by a single technical lead designated by the CII.
+The project is led by a single technical lead designated by the OpenSSF.
 The technical lead has final say on decisions (and thus is
 something of a "benevolent dictator"), but the technical
-lead is subject to being overruled or replaced by the CII.
+lead is subject to being overruled or replaced by the OpenSSF.
 Also, since the project is FLOSS, the project can be forked;
 this ability to fork also provides a check against despotism.
 The technical lead's job is focus on doing what's best
@@ -69,23 +68,37 @@ and trivial clarifications.
 Criteria may have clarifications and minor exceptions added, but there
 must be an opportunity for discussion.
 Our usual approach is to create an issue and mark it with
-"criteria-clarification".
+"criteria-clarification", and in most cases there should also be a notice
+posted to the mailing list.
 
-We expect that the criteria will need to be changed in more significant
-ways over time, but these more significant changes *MUST* happen much
+We expect that the set of criteria will need to be changed in more significant
+ways over time.
+However, if these changes could cause any existing badge-holders to lose
+their badges, these are significant changes.
+These significant changes *MUST* happen much
 less often and projects *MUST* be given much more time to either (1) object
 or (2) modify their project to comply *and* record that in the BadgeApp
 (so that they retain their badges).
 We currently expect that badge criteria will change at most 1/year,
-and that projects will have at least 2 months' warning before the change.
+and that projects will have at *least* 2 months' warning before the change.
 In that 2-month time, the BadgeApp must provide the necessary mechanisms
 (e.g., using "future" criteria) so that projects can record their new answers
-and thus have ample time to prevent losing the badge.
+and thus have ample time to prevent losing their badge.
+
+If adding a new criteria will *not* cause any existing badge holder
+to lose their badge (e.g., because it is "Met" by default),
+at a *minimum*
+the proposed criterion *MUST* be discussed on the mailing list *AND*
+must have an issue where at *least* two weeks is allowed for discussion
+and improvement before putting on the live site.
+In addition, there must be a rough consensus that "speedy adding"
+of this criterion is appropriate.
+Speeding adding of a criterion is expected to be extremely unusual.
 
 ## Current people
 
 The current Badge Project technical lead is David A. Wheeler.
-Others with commit rights include Dan Kohn and Jason Dossett.
+Others with commit rights include Jason Dossett.
 
 ## See also
 

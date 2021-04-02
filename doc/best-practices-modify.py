@@ -1,118 +1,83 @@
 #!/usr/bin/python3
-# Demo how to modify bestpractices.coreinfrastructure.org entries via API
+# Modify bestpractices.coreinfrastructure.org project entries via API
 
 # Copyright the Linux Foundation and the
 # CII Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
-# To authenticate, you need a session cookie for the site and store
-# that in the environment variable `_BadgeApp_session`.
-# The easy way is to login as usual using your web browser and then
-# find the cookie value for `_BadgeApp_session`.
-# In Chrome, login to site & leave on screen. Then go to
-# More Tools => Developer Tools => Application => Cookies
-# select the site, select the _BadgeApp_session cookie,
-# then go to the right and select JUST its value under the "Value" column.
-# Now copy (control-C or cmd-C).
-# In Firefox, Web Developer => Storage Inspector => Cookies
-# shows the cookie value.
-#
-# One you have the cookie value copied into your clipboard, 
-# set the environment variable _BadgeApp_session to it. E.g., in sh:
-# export _BadgeApp_session='VALUE_FROM_CLIPBOARD'
+# Sample usage (modify staging, project 1, with this JSON data):
+# ... doc/best-practices-modify.py -S 1 '{"test_status": "Met"}'
+# To modify the *production* site data, use -P instead of -S.
 
-# NOTE: A given login cookie is good for 48 hours, and then expires.
+# This requires a session cookie to be set. Run
+# ... doc/best-practices-modify.py --help
+# for an explanation on how to do that.
+
+# Python2 is "officially" unsupported but actually in wide use,
+# so we'll try to make it not hard to use Python2.
+# We'll import print_function, and use "+" to concatenate strings.
+# We haven't tested with Python2, so more changes are likely necessary. 
+from __future__ import print_function
 
 import os, sys, re, json, urllib
+import argparse
 from urllib.request import urlopen
 
-# This is the base URL for project data.
-# base_url = 'https://master.bestpractices.coreinfrastructure.org/'
-# TODO
-base_url = 'http://localhost:3000/'
+# Plausible base URLs.
+LOCAL_BASE_URL = 'http://localhost:3000/'
+STAGING_BASE_URL = 'https://staging.bestpractices.coreinfrastructure.org/'
+PRODUCTION_BASE_URL = 'https://bestpractices.coreinfrastructure.org/'
 
 COOKIE_NAME = '_BadgeApp_session'
 
-# This doesn't work, reasons unknown.
-# curl -b "_BadgeApp_session=$BadgeApp_session" -i 'http://localhost:3000/en/projects/1/edit'
-
-
-# In *principle* this is how to modify a project programmatically:
-# * Log in using your browser and store the session cookie data
-#   in the environment variable "_BadgeApp_session" as described above.
-# * In some cases you might want to GET the JSON data
-#   for the project you're editing, which will be
-#   <https://bestpractices.coreinfrastructure.org/projects/NUMBER.json>.
-# * GET the HTML page for the edit page of the project you’re editing,
-#   which will be
-#   <https://bestpractices.coreinfrastructure.org/projects/NUMBER/edit>.
-#   You’re looking for this in the HTML. You should see two values
-#   (the ..._HERE are the values you want): <meta name="csrf-token"
-#   content="CSRF_TOKEN_VALUE_HERE" />
-#   ...  <input type="hidden" name="authenticity_token"
-#   value="AUTH_TOKEN_VALUE_HERE" />
-#   I think the value you actually want is the one with
-#   "authenticity_token".
-# * Capture the cookie that represents login & related session data,
-#   it’s named _BadgeApp_session
-#   You must do this *AFTER* you’ve done GET on the form, because the
-#   cookie includes encrypted data that must be matched with the form data.
-# * PATCH the project data update, sending the cookie & data to authenticate
-#   that this isn’t a CSRF attack.
-#   It’s probably easier to send as JSON, e.g., POST
-#   https://bestpractices.coreinfrastructure/projects/NUMBER.json).
-#   I suggest sending the csrf token using the "X-CSRF-Token" HTTP
-#   header, though you should also be able to include it as a POST
-#   parameter. I think the token you need to send is the one set by
-#   “authenticity_token”, and not csrf-token.
-
-
-
-
-# Enable per-form CSRF tokens. Previous versions had false. CHANGED.
-# Rails.application.config.action_controller.per_form_csrf_tokens = true
-# Enable origin-checking CSRF mitigation. Previous versions had false. CHANGED.
-# Rails.application.config.action_controller.forgery_protection_origin_check = true
-
-
-def patch_project(id, updated_data, auth_token, csrf_token, session_cookie):
+def patch_project(base_url, id, updated_data,
+                  auth_token, csrf_token, session_cookie):
     """Attempts to patch project id with updated_data"""
-    # We assume updated_data is a string, in JSON format, of changes.
 
-    # TODO
-    print('starting patch_project')
-    """Returns auth_token,session_cookie for editing given project."""
+    # Originally we tried to PATCH the JSON endpoint, but we never
+    # got that working. So instead we PATCH the HTML endpoint:
+    url = base_url + 'en/projects/' + str(id)
 
-    # Try to get the "edit" page with our logged-in session cookie
-    url = base_url + 'en/projects/' + str(id) + '.json'
+    # Convert updated_data hashes of form {'test_status': 'Unmet'}
+    # into {'project[test_status]': 'Unmet'} because that's what the
+    # HTML form submission format requires.
+    updated_data_reformatted = {}
+    for key, value in updated_data.items():
+        updated_data_reformatted['project[' + key + ']'] = value
+    # Add authentication_token
+    updated_data_reformatted['authentication_token'] = auth_token
 
+    # Encode data for urllib.request.html as described in
     # https://docs.python.org/3/library/urllib.request.html#request-objects
-    # For an HTTP POST request method, data should be a buffer in the standard application/x-www-form-urlencoded format. The urllib.parse.urlencode() function takes a mapping or sequence of 2-tuples and returns an ASCII string in this format. It should be encoded to bytes before being used as the data parameter.
-    # https://docs.python.org/3/library/urllib.parse.html#urllib.parse.urlencode
+    updated_data_encoded = urllib.parse.urlencode(
+            updated_data_reformatted).encode('utf-8')
 
-    # updated_data_bytes = bytes(updated_data, 'utf-8')
-    # urllib.parse.urlencode({'spam': 1, 'eggs': 2, 'bacon': 0})
-    # updated_data_encoded = urllib.parse.urlencode(updated_data) # .encode('ascii')
-    updated_data_encoded = bytes(updated_data, 'utf-8')
-
+    # Set up request.
     request = urllib.request.Request(url,
             data=updated_data_encoded, method='PATCH')
+    # Provide authentication cookie to prove we're authorized to update.
     # Beware: add_header can only add *one* Cookie header
     request.add_header('Cookie', COOKIE_NAME + '=' + session_cookie)
     request.add_header('X-CSRF-Token', csrf_token)
-    request.add_header('Content-Type', 'application/json')
-    # request.add_header('Accepts', 'application/json') # Shouldn't matter
-    # TODO: auth_token???
     # Note: We don't send an origin; Rails considers that a valid origin.
+    # Originally we tried to post JSON, but had trouble getting that working.
+    # To do that you'd use the .json resource and add this header:
+    # request.add_header('Content-Type', 'application/json')
+    # request.add_header('Accepts', 'application/json') # Shouldn't matter
 
-    # TODO: Handle exception on open failure
-    response = urlopen(request)
+    # Attempt to send request.
+    try:
+        response = urlopen(request)
+    except urllib.error.HTTPError as e:
+        if e.code == 302 and e.headers['Location'] == url:
+            # EXPECTED result - everything is fine!
+            return 200
+        print('Warning: Received HTTPError, code=' + str(e.code))
+        print('This can happen on localhost if project badge status changes.')
+        return 500
 
-    redirected = (response.url != url)
-    if redirected or response.code != 200:
-        print('Error: Did not have permission to change project data')
-        return 403 # Forbidden
-
+    print('Warning: No exception, even though we expected a redirect 302')
+    print('There may be an invalid key or key value.')
     return 200
 
 # To find the form's authenticity token we look for this pattern:
@@ -125,9 +90,8 @@ CSRF_TOKEN_HTML_PATTERN = re.compile(
     r'<meta name="csrf-token" content="([^"]+)"'
 )
 
-
 def get_token(html, pattern):
-    """Return token in provided HTML that matches pattern."""
+    """Return string token in provided HTML that matches pattern."""
     result = pattern.search(html)
     if result:
         return result.group(1)
@@ -152,16 +116,17 @@ def get_updated_cookie(headers, session_cookie):
     new_session_cookie = leftover.split(';',1)[0]
     return new_session_cookie
 
-def get_project_tokens(id, session_cookie):
+def get_project_tokens(base_url, id, session_cookie):
     """Returns auth_token,csrf_token,session_cookie for project id."""
     # Try to get the "edit" page with our logged-in session cookie
     url = base_url + 'en/projects/' + str(id) + '/edit'
     request = urllib.request.Request(url)
+    # Provide authentication cookie to prove we're authorized to get page.
     # Beware: add_header can only add *one* Cookie header
     request.add_header('Cookie', COOKIE_NAME + '=' + session_cookie)
     # Note: We don't send an origin; Rails considers that a valid origin.
 
-    # TODO: Handle exception on open failure
+    # Note: This will raise exception on open failure
     response = urlopen(request)
 
     redirected = (response.url != url)
@@ -176,84 +141,94 @@ def get_project_tokens(id, session_cookie):
     new_session_cookie = get_updated_cookie(response.headers, session_cookie)
     return auth_token, csrf_token, new_session_cookie
 
-def get_session_cookie():
-    if '_BadgeApp_session' in os.environ:
-        return os.environ['_BadgeApp_session']
-    else:
-        print('Error: Environment variable _BadgeApp_session not set!')
-        print('Please log in and set the environment variable.')
-        # Just exit, we can't do anything in this situation.
-        sys.exit(1)
-
-def write_to_project(id, updated_data):
+def write_to_project(base_url, id, updated_data, session_cookie):
     """Write to project #id the updated_data in json format -> true if ok"""
-    session_cookie = get_session_cookie()
     auth_token, csrf_token, session_cookie = get_project_tokens(
-            id, session_cookie)
-    status = patch_project(id, updated_data, auth_token, csrf_token, session_cookie)
+            base_url, id, session_cookie)
+    status = patch_project(base_url, id, updated_data,
+            auth_token, csrf_token, session_cookie)
     return status == 200
 
-# TODO: Stub until we're confident it works
-PROJECT_NUMBER = 1
-# UPDATED_DATA = "{ 'automated_integration_testing_status' : 'Unmet' }"
-# UPDATED_DATA = "{'id': 25, 'project': { 'id': 25, 'automated_integration_testing_status' : 'Unmet' }}"
-# UPDATED_DATA = {'id': 25, 'project': { 'id': 25, 'automated_integration_testing_status' : 'Unmet' }}
-UPDATED_DATA = "{'id':25,'project':{'id':25,'automated_integration_testing_status':'Unmet'}}"
+HELP_EPILOG = """
+
+An example of using this is
+doc/best-practices-modify.py -S 1 '{"test_status": "Met"}'
+which modifies project 1 on the staging site.
+To modify the *production* site data, use -P instead of -S.
+Updates use JSON format; remember to use double-quotes around all strings
+in the JSON format.
+
+Note: For modification to work, you need to authenticate to the BadgeApp
+and provide that data to this program. Here's how.
+
+First, use your web browser to log into
+the BadgeApp and get the value of the session cookie `_BadgeApp_session`.
+In Chrome, go to
+More Tools => Developer Tools => Application => Cookies,
+select the site, and select the _BadgeApp_session cookie.
+In Firefox, go to Web Developer => Storage Inspector => Cookies.
+No matter what, select JUST the value of cookie `_BadgeApp_session`
+and copy it.
+
+One you have the cookie value copied into your clipboard, 
+the recommended approach is to set the environment variable _BadgeApp_session
+to it. E.g., in sh:
+export _BadgeApp_session='VALUE_FROM_CLIPBOARD'
+
+Alternatively, you can pass the session value on the command line, by
+using the -C argument (-C *session_cookie_value*).
+
+Note that a given login cookie is good for 48 hours, and then expires.
+"""
 
 def main():
-    print('Writing to project')
-    # TODO: Stub until we're confident it works
-    sys.exit(not write_to_project(PROJECT_NUMBER, UPDATED_DATA))
+    # Create argument parser, then parse command line arguments with it.
+    parser = argparse.ArgumentParser(
+            description='Modify project data on BadgeApp',
+            epilog=HELP_EPILOG
+    )
+    parser.add_argument('-C', '--cookie',
+        help='Session cookie value, else uses env variable ' + COOKIE_NAME,
+        dest='session_cookie', default=os.environ.get(COOKIE_NAME))
+    # Make it easy to select base URL
+    group_base = parser.add_mutually_exclusive_group()
+    group_base.add_argument('-b', '--base', dest='base_url',
+            default=LOCAL_BASE_URL, help='Arbitrary base URL to modify')
+    group_base.add_argument('-L', '--local', dest='base_url',
+            action='store_const',
+            const=LOCAL_BASE_URL, help='Store in local repo')
+    group_base.add_argument('-S', '--staging', dest='base_url',
+            action='store_const',
+            const=STAGING_BASE_URL, help='Store in staging repo')
+    group_base.add_argument('-P', '--production', dest='base_url',
+            action='store_const',
+            const=PRODUCTION_BASE_URL, help='Store in production (REAL) repo')
+    parser.add_argument('project_id', help='Project id (number) to modify')
+    parser.add_argument('updated_data', help='Updated data (JSON format)')
+
+    # Process command line arguments.
+    args = parser.parse_args()
+
+    if (args.session_cookie == None or args.session_cookie == ''):
+        print('We MUST have a session cookie value to proceed')
+        sys.exit(1)
+
+    # Convert JSON data into a Python dictionary.
+    # This will fail & raise an exception if non-JSON provided.
+    # Remember to use *double-quotes* around all strings in JSON;
+    # the JSON data needs to look like this:
+    # {"test_status": "Met"}
+    # Note that status values can be "Met", "Unmet", or "?".
+    updated_data_json = json.loads(args.updated_data)
+
+    # Notify what we're doing.
+    print("Writing data to project " + args.project_id +
+          " at base URL " + args.base_url)
+
+    # Now go do it!
+    result = write_to_project(args.base_url,
+            args.project_id, updated_data_json, args.session_cookie)
+    sys.exit(not result)
 
 if __name__ == '__main__':
     main()
-
-
-# # Retrieve paged JSON data
-# def retrieve_data():
-#     retrieved_dataset = []
-#     page_number = 1
-#     while True:
-#         url = base_url + '?page=' + str(page_number)
-#         page_string = urlopen(url).read()
-#         page_data = json.loads(page_string)
-#         print(page_number, file=sys.stderr)
-#         if len(page_data) == 0:
-#             break
-#         retrieved_dataset += page_data
-#         page_number += 1
-#     return retrieved_dataset
-# 
-# # Load JSON data (from a file if possible, else it's retrieved and saved)
-# def load_data():
-#     if os.path.exists(cached_filename):
-#         print('Loading existing file: %s' % cached_filename, file=sys.stderr)
-#         f = open(cached_filename, 'r')
-#         return json.load(f)
-#     else:
-#         print('Retrieving data', file=sys.stderr)
-#         retrieved_dataset = retrieve_data()
-#         # Save data into file so we don't need to retrieve later
-#         print('Saving data to file: %s' % cached_filename, file=sys.stderr)
-#         f = open(cached_filename, 'w')
-#         json.dump(retrieved_dataset, f)
-#         return retrieved_dataset
-# 
-# #
-# # Load the JSON data by calling load_data()
-# #
-# 
-# json_dataset = load_data()
-# 
-# # Now json_dataset has complete set of data.  Print a count.
-# print('Number of projects = ', len(json_dataset))
-# 
-# # Now do some sample analysis.  Example analysis:
-# # Count projects saying they use the R programming language.
-# re_split_list = re.compile(r' *, *')
-# r_projects = 0
-# for project in json_dataset:
-#     if project['implementation_languages']:
-#         langs = re.split(re_split_list, project['implementation_languages'])
-#         if 'R' in langs: r_projects += 1
-# print('R projects =', r_projects)

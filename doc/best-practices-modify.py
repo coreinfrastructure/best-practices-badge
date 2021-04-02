@@ -130,7 +130,7 @@ def get_updated_cookie(headers, session_cookie):
     # Set-Cookie: _BadgeApp_session=VALUE; path=/; HttpOnly
     # We will try to return the VALUE part.
     set_cookie = headers['Set-Cookie']
-    if set_cookie == None:
+    if set_cookie is None:
         print('Warning: No cookie updated')
         return session_cookie
     expected_prefix = COOKIE_NAME + '='
@@ -209,7 +209,7 @@ def main():
     # Process command line arguments.
     args = parser.parse_args()
 
-    if (args.session_cookie == None or args.session_cookie == ''):
+    if (args.session_cookie is None or args.session_cookie == ''):
         print('We MUST have a session cookie value to proceed')
         sys.exit(1)
 

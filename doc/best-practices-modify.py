@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # Demo how to modify bestpractices.coreinfrastructure.org entries via API
 
-# Copyright 2018, the Linux Foundation and the
+# Copyright the Linux Foundation and the
 # CII Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
@@ -21,37 +21,43 @@
 # set the environment variable _BadgeApp_session to it. E.g., in sh:
 # export _BadgeApp_session='VALUE_FROM_CLIPBOARD'
 
+# NOTE: A given login cookie is good for 48 hours, and then expires.
+
 import os, sys, re, json, urllib
 from urllib.request import urlopen
 
 # This is the base URL for project data.
-base_url = 'https://master.bestpractices.coreinfrastructure.org/'
+# base_url = 'https://master.bestpractices.coreinfrastructure.org/'
+# TODO
 base_url = 'http://localhost:3000/'
 
-# This will fail if the cookie is not set.
-cookie = os.environ['_BadgeApp_session']
+COOKIE_NAME = '_BadgeApp_session'
 
 # This doesn't work, reasons unknown.
 # curl -b "_BadgeApp_session=$BadgeApp_session" -i 'http://localhost:3000/en/projects/1/edit'
 
 
 # In *principle* this is how to modify a project programmatically:
-# * Log in
+# * Log in using your browser and store the session cookie data
+#   in the environment variable "_BadgeApp_session" as described above.
+# * In some cases you might want to GET the JSON data
+#   for the project you're editing, which will be
+#   <https://bestpractices.coreinfrastructure.org/projects/NUMBER.json>.
 # * GET the HTML page for the edit page of the project you’re editing,
 #   which will be
 #   <https://bestpractices.coreinfrastructure.org/projects/NUMBER/edit>.
 #   You’re looking for this in the HTML. You should see two values
 #   (the ..._HERE are the values you want): <meta name="csrf-token"
-#   content=“CSRF_TOKEN_VALUE_HERE" />
+#   content="CSRF_TOKEN_VALUE_HERE" />
 #   ...  <input type="hidden" name="authenticity_token"
-#   value=“AUTH_TOKEN_VALUE_HERE" />
+#   value="AUTH_TOKEN_VALUE_HERE" />
 #   I think the value you actually want is the one with
-#   “authenticity_token”.
+#   "authenticity_token".
 # * Capture the cookie that represents login & related session data,
 #   it’s named _BadgeApp_session
 #   You must do this *AFTER* you’ve done GET on the form, because the
 #   cookie includes encrypted data that must be matched with the form data.
-# * Post the project data update, sending the cookie & data to authenticate
+# * PATCH the project data update, sending the cookie & data to authenticate
 #   that this isn’t a CSRF attack.
 #   It’s probably easier to send as JSON, e.g., POST
 #   https://bestpractices.coreinfrastructure/projects/NUMBER.json).
@@ -60,8 +66,147 @@ cookie = os.environ['_BadgeApp_session']
 #   parameter. I think the token you need to send is the one set by
 #   “authenticity_token”, and not csrf-token.
 
+
+
+
+# Enable per-form CSRF tokens. Previous versions had false. CHANGED.
+# Rails.application.config.action_controller.per_form_csrf_tokens = true
+# Enable origin-checking CSRF mitigation. Previous versions had false. CHANGED.
+# Rails.application.config.action_controller.forgery_protection_origin_check = true
+
+
+def patch_project(id, updated_data, auth_token, csrf_token, session_cookie):
+    """Attempts to patch project id with updated_data"""
+    # We assume updated_data is a string, in JSON format, of changes.
+
+    # TODO
+    print('starting patch_project')
+    """Returns auth_token,session_cookie for editing given project."""
+
+    # Try to get the "edit" page with our logged-in session cookie
+    url = base_url + 'en/projects/' + str(id) + '.json'
+
+    # https://docs.python.org/3/library/urllib.request.html#request-objects
+    # For an HTTP POST request method, data should be a buffer in the standard application/x-www-form-urlencoded format. The urllib.parse.urlencode() function takes a mapping or sequence of 2-tuples and returns an ASCII string in this format. It should be encoded to bytes before being used as the data parameter.
+    # https://docs.python.org/3/library/urllib.parse.html#urllib.parse.urlencode
+
+    # updated_data_bytes = bytes(updated_data, 'utf-8')
+    # urllib.parse.urlencode({'spam': 1, 'eggs': 2, 'bacon': 0})
+    # updated_data_encoded = urllib.parse.urlencode(updated_data) # .encode('ascii')
+    updated_data_encoded = bytes(updated_data, 'utf-8')
+
+    request = urllib.request.Request(url,
+            data=updated_data_encoded, method='PATCH')
+    # Beware: add_header can only add *one* Cookie header
+    request.add_header('Cookie', COOKIE_NAME + '=' + session_cookie)
+    request.add_header('X-CSRF-Token', csrf_token)
+    request.add_header('Content-Type', 'application/json')
+    # request.add_header('Accepts', 'application/json') # Shouldn't matter
+    # TODO: auth_token???
+    # Note: We don't send an origin; Rails considers that a valid origin.
+
+    # TODO: Handle exception on open failure
+    response = urlopen(request)
+
+    redirected = (response.url != url)
+    if redirected or response.code != 200:
+        print('Error: Did not have permission to change project data')
+        return 403 # Forbidden
+
+    return 200
+
+# To find the form's authenticity token we look for this pattern:
+AUTH_TOKEN_HTML_PATTERN = re.compile(
+    r'<input type="hidden" name="authenticity_token" value="([^"]+)"'
+)
+
+# To find the form's csrf token we look for this pattern:
+CSRF_TOKEN_HTML_PATTERN = re.compile(
+    r'<meta name="csrf-token" content="([^"]+)"'
+)
+
+
+def get_token(html, pattern):
+    """Return token in provided HTML that matches pattern."""
+    result = pattern.search(html)
+    if result:
+        return result.group(1)
+    else:
+        print('Failed to find token')
+        return None
+
+def get_updated_cookie(headers, session_cookie):
+    """Retrieve the updated session cookie"""
+    # We should have received an HTTP header of this form:
+    # Set-Cookie: _BadgeApp_session=VALUE; path=/; HttpOnly
+    # We will try to return the VALUE part.
+    set_cookie = headers['Set-Cookie']
+    if set_cookie == None:
+        print('Warning: No cookie updated')
+        return session_cookie
+    expected_prefix = COOKIE_NAME + '='
+    if not set_cookie.startswith(expected_prefix):
+        print('Warning: Wrong cookie set')
+        return session_cookie
+    leftover = set_cookie[len(expected_prefix):]
+    new_session_cookie = leftover.split(';',1)[0]
+    return new_session_cookie
+
+def get_project_tokens(id, session_cookie):
+    """Returns auth_token,csrf_token,session_cookie for project id."""
+    # Try to get the "edit" page with our logged-in session cookie
+    url = base_url + 'en/projects/' + str(id) + '/edit'
+    request = urllib.request.Request(url)
+    # Beware: add_header can only add *one* Cookie header
+    request.add_header('Cookie', COOKIE_NAME + '=' + session_cookie)
+    # Note: We don't send an origin; Rails considers that a valid origin.
+
+    # TODO: Handle exception on open failure
+    response = urlopen(request)
+
+    redirected = (response.url != url)
+    if redirected or response.code != 200:
+        print('Error: Did not have permission to view edit page')
+        return None, None
+
+    html = str(response.read(), 'utf-8')
+    auth_token = get_token(html, AUTH_TOKEN_HTML_PATTERN)
+    csrf_token = get_token(html, CSRF_TOKEN_HTML_PATTERN)
+
+    new_session_cookie = get_updated_cookie(response.headers, session_cookie)
+    return auth_token, csrf_token, new_session_cookie
+
+def get_session_cookie():
+    if '_BadgeApp_session' in os.environ:
+        return os.environ['_BadgeApp_session']
+    else:
+        print('Error: Environment variable _BadgeApp_session not set!')
+        print('Please log in and set the environment variable.')
+        # Just exit, we can't do anything in this situation.
+        sys.exit(1)
+
+def write_to_project(id, updated_data):
+    """Write to project #id the updated_data in json format -> true if ok"""
+    session_cookie = get_session_cookie()
+    auth_token, csrf_token, session_cookie = get_project_tokens(
+            id, session_cookie)
+    status = patch_project(id, updated_data, auth_token, csrf_token, session_cookie)
+    return status == 200
+
+# TODO: Stub until we're confident it works
+PROJECT_NUMBER = 1
+# UPDATED_DATA = "{ 'automated_integration_testing_status' : 'Unmet' }"
+# UPDATED_DATA = "{'id': 25, 'project': { 'id': 25, 'automated_integration_testing_status' : 'Unmet' }}"
+# UPDATED_DATA = {'id': 25, 'project': { 'id': 25, 'automated_integration_testing_status' : 'Unmet' }}
+UPDATED_DATA = "{'id':25,'project':{'id':25,'automated_integration_testing_status':'Unmet'}}"
+
+def main():
+    print('Writing to project')
+    # TODO: Stub until we're confident it works
+    sys.exit(not write_to_project(PROJECT_NUMBER, UPDATED_DATA))
+
 if __name__ == '__main__':
-    print('Hello')
+    main()
 
 
 # # Retrieve paged JSON data

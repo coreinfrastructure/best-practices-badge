@@ -168,10 +168,15 @@ def get_project_tokens(base_url, id, session_cookie):
 
 def write_to_project(base_url, id, updated_data, session_cookie):
     """Write to project #id the updated_data in json format -> true if ok"""
-    auth_token, csrf_token, session_cookie = get_project_tokens(
+    # First request the HTML edit form; it includes information we
+    # must have to successfully patch a project.
+    auth_token, csrf_token, updated_session_cookie = get_project_tokens(
             base_url, id, session_cookie)
+    # Now request patching the project.
+    # We have to send various other data, including an updated_session_cookie,
+    # because we need them to be allowed to do an update.
     status = patch_project(base_url, id, updated_data,
-            auth_token, csrf_token, session_cookie)
+            auth_token, csrf_token, updated_session_cookie)
     return status == 200
 
 def main():

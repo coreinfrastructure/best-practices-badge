@@ -5,13 +5,38 @@
 # CII Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
-# Sample usage (modify staging, project 1, with this JSON data):
-# ... doc/best-practices-modify.py -S 1 '{"test_status": "Met"}'
-# To modify the *production* site data, use -P instead of -S.
+"""
+This program programmatically modifies BadgeApp projects.
 
-# This requires a session cookie to be set. Run
-# ... doc/best-practices-modify.py --help
-# for an explanation on how to do that.
+An example of using this is
+doc/best-practices-modify.py -S 1 '{"test_status": "Met"}'
+which modifies project 1 on the staging site.
+To modify the *production* site data, use -P instead of -S.
+Updates use JSON format; remember to use double-quotes around all strings
+in the JSON format.
+
+Note: For modification to work, you need to authenticate to the BadgeApp
+and provide that data to this program. Here's how.
+
+First, use your web browser to log into
+the BadgeApp and get the value of the session cookie `_BadgeApp_session`.
+In Chrome, go to
+More Tools => Developer Tools => Application => Cookies,
+select the site, and select the _BadgeApp_session cookie.
+In Firefox, go to Web Developer => Storage Inspector => Cookies.
+No matter what, select JUST the value of cookie `_BadgeApp_session`
+and copy it.
+
+One you have the cookie value copied into your clipboard, 
+the recommended approach is to set the environment variable _BadgeApp_session
+to it. E.g., in sh:
+export _BadgeApp_session='VALUE_FROM_CLIPBOARD'
+
+Alternatively, you can pass the session value on the command line, by
+using the -C argument (-C *session_cookie_value*).
+
+Note that a given login cookie is good for 48 hours, and then expires.
+"""
 
 # Python2 is "officially" unsupported but actually in wide use,
 # so we'll try to make it not hard to use Python2.
@@ -149,43 +174,13 @@ def write_to_project(base_url, id, updated_data, session_cookie):
             auth_token, csrf_token, session_cookie)
     return status == 200
 
-HELP_EPILOG = """
-
-An example of using this is
-doc/best-practices-modify.py -S 1 '{"test_status": "Met"}'
-which modifies project 1 on the staging site.
-To modify the *production* site data, use -P instead of -S.
-Updates use JSON format; remember to use double-quotes around all strings
-in the JSON format.
-
-Note: For modification to work, you need to authenticate to the BadgeApp
-and provide that data to this program. Here's how.
-
-First, use your web browser to log into
-the BadgeApp and get the value of the session cookie `_BadgeApp_session`.
-In Chrome, go to
-More Tools => Developer Tools => Application => Cookies,
-select the site, and select the _BadgeApp_session cookie.
-In Firefox, go to Web Developer => Storage Inspector => Cookies.
-No matter what, select JUST the value of cookie `_BadgeApp_session`
-and copy it.
-
-One you have the cookie value copied into your clipboard, 
-the recommended approach is to set the environment variable _BadgeApp_session
-to it. E.g., in sh:
-export _BadgeApp_session='VALUE_FROM_CLIPBOARD'
-
-Alternatively, you can pass the session value on the command line, by
-using the -C argument (-C *session_cookie_value*).
-
-Note that a given login cookie is good for 48 hours, and then expires.
-"""
-
 def main():
+    """Main entry for command line interface"""
+
     # Create argument parser, then parse command line arguments with it.
     parser = argparse.ArgumentParser(
             description='Modify project data on BadgeApp',
-            epilog=HELP_EPILOG
+            epilog=__doc__
     )
     parser.add_argument('-C', '--cookie',
         help='Session cookie value, else uses env variable ' + COOKIE_NAME,

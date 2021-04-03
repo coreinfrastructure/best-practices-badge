@@ -227,15 +227,21 @@ Currently it is one of `in_progress`, `passing`, `silver`, or `gold`.
 If we add new badge levels (such as `platinum`) then it will provide
 that new value as appropriate.
 
-## Sample program
+## Sample programs
 
-See the [best-practices.py](./best-practices.py) program to see an
+See the [best\_practices.py](./best_practices.py) program to see an
 example of how to download and analyze data.
 Notice that since we supply JSON data in pages, you need to retrieve
 all the pages if you want the entire dataset.
 If you retrieve the entire database, store it locally
 (in a file or database system); it intentionally takes some time
 to download all of it.
+
+See the [best\_practices\_modify.py](./best_practices_modify.py)
+program to see how to programmatically *modify* project data.
+Note that if you want to *modify* project data, you have to
+take a few extra steps to authenticate youself
+(to prove that you're authorized to do this).
 
 ## Query (Search)
 

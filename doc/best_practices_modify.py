@@ -8,12 +8,15 @@
 """
 This program programmatically modifies BadgeApp projects.
 
-An example of using this is
+An example of using this on the command line is
 doc/best-practices-modify.py -S 1 '{"test_status": "Met"}'
 which modifies project 1 on the staging site.
 To modify the *production* site data, use -P instead of -S.
 Updates use JSON format; remember to use double-quotes around all strings
-in the JSON format.
+in the JSON format. Typically the JSON will modify criteria data; for
+a CRITERION, the status value is in field CRITERION_status
+nd the corresponding text justification is in CRITERION_justification.
+A CRITERION_status can be Met, Unmnet, ?, or N/A.
 
 Note: For modification to work, you need to authenticate to the BadgeApp
 and provide that data to this program. Here's how.
@@ -36,6 +39,15 @@ Alternatively, you can pass the session value on the command line, by
 using the -C argument (-C *session_cookie_value*).
 
 Note that a given login cookie is good for 48 hours, and then expires.
+
+When used as a library, the two functions to use are
+best_practices_modify.write_to_project()
+and best_practices_modify.patch_project().
+In addition, these string constants may be useful:
+best_practices_modify.COOKIE_NAME,
+best_practices_modify.PRODUCTION_BASE_URL,
+best_practices_modify.STAGING_BASE_URL, and
+best_practices_modify.LOCAL_BASE_URL.
 """
 
 # Python2 is "officially" unsupported but actually in wide use,
@@ -167,7 +179,15 @@ def get_project_tokens(base_url, id, session_cookie):
     return auth_token, csrf_token, new_session_cookie
 
 def write_to_project(base_url, id, updated_data, session_cookie):
-    """Write to project #id the updated_data in json format -> true if ok"""
+    """Write to project #id the updated_data in json format -> true if ok.
+    The base_url is the URL prefix; it will typically start with
+    'http://' or 'https://' and must end in a slash, e.g.,
+    'http://localhost:3000/'
+    The id is the project id number (a positive integer).
+    The update_data is a Python dictionary of updates to be made, e.g.,
+    {"test_status": "Met"}, typically created by reading data in JSON format.
+    The session_cookie is the _BadgeApp_session cookie value.
+    """
     # First request the HTML edit form; it includes information we
     # must have to successfully patch a project.
     auth_token, csrf_token, updated_session_cookie = get_project_tokens(

@@ -59,7 +59,7 @@ class FastlyRails
   # rubocop:enable Metrics/MethodLength
 
   # rubocop:disable Metrics/MethodLength
-  def self.purge_all(key, force = false, base = FASTLY_BASE)
+  def self.purge_all(force = false, base = FASTLY_BASE)
     return if !force && (FASTLY_API_KEY.blank? || FASTLY_SERVICE_ID.blank?)
 
     begin
@@ -79,7 +79,7 @@ class FastlyRails
       # For example, this does NOT work:
       # rescue HTTParty::Error, Net::OpenTimeout, IOError => e
       Rails.logger.error do
-        "ERROR:: FAILED TO PURGE #{key} , #{e.class}: #{e}"
+        "ERROR:: FAILED TO PURGE_ALL, #{e.class}: #{e}"
       end
     end
   end

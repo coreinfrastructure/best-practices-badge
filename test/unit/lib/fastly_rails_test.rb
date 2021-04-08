@@ -37,6 +37,6 @@ class FastlyRailsTest < ActiveSupport::TestCase
     # We set a nonsense localhost base  for this test.
     # VCR can't record "failure to connect", so we'll
     # instead force a failure to connect so we can test its handling.
-    FastlyRails.purge_all('foo', true, 'https://localhost:0/')
+    FastlyRails.purge_all(true, 'https://localhost:0/')
   end
 end

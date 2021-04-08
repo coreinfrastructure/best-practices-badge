@@ -283,7 +283,7 @@ namespace :fastly do
   desc 'Purge ALL of Fastly cache (takes about 5s)'
   task :purge_all do
     puts 'Starting purge ALL of Fastly cache (typically takes about 5s)'
-    FastlyRails.purge_all(ENV['FASTLY_API_KEY'])
+    FastlyRails.purge_all
     puts 'Cache purged'
   end
 

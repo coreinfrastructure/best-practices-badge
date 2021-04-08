@@ -44,8 +44,8 @@ class RecalcTest < ActionDispatch::IntegrationTest
 
   # rubocop:disable Metrics/BlockLength
   test 'Make sure recalc percentages only updates levels affected' do
-    old_percentage0 = Project.find(projects(:one).id).badge_percentage_0
-    old_percentage1 = Project.find(projects(:one).id).badge_percentage_1
+    old_percentage0 = @project.badge_percentage_0
+    old_percentage1 = @project.badge_percentage_1
     assert old_percentage0.zero?, 'Old passing percentage is supposed to be 0'
     assert old_percentage1.zero?, 'Old silver percentage is supposed to be 0'
     # Update some columns without triggering percentage calculation

@@ -178,8 +178,8 @@ jobs:
       - run:
           name: Migrate DB for Main
           command: |
-            heroku run rake db:migrate --app master-bestpractices
-          no_output_timeout: 400s
+            heroku run --app master-bestpractices -- bundle exec rails db:migrate
+          no_output_timeout: 600s
       # Not reliable enough:
       # - run:
           # name: Test Fastly
@@ -200,8 +200,8 @@ jobs:
       - run:
           name: Migrate DB for Staging
           command: |
-            heroku run rake db:migrate --app staging-bestpractices
-          no_output_timeout: 400s
+            heroku run --app staging-bestpractices -- bundle exec rails db:migrate
+          no_output_timeout: 600s
   deploy-production:
     docker:
       - image: buildpack-deps:bionic
@@ -218,8 +218,8 @@ jobs:
       - run:
           name: Migrate DB for Production
           command: |
-            heroku run rake db:migrate --app production-bestpractices
-          no_output_timeout: 400s
+            heroku run --app production-bestpractices -- bundle exec rails db:migrate
+          no_output_timeout: 600s
 workflows:
   version: 2
   build-deploy:

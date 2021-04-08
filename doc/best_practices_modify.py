@@ -67,9 +67,19 @@ PRODUCTION_BASE_URL = 'https://bestpractices.coreinfrastructure.org/'
 
 COOKIE_NAME = '_BadgeApp_session'
 
+def error(message):
+    """Print error message to standard error."""
+    print(message, file=sys.stderr)
+
 def patch_project(base_url, id, updated_data,
                   auth_token, csrf_token, session_cookie):
-    """Attempts to patch project id with updated_data"""
+    """
+    Attempts to patch project id at base_url with dictionary updated_data.
+    We require auth_token, csrf_token, and session_cookie to prove that
+    we are authorized to cause this patch.
+    This is a lower-level method; most users should invoke
+    write_to_project() instead.
+    """
 
     # Originally we tried to PATCH the JSON endpoint, but we never
     # got that working. So instead we PATCH the HTML endpoint:
@@ -109,12 +119,12 @@ def patch_project(base_url, id, updated_data,
         if e.code == 302 and e.headers['Location'] == url:
             # EXPECTED result - everything is fine!
             return 200
-        print('Warning: Received HTTPError, code=' + str(e.code))
-        print('This can happen on localhost if project badge status changes.')
+        error('Warning: Received HTTPError, code=' + str(e.code))
+        error('This can happen on localhost if project badge status changes.')
         return 500
 
-    print('Warning: No exception, even though we expected a redirect 302')
-    print('There may be an invalid key or key value.')
+    error('Warning: No exception, even though we expected a redirect 302')
+    error('There may be an invalid key or key value.')
     return 200
 
 # To find the form's authenticity token we look for this pattern:
@@ -133,7 +143,7 @@ def get_token(html, pattern):
     if result:
         return result.group(1)
     else:
-        print('Failed to find token')
+        error('Failed to find token')
         return None
 
 def get_updated_cookie(headers, session_cookie):
@@ -143,11 +153,11 @@ def get_updated_cookie(headers, session_cookie):
     # We will try to return the VALUE part.
     set_cookie = headers['Set-Cookie']
     if set_cookie is None:
-        print('Warning: No cookie updated')
+        error('Warning: No cookie updated')
         return session_cookie
     expected_prefix = COOKIE_NAME + '='
     if not set_cookie.startswith(expected_prefix):
-        print('Warning: Wrong cookie set')
+        error('Warning: Wrong cookie set')
         return session_cookie
     leftover = set_cookie[len(expected_prefix):]
     new_session_cookie = leftover.split(';',1)[0]
@@ -168,7 +178,7 @@ def get_project_tokens(base_url, id, session_cookie):
 
     redirected = (response.url != url)
     if redirected or response.code != 200:
-        print('Error: Did not have permission to view edit page')
+        error('Error: Did not have permission to view edit page')
         return None, None
 
     html = str(response.read(), 'utf-8')
@@ -213,7 +223,7 @@ def main():
     # Make it easy to select base URL
     group_base = parser.add_mutually_exclusive_group()
     group_base.add_argument('-b', '--base', dest='base_url',
-            default=LOCAL_BASE_URL, help='Arbitrary base URL to modify')
+            default=None, help='Arbitrary base URL to modify')
     group_base.add_argument('-L', '--local', dest='base_url',
             action='store_const',
             const=LOCAL_BASE_URL, help='Store in local repo')
@@ -230,7 +240,10 @@ def main():
     args = parser.parse_args()
 
     if (args.session_cookie is None or args.session_cookie == ''):
-        print('We MUST have a session cookie value to proceed')
+        error('Error: We MUST have a session cookie value to proceed')
+        sys.exit(1)
+    if not args.base_url:
+        error('Error: We MUST have a base (-b/--base, -L, -S, or -P)')
         sys.exit(1)
 
     # Convert JSON data into a Python dictionary.
@@ -242,7 +255,7 @@ def main():
     updated_data_json = json.loads(args.updated_data)
 
     # Notify what we're doing.
-    print("Writing data to project " + args.project_id +
+    error("Writing data to project " + args.project_id +
           " at base URL " + args.base_url)
 
     # Now go do it!

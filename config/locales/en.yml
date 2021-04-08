@@ -1242,6 +1242,36 @@ en:
           and reviewers worldwide. A project can meet this criterion
           even if its core developers' primary language is not
           English.
+      maintained:
+        description: >-
+          The project MUST be maintained.
+        details: >-
+          As a minimum, the project should attempt to respond to
+          significant problem and vulnerability reports.
+          A project that is actively pursuing a badge is probably maintained.
+          All projects and people have limited resources, and typical projects
+          must reject some proposed changes, so limited resources and proposal
+          rejections do not by themselves indicate an unmaintained project.
+          <br><br>
+          When a project knows that it will no longer be maintained,
+          it should set this criterion to "Unmet" and use the
+          appropriate mechanism(s) to indicate to others that
+          it is not being maintained.
+          For example, use “DEPRECATED” as the first heading of its README,
+          add “DEPRECATED” near the beginning of its home page,
+          add “DEPRECATED” to the beginning of its code repository
+          project description,
+          add a <a href="https://unmaintained.tech/">no-maintenance-intended
+          badge</a> in its README and/or home page,
+          mark it as deprecated in any package repositories (e.g.,
+          <a href="https://docs.npmjs.com/deprecating-and-undeprecating-packages-or-package-versions”>npm deprecate</a>),
+          and/or use the code repository's marking system to archive it (e.g.,
+          GitHub's <a href="https://docs.github.com/en/enterprise-server@2.21/github/creating-cloning-and-archiving-repositories/archiving-a-github-repository">"archive" setting</a>,
+          GitLab’s <a href="https://docs.gitlab.com/ee/user/project/settings/#archiving-a-project">"archived" marking</a>,
+          Gerrit's "readonly" status, or
+          SourceForge’s "abandoned" project status).
+          Additional discussion can be found
+          <a href="https://medium.com/maintainer-io/how-to-deprecate-a-repository-on-github-8f0ceb9155e">here</a>.
       repo_public:
         description: >-
           The project MUST have a version-controlled source repository

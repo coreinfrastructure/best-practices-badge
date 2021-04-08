@@ -46,8 +46,8 @@ class RecalcTest < ActionDispatch::IntegrationTest
   test 'Make sure recalc percentages only updates levels affected' do
     old_percentage0 = Project.find(projects(:one).id).badge_percentage_0
     old_percentage1 = Project.find(projects(:one).id).badge_percentage_1
-    assert old_percentage0.zero?
-    assert old_percentage1.zero?
+    assert old_percentage0.zero?, 'Old passing percentage is supposed to be 0'
+    assert old_percentage1.zero?, 'Old silver percentage is supposed to be 0'
     # Update some columns without triggering percentage calculation
     # or change in updated_at
     assert_no_difference [
@@ -73,11 +73,13 @@ class RecalcTest < ActionDispatch::IntegrationTest
     # Check the badge percentage changed
     assert_not_equal(
       Project.find(projects(:one).id).badge_percentage_0,
-      old_percentage0
+      old_percentage0,
+      'passing badge percentage is supposed to change'
     )
     assert_not_equal(
       Project.find(projects(:one).id).badge_percentage_1,
-      old_percentage1
+      old_percentage1,
+      'silver badge percentage is supposed to change'
     )
   end
   # rubocop:enable Metrics/BlockLength

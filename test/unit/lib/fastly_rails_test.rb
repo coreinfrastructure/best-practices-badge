@@ -31,4 +31,12 @@ class FastlyRailsTest < ActiveSupport::TestCase
     # instead force a failure to connect so we can test its handling.
     FastlyRails.purge_by_key('foo', true, 'https://localhost:0/')
   end
+
+  test 'purge_all keeps working even if port fails' do
+    # *Force* use of the key, since we don't have one set.
+    # We set a nonsense localhost base  for this test.
+    # VCR can't record "failure to connect", so we'll
+    # instead force a failure to connect so we can test its handling.
+    FastlyRails.purge_all('foo', true, 'https://localhost:0/')
+  end
 end

@@ -57,4 +57,31 @@ class FastlyRails
     end
   end
   # rubocop:enable Metrics/MethodLength
+
+  # rubocop:disable Metrics/MethodLength
+  def self.purge_all(key, force = false, base = FASTLY_BASE)
+    return if !force && (FASTLY_API_KEY.blank? || FASTLY_SERVICE_ID.blank?)
+
+    begin
+      # We'll return the result, but normally that will be ignored.
+      # https://developer.fastly.com/reference/api/purging/
+      # We won't ask for a "soft purge" because purge-all doesn't support it.
+      HTTParty.post(
+        "#{base}/service/#{FASTLY_SERVICE_ID}/purge_all",
+        FASTLY_OPTIONS
+      )
+    rescue StandardError => e
+      # I hate catching StandardError, ideally we'd be more specific.
+      # However, there doesn't seem to be a safe way to identify
+      # all network-based exceptions. See:
+      # https://stackoverflow.com/questions/5370697/
+      # what-s-the-best-way-to-handle-exceptions-from-nethttp
+      # For example, this does NOT work:
+      # rescue HTTParty::Error, Net::OpenTimeout, IOError => e
+      Rails.logger.error do
+        "ERROR:: FAILED TO PURGE #{key} , #{e.class}: #{e}"
+      end
+    end
+  end
+  # rubocop:enable Metrics/MethodLength
 end

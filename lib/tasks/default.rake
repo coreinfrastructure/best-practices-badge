@@ -266,17 +266,24 @@ end
 
 # Tasks for Fastly including purging and testing the cache.
 namespace :fastly do
-  # Implement full purge of Fastly CDN cache.  Invoke using:
-  #   heroku run --app HEROKU_APP_HERE rake fastly:purge
+  # Implement purge_all (full purge) of Fastly CDN cache.  Invoke using:
+  #   heroku run --app HEROKU_APP_HERE -- rake fastly:purge
   # Run this if code changes will cause a change in badge level, since otherwise
   # the old badge levels will keep being displayed until the cache times out.
   # See: https://robots.thoughtbot.com/
   # a-guide-to-caching-your-rails-application-with-fastly
-  desc 'Purge Fastly cache (takes about 5s)'
-  task :purge do
-    puts 'Starting full purge of Fastly cache (typically takes about 5s)'
-    require Rails.root.join('config', 'initializers', 'fastly')
-    FastlyRails.client.get_service(ENV.fetch('FASTLY_SERVICE_ID')).purge_all
+  # This will cause a SIGNIFICANT temporary increase in activity, since
+  # it will completely empty the CDN cache.
+  # This requires environment variables to be set, specifically
+  # 'FASTLY_API_KEY' and 'FASTLY_SERVICE_ID'. See:
+  # https://developer.fastly.com/reference/api/purging/
+  # Basically, we'll do POST /service/service_id/purge_all
+  # Unfortunately we *cannot* do a soft purge, "Fastly-Soft-Purge: 1"
+  # on a purge-all, per the Fastly documentation.
+  desc 'Purge ALL of Fastly cache (takes about 5s)'
+  task :purge_all do
+    puts 'Starting purge ALL of Fastly cache (typically takes about 5s)'
+    FastlyRails.purge_all(ENV['FASTLY_API_KEY'])
     puts 'Cache purged'
   end
 

@@ -8,8 +8,8 @@ require 'test_helper'
 
 class RecalcTest < ActionDispatch::IntegrationTest
   test 'Make sure recalc percentages only updates levels specified' do
-    @project = projects(:one)
-    old_percentage = @project.badge_percentage_1
+    project = projects(:one)
+    old_percentage = project.badge_percentage_1
     assert_equal 0, old_percentage, 'Old silver percentage supposed to be 0'
     # Update some columns without triggering percentage calculation
     # or change in updated_at
@@ -19,10 +19,10 @@ class RecalcTest < ActionDispatch::IntegrationTest
       'Project.find(projects(:one).id).badge_percentage_2',
       'Project.find(projects(:one).id).updated_at'
     ] do
-      @project.update_column(:crypto_weaknesses_status, 'Met')
-      @project.update_column(:crypto_weaknesses_justification, 'It is good')
-      @project.update_column(:warnings_strict_status, 'Met')
-      @project.update_column(:warnings_strict_justification, 'It is good')
+      project.update_column(:crypto_weaknesses_status, 'Met')
+      project.update_column(:crypto_weaknesses_justification, 'It is good')
+      project.update_column(:warnings_strict_status, 'Met')
+      project.update_column(:warnings_strict_justification, 'It is good')
     end
     # Run the update task, make sure updated_at and others don't change
     assert_no_difference [
@@ -41,9 +41,9 @@ class RecalcTest < ActionDispatch::IntegrationTest
 
   # rubocop:disable Metrics/BlockLength
   test 'Make sure recalc percentages only updates levels affected' do
-    @project = projects(:one)
-    old_percentage0 = @project.badge_percentage_0
-    old_percentage1 = @project.badge_percentage_1
+    project = projects(:one)
+    old_percentage0 = project.badge_percentage_0
+    old_percentage1 = project.badge_percentage_1
     assert_equal 0, old_percentage0, 'Old passing percentage supposed to be 0'
     assert_equal 0, old_percentage1, 'Old silver percentage supposed to be 0'
     # Update some columns without triggering percentage calculation
@@ -54,10 +54,10 @@ class RecalcTest < ActionDispatch::IntegrationTest
       'Project.find(projects(:one).id).badge_percentage_2',
       'Project.find(projects(:one).id).updated_at'
     ] do
-      @project.update_column(:crypto_weaknesses_status, 'Met')
-      @project.update_column(:crypto_weaknesses_justification, 'It is good')
-      @project.update_column(:warnings_strict_status, 'Met')
-      @project.update_column(:warnings_strict_justification, 'It is good')
+      project.update_column(:crypto_weaknesses_status, 'Met')
+      project.update_column(:crypto_weaknesses_justification, 'It is good')
+      project.update_column(:warnings_strict_status, 'Met')
+      project.update_column(:warnings_strict_justification, 'It is good')
     end
     # Run the update task, make sure updated_at and others don't change
     assert_no_difference [

@@ -283,6 +283,10 @@ namespace :fastly do
   desc 'Purge ALL of Fastly cache (takes about 5s)'
   task :purge_all do
     puts 'Starting purge ALL of Fastly cache (typically takes about 5s)'
+    # The following is needed to load fastly_rails without bringing in the
+    # entire Rails environment (which we don't need).
+    $LOAD_PATH.append("#{Dir.getwd}/app/lib")
+    require 'fastly_rails'
     FastlyRails.purge_all
     puts 'Cache purged'
   end

@@ -7,11 +7,8 @@
 require 'test_helper'
 
 class RecalcTest < ActionDispatch::IntegrationTest
-  setup do
-    @project = projects(:one)
-  end
-
   test 'Make sure recalc percentages only updates levels specified' do
+    @project = projects(:one)
     old_percentage = @project.badge_percentage_1
     assert_equal 0, old_percentage, 'Old silver percentage supposed to be 0'
     # Update some columns without triggering percentage calculation
@@ -44,6 +41,7 @@ class RecalcTest < ActionDispatch::IntegrationTest
 
   # rubocop:disable Metrics/BlockLength
   test 'Make sure recalc percentages only updates levels affected' do
+    @project = projects(:one)
     old_percentage0 = @project.badge_percentage_0
     old_percentage1 = @project.badge_percentage_1
     assert_equal 0, old_percentage0, 'Old passing percentage supposed to be 0'

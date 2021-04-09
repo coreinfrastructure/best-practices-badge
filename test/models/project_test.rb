@@ -11,7 +11,7 @@ class ProjectTest < ActiveSupport::TestCase
   using StringRefinements
   setup do
     @user = users(:test_user)
-    @project = @user.projects.build(
+    @project_built = @user.projects.build(
       homepage_url: 'https://www.example.org',
       repo_url: 'https://www.example.org/code'
     )
@@ -22,12 +22,12 @@ class ProjectTest < ActiveSupport::TestCase
   end
 
   test 'should be valid' do
-    assert @project.valid?
+    assert @project_built.valid?
   end
 
   test 'user id should be present' do
-    @project.user_id = nil
-    assert_not @project.valid?
+    @project_built.user_id = nil
+    assert_not @project_built.valid?
   end
 
   test '#contains_url?' do

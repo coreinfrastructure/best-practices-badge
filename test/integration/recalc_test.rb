@@ -12,7 +12,7 @@ class RecalcTest < ActionDispatch::IntegrationTest
   end
 
   test 'Make sure recalc percentages only updates levels specified' do
-    old_percentage = Project.find(projects(:one).id).badge_percentage_1
+    old_percentage = @project.badge_percentage_1
     assert old_percentage.zero?
     # Update some columns without triggering percentage calculation
     # or change in updated_at

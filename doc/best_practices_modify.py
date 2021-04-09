@@ -240,10 +240,12 @@ def main():
     args = parser.parse_args()
 
     if (args.session_cookie is None or args.session_cookie == ''):
-        error('Error: We MUST have a session cookie value to proceed')
+        error('Error: We MUST have a session cookie value to proceed.')
+        error('Use --help for more information.')
         sys.exit(1)
     if not args.base_url:
-        error('Error: We MUST have a base (-b/--base, -L, -S, or -P)')
+        error('Error: We MUST have a base (-b/--base, -L, -S, or -P).')
+        error('Use --help for more information.')
         sys.exit(1)
 
     # Convert JSON data into a Python dictionary.

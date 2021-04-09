@@ -293,24 +293,16 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal 85, p.compute_tiered_percentage
   end
 
-  # If these tests fail, you've probably changed the criteria and
+  # If one of these tests fail, you've probably changed the criteria and
   # haven't changed the fixture values to match. The solution
   # will probably require updating test/fixtures/projects.yml
   test 'Check that fixture percentages are correct' do
-    fixture_projects = projects(
-      :one, :two, :no_repo, :perfect_unjustified, :perfect_passing,
-      :perfect_silver, :perfect
-    )
-    fixture_projects.each do |project|
-      assert_equal project.badge_percentage_0,
-                   project.calculate_badge_percentage('0'),
-                   "Miscalculation level 0 in project #{project.name}"
-      assert_equal project.badge_percentage_1,
-                   project.calculate_badge_percentage('1'),
-                   "Miscalculation level 1 in project #{project.name}"
-      assert_equal project.badge_percentage_2,
-                   project.calculate_badge_percentage('2'),
-                   "Miscalculation level 2 in project #{project.name}"
+    projects.each_entry do |project|
+      Project::LEVEL_IDS.each do |level|
+        assert_equal project["badge_percentage_#{level}"],
+                     project.calculate_badge_percentage(level),
+                     "Miscalculation level #{level} in project #{project.name}"
+      end
     end
   end
 end

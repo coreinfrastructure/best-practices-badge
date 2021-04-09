@@ -44,7 +44,7 @@ class RecalcTest < ActionDispatch::IntegrationTest
     project = projects(:one)
     old_percentage0 = project.badge_percentage_0
     old_percentage1 = project.badge_percentage_1
-    assert_equal 0, old_percentage0, 'Old passing percentage supposed to be 0'
+    assert_equal 1, old_percentage0, 'Old passing percentage supposed to be 0'
     assert_equal 0, old_percentage1, 'Old silver percentage supposed to be 0'
     # Update some columns without triggering percentage calculation
     # or change in updated_at

@@ -13,7 +13,7 @@ class RecalcTest < ActionDispatch::IntegrationTest
 
   test 'Make sure recalc percentages only updates levels specified' do
     old_percentage = @project.badge_percentage_1
-    assert old_percentage.zero?
+    assert_equal 0, old_percentage, 'Old silver percentage supposed to be 0'
     # Update some columns without triggering percentage calculation
     # or change in updated_at
     assert_no_difference [
@@ -46,8 +46,8 @@ class RecalcTest < ActionDispatch::IntegrationTest
   test 'Make sure recalc percentages only updates levels affected' do
     old_percentage0 = @project.badge_percentage_0
     old_percentage1 = @project.badge_percentage_1
-    assert old_percentage0.zero?, 'Old passing percentage is supposed to be 0'
-    assert old_percentage1.zero?, 'Old silver percentage is supposed to be 0'
+    assert_equal 0, old_percentage0, 'Old passing percentage supposed to be 0'
+    assert_equal 0, old_percentage1, 'Old silver percentage supposed to be 0'
     # Update some columns without triggering percentage calculation
     # or change in updated_at
     assert_no_difference [

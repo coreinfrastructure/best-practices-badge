@@ -292,5 +292,18 @@ class ProjectTest < ActiveSupport::TestCase
     p.badge_percentage_0 = 85
     assert_equal 85, p.compute_tiered_percentage
   end
+
+  # If one of these tests fail, you've probably changed the criteria and
+  # haven't changed the fixture values to match. The solution
+  # will probably require updating test/fixtures/projects.yml
+  test 'Check that fixture percentages are correct' do
+    projects.each_entry do |project|
+      Project::LEVEL_IDS.each do |level|
+        assert_equal project["badge_percentage_#{level}"],
+                     project.calculate_badge_percentage(level),
+                     "Miscalculation level #{level} in project #{project.name}"
+      end
+    end
+  end
 end
 # rubocop:enable Metrics/ClassLength

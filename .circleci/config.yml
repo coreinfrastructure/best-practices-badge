@@ -189,6 +189,7 @@ jobs:
             if [ "$HEROKU_APP" = 'main-bestpractices' ] ; then export HEROKU_APP='master-bestpractices'; fi
             heroku run --app "$HEROKU_APP" -- bundle exec rails db:migrate
             if [ -f '.recalculate' ] ; then
+                echo 'Recalculation marker found, performing recalculation.'
                 heroku run --app "$HEROKU_APP" -- rake update_all_badge_percentages
                 rm -f '.recalculate'
             fi

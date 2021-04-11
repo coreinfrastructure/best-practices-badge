@@ -1901,6 +1901,9 @@ ru:
           href="https://www.first.org/cvss/">CVSS</a> на момент
           раскрытия уязвимости, если вводные для вычисления раскрываются
           вместе с публикацией уязвимости.
+      maintained:
+        description:
+        details:
     '1':
       contribution_requirements:
         description: >-

@@ -1072,6 +1072,9 @@ ja:
           <a href="https://nvd.nist.gov">National Vulnerability
           Databaseなど</a>）で公開されているCVSSスコアを、そのデータベースで報告されている最新バージョンのCVSSを使用して使用できます。代わりに、脆弱性が公表された後に計算入力が公開された場合、プロジェクトは脆弱性の開示時に最新バージョンの<a
           href="https://www.first.org/cvss/">CVSS</a>を使用して重大度を自ら計算することができます。
+      maintained:
+        description:
+        details:
     '1':
       contribution_requirements:
         description: >-

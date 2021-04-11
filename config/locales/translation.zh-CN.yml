@@ -912,6 +912,9 @@ zh-CN:
         details: >-
           如果<a href="https://nvd.nist.gov/cvss.cfm"> CVSS 2.0
           </a>基本分数为4，那么一个漏洞是中等到高的严重性。如果您没有运行动态代码分析，没有发现任何这样的漏洞，选择“不适用”（N/A）。
+      maintained:
+        description:
+        details:
     '1':
       contribution_requirements:
         description: 关于如何贡献的信息必须包括对可接受的贡献的要求（例如，引用任何所需的编码标准）。

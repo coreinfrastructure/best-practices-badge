@@ -2042,6 +2042,9 @@ fr:
           moment de la divulgation de la vulnérabilité, si les
           entrées de calcul sont révélées publiquement une fois
           que la vulnérabilité est connue du public.
+      maintained:
+        description:
+        details:
     '1':
       contribution_requirements:
         description: >-

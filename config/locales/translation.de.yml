@@ -1964,6 +1964,9 @@ de:
           der Schwachstellenmeldung verwendend, wenn die Eingaben
           für die Berechnung veröffentlicht werden sobald die
           Schwachstelle öffentlich bekannt gegeben wurde.
+      maintained:
+        description:
+        details:
     '1':
       contribution_requirements:
         description: >-

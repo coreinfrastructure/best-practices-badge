@@ -744,6 +744,9 @@ es:
       dynamic_analysis_fixed:
         description:
         details:
+      maintained:
+        description:
+        details:
     '1':
       achieve_passing:
         description:

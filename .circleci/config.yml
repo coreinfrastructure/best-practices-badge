@@ -188,6 +188,10 @@ jobs:
             export HEROKU_APP="$CIRCLECI_BRANCH"-bestpractices
             if [ "$HEROKU_APP" = 'main-bestpractices' ] ; then export HEROKU_APP='master-bestpractices'; fi
             heroku run --app "$HEROKU_APP" -- bundle exec rails db:migrate
+            if [ -f '.recalculate' ] ; then
+                heroku run --app "$HEROKU_APP" -- rake update_all_badge_percentages
+                rm -f '.recalculate'
+            fi
             heroku --app "$HEROKU_APP" maintenance:off
           no_output_timeout: 20m
       # Not reliable enough:

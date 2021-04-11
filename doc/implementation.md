@@ -323,6 +323,20 @@ modify the autofill code in the app/lib/ directory.
 Be sure to "git add" all new files, including any migration files,
 and then use "git commit" and "git push".
 
+*Deploying* the update will take some extra steps.
+First of all, if your migration adds a new default value, the migration
+may take a few minutes, so you may want to warn users ahead-of-time.
+
+Once the migration has completed, if the percentage calculations
+will be different, you should do the following for each stage, to
+recalculate percentages and then ensure that the old cached badge data
+is purged:
+
+~~~~sh
+    heroku run --app APP -- rake update_all_badge_percentages
+    heroku run --app APP -- rake fastly:purge_all
+~~~~
+
 ## Internationalization (i18n) and localization (l10n)
 
 This application is "internationalized", that is, it allows

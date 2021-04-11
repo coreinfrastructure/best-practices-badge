@@ -1264,7 +1264,7 @@ en:
           add a <a href="https://unmaintained.tech/">no-maintenance-intended
           badge</a> in its README and/or home page,
           mark it as deprecated in any package repositories (e.g.,
-          <a href="https://docs.npmjs.com/deprecating-and-undeprecating-packages-or-package-versions”>npm deprecate</a>),
+          <a href="https://docs.npmjs.com/deprecating-and-undeprecating-packages-or-package-versions">npm deprecate</a>),
           and/or use the code repository's marking system to archive it (e.g.,
           GitHub's <a href="https://docs.github.com/en/enterprise-server@2.21/github/creating-cloning-and-archiving-repositories/archiving-a-github-repository">"archive" setting</a>,
           GitLab’s <a href="https://docs.gitlab.com/ee/user/project/settings/#archiving-a-project">"archived" marking</a>,

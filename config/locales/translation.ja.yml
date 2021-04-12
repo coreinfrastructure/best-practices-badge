@@ -1073,8 +1073,16 @@ ja:
           Databaseなど</a>）で公開されているCVSSスコアを、そのデータベースで報告されている最新バージョンのCVSSを使用して使用できます。代わりに、脆弱性が公表された後に計算入力が公開された場合、プロジェクトは脆弱性の開示時に最新バージョンの<a
           href="https://www.first.org/cvss/">CVSS</a>を使用して重大度を自ら計算することができます。
       maintained:
-        description:
-        details:
+        description: プロジェクトは維持管理されなければなりません。
+        details: >-
+          少なくとも、プロジェクトは重大な問題と脆弱性の報告に対応するように努める必要があります。バッジを積極的に追求しているプロジェクトはおそらく維持されています。すべてのプロジェクトと人は限られたリソースを持っており、典型的なプロジェクトはいくつかの提案された変更を拒否する必要があるため、限られたリソースと提案の拒否はそれ自体がメンテナンスされていないプロジェクトを示すものではありません。<br><br>プロジェクトが保守されなくなることがわかっている場合は、この基準を「満たされていない」に設定し、適切なメカニズムを使用して、保守されていないことを他の人に示す必要があります。たとえば、READMEの最初の見出しとして「DEPRECATED」を使用し、ホームページの先頭近くに「DEPRECATED」を追加し、コードリポジトリプロジェクトの説明の先頭に「DEPRECATED」を追加し、<a
+          href="https://unmaintained.tech/">メンテナンスを目的としないバッジ</a>を追加します。そのREADMEおよび/またはホームページ、パッケージリポジトリで非推奨としてマークする（例：
+          <a href="https://docs.npmjs.com/deprecating-and-undeprecating-packages-or-package-versions">npm
+          deprecate</a> ）、および/またはコードリポジトリのマーキングシステムを使用してアーカイブする（例：GitHubの<a
+          href="https://docs.github.com/en/enterprise-server@2.21/github/creating-cloning-and-archiving-repositories/archiving-a-github-repository">「アーカイブ」設定</a>、GitLabの<a
+          href="https://docs.gitlab.com/ee/user/project/settings/#archiving-a-project">「アーカイブ」マーキング</a>、
+          Gerritの「読み取り専用」ステータス、またはSourceForgeの「放棄された」プロジェクトステータス）。<a
+          href="https://medium.com/maintainer-io/how-to-deprecate-a-repository-on-github-8f0ceb9155e">追加の議論はここ</a>で見つけることができます。
     '1':
       contribution_requirements:
         description: >-

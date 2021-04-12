@@ -913,7 +913,7 @@ zh-CN:
           如果<a href="https://nvd.nist.gov/cvss.cfm"> CVSS 2.0
           </a>基本分数为4，那么一个漏洞是中等到高的严重性。如果您没有运行动态代码分析，没有发现任何这样的漏洞，选择“不适用”（N/A）。
       maintained:
-        description:
+        description: 必须维护该项目。
         details:
     '1':
       contribution_requirements:
@@ -1419,23 +1419,23 @@ zh-CN:
     intro_p02_html:
     intro_p03_html:
     intro_p04_html:
-    intro_p05_html:
+    intro_p05_html: "<p>这些最佳实践的创建是为了：</p>"
     intro_p06_html:
     intro_p07_html:
     intro_p08_html:
-    structure_p01_html:
+    structure_p01_html: "<p></p><h2 id='criteria_structure'>标准结构</h2>"
     structure_p02_html:
     structure_p03_html:
-    other_p01_html:
+    other_p01_html: "<p></p><h2 id='criteria_other_projects'>与其他项目的关系</h2>"
     other_p02_html:
-    automation_p01_html:
+    automation_p01_html: "<p></p><h2 id='criteria_automation'>标准自动化</h2>"
     automation_p02_html:
     automation_p03_html:
     automation_p04_html:
-    changes_p01_html:
+    changes_p01_html: "<p></p><h2 id='criteria_changes'>随着时间的变化</h2>"
     changes_p02_html:
     changes_p03_html:
-    keywords_p01_html:
+    keywords_p01_html: "<p></p><h2 id='keywords'>关键词</h2>"
     keywords_p02_html:
     keywords_p03_html:
     keywords_p04_html:
@@ -1448,32 +1448,36 @@ zh-CN:
     achieving_p04_html:
     achieving_p05_html:
     achieving_p06_html:
-    terminology_p01_html:
+    terminology_p01_html: "<p></p><h2 id='criteria_terminology'>术语</h2>"
     terminology_p02_html:
-    terminology_p03_html:
+    terminology_p03_html: "<p>以下是一些关键术语：</p><ul>"
     terminology_p04_html:
     terminology_p05_html:
-    terminology_p06_html:
-    terminology_p07_html:
-    terminology_p08_html:
+    terminology_p06_html: >-
+      <li>项目<em>结果</em>是项目成员共同努力产生的最终目标。通常是软件，但是项目结果可能还包括其他内容。引用“项目产生的软件”的标准是指项目结果。</li>
+    terminology_p07_html: >-
+      <li>项目<em>站点</em>是专用于支持开发和传播项目成果的站点，并且在适用的情况下包括项目网站，仓库和下载站点（请参考<a
+      href="#sites_https">sites_https</a> ）。</li>
+    terminology_p08_html: >-
+      <li>项目<em>网站</em>，又称项目主页，是新用户通常会访问以及查看有关项目信息的万维网（WWW）上的主页；它可能与项目的仓库站点相同（在GitHub上通常如此）。</li>
     terminology_p09_html: >-
       <li>项目<em>仓库</em>管理和存储项目结果以及项目结果的修订历史记录。这也称为项目<em>源仓库</em>，因为我们仅需要管理和存储可编辑版本，而不是自动生成的结果（在许多情况下，生成的结果不存储在仓库中）。</li>
     terminology_p10_html: "<li>A<em>项目安全机制</em>是交付的项目的软件提供的安全机制。</ul>"
-    noncriteria_p01_html:
-    noncriteria_p02_html:
+    noncriteria_p01_html: "<p></p><h2 id='criteria_noncriteria'>非标准</h2>"
+    noncriteria_p02_html: "<p>条件：<ul>"
     noncriteria_p03_html:
     noncriteria_p04_html:
     noncriteria_p05_html:
     noncriteria_p06_html:
-    noncriteria_p07_html:
+    noncriteria_p07_html: "<li><em>不需要</em>费用就可以获得徽章。"
     noncriteria_p08_html:
     noncriteria_p09_html:
-    identify_p01_html:
+    identify_p01_html: "<p></p><h2 id='criteria_id_project'>识别项目</h2>"
     identify_p02_html:
-    criteria_why_p01_html:
+    criteria_why_p01_html: "<h2 id='criteria_why'>为什么要有标准？</h2>"
     criteria_why_p02_html:
     criteria_why_p03_html:
     criteria_why_p04_html:
     criteria_why_p05_html:
-    self_certification_p01_html:
+    self_certification_p01_html: <h3 id="criteria_self_certification">为什么要自我认证？</h3>
     self_certification_p02_html:

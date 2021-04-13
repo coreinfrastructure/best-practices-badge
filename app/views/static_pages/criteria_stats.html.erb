@@ -18,7 +18,7 @@
       <th><%= t '.future' %></th>
     </tr>
     <% previous_criteria = [] # For counting "new this level"
-       ['0', '1', '2'].each do |level| %>
+       Project::LEVEL_IDS.each do |level| %>
       <tr>
         <% future_criteria, active_criteria =
              Criteria[level].values.partition(&:future?) %>

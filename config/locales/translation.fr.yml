@@ -2043,8 +2043,35 @@ fr:
           entrées de calcul sont révélées publiquement une fois
           que la vulnérabilité est connue du public.
       maintained:
-        description:
-        details:
+        description: Le projet DOIT être maintenu.
+        details: >-
+          Au minimum, le projet doit tenter de répondre aux rapports
+          de problèmes et de vulnérabilités importants. Un projet
+          qui poursuit activement un badge est probablement maintenu.
+          Tous les projets et tous les individus ont des ressources
+          limitées, et les projets typiques doivent rejeter certaines
+          modifications proposées, de sorte que les ressources
+          limitées et les rejets de propositions n'indiquent pas
+          en eux-mêmes un projet non maintenu. <br><br> Lorsqu'un
+          projet sait qu'il ne sera plus maintenu, il doit définir
+          ce critère comme « Non satisfait » et utiliser le(s)
+          mécanisme(s) approprié(s) pour indiquer aux autres qu'il
+          n'est pas maintenu. Par exemple, utiliser « DEPRECATED
+          » comme premier en-tête de son fichier README, ajouter
+          « DEPRECATED » au début de sa page d'accueil, ajouter
+          « DEPRECATED » au début de la description de projet
+          de son dépôt de code, ajouter un <a href="https://unmaintained.tech/">badge
+          sans maintenance</a> dans son README et/ou sa page d'accueil,
+          le marquer comme obsolète dans tous les dépôts de paquets
+          (par exemple, <a href="https://docs.npmjs.com/deprecating-and-undeprecating-packages-or-package-versions">npm
+          deprecate</a>), et/ou utiliser le système de marquage
+          du dépôt de code pour l'archiver (par exemple, le <a
+          href="https://docs.github.com/en/enterprise-server@2.21/github/creating-cloning-and-archiving-repositories/archiving-a-github-repository">paramètre
+          « archive »</a> de GitHub, le <a href="https://docs.gitlab.com/ee/user/project/settings/#archiving-a-project">marquage
+          « archivé »</a> de GitLab, le statut « lecture seule
+          » de Gerrit ou le statut de projet « abandonné » de
+          SourceForge). Une discussion supplémentaire peut être
+          trouvée <a href="https://medium.com/maintainer-io/how-to-deprecate-a-repository-on-github-8f0ceb9155e">ici</a>.
     '1':
       contribution_requirements:
         description: >-

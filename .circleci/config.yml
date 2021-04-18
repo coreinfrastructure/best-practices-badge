@@ -171,7 +171,7 @@ jobs:
       - run:
           name: Install Heroku CLI tools (to easily control maintenance mode)
           command: |
-            sudo snap install --classic heroku
+            snap install --classic heroku
       - run:
           name: Deploy to Heroku
           command: |

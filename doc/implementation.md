@@ -262,45 +262,70 @@ logical name you're giving to the migration (e.g., "add_discussion").
 By convention, begin a migration name with 'add' to add a column and
 'rename' to rename a column:
 
-~~~~
-  rails generate migration MIGRATION_NAME
-  git add db/migrate/*MIGRATION_NAME.rb
-  $EDITOR db/migrate/*MIGRATION_NAME.rb
+~~~~sh
+    rails generate migration MIGRATION_NAME
+    git add db/migrate/*MIGRATION_NAME.rb
+    $EDITOR db/migrate/*MIGRATION_NAME.rb
 ~~~~
 
 Your migration file should look something like this if it adds columns
-(where add_column takes the name of the table, the name of the column,
+(where `add_column` takes the name of the table, the name of the column,
 the type of the column, and then various options):
 
-~~~~
-class MIGRATION_NAME < ActiveRecord::Migration
-  def change
-    add_column :projects, :crypto_alternatives_status, :string,
-               null: false, default: '?'
-    add_column :projects, :crypto_alternatives_justification, :text
-  end
-end
+~~~~ruby
+    # frozen_string_literal: true
+    class MIGRATION_NAME < ActiveRecord::Migration
+      def change
+        add_column :projects, :crypto_alternatives_status, :string,
+                   null: false, default: '?'
+        add_column :projects, :crypto_alternatives_justification, :text
+      end
+    end
 ~~~~
 
 Similarly, your migration file should look something like this
 if it renames columns:
 
-~~~~
-class Rename < ActiveRecord::Migration
-  def change
-    rename_column :projects,
-                  :description_sufficient_status,
-                  :description_good_status
-    rename_column :projects,
-                  :description_sufficient_justification,
-                  :description_good_justification
-  end
-end
+~~~~ruby
+    # frozen_string_literal: true
+    class Rename < ActiveRecord::Migration
+      def change
+        rename_column :projects,
+                      :description_sufficient_status,
+                      :description_good_status
+        rename_column :projects,
+                      :description_sufficient_justification,
+                      :description_good_justification
+      end
+    end
 ~~~~
 
 In some cases it may be useful to insert SQL commands or do
 other special operations in a migration.
 See the migrations in the db/migrate/ directory for examples.
+
+**If your migration will change some percentage calculations**,
+your `change` operation should `touch` the file `.recalculate`, like this:
+
+~~~~ruby
+    def change
+        # ....
+        touch('.recalculate')
+    end
+~~~~
+
+This `touch` will cause the CI pipeline deployments to automatically run
+`rake update_all_badge_percentages` after the migration, and thus
+recalculate projects' percentages.
+(We use `touch` to communicate these changes because it's the easiest
+way to implement the communication. It's more complicated to invoke
+the recalculation directly from the migration, and it's also more flexible
+to make sure that migrations by *themselves* don't directly execute
+the time-consuming process of recalculating all projects.)
+
+**If your migration will change some percentage calculations**,
+make *sure* you run `rake production_to_main` before merging into `main`,
+to prevent spurious warnings to projects about them losing badges.
 
 Once you've created the migration file, check it first by running
 "rake rubocop".  This will warn you of some potential issues, and
@@ -311,8 +336,8 @@ the migration).
 
 You can migrate by running:
 
-~~~~
-  $ rake db:migrate
+~~~~sh
+    rake db:migrate
 ~~~~
 
 If it fails, you *may* need to use "rake db:rollback" to roll it back.
@@ -328,12 +353,17 @@ First of all, if your migration adds a new default value, the migration
 may take a few minutes, so you may want to warn users ahead-of-time.
 
 Once the migration has completed, if the percentage calculations
-will be different, you should do the following for each stage, to
-recalculate percentages and then ensure that the old cached badge data
-is purged:
+may have changed and you forgot to touch `.recalculate` in the migration,
+you can manually force the recalculations by doing:
 
 ~~~~sh
     heroku run --app APP -- rake update_all_badge_percentages
+~~~~
+
+After the site is up and running, if percentagies have been recalculated,
+purge the CDN cache:
+
+~~~~sh
     heroku run --app APP -- rake fastly:purge_all
 ~~~~
 

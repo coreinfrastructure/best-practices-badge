@@ -985,14 +985,16 @@ You should normally use `git checkout -b NEW_BRANCH_NAME` for the new branch.
 Then run the following command:
 
 ~~~~sh
-./update-ruby NEW_VERSION_NUMBER
+    ./update-ruby NEW_VERSION_NUMBER
 ~~~~
 
-Note at the end of this script a `git commit -as` will be initiated
-if everything worked correctly. Next you should update the CircleCI build
-image and `.circleci/config.yml` as indicated in the dockerfiles
-[README](dockerfiles/README.md).  You will then need to commit those changes.
-and run `git push`.
+Note at the end of this script it will run `rake` to run a full system test,
+and then (if everyhing worked correctly) a `git commit -as` will be run.
+Next you should create and push a new CircleCI build image
+as describe in the dockerfiles [README](dockerfiles/README.md).
+Finally, modify `.circleci/config.yml` as described in the dockerfiles
+readme so that it will *use* those new CircleCI build images.
+You will then need to commit those changes, and run `git push`.
 
 For more details about updating Ruby versions with rbenv, see
 <https://github.com/rbenv/ruby-build> and

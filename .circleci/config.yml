@@ -181,7 +181,7 @@ jobs:
             export HEROKU_APP="$CIRCLECI_BRANCH"-bestpractices
             if [ "$HEROKU_APP" = 'main-bestpractices' ] ; then export HEROKU_APP='master-bestpractices'; fi
             echo "Deploying to $HEROKU_APP"
-            heroku --app "$HEROKU_APP" maintenance:on
+            heroku maintenance:on --app "$HEROKU_APP"
             # Give production site a few seconds to complete ongoing work.
             [ "$HEROKU_APP" != 'production-bestpractices' ] || sleep 10
             git push git@heroku.com:"$HEROKU_APP".git $CIRCLE_SHA1:refs/heads/master
@@ -200,7 +200,7 @@ jobs:
                 heroku run --app "$HEROKU_APP" -- rake update_all_badge_percentages
                 rm -f '.recalculate'
             fi
-            heroku --app "$HEROKU_APP" maintenance:off
+            heroku maintenance:off --app "$HEROKU_APP"
           no_output_timeout: 20m
       # Not reliable enough:
       # - run:

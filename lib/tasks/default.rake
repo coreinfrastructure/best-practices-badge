@@ -807,19 +807,37 @@ task :slow_tests do
   end
 end
 
+# Search for & print matching email address.
+# Presumes we are in a Rails environment
+def real_search_email(email)
+  puts "Searching for email '#{email}'; matching ids and names are:"
+  results = User.where(email: email)
+                .select('id, name, encrypted_email, encrypted_email_iv')
+                .pluck(:id, :name)
+  puts results
+  puts 'End of results.'
+end
+
 # Search for a given user email address.
 desc 'Search for users with given email (for GDPR requests)'
 task search_email: :environment do
   ARGV.shift # Drop rake task name
   ARGV.shift if ARGV[0] == '--' # Skip garbage
-  search_email = ARGV[0]
-  puts "Searching for '#{search_email}'; matching ids and names are:"
-  results = User.where(email: search_email)
+  email = ARGV[0]
+  real_search_email(email)
+  exit(0) # Work around rake
+end
+
+# Search for & print matching name.
+# Presumes we are in a Rails environment
+def real_search_name(name)
+  puts "Searching for name '#{name}' ignoring case; matching ids and names are:"
+  name_downcase = name.downcase
+  results = User.where('lower(name) LIKE ?', "%#{name_downcase}%")
                 .select('id, name, encrypted_email, encrypted_email_iv')
                 .pluck(:id, :name)
   puts results
   puts 'End of results.'
-  exit(0) # Work around rake
 end
 
 # Search for a given user name.
@@ -833,14 +851,21 @@ desc 'Search for users with given case-insensitive name (for GDPR requests)'
 task search_name: :environment do
   ARGV.shift # Drop rake task name
   ARGV.shift if ARGV[0] == '--' # Skip garbage
-  search_name = ARGV[0]
-  search_name_downcase = search_name.downcase
-  puts "Searching for '#{search_name}'; matching ids and names are:"
-  results = User.where('lower(name) LIKE ?', "%#{search_name_downcase}%")
-                .select('id, name, encrypted_email, encrypted_email_iv')
-                .pluck(:id, :name)
-  puts results
-  puts 'End of results.'
+  name = ARGV[0]
+  real_search_name(name)
+  exit(0) # Work around rake
+end
+
+# Search for a given user name AND email address.
+desc 'Search for users with NAME and EMAIL (for GDPR requests)'
+task search_user: :environment do
+  ARGV.shift # Drop rake task name
+  ARGV.shift if ARGV[0] == '--' # Skip garbage
+  name = ARGV[0]
+  email = ARGV[1]
+  real_search_name(name)
+  puts
+  real_search_email(email)
   exit(0) # Work around rake
 end
 

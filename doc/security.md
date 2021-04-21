@@ -85,6 +85,8 @@ certainly do have these processes.
 However, as with almost all real software development projects,
 we perform these processes in parallel, iterating and
 feeding back as appropriate.
+Trying to make decisions without feedback is extremely dangerous, e.g., see
+[How Our Physics Envy Results In False Confidence In Our Organizations](https://www.younglingfeynman.com/essays/physicsenvy).
 Each process is (notionally) run in parallel;
 each receives inputs and produces outputs.
 

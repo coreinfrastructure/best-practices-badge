@@ -179,7 +179,7 @@ def get_project_tokens(base_url, id, session_cookie):
     redirected = (response.url != url)
     if redirected or response.code != 200:
         error('Error: Did not have permission to view edit page')
-        return None, None
+        return None, None, None
 
     html = str(response.read(), 'utf-8')
     auth_token = get_token(html, AUTH_TOKEN_HTML_PATTERN)

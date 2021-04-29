@@ -102,7 +102,8 @@ GEM
     capybara-slow_finder_errors (0.1.5)
       capybara (~> 3.0)
     chartkick (3.4.2)
-    chef-utils (16.13.16)
+    chef-utils (17.0.242)
+      concurrent-ruby
     childprocess (3.0.0)
     code_analyzer (0.5.2)
       sexp_processor
@@ -167,7 +168,7 @@ GEM
     jquery-ui-rails (6.0.1)
       railties (>= 3.2.16)
     json (2.5.1)
-    jwt (2.2.2)
+    jwt (2.2.3)
     kramdown (2.3.1)
       rexml
     kramdown-parser-gfm (1.1.0)
@@ -206,7 +207,7 @@ GEM
       nokogiri (~> 1)
       rake
     mini_mime (1.1.0)
-    mini_portile2 (2.5.0)
+    mini_portile2 (2.5.1)
     minitest (5.14.4)
     minitest-reporters (1.4.3)
       ansi

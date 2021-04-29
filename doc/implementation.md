@@ -181,12 +181,23 @@ heroku config:set --app production-bestpractices TZ=:/usr/share/zoneinfo/UTC
 
 We have a simple ability for system admins to search for user names
 and user emails, primarily to support GDPR Requests.
-Use as follows
+Use as follows:
 
 ~~~~
-heroku run --app production-bestpractices rake search_name -- 'NAME'
-heroku run --app production-bestpractices rake search_email -- 'EMAIL'
+    heroku run --app production-bestpractices rake search_user -- 'NAME' 'EMAIL'
+    heroku run --app production-bestpractices rake search_name -- 'NAME'
+    heroku run --app production-bestpractices rake search_email -- 'EMAIL'
 ~~~~
+
+Note that `search_user` is a shorthand to search for `NAME` and then for
+`EMAIL`; this is a common case, so it makes sense to do it at once.
+Both the name and email searches are case-insensitive.
+
+The name search is LIKE search, so it will list all database names that
+contain the searched name. That is, a search for `David` will list all
+records that include `David` in the name field. Thus, a name match might
+*not* be the person being searched for. Our goal is to minimize the chance
+of not detecting someone, but double-check before deleting any matches.
 
 ## Security
 

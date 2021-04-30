@@ -135,7 +135,7 @@ end
 
 group :test do
   gem 'capybara-slow_finder_errors', '0.1.5', require: false
-  gem 'codecov', '0.4.3', require: false
+  gem 'codecov', '0.5.2', require: false
   gem 'minitest-reporters', '1.4.3', require: false
   gem 'minitest-retry', '0.2.1', require: false # Avoid Capybara false positives
   # Note: Updating 'rails-controller-testing' to '1.0.5' causes failures

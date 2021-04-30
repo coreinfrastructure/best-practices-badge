@@ -87,7 +87,7 @@ gem 'sprockets-rails', '3.2.2' # Rails. Asset precompilation
 gem 'uglifier', '4.2.0', require: false # Minify JavaScript
 
 group :development, :test do
-  gem 'awesome_print', '1.8.0' # Pretty print Ruby objects
+  gem 'awesome_print', '1.9.2' # Pretty print Ruby objects
   gem 'bullet', '6.1.3' # Avoid n+1 queries
   gem 'bundler-audit', '0.8.0'
   gem 'dotenv-rails', '2.7.6'
@@ -120,7 +120,7 @@ group :fake_production, :development, :test do
 end
 
 group :development do
-  gem 'bootsnap', '1.7.2' # Speed up boot via caches
+  gem 'bootsnap', '1.7.4' # Speed up boot via caches
   # gem 'fasterer', '0.3.2' # Provide speed recommendations - run 'fasterer'
   # Waiting for Ruby 2.4 support:
   # https://github.com/seattlerb/ruby_parser/issues/239

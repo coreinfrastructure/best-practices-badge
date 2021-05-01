@@ -88,7 +88,7 @@ gem 'uglifier', '4.2.0', require: false # Minify JavaScript
 
 group :development, :test do
   gem 'awesome_print', '1.9.2' # Pretty print Ruby objects
-  gem 'bullet', '6.1.3' # Avoid n+1 queries
+  gem 'bullet', '6.1.4' # Avoid n+1 queries
   gem 'bundler-audit', '0.8.0'
   gem 'dotenv-rails', '2.7.6'
   gem 'eslintrb', '2.1.0'
@@ -137,7 +137,7 @@ group :test do
   gem 'capybara-slow_finder_errors', '0.1.5', require: false
   gem 'codecov', '0.5.2', require: false
   gem 'minitest-reporters', '1.4.3', require: false
-  gem 'minitest-retry', '0.2.1', require: false # Avoid Capybara false positives
+  gem 'minitest-retry', '0.2.2', require: false # Avoid Capybara false positives
   # Note: Updating 'rails-controller-testing' to '1.0.5' causes failures
   gem 'rails-controller-testing', '1.0.5' # for `assigns` and `assert_template`
   gem 'selenium-webdriver', '3.142.7', require: false

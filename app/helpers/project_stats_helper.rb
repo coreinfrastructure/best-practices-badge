@@ -8,8 +8,7 @@ module ProjectStatsHelper
   DATE_CHART_OPTIONS = {
     scales:
       {
-        xAxes:
-        [
+        x:
           {
             type: 'time',
             unit: 'day',
@@ -17,15 +16,17 @@ module ProjectStatsHelper
             # Setting min & max rotation speeds diplay. See:
             # https://www.chartjs.org/docs/latest/general/performance.html
             ticks: { minRotation: 30, maxRotation: 30 },
+            # Set time format (changed from older chartkick). See:
+            # https://www.chartjs.org/docs/latest/axes/cartesian/time.html
+            # and https://git.io/fxCyr
             time: {
               # Use these ISO 8601 formats so we're language-neutral
               displayFormats: {
-                'day': 'YYYY-MM-DD', 'month': 'YYYY-MM',
+                'day': 'yyyy-MM-dd', 'month': 'yyyy-MM',
                 'second': 'HH:MM:ss'
               }
             }
           }
-        ]
       },
     elements:
       {

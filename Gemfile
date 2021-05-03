@@ -31,7 +31,8 @@ gem 'bootstrap-sass', '3.4.1'
 gem 'bootstrap-social-rails', '4.12.0'
 gem 'bootstrap_form', '2.7.0'
 gem 'bundler' # Ensure it's available
-gem 'chartkick', '3.4.2' # Chart project_stats
+# Note: if webpacker is used, see chartkick website for added instructions
+gem 'chartkick', '4.0.4' # Chart project_stats
 # We no longger use "fastly-rails"; it doesn't support Rails 6+.
 # They recommend switching to the "fastly" gem (aka "fastly-ruby"),
 # but fastly-ruby is not designed to support multi-threading, so we

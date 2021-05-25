@@ -588,7 +588,7 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
 #### Continuity
 
 * <a name="access_continuity"></a>The project MUST be able to continue
-    with minimal interruption if any one person is incapacitated or is
+    with minimal interruption if any one person dies, is incapacitated, or is
     otherwise unable or unwilling to continue support of the project.
     In particular, the project MUST be able to create and close
     issues, accept proposed changes, and release versions of software,

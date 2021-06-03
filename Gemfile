@@ -69,7 +69,7 @@ gem 'paleta', '0.3.0' # Color manipulation, used for badges
 gem 'paper_trail', '11.1.0' # Record previous versions of project data
 gem 'pg', '1.2.3' # PostgreSQL database, used for data storage
 gem 'pg_search', '2.3.5' # PostgreSQL full-text search
-gem 'puma', '5.3.1' # Faster webserver; recommended by Heroku
+gem 'puma', '5.3.2' # Faster webserver; recommended by Heroku
 gem 'puma_worker_killer', '0.3.1' # Band-aid: Restart to limit memory use
 gem 'rack-attack', '6.3.1' # Implement rate limiting
 gem 'rack-cors', '1.1.1' # Enable CORS so JavaScript clients can get JSON
@@ -121,7 +121,7 @@ group :fake_production, :development, :test do
 end
 
 group :development do
-  gem 'bootsnap', '1.7.4' # Speed up boot via caches
+  gem 'bootsnap', '1.7.5' # Speed up boot via caches
   # gem 'fasterer', '0.3.2' # Provide speed recommendations - run 'fasterer'
   # Waiting for Ruby 2.4 support:
   # https://github.com/seattlerb/ruby_parser/issues/239
@@ -144,7 +144,7 @@ group :test do
   gem 'selenium-webdriver', '3.142.7', require: false
   # We don't list "simplecov"; code depends on it & brings it in
   gem 'webdrivers', '4.6.0', require: false
-  gem 'webmock', '3.12.2', require: false
+  gem 'webmock', '3.13.0', require: false
 end
 
 group :production do

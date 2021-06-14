@@ -943,7 +943,7 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
 
     *Rationale*:
     For more information, see
-    <a href="http://aegis.sourceforge.net/auug97.pdf">"Recursive Make Considered Harmful" by Peter Miller</a>
+    <a href="https://web.archive.org/web/20200209034547/http://aegis.sourceforge.net/auug97.pdf">"Recursive Make Considered Harmful" by Peter Miller</a>
     (note that this incorrect approach can be used in any build system,
     not just <i>make</i>).
     Note that

@@ -29,6 +29,12 @@ as issues or pull (merge) requests.
 There is also a
 [mailing list](https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges)
 for general discussion.
+This project was originally developed under the CII, but it
+is now part of the
+[Open Source Security Foundation (OpenSSF)](https://openssf.org/)
+[Best Practices Working Group (WG)](https://github.com/ossf/wg-best-practices-os-developers).
+
+Interesting pages include:
 
 * Badging **[Criteria for the passing level](https://bestpractices.coreinfrastructure.org/criteria/0)**
 * **[Criteria for all badging levels](https://bestpractices.coreinfrastructure.org/criteria)**

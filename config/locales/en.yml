@@ -125,8 +125,8 @@ en:
       check_us_out: Check out the CII Best Practices Badge website!
       p1_html: >-
         The <a href="https://www.linuxfoundation.org/">Linux Foundation
-        (LF)</a> <a href="https://www.coreinfrastructure.org/">Core
-        Infrastructure Initiative (CII)</a> Best Practices badge
+        (LF)</a> Core
+        Infrastructure Initiative (CII) Best Practices badge
         is a way for Free/Libre and Open Source Software (FLOSS)
         projects to show that they follow best practices. Projects
         can voluntarily self-certify, at no cost, by using this
@@ -147,6 +147,12 @@ en:
         projects and supports queries (e.g., you can see <a href="/en/projects?gteq=100">projects
         that have a passing badge</a>). You can also see <a href='/en/projects/1/0'>an
         example (where we try to earn our own badge)</a>.
+        This project was originally developed under the CII,
+        but it is now part of the
+        <a href="https://openssf.org/"
+        >Open Source Security Foundation (OpenSSF)</a>
+        <a href="https://github.com/ossf/wg-best-practices-os-developers"
+        Best Practices Working Group (WG)</a>.
       p3_html: >-
         <em>Privacy and legal issues</em>: Please see our <a href="https://www.linuxfoundation.org/privacy">privacy
         policy</a>,

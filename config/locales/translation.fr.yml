@@ -2173,17 +2173,18 @@ fr:
       access_continuity:
         description: >-
           Le projet DOIT pouvoir continuer avec une interruption
-          minimale si une personne est invalide ou tuée. En particulier,
+          minimale si une personne décède, est invalidée ou ne
+          peut/veut plus continuer à maintenir le projet. En particulier,
           le projet DOIT être en mesure de créer et de fermer
           des problèmes, d'accepter les modifications proposées
           et de publier des versions du logiciel, dans un délai
-          d'une semaine après confirmation qu'un individu est
-          invalide ou tué. Cela PEUT être fait en s'assurant que
-          quelqu'un d'autre possède les clés, les mots de passe
-          et les droits juridiques nécessaires pour poursuivre
-          le projet. Les personnes qui exécutent un projet FLOSS
-          PEUVENT faire cela en fournissant des clés dans un coffre-fort
-          et un testament fournissant les droits légaux nécessaires
+          d'une semaine après confirmation du retrait d'un individu
+          du projet. Cela PEUT être fait en s'assurant que quelqu'un
+          d'autre possède les clés, les mots de passe et les droits
+          juridiques nécessaires pour poursuivre le projet. Les
+          personnes qui exécutent un projet FLOSS PEUVENT faire
+          cela en fournissant des clés dans un coffre-fort et
+          un testament fournissant les droits légaux nécessaires
           (par exemple, pour les noms DNS).
       bus_factor:
         description: Le projet DEVRAIT avoir un « bus factor »
@@ -3067,7 +3068,7 @@ fr:
       get_your_badge: Obtenez votre badge immédiatement !
       p1_html: |-
         Le programme de badge des meilleures pratiques de
-        la <a href="https://www.coreinfrastructure.org/">Core Infrastructure Initiative (CII)</a> de la <a href="https://www.linuxfoundation.org/">Fondation Linux</a> est un moyen pour les projets de logiciel libre (FLOSS) de montrer qu'ils suivent les meilleures pratiques de développement. Les projets peuvent s'auto-évaluer de manière volontaire, sans frais, en utilisant cette application Web pour expliquer comment ils suivent chacune des meilleures pratiques. Le programme de badge des meilleures pratiques de la CII s'inspire des nombreux badges disponibles aux projets sur GitHub. Les consommateurs du badge peuvent évaluer rapidement quels projets de logiciel libre suivent les meilleures pratiques et, par conséquent, sont plus susceptibles de produire des logiciels sûrs et de meilleure qualité.
+        la Core Infrastructure Initiative (CII) de la <a href="https://www.linuxfoundation.org/">Fondation Linux</a> est un moyen pour les projets de logiciel libre (FLOSS) de montrer qu'ils suivent les meilleures pratiques de développement. Les projets peuvent s'auto-évaluer de manière volontaire, sans frais, en utilisant cette application Web pour expliquer comment ils suivent chacune des meilleures pratiques. Le programme de badge des meilleures pratiques de la CII s'inspire des nombreux badges disponibles aux projets sur GitHub. Les consommateurs du badge peuvent évaluer rapidement quels projets de logiciel libre suivent les meilleures pratiques et, par conséquent, sont plus susceptibles de produire des logiciels sûrs et de meilleure qualité.
       p2_html: |-
         Vous pouvez facilement voir les <a href="/fr/criteria/0">critères pour le badge basique</a>. Plus d'informations sur le programme de badge
         des meilleures pratiques de la CII sont
@@ -3080,7 +3081,7 @@ fr:
         <a href="/fr/projects?gteq=100">les projets ayant obtenu le
         badge basique</a>). Vous pouvez également y voir
         <a href='/fr/projects/1/0'>un exemple (où nous essayons
-        d'obtenir notre propre badge)</a>.
+        d'obtenir notre propre badge)</a>. Ce projet a été développé à l'origine avec la CII, mais il fait maintenant partie du <a href="https://github.com/ossf/wg-best-practices-os-developers">Groupe de travail (GT) sur les meilleures pratiques</a> de l'<a href="https://openssf.org/">Open Source Security Foundation (OpenSSF)</a>.
       p3_html: >-
         <em>Confidentialité et problèmes juridiques</em> : Consultez
         notre <a href="https://www.linuxfoundation.org/privacy">politique

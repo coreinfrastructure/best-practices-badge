@@ -436,7 +436,7 @@ ja:
       バッジ エントリのURLは次のとおりです。
     new_project_part3_html: |-
       <p>
-      私たちはあなたが進歩し続けることをお勧めします。
+      常に進歩しましょう。
       </p>
       <p>
       不足しているもの<em>のみ</em>見たい場合は、
@@ -453,7 +453,7 @@ ja:
       新しいプロジェクトバッジエントリを作成したとき、プロジェクトがバッジを取得または失ったとき、誰かがユーザーアカウントでパスワードのリセットを要求したときなど、重要なバッジアプリケーションイベントについてメールを送信します。
       プロジェクトにバッジがなく、バッジエントリを30日以上更新していない場合、通常は30〜60日ごとに非アクティブのリマインダーが送信されます。
       これらの非アクティブリマインダーメッセージはいつでも無効にできます。
-      <a href="%{project_info_url}#project_disabled_reminders">％{project_info_url} #project_disabled_reminders </a>でバッジエントリを編集するだけです。
+      <a href="%{project_info_url}#project_disabled_reminders">％{project_info_url} #project_disabled_reminders</a> でバッジエントリを編集するだけです。
       「非アクティブリマインダーを無効にする」をオンにします。
       値を変更する場合は、プロジェクトエントリを<i>編集</i>することを忘れないでください。
       プロジェクトが合格バッジを獲得した場合、またはバッジエントリが30日以内に編集された場合、非アクティブのリマインダーは送信されません。
@@ -1509,9 +1509,9 @@ ja:
       get_your_badge: バッジを入手する
       p1_html: >-
         <a href="https://www.linuxfoundation.org/">Linux Foundation
-        (LF)</a> <a href="https://www.coreinfrastructure.org/">Core
-        Infrastructure Initiative (CII)</a> ベスト プラクティス バッジは、Free
-        / Libre and Open Source Software（FLOSS）プロジェクトが、ベスト プラクティスに従っていることを自ら示す方法です。プロジェクトは、このWebアプリケーションを使用して、それぞれのベスト
+        (LF)</a> Core Infrastructure Initiative (CII) ベスト プラクティス
+        バッジは、Free/Libre and Open Source Software（FLOSS）プロジェクトが、ベスト
+        プラクティスに従っていることを自ら示す方法です。プロジェクトは、このWebアプリケーションを使用して、それぞれのベスト
         プラクティスに従っていることを説明することにより、自主的に無償で自己証明することができます。 CII ベスト
         プラクティス バッジは、GitHubのプロジェクトで利用可能な多くのバッジからインスピレーションを受けています。バッジの消費者は、どのFLOSSプロジェクトがベスト
         プラクティスに従っているかを速やかに評価でき、その結果、より高品質で安全なソフトウェアを生産することができます。
@@ -1521,8 +1521,10 @@ ja:
         <a href="/ja/project_stats">プロジェクトの統計情報</a>や<a href="/ja/criteria_stats">基準の統計情報</a>も確認できます。
         <a href="/ja/projects">プロジェクト ページ</a>には、参加しているプロジェクトが表示され、クエリも使用できます
         (「<a href="/ja/projects?gteq=100">合格バッジを持つプロジェクトだけ表示する</a
-        >」クエリなど)。また、<a href='/ja/projects/1'>その例 (当プロジェクトのバッジ取得サイト)</a>
-        も見ることができます。
+        >」クエリなど)。また、<a href='/ja/projects/1/0'>その例 (当プロジェクトのバッジ取得サイト)</a>
+        も見ることができます。このプロジェクトはもともとはCIIのもとで開発されましたが、現在は<a href="https://openssf.org/"
+        >Open Source Security Foundation (OpenSSF)</a> <a href="https://github.com/ossf/wg-best-practices-os-developers">
+        Best Practices Working Group (WG)</a>に属しています。
       p3_html: >-
         <em>プライバシーと法的問題</em>：<a href="https://www.linuxfoundation.jp/privacy">プライバシーポリシー</a>、
         <a href="/ja/cookies">クッキーについて</a>、および<a href="https://www.linuxfoundation.jp/terms">利用条件</a>をご覧ください。このバッジ

@@ -914,7 +914,15 @@ zh-CN:
           </a>基本分数为4，那么一个漏洞是中等到高的严重性。如果您没有运行动态代码分析，没有发现任何这样的漏洞，选择“不适用”（N/A）。
       maintained:
         description: 必须维护该项目。
-        details:
+        details: >-
+          至少，项目应尝试响应重大问题和漏洞报告。可能正在维护一个积极追求徽章的项目。所有项目和人员的资源都有限，典型项目必须拒绝某些提议的更改，因此有限的资源和提议拒绝本身并不表示未维护的项目。<br><br>当项目知道将不再维护该项目时，应将此标准设置为“未满足”，并使用适当的机制向其他人指示该项目将不会得到维护。例如，使用“
+          DEPRECATED”作为其自述文件的第一个标题，在其主页开头附近添加“ DEPRECATED”，在其代码存储库项目说明的开头添加“
+          DEPRECATED”，在其中添加<a href="https://unmaintained.tech/">无需维护的标志</a>其自述文件和/或主页，在任何软件包存储库中将其标记为已弃用（例如<a
+          href="https://docs.npmjs.com/deprecating-and-undeprecating-packages-or-package-versions">npm
+          deprecate</a> ），和/或使用代码存储库的标记系统对其进行归档（例如GitHub的<a href="https://docs.github.com/en/enterprise-server@2.21/github/creating-cloning-and-archiving-repositories/archiving-a-github-repository">“
+          archive”设置</a>，GitLab的<a href="https://docs.gitlab.com/ee/user/project/settings/#archiving-a-project">“
+          archived”标记</a>， Gerrit的“只读”状态，或SourceForge的“已放弃”项目状态）。<a
+          href="https://medium.com/maintainer-io/how-to-deprecate-a-repository-on-github-8f0ceb9155e">可以在这里</a>找到更多讨论。
     '1':
       contribution_requirements:
         description: 关于如何贡献的信息必须包括对可接受的贡献的要求（例如，引用任何所需的编码标准）。

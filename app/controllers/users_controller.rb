@@ -186,6 +186,10 @@ class UsersController < ApplicationController
     # web-crawled data (such as from search engines) or via caches.
     # The goal is to make it harder for adversaries to get leaked data.
     # We do this as HTTP headers, so it applies to anything (HTML, JSON, etc.)
+    # Note that we need "private" along with "no-store"; the spec suggests
+    # "no-store" is enough, but "no-store" is ignored by some systems
+    # such as Fastly. See:
+    # https://github.com/rails/rails/issues/40798
     response.set_header('X-Robots-Tag', 'noindex')
     response.set_header('Cache-Control', 'private, no-store, must-revalidate')
   end

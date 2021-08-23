@@ -96,7 +96,9 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes @response.body, '@example.com'
     # We also want to make sure we don't cache this
     assert_equal 'noindex', @response.headers['X-Robots-Tag']
-    assert_equal 'no-store', @response.headers['Cache-Control']
+    # You might think we should just use no-store without private, but
+    # some systems (including Fastly) ignore no-store, so both are needed.
+    assert_equal 'private, no-store', @response.headers['Cache-Control']
   end
 
   test 'JSON provides reasonable results when not logged in, but NOT email' do
@@ -115,7 +117,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_not_includes @response.body, '%40example.com'
     assert_not_includes @response.body, '@example.com'
-    assert_equal 'no-store', @response.headers['Cache-Control']
+    assert_equal 'private, no-store', @response.headers['Cache-Control']
   end
 
   test 'JSON should NOT show email address when logged in as another user' do
@@ -123,7 +125,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     get "/en/users/#{@user.id}.json"
     assert_response :success
     assert_not_includes @response.body, 'example.com'
-    assert_equal 'no-store', @response.headers['Cache-Control']
+    assert_equal 'private, no-store', @response.headers['Cache-Control']
     json_response = JSON.parse(@response.body)
     assert_equal @user.id, json_response['id']
     assert_not_includes json_response, 'email'
@@ -141,7 +143,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     get "/en/users/#{@user.id}"
     assert_response :success
     assert_includes @response.body, 'mailto:melissa%40example.com'
-    assert_equal 'no-store', @response.headers['Cache-Control']
+    assert_equal 'private, no-store', @response.headers['Cache-Control']
   end
 
   test 'should show email address when logged in as admin' do
@@ -149,7 +151,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     get "/en/users/#{@user.id}"
     assert_response :success
     assert_includes @response.body, 'mailto:melissa%40example.com'
-    assert_equal 'no-store', @response.headers['Cache-Control']
+    assert_equal 'private, no-store', @response.headers['Cache-Control']
   end
 
   test 'JSON should show email address when logged in as admin' do
@@ -159,7 +161,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     get "/en/users/#{@user.id}?format=json"
     assert_response :success
     assert_includes @response.body, 'melissa@example.com'
-    assert_equal 'no-store', @response.headers['Cache-Control']
+    assert_equal 'private, no-store', @response.headers['Cache-Control']
   end
 
   test 'should redirect edit when not logged in' do

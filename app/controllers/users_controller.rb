@@ -186,12 +186,15 @@ class UsersController < ApplicationController
     # web-crawled data (such as from search engines) or via caches.
     # The goal is to make it harder for adversaries to get leaked data.
     # We do this as HTTP headers, so it applies to anything (HTML, JSON, etc.)
+    # We don't say "must-revalidate", because we're already saying
+    # no-store (so there would be nothing to revalidate); even if we try,
+    # Rails notices the inconsistency & removes it.
     # Note that we need "private" along with "no-store"; the spec suggests
     # "no-store" is enough, but "no-store" is ignored by some systems
     # such as Fastly. See:
     # https://github.com/rails/rails/issues/40798
     response.set_header('X-Robots-Tag', 'noindex')
-    response.set_header('Cache-Control', 'private, no-store, must-revalidate')
+    response.set_header('Cache-Control', 'private, no-store')
   end
 
   def user_params

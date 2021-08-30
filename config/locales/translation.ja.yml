@@ -962,7 +962,7 @@ ja:
           プロジェクトによって作成されたソフトウェア内のセキュリティ メカニズムは、暗号学的にセキュアな乱数発生器を使用して、すべての暗号鍵とナンスを生成しなければなりません。暗号学的にセキュアでない発生器を使用してはいけません。
         details: >-
           暗号学的にセキュアな乱数発生器は、ハードウェアの乱数発生器でも、Hash_DRBG、HMAC_DRBG、
-          CTR_DRBG、Yarrow、 Fortuna.などのアルゴリズムを使用する暗号学的にセキュアな疑似乱数発生器（CSPRNG）でもよいです。<em>セキュアでない</em>乱数発生器には、Javaのjava.util.RandomとJavaScriptのMath.randomがあります。
+          CTR_DRBG、Yarrow、Fortunaなどのアルゴリズムを使用する暗号学的にセキュアな疑似乱数発生器（CSPRNG）でもよいです。<em>セキュアでない</em>乱数発生器には、Javaのjava.util.RandomとJavaScriptのMath.randomがあります。
       delivery_mitm:
         description: >-
           プロジェクトは、MITM攻撃に対抗する配信メカニズムを使用しなければならない。httpsまたはssh+scpを使用することは許容されます。

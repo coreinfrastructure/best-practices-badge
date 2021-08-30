@@ -1657,9 +1657,11 @@ en:
           only one developer, that individual is the primary developer.
           Many books and courses are available to help you understand
           how to develop more secure software and discuss design.
-          For example, the <a href="https://www.edx.org/professional-certificate/linuxfoundationx-secure-software-development-fundamentals">Secure
+          For example, the <a href="https://openssf.org/edx-courses/">Secure
           Software Development Fundamentals</a> course is a free set
-          of three courses that explain how to develop more secure software.
+          of three courses that explain how to develop more secure software
+          (it's free if you audit it; for an extra fee you can earn a
+          certificate to prove you learned the material).
       know_common_errors:
         description: >-
           At least one of the project's primary developers MUST

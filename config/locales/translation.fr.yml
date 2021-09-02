@@ -1581,10 +1581,13 @@ fr:
           cette personne est le développeur principal. De nombreux
           livres et cours sont disponibles pour vous aider à comprendre
           comment développer des logiciels plus sûrs et pour discuter
-          de leur conception. Par exemple, le cours <a href="https://www.edx.org/professional-certificate/linuxfoundationx-secure-software-development-fundamentals">Bases
+          de leur conception. Par exemple, le cours <a href="https://openssf.org/edx-courses/">Bases
           du développement logiciel sécurisé</a> est un ensemble
           gratuit de trois cours qui expliquent comment développer
-          des logiciels plus sûrs.
+          des logiciels plus sûrs (il est possible de le suivre
+          gratuitement comme auditeur ; il est aussi possible
+          de payer pour obtenir un certificat prouvant que vous
+          avez compris les enseignements du cours).
       know_common_errors:
         description: >-
           Au moins l'un des principaux développeurs du projet

@@ -353,7 +353,7 @@ write priveleges to the GitHub git repository.  If you do, you can trigger a
 test by running
 
 ~~~~
-rake test_dev_install
+    rake test_dev_install
 ~~~~
 
 This command will merge the current master branch into our test branch while
@@ -381,8 +381,38 @@ You can find lines matching "rbenv" in shell startup files
 with the following shell command:
 
 ~~~~sh
-grep rbenv ~/.bashrc ~/.bash_profile ~/.zshrc /etc/profile /etc/profile.d/*
+    grep rbenv ~/.bashrc ~/.bash_profile ~/.zshrc /etc/profile /etc/profile.d/*
 ~~~~
+
+## Optional: Setting up OpenSSF Scorecard
+
+We work with
+[OpenSSF ScoreCard](https://github.com/ossf/scorecard),
+so you may want to install to scorecard to analyze this code
+for the best practices website.
+An easy way to install scorecard on Ubuntu is:
+
+~~~~sh
+    # Set up go environment
+    echo 'PATH="$PATH:$(go env GOPATH)/bin"' >> "$HOME/.profile"
+    source "$HOME/.profile"
+
+    # Install scorecard
+    sudo snap install --classic go
+    go install github.com/ossf/scorecard/v2@latest
+    sudo apt-get install jq # Useful tool
+
+    # Optional: Install node/npm
+    snap install --classic npm
+
+    # Run scorecard, showing details
+    export GITHUB_TOKEN='...'
+    scorecard --repo=github.com/coreinfrastructure/best-practices-badge \
+      --show-details --format=json | jq -C | less -R
+~~~~
+
+See [OpenSSF ScoreCard](https://github.com/ossf/scorecard) for more
+information.
 
 ## See also
 

@@ -27,10 +27,10 @@ installed on your computer (Install instructions are
     docker push <username>/cii-bestpractices:<tag>
     ~~~~
 
-Once completed you can then update `.circleci/config.yml` to use the new image.
-You should also add your new Dockerfile to version control.
+Once completed you must then update `.circleci/config.yml` to use the new image.
+You should also add your new/updated Dockerfile to version control.
 
 Note that, as required by OpenSSF Scorecard, you should pin the dependencies
 to specific hash values instead of versions, so that changes (which might
 be malicious) won't be silently accepted. See the existing
-Dockerfile(s) for how to do that.
+Dockerfile(s) and CircleCI configuration file for how to do that.

@@ -1,4 +1,12 @@
 version: 2.1
+# This CircleCI config.yml file uses PINNED dependencies as required by
+# OpenSSF Scorecard. You can see the hash pins on the various "image:"
+# values. That prevents downloading of later subversions AND of later
+# updates. When you *DO* want to update, you can easily find out the hash
+# of a given docker container by just running something like:
+# > docker pull circleci/postgres:11.5-ram
+# This will return with the SHA-256 hash of the current version.
+#
 # This CircleCI orb doesn't seem to work, so I gave up:
 # orbs:
 #   browser-tools: circleci/browser-tools@1.1.1
@@ -15,13 +23,13 @@ jobs:
       CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
       CIRCLE_TEST_REPORTS: /tmp/circleci-test-results
     docker:
-    - image: drdavidawheeler/cii-bestpractices:3.0.1-browsers
+    - image: drdavidawheeler/cii-bestpractices@sha256:26cfbeb00f03483ba4ba67fa9b8727653496d24fa3f95ec7c6bff1325e6d32c1 # pin :3.0.1-browsers
       environment:
         PG_HOST: localhost
         PG_USER: ubuntu
         RAILS_ENV: test
         RACK_ENV: test
-    - image: circleci/postgres:11.5-ram
+    - image: circleci/postgres@sha256:7a993db59e844d1c9c7a6b4685be57cd4e79173d8e5c25f48b8bb752e53fffdf # pin :11.5-ram
       environment:
         POSTGRES_USER: ubuntu
         POSTGRES_DB: circle_ruby_test
@@ -165,10 +173,14 @@ jobs:
   # duplication.
   deploy:
     docker:
-      - image: buildpack-deps:bionic
+      - image: buildpack-deps@sha256:73f48ef53511ce25f37dc17849fb467925f1bfdcb758c77e8437284158a251ce # pin :bionic
     steps:
       - checkout
       - run:
+          # We don't pin these, as Heroku doesn't support pinning.
+          # In any case, these aren't included in the final result, nor used
+          # in the process of testing the final result... they're
+          # just tools we use to *transfer* the final result to deployment.
           name: Install Heroku CLI tools (to easily control maintenance mode)
           command: |
             wget https://cli-assets.heroku.com/heroku-linux-x64.tar.gz

@@ -19,8 +19,15 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      # Checks-out your repository under $GITHUB_WORKSPACE,
+      # so your job can access it.
+      # As required by OpenSSF Scorecard,
+      # we pin this to a specific hash value to prevent use of an unknown
+      # (and possibly subverted) version.
+      # Update by consulting: https://github.com/actions/checkout/releases
+      # We include the hash after '@', and comment "pin @SIMPLE-NAME"; this is
+      # the naming convention of https://github.com/mheap/pin-github-action
+      - uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # pin @v2.3.4
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
@@ -34,6 +41,8 @@ jobs:
 
       # Run Brakeman. See https://github.com/devmasx/brakeman-linter-action
       - name: Brakeman linter
-        uses: devmasx/brakeman-linter-action@v1.0.0
+        # To review release options see:
+        # https://github.com/devmasx/brakeman-linter-action/releases
+        uses: devmasx/brakeman-linter-action@0dc80fcccf87915ccb1761669014015214f36287 # pin@v1.0.0
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'

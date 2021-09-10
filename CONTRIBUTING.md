@@ -14,7 +14,7 @@ Here's help on how to make contributions, divided into the following sections:
 * code changes,
 * how to check proposed changes before submitting them,
 * reuse (supply chain for third-party components, including updating them),
-* keeping up with external changes, and
+* keeping up the main branch, and
 * handling the rename of the "master" branch to "main".
 
 ## General information
@@ -290,6 +290,8 @@ If the language is not written left-to-right (e.g., Arabic and Hebrew),
 there are some additional steps we will need to take.
 And of course, you need to convince us that you'll produce trustworthy
 translations, because others are counting on you.
+
+More information is in [doc/translators.md](doc/translators.md).
 
 ## Criteria changes
 
@@ -1017,7 +1019,7 @@ warning: please see https://github.com/whitequark/parser#compatibility-with-ruby
 Once the component update has been verified,
 it can be checked in as a new commit.
 
-## Keeping up with external changes
+## Keeping up with the main branch
 
 The installer adds a git remote named 'upstream'.
 Running 'git pull upstream main' will pull the current version from
@@ -1034,6 +1036,15 @@ If the version of Ruby has changed (in the Gemfile),
 use the 'Ruby itself can be updated' instructions.
 If gems have been added or their versions changed, run
 "bundle install" to install the new ones.
+
+## Keeping dependencies up-to-date
+
+We pin dependencies so that we know and control what we depend on.
+For example, the file `Gemfile.lock` locks the specific version of the
+Ruby libraries ("gems") we use; use "bundle" to control that.
+There are also specific pinned versions identified in `dockerfiles/`
+`.github/workflows/main.yml`, and `.circleci/config.yml` that control
+versions and will need to be updated to switch dependencies.
 
 ## Renaming "master" to "main"
 

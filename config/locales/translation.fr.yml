@@ -1606,10 +1606,12 @@ fr:
           aider à comprendre comment développer des logiciels
           plus sûrs et discuter des erreurs courantes de mise
           en œuvre qui conduisent à des vulnérabilités. Par exemple,
-          le cours <a href="https://www.edx.org/professional-certificate/linuxfoundationx-secure-software-development-fundamentals">Bases
+          le cours <a href="https://openssf.org/edx-courses/">Bases
           du développement logiciel sécurisé</a> est un ensemble
           gratuit de trois cours qui expliquent comment développer
-          des logiciels plus sûrs.
+          des logiciels plus sûrs (gratuitement ; vous pouvez
+          payer pour obtenir un certificat démontrant que vous
+          avez assimilé le matériel présenté).
       crypto_published:
         description: >-
           Le logiciel produit par le projet DOIT utiliser, par

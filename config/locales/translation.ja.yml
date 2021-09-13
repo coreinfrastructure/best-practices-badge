@@ -908,10 +908,10 @@ ja:
           プロジェクトの主要開発者の少なくとも1人は、この種のソフトウェアの脆弱性につながる一般的な種類のエラーを知っていなければならず、それぞれを対策または緩和する少なくとも1つの方法を知っていなければなりません。
         details: >-
           例（ソフトウェアの種類によって異なります）には、SQLインジェクション、OSインジェクション、従来のバッファオーバーフロー、クロスサイトスクリプティング、認証の欠落、承認の欠落などがあります。一般的に使用されるリストについては、
-          <a href="https://cwe.mitre.org/top25/">CWE / SANSトップ25</a>または<a
+          <a href="https://cwe.mitre.org/top25/">CWE/SANSトップ25</a>または<a
           href="https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project">OWASPトップ10</a>を参照してください。より安全なソフトウェアを開発する方法を理解し、脆弱性につながる一般的な実装エラーについて説明するのに役立つ多くの書籍やコースが用意されています。たとえば、
-          <a href="https://www.edx.org/professional-certificate/linuxfoundationx-secure-software-development-fundamentals">Secure
-          Software Development Fundamentals</a>コースは、より安全なソフトウェアを開発する方法を説明する3つのコースの無料セットです。
+          <a href="https://openssf.org/edx-courses/">Secure Software
+          Development Fundamentals</a>コースは、より安全なソフトウェアを開発する方法を説明する3つのコースの無料セットです（受講は無料です。追加料金を払うと、学習したことを証明する証明書を入手できます）。
       crypto_published:
         description: >-
           プロジェクトによって作成されたソフトウェアは、デフォルトで、一般に公開され、専門家によってレビューされている暗号プロトコルとアルゴリズムを使用しなければなりません。（暗号プロトコルとアルゴリズムが使用される場合）

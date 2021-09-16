@@ -1,6 +1,12 @@
-# This is a basic workflow to help you get started with Actions
-
+# This is a simple GitHub Actions CI workflow.
 name: CI
+
+# Limit permissions. See:
+# https://github.com/ossf/scorecard/blob/main/docs/checks.md#token-permissions
+# https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#permissions
+# Since we set "permissions", anything unset has access "none".
+permissions:
+  contents: read
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch

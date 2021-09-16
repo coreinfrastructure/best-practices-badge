@@ -1,0 +1,38 @@
+# Enable dependabot, a tool to automatically propose dependency updates
+
+# Copyright the Linux Foundation and the CII Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+
+# It's possible to enable dependabot via just GitHub project settings,
+# and we did that for a while. However, when a project does that,
+# it's harder for others (such as OpenSSF Scorecard) to realize or verify
+# that the project has dependabot enabled. Creating this dependabot.yml
+# file makes easier to *verify* that automatic dependency update proposals
+# are happening. This also gives finer-grained control.
+
+# For more information, see:
+# https://docs.github.com/en/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically/configuration-options-for-dependency-updates
+
+
+version: 2
+updates:
+  # Bundler is the usual external package manager for Ruby programs.
+  # Packaged Ruby libraries are called "gems".
+  # Bundler tracks gem inter-dependencies and loads gems from external sites
+  # (typically from the Rubygems site),
+  # Bundler uses the Ruby program 'gem' to install gems locally.
+  - package-ecosystem: "bundler"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    ignore:
+      # Do not "update" vcr. Later versions switched to a non-OSS licnese.
+      # This dependency is *only* used during testing,
+      # so any unintentional vulnerabilities in it don't matter.
+      - dependency-name: "vcr"
+  # Keep our GitHub actions up to date.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      # Every weekday
+      interval: "daily"

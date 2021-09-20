@@ -89,7 +89,7 @@ gem 'uglifier', '4.2.0', require: false # Minify JavaScript
 
 group :development, :test do
   gem 'awesome_print', '1.9.2' # Pretty print Ruby objects
-  gem 'bullet', '6.1.4' # Avoid n+1 queries
+  gem 'bullet', '6.1.5' # Avoid n+1 queries
   gem 'bundler-audit', '0.8.0'
   gem 'dotenv-rails', '2.7.6'
   gem 'eslintrb', '2.1.0'

@@ -32,7 +32,7 @@ gem 'bootstrap-social-rails', '4.12.0'
 gem 'bootstrap_form', '2.7.0'
 gem 'bundler' # Ensure it's available
 # Note: if webpacker is used, see chartkick website for added instructions
-gem 'chartkick', '4.0.4' # Chart project_stats
+gem 'chartkick', '4.0.5' # Chart project_stats
 # We no longger use "fastly-rails"; it doesn't support Rails 6+.
 # They recommend switching to the "fastly" gem (aka "fastly-ruby"),
 # but fastly-ruby is not designed to support multi-threading, so we
@@ -121,7 +121,7 @@ group :fake_production, :development, :test do
 end
 
 group :development do
-  gem 'bootsnap', '1.7.5' # Speed up boot via caches
+  gem 'bootsnap', '1.9.1' # Speed up boot via caches
   # gem 'fasterer', '0.3.2' # Provide speed recommendations - run 'fasterer'
   # Waiting for Ruby 2.4 support:
   # https://github.com/seattlerb/ruby_parser/issues/239

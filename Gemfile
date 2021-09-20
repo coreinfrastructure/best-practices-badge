@@ -121,7 +121,7 @@ group :fake_production, :development, :test do
 end
 
 group :development do
-  gem 'bootsnap', '1.7.5' # Speed up boot via caches
+  gem 'bootsnap', '1.9.1' # Speed up boot via caches
   # gem 'fasterer', '0.3.2' # Provide speed recommendations - run 'fasterer'
   # Waiting for Ruby 2.4 support:
   # https://github.com/seattlerb/ruby_parser/issues/239
@@ -136,7 +136,7 @@ end
 
 group :test do
   gem 'capybara-slow_finder_errors', '0.1.5', require: false
-  gem 'codecov', '0.5.2', require: false
+  gem 'codecov', '0.6.0', require: false
   gem 'minitest-reporters', '1.4.3', require: false
   gem 'minitest-retry', '0.2.2', require: false # Avoid Capybara false positives
   # Note: Updating 'rails-controller-testing' to '1.0.5' causes failures

@@ -32,7 +32,7 @@ gem 'bootstrap-social-rails', '4.12.0'
 gem 'bootstrap_form', '2.7.0'
 gem 'bundler' # Ensure it's available
 # Note: if webpacker is used, see chartkick website for added instructions
-gem 'chartkick', '4.0.4' # Chart project_stats
+gem 'chartkick', '4.0.5' # Chart project_stats
 # We no longger use "fastly-rails"; it doesn't support Rails 6+.
 # They recommend switching to the "fastly" gem (aka "fastly-ruby"),
 # but fastly-ruby is not designed to support multi-threading, so we
@@ -89,7 +89,7 @@ gem 'uglifier', '4.2.0', require: false # Minify JavaScript
 
 group :development, :test do
   gem 'awesome_print', '1.9.2' # Pretty print Ruby objects
-  gem 'bullet', '6.1.4' # Avoid n+1 queries
+  gem 'bullet', '6.1.5' # Avoid n+1 queries
   gem 'bundler-audit', '0.8.0'
   gem 'dotenv-rails', '2.7.6'
   gem 'eslintrb', '2.1.0'

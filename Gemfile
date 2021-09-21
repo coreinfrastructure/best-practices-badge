@@ -90,7 +90,7 @@ gem 'uglifier', '4.2.0', require: false # Minify JavaScript
 group :development, :test do
   gem 'awesome_print', '1.9.2' # Pretty print Ruby objects
   gem 'bullet', '6.1.5' # Avoid n+1 queries
-  gem 'bundler-audit', '0.8.0'
+  gem 'bundler-audit', '0.9.0.1'
   gem 'dotenv-rails', '2.7.6'
   gem 'eslintrb', '2.1.0'
   gem 'json', '2.5.1'
@@ -143,7 +143,7 @@ group :test do
   gem 'rails-controller-testing', '1.0.5' # for `assigns` and `assert_template`
   gem 'selenium-webdriver', '3.142.7', require: false
   # We don't list "simplecov"; code depends on it & brings it in
-  gem 'webdrivers', '4.6.0', require: false
+  gem 'webdrivers', '4.6.1', require: false
   gem 'webmock', '3.13.0', require: false
 end
 

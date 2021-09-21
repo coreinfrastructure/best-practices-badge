@@ -66,7 +66,7 @@ gem 'omniauth-github', '1.4.0' # Authentication to GitHub (get project info)
 gem 'omniauth-rails_csrf_protection', '0.1.2' # Counter CVE-2015-9284
 gem 'pagy', '3.11.0' # Paginate some views
 gem 'paleta', '0.3.0' # Color manipulation, used for badges
-gem 'paper_trail', '11.1.0' # Record previous versions of project data
+gem 'paper_trail', '12.1.0' # Record previous versions of project data
 gem 'pg', '1.2.3' # PostgreSQL database, used for data storage
 gem 'pg_search', '2.3.5' # PostgreSQL full-text search
 gem 'puma', '5.4.0' # Faster webserver; recommended by Heroku
@@ -90,7 +90,7 @@ gem 'uglifier', '4.2.0', require: false # Minify JavaScript
 group :development, :test do
   gem 'awesome_print', '1.9.2' # Pretty print Ruby objects
   gem 'bullet', '6.1.5' # Avoid n+1 queries
-  gem 'bundler-audit', '0.8.0'
+  gem 'bundler-audit', '0.9.0.1'
   gem 'dotenv-rails', '2.7.6'
   gem 'eslintrb', '2.1.0'
   gem 'json', '2.5.1'

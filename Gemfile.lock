@@ -87,7 +87,7 @@ GEM
     bullet (6.1.5)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
-    bundler-audit (0.8.0)
+    bundler-audit (0.9.0.1)
       bundler (>= 1.2.0, < 3)
       thor (~> 1.0)
     byebug (11.1.3)
@@ -487,7 +487,7 @@ DEPENDENCIES
   bootstrap_form (= 2.7.0)
   bullet (= 6.1.5)
   bundler
-  bundler-audit (= 0.8.0)
+  bundler-audit (= 0.9.0.1)
   capybara-slow_finder_errors (= 0.1.5)
   chartkick (= 4.0.5)
   codecov (= 0.6.0)

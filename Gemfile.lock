@@ -407,7 +407,7 @@ GEM
       faraday (> 0.8, < 2.0)
     scout_apm (4.1.2)
       parser
-    secure_headers (6.3.2)
+    secure_headers (6.3.3)
     selenium-webdriver (3.142.7)
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
@@ -538,7 +538,7 @@ DEPENDENCIES
   ruby-graphviz (= 1.2.5)
   sass-rails (= 5.1.0)
   scout_apm (= 4.1.2)
-  secure_headers (= 6.3.2)
+  secure_headers (= 6.3.3)
   selenium-webdriver (= 3.142.7)
   spring (= 3.0.0)
   sprockets-rails (= 3.2.2)

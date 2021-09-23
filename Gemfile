@@ -69,7 +69,7 @@ gem 'paleta', '0.3.0' # Color manipulation, used for badges
 gem 'paper_trail', '12.1.0' # Record previous versions of project data
 gem 'pg', '1.2.3' # PostgreSQL database, used for data storage
 gem 'pg_search', '2.3.5' # PostgreSQL full-text search
-gem 'puma', '5.4.0' # Faster webserver; recommended by Heroku
+gem 'puma', '5.5.0' # Faster webserver; recommended by Heroku
 gem 'puma_worker_killer', '0.3.1' # Band-aid: Restart to limit memory use
 gem 'rack-attack', '6.5.0' # Implement rate limiting
 gem 'rack-cors', '1.1.1' # Enable CORS so JavaScript clients can get JSON
@@ -83,7 +83,7 @@ gem 'rails-i18n', '6.0.0' # Localizations for Rails built-ins
 gem 'redcarpet', '3.5.1' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.1.0', require: false # For .scss files (CSS extension)
 gem 'scout_apm', '4.1.2' # Monitor for memory leaks
-gem 'secure_headers', '6.3.2' # Add hardening measures to HTTP headers
+gem 'secure_headers', '6.3.3' # Add hardening measures to HTTP headers
 gem 'sprockets-rails', '3.2.2' # Rails. Asset precompilation
 gem 'uglifier', '4.2.0', require: false # Minify JavaScript
 

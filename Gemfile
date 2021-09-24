@@ -69,7 +69,7 @@ gem 'paleta', '0.3.0' # Color manipulation, used for badges
 gem 'paper_trail', '12.1.0' # Record previous versions of project data
 gem 'pg', '1.2.3' # PostgreSQL database, used for data storage
 gem 'pg_search', '2.3.5' # PostgreSQL full-text search
-gem 'puma', '5.4.0' # Faster webserver; recommended by Heroku
+gem 'puma', '5.5.0' # Faster webserver; recommended by Heroku
 gem 'puma_worker_killer', '0.3.1' # Band-aid: Restart to limit memory use
 gem 'rack-attack', '6.5.0' # Implement rate limiting
 gem 'rack-cors', '1.1.1' # Enable CORS so JavaScript clients can get JSON
@@ -144,7 +144,7 @@ group :test do
   gem 'selenium-webdriver', '3.142.7', require: false
   # We don't list "simplecov"; code depends on it & brings it in
   gem 'webdrivers', '4.6.1', require: false
-  gem 'webmock', '3.13.0', require: false
+  gem 'webmock', '3.14.0', require: false
 end
 
 group :production do

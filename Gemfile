@@ -39,7 +39,7 @@ gem 'chartkick', '4.0.5' # Chart project_stats
 # call the Fastly API directly instead.
 gem 'font-awesome-rails', '4.7.0.7'
 gem 'http_accept_language', '2.1.1' # Determine user's preferred locale
-gem 'httparty', '0.19.0' # HTTP convenience. rake fix_use_gravatar
+gem 'httparty', '0.20.0' # HTTP convenience. rake fix_use_gravatar
 gem 'imagesLoaded_rails', '4.1.0' # JavaScript - enable wait for image load
 gem 'jbuilder', '2.11.2' # Template mechanism for JSON format results
 gem 'jquery-rails', '4.4.0' # JavaScript jQuery library (for Rails)
@@ -144,7 +144,7 @@ group :test do
   gem 'selenium-webdriver', '3.142.7', require: false
   # We don't list "simplecov"; code depends on it & brings it in
   gem 'webdrivers', '4.6.1', require: false
-  gem 'webmock', '3.13.0', require: false
+  gem 'webmock', '3.14.0', require: false
 end
 
 group :production do

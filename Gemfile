@@ -39,7 +39,7 @@ gem 'chartkick', '4.0.5' # Chart project_stats
 # call the Fastly API directly instead.
 gem 'font-awesome-rails', '4.7.0.7'
 gem 'http_accept_language', '2.1.1' # Determine user's preferred locale
-gem 'httparty', '0.19.0' # HTTP convenience. rake fix_use_gravatar
+gem 'httparty', '0.20.0' # HTTP convenience. rake fix_use_gravatar
 gem 'imagesLoaded_rails', '4.1.0' # JavaScript - enable wait for image load
 gem 'jbuilder', '2.11.2' # Template mechanism for JSON format results
 gem 'jquery-rails', '4.4.0' # JavaScript jQuery library (for Rails)
@@ -104,7 +104,7 @@ group :development, :test do
   gem 'pronto-rails_best_practices', '0.11.0'
   gem 'pronto-rubocop', '0.11.1'
   # gem 'railroader', '4.3.8' # Security static analyzer. OSS fork of Brakeman
-  gem 'rubocop', '0.91.1', require: false # Style checker
+  gem 'rubocop', '1.22.0', require: false # Style checker
   gem 'rubocop-performance', '1.10.2', require: false # Performance cops
   gem 'rubocop-rails', '2.8.0', require: false # Rails-specific cops
   gem 'ruby-graphviz', '1.2.5' # This is used for bundle viz

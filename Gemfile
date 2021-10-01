@@ -47,7 +47,7 @@ gem 'jquery-ui-rails', '6.0.1' # JavaScript jQueryUI library (for Rails)
 gem 'lograge', '0.11.2' # Simplify logs
 gem 'mail', '2.7.1' # Ruby mail handler
 #
-gem 'octokit', '4.18.0' # GitHub's official Ruby API
+gem 'octokit', '4.21.0' # GitHub's official Ruby API
 gem 'omniauth-github', '1.4.0' # Authentication to GitHub (get project info)
 #
 # Counter CVE-2015-9284 in omniauth.  Unfortunately, at the time of this

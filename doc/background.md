@@ -1626,6 +1626,16 @@ point to guidelines to follow (like CERT's).
     See the <a href="http://cwe.mitre.org/data/definitions/789.html">CWE</a>.
     <sup>[<a href="#validate_the_malloc_size">validate_the_malloc_size</a>]</sup>
 
+## General issues about labels and criteria
+
+<a href="https://gael.univ-grenoble-alpes.fr/sites/gael/files/doc-recherche/WP/A2014/gael2014-03.pdf"
+>On the Economics of Labels: How their Introduction Affects
+the Functioning of  Markets and the Welfare of all Participants
+by Olivier BONROY and Christos CONSTANTATOS, June 2014
+(American Journal of Agricultural Economics)
+</a>
+surveys the literature on labelling programs.
+
 ## Bibliography
 
 Not all of these items are referenced directly, but they may still

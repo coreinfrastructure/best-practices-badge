@@ -177,7 +177,7 @@ GEM
       thor (>= 0.14, < 2.0)
     jquery-ui-rails (6.0.1)
       railties (>= 3.2.16)
-    json (2.5.1)
+    json (2.6.0)
     jwt (2.2.3)
     kramdown (2.3.1)
       rexml
@@ -500,7 +500,7 @@ DEPENDENCIES
   jbuilder (= 2.11.2)
   jquery-rails (= 4.4.0)
   jquery-ui-rails (= 6.0.1)
-  json (= 2.5.1)
+  json (= 2.6.0)
   license_finder (= 6.0.0)
   lograge (= 0.11.2)
   mail (= 2.7.1)

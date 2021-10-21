@@ -31,7 +31,7 @@ class ProjectStatsController < ApplicationController
   # The time, in number of seconds since midnight, when we log
   # project statistics. This is currently 23:30 UTC, set by Heroku scheduler;
   # change this value if you change the time of day we log statistics.
-  LOG_TIME = (23 * 60 + 30) * 60
+  LOG_TIME = ((23 * 60) + 30) * 60
 
   # If the "current time" is within this number of seconds to
   # seconds_since_midnight_log_time, presume that we're about to change
@@ -475,9 +475,7 @@ class ProjectStatsController < ApplicationController
   # rubocop: disable Metrics/MethodLength
   def create_line_chart(fields)
     # Retrieve just the data we need
-    database_fields =
-      [:created_at] +
-      fields.map(&:to_sym)
+    database_fields = [:created_at] + fields.map(&:to_sym)
     stat_data = ProjectStat.select(*database_fields)
 
     dataset = []

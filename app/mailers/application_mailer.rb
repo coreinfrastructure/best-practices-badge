@@ -23,10 +23,10 @@ class ApplicationMailer < ActionMailer::Base
   # we'll store it that way.
   NORMAL_X_SMTPAPI =
     '{ "filters" : { ' \
-       '"clicktrack" : { "settings" : { "enable" : 0 } }, ' \
-       '"ganalytics" : { "settings" : { "enable" : 0 } }, ' \
-       '"subscriptiontrack" : { "settings" : { "enable" : 0 } }, ' \
-       '"opentrack" : { "settings" : { "enable" : 0 } } ' \
+    '"clicktrack" : { "settings" : { "enable" : 0 } }, ' \
+    '"ganalytics" : { "settings" : { "enable" : 0 } }, ' \
+    '"subscriptiontrack" : { "settings" : { "enable" : 0 } }, ' \
+    '"opentrack" : { "settings" : { "enable" : 0 } } ' \
     '} }'
 
   # This forces fast failure on start if NORMAL_X_SMTPAPI is not valid JSON

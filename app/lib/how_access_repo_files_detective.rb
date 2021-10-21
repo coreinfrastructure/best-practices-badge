@@ -23,10 +23,13 @@ class HowAccessRepoFilesDetective < Detective
   end
 
   def assemble_result(fullname)
-    { repo_files:
-          {
-            value: GithubContentAccess.new(fullname, @octokit_client_factory),
-            confidence: 5
-          } }
+    {
+      repo_files:
+                {
+                  value: GithubContentAccess.new(fullname,
+                                                 @octokit_client_factory),
+                  confidence: 5
+                }
+    }
   end
 end

@@ -30,7 +30,7 @@ class HardenedSitesDetective < Detective
     {
       value: 'Unmet', confidence: 5,
       explanation: '// One or more of the required security hardening headers '\
-        'is missing.'
+                   'is missing.'
     }.freeze
   UNMET_NOSNIFF =
     {

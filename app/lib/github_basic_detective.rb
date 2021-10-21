@@ -49,7 +49,7 @@ class GithubBasicDetective < Detective
   }.freeze
 
   EXCLUDE_IMPLEMENTATION_LANGUAGES = [
-    :HTML, :CSS, :Roff, :"DIGITAL Command Language"
+    :HTML, :CSS, :Roff, :'DIGITAL Command Language'
   ].freeze
 
   # Clean up name of license to be like the SPDX display.
@@ -93,24 +93,25 @@ class GithubBasicDetective < Detective
       results[:repo_public_status] = {
         value: 'Met', confidence: 3,
         explanation: 'Repository on GitHub, which provides ' \
-          'public git repositories with URLs.'
+                     'public git repositories with URLs.'
       }
       results[:repo_track_status] = {
         value: 'Met', confidence: 4,
         explanation: 'Repository on GitHub, which uses git. ' \
-          'git can track the changes, ' \
-          'who made them, and when they were made.'
+                     'git can track the changes, ' \
+                     'who made them, and when they were made.'
       }
       results[:repo_distributed_status] = {
         value: 'Met', confidence: 4,
         explanation: 'Repository on GitHub, which uses git. ' \
-          'git is distributed.'
+                     'git is distributed.'
       }
       results[:contribution_status] = {
         value: 'Met', confidence: 2,
         explanation: 'Projects on GitHub by default use issues and ' \
-          'pull requests, as encouraged by documentation such as ' \
-          '<https://guides.github.com/activities/contributing-to-open-source/>.'
+                     'pull requests, as encouraged by documentation such as ' \
+                     '<https://guides.github.com/activities/' \
+                     'contributing-to-open-source/>.'
       }
       results[:discussion_status] = {
         value: 'Met', confidence: 3,

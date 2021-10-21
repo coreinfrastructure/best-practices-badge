@@ -70,9 +70,7 @@ class ProjectsController < ApplicationController
   # rubocop:disable Metrics/PerceivedComplexity, Metrics/BlockNesting
   def index
     validated_url = set_valid_query_url
-    if validated_url != request.original_url
-      redirect_to validated_url
-    else
+    if validated_url == request.original_url
       retrieve_projects
 
       # Omit useless unchanged session cookie for performance & privacy
@@ -101,6 +99,8 @@ class ProjectsController < ApplicationController
       else
         show_normal_index
       end
+    else
+      redirect_to validated_url
     end
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
@@ -341,10 +341,12 @@ class ProjectsController < ApplicationController
   # These are the fields for *projects*; the .recently_updated scope
   # forces loading of user data (where we get the user name/nickname).
   FEED_DISPLAY_FIELDS = 'projects.id as id, projects.name as name, ' \
-    'projects.updated_at as updated_at, projects.created_at as created_at, ' \
-    'tiered_percentage, ' \
-    'badge_percentage_0, badge_percentage_1, badge_percentage_2, ' \
-    'homepage_url, repo_url, description, user_id'
+                        'projects.updated_at as updated_at, ' \
+                        'projects.created_at as created_at, ' \
+                        'tiered_percentage, ' \
+                        'badge_percentage_0, badge_percentage_1, ' \
+                        'badge_percentage_2, ' \
+                        'homepage_url, repo_url, description, user_id'
 
   def feed
     # @projects = Project.select(FEED_DISPLAY_FIELDS).
@@ -652,9 +654,9 @@ class ProjectsController < ApplicationController
   # rubocop:enable Style/MethodCalledOnDoEndBlock, Metrics/MethodLength
 
   HTML_INDEX_FIELDS = 'projects.id, projects.name, description, ' \
-    'homepage_url, repo_url, license, projects.user_id, ' \
-    'achieved_passing_at, projects.updated_at, badge_percentage_0, ' \
-    'tiered_percentage'
+                      'homepage_url, repo_url, license, projects.user_id, ' \
+                      'achieved_passing_at, projects.updated_at, badge_percentage_0, ' \
+                      'tiered_percentage'
 
   # Retrieve project data using the various query parameters.
   # The parameters determine what to select *and* fields to load

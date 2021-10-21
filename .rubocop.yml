@@ -88,6 +88,7 @@ Metrics/ClassLength:
 # Weird failures on this, disabled for now.
 Layout/LineLength:
   Enabled: false
+  # Max: 79
   # Exclude:
   #   - 'db/migrate/*'
 Metrics/MethodLength:

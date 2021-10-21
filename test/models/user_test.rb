@@ -36,7 +36,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'email should not be too long' do
-    @user.email = 'e' * 250 + '@mail.com'
+    @user.email = ('e' * 250) + '@mail.com'
     assert_not @user.valid?
   end
 
@@ -161,7 +161,8 @@ class UserTest < ActiveSupport::TestCase
     User.find_each do |user|
       # puts(user.name)
       assert user.name.present?, "Empty name for #{user.id}"
-      assert user.encrypted_email.present?, "Email not present for #{user.name}"
+      assert user.encrypted_email.present?,
+             "Email not present for #{user.name}"
       assert(
         user.encrypted_email_iv.present?,
         "Email IV not present for #{user.name}"

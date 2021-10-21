@@ -15,12 +15,14 @@ class UsersEditTest < ActionDispatch::IntegrationTest
     log_in_as(@user)
     get edit_user_path(@user)
     assert_template 'users/edit'
-    patch user_path(@user), params: { user: {
-      name:  '',
-      email: 'foo@invalid',
-      password:              '',
-      password_confirmation: ''
-    } }
+    patch user_path(@user), params: {
+      user: {
+        name:  '',
+            email: 'foo@invalid',
+            password:              '',
+            password_confirmation: ''
+      }
+    }
     assert_template 'users/edit'
   end
 
@@ -28,12 +30,14 @@ class UsersEditTest < ActionDispatch::IntegrationTest
     log_in_as(@user)
     get edit_user_path(@user)
     assert_template 'users/edit'
-    patch user_path(@user), params: { user: {
-      name:  '',
-      email: '',
-      password:              'password',
-      password_confirmation: 'password'
-    } }
+    patch user_path(@user), params: {
+      user: {
+        name:  '',
+            email: '',
+            password:              'password',
+            password_confirmation: 'password'
+      }
+    }
     assert_template 'users/edit'
   end
 
@@ -45,12 +49,14 @@ class UsersEditTest < ActionDispatch::IntegrationTest
     name  = 'Foo Bar'
     email = 'foo@bar.com'
     VCR.use_cassette('successful_edit_-_name_email') do
-      patch user_path(@user), params: { user: {
-        name:  name,
-        email: email,
-        password:              '',
-        password_confirmation: ''
-      } }
+      patch user_path(@user), params: {
+        user: {
+          name:  name,
+                email: email,
+                password:              '',
+                password_confirmation: ''
+        }
+      }
     end
     assert_not flash.empty?
     assert_redirected_to @user
@@ -78,12 +84,14 @@ class UsersEditTest < ActionDispatch::IntegrationTest
     name  = 'Foo Bar'
     email = 'foo@bar.com'
     VCR.use_cassette('successful_edit_-_password') do
-      patch user_path(@user), params: { user: {
-        name:  name,
-        email: email,
-        password:              'Agoodp@$$word',
-        password_confirmation: 'Agoodp@$$word'
-      } }
+      patch user_path(@user), params: {
+        user: {
+          name:  name,
+                email: email,
+                password:              'Agoodp@$$word',
+                password_confirmation: 'Agoodp@$$word'
+        }
+      }
     end
     assert_not flash.empty?
     assert_redirected_to @user

@@ -250,7 +250,7 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
     # Ensure that cache_time() produces correct answers
     controller = ProjectStatsController.new
     # We'll presume that logs are sent at 23:30 daily
-    log_time = (23 * 60 + 30) * 60
+    log_time = ((23 * 60) + 30) * 60
     assert_equal 120, controller.cache_time(log_time - 70)
     assert_equal 120, controller.cache_time(log_time + 70)
     assert_equal log_time, controller.cache_time(0)

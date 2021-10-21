@@ -115,15 +115,18 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
   end
   # rubocop: enable Metrics/BlockLength
 
+  # rubocop: disable Metrics/BlockLength
   test 'resend account activation for unactivated account' do
     VCR.use_cassette('resend_account_activation_for_unactivated_account') do
       get signup_path
-      login_params = { user: {
-        name: 'Example User',
-        email: 'user@example.com',
-        password:              'a-g00d!Xpassword',
-        password_confirmation: 'a-g00d!Xpassword'
-      } }
+      login_params = {
+        user: {
+          name: 'Example User',
+                email: 'user@example.com',
+                password:              'a-g00d!Xpassword',
+                password_confirmation: 'a-g00d!Xpassword'
+        }
+      }
       assert_difference 'User.count', 1 do
         post users_path, params: login_params
       end
@@ -135,13 +138,15 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
       user = assigns(:user)
       assert_not user.activated?
       # Valid activation token
-      get edit_account_activation_path(user.activation_token, email: user.email)
+      get edit_account_activation_path(user.activation_token,
+                                       email: user.email)
       assert user.reload.activated?
       follow_redirect!
       assert_template 'sessions/new'
       assert_not user_logged_in?
     end
   end
+  # rubocop: enable Metrics/BlockLength
 
   test 'redirect activated user to login' do
     @user = users(:test_user)

@@ -23,7 +23,10 @@ SecureHeaders::Configuration.default do |config|
   config.csp = {
     # Control information sources
     default_src: normal_src,
-    img_src: ['secure.gravatar.com', 'avatars.githubusercontent.com', "'self'"],
+    img_src: [
+      'secure.gravatar.com', 'avatars.githubusercontent.com',
+      "'self'"
+    ],
     object_src: ["'none'"],
     script_src: normal_src,
     style_src: normal_src,

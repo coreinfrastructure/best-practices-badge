@@ -47,22 +47,13 @@ class ProjectGetTest < ActionDispatch::IntegrationTest
       'no-referrer-when-downgrade',
       @response.headers['Referrer-Policy']
     )
-    assert_equal(
-      'nosniff',
-      @response.headers['X-Content-Type-Options']
-    )
-    assert_equal(
-      'DENY',
-      @response.headers['X-Frame-Options']
-    )
+    assert_equal('nosniff', @response.headers['X-Content-Type-Options'])
+    assert_equal('DENY', @response.headers['X-Frame-Options'])
     assert_equal(
       'none',
       @response.headers['X-Permitted-Cross-Domain-Policies']
     )
-    assert_equal(
-      '1; mode=block',
-      @response.headers['X-XSS-Protection']
-    )
+    assert_equal('1; mode=block', @response.headers['X-XSS-Protection'])
     # Check warning on development system
     assert_match 'This is not the production system', response.body
 

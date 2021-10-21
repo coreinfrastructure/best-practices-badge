@@ -12,7 +12,7 @@ class UserMailer < ApplicationMailer
   # Time in seconds to intentionally delay activation message
   # as a way to counter spammers.
   ACTIVATION_MESSAGE_DELAY_TIME = (
-    ENV['ACTIVATION_MESSAGE_DELAY_TIME'] || 5 * 60
+    ENV['ACTIVATION_MESSAGE_DELAY_TIME'] || (5 * 60)
   ).to_i
 
   # Compute and return the new X-SMTPAPI header value to cause a send delay.

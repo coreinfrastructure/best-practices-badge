@@ -40,10 +40,8 @@ class SessionsHelperTest < ActionView::TestCase
 
   # Unit test.  There are tricky cases, so try various forms
   test 'check force_locale_url' do
-    assert_equal 'https://a.b.c/',
-                 force_locale_url('https://a.b.c/', nil)
-    assert_equal 'https://a.b.c/',
-                 force_locale_url('https://a.b.c', nil)
+    assert_equal 'https://a.b.c/', force_locale_url('https://a.b.c/', nil)
+    assert_equal 'https://a.b.c/', force_locale_url('https://a.b.c', nil)
     assert_equal 'https://a.b.c/fr', force_locale_url('https://a.b.c/', :fr)
     assert_equal 'https://a.b.c/fr', force_locale_url('https://a.b.c', :fr)
     assert_equal 'https://a.b.c/en',
@@ -77,6 +75,7 @@ class SessionsHelperTest < ActionView::TestCase
       @pull = pull
     end
   end
+
   class StubOctokitResult
     attr_reader :permissions
 
@@ -84,6 +83,7 @@ class SessionsHelperTest < ActionView::TestCase
       @permissions = StubOctokitPermissions.new(admin, push, pull)
     end
   end
+
   class StubOctokitClient
     def initialize(**params); end
 
@@ -122,8 +122,7 @@ class SessionsHelperTest < ActionView::TestCase
   end
 
   test 'unit test of get_gethub_owner' do
-    assert_equal 'ciitest',
-                 get_github_owner('https://github.com/ciitest/1234')
+    assert_equal 'ciitest', get_github_owner('https://github.com/ciitest/1234')
     assert_equal 'asdf-123',
                  get_github_owner('https://github.com/asdf-123/456')
     assert_equal 'ciitest2',

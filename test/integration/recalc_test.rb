@@ -87,6 +87,8 @@ class RecalcTest < ActionDispatch::IntegrationTest
   end
 
   test 'Raises ArgumentError' do
-    assert_raises(ArgumentError) { Project.update_all_badge_percentages(['3']) }
+    assert_raises(ArgumentError) do
+      Project.update_all_badge_percentages(['3'])
+    end
   end
 end

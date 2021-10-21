@@ -159,12 +159,9 @@ class Project < ApplicationRecord
 
   # For these fields we'll have just simple validation rules.
   # We'll rely on Rails' HTML escaping system to counter XSS.
-  validates :name, length: { maximum: MAX_SHORT_STRING_LENGTH },
-                   text: true
-  validates :description, length: { maximum: MAX_TEXT_LENGTH },
-                          text: true
-  validates :license, length: { maximum: MAX_SHORT_STRING_LENGTH },
-                      text: true
+  validates :name, length: { maximum: MAX_SHORT_STRING_LENGTH }, text: true
+  validates :description, length: { maximum: MAX_TEXT_LENGTH }, text: true
+  validates :license, length: { maximum: MAX_SHORT_STRING_LENGTH }, text: true
   validates :general_comments, text: true
 
   # We'll do automated analysis on these URLs, which means we will *download*

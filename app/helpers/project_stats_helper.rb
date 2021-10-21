@@ -22,8 +22,8 @@ module ProjectStatsHelper
             time: {
               # Use these ISO 8601 formats so we're language-neutral
               displayFormats: {
-                'day': 'yyyy-MM-dd', 'month': 'yyyy-MM',
-                'second': 'HH:MM:ss'
+                day: 'yyyy-MM-dd', month: 'yyyy-MM',
+                second: 'HH:MM:ss'
               }
             }
           }

@@ -60,8 +60,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     get "/en/users/#{@admin.id}"
     assert_response :success
     assert I18n.t('users.show.is_admin').present?
-    assert_includes @response.body,
-                    I18n.t('users.show.is_admin')
+    assert_includes @response.body, I18n.t('users.show.is_admin')
   end
 
   test 'do NOT indicate non-admin is admin to admin' do
@@ -69,24 +68,21 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     log_in_as(@admin)
     get "/en/users/#{@user.id}"
     assert_response :success
-    assert_not_includes @response.body,
-                        I18n.t('users.show.is_admin')
+    assert_not_includes @response.body, I18n.t('users.show.is_admin')
   end
 
   test 'do NOT indicate admin is admin to non-admin' do
     log_in_as(@user, password: 'password1')
     get "/en/users/#{@user.id}"
     assert_response :success
-    assert_not_includes @response.body,
-                        I18n.t('users.show.is_admin')
+    assert_not_includes @response.body, I18n.t('users.show.is_admin')
   end
 
   test 'do NOT indicate admin is admin if not logged in' do
     # No log_in_as
     get "/en/users/#{@user.id}"
     assert_response :success
-    assert_not_includes @response.body,
-                        I18n.t('users.show.is_admin')
+    assert_not_includes @response.body, I18n.t('users.show.is_admin')
   end
 
   test 'should NOT show email address when not logged in' do
@@ -171,7 +167,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'can create local user' do
-    # Note: We don't rate limit *creating* a local user, but we have
+    # NOTE: We don't rate limit *creating* a local user, but we have
     # additional requirements for actual *activation* of local user accounts.
     VCR.use_cassette('can_create_local_user') do
       # This will produce a "create" call on the controller
@@ -324,8 +320,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     end
     assert_redirected_to user_path(id: @user.id)
     follow_redirect!
-    my_assert_select '.alert-danger',
-                     'Cannot delete a user who owns projects.'
+    my_assert_select '.alert-danger', 'Cannot delete a user who owns projects.'
   end
 
   test 'admin should be able to destroy self without projects' do

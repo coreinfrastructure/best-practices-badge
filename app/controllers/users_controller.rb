@@ -6,7 +6,7 @@
 
 # rubocop: disable Metrics/ClassLength
 class UsersController < ApplicationController
-  # Note: If a "before" filter renders or redirects, the action will not run,
+  # NOTE: If a "before" filter renders or redirects, the action will not run,
   # and other additional filters scheduled to run after it are cancelled.
   # See: http://guides.rubyonrails.org/action_controller_overview.html
   # Require being logged in for "index" to slightly discourage enumeration

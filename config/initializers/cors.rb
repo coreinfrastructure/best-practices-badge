@@ -113,7 +113,7 @@ CORS_UNDIFFERENTIATED_RESOURCE_PATTERNS = [
 ].freeze
 CORS_UNDIFFERENTIATED_VARY = ['Accept-Encoding'].freeze
 
-# Note: "Vary: Accept-Encoding" will still happen, but Fastly CDN
+# NOTE: "Vary: Accept-Encoding" will still happen, but Fastly CDN
 # normalizes this to one of a few values per:
 # https://docs.fastly.com/en/guides/enabling-automatic-gzipping
 # As a result, "Vary: Accept-Encoding" does *not* significantly impede

@@ -12,7 +12,7 @@ class RepoFilesExamineDetectiveTest < ActiveSupport::TestCase
     def get_info(_pattern)
       [
         {
-          'name': 'LICENSES', 'type': 'dir', 'html_url': './LICENSES/'
+          name: 'LICENSES', type: 'dir', html_url: './LICENSES/'
         }.with_indifferent_access
       ]
     end

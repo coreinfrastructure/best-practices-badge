@@ -48,7 +48,7 @@ class LoginTest < ApplicationSystemTestCase
     visit projects_path(locale: :en)
     click_on 'Login'
     fill_in 'Email', with: @user.email
-    # Note: we do NOT fill in a password.
+    # NOTE: we do NOT fill in a password.
     click_button 'Log in using custom account'
     assert has_content? 'Invalid email/password combination'
     assert_equal login_path(locale: :en), current_path
@@ -73,8 +73,7 @@ class LoginTest < ApplicationSystemTestCase
     fill_in 'project_name', with: 'It doesnt matter'
     # Below we are clicking the final save button, it has a value of ''
     click_button('Save', exact: true)
-    assert_equal edit_project_path(@project, locale: :en),
-                 current_path
+    assert_equal edit_project_path(@project, locale: :en), current_path
     assert has_content? 'Project was successfully updated.'
     # TODO: Get the clicking working again with capybara.
     # Details: If we expand all panels first and dont click this test passes.

@@ -15,9 +15,7 @@ class BuildDetectiveTest < ActiveSupport::TestCase
   end
 
   test 'Build' do
-    results = BuildDetective.new.analyze(
-      @evidence, repo_url: @repo_url
-    )
+    results = BuildDetective.new.analyze(@evidence, repo_url: @repo_url)
     assert results == {}
   end
 end

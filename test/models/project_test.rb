@@ -74,28 +74,28 @@ class ProjectTest < ActiveSupport::TestCase
 
     # Accept U+0020 (space) and U+00E9 c3 a9 "LATIN SMALL LETTER E WITH ACUTE"
     assert validator.url_acceptable?('https://github.com/linuxfoundation/' \
-                                    'cii-best-practices-badge%20%c3%a9')
+                                     'cii-best-practices-badge%20%c3%a9')
     # Accept U+8C0A Unicode Han Character 'friendship; appropriate, suitable'
     # encoded in UTF-8 as 0xE8 0xB0 0x8A (e8b08a); see
     # http://www.fileformat.info/info/unicode/char/8c0a/index.htm
     assert validator.url_acceptable?('https://github.com/linuxfoundation/' \
-                                    '%E8%B0%8A')
+                                     '%E8%B0%8A')
     # Accept U+1000 Unicode Character 'MYANMAR LETTER KA'
     # encoded in UTF-8 as 0xE1 0x80 0x80
     # http://www.fileformat.info/info/unicode/char/1000/index.htm
     assert validator.url_acceptable?('https://github.com/linuxfoundation/' \
-                                    '%e1%80%80')
+                                     '%e1%80%80')
     # Don't accept "c0 80", an overlong (2-byte) encoding of U+0000 (NUL).
     # Note that "modified UTF-8" does accept this.
     assert_not validator.url_acceptable?('https://github.com/linuxfoundation/' \
-                                    'cii-best-practices-badge%20%c0%80')
+                                         'cii-best-practices-badge%20%c0%80')
     # Don't accept non-UTF-8, even if the individual bytes are acceptable.
     assert_not validator.url_acceptable?('https://github.com/linuxfoundation/' \
-                                    'cii-best-practices-badge%eex')
+                                         'cii-best-practices-badge%eex')
     assert_not validator.url_acceptable?('https://github.com/linuxfoundation/' \
-                                    'cii-best-practices-badge%ee')
+                                         'cii-best-practices-badge%ee')
     assert_not validator.url_acceptable?('https://github.com/linuxfoundation/' \
-                                    'cii-best-practices-badge%ff%ff')
+                                         'cii-best-practices-badge%ff%ff')
   end
   # rubocop:enable Metrics/BlockLength
 

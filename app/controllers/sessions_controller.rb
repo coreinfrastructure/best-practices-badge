@@ -78,13 +78,12 @@ class SessionsController < ApplicationController
   end
 
   def local_login
-    user = User.find_by provider: 'local',
-                        email: params[:session][:email]
-    if !user&.authenticate(params[:session][:password])
+    user = User.find_by provider: 'local', email: params[:session][:email]
+    if user&.authenticate(params[:session][:password])
+      local_login_procedure(user)
+    else
       flash.now[:danger] = t('sessions.invalid_combo')
       render 'new'
-    else
-      local_login_procedure(user)
     end
   end
 

@@ -25,7 +25,7 @@ class ProjectStat < ApplicationRecord
   end.freeze
   # rubocop:enable Style/MethodCalledOnDoEndBlock
 
-  # Note: The constants below are for clarity.  Don't just change them,
+  # NOTE: The constants below are for clarity.  Don't just change them,
   # or trend lines will be recording different cutoffs.
   # See below for their meaning.
   REACTIVATION_PERIOD = 14 # number of days from reminder to update.

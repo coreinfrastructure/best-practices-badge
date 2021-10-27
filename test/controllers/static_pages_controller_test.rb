@@ -6,7 +6,7 @@
 
 require 'test_helper'
 
-# Note: we inherit from ActionDispatch::IntegrationTest, not
+# NOTE: we inherit from ActionDispatch::IntegrationTest, not
 # ActionController::TestCase, because the latter is obsolete.
 # rubocop: disable Metrics/BlockLength, Metrics/ClassLength
 class StaticPagesControllerTest < ActionDispatch::IntegrationTest

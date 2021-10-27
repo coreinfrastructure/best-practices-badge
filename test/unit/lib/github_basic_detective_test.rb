@@ -45,10 +45,10 @@ class GithubBasicDetectiveTest < ActiveSupport::TestCase
       # We need to use the older hash syntax to spell some names
       # rubocop:disable Style/HashSyntax
       assert_equal 'C++, C', detective.language_cleanup( # actually sorts
-        C: 1000, :"C++" => 5000
+        C: 1000, :'C++' => 5000
       )
       assert_equal 'C#, JavaScript', detective.language_cleanup(
-        HTML: 1000, :"C#" => 5000, JavaScript: 800
+        HTML: 1000, :'C#' => 5000, JavaScript: 800
       )
       # This is the list from https://api.github.com/repos/
       # assimilation/assimilation-official/languages
@@ -57,9 +57,9 @@ class GithubBasicDetectiveTest < ActiveSupport::TestCase
                      Python: 1_151_127,
                      C: 1_059_779,
                      Shell: 285_358,
-                     :"C++" => 44_086,
+                     :'C++' => 44_086,
                      CMake: 33_855,
-                     :"C#" => 29_834,
+                     :'C#' => 29_834,
                      HTML: 2_290,
                      Ruby: 1_359
                    )

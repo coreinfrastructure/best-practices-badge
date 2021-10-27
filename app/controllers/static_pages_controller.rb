@@ -9,8 +9,7 @@ class StaticPagesController < ApplicationController
 
   # If a page is *invariant* regardless of locale, don't bother
   # to figure out what the locale is.
-  skip_before_action :set_locale_to_best_available,
-                     only: %i[robots]
+  skip_before_action :set_locale_to_best_available, only: %i[robots]
 
   # There's no value in redirecting these pages to a locale,
   # so do *not* redirect them to a URL based on locale.

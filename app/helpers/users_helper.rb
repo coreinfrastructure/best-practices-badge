@@ -24,7 +24,7 @@ module UsersHelper
   def avatar_for(user)
     image_tag(
       user.avatar_url, alt: user.name, class: 'avatar', size: '80x80',
-                       'referrerpolicy': 'no-referrer'
+                       referrerpolicy: 'no-referrer'
     )
   end
 end

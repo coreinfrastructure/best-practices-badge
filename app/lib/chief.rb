@@ -96,8 +96,8 @@ class Chief
   def log_detective_failure(source, e, detective, proposal, data)
     Rails.logger.error do
       'ERROR:: ' \
-      "In method #{source}, exception #{e} on #{detective.class.name}, " \
-      "current_proposal= #{proposal}, current_data= #{data}"
+        "In method #{source}, exception #{e} on #{detective.class.name}, " \
+        "current_proposal= #{proposal}, current_data= #{data}"
     end
   end
 
@@ -153,8 +153,7 @@ class Chief
       # Now add the explanation, if we can.
       next unless key.to_s.end_with?('_status') && data.key?(:explanation)
 
-      justification_key =
-        (key.to_s.chomp('_status') + '_justification').to_sym
+      justification_key = (key.to_s.chomp('_status') + '_justification').to_sym
       if project.attribute_present?(justification_key)
         unless project[justification_key].end_with?(data[:explanation])
           project[justification_key] =

@@ -128,7 +128,7 @@ def change_translation(id, new_value)
   return true unless $REAL
 
   new_value_json = { 'target' => new_value }.to_json
-  # Note: This popen invocation does NOT go through the shell,
+  # NOTE: This popen invocation does NOT go through the shell,
   # so we do not use shell escapes.
   IO.popen(
     [
@@ -159,7 +159,7 @@ def post_translation(key, lang, source, new_value)
     'source' => source,
     'target' => new_value
   }.to_json
-  # Note: This popen invocation does NOT go through the shell,
+  # NOTE: This popen invocation does NOT go through the shell,
   # so we do not use shell escapes.
   # POST https://translation.io/api/v1/segments(.json)
   IO.popen(

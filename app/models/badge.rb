@@ -105,7 +105,8 @@ class Badge
   # rubocop:disable Metrics/AbcSize
   def badge_svg(specs, percentage)
     color = specs[:color] ||
-            '#' + Paleta::Color.new(:hsl, percentage * 0.45 + 15, 85, 43).hex
+            ('#' + Paleta::Color.new(:hsl, (percentage * 0.45) + 15, 85,
+                                     43).hex)
     text = percentage ? specs[:text] + " #{percentage}%" : specs[:text]
     <<-BADGE_AS_SVG.squish
     <svg xmlns="http://www.w3.org/2000/svg" width="#{specs[:width]}"

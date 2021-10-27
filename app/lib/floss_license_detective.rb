@@ -55,14 +55,14 @@ class FlossLicenseDetective < Detective
     'GNU General Public License version 3.0 or later (GPL-3.0-or-later)',
     'GNU Library or "Lesser" General Public License version 2.1 (LGPL-2.1)',
     'GNU Library or "Lesser" General Public License version 2.1 only ' \
-      '(LGPL-2.1-only)',
+    '(LGPL-2.1-only)',
     'GNU Library or "Lesser" General Public License version 2.1 or later ' \
-      '(LGPL-2.1-or-later)',
+    '(LGPL-2.1-or-later)',
     'GNU Library or "Lesser" General Public License version 3.0 (LGPL-3.0)',
     'GNU Library or "Lesser" General Public License version 3.0 only ' \
-      '(LGPL-3.0-only)',
+    '(LGPL-3.0-only)',
     'GNU Library or "Lesser" General Public License version 3.0 or later ' \
-      '(LGPL-3.0-or-later)',
+    '(LGPL-3.0-or-later)',
     'Historical Permission Notice and Disclaimer (HPND)',
     'IBM Public License 1.0 (IPL-1.0)',
     'IPA Font License (IPA)',
@@ -145,15 +145,17 @@ class FlossLicenseDetective < Detective
           {
             value: 'Met', confidence: 5,
             explanation: "The #{license} license is approved by the " \
-                     'Open Source Initiative (OSI).'
+                         'Open Source Initiative (OSI).'
           }
       }
     elsif license.match?(/\A[^(]/)
-      { floss_license_osi_status:
-          {
-            value: 'Unmet', confidence: 1,
-            explanation: '// Did not find license in the OSI list.'
-          } }
+      {
+        floss_license_osi_status:
+                  {
+                    value: 'Unmet', confidence: 1,
+                    explanation: '// Did not find license in the OSI list.'
+                  }
+      }
     else
       # We currently don't handle (...), so don't even guess.
       {}

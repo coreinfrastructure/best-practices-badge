@@ -52,8 +52,7 @@ class GithubProjectTest < ApplicationSystemTestCase
       assert has_no_selector?(
         "option[value='https://github.com/ciitest2/test-repo-shared']"
       )
-      select 'ciitest/cii-best-practices-badge',
-             from: 'project[repo_url]'
+      select 'ciitest/cii-best-practices-badge', from: 'project[repo_url]'
       click_on 'Submit GitHub Repository'
       assert has_content? 'Thanks for adding the Project! Please fill out ' \
                           'the rest of the information to get the Badge.'

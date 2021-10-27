@@ -65,7 +65,7 @@ end
 desc 'Run rails_best_practices with options'
 task :rails_best_practices do
   sh 'bundle exec rails_best_practices ' \
-      '--features --spec --without-color --exclude railroader/'
+     '--features --spec --without-color --exclude railroader/'
 end
 
 desc 'Setup railroader if needed'
@@ -94,7 +94,7 @@ task :bundle do
   sh 'bundle check || bundle install'
 end
 
-# Note: We've had some trouble with bundle doctor, so it might
+# NOTE: We've had some trouble with bundle doctor, so it might
 # not be run by default.
 desc 'Run bundle doctor - check for some Ruby gem configuration problems'
 task :bundle_doctor do
@@ -146,7 +146,7 @@ task :bundle_audit do
 end
 # rubocop: enable Metrics/BlockLength
 
-# Note: If you don't want mdl to be run on a markdown file, rename it to
+# NOTE: If you don't want mdl to be run on a markdown file, rename it to
 # end in ".markdown" instead.  (E.g., for markdown fragments.)
 desc 'Run markdownlint (mdl) - check for markdown problems on **.md files'
 task :markdownlint do
@@ -404,6 +404,7 @@ task :fake_production do
   sh 'RAILS_ENV=fake_production rails server -p 4000'
 end
 
+# rubocop:disable Metrics/MethodLength
 def normalize_values(input, locale)
   # The destination locale is "locale".
   input.transform_values! do |value|
@@ -413,10 +414,12 @@ def normalize_values(input, locale)
       normalize_string value, locale
     elsif value.is_a?(NilClass)
       value
-    else raise TypeError 'Not Hash, String or NilClass'
+    else
+      raise TypeError 'Not Hash, String or NilClass'
     end
   end
 end
+# rubocop:enable Metrics/MethodLength
 
 # rubocop:disable Metrics/MethodLength
 def normalize_string(value, locale)
@@ -453,9 +456,7 @@ def normalize_yaml(path)
     # Compute locale from filename (it must be before the last period)
     locale = filename.split('.')[-2]
     normalized = normalize_values(YAML.load_file(filename), locale)
-    IO.write(
-      filename, normalized.to_yaml(line_width: 60).gsub(/\s+$/, '')
-    )
+    IO.write(filename, normalized.to_yaml(line_width: 60).gsub(/\s+$/, ''))
   end
 end
 

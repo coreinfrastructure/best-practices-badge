@@ -184,8 +184,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   # that it has STOPPED working once we've removed that functionality.
   # We have documented this deprecation in doc/api.md.
   test 'should project JSON data if HTTP header Accept: application/json ' do
-    get "/en/projects/#{@project.id}",
-        headers: { 'Accept': 'application/json' }
+    get "/en/projects/#{@project.id}", headers: { Accept: 'application/json' }
     assert_response :success
     # The JSON looks like {...} and has "id", while the HTML does not.
     assert_equal '{', response.body[0]
@@ -419,7 +418,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should fail to update project if not logged in' do
-    # Note: no log_in_as
+    # NOTE: no log_in_as
     old_name = @project.name
     new_name = old_name + '_updated'
     # Run patch (the point of the test), which invokes the 'update' method
@@ -446,9 +445,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       homepage_url: 'example.org' # bad url
     }
     # Run patch (the point of the test), which invokes the 'update' method
-    patch "/en/projects/#{@project.id}", params: {
-      project: new_project_data
-    }
+    patch "/en/projects/#{@project.id}", params: { project: new_project_data }
     # "Success" here only in the HTTP sense - we *do* get a form...
     assert_response :success
     # ... but we just get the edit form.
@@ -474,17 +471,13 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       lock_version: @project.lock_version
     }
     log_in_as(@project.user)
-    patch "/en/projects/#{@project.id}", params: {
-      project: new_project_data1
-    }
+    patch "/en/projects/#{@project.id}", params: { project: new_project_data1 }
     assert_redirected_to project_path(@project, locale: :en)
     get "/en/projects/#{@project.id}/edit"
     assert_includes @response.body, 'Edit Project Badge Status'
     assert_includes @response.body, new_name1
     assert_not_includes @response.body, new_name2
-    patch "/en/projects/#{@project.id}", params: {
-      project: new_project_data2
-    }
+    patch "/en/projects/#{@project.id}", params: { project: new_project_data2 }
     assert_includes flash['danger'],
                     'Another user has made a change to that record ' \
                     'since you accessed the edit form.'
@@ -565,7 +558,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
   test 'CORS Cannot evade /badge match with /badge.json/..' do
     get "/projects/#{@perfect_passing_project.id}/badge.json/..",
-        headers: { 'Origin': 'example.com' }
+        headers: { Origin: 'example.com' }
     assert_response :not_found
     assert_equal 'Accept-Encoding, Origin', @response.headers['Vary']
     assert_equal '*', @response.headers['Access-Control-Allow-Origin']
@@ -573,7 +566,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
   test 'Cannot evade /badge match with /projects/NUM/../badge.json' do
     get "/projects/#{@perfect_passing_project.id}/../badge.json",
-        headers: { 'Origin': 'example.com' }
+        headers: { Origin: 'example.com' }
     assert_response :not_found
     # We don't really care about these for a "not found":
     # assert_equal 'Accept-Encoding', @response.headers['Vary']
@@ -586,7 +579,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
         params: { format: 'svg' }
     assert_response :success
     assert_equal contents('badge-passing.svg'), @response.body
-    # Note: Requestors MUST use the ".json"
+    # NOTE: Requestors MUST use the ".json"
     # suffix to requst the data in JSON format
     # (and NOT use the HTTP Accept header to try to select the output format).
     # Therefore we don't need to include "Accept" as part of "Vary".
@@ -597,7 +590,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
   test 'A perfect passing project requested with CORS' do
     get "/en/projects/#{@project.id}/badge.json",
-        headers: { 'Origin': 'example.com' }
+        headers: { Origin: 'example.com' }
     assert_equal 'Accept-Encoding', @response.headers['Vary']
   end
 
@@ -695,7 +688,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should NOT destroy own project if rationale too short' do
     log_in_as(@project.user)
-    assert_no_difference('Project.count', ActionMailer::Base.deliveries.size) do
+    assert_no_difference('Project.count',
+                         ActionMailer::Base.deliveries.size) do
       delete "/en/projects/#{@project.id}",
              params: { deletion_rationale: 'Nah.' }
     end
@@ -705,7 +699,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should NOT destroy own project if rationale has few non-whitespace' do
     log_in_as(@project.user)
-    assert_no_difference('Project.count', ActionMailer::Base.deliveries.size) do
+    assert_no_difference('Project.count',
+                         ActionMailer::Base.deliveries.size) do
       delete "/en/projects/#{@project.id}",
              params: { deletion_rationale: ' x y ' + ("\n" * 30) }
     end
@@ -729,14 +724,16 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     log_in_as(@user2, password: 'password1')
     # Verify that we are actually logged in
     assert_equal @user2.id, session[:user_id]
-    assert_no_difference('Project.count', ActionMailer::Base.deliveries.size) do
+    assert_no_difference('Project.count',
+                         ActionMailer::Base.deliveries.size) do
       delete "/en/projects/#{@project.id}" # calls controller method "destroy"
     end
   end
 
   test 'should not destroy project if not logged in' do
     # Notice that we do *not* call log_in_as.
-    assert_no_difference('Project.count', ActionMailer::Base.deliveries.size) do
+    assert_no_difference('Project.count',
+                         ActionMailer::Base.deliveries.size) do
       delete "/en/projects/#{@project.id}" # calls controller method "destroy"
     end
   end
@@ -795,8 +792,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'update', @project_two.versions.last.event
     assert_equal @project_two.user.id,
                  @project_two.versions.last.whodunnit.to_i
-    assert_equal old_repo_url,
-                 @project_two.versions.last.reify.repo_url
+    assert_equal old_repo_url, @project_two.versions.last.reify.repo_url
   end
 
   test 'admin can change other users non-blank repo_url' do

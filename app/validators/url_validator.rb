@@ -47,12 +47,12 @@ class UrlValidator < ActiveModel::EachValidator
 
   # Return true if URL matches URL_REGEX and its decoding is valid UTF-8.
   def url_acceptable?(value)
-    if !URL_REGEX.match?(value)
-      false
-    else
+    if URL_REGEX.match?(value)
       # The unescapes the *entire* URL, but that's okay because we've
       # already confirmed that the domain name doesn't have "%"
       unescape_unforced(value).force_encoding('UTF-8').valid_encoding?
+    else
+      false
     end
   end
 

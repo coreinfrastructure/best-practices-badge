@@ -234,8 +234,7 @@ module ActiveSupport
       github_login_vcr_file = "test/vcr_cassettes/#{cassette}.yml"
       return Null unless File.exist?(github_login_vcr_file)
 
-      y = YAML.load_file(github_login_vcr_file)
-              .with_indifferent_access
+      y = YAML.load_file(github_login_vcr_file).with_indifferent_access
       query_string = y[:http_interactions][0][:response][:body][:string]
       Rack::Utils.parse_nested_query(query_string)['access_token']
     end

@@ -29,8 +29,7 @@ class BadgeStaticController < ApplicationController
     return unless Badge.valid?(value)
 
     set_surrogate_key_header "/badge_percent/#{value}"
-    send_data Badge[value],
-              type: 'image/svg+xml', disposition: 'inline'
+    send_data Badge[value], type: 'image/svg+xml', disposition: 'inline'
     # Our application router now prevents invalid values. Before we did that,
     # we had an "else" clause that sent a 404 by doing this:
     # render(

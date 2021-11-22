@@ -41,7 +41,7 @@ gem 'font-awesome-rails', '4.7.0.7'
 gem 'http_accept_language', '2.1.1' # Determine user's preferred locale
 gem 'httparty', '0.20.0' # HTTP convenience. rake fix_use_gravatar
 gem 'imagesLoaded_rails', '4.1.0' # JavaScript - enable wait for image load
-gem 'jbuilder', '2.11.2' # Template mechanism for JSON format results
+gem 'jbuilder', '2.11.3' # Template mechanism for JSON format results
 gem 'jquery-rails', '4.4.0' # JavaScript jQuery library (for Rails)
 gem 'jquery-ui-rails', '6.0.1' # JavaScript jQueryUI library (for Rails)
 gem 'lograge', '0.11.2' # Simplify logs
@@ -93,7 +93,7 @@ group :development, :test do
   gem 'bundler-audit', '0.9.0.1'
   gem 'dotenv-rails', '2.7.6'
   gem 'eslintrb', '2.1.0'
-  gem 'json', '2.5.1'
+  gem 'json', '2.6.1'
   gem 'license_finder', '6.0.0'
   gem 'mdl', '0.11.0'
   # NOTE: If you update pronto you may need to update other pronto-* gems

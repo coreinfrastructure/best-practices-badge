@@ -41,7 +41,7 @@ gem 'font-awesome-rails', '4.7.0.7'
 gem 'http_accept_language', '2.1.1' # Determine user's preferred locale
 gem 'httparty', '0.20.0' # HTTP convenience. rake fix_use_gravatar
 gem 'imagesLoaded_rails', '4.1.0' # JavaScript - enable wait for image load
-gem 'jbuilder', '2.11.2' # Template mechanism for JSON format results
+gem 'jbuilder', '2.11.3' # Template mechanism for JSON format results
 gem 'jquery-rails', '4.4.0' # JavaScript jQuery library (for Rails)
 gem 'jquery-ui-rails', '6.0.1' # JavaScript jQueryUI library (for Rails)
 gem 'lograge', '0.11.2' # Simplify logs
@@ -84,7 +84,7 @@ gem 'redcarpet', '3.5.1' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.1.0', require: false # For .scss files (CSS extension)
 gem 'scout_apm', '4.1.2' # Monitor for memory leaks
 gem 'secure_headers', '6.3.3' # Add hardening measures to HTTP headers
-gem 'sprockets-rails', '3.2.2' # Rails. Asset precompilation
+gem 'sprockets-rails', '3.4.0' # Rails. Asset precompilation
 gem 'uglifier', '4.2.0', require: false # Minify JavaScript
 
 group :development, :test do

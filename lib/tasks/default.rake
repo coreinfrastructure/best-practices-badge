@@ -812,6 +812,10 @@ end
 # Presumes we are in a Rails environment
 def real_search_email(email)
   puts "Searching for email '#{email}'; matching ids and names are:"
+  # Trivial email validation check. This isn't sophisticated, this is primarily
+  # to prevent swapping the email & name fields when calling search_user.
+  raise ArgumentError unless /.+@.+/.match?(email)
+
   results = User.where(email: email)
                 .select('id, name, encrypted_email, encrypted_email_iv')
                 .pluck(:id, :name)

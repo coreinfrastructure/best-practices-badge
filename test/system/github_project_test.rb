@@ -13,7 +13,7 @@ class GithubProjectTest < ApplicationSystemTestCase
 
     VCR.use_cassette('github_project', allow_playback_repeats: true) do
       visit '/en'
-      assert has_content? 'CII Best Practices Badge Program'
+      assert has_content? 'OpenSSF Best Practices Badge Program'
       click_on 'Get Your Badge Now!'
       assert_equal new_project_path(locale: :en), current_path
       assert has_content? 'Log in with GitHub'

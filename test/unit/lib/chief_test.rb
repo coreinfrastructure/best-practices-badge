@@ -17,7 +17,7 @@ class ChiefTest < ActiveSupport::TestCase
   end
 
   # rubocop:disable Metrics/BlockLength
-  test 'CII badge results correct' do
+  test 'OpenSSF badge results correct' do
     new_chief = Chief.new(@sample_project, proc { Octokit::Client.new })
     VCR.use_cassette('github') do
       new_chief.autofill

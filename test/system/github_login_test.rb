@@ -13,7 +13,7 @@ class GithubLoginTest < ApplicationSystemTestCase
 
     VCR.use_cassette('github_login', allow_playback_repeats: true) do
       visit '/en'
-      assert has_content? 'CII Best Practices Badge Program'
+      assert has_content? 'OpenSSF Best Practices Badge Program'
       click_on 'Login'
       assert_equal login_path(locale: :en), current_path
       assert has_content? 'Log in with GitHub'

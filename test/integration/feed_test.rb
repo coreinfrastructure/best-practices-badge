@@ -38,7 +38,7 @@ class FeedTest < ActionDispatch::IntegrationTest
     # See test/fixtures/files/feed.atom for a sample
     assert response.body.start_with?('<?xml version="1.0" encoding="UTF-8"?>')
     assert response.body.include?(
-      '<title>CII Best Practices BadgeApp Updated Projects</title>'
+      '<title>OpenSSF Best Practices BadgeApp Updated Projects</title>'
     )
     assert response.body.include?(
       '<title>Another Ascent Vehicle (AAV)</title>'

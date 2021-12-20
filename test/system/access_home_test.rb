@@ -9,7 +9,7 @@ require 'application_system_test_case'
 class AccessHomeTest < ApplicationSystemTestCase
   test 'sanity' do
     visit root_path(locale: :en)
-    assert has_content? 'CII Best Practices Badge Program'
+    assert has_content? 'OpenSSF Best Practices Badge Program'
   end
 
   test 'New Project link' do

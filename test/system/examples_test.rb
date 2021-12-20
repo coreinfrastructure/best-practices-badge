@@ -10,6 +10,6 @@ require 'application_system_test_case'
 class ExamplesTest < ApplicationSystemTestCase
   test 'visiting the English home page' do
     visit '/en'
-    assert_selector 'h2', text: 'CII Best Practices Badge Program'
+    assert_selector 'h2', text: 'OpenSSF Best Practices Badge Program'
   end
 end

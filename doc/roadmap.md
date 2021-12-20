@@ -1,6 +1,6 @@
 # Roadmap
 
-The CII Best Practices badge project is essentially in a
+The OpenSSF Best Practices badge project is essentially in a
 "sustainment" mode.  That doesn't mean the project is static,
 it just means that we've already achieved our "big" objectives.
 This is similar to the situation of the Linux kernel, which is

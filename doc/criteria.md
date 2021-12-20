@@ -88,9 +88,9 @@ The Linux Foundation also sponsors the
 identifies criteria for a "high quality Free
 and Open Source Software (FOSS) compliance program."
 OpenChain focuses on how organizations can best use FLOSS and contribute
-back to FLOSS projects, while the CII Best Practices badge
+back to FLOSS projects, while the OpenSSF Best Practices badge
 focuses on the FLOSS projects themselves.
-The CII Best Practices badge and OpenChain work together to help
+The OpenSSF Best Practices badge and OpenChain work together to help
 improve FLOSS and how FLOSS is used.
 
 We expect that these practices and their detailed criteria will be updated,

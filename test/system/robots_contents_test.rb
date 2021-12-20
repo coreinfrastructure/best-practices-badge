@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Copyright the Linux Foundation, IDA,
-# and the CII Best Practices badge contributors
+# and the OpenSSF Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
 require 'application_system_test_case'

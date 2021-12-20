@@ -33,7 +33,7 @@ This project was originally developed under the CII, but it
 is now part of the
 [Open Source Security Foundation (OpenSSF)](https://openssf.org/)
 [Best Practices Working Group (WG)](https://github.com/ossf/wg-best-practices-os-developers).
-The original name of the project was the CII Best Practices badge, but
+The original name of the project was the OpenSSF Best Practices badge, but
 it is now the OpenSSF Best Practices badge project.
 
 Interesting pages include:

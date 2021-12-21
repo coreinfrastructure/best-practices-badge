@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Copyright the Linux Foundation, IDA, and the
-# CII Best Practices badge contributors
+# OpenSSF Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
 # Enable CORS to allow client-side JavaScript of other systems to

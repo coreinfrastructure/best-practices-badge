@@ -76,7 +76,7 @@ is released under at least the
 newer non-code content is released under
 CC-BY version 3.0 or later (CC-BY-3.0+).
 If referencing collectively or not
-otherwise noted, please credit the CII Best Practices badge contributors.
+otherwise noted, please credit the OpenSSF Best Practices badge contributors.
 
 If you use the data for research, we'd love to hear about your results,
 so please do share the results with us if you can.
@@ -351,7 +351,7 @@ newer non-code content is released under
 CC-BY version 3.0 or later (CC-BY-3.0+).
 If referencing collectively or
 not otherwise noted, please credit the
-"CII Best Practices badge contributors" and note the license.
+"OpenSSF Best Practices badge contributors" and note the license.
 You should also note the website URL as the data source, which is
 <https://bestpractices.coreinfrastructure.org>.
 

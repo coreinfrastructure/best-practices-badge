@@ -18,7 +18,7 @@
 # dropdown (down arrow) to the right of the relevant, select "Settings".
 
 # Copyright 2020-, the Linux Foundation and the
-# CII Best Practices badge contributors
+# OpenSSF Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
 # We ASSUME that the input YAML file is trusted.

@@ -1,8 +1,8 @@
-# Core Infrastructure Initiative Best Practices Badge
+# OpenSSF Best Practices Badge
 
 <!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
 
-[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/1/badge)](https://bestpractices.coreinfrastructure.org/projects/1)
+[![OpenSSF Best Practices](https://bestpractices.coreinfrastructure.org/projects/1/badge)](https://bestpractices.coreinfrastructure.org/projects/1)
 [![CircleCI Build Status](https://circleci.com/gh/coreinfrastructure/best-practices-badge.svg?&style=shield&circle-token=ca450ac150523030464677a1aa7f3cacfb8b3472)](https://app.circleci.com/pipelines/github/coreinfrastructure/best-practices-badge)
 [![codecov](https://codecov.io/gh/coreinfrastructure/best-practices-badge/branch/master/graph/badge.svg)](https://codecov.io/gh/coreinfrastructure/best-practices-badge)
 [![License](https://img.shields.io/:license-mit-blue.svg)](https://badges.mit-license.org)
@@ -19,7 +19,7 @@ We believe that FLOSS projects that implement best practices are more likely
 to produce better software, including more secure software.
 
 See the
-*[Core Infrastructure Initiative (CII) Best Practices badge website](https://bestpractices.coreinfrastructure.org/)* if you want to try to actually get a badge.
+*[OpenSSF Best Practices badge website](https://bestpractices.coreinfrastructure.org/)* if you want to try to actually get a badge.
 
 This is the development site for the criteria and badge application
 software that runs the website.
@@ -33,6 +33,8 @@ This project was originally developed under the CII, but it
 is now part of the
 [Open Source Security Foundation (OpenSSF)](https://openssf.org/)
 [Best Practices Working Group (WG)](https://github.com/ossf/wg-best-practices-os-developers).
+The original name of the project was the OpenSSF Best Practices badge, but
+it is now the OpenSSF Best Practices badge project.
 
 Interesting pages include:
 

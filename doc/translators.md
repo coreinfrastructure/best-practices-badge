@@ -2,7 +2,7 @@
 
 ## Welcome
 
-Thank you for translating for the CII Best Practices badge project! *Any* help you can give is greatly appreciated.
+Thank you for translating for the OpenSSF Best Practices badge project! *Any* help you can give is greatly appreciated.
 
 ## How to Translate
 

@@ -142,11 +142,7 @@ jobs:
           -c=$(git log --pretty=format:%H | tail -1) --exit-code
     # Temporarily disable bundle doctor; trying to run it produces an error.
     # - run: bundle exec bundle doctor
-    # Ignore CVE-2015-9284 (omniauth); We have mitigated this with a
-    # third-party countermeasure (omniauth-rails_csrf_protection) in:
-    # https://github.com/coreinfrastructure/best-practices-badge/pull/1298
-    # - run: bundle exec bundle audit check --update
-    - run: bundle exec bundle audit check --update --ignore CVE-2015-9284
+    - run: bundle exec rake bundle_audit
     - run: bundle exec rake whitespace_check
     - run: bundle exec rake license_finder_report.html
     - run: script/report_code_statistics

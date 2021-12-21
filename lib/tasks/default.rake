@@ -137,10 +137,7 @@ task :bundle_audit do
         # Ignore CVE-2015-9284 (omniauth); We have mitigated this with a
         # third-party countermeasure (omniauth-rails_csrf_protection) in:
         # https://github.com/coreinfrastructure/best-practices-badge/pull/1298
-        # Ignore CVE-2021-44528: This hurts applications that allow hosts with
-        # a leading dot, which we don't do. In any case, we don't care
-        # what the user *thinks* is the host - we force it.
-        bundle exec bundle audit check --ignore CVE-2015-9284 CVE-2021-44528
+        bundle exec bundle audit check --ignore CVE-2015-9284
       else
         true
       fi

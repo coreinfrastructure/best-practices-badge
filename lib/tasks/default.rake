@@ -878,3 +878,46 @@ desc 'Update Database list of bad passwords from raw-bad-passwords-lowercase'
 task update_bad_password_db: :environment do
   BadPassword.force_load
 end
+
+desc 'Update SVG badge images from shields.io'
+task :update_badge_images do
+  # require 'Paleta'
+  sh 'curl -o app/assets/images/badge_static_passing.svg ' \
+     'https://img.shields.io/badge/openssf_best_practices-passing-4c1'
+  sh 'curl -o app/assets/images/badge_static_silver.svg ' \
+     'https://img.shields.io/badge/openssf_best_practices-silver-c0c0c0'
+  sh 'curl -o app/assets/images/badge_static_gold.svg ' \
+     'https://img.shields.io/badge/openssf_best_practices-gold-ffd700'
+  (0..99).each do |percent|
+    # scale "color" to be greener as we approach passing, to provide a
+    # visual indication of progress for those who can see color
+    color = Paleta::Color.new(:hsl, (percent * 0.45) + 15, 85, 43).hex
+    puts(color)
+    sh "curl -o app/assets/images/badge_static_#{percent}.svg " \
+       'https://img.shields.io/badge/openssf_best_practices-in_progress_' \
+       "#{percent}%25-#{color}"
+  end
+  # TODO: Capture widths
+  sh <<-CAPTURE_WIDTHS
+    file='app/assets/images/badge_static_widths.txt'
+    echo '{' > "$file"
+    for level in passing silver gold $(seq 0 99)
+    do
+      width=$(grep -Eo 'width="[0-9]*"' app/assets/images/badge_static_"$level".svg | head -1 | tr -dc '0-9')
+      echo "  '${level}': ${width}," >> "$file"
+    done
+    echo '}' >> "$file"
+  CAPTURE_WIDTHS
+  puts <<-REMINDERS
+    Reminders:
+    Extract app/assets/images/badge_static_widths.txt into app/models/badge.rb
+    cp -p app/assets/images/badge_static_passing.svg \
+          test/fixtures/files/badge-passing.svg
+    cp -p app/assets/images/badge_static_silver.svg \
+          test/fixtures/files/badge-silver.svg
+    cp -p app/assets/images/badge_static_gold.svg \
+          test/fixtures/files/badge-gold.svg
+    cp -p app/assets/images/badge_static_88.svg \
+          test/fixtures/files/badge-88.svg
+  REMINDERS
+end

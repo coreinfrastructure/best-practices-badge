@@ -34,9 +34,9 @@ fr:
       question ? Vous voyez un problème ? Merci d'<em><a href="mailto:&#99;ii&#45;badges&#45;questions&#64;lists&#46;coreinfrastructure&#46;or&#103;">envoyer
       un email</a></em> ou de <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
       target="_blank" rel="noopener">reporter un problème</a></i>.</strong>
-      © 2015-2018 <a href="https://openssf.org"
-      target="_blank" rel="noopener">Open Source Security Foundation</a>,
-      un projet collaboratif de la <a href="https://www.linuxfoundation.org/"
+      © 2015-2018 <a href="https://openssf.org" target="_blank"
+      rel="noopener">Open Source Security Foundation</a>, un projet
+      collaboratif de la <a href="https://www.linuxfoundation.org/"
       target="_blank" rel="noopener">Fondation Linux</a>. Tous
       droits réservés. Consultez notre <a href="https://www.linuxfoundation.org/privacy"
       target="_blank" rel="noopener">politique de confidentialité</a>
@@ -345,12 +345,11 @@ fr:
         Attribution version 3.0 (CC-BY-3.0)</a> comme indiqué
         dans les <a href="https://www.linuxfoundation.org/terms"
         target="_blank" rel="noopener">conditions d'utilisation</a>
-        de la <a href="https://openssf.org/" target="_blank"
-        rel="noopener">Open Source Security Foundation</a>. Chacun
-        peut librement partager et adapter les données, à condition
-        de créditer leur origine. Veuillez créditer %{user} et
-        les contributeurs du badge des meilleures pratiques de
-        la OpenSSF.<br><br>
+        de la <a href="https://openssf.org/" target="_blank" rel="noopener">Open
+        Source Security Foundation</a>. Chacun peut librement
+        partager et adapter les données, à condition de créditer
+        leur origine. Veuillez créditer %{user} et les contributeurs
+        du badge des meilleures pratiques de la OpenSSF.<br><br>
       owned_by: 'Soumission du badge du projet appartenant à :'
       created_at_html: "<strong>Soumission créée le</strong> %{when},"
       updated_at_html: "<strong>dernière mise à jour le</strong>
@@ -861,63 +860,68 @@ fr:
       Nous sommes désolés, mais votre projet n'a plus le badge « %{old_level} »
       et est maintenant « %{new_level} ».
       Consultez l'URL suivante pour plus d'informations :
-    reminder_body_html: "<h1>Rappel automatique du badge des meilleures
-      pratiques pour %{project_name}</h1>\n<p>\nCeci est un rappel
-      automatisé que votre projet\n« %{project_name} »\nn'a pas
-      actuellement de badge « meilleures pratiques »,\net son
-      entrée de badge n'a pas été mise à jour depuis un moment.\n</p>\n<p>\nVotre
-      entrée de badge des meilleures pratiques est à\n<a href=\"%{project_info_url}\">%{project_info_url}</a>\net
-      a été mis à jour pour la dernière fois le %{project_updated_at}.\nIl
-      est actuellement à %{project_badge_percentage_0}% (sur 100%).\n</p>\n<p>\nNous
-      vous encourageons à continuer à progresser.\nVeuillez visiter
-      votre entrée de badge à\n<a href=\"%{project_info_url}\">%{project_info_url}</a>\npour
-      compléter l'information et obtenir votre badge !\n</p>\n<p>\nSi
-      vous voulez voir <em>seulement</em> ce qui vous manque,
-      visitez votre entrée de badge,\nsélectionnez le bouton près
-      du haut étiqueté « Développer les panneaux », \npuis sélectionnez
-      le bouton près du sommet étiqueté « Masquer atteints & N/A
-      ».\nSi vous avez des questions ou si vous avez besoin d'aide,
-      veuillez contacter\n<a href=\"mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;\">&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;</a>\nou
-      reporter un problème à\n<a href=\"https://github.com/coreinfrastructure/best-practices-badge/issues\">https://github.com/coreinfrastructure/best-practices-badge/issues</a>\n(cliquez
-      sur « nouveau problème »).\n</p>\n\n<p>\nNous n'envoyons
-      pas de rappels si vous continuez à mettre à jour votre entrée
-      de badge, et nous envoyons seulement des rappels environ
-      tous les 30-60 jours. Cependant, si vous souhaitez désactiver
-      ces messages de rappel, modifiez votre entrée de badge à
-      <a href=\"%{project_info_url}#project_disabled_reminder\">%{project_info_url}#project_disabled_reminder</a>\npour
-      activer la « désactivation du rappel d'inactivité ». Vérifiez
-      que vous éditez le projet de badge, au lieu de seulement
-      le consulter, pour pouvoir changer si vous voulez ou non
-      recevoir le rappel d'inactivité.\nNous espérons que vous
-      continuerez à travailler sur votre soumission pour finalement
-      obtenir le badge.\n</p>\n\n<p>\nMerci pour votre attention.\n</p>"
-    reminder_body_text: "Ceci est un rappel automatisé que votre
-      projet\n« %{project_name} »\nn'a pas actuellement de badge
-      « meilleures pratiques »,\net son entrée de badge n'a pas
-      été mise à jour depuis un moment.\nVotre entrée de badge
-      des meilleures pratiques est à\n%{project_info_url}\net
-      a été mis à jour pour la dernière fois le %{project_updated_at}.\nIl
-      est actuellement à %{project_badge_percentage_0}% (sur 100%).\nNous
-      vous encourageons à continuer à progresser.\nVeuillez visiter
-      votre entrée de badge à\n%{project_info_url}\npour compléter
-      l'information et obtenir votre badge !\nSi vous voulez voir
-      seulement ce qui vous manque, visitez votre entrée de badge,\nsélectionnez
-      le bouton près du haut étiqueté « Développer les panneaux
-      », \npuis sélectionnez le bouton près du sommet étiqueté
-      « Masquer atteints & N/A ».\nSi vous avez des questions
-      ou si vous avez besoin d'aide, veuillez contacter\ncii-badges-questions@lists.coreinfrastructure.org
-      ou reporter un problème à\nhttps://github.com/coreinfrastructure/best-practices-badge/issues\n(cliquez
-      sur « nouveau problème »).\n\nNous n'envoyons pas de rappels
-      si vous continuez à mettre à jour votre entrée de badge,
-      et nous envoyons seulement des rappels environ tous les
-      30-60 jours. Cependant, si vous souhaitez désactiver ces
-      messages de rappel, modifiez votre entrée de badge à %{project_info_url}#project_disabled_reminder\npour
-      activer la « désactivation du rappel d'inactivité ». Vérifiez
-      que vous éditez le projet de badge, au lieu de seulement
-      le consulter, pour pouvoir changer si vous voulez ou non
-      recevoir le rappel d'inactivité.\n\nNous espérons que vous
-      continuerez à travailler sur votre soumission pour finalement
-      obtenir le badge.\n\nMerci pour votre attention."
+    reminder_body_html: |-
+      <h1>Rappel automatique du badge des meilleures pratiques pour %{project_name}</h1>
+      <p>
+      Ceci est un rappel automatisé que votre projet
+      « %{project_name} »
+      n'a pas actuellement de badge « meilleures pratiques »,
+      et son entrée de badge n'a pas été mise à jour depuis un moment.
+      </p>
+      <p>
+      Votre entrée de badge des meilleures pratiques est à
+      <a href="%{project_info_url}">%{project_info_url}</a>
+      et a été mis à jour pour la dernière fois le %{project_updated_at}.
+      Il est actuellement à %{project_badge_percentage_0}% (sur 100%).
+      </p>
+      <p>
+      Nous vous encourageons à continuer à progresser.
+      Veuillez visiter votre entrée de badge à
+      <a href="%{project_info_url}">%{project_info_url}</a>
+      pour compléter l'information et obtenir votre badge !
+      </p>
+      <p>
+      Si vous voulez voir <em>seulement</em> ce qui vous manque, visitez votre entrée de badge,
+      sélectionnez le bouton près du haut étiqueté « Développer les panneaux »,
+      puis sélectionnez le bouton près du sommet étiqueté « Masquer atteints & N/A ».
+      Si vous avez des questions ou si vous avez besoin d'aide, veuillez contacter
+      <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;</a>
+      ou reporter un problème à
+      <a href="https://github.com/coreinfrastructure/best-practices-badge/issues">https://github.com/coreinfrastructure/best-practices-badge/issues</a>
+      (cliquez sur « nouveau problème »).
+      </p>
+      <p>
+      Nous n'envoyons pas de rappels si vous continuez à mettre à jour votre entrée de badge, et nous envoyons seulement des rappels environ tous les 30-60 jours. Cependant, si vous souhaitez désactiver ces messages de rappel, modifiez votre entrée de badge à <a href="%{project_info_url}#project_disabled_reminder">%{project_info_url}#project_disabled_reminder</a>
+      pour activer la « désactivation du rappel d'inactivité ». Vérifiez que vous éditez le projet de badge, au lieu de seulement le consulter, pour pouvoir changer si vous voulez ou non recevoir le rappel d'inactivité.
+      Nous espérons que vous continuerez à travailler sur votre soumission pour finalement obtenir le badge.
+      </p>
+      <p>
+      Merci pour votre attention.
+      </p>
+    reminder_body_text: |-
+      Ceci est un rappel automatisé que votre projet
+      « %{project_name} »
+      n'a pas actuellement de badge « meilleures pratiques »,
+      et son entrée de badge n'a pas été mise à jour depuis un moment.
+      Votre entrée de badge des meilleures pratiques est à
+      %{project_info_url}
+      et a été mis à jour pour la dernière fois le %{project_updated_at}.
+      Il est actuellement à %{project_badge_percentage_0}% (sur 100%).
+      Nous vous encourageons à continuer à progresser.
+      Veuillez visiter votre entrée de badge à
+      %{project_info_url}
+      pour compléter l'information et obtenir votre badge !
+      Si vous voulez voir seulement ce qui vous manque, visitez votre entrée de badge,
+      sélectionnez le bouton près du haut étiqueté « Développer les panneaux »,
+      puis sélectionnez le bouton près du sommet étiqueté « Masquer atteints & N/A ».
+      Si vous avez des questions ou si vous avez besoin d'aide, veuillez contacter
+      cii-badges-questions@lists.coreinfrastructure.org ou reporter un problème à
+      https://github.com/coreinfrastructure/best-practices-badge/issues
+      (cliquez sur « nouveau problème »).
+      Nous n'envoyons pas de rappels si vous continuez à mettre à jour votre entrée de badge, et nous envoyons seulement des rappels environ tous les 30-60 jours. Cependant, si vous souhaitez désactiver ces messages de rappel, modifiez votre entrée de badge à %{project_info_url}#project_disabled_reminder
+      pour activer la « désactivation du rappel d'inactivité ». Vérifiez que vous éditez le projet de badge, au lieu de seulement le consulter, pour pouvoir changer si vous voulez ou non recevoir le rappel d'inactivité.
+      Nous espérons que vous continuerez à travailler sur votre soumission pour finalement obtenir le badge.
+      Merci pour votre attention.
   project_name_unknown: "(Nom inconnu)"
   locale_name:
     en: Anglais
@@ -3275,8 +3279,8 @@ fr:
       <p> Il s'agit de l'ensemble des meilleures pratiques pour
       les projets de logiciels libres et open source (FLOSS) pour
       obtenir les badges des meilleures pratiques de la Open Source
-      Security Foundation (OpenSSF) aux niveaux basique, argent et or. Vous
-      pouvez afficher cette liste avec <a href="/fr/criteria">uniquement
+      Security Foundation (OpenSSF) aux niveaux basique, argent
+      et or. Vous pouvez afficher cette liste avec <a href="/fr/criteria">uniquement
       les critères</a> ou avec <a href="/fr/criteria?details=true&rationale=true">des
       informations supplémentaires</a>. Vous pouvez également
       afficher uniquement les critères du niveau <a href="/fr/criteria/0">basique</a>
@@ -3286,10 +3290,10 @@ fr:
     beginning_0_html: >-
       <p> Il s'agit de l'ensemble des meilleures pratiques pour
       les projets de logiciels libres et open source (FLOSS) pour
-      obtenir le badge des meilleures pratiques de la Open Source Security
-      Foundation (OpenSSF) au niveau basique. Vous pouvez afficher
-      cette liste avec <a href="/fr/criteria/0">uniquement les
-      critères</a> ou avec <a href="/fr/criteria/0?details=true&rationale=true">des
+      obtenir le badge des meilleures pratiques de la Open Source
+      Security Foundation (OpenSSF) au niveau basique. Vous pouvez
+      afficher cette liste avec <a href="/fr/criteria/0">uniquement
+      les critères</a> ou avec <a href="/fr/criteria/0?details=true&rationale=true">des
       informations supplémentaires</a>. <a href="/fr/criteria">L'ensemble
       complet des critères pour tous les niveaux de badge</a>
       est également disponible.
@@ -3297,9 +3301,9 @@ fr:
       <p> Il s'agit de l'ensemble des meilleures pratiques pour
       les projets de logiciels libres et open source (FLOSS) pour
       obtenir le badge des meilleures pratiques de la Open Source
-      Security Foundation (OpenSSF) au niveau argent. Vous pouvez afficher
-      cette liste avec <a href="/fr/criteria/1">uniquement les
-      critères</a> ou avec <a href="/fr/criteria/1?details=true&rationale=true">des
+      Security Foundation (OpenSSF) au niveau argent. Vous pouvez
+      afficher cette liste avec <a href="/fr/criteria/1">uniquement
+      les critères</a> ou avec <a href="/fr/criteria/1?details=true&rationale=true">des
       informations supplémentaires</a>. <a href="/fr/criteria">L'ensemble
       complet des critères pour tous les niveaux de badge</a>
       est également disponible.
@@ -3307,9 +3311,9 @@ fr:
       <p> Il s'agit de l'ensemble des meilleures pratiques pour
       les projets de logiciels libres et open source (FLOSS) pour
       obtenir le badge des meilleures pratiques de la Open Source
-      Security Foundation (OpenSSF) au niveau or. Vous pouvez afficher cette
-      liste avec <a href="/fr/criteria/2">uniquement les critères</a>
-      ou avec <a href="/fr/criteria/2?details=true&rationale=true">des
+      Security Foundation (OpenSSF) au niveau or. Vous pouvez
+      afficher cette liste avec <a href="/fr/criteria/2">uniquement
+      les critères</a> ou avec <a href="/fr/criteria/2?details=true&rationale=true">des
       informations supplémentaires</a>. <a href="/fr/criteria">L'ensemble
       complet des critères pour tous les niveaux de badge</a>
       est également disponible.
@@ -3338,8 +3342,8 @@ fr:
     intro_p04_html: >-
       <p> Cette page présente l'ensemble des meilleures pratiques
       pour les projets de logiciels libres et open source (FLOSS)
-      développé pour le badge des meilleures pratiques de la Open Source
-      Security Foundation (OpenSSF). Les projets qui suivent
+      développé pour le badge des meilleures pratiques de la Open
+      Source Security Foundation (OpenSSF). Les projets qui suivent
       ces meilleures pratiques pourront s'auto-certifier volontairement
       et montrer qu'ils ont obtenu le badge correspondant. Les
       projets peuvent le faire, sans frais, en utilisant une application
@@ -3360,9 +3364,9 @@ fr:
     intro_p08_html: >-
       <p> Pour plus d'informations sur la manière dont ces critères
       ont été développés, consultez le <a href="https://github.com/coreinfrastructure/best-practices-badge">site
-      GitHub du badge des meilleures pratiques OpenSSF</a>. </p> <p>
-      Vous pouvez également <a href="/fr/criteria"> voir les critères
-      complets</a>. </p>
+      GitHub du badge des meilleures pratiques OpenSSF</a>. </p>
+      <p> Vous pouvez également <a href="/fr/criteria"> voir les
+      critères complets</a>. </p>
     structure_p01_html: >-
       <p> </p> <h2 id='criteria_structure'>Structure des critères</h2>
     structure_p02_html: >-
@@ -3391,8 +3395,8 @@ fr:
       et open source (FLOSS) de haute qualité ». OpenChain se
       concentre sur la façon dont les organisations peuvent utiliser
       au mieux le FLOSS et contribuer en retour aux projets FLOSS,
-      tandis que le badge des meilleures pratiques de la OpenSSF se
-      concentre sur les projets FLOSS eux-mêmes. Le badge des
+      tandis que le badge des meilleures pratiques de la OpenSSF
+      se concentre sur les projets FLOSS eux-mêmes. Le badge des
       meilleures pratiques de la OpenSSF et OpenChain travaillent
       ensemble pour aider à améliorer le FLOSS et la façon dont
       le FLOSS est utilisé.

@@ -15,7 +15,8 @@ ru:
     zero: Нет проектов
     few: "%{count} проекта"
     many: "%{count} проектов"
-  feed_title: Значок "Передовая практика OpenSSF" - обновленные проекты
+  feed_title: Значок "Передовая практика OpenSSF" - обновленные
+    проекты
   project_name_unknown: "(Название неизвестно)"
   locale_name:
     en: Английский
@@ -46,9 +47,9 @@ ru:
       Пожалуйста, отправьте <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">электронное
       письмо</a></em> или <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
       target="_blank" rel="noopener">вопрос на GitHub</a></em>.</strong>
-      © 2015-2018 <a href="https://openssf.org"
-      target="_blank" rel="noopener">Open Source Security Foundation</a>,
-      a <a href="https://www.linuxfoundation.org/" target="_blank"
+      © 2015-2018 <a href="https://openssf.org" target="_blank"
+      rel="noopener">Open Source Security Foundation</a>, a <a
+      href="https://www.linuxfoundation.org/" target="_blank"
       rel="noopener">Linux Foundation</a> Collaborative Project.
       All Rights Reserved. Please see our <a href="https://www.linuxfoundation.org/privacy"
       target="_blank" rel="noopener">privacy policy</a> and <a
@@ -138,15 +139,15 @@ ru:
         добровольно и бесплатно оценить, насколько они используют
         передовые методы организации разработки свободного и открытого
         ПО, и опубликовать результат. Идея значка "Передовая практика
-        OpenSSF" навеяна многими другими значками, доступными для
-        проектов на GitHub. Видящие значок могут быстро определить,
+        OpenSSF" навеяна многими другими значками, доступными
+        для проектов на GitHub. Видящие значок могут быстро определить,
         какие проекты FLOSS используют передовые методы и в результате
         с большей вероятностью создают более качественное и защищенное
         программное обеспечение.
       p2_html: >-
-        Более подробную информацию о программе значков OpenSSF "Передовая
-        практика", в том числе о происхождении программы и <a
-        href='https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/criteria.md'>критериях</a>,
+        Более подробную информацию о программе значков OpenSSF
+        "Передовая практика", в том числе о происхождении программы
+        и <a href='https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/criteria.md'>критериях</a>,
         можно найти на <a href='https://github.com/coreinfrastructure/best-practices-badge'>странице
         проекта на GitHub</a>. Имеются <a href="/ru/project_stats">проектная
         статистика</a> и <a href="/ru/criteria_stats">статистика
@@ -885,7 +886,7 @@ ru:
       href=\"%{project_info_url}\">%{project_info_url}</a> -\nи
       в последний раз обновлялась %{project_updated_at}.\nВ настоящее
       время прогресс равен %{project_badge_percentage_0}% (из
-      100%).\n</p>\n\n<p>\nМы призываем вас продолжать двигаться
+      100%).\n</p>\n<p>\nМы призываем вас продолжать двигаться
       вперед.\nПожалуйста, откройте анкету по адресу\n<a href=\"%{project_info_url}\">%{project_info_url}</a>,\nчтобы
       закончить ввод данных и получить свой значок!\n</p>\n\n<p>\nЕсли
       вы хотите видеть <em>только</em> то, чего вам не хватает,
@@ -911,7 +912,7 @@ ru:
       некоторое время не обновлялась.\nВаша анкета на значок передовой
       практики находится здесь:\n%{project_info_url} -\nи в последний
       раз обновлялась %{project_updated_at}.\nВ настоящее время
-      прогресс равен %{project_badge_percentage_0}% (из 100%).\n\nМы
+      прогресс равен %{project_badge_percentage_0}% (из 100%).\nМы
       призываем вас продолжать движение вперед.\nПожалуйста, откройте
       анкету по адресу\n%{project_info_url},\nчтобы закончить
       ввод данных и получить свой значок!\n\nЕсли вы хотите видеть

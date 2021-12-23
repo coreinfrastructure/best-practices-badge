@@ -41,11 +41,10 @@ ja:
       <small> <strong>疑問、質問、または問題がある場合は<em> <a href="mailto:&#99;ii&#45;badges&#45;questions&#64;lists&#46;coreinfrastructure&#46;or&#103;">電子メールで報告する</a></em>か、<em>
       <a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
       target="_blank" rel="noopener">こちらから問題を提出</a></em>してください。</strong>
-      © 2015-2018 <a href="https://openssf.org"
-      target="_blank" rel="noopener">Open Source Security Foundation</a>、<a
-      href="https://www.linuxfoundation.org/" target="_blank"
-      rel="noopener">Linux Foundation</a> Collaborative Project.
-      All Rights Reserved.<a href="https://www.linuxfoundation.org/privacy"
+      © 2015-2018 <a href="https://openssf.org" target="_blank"
+      rel="noopener">Open Source Security Foundation</a>、<a href="https://www.linuxfoundation.org/"
+      target="_blank" rel="noopener">Linux Foundation</a> Collaborative
+      Project. All Rights Reserved.<a href="https://www.linuxfoundation.org/privacy"
       target="_blank" rel="noopener">プライバシー ポリシー</a> と<a href="https://www.linuxfoundation.org/terms"
       target="_blank" rel="noopener">利用条件</a>を必ずお読みください。</small>
     choose_locale: 言語を選択する
@@ -253,8 +252,8 @@ ja:
         version 3.0以降のライセンス（CC-BY-3.0 +）</a>のもとで利用できます。すべての人がデータを自由に共有および適応できますが、適切にクレジットを入れる必要があります。
         %{user}とOpenSSFベストプラクティス バッジ貢献者のクレジットを入れてください。<br><br>
       cc_by_3only_html: >-
-        本データは、<a href="https://openssf.org/" target="_blank"
-        rel="noopener">Open Source Security Foundation</a> <a href="https://www.linuxfoundation.org/terms"
+        本データは、<a href="https://openssf.org/" target="_blank" rel="noopener">Open
+        Source Security Foundation</a> <a href="https://www.linuxfoundation.org/terms"
         target="_blank" rel="noopener">利用規約</a>に従って、<a href="https://creativecommons.org/licenses/by/3.0/us"
         target="_blank" rel="noopener">Creative Commons Attribution
         version 3.0 ライセンス（CC-BY-3.0）</a>のもとで利用できます。すべての人が自由にデータを共有し、修正することができますが、適切にクレジットを入れなければなりません。%{user}とOpenSSF
@@ -488,7 +487,8 @@ ja:
       ご協力ありがとうございます。
     in_markdown_add: マークダウンでは、これを追加することができます：
     in_html_add: HTMLでは、これを追加することができます：
-    ending: "--- David A. Wheeler、OpenSSFベスト プラクティス バッジ テクニカル リード"
+    ending: "--- David A. Wheeler、OpenSSFベスト プラクティス バッジ テクニカル
+      リード"
     subject_achieved_passing: "%{new_level}ベスト プラクティス バッジを達成したことをお祝いします！"
     subject_no_longer_passing: あなたのベスト プラクティス バッジはもはや%{old_level}ではありません
     subject_new_project: あなたは、OpenSSFベスト プラクティス バッジ プログラムにプロジェクトを追加しました
@@ -1509,15 +1509,15 @@ ja:
       get_your_badge: バッジを入手する
       p1_html: >-
         <a href="https://www.linuxfoundation.org/">Linux Foundation
-        (LF)</a> Open Source Security Foundation (OpenSSF) ベスト プラクティス
-        バッジは、Free/Libre and Open Source Software（FLOSS）プロジェクトが、ベスト
+        (LF)</a> Open Source Security Foundation (OpenSSF) ベスト
+        プラクティス バッジは、Free/Libre and Open Source Software（FLOSS）プロジェクトが、ベスト
         プラクティスに従っていることを自ら示す方法です。プロジェクトは、このWebアプリケーションを使用して、それぞれのベスト
-        プラクティスに従っていることを説明することにより、自主的に無償で自己証明することができます。 OpenSSF ベスト
-        プラクティス バッジは、GitHubのプロジェクトで利用可能な多くのバッジからインスピレーションを受けています。バッジの消費者は、どのFLOSSプロジェクトがベスト
+        プラクティスに従っていることを説明することにより、自主的に無償で自己証明することができます。 OpenSSF
+        ベスト プラクティス バッジは、GitHubのプロジェクトで利用可能な多くのバッジからインスピレーションを受けています。バッジの消費者は、どのFLOSSプロジェクトがベスト
         プラクティスに従っているかを速やかに評価でき、その結果、より高品質で安全なソフトウェアを生産することができます。
       p2_html: >-
-        <a href="/ja/criteria/0">バッジの合格基準はこちら</a>です。OpenSSF ベスト プラクティス
-        バッジ プログラムの詳細については、<a href='https://github.com/coreinfrastructure/best-practices-badge'>GitHubで公開</a>されています。
+        <a href="/ja/criteria/0">バッジの合格基準はこちら</a>です。OpenSSF ベスト
+        プラクティス バッジ プログラムの詳細については、<a href='https://github.com/coreinfrastructure/best-practices-badge'>GitHubで公開</a>されています。
         <a href="/ja/project_stats">プロジェクトの統計情報</a>や<a href="/ja/criteria_stats">基準の統計情報</a>も確認できます。
         <a href="/ja/projects">プロジェクト ページ</a>には、参加しているプロジェクトが表示され、クエリも使用できます
         (「<a href="/ja/projects?gteq=100">合格バッジを持つプロジェクトだけ表示する</a

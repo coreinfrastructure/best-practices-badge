@@ -46,9 +46,9 @@ sw:
       Tafadhali <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#64;lists&#46;coreinfrastructure&#46;or&#103;">tuma
       barua pepe</a> </em>or <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
       target="_blank" rel="noopener">wasilisha suala</a></em>.</strong>
-      © 2015-2018 <a href="https://openssf.org"
-      target="_blank" rel="noopener">Open Source Security Foundation</a>,
-      a <a href="https://www.linuxfoundation.org/" target="_blank"
+      © 2015-2018 <a href="https://openssf.org" target="_blank"
+      rel="noopener">Open Source Security Foundation</a>, a <a
+      href="https://www.linuxfoundation.org/" target="_blank"
       rel="noopener">Linux Foundation</a> Mradi Shirikishi. Haki
       Zote Zimehifadhiwa. Tafadhali angalia <a href="https://www.linuxfoundation.org/privacy"
       target="_blank" rel="noopener">sera ya faragha</a> and <a
@@ -135,18 +135,17 @@ sw:
         OpenSSF!
       p1_html: >-
         <a href="https://www.linuxfoundation.org/">Linux Foundation
-        (LF)</a> <a href="https://openssf.org/">Open
-        Source Security Foundation (OpenSSF)</a> Nishani ya Mazoea
-        Bora ni njia kwa minajili miradi ya Programu Huru na Zana
-        Huria (FLOSS) kuonyesha kuwa zinafuata mazoea bora. Miradi
-        yaweza kujihakikisha kwa hiari yao binafsi, bila malipo,
-        kwa kutumia hii tovuti kueleza vile wanafuata kila moja
-        ya mazoea bora. Nishani za Mazoea Bora ya OpenSSF imevuviwa
-        na nishani mingi zinazopatikana kwenye miradi ya GitHub.
-        Watumizi wa hiyo nishani wanaweza kwa haraka kadiri ni
-        miradi ipi ya FLOSS inayofuata mazoea bora na matokeo
-        sanasana inaweza kutoa programu za kompyuta zilizo na
-        usalamu wa hali ya juu.
+        (LF)</a> <a href="https://openssf.org/">Open Source Security
+        Foundation (OpenSSF)</a> Nishani ya Mazoea Bora ni njia
+        kwa minajili miradi ya Programu Huru na Zana Huria (FLOSS)
+        kuonyesha kuwa zinafuata mazoea bora. Miradi yaweza kujihakikisha
+        kwa hiari yao binafsi, bila malipo, kwa kutumia hii tovuti
+        kueleza vile wanafuata kila moja ya mazoea bora. Nishani
+        za Mazoea Bora ya OpenSSF imevuviwa na nishani mingi zinazopatikana
+        kwenye miradi ya GitHub. Watumizi wa hiyo nishani wanaweza
+        kwa haraka kadiri ni miradi ipi ya FLOSS inayofuata mazoea
+        bora na matokeo sanasana inaweza kutoa programu za kompyuta
+        zilizo na usalamu wa hali ya juu.
       p2_html: >-
         Unaweza ona kwa urahisi <a href="/sw/criteria/0">vigezo
         vya nishani iliyohitimu</a>. Taarifa zaidi kuhusu programu
@@ -528,7 +527,7 @@ sw:
         <p>
         Kama hauku anzisha tendo hili, tafadhali kagua batli yako ya usalama kwa GitHub iliyomo ndani ya Mipangilio&gt;Usalama.
         </p>
-      before_text: |
+      before_text: |-
         Jambo,
         Asante kwa kuunganisha akaunti yako ya GitHub na karibu kwenye Programu ya Nishani za Mazoea Bora ya OpenSSF!
         Kama hauku anzisha tendo hili, tafadhali kagua batli yako ya usalama kwa GitHub iliyomo ndani ya Mipangilio&gt;Usalama.

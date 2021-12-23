@@ -31,11 +31,10 @@ zh-CN:
       <small> <strong>需要帮助？有疑问？发现问题？请 <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">发送邮件</a>
       或 <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
       target="_blank" rel="noopener">提出问题</a></em>.</strong> ©
-      2015-2017 <a href="https://openssf.org/"
-      target="_blank" rel="noopener">Open Source Security Foundation
-      （核心基础设施计划）</a>, 一个 <a href="https://www.linuxfoundation.org/"
-      target="_blank" rel="noopener">Linux 基金会</a> 合作项目。版权所有。
-      请查阅我们的 <a href="https://www.linuxfoundation.org/privacy"
+      2015-2017 <a href="https://openssf.org/" target="_blank"
+      rel="noopener">Open Source Security Foundation （核心基础设施计划）</a>,
+      一个 <a href="https://www.linuxfoundation.org/" target="_blank"
+      rel="noopener">Linux 基金会</a> 合作项目。版权所有。 请查阅我们的 <a href="https://www.linuxfoundation.org/privacy"
       target="_blank" rel="noopener">隐私策略</a> 和 <a href="https://www.linuxfoundation.org/terms"
       target="_blank" rel="noopener">使用条款</a>. </small>
     account: 帐户
@@ -215,9 +214,9 @@ zh-CN:
       cc_by_3only_html: >-
         此数据在<a href="https://creativecommons.org/licenses/by/3.0/us"
         target="_blank" rel="noopener">知识共享署名3.0版本许可证（CC-BY-3.0）</a>下可用，并依据<a
-        href="https://openssf.org/" target="_blank"
-        rel="noopener">核心基础设施计划</a> <a href ="https://www.linuxfoundation.org/terms"
-        target="_blank" rel="noopener">使用条款</a>。所有数据都可以自由分享和演绎，但必须给予适当的署名。请署名%{user}和OpenSSF最佳实践徽章贡献者。<br>
+        href="https://openssf.org/" target="_blank" rel="noopener">核心基础设施计划</a>
+        <a href ="https://www.linuxfoundation.org/terms" target="_blank"
+        rel="noopener">使用条款</a>。所有数据都可以自由分享和演绎，但必须给予适当的署名。请署名%{user}和OpenSSF最佳实践徽章贡献者。<br>
         <br>
       owned_by: 项目徽章条目拥有者：
       created_at_html: "<strong>最后更新于</strong> %{when},"

@@ -45,9 +45,9 @@ de:
       Sehen Sie ein Problem? Bitte <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">senden
       Sie eine E-Mail</a></em> oder <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
       target="_blank" rel="noopener">reichen Sie ein Problem ein</a></em>.</strong>
-      © 2015-2018 <a href="https://openssf.org/"
-      target="_blank" rel="noopener">Open Source Security Foundation</a>,
-      ein <a href="https://www.linuxfoundation.org/" target="_blank"
+      © 2015-2018 <a href="https://openssf.org/" target="_blank"
+      rel="noopener">Open Source Security Foundation</a>, ein
+      <a href="https://www.linuxfoundation.org/" target="_blank"
       rel="noopener">Linux Foundation</a> Kollaboratives Projekt.
       Alle Rechte vorbehalten. Bitte beachten Sie unsere <a href="https://www.linuxfoundation.org/privacy"
       target="_blank" rel="noopener">Datenschutzrichtlinie</a>
@@ -365,14 +365,13 @@ de:
         Die Daten sind unter der <a href="https://creativecommons.org/licenses/by/3.0/us"
         target="_blank" rel="noopener">Creative Commons Attribution
         3.0-Lizenz (CC-BY-3.0)</a> verfügbar, bereitgestellt von
-        der <a href="https://openssf.org/" target="_blank"
-        rel="noopener">Open Source Security Foundation</a> unter
-        den <a href="https://www.linuxfoundation.org/terms" target="_blank"
-        rel="noopener">Nutzungsbedingungen</a>. Es ist allen erlaubt,
-        die Daten zu teilen und anzupassen, müssen aber einen
-        angemessene Hinweis auf den Urheber geben. Bitte geben
-        Sie als Urheber %{user} und die OpenSSF Best Practices Badge
-        Mitwirkenden an. <br> <br>
+        der <a href="https://openssf.org/" target="_blank" rel="noopener">Open
+        Source Security Foundation</a> unter den <a href="https://www.linuxfoundation.org/terms"
+        target="_blank" rel="noopener">Nutzungsbedingungen</a>.
+        Es ist allen erlaubt, die Daten zu teilen und anzupassen,
+        müssen aber einen angemessene Hinweis auf den Urheber
+        geben. Bitte geben Sie als Urheber %{user} und die OpenSSF
+        Best Practices Badge Mitwirkenden an. <br> <br>
       owned_by: 'Projekt-Badge-Eintrag im Besitz von:'
       created_at_html: "<strong>Eintrag erstellt: </strong> %{when},"
       updated_at_html: "<strong>zuletzt aktualisiert: </strong>
@@ -784,8 +783,8 @@ de:
     subject_no_longer_passing: Ihr Best Practices Badge ist nicht
       mehr %{old_level}
     subject_new_project: >-
-      Sie haben dem OpenSSF Best Practices Badging Programm ein Projekt
-      hinzugefügt
+      Sie haben dem OpenSSF Best Practices Badging Programm ein
+      Projekt hinzugefügt
     subject_reminder: Ihr Projekt hat noch kein "Best Practices"
       Badge
     subject_project_deleted: >-
@@ -2964,14 +2963,14 @@ de:
       get_your_badge: Jetzt Badge holen!
       p1_html: >-
         Die <a href="https://www.linuxfoundation.org/">Linux Foundation
-        (LF)</a> <a href="https://openssf.org/">Open
-        Source Security Foundation (OpenSSF)</a> Best Practices Badge
-        ist ein Weg für Free/Libre und Open Source Software (FLOSS)
-        Projekte zu zeigen, dass sie Best Practices folgen. Projekte
-        können sich freiwillig und kostenlos selbst zertifizieren,
-        indem sie diese Webapplikation benutzen, um zu zeigen,
-        wie Sie Best Practices umsetzen. Der OpenSSF-Best-Practices-
-        Badge wurde von den vielen Badges, die Projekten auf GitHub
+        (LF)</a> <a href="https://openssf.org/">Open Source Security
+        Foundation (OpenSSF)</a> Best Practices Badge ist ein
+        Weg für Free/Libre und Open Source Software (FLOSS) Projekte
+        zu zeigen, dass sie Best Practices folgen. Projekte können
+        sich freiwillig und kostenlos selbst zertifizieren, indem
+        sie diese Webapplikation benutzen, um zu zeigen, wie Sie
+        Best Practices umsetzen. Der OpenSSF-Best-Practices- Badge
+        wurde von den vielen Badges, die Projekten auf GitHub
         zur Verfügung stehen, inspiriert. Benutzer des Badges
         können schnell erkennen, welche FLOSS-Projekte Best Practices
         umsetzen und folglich mit Wahrscheinlichkeit qualitative
@@ -3000,7 +2999,8 @@ de:
         Version 3.0 oder später (CC-BY-3.0+) lizensiert. Bitte
         die OpenSSF-Best-Practices-Badge-Mitwirkenden als Urheber
         angeben.
-      check_us_out: Schauen Sie sich die OpenSSF-Best-Practices-Badge-Website
+      check_us_out: >-
+        Schauen Sie sich die OpenSSF-Best-Practices-Badge-Website
         an!
       share_header_html: "<p> Bitte teilen Sie dies: </p>"
       twitter: Twitter
@@ -3174,10 +3174,10 @@ de:
     beginning_all_html: >-
       <p>Dies sind die Best Practices für Free/Libre und Open
       Source Software (FLOSS) Projekte, um die Best Practices
-      Badges der Open Source Security Foundation (OpenSSF) der Level
-      Passing, Silber und Gold zu erhalten. Sie können diese Liste
-      <a href="/de/criteria">nur mit den Kriterien</a> oder mit
-      <a href="/de/criteria?details=true&rationale=true">zusätzlichen
+      Badges der Open Source Security Foundation (OpenSSF) der
+      Level Passing, Silber und Gold zu erhalten. Sie können diese
+      Liste <a href="/de/criteria">nur mit den Kriterien</a> oder
+      mit <a href="/de/criteria?details=true&rationale=true">zusätzlichen
       Informationen anschauen</a>. Sie können auch nur die Kriterien
       für die Level <a href="/de/criteria/0">Passing</a>, <a href="/de/criteria/1">Silber</a>
       und <a href="/de/criteria/2">Gold</a>, sowie <a href="/de/criteria_stats">Kriterien
@@ -3201,9 +3201,9 @@ de:
     beginning_2_html: >-
       <p> Dies sind Best Practices für Free/Libre und Open Source
       Software (FLOSS) Projekte, um den Open Source Security Foundation
-      (OpenSSF) Best Practices Badge Level "Gold" zu erreichen. Sie
-      können diese Liste <a href="/de/criteria/2">nur mit den
-      Kriterien</a> oder mit <a href="/de/criteria/2?details=true&rationale=true">zusätzlichen
+      (OpenSSF) Best Practices Badge Level "Gold" zu erreichen.
+      Sie können diese Liste <a href="/de/criteria/2">nur mit
+      den Kriterien</a> oder mit <a href="/de/criteria/2?details=true&rationale=true">zusätzlichen
       Informationen anschauen</a>. Es sind auch die <a href="/de/criteria">Kriterien
       für alle Badge Level</a> verfügbar.
     see_discussion_html: >-

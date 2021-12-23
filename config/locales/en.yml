@@ -39,9 +39,9 @@ en:
       <small> <strong>Need help? Have a question? See a problem?
       Please <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#64;lists&#46;coreinfrastructure&#46;or&#103;">send
       an email</a> </em>or <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
-      target="_blank" rel="noopener">file an issue</a></em>.</strong> © 2015-2018
-      <a href="https://www.coreinfrastructure.org" target="_blank" rel="noopener">Core
-      Infrastructure Initiative</a>, a <a href="https://www.linuxfoundation.org/"
+      target="_blank" rel="noopener">file an issue</a></em>.</strong> © 2015-2021
+      <a href="https://openssf.org" target="_blank" rel="noopener">Open Source
+      Security Foundation</a>, a <a href="https://www.linuxfoundation.org/"
       target="_blank" rel="noopener">Linux Foundation</a> Collaborative Project.
       All Rights Reserved. Please see our <a href="https://www.linuxfoundation.org/privacy"
       target="_blank" rel="noopener">privacy policy</a> and <a href="https://www.linuxfoundation.org/terms"
@@ -546,8 +546,7 @@ en:
       cc_by_3only_html: >-
         This data is available under the <a href="https://creativecommons.org/licenses/by/3.0/us"
         target="_blank" rel="noopener">Creative Commons Attribution version 3.0
-        license (CC-BY-3.0)</a> per the <a href="https://www.coreinfrastructure.org/"
-        target="_blank" rel="noopener">Core Infrastructure Initiative</a> <a
+        license (CC-BY-3.0)</a> per the <a
         href="https://www.linuxfoundation.org/terms" target="_blank" rel="noopener">terms
         of use</a>. All are free to share and adapt the data,
         but must give appropriate credit. Please credit %{user}

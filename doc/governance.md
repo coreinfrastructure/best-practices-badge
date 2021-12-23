@@ -3,7 +3,7 @@
 <!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
 
 This document briefly describes "how we make decisions" in the
-CII Best Practices Badge Project.
+OpenSSF Best Practices Badge Project.
 
 ## Overall
 
@@ -41,9 +41,8 @@ For details, including contribution requirements, see
 Note that we emphasize two-person review for anything other than
 low-risk contributions.
 
-CII requires two-factor authentication (2FA) for all projects,
-including this one.  In addition, this project does not accept SMS
-as the second factor.
+This project requires two-factor authentication (2FA).
+In addition, this project does not accept SMS as the second factor.
 
 Issues that we have determined are especially important, particularly
 if they will take a while, are added to the "next" milestone

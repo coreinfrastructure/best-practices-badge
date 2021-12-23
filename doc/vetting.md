@@ -76,7 +76,7 @@ We believe there is a need for an approach that helps FLOSS be secure
 that can scale up to the millions of FLOSS programs available today and
 takes advantage of the distinctive nature of FLOSS.
 
-## CII Badging approach to vetting
+## OpenSSF Badging approach to vetting
 
 The best practices badge approach is based on self-certification.
 There are literally millions of OSS projects (we counted), so it's unlikely
@@ -93,10 +93,10 @@ mechanisms to mitigate its problems:
 
 * Automation. We work to automatically determine answers, and we will not accept answers where can confirm with high confidence that the answer is false. E.g., if you use "http://" for your project or repo URLs, your project fails the criterion `sites_https`. That means that the badge is not strictly self-certification, instead, the badge is merely based on it. In the long term we hope to implement more automation. The file criteria/criteria.yml documents how we think various criteria could be automated. Patches to improve automation are joyfully welcomed.  That said, as noted above, we want to focus on what criteria are *important* - even if we currently require people to determine the answer.
 * Public display of answers (for criticism).  People are far more willing to lie in private than in public. It's been long observed that
- “Sunlight is said to be the best of disinfectants; electric light the most efficient policeman.” [[Louis Brandeis, 1914, “What Publicity Can Do”, in Other People's Money and How the Bankers Use It](http://louisville.edu/law/library/special-collections/the-louis-d.-brandeis-collection/other-peoples-money-chapter-v)]
+ “Sunlight is said to be the best of disinfectants; electric light the most efficient policeman.” See [Louis Brandeis, 1914, “What Publicity Can Do”, in Other People's Money and How the Bankers Use It](http://louisville.edu/law/library/special-collections/the-louis-d.-brandeis-collection/other-peoples-money-chapter-v)
 * Reduced incentives. We intentionally reduce the incentives for people to create false information.  For example, all links are specifically marked as `rel="nofollow ugc"`; this greatly reduces the incentive to do Search Engine Optimization (SEO) hacking by creating nonsense projects.
 * Notifications and spot-checks. We (the managers of the badging process) get notifications of various events or suspicious claims for review. Anyone can post an issue disputing a claim, and again, we can check the claim.
-* Answers can be overridden by CII if false. Those who repeatedly falsify information can be kicked off. We do not do this lightly, but the fact that we can reduces the incentive to try.
+* Answers can be overridden by the Linux Foundation (LF) if false. Those who repeatedly falsify information can be kicked off. We do not do this lightly, but the fact that we can reduces the incentive to try.
 * FLOSS.  The badging site is itself FLOSS, so if others can identify ways to improve it and even propose implementations of it.
 
 Nothing is perfect; we believe that the approach we're taking is

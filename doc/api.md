@@ -121,7 +121,7 @@ might request.
     ```
 
     You can also embed the badge status of project NNN in a markdown file with:
-    `[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/NNN/badge)](https://bestpractices.coreinfrastructure.org/projects/NNN)`
+    `[![OpenSSF Best Practices](https://bestpractices.coreinfrastructure.org/projects/NNN/badge)](https://bestpractices.coreinfrastructure.org/projects/NNN)`
 
 *   `GET /(:locale/)projects(.:format)(?:query)`
 
@@ -166,12 +166,12 @@ might request.
     easy to get the relevant badge (if any).
 
     Dashboards using this information that want a simple display
-    of the CII Badge result may want to use combine hypertext
+    of the OpenSSF Badge result may want to use combine hypertext
     links and the "alt" tag like this, where `MY_URL` is the URL to be used:
 
     ```
     <a href="https://bestpractices.coreinfrastructure.org/projects?as=entry&url=MY_URL">
-      <img src="https://bestpractices.coreinfrastructure.org/projects?as=badge&url=MY_URL" alt="CII N/A">
+      <img src="https://bestpractices.coreinfrastructure.org/projects?as=badge&url=MY_URL" alt="OpenSSF N/A">
     </a>
     ```
 
@@ -185,15 +185,15 @@ might request.
     images have smaller rate limits. So while you can embed this query when
     describing a single project, you can't really have a page
     full of these queries (such as the img src above using a /projects query).
-    If you want to show a large number of CII badges images all at once,
+    If you want to show a large number of OpenSSF badges images all at once,
     it's better to use the query interface to find its corresponding
     numeric project id (e.g., at the server). Then just use the numeric
     project id reference instead, e.g., generate this instead (where you
     found NUMBER earlier):
 
-    <img src="https://bestpractices.coreinfrastructure.org/projects/NUMBER/badge" alt="CII N/A">
+    <img src="https://bestpractices.coreinfrastructure.org/projects/NUMBER/badge" alt="OpenSSF N/A">
 
-## Tiered percentage in CII Best Practices Badge
+## Tiered percentage in OpenSSF Best Practices Badge
 
 The `tiered_percentage` field of a project
 (shown as the "tiered %" column on the projects page)

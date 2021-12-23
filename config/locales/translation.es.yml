@@ -28,7 +28,7 @@ es:
     sw:
     pt-BR:
   layouts:
-    cii_best_practices: CII Best Practices
+    cii_best_practices: OpenSSF Best Practices
     projects: Proyectos
     users: Usuarios
     account: Cuenta
@@ -90,13 +90,13 @@ es:
     cannot_login_yet:
   static_pages:
     home:
-      badge_program: Programa de CII Best Practices Badge
+      badge_program: Programa de OpenSSF Best Practices Badge
       get_your_badge: "¡Obtenga su insignia ahora!"
-      check_us_out: "¡Mira el sitio web de CII Best Practices
+      check_us_out: "¡Mira el sitio web de OpenSSF Best Practices
         Badge!"
       p1_html: |2-
          La insignia de Mejores Pr&aacute;cticas [Best Practices
-        badge] de la <a href="https://www.coreinfrastructure.org/">Iniciativa de Infraestructura N&uacute;cleo [Core Infrastructure Initiative (CII)]</a> que es parte de la <a href="https://www.linuxfoundation.org/">Fundaci&oacute;n Linux [Linux Foundation (LF)]</a> constituye una de las maneras en la que proyectos de tipo Free/Libre y Open Source Software (FLOSS) pueden mostrar que est&aacute;n siguiendo las mejores pr&aacute;cticas de dicha comunidad. Los proyectos pueden auto-certificarse voluntaria y gratuitamente llenando el cuestionario que se ofrece en esta p&aacute;gina. Con dicho cuestionario los proyectos pueden explicar como est&aacute;n siendo creados de conformidad con las mejores pr&aacute;cticas. La insignia de Mejores Pr&aacute;cticas fue inspirada por las m&uacute;ltiples insignias que los proyectos en Github tienen a su disposici&oacute;n. Los consumidores de la insignia pueden evaluar r&aacute;pidamente cuales son los proyectos de FLOSS que est&aacute;n siguiendo las mejores pr&aacute;cticas y que por lo tanto tienen una mayor probabilidad de producir c&oacute;digo que es seguro y de alta calidad.
+        badge] de la <a href="https://openssf.org/">Iniciativa de Infraestructura N&uacute;cleo [Open Source Security Foundation (OpenSSF)]</a> que es parte de la <a href="https://www.linuxfoundation.org/">Fundaci&oacute;n Linux [Linux Foundation (LF)]</a> constituye una de las maneras en la que proyectos de tipo Free/Libre y Open Source Software (FLOSS) pueden mostrar que est&aacute;n siguiendo las mejores pr&aacute;cticas de dicha comunidad. Los proyectos pueden auto-certificarse voluntaria y gratuitamente llenando el cuestionario que se ofrece en esta p&aacute;gina. Con dicho cuestionario los proyectos pueden explicar como est&aacute;n siendo creados de conformidad con las mejores pr&aacute;cticas. La insignia de Mejores Pr&aacute;cticas fue inspirada por las m&uacute;ltiples insignias que los proyectos en Github tienen a su disposici&oacute;n. Los consumidores de la insignia pueden evaluar r&aacute;pidamente cuales son los proyectos de FLOSS que est&aacute;n siguiendo las mejores pr&aacute;cticas y que por lo tanto tienen una mayor probabilidad de producir c&oacute;digo que es seguro y de alta calidad.
       p2_html: >-
         M&aacute;s informaci&oacute;n acerca del programa que
         confiere la insignia de Mejores Pr&aacute;cticas, incluyendo
@@ -133,7 +133,7 @@ es:
         en esta p&aacute;gina se cita colectivamente o sin anotaci&oacute;n
         de otro tipo, se pide que se le d&eacute; el debido cr&eacute;dito
         a los que han contribuido a la creaci&oacute;n de la insignia
-        CII de Mejores Pr&aacute;cticas.
+        OpenSSF de Mejores Pr&aacute;cticas.
       share_header_html: "<p> Comparta esto: </p>"
       twitter: Twitter
       reddit: Reddit

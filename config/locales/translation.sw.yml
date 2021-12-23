@@ -28,7 +28,7 @@ sw:
     zh-CN: Kichina (Kilichorahisishwa)
     pt-BR:
   layouts:
-    cii_best_practices: Mazoea Bora ya CII
+    cii_best_practices: Mazoea Bora ya OpenSSF
     toggle_navigation:
     projects: Miradi
     users: Watumiaji
@@ -46,8 +46,8 @@ sw:
       Tafadhali <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#64;lists&#46;coreinfrastructure&#46;or&#103;">tuma
       barua pepe</a> </em>or <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
       target="_blank" rel="noopener">wasilisha suala</a></em>.</strong>
-      © 2015-2018 <a href="https://www.coreinfrastructure.org"
-      target="_blank" rel="noopener">Core Infrastructure Initiative</a>,
+      © 2015-2018 <a href="https://openssf.org"
+      target="_blank" rel="noopener">Open Source Security Foundation</a>,
       a <a href="https://www.linuxfoundation.org/" target="_blank"
       rel="noopener">Linux Foundation</a> Mradi Shirikishi. Haki
       Zote Zimehifadhiwa. Tafadhali angalia <a href="https://www.linuxfoundation.org/privacy"
@@ -129,19 +129,19 @@ sw:
         Samahani, ingizo nyingi zinalingana na ombi, na kusababisha
         mgogoro.
     home:
-      badge_program: Programu ya Nishani za Mazoea Bora ya CII
+      badge_program: Programu ya Nishani za Mazoea Bora ya OpenSSF
       get_your_badge: Pata Nishani Yako Sasa!
       check_us_out: Tazama tovuti ya Nishani ya Mazoea Bora ya
-        CII!
+        OpenSSF!
       p1_html: >-
         <a href="https://www.linuxfoundation.org/">Linux Foundation
-        (LF)</a> <a href="https://www.coreinfrastructure.org/">Core
-        Infrastructure Initiative (CII)</a> Nishani ya Mazoea
+        (LF)</a> <a href="https://openssf.org/">Open
+        Source Security Foundation (OpenSSF)</a> Nishani ya Mazoea
         Bora ni njia kwa minajili miradi ya Programu Huru na Zana
         Huria (FLOSS) kuonyesha kuwa zinafuata mazoea bora. Miradi
         yaweza kujihakikisha kwa hiari yao binafsi, bila malipo,
         kwa kutumia hii tovuti kueleza vile wanafuata kila moja
-        ya mazoea bora. Nishani za Mazoea Bora ya CII imevuviwa
+        ya mazoea bora. Nishani za Mazoea Bora ya OpenSSF imevuviwa
         na nishani mingi zinazopatikana kwenye miradi ya GitHub.
         Watumizi wa hiyo nishani wanaweza kwa haraka kadiri ni
         miradi ipi ya FLOSS inayofuata mazoea bora na matokeo
@@ -150,7 +150,7 @@ sw:
       p2_html: >-
         Unaweza ona kwa urahisi <a href="/sw/criteria/0">vigezo
         vya nishani iliyohitimu</a>. Taarifa zaidi kuhusu programu
-        ya nishani ya Mazoea Bora ya CII <a href='https://github.com/coreinfrastructure/best-practices-badge'>inapatikana
+        ya nishani ya Mazoea Bora ya OpenSSF <a href='https://github.com/coreinfrastructure/best-practices-badge'>inapatikana
         katika GitHub</a>. <a href="/sw/project_stats">Takwimu
         ya mradi</a> na <a href="/sw/criteria_stats">takwimu ya
         vigezo</a> yapatikana. <a href="/sw/projects">Kurasa ya
@@ -174,7 +174,7 @@ sw:
         mambo mapya yasiyo msimbo imetolewa kupitia CC-BY toleo
         3.0 au ya baadaye (CC-BY-3.0+). Kama inarejelea kwa pamoja
         au imedokezwa vinginevyo, tafadhali tambua wachangiaji
-        wa nishani ya Mazoea Bora ya CII.
+        wa nishani ya Mazoea Bora ya OpenSSF.
       share_header_html: "<p> Tafadhali shiriki hii: </p>"
       twitter: Twitter
       reddit: Reddit
@@ -484,7 +484,7 @@ sw:
       sasa hauna %{old_level}
     subject_new_project: >-
       Umeongeza mradi kwenye Programu ya Nishani za Mazoea Bora
-      ya CII
+      ya OpenSSF
     subject_reminder: Mradi wako bado hauna nishani ya "mazoea
       bora"
     subject_project_deleted: Mradi %{project_id} uliopewa jina
@@ -506,7 +506,7 @@ sw:
   user_mailer:
     account_activation:
       before_html: |-
-        <h1>Programu ya Nishani za Mazoea Bora ya CII</h1>
+        <h1>Programu ya Nishani za Mazoea Bora ya OpenSSF</h1>
         <p>Jambo,</p>
         <p>
         Karibu kwenye programu ya Nishani!
@@ -514,23 +514,23 @@ sw:
         </p>
       before_text: |-
         Jambo,
-        Karibu kwenye programu ya Nishani za Mazoea Bora ya CII!
+        Karibu kwenye programu ya Nishani za Mazoea Bora ya OpenSSF!
         Chagua kiunganishi hapo chini kuamilisha akaunti yako:
       activate: Amilisha
       subject: Akaunti imeamilishwa!
     github_welcome:
       before_html: |-
-        <h1>Programu ya Nishani za Mazoea Bora ya CII</h1>
+        <h1>Programu ya Nishani za Mazoea Bora ya OpenSSF</h1>
         <p>Jambo,</p>
         <p>
-        Asante kwa kuunganisha akaunti yako ya GitHub na karibu kwenye Programu ya Nishani za Mazoea Bora ya CII!
+        Asante kwa kuunganisha akaunti yako ya GitHub na karibu kwenye Programu ya Nishani za Mazoea Bora ya OpenSSF!
         </p>
         <p>
         Kama hauku anzisha tendo hili, tafadhali kagua batli yako ya usalama kwa GitHub iliyomo ndani ya Mipangilio&gt;Usalama.
         </p>
       before_text: |
         Jambo,
-        Asante kwa kuunganisha akaunti yako ya GitHub na karibu kwenye Programu ya Nishani za Mazoea Bora ya CII!
+        Asante kwa kuunganisha akaunti yako ya GitHub na karibu kwenye Programu ya Nishani za Mazoea Bora ya OpenSSF!
         Kama hauku anzisha tendo hili, tafadhali kagua batli yako ya usalama kwa GitHub iliyomo ndani ya Mipangilio&gt;Usalama.
       subject: Karibu kwenye Programu ya kuwekeza Nishani
     user_update:

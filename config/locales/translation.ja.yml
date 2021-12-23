@@ -15,7 +15,7 @@ ja:
     zero: 該当プロジェクトなし
     few: "%{count} プロジェクト"
     many: "%{count} プロジェクト"
-  feed_title: CIIベスト プラクティス バッジ更新プロジェクト
+  feed_title: OpenSSFベスト プラクティス バッジ更新プロジェクト
   project_name_unknown: "（名称不明）"
   locale_name:
     en: 英語
@@ -28,7 +28,7 @@ ja:
     sw: スワヒリ語
     pt-BR: ブラジル系ポルトガル語
   layouts:
-    cii_best_practices: CII ベスト プラクティス
+    cii_best_practices: OpenSSF ベスト プラクティス
     projects: プロジェクト
     users: ユーザー
     account: アカウント
@@ -41,8 +41,8 @@ ja:
       <small> <strong>疑問、質問、または問題がある場合は<em> <a href="mailto:&#99;ii&#45;badges&#45;questions&#64;lists&#46;coreinfrastructure&#46;or&#103;">電子メールで報告する</a></em>か、<em>
       <a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
       target="_blank" rel="noopener">こちらから問題を提出</a></em>してください。</strong>
-      © 2015-2018 <a href="https://www.coreinfrastructure.org"
-      target="_blank" rel="noopener">Core Infrastructure Initiative</a>、<a
+      © 2015-2018 <a href="https://openssf.org"
+      target="_blank" rel="noopener">Open Source Security Foundation</a>、<a
       href="https://www.linuxfoundation.org/" target="_blank"
       rel="noopener">Linux Foundation</a> Collaborative Project.
       All Rights Reserved.<a href="https://www.linuxfoundation.org/privacy"
@@ -251,13 +251,13 @@ ja:
         このデータは、<a href="https://creativecommons.org/licenses/by/3.0/us"
         target="_blank" rel="noopener">Creative Commons Attribution
         version 3.0以降のライセンス（CC-BY-3.0 +）</a>のもとで利用できます。すべての人がデータを自由に共有および適応できますが、適切にクレジットを入れる必要があります。
-        %{user}とCIIベストプラクティス バッジ貢献者のクレジットを入れてください。<br><br>
+        %{user}とOpenSSFベストプラクティス バッジ貢献者のクレジットを入れてください。<br><br>
       cc_by_3only_html: >-
-        本データは、<a href="https://www.coreinfrastructure.org/" target="_blank"
-        rel="noopener">Core Infrastructure Initiative</a> <a href="https://www.linuxfoundation.org/terms"
+        本データは、<a href="https://openssf.org/" target="_blank"
+        rel="noopener">Open Source Security Foundation</a> <a href="https://www.linuxfoundation.org/terms"
         target="_blank" rel="noopener">利用規約</a>に従って、<a href="https://creativecommons.org/licenses/by/3.0/us"
         target="_blank" rel="noopener">Creative Commons Attribution
-        version 3.0 ライセンス（CC-BY-3.0）</a>のもとで利用できます。すべての人が自由にデータを共有し、修正することができますが、適切にクレジットを入れなければなりません。%{user}とCII
+        version 3.0 ライセンス（CC-BY-3.0）</a>のもとで利用できます。すべての人が自由にデータを共有し、修正することができますが、適切にクレジットを入れなければなりません。%{user}とOpenSSF
         ベストプラクティス バッジ貢献者のクレジットを入れてください。<br> <br>
       owned_by: プロジェクト バッジ登録の所有者：
       created_at_html: "<strong>エントリの作成日時</strong> %{when}、"
@@ -336,8 +336,8 @@ ja:
     form_early:
       badge_intro:
         description: >-
-          本サイトが提示する下記のベストプラクティスを実行するプロジェクトは、Core Infrastructure
-          Initiative (CII) バッジを達成したことを自主的に自己認証し、そのことを外部に示すことができます。
+          本サイトが提示する下記のベストプラクティスを実行するプロジェクトは、Open Source Security
+          Foundation (OpenSSF) バッジを達成したことを自主的に自己認証し、そのことを外部に示すことができます。
         details_html: >-
           ソフトウェアに欠陥や脆弱性がないことを保証する手立てはありません。形式論的な証明ができたとしても、仕様や前提が間違っていると誤動作の可能性があります。また、プロジェクトが健全で、かつ機能的な開発コミュニティであり続けることを保証する手立てもありません。しかし、ベストプラクティスの採用は、プロジェクトの成果の向上に寄与する可能性があります。たとえば、いくつものベストプラクティスがリリース前の複数人によるレビューを定めていますが、それによりレビュー以外では発見困難な技術的脆弱性を見つけるのを助け、同時に異なる企業の開発者間の信頼を築き、さらに交流を続けることに対する意欲を生んでいます。バッジを獲得するには、すべてのMUSTおよびMUST
           NOT基準を満たさなければなりません。すべてのSHOULD基準も満たさなければなりませんが、正当な理由がある場合は満たさなくても構いません。<em>そして</em>すべてのSUGGESTED基準も満たさなければなりませんが、満たさないとしても、少なくとも考慮することが望まれます。フィードバックは、<a
@@ -488,16 +488,16 @@ ja:
       ご協力ありがとうございます。
     in_markdown_add: マークダウンでは、これを追加することができます：
     in_html_add: HTMLでは、これを追加することができます：
-    ending: "--- David A. Wheeler、CIIベスト プラクティス バッジ テクニカル リード"
+    ending: "--- David A. Wheeler、OpenSSFベスト プラクティス バッジ テクニカル リード"
     subject_achieved_passing: "%{new_level}ベスト プラクティス バッジを達成したことをお祝いします！"
     subject_no_longer_passing: あなたのベスト プラクティス バッジはもはや%{old_level}ではありません
-    subject_new_project: あなたは、CIIベスト プラクティス バッジ プログラムにプロジェクトを追加しました
+    subject_new_project: あなたは、OpenSSFベスト プラクティス バッジ プログラムにプロジェクトを追加しました
     subject_reminder: あなたのプロジェクトはまだ「ベスト プラクティス」バッジを持っていません
     subject_project_deleted: "%{project_name}という名前のプロジェクト%{project_id}を削除されました"
     gained_level_part1: |-
       おめでとうございます！
       あなたが提供した情報によると、
-      あなたのプロジェクトはCIIベスト プラクティス '%{new_level}'バッジを獲得しました。
+      あなたのプロジェクトはOpenSSFベスト プラクティス '%{new_level}'バッジを獲得しました。
       詳細については、次のURLを参照してください。
     gained_level_part2: |-
       バッジをプロジェクトやリポジトリサイトに追加してください。
@@ -597,7 +597,7 @@ ja:
   user_mailer:
     account_activation:
       before_html: |-
-        <h1> CIIベスト プラクティス バッジ プログラム</h1>
+        <h1> OpenSSFベスト プラクティス バッジ プログラム</h1>
         <p>こんにちは、</p>
         <p>
         バッジ プログラムへようこそ！
@@ -605,16 +605,16 @@ ja:
         </p>
       before_text: |-
         こんにちは、
-        CIIベストプラクティス バッジ プログラムへようこそ！
+        OpenSSFベストプラクティス バッジ プログラムへようこそ！
         アカウントを有効にするには、以下のリンクを選択してください。
       activate: アクティベート
       subject: アカウントの有効化
     github_welcome:
       before_html: |-
-        <h1> CIIベストプラクティスバッジプログラム</h1>
+        <h1> OpenSSFベストプラクティスバッジプログラム</h1>
         <p>こんにちは、</p>
         <p>
-        GitHubアカウントに接続してくださりありがとうございます。CIIベストプラクティス バッジ プログラムにようこそ！
+        GitHubアカウントに接続してくださりありがとうございます。OpenSSFベストプラクティス バッジ プログラムにようこそ！
         </p>
         <p>
         この操作を開始していない場合は、[設定]＆gt; [セキュリティ]の下にあるGitHubのセキュリティ ログを確認してください。
@@ -622,7 +622,7 @@ ja:
       before_text: |-
         こんにちは、
         GitHubアカウントに接続してくださりありがとうございます
-        CIIベストプラクティス バッジ プログラムへようこそ！
+        OpenSSFベストプラクティス バッジ プログラムへようこそ！
         この操作を開始していない場合は、GitHubの設定>セキュリティの下にあるセキュリティ ログをチェックしてください。
       subject: バッジ プログラムへようこそ
     user_update:
@@ -1505,24 +1505,24 @@ ja:
         description: プロジェクトは、シルバー レベル バッジを達成しなければなりません。
   static_pages:
     home:
-      badge_program: CII ベスト プラクティス バッジ プログラム
+      badge_program: OpenSSF ベスト プラクティス バッジ プログラム
       get_your_badge: バッジを入手する
       p1_html: >-
         <a href="https://www.linuxfoundation.org/">Linux Foundation
-        (LF)</a> Core Infrastructure Initiative (CII) ベスト プラクティス
+        (LF)</a> Open Source Security Foundation (OpenSSF) ベスト プラクティス
         バッジは、Free/Libre and Open Source Software（FLOSS）プロジェクトが、ベスト
         プラクティスに従っていることを自ら示す方法です。プロジェクトは、このWebアプリケーションを使用して、それぞれのベスト
-        プラクティスに従っていることを説明することにより、自主的に無償で自己証明することができます。 CII ベスト
+        プラクティスに従っていることを説明することにより、自主的に無償で自己証明することができます。 OpenSSF ベスト
         プラクティス バッジは、GitHubのプロジェクトで利用可能な多くのバッジからインスピレーションを受けています。バッジの消費者は、どのFLOSSプロジェクトがベスト
         プラクティスに従っているかを速やかに評価でき、その結果、より高品質で安全なソフトウェアを生産することができます。
       p2_html: >-
-        <a href="/ja/criteria/0">バッジの合格基準はこちら</a>です。CII ベスト プラクティス
+        <a href="/ja/criteria/0">バッジの合格基準はこちら</a>です。OpenSSF ベスト プラクティス
         バッジ プログラムの詳細については、<a href='https://github.com/coreinfrastructure/best-practices-badge'>GitHubで公開</a>されています。
         <a href="/ja/project_stats">プロジェクトの統計情報</a>や<a href="/ja/criteria_stats">基準の統計情報</a>も確認できます。
         <a href="/ja/projects">プロジェクト ページ</a>には、参加しているプロジェクトが表示され、クエリも使用できます
         (「<a href="/ja/projects?gteq=100">合格バッジを持つプロジェクトだけ表示する</a
         >」クエリなど)。また、<a href='/ja/projects/1/0'>その例 (当プロジェクトのバッジ取得サイト)</a>
-        も見ることができます。このプロジェクトはもともとはCIIのもとで開発されましたが、現在は<a href="https://openssf.org/"
+        も見ることができます。このプロジェクトはもともとはOpenSSFのもとで開発されましたが、現在は<a href="https://openssf.org/"
         >Open Source Security Foundation (OpenSSF)</a> <a href="https://github.com/ossf/wg-best-practices-os-developers">
         Best Practices Working Group (WG)</a>に属しています。
       p3_html: >-
@@ -1532,9 +1532,9 @@ ja:
         コンテンツは、少なくとも<a href="https://creativecommons.org/licenses/by/3.0/">Creative
         Commons Attribution License version 3.0 (CC-BY-3.0)</a>
         のもとでリリースされています。また、より新しい非コード コンテンツは、CC-BY version 3.0 以降
-        (CC-BY-3.0+) のもとでリリースされています。詳細や不足事項については、CII ベスト プラクティス
+        (CC-BY-3.0+) のもとでリリースされています。詳細や不足事項については、OpenSSF ベスト プラクティス
         バッジのコントリビューターまでご連絡ください。
-      check_us_out: CII ベストプラクティスバッジWebサイトをご覧ください！
+      check_us_out: OpenSSF ベストプラクティスバッジWebサイトをご覧ください！
       share_header_html: "<p>この情報を共有しましょう：</p>"
       twitter: Twitter
       reddit: Reddit
@@ -1644,20 +1644,20 @@ ja:
     beginning_header_1: FLOSSベストプラクティス基準（シルバー バッジ）
     beginning_header_2: FLOSSベストプラクティス基準（ゴールド バッジ）
     beginning_all_html: >-
-      <p>これは、合格、シルバー、およびゴールドバッジレベルでコアインフラストラクチャイニシアチブ（CII）ベストプラクティスバッジを達成するための、フリー/リブレおよびオープンソースソフトウェア（FLOSS）プロジェクトのベストプラクティスのセットです。このリストは、<a
+      <p>これは、合格、シルバー、およびゴールドバッジレベルでコアインフラストラクチャイニシアチブ（OpenSSF）ベストプラクティスバッジを達成するための、フリー/リブレおよびオープンソースソフトウェア（FLOSS）プロジェクトのベストプラクティスのセットです。このリストは、<a
       href="/ja/criteria">基準のみ</a>または<a href="/ja/criteria?details=true&rationale=true">追加情報</a>とともに表示できます。
       <a href="/ja/criteria/0">合格</a> 、 <a href="/ja/criteria/1">シルバー</a>
       、 <a href="/ja/criteria/2">ゴールド</a>の基準だけでなく、 <a href="/ja/criteria_stats">基準の統計</a>も表示できます。
     beginning_0_html: >-
-      <p>これは、コアインフラストラクチャイニシアチブ（CII）ベストプラクティスのシルバーバッジを達成するための、フリー/リブレおよびオープンソースソフトウェア（FLOSS）プロジェクトのベストプラクティスのセットです。このリストは、<a
+      <p>これは、コアインフラストラクチャイニシアチブ（OpenSSF）ベストプラクティスのシルバーバッジを達成するための、フリー/リブレおよびオープンソースソフトウェア（FLOSS）プロジェクトのベストプラクティスのセットです。このリストは、<a
       href="/ja/criteria/0">基準のみ</a>または<a href="/ja/criteria/0?details=true&rationale=true">追加情報</a>とともに表示できます
       。 <a href="/ja/criteria">条件の完全なセット</a>も利用できます。
     beginning_1_html: >-
-      <p>これは、コアインフラストラクチャイニシアチブ（CII）ベストプラクティスのシルバーバッジを達成するための、フリー/リブレおよびオープンソースソフトウェア（FLOSS）プロジェクトのベストプラクティスのセットです。このリストは、<a
+      <p>これは、コアインフラストラクチャイニシアチブ（OpenSSF）ベストプラクティスのシルバーバッジを達成するための、フリー/リブレおよびオープンソースソフトウェア（FLOSS）プロジェクトのベストプラクティスのセットです。このリストは、<a
       href="/ja/criteria/1">基準のみ</a>または<a href="/ja/criteria/1?details=true&rationale=true">追加情報</a>とともに表示できます
       。 <a href="/ja/criteria">条件の完全なセット</a>も利用できます。
     beginning_2_html: >-
-      <p>これは、コアインフラストラクチャイニシアチブ（CII）ベストプラクティスのシルバーバッジを達成するための、フリー/リブレおよびオープンソースソフトウェア（FLOSS）プロジェクトのベストプラクティスのセットです。このリストは、<a
+      <p>これは、コアインフラストラクチャイニシアチブ（OpenSSF）ベストプラクティスのシルバーバッジを達成するための、フリー/リブレおよびオープンソースソフトウェア（FLOSS）プロジェクトのベストプラクティスのセットです。このリストは、<a
       href="/ja/criteria/2">基準のみ</a>または<a href="/ja/criteria/2?details=true&rationale=true">追加情報</a>とともに表示できます
       。 <a href="/ja/criteria">条件の完全なセット</a>も利用できます。
     see_discussion_html: >-
@@ -1674,7 +1674,7 @@ ja:
     intro_p03_html: >-
       <p> しかし、ベストプラクティスに従うことで、プロジェクトの成果を向上させることができます。たとえば、リリース前に複数人によるレビューを可能にするプラクティスもあります。これは、発見しにくい技術的な脆弱性を発見するのに役立ち、異なる組織の開発者の間で信頼を築き、繰り返しやりとりすることができます。</p>
     intro_p04_html: >-
-      <p>このページでは、Core Infrastructure Initiative (CII) のベストプラクティス
+      <p>このページでは、Open Source Security Foundation (OpenSSF) のベストプラクティス
       バッジのために開発された、Free/Libre and Open Source Software (FLOSS)
       プロジェクトのためのベストプラクティスのセットについて説明します。これらのベストプラクティスに従っているプロジェクトは、自主的に自己認証を行い、関連するバッジを達成したことを示すことができます。プロジェクトは、Webアプリケーション
       (BadgeApp) を使用して、どのようにしてこれらのベストプラクティスとその詳細な基準を満たしているかを説明することで、無料でこれを行うことができます。</p>
@@ -1689,7 +1689,7 @@ ja:
       rel="nofollow">Dictionary.com</a>）。これらの基準は、より広いFLOSSコミュニティで広く「推奨または標準と見なされている」と私たちが信じているものです。</p>
     intro_p08_html: >-
       <p>これらの基準がどのように開発されたかの詳細については、<a href="https://github.com/coreinfrastructure/best-practices-badge"
-      >CII Best PracticesバッジGitHubサイト</a>を参照してください。</p> <p>また、<a
+      >OpenSSF Best PracticesバッジGitHubサイト</a>を参照してください。</p> <p>また、<a
       href="/ja/criteria">完全な基準を見る</a>こともできます。</p>
     structure_p01_html: "<p></p> <h2 id='criteria_structure'>基準の構造</h2>"
     structure_p02_html: >-
@@ -1700,8 +1700,8 @@ ja:
     other_p02_html: >-
       <p>Linux Foundationは、「高品質のフリーおよびオープンソース ソフトウェア（FOSS）コンプライアンス
       プログラム」の基準を特定する <a href="https://www.openchainproject.org/"
-      rel="nofollow">OpenChain Project</a>も後援しています。OpenChainは、組織がFLOSSを最適に使用し、FLOSSプロジェクトに貢献する方法に焦点を当てていますが、CIIベストプラクティスバッジは、FLOSSプロジェクト自体に焦点を当てています。
-      CIIベストプラクティスバッジとOpenChainは連携して、FLOSSとFLOSSの使用方法を改善します。</p>
+      rel="nofollow">OpenChain Project</a>も後援しています。OpenChainは、組織がFLOSSを最適に使用し、FLOSSプロジェクトに貢献する方法に焦点を当てていますが、OpenSSFベストプラクティスバッジは、FLOSSプロジェクト自体に焦点を当てています。
+      OpenSSFベストプラクティスバッジとOpenChainは連携して、FLOSSとFLOSSの使用方法を改善します。</p>
     automation_p01_html: "<p></p> <h2 id='criteria_automation'>基準の自動化</h2>"
     automation_p02_html: >-
       <p> 場合によっては、プロジェクトが標準の規則に従っていて、適切なAPIサポートを備えたサイト（GitHubなど）でホストされている場合、情報を自動的にテストして入力します。</p>

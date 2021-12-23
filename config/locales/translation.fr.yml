@@ -16,9 +16,9 @@ fr:
     many: "%{count} Projets"
   feed_title: >-
     Mise à Jour des Projets de la BadgeApp Meilleures Pratiques
-    de la CII
+    de la OpenSSF
   layouts:
-    cii_best_practices: Meilleures Pratiques de la CII
+    cii_best_practices: Meilleures Pratiques de la OpenSSF
     projects: Projets
     users: Utilisateurs
     profile: Profil
@@ -34,8 +34,8 @@ fr:
       question ? Vous voyez un problème ? Merci d'<em><a href="mailto:&#99;ii&#45;badges&#45;questions&#64;lists&#46;coreinfrastructure&#46;or&#103;">envoyer
       un email</a></em> ou de <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
       target="_blank" rel="noopener">reporter un problème</a></i>.</strong>
-      © 2015-2018 <a href="https://www.coreinfrastructure.org"
-      target="_blank" rel="noopener">Core Infrastructure Initiative</a>,
+      © 2015-2018 <a href="https://openssf.org"
+      target="_blank" rel="noopener">Open Source Security Foundation</a>,
       un projet collaboratif de la <a href="https://www.linuxfoundation.org/"
       target="_blank" rel="noopener">Fondation Linux</a>. Tous
       droits réservés. Consultez notre <a href="https://www.linuxfoundation.org/privacy"
@@ -338,19 +338,19 @@ fr:
         Chacun peut librement partager et adapter les données,
         à condition de créditer leur origine. Veuillez créditer
         %{user} et les contributeurs du badge des meilleures pratiques
-        de la CII.<br><br>
+        de la OpenSSF.<br><br>
       cc_by_3only_html: >-
         Ces données sont disponibles sous <a href="https://creativecommons.org/licenses/by/3.0/us"
         target="_blank" rel="noopener">licence Creative Commons
         Attribution version 3.0 (CC-BY-3.0)</a> comme indiqué
         dans les <a href="https://www.linuxfoundation.org/terms"
         target="_blank" rel="noopener">conditions d'utilisation</a>
-        de la <a href="https://www.coreinfrastructure.org/" target="_blank"
-        rel="noopener">Core Infrastructure Initiative</a>. Chacun
+        de la <a href="https://openssf.org/" target="_blank"
+        rel="noopener">Open Source Security Foundation</a>. Chacun
         peut librement partager et adapter les données, à condition
         de créditer leur origine. Veuillez créditer %{user} et
         les contributeurs du badge des meilleures pratiques de
-        la CII.<br><br>
+        la OpenSSF.<br><br>
       owned_by: 'Soumission du badge du projet appartenant à :'
       created_at_html: "<strong>Soumission créée le</strong> %{when},"
       updated_at_html: "<strong>dernière mise à jour le</strong>
@@ -502,7 +502,7 @@ fr:
         description: >-
           Les projets qui suivent les meilleures pratiques ci-dessous
           peuvent s'auto-certifier et montrer qu'ils ont obtenu
-          le badge de la Core Infrastructure Initiative (CII).
+          le badge de la Open Source Security Foundation (OpenSSF).
         details_html: >-
           Il n'existe aucun ensemble de pratiques qui garantissent
           que ce logiciel n'aura jamais de défauts ou de vulnérabilités
@@ -695,7 +695,7 @@ fr:
   user_mailer:
     account_activation:
       before_html: |-
-        <h1>Programme de badge des Meilleures Pratiques de lq CII</h1>
+        <h1>Programme de badge des Meilleures Pratiques de lq OpenSSF</h1>
         <p>Bonjour,</p>
         <p>
         Bienvenue dans le programme de badge !
@@ -703,17 +703,17 @@ fr:
         </p>
       before_text: |-
         Bonjour,
-        Bienvenue dans le programme de badge des Meilleures Pratiques de la CII !
+        Bienvenue dans le programme de badge des Meilleures Pratiques de la OpenSSF !
         Cliquez sur le lien ci-dessous pour activer votre compte :
       activate: Activer
       subject: Activation de compte
     github_welcome:
       before_html: |-
-        <h1>Programme de badge des Meilleures Pratiques de la CII</h1>
+        <h1>Programme de badge des Meilleures Pratiques de la OpenSSF</h1>
         <p>Bonjour,</p>
         <p>
         Merci d'avoir relié votre compte GitHub et bienvenue
-        au programme de badge des Meilleures Pratiques de la CII !
+        au programme de badge des Meilleures Pratiques de la OpenSSF !
         </p>
         <p>
         Si vous n'êtes pas à l'origine de cette action, vérifiez votre
@@ -722,7 +722,7 @@ fr:
       before_text: |-
         Bonjour,
         Merci d'avoir relié votre compte GitHub et bienvenue
-        au programme de badge des Meilleures Pratiques de la CII !
+        au programme de badge des Meilleures Pratiques de la OpenSSF !
         Si vous n'êtes pas à l'origine de cette action, vérifiez votre
         journal de sécurité GitHub sous Paramètres>Sécurité.
       subject: Bienvenue dans le programme de badge
@@ -830,7 +830,7 @@ fr:
     in_markdown_add: 'En markdown, vous pouvez ajouter ceci :'
     in_html_add: 'En HTML, vous pouvez ajouter ceci :'
     ending: >-
-      --- David A. Wheeler, Directeur Technique du programme CII
+      --- David A. Wheeler, Directeur Technique du programme OpenSSF
       Best Practices Badge
     subject_achieved_passing: >-
       FÉLICITATIONS pour l'obtention d'un badge %{new_level} des
@@ -839,7 +839,7 @@ fr:
       n'est plus %{old_level}
     subject_new_project: >-
       Vous avez ajouté un projet au programme de badge des meilleures
-      pratiques de la CII
+      pratiques de la OpenSSF
     subject_reminder: >-
       Votre projet n'a pas encore le badge « meilleures pratiques
       »
@@ -848,7 +848,7 @@ fr:
     gained_level_part1: |-
       Toutes nos félicitations !
       Selon les informations que vous avez fournies,
-      votre projet a obtenu le badge '%{new_level}' des meilleures pratiques de la CII.
+      votre projet a obtenu le badge '%{new_level}' des meilleures pratiques de la OpenSSF.
       Pour plus d'informations, consultez cette URL :
     gained_level_part2: |-
       Ajoutez votre badge à votre projet et/ou site de dépôt ;
@@ -3069,14 +3069,14 @@ fr:
   static_pages:
     home:
       badge_program: Programme de badge des meilleures pratiques
-        de la CII
+        de la OpenSSF
       get_your_badge: Obtenez votre badge immédiatement !
       p1_html: |-
         Le programme de badge des meilleures pratiques de
-        la Core Infrastructure Initiative (CII) de la <a href="https://www.linuxfoundation.org/">Fondation Linux</a> est un moyen pour les projets de logiciel libre (FLOSS) de montrer qu'ils suivent les meilleures pratiques de développement. Les projets peuvent s'auto-évaluer de manière volontaire, sans frais, en utilisant cette application Web pour expliquer comment ils suivent chacune des meilleures pratiques. Le programme de badge des meilleures pratiques de la CII s'inspire des nombreux badges disponibles aux projets sur GitHub. Les consommateurs du badge peuvent évaluer rapidement quels projets de logiciel libre suivent les meilleures pratiques et, par conséquent, sont plus susceptibles de produire des logiciels sûrs et de meilleure qualité.
+        la Open Source Security Foundation (OpenSSF) de la <a href="https://www.linuxfoundation.org/">Fondation Linux</a> est un moyen pour les projets de logiciel libre (FLOSS) de montrer qu'ils suivent les meilleures pratiques de développement. Les projets peuvent s'auto-évaluer de manière volontaire, sans frais, en utilisant cette application Web pour expliquer comment ils suivent chacune des meilleures pratiques. Le programme de badge des meilleures pratiques de la OpenSSF s'inspire des nombreux badges disponibles aux projets sur GitHub. Les consommateurs du badge peuvent évaluer rapidement quels projets de logiciel libre suivent les meilleures pratiques et, par conséquent, sont plus susceptibles de produire des logiciels sûrs et de meilleure qualité.
       p2_html: |-
         Vous pouvez facilement voir les <a href="/fr/criteria/0">critères pour le badge basique</a>. Plus d'informations sur le programme de badge
-        des meilleures pratiques de la CII sont
+        des meilleures pratiques de la OpenSSF sont
         <a href='https://github.com/coreinfrastructure/best-practices-badge'>disponibles sur GitHub</a>.
         <a href="/fr/project_stats">Les statistiques des projets</a> et
         <a href="/fr/criteria_stats">les statistiques sur les critères</a> sont
@@ -3086,7 +3086,7 @@ fr:
         <a href="/fr/projects?gteq=100">les projets ayant obtenu le
         badge basique</a>). Vous pouvez également y voir
         <a href='/fr/projects/1/0'>un exemple (où nous essayons
-        d'obtenir notre propre badge)</a>. Ce projet a été développé à l'origine avec la CII, mais il fait maintenant partie du <a href="https://github.com/ossf/wg-best-practices-os-developers">Groupe de travail (GT) sur les meilleures pratiques</a> de l'<a href="https://openssf.org/">Open Source Security Foundation (OpenSSF)</a>.
+        d'obtenir notre propre badge)</a>. Ce projet a été développé à l'origine avec la OpenSSF, mais il fait maintenant partie du <a href="https://github.com/ossf/wg-best-practices-os-developers">Groupe de travail (GT) sur les meilleures pratiques</a> de l'<a href="https://openssf.org/">Open Source Security Foundation (OpenSSF)</a>.
       p3_html: >-
         <em>Confidentialité et problèmes juridiques</em> : Consultez
         notre <a href="https://www.linuxfoundation.org/privacy">politique
@@ -3104,10 +3104,10 @@ fr:
         (CC-BY-3.0+).  Pour faire référence globalement à ces
         contenus, ou en l'absence d'instructions spécifiques,
         veuillez mentionner comme source les contributeurs du
-        programme de badge des meilleures pratiques de la CII.
+        programme de badge des meilleures pratiques de la OpenSSF.
       check_us_out: >-
         Consultez le site Web du badge des meilleures pratiques
-        de la CII !
+        de la OpenSSF !
       share_header_html: "<p> Merci de partager ceci : </p>"
       twitter: Twitter
       reddit: Reddit
@@ -3274,8 +3274,8 @@ fr:
     beginning_all_html: >-
       <p> Il s'agit de l'ensemble des meilleures pratiques pour
       les projets de logiciels libres et open source (FLOSS) pour
-      obtenir les badges des meilleures pratiques de la Core Infrastructure
-      Initiative (CII) aux niveaux basique, argent et or. Vous
+      obtenir les badges des meilleures pratiques de la Open Source
+      Security Foundation (OpenSSF) aux niveaux basique, argent et or. Vous
       pouvez afficher cette liste avec <a href="/fr/criteria">uniquement
       les critères</a> ou avec <a href="/fr/criteria?details=true&rationale=true">des
       informations supplémentaires</a>. Vous pouvez également
@@ -3286,8 +3286,8 @@ fr:
     beginning_0_html: >-
       <p> Il s'agit de l'ensemble des meilleures pratiques pour
       les projets de logiciels libres et open source (FLOSS) pour
-      obtenir le badge des meilleures pratiques de la Core Infrastructure
-      Initiative (CII) au niveau basique. Vous pouvez afficher
+      obtenir le badge des meilleures pratiques de la Open Source Security
+      Foundation (OpenSSF) au niveau basique. Vous pouvez afficher
       cette liste avec <a href="/fr/criteria/0">uniquement les
       critères</a> ou avec <a href="/fr/criteria/0?details=true&rationale=true">des
       informations supplémentaires</a>. <a href="/fr/criteria">L'ensemble
@@ -3296,8 +3296,8 @@ fr:
     beginning_1_html: >-
       <p> Il s'agit de l'ensemble des meilleures pratiques pour
       les projets de logiciels libres et open source (FLOSS) pour
-      obtenir le badge des meilleures pratiques de la Core Infrastructure
-      Initiative (CII) au niveau argent. Vous pouvez afficher
+      obtenir le badge des meilleures pratiques de la Open Source
+      Security Foundation (OpenSSF) au niveau argent. Vous pouvez afficher
       cette liste avec <a href="/fr/criteria/1">uniquement les
       critères</a> ou avec <a href="/fr/criteria/1?details=true&rationale=true">des
       informations supplémentaires</a>. <a href="/fr/criteria">L'ensemble
@@ -3306,8 +3306,8 @@ fr:
     beginning_2_html: >-
       <p> Il s'agit de l'ensemble des meilleures pratiques pour
       les projets de logiciels libres et open source (FLOSS) pour
-      obtenir le badge des meilleures pratiques de la Core Infrastructure
-      Initiative (CII) au niveau or. Vous pouvez afficher cette
+      obtenir le badge des meilleures pratiques de la Open Source
+      Security Foundation (OpenSSF) au niveau or. Vous pouvez afficher cette
       liste avec <a href="/fr/criteria/2">uniquement les critères</a>
       ou avec <a href="/fr/criteria/2?details=true&rationale=true">des
       informations supplémentaires</a>. <a href="/fr/criteria">L'ensemble
@@ -3338,8 +3338,8 @@ fr:
     intro_p04_html: >-
       <p> Cette page présente l'ensemble des meilleures pratiques
       pour les projets de logiciels libres et open source (FLOSS)
-      développé pour le badge des meilleures pratiques de la Core
-      Infrastructure Initiative (CII). Les projets qui suivent
+      développé pour le badge des meilleures pratiques de la Open Source
+      Security Foundation (OpenSSF). Les projets qui suivent
       ces meilleures pratiques pourront s'auto-certifier volontairement
       et montrer qu'ils ont obtenu le badge correspondant. Les
       projets peuvent le faire, sans frais, en utilisant une application
@@ -3360,7 +3360,7 @@ fr:
     intro_p08_html: >-
       <p> Pour plus d'informations sur la manière dont ces critères
       ont été développés, consultez le <a href="https://github.com/coreinfrastructure/best-practices-badge">site
-      GitHub du badge des meilleures pratiques CII</a>. </p> <p>
+      GitHub du badge des meilleures pratiques OpenSSF</a>. </p> <p>
       Vous pouvez également <a href="/fr/criteria"> voir les critères
       complets</a>. </p>
     structure_p01_html: >-
@@ -3391,9 +3391,9 @@ fr:
       et open source (FLOSS) de haute qualité ». OpenChain se
       concentre sur la façon dont les organisations peuvent utiliser
       au mieux le FLOSS et contribuer en retour aux projets FLOSS,
-      tandis que le badge des meilleures pratiques de la CII se
+      tandis que le badge des meilleures pratiques de la OpenSSF se
       concentre sur les projets FLOSS eux-mêmes. Le badge des
-      meilleures pratiques de la CII et OpenChain travaillent
+      meilleures pratiques de la OpenSSF et OpenChain travaillent
       ensemble pour aider à améliorer le FLOSS et la façon dont
       le FLOSS est utilisé.
     automation_p01_html: >-

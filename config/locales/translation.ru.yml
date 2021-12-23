@@ -15,7 +15,7 @@ ru:
     zero: Нет проектов
     few: "%{count} проекта"
     many: "%{count} проектов"
-  feed_title: Значок "Передовая практика CII" - обновленные проекты
+  feed_title: Значок "Передовая практика OpenSSF" - обновленные проекты
   project_name_unknown: "(Название неизвестно)"
   locale_name:
     en: Английский
@@ -28,7 +28,7 @@ ru:
     sw:
     pt-BR:
   layouts:
-    cii_best_practices: Передовая практика CII
+    cii_best_practices: Передовая практика OpenSSF
     projects: Проекты
     users: Пользователи
     account: Учетная запись
@@ -46,8 +46,8 @@ ru:
       Пожалуйста, отправьте <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">электронное
       письмо</a></em> или <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
       target="_blank" rel="noopener">вопрос на GitHub</a></em>.</strong>
-      © 2015-2018 <a href="https://www.coreinfrastructure.org"
-      target="_blank" rel="noopener">Core Infrastructure Initiative</a>,
+      © 2015-2018 <a href="https://openssf.org"
+      target="_blank" rel="noopener">Open Source Security Foundation</a>,
       a <a href="https://www.linuxfoundation.org/" target="_blank"
       rel="noopener">Linux Foundation</a> Collaborative Project.
       All Rights Reserved. Please see our <a href="https://www.linuxfoundation.org/privacy"
@@ -126,11 +126,11 @@ ru:
     cannot_login_yet:
   static_pages:
     home:
-      badge_program: Программа значков "Передовая практика CII"
+      badge_program: Программа значков "Передовая практика OpenSSF"
       get_your_badge: Получите ваш значок сейчас!
       p1_html: >-
-        Значок "Передовая практика <a href="https://www.coreinfrastructure.org/">Core
-        Infrastructure Initiative (CII)</a>" от <a href="https://www.linuxfoundation.org/">Linux
+        Значок "Передовая практика <a href="https://openssf.org/">Open
+        Source Security Foundation (OpenSSF)</a>" от <a href="https://www.linuxfoundation.org/">Linux
         Foundation (LF)</a> - это возможность для проектов свободного
         и открытого ПО (Free/Libre and Open Source Software -
         FLOSS) показать, что они следуют передовым наработкам
@@ -138,13 +138,13 @@ ru:
         добровольно и бесплатно оценить, насколько они используют
         передовые методы организации разработки свободного и открытого
         ПО, и опубликовать результат. Идея значка "Передовая практика
-        CII" навеяна многими другими значками, доступными для
+        OpenSSF" навеяна многими другими значками, доступными для
         проектов на GitHub. Видящие значок могут быстро определить,
         какие проекты FLOSS используют передовые методы и в результате
         с большей вероятностью создают более качественное и защищенное
         программное обеспечение.
       p2_html: >-
-        Более подробную информацию о программе значков CII "Передовая
+        Более подробную информацию о программе значков OpenSSF "Передовая
         практика", в том числе о происхождении программы и <a
         href='https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/criteria.md'>критериях</a>,
         можно найти на <a href='https://github.com/coreinfrastructure/best-practices-badge'>странице
@@ -167,10 +167,10 @@ ru:
         Commons Attribution версии 3.0 (CC-BY-3.0)</a>; более
         новый содержимое, не являющееся кодом, выпущено под CC-BY
         версии 3.0 или выше (CC-BY-3.0+). Для коллективной ссылки
-        или если не указано иное, пожалуйста, ссылайтесь на "CII
+        или если не указано иное, пожалуйста, ссылайтесь на "OpenSSF
         Best Practices badge contributors".
       check_us_out: Посетите веб-сайт значков "Передовая практика
-        CII"!
+        OpenSSF"!
       share_header_html: "<p>Поделиться: </p>"
       twitter: Twitter
       reddit: Reddit
@@ -517,26 +517,26 @@ ru:
         Attribution версии 3.0 или более поздней (CC-BY-3.0+)</a>.
         Все могут свободно делиться и адаптировать эти данные,
         но должны указывать соответствующие ссылки. При распространении,
-        пожалуйста, указывайте "%{user} and the CII Best Practices
+        пожалуйста, указывайте "%{user} and the OpenSSF Best Practices
         badge contributors".<br><br>
       cc_by_3only_html: >-
         Эти данные доступны под <a href="https://creativecommons.org/licenses/by/3.0/us"
         target="_blank" rel="noopener">лицензией Creative Commons
         Attribution версии 3.0 (CC-BY-3.0)</a> в соответствии
         с <a href="https://www.linuxfoundation.org/terms" target="_blank"
-        rel="noopener">условиями использования</a> <a href="https://www.coreinfrastructure.org/"
-        target="_blank" rel="noopener">Core Infrastructure Initiative</a>.
+        rel="noopener">условиями использования</a> <a href="https://openssf.org/"
+        target="_blank" rel="noopener">Open Source Security Foundation</a>.
         Все могут свободно делиться и адаптировать эти данные,
         но должны указывать соответствующие ссылки. При распространении,
-        пожалуйста, указывайте "%{user} and the CII Best Practices
+        пожалуйста, указывайте "%{user} and the OpenSSF Best Practices
         badge contributors".
     form_early:
       badge_intro:
         description: >-
           Проекты, которые следуют приведенным ниже лучшим практикам,
           могут добровольно и самостоятельно оценить себя и продемонстрировать,
-          что они получили значок Core Infrastructure Initiative
-          (CII).
+          что они получили значок Open Source Security Foundation
+          (OpenSSF).
         details_html: >-
           Не существует набора практик, гарантирующего, что у
           программного обеспечения никогда не будет недостатков
@@ -802,7 +802,7 @@ ru:
       не %{old_level}
     subject_new_project: >-
       Вы добавили проект в программу значков Передовой практики
-      CII
+      OpenSSF
     subject_reminder: У вашего проекта все еще нет значка Передовой
       практики
     subject_project_deleted: Проект %{project_id} под названием
@@ -850,7 +850,7 @@ ru:
     gained_level_part1: |-
       Поздравляем!
       Согласно информации, которую вы предоставили,
-      ваш проект заработал значок «Передовая практика CII» уровня %{new_level}.
+      ваш проект заработал значок «Передовая практика OpenSSF» уровня %{new_level}.
       Для получения дополнительной информации см. этот URL:
     gained_level_part2: >-
       Добавьте свой значок на сайт своего проекта и/или репозитория,
@@ -874,10 +874,10 @@ ru:
       и теперь ваш уровень «%{new_level}».
       Дополнительную информацию см. по следующему URL:
     ending: >-
-      --- David A. Wheeler, технический руководитель проекта CII
+      --- David A. Wheeler, технический руководитель проекта OpenSSF
       Best Practices Badge
     reminder_body_html: "<h1>Автонапоминание от программы значков
-      \"Передовая практика CII\" для %{project_name}</h1>\n<p>\nЭто
+      \"Передовая практика OpenSSF\" для %{project_name}</h1>\n<p>\nЭто
       автоматическое напоминание о том, что ваш проект\n\"%{project_name}\"\nв
       настоящее время не имеет значка передовой практики,\nи запись
       его значка уже некоторое время не обновлялась.\n</p>\n<p>\nВаша
@@ -934,22 +934,22 @@ ru:
   user_mailer:
     account_activation:
       before_html: |-
-        <h1>Программа значков "Передовая практика CII"</h1>
+        <h1>Программа значков "Передовая практика OpenSSF"</h1>
         <p>Здравствуйте, и добро пожаловать в Программу!
         Пожалуйста, перейдите по ссылке внизу для активации учетной записи:
         </p>
       before_text: |-
-        Здравствуйте, и добро пожаловать в Программу значков "Передовая практика CII"!
+        Здравствуйте, и добро пожаловать в Программу значков "Передовая практика OpenSSF"!
         Чтобы активировать свою учетную запись, используйте ссылку ниже:
       activate: Активировать
       subject: Активация учетной записи
     github_welcome:
       before_html: |-
-        <h1>Программа значков &laquo;Передовая практика CII&raquo;</h1>
+        <h1>Программа значков &laquo;Передовая практика OpenSSF&raquo;</h1>
         <p>Здравствуйте,</p>
         <p>
         Благодарим вас за подключение вашего аккаунта GitHub и приветствуем
-        в программе значков &laquo;Передовая практика CII&raquo;!
+        в программе значков &laquo;Передовая практика OpenSSF&raquo;!
         </p>
         <p>
         Если вы не инициировали это действие, проверьте безопасность своего GitHub в разделе Settings&gt;Security.
@@ -957,9 +957,9 @@ ru:
       before_text: |-
         Здравствуйте,
         Благодарим вас за подключение вашего аккаунта GitHub и приветствуем
-        в программе значков "Передовая практика CII"!
+        в программе значков "Передовая практика OpenSSF"!
         Если вы не инициировали это действие, проверьте безопасность своего GitHub в разделе Settings>Security.
-      subject: Добро пожаловать в программу значков CII
+      subject: Добро пожаловать в программу значков OpenSSF
     user_update:
       before_text: >-
         Некоторые данные пользователя для вашей учетной записи

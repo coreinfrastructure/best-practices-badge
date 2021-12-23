@@ -14,9 +14,9 @@ zh-CN:
     zero: 零项目
     few: "%{count}个项目"
     many: "%{count}个项目"
-  feed_title: CII最佳实践徽章计划更新项目
+  feed_title: OpenSSF最佳实践徽章计划更新项目
   layouts:
-    cii_best_practices: CII最佳实践
+    cii_best_practices: OpenSSF最佳实践
     projects: 项目
     users: 用户
     profile: 资料
@@ -31,8 +31,8 @@ zh-CN:
       <small> <strong>需要帮助？有疑问？发现问题？请 <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">发送邮件</a>
       或 <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
       target="_blank" rel="noopener">提出问题</a></em>.</strong> ©
-      2015-2017 <a href="https://www.coreinfrastructure.org/"
-      target="_blank" rel="noopener">Core Infrastructure Initiative
+      2015-2017 <a href="https://openssf.org/"
+      target="_blank" rel="noopener">Open Source Security Foundation
       （核心基础设施计划）</a>, 一个 <a href="https://www.linuxfoundation.org/"
       target="_blank" rel="noopener">Linux 基金会</a> 合作项目。版权所有。
       请查阅我们的 <a href="https://www.linuxfoundation.org/privacy"
@@ -211,13 +211,13 @@ zh-CN:
       cc_by_3plus_html: >-
         此数据在<a href="https://creativecommons.org/licenses/by/3.0/us"
         target="_blank" rel="noopener">知识共享署名3.0或更高版本许可证（CC-BY-3.0
-        +）</a> 下可用。所有内容都可以自由分享和演绎，但必须给予适当的署名。请署名为%{user}和CII最佳实践徽章贡献者。<br><br>
+        +）</a> 下可用。所有内容都可以自由分享和演绎，但必须给予适当的署名。请署名为%{user}和OpenSSF最佳实践徽章贡献者。<br><br>
       cc_by_3only_html: >-
         此数据在<a href="https://creativecommons.org/licenses/by/3.0/us"
         target="_blank" rel="noopener">知识共享署名3.0版本许可证（CC-BY-3.0）</a>下可用，并依据<a
-        href="https://www.coreinfrastructure.org/" target="_blank"
+        href="https://openssf.org/" target="_blank"
         rel="noopener">核心基础设施计划</a> <a href ="https://www.linuxfoundation.org/terms"
-        target="_blank" rel="noopener">使用条款</a>。所有数据都可以自由分享和演绎，但必须给予适当的署名。请署名%{user}和CII最佳实践徽章贡献者。<br>
+        target="_blank" rel="noopener">使用条款</a>。所有数据都可以自由分享和演绎，但必须给予适当的署名。请署名%{user}和OpenSSF最佳实践徽章贡献者。<br>
         <br>
       owned_by: 项目徽章条目拥有者：
       created_at_html: "<strong>最后更新于</strong> %{when},"
@@ -284,7 +284,7 @@ zh-CN:
         placeholder: 更改使用+或 - 后跟逗号分隔的用户标识列表
     form_early:
       badge_intro:
-        description: 遵循以下最佳实践的项目将能够自愿的自我认证，并显示他们已经实现了核心基础设施计划（CII）徽章。
+        description: 遵循以下最佳实践的项目将能够自愿的自我认证，并显示他们已经实现了核心基础设施计划（OpenSSF）徽章。
         details_html: >-
           没有一套可以保证软件永远不会有缺陷或漏洞的做法；如果规范或假设是错误的，即使合适的方法也可能失败。也没有哪些做法可以保证一个项目能够维持健康和运作良好的开发者社区。但是，遵循最佳做法可以帮助改善项目的成果。例如，一些做法可以在发布之前进行多人评估，这可以帮助您找到其他难以找到的技术漏洞，并帮助建立信任，并希望不同公司的开发人员之间进行重复的交互。要获得徽章，必须满足所有“必须”和“禁止”的条款，满足所有“应该”条款或有合适的理由，<em>和</em>所有“建议”条款必须满足或未满足（至少希望考虑）。欢迎通过<a
           href="https://github.com/coreinfrastructure/best-practices-badge">
@@ -363,7 +363,7 @@ zh-CN:
   user_mailer:
     account_activation:
       before_html: |-
-        <h1>CII 最佳实践徽章计划</h1>
+        <h1>OpenSSF 最佳实践徽章计划</h1>
         <p>您好！</p>
         <p>
         欢迎来到徽章计划！
@@ -371,7 +371,7 @@ zh-CN:
         </p>
       before_text: |-
         您好！
-        欢迎来到CII 最佳实践徽章计划！
+        欢迎来到OpenSSF 最佳实践徽章计划！
         点击下面的链接激活帐户：
       activate: 启用
       subject: 帐号激活
@@ -380,7 +380,7 @@ zh-CN:
         <p>您好，</p>
         <p>
         感谢连接到您的GitHub账户，欢迎来到
-        CII最佳实践徽章计划！
+        OpenSSF最佳实践徽章计划！
         </p>
         <p>
         如果该操作不是由您本人做出，请检查您的 GitHub
@@ -389,7 +389,7 @@ zh-CN:
       before_text: |-
         您好，
         感谢连接到您的GitHub账户，欢迎来到
-        CII最佳实践徽章计划！
+        OpenSSF最佳实践徽章计划！
         如果该操作不是由您本人做出，请检查您的 GitHub
         安全日志：Settings>Security。
       subject: 欢迎来到徽章计划
@@ -475,16 +475,16 @@ zh-CN:
       感谢您的时间投入。
     in_markdown_add: 在markdown标记文本中，您可以添加：
     in_html_add: 在HTML中，您可以添加：
-    ending: "--- David A. Wheeler，CII最佳实践徽章技术负责人"
+    ending: "--- David A. Wheeler，OpenSSF最佳实践徽章技术负责人"
     subject_achieved_passing: 恭喜获得新的%{new_level}最佳实践徽章！
     subject_no_longer_passing: 您的最佳实践徽章不再是%{old_level}
-    subject_new_project: 您已将项目添加到CII最佳实践徽章计划
+    subject_new_project: 您已将项目添加到OpenSSF最佳实践徽章计划
     subject_reminder: 您的项目还没有“最佳实践”徽章
     subject_project_deleted: 名为%{project_name}的项目%{project_id}已被删除
     gained_level_part1: |-
       恭喜！
       根据您提供的信息，
-      您的项目获得了CII最佳实践“%{new_level}”徽章。
+      您的项目获得了OpenSSF最佳实践“%{new_level}”徽章。
       有关详细信息，请参阅此URL：
     gained_level_part2: |-
       请将您的徽章添加到您的项目和/或代码仓库网站；
@@ -1255,18 +1255,18 @@ zh-CN:
         description: 该项目必须拥有银级徽章。
   static_pages:
     home:
-      badge_program: CII 最佳实践徽章计划
+      badge_program: OpenSSF 最佳实践徽章计划
       get_your_badge: 马上获取徽章！
       p1_html: |-
         The <a href="https://www.linuxfoundation.org/">Linux 基金会 (LF)</a>
-        <a href="https://www.coreinfrastructure.org/">核心基础设施计划
-        (CII)</a>
+        <a href="https://openssf.org/">核心基础设施计划
+        (OpenSSF)</a>
         最佳实践徽章是自由和开放源代码软件(FLOSS)项目展示自己遵循安全最佳实践的>途径。
         项目可以使用本Web应用，自愿、免费的自助认证，来阐述如何遵循每项最佳实践>。
-        The CII 最佳实践徽章受到GitHub上众多可获得的徽章系统的启发。徽章的目标用 户将能够
+        The OpenSSF 最佳实践徽章受到GitHub上众多可获得的徽章系统的启发。徽章的目标用 户将能够
         快速评估哪些FLOSS项目遵循最佳实践，也将更容易地构建高质量的安全软件。
       p2_html: |-
-        关于CII 最佳实践徽章计划的更多信息，
+        关于OpenSSF 最佳实践徽章计划的更多信息，
         包括背景以及
         <a href='https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/criteria.md'>标准</a>, 可以访问
         <a href='https://github.com/coreinfrastructure/best-practices-badge'>GitHub 项目</a>.
@@ -1289,8 +1289,8 @@ zh-CN:
         新的非代码内容
         使用CC-BY 版本 3.0 或者更高 (CC-BY-3.0+)。
         如果集体引用，或不另外注明，
-        请标明出处为CII最佳实践徽章贡献者。
-      check_us_out: 查看CII最佳实践徽章网站！
+        请标明出处为OpenSSF最佳实践徽章贡献者。
+      check_us_out: 查看OpenSSF最佳实践徽章网站！
       share_header_html: "<p>请分享：</p>"
       twitter: Twitter
       reddit: Reddit
@@ -1396,22 +1396,22 @@ zh-CN:
     beginning_header_1: FLOSS 最佳实践标准（白银徽章）
     beginning_header_2: FLOSS 最佳实践标准（黄金徽章）
     beginning_all_html: >-
-      <p>这是自由/自由和开源软件（FLOSS）项目的最佳实践集，以在通过，银色和金色徽章级别获得核心基础设施计划（CII）最佳实践徽章。您可以<a
+      <p>这是自由/自由和开源软件（FLOSS）项目的最佳实践集，以在通过，银色和金色徽章级别获得核心基础设施计划（OpenSSF）最佳实践徽章。您可以<a
       href="/zh-CN/criteria">仅使用标准</a>或<a href="/zh-CN/criteria?details=true&rationale=true">其他信息</a>来显示此列表。您还可以仅查看<a
       href="/zh-CN/criteria/0">通过</a>，<a href="/zh-CN/criteria/1">银</a>和<a
       href="/zh-CN/criteria/2">金</a>标准，以及<a href="/zh-CN/criteria_stats">标准统计信息</a>。
     beginning_0_html: >-
-      <p>这是自由/自由和开源软件（FLOSS）项目的最佳实践集，以在通过，银色和金色徽章级别获得核心基础设施计划（CII）最佳实践徽章。您可以<a
+      <p>这是自由/自由和开源软件（FLOSS）项目的最佳实践集，以在通过，银色和金色徽章级别获得核心基础设施计划（OpenSSF）最佳实践徽章。您可以<a
       href="/zh-CN/criteria">仅使用标准</a>或<a href="/zh-CN/criteria?details=true&rationale=true">其他信息</a>来显示此列表。您还可以仅查看<a
       href="/zh-CN/criteria/0">通过</a>，<a href="/zh-CN/criteria/1">银</a>和<a
       href="/zh-CN/criteria/2">金</a>标准，以及<a href="/zh-CN/criteria_stats">全套标准</a>。
     beginning_1_html: >-
-      <p>这是自由/自由和开源软件（FLOSS）项目的最佳实践集，以在通过，银色和金色徽章级别获得核心基础设施计划（CII）最佳实践徽章。您可以<a
+      <p>这是自由/自由和开源软件（FLOSS）项目的最佳实践集，以在通过，银色和金色徽章级别获得核心基础设施计划（OpenSSF）最佳实践徽章。您可以<a
       href="/zh-CN/criteria">仅使用标准</a>或<a href="/zh-CN/criteria?details=true&rationale=true">其他信息</a>来显示此列表。您还可以仅查看<a
       href="/zh-CN/criteria/0">通过</a>，<a href="/zh-CN/criteria/1">银</a>和<a
       href="/zh-CN/criteria/2">金</a>标准，以及<a href="/zh-CN/criteria_stats">全套标准</a>。
     beginning_2_html: >-
-      <p>这是自由/自由和开源软件（FLOSS）项目的最佳实践集，以在通过，银色和金色徽章级别获得核心基础设施计划（CII）最佳实践徽章。您可以<a
+      <p>这是自由/自由和开源软件（FLOSS）项目的最佳实践集，以在通过，银色和金色徽章级别获得核心基础设施计划（OpenSSF）最佳实践徽章。您可以<a
       href="/zh-CN/criteria">仅使用标准</a>或<a href="/zh-CN/criteria?details=true&rationale=true">其他信息</a>来显示此列表。您还可以仅查看<a
       href="/zh-CN/criteria/0">通过</a>，<a href="/zh-CN/criteria/1">银</a>和<a
       href="/zh-CN/criteria/2">金</a>标准，以及<a href="/zh-CN/criteria_stats">全套标准</a>。

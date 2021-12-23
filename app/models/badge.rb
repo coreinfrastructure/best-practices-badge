@@ -6,6 +6,7 @@
 
 require 'set'
 
+# rubocop: disable Metrics/ClassLength
 class Badge
   ACCEPTABLE_PERCENTAGES = (0..99).to_a.freeze
   ACCEPTABLE_LEVELS = %w[passing silver gold].freeze
@@ -15,37 +16,115 @@ class Badge
     ACCEPTABLE_PERCENTAGES + ACCEPTABLE_LEVELS
   ).to_set.freeze
 
-  WHITE_TEXT_SPECS = {
-    color: 'fill="#000" ', shadow: 'fill="#fefefe" fill-opacity=".7"'
-  }.freeze
-
-  BLACK_TEXT_SPECS = {
-    color: '', shadow: 'fill="#010101" fill-opacity=".3"'
-  }.freeze
-
-  IN_PROGRESS_SPECS = {
-    width: 204, text: 'in progress', text_pos: 152.5,
-    text_colors: BLACK_TEXT_SPECS
-  }.freeze
-
-  PASSING_SPECS = {
-    width: 154, color: '#4c1', text: 'passing', text_pos: 127.5,
-    text_colors: BLACK_TEXT_SPECS
-  }.freeze
-
-  SILVER_SPECS = {
-    width: 142, color: '#C0C0C0', text: 'silver', text_pos: 121.5,
-    text_colors: WHITE_TEXT_SPECS
-  }.freeze
-
-  GOLD_SPECS = {
-    width: 136, color: '#ffd700', text: 'gold', text_pos: 118.5,
-    text_colors: WHITE_TEXT_SPECS
-  }.freeze
-
-  BADGE_SPECS = {
-    'in_progress' => IN_PROGRESS_SPECS, 'passing' => PASSING_SPECS,
-    'silver' => SILVER_SPECS, 'gold' => GOLD_SPECS
+  # These are copied from app/assets/images/badge_static_widths.txt
+  # after running 'rake update_badge_images'.
+  # We very rarely change the static images in a way that affects widths,
+  # so it's simpler to just copy the information into the source code here.
+  # As a style recommendation remove the comma from the last entry.
+  BADGE_WIDTHS = {
+    'passing': 184,
+    'silver': 172,
+    'gold': 166,
+    '0': 228,
+    '1': 228,
+    '2': 228,
+    '3': 228,
+    '4': 228,
+    '5': 228,
+    '6': 228,
+    '7': 228,
+    '8': 228,
+    '9': 228,
+    '10': 234,
+    '11': 234,
+    '12': 234,
+    '13': 234,
+    '14': 234,
+    '15': 234,
+    '16': 234,
+    '17': 234,
+    '18': 234,
+    '19': 234,
+    '20': 234,
+    '21': 234,
+    '22': 234,
+    '23': 234,
+    '24': 234,
+    '25': 234,
+    '26': 234,
+    '27': 234,
+    '28': 234,
+    '29': 234,
+    '30': 234,
+    '31': 234,
+    '32': 234,
+    '33': 234,
+    '34': 234,
+    '35': 234,
+    '36': 234,
+    '37': 234,
+    '38': 234,
+    '39': 234,
+    '40': 234,
+    '41': 234,
+    '42': 234,
+    '43': 234,
+    '44': 234,
+    '45': 234,
+    '46': 234,
+    '47': 234,
+    '48': 234,
+    '49': 234,
+    '50': 234,
+    '51': 234,
+    '52': 234,
+    '53': 234,
+    '54': 234,
+    '55': 234,
+    '56': 234,
+    '57': 234,
+    '58': 234,
+    '59': 234,
+    '60': 234,
+    '61': 234,
+    '62': 234,
+    '63': 234,
+    '64': 234,
+    '65': 234,
+    '66': 234,
+    '67': 234,
+    '68': 234,
+    '69': 234,
+    '70': 234,
+    '71': 234,
+    '72': 234,
+    '73': 234,
+    '74': 234,
+    '75': 234,
+    '76': 234,
+    '77': 234,
+    '78': 234,
+    '79': 234,
+    '80': 234,
+    '81': 234,
+    '82': 234,
+    '83': 234,
+    '84': 234,
+    '85': 234,
+    '86': 234,
+    '87': 234,
+    '88': 234,
+    '89': 234,
+    '90': 234,
+    '91': 234,
+    '92': 234,
+    '93': 234,
+    '94': 234,
+    '95': 234,
+    '96': 234,
+    '97': 234,
+    '98': 234,
+    '99': 234
   }.freeze
 
   attr_accessor :svg
@@ -86,7 +165,7 @@ class Badge
   def initialize(level)
     raise ArgumentError unless self.class.valid?(level)
 
-    @svg = create_svg(level)
+    @svg = load_svg(level)
   end
 
   def to_s
@@ -95,37 +174,8 @@ class Badge
 
   private
 
-  def create_svg(level)
-    # svg badges generated from http://shields.io/
-    return badge_svg(BADGE_SPECS['in_progress'], level) if level.is_a?(Integer)
-
-    badge_svg(BADGE_SPECS[level], nil)
+  def load_svg(level)
+    File.read("app/assets/images/badge_static_#{level}.svg")
   end
-
-  # rubocop:disable Metrics/AbcSize
-  def badge_svg(specs, percentage)
-    color = specs[:color] ||
-            ('#' + Paleta::Color.new(:hsl, (percentage * 0.45) + 15, 85,
-                                     43).hex)
-    text = percentage ? specs[:text] + " #{percentage}%" : specs[:text]
-    <<-BADGE_AS_SVG.squish
-    <svg xmlns="http://www.w3.org/2000/svg" width="#{specs[:width]}"
-    height="20"><linearGradient id="b" x2="0" y2="100%"><stop offset="0"
-    stop-color="#bbb" stop-opacity=".1"/><stop offset="1"
-    stop-opacity=".1"/></linearGradient><mask id="a"><rect
-    width="#{specs[:width]}" height="20" rx="3" fill="#fff"/></mask><g
-    mask="url(#a)"><path fill="#555" d="M0 0h103v20H0z"/><path
-    fill="#{color}" d="M103 0h#{specs[:width] - 103}v20H103z"/><path
-    fill="url(#b)" d="M0 0h#{specs[:width]}v20H0z"/></g><g
-    fill="#fff" text-anchor="middle"
-    font-family="DejaVu Sans,Verdana,Geneva,sans-serif"
-    font-size="11"><text x="51.5" y="15" fill="#010101"
-    fill-opacity=".3">cii best practices</text><text x="51.5"
-    y="14">cii best practices</text><text x="#{specs[:text_pos]}"
-    y="15" #{specs[:text_colors][:shadow]}>#{text}</text><text
-    #{specs[:text_colors][:color]}x="#{specs[:text_pos]}"
-    y="14">#{text}</text></g></svg>
-    BADGE_AS_SVG
-  end
-  # rubocop:enable Metrics/AbcSize
 end
+# rubocop: enable Metrics/ClassLength

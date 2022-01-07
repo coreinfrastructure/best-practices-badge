@@ -1522,7 +1522,7 @@ ja:
         <a href="/ja/projects">プロジェクト ページ</a>には、参加しているプロジェクトが表示され、クエリも使用できます
         (「<a href="/ja/projects?gteq=100">合格バッジを持つプロジェクトだけ表示する</a
         >」クエリなど)。また、<a href='/ja/projects/1/0'>その例 (当プロジェクトのバッジ取得サイト)</a>
-        も見ることができます。このプロジェクトはもともとはOpenSSFのもとで開発されましたが、現在は<a href="https://openssf.org/"
+        も見ることができます。このプロジェクトはもともとはCIIのもとで開発されましたが、現在は<a href="https://openssf.org/"
         >Open Source Security Foundation (OpenSSF)</a> <a href="https://github.com/ossf/wg-best-practices-os-developers">
         Best Practices Working Group (WG)</a>に属しています。
       p3_html: >-

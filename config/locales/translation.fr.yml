@@ -694,7 +694,7 @@ fr:
   user_mailer:
     account_activation:
       before_html: |-
-        <h1>Programme de badge des Meilleures Pratiques de lq OpenSSF</h1>
+        <h1>Programme de badge des Meilleures Pratiques de la OpenSSF</h1>
         <p>Bonjour,</p>
         <p>
         Bienvenue dans le programme de badge !
@@ -829,8 +829,8 @@ fr:
     in_markdown_add: 'En markdown, vous pouvez ajouter ceci :'
     in_html_add: 'En HTML, vous pouvez ajouter ceci :'
     ending: >-
-      --- David A. Wheeler, Directeur Technique du programme OpenSSF
-      Best Practices Badge
+      --- David A. Wheeler, Directeur du programme de badge des
+      meilleures pratiques de la OpenSSF
     subject_achieved_passing: >-
       FÉLICITATIONS pour l'obtention d'un badge %{new_level} des
       meilleures pratiques !

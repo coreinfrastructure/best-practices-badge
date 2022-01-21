@@ -6,27 +6,4 @@
 
 module ApplicationHelper
   include Pagy::Frontend
-
-  # Approach from https://blog.cloud66.com/using-svgs-in-a-rails-stack/
-  # "Using SVGs in a Rails Stack" by
-  # Khash SajadiKhash Sajadi 09 MARCH 2021
-  def embedded_svg(filename, options = {})
-    assets = Rails.application.assets
-    asset = assets.find_asset(filename)
-
-    if asset
-      file = asset.source.force_encoding('UTF-8')
-      doc = Nokogiri::HTML::DocumentFragment.parse file
-      svg = doc.at_css 'svg'
-      svg['class'] = options[:class] if options[:class].present?
-    else
-      doc = "<!-- SVG #{filename} not found -->"
-    end
-
-    # This call to "raw" is safe, because doc is always from a trusted
-    # local data source (the contents of the asset found using the filename).
-    # rubocop:disable Rails/OutputSafety
-    raw doc
-    # rubocop:enable Rails/OutputSafety
-  end
 end

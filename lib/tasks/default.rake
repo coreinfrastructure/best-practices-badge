@@ -178,7 +178,7 @@ task :load_self_json do
   require 'open-uri'
   require 'json'
   url = 'https://master.bestpractices.coreinfrastructure.org/projects/1.json'
-  contents = URI.open(url).read
+  contents = URI.parse(url).open.read
   pretty_contents = JSON.pretty_generate(JSON.parse(contents))
   File.write('doc/self.json', pretty_contents)
 end

@@ -31,7 +31,7 @@ class Evidence
   def get(url)
     unless @cached_data.key?(url)
       begin
-        URI.open(url, 'rb') do |file|
+        URI.parse(url).open('rb') do |file|
           @cached_data[url] = { meta: file.meta, body: file.read(MAXREAD) }
         end
       rescue

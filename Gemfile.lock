@@ -84,7 +84,7 @@ GEM
       railties (>= 3.1)
     bootstrap_form (2.7.0)
     builder (3.2.4)
-    bullet (6.1.5)
+    bullet (7.0.1)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
     bundler-audit (0.9.0.1)
@@ -169,7 +169,7 @@ GEM
     httparty (0.20.0)
       mime-types (~> 3.0)
       multi_xml (>= 0.5.2)
-    i18n (1.8.11)
+    i18n (1.9.1)
       concurrent-ruby (~> 1.0)
     imagesLoaded_rails (4.1.0)
       railties (>= 3.1)
@@ -469,7 +469,7 @@ GEM
     xpath (3.2.0)
       nokogiri (~> 1.8)
     yaml-lint (0.0.10)
-    zeitwerk (2.5.1)
+    zeitwerk (2.5.4)
 
 PLATFORMS
   ruby
@@ -490,7 +490,7 @@ DEPENDENCIES
   bootstrap-sass (= 3.4.1)
   bootstrap-social-rails (= 4.12.0)
   bootstrap_form (= 2.7.0)
-  bullet (= 6.1.5)
+  bullet (= 7.0.1)
   bundler
   bundler-audit (= 0.9.0.1)
   capybara-slow_finder_errors (= 0.1.5)

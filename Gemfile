@@ -94,7 +94,7 @@ gem 'uglifier', '4.2.0', require: false # Minify JavaScript
 
 group :development, :test do
   gem 'awesome_print', '1.9.2' # Pretty print Ruby objects
-  gem 'bullet', '6.1.5' # Avoid n+1 queries
+  gem 'bullet', '7.0.1' # Avoid n+1 queries
   gem 'bundler-audit', '0.9.0.1'
   gem 'dotenv-rails', '2.7.6'
   gem 'eslintrb', '2.1.0'
@@ -136,7 +136,7 @@ group :development do
   # only *parts* of Rails is fine:
   gem 'rails', '6.1.4.4' # Rails (our web framework)
   gem 'translation', '1.23' # translation.io - translation service
-  gem 'web-console', '4.1.0' # In-browser debugger; use <% console %> or console
+  gem 'web-console', '4.2.0' # In-browser debugger; use <% console %> or console
 end
 
 group :test do

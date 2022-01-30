@@ -1046,7 +1046,7 @@ ru:
           Открытого ПО</a> (<a href="https://opensource.org/osd-annotated">официальный
           текст на англ.</a>) или <a href="https://www.gnu.org/philosophy/free-sw.ru.html">Определению
           Свободного Программного Обеспечения</a>. Примеры таких
-          лицензий включают <a href="http://creativecommons.org/publicdomain/zero/1.0/">CC0</a>,
+          лицензий включают <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>,
           <a href="https://opensource.org/licenses/MIT">MIT</a>,
           <a href="https://opensource.org/licenses/BSD-2-Clause">BSD
           2-Clause</a>, <a href="https://opensource.org/licenses/BSD-3-Clause">BSD
@@ -1561,9 +1561,17 @@ ru:
           SQL-кода (injection), внедрение на уровне ОС, классическое
           переполнение буфера, межсайтовый скриптинг, отсутствие
           проверки подлинности и отсутствие авторизации. Обычно
-          используемые списки уязвимостей можно найти в <a href="http://cwe.mitre.org/top25/">CWE/SANS
+          используемые списки уязвимостей можно найти в <a href="https://cwe.mitre.org/top25/">CWE/SANS
           top 25</a> или <a href="https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project">OWASP
-          Top 10</a>.
+          Top 10</a>. Есть много книг и обучающих курсов, помогающих
+          понять, как разрабатывается безопасное программное обеспечение,
+          и обсуждающих типичные ошибки в реализации, ведущие
+          к уязвимостям. К примеру, <a href="https://openssf.org/edx-courses/">Secure
+          Software Development Fundamentals</a> - это набор из
+          трех курсов, объясняющих, как сделать разрабатываемое
+          ПО более безопасным (бесплатный для прослушивания; за
+          дополнительную плату вы можете получить справку о том,
+          что прошли его).
       crypto_published:
         description: >-
           Программное обеспечение, созданное проектом, ОБЯЗАНО
@@ -1878,7 +1886,9 @@ ru:
         description: >-
           ЖЕЛАТЕЛЬНО включать в ПО, создаваемое проектом, достаточно
           много утверждений (assertions) времени выполнения, проверяемых
-          при динамическом анализе.
+          при динамическом анализе. Во многих случаях эти утверждения
+          <i>не</i> должны попадать в сборки под эксплуатацию
+          (production).
         details:
       dynamic_analysis_fixed:
         description: >-

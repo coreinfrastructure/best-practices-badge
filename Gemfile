@@ -41,7 +41,7 @@ gem 'font-awesome-rails', '4.7.0.7'
 gem 'http_accept_language', '2.1.1' # Determine user's preferred locale
 gem 'httparty', '0.20.0' # HTTP convenience. rake fix_use_gravatar
 gem 'imagesLoaded_rails', '4.1.0' # JavaScript - enable wait for image load
-gem 'jbuilder', '2.11.3' # Template mechanism for JSON format results
+gem 'jbuilder', '2.11.5' # Template mechanism for JSON format results
 gem 'jquery-rails', '4.4.0' # JavaScript jQuery library (for Rails)
 gem 'jquery-ui-rails', '6.0.1' # JavaScript jQueryUI library (for Rails)
 gem 'lograge', '0.11.2' # Simplify logs
@@ -89,7 +89,7 @@ gem 'secure_headers', '6.3.3' # Add hardening measures to HTTP headers
 # The gem sprockets-rails version 3.4.1 (from 3.2.2) caused a regression
 # in deployment (icons no longer displayed) that does NOT occur locally.
 # WARNING!!!!
-gem 'sprockets-rails', '3.2.2' # Rails. Asset precompilation
+gem 'sprockets-rails', '3.4.2' # Rails. Asset precompilation
 gem 'uglifier', '4.2.0', require: false # Minify JavaScript
 
 group :development, :test do
@@ -113,7 +113,7 @@ group :development, :test do
   gem 'rubocop-performance', '1.10.2', require: false # Performance cops
   gem 'rubocop-rails', '2.8.0', require: false # Rails-specific cops
   gem 'ruby-graphviz', '1.2.5' # This is used for bundle viz
-  gem 'spring', '3.0.0' # Preloads app so console, rake, and tests run faster
+  gem 'spring', '4.0.0' # Preloads app so console, rake, and tests run faster
   # Do NOT upgrade to vcr 6.*, as that is not OSS:
   gem 'vcr', '5.0.0' # Record network responses for later test reuse
   gem 'yaml-lint', '0.0.10' # Check YAML file syntax

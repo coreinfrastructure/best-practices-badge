@@ -69,7 +69,7 @@ gem 'paleta', '0.3.0' # Color manipulation, used for badges
 gem 'paper_trail', '12.1.0' # Record previous versions of project data
 gem 'pg', '1.2.3' # PostgreSQL database, used for data storage
 gem 'pg_search', '2.3.5' # PostgreSQL full-text search
-gem 'puma', '5.5.2' # Faster webserver; recommended by Heroku
+gem 'puma', '5.6.1' # Faster webserver; recommended by Heroku
 gem 'puma_worker_killer', '0.3.1' # Band-aid: Restart to limit memory use
 gem 'rack-attack', '6.5.0' # Implement rate limiting
 gem 'rack-cors', '1.1.1' # Enable CORS so JavaScript clients can get JSON
@@ -113,7 +113,7 @@ group :development, :test do
   gem 'rubocop-performance', '1.10.2', require: false # Performance cops
   gem 'rubocop-rails', '2.8.0', require: false # Rails-specific cops
   gem 'ruby-graphviz', '1.2.5' # This is used for bundle viz
-  gem 'spring', '3.0.0' # Preloads app so console, rake, and tests run faster
+  gem 'spring', '4.0.0' # Preloads app so console, rake, and tests run faster
   # Do NOT upgrade to vcr 6.*, as that is not OSS:
   gem 'vcr', '5.0.0' # Record network responses for later test reuse
   gem 'yaml-lint', '0.0.10' # Check YAML file syntax

@@ -41,7 +41,7 @@ gem 'font-awesome-rails', '4.7.0.7'
 gem 'http_accept_language', '2.1.1' # Determine user's preferred locale
 gem 'httparty', '0.20.0' # HTTP convenience. rake fix_use_gravatar
 gem 'imagesLoaded_rails', '4.1.0' # JavaScript - enable wait for image load
-gem 'jbuilder', '2.11.3' # Template mechanism for JSON format results
+gem 'jbuilder', '2.11.5' # Template mechanism for JSON format results
 gem 'jquery-rails', '4.4.0' # JavaScript jQuery library (for Rails)
 gem 'jquery-ui-rails', '6.0.1' # JavaScript jQueryUI library (for Rails)
 gem 'lograge', '0.11.2' # Simplify logs
@@ -136,7 +136,7 @@ group :development do
   # only *parts* of Rails is fine:
   gem 'rails', '6.1.4.4' # Rails (our web framework)
   gem 'translation', '1.23' # translation.io - translation service
-  gem 'web-console', '4.1.0' # In-browser debugger; use <% console %> or console
+  gem 'web-console', '4.2.0' # In-browser debugger; use <% console %> or console
 end
 
 group :test do

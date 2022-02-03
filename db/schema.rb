@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_30_015708) do
+ActiveRecord::Schema.define(version: 2022_02_03_172721) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
@@ -422,6 +422,8 @@ ActiveRecord::Schema.define(version: 2021_03_30_015708) do
     t.string "email_bidx"
     t.boolean "use_gravatar", default: false, null: false
     t.datetime "can_login_starting_at"
+    t.boolean "blocked", default: false, null: false
+    t.text "blocked_rationale"
     t.index ["email_bidx"], name: "email_local_unique_bidx", unique: true, where: "((provider)::text = 'local'::text)"
     t.index ["email_bidx"], name: "index_users_on_email_bidx"
     t.index ["last_login_at"], name: "index_users_on_last_login_at"

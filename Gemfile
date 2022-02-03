@@ -64,7 +64,7 @@ gem 'omniauth-github', '1.4.0' # Authentication to GitHub (get project info)
 # all testing, and over time we've become more comfortable that this is
 # the "standard way to resolve this issue".
 gem 'omniauth-rails_csrf_protection', '0.1.2' # Counter CVE-2015-9284
-gem 'pagy', '5.9.1' # Paginate some views
+gem 'pagy', '5.10.1' # Paginate some views
 gem 'paleta', '0.3.0' # Color manipulation, used for badges
 gem 'paper_trail', '12.1.0' # Record previous versions of project data
 gem 'pg', '1.2.3' # PostgreSQL database, used for data storage
@@ -99,7 +99,7 @@ group :development, :test do
   gem 'dotenv-rails', '2.7.6'
   gem 'eslintrb', '2.1.0'
   gem 'json', '2.6.1'
-  gem 'license_finder', '6.0.0'
+  gem 'license_finder', '6.15.0'
   gem 'mdl', '0.11.0'
   # NOTE: If you update pronto you may need to update other pronto-* gems
   gem 'pronto', '0.11.0'

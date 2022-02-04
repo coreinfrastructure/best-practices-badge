@@ -54,8 +54,9 @@ module SessionsHelper
     )
   end
 
-  # Returns the user corresponding to the remember token cookie
-  # rubocop:disable Metrics/MethodLength
+  # Returns the user corresponding to the remember token cookie or session
+  # If the user is blocked, forcibly log them out, even if they're logged in.
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def current_user
     return if Rails.application.config.deny_login
 
@@ -71,8 +72,10 @@ module SessionsHelper
         @current_user = user
       end
     end
+    log_out if @current_user&.blocked
+    @current_user
   end
-  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   # Returns true if the user is logged in, false otherwise.
   def logged_in?

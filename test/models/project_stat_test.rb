@@ -27,7 +27,7 @@ class ProjectStatTest < ActiveSupport::TestCase
     assert_equal 0, @project_stat.updated_since_yesterday
     assert_equal '2015-03-01 12:00:00 UTC', @project_stat.created_at.to_s
     assert_equal '2015-03-01 12:00:00 UTC', @project_stat.updated_at.to_s
-    assert_equal 8, @project_stat.users
+    assert_equal 9, @project_stat.users
   end
 
   test 'count including fixtures' do

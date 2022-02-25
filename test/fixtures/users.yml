@@ -157,3 +157,18 @@ fr_user:
   preferred_locale: fr
   activated: true
   activated_at: <%= Time.zone.now %>
+
+# current_email = 'github-user@example.com'
+blocked_github_user:
+  name: Blocked GitHub The User
+  nickname: github-user-blocked
+  encrypted_email_iv: "G4fbeClWL3aFMY9I"
+  encrypted_email: "2r2jdqby3LxSC3Z/CB/H/ImFKgTeplS8IDY+qfw8Fi73KhLn8MYC\n"
+  # email_bidx: (%= User.generate_email_bidx('github-user@example.com').inspect %)
+  email_bidx: "ZjENXwF1sT4lGPhlXJMGGojv/NgxQvRgis647Pgotwg="
+  password_digest: <%= User.digest('password') %>
+  provider: github
+  preferred_locale: en
+  activated: true
+  activated_at: <%= Time.zone.now %>
+  blocked: true

@@ -26,8 +26,9 @@ jobs:
     permissions:
       # Give permissions so results can be stored. See:
       # https://github.com/actions/first-interaction/issues/10#issuecomment-1041402989
-      contents: write
-      pull-requests: write
+      # contents: write
+      # pull-requests: write
+      checks: write
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:

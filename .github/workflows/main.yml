@@ -12,13 +12,9 @@ permissions:
 # events but only for the master branch
 on:
   push:
-    branches:
-      - main
-      - harden-runner
+    branches: [ main ]
   pull_request:
-    branches:
-      - main
-      - harden-runner
+    branches: [ main ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:

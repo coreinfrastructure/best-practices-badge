@@ -12,9 +12,9 @@ permissions:
 # events but only for the master branch
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -22,6 +22,13 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+
+    permissions:
+      # Give permissions so results can be stored. See:
+      # https://github.com/actions/first-interaction/issues/10#issuecomment-1041402989
+      # contents: write
+      # pull-requests: write
+      checks: write
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:

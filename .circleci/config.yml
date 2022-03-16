@@ -173,6 +173,10 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Increase git verbosity when using ssh to simplify debugging
+          # Use 'ssh -vvv' instead of 'ssh -v' for extra verbosity
+          command: git config core.sshCommand 'ssh -v'
+      - run:
           # We don't pin these, as Heroku doesn't support pinning.
           # In any case, these aren't included in the final result, nor used
           # in the process of testing the final result... they're

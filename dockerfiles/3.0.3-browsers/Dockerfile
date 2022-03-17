@@ -8,15 +8,16 @@
 # https://medium.com/@tariq.m.islam/container-deployments-a-lesson-in-deterministic-ops-a4a467b14a03
 # You can get the hash value for a specific image by using "docker images"
 # and querying about REPOSITORY:TAG, for example:
-# docker images --no-trunc --quiet cimg/ruby:3.0.1-browsers
+# docker pull cimg/ruby:3.0.3-browsers
+# docker images --no-trunc --quiet cimg/ruby:3.0.3-browsers
 # will return:
 # sha256:8ce5c62bec9c78a46f7e40b39cd457523301eec8a1c525c92bd55d49e7930e80
 # For more about Docker pinning, see:
 # https://docs.docker.com/engine/reference/commandline/pull/#pull-an-image-by-digest-immutable-identifier
-# So instead of something like "FROM cimg/ruby:3.0.1-browsers", we do this:
+# So instead of something like "FROM cimg/ruby:3.0.3-browsers", we do this:
 
-# pin :3.0.1-browsers
-FROM cimg/ruby@sha256:bd1332a565fb33dff02b9b52c8a090bad284fc39e348c5e26e24b83acd405689
+# pin :3.0.3-browsers
+FROM cimg/ruby@sha256:a900ba3c4c9d2bcfeb333d59135cd85f8d4aab0a6a89273fa5ab796450e3cf07
 
 # skip installing gem documentation
 # We need "cmake" to build the C code required by some gems.

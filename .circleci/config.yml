@@ -194,7 +194,7 @@ jobs:
             # https://devcenter.heroku.com/articles/authentication
             echo 'Set up .netrc so git push will work'
             printf 'machine git.heroku.com\n  login %s\n  password %s\n' \
-              'bestpractices@linuxfoundation.org' "$HEROKU_API_KEY"
+              'bestpractices@linuxfoundation.org' "$HEROKU_API_KEY" > ~/.netrc
             echo "Set git remote heroku for $HEROKU_APP"
             heroku git:remote -a "$HEROKU_APP"
             git remote get-url heroku

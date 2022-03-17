@@ -189,12 +189,12 @@ jobs:
             export PATH="$PATH:$(pwd)/heroku/bin"
             export HEROKU_APP="$CIRCLE_BRANCH"-bestpractices
             if [ "$HEROKU_APP" = 'main-bestpractices' ] ; then export HEROKU_APP='master-bestpractices'; fi
-            # Login to Heroku (updates file .netrc using HEROKU_API_KEY)
-            # We must do this so "git push heroku ..." will work later.
+            # Set file .netrc so "git push heroku ..." will work later.
             # Heroku uses HEROKU_API_KEY, but git only knows about ~/.netrc.
             # https://devcenter.heroku.com/articles/authentication
-            echo 'heroku login'
-            heroku login
+            echo 'Set up .netrc so git push will work'
+            printf 'machine git.heroku.com\n  login %s\n  password %s\n' \
+              'bestpractices@linuxfoundation.org' "$HEROKU_API_KEY"
             echo "Set git remote heroku for $HEROKU_APP"
             heroku git:remote -a "$HEROKU_APP"
             git remote get-url heroku

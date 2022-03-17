@@ -203,7 +203,10 @@ jobs:
             # Give production site a few seconds to complete ongoing work.
             [ "$HEROKU_APP" != 'production-bestpractices' ] || sleep 10
             echo "Deploying to $HEROKU_APP"
-            git push heroku "$CIRCLE_BRANCH:main"
+            # Switching from "master" here requires additional work, see:
+            # https://stackoverflow.com/questions/10451330/clean-git-repo-on-heroku
+            # https://stackoverflow.com/questions/36111040/error-message-after-successfully-pushing-to-heroku
+            GIT_CURL_VERBOSE=1 GIT_TRACE=1 git push heroku "$CIRCLE_BRANCH:master"
       - run:
             # This may no longer be necessary
             name: Setup Heroku

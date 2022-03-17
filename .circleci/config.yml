@@ -189,7 +189,7 @@ jobs:
             export PATH="$PATH:$(pwd)/heroku/bin"
             export HEROKU_APP="$CIRCLE_BRANCH"-bestpractices
             if [ "$HEROKU_APP" = 'main-bestpractices' ] ; then export HEROKU_APP='master-bestpractices'; fi
-            echo 'Set git remote 'heroku' for $HEROKU_APP"
+            echo "Set git remote heroku for $HEROKU_APP"
             heroku git:remote -a "$HEROKU_APP"
             git remote get-url heroku
             echo "Switching to maintenance mode in $HEROKU_APP"
@@ -198,9 +198,10 @@ jobs:
             [ "$HEROKU_APP" != 'production-bestpractices' ] || sleep 10
             echo "Deploying to $HEROKU_APP"
             git push heroku "$CIRCLE_BRANCH:main"
-      # - run:
-      #     name: Setup Heroku
-      #     command: bash .circleci/setup-heroku.sh
+      - run:
+            # This may no longer be necessary
+            name: Setup Heroku
+            command: bash .circleci/setup-heroku.sh
       - run:
           name: Migrate DB
           command: |

@@ -184,17 +184,17 @@ jobs:
             wget https://cli-assets.heroku.com/heroku-linux-x64.tar.gz
             tar xzf heroku-linux-x64.tar.gz
       - run:
-          # We must do this so "git push heroku ..." will work.
-          # Heroku uses HEROKU_API_KEY, but git only knows about ~/.netrc.
-          # https://devcenter.heroku.com/articles/authentication
-          name: Login to Heroku (updates file .netrc using HEROKU_API_KEY)
-          command: heroku login
-      - run:
           name: Deploy to Heroku
           command: |
             export PATH="$PATH:$(pwd)/heroku/bin"
             export HEROKU_APP="$CIRCLE_BRANCH"-bestpractices
             if [ "$HEROKU_APP" = 'main-bestpractices' ] ; then export HEROKU_APP='master-bestpractices'; fi
+            # Login to Heroku (updates file .netrc using HEROKU_API_KEY)
+            # We must do this so "git push heroku ..." will work later.
+            # Heroku uses HEROKU_API_KEY, but git only knows about ~/.netrc.
+            # https://devcenter.heroku.com/articles/authentication
+            echo 'heroku login'
+            heroku login
             echo "Set git remote heroku for $HEROKU_APP"
             heroku git:remote -a "$HEROKU_APP"
             git remote get-url heroku

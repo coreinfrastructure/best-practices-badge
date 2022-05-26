@@ -22,7 +22,7 @@ class TranslationsTest < ActiveSupport::TestCase
   ACCEPTABLE_TAGS =
     %w[h1 h2 h3 a strong em i b small tt ol ul li br p span div].freeze
   # Class can cause trouble, but we need it for glyphicons, etc.
-  ACCEPTABLE_ATTRS = %w[href name class target rel id].freeze
+  ACCEPTABLE_ATTRS = %w[href name class target rel id aria-hidden].freeze
 
   def sanitize_html(text)
     html_sanitizer = Rails::Html::WhiteListSanitizer.new

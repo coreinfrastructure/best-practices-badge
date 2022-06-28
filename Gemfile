@@ -135,7 +135,7 @@ group :development do
   # this also keeps some gems happy that don't realize that loading
   # only *parts* of Rails is fine:
   gem 'rails', '6.1.5.1' # Rails (our web framework)
-  gem 'translation', '1.23' # translation.io - translation service
+  gem 'translation', '1.32' # translation.io - translation service
   gem 'web-console', '4.2.0' # In-browser debugger; use <% console %> or console
 end
 

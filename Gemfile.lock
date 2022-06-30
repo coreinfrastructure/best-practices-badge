@@ -270,7 +270,7 @@ GEM
     pagy (5.10.1)
       activesupport
     paleta (0.3.0)
-    paper_trail (12.1.0)
+    paper_trail (12.3.0)
       activerecord (>= 5.2)
       request_store (~> 1.1)
     parallel (1.22.1)
@@ -529,7 +529,7 @@ DEPENDENCIES
   omniauth-rails_csrf_protection (= 0.1.2)
   pagy (= 5.10.1)
   paleta (= 0.3.0)
-  paper_trail (= 12.1.0)
+  paper_trail (= 12.3.0)
   pg (= 1.2.3)
   pg_search (= 2.3.5)
   pronto (= 0.11.0)

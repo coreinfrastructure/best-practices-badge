@@ -811,7 +811,6 @@ end
 # Search for & print matching email address.
 # Presumes we are in a Rails environment
 def real_search_email(email)
-  puts "Searching for email '#{email}'; matching ids and names are:"
   # Trivial email validation check. This isn't sophisticated, this is primarily
   # to prevent swapping the email & name fields when calling search_user.
   raise ArgumentError unless /.+@.+/.match?(email)
@@ -820,7 +819,6 @@ def real_search_email(email)
                 .select('id, name, encrypted_email, encrypted_email_iv')
                 .pluck(:id, :name)
   puts results
-  puts 'End of results.'
 end
 
 # Search for a given user email address.
@@ -829,20 +827,20 @@ task search_email: :environment do
   ARGV.shift # Drop rake task name
   ARGV.shift if ARGV[0] == '--' # Skip garbage
   email = ARGV[0]
+  puts "Searching for email '#{email}'; matching ids and names are:"
   real_search_email(email)
+  puts 'End of results.'
   exit(0) # Work around rake
 end
 
 # Search for & print matching name.
 # Presumes we are in a Rails environment
 def real_search_name(name)
-  puts "Searching for name '#{name}' ignoring case; matching ids and names are:"
   name_downcase = name.downcase
   results = User.where('lower(name) LIKE ?', "%#{name_downcase}%")
                 .select('id, name, encrypted_email, encrypted_email_iv')
                 .pluck(:id, :name)
   puts results
-  puts 'End of results.'
 end
 
 # Search for a given user name.
@@ -857,7 +855,9 @@ task search_name: :environment do
   ARGV.shift # Drop rake task name
   ARGV.shift if ARGV[0] == '--' # Skip garbage
   name = ARGV[0]
+  puts "Searching for name '#{name}' ignoring case; matching ids and names are:"
   real_search_name(name)
+  puts 'End of results.'
   exit(0) # Work around rake
 end
 

@@ -44,7 +44,7 @@ gem 'imagesLoaded_rails', '4.1.0' # JavaScript - enable wait for image load
 gem 'jbuilder', '2.11.5' # Template mechanism for JSON format results
 gem 'jquery-rails', '4.4.0' # JavaScript jQuery library (for Rails)
 gem 'jquery-ui-rails', '6.0.1' # JavaScript jQueryUI library (for Rails)
-gem 'lograge', '0.11.2' # Simplify logs
+gem 'lograge', '0.12.0' # Simplify logs
 gem 'mail', '2.7.1' # Ruby mail handler
 #
 gem 'octokit', '4.22.0' # GitHub's official Ruby API
@@ -94,7 +94,7 @@ gem 'uglifier', '4.2.0', require: false # Minify JavaScript
 
 group :development, :test do
   gem 'awesome_print', '1.9.2' # Pretty print Ruby objects
-  gem 'bullet', '7.0.1' # Avoid n+1 queries
+  gem 'bullet', '7.0.2' # Avoid n+1 queries
   gem 'bundler-audit', '0.9.1'
   gem 'dotenv-rails', '2.7.6'
   gem 'eslintrb', '2.1.0'

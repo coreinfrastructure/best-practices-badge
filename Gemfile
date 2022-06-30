@@ -66,7 +66,7 @@ gem 'omniauth-github', '1.4.0' # Authentication to GitHub (get project info)
 gem 'omniauth-rails_csrf_protection', '0.1.2' # Counter CVE-2015-9284
 gem 'pagy', '5.10.1' # Paginate some views
 gem 'paleta', '0.3.0' # Color manipulation, used for badges
-gem 'paper_trail', '12.1.0' # Record previous versions of project data
+gem 'paper_trail', '12.3.0' # Record previous versions of project data
 gem 'pg', '1.2.3' # PostgreSQL database, used for data storage
 gem 'pg_search', '2.3.5' # PostgreSQL full-text search
 gem 'puma', '5.6.4' # Faster webserver; recommended by Heroku
@@ -135,7 +135,7 @@ group :development do
   # this also keeps some gems happy that don't realize that loading
   # only *parts* of Rails is fine:
   gem 'rails', '6.1.5.1' # Rails (our web framework)
-  gem 'translation', '1.23' # translation.io - translation service
+  gem 'translation', '1.32' # translation.io - translation service
   gem 'web-console', '4.2.0' # In-browser debugger; use <% console %> or console
 end
 

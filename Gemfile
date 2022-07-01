@@ -67,7 +67,7 @@ gem 'omniauth-rails_csrf_protection', '0.1.2' # Counter CVE-2015-9284
 gem 'pagy', '5.10.1' # Paginate some views
 gem 'paleta', '0.3.0' # Color manipulation, used for badges
 gem 'paper_trail', '12.3.0' # Record previous versions of project data
-gem 'pg', '1.2.3' # PostgreSQL database, used for data storage
+gem 'pg', '1.4.1' # PostgreSQL database, used for data storage
 gem 'pg_search', '2.3.5' # PostgreSQL full-text search
 gem 'puma', '5.6.4' # Faster webserver; recommended by Heroku
 gem 'puma_worker_killer', '0.3.1' # Band-aid: Restart to limit memory use

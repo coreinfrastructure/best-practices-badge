@@ -868,9 +868,10 @@ task search_user: :environment do
   ARGV.shift if ARGV[0] == '--' # Skip garbage
   name = ARGV[0]
   email = ARGV[1]
+  puts "Searching for name '#{name}', email #{email} (ignoring case for both)"
   real_search_name(name)
-  puts
   real_search_email(email)
+  puts 'Done.'
   exit(0) # Work around rake
 end
 

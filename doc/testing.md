@@ -214,6 +214,28 @@ If you didn't previously run `./install-badge-dev-env`, install phantomjs with `
 
 When debugging tests (or code!), it is very helpful to insert `binding.pry` where results are confusing. This will open the pry byebug debugger and allow you to access local variables in a REPL. `c` continues execution.
 
+## Fixing pushes to heroku
+
+It's unfortunately possible for the git repo on heroku to get its
+state mildly corrupted. You'll see these errors in the deploy step
+while it fails:
+
+~~~~
+    remote: Verifying deploy... done.
+    fatal: protocol error: bad line length character: fata
+    error: error in sideband demultiplexer
+~~~~
+
+You can re-run the deploy step, but that's absurd.
+You can solve this by cleaning out its repo:
+
+~~~~sh
+    heroku plugins:install heroku-repo
+    heroku repo:reset -a <app-name>
+~~~~
+
+Then redeploy (e.g., by going to Heroku and forcibly rerunning a deploy step).
+
 ## See also
 
 Project participation and interface:

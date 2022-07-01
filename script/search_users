@@ -1,0 +1,27 @@
+#!/bin/bash
+# search_users:
+# Search for users by name & email address, to simplify GDPR compliance
+# when users ask to have their accounts deleted.
+# Reads from standard input a tab-separated .tsv file;
+# the first row is skipped (presumably this has headers), in the rest
+# of the rows the first column is name & second column is email address.
+
+# USAGE:
+# ./search_users < gdpr_list.tsv
+
+# To use this, get list from spreadsheet, save as tab-separated file,
+# transfer to VM, run this as "./search_users < foo.tsv"
+
+# Skip first row (headers)
+read headers
+
+# We are reading a tab-separated file
+IFS="$(printf '\t')"
+
+while read -r name email
+do
+  # Must redirect stdin; otherwise "heroku run" will consume stdin.
+  heroku run --app production-bestpractices \
+    rake search_user -- "$name" "$email" < /dev/null
+  echo
+done

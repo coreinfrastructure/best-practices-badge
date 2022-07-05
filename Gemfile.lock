@@ -72,8 +72,8 @@ GEM
     awesome_print (1.9.2)
     bcrypt (3.1.16)
     bindex (0.8.1)
-    blind_index (2.2.0)
-      activesupport (>= 5)
+    blind_index (2.3.0)
+      activesupport (>= 5.2)
       argon2-kdf (>= 0.1.1)
     bootsnap (1.12.0)
       msgpack (~> 1.2)
@@ -224,7 +224,7 @@ GEM
     mime-types-data (3.2022.0105)
     mini_mime (1.1.2)
     mini_portile2 (2.8.0)
-    minitest (5.16.1)
+    minitest (5.16.2)
     minitest-reporters (1.5.0)
       ansi
       builder
@@ -497,7 +497,7 @@ DEPENDENCIES
   attr_encrypted (= 3.1.0)
   awesome_print (= 1.9.2)
   bcrypt (= 3.1.16)
-  blind_index (= 2.2.0)
+  blind_index (= 2.3.0)
   bootsnap (= 1.12.0)
   bootstrap-sass (= 3.4.1)
   bootstrap-social-rails (= 4.12.0)

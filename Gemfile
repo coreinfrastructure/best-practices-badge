@@ -126,7 +126,7 @@ group :fake_production, :development, :test do
 end
 
 group :development do
-  gem 'bootsnap', '1.10.2' # Speed up boot via caches
+  gem 'bootsnap', '1.12.0' # Speed up boot via caches
   # gem 'fasterer', '0.3.2' # Provide speed recommendations - run 'fasterer'
   # Waiting for Ruby 2.4 support:
   # https://github.com/seattlerb/ruby_parser/issues/239

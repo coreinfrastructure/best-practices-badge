@@ -20,7 +20,8 @@ for how to submit a vulnerability report.
 For more technical information on the implementation, see
 [implementation.md](implementation.md).
 
-You can see a video summarizing this assurance case (as of September 2017),
+You can see a video summarizing an older version of
+this assurance case (as of September 2017),
 along with some more general information about developing secure software:
 ["How to Develop Secure Applications: The BadgeApp Example" by David A. Wheeler, 2017-09-18](https://www.youtube.com/watch?v=5a5D4d6hcEY).
 For more information on developing secure software, see
@@ -35,16 +36,21 @@ The following figures summarize why we think this application
 is adequately secure (more detail is provided in the rest of this document):
 The figures are simply a summary; the text below provides the details.
 
+![Assurance case summary](./assurance-case-toplevel-sacm.svg)
 ![Assurance case summary](./assurance-case.png)
 ![Assurance case in lifecycle](./assurance-case-lifecycle.png)
 ![Assurance case in implementation](./assurance-case-implementation.png)
 ![Assurance case in other processes](./assurance-case-other-lifecycle.png)
 
-These figures are in Claims, Arguments and Evidence (CAE) notation,
+Some of these figures (especially the top ones) are in SACM notation.
+Currently some (older) figures are in
+Claims, Arguments and Evidence (CAE) notation,
 which is a simple notation often used for assurance cases.
+In CAE notation,
 Ovals are claims or sub-claims, while rounded rectangles are the supporting
 arguments justifying the claims.
 Evidence, where shown, are in rectangles.
+We are working to eventually move from CAE to SACM notation.
 We do not show most evidence in the figures, but provide the evidence in
 the supporting text below instead, because large figures are time-consuming
 to edit and for our purposes providing most evidence only in the supporting
@@ -81,6 +87,8 @@ certainly do have these processes.
 However, as with almost all real software development projects,
 we perform these processes in parallel, iterating and
 feeding back as appropriate.
+Trying to make decisions without feedback is extremely dangerous, e.g., see
+[How Our Physics Envy Results In False Confidence In Our Organizations](https://www.younglingfeynman.com/essays/physicsenvy).
 Each process is (notionally) run in parallel;
 each receives inputs and produces outputs.
 
@@ -151,8 +159,114 @@ We conclude with a short discussion of residual risks,
 describe the vulnerability report handling process, and make
 a final appeal to report to us if you find a vulnerability.
 
+In this assurance case we typically point to source code or tests as
+evidence, and not the results of the tests themselves. We do not
+ship to production unless tests pass, so there is usually no reason to
+see the test results unless a test fails.
+That said, the test results for the master branch
+are available if desired at:
+https://app.circleci.com/pipelines/github/coreinfrastructure/best-practices-badge?branch=master
+
 (Note to editors: to edit the figures above, edit the .odg file, then
 export to .png so that it can viewed on GitHub.)
+
+## Structured Assurance Case Metamodel (SACM) Graphical Notation
+
+This assurance case uses a subset of the
+[Object Management Group (OMG) Structured Assurance Case Metamodel (SACM)](Structured Assurance Case Metamodel (SACM))
+graphical notation.
+The OMG specification, which is publicly available, defines SACM in detail.
+In this section we'll explain the subset of SACM
+graphical notation and conventions that we use.
+
+Assurance cases typically use one of three graphical notations:
+[Claims- Arguments- Evidence (CAE) notation](https://www.adelard.com/asce/choosing-asce/cae.html),
+Goal Structuring Notation (GSN), or the SACM graphical notation.
+The original BadgeApp assurance case used the
+CAE notation because it is simple and the SACM graphical notation did not exist.
+However, the SACM specification version 2.1 added in 2020
+a graphical notation that has many advantages, so we have switched to SACM.
+Later in this document we'll discuss the advantages of SACM.
+
+### Explanation of SACM Notation Subset
+
+Here is the subset of the SACM graphical notation that we use:
+
+1. *Claim*.
+   A claim is a statement that can be either true or false (not both).
+   A claim is represented as a rectangle (we fill them with light blue 3),
+   A claim that supports another claim is also called a subclaim.
+   It is equivalent to the CAE Claim and GSN Goal.
+2. *ArtifactReference*, which is used for  *evidence*.
+   An ArtifactReference refers to some artifact (such as a piece of information),
+   and is represented as a shadowed rectangle.
+   When an ArtifactReference is used to support a claim,
+   which is the only way we use them, they're also called evidence.
+   The official SACM graphical notation includes an angled arrow in its icon,
+   but our tools don't easily support that.
+   As we use them this is equivalent to the CAE Evidence and GSN Solution.
+3. *ArgumentReasoning* aka *argument*.
+   An argument explains why the supporting claims and evidence justify
+   the claim.
+   It is represented as a half-open rectangle
+   (we fill them with light magenta 4).
+4. *AssertedInference* and *AssertedEvidence*, aka kinds of *relationships*.
+   SACM terminology is that an AssertedInference shows that a claim supports
+   another claim, and an AssertedEvidence shows that an ArtifactReference
+   (evidence) supports a claim.
+   But they have the same graphical representation, and
+   we'll just call both relationships.
+   They are shown as directed lines with a bigdot
+   and an arrowhead pointing to the claim(s) or relationship being justified.
+   SACM relationships (AssertRelationships) can do more,
+   but we do not use the other forms.
+5. *ArgumentPackage* aka *package*.
+   An argument package is a grouping of argumention elements.
+   This lets us break the information into multiple pages.
+   We show this as a scroll; the official SACM graphical symbol is complicated
+   and not supported by our drawing tool.
+   It is equivalent to the GSN Module.
+6. *asCited Claim*.
+   An asCited Claim is a claim expanded elsewhere, that is, a cross-reference.
+   Its description text shows its containing package, followed by the
+   claim id in square brackets.
+   This is represented as a bracketed rectangle.
+
+![SACM notation summary](./sacm.svg)
+
+The text shows an ID and colon (in bold), followed by whitespace and
+its description.
+
+The SACM graphical notation includes many other features (such as
+contexts and other kinds of relationships) that we don't use.
+In SACM these elements can have "notes" attached to them; the equivalent
+to notes is the text in this document.
+The notes may refer to added evidence and/or arguments.
+We don't use many other constructs, such as SACM contexts.
+The paper
+"A Visual Notation for the Representation of Assurance Cases using SACM"
+(2020) provides more information, but unfortunately that paper
+is not publicly available.
+
+In the rest of this document we will often use the term "argument"
+for SACM’s ArgumentReasoning, and "evidence" for ArtifactReference,
+because these are simpler terms.
+
+### Conventions
+
+Here are some conventions we use:
+
+* Our convention is that the argument description completes the phrase
+  "The claim is justified by these subclaims/evidence because (TEXT)".
+* Where possible, the first or second word in the description
+  is distinctive.  That makes it easier to see what is most important.
+  We try to put phrases like "is secure" or "is countered" last;
+  those aren't distinctive, since many
+  claims are about security or about countering something.
+* We structure this as primarily claims and subordinate subclaims,
+  instead of as arguments and subordinate arguments, per 2020 feedback from
+  MITRE. This is an improvement; since claims are each true/false statements,
+  the relationship between them is usually much clearer doing it this way.
 
 ## Security Requirements
 
@@ -190,7 +304,10 @@ First, the basics.
 We work hard to comply with the
 EU General Data Protection Regulation (GDPR), which has many requirements
 related to privacy.
-We have a separate document that details how we comply with the GDPR.
+We have a separate document that details how we
+implement privacy in the CII Best Practices Badge site and comply with
+the GDPR:
+[Privacy in the CII Best Practices site, focusing on the GDPR](https://docs.google.com/document/d/1qarSkCJacjoMeu1k6p5JQXvPt-0xUqzKy3OW8zmGvpg).
 As discussed later, non-public data is kept confidential
 both at rest and in motion
 (in particular, email addresses are protected).
@@ -453,6 +570,9 @@ The system does not have the unencrypted `remember_token` for any
 given user (only its bcrypted form), so the system cannot later reveal the
 `remember_token` to anyone else.
 
+In file `test/integration/users_login_test.rb` we verify that the
+password is not stored as cleartext in the user cookie.
+
 #### Email addresses
 
 Email addresses are only revealed to the owner of the email address and to
@@ -489,9 +609,15 @@ Here are the only ways that user email addresses can be revealed
 - The only *normal* way to display user email addresses is to invoke
   a view of a user or a list of users.  However, these invoke
   user views defined in `app/views/users/`, and all of these views only
-  display a user email address if the current user is the user being displayed
+  provide a user email address if the current user is the user
+  being displayed
   or the current user is an administrator.  This is true for views in both
   HTML and JSON formats.
+  In addition, while we directly display the email address when local users
+  are editing it (we must, so that users can change it), when user
+  records are shown (not edited) the email address is only available via
+  a hypertext link, and not directly displayed on the screen, to reduce
+  the risk of revealing an email address while using sharing a screen.
   The following automated tests verify that email addresses
   are not provided without authorization:
     - `should NOT show email address when not logged in`
@@ -1555,7 +1681,8 @@ list the additional items added since 2013.
    repositories), instead, various Ruby APIs acquire and process it directly.
 2. Broken Authentication and Session Management.
    Sessions are created and destroyed through a common
-   Rails mechanism, including an encrypted and signed cookie session key.
+   Rails mechanism, including an encrypted and signed cookie authentication
+   value.
 3. Cross-Site Scripting (XSS).
    We use Rails' built-in XSS
    countermeasures, in particular, its "safe" HTML mechanisms such
@@ -1689,10 +1816,10 @@ We take a number of steps to counter misconfiguration.
 We have strived to enable secure defaults from the start.
 We use a number of [external online checkers](#online-checkers)
 to detect common HTTPS misconfiguration problems (see below).
-We use brakeman, which can detect
+We use Brakeman, which can detect
 some misconfigurations in Rails applications.
-Brakeman is invoked by the default 'rake' task,
-and our continuous integration task reruns brakeman.
+We invoke a static analysis tool (Brakeman) as part of
+our continuous integration pipeline.
 
 However, our primary mechanism for countering misconfigurations is by
 identifying and apply ing the most-relevant security guide available.
@@ -1807,7 +1934,7 @@ as of 2015-12-14:
    but this is not depended on).
    Ruby's regular expression (regex) language oddly interprets "^" and "$",
    which can lead to defects (you're supposed to use \A and \Z instead).
-   However, Ruby's format validator and the "brakeman" tool both detect
+   However, Ruby's format validator and the "Brakeman" tool both detect
    this common mistake with regexes, so this should be unlikely.
    Since the project data is public, manipulating the 'id' cannot reveal
    private public data.  We don't consider the list of valid users
@@ -2124,7 +2251,7 @@ debugging problems if you weren't expecting that.
 
 Note that `attr_encrypted` depends on the gem `encryptor`.
 Encryptor version 2.0.0 had a
-[major security bug when using AES-*-GCM algorithms](https://github.com/attr-encrypted/encryptor/pull/22).
+[major security bug when using AES-\*-GCM algorithms](https://github.com/attr-encrypted/encryptor/pull/22).
 We do not use that version, but instead use
 a newer version that does not have that vulnerability.
 Some old documentation recommends using
@@ -2397,7 +2524,7 @@ and how it helps make the software more secure:
   This is one of many kinds of "static analysis" tools, that is, a tool
   that doesn't run the code (and thus is not limited to examining only the
   cases of specific inputs).
-  We use brakeman, a source code weakness analyzer that focuses
+  We use Brakeman, a source code weakness analyzer that focuses
   on finding security issues in Ruby on Rails applications.
   Note that this is separate from the automatic detection of
   third-party components with publicly-known vulnerabilities;
@@ -3116,6 +3243,134 @@ Once the fix is in the final production system, credit will be
 publicly given to the vulnerability reporter (unless the reporter
 requested otherwise).
 
+## Why are we using SACM graphical notation?
+
+Historically we used
+[Claims- Arguments- Evidence (CAE) notation](https://www.adelard.com/asce/choosing-asce/cae.html),
+CAE notation is wonderfully simple:
+Claims (including subclaims) are ovals,
+arguments are rounded rectangles, and evidence (references) are rectangles.
+The GSN alternative was too complex (it uses many more symbols) and confusing
+to non-experts (e.g., it uses terms like "Strategy" for an argument).
+In addition, when we started the SACM graphical notation did not exist
+(it was not released until 2020).
+
+Historically the
+[Object Management Group (OMG) Structured Assurance Case Metamodel (SACM) specification](https://www.omg.org/spec/SACM/About-SACM/)
+specification has focused on defining a standard interchange
+format for assurance case data.
+[Mappings are available between other notations and the SACM data structures](https://www.adelard.com/asce/choosing-asce/standardisation.html),
+However, we currently aren’t trying to exchange with other systems.
+So while we didn't know of anything intrinsically wrong with SACM,
+historically the SACM specification wasn’t
+focused on solving any problems we’re trying to solve.
+In addition, we don’t know of any mature OSS tools that directly
+support the SACM data format.
+By policy, any tools we *depend* on must be OSS, and when we modify the
+code or configuration we must be able to update the assurance case.
+
+However, in 2020 version 2.1 of SACM added a new graphical notation.
+Claims (including subclaims) are rectangles, ArgumentReasoning (aka
+arguments) are open rectangles, ArtifactCitations (used for evidence)
+are shadowed rectangles, and a connection showing an AssertedRelationship
+use intermediate symbols such as "big dots".
+
+After comparing the notations, we have found that the SACM
+graphical notation has many advantages over CAE graphical notation:
+
+1. CAE Claim vs. SACM Claim. CAE uses ovals, while SACM uses
+   rectangles. SACM has a *BIG* win here: Rectangles use MUCH less
+   space, so complex diagrams are much easier to create & easier to
+   understand.
+2. CAE Argument vs. SACM ArgumentReasoning. CAE uses rounded
+   rectangles, while SACM uses a shape I’ll call an "open rectangle”.
+   CAE’s rounded rectangles are not very distinct from its evidence
+   rectangles, which is a minor negative for the CAE notation. SACM
+   initially presented some challenges when using our drawing tool
+   (LIbreOffice Draw), but I overcame them:
+  - SACM’s half-rectangle initially presented me with a problem:
+    that is *NOT* a built-in shape for the drawing tool I’m using
+    (LIbreOffice Draw). I suspect it’s not a built-in symbol in many
+    tools. I was able to work around this by creating a polygon (many
+    drawing tools support this, and this is a very easy polygon to
+    make). It took a little tweaking, but I managed to create a simple
+    polygon with embedded text. In the longer term, the SACM community
+    should work to get this easy icon into other drawing tools, to
+    simplify its use.
+  - SACM’s half-rectangle is VERY hard to visually distinguish
+    if both it & claims are filled with color. I use color fills
+    to help the eye notice type differences. My solution was simple:
+    color fill everything *except* the half-rectangle; this makes
+    them all visually distinct.
+3. CAE Evidence vs. SACM ArtifactReference.
+   In CAE this is a simple rectangle. In SACM this is a shadowed
+   rectangle with an arrow; the arrow is hard to add with simple
+   drawing tools, but the shadow is trivial to add with a “shadow”
+   property in LibreOffice (and many other drawing tools), and I
+   think just the shadow is adequate. The shadow adds slightly more
+   space (but MUCH less than ovals), and it takes a moment to draw
+   by hand, but I think that’s a reasonable trade-off to ensure
+   that they are visually distinct. In addition: I tend to record
+   evidence / ArtifactReferences in *only* text, not in the diagrams,
+   because diagrams are time-consuming to maintain. So making
+   *claims* simple to draw, and making evidence/ArtifactReferences
+   slightly more complex to draw, is exactly the right tradeoff.
+4. Visual distinctiveness. In *general* the CAE icons
+   for Claim/Argument/Evidence are not as visually distinct as
+   SACM’s Claim/ArgumentReasoning/ArtifactReference, especially
+   when they get shaped to the text contents. That’s an overall
+   advantage for the SACM graphical notation.
+5. SACM’s “bigdot”.
+   The bigdot, e.g., in AssertedInference, make the diagrams simpler
+   by making it easy to move an argument / ArgumentReasoning icon
+   away from the flow from supporting claims/evidence to a higher
+   claim. It also makes the arrows clearer (you merge flows earlier)
+   and that merging makes combinations easier to follow.
+   You could also informally do that with CAE, but it’s clearly a part of SACM.
+6. It has an asCited notation that a claim in one location is described
+   elsewhere, a rectangle in another (an asCited Claim). I've been using "See..."
+   as text instead.
+
+In our SACM diagrams we've sometimes omitted the bigdot when there is a
+single connection from one element to antoher.
+This is not strictly compliant.
+One advantage of using “bigdot” even in these
+cases would be that it would make it much easier to add
+an ArgumentReasoning later.
+However, adding the bigdot in those cases is nontrivial
+extra work when using our basic drawing tools (because we must draw
+the bigdot, two connectors, and connect them all up,
+instead of using a simple direct connection).
+
+We don't have an easy way to display SACM's ArgumentPackage and related
+symbols. We just use a "scroll" icon in that case to indicate
+each diagram package.
+
+At first it appeared that there was a problem with
+SACM’s ArgumentReasoning symbol, rectangle open on one side.
+While it’s easy to connect on the
+left/top/bottom, it’s somewhat unclear when trying to connect from
+its bare right-hand-side in its presented orientation
+(because the lines are not visibly connected to another symbol).
+My thanks to Scott Ankrum for pointing this out!
+This not an unusual problem; in data flow diagrams, the "data store"
+symbol is open on both the left and right edges
+(resulting in the same problem).
+One solution, without changing anything, is to prefer to put
+this icon on the right-hand-side of what it connects to.
+Another solution would have been to use another symbol, e.g., an
+an uneven pentagon (“pointer”) or callout symbol (with the little tail).
+However, the paper
+"A Visual Notation for the Representation of Assurance Cases using SACM"
+suggests a simpler solution was intended: horizontally flip the
+rectangle open on one side.
+
+## Future work
+
+["Evaluating and Mitigating Software Supply Chain Security Risks" by Ellison et al, May 2020](https://resources.sei.cmu.edu/asset_files/TechnicalNote/2010_004_001_15176.pdf) has an assurance case focusing on
+supply chain security risks, as well as other information.
+We intend to review it for future ideas.
+
 ## Your help is welcome!
 
 Security is hard; we welcome your help.
@@ -3123,6 +3378,8 @@ We welcome hardening in general, particularly pull requests
 that actually do the work of hardening.
 We thank many, including Reg Meeson, for reviewing and providing feedback
 on this assurance case.
+
+
 
 Please report potential vulnerabilities you find; see
 [CONTRIBUTING.md](../CONTRIBUTING.md) for how to submit a vulnerability report.

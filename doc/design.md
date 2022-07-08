@@ -43,29 +43,38 @@ The following figure shows a high-level design of the implementation:
 
 There are at least two ways to develop a web application:
 
-* a "traditional web application" where most user interactions (such
-  as form submission) involve loading an entirely new web page.
+* a server-side ("traditional") web application where most user interactions
+  (such as form submission) involve loading an entirely new web page.
 * a [single-page application (SPA)](https://en.wikipedia.org/wiki/Single-page_application)
   interacts with the user by dynamically rewriting the current page
   (instead of loading new pages from a server).
   SPAs typically provide a more fluid user experience, but also
-  incur a higher development and maintenance cost.
+  incur a higher development and maintenance cost, and requires that the
+  user have JavaScript enabled on the client.
 
-We intentionally developed this application as a traditional web application,
-not as an SPA, because development and maintenance cost was very important
-when the project started.
+We intentionally developed this application as a server-side web application,
+not as an SPA, because minimizing
+development and maintenance cost are very important to us.
+We have limited resources to manage this site.
 Indeed, the article
 [SPAs Are Just Harder, and Always Will Be](http://wgross.net/essays/spas-are-harder)
 argues that SPAs will *always* be harder to develop, even with
 frameworks to help.
+["Escaping the SPA rabbit hole with modern Rails" by Jorge Manrubia (2020-07-04)](https://medium.com/@jmanrubia/escaping-the-spa-rabbit-hole-with-turbolinks-903f942bf52c)
+also discusses the trade-offs between SPAs and traditional web applications
+built with Rails:
+"Modern Rails lets you build apps that are fast enough and feel great [and]
+For a vast variety of apps, Rails enables you to implement the same
+functionality with a fraction of the code and complexity."
 In addition, some security-conscious people disable JavaScript, and
 one of our requirements is that the application work in those cases
-(with some graceful degradation).
+(with some graceful degradation)... so we would still need to support
+the server-side application anyway.
 
 When the project started, our primary concerns were to determine the
 criteria, and try to get broad buy-in that those criteria were sensible.
 
-This approach can easily be revisited in the future, if it is decided
+This approach can be revisited in the future, if it is decided
 that the costs are worthwhile.
 
 ### Key components

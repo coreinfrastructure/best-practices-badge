@@ -36,25 +36,37 @@ The following figures summarize why we think this application
 is adequately secure (more detail is provided in the rest of this document):
 The figures are simply a summary; the text below provides the details.
 
+### Top level assurance case in SACM notation
+
+We are in the early stages of switching from
+Claims, Arguments, and Evidence (CAE) notation to the
+Structured Assurance Case Metamodel (SACM) graphical notation.
+We've converted the top level to SACM notation, and here it is:
+
 ![Assurance case summary](./assurance-case-toplevel-sacm.svg)
+
+### Assurance case in CAE notation
+
+Currently our full assurance case is recorded in CAE notation.
+Here is the assurance case summary in CAE notation:
+
 ![Assurance case summary](./assurance-case.png)
 ![Assurance case in lifecycle](./assurance-case-lifecycle.png)
 ![Assurance case in implementation](./assurance-case-implementation.png)
 ![Assurance case in other processes](./assurance-case-other-lifecycle.png)
 
-Some of these figures (especially the top ones) are in SACM notation.
-Currently some (older) figures are in
-Claims, Arguments and Evidence (CAE) notation,
-which is a simple notation often used for assurance cases.
+Claims, Arguments and Evidence (CAE) notation
+is a simple notation often used for assurance cases.
 In CAE notation,
 Ovals are claims or sub-claims, while rounded rectangles are the supporting
 arguments justifying the claims.
 Evidence, where shown, are in rectangles.
-We are working to eventually move from CAE to SACM notation.
 We do not show most evidence in the figures, but provide the evidence in
 the supporting text below instead, because large figures are time-consuming
 to edit and for our purposes providing most evidence only in the supporting
 test is adequate.
+
+### Overall approach
 
 Our overall security approach is called
 defense-in-breadth, that is, we consider
@@ -172,7 +184,7 @@ export to .png so that it can viewed on GitHub.)
 
 ## Structured Assurance Case Metamodel (SACM) Graphical Notation
 
-This assurance case uses a subset of the
+Some figures of this assurance case uses a subset of the
 [Object Management Group (OMG) Structured Assurance Case Metamodel (SACM)](Structured Assurance Case Metamodel (SACM))
 graphical notation.
 The OMG specification, which is publicly available, defines SACM in detail.

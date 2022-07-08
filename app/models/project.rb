@@ -519,6 +519,7 @@ class Project < ApplicationRecord
   def self.projects_first_in(level, target_month)
     # Defense-in-depth: ensure 'level' is a valid value.
     return unless LEVEL_ID_NUMBERS.member?(level)
+
     name = COMPLETED_BADGE_LEVELS[level] # level name, e.g. 'passing'
     # We could omit listing projects which have lost & regained their
     # badge by adding this line:

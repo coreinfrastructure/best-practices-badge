@@ -3391,8 +3391,6 @@ that actually do the work of hardening.
 We thank many, including Reg Meeson, for reviewing and providing feedback
 on this assurance case.
 
-
-
 Please report potential vulnerabilities you find; see
 [CONTRIBUTING.md](../CONTRIBUTING.md) for how to submit a vulnerability report.
 

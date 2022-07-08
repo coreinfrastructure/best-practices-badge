@@ -318,6 +318,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 0, AdditionalRight.where(project_id: @project.id).count
   end
 
+  # Negative test
   test 'cannot remove a user with only additional rights using "-"' do
     AdditionalRight.new(
       user_id: users(:test_user_melissa).id,
@@ -341,6 +342,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 2, AdditionalRight.where(project_id: @project.id).count
   end
 
+  # Negative test
   test 'should not get edit page as user without additional rights' do
     # This *expressly* tests that a normal logged-in
     # user cannot request the edit page of another project's data
@@ -417,6 +419,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal @project.name, new_name
   end
 
+  # Negative test
   test 'should fail to update project if not logged in' do
     # NOTE: no log_in_as
     old_name = @project.name
@@ -720,6 +723,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal num + 1, ActionMailer::Base.deliveries.size
   end
 
+  # Negative test
   test 'should not destroy project if logged in as different user' do
     log_in_as(@user2, password: 'password1')
     # Verify that we are actually logged in
@@ -730,6 +734,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  # Negative test
   test 'should not destroy project if not logged in' do
     # Notice that we do *not* call log_in_as.
     assert_no_difference('Project.count',

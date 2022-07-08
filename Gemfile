@@ -15,14 +15,14 @@ ruby File.read('.ruby-version').strip
 # sure to upgrade them in sync, *including* railties.
 # Loading only what we use reduces memory use & attack surface.
 # gem 'actioncable' # Not used. Client/server comm channel.
-gem 'actionmailer', '6.1.4.7' # Rails. Send email.
-gem 'actionpack', '6.1.4.7' # Rails. MVC framework.
-gem 'actionview', '6.1.4.7' # Rails. View.
-gem 'activejob', '6.1.4.7' # Rails. Async jobs.
-gem 'activemodel', '6.1.4.7' # Rails. Model basics.
-gem 'activerecord', '6.1.4.7' # Rails. ORM and query system.
+gem 'actionmailer', '6.1.5.1' # Rails. Send email.
+gem 'actionpack', '6.1.5.1' # Rails. MVC framework.
+gem 'actionview', '6.1.5.1' # Rails. View.
+gem 'activejob', '6.1.5.1' # Rails. Async jobs.
+gem 'activemodel', '6.1.5.1' # Rails. Model basics.
+gem 'activerecord', '6.1.5.1' # Rails. ORM and query system.
 # gem 'activestorage' # Not used. Attaches cloud files to ActiveRecord.
-gem 'activesupport', '6.1.4.7' # Rails. Underlying library.
+gem 'activesupport', '6.1.5.1' # Rails. Underlying library.
 # gem 'activetext' # Not used. Text editor that fails to support markdown.
 gem 'attr_encrypted', '3.1.0' # Encrypt email addresses
 gem 'bcrypt', '3.1.16' # Security - for salted hashed interated passwords
@@ -44,7 +44,7 @@ gem 'imagesLoaded_rails', '4.1.0' # JavaScript - enable wait for image load
 gem 'jbuilder', '2.11.5' # Template mechanism for JSON format results
 gem 'jquery-rails', '4.4.0' # JavaScript jQuery library (for Rails)
 gem 'jquery-ui-rails', '6.0.1' # JavaScript jQueryUI library (for Rails)
-gem 'lograge', '0.11.2' # Simplify logs
+gem 'lograge', '0.12.0' # Simplify logs
 gem 'mail', '2.7.1' # Ruby mail handler
 #
 gem 'octokit', '4.22.0' # GitHub's official Ruby API
@@ -66,19 +66,19 @@ gem 'omniauth-github', '1.4.0' # Authentication to GitHub (get project info)
 gem 'omniauth-rails_csrf_protection', '0.1.2' # Counter CVE-2015-9284
 gem 'pagy', '5.10.1' # Paginate some views
 gem 'paleta', '0.3.0' # Color manipulation, used for badges
-gem 'paper_trail', '12.1.0' # Record previous versions of project data
-gem 'pg', '1.2.3' # PostgreSQL database, used for data storage
-gem 'pg_search', '2.3.5' # PostgreSQL full-text search
-gem 'puma', '5.6.2' # Faster webserver; recommended by Heroku
+gem 'paper_trail', '12.3.0' # Record previous versions of project data
+gem 'pg', '1.4.1' # PostgreSQL database, used for data storage
+gem 'pg_search', '2.3.6' # PostgreSQL full-text search
+gem 'puma', '5.6.4' # Faster webserver; recommended by Heroku
 gem 'puma_worker_killer', '0.3.1' # Band-aid: Restart to limit memory use
-gem 'rack-attack', '6.5.0' # Implement rate limiting
+gem 'rack-attack', '6.6.1' # Implement rate limiting
 gem 'rack-cors', '1.1.1' # Enable CORS so JavaScript clients can get JSON
 gem 'rack-headers_filter', '0.0.1' # Filter out "dangerous" headers
-# We no longer say: gem 'rails', '6.1.4.7' # Our web framework
+# We no longer say: gem 'rails', '6.1.5.1' # Our web framework
 # but instead load only what we use (to reduce memory use and attack surface).
 # We load sprockets-rails, but its version number isn't kept in sync.
 # Note: Update the gem versions of action* and railties in sync.
-gem 'railties', '6.1.4.7' # Rails. Rails core, loads rest of Rails
+gem 'railties', '6.1.5.1' # Rails. Rails core, loads rest of Rails
 gem 'rails-i18n', '6.0.0' # Localizations for Rails built-ins
 gem 'redcarpet', '3.5.1' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.1.0', require: false # For .scss files (CSS extension)
@@ -94,12 +94,12 @@ gem 'uglifier', '4.2.0', require: false # Minify JavaScript
 
 group :development, :test do
   gem 'awesome_print', '1.9.2' # Pretty print Ruby objects
-  gem 'bullet', '7.0.1' # Avoid n+1 queries
-  gem 'bundler-audit', '0.9.0.1'
+  gem 'bullet', '7.0.2' # Avoid n+1 queries
+  gem 'bundler-audit', '0.9.1'
   gem 'dotenv-rails', '2.7.6'
   gem 'eslintrb', '2.1.0'
   gem 'json', '2.6.1'
-  gem 'license_finder', '6.15.0'
+  gem 'license_finder', '7.0.1'
   gem 'mdl', '0.11.0'
   # NOTE: If you update pronto you may need to update other pronto-* gems
   gem 'pronto', '0.11.0'
@@ -126,7 +126,7 @@ group :fake_production, :development, :test do
 end
 
 group :development do
-  gem 'bootsnap', '1.10.2' # Speed up boot via caches
+  gem 'bootsnap', '1.12.0' # Speed up boot via caches
   # gem 'fasterer', '0.3.2' # Provide speed recommendations - run 'fasterer'
   # Waiting for Ruby 2.4 support:
   # https://github.com/seattlerb/ruby_parser/issues/239
@@ -134,8 +134,8 @@ group :development do
   # We bring in full rails in development in case we need it for debugging;
   # this also keeps some gems happy that don't realize that loading
   # only *parts* of Rails is fine:
-  gem 'rails', '6.1.4.7' # Rails (our web framework)
-  gem 'translation', '1.23' # translation.io - translation service
+  gem 'rails', '6.1.5.1' # Rails (our web framework)
+  gem 'translation', '1.32' # translation.io - translation service
   gem 'web-console', '4.2.0' # In-browser debugger; use <% console %> or console
 end
 

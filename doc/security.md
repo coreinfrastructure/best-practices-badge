@@ -30,6 +30,18 @@ For more information on developing secure software, see
 shows how to create an assurance case for your project, using
 a version of this assurance case as an example.
 
+We thank Scott Ankrum (MITRE)
+for analyzing an earlier version of this assurance case.
+He provided a number of helpful comments and provided a lot of feedback
+in how to convert its notation from the
+Claims, Arguments, and Evidence (CAE) notation to
+Structured Assurance Case Metamodel (SACM) notation.
+For his initial work in converting this assurance case to SACM notation,
+see
+<a href="https://www.researchgate.net/publication/351854207_BadgeApp_Assurance_Case_in_SACM_Notation"
+><i>BadgeApp Assurance Case in SACM Notation</i> by T. Scott Ankrum,
+The MITRE Corporation, May 2021</a>.
+
 ## Assurance case summary
 
 The following figures summarize why we think this application
@@ -54,17 +66,6 @@ Here is the assurance case summary in CAE notation:
 ![Assurance case in lifecycle](./assurance-case-lifecycle.png)
 ![Assurance case in implementation](./assurance-case-implementation.png)
 ![Assurance case in other processes](./assurance-case-other-lifecycle.png)
-
-Claims, Arguments and Evidence (CAE) notation
-is a simple notation often used for assurance cases.
-In CAE notation,
-Ovals are claims or sub-claims, while rounded rectangles are the supporting
-arguments justifying the claims.
-Evidence, where shown, are in rectangles.
-We do not show most evidence in the figures, but provide the evidence in
-the supporting text below instead, because large figures are time-consuming
-to edit and for our purposes providing most evidence only in the supporting
-test is adequate.
 
 ### Overall approach
 
@@ -181,6 +182,23 @@ https://app.circleci.com/pipelines/github/coreinfrastructure/best-practices-badg
 
 (Note to editors: to edit the figures above, edit the .odg file, then
 export to .png so that it can viewed on GitHub.)
+
+## CAE notation
+
+Our full assurance case is currently described in CAE notation.
+
+Claims, Arguments and Evidence (CAE) notation
+is a simple notation often used for assurance cases.
+In CAE notation,
+Ovals are claims or sub-claims, while rounded rectangles are the supporting
+arguments justifying the claims.
+Evidence, where shown, are in rectangles.
+
+We do not show most evidence in the figures, but provide the evidence in
+the supporting text below instead, because large figures are time-consuming
+to edit and for our purposes providing most evidence only in the supporting
+test is adequate.
+
 
 ## Structured Assurance Case Metamodel (SACM) Graphical Notation
 

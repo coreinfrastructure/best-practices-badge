@@ -25,7 +25,7 @@ gem 'activerecord', '6.1.6.1' # Rails. ORM and query system.
 gem 'activesupport', '6.1.6.1' # Rails. Underlying library.
 # gem 'activetext' # Not used. Text editor that fails to support markdown.
 gem 'attr_encrypted', '3.1.0' # Encrypt email addresses
-gem 'bcrypt', '3.1.16' # Security - for salted hashed interated passwords
+gem 'bcrypt', '3.1.18' # Security - for salted hashed interated passwords
 gem 'blind_index', '2.2.0' # Index encrypted email addresses
 gem 'bootstrap-sass', '3.4.1'
 gem 'bootstrap-social-rails', '4.12.0'
@@ -84,7 +84,7 @@ gem 'rails-i18n', '6.0.0' # Localizations for Rails built-ins
 gem 'redcarpet', '3.5.1' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.1.0', require: false # For .scss files (CSS extension)
 gem 'scout_apm', '4.1.2' # Monitor for memory leaks
-gem 'secure_headers', '6.3.3' # Add hardening measures to HTTP headers
+gem 'secure_headers', '6.3.4' # Add hardening measures to HTTP headers
 # WARNING!!!!
 # CHECK DEPLOYMENT FIRST IF YOU UPDATE sprockets-rails.
 # The gem sprockets-rails version 3.4.1 (from 3.2.2) caused a regression

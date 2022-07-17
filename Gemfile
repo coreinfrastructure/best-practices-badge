@@ -25,8 +25,8 @@ gem 'activerecord', '6.1.6.1' # Rails. ORM and query system.
 gem 'activesupport', '6.1.6.1' # Rails. Underlying library.
 # gem 'activetext' # Not used. Text editor that fails to support markdown.
 gem 'attr_encrypted', '3.1.0' # Encrypt email addresses
-gem 'bcrypt', '3.1.16' # Security - for salted hashed interated passwords
-gem 'blind_index', '2.2.0' # Index encrypted email addresses
+gem 'bcrypt', '3.1.18' # Security - for salted hashed interated passwords
+gem 'blind_index', '2.3.0' # Index encrypted email addresses
 gem 'bootstrap-sass', '3.4.1'
 gem 'bootstrap-social-rails', '4.12.0'
 gem 'bootstrap_form', '2.7.0'
@@ -154,7 +154,7 @@ group :test do
 end
 
 group :production do
-  gem 'rack-timeout', '0.6.0' # Timeout; https://github.com/heroku/rack-timeout
+  gem 'rack-timeout', '0.6.3' # Timeout; https://github.com/heroku/rack-timeout
   gem 'rails_12factor', '0.0.3'
 end
 

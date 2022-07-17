@@ -719,6 +719,30 @@ WHERE homepage_url <> '' AND homepage_url IN
    HAVING COUNT(homepage_url) > 1);
 ~~~~
 
+## Deleting fraudulent project entries
+
+We try to work with people who are trying to do the right thing
+but misunderstand something.
+
+However, badge entries can be clearly fraudulent.
+For example, they can claim their code does many things without having code,
+that their documents cover things yet have no documentation, and so on.
+If we are confronted with clear fraud then we simply fix the database,
+typically by deleting all the user's project entries and blocking their
+user accounts. If it's clearly fraudulent then they're attackers and
+we don't give the attackers any warning, there's no need for that.
+
+To block an account we'd do something like this (after backing up the database);
+in the `blocked_rationale` include the YYYY-MM-DD date when the block
+was created as part of the rationale.
+
+~~~~sh
+echo "UPDATE users SET blocked=true, blocked_rationale='...' WHERE id = 13323;"|
+  heroku pg:psql --app production-bestpractices
+echo "DELETE FROM projects WHERE user_id = 13323;" | \
+  heroku pg:psql --app production-bestpractices
+~~~~
+
 ## Recovering a deleted or mangled project entry
 
 If you want to restore a deleted project, or reset its values,

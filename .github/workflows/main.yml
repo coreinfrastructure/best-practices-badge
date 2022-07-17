@@ -4,17 +4,19 @@ name: CI
 # Limit permissions. See:
 # https://github.com/ossf/scorecard/blob/main/docs/checks.md#token-permissions
 # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#permissions
+# https://github.com/actions/first-interaction/issues/10#issuecomment-1041402989
 # Since we set "permissions", anything unset has access "none".
 permissions:
   contents: read
+  checks: write
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
+# Controls when the action will run. Triggers the workflow on push or pull
+# request events but only for the main branch (formerly the master branch)
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -25,6 +27,12 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      # Use harden-runner https://github.com/step-security/harden-runner
+      # presented at OpenSSF Best Practices WG 2022-03-15
+      - uses: step-security/harden-runner@74b568e8591fbb3115c70f3436a0c6b0909a8504 # v1
+        with:
+          egress-policy: audit
+
       # Checks-out your repository under $GITHUB_WORKSPACE,
       # so your job can access it.
       # As required by OpenSSF Scorecard,
@@ -33,7 +41,7 @@ jobs:
       # Update by consulting: https://github.com/actions/checkout/releases
       # We include the hash after '@', and comment "pin @SIMPLE-NAME"; this is
       # the naming convention of https://github.com/mheap/pin-github-action
-      - uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579 # pin @v2.4.0
+      - uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # pin @v3.0.2
 
       # Runs a single command using the runners shell
       - name: Run a one-line script

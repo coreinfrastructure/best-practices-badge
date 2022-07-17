@@ -177,6 +177,8 @@ jobs:
           # In any case, these aren't included in the final result, nor used
           # in the process of testing the final result... they're
           # just tools we use to *transfer* the final result to deployment.
+          # We are downloading these tools from a trusted source, so we *do*
+          # want to use the latest version, not a pinned version.
           name: Install Heroku CLI tools (to easily control maintenance mode)
           command: |
             wget https://cli-assets.heroku.com/heroku-linux-x64.tar.gz
@@ -184,18 +186,31 @@ jobs:
       - run:
           name: Deploy to Heroku
           command: |
-            echo 'heroku.com ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAu8erSx6jh+8ztsfHwkNeFr/SZaSOcvoa8AyMpaerGIPZDB2TKNgNkMSYTLYGDK2ivsqXopo2W7dpQRBIVF80q9mNXy5tbt1WE04gbOBB26Wn2hF4bk3Tu+BNMFbvMjPbkVlC2hcFuQJdH4T2i/dtauyTpJbD/6ExHR9XYVhdhdMs0JsjP/Q5FNoWh2ff9YbZVpDQSTPvusUp4liLjPfa/i0t+2LpNCeWy8Y+V9gUlDWiyYwrfMVI0UwNCZZKHs1Unpc11/4HLitQRtvuk0Ot5qwwBxbmtvCDKZvj1aFBid71/mYdGRPYZMIxq1zgP1acePC1zfTG/lvuQ7d0Pe0kaw==' >> ~/.ssh/known_hosts
             export PATH="$PATH:$(pwd)/heroku/bin"
             export HEROKU_APP="$CIRCLE_BRANCH"-bestpractices
             if [ "$HEROKU_APP" = 'main-bestpractices' ] ; then export HEROKU_APP='master-bestpractices'; fi
-            echo "Deploying to $HEROKU_APP"
+            # Set file .netrc so "git push heroku ..." will work later.
+            # Heroku uses HEROKU_API_KEY, but git only knows about ~/.netrc.
+            # https://devcenter.heroku.com/articles/authentication
+            echo 'Set up .netrc so git push will work'
+            printf 'machine git.heroku.com\n  login %s\n  password %s\n' \
+              'bestpractices@linuxfoundation.org' "$HEROKU_API_KEY" > ~/.netrc
+            echo "Set git remote heroku for $HEROKU_APP"
+            heroku git:remote -a "$HEROKU_APP"
+            git remote get-url heroku
+            echo "Switching to maintenance mode in $HEROKU_APP"
             heroku maintenance:on --app "$HEROKU_APP"
             # Give production site a few seconds to complete ongoing work.
             [ "$HEROKU_APP" != 'production-bestpractices' ] || sleep 10
-            git push git@heroku.com:"$HEROKU_APP".git $CIRCLE_SHA1:refs/heads/master
+            echo "Deploying to $HEROKU_APP"
+            # Switching from "master" here requires additional work, see:
+            # https://stackoverflow.com/questions/10451330/clean-git-repo-on-heroku
+            # https://stackoverflow.com/questions/36111040/error-message-after-successfully-pushing-to-heroku
+            GIT_CURL_VERBOSE=1 GIT_TRACE=1 git push heroku "$CIRCLE_BRANCH:master"
       - run:
-          name: Setup Heroku
-          command: bash .circleci/setup-heroku.sh
+            # This may no longer be necessary
+            name: Setup Heroku
+            command: bash .circleci/setup-heroku.sh
       - run:
           name: Migrate DB
           command: |

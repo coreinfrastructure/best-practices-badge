@@ -131,6 +131,32 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test 'should fail to create project as blocked user' do
+    blocked_user = users(:blocked_github_user)
+    log_in_as(blocked_user)
+    stub_request(:get, 'https://api.github.com/user/repos')
+      .to_return(status: 200, body: '', headers: {})
+    # Use assert_difference to verify that project record created & email sent
+    # This actually raises an exception, so we'll need to catch & ignore it
+    # rubocop:disable Style/RescueStandardError
+    assert_no_difference [
+      'Project.count', 'ActionMailer::Base.deliveries.size'
+    ] do
+      post '/en/projects', params: { # Routes to 'create'
+        project: {
+          description: @project.description,
+          license: @project.license,
+          name: @project.name,
+          repo_url: 'https://www.example.org/code',
+          homepage_url: @project.homepage_url
+        }
+      }
+    rescue
+      # We don't care what the exception is
+    end
+    # rubocop:enable Style/RescueStandardError
+  end
+
   test 'should fail to create project' do
     log_in_as(@user)
     # We simplify this test by stubbing out the request to GitHub to

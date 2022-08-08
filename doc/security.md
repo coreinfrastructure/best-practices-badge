@@ -199,7 +199,6 @@ the supporting text below instead, because large figures are time-consuming
 to edit and for our purposes providing most evidence only in the supporting
 test is adequate.
 
-
 ## Structured Assurance Case Metamodel (SACM) Graphical Notation
 
 Some figures of this assurance case uses a subset of the

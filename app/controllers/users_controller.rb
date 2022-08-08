@@ -61,18 +61,23 @@ class UsersController < ApplicationController
     end
     @user = User.find_by(email: user_params[:email])
     if @user
-      redirect_existing
+      if !@user.activated # User exists but is not activated; retry activation
+        regenerate_activation_digest
+        @user.send_activation_email
+      end
     else
       @user = User.new(user_params)
       @user.provider = 'local'
       @user.preferred_locale = I18n.locale.to_s
-      @user.use_gravatar = @user.gravatar_exists # we know this is local
+      @user.use_gravatar = @user.gravatar_exists # this is local
       if @user.save
-        send_activation
-      else
-        render 'new'
+        @user.send_activation_email
       end
     end
+    # ALWAYS show "activation link created" message, so people can't
+    # determine whether or not the email address already exists
+    flash[:info] = t('users.new_activation_link_created')
+    redirect_to root_path, status: :found
   end
   # rubocop: enable Metrics/MethodLength, Metrics/AbcSize
 
@@ -155,22 +160,6 @@ class UsersController < ApplicationController
     end
   end
   # rubocop: enable Metrics/MethodLength, Metrics/AbcSize
-
-  def redirect_existing
-    if @user.activated
-      flash[:info] = t('users.redirect_existing')
-      redirect_to login_path
-    else
-      regenerate_activation_digest
-      send_activation
-    end
-  end
-
-  def send_activation
-    @user.send_activation_email
-    flash[:info] = t('users.new_activation_link_created')
-    redirect_to root_path, status: :found
-  end
 
   private
 

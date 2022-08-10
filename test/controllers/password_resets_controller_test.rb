@@ -6,6 +6,7 @@
 
 require 'test_helper'
 
+# rubocop: disable Metrics/ClassLength
 class PasswordResetsControllerTest < ActionDispatch::IntegrationTest
   def setup
     ActionMailer::Base.deliveries.clear
@@ -29,7 +30,7 @@ class PasswordResetsControllerTest < ActionDispatch::IntegrationTest
     assert_not flash.empty?
     assert_includes @response.body, 'Email sent with password reset'
 
-    # Valid email
+    # Password reset request with valid email
     old_digest = @user.reset_digest
     post '/en/password_resets', params: {
       password_reset: { email: @user.email }
@@ -42,7 +43,21 @@ class PasswordResetsControllerTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_includes @response.body, 'Email sent with password reset'
 
-    # Right email, wrong token (written here as "wrong_token")
+    # Password reset request with SAME email - should be skipped since
+    # it's too soon.
+    old_digest = @user.reset_digest
+    post '/en/password_resets', params: {
+      password_reset: { email: @user.email }
+    }
+    new_digest = @user.reload.reset_digest
+    assert_equal old_digest, new_digest
+    # Unchanged, since we shouldn't have sent anything.
+    assert_equal 1, ActionMailer::Base.deliveries.size
+    assert_redirected_to root_url
+    follow_redirect!
+    assert_includes @response.body, 'Email sent with password reset'
+
+    #  Right email, wrong token (written here as "wrong_token")
     get "/en/password_resets/wrong_token/edit?email=#{@user.email}"
     assert_redirected_to root_url
     follow_redirect!
@@ -152,3 +167,4 @@ class PasswordResetsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to password_resets_path(locale: 'en')
   end
 end
+# rubocop: enable Metrics/ClassLength

@@ -69,12 +69,10 @@ en:
     forgot_password: Forgot password
     reset_password: Reset password
     password_confirmation: Confirmation
-    email_not_found: Email address not found
     password_empty: Password can't be empty
     password_reset: Password has been reset
-    instructions_sent: Email sent with password reset instructions
-    cant_reset_nonlocal: Sorry, can only reset the password for a custom
-      (local) user
+    instructions_sent: >
+      Email sent with password reset instructions (if a local account exists)
     reset_expired: Password reset has expired.
     update_password: Update password
   sessions:

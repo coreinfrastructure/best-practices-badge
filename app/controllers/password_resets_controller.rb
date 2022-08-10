@@ -11,8 +11,21 @@ class PasswordResetsController < ApplicationController
 
   def new; end
 
+  # Note: password resets *always* reply with the same message, in all cases.
+  # At one time we replied with error reports if there was no account or if
+  # there was a GitHub account (not a local account) with the email address.
+  # However, that allowed attackers to determine if a given email address
+  # was present or not in an account. That's not a large leak of
+  # information; the attacker has to already guess the specific email address,
+  # and they merely get "is present/absent" instead of the specific account.
+  # Many systems *do* provide such error messages, so many users would
+  # be unsurprised by this information leak.
+  # Still, we want to be excellent at providing user privacy, so we're
+  # going to go beyond what some might see as the minimum, and instead
+  # do what we can to maximize our users' privacy.
   def create
-    @user = User.find_by(email: nested_params(:password_reset, :email))
+    @user = User.find_by(email: nested_params(:password_reset, :email),
+                         provider: 'local')
     if @user
       # NOTE: We send the password reset to the email address originally
       # created by the *original* user, and *not* to the requester
@@ -21,10 +34,9 @@ class PasswordResetsController < ApplicationController
       # the "wrong" email address (e.g., exploiting dotless i). See:
       # https://eng.getwisdom.io/hacking-github-with-unicode-dotless-i/
       reset_password(@user)
-    else
-      flash.now[:danger] = t('password_resets.email_not_found')
-      render 'new'
     end
+    flash[:info] = t('password_resets.instructions_sent')
+    redirect_to root_url
   end
 
   def edit; end
@@ -45,15 +57,11 @@ class PasswordResetsController < ApplicationController
   private
 
   def reset_password(user)
-    if user.provider == 'local'
-      @user.create_reset_digest
-      @user.send_password_reset_email
-      flash[:info] = t('password_resets.instructions_sent')
-      redirect_to root_url
-    else
-      flash[:danger] = t('password_resets.cant_reset_nonlocal')
-      redirect_to login_url
-    end
+    # Local password resets only make sense for local users
+    return unless user.provider == 'local'
+
+    @user.create_reset_digest
+    @user.send_password_reset_email
   end
 
   def user_params

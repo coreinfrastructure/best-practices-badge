@@ -776,15 +776,11 @@ fr:
     forgot_password: Mot de passe oublié
     reset_password: Réinitialiser le mot de passe
     password_confirmation: Confirmation
-    email_not_found: Adresse e-mail introuvable
     password_empty: Le mot de passe ne peut pas être vide
     password_reset: Le mot de passe a été réinitialisé
     instructions_sent: >-
       E-mail envoyé avec les instructions de réinitialisation
       du mot de passe
-    cant_reset_nonlocal: >-
-      Désolé, il n'est possible de réinitialiser le mot de passe
-      que pour un utilisateur personnalisé (local)
     reset_expired: La réinitialisation du mot de passe est expirée.
     update_password: Mise à jour du mot de passe
   report_mailer:
@@ -3090,7 +3086,7 @@ fr:
         <a href="/fr/projects?gteq=100">les projets ayant obtenu le
         badge basique</a>). Vous pouvez également y voir
         <a href='/fr/projects/1/0'>un exemple (où nous essayons
-        d'obtenir notre propre badge)</a>. Ce projet a été développé à l'origine avec la OpenSSF, mais il fait maintenant partie du <a href="https://github.com/ossf/wg-best-practices-os-developers">Groupe de travail (GT) sur les meilleures pratiques</a> de l'<a href="https://openssf.org/">Open Source Security Foundation (OpenSSF)</a>.
+        d'obtenir notre propre badge)</a>. Ce projet était connu à l'origine comme le projet de Badge des Meilleures Pratiques de la Core Infrastructure Initiative (CII), et a été développé à l'origine dans le cadre de la CII. Il fait maintenant partie du <a href="https://github.com/ossf/wg-best-practices-os-developers">Groupe de travail (GT) sur les meilleures pratiques</a> de l'<a href="https://openssf.org/">Open Source Security Foundation (OpenSSF)</a>. OpenSSF est une fondation de la <a href="https://www.linuxfoundation.org/">Fondation Linux</a>. Le projet a été formellement renommé depuis le « Badge des Meilleures Pratiques de la CII » le 2021-12-24.
       p3_html: >-
         <em>Confidentialité et problèmes juridiques</em> : Consultez
         notre <a href="https://www.linuxfoundation.org/privacy">politique

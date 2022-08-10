@@ -78,15 +78,11 @@ ru:
     forgot_password: Забыли пароль?
     reset_password: Сброс пароля
     password_confirmation: Подтверждение
-    email_not_found: Адрес электронной почты не найден
     password_empty: Пароль не может быть пустым
     password_reset: Пароль был сброшен
     instructions_sent: >-
       Вам отправлено электронное письмо с инструкцией по сбросу
       пароля
-    cant_reset_nonlocal: >-
-      К сожалению, сбросить пароль можно только для пользователей,
-      зарегистрированных непосредственно на этом сайте.
     reset_expired: Истекло время на сброс пароля.
     update_password: Обновление пароля
   sessions:

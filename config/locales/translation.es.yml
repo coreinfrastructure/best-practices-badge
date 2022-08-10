@@ -58,13 +58,9 @@ es:
     forgot_password:
     reset_password:
     password_confirmation:
-    email_not_found:
     password_empty:
     password_reset:
     instructions_sent:
-    cant_reset_nonlocal: >-
-      Lo sentimos, no se puede restablecer la contraseña para
-      un usuario no local
     reset_expired:
     update_password:
   sessions:

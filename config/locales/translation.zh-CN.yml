@@ -433,11 +433,9 @@ zh-CN:
     forgot_password: 忘记密码
     reset_password: 重设密码
     password_confirmation: 确认
-    email_not_found: 电子邮件地址未找到
     password_empty: 密码不能为空
     password_reset: 密码已重置
     instructions_sent: 电子邮件发送密码重置说明
-    cant_reset_nonlocal: 对不起，无法重设非本地用户的密码
     reset_expired: 密码重设已过期。
     update_password: 更新密码
   report_mailer:

@@ -75,14 +75,10 @@ de:
     forgot_password: Passwort vergessen
     reset_password: Passwort zurücksetzen
     password_confirmation: Bestätigung
-    email_not_found: E-Mailadresse nicht gefunden
     password_empty: Passwort darf nicht leer sein
     password_reset: Passwort wurde zurückgesetzt
     instructions_sent: E-Mail mit Anweisungen zum Passwortzurücksetzen
       verschickt
-    cant_reset_nonlocal: >-
-      Sorry, kann nur das Passwort für einen benutzerdefinierten
-      (lokalen) Benutzer zurücksetzen
     reset_expired: Passwort zurücksetzen ist abgelaufen.
     update_password: Passwort aktualisieren
   sessions:

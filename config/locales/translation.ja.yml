@@ -61,11 +61,9 @@ ja:
     forgot_password: パスワードを忘れた方はこちら
     reset_password: パスワードをリセットしてください
     password_confirmation: 確認
-    email_not_found: 電子メール アドレスが見つかりません
     password_empty: パスワードを空にすることはできません
     password_reset: パスワードがリセットされました
     instructions_sent: パスワードリセットの方法が電子メールで送信されました
-    cant_reset_nonlocal: 申し訳ありませんが、カスタム（ローカル）ユーザー以外のパスワードをリセットすることはできません
     reset_expired: パスワードのリセットは期限切れです
     update_password: パスワードを更新してください
   sessions:

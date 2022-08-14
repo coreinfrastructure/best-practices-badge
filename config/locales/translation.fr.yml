@@ -780,7 +780,7 @@ fr:
     password_reset: Le mot de passe a été réinitialisé
     instructions_sent: >-
       E-mail envoyé avec les instructions de réinitialisation
-      du mot de passe
+      du mot de passe (si un compte local existe)
     reset_expired: La réinitialisation du mot de passe est expirée.
     update_password: Mise à jour du mot de passe
   report_mailer:

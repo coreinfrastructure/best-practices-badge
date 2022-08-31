@@ -49,7 +49,7 @@ gem 'lograge', '0.12.0' # Simplify logs
 gem 'mail', '2.7.1' # Ruby mail handler
 #
 gem 'octokit', '4.25.0' # GitHub's official Ruby API
-gem 'omniauth-github', '1.4.0' # Authentication to GitHub (get project info)
+gem 'omniauth-github', '2.0.0' # Authentication to GitHub (get project info)
 #
 # Counter CVE-2015-9284 in omniauth.  Unfortunately, at the time of this
 # writing the omniauth folks STILL have not fixed it (!). There is a shim

@@ -693,8 +693,8 @@ raw passwords and unencrypted email addresses).
 These are considered additional hardening measures, and so are
 discussed further in the section on hardening.
 
-Password reset requests (for local users) trigger an email, but that
-email is sent to the address as provided by the original account;
+Password reset requests (for local users) trigger an email,
+but that email is sent to the address as provided by the original account;
 emails are *not* sent to whatever email address is provided by the
 reset requestor (who might be an attacker).
 These email addresses match in the sense of `find_by`, which is a
@@ -705,6 +705,18 @@ You can verify this by reviewing
 `app/controllers/password_resets_controller.rb`.
 This approach completely counters the attack described in
 [Hacking GitHub with Unicode's dotless 'i'](https://eng.getwisdom.io/hacking-github-with-unicode-dotless-i/).
+
+The presence or absence of an email address is not revealed by the
+authentication system (countering enumeration or verification attacks):
+
+1. Local account creation always reports that the account must be
+   verified by checking the delivered email, whether or not the email
+   account exists. Thus, attempting to create a local account won't
+   reveal if the account exists to others.
+2. Password reset requests do *not* vary depending 
+   on whether or not the email address is present as a local account.
+3. Failed login requests for local accounts simply reports that
+   the login failed; they do not indicate if the email address is present.
 
 #### HTTPS
 

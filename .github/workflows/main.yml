@@ -29,7 +29,7 @@ jobs:
     steps:
       # Use harden-runner https://github.com/step-security/harden-runner
       # presented at OpenSSF Best Practices WG 2022-03-15
-      - uses: step-security/harden-runner@74b568e8591fbb3115c70f3436a0c6b0909a8504 # v1
+      - uses: step-security/harden-runner@2e205a28d0e1da00c5f53b161f4067b052c61f34 # v1
         with:
           egress-policy: audit
 

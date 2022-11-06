@@ -42,7 +42,7 @@
   <%= render(partial: "details", locals: {
          criterion: "got_badge",
          details: t('projects.form_early.got_badge.details_html',
-                    markdown_embedding: %{<code>[![CII Best Practices](https://#{ badge_hostname }/projects/#{ project.id }/badge)](https://#{ badge_hostname }/projects/#{ project.id })</code>}.html_safe,
+                    markdown_embedding: %{<code>[![OpenSSF Best Practices](https://#{ badge_hostname }/projects/#{ project.id }/badge)](https://#{ badge_hostname }/projects/#{ project.id })</code>}.html_safe,
                     html_embedding: %{<code>&lt;a href="https://#{badge_hostname}/projects/#{ project.id }"&gt;&lt;img src="https://#{ badge_hostname }/projects/#{ project.id }/badge"&gt;&lt;/a&gt; </code>}.html_safe)
       }) %>
 <% else %>

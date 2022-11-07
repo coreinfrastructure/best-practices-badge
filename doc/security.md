@@ -713,7 +713,7 @@ authentication system (countering enumeration or verification attacks):
    verified by checking the delivered email, whether or not the email
    account exists. Thus, attempting to create a local account won't
    reveal if the account exists to others.
-2. Password reset requests do *not* vary depending 
+2. Password reset requests do *not* vary depending
    on whether or not the email address is present as a local account.
 3. Failed login requests for local accounts simply reports that
    the login failed; they do not indicate if the email address is present.

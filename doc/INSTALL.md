@@ -239,11 +239,12 @@ changes.
 
 ## Deployment instructions
 
-This is designed to be easily deployed simply by doing a "git push"
+This is designed to be easily deployed simply by doing a `git push`
 to an appropriate destination.
 
-At this point, a deployment is automatically done to a staging system once
-it's checked into the repository on the master branch.
+We currently run a `rake deploy_staging` command that does a `git push`
+to deploy to a staging site, and later `rake deploy_production` to push
+to the production site.
 
 ## See also
 

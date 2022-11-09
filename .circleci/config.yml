@@ -188,7 +188,6 @@ jobs:
           command: |
             export PATH="$PATH:$(pwd)/heroku/bin"
             export HEROKU_APP="$CIRCLE_BRANCH"-bestpractices
-            if [ "$HEROKU_APP" = 'main-bestpractices' ] ; then export HEROKU_APP='master-bestpractices'; fi
             # Set file .netrc so "git push heroku ..." will work later.
             # Heroku uses HEROKU_API_KEY, but git only knows about ~/.netrc.
             # https://devcenter.heroku.com/articles/authentication
@@ -216,7 +215,6 @@ jobs:
           command: |
             export PATH="$PATH:$(pwd)/heroku/bin"
             export HEROKU_APP="$CIRCLE_BRANCH"-bestpractices
-            if [ "$HEROKU_APP" = 'main-bestpractices' ] ; then export HEROKU_APP='master-bestpractices'; fi
             heroku run --app "$HEROKU_APP" -- bundle exec rails db:migrate
             if [ -f '.recalculate' ] ; then
                 echo 'Recalculation marker found, performing recalculation.'
@@ -240,6 +238,5 @@ workflows:
           filters:
             branches:
               only:
-                - main
                 - staging
                 - production

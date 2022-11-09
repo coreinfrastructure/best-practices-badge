@@ -364,18 +364,22 @@ is thread safe."
 
 ## Deployment
 
-We have three publicly accessible tiers:
+We have two publicly accessible tiers:
 
-* master - an instance of the master branch
 * staging
 * production
 
 These are currently executed on Heroku.
+
+Historically we also had a `main` aka `master` tier, an instance 
+of the main branch. However, when Heroku removed their free tier pricing,
+we removed the `main` tier to save money.
+
 If you have write authorization to the GitHub repository,
-the commands "rake deploy_staging" and "rake deploy_production"
+the commands `rake deploy_staging` and `rake deploy_production`
 will update the staging and production branches (respectively).
-Those updates will trigger tests by CircleCI (via webhooks).
-If those tests pass, that updated branch is then deployed to
+Those updates will trigger tests by CircleCI as usual (via webhooks).
+If those tests pass, CirccleIC will then deploy that updated branch to
 its respective tier.
 
 Most administrative actions require logging into the relevant Heroku tier

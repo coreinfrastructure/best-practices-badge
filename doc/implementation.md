@@ -63,7 +63,7 @@ The application is configured by various environment variables:
   project was last sent a reminder
 * RAILS_ENV (default 'development'): Rails environment, one of
   'test', 'development', 'fake_production', and 'production'.
-  The master, staging, and production systems set this to 'production'.
+  The main/master, staging, and production systems set this to 'production'.
   See the discussion below about fake_production.
 * BADGEAPP_DAY_FOR_MONTHLY: Day of the month to monthly activities, e.g.,
   send out monthly reminders.  Default 5.  Set to 0 to disable monthly acts.
@@ -830,7 +830,8 @@ so any files written are temporary.
 That said, it's no worse than a memory-only cache, and it would be a
 valid alternative.
 
-Heroku offers memcached, but the free tiers are only 25M-30M (smaller
+Heroku offers memcached, but the free tiers (when they existed) were
+only 25M-30M (smaller
 than easily available from memory), and they quickly get expensive
 (the next tier up is only 100M).
 Redis also gets expensive.

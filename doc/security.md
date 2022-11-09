@@ -2658,11 +2658,14 @@ but we think they greatly reduce the risks.
 To be secure, the software has to be secure as actually transitioned
 (deployed) and operated securely.
 
-Our transition process has software normally go through
-three tiers: master, staging, and production.
-The "master" tier runs the software at the HEAD of the master branch.
-Software that runs fine there is promoted to staging; software that
-runs find there is promoted to production (the "real" system).
+Our transition process has software normally go through tiers.
+At this time there are two deployed tiers: staging and production.
+At one time we also had a "main" aka "master" tier; that ran
+the software at the HEAD of the main (formerly master) branch,
+but to reduce costs we no longer have a tier that deploys the main branch.
+At any time software can be promoted from the main branch
+to the staging tier (using `rake deploy_staging`). Software that
+runs fine on the staging branch is promoted to production (the "real" system).
 In an emergency we can skip tiers or promote to them in parallel, but
 doing that is rare.
 

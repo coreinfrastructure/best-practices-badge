@@ -371,7 +371,7 @@ We have two publicly accessible tiers:
 
 These are currently executed on Heroku.
 
-Historically we also had a `main` aka `master` tier, an instance 
+Historically we also had a `main` aka `master` tier, an instance
 of the main branch. However, when Heroku removed their free tier pricing,
 we removed the `main` tier to save money.
 

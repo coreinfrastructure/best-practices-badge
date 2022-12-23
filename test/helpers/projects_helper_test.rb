@@ -54,20 +54,14 @@ class ProjectsHelperTest < ActionView::TestCase
     # but they have to use the markdown format [test](URL), and that format
     # gives us an opportunity to forcibly insert rel="nofollow ugc".
     # Negative test (security)
-    assert_equal(
-      "<p>Junk</p>\n",
-      markdown('<a href="https://www.dwheeler.com">Junk</a>')
-    )
+    assert_equal("<p>Junk</p>\n", markdown('<a href="https://www.dwheeler.com">Junk</a>'))
   end
 
   test 'markdown - no script HTML' do
     # Allowing <script> would be a big security vulnerability.
     # This is a negative test to make sure we're filtering it out.
     # Negative test (security)
-    assert_equal(
-      "<p>Hello</p>\n",
-      markdown('<script src="hi"></script>Hello')
-    )
+    assert_equal("<p>Hello</p>\n", markdown('<script src="hi"></script>Hello'))
   end
 
   test 'markdown - Embedded onclick rejected' do
@@ -85,25 +79,18 @@ class ProjectsHelperTest < ActionView::TestCase
     # by Alexander "Alex" Yumashev, May 4 2016
     # https://www.jitbit.com/alexblog/
     # 256-targetblank---the-most-underestimated-vulnerability-ever/
-    assert_equal(
-      "<p>Hello</p>\n",
-      markdown('<a href="https://www.dwheeler.com" target="_blank">Hello</a>')
-    )
+    assert_equal("<p>Hello</p>\n", markdown('<a href="https://www.dwheeler.com" target="_blank">Hello</a>'))
   end
 
   test 'Ensure tiered_percent_as_string works' do
     I18n.with_locale(:de) do
-      assert_equal 'In Arbeit, 74% Fortschritt für Passing',
-                   tiered_percent_as_string(74)
+      assert_equal 'In Arbeit, 74% Fortschritt für Passing', tiered_percent_as_string(74)
     end
     I18n.with_locale(:en) do
       assert_nil tiered_percent_as_string(nil)
-      assert_equal 'In Progress, 74% completed for passing',
-                   tiered_percent_as_string(74)
-      assert_equal 'Passing, 23% completed for silver',
-                   tiered_percent_as_string(123)
-      assert_equal 'Silver, 52% completed for gold',
-                   tiered_percent_as_string(252)
+      assert_equal 'In Progress, 74% completed for passing', tiered_percent_as_string(74)
+      assert_equal 'Passing, 23% completed for silver', tiered_percent_as_string(123)
+      assert_equal 'Silver, 52% completed for gold', tiered_percent_as_string(252)
       assert_equal 'Gold', tiered_percent_as_string(300)
     end
     # I18n.with_locale(:fr) do

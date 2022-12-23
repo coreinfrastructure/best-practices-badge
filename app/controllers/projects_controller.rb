@@ -14,8 +14,7 @@ class ProjectsController < ApplicationController
   # The 'badge' action is special and does NOT take a locale.
   skip_before_action :redir_missing_locale, only: :badge
 
-  before_action :set_project,
-                only: %i[edit update delete_form destroy show show_json]
+  before_action :set_project, only: %i[edit update delete_form destroy show show_json]
   before_action :require_logged_in, only: :create
   before_action :can_edit_else_redirect, only: %i[edit update]
   before_action :can_control_else_redirect, only: %i[destroy delete_form]
@@ -90,8 +89,7 @@ class ProjectsController < ApplicationController
         ids = @projects.limit(2).ids
         if ids.size == 1
           suffix = request&.format&.symbol == :json ? '.json' : ''
-          redirect_to "/#{locale}/projects/#{ids[0]}#{suffix}",
-                      status: :moved_permanently
+          redirect_to "/#{locale}/projects/#{ids[0]}#{suffix}", status: :moved_permanently
         else
           # If there's not one entry, show the project index instead.
           show_normal_index
@@ -129,8 +127,7 @@ class ProjectsController < ApplicationController
       # But in practice, ids are as "permanent" as anything on the web gets.
       # If we say it's moved permanently, then browsers & caches &
       # search engines will do the right thing, so that's the status used.
-      redirect_to "/projects/#{id_list[0]}/badge#{suffix}",
-                  status: :moved_permanently
+      redirect_to "/projects/#{id_list[0]}/badge#{suffix}", status: :moved_permanently
     end
   end
   # rubocop:disable Metrics/MethodLength
@@ -150,14 +147,11 @@ class ProjectsController < ApplicationController
     # will find the intended data.
     parsed = Addressable::URI.parse(request.original_url)
     if parsed&.query_values&.include?('criteria_level,2')
-      redirect_to project_path(@project, criteria_level: 2),
-                  status: :moved_permanently
+      redirect_to project_path(@project, criteria_level: 2), status: :moved_permanently
     elsif parsed&.query_values&.include?('criteria_level,1')
-      redirect_to project_path(@project, criteria_level: 1),
-                  status: :moved_permanently
+      redirect_to project_path(@project, criteria_level: 1), status: :moved_permanently
     elsif parsed&.query_values&.include?('criteria_level,0')
-      redirect_to project_path(@project, criteria_level: 0),
-                  status: :moved_permanently
+      redirect_to project_path(@project, criteria_level: 0), status: :moved_permanently
     end
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
@@ -194,8 +188,7 @@ class ProjectsController < ApplicationController
 
     respond_to do |format|
       format.svg do
-        send_data Badge[@project.badge_value],
-                  type: 'image/svg+xml', disposition: 'inline'
+        send_data Badge[@project.badge_value], type: 'image/svg+xml', disposition: 'inline'
       end
       format.json do
         format.json { render :badge, status: :ok, location: @project }
@@ -215,7 +208,7 @@ class ProjectsController < ApplicationController
   def edit
     return unless @project.notify_for_static_analysis?('0')
 
-    message = t('projects.edit.static_analysis_updated_html')
+    message = t('.static_analysis_updated_html')
     flash.now[:danger] = message
   end
 
@@ -318,16 +311,14 @@ class ProjectsController < ApplicationController
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def destroy
     @project.destroy!
-    ReportMailer.report_project_deleted(
-      @project, current_user, params[:deletion_rationale]
-    ).deliver_now
+    ReportMailer.report_project_deleted(@project, current_user, params[:deletion_rationale]).deliver_now
     # @project.purge
     # @project.purge_all
     respond_to do |format|
       @project.homepage_url ||= project_find_default_url
       format.html do
         redirect_to projects_path
-        flash[:success] = t('projects.delete.done')
+        flash.now[:success] = t('projects.delete.done')
       end
       format.json { head :no_content }
     end
@@ -405,8 +396,7 @@ class ProjectsController < ApplicationController
     prev_month = consider_today.prev_month
     month_display = prev_month.strftime('%Y-%m')
     last_stat_in_prev_month = ProjectStat.last_in_month(prev_month)
-    last_stat_in_prev_prev_month =
-      ProjectStat.last_in_month(prev_month.prev_month)
+    last_stat_in_prev_prev_month = ProjectStat.last_in_month(prev_month.prev_month)
     projects = Array.new(Project::LEVEL_IDS.size)
     Project::LEVEL_ID_NUMBERS.each do |level|
       projects[level] = Project.projects_first_in(level, prev_month)
@@ -631,10 +621,7 @@ class ProjectsController < ApplicationController
     # we pass a per_page value to control this.  For more information, see:
     # https://developer.github.com/v3/#pagination
     github.auto_paginate = false
-    repos = github.repos(
-      nil,
-      sort: 'pushed', per_page: MAX_GITHUB_REPOS_FROM_USER
-    )
+    repos = github.repos(nil, sort: 'pushed', per_page: MAX_GITHUB_REPOS_FROM_USER)
     return if repos.blank?
 
     # Find & remove the repos already in our database.
@@ -678,9 +665,7 @@ class ProjectsController < ApplicationController
     # This will NOT match full URLs, but will match partial URLs.
     @projects = @projects.search_for(params[:q]) if params[:q].present?
     if params[:ids].present?
-      @projects = @projects.where(
-        'id in (?)', params[:ids].split(',').map { |x| Integer(x) }
-      )
+      @projects = @projects.where(id: params[:ids].split(',').map { |x| Integer(x) })
     end
     @projects
   end
@@ -752,9 +737,7 @@ class ProjectsController < ApplicationController
 
     sort_direction = params[:sort_direction] == 'desc' ? ' desc' : ' asc'
     sort_index = ALLOWED_SORT.index(params[:sort])
-    @projects = @projects
-                .reorder(ALLOWED_SORT[sort_index] + sort_direction)
-                .order('created_at' + sort_direction)
+    @projects = @projects.reorder(ALLOWED_SORT[sort_index] + sort_direction).order('created_at' + sort_direction)
   end
   # rubocop:enable Metrics/AbcSize
 
@@ -766,9 +749,7 @@ class ProjectsController < ApplicationController
     format.html do
       if params[:continue]
         flash[:info] = t('projects.edit.successfully_updated')
-        redirect_to edit_project_path(
-          @project, criteria_level: criteria_level
-        ) + url_anchor
+        redirect_to edit_project_path(@project, criteria_level: criteria_level) + url_anchor
       else
         redirect_to project_path(@project, criteria_level: criteria_level),
                     success: t('projects.edit.successfully_updated')
@@ -779,23 +760,15 @@ class ProjectsController < ApplicationController
     return unless new_badge_level != old_badge_level
 
     # TODO: Eventually deliver_later
-    ReportMailer.project_status_change(
-      @project, old_badge_level, new_badge_level
-    ).deliver_now
-    if Project::BADGE_LEVELS.index(new_badge_level) >
-       Project::BADGE_LEVELS.index(old_badge_level)
-      flash[:success] = t(
-        'projects.edit.congrats_new',
-        new_badge_level: new_badge_level
-      )
+    ReportMailer.project_status_change(@project, old_badge_level, new_badge_level).deliver_now
+    if Project::BADGE_LEVELS.index(new_badge_level) > Project::BADGE_LEVELS.index(old_badge_level)
+      flash[:success] = t('projects.edit.congrats_new', new_badge_level: new_badge_level)
       lost_level = false
     else
       flash[:danger] = t('projects.edit.lost_badge')
       lost_level = true
     end
-    ReportMailer.email_owner(
-      @project, old_badge_level, new_badge_level, lost_level
-    ).deliver_now
+    ReportMailer.email_owner(@project, old_badge_level, new_badge_level, lost_level).deliver_now
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 

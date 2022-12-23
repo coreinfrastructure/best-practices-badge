@@ -81,10 +81,7 @@ class SubdirFileContentsDetective < Detective
 
     # Top_level is iterable, contains a hash with name, size, type (file|dir).
     @top_level = repo_files.get_info('/')
-    determine_content_results(
-      repo_files, :documentation_basics_status, DOCS_BASICS,
-      'documentation basics'
-    )
+    determine_content_results(repo_files, :documentation_basics_status, DOCS_BASICS, 'documentation basics')
     @results
   end
 end

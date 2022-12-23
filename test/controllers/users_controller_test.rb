@@ -25,8 +25,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     get '/en/users/new'
     assert_response :success
     assert_includes @response.body, 'Sign up'
-    assert_includes @response.body,
-                    'sign up here instead (this creates a custom account'
+    assert_includes @response.body, 'sign up here instead (this creates a custom account'
   end
 
   test 'should show additional rights on user page when present' do
@@ -36,23 +35,18 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     get "/en/users/#{@other_user.id}"
     assert_response :success
     assert_not_includes @response.body, project.name
-    assert_not_includes @response.body,
-                        I18n.t('users.show.projects_additional_rights')
+    assert_not_includes @response.body, I18n.t('users.show.projects_additional_rights')
 
     # Create additional rights during test, not as a fixture.
     # The fixture would require correct references to *other* fixture ids.
-    new_right = AdditionalRight.new(
-      user_id: @other_user.id,
-      project_id: project.id
-    )
+    new_right = AdditionalRight.new(user_id: @other_user.id, project_id: project.id)
     new_right.save!
 
     # Now that there are additional rights, we should see them
     get "/en/users/#{@other_user.id}"
     assert_response :success
     assert_includes @response.body, project.name
-    assert_includes @response.body,
-                    I18n.t('users.show.projects_additional_rights')
+    assert_includes @response.body, I18n.t('users.show.projects_additional_rights')
   end
 
   test 'indicate admin is admin to admin' do
@@ -171,9 +165,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     # additional requirements for actual *activation* of local user accounts.
     VCR.use_cassette('can_create_local_user') do
       # This will produce a "create" call on the controller
-      post '/en/users', params: {
-        user: { name: 'Not here', email: 'nonsense@example.org' }
-      }
+      post '/en/users', params: { user: { name: 'Not here', email: 'nonsense@example.org' } }
     end
     assert_response 302
     assert_redirected_to root_url
@@ -191,9 +183,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
     VCR.use_cassette('cannot_create_local_user_if_login_disabled') do
       # This will produce a "create" call on the controller
-      post '/en/users', params: {
-        user: { name: 'Not here', email: 'nonsense@example.org' }, locale: :en
-      }
+      post '/en/users', params: { user: { name: 'Not here', email: 'nonsense@example.org' }, locale: :en }
     end
     assert '403', response.code
 
@@ -202,9 +192,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
   test 'should redirect update when not logged in' do
     # This becomes an 'update' on the users controller
-    patch "/en/users/#{@user.id}", params: {
-      user: { name: @user.name, email: @user.email }
-    }
+    patch "/en/users/#{@user.id}", params: { user: { name: @user.name, email: @user.email } }
     assert_redirected_to login_url
   end
 
@@ -219,9 +207,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
   test 'should redirect update when logged in as wrong user' do
     log_in_as(@other_user)
-    patch "/en/users/#{@user.id}", params: {
-      user: { name: @user.name, email: @user.email }
-    }
+    patch "/en/users/#{@user.id}", params: { user: { name: @user.name, email: @user.email } }
     assert_redirected_to root_url
     follow_redirect!
     assert_includes @response.body, 'Sorry, you are not allowed to do that.'
@@ -243,9 +229,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   test 'should be able to change locale' do
     log_in_as(@user, password: 'password1')
     VCR.use_cassette('should_be_able_to_change_locale') do
-      patch "/en/users/#{@user.id}", params: {
-        user: { preferred_locale: 'fr' }
-      }
+      patch "/en/users/#{@user.id}", params: { user: { preferred_locale: 'fr' } }
     end
     # The redirected URL has form "/fr/users/ID", not "?id=...".
     assert_redirected_to users_path(locale: 'fr') + "/#{@user.id}"

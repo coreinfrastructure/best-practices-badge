@@ -21,14 +21,8 @@ class StaticPagesControllerTest < ActionDispatch::IntegrationTest
     # target=... better not end immediately, we need rel="noopener"
     assert_not_includes @response.body, 'target=[^ >]+>'
     # Check that our preload statements are present
-    assert_select(
-      'head link[rel="preload"][as="stylesheet"][type="text/css"]' \
-      '[href^="/assets/"]'
-    )
-    assert_select(
-      'head link[rel="preload"][as="script"][type="application/javascript"]' \
-      '[href^="/assets/"]'
-    )
+    assert_select('head link[rel="preload"][as="stylesheet"][type="text/css"][href^="/assets/"]')
+    assert_select('head link[rel="preload"][as="script"][type="application/javascript"][href^="/assets/"]')
     # Ensure locale cross-references are present, and that
     # the home page URL doesn't have a trailing slash UNLESS there's no locale.
     # If there's no locale, include a '/' to be consistent with root_path.
@@ -60,15 +54,9 @@ class StaticPagesControllerTest < ActionDispatch::IntegrationTest
         %r{\Ahttps?://[a-z0-9.:]+/#{loc}\z}
       )
       # User locale selector (useful for users)
-      assert_select(
-        'li a:match("href", ?)',
-        %r{\Ahttps?://[a-z0-9.:]+/#{loc}\z}
-      )
+      assert_select('li a:match("href", ?)', %r{\Ahttps?://[a-z0-9.:]+/#{loc}\z})
     end
-    assert_select(
-      'head link[rel="alternate"][hreflang="x-default"]:match("href", ?)',
-      %r{\Ahttps?://[a-z0-9.:]+/\z}
-    )
+    assert_select('head link[rel="alternate"][hreflang="x-default"]:match("href", ?)', %r{\Ahttps?://[a-z0-9.:]+/\z})
   end
 
   test 'should get home in French when fr locale in URL' do
@@ -167,9 +155,7 @@ class StaticPagesControllerTest < ActionDispatch::IntegrationTest
   # what locale to prefer.  Test to ensure that if we do NOT get a
   # locale in the URL, we'll use the browser Accept-Language value.
   test 'No such page with fr Accept-Language returns 404 with fr messages' do
-    get '/no-such-page', headers: {
-      'Accept-Language' => 'fr-CH, fr;q=0.9, en;q=0.8, de;q=0.7, *;q=0.5'
-    }
+    get '/no-such-page', headers: { 'Accept-Language' => 'fr-CH, fr;q=0.9, en;q=0.8, de;q=0.7, *;q=0.5' }
     assert_response :missing
     assert_includes @response.body, 'Erreur 404 - Page non trouvée'
     assert_includes @response.body, 'Désolé, cette page n&#39;existe pas.'
@@ -177,9 +163,7 @@ class StaticPagesControllerTest < ActionDispatch::IntegrationTest
 
   # Accept-Language is overridden by a URL locale on an error message.
   test 'Express locale overrides Accept-Language in no such page' do
-    get '/en/no-such-page', headers: {
-      'Accept-Language' => 'fr-CH, fr;q=0.9, en;q=0.8, de;q=0.7, *;q=0.5'
-    }
+    get '/en/no-such-page', headers: { 'Accept-Language' => 'fr-CH, fr;q=0.9, en;q=0.8, de;q=0.7, *;q=0.5' }
     assert_response :missing
     assert_includes @response.body, 'Error 404: Page Not Found'
     assert_includes @response.body, 'Sorry, no such page exists.'
@@ -189,8 +173,7 @@ class StaticPagesControllerTest < ActionDispatch::IntegrationTest
   # Google error messages.
   test 'Google verifier' do
     get '/google75f94b1182a77eb8.html'
-    assert_equal "google-site-verification: google75f94b1182a77eb8.html\n",
-                 @response.body
+    assert_equal "google-site-verification: google75f94b1182a77eb8.html\n", @response.body
   end
 end
 # rubocop: enable Metrics/BlockLength, Metrics/ClassLength

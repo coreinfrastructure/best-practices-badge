@@ -17,9 +17,7 @@ class Criteria
     major minor unmet
   ].freeze
 
-  LOCALE_ACCESSORS = %i[
-    description details met_placeholder unmet_placeholder na_placeholder
-  ].freeze
+  LOCALE_ACCESSORS = %i[description details met_placeholder unmet_placeholder na_placeholder].freeze
 
   FIELDS_TO_OMIT = %w[description details rationale autofill].freeze
 
@@ -73,8 +71,7 @@ class Criteria
       CriteriaHash.each do |level, level_hash|
         level_hash.each do |criterion|
           name = criterion[0].to_sym
-          ((@criteria ||= {})[level] ||= {})[name] =
-            new({ name: name, level: level }.merge(criterion[1]))
+          ((@criteria ||= {})[level] ||= {})[name] = new({ name: name, level: level }.merge(criterion[1]))
           ((@criteria_levels ||= {})[name] ||= []).append(level)
         end
       end
@@ -100,8 +97,7 @@ class Criteria
               next if k.to_s.in? FIELDS_TO_OMIT
 
               translations[k.to_s] = {} unless translations.key?(k.to_s)
-              translations[k.to_s][locale.to_s] =
-                I18n.t(".criteria.#{level}.#{criterion}.#{k}", locale: locale)
+              translations[k.to_s][locale.to_s] = I18n.t(".criteria.#{level}.#{criterion}.#{k}", locale: locale)
             end
           end
           fields.update(translations)

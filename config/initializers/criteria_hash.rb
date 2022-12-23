@@ -6,8 +6,7 @@
 
 require 'yaml'
 # Load in entire criteria.yml, which keys off the major/minor groups
-FullCriteriaHash =
-  YAML.load_file('criteria/criteria.yml').with_indifferent_access.freeze
+FullCriteriaHash = YAML.load_file('criteria/criteria.yml').with_indifferent_access.freeze
 criteria_hash = {}.with_indifferent_access
 FullCriteriaHash.each do |level, level_value|
   criteria_hash[level] = {}.with_indifferent_access

@@ -30,10 +30,7 @@ class SubdirFileContentsDetectiveTest < ActiveSupport::TestCase
       assert results.key?(:documentation_basics_status)
       dbs = results[:documentation_basics_status]
       assert dbs.key?(:explanation)
-      assert_equal(
-        'Some documentation basics file contents found.',
-        dbs[:explanation]
-      )
+      assert_equal('Some documentation basics file contents found.', dbs[:explanation])
       assert dbs.key?(:value)
       assert_equal 'Met', dbs[:value]
     end
@@ -51,10 +48,7 @@ class SubdirFileContentsDetectiveTest < ActiveSupport::TestCase
       assert results.key?(:documentation_basics_status)
       dbs = results[:documentation_basics_status]
       assert dbs.key?(:explanation)
-      assert_equal(
-        '// No documentation basics file(s) found.',
-        dbs[:explanation]
-      )
+      assert_equal('// No documentation basics file(s) found.', dbs[:explanation])
       assert dbs.key?(:value)
       assert_equal 'Unmet', dbs[:value]
     end

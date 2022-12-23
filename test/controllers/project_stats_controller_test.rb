@@ -16,9 +16,7 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
     get '/en/project_stats'
     assert_response :success
     assert @response.body.include?('All projects')
-    assert @response.body.include?(
-      '<h2>Projects with badge entry activity in last 30 days</h2>'
-    )
+    assert @response.body.include?('<h2>Projects with badge entry activity in last 30 days</h2>')
     # This isn't normally shown:
     assert_not @response.body.include?('Percentage of projects earning badges')
     # Do *NOT* include "Accept" in the Vary heading.
@@ -31,9 +29,7 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
     get '/en/project_stats'
     assert_response :success
     assert @response.body.include?('All projects')
-    assert @response.body.include?(
-      '<h2>Projects with badge entry activity in last 30 days</h2>'
-    )
+    assert @response.body.include?('<h2>Projects with badge entry activity in last 30 days</h2>')
     assert @response.body.include?('As an admin, you may also see')
   end
 
@@ -146,8 +142,7 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'Test /project_stats/total_projects.json' do
-    assert '/project_stats/total_projects.json',
-           total_projects_project_stats_path(format: :json, locale: nil)
+    assert '/project_stats/total_projects.json', total_projects_project_stats_path(format: :json, locale: nil)
     get total_projects_project_stats_path(format: :json, locale: nil)
     contents = JSON.parse(@response.body)
     assert 20, contents['2013-05-19 17:44:18 UTC']
@@ -161,11 +156,10 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'Test /project_stats/nontrivial_projects.json' do
-    assert '/project_stats/nontrivial_projects.json',
-           nontrivial_projects_project_stats_path(format: :json, locale: nil)
+    assert '/project_stats/nontrivial_projects.json', nontrivial_projects_project_stats_path(format: :json, locale: nil)
     get nontrivial_projects_project_stats_path(format: :json)
     contents = JSON.parse(@response.body)
-    levels = contents.map { |entry| entry['name'] } # levels reported
+    levels = contents.pluck('name') # levels reported
     assert_equal ['>=25%', '>=50%', '>=75%', '>=90%', '>=100%'], levels
     assert_equal '>=25%', contents[0]['name']
     assert_equal 18, contents[0]['data']['2013-05-19 17:44:18 UTC']
@@ -174,18 +168,14 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
   test 'Test /en/project_stats/activity_30.json' do
     get activity_30_project_stats_path(format: :json)
     contents = JSON.parse(@response.body)
-    assert_equal 'Active projects (created/updated within 30 days)',
-                 contents[0]['name']
+    assert_equal 'Active projects (created/updated within 30 days)', contents[0]['name']
     assert_equal 4, contents.length
   end
 
   test 'Test /fr/project_stats/activity_30.json' do
     get activity_30_project_stats_path(format: :json, locale: 'fr')
     contents = JSON.parse(@response.body)
-    assert_equal(
-      'Projets actifs (créés / mis à jour dans les 30 derniers jours)',
-      contents[0]['name']
-    )
+    assert_equal('Projets actifs (créés / mis à jour dans les 30 derniers jours)', contents[0]['name'])
     assert_equal 4, contents.length
   end
 
@@ -206,8 +196,7 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'Test /project_stats/silver.json' do
-    assert '/project_stats/silver.json',
-           silver_project_stats_path(format: :json, locale: nil)
+    assert '/project_stats/silver.json', silver_project_stats_path(format: :json, locale: nil)
     get silver_project_stats_path(format: :json, locale: nil)
     # Verify that we can parse the result as JSON
     contents = JSON.parse(@response.body)
@@ -216,8 +205,7 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'Test /project_stats/gold.json' do
-    assert '/project_stats/gold.json',
-           gold_project_stats_path(format: :json, locale: nil)
+    assert '/project_stats/gold.json', gold_project_stats_path(format: :json, locale: nil)
     get gold_project_stats_path(format: :json, locale: nil)
     # Verify that we can parse the result as JSON
     contents = JSON.parse(@response.body)

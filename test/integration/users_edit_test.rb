@@ -68,8 +68,7 @@ class UsersEditTest < ActionDispatch::IntegrationTest
     # account's email address will alert the old email address.
     # Obviously we don't want takeovers to happen in the first place, but
     # always doing this reduces the potential damage.
-    assert_equal ['foo@bar.com', 'test@example.org'],
-                 ActionMailer::Base.deliveries[0]['To'].unparsed_value
+    assert_equal ['foo@bar.com', 'test@example.org'], ActionMailer::Base.deliveries[0]['To'].unparsed_value
     # Forcibly load the data from the database, and ensure that we
     # can retrieve from the database the values we supposedly just changed.
     @user.reload

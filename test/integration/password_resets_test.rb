@@ -18,19 +18,16 @@ class PasswordResetsTest < ActionDispatch::IntegrationTest
     get new_password_reset_path(locale: :en)
     assert_template 'password_resets/new'
     # Invalid email
-    post password_resets_path,
-         params: { password_reset: { email: '' }, locale: :en }
+    post password_resets_path, params: { password_reset: { email: '' }, locale: :en }
     assert_not flash.empty?
     assert_redirected_to root_url(locale: :en)
     # Valid email, github user
-    post password_resets_path,
-         params: { password_reset: { email: @ghuser.email }, locale: :en }
+    post password_resets_path, params: { password_reset: { email: @ghuser.email }, locale: :en }
     assert_equal 0, ActionMailer::Base.deliveries.size
     assert_not flash.empty?
     assert_redirected_to root_url(locale: :en)
     # Valid email
-    post password_resets_path,
-         params: { password_reset: { email: @user.email }, locale: :en }
+    post password_resets_path, params: { password_reset: { email: @user.email }, locale: :en }
     assert_not_equal @user.reset_digest, @user.reload.reset_digest
     assert_equal 1, ActionMailer::Base.deliveries.size
     assert_not flash.empty?
@@ -42,19 +39,14 @@ class PasswordResetsTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_url
     # Inactive user
     user.toggle!(:activated)
-    get edit_password_reset_path(
-      user.reset_token,
-      email: user.email, locale: :en
-    )
+    get edit_password_reset_path(user.reset_token, email: user.email, locale: :en)
     assert_redirected_to root_url(locale: :en)
     user.toggle!(:activated)
     # Right email, wrong token
     get edit_password_reset_path('wrong token', email: user.email, locale: :en)
     assert_redirected_to root_url(locale: :en)
     # Right email, right token
-    get edit_password_reset_path(
-      user.reset_token, email: user.email, locale: :en
-    )
+    get edit_password_reset_path(user.reset_token, email: user.email, locale: :en)
     assert_template 'password_resets/edit'
     assert_select(+'input[name=email][type=hidden][value=?]', user.email)
     # Invalid password & confirmation
@@ -93,13 +85,7 @@ class PasswordResetsTest < ActionDispatch::IntegrationTest
 
   test 'expired token' do
     get new_password_reset_path(locale: :en)
-    post password_resets_path(locale: :en),
-         params: {
-           password_reset: {
-             email: @user.email
-           },
-           locale: 'en'
-         }
+    post password_resets_path(locale: :en), params: { password_reset: { email: @user.email }, locale: 'en' }
 
     @user = assigns(:user)
     @user.update_attribute(:reset_sent_at, 3.hours.ago)

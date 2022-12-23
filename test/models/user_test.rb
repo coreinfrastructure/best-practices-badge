@@ -41,10 +41,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'email validation should accept good emails' do
-    good_emails = %w[
-      user@mail.com USER@foo.COM A_US-ER@abc.mail.org
-      first.last@foo.co hello+bye@baz.uk
-    ]
+    good_emails = %w[user@mail.com USER@foo.COM A_US-ER@abc.mail.org first.last@foo.co hello+bye@baz.uk]
     good_emails.each do |good_email|
       @user.email = good_email
       assert @user.valid?, "#{good_email.inspect} should be valid"
@@ -52,10 +49,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'email validation should reject bad emails' do
-    bad_emails = %w[
-      user@mail,com user_at_foo.org user.name@mail.
-      foo@bar_baz.com foo@bar+baz.com
-    ]
+    bad_emails = %w[user@mail,com user_at_foo.org user.name@mail. foo@bar_baz.com foo@bar+baz.com]
     bad_emails.each do |bad_email|
       @user.email = bad_email
       assert_not @user.valid?, "#{bad_email.inspect} should be invalid"
@@ -96,10 +90,7 @@ class UserTest < ActiveSupport::TestCase
     old_key = ['ea' * 32].pack('H*')
     old_iv = Base64.decode64(user1.encrypted_email_iv)
     email_address = 'bogus@stuff.com'
-    user1.encrypted_email = User.encrypt_email(
-      email_address,
-      key: old_key, iv: old_iv
-    )
+    user1.encrypted_email = User.encrypt_email(email_address, key: old_key, iv: old_iv)
     # Setup done, now invoke rekey to test rekeying the record.
     user1.rekey(old_key)
     # Check if rekey results are correct
@@ -114,10 +105,7 @@ class UserTest < ActiveSupport::TestCase
 
   test 'associated projects should be destroyed' do
     @user.save!
-    @user.projects.create!(
-      homepage_url: 'https://www.example.org',
-      repo_url: 'https://www.example.org/code'
-    )
+    @user.projects.create!(homepage_url: 'https://www.example.org', repo_url: 'https://www.example.org/code')
     assert_difference 'Project.count', -1 do
       @user.destroy
     end
@@ -129,13 +117,11 @@ class UserTest < ActiveSupport::TestCase
 
   test 'gravatar URL for local user' do
     avatar_id = Digest::MD5.hexdigest(users(:admin_user).email.downcase)
-    assert_equal "https://secure.gravatar.com/avatar/#{avatar_id}?d=mm&size=80",
-                 users(:admin_user).avatar_url
+    assert_equal "https://secure.gravatar.com/avatar/#{avatar_id}?d=mm&size=80", users(:admin_user).avatar_url
   end
 
   test 'gravatar URL for github user' do
-    assert_equal 'https://avatars.githubusercontent.com/github-user?size=80',
-                 users(:github_user).avatar_url
+    assert_equal 'https://avatars.githubusercontent.com/github-user?size=80', users(:github_user).avatar_url
   end
 
   test 'Bcrypt of text with full rounds' do
@@ -161,12 +147,8 @@ class UserTest < ActiveSupport::TestCase
     User.find_each do |user|
       # puts(user.name)
       assert user.name.present?, "Empty name for #{user.id}"
-      assert user.encrypted_email.present?,
-             "Email not present for #{user.name}"
-      assert(
-        user.encrypted_email_iv.present?,
-        "Email IV not present for #{user.name}"
-      )
+      assert user.encrypted_email.present?, "Email not present for #{user.name}"
+      assert(user.encrypted_email_iv.present?, "Email IV not present for #{user.name}")
       # This will also fail if the email is not encrypted correctly:
       assert user.email.present?, "Email not present for #{user.name}"
       assert user.provider.present?, "Provider not present for #{user.name}"

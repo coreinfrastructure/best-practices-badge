@@ -66,14 +66,12 @@ class TranslationTest < ActionDispatch::IntegrationTest
   end
 
   test 'Correctly switch to browser default locale in /projects' do
-    get '/projects',
-        headers: { HTTP_ACCEPT_LANGUAGE: 'fr,en-US;q=0.7,en;q=0.3' }
+    get '/projects', headers: { HTTP_ACCEPT_LANGUAGE: 'fr,en-US;q=0.7,en;q=0.3' }
     assert_redirected_to projects_url(locale: :fr)
   end
 
   test 'Do not switch locale of /projects if one given' do
-    get '/de/projects',
-        headers: { HTTP_ACCEPT_LANGUAGE: 'fr,en-US;q=0.7,en;q=0.3' }
+    get '/de/projects', headers: { HTTP_ACCEPT_LANGUAGE: 'fr,en-US;q=0.7,en;q=0.3' }
     assert_response :success
   end
 end

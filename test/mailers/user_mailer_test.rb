@@ -36,8 +36,7 @@ class UserMailerTest < ActionMailer::TestCase
     assert_not_equal [user.email.downcase], mail.to
     assert_equal ['badgeapp@localhost'], mail.from
     assert mail.multipart?
-    assert_equal ['text/plain; charset=UTF-8', 'text/html; charset=UTF-8'],
-                 mail.parts.map(&:content_type)
+    assert_equal ['text/plain; charset=UTF-8', 'text/html; charset=UTF-8'], mail.parts.map(&:content_type)
     # Ensure that the reset token is actually being passed:
     assert_match user.reset_token, mail.parts[0].body.to_s
     assert_match CGI.escape(user.email), mail.body.encoded

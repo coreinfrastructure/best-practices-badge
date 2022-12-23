@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
+require 'set'
 # Copyright 2015-2017, the Linux Foundation, IDA, and the
 # OpenSSF Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
 require 'test_helper'
-require 'set'
 
 # rubocop:disable Metrics/ClassLength
 class CriteriaTest < ActiveSupport::TestCase
@@ -67,9 +67,7 @@ class CriteriaTest < ActiveSupport::TestCase
   end
 
   test 'Ensure that only allowed fields are in Criteria translations' do
-    allowed_set = Set.new %i[
-      description details met_placeholder unmet_placeholder na_placeholder
-    ]
+    allowed_set = Set.new %i[description details met_placeholder unmet_placeholder na_placeholder]
     I18n.t('criteria').each_value do |criteria_set|
       criteria_set.each_value do |fields|
         fields.each_key { |k| assert_includes allowed_set, k }
@@ -81,9 +79,7 @@ class CriteriaTest < ActiveSupport::TestCase
     required_set = Set.new %i[category major minor]
     Criteria.to_h.each do |level, criteria_set|
       criteria_set.each do |criterion, fields|
-        assert I18n.exists?(
-          "criteria.#{level}.#{criterion}.description", :en
-        )
+        assert I18n.exists?("criteria.#{level}.#{criterion}.description", :en)
         required_set.each do |required_field|
           assert_includes fields.keys, required_field.to_s
         end
@@ -103,10 +99,8 @@ class CriteriaTest < ActiveSupport::TestCase
     allowed_field_values = %w[MUST SHOULD SUGGESTED]
     Criteria.to_h.each_value do |criteria_set|
       criteria_set.each_value do |fields|
-        assert_includes allowed_field_values, fields['category'],
-                        'only valid categories may be in Criteria'
-        assert_not fields[:met_url_required] && fields[:met_suppress],
-                   'If URL required, do not suppress justification'
+        assert_includes allowed_field_values, fields['category'], 'only valid categories may be in Criteria'
+        assert_not fields[:met_url_required] && fields[:met_suppress], 'If URL required, do not suppress justification'
         assert_not fields[:met_justification_required] && fields[:met_suppress],
                    'If Met justification required, must allow justification'
         assert_not fields[:na_justification_required] && fields[:met_suppress],

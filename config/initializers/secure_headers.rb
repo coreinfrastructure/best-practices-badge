@@ -8,8 +8,7 @@
 SecureHeaders::Configuration.default do |config|
   normal_src = ["'self'"]
   if ENV['PUBLIC_HOSTNAME']
-    fastly_alternate = 'https://' + ENV['PUBLIC_HOSTNAME'] +
-                       '.global.ssl.fastly.net'
+    fastly_alternate = 'https://' + ENV['PUBLIC_HOSTNAME'] + '.global.ssl.fastly.net'
     normal_src += [fastly_alternate]
   end
   config.hsts = "max-age=#{20.years.to_i}; includeSubDomains; preload"

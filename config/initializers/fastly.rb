@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'ipaddr'
+require 'json'
 # Copyright 2015-2017, the Linux Foundation, IDA, and the
 # OpenSSF Best Practices badge contributors
 # SPDX-License-Identifier: MIT
@@ -7,8 +9,6 @@
 # See https://github.com/fastly/fastly-rails
 
 require 'net/https'
-require 'json'
-require 'ipaddr'
 
 # Download list of valid IP addresses from this (be SURE this is https!):
 # iplist_uri = 'https://api.fastly.com/public-ip-list'

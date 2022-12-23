@@ -11,14 +11,9 @@ class UsersController < ApplicationController
   # See: http://guides.rubyonrails.org/action_controller_overview.html
   # Require being logged in for "index" to slightly discourage enumeration
   before_action :redir_unless_logged_in, only: %i[edit update destroy index]
-  before_action :redir_unless_current_user_can_edit,
-                only: %i[edit update destroy]
+  before_action :redir_unless_current_user_can_edit, only: %i[edit update destroy]
   before_action :enable_maximum_privacy_headers
   include SessionsHelper
-
-  def new
-    @user = User.new
-  end
 
   def index
     @pagy, @users = pagy(User.all)
@@ -37,20 +32,29 @@ class UsersController < ApplicationController
     # Don't bother paginating the projects wtih additional rights,
     # we practically never have that many and the interface would be confusing.
     @projects_additional_rights =
-      select_needed(Project.includes(:user).joins(:additional_rights)
-        .where('additional_rights.user_id = ?', @user.id))
+      select_needed(Project.includes(:user).joins(:additional_rights).where(additional_rights: { user_id: @user.id }))
     # *Separately* list edit_projects from projects_additional_rights.
     # Jason Dossett thinks they should be combined, but David A. Wheeler
     # thinks these are important to keep separate because how to *change*
     # what is in these lists is radically different.
     return unless @user == current_user && @user.provider == 'github'
 
-    @edit_projects =
-      select_needed(
-        Project.includes(:user).where(repo_url: github_user_projects)
-      ) - @projects
+    @edit_projects = select_needed(Project.includes(:user).where(repo_url: github_user_projects)) - @projects
   end
+
+  def new
+    @user = User.new
+  end
+
   # rubocop: enable Metrics/MethodLength, Metrics/AbcSize
+
+  def edit
+    @user = User.find(params[:id])
+    # Force redirect if current_user cannot edit.  Otherwise, the process
+    # of displaying the edit fields (with their defaults) could cause an
+    # unauthorized exposure of an email address.
+    redirect_to @user unless current_user_can_edit(@user)
+  end
 
   # rubocop: disable Metrics/MethodLength, Metrics/AbcSize
   def create
@@ -79,15 +83,6 @@ class UsersController < ApplicationController
     flash[:info] = t('users.new_activation_link_created')
     redirect_to root_path, status: :found
   end
-  # rubocop: enable Metrics/MethodLength, Metrics/AbcSize
-
-  def edit
-    @user = User.find(params[:id])
-    # Force redirect if current_user cannot edit.  Otherwise, the process
-    # of displaying the edit fields (with their defaults) could cause an
-    # unauthorized exposure of an email address.
-    redirect_to @user unless current_user_can_edit(@user)
-  end
 
   # Produce a cleaned-up hash of changes.
   # The key is the field that was changed, the value is [old, new]
@@ -112,9 +107,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     old_email = @user&.email_if_decryptable
     @user.assign_attributes(user_params)
-    changes = cleanup_changes(
-      @user.changes, old_email, @user.email_if_decryptable
-    )
+    changes = cleanup_changes(@user.changes, old_email, @user.email_if_decryptable)
     if @user.save
       # If user changed his own locale, switch to it.  It's possible for an
       # *admin* to change someone else's locale, in that case leave it alone.

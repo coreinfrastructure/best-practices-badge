@@ -32,10 +32,7 @@ class UserMailer < ApplicationMailer
     # modify header to delay email transmission
     headers['X-SMTPAPI'] = delay_send_header(NORMAL_X_SMTPAPI_JSON)
     I18n.with_locale(user.preferred_locale.to_sym) do
-      mail(
-        to: user.email,
-        subject: t('user_mailer.account_activation.subject').strip
-      )
+      mail(to: user.email, subject: t('user_mailer.account_activation.subject').strip)
     end
   end
 
@@ -43,10 +40,7 @@ class UserMailer < ApplicationMailer
     @user = user
     set_standard_headers
     I18n.with_locale(user.preferred_locale.to_sym) do
-      mail(
-        to: user.email,
-        subject: t('user_mailer.password_reset.subject').strip
-      )
+      mail(to: user.email, subject: t('user_mailer.password_reset.subject').strip)
     end
   end
 
@@ -72,10 +66,7 @@ class UserMailer < ApplicationMailer
     destination = find_destinations(user&.email, changes)
     set_standard_headers
     I18n.with_locale(user.preferred_locale.to_sym) do
-      mail(
-        to: destination,
-        subject: t('user_mailer.user_update.subject').strip
-      )
+      mail(to: destination, subject: t('user_mailer.user_update.subject').strip)
     end
   end
 
@@ -83,10 +74,7 @@ class UserMailer < ApplicationMailer
     @user = user
     set_standard_headers
     I18n.with_locale(user.preferred_locale.to_sym) do
-      mail(
-        to: user.email,
-        subject: t('user_mailer.github_welcome.subject').strip
-      )
+      mail(to: user.email, subject: t('user_mailer.github_welcome.subject').strip)
     end
   end
 
@@ -96,10 +84,7 @@ class UserMailer < ApplicationMailer
     @body = body
     set_standard_headers
     I18n.with_locale(user.preferred_locale.to_sym) do
-      mail(
-        to: user.email,
-        subject: subject
-      )
+      mail(to: user.email, subject: subject)
     end
   end
 end

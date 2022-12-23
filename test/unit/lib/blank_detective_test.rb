@@ -13,9 +13,7 @@ class BlankDetectiveTest < ActiveSupport::TestCase
   end
 
   test 'Blank' do
-    results = BlankDetective.new.analyze(
-      nil, license: '(GPL-2.0 WITH CLASSPATH'
-    )
+    results = BlankDetective.new.analyze(nil, license: '(GPL-2.0 WITH CLASSPATH')
     assert results == {}
   end
 end

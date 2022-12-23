@@ -50,9 +50,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     get '/en/projects/new'
     assert_response :success
     assert_includes @response.body, 'Log in with '
-    assert_not_includes @response.body,
-                        'What is the URL for the project home page ' \
-                        '(the URL for the project as a whole)'
+    assert_not_includes @response.body, 'What is the URL for the project home page (the URL for the project as a whole)'
   end
 
   test 'should get new' do
@@ -60,19 +58,14 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     get '/en/projects/new'
     assert_response :success
     assert_not_includes @response.body, 'Log in with '
-    assert_includes @response.body,
-                    'What is the URL for the project home page ' \
-                    '(the URL for the project as a whole)'
+    assert_includes @response.body, 'What is the URL for the project home page (the URL for the project as a whole)'
   end
 
   test 'should create project' do
     log_in_as(@user)
-    stub_request(:get, 'https://api.github.com/user/repos')
-      .to_return(status: 200, body: '', headers: {})
+    stub_request(:get, 'https://api.github.com/user/repos').to_return(status: 200, body: '', headers: {})
     # Use assert_difference to verify that project record created & email sent
-    assert_difference [
-      'Project.count', 'ActionMailer::Base.deliveries.size'
-    ] do
+    assert_difference ['Project.count', 'ActionMailer::Base.deliveries.size'] do
       post '/en/projects', params: { # Routes to 'create'
         project: {
           description: @project.description,
@@ -95,11 +88,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should create project with empty repo' do
     log_in_as(@user)
-    stub_request(:get, 'https://api.github.com/user/repos')
-      .to_return(status: 200, body: '', headers: {})
-    assert_difference [
-      'Project.count', 'ActionMailer::Base.deliveries.size'
-    ] do
+    stub_request(:get, 'https://api.github.com/user/repos').to_return(status: 200, body: '', headers: {})
+    assert_difference ['Project.count', 'ActionMailer::Base.deliveries.size'] do
       post '/en/projects', params: { # Routes to 'create'
         project: {
           description: @project.description,
@@ -114,11 +104,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should fail to create project with duplicate repo' do
     log_in_as(@user)
-    stub_request(:get, 'https://api.github.com/user/repos')
-      .to_return(status: 200, body: '', headers: {})
-    assert_no_difference [
-      'Project.count', 'ActionMailer::Base.deliveries.size'
-    ] do
+    stub_request(:get, 'https://api.github.com/user/repos').to_return(status: 200, body: '', headers: {})
+    assert_no_difference ['Project.count', 'ActionMailer::Base.deliveries.size'] do
       post '/en/projects', params: { # Routes to 'create'
         project: {
           description: 'Some other project',
@@ -134,14 +121,11 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test 'should fail to create project as blocked user' do
     blocked_user = users(:blocked_github_user)
     log_in_as(blocked_user)
-    stub_request(:get, 'https://api.github.com/user/repos')
-      .to_return(status: 200, body: '', headers: {})
+    stub_request(:get, 'https://api.github.com/user/repos').to_return(status: 200, body: '', headers: {})
     # Use assert_difference to verify that project record created & email sent
     # This actually raises an exception, so we'll need to catch & ignore it
     # rubocop:disable Style/RescueStandardError
-    assert_no_difference [
-      'Project.count', 'ActionMailer::Base.deliveries.size'
-    ] do
+    assert_no_difference ['Project.count', 'ActionMailer::Base.deliveries.size'] do
       post '/en/projects', params: { # Routes to 'create'
         project: {
           description: @project.description,
@@ -167,23 +151,18 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       post '/en/projects', params: { project: { name: @project.name } }
     end
     assert_no_difference('Project.count') do
-      post '/en/projects.json', params: {
-        project: { name: @project.name }
-      }
+      post '/en/projects.json', params: { project: { name: @project.name } }
     end
   end
 
   test 'should show project' do
     get "/en/projects/#{@project.id}"
     assert_response :success
-    assert_includes @response.body,
-                    'What is the human-readable name of the project'
+    assert_includes @response.body, 'What is the human-readable name of the project'
     assert_select(+'a[href=?]', 'https://www.nasa.gov')
     assert_select(+'a[href=?]', 'https://www.nasa.gov/pathfinder')
     # Check semver description, which has HTML - make sure it's not escaped:
-    assert @response.body.include?(
-      I18n.t('criteria.0.version_semver.description')
-    )
+    assert @response.body.include?(I18n.t('criteria.0.version_semver.description'))
     assert_not_includes @response.body, 'target=[^ >]+>'
     assert_includes @response.body, "<img src='/projects/#{@project.id}/badge"
     assert_equal 'Accept-Encoding, Origin', @response.headers['Vary']
@@ -192,8 +171,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test 'should show passing project' do
     get "/en/projects/#{@perfect_passing_project.id}"
     assert_response :success
-    assert_includes @response.body,
-                    'What is the human-readable name of the project'
+    assert_includes @response.body, 'What is the human-readable name of the project'
     assert_select(+'a[href=?]', 'https://www.example.org')
     assert_includes @response.body, "<img src='/badge_static/passing'"
     assert_equal 'Accept-Encoding, Origin', @response.headers['Vary']
@@ -260,9 +238,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should get edit' do
     log_in_as(@project.user)
-    assert_equal(
-      'Logged in! Last login: (No previous time recorded.)', flash['success']
-    )
+    assert_equal('Logged in! Last login: (No previous time recorded.)', flash['success'])
     get "/en/projects/#{@project.id}/edit"
     assert_response :success
     assert_includes @response.body, 'Edit Project Badge Status'
@@ -272,10 +248,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     test_user = users(:test_user_mark)
     # Create additional rights during test, not as a fixure.
     # The fixture would require correct references to *other* fixture ids.
-    new_right = AdditionalRight.new(
-      user_id: test_user.id,
-      project_id: @project.id
-    )
+    new_right = AdditionalRight.new(user_id: test_user.id, project_id: @project.id)
     new_right.save!
     log_in_as(test_user)
     get "/en/projects/#{@project.id}/edit" # Invokes "edit"
@@ -287,18 +260,9 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test 'can add users with additional rights using "+"' do
     log_in_as(@project.user)
     # Ensure that our test setup is correct & get current state
-    assert_not AdditionalRight.exists?(
-      project_id: @project.id,
-      user_id: users(:test_user_mark).id
-    )
-    assert_not AdditionalRight.exists?(
-      project_id: @project.id,
-      user_id: users(:test_user_melissa).id
-    )
-    assert_not AdditionalRight.exists?(
-      project_id: @project.id,
-      user_id: @admin.id
-    )
+    assert_not AdditionalRight.exists?(project_id: @project.id, user_id: users(:test_user_mark).id)
+    assert_not AdditionalRight.exists?(project_id: @project.id, user_id: users(:test_user_melissa).id)
+    assert_not AdditionalRight.exists?(project_id: @project.id, user_id: @admin.id)
     previous_update = @project.updated_at
     # Run patch (the point of the test), which invokes the 'update' method
     patch "/en/projects/#{@project.id}", params: {
@@ -308,14 +272,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     }
     # Check that results are what was expected
     assert_redirected_to project_path(assigns(:project))
-    assert AdditionalRight.exists?(
-      project_id: @project.id,
-      user_id: users(:test_user_mark).id
-    )
-    assert AdditionalRight.exists?(
-      project_id: @project.id,
-      user_id: users(:test_user_melissa).id
-    )
+    assert AdditionalRight.exists?(project_id: @project.id, user_id: users(:test_user_mark).id)
+    assert AdditionalRight.exists?(project_id: @project.id, user_id: users(:test_user_melissa).id)
     # Ensure that updated_at has changed
     @project.reload
     assert_not_equal previous_update, @project.updated_at
@@ -323,14 +281,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   # rubocop:enable Metrics/BlockLength
 
   test 'can remove a user with additional rights using "-"' do
-    AdditionalRight.new(
-      user_id: users(:test_user_melissa).id,
-      project_id: @project.id
-    ).save!
-    AdditionalRight.new(
-      user_id: users(:test_user_mark).id,
-      project_id: @project.id
-    ).save!
+    AdditionalRight.new(user_id: users(:test_user_melissa).id, project_id: @project.id).save!
+    AdditionalRight.new(user_id: users(:test_user_mark).id, project_id: @project.id).save!
     assert_equal 2, AdditionalRight.where(project_id: @project.id).count
     log_in_as(@project.user)
     # Run patch (the point of the test), which invokes the 'update' method
@@ -346,14 +298,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
   # Negative test
   test 'cannot remove a user with only additional rights using "-"' do
-    AdditionalRight.new(
-      user_id: users(:test_user_melissa).id,
-      project_id: @project.id
-    ).save!
-    AdditionalRight.new(
-      user_id: users(:test_user_mark).id,
-      project_id: @project.id
-    ).save!
+    AdditionalRight.new(user_id: users(:test_user_melissa).id, project_id: @project.id).save!
+    AdditionalRight.new(user_id: users(:test_user_mark).id, project_id: @project.id).save!
     assert_equal 2, AdditionalRight.where(project_id: @project.id).count
     log_in_as(users(:test_user_melissa))
     # Run patch (the point of the test), which invokes the 'update' method
@@ -481,9 +427,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, 'Edit Project Badge Status'
 
     # Do the same thing, but as for JSON
-    patch "/en/projects/#{@project.id}.json", params: {
-      project: new_project_data
-    }
+    patch "/en/projects/#{@project.id}.json", params: { project: new_project_data }
     assert_response :unprocessable_entity
   end
 
@@ -495,10 +439,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     new_name1 = @project.name + '_updated-1'
     new_project_data1 = { name: new_name1 }
     new_name2 = @project.name + '_updated-2'
-    new_project_data2 = {
-      name: new_name2,
-      lock_version: @project.lock_version
-    }
+    new_project_data2 = { name: new_name2, lock_version: @project.lock_version }
     log_in_as(@project.user)
     patch "/en/projects/#{@project.id}", params: { project: new_project_data1 }
     assert_redirected_to project_path(@project, locale: :en)
@@ -507,9 +448,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, new_name1
     assert_not_includes @response.body, new_name2
     patch "/en/projects/#{@project.id}", params: { project: new_project_data2 }
-    assert_includes flash['danger'],
-                    'Another user has made a change to that record ' \
-                    'since you accessed the edit form.'
+    assert_includes flash['danger'], 'Another user has made a change to that record since you accessed the edit form.'
     assert_includes @response.body, 'Edit Project Badge Status'
     # Return to the user the *unsaved* values in the edit field, along with
     # the error message. That way, the user can store them separately
@@ -549,9 +488,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     new_name = old_name + '_updated'
     assert_not_equal @user, @project_two.user
     log_in_as(@user)
-    patch "/en/projects/#{@project_two.id}", params: {
-      project: { name: new_name }
-    }
+    patch "/en/projects/#{@project_two.id}", params: { project: { name: new_name } }
     assert_redirected_to root_url(locale: :en)
     @project_two.reload
     assert_equal old_name, @project_two.name
@@ -561,41 +498,35 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     new_name = @project.name + '_updated'
     log_in_as(@admin)
     assert_not_equal @admin, @project.user
-    patch "/en/projects/#{@project.id}", params: {
-      project: { name: new_name }
-    }
+    patch "/en/projects/#{@project.id}", params: { project: { name: new_name } }
     assert_redirected_to project_path(assigns(:project))
     @project.reload
     assert_equal new_name, @project.name
   end
 
   test 'Cannot evade /badge match with /badge/..' do
-    get "/projects/#{@perfect_passing_project.id}/badge/..",
-        params: { format: 'svg' }
+    get "/projects/#{@perfect_passing_project.id}/badge/..", params: { format: 'svg' }
     assert_response :not_found
     assert_equal 'Accept-Encoding, Origin', @response.headers['Vary']
     assert_nil @response.headers['Access-Control-Allow-Origin']
   end
 
   test 'Cannot evade /badge match with /projects/NUM/../badge' do
-    get "/projects/#{@perfect_passing_project.id}/../badge",
-        params: { format: 'svg' }
+    get "/projects/#{@perfect_passing_project.id}/../badge", params: { format: 'svg' }
     assert_response :not_found
     assert_equal 'Accept-Encoding', @response.headers['Vary']
     assert_nil @response.headers['Access-Control-Allow-Origin']
   end
 
   test 'CORS Cannot evade /badge match with /badge.json/..' do
-    get "/projects/#{@perfect_passing_project.id}/badge.json/..",
-        headers: { Origin: 'example.com' }
+    get "/projects/#{@perfect_passing_project.id}/badge.json/..", headers: { Origin: 'example.com' }
     assert_response :not_found
     assert_equal 'Accept-Encoding, Origin', @response.headers['Vary']
     assert_equal '*', @response.headers['Access-Control-Allow-Origin']
   end
 
   test 'Cannot evade /badge match with /projects/NUM/../badge.json' do
-    get "/projects/#{@perfect_passing_project.id}/../badge.json",
-        headers: { Origin: 'example.com' }
+    get "/projects/#{@perfect_passing_project.id}/../badge.json", headers: { Origin: 'example.com' }
     assert_response :not_found
     # We don't really care about these for a "not found":
     # assert_equal 'Accept-Encoding', @response.headers['Vary']
@@ -604,8 +535,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
   test 'A perfect passing project should have the passing badge' do
     # NOTICE!! Badge URLs do *NOT* have a locale prefix
-    get "/projects/#{@perfect_passing_project.id}/badge",
-        params: { format: 'svg' }
+    get "/projects/#{@perfect_passing_project.id}/badge", params: { format: 'svg' }
     assert_response :success
     assert_equal contents('badge-passing.svg'), @response.body
     # NOTE: Requestors MUST use the ".json"
@@ -618,15 +548,13 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'A perfect passing project requested with CORS' do
-    get "/en/projects/#{@project.id}/badge.json",
-        headers: { Origin: 'example.com' }
+    get "/en/projects/#{@project.id}/badge.json", headers: { Origin: 'example.com' }
     assert_equal 'Accept-Encoding', @response.headers['Vary']
   end
 
   test 'A perfect silver project should have the silver badge' do
     @perfect_silver_project = projects(:perfect_silver)
-    get "/projects/#{@perfect_silver_project.id}/badge",
-        params: { format: 'svg' }
+    get "/projects/#{@perfect_silver_project.id}/badge", params: { format: 'svg' }
     assert_response :success
     assert_equal contents('badge-silver.svg'), @response.body
   end
@@ -673,17 +601,13 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     log_in_as(@admin)
     assert_nil @perfect_passing_project.lost_passing_at
     assert_not_nil @perfect_passing_project.achieved_passing_at
-    patch "/en/projects/#{@perfect_passing_project.id}", params: {
-      project: { interact_status: 'Unmet' }
-    }
+    patch "/en/projects/#{@perfect_passing_project.id}", params: { project: { interact_status: 'Unmet' } }
     follow_redirect!
     @perfect_passing_project.reload
     assert_not_nil @perfect_passing_project.lost_passing_at
     assert @perfect_passing_project.lost_passing_at > 5.minutes.ago.utc
     assert_not_nil @perfect_passing_project.achieved_passing_at
-    patch "/en/projects/#{@perfect_passing_project.id}", params: {
-      project: { interact_status: 'Met' }
-    }
+    patch "/en/projects/#{@perfect_passing_project.id}", params: { project: { interact_status: 'Met' } }
     assert_not_nil @perfect_passing_project.lost_passing_at
     assert_not_nil @perfect_passing_project.achieved_passing_at
     # These tests should work, but don't; it appears our workaround for
@@ -705,10 +629,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     num = ActionMailer::Base.deliveries.size
     assert_difference('Project.count', -1) do
       # The "delete" request routes to the controller method "destroy"
-      delete "/en/projects/#{@project.id}",
-             params: {
-               deletion_rationale: 'The front page is not purple enough.'
-             }
+      delete "/en/projects/#{@project.id}", params: { deletion_rationale: 'The front page is not purple enough.' }
     end
     assert_equal 'Project was successfully deleted.', flash['success']
     assert_redirected_to projects_path
@@ -719,8 +640,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     log_in_as(@project.user)
     assert_no_difference('Project.count',
                          ActionMailer::Base.deliveries.size) do
-      delete "/en/projects/#{@project.id}",
-             params: { deletion_rationale: 'Nah.' }
+      delete "/en/projects/#{@project.id}", params: { deletion_rationale: 'Nah.' }
     end
     assert_equal 'Must have at least 20 characters.', flash['danger']
     assert_redirected_to delete_form_project_path(@project)
@@ -730,11 +650,9 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     log_in_as(@project.user)
     assert_no_difference('Project.count',
                          ActionMailer::Base.deliveries.size) do
-      delete "/en/projects/#{@project.id}",
-             params: { deletion_rationale: ' x y ' + ("\n" * 30) }
+      delete "/en/projects/#{@project.id}", params: { deletion_rationale: ' x y ' + ("\n" * 30) }
     end
-    assert_equal 'Must have at least 15 non-whitespace characters.',
-                 flash['danger']
+    assert_equal 'Must have at least 15 non-whitespace characters.', flash['danger']
     assert_redirected_to delete_form_project_path(@project)
   end
 
@@ -786,18 +704,14 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     # Verify that we are actually logged in
     assert_equal @user2.id, session[:user_id]
     new_repo_url = @project.repo_url + '_new'
-    patch "/en/projects/#{@project_two.id}", params: {
-      project: { repo_url:  new_repo_url }
-    }
+    patch "/en/projects/#{@project_two.id}", params: { project: { repo_url: new_repo_url } }
     # Check for success
     @project_two.reload
     assert_equal new_repo_url, @project_two.repo_url
 
     # Now let's do it again. *This* should fail, it's too soon.
     second_repo_url = new_repo_url + '_second'
-    patch "/en/projects/#{@project_two.id}", params: {
-      project: { repo_url:  second_repo_url }
-    }
+    patch "/en/projects/#{@project_two.id}", params: { project: { repo_url: second_repo_url } }
     # Ensure the second attempt failed.
     assert_not_empty flash
     assert_includes @response.body, 'Edit Project Badge Status'
@@ -821,8 +735,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal @project_two.repo_url, new_repo_url
     # Check that PaperTrail properly recorded the old version
     assert_equal 'update', @project_two.versions.last.event
-    assert_equal @project_two.user.id,
-                 @project_two.versions.last.whodunnit.to_i
+    assert_equal @project_two.user.id, @project_two.versions.last.whodunnit.to_i
     assert_equal old_repo_url, @project_two.versions.last.reify.repo_url
   end
 
@@ -894,9 +807,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
          \ href="https?://[a-z0-9.:]+/#{loc}/projects\?gteq=100"\ />}x,
         @response.body
       # User locale selector (useful for users)
-      assert_match \
-        %r{<li><a\ href="https?://[a-z0-9.:]+/#{loc}/projects\?gteq=100">}x,
-        @response.body
+      assert_match %r{<li><a\ href="https?://[a-z0-9.:]+/#{loc}/projects\?gteq=100">}x, @response.body
     end
     assert_match \
       %r{<link\ rel="alternate"\ hreflang="x-default"
@@ -906,29 +817,25 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
   test 'as=badge works in simple case (single result)' do
     expected_id = projects(:perfect).id
-    get '/en/projects?as=badge&' \
-        'url=https%3A%2F%2Fgithub.com%2Fciitest2%2Ftest-repo-shared'
+    get '/en/projects?as=badge&url=https%3A%2F%2Fgithub.com%2Fciitest2%2Ftest-repo-shared'
     assert_redirected_to "/projects/#{expected_id}/badge"
   end
 
   test 'as=badge works with trailing space and slash' do
     expected_id = projects(:perfect).id
-    get '/en/projects?as=badge&' \
-        'url=https%3A%2F%2Fgithub.com%2Fciitest2%2Ftest-repo-shared%2F%20'
+    get '/en/projects?as=badge&url=https%3A%2F%2Fgithub.com%2Fciitest2%2Ftest-repo-shared%2F%20'
     assert_redirected_to "/projects/#{expected_id}/badge"
   end
 
   test 'as=badge works in simple case returning JSON' do
     expected_id = projects(:perfect).id
-    get '/en/projects.json?as=badge&' \
-        'url=https%3A%2F%2Fgithub.com%2Fciitest2%2Ftest-repo-shared'
+    get '/en/projects.json?as=badge&url=https%3A%2F%2Fgithub.com%2Fciitest2%2Ftest-repo-shared'
     assert_redirected_to "/projects/#{expected_id}/badge.json"
   end
 
   test 'as=badge redirects simple case when using pq=' do
     expected_id = projects(:perfect).id
-    get '/en/projects?as=badge&' \
-        'pq=https%3A%2F%2Fgithub.com%2Fciitest2%2Ftest-repo-shared'
+    get '/en/projects?as=badge&pq=https%3A%2F%2Fgithub.com%2Fciitest2%2Ftest-repo-shared'
     assert_redirected_to "/projects/#{expected_id}/badge"
   end
 
@@ -944,8 +851,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
   test 'as=entry works in simple case (single result)' do
     expected_id = projects(:perfect).id
-    get '/en/projects?as=entry&' \
-        'url=https%3A%2F%2Fgithub.com%2Fciitest2%2Ftest-repo-shared'
+    get '/en/projects?as=entry&url=https%3A%2F%2Fgithub.com%2Fciitest2%2Ftest-repo-shared'
     assert_redirected_to "/en/projects/#{expected_id}"
   end
 

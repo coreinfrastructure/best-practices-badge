@@ -21,9 +21,7 @@ Rails.application.configure do
   # Full error reports are disabled and caching is turned on.
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = true
-  config.cache_store =
-    :memory_store,
-    { size: (ENV['RAILS_CACHE_SIZE'] || '128').to_i.megabytes }
+  config.cache_store = :memory_store, { size: (ENV['RAILS_CACHE_SIZE'] || '128').to_i.megabytes }
 
   # Enable Rack::Cache to put a simple HTTP cache in front of your application
   # Add `rack-cache` to your Gemfile before enabling this.
@@ -108,8 +106,8 @@ Rails.application.configure do
     address: 'smtp.sendgrid.net',
     port: '587',
     authentication: :plain,
-    user_name: ENV['SENDGRID_USERNAME'],
-    password: ENV['SENDGRID_PASSWORD'],
+    user_name: ENV.fetch('SENDGRID_USERNAME', nil),
+    password: ENV.fetch('SENDGRID_PASSWORD', nil),
     domain: 'heroku.com',
     enable_starttls_auto: true
   }
@@ -123,7 +121,7 @@ Rails.application.configure do
   config.active_support.deprecation = :notify
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
-  config.log_formatter = ::Logger::Formatter.new
+  config.log_formatter = Logger::Formatter.new
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
@@ -137,11 +135,7 @@ Rails.application.configure do
   # renamed to "config.serve_static_files", which we already conditionally set.
 
   # Cache static content.  Cache for a long time; the asset cache is
-  config.public_file_server.headers =
-    {
-      'Cache-Control' =>
-        'public, s-maxage=31536000, max-age=31536000, immutable'
-    }
+  config.public_file_server.headers = { 'Cache-Control' => 'public, s-maxage=31536000, max-age=31536000, immutable' }
 
   # Enable Rack's built-in compression mechanism; this is important for people
   # with slow network connections

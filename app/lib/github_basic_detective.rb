@@ -48,9 +48,7 @@ class GithubBasicDetective < Detective
     'ZLIB' => 'Zlib'
   }.freeze
 
-  EXCLUDE_IMPLEMENTATION_LANGUAGES = [
-    :HTML, :CSS, :Roff, :'DIGITAL Command Language'
-  ].freeze
+  EXCLUDE_IMPLEMENTATION_LANGUAGES = [:HTML, :CSS, :Roff, :'DIGITAL Command Language'].freeze
 
   # Clean up name of license to be like the SPDX display.
   def cleanup_license(license)
@@ -131,16 +129,11 @@ class GithubBasicDetective < Detective
       return results unless basic_repo_data
 
       if basic_repo_data[:name]
-        results[:name] = {
-          value: basic_repo_data[:name],
-          confidence: 3, explanation: 'GitHub name'
-        }
+        results[:name] = { value: basic_repo_data[:name], confidence: 3, explanation: 'GitHub name' }
       end
       if basic_repo_data[:description]
         results[:description] = {
-          value: basic_repo_data[:description].gsub(
-            /(\A|\s)\:[a-zA-Z]+\:(\s|\Z)/, ' '
-          ).strip,
+          value: basic_repo_data[:description].gsub(/(\A|\s)\:[a-zA-Z]+\:(\s|\Z)/, ' ').strip,
           confidence: 3, explanation: 'GitHub description'
         }
       end
@@ -156,10 +149,7 @@ class GithubBasicDetective < Detective
         # https://github.com/benbalter/licensee/issues/72
         # For now, we'll upcase and then fix common cases.
         license = cleanup_license(license_data_raw[:key])
-        results[:license] = {
-          value: license,
-          confidence: 3, explanation: 'GitHub API license analysis'
-        }
+        results[:license] = { value: license, confidence: 3, explanation: 'GitHub API license analysis' }
       end
 
       # Fill in programming languages

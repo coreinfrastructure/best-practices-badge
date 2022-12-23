@@ -33,10 +33,7 @@ class RecalcTest < ActionDispatch::IntegrationTest
       Project.update_all_badge_percentages(['1'])
     end
     # Check the badge percentage changed
-    assert_not_equal(
-      Project.find(projects(:one).id).badge_percentage_1,
-      old_percentage
-    )
+    assert_not_equal(Project.find(projects(:one).id).badge_percentage_1, old_percentage)
   end
 
   # rubocop:disable Metrics/BlockLength

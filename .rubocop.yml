@@ -233,3 +233,27 @@ Rails/WhereNot:
   Enabled: false
 Rails/NegateInclude:
   Enabled: false
+Layout/RedundantLineBreak:
+  Enabled: false
+Naming/VariableNumber:
+  Enabled: false
+Layout/LineContinuationLeadingSpace:
+  Enabled: false
+Style/TopLevelMethodDefinition:
+  Enabled: false
+Naming/InclusiveLanguage:
+  Enabled: false
+Bundler/GemVersion:
+  Enabled: false
+Lint/EmptyBlock:
+  Enabled: false
+Lint/OrAssignmentToConstant:
+  Enabled: false
+Rails/EnvironmentVariableAccess:
+  Enabled: false
+Rails/DuplicateScope:
+  Enabled: false
+Rails/I18nLocaleTexts:
+  Enabled: false
+Rails/RedundantPresenceValidationOnBelongsTo:
+  Enabled: false

@@ -11,9 +11,7 @@ class RepoFilesExamineDetectiveTest < ActiveSupport::TestCase
   class MockRepoFilesLicenses
     def get_info(_pattern)
       [
-        {
-          name: 'LICENSES', type: 'dir', html_url: './LICENSES/'
-        }.with_indifferent_access
+        { name: 'LICENSES', type: 'dir', html_url: './LICENSES/' }.with_indifferent_access
       ]
     end
 

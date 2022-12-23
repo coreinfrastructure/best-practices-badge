@@ -12,6 +12,8 @@ class PasswordResetsController < ApplicationController
 
   def new; end
 
+  def edit; end
+
   # NOTE: password resets *always* reply with the same message, in all cases.
   # At one time we replied with error reports if there was no account or if
   # there was a GitHub account (not a local account) with the email address.
@@ -25,8 +27,7 @@ class PasswordResetsController < ApplicationController
   # going to go beyond what some might see as the minimum, and instead
   # do what we can to maximize our users' privacy.
   def create
-    @user = User.find_by(email: nested_params(:password_reset, :email),
-                         provider: 'local')
+    @user = User.find_by(email: nested_params(:password_reset, :email), provider: 'local')
     if @user
       # NOTE: We send the password reset to the email address originally
       # created by the *original* user, and *not* to the requester
@@ -39,8 +40,6 @@ class PasswordResetsController < ApplicationController
     flash[:info] = t('password_resets.instructions_sent')
     redirect_to root_url
   end
-
-  def edit; end
 
   def update
     new_password = nested_params(:user, :password)
@@ -57,9 +56,7 @@ class PasswordResetsController < ApplicationController
 
   private
 
-  DELAY_BETWEEN_RESET_PASSWORDS = Integer(
-    (ENV['DELAY_BETWEEN_RESET_PASSWORDS'] || 4.hours.seconds.to_s), 10
-  ).seconds
+  DELAY_BETWEEN_RESET_PASSWORDS = Integer((ENV['DELAY_BETWEEN_RESET_PASSWORDS'] || 4.hours.seconds.to_s), 10).seconds
 
   # Return true iff sent_at is too soon (compared to the current time)
   # to send a reset password request.

@@ -43,16 +43,8 @@ class ProjectStat < ApplicationRecord
         public_send "percent_ge_#{completion}=", Project.gteq(completion).count
         next if completion.to_i.zero? # Don't record percentage "0" > level 0
 
-        public_send "percent_1_ge_#{completion}=",
-                    Project.where(
-                      'badge_percentage_1 >= ?',
-                      completion.to_i
-                    ).count
-        public_send "percent_2_ge_#{completion}=",
-                    Project.where(
-                      'badge_percentage_2 >= ?',
-                      completion.to_i
-                    ).count
+        public_send "percent_1_ge_#{completion}=", Project.where('badge_percentage_1 >= ?', completion.to_i).count
+        public_send "percent_2_ge_#{completion}=", Project.where('badge_percentage_2 >= ?', completion.to_i).count
       end
       self.projects_edited = Project.where('created_at < updated_at').count
 
@@ -62,12 +54,10 @@ class ProjectStat < ApplicationRecord
       self.created_since_yesterday = Project.created_since(1.day.ago).count
 
       # Exclude newly-created records from updated_since count
-      self.updated_since_yesterday = Project.updated_since(1.day.ago).count -
-                                     created_since_yesterday
+      self.updated_since_yesterday = Project.updated_since(1.day.ago).count - created_since_yesterday
 
       # Record the number of reminders sent within the day.
-      self.reminders_sent =
-        Project.where('last_reminder_at > ?', 1.day.ago).count
+      self.reminders_sent = Project.where('last_reminder_at > ?', 1.day.ago).count
 
       # If an inactive project becomes active within REACTIVATION_PERIOD
       # number of days after a reminder, the reminder is likely to be the
@@ -80,12 +70,8 @@ class ProjectStat < ApplicationRecord
       # (the number of project badge entries updated
       # within ACTIVE_PERIOD number of days)
       self.active_projects = Project.updated_since(ACTIVE_PERIOD.day.ago).count
-      self.active_edited_projects =
-        Project.updated_since(ACTIVE_PERIOD.day.ago)
-               .where('created_at < updated_at').count
-      self.active_in_progress =
-        Project.updated_since(ACTIVE_PERIOD.day.ago)
-               .where('badge_percentage_0 < 100').count
+      self.active_edited_projects = Project.updated_since(ACTIVE_PERIOD.day.ago).where('created_at < updated_at').count
+      self.active_in_progress = Project.updated_since(ACTIVE_PERIOD.day.ago).where('badge_percentage_0 < 100').count
       self.active_edited_in_progress =
         Project.updated_since(ACTIVE_PERIOD.day.ago)
                .where('created_at < updated_at')
@@ -109,27 +95,15 @@ class ProjectStat < ApplicationRecord
         self.users_updated_since_yesterday = User.updated_since(1.day.ago).count
         self.users_with_projects = Project.select(:user_id).distinct.count
         self.users_without_projects = users - users_with_projects
-        self.users_with_multiple_projects =
-          Project.unscoped.group(:user_id).having('count(*) > 1').count.length
-        self.users_with_passing_projects =
-          Project.select(:user_id)
-                 .where('badge_percentage_0 >= 100')
-                 .distinct.count
-        self.users_with_silver_projects =
-          Project.select(:user_id)
-                 .where('badge_percentage_1 >= 100')
-                 .distinct.count
-        self.users_with_gold_projects =
-          Project.select(:user_id)
-                 .where('badge_percentage_2 >= 100')
-                 .distinct.count
+        self.users_with_multiple_projects = Project.unscoped.group(:user_id).having('count(*) > 1').count.length
+        self.users_with_passing_projects = Project.select(:user_id).where('badge_percentage_0 >= 100').distinct.count
+        self.users_with_silver_projects = Project.select(:user_id).where('badge_percentage_1 >= 100').distinct.count
+        self.users_with_gold_projects = Project.select(:user_id).where('badge_percentage_2 >= 100').distinct.count
       end
       AdditionalRight.transaction do
         self.additional_rights_entries = AdditionalRight.count
-        self.projects_with_additional_rights =
-          AdditionalRight.select(:project_id).distinct.count
-        self.users_with_additional_rights =
-          AdditionalRight.select(:user_id).distinct.count
+        self.projects_with_additional_rights = AdditionalRight.select(:project_id).distinct.count
+        self.users_with_additional_rights = AdditionalRight.select(:user_id).distinct.count
       end
     end
 

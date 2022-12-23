@@ -25,10 +25,7 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
     repo_url = 'https://github.com/coreinfrastructure/best-practices-badge'
 
     VCR.use_cassette('users_manipulate_test') do
-      post '/en/projects', params: {
-        'project[homepage_url]' => repo_url,
-        'project[repo_url]' => repo_url
-      }
+      post '/en/projects', params: { 'project[homepage_url]' => repo_url, 'project[repo_url]' => repo_url }
       assert_response :redirect
       follow_redirect!
 
@@ -125,10 +122,7 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
     repo_url = 'https://github.com/assimilation/assimilation-official'
 
     VCR.use_cassette('assimilation-official') do
-      post '/en/projects', params: {
-        'project[homepage_url]' => repo_url,
-        'project[repo_url]' => repo_url
-      }
+      post '/en/projects', params: { 'project[homepage_url]' => repo_url, 'project[repo_url]' => repo_url }
       assert_response :redirect
       follow_redirect!
 
@@ -157,10 +151,7 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
     project_url = 'https://www.sendmail.com/'
 
     VCR.use_cassette('sendmail') do
-      post '/en/projects', params: {
-        'project[homepage_url]' => project_url,
-        'project[repo_url]' => project_url
-      }
+      post '/en/projects', params: { 'project[homepage_url]' => project_url, 'project[repo_url]' => project_url }
       assert_response :redirect
       follow_redirect!
 

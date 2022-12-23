@@ -16,27 +16,16 @@ class HardenedSitesDetective < Detective
   # All of the security-hardening headers that need to be present to pass.
   # They're listed in the same order as the criteria text.
   # Field names must be in lowercase here.
-  CHECK =
-    [
-      'content-security-policy', 'strict-transport-security',
-      XCTO, 'x-frame-options'
-    ].freeze
-  MET =
-    {
-      value: 'Met', confidence: 3,
-      explanation: 'Found all required security hardening headers.'
-    }.freeze
+  CHECK = ['content-security-policy', 'strict-transport-security', XCTO, 'x-frame-options'].freeze
+  MET = { value: 'Met', confidence: 3, explanation: 'Found all required security hardening headers.' }.freeze
   UNMET_MISSING =
     {
       value: 'Unmet', confidence: 5,
-      explanation: '// One or more of the required security hardening headers '\
+      explanation: '// One or more of the required security hardening headers ' \
                    'is missing.'
     }.freeze
   UNMET_NOSNIFF =
-    {
-      value: 'Unmet', confidence: 5,
-      explanation: '// X-Content-Type-Options was not set to "nosniff".'
-    }.freeze
+    { value: 'Unmet', confidence: 5, explanation: '// X-Content-Type-Options was not set to "nosniff".' }.freeze
 
   INPUTS = %i[repo_url homepage_url].freeze
   OUTPUTS = [:hardened_site_status].freeze

@@ -33,7 +33,4 @@ module Rack
   end
 end
 
-Rails.application.config.middleware.insert_before(
-  0,
-  Rack::CanonicalizeTrailingSlash
-)
+Rails.application.config.middleware.insert_before(0, Rack::CanonicalizeTrailingSlash)

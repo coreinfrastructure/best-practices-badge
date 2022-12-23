@@ -13,8 +13,7 @@ class StaticPagesController < ApplicationController
 
   # There's no value in redirecting these pages to a locale,
   # so do *not* redirect them to a URL based on locale.
-  skip_before_action :redir_missing_locale,
-                     only: %i[robots error_404 google_verifier]
+  skip_before_action :redir_missing_locale, only: %i[robots error_404 google_verifier]
 
   # Omit useless unchanged session cookie for performance & privacy
   # We *must not* set error messages in the flash area,
@@ -42,21 +41,13 @@ class StaticPagesController < ApplicationController
     # You can do something like this to log more information, but be sure
     # to escape attacker data to counter log forging:
     # logger.info 'Page not found'
-    render(
-      template: 'static_pages/error_404',
-      formats: [:html], layout: false,
-      status: :not_found
-    )
+    render(template: 'static_pages/error_404', formats: [:html], layout: false, status: :not_found)
   end
 
   # Weird special case: For David A. Wheeler to get log issues from Google,
   # we have to have a special file to let Google verify access.
   def google_verifier
-    render(
-      template: 'static_pages/google_verifier',
-      layout: false,
-      status: :ok
-    )
+    render(template: 'static_pages/google_verifier', layout: false, status: :ok)
   end
 
   def robots

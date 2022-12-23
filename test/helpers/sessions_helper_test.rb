@@ -44,19 +44,13 @@ class SessionsHelperTest < ActionView::TestCase
     assert_equal 'https://a.b.c/', force_locale_url('https://a.b.c', nil)
     assert_equal 'https://a.b.c/fr', force_locale_url('https://a.b.c/', :fr)
     assert_equal 'https://a.b.c/fr', force_locale_url('https://a.b.c', :fr)
-    assert_equal 'https://a.b.c/en',
-                 force_locale_url('https://a.b.c?locale=fr', :en)
-    assert_equal 'https://a.b.c/en',
-                 force_locale_url('https://a.b.c?locale=en', :en)
+    assert_equal 'https://a.b.c/en', force_locale_url('https://a.b.c?locale=fr', :en)
+    assert_equal 'https://a.b.c/en', force_locale_url('https://a.b.c?locale=en', :en)
     assert_equal 'https://a.b/en', force_locale_url('https://a.b', :en)
-    assert_equal 'https://a.b/fr/projects',
-                 force_locale_url('https://a.b/zh-CN/projects', :fr)
-    assert_equal 'https://a.b/zh-CN/projects',
-                 force_locale_url('https://a.b/fr/projects', :'zh-CN')
-    assert_equal 'https://a.b/zh-CN/projects',
-                 force_locale_url('https://a.b/projects', :'zh-CN')
-    assert_equal 'https://a.b/en/projects',
-                 force_locale_url('https://a.b/zh-CN/projects', :en)
+    assert_equal 'https://a.b/fr/projects', force_locale_url('https://a.b/zh-CN/projects', :fr)
+    assert_equal 'https://a.b/zh-CN/projects', force_locale_url('https://a.b/fr/projects', :'zh-CN')
+    assert_equal 'https://a.b/zh-CN/projects', force_locale_url('https://a.b/projects', :'zh-CN')
+    assert_equal 'https://a.b/en/projects', force_locale_url('https://a.b/zh-CN/projects', :en)
     assert_equal 'https://a.b/fr/projects/1?criteria_level=2',
                  force_locale_url(
                    'https://a.b/projects/1?locale=ja&criteria_level=2', :fr
@@ -106,37 +100,23 @@ class SessionsHelperTest < ActionView::TestCase
   # doesn't have that many, and we don't want to use real users for testing.
   # So we'll stub things out just enough to do a unit test.
   test 'unit test of github_user_projects_include?' do
-    assert github_user_can_push?(
-      'https://github.com/ciitest/asdf', StubOctokitClient
-    )
-    assert github_user_can_push?(
-      'https://github.com/ciitest2/asdf', StubOctokitClient
-    )
-    assert_not github_user_can_push?(
-      'https://github.com/ciitest3/asdf', StubOctokitClient
-    )
-    assert_not github_user_can_push?(
-      'https://github.com/not-here/not-found',
-      StubOctokitClient
-    )
+    assert github_user_can_push?('https://github.com/ciitest/asdf', StubOctokitClient)
+    assert github_user_can_push?('https://github.com/ciitest2/asdf', StubOctokitClient)
+    assert_not github_user_can_push?('https://github.com/ciitest3/asdf', StubOctokitClient)
+    assert_not github_user_can_push?('https://github.com/not-here/not-found', StubOctokitClient)
   end
 
   test 'unit test of get_gethub_owner' do
     assert_equal 'ciitest', get_github_owner('https://github.com/ciitest/1234')
-    assert_equal 'asdf-123',
-                 get_github_owner('https://github.com/asdf-123/456')
-    assert_equal 'ciitest2',
-                 get_github_owner('https://github.com/ciitest2/1234')
+    assert_equal 'asdf-123', get_github_owner('https://github.com/asdf-123/456')
+    assert_equal 'ciitest2', get_github_owner('https://github.com/ciitest2/1234')
     assert_nil get_github_owner('http://githubs.com/asdf/1234')
   end
 
   test 'unit test of get_github_path' do
-    assert_equal 'ciitest/1234',
-                 get_github_path('https://github.com/ciitest/1234')
-    assert_equal 'asdf-123/456',
-                 get_github_path('https://github.com/asdf-123/456')
-    assert_equal 'ciitest2/1234',
-                 get_github_path('https://github.com/ciitest2/1234')
+    assert_equal 'ciitest/1234', get_github_path('https://github.com/ciitest/1234')
+    assert_equal 'asdf-123/456', get_github_path('https://github.com/asdf-123/456')
+    assert_equal 'ciitest2/1234', get_github_path('https://github.com/ciitest2/1234')
     assert_nil get_github_path('http://githubs.com/asdf/1234')
   end
 

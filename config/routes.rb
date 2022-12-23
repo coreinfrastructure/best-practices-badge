@@ -29,8 +29,7 @@ Rails.application.routes.draw do
 
   # The "robots.txt" file is always at the root of the
   # document tree and has no locale. Handle it specially.
-  get '/robots.txt' => 'static_pages#robots',
-      defaults: { format: 'text' }, as: :robots
+  get '/robots.txt' => 'static_pages#robots', defaults: { format: 'text' }, as: :robots
 
   # The /projects/NUMBER/badge image route needs speed and never uses a
   # locale. Perhaps most importantly, badge images need to have
@@ -41,9 +40,7 @@ Rails.application.routes.draw do
   # more work to change or invalidate them, with no purpose.
   # Therefore, instead of redirecting the badge image to a locale if
   # one is not listed, we do *NOT* support locale URLs in this case.
-  get '/projects/:id/badge' => 'projects#badge',
-      constraints: { id: VALID_ID },
-      defaults: { format: 'svg' }
+  get '/projects/:id/badge' => 'projects#badge', constraints: { id: VALID_ID }, defaults: { format: 'svg' }
 
   # The /badge_static/:value route needs speed and never uses a locale.
   # Beware: This route produces a result unconnected to a project's status.
@@ -71,8 +68,7 @@ Rails.application.routes.draw do
   # we have to let Google verify this.  Locale is irrelevant.
   # It isn't really HTML, even though the filename extension is .html. See:
   # https://github.com/coreinfrastructure/best-practices-badge/issues/1223
-  get '/google75f94b1182a77eb8.html' => 'static_pages#google_verifier',
-      defaults: { format: 'text' }
+  get '/google75f94b1182a77eb8.html' => 'static_pages#google_verifier', defaults: { format: 'text' }
 
   # Now handle the normal case: routes with an optional locale prefix.
   # We include almost all routes inside a :locale header,
@@ -109,8 +105,7 @@ Rails.application.routes.draw do
       as: 'user_statistics_project_stats',
       constraints: ->(req) { req.format == :json }
     # The following route isn't very useful; we may remove it in the future:
-    get '/project_stats/:id', to: 'project_stats#show',
-        constraints: { id: VALID_ID }
+    get '/project_stats/:id', to: 'project_stats#show', constraints: { id: VALID_ID }
 
     get 'sessions/new'
 
@@ -128,12 +123,9 @@ Rails.application.routes.draw do
     resources :projects, constraints: { id: VALID_ID } do
       member do
         get 'delete_form' => 'projects#delete_form'
-        get '' => 'projects#show_json',
-            constraints: ->(req) { req.format == :json }
-        get ':criteria_level(.:format)' => 'projects#show',
-            constraints: { criteria_level: VALID_CRITERIA_LEVEL }
-        get ':criteria_level/edit(.:format)' => 'projects#edit',
-            constraints: { criteria_level: VALID_CRITERIA_LEVEL }
+        get '' => 'projects#show_json', constraints: ->(req) { req.format == :json }
+        get ':criteria_level(.:format)' => 'projects#show', constraints: { criteria_level: VALID_CRITERIA_LEVEL }
+        get ':criteria_level/edit(.:format)' => 'projects#edit', constraints: { criteria_level: VALID_CRITERIA_LEVEL }
       end
     end
     match(

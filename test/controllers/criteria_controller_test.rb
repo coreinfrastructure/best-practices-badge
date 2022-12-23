@@ -15,12 +15,10 @@ class CriteriaControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_includes @response.body, 'Basics'
     assert_includes @response.body, 'Basic project website content'
-    assert_includes @response.body,
-                    'MUST succinctly describe what the software does'
+    assert_includes @response.body, 'MUST succinctly describe what the software does'
     assert_includes @response.body, 'MUST achieve a passing level badge'
     assert_includes @response.body, 'MUST achieve a silver level badge'
-    assert_includes @response.body,
-                    'MUST document its code review requirements'
+    assert_includes @response.body, 'MUST document its code review requirements'
     assert_includes @response.body, 'Passing'
     assert_includes @response.body, 'Silver'
     assert_includes @response.body, 'Gold'
@@ -34,12 +32,10 @@ class CriteriaControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_includes @response.body, 'Basics'
     assert_includes @response.body, 'Basic project website content'
-    assert_includes @response.body,
-                    'MUST succinctly describe what the software does'
+    assert_includes @response.body, 'MUST succinctly describe what the software does'
     assert_includes @response.body, 'MUST achieve a passing level badge'
     assert_includes @response.body, 'MUST achieve a silver level badge'
-    assert_includes @response.body,
-                    'MUST document its code review requirements'
+    assert_includes @response.body, 'MUST document its code review requirements'
     assert_includes @response.body, 'Passing'
     assert_includes @response.body, 'Silver'
     assert_includes @response.body, 'Gold'
@@ -53,8 +49,7 @@ class CriteriaControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_includes @response.body, 'Basics'
     assert_includes @response.body, 'Basic project website content'
-    assert_includes @response.body,
-                    'MUST succinctly describe what the software does'
+    assert_includes @response.body, 'MUST succinctly describe what the software does'
     assert_includes @response.body, 'Details:'
     assert_includes @response.body, 'Rationale:'
     assert_not_includes @response.body, 'Autofill:'
@@ -65,8 +60,7 @@ class CriteriaControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_includes @response.body, 'Basics'
     assert_includes @response.body, 'Basic project website content'
-    assert_includes @response.body,
-                    'MUST succinctly describe what the software does'
+    assert_includes @response.body, 'MUST succinctly describe what the software does'
     assert_includes @response.body, 'Details:'
     assert_not_includes @response.body, 'Rationale:'
     assert_includes @response.body, 'Autofill:'
@@ -76,8 +70,7 @@ class CriteriaControllerTest < ActionDispatch::IntegrationTest
     get '/en/criteria/0'
     assert_response :success
     assert_includes @response.body, 'Basic project website content'
-    assert_includes @response.body,
-                    'MUST succinctly describe what the software does'
+    assert_includes @response.body, 'MUST succinctly describe what the software does'
     assert_not_includes @response.body, 'Details:'
     assert_not_includes @response.body, 'Rationale:'
     assert_not_includes @response.body, 'Autofill:'
@@ -99,8 +92,7 @@ class CriteriaControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_includes @response.body, 'Basique'
     assert_includes @response.body, 'Contenu basique du site Web du projet'
-    assert_includes @response.body,
-                    'décrire succinctement ce que le logiciel fait'
+    assert_includes @response.body, 'décrire succinctement ce que le logiciel fait'
   end
 
   # Getting the entire set of criteria in another language is a stress test

@@ -34,8 +34,7 @@ class BuildDetective < Detective
     found_files = files_named(name_pattern)
     if found_files.empty?
     else
-      @results[status] =
-        met_result result_description, found_files.first['html_url']
+      @results[status] = met_result result_description, found_files.first['html_url']
     end
   end
 

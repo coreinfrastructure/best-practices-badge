@@ -80,8 +80,7 @@ class User < ApplicationRecord
   # and works regardless of the underlying RDBMS.  The RDBMS-level index
   # check, however, is immune to races where supported (PostgreSQL does),
   # because the RDBMS is the final arbiter.
-  validates :email, uniqueness: { scope: :provider, case_sensitive: false },
-                    if: ->(u) { u.provider == 'local' }
+  validates :email, uniqueness: { scope: :provider, case_sensitive: false }, if: ->(u) { u.provider == 'local' }
 
   # Validate passwords; this is obviously security-related.
   # We directly control validations instead of using the default
@@ -221,9 +220,7 @@ class User < ApplicationRecord
     old_iv = Base64.decode64(encrypted_email_iv)
     # Get the old email address; this will raise an exception if the
     # given key is wrong.
-    old_email_address = User.decrypt_email(
-      encrypted_email, iv: old_iv, key: old_key
-    )
+    old_email_address = User.decrypt_email(encrypted_email, iv: old_iv, key: old_key)
     # Change to new email address; this creates a new IV, re-encrypts,
     # and recalculates the blind index using the current blind index key.
     # This deals with a quirk of attr_encrypted: You have to set the

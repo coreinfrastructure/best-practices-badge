@@ -39,10 +39,7 @@ class FastlyRails
 
     begin
       # We'll return the result, but normally that will be ignored.
-      HTTParty.post(
-        "#{base}/service/#{FASTLY_SERVICE_ID}/purge/#{key}",
-        FASTLY_OPTIONS
-      )
+      HTTParty.post("#{base}/service/#{FASTLY_SERVICE_ID}/purge/#{key}", FASTLY_OPTIONS)
     rescue StandardError => e
       # I hate catching StandardError, ideally we'd be more specific.
       # However, there doesn't seem to be a safe way to identify
@@ -66,10 +63,7 @@ class FastlyRails
       # We'll return the result, but normally that will be ignored.
       # https://developer.fastly.com/reference/api/purging/
       # We won't ask for a "soft purge" because purge-all doesn't support it.
-      HTTParty.post(
-        "#{base}/service/#{FASTLY_SERVICE_ID}/purge_all",
-        FASTLY_OPTIONS
-      )
+      HTTParty.post("#{base}/service/#{FASTLY_SERVICE_ID}/purge_all", FASTLY_OPTIONS)
     rescue StandardError => e
       # I hate catching StandardError, ideally we'd be more specific.
       # However, there doesn't seem to be a safe way to identify

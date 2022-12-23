@@ -26,8 +26,7 @@ class HowAccessRepoFilesDetective < Detective
     {
       repo_files:
                 {
-                  value: GithubContentAccess.new(fullname,
-                                                 @octokit_client_factory),
+                  value: GithubContentAccess.new(fullname, @octokit_client_factory),
                   confidence: 5
                 }
     }

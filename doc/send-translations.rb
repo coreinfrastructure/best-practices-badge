@@ -1,6 +1,7 @@
 #!/usr/bin/ruby
 # frozen_string_literal: true
 
+require 'English' # Use clearer global variable names like $CHILD_STATUS
 # Push all translations in the YAML file(s) listed on the command line to
 # translation.io that have different values. Unchanged values left unchanged.
 # We presume these are *key-based* translations, and that the YAML file's
@@ -42,7 +43,6 @@
 
 require 'json'
 require 'yaml'
-require 'English' # Use clearer global variable names like $CHILD_STATUS
 
 $REAL = false
 
@@ -54,7 +54,7 @@ $CURRENT_TRANSLATIONS = {}
 $SOURCE = {}
 
 # Get API key - warn very early if we can't get it!
-$API_KEY = ENV['API_KEY']
+$API_KEY = ENV.fetch('API_KEY', nil)
 if $API_KEY.nil? || $API_KEY == ''
   STDERR.puts 'Error: Need API_KEY environment variable'
   exit 1
@@ -189,8 +189,7 @@ def process_data(lang, key, data)
   elsif data.is_a?(String)
     if $CURRENT_TRANSLATIONS[lang].key?(key)
       # Potential change to an existing translation
-      this_current_translation = $CURRENT_TRANSLATIONS[lang][key]['target']
-                                 .rstrip
+      this_current_translation = $CURRENT_TRANSLATIONS[lang][key]['target'].rstrip
       new_translation = data.rstrip
       if this_current_translation != new_translation
         # Translation has changed!

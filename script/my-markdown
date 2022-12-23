@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+require 'redcarpet'
 # Processor for Github flavored markdown, using redcarpet version 2.
 #
 # Inspired by:
@@ -22,7 +23,6 @@
 #   https://github.com/github/markup
 
 require 'rubygems'
-require 'redcarpet'
 
 class RenderResult < Redcarpet::Render::HTML
   def block_code(code, _language)

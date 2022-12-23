@@ -44,24 +44,15 @@ class ProjectStatTest < ActiveSupport::TestCase
 
   test 'ProjectStat.percent_field_description() works correctly' do
     I18n.with_locale(:en) do
-      assert_equal 'Total Projects',
-                   ProjectStat.percent_field_description(0, 0)
-      assert_equal 'Total Projects',
-                   ProjectStat.percent_field_description('0', 0)
-      assert_equal 'Passing Projects',
-                   ProjectStat.percent_field_description(0, 100)
-      assert_equal 'Passing Projects',
-                   ProjectStat.percent_field_description('0', 100)
-      assert_equal 'Silver Projects',
-                   ProjectStat.percent_field_description(1, 100)
-      assert_equal 'Gold Projects',
-                   ProjectStat.percent_field_description(2, 100)
-      assert_equal 'Passing Projects, 50%+ to Silver',
-                   ProjectStat.percent_field_description(1, 50)
-      assert_equal 'Silver Projects, 90%+ to Gold',
-                   ProjectStat.percent_field_description(2, 90)
-      assert_equal 'Silver Projects, 90%+ to Gold',
-                   ProjectStat.percent_field_description('2', 90)
+      assert_equal 'Total Projects', ProjectStat.percent_field_description(0, 0)
+      assert_equal 'Total Projects', ProjectStat.percent_field_description('0', 0)
+      assert_equal 'Passing Projects', ProjectStat.percent_field_description(0, 100)
+      assert_equal 'Passing Projects', ProjectStat.percent_field_description('0', 100)
+      assert_equal 'Silver Projects', ProjectStat.percent_field_description(1, 100)
+      assert_equal 'Gold Projects', ProjectStat.percent_field_description(2, 100)
+      assert_equal 'Passing Projects, 50%+ to Silver', ProjectStat.percent_field_description(1, 50)
+      assert_equal 'Silver Projects, 90%+ to Gold', ProjectStat.percent_field_description(2, 90)
+      assert_equal 'Silver Projects, 90%+ to Gold', ProjectStat.percent_field_description('2', 90)
     end
   end
 end

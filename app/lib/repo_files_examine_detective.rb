@@ -10,9 +10,7 @@
 
 class RepoFilesExamineDetective < Detective
   INPUTS = [:repo_files].freeze
-  OUTPUTS = %i[
-    contribution_status license_location_status release_notes_status
-  ].freeze
+  OUTPUTS = %i[contribution_status license_location_status release_notes_status].freeze
 
   # Minimum file sizes (in bytes) before they are considered useful.
   # Empty files, in particular, clearly do NOT have enough content.
@@ -24,8 +22,7 @@ class RepoFilesExamineDetective < Detective
   # that match the regex name pattern and are at least minimum_size in length.
   def files_named(name_pattern, minimum_size)
     @top_level.select do |fso|
-      fso['type'] == 'file' && fso['name'].match(name_pattern) &&
-        fso['size'] >= minimum_size
+      fso['type'] == 'file' && fso['name'].match(name_pattern) && fso['size'] >= minimum_size
     end
   end
 
@@ -70,8 +67,7 @@ class RepoFilesExamineDetective < Detective
     html_url_directory = directory_named(name_pattern)
     return if html_url_directory.blank?
 
-    @results[status] =
-      met_result(result_description, html_url_directory['html_url'])
+    @results[status] = met_result(result_description, html_url_directory['html_url'])
   end
 
   # rubocop:disable Metrics/MethodLength
@@ -99,11 +95,7 @@ class RepoFilesExamineDetective < Detective
     )
 
     # If there's a LICENSES directory, then license_location probably met.
-    override_results_if_dir(
-      :license_location_status,
-      /\ALICENSES\Z/,
-      'licenses directory'
-    )
+    override_results_if_dir(:license_location_status, /\ALICENSES\Z/, 'licenses directory')
 
     determine_results(
       :release_notes_status,

@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
+require 'capybara/minitest'
+require 'capybara/rails'
+require 'selenium/webdriver'
 # Copyright the OpenSSF Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
 require 'test_helper'
-require 'capybara/rails'
-require 'capybara/minitest'
-require 'selenium/webdriver'
 require 'webdrivers'
 
 # Set up a test environment to run client-side JavaScript.
@@ -24,9 +24,7 @@ Capybara.register_driver :headless_chrome do |app|
   browser_options.binary = ENV.fetch('GOOGLE_CHROME_SHIM', nil) if ENV['CI']
   browser_options.args << '--headless'
   browser_options.args << '--disable-gpu' if Gem.win_platform?
-  driver = Capybara::Selenium::Driver.new(
-    app, browser: :chrome, options: browser_options
-  )
+  driver = Capybara::Selenium::Driver.new(app, browser: :chrome, options: browser_options)
   driver.browser.download_path = Capybara.save_path
   driver
 end
@@ -61,8 +59,7 @@ Capybara.server = :puma, { Silent: true }
 # https://medium.com/@john200Ok/running-rails-6-system-tests-using-chrome-headless-and-selenium-on-gitlab-ci-9b4de5cafcd0
 
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
-  driven_by :selenium, using: :headless_chrome,
-screen_size: [1400, 1400] do |option|
+  driven_by :selenium, using: :headless_chrome, screen_size: [1400, 1400] do |option|
     option.add_argument('no-sandbox')
   end
 end

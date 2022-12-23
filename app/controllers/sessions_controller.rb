@@ -89,8 +89,7 @@ class SessionsController < ApplicationController
 
   def omniauth_login
     auth = request.env['omniauth.auth']
-    user = User.find_by(provider: auth['provider'], uid: auth['uid']) ||
-           User.create_with_omniauth(auth)
+    user = User.find_by(provider: auth['provider'], uid: auth['uid']) || User.create_with_omniauth(auth)
     session[:user_token] = auth['credentials']['token']
     session[:github_name] = auth['info']['nickname']
     user.name ||= user.nickname

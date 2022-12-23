@@ -13,23 +13,18 @@ class TranslationsTest < ActiveSupport::TestCase
 
   test 'Translations.for_js has same keys as projects.misc.in_javascript' do
     I18n.available_locales.each do |l|
-      assert_equal I18n.t('.projects.misc.in_javascript').keys.sort,
-                   Translations.for_js[l].keys.sort
+      assert_equal I18n.t('.projects.misc.in_javascript').keys.sort, Translations.for_js[l].keys.sort
     end
   end
 
   # What tags & attributes are allowed?
-  ACCEPTABLE_TAGS =
-    %w[h1 h2 h3 a strong em i b small tt ol ul li br p span div].freeze
+  ACCEPTABLE_TAGS = %w[h1 h2 h3 a strong em i b small tt ol ul li br p span div].freeze
   # Class can cause trouble, but we need it for glyphicons, etc.
   ACCEPTABLE_ATTRS = %w[href name class target rel id aria-hidden].freeze
 
   def sanitize_html(text)
     html_sanitizer = Rails::Html::WhiteListSanitizer.new
-    html_sanitizer.sanitize(
-      text, tags: ACCEPTABLE_TAGS,
-            attributes: ACCEPTABLE_ATTRS
-    ).to_s
+    html_sanitizer.sanitize(text, tags: ACCEPTABLE_TAGS, attributes: ACCEPTABLE_ATTRS).to_s
   end
 
   def regularize_html(text)
@@ -39,8 +34,7 @@ class TranslationsTest < ActiveSupport::TestCase
 
   # Return true if x is a "simple" (non-compound) non-string type
   def simple_type(x)
-    x.is_a?(Symbol) || x.is_a?(Numeric) || x.in?([true, false, nil]) ||
-      x.is_a?(Proc)
+    x.is_a?(Symbol) || x.is_a?(Numeric) || x.in?([true, false, nil]) || x.is_a?(Proc)
   end
 
   # Is the HTML string acceptable?  It needs to NOT have common mistakes,
@@ -95,11 +89,9 @@ class TranslationsTest < ActiveSupport::TestCase
     elsif translation.kind_of?(Hash)
       translation.each { |key, part| check_text(part, from + [key]) }
     elsif translation.kind_of?(String) # includes safe_html
-      assert acceptable_html_string(translation.to_s),
-             "Locale text failure in #{from.join('.')} : #{translation}"
+      assert acceptable_html_string(translation.to_s), "Locale text failure in #{from.join('.')} : #{translation}"
     else
-      assert simple_type(translation),
-             "Locale text type failure in #{from.join('.')} : #{translation}"
+      assert simple_type(translation), "Locale text type failure in #{from.join('.')} : #{translation}"
     end
   end
   # rubocop:enable Style/ClassCheck, Metrics/MethodLength
@@ -119,8 +111,7 @@ class TranslationsTest < ActiveSupport::TestCase
     en_locale_names = en_hash[:locale_name].keys
     # Check if locale okay, e.g., "en" or "zh-CN".
     en_locale_names.each do |loc|
-      assert_match(/\A[a-z]{2}(-[A-Z]{2})?\z/,
-                   loc.to_s, "Bad locale key name: #{loc}")
+      assert_match(/\A[a-z]{2}(-[A-Z]{2})?\z/, loc.to_s, "Bad locale key name: #{loc}")
       assert_includes I18n.available_locales, loc
     end
     I18n.available_locales do |loc|

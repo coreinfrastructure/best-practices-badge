@@ -87,8 +87,7 @@ class Rack::Attack
       limit: (ENV['NONBADGE_RATE_REQ_IP_LIMIT'] || '31').to_i,
       period: (ENV['NONBADGE_RATE_REQ_IP_PERIOD'] || '15').to_i
     ) do |req|
-      if req.env['HTTP_ACCEPT']&.include?('application/json') ||
-         !BADGE_REGEX_PATH.match(req.path)
+      if req.env['HTTP_ACCEPT']&.include?('application/json') || !BADGE_REGEX_PATH.match(req.path)
         ClientIp.acquire(req)
       end
     end

@@ -30,10 +30,7 @@ class ProjectGetTest < ActionDispatch::IntegrationTest
 
     # Check some normal headers
     assert_equal('text/html; charset=utf-8', @response.headers['Content-Type'])
-    assert_equal(
-      'max-age=0, private, must-revalidate',
-      @response.headers['Cache-Control']
-    )
+    assert_equal('max-age=0, private, must-revalidate', @response.headers['Cache-Control'])
 
     # Check hardening headers
     assert_equal(
@@ -43,16 +40,10 @@ class ProjectGetTest < ActionDispatch::IntegrationTest
       "object-src 'none'; script-src 'self'; style-src 'self'",
       @response.headers['Content-Security-Policy']
     )
-    assert_equal(
-      'no-referrer-when-downgrade',
-      @response.headers['Referrer-Policy']
-    )
+    assert_equal('no-referrer-when-downgrade', @response.headers['Referrer-Policy'])
     assert_equal('nosniff', @response.headers['X-Content-Type-Options'])
     assert_equal('DENY', @response.headers['X-Frame-Options'])
-    assert_equal(
-      'none',
-      @response.headers['X-Permitted-Cross-Domain-Policies']
-    )
+    assert_equal('none', @response.headers['X-Permitted-Cross-Domain-Policies'])
     assert_equal('1; mode=block', @response.headers['X-XSS-Protection'])
     # Check warning on development system
     assert_match 'This is not the production system', response.body
@@ -68,16 +59,12 @@ class ProjectGetTest < ActionDispatch::IntegrationTest
   # rubocop:enable Metrics/BlockLength
 
   test 'ensure CORS set when origin set' do
-    get project_path(@project_one, locale: :en),
-        headers: { 'Origin' => 'https://en/example.com' }
+    get project_path(@project_one, locale: :en), headers: { 'Origin' => 'https://en/example.com' }
     assert_response :success
 
     # When there's an origin, we allow just GET from anywhere.
     assert_equal('*', @response.headers['Access-Control-Allow-Origin'])
-    assert_equal(
-      'GET, OPTIONS',
-      @response.headers['Access-Control-Allow-Methods']
-    )
+    assert_equal('GET, OPTIONS', @response.headers['Access-Control-Allow-Methods'])
 
     # It would be a security disaster if this was true, so let's make
     # sure it isn't true.  This test just ensures it's blank.
@@ -97,26 +84,20 @@ class ProjectGetTest < ActionDispatch::IntegrationTest
     get project_path(id: @project_one.id, locale: 'en') + '?criteria_level,2'
     # Should redirect
     assert_response 301
-    assert_redirected_to project_path(
-      id: @project_one.id, locale: 'en', criteria_level: 2
-    )
+    assert_redirected_to project_path(id: @project_one.id, locale: 'en', criteria_level: 2)
   end
 
   test 'Redirect malformed query string criteria_level,1' do
     get project_path(id: @project_one.id, locale: 'de') + '?criteria_level,1'
     # Should redirect
     assert_response 301
-    assert_redirected_to project_path(
-      id: @project_one.id, locale: 'de', criteria_level: 1
-    )
+    assert_redirected_to project_path(id: @project_one.id, locale: 'de', criteria_level: 1)
   end
 
   test 'Redirect malformed query string criteria_level,0' do
     get project_path(id: @project_one.id, locale: 'fr') + '?criteria_level,0'
     # Should redirect
     assert_response 301
-    assert_redirected_to project_path(
-      id: @project_one.id, locale: 'fr', criteria_level: 0
-    )
+    assert_redirected_to project_path(id: @project_one.id, locale: 'fr', criteria_level: 0)
   end
 end

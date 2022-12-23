@@ -16,7 +16,6 @@ class TextValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
     return if text_acceptable?(value)
 
-    record.errors.add attribute, (options[:message] ||
-                                  I18n.t('error_messages.valid_text'))
+    record.errors.add attribute, (options[:message] || I18n.t('error_messages.valid_text'))
   end
 end

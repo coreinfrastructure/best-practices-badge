@@ -47,9 +47,7 @@ class GithubBasicDetectiveTest < ActiveSupport::TestCase
       assert_equal 'C++, C', detective.language_cleanup( # actually sorts
         C: 1000, :'C++' => 5000
       )
-      assert_equal 'C#, JavaScript', detective.language_cleanup(
-        HTML: 1000, :'C#' => 5000, JavaScript: 800
-      )
+      assert_equal 'C#, JavaScript', detective.language_cleanup(HTML: 1000, :'C#' => 5000, JavaScript: 800)
       # This is the list from https://api.github.com/repos/
       # assimilation/assimilation-official/languages
       assert_equal 'Python, C, Shell, C++, CMake, C#, Ruby',

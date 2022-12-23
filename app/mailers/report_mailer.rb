@@ -38,10 +38,7 @@ class ReportMailer < ApplicationMailer
     @report_destination = REPORT_EMAIL_DESTINATION
     set_standard_headers
     I18n.with_locale(I18n.default_locale) do
-      mail(
-        to: @report_destination,
-        subject: "Project #{project.id} status change to #{new_badge_status}"
-      )
+      mail(to: @report_destination, subject: "Project #{project.id} status change to #{new_badge_status}")
     end
   end
 
@@ -66,8 +63,7 @@ class ReportMailer < ApplicationMailer
     return unless user.email?
     return unless user.email.include?('@')
 
-    @project_info_url =
-      project_url(@project, locale: user.preferred_locale.to_sym)
+    @project_info_url = project_url(@project, locale: user.preferred_locale.to_sym)
     @email_destination = user.email
     @new_level = new_badge_level
     @old_level = old_badge_level
@@ -76,9 +72,7 @@ class ReportMailer < ApplicationMailer
       mail(
         to: @email_destination,
         template_name: lost_level ? 'lost_level' : 'gained_level',
-        subject: subject_for(
-          old_badge_level, new_badge_level, lost_level
-        ).strip
+        subject: subject_for(old_badge_level, new_badge_level, lost_level).strip
       )
     end
   end
@@ -96,8 +90,7 @@ class ReportMailer < ApplicationMailer
     return unless user.email?
     return unless user.email.include?('@')
 
-    @project_info_url =
-      project_url(@project, locale: user.preferred_locale.to_sym)
+    @project_info_url = project_url(@project, locale: user.preferred_locale.to_sym)
     @email_destination = user.email
     set_standard_headers
     I18n.with_locale(user.preferred_locale.to_sym) do
@@ -119,10 +112,7 @@ class ReportMailer < ApplicationMailer
     @projects = projects
     set_standard_headers
     I18n.with_locale(I18n.default_locale) do
-      mail(
-        to: @report_destination,
-        subject: 'Summary of reminders sent'
-      )
+      mail(to: @report_destination, subject: 'Summary of reminders sent')
     end
   end
 
@@ -131,10 +121,12 @@ class ReportMailer < ApplicationMailer
   # We currently only send these out in English, so it's not internationalized
   # (no point in asking the translators to do unnecessary work).
   def report_monthly_announcement(
-    projects, month_display,
-    last_stat_in_prev_month, last_stat_in_prev_prev_month
+    projects,
+    month_display,
+    last_stat_in_prev_month,
+    last_stat_in_prev_prev_month
   )
-    @report_destination = ENV['REPORT_MONTHLY_EMAIL']
+    @report_destination = ENV.fetch('REPORT_MONTHLY_EMAIL', nil)
     return if @report_destination.blank?
 
     @projects = projects
@@ -143,10 +135,7 @@ class ReportMailer < ApplicationMailer
     @last_stat_in_prev_prev_month = last_stat_in_prev_prev_month
     set_standard_headers
     I18n.with_locale(I18n.default_locale) do
-      mail(
-        to: @report_destination,
-        subject: 'Projects that received badges (monthly summary)'
-      )
+      mail(to: @report_destination, subject: 'Projects that received badges (monthly summary)')
     end
   end
 
@@ -161,15 +150,11 @@ class ReportMailer < ApplicationMailer
     return unless user.email?
     return unless user.email.include?('@')
 
-    @project_info_url =
-      project_url(@project, locale: user.preferred_locale.to_sym)
+    @project_info_url = project_url(@project, locale: user.preferred_locale.to_sym)
     @email_destination = user.email
     set_standard_headers
     I18n.with_locale(user.preferred_locale.to_sym) do
-      mail(
-        to: @email_destination,
-        subject: t('report_mailer.subject_new_project').strip
-      )
+      mail(to: @email_destination, subject: t('report_mailer.subject_new_project').strip)
     end
   end
   # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
@@ -185,10 +170,7 @@ class ReportMailer < ApplicationMailer
     I18n.with_locale(I18n.default_locale) do
       mail(
         to: @report_destination,
-        subject: t(
-          'report_mailer.subject_project_deleted',
-          project_id: project.id, project_name: project.name
-        ).strip
+        subject: t('report_mailer.subject_project_deleted', project_id: project.id, project_name: project.name).strip
       )
     end
   end

@@ -37,12 +37,8 @@ class FeedTest < ActionDispatch::IntegrationTest
     get feed_path(locale: :en)
     # See test/fixtures/files/feed.atom for a sample
     assert response.body.start_with?('<?xml version="1.0" encoding="UTF-8"?>')
-    assert response.body.include?(
-      '<title>OpenSSF Best Practices BadgeApp Updated Projects</title>'
-    )
-    assert response.body.include?(
-      '<title>Another Ascent Vehicle (AAV)</title>'
-    )
+    assert response.body.include?('<title>OpenSSF Best Practices BadgeApp Updated Projects</title>')
+    assert response.body.include?('<title>Another Ascent Vehicle (AAV)</title>')
     # Attempt to parse it as XML to verify if it's well-formed.
     # It might not be valid XML, but we'd need a schema definition to check.
     # Disable Rubocop check - rubocop is very confused by this.

@@ -14,10 +14,7 @@ ENV['RAILS_ENV'] ||= 'test'
 # Configure SimpleCov formatting before we start it
 if ENV['CI']
   require 'codecov'
-  SimpleCov.formatters = [
-    SimpleCov::Formatter::HTMLFormatter,
-    SimpleCov::Formatter::Codecov
-  ]
+  SimpleCov.formatters = [SimpleCov::Formatter::HTMLFormatter, SimpleCov::Formatter::Codecov]
 else
   SimpleCov.formatters = SimpleCov::Formatter::HTMLFormatter
 end
@@ -48,15 +45,13 @@ else
   Minitest::Reporters.use! Minitest::Reporters::DefaultReporter.new
 end
 
-require File.expand_path('../config/environment', __dir__)
 require 'rails/test_help'
+require File.expand_path('../config/environment', __dir__)
 
 # We must specially allow web calls by test drivers, e.g.,
 # GET https://chromedriver.storage.googleapis.com/LATEST_RELEASE_75.0.3770
 # See: https://github.com/titusfortner/webdrivers/issues/109
-driver_urls = [
-  %r{https://chromedriver.storage.googleapis.com/LATEST_RELEASE_[0-9.]+}
-]
+driver_urls = [%r{https://chromedriver.storage.googleapis.com/LATEST_RELEASE_[0-9.]+}]
 
 require 'webmock/minitest'
 # This would disable network connections; would interfere with vcr:
@@ -85,6 +80,7 @@ VCR.configure do |config|
   config.ignore_hosts(*driver_urls)
 end
 
+require 'uri'
 # The chromedriver occasionally calls out with its own API,
 # which isn't part of the system under test. This can occasionally
 # cause an error of this form:
@@ -95,7 +91,6 @@ end
 # https://github.com/titusfortner/webdrivers/issues/109
 
 require 'webdrivers'
-require 'uri'
 
 # With activesupport gem
 driver_hosts =
@@ -136,7 +131,7 @@ module ActiveSupport
     end
 
     def contents(file_name)
-      IO.read "test/fixtures/files/#{file_name}"
+      File.read "test/fixtures/files/#{file_name}"
     end
 
     # rubocop:disable Metrics/MethodLength
@@ -163,7 +158,10 @@ module ActiveSupport
     # Using "password" helps test that users can log in to their
     # existing accounts, even if we make the password rules harsher later.
     def log_in_as(
-      user, password: 'password', provider: 'local', remember_me: '1',
+      user,
+      password: 'password',
+      provider: 'local',
+      remember_me: '1',
       make_old: false
     )
       # This is based on "Ruby on Rails Tutorial" by Michael Hargle, chapter 8,

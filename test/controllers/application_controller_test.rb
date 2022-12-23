@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
+require 'ipaddr'
 # Copyright 2015-2017, the Linux Foundation, IDA, and the
 # OpenSSF Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
 require 'test_helper'
-require 'ipaddr'
 
 class ApplicationControllerTest < ActionDispatch::IntegrationTest
   # These are special tests for how the ApplicationController works,

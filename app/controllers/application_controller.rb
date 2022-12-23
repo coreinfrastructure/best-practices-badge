@@ -67,13 +67,9 @@ class ApplicationController < ActionController::Base
   # the CDN will keep serving *some* data for a while.
   # 864000 = 10 days, 1728000 = 20 days, 8640000 = 100 days
   # We force it to be at least twice the BADGE_CACHE_MAX_AGE.
-  BADGE_CACHE_STALE_AGE = [
-    (ENV['BADGEAPP_BADGE_CACHE_MAX_AGE'] || '8640000').to_i,
-    2 * BADGE_CACHE_MAX_AGE
-  ].max
+  BADGE_CACHE_STALE_AGE = [(ENV['BADGEAPP_BADGE_CACHE_MAX_AGE'] || '8640000').to_i, 2 * BADGE_CACHE_MAX_AGE].max
 
-  BADGE_CACHE_SURROGATE_CONTROL =
-    "max-age=#{BADGE_CACHE_MAX_AGE}, stale-if-error=#{BADGE_CACHE_STALE_AGE}"
+  BADGE_CACHE_SURROGATE_CONTROL = "max-age=#{BADGE_CACHE_MAX_AGE}, stale-if-error=#{BADGE_CACHE_STALE_AGE}"
 
   # Set the cache control headers
   # More info:
@@ -159,8 +155,7 @@ class ApplicationController < ActionController::Base
       range.include?(client_ip_data)
     end
 
-    raise ActionController::RoutingError.new('Invalid client IP'),
-          'Invalid client IP'
+    raise ActionController::RoutingError.new('Invalid client IP'), 'Invalid client IP'
   end
 
   # See: http://stackoverflow.com/questions/4329176/
@@ -190,10 +185,7 @@ class ApplicationController < ActionController::Base
   # Browsers often provide ACCEPT_LANGUAGE (which in turn is often provided
   # by the operating system), so we should not need geolocation anyway.
   def find_best_locale
-    browser_locale =
-      http_accept_language.preferred_language_from(
-        Rails.application.config.automatic_locales
-      )
+    browser_locale = http_accept_language.preferred_language_from(Rails.application.config.automatic_locales)
     return browser_locale if browser_locale.present?
 
     I18n.default_locale

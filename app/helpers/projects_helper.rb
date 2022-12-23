@@ -22,8 +22,7 @@ module ProjectsHelper
   def github_select
     retrieved_repo_data = repo_data # Get external data
     fork_repos, original_repos = fork_and_original(retrieved_repo_data)
-    original_header(original_repos) + original_repos +
-      fork_header(fork_repos) + fork_repos
+    original_header(original_repos) + original_repos + fork_header(fork_repos) + fork_repos
   end
 
   def fork_and_original(retrieved_repo_data)
@@ -71,13 +70,7 @@ module ProjectsHelper
   # Generate HTML for minor heading
   def minor_header_html(minor)
     # rubocop:disable Rails/OutputSafety
-    safe_join(
-      [
-        '<li class="list-group-item"><h3>'.html_safe,
-        t(minor, scope: [:headings]),
-        '</h3>'.html_safe
-      ]
-    )
+    safe_join(['<li class="list-group-item"><h3>'.html_safe, t(minor, scope: [:headings]), '</h3>'.html_safe])
     # rubocop:enable Rails/OutputSafety
   end
 
@@ -96,10 +89,7 @@ module ProjectsHelper
     results = ActionView::OutputBuffer.new
     results << minor_header_html(minor) if wrapped
     minor_criteria.each do |criterion|
-      results << render_status(
-        criterion, f, project, criteria_level, is_disabled,
-        criterion == minor_criteria.last
-      )
+      results << render_status(criterion, f, project, criteria_level, is_disabled, criterion == minor_criteria.last)
     end
     # rubocop:disable Rails/OutputSafety
     results << safe_join(['</li>'.html_safe]) if wrapped
@@ -111,8 +101,7 @@ module ProjectsHelper
 
   # Return HTML for a sortable header.
   def sortable_header(title, field_name)
-    new_params = params.merge(sort: field_name)
-                       .permit(ProjectsController::ALLOWED_QUERY_PARAMS)
+    new_params = params.merge(sort: field_name).permit(ProjectsController::ALLOWED_QUERY_PARAMS)
     if params[:sort] == field_name && params[:sort_direction] != 'desc'
       new_params[:sort_direction] = 'desc'
     else

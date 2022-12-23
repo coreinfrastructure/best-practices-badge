@@ -31,31 +31,22 @@ class GithubProjectTest < ApplicationSystemTestCase
         # We don't assume not authorized so look for whether we are on the
         # authorization page and click authorize if we are
         if page.has_content?('Test BadgeApp (not for production use)')
-          puts 'Please delete github_login.yml cassette and rerun' \
-               ' github_login_test.rb with DRIVER=chrome to authorize' \
-               ' the test envrionment app'
+          puts 'Please delete github_login.yml cassette and rerun ' \
+               'github_login_test.rb with DRIVER=chrome to authorize ' \
+               'the test envrionment app'
         end
       end
       # Regression test, make sure redirected correctly after login
       assert_equal new_project_path(locale: :en), current_path
       assert_equal num + 1, ActionMailer::Base.deliveries.size
-      assert find(
-        "option[value='https://github.com/ciitest/cii-best-practices-badge']"
-      )
-      assert has_selector?(
-        "option[value='https://github.com/ciitest2/test-repo-shared-2']"
-      )
+      assert find("option[value='https://github.com/ciitest/cii-best-practices-badge']")
+      assert has_selector?("option[value='https://github.com/ciitest2/test-repo-shared-2']")
       # Should not see repos that already have existing badge
-      assert has_no_selector?(
-        "option[value='https://github.com/ciitest/test-repo']"
-      )
-      assert has_no_selector?(
-        "option[value='https://github.com/ciitest2/test-repo-shared']"
-      )
+      assert has_no_selector?("option[value='https://github.com/ciitest/test-repo']")
+      assert has_no_selector?("option[value='https://github.com/ciitest2/test-repo-shared']")
       select 'ciitest/cii-best-practices-badge', from: 'project[repo_url]'
       click_on 'Submit GitHub Repository'
-      assert has_content? 'Thanks for adding the Project! Please fill out ' \
-                          'the rest of the information to get the Badge.'
+      assert has_content? 'Thanks for adding the Project! Please fill out the rest of the information to get the Badge.'
       assert_equal num + 2, ActionMailer::Base.deliveries.size
       click_on 'Account'
       assert has_content? 'Profile'

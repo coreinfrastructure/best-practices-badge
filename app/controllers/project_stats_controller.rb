@@ -23,8 +23,7 @@ class ProjectStatsController < ApplicationController
   # use these are more likely to get a quick answer, and we also
   # save a few cycles on the server.
   # This is *only* acceptable if the called routine never calls I18n.t.
-  skip_before_action :redir_missing_locale,
-                     only: %i[total_projects nontrivial_projects silver gold]
+  skip_before_action :redir_missing_locale, only: %i[total_projects nontrivial_projects silver gold]
 
   CSV_FILENAME = 'project_stats.csv'
 
@@ -109,8 +108,7 @@ class ProjectStatsController < ApplicationController
     respond_to do |format|
       format.csv do
         cache_until_next_stat
-        headers['Content-Disposition'] =
-          "attachment; filename=\"#{CSV_FILENAME}\""
+        headers['Content-Disposition'] = "attachment; filename=\"#{CSV_FILENAME}\""
         # No longer need this: @project_stats = ProjectStat.all
         @model = ProjectStat
         render format: :csv, filename: CSV_FILENAME
@@ -217,30 +215,21 @@ class ProjectStatsController < ApplicationController
       stat_data.reduce({}) do |h, e|
         h.merge(e.created_at => e.active_projects)
       end
-    dataset << {
-      name: I18n.t('project_stats.index.active_projects'),
-                data: active_dataset
-    }
+    dataset << { name: I18n.t('project_stats.index.active_projects'), data: active_dataset }
 
     # Active in-progress projects
     active_in_progress_dataset =
       stat_data.reduce({}) do |h, e|
         h.merge(e.created_at => e.active_in_progress)
       end
-    dataset << {
-      name: I18n.t('project_stats.index.active_in_progress'),
-                data: active_in_progress_dataset
-    }
+    dataset << { name: I18n.t('project_stats.index.active_in_progress'), data: active_in_progress_dataset }
 
     # Active edited projects
     active_edited_dataset =
       stat_data.reduce({}) do |h, e|
         h.merge(e.created_at => e.active_edited_projects)
       end
-    dataset << {
-      name: I18n.t('project_stats.index.active_edited'),
-                data: active_edited_dataset
-    }
+    dataset << { name: I18n.t('project_stats.index.active_edited'), data: active_edited_dataset }
 
     # Active edited in-progress projects
     active_edited_in_progress_dataset =
@@ -271,10 +260,7 @@ class ProjectStatsController < ApplicationController
     ndays = 7 # Days for calculated moving average
 
     # Retrieve just the data we need
-    stat_data = ProjectStat.select(
-      :created_at,
-      :created_since_yesterday, :updated_since_yesterday
-    )
+    stat_data = ProjectStat.select(:created_at, :created_since_yesterday, :updated_since_yesterday)
 
     actions = %w[created updated].freeze
     actions.each do |action|
@@ -283,12 +269,9 @@ class ProjectStatsController < ApplicationController
         stat_data.reduce({}) do |h, e|
           h.merge(e.created_at => e[desired_field])
         end
-      dataset << {
-        name: I18n.t("project_stats.index.projects_#{action}_since_yesterday"),
-        data: series_dataset
-      }
+      dataset << { name: I18n.t("project_stats.index.projects_#{action}_since_yesterday"), data: series_dataset }
       # Calculate moving average over ndays
-      series_counts = stat_data.map { |e| e[desired_field] }
+      series_counts = stat_data.pluck(desired_field)
       series_moving_average =
         series_counts.each_cons(ndays).map do |e|
           e.sum.to_f / ndays
@@ -296,8 +279,7 @@ class ProjectStatsController < ApplicationController
       moving_average_dataset = {}
       stat_data.each_with_index do |e, index|
         if index >= ndays
-          moving_average_dataset[e.created_at] =
-            series_moving_average[index - ndays]
+          moving_average_dataset[e.created_at] = series_moving_average[index - ndays]
         end
       end
       dataset << {
@@ -320,28 +302,20 @@ class ProjectStatsController < ApplicationController
     dataset = []
 
     # Retrieve just the data we need
-    stat_data = ProjectStat.select(
-      :created_at, :reminders_sent, :reactivated_after_reminder
-    )
+    stat_data = ProjectStat.select(:created_at, :reminders_sent, :reactivated_after_reminder)
 
     # Reminders sent
     reminders_dataset =
       stat_data.reduce({}) do |h, e|
         h.merge(e.created_at => e.reminders_sent)
       end
-    dataset << {
-      name: I18n.t('project_stats.index.reminders_sent_since_yesterday'),
-      data: reminders_dataset
-    }
+    dataset << { name: I18n.t('project_stats.index.reminders_sent_since_yesterday'), data: reminders_dataset }
     # Reactivated after reminders
     reactivated_dataset =
       stat_data.reduce({}) do |h, e|
         h.merge(e.created_at => e.reactivated_after_reminder)
       end
-    dataset << {
-      name: I18n.t('project_stats.index.reactivated_projects'),
-      data: reactivated_dataset
-    }
+    dataset << { name: I18n.t('project_stats.index.reactivated_projects'), data: reactivated_dataset }
 
     render_json_fast dataset
   end
@@ -421,9 +395,7 @@ class ProjectStatsController < ApplicationController
     cache_until_next_stat
 
     # Retrieve just the data we need
-    stat_data = ProjectStat.select(
-      :created_at, :percent_1_ge_100, :percent_2_ge_100
-    )
+    stat_data = ProjectStat.select(:created_at, :percent_1_ge_100, :percent_2_ge_100)
 
     dataset =
       %w[1 2].map do |level|
@@ -448,10 +420,7 @@ class ProjectStatsController < ApplicationController
     cache_until_next_stat
 
     # Retrieve just the data we need
-    stat_data = ProjectStat.select(
-      :created_at, :percent_ge_0,
-      :percent_ge_100, :percent_1_ge_100, :percent_2_ge_100
-    )
+    stat_data = ProjectStat.select(:created_at, :percent_ge_0, :percent_ge_100, :percent_1_ge_100, :percent_2_ge_100)
 
     dataset =
       [0, 1, 2].map do |level|
@@ -459,8 +428,7 @@ class ProjectStatsController < ApplicationController
           "percent#{level.positive? ? '_' + level.to_s : ''}_ge_100"
         series_dataset =
           stat_data.reduce({}) do |h, e|
-            h.merge(e.created_at =>
-              e[desired_field].to_i * 100.0 / e['percent_ge_0'].to_i)
+            h.merge(e.created_at => e[desired_field].to_i * 100.0 / e['percent_ge_0'].to_i)
           end
         {
           name: I18n.t("projects.form_early.level.#{level}"),
@@ -485,10 +453,7 @@ class ProjectStatsController < ApplicationController
         stat_data.reduce({}) do |h, e|
           h.merge(e.created_at => e[field])
         end
-      dataset << {
-        name: I18n.t("project_stats.index.#{field}"),
-        data: active_dataset
-      }
+      dataset << { name: I18n.t("project_stats.index.#{field}"), data: active_dataset }
     end
     dataset
   end

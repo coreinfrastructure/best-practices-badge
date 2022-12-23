@@ -4,12 +4,14 @@
 # OpenSSF Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
-class Translations
+module Translations
+  module_function
+
   # This class is a used to gather sets of translations which will commonly
   # be called in bulk.  For example, there are translations we would like
   # to export to JavaScript.  We can use a method here to do that quickly.
 
-  def self.for_js
+  def for_js
     js_translations =
       I18n.available_locales.map do |locale|
         locale_t =

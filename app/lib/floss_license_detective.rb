@@ -118,8 +118,7 @@ class FlossLicenseDetective < Detective
 
   # Report if string is an OSI-approved license.  We ignore case.
   # TODO: Handle AND, OR, WITH
-  KNOWN_OSI_LICENSES_DOWNCASED =
-    FlossLicenseDetective::KNOWN_OSI_LICENSES.map(&:downcase)
+  KNOWN_OSI_LICENSES_DOWNCASED = FlossLicenseDetective::KNOWN_OSI_LICENSES.map(&:downcase)
   def self.osi_license?(s)
     FlossLicenseDetective::KNOWN_OSI_LICENSES_DOWNCASED.include?(s.downcase)
   end

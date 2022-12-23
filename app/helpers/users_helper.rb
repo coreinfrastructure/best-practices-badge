@@ -22,9 +22,6 @@ module UsersHelper
   # additional privacy when the user is viewing information they may not
   # realize is being transcluded (because they did not actively select it).
   def avatar_for(user)
-    image_tag(
-      user.avatar_url, alt: user.name, class: 'avatar', size: '80x80',
-                       referrerpolicy: 'no-referrer'
-    )
+    image_tag(user.avatar_url, alt: user.name, class: 'avatar', size: '80x80', referrerpolicy: 'no-referrer')
   end
 end

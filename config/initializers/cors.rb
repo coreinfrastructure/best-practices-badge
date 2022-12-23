@@ -128,8 +128,7 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
     # In these cases the same result must always occur.
     # These undifferentiated rules must be first so they have higher priority.
     CORS_UNDIFFERENTIATED_RESOURCE_PATTERNS.each do |resource_pattern|
-      resource resource_pattern, headers: :any, methods: CORS_ALLOWED_METHODS,
-               vary: CORS_UNDIFFERENTIATED_VARY
+      resource resource_pattern, headers: :any, methods: CORS_ALLOWED_METHODS, vary: CORS_UNDIFFERENTIATED_VARY
     end
 
     # 'Vary' is the default, includes Origin.

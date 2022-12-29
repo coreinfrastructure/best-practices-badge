@@ -6,17 +6,14 @@ name: CI
 # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#permissions
 # https://github.com/actions/first-interaction/issues/10#issuecomment-1041402989
 # Since we set "permissions", anything unset has access "none".
-permissions:
-  contents: read
-  checks: write
+permissions: read-all
 
 # Controls when the action will run. Triggers the workflow on push or pull
 # request events but only for the main branch (formerly the master branch)
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  pull_request_target:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -57,6 +54,8 @@ jobs:
       - name: Brakeman linter
         # To review release options see:
         # https://github.com/devmasx/brakeman-linter-action/releases
-        uses: devmasx/brakeman-linter-action@0dc80fcccf87915ccb1761669014015214f36287 # pin@v1.0.0
+        uses: devmasx/brakeman-linter-action@35a5a3de5330fead60055f952a90cc324fd68295 # pin@v1.0.0
         env:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+          PROJECT_PATH: best-practices-badge
+          REPORT_PATH: tmp/brakeman.json

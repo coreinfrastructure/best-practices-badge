@@ -108,7 +108,7 @@ group :development, :test do
   # gem 'pronto-brakeman', '0.9.1'
   gem 'pronto-eslint', '0.11.0'
   gem 'pronto-rails_best_practices', '0.11.0'
-  gem 'pronto-rubocop', '0.11.1'
+  gem 'pronto-rubocop', '0.11.3'
   # gem 'railroader', '4.3.8' # Security static analyzer. OSS fork of Brakeman
   gem 'rubocop', '1.0.0', require: false # Style checker
   gem 'rubocop-performance', '1.10.2', require: false # Performance cops

@@ -51,7 +51,7 @@ task(:ci).clear.enhance %w[
 # Simple smoke test to avoid development environment misconfiguration
 desc 'Ensure that rbenv or rvm are set up in PATH'
 task :rbenv_rvm_setup do
-  path = ENV['PATH']
+  path = ENV.fetch('PATH', nil)
   if !path.include?('.rbenv') && !path.include?('.rvm')
     raise RuntimeError 'Must have rbenv or rvm in PATH'
   end
@@ -64,8 +64,7 @@ end
 
 desc 'Run rails_best_practices with options'
 task :rails_best_practices do
-  sh 'bundle exec rails_best_practices ' \
-     '--features --spec --without-color --exclude railroader/'
+  sh 'bundle exec rails_best_practices --features --spec --without-color --exclude railroader/'
 end
 
 desc 'Setup railroader if needed'
@@ -85,8 +84,7 @@ task railroader: %w[railroader/bin/railroader] do
   # sh 'bundle exec railroader --quiet --no-pager'
   # Workaround to run correct version of railroader & its dependencies.
   # We have to set BUNDLE_GEMFILE so bundle works inside the rake task
-  sh 'cd railroader; BUNDLE_GEMFILE=$(pwd)/Gemfile ' \
-     'bundle exec bin/railroader --quiet --no-pager $(dirname $(pwd))'
+  sh 'cd railroader; BUNDLE_GEMFILE=$(pwd)/Gemfile bundle exec bin/railroader --quiet --no-pager $(dirname $(pwd))'
 end
 
 desc 'Run bundle if needed'
@@ -175,8 +173,8 @@ end
 
 desc 'Load current self.json'
 task :load_self_json do
-  require 'open-uri'
   require 'json'
+  require 'open-uri'
   url = 'https://master.bestpractices.coreinfrastructure.org/projects/1.json'
   contents = URI.parse(url).open.read
   pretty_contents = JSON.pretty_generate(JSON.parse(contents))
@@ -192,14 +190,15 @@ file 'license_okay' => ['Gemfile.lock', 'doc/dependency_decisions.yml'] do
 end
 
 desc 'Create license report'
-file 'license_finder_report.html' =>
-     ['Gemfile.lock', 'doc/dependency_decisions.yml'] do
-  sh 'bundle exec license_finder report --format html ' \
-     '> license_finder_report.html'
+file 'license_finder_report.html' => [
+  'Gemfile.lock',
+  'doc/dependency_decisions.yml'
+] do
+  sh 'bundle exec license_finder report --format html > license_finder_report.html'
 end
 
 # Don't do whitespace checks on these YAML files:
-YAML_WS_EXCEPTIONS ||= ':!test/vcr_cassettes/*.yml'
+YAML_WS_EXCEPTIONS = ':!test/vcr_cassettes/*.yml'
 
 desc 'Check for trailing whitespace in latest proposed (git) patch.'
 task :whitespace_check do
@@ -215,7 +214,7 @@ task :yaml_syntax_check do
   # Don't check "project.yml" - it's not a straight YAML file, but instead
   # it's processed by ERB (even though the filename doesn't admit it).
   sh "find . -name '*.yml' ! -name 'projects.yml' ! -path './railroader/*' " \
-     "! -path './vendor/*' -exec bundle exec yaml-lint {} + \;"
+     "! -path './vendor/*' -exec bundle exec yaml-lint {} + ;"
 end
 
 # The following are invoked as needed.
@@ -227,14 +226,12 @@ end
 
 desc 'Deploy current origin/main to staging'
 task deploy_staging: :production_to_staging do
-  sh 'git checkout staging && git pull && ' \
-     'git merge --ff-only origin/main && git push && git checkout main'
+  sh 'git checkout staging && git pull && git merge --ff-only origin/main && git push && git checkout main'
 end
 
 desc 'Deploy current origin/staging to production'
 task :deploy_production do
-  sh 'git checkout production && git pull && ' \
-     'git merge --ff-only origin/staging && git push && git checkout main'
+  sh 'git checkout production && git pull && git merge --ff-only origin/staging && git push && git checkout main'
 end
 
 rule '.html' => '.md' do |t|
@@ -293,8 +290,7 @@ namespace :fastly do
 
   desc 'Test Fastly Caching'
   task :test, [:site_name] do |_t, args|
-    args.with_defaults site_name:
-      'https://master.bestpractices.coreinfrastructure.org/projects/1/badge'
+    args.with_defaults site_name: 'https://master.bestpractices.coreinfrastructure.org/projects/1/badge'
     puts 'Starting test of Fastly caching'
     verbose(false) do
       sh "script/fastly_test #{args.site_name}"
@@ -353,8 +349,7 @@ desc 'Copy production database backup to main stage, overwriting main database'
 task :production_to_main do
   sh 'heroku pg:backups:restore $(heroku pg:backups:public-url ' \
      '--app production-bestpractices) DATABASE_URL --app master-bestpractices'
-  sh 'heroku run:detached bundle exec rake db:migrate ' \
-     '--app master-bestpractices'
+  sh 'heroku run:detached bundle exec rake db:migrate --app master-bestpractices'
 end
 
 desc 'Copy production database backup to staging, overwriting staging database'
@@ -362,8 +357,7 @@ task :production_to_staging do
   sh 'heroku pg:backups:restore $(heroku pg:backups:public-url ' \
      '--app production-bestpractices) DATABASE_URL ' \
      '--app staging-bestpractices --confirm staging-bestpractices'
-  sh 'heroku run:detached bundle exec rake db:migrate ' \
-     '--app staging-bestpractices'
+  sh 'heroku run:detached bundle exec rake db:migrate --app staging-bestpractices'
 end
 
 # require 'rails/testtask.rb'
@@ -444,7 +438,7 @@ def normalize_string(value, locale)
        .gsub(/target="_blank" *>/, 'target="_blank" rel="noopener">')
        .gsub(%r{https: // }, 'https://')
        .gsub(%r{href="/en/}, "href=\"/#{locale}/")
-       .gsub(%r{href='/en/}, "href=\'/#{locale}/")
+       .gsub(%r{href='/en/}, "href='/#{locale}/")
 end
 # rubocop:enable Metrics/MethodLength
 
@@ -456,7 +450,7 @@ def normalize_yaml(path)
     # Compute locale from filename (it must be before the last period)
     locale = filename.split('.')[-2]
     normalized = normalize_values(YAML.load_file(filename), locale)
-    IO.write(filename, normalized.to_yaml(line_width: 60).gsub(/\s+$/, ''))
+    File.write(filename, normalized.to_yaml(line_width: 60).gsub(/\s+$/, ''))
   end
 end
 
@@ -615,8 +609,7 @@ task :create_project_insertion_command do
   puts "Inserting project id #{project_id}"
   # Escape JSON using SQL escape ' -> '', so we can use it in a SQL command
   escaped_json = "'" + file_contents.gsub(/'/, "''") + "'"
-  sql_command = 'insert into projects select * from ' \
-                "json_populate_record(NULL::projects, #{escaped_json});"
+  sql_command = 'insert into projects select * from ' + "json_populate_record(NULL::projects, #{escaped_json});"
   File.write('project.sql', sql_command)
   puts 'File project.sql created. To use this, do the following (examples):'
   puts 'Local:  rails db < project.sql'
@@ -683,7 +676,7 @@ end
 # we loop over all users, but ignore users where the rekey doesn't work.
 desc 'Rekey (change keys) of email addresses'
 task rekey: :environment do
-  old_key = [ENV['EMAIL_ENCRYPTION_KEY_OLD']].pack('H*')
+  old_key = [ENV.fetch('EMAIL_ENCRYPTION_KEY_OLD', nil)].pack('H*')
   User.find_each do |u|
     # rubocop:disable Style/RedundantBegin
     begin
@@ -745,8 +738,8 @@ end
 # We do *NOT* try to localize, for speed.
 desc 'Send a mass email (e.g., a required GDPR notification)'
 task :mass_email do
-  subject = ENV['MASS_EMAIL_SUBJECT']
-  body = ENV['MASS_EMAIL_BODY']
+  subject = ENV.fetch('MASS_EMAIL_SUBJECT', nil)
+  body = ENV.fetch('MASS_EMAIL_BODY', nil)
   where_condition = ENV['MASS_EMAIL_WHERE'] || 'true'
   raise if !subject || !body
 
@@ -815,9 +808,9 @@ def real_search_email(email)
   # to prevent swapping the email & name fields when calling search_user.
   raise ArgumentError unless /.+@.+/.match?(email)
 
-  results = User.where(email: email)
-                .select('id, name, encrypted_email, encrypted_email_iv')
-                .pluck(:id, :name)
+  results = User.where(email: email).select('id, name, encrypted_email, encrypted_email_iv').pluck(
+    :id, :name
+  )
   puts results
 end
 
@@ -887,9 +880,8 @@ task :update_badge_images do
      'https://img.shields.io/badge/openssf_best_practices-passing-4c1'
   sh 'curl -o app/assets/images/badge_static_silver.svg ' \
      'https://img.shields.io/badge/openssf_best_practices-silver-c0c0c0'
-  sh 'curl -o app/assets/images/badge_static_gold.svg ' \
-     'https://img.shields.io/badge/openssf_best_practices-gold-ffd700'
-  (0..99).each do |percent|
+  sh 'curl -o app/assets/images/badge_static_gold.svg https://img.shields.io/badge/openssf_best_practices-gold-ffd700'
+  100.times do |percent|
     # scale "color" to be greener as we approach passing, to provide a
     # visual indication of progress for those who can see color
     color = Paleta::Color.new(:hsl, (percent * 0.45) + 15, 85, 43).hex

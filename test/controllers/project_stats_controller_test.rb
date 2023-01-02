@@ -165,7 +165,7 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
            nontrivial_projects_project_stats_path(format: :json, locale: nil)
     get nontrivial_projects_project_stats_path(format: :json)
     contents = JSON.parse(@response.body)
-    levels = contents.map { |entry| entry['name'] } # levels reported
+    levels = contents.pluck('name') # levels reported
     assert_equal ['>=25%', '>=50%', '>=75%', '>=90%', '>=100%'], levels
     assert_equal '>=25%', contents[0]['name']
     assert_equal 18, contents[0]['data']['2013-05-19 17:44:18 UTC']

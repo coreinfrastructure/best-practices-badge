@@ -49,7 +49,7 @@ def puts_criterion(key, criterion)
     print ' (Justification required for "N/A".)'
   end
   print ' (URL required for "met".)' if criterion.key?('met_url_required')
-  print " <sup>[<a href=\"\##{key}\">#{key}</a>]</sup>"
+  print " <sup>[<a href=\"##{key}\">#{key}</a>]</sup>"
   if CriteriaText[key].key?('details') || criterion.key?('rationale')
     print '<dl>' # Put details and rationale in a detail list
     show_details(key)

@@ -7,10 +7,10 @@
 Octokit.configure do |c|
   if Rails.env.test?
     # Test app OAuth returns to a different port
-    ENV['GITHUB_KEY'] = ENV['TEST_GITHUB_KEY']
-    ENV['GITHUB_SECRET'] = ENV['TEST_GITHUB_SECRET']
+    ENV['GITHUB_KEY'] = ENV.fetch('TEST_GITHUB_KEY', nil)
+    ENV['GITHUB_SECRET'] = ENV.fetch('TEST_GITHUB_SECRET', nil)
   end
-  c.client_id = ENV['GITHUB_KEY']
-  c.client_secret = ENV['GITHUB_SECRET']
+  c.client_id = ENV.fetch('GITHUB_KEY', nil)
+  c.client_secret = ENV.fetch('GITHUB_SECRET', nil)
   c.auto_paginate = true
 end

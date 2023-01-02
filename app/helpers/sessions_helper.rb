@@ -142,7 +142,7 @@ module SessionsHelper
   def github_user_projects
     github = Octokit::Client.new access_token: session[:user_token]
     github.auto_paginate = true
-    github.repos.map(&:html_url).reject(&:blank?)
+    github.repos.map(&:html_url).compact_blank
   end
 
   # Logs out the current user.
@@ -190,7 +190,7 @@ module SessionsHelper
   # Returns true iff this is not the REAL final production system,
   # including the master/main and staging systems.
   # It only returns false if we are "truly in production"
-  def in_development?(hostname = ENV['PUBLIC_HOSTNAME'])
+  def in_development?(hostname = ENV.fetch('PUBLIC_HOSTNAME', nil))
     return true if hostname.nil?
 
     hostname != PRODUCTION_HOSTNAME

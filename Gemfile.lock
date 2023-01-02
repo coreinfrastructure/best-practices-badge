@@ -91,7 +91,7 @@ GEM
       bundler (>= 1.2.0, < 3)
       thor (~> 1.0)
     byebug (11.1.3)
-    capybara (3.37.1)
+    capybara (3.38.0)
       addressable
       matrix
       mini_mime (>= 0.1.3)
@@ -103,7 +103,7 @@ GEM
     capybara-slow_finder_errors (0.1.5)
       capybara (~> 3.0)
     chartkick (4.0.5)
-    chef-utils (17.10.0)
+    chef-utils (18.0.185)
       concurrent-ruby
     childprocess (3.0.0)
     code_analyzer (0.5.5)
@@ -121,23 +121,23 @@ GEM
       dotenv (= 2.7.6)
       railties (>= 3.2)
     encryptor (3.0.0)
-    erubi (1.11.0)
+    erubi (1.12.0)
     erubis (2.7.0)
     eslintrb (2.1.0)
       execjs
       multi_json (>= 1.3)
       rake
     execjs (2.8.1)
-    faraday (2.6.0)
+    faraday (2.7.2)
       faraday-net_http (>= 2.0, < 3.1)
       ruby2_keywords (>= 0.0.4)
-    faraday-net_http (3.0.1)
+    faraday-net_http (3.0.2)
     faraday-retry (2.0.0)
       faraday (~> 2.0)
     ffi (1.15.5)
     font-awesome-rails (4.7.0.7)
       railties (>= 3.2, < 7)
-    forwardable (1.3.2)
+    forwardable (1.3.3)
     get_process_mem (0.2.7)
       ffi (~> 1.0)
     gettext (3.4.3)
@@ -170,7 +170,7 @@ GEM
     jquery-ui-rails (6.0.1)
       railties (>= 3.2.16)
     json (2.6.2)
-    jwt (2.4.1)
+    jwt (2.6.0)
     kramdown (2.4.0)
       rexml
     kramdown-parser-gfm (1.1.0)
@@ -206,8 +206,7 @@ GEM
       mime-types-data (~> 3.2015)
     mime-types-data (3.2022.0105)
     mini_mime (1.1.2)
-    mini_portile2 (2.8.0)
-    minitest (5.16.3)
+    minitest (5.17.0)
     minitest-reporters (1.5.0)
       ansi
       builder
@@ -220,19 +219,18 @@ GEM
       tomlrb
     mixlib-shellout (3.2.7)
       chef-utils
-    msgpack (1.5.4)
+    msgpack (1.6.0)
     multi_json (1.15.0)
     multi_xml (0.6.0)
     nio4r (2.5.8)
-    nokogiri (1.13.10)
-      mini_portile2 (~> 2.8.0)
+    nokogiri (1.13.10-x86_64-linux)
       racc (~> 1.4)
-    oauth2 (2.0.6)
+    oauth2 (2.0.9)
       faraday (>= 0.17.3, < 3.0)
       jwt (>= 1.0, < 3.0)
       multi_xml (~> 0.5)
-      rack (>= 1.2, < 3)
-      rash_alt (>= 0.4, < 1)
+      rack (>= 1.2, < 4)
+      snaky_hash (~> 2.0)
       version_gem (~> 1.1)
     octokit (4.25.0)
       faraday (>= 1, < 3)
@@ -256,7 +254,7 @@ GEM
       activerecord (>= 5.2)
       request_store (~> 1.1)
     parallel (1.22.1)
-    parser (3.1.2.1)
+    parser (3.2.0.0)
       ast (~> 2.4.1)
     pg (1.4.1)
     pg_search (2.3.6)
@@ -288,14 +286,14 @@ GEM
     pry-byebug (3.9.0)
       byebug (~> 11.0)
       pry (~> 0.13.0)
-    public_suffix (5.0.0)
+    public_suffix (5.0.1)
     puma (5.6.4)
       nio4r (~> 2.0)
     puma_worker_killer (0.3.1)
       get_process_mem (~> 0.2)
       puma (>= 2.7)
-    racc (1.6.1)
-    rack (2.2.4)
+    racc (1.6.2)
+    rack (2.2.5)
     rack-attack (6.6.1)
       rack (>= 1.0, < 3)
     rack-cors (1.1.1)
@@ -334,7 +332,7 @@ GEM
     rails_12factor (0.0.3)
       rails_serve_static_assets
       rails_stdout_logging
-    rails_best_practices (1.23.1)
+    rails_best_practices (1.23.2)
       activesupport
       code_analyzer (~> 0.5.5)
       erubis
@@ -352,13 +350,11 @@ GEM
       thor (~> 1.0)
     rainbow (3.1.1)
     rake (13.0.6)
-    rash_alt (0.4.12)
-      hashie (>= 3.4)
-    rb-fsevent (0.11.1)
+    rb-fsevent (0.11.2)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     redcarpet (3.5.1)
-    regexp_parser (2.6.0)
+    regexp_parser (2.6.1)
     request_store (1.5.1)
       rack (>= 1.4)
     require_all (3.0.0)
@@ -418,6 +414,9 @@ GEM
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.4)
     singleton (0.1.1)
+    snaky_hash (2.0.1)
+      hashie
+      version_gem (~> 1.1, >= 1.1.1)
     spring (4.0.0)
     sprockets (3.7.2)
       concurrent-ruby (~> 1.0)
@@ -438,10 +437,10 @@ GEM
       concurrent-ruby (~> 1.0)
     uglifier (4.2.0)
       execjs (>= 0.3.0, < 3)
-    unicode-display_width (1.8.0)
+    unicode-display_width (2.4.0)
     uniform_notifier (1.16.0)
     vcr (5.0.0)
-    version_gem (1.1.0)
+    version_gem (1.1.1)
     web-console (4.2.0)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -464,10 +463,10 @@ GEM
     xpath (3.2.0)
       nokogiri (~> 1.8)
     yaml-lint (0.0.10)
-    zeitwerk (2.6.5)
+    zeitwerk (2.6.6)
 
 PLATFORMS
-  ruby
+  x86_64-linux
 
 DEPENDENCIES
   actionmailer (= 6.1.7)
@@ -555,4 +554,4 @@ RUBY VERSION
    ruby 3.0.5p211
 
 BUNDLED WITH
-   2.2.33
+   2.3.26

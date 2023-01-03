@@ -67,7 +67,7 @@ class ChiefTest < ActiveSupport::TestCase
   end
 
   test 'Fatal exceptions in a Detective will not crash production system' do
-    old_environment = ENV['RAILS_ENV']
+    old_environment = ENV.fetch('RAILS_ENV', nil)
     # TEMPORARILY make this a 'production' environment (it isn't really)
     ENV['RAILS_ENV'] = 'production'
 
@@ -115,7 +115,7 @@ class ChiefTest < ActiveSupport::TestCase
     # but not in this way.  Thus, we must more carefully test the alternatives,
     # to ensure that both behaviors occur.
 
-    old_environment = ENV['RAILS_ENV']
+    old_environment = ENV.fetch('RAILS_ENV', nil)
     # TEMPORARILY make this a 'test' environment (it probably is anyway)
     ENV['RAILS_ENV'] = 'test'
 

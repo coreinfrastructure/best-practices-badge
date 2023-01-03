@@ -136,7 +136,7 @@ module ActiveSupport
     end
 
     def contents(file_name)
-      IO.read "test/fixtures/files/#{file_name}"
+      File.read "test/fixtures/files/#{file_name}"
     end
 
     # rubocop:disable Metrics/MethodLength
@@ -163,7 +163,10 @@ module ActiveSupport
     # Using "password" helps test that users can log in to their
     # existing accounts, even if we make the password rules harsher later.
     def log_in_as(
-      user, password: 'password', provider: 'local', remember_me: '1',
+      user,
+      password: 'password',
+      provider: 'local',
+      remember_me: '1',
       make_old: false
     )
       # This is based on "Ruby on Rails Tutorial" by Michael Hargle, chapter 8,

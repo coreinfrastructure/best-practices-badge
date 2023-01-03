@@ -12,6 +12,8 @@ class PasswordResetsController < ApplicationController
 
   def new; end
 
+  def edit; end
+
   # NOTE: password resets *always* reply with the same message, in all cases.
   # At one time we replied with error reports if there was no account or if
   # there was a GitHub account (not a local account) with the email address.
@@ -39,8 +41,6 @@ class PasswordResetsController < ApplicationController
     flash[:info] = t('password_resets.instructions_sent')
     redirect_to root_url
   end
-
-  def edit; end
 
   def update
     new_password = nested_params(:user, :password)

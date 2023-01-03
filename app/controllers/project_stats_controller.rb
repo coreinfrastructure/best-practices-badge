@@ -288,7 +288,7 @@ class ProjectStatsController < ApplicationController
         data: series_dataset
       }
       # Calculate moving average over ndays
-      series_counts = stat_data.map { |e| e[desired_field] }
+      series_counts = stat_data.pluck(desired_field)
       series_moving_average =
         series_counts.each_cons(ndays).map do |e|
           e.sum.to_f / ndays

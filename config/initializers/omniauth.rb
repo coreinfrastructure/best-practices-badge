@@ -7,10 +7,10 @@
 Rails.application.config.middleware.use OmniAuth::Builder do
   if Rails.env.test?
     # Test app OAuth returns to a different port
-    ENV['GITHUB_KEY'] = ENV['TEST_GITHUB_KEY']
-    ENV['GITHUB_SECRET'] = ENV['TEST_GITHUB_SECRET']
+    ENV['GITHUB_KEY'] = ENV.fetch('TEST_GITHUB_KEY', nil)
+    ENV['GITHUB_SECRET'] = ENV.fetch('TEST_GITHUB_SECRET', nil)
   end
-  provider :github, ENV['GITHUB_KEY'], ENV['GITHUB_SECRET'],
+  provider :github, ENV.fetch('GITHUB_KEY', nil), ENV.fetch('GITHUB_SECRET', nil),
            scope: 'user:email, read:org'
   Hashie.logger = Rails.logger
 end

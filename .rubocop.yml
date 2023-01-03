@@ -87,8 +87,7 @@ Metrics/ClassLength:
     - 'db/migrate/*'
 # Weird failures on this, disabled for now.
 Layout/LineLength:
-  Enabled: false
-  # Max: 79
+   Max: 132
   # Exclude:
   #   - 'db/migrate/*'
 Metrics/MethodLength:
@@ -232,4 +231,30 @@ Rails/DefaultScope:
 Rails/WhereNot:
   Enabled: false
 Rails/NegateInclude:
+  Enabled: false
+Layout/RedundantLineBreak:
+  Enabled: false
+Naming/VariableNumber:
+  Enabled: false
+Layout/LineContinuationLeadingSpace:
+  Enabled: false
+Style/TopLevelMethodDefinition:
+  Enabled: false
+Naming/InclusiveLanguage:
+  Enabled: false
+Bundler/GemVersion:
+  Enabled: false
+Lint/EmptyBlock:
+  Enabled: false
+Lint/OrAssignmentToConstant:
+  Enabled: false
+Rails/EnvironmentVariableAccess:
+  Enabled: false
+Rails/DuplicateScope:
+  Enabled: false
+Rails/I18nLocaleTexts:
+  Enabled: false
+Rails/RedundantPresenceValidationOnBelongsTo:
+  Enabled: false
+Style/RequireOrder:
   Enabled: false

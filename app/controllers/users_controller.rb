@@ -16,10 +16,6 @@ class UsersController < ApplicationController
   before_action :enable_maximum_privacy_headers
   include SessionsHelper
 
-  def new
-    @user = User.new
-  end
-
   def index
     @pagy, @users = pagy(User.all)
     @pagy_locale = I18n.locale.to_s # Pagy requires a string version
@@ -38,7 +34,7 @@ class UsersController < ApplicationController
     # we practically never have that many and the interface would be confusing.
     @projects_additional_rights =
       select_needed(Project.includes(:user).joins(:additional_rights)
-        .where('additional_rights.user_id = ?', @user.id))
+        .where(additional_rights: { user_id: @user.id }))
     # *Separately* list edit_projects from projects_additional_rights.
     # Jason Dossett thinks they should be combined, but David A. Wheeler
     # thinks these are important to keep separate because how to *change*
@@ -50,7 +46,20 @@ class UsersController < ApplicationController
         Project.includes(:user).where(repo_url: github_user_projects)
       ) - @projects
   end
+
+  def new
+    @user = User.new
+  end
+
   # rubocop: enable Metrics/MethodLength, Metrics/AbcSize
+
+  def edit
+    @user = User.find(params[:id])
+    # Force redirect if current_user cannot edit.  Otherwise, the process
+    # of displaying the edit fields (with their defaults) could cause an
+    # unauthorized exposure of an email address.
+    redirect_to @user unless current_user_can_edit(@user)
+  end
 
   # rubocop: disable Metrics/MethodLength, Metrics/AbcSize
   def create
@@ -78,15 +87,6 @@ class UsersController < ApplicationController
     # determine whether or not the email address already exists
     flash[:info] = t('users.new_activation_link_created')
     redirect_to root_path, status: :found
-  end
-  # rubocop: enable Metrics/MethodLength, Metrics/AbcSize
-
-  def edit
-    @user = User.find(params[:id])
-    # Force redirect if current_user cannot edit.  Otherwise, the process
-    # of displaying the edit fields (with their defaults) could cause an
-    # unauthorized exposure of an email address.
-    redirect_to @user unless current_user_can_edit(@user)
   end
 
   # Produce a cleaned-up hash of changes.

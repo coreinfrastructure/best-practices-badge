@@ -21,6 +21,7 @@ class Badge
   # We very rarely change the static images in a way that affects widths,
   # so it's simpler to just copy the information into the source code here.
   # As a style recommendation remove the comma from the last entry.
+  # rubocop:disable Lint/SymbolConversion
   BADGE_WIDTHS = {
     'passing': 184,
     'silver': 172,
@@ -126,6 +127,7 @@ class Badge
     '98': 234,
     '99': 234
   }.freeze
+  # rubocop:enable Lint/SymbolConversion
 
   attr_accessor :svg
 

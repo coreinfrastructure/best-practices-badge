@@ -215,7 +215,7 @@ class ProjectsController < ApplicationController
   def edit
     return unless @project.notify_for_static_analysis?('0')
 
-    message = t('projects.edit.static_analysis_updated_html')
+    message = t('.static_analysis_updated_html')
     flash.now[:danger] = message
   end
 
@@ -327,7 +327,7 @@ class ProjectsController < ApplicationController
       @project.homepage_url ||= project_find_default_url
       format.html do
         redirect_to projects_path
-        flash[:success] = t('projects.delete.done')
+        flash.now[:success] = t('projects.delete.done')
       end
       format.json { head :no_content }
     end
@@ -678,9 +678,9 @@ class ProjectsController < ApplicationController
     # This will NOT match full URLs, but will match partial URLs.
     @projects = @projects.search_for(params[:q]) if params[:q].present?
     if params[:ids].present?
-      @projects = @projects.where(
-        'id in (?)', params[:ids].split(',').map { |x| Integer(x) }
-      )
+      @projects = @projects.where(id: params[:ids].split(',').map do |x|
+                                        Integer(x)
+                                      end)
     end
     @projects
   end

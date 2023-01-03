@@ -149,7 +149,7 @@ group :test do
   gem 'rails-controller-testing', '1.0.5' # for `assigns` and `assert_template`
   gem 'selenium-webdriver', '3.142.7', require: false
   # We don't list "simplecov"; code depends on it & brings it in
-  gem 'webdrivers', '4.6.1', require: false
+  gem 'webdrivers', '4.7.0', require: false
   gem 'webmock', '3.14.0', require: false
 end
 

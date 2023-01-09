@@ -1268,9 +1268,44 @@ it update the database for use. Do this by running:
     heroku run --app APP rake update_bad_password_db
 ~~~~
 
-## Installing CircleCI / Heroku OpenSSH keys
+## Installing CircleCI / Heroku keys
 
-To push to Heroku, you need to prove you're authorized.
+We use CircleCI to push to Heroku once it passes all tests, but
+CircleCI must prove it's authorized to Heroku that this is authorized.
+Heroku [uses API keys to do this](https://help.heroku.com/PBGP6IDE/how-should-i-generate-an-api-key-that-allows-me-to-use-the-heroku-platform-api).
+To recreate such keys, use `heroku authorizations:create` for production apps, and use `heroku auth:token` for development. Each token has a secret value and an "id" that is used to identify it.
+If CircleCI is broken in to, you need to change the Heroku keys and GitHub
+keys stored on CircleCI. Heroku calls this key rotation.
+
+To replace an existing Heroku key on CircleCI, that is, the Heroku OAuth token, take the following steps.
+
+First, find the ID of "Long-lived user authorization" using:
+
+> heroku authorizations
+
+Use the ID you find (a dash-separated sequence of hexadecimal numbers) and
+rotate the key:
+
+> heroku authorizations:rotate ID-GOES-HERE
+
+After rotation it will show the secret Token value (another dash-separated
+sequence of hexadecimal numbers). Log in to CircleCI,
+select the best-practices-badge application, Project Settings,
+Environment Variables, and change the value of
+`HEROKU_API_KEY` to the secret token value (*not* the token ID).
+
+The CircleCI interface is a little confusing on this point because there's
+no obvious way to edit a value, but fear not - just select
+*Add Environment Variable* with the *current* name of the environment
+variable (e.g., `HEROKU_API_KEY`) and a new value, and the environment
+variable's value will be replaced.
+
+Note that `heroku authorizations --help` will provide more info on Heroku
+authorization commands.
+
+--
+
+Historically Heroku used RSA keys. Here are those older instructions.
 See [keys](https://devcenter.heroku.com/articles/keys) for details.
 At the time of this writing Heroku only supports RSA keys.
 

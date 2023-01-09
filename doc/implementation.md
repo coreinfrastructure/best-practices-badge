@@ -1303,9 +1303,7 @@ variable's value will be replaced.
 Note that `heroku authorizations --help` will provide more info on Heroku
 authorization commands.
 
---
-
-Historically Heroku used RSA keys. Here are those older instructions.
+We also use RSA keys.
 See [keys](https://devcenter.heroku.com/articles/keys) for details.
 At the time of this writing Heroku only supports RSA keys.
 

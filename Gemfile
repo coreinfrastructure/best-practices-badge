@@ -65,7 +65,7 @@ gem 'omniauth-github', '1.4.0' # Authentication to GitHub (get project info)
 # all testing, and over time we've become more comfortable that this is
 # the "standard way to resolve this issue".
 gem 'omniauth-rails_csrf_protection', '0.1.2' # Counter CVE-2015-9284
-gem 'pagy', '5.10.1' # Paginate some views
+gem 'pagy', '6.0.0' # Paginate some views
 gem 'paleta', '0.3.0' # Color manipulation, used for badges
 gem 'paper_trail', '12.3.0' # Record previous versions of project data
 gem 'pg', '1.4.1' # PostgreSQL database, used for data storage

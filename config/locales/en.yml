@@ -1930,11 +1930,10 @@ en:
           list of tools for static code analysis</a>, <a href="https://www.owasp.org/index.php/Static_Code_Analysis">OWASP
           information on static code analysis</a>, <a href="https://samate.nist.gov/index.php/Source_Code_Security_Analyzers.html">NIST
           list of source code security analyzers</a>, and <a href="https://www.dwheeler.com/essays/static-analysis-tools.html">Wheeler's
-          list of static analysis tools</a>. The <a href="https://continuousassurance.org/">SWAMP</a>
-          is a no-cost platform for assessing vulnerabilities
-          in software using a variety of tools. If there are no
+          list of static analysis tools</a>.
+          If there are no
           FLOSS static analysis tools available for the implementation
-          language(s) used, select 'N/A'.
+          language(s) used, you may select 'N/A'.
         na_placeholder: >-
           Why can't this be met (e.g., no FLOSS tools exist for
           that language)?

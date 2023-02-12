@@ -1887,10 +1887,7 @@ fr:
           liste NIST des analyseurs de sécurité du code source</a>
           et <a href="https://www.dwheeler.com/essays/static-analysis-tools.html">la
           liste des outils d'analyse statique de Wheeler</a >.
-          <a href="https://continuousassurance.org/">SWAMP</a>
-          est une plate-forme gratuite pour évaluer les vulnérabilités
-          dans les logiciels utilisant une variété d'outils. S'il
-          n'y a pas d'outil d'analyse statique FLOSS disponible
+          S'il n'y a pas d'outil d'analyse statique FLOSS disponible
           pour le(s) langage(s) d'implémentation utilisé(s), sélectionnez
           « N/A ».
         na_placeholder: >-

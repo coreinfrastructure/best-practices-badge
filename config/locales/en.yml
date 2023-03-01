@@ -1452,8 +1452,16 @@ en:
           The project MUST publish the process for reporting vulnerabilities
           on the project site.
         details: >-
-          E.g., a clearly designated mailing address on https://PROJECTSITE/security,
-          often in the form security@example.org. This MAY be
+          Projects hosted on GitHub SHOULD consider
+          <a href="https://docs.github.com/en/code-security/security-advisories/guidance-on-reporting-and-writing/privately-reporting-a-security-vulnerability"
+>enabling privately reporting a security vulnerability</a>.
+          Projects on GitLab SHOULD consider using its ability for
+          <a href="https://docs.github.com/en/code-security/security-advisories/guidance-on-reporting-and-writing/privately-reporting-a-security-vulnerability"
+          >privately reporting a vulnerability</a>.
+          Projects MAY identify a mailing address
+          on https://PROJECTSITE/security,
+          often in the form security@example.org.
+          This vulnerability reporting process MAY be
           the same as its bug reporting process. Vulnerability
           reports MAY always be public, but many projects have
           a private vulnerability reporting mechanism.

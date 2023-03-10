@@ -51,9 +51,16 @@ gem 'mail', '2.7.1' # Ruby mail handler
 gem 'octokit', '4.25.0' # GitHub's official Ruby API
 gem 'omniauth-github', '1.4.0' # Authentication to GitHub (get project info)
 #
-# Counter CVE-2015-9284 in omniauth.  Unfortunately, at the time of this
+# Counter CVE-2015-9284 in the omniauth 1.X series.
+# The omniauth gem 1.X series has a vulnerability if GET requests are used
+# for login, and it was left unfixed for years. A countermeasure is using POST.
+# For a discussion on this countermeasure see:
+# <https://github.com/omniauth/omniauth/wiki/Resolving-CVE-2015-9284>.
+# We are *not* vulnerable, because we use the POST method for /auth; see:
+# app/views/sessions/new.html.erb
+# For added protection we also use a
 # writing the omniauth folks STILL have not fixed it (!). There is a shim
-# by a third party that *does* fix it. I don't know the person who created
+# a third party that *does* fix it. I don't know the person who created
 # this shim, but I reviewed the code and it looks okay.
 # At one time I did this:
 # gem 'omniauth-rails_csrf_protection',
@@ -64,6 +71,7 @@ gem 'omniauth-github', '1.4.0' # Authentication to GitHub (get project info)
 # However, using a git reference busts CI pipeline caching, slowing down
 # all testing, and over time we've become more comfortable that this is
 # the "standard way to resolve this issue".
+# When we update to omniauth 2.X series we can remove this.
 gem 'omniauth-rails_csrf_protection', '0.1.2' # Counter CVE-2015-9284
 gem 'pagy', '5.10.1' # Paginate some views
 gem 'paleta', '0.3.0' # Color manipulation, used for badges

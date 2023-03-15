@@ -8,7 +8,7 @@
    # "^" and "$" are not needed.
    domain_pattern = '[A-Za-z0-9_][-A-Za-z0-9_.]*'
    url_pattern = 'https?:\/\/' + domain_pattern + \
-     '(\/([-A-Za-z0-9_.:\/\+!,#~]|%(20|[89A-Ea-e][0-9A-Fa-f]|[Ff][0-7]))*)?'
+     '(\/([-A-Za-z0-9_.:\/\+!,#@~]|%(20|[89A-Ea-e][0-9A-Fa-f]|[Ff][0-7]))*)?'
 %>
 <% if logged_in? %>
   <div class='row'>

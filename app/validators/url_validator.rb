@@ -28,7 +28,7 @@ class UrlValidator < ActiveModel::EachValidator
         https?://
         [A-Za-z0-9][-A-Za-z0-9_.]*  # domain name per DNS spec; includes I18N.
         (/
-          ([-A-Za-z0-9_.:/+!,#~]|    # allow these ASCII chars.
+          ([-A-Za-z0-9_.:/+!,#@~]|    # allow these ASCII chars.
            %(20|[89A-Ea-e][0-9A-Fa-f]|[Ff][0-7]))*  # Allow some %-encoded
         )?)\z}x.freeze
 

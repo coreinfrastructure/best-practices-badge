@@ -1454,7 +1454,7 @@ en:
         details: >-
           Projects hosted on GitHub SHOULD consider
           <a href="https://docs.github.com/en/code-security/security-advisories/guidance-on-reporting-and-writing/privately-reporting-a-security-vulnerability"
->enabling privately reporting a security vulnerability</a>.
+          >enabling privately reporting a security vulnerability</a>.
           Projects on GitLab SHOULD consider using its ability for
           <a href="https://docs.github.com/en/code-security/security-advisories/guidance-on-reporting-and-writing/privately-reporting-a-security-vulnerability"
           >privately reporting a vulnerability</a>.

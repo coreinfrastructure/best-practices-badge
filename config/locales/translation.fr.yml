@@ -1346,13 +1346,18 @@ fr:
           Le projet DOIT publier le processus de signalement des
           vulnérabilités sur le site du projet.
         details: >-
-          Par exemple, une adresse postale clairement désignée
-          sur https://PROJECTSITE/security, souvent sous la forme
-          security@example.org. Cela PEUT être identique à son
-          processus de signalement des bogues. Les signalements
-          de vulnérabilités PEUVENT toujours être publics, mais
-          de nombreux projets disposent d'un mécanisme privé de
-          signalement des vulnérabilités.
+          Les projets hébergés sur GitHub DEVRAIENT envisager
+          <a href="https://docs.github.com/en/code-security/security-advisories/guidance-on-reporting-and-writing/privately-reporting-a-security-vulnerability"
+          >d'activer le signalement privé d'une vulnérabilité
+          de sécurité</a> . Les projets sur GitLab DEVRAIENT envisager
+          d'utiliser sa capacité à <a href="https://docs.github.com/en/code-security/security-advisories/guidance-on-reporting-and-writing/privately-reporting-a-security-vulnerability"
+          >signaler une vulnérabilité en privé</a> . Les projets
+          PEUVENT identifier une adresse postale sur https://PROJECTSITE/security,
+          souvent sous la forme security@example.org. Ce processus
+          de rapport de vulnérabilité PEUT être le même que son
+          processus de rapport de bogue. Les rapports de vulnérabilité
+          PEUVENT toujours être publics, mais de nombreux projets
+          ont un mécanisme de rapport de vulnérabilité privé.
       vulnerability_report_private:
         description: >-
           Si les signalements de vulnérabilités privés sont pris

@@ -42,6 +42,7 @@ Interesting pages include:
 * Badging **[Criteria for the passing level](https://bestpractices.coreinfrastructure.org/criteria/0)**
 * **[Criteria for all badging levels](https://bestpractices.coreinfrastructure.org/criteria)**
 * Information on how to **[contribute](./CONTRIBUTING.md)**
+* Information on **[our own security, including how to report vulnerabilities in our badge application](./SECURITY.md)**
   (including how to report vulnerabilities)
 * [Up-for-grabs](https://github.com/coreinfrastructure/best-practices-badge/labels/up-for-grabs)
   lists smaller tasks that may take 1-3 days, and are ideal for people

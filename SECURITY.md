@@ -16,6 +16,9 @@ For now, the security contacts are:
 David A. Wheeler <dwheelerNOSPAM@dwheeler.com> and
 Jason Dossett <jdossettNOSPAM@utdallas.edu>.
 (remove the NOSPAM markers).
+If for some reason that doesn't work, as this is an OpenSSF project,
+contact the OpenSSF security reporting email address,
+which is <securityNOSPAM@openssf.org> (remove NOSPAM).
 
 If you report via email,
 please use an email system (like Gmail) that supports

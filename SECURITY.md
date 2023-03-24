@@ -19,10 +19,11 @@ Jason Dossett <jdossettNOSPAM@utdallas.edu>.
 
 If you report via email,
 please use an email system (like Gmail) that supports
-hop-to-hop encryption using STARTTLS when reporting vulnerabilities.
-Examples of such systems include Gmail, Outlook.com, and runbox.com.
-See [STARTTLS Everywhere](https://starttls-everywhere.org/)
-if you wish to learn more about efforts to encourage the use of STARTTLS.
+hop-to-hop (transport) encryption.
+The preferred approach is an email system that uses
+Mail Transfer Agent Strict Transport Security (MTA-STS), as this
+always uses TLS to authenticate destinations and encrypts contents.
+If you can't do that, use STARTTLS.
 Your email client should use encryption to communicate with
 your email system (i.e., if you use a web-based email client then use HTTPS,
 and if you use email client software then configure it to use encryption).

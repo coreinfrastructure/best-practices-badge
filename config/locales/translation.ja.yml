@@ -41,7 +41,7 @@ ja:
       <small> <strong>疑問、質問、または問題がある場合は<em> <a href="mailto:&#99;ii&#45;badges&#45;questions&#64;lists&#46;coreinfrastructure&#46;or&#103;">電子メールで報告する</a></em>か、<em>
       <a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
       target="_blank" rel="noopener">こちらから問題を提出</a></em>してください。</strong>
-      © 2015-2018 <a href="https://openssf.org" target="_blank"
+      © 2015-2021 <a href="https://openssf.org" target="_blank"
       rel="noopener">Open Source Security Foundation</a>、<a href="https://www.linuxfoundation.org/"
       target="_blank" rel="noopener">Linux Foundation</a> Collaborative
       Project. All Rights Reserved.<a href="https://www.linuxfoundation.org/privacy"
@@ -63,7 +63,7 @@ ja:
     password_confirmation: 確認
     password_empty: パスワードを空にすることはできません
     password_reset: パスワードがリセットされました
-    instructions_sent: パスワードリセットの方法が電子メールで送信されました
+    instructions_sent: パスワードリセットの方法が電子メールで送信されました（ローカル アカウントが存在する場合）
     reset_expired: パスワードのリセットは期限切れです
     update_password: パスワードを更新してください
   sessions:
@@ -898,8 +898,8 @@ ja:
           <li>心理学的受容性（ヒューマンインタフェースは、使いやすく設計されていなければならない - 「驚きが最小限になる」という設計が助けになる）<li>限られた攻撃面（攻撃面
           - 攻撃者がデータを入力または抽出しようとする部分 - を制限する必要があります）<li>ホワイト リストで入力を検証します（入力は通常、この検証はブラックリスト（既知の不良値をリストする）ではなく、ホワイトリスト（既知の値のみを受け入れる）を使用する必要があります。
           </ul>プロジェクトの「主要な開発者」とは、プロジェクトのコードベースに精通していて、容易に変更を加えることができ、プロジェクトの他のほとんどの参加者によって認められている人です。主要な開発者は、通常、過去1年間に（コード、文書、または質問に回答して）多数の貢献を行います。ある開発者が、プロジェクトを開始している（3年以上プロジェクトから離れていない）、プライベート脆弱性報告チャネル（存在する場合）に関する情報を受け取る、プロジェクトを代表してコミットを受け入れる、最終リリースする、などを行う時主要な開発者とみなすことができます。開発者が1人だけの場合、その人物が主要開発者です。より安全なソフトウェアを開発し、設計について議論する方法を理解するのに役立つ多くの本やコースが利用可能です。
-          たとえば、<a href="https://www.edx.org/professional-certificate/linuxfoundationx-secure-software-development-fundamentals">
-          Secure Software Development Fundamentals </a>コースは、3つのコースの無料セットです。
+          たとえば、<a href="https://openssf.org/edx-courses/"> Secure
+          Software Development Fundamentals </a>コースは、3つのコースの無料セットです。
           より安全なソフトウェアを開発する方法を説明しています。
       know_common_errors:
         description: >-
@@ -1011,7 +1011,7 @@ ja:
           <a href="https://www.owasp.org/index.php/Static_Code_Analysis">静的コード解析に関するOWASP情報</a>、<a
           href="https://samate.nist.gov/index.php/Source_Code_Security_Analyzers.html">
           NISTソースコードセキュリティアナライザのリスト</a>、および<a href="https://www.dwheeler.com/essays/static-analysis-tools.html">ウィーラーの静的解析ツール一覧</a>などがあります。
-          <a href="https://continuousassurance.org/">SWAMP</a>は、さまざまなツールを使用してソフトウェアの脆弱性を評価する無償のプラットフォームです。使用する実装言語で使用できるFLOSS静的解析ツールがない場合は、「該当なし」（N/A）を選択します。
+          使用する実装言語で使用できるFLOSS静的解析ツールがない場合は、「該当なし」（N/A）を選択します。
         na_placeholder: これが満たされないのはなぜですか（たとえば、その言語用のFLOSSツールがないから）？
         met_placeholder: どのような静的解析ツールを使用していますか？
       static_analysis_common_vulnerabilities:
@@ -1522,7 +1522,8 @@ ja:
         (OpenSSF)</a> <a href="https://github.com/ossf/wg-best-practices-os-developers">
         Best Practices Working Group (WG)</a>に属しています。OpenSSFは、<a
         href="https://www.linuxfoundation.org/">Linux Foundation
-        (LF)</a>傘下のファウンデーションです。
+        (LF)</a>傘下のファウンデーションです。同プロジェクトは、2021年12月24日付で、従来の "CII
+        Best Practices badge" から正式に名称変更されました。
       p3_html: >-
         <em>プライバシーと法的問題</em>：<a href="https://www.linuxfoundation.jp/privacy">プライバシーポリシー</a>、
         <a href="/ja/cookies">クッキーについて</a>、および<a href="https://www.linuxfoundation.jp/terms">利用条件</a>をご覧ください。このバッジ

@@ -95,7 +95,7 @@ Write Capybara features to test the happy path of new features. Test the feature
 
 ## External API testing
 
-We use Webmock and VCR to record external API responses and test against them without needing to make actual HTTP requests. If the external services (particularly Github) change their API, you need to delete the corresponding VCR cassette and rerun the test to re-record. This would involve (substituting the value of `GITHUB_PASSWORD` for the actual password for the Github account `ciitest`):
+We use Webmock and VCR to record external API responses and test against them without needing to make actual HTTP requests. If the external services (particularly Github) change their API, you need to delete the corresponding VCR cassette and rerun the test to re-record. This would involve (substituting the value of `GITHUB_PASSWORD` for the actual password for the Github account `bestpracticestest`):
 
 ```bash
 rm test/vcr_cassettes/github_login.yml
@@ -134,14 +134,14 @@ RAILS_ENV=test rails s -p 31337 -b 0.0.0.0
 and then go to <http://127.0.0.1:31337> in your web browser.
 
 If you re-record a cassette using DRIVER=, the cassette may correctly
-add the ciitest privilege and record what happened,
-but then fail to revoke the `ciitest` privilege.
+add the bestpracticestest privilege and record what happened,
+but then fail to revoke the `bestpracticestest` privilege.
 That's a problem, because future recording efforts will fail
 (the recording system presumes it doesn't already have the privileges,
 and will fail when it tries to add them).
 We'd like to fix that, but have not managed to do so yet
 (it only matters when you record a new cassette, which is a rare event).
-You can manually force removal by logging in to GitHub as `ciitest`,
+You can manually force removal by logging in to GitHub as `bestpracticestest`,
 going to <https://github.com/settings/applications>, select
 Applications / Authorized OAuth Apps, and revoke the privilege.
 
@@ -166,11 +166,11 @@ We believe that the test setup does not have a security issue.
 
 We want to test what happens when a user who logs into GitHub
 tries to use the system.  In those cases we use a special GitHub user
-`ciitest`.  This user controls no real-world projects, just a test project,
-and we only grant privileges to user `ciitest` to control the test data
+`bestpracticestest`.  This user controls no real-world projects, just a test project,
+and we only grant privileges to user `bestpracticestest` to control the test data
 (which we already include in the public distribution).
 So even if an attacker can use data in the cassettes to take control of
-the `ciitest` user, that user account has no privileges worth taking.
+the `bestpracticestest` user, that user account has no privileges worth taking.
 
 In addition, we create special keys that are recorded in the cassettes,
 and those keys are revoked at the end of the test.

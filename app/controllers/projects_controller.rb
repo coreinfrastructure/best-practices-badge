@@ -631,10 +631,14 @@ class ProjectsController < ApplicationController
     # we pass a per_page value to control this.  For more information, see:
     # https://developer.github.com/v3/#pagination
     github.auto_paginate = false
-    repos = github.repos(
-      nil,
-      sort: 'pushed', per_page: MAX_GITHUB_REPOS_FROM_USER
-    )
+    begin
+      repos = github.repos(
+        nil,
+        sort: 'pushed', per_page: MAX_GITHUB_REPOS_FROM_USER
+      )
+    rescue Octokit::Unauthorized
+      return
+    end
     return if repos.blank?
 
     # Find & remove the repos already in our database.

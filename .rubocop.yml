@@ -93,6 +93,7 @@ Layout/LineLength:
 Metrics/MethodLength:
  Exclude:
    - 'db/migrate/*'
+ Max: 12
 Rails/SkipsModelValidations:
   Exclude:
     - 'test/**/*.rb'

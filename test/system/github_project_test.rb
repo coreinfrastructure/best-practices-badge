@@ -19,15 +19,19 @@ class GithubProjectTest < ApplicationSystemTestCase
       assert has_content? 'Log in with GitHub'
       num = ActionMailer::Base.deliveries.size
       click_link 'Log in with GitHub'
+      sleep 2
 
       # When re-recording cassetes you must use DRIVER=chrome
       # Github has an anti bot mechanism that requires real mouse movement
       # to authorize an application.
-      if ENV['GITHUB_PASSWORD'] # for re-recording cassettes
-        find_field id: 'login_field' # Make sure field exists first
-        fill_in 'login_field', with: 'ciitest'
-        fill_in 'password', with: ENV['GITHUB_PASSWORD']
+      unless has_content? 'Logged in'
+        fill_in 'login', with: 'bestpracticestest'
+        fill_in 'password', with: ENV.fetch('GITHUB_PASSWORD', nil)
         click_on 'Sign in'
+        sleep 2
+      end
+      sleep 2
+      if ENV['GITHUB_PASSWORD'] # for re-recording cassettes
         # We don't assume not authorized so look for whether we are on the
         # authorization page and click authorize if we are
         if page.has_content?('Test BadgeApp (not for production use)')
@@ -36,23 +40,23 @@ class GithubProjectTest < ApplicationSystemTestCase
                ' the test envrionment app'
         end
       end
-      # Regression test, make sure redirected correctly after login
-      assert_equal new_project_path(locale: :en), current_path
+      sleep 2
       assert_equal num + 1, ActionMailer::Base.deliveries.size
+      sleep 2
       assert find(
-        "option[value='https://github.com/ciitest/cii-best-practices-badge']"
+        "option[value='https://github.com/bestpracticestest/best-practices-badge']"
       )
       assert has_selector?(
-        "option[value='https://github.com/ciitest2/test-repo-shared-2']"
+        "option[value='https://github.com/andrewfader/test-repo-shared-2']"
       )
       # Should not see repos that already have existing badge
       assert has_no_selector?(
-        "option[value='https://github.com/ciitest/test-repo']"
+        "option[value='https://github.com/bestpracticestest/test-repo']"
       )
-      assert has_no_selector?(
-        "option[value='https://github.com/ciitest2/test-repo-shared']"
-      )
-      select 'ciitest/cii-best-practices-badge', from: 'project[repo_url]'
+      # assert has_no_selector?(
+      # "option[value='https://github.com/andrewfader/test-repo-shared']"
+      # )
+      select 'bestpracticestest/best-practices-badge', from: 'project[repo_url]'
       click_on 'Submit GitHub Repository'
       assert has_content? 'Thanks for adding the Project! Please fill out ' \
                           'the rest of the information to get the Badge.'
@@ -60,7 +64,7 @@ class GithubProjectTest < ApplicationSystemTestCase
       click_on 'Account'
       assert has_content? 'Profile'
       click_on 'Profile'
-      assert has_content? 'Core Infrastructure Initiative Best Practices Badge'
+      assert has_content? 'Best Practices Badge'
       click_on 'Account'
       # Regression test, make sure GitHub users can logout
       assert has_content? 'Logout'

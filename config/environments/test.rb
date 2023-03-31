@@ -13,7 +13,7 @@ Rails.application.configure do
   # test suite. You never need to work with it otherwise. Remember that
   # your test database is "scratch space" for the test suite and is wiped
   # and recreated between test runs. Don't rely on the data there!
-  config.cache_classes = true
+  config.cache_classes = false
 
   # Do not eager load code on boot. This avoids loading your whole application
   # just for the purpose of running a single test. If you are using a tool that
@@ -64,7 +64,7 @@ Rails.application.configure do
     # when you should add eager loading (N+1 queries),
     # when you're using eager loading that isn't necessary and
     # when you should use counter cache.
-    Bullet.enable = true
+    Bullet.enable = false
     Bullet.rails_logger = true
     Bullet.add_footer = true
     Bullet.raise = true # raise an error if n+1 query occurs

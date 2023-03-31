@@ -6,6 +6,6 @@ indirect=$(bundle list | tail -n +2 | wc -l)
 echo "Number of gems (direct dependencies only) = $direct"
 echo "Number of gems (including indirect dependencies) = $indirect"
 echo
-bundle exec rails stats
+bin/rails stats
 echo
 true

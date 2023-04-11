@@ -198,7 +198,7 @@ file 'license_finder_report.html' => [
 end
 
 # Don't do whitespace checks on these YAML files:
-YAML_WS_EXCEPTIONS = ':!test/vcr_cassettes/*.yml'
+YAML_WS_EXCEPTIONS ||= ':!test/vcr_cassettes/*.yml'
 
 desc 'Check for trailing whitespace in latest proposed (git) patch.'
 task :whitespace_check do

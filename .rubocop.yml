@@ -221,6 +221,7 @@ Style/OptionalBooleanParameter:
   Enabled: false
 Metrics/PerceivedComplexity:
   Enabled: false
+  Max: 10
 Style/SoleNestedConditional:
   Enabled: false
 Lint/EmptyConditionalBody:
@@ -258,4 +259,6 @@ Rails/I18nLocaleTexts:
 Rails/RedundantPresenceValidationOnBelongsTo:
   Enabled: false
 Style/RequireOrder:
+  Enabled: false
+Style/YodaExpression:
   Enabled: false

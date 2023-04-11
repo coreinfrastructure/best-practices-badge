@@ -226,7 +226,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test 'should show project JSON data with locale' do
     get "/en/projects/#{@project.id}.json"
     assert_response :success
-    body = JSON.parse(response.body)
+    body = response.parsed_body
     assert_equal 'Pathfinder OS', body['name']
     assert_equal 'Operating system for Pathfinder rover', body['description']
     assert_equal 'https://www.nasa.gov', body['homepage_url']
@@ -236,7 +236,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test 'should show project JSON data without locale' do
     get "/projects/#{@project.id}.json"
     assert_response :success
-    body = JSON.parse(response.body)
+    body = response.parsed_body
     assert_equal 'Pathfinder OS', body['name']
     assert_equal 'Operating system for Pathfinder rover', body['description']
     assert_equal 'https://www.nasa.gov', body['homepage_url']
@@ -841,7 +841,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test 'query JSON for passing projects' do
     get '/en/projects.json?gteq=100'
     assert_response :success
-    body = JSON.parse(response.body)
+    body = response.parsed_body
     # We don't want to have to edit this test if we merely add new
     # test fixtures, so we'll just make sure we have at least 3 and
     # do a sanity check of the response.
@@ -946,7 +946,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     get "/en/projects.json?ids=#{@project.id}%2c#{@project_two.id}"
     follow_redirect!
     assert_response :success
-    body = JSON.parse(response.body)
+    body = response.parsed_body
     assert_equal 2, body.length
     assert_equal @project.id, body[0]['id']
     assert_equal @project_two.id, body[1]['id']

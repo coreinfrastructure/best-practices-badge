@@ -19,7 +19,6 @@ class GithubProjectTest < ApplicationSystemTestCase
       assert has_content? 'Log in with GitHub'
       num = ActionMailer::Base.deliveries.size
       click_link 'Log in with GitHub'
-      sleep 2
 
       # When re-recording cassetes you must use DRIVER=chrome
       # Github has an anti bot mechanism that requires real mouse movement
@@ -28,9 +27,7 @@ class GithubProjectTest < ApplicationSystemTestCase
         fill_in 'login', with: 'bestpracticestest'
         fill_in 'password', with: ENV.fetch('GITHUB_PASSWORD', nil)
         click_on 'Sign in'
-        sleep 2
       end
-      sleep 2
       if ENV['GITHUB_PASSWORD'] # for re-recording cassettes
         # We don't assume not authorized so look for whether we are on the
         # authorization page and click authorize if we are
@@ -40,9 +37,7 @@ class GithubProjectTest < ApplicationSystemTestCase
                ' the test envrionment app'
         end
       end
-      sleep 2
       assert_equal num + 1, ActionMailer::Base.deliveries.size
-      sleep 2
       assert find(
         "option[value='https://github.com/bestpracticestest/best-practices-badge']"
       )

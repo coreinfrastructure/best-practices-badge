@@ -10,7 +10,7 @@ class GithubBasicDetectiveTest < ActiveSupport::TestCase
   setup do
     @full_name = 'ciitest/test-repo'
     @repo_name = 'test-repo'
-    @description = 'This is for testing the CII Best Practices BadgeApp'
+    @description = 'This is for testing the OpenSSF Best Practices BadgeApp'
     @evidence = Evidence.new({})
     @repo_url = "https://github.com/#{@full_name}"
   end

@@ -82,7 +82,7 @@ VCR.configure do |config|
   # end
   # config.match_on [:skip_changers]
   # Allow calls needed by test drivers
-  config.ignore_hosts(*driver_urls)
+  # config.ignore_hosts(*driver_urls)
 end
 
 # The chromedriver occasionally calls out with its own API,
@@ -98,12 +98,12 @@ require 'webdrivers'
 require 'uri'
 
 # With activesupport gem
-driver_hosts =
-  Webdrivers::Common.subclasses.map do |this_driver|
-    URI(this_driver.base_url).host
-  end
+# driver_hosts =
+# Webdrivers::Common.subclasses.map do |this_driver|
+# URI(this_driver.base_url).host
+# end
 
-VCR.configure { |config| config.ignore_hosts(*driver_hosts) }
+# VCR.configure { |config| config.ignore_hosts(*driver_hosts) }
 
 # NOTE: We *could* speed up test execution by disabling PaperTrail
 # except in cases where we check PaperTrail results. PaperTrail records all
@@ -239,7 +239,6 @@ module ActiveSupport
 
       y = YAML.load_file(github_login_vcr_file).with_indifferent_access
       query_string = y[:http_interactions][0][:response][:body][:string]
-      # binding.pry
       Rack::Utils.parse_nested_query(query_string)['access_token']
     end
 

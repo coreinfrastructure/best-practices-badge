@@ -24,18 +24,15 @@ class GithubLoginTest < ApplicationSystemTestCase
       # Github has an anti bot mechanism that requires real mouse movement
       # to authorize an application.
       unless has_content? 'Logged in'
-        sleep 1
         fill_in 'login', with: 'bestpracticestest'
         fill_in 'password', with: ENV.fetch('GITHUB_PASSWORD', nil)
         click_on 'Sign in'
-        sleep 1
       end
       # We don't assume not authorized so look for whether we are on the
       # authorization page and click authorize if we are
       if page.has_content?('Test BadgeApp (not for production use)')
         click_on 'Authorize dankohn'
       end
-      sleep 1
       assert has_content? 'Logged in!'
       assert_equal '/en', current_path
       assert_equal num + 1, ActionMailer::Base.deliveries.size

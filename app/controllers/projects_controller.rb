@@ -780,7 +780,7 @@ class ProjectsController < ApplicationController
     end
     format.json { render :show, status: :ok, location: @project }
     new_badge_level = @project.badge_level
-    return unless new_badge_level != old_badge_level
+    return if new_badge_level == old_badge_level
 
     # TODO: Eventually deliver_later
     ReportMailer.project_status_change(

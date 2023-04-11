@@ -64,7 +64,7 @@ Rails.application.configure do
     # when you should add eager loading (N+1 queries),
     # when you're using eager loading that isn't necessary and
     # when you should use counter cache.
-    Bullet.enable = false
+    Bullet.enable = true
     Bullet.rails_logger = true
     Bullet.add_footer = true
     Bullet.raise = true # raise an error if n+1 query occurs

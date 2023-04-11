@@ -43,7 +43,7 @@ class UsersController < ApplicationController
 
     @edit_projects =
       select_needed(
-        Project.where(repo_url: github_user_projects)
+        Project.includes(:user).where(repo_url: github_user_projects)
       ) - @projects
   end
 

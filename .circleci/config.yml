@@ -18,7 +18,7 @@ jobs:
   build:
     working_directory: ~/coreinfrastructure/best-practices-badge
     parallelism: 1
-    resource_class: large
+    resource_class: medium
     shell: /bin/bash --login
     environment:
       CIRCLE_ARTIFACTS: /tmp/circleci-artifacts

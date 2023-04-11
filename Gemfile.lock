@@ -83,7 +83,7 @@ GEM
     awesome_print (1.9.2)
     bcrypt (3.1.18)
     bindex (0.8.1)
-    blind_index (2.3.0)
+    blind_index (2.3.1)
       activesupport (>= 5.2)
       argon2-kdf (>= 0.1.1)
     bootsnap (1.16.0)
@@ -113,7 +113,7 @@ GEM
       xpath (~> 3.2)
     capybara-slow_finder_errors (0.1.5)
       capybara (~> 3.0)
-    chartkick (4.0.5)
+    chartkick (4.2.1)
     chef-utils (18.2.7)
       concurrent-ruby
     code_analyzer (0.5.5)
@@ -202,8 +202,11 @@ GEM
     loofah (2.20.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
-    mail (2.7.1)
+    mail (2.8.1)
       mini_mime (>= 0.1.1)
+      net-imap
+      net-pop
+      net-smtp
     marcel (1.0.2)
     matrix (0.4.2)
     mdl (0.11.0)
@@ -500,32 +503,32 @@ DEPENDENCIES
   activesupport (~> 7.0.4)
   attr_encrypted!
   awesome_print
-  bcrypt (= 3.1.18)
-  blind_index (= 2.3.0)
+  bcrypt (~> 3.1.18)
+  blind_index (~> 2.3.0)
   bootsnap
-  bootstrap-sass (= 3.4.1)
-  bootstrap-social-rails (= 4.12.0)
-  bootstrap_form (= 2.7.0)
+  bootstrap-sass (~> 3.4)
+  bootstrap-social-rails (~> 4.12)
+  bootstrap_form (~> 2.7)
   bullet
   bundler
   bundler-audit
   capybara-slow_finder_errors
-  chartkick (= 4.0.5)
+  chartkick (~> 4.0)
   codecov
   dotenv-rails (~> 2.7)
   eslintrb
   faraday-retry (~> 2.1)
   font-awesome-rails (~> 4.7)
-  http_accept_language (= 2.1.1)
+  http_accept_language (~> 2.1)
   httparty
-  imagesLoaded_rails (= 4.1.0)
+  imagesLoaded_rails (~> 4.1)
   jbuilder (~> 2.11)
   jquery-rails (~> 4.4)
   jquery-ui-rails (~> 6.0)
   json (~> 2.0)
   license_finder (~> 7.0)
-  lograge (= 0.12.0)
-  mail (= 2.7.1)
+  lograge (~> 0.12)
+  mail (~> 2.7)
   mdl (= 0.11.0)
   minitest-reporters
   minitest-retry
@@ -533,8 +536,8 @@ DEPENDENCIES
   omniauth-github (~> 2.0)
   omniauth-rails_csrf_protection
   pagy (~> 6.0)
-  paleta (= 0.3.0)
-  paper_trail (= 12.3.0)
+  paleta (~> 0.3)
+  paper_trail (~> 12.3)
   pg (~> 1.4)
   pg_search (~> 2.3)
   pronto (= 0.11.1)
@@ -543,34 +546,34 @@ DEPENDENCIES
   pronto-rubocop (= 0.11.5)
   pry-byebug
   puma (~> 6.2)
-  puma_worker_killer (= 0.3.1)
-  rack-attack (= 6.6.1)
+  puma_worker_killer (~> 0.3)
+  rack-attack (~> 6.6)
   rack-cors (~> 1.0)
-  rack-headers_filter (= 0.0.1)
-  rack-timeout (= 0.6.3)
+  rack-headers_filter (~> 0.0.1)
+  rack-timeout (~> 0.6.3)
   rails (~> 7.0.4)
   rails-controller-testing (~> 1.0)
   rails-i18n (~> 7.0.4)
-  rails_12factor (= 0.0.3)
+  rails_12factor (~> 0.0.3)
   railties (~> 7.0.4)
   redcarpet (~> 3.5)
   rubocop (= 1.49.0)
   rubocop-performance (= 1.17.1)
   rubocop-rails (= 2.19.0)
   ruby-graphviz (= 1.2.5)
-  sass-rails (= 5.1.0)
-  scout_apm (= 4.1.2)
+  sass-rails (~> 5.1)
+  scout_apm (~> 4.1)
   secure_headers (~> 6.3)
   selenium-webdriver
   spring (~> 4.1)
   sprockets-rails (= 3.4.2)
   translation (= 1.32)
-  uglifier (= 4.2.0)
+  uglifier (~> 4.2.0)
   vcr (< 5.1)
   web-console
   webdrivers
   webmock (~> 3.0)
-  yaml-lint (= 0.1.2)
+  yaml-lint (~> 0.1.2)
 
 RUBY VERSION
    ruby 3.2.1p31

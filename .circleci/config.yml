@@ -18,6 +18,7 @@ jobs:
   build:
     working_directory: ~/coreinfrastructure/best-practices-badge
     parallelism: 1
+    resource_class: large
     shell: /bin/bash --login
     environment:
       CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
@@ -29,7 +30,7 @@ jobs:
         PG_USER: ubuntu
         RAILS_ENV: test
         RACK_ENV: test
-    - image: circleci/postgres@sha256:7a993db59e844d1c9c7a6b4685be57cd4e79173d8e5c25f48b8bb752e53fffdf # pin :11.5-ram
+    - image: cimg/postgres@sha256:baf39240249c9aeaaf09a3052e3663a5e99fa515c38ed6293b6689ffa15bb48e # pin :11.17
       environment:
         POSTGRES_USER: ubuntu
         POSTGRES_DB: circle_ruby_test

@@ -36,7 +36,6 @@ Capybara.register_driver :chrome do |app|
   Capybara::Selenium::Driver.new(app, browser: :chrome)
 end
 
-# Note that DRIVER only controls the Capybara javascript_driver.
 driver = ENV['DRIVER'].try(:to_sym)
 Capybara.javascript_driver = driver.present? ? driver : :headless_chrome
 Capybara.default_driver = driver.present? ? driver : :headless_chrome

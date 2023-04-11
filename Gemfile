@@ -82,7 +82,7 @@ gem 'pg_search', '~> 2.3' # PostgreSQL full-text search
 gem 'puma', '~> 6.2' # Faster webserver; recommended by Heroku
 gem 'puma_worker_killer', '0.3.1' # Band-aid: Restart to limit memory use
 gem 'rack-attack', '6.6.1' # Implement rate limiting
-gem 'rack-cors', '1.1.1' # Enable CORS so JavaScript clients can get JSON
+gem 'rack-cors', '~> 1' # Enable CORS so JavaScript clients can get JSON
 gem 'rack-headers_filter', '0.0.1' # Filter out "dangerous" headers
 # We no longer say: gem 'rails', '6.1.7.3' # Our web framework
 # but instead load only what we use (to reduce memory use and attack surface).
@@ -90,10 +90,10 @@ gem 'rack-headers_filter', '0.0.1' # Filter out "dangerous" headers
 # Note: Update the gem versions of action* and railties in sync.
 gem 'railties', '~> 7' # Rails. Rails core, loads rest of Rails
 gem 'rails-i18n', '~> 7' # Localizations for Rails built-ins
-gem 'redcarpet', '3.5.1' # Process markdown in form textareas (justifications)
+gem 'redcarpet', '~> 3.5' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.1.0', require: false # For .scss files (CSS extension)
 gem 'scout_apm', '4.1.2' # Monitor for memory leaks
-gem 'secure_headers', '6.3.4' # Add hardening measures to HTTP headers
+gem 'secure_headers', '~> 6.3' # Add hardening measures to HTTP headers
 # WARNING!!!!
 # CHECK DEPLOYMENT FIRST IF YOU UPDATE sprockets-rails.
 # The gem sprockets-rails version 3.4.1 (from 3.2.2) caused a regression
@@ -105,11 +105,11 @@ gem 'uglifier', '4.2.0', require: false # Minify JavaScript
 group :development, :test do
   gem 'awesome_print' # Pretty print Ruby objects
   gem 'bullet' # Avoid n+1 queries
-  gem 'bundler-audit', '0.9.1'
+  gem 'bundler-audit'
   gem 'dotenv-rails', '~> 2.7'
-  gem 'eslintrb', '2.1.0'
-  gem 'json'
-  gem 'license_finder', '7.0.1'
+  gem 'eslintrb'
+  gem 'json', '~> 2'
+  gem 'license_finder', '~> 7'
   gem 'mdl', '0.11.0'
   # NOTE: If you update pronto you may need to update other pronto-* gems
   gem 'pronto', '0.11.1'
@@ -150,12 +150,12 @@ group :development do
 end
 
 group :test do
-  gem 'capybara-slow_finder_errors', '0.1.5', require: false
-  gem 'codecov', '0.6.0', require: false
-  gem 'minitest-reporters', '1.5.0', require: false
-  gem 'minitest-retry', '0.2.2', require: false # Avoid Capybara false positives
+  gem 'capybara-slow_finder_errors', require: false
+  gem 'codecov', require: false
+  gem 'minitest-reporters', require: false
+  gem 'minitest-retry', require: false # Avoid Capybara false positives
   # Note: Updating 'rails-controller-testing' to '1.0.5' causes failures
-  gem 'rails-controller-testing', '1.0.5' # for `assigns` and `assert_template`
+  gem 'rails-controller-testing', '~> 1' # for `assigns` and `assert_template`
   gem 'selenium-webdriver'
   # We don't list "simplecov"; code depends on it & brings it in
   gem 'webdrivers'

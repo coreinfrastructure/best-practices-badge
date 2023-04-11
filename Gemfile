@@ -155,11 +155,11 @@ group :test do
   gem 'minitest-reporters', require: false
   gem 'minitest-retry', require: false # Avoid Capybara false positives
   # Note: Updating 'rails-controller-testing' to '1.0.5' causes failures
-  gem 'rails-controller-testing', '~> 1' # for `assigns` and `assert_template`
+  gem 'rails-controller-testing', '~> 1.0' # for `assigns` and `assert_template`
   gem 'selenium-webdriver'
   # We don't list "simplecov"; code depends on it & brings it in
   gem 'webdrivers'
-  gem 'webmock', '~> 3', require: false
+  gem 'webmock', '~> 3.0', require: false
 end
 
 group :production do

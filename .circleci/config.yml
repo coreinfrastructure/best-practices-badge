@@ -7,13 +7,8 @@ version: 2.1
 # > docker pull circleci/postgres:11.5-ram
 # This will return with the SHA-256 hash of the current version.
 #
-# This CircleCI orb doesn't seem to work, so I gave up:
-# orbs:
-#   browser-tools: circleci/browser-tools@1.1.1
-# When I try to later run "browser-tools/install-browser-tools" or similar,
-# CircleCI reports that the file doesn't exist (which is true).
-# It's not clear *why* the file doesn't exist. So we instead force-install
-# a browser for testing below.
+orbs:
+  browser-tools: circleci/browser-tools@1.4.1
 jobs:
   build:
     working_directory: ~/coreinfrastructure/best-practices-badge
@@ -38,33 +33,7 @@ jobs:
     - checkout
     - run: pwd
     - run: ls -l
-    # This should install the orb, but it doesn't work.
-    # - run:
-    #     name: Install browser tools
-    #     command: browser-tools/install-browser-tools
-    #
-    # We instead manually force installation of Chrome using a code
-    # snippet from the browser tools. See:
-    # https://github.com/CircleCI-Public/browser-tools-orb/blob/master/src/commands/install-chrome.yml#L131
-    - run:
-        name: Install Chrome
-        command: |
-          SUDO='sudo'
-          CHROME_VERSION='latest'
-          if [[ "$CHROME_VERSION" == "latest" ]]; then
-            CHROME_URL="https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
-          else
-            CHROME_URL="https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${CHROME_VERSION}-1_amd64.deb"
-          fi
-          curl --silent --show-error --location --fail --retry 3 \
-            --output google-chrome.deb $CHROME_URL
-          $SUDO apt-get update
-          # The pipe will install any dependencies missing
-          $SUDO dpkg -i google-chrome.deb || $SUDO apt-get -fy install
-          rm -rf google-chrome.deb
-          $SUDO sed -i 's|HERE/chrome"|HERE/chrome" --disable-setuid-sandbox --no-sandbox|g' "/opt/google/chrome/google-chrome"
-          which google-chrome
-          google-chrome --version
+    - browser-tools/install-chromedriver
     # Prepare for artifact and test results
     - run: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS
     # Force cleanup to make deterministic.
@@ -84,14 +53,9 @@ jobs:
     # This would show what we restored
     # - run: find ~/.rubygems || true
     - run:
-        name: Update Rubygems
-        command: sudo gem update --system --silent --no-document
-        environment:
-          REALLY_GEM_UPDATE_SYSTEM: 1
-    - run:
         name: Update bundler to match Gemfile.lock
         command: >
-          sudo sh -c 'yes | gem install bundler --force --no-document
+          sudo sh -c 'yes | gem install bundler --no-document
           -v "$(cat Gemfile.lock | tail -1 | tr -d \\\\" \\\\")"'
     - run:
         name: Bundler Version

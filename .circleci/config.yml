@@ -128,7 +128,7 @@ jobs:
           cp {database.ci,database}.yml
     - run:
         name: Create database
-        command: bundle exec rake db:create db:schema:load --trace
+        command: bundle exec rake db:setup
     # Start testing
     - run:
         name: Check for whitespace issues.

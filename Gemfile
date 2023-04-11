@@ -108,7 +108,7 @@ group :development, :test do
   gem 'dotenv-rails', '2.7.6'
   gem 'eslintrb', '2.1.0'
   gem 'json', '2.6.2'
-  gem 'license_finder', '7.0.1'
+  gem 'license_finder', '7.1.0'
   gem 'mdl', '0.11.0'
   # NOTE: If you update pronto you may need to update other pronto-* gems
   gem 'pronto', '0.11.0'

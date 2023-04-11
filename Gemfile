@@ -16,14 +16,14 @@ ruby File.read('.ruby-version').strip
 # Loading only what we use reduces memory use & attack surface.
 # gem 'actioncable' # Not used. Client/server comm channel.
 # gem 'activestorage' # Not used. Attaches cloud files to ActiveRecord.
-gem 'actionmailer', '~> 7' # Rails. Send email.
-gem 'actionpack', '~> 7' # Rails. MVC framework.
-gem 'actionview', '~> 7' # Rails. View.
-gem 'activejob', '~> 7' # Rails. Async jobs.
-gem 'activemodel', '~> 7' # Rails. Model basics.
-gem 'activerecord', '~> 7' # Rails. ORM and query system.
+gem 'actionmailer', '~> 7.0' # Rails. Send email.
+gem 'actionpack', '~> 7.0' # Rails. MVC framework.
+gem 'actionview', '~> 7.0' # Rails. View.
+gem 'activejob', '~> 7.0' # Rails. Async jobs.
+gem 'activemodel', '~> 7.0' # Rails. Model basics.
+gem 'activerecord', '~> 7.0' # Rails. ORM and query system.
 # gem 'activestorage' # Not used. Attaches cloud files to ActiveRecord.
-gem 'activesupport', '~> 7' # Rails. Underlying library.
+gem 'activesupport', '~> 7.0' # Rails. Underlying library.
 # gem 'activetext' # Not used. Text editor that fails to support markdown.
 gem 'attr_encrypted', github: 'andrewfader/attr_encrypted'
 gem 'bcrypt', '3.1.18' # Security - for salted hashed interated passwords
@@ -88,8 +88,8 @@ gem 'rack-headers_filter', '0.0.1' # Filter out "dangerous" headers
 # but instead load only what we use (to reduce memory use and attack surface).
 # We load sprockets-rails, but its version number isn't kept in sync.
 # Note: Update the gem versions of action* and railties in sync.
-gem 'railties', '~> 7' # Rails. Rails core, loads rest of Rails
-gem 'rails-i18n', '~> 7' # Localizations for Rails built-ins
+gem 'railties', '~> 7.0' # Rails. Rails core, loads rest of Rails
+gem 'rails-i18n', '~> 7.0' # Localizations for Rails built-ins
 gem 'redcarpet', '~> 3.5' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '5.1.0', require: false # For .scss files (CSS extension)
 gem 'scout_apm', '4.1.2' # Monitor for memory leaks
@@ -109,7 +109,7 @@ group :development, :test do
   gem 'dotenv-rails', '~> 2.7'
   gem 'eslintrb'
   gem 'json', '~> 2'
-  gem 'license_finder', '~> 7'
+  gem 'license_finder', '~> 7.0'
   gem 'mdl', '0.11.0'
   # NOTE: If you update pronto you may need to update other pronto-* gems
   gem 'pronto', '0.11.1'
@@ -144,7 +144,7 @@ group :development do
   # We bring in full rails in development in case we need it for debugging;
   # this also keeps some gems happy that don't realize that loading
   # only *parts* of Rails is fine:
-  gem 'rails', '~> 7' # Rails (our web framework)
+  gem 'rails', '~> 7.0' # Rails (our web framework)
   gem 'translation', '1.32' # translation.io - translation service
   gem 'web-console' # In-browser debugger; use <% console %> or console
 end

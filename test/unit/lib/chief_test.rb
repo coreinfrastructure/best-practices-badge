@@ -10,7 +10,8 @@ class ChiefTest < ActiveSupport::TestCase
   setup do
     @full_name = 'linuxfoundation/cii-best-practices-badge'
     @repo_name = 'best-practices-badge'
-    @description = '🏆Core Infrastructure Initiative Best Practices Badge'
+    @description = '🏆Open Source Security Foundation (OpenSSF)' \
+                   ' Best Practices Badge (formerly Core Infrastructure Initiative (CII) Best Practices Badge)'
 
     @sample_project = Project.new
     @sample_project[:repo_url] = "https://github.com/#{@full_name}"
@@ -34,21 +35,19 @@ class ChiefTest < ActiveSupport::TestCase
     assert_equal 'Met', results[:floss_license_osi_status]
     assert_equal mit_ok, results[:floss_license_osi_justification]
     assert_equal 'Met', results[:contribution_status]
-    assert_equal 'Non-trivial contribution file in repository: ' \
-                 '<https://github.com/coreinfrastructure/' \
-                 'best-practices-badge/blob/master/CONTRIBUTING.md>.',
+    assert_equal 'Non-trivial contribution file in repository: <https://github.com/coreinfrastructure/best-practices-badge/blob/main/CONTRIBUTING.md>.',
                  results[:contribution_justification]
     assert_equal 'Met', results[:release_notes_status]
     assert_equal 'Non-trivial release notes file in repository: ' \
                  '<https://github.com/coreinfrastructure/' \
-                 'best-practices-badge/blob/master/CHANGELOG.md>.',
+                 'best-practices-badge/blob/main/CHANGELOG.md>.',
                  results[:release_notes_justification]
     assert_equal 'Met', results[:build_status]
     assert_equal 'Non-trivial build file in repository: ' \
                  '<https://github.com/coreinfrastructure/' \
-                 'best-practices-badge/blob/master/Rakefile>.',
+                 'best-practices-badge/blob/main/Rakefile>.',
                  results[:build_justification]
-    assert_equal 'Ruby, JavaScript, Shell, Makefile, Dockerfile',
+    assert_equal 'Ruby, JavaScript, Shell, SCSS, Dockerfile, Makefile, Procfile',
                  results[:implementation_languages]
   end
   # rubocop:enable Metrics/BlockLength

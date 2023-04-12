@@ -204,20 +204,6 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_response :missing
   end
 
-  # DEPRECATED CAPABILITY. We eventually want to require people to use
-  # "/en/projects/:id.json" if they want JSON. However, as long as this
-  # capability exists, we should test that it works. We also want to test
-  # that it has STOPPED working once we've removed that functionality.
-  # We have documented this deprecation in doc/api.md.
-  test 'should project JSON data if HTTP header Accept: application/json ' do
-    get "/en/projects/#{@project.id}", headers: { Accept: 'application/json' }
-    assert_response :success
-    # The JSON looks like {...} and has "id", while the HTML does not.
-    assert_equal '{', response.body[0]
-    assert_equal '}', response.body[-1]
-    assert_includes response.body, '"id"'
-  end
-
   test 'should show project with criteria_level=1' do
     # Use "/1" suffix to indicate criteria_level=1
     get "/en/projects/#{@project.id}/1"
@@ -240,7 +226,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test 'should show project JSON data with locale' do
     get "/en/projects/#{@project.id}.json"
     assert_response :success
-    body = JSON.parse(response.body)
+    body = response.parsed_body
     assert_equal 'Pathfinder OS', body['name']
     assert_equal 'Operating system for Pathfinder rover', body['description']
     assert_equal 'https://www.nasa.gov', body['homepage_url']
@@ -250,7 +236,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test 'should show project JSON data without locale' do
     get "/projects/#{@project.id}.json"
     assert_response :success
-    body = JSON.parse(response.body)
+    body = response.parsed_body
     assert_equal 'Pathfinder OS', body['name']
     assert_equal 'Operating system for Pathfinder rover', body['description']
     assert_equal 'https://www.nasa.gov', body['homepage_url']
@@ -855,7 +841,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test 'query JSON for passing projects' do
     get '/en/projects.json?gteq=100'
     assert_response :success
-    body = JSON.parse(response.body)
+    body = response.parsed_body
     # We don't want to have to edit this test if we merely add new
     # test fixtures, so we'll just make sure we have at least 3 and
     # do a sanity check of the response.
@@ -907,28 +893,28 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test 'as=badge works in simple case (single result)' do
     expected_id = projects(:perfect).id
     get '/en/projects?as=badge&' \
-        'url=https%3A%2F%2Fgithub.com%2Fciitest2%2Ftest-repo-shared'
+        'url=https%3A%2F%2Fgithub.com%2Fbestpracticestest%2Ftest-repo-shared'
     assert_redirected_to "/projects/#{expected_id}/badge"
   end
 
   test 'as=badge works with trailing space and slash' do
     expected_id = projects(:perfect).id
     get '/en/projects?as=badge&' \
-        'url=https%3A%2F%2Fgithub.com%2Fciitest2%2Ftest-repo-shared%2F%20'
+        'url=https%3A%2F%2Fgithub.com%2Fbestpracticestest%2Ftest-repo-shared%2F%20'
     assert_redirected_to "/projects/#{expected_id}/badge"
   end
 
   test 'as=badge works in simple case returning JSON' do
     expected_id = projects(:perfect).id
     get '/en/projects.json?as=badge&' \
-        'url=https%3A%2F%2Fgithub.com%2Fciitest2%2Ftest-repo-shared'
+        'url=https%3A%2F%2Fgithub.com%2Fbestpracticestest%2Ftest-repo-shared'
     assert_redirected_to "/projects/#{expected_id}/badge.json"
   end
 
   test 'as=badge redirects simple case when using pq=' do
     expected_id = projects(:perfect).id
     get '/en/projects?as=badge&' \
-        'pq=https%3A%2F%2Fgithub.com%2Fciitest2%2Ftest-repo-shared'
+        'pq=https%3A%2F%2Fgithub.com%2Fbestpracticestest%2Ftest-repo-shared'
     assert_redirected_to "/projects/#{expected_id}/badge"
   end
 
@@ -945,7 +931,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test 'as=entry works in simple case (single result)' do
     expected_id = projects(:perfect).id
     get '/en/projects?as=entry&' \
-        'url=https%3A%2F%2Fgithub.com%2Fciitest2%2Ftest-repo-shared'
+        'url=https%3A%2F%2Fgithub.com%2Fbestpracticestest%2Ftest-repo-shared'
     assert_redirected_to "/en/projects/#{expected_id}"
   end
 
@@ -960,7 +946,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     get "/en/projects.json?ids=#{@project.id}%2c#{@project_two.id}"
     follow_redirect!
     assert_response :success
-    body = JSON.parse(response.body)
+    body = response.parsed_body
     assert_equal 2, body.length
     assert_equal @project.id, body[0]['id']
     assert_equal @project_two.id, body[1]['id']

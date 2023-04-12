@@ -18,11 +18,8 @@ if ENV['RAILS_ENV'] == 'development'
     development_mode:     ENV['RAILS_ENV'] == 'development',
     # Should we optimize the LOAD_PATH with a cache?
     load_path_cache:      true,
-    # Should we optimize ActiveSupport autoloads with cache?
-    autoload_paths_cache: true,
     # Sets `RubyVM::InstructionSequence.compile_option =
     #   { trace_instruction: false }`
-    disable_trace:        false,
     # Should compile Ruby code into ISeq cache?
     compile_cache_iseq:   true,
     # Should compile YAML into a cache?

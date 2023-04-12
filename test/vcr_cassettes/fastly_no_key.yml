@@ -2,59 +2,6 @@
 http_interactions:
 - request:
     method: post
-    uri: https://api.fastly.com//service//purge/foo
-    body:
-      encoding: UTF-8
-      string: ''
-    headers:
-      Fastly-Key:
-      - ''
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-      Accept:
-      - "*/*"
-      User-Agent:
-      - Ruby
-  response:
-    status:
-      code: 404
-      message: Not Found
-    headers:
-      Connection:
-      - keep-alive
-      Status:
-      - 404 Not Found
-      Fastly-Ratelimit-Remaining:
-      - '999'
-      Fastly-Ratelimit-Reset:
-      - '1609815600'
-      Accept-Ranges:
-      - bytes
-      Via:
-      - 1.1 varnish, 1.1 varnish
-      Date:
-      - Tue, 05 Jan 2021 02:08:55 GMT
-      X-Served-By:
-      - cache-control-slwdc9037-CONTROL-SLWDC, cache-wdc5548-WDC
-      X-Cache:
-      - MISS, MISS
-      X-Cache-Hits:
-      - 0, 0
-      X-Timer:
-      - S1609812535.267807,VS0,VE56
-      Vary:
-      - Accept-Encoding
-      Strict-Transport-Security:
-      - max-age=31536000
-      Transfer-Encoding:
-      - chunked
-    body:
-      encoding: ASCII-8BIT
-      string: ''
-    http_version: 
-  recorded_at: Tue, 05 Jan 2021 02:08:55 GMT
-- request:
-    method: post
     uri: https://api.fastly.com/service//purge/foo
     body:
       encoding: UTF-8
@@ -86,11 +33,11 @@ http_interactions:
       Accept-Ranges:
       - bytes
       Date:
-      - Wed, 06 Jan 2021 02:13:48 GMT
+      - Tue, 11 Apr 2023 05:22:16 GMT
       Via:
       - 1.1 varnish
       X-Served-By:
-      - cache-wdc5579-WDC
+      - cache-ewr18123-EWR
       X-Cache:
       - MISS
       X-Cache-Hits:
@@ -100,6 +47,5 @@ http_interactions:
     body:
       encoding: UTF-8
       string: '{"msg":"Record not found", "detail": "Cannot find service ''(null)''"}'
-    http_version: 
-  recorded_at: Wed, 06 Jan 2021 02:13:48 GMT
-recorded_with: VCR 5.0.0
+  recorded_at: Tue, 11 Apr 2023 05:22:16 GMT
+recorded_with: VCR 6.1.0

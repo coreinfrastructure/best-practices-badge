@@ -631,10 +631,14 @@ class ProjectsController < ApplicationController
     # we pass a per_page value to control this.  For more information, see:
     # https://developer.github.com/v3/#pagination
     github.auto_paginate = false
-    repos = github.repos(
-      nil,
-      sort: 'pushed', per_page: MAX_GITHUB_REPOS_FROM_USER
-    )
+    begin
+      repos = github.repos(
+        nil,
+        sort: 'pushed', per_page: MAX_GITHUB_REPOS_FROM_USER
+      )
+    rescue Octokit::Unauthorized
+      return
+    end
     return if repos.blank?
 
     # Find & remove the repos already in our database.
@@ -776,7 +780,7 @@ class ProjectsController < ApplicationController
     end
     format.json { render :show, status: :ok, location: @project }
     new_badge_level = @project.badge_level
-    return unless new_badge_level != old_badge_level
+    return if new_badge_level == old_badge_level
 
     # TODO: Eventually deliver_later
     ReportMailer.project_status_change(

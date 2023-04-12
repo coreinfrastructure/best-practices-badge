@@ -26,7 +26,7 @@ class Icon
     # Return the SafeBuffer text that represents icon "key".
     def [](key)
       # Use fetch, not @icon_data[key], so we discover missing keys
-      @icon_data.fetch(key)
+      @icon_data&.fetch(key)
     end
 
     # Useful for debugging

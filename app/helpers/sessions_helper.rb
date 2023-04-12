@@ -123,12 +123,12 @@ module SessionsHelper
 
     github = client.new access_token: session[:user_token]
     begin
-      github.repo(github_path).permissions.push
+      github.repo(github_path).permissions.presence && github.repo(github_path).permissions[:push]
     # If you suddenly get a lot of 503's most likely github has changed
     # its API, make this a generic rescue
     # Disable rubocop - Style/RescueStandardError if that is needed
     rescue Octokit::NotFound
-      false
+      return false
     end
   end
 

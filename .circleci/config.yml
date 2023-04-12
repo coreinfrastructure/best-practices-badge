@@ -7,29 +7,25 @@ version: 2.1
 # > docker pull circleci/postgres:11.5-ram
 # This will return with the SHA-256 hash of the current version.
 #
-# This CircleCI orb doesn't seem to work, so I gave up:
-# orbs:
-#   browser-tools: circleci/browser-tools@1.1.1
-# When I try to later run "browser-tools/install-browser-tools" or similar,
-# CircleCI reports that the file doesn't exist (which is true).
-# It's not clear *why* the file doesn't exist. So we instead force-install
-# a browser for testing below.
+orbs:
+  browser-tools: circleci/browser-tools@1.4.1
 jobs:
   build:
     working_directory: ~/coreinfrastructure/best-practices-badge
     parallelism: 1
+    resource_class: medium
     shell: /bin/bash --login
     environment:
       CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
       CIRCLE_TEST_REPORTS: /tmp/circleci-test-results
     docker:
-    - image: afader/cii-bestpractices@sha256:bc9f83b4b42b3aebae1c6bd333ce49286d9ca0015b68e494d6dd8b0f2ada948f # pin :3.0.5-browsers
+    - image: afader/cii-bestpractices@sha256:f04eaa5141adf78fe2d77ddae428bf7ed4ca91057ad352905b5fcdd490d5f4e5 # pin :3.2.1-browsers
       environment:
         PG_HOST: localhost
         PG_USER: ubuntu
         RAILS_ENV: test
         RACK_ENV: test
-    - image: circleci/postgres@sha256:7a993db59e844d1c9c7a6b4685be57cd4e79173d8e5c25f48b8bb752e53fffdf # pin :11.5-ram
+    - image: cimg/postgres@sha256:baf39240249c9aeaaf09a3052e3663a5e99fa515c38ed6293b6689ffa15bb48e # pin :11.17
       environment:
         POSTGRES_USER: ubuntu
         POSTGRES_DB: circle_ruby_test
@@ -37,33 +33,7 @@ jobs:
     - checkout
     - run: pwd
     - run: ls -l
-    # This should install the orb, but it doesn't work.
-    # - run:
-    #     name: Install browser tools
-    #     command: browser-tools/install-browser-tools
-    #
-    # We instead manually force installation of Chrome using a code
-    # snippet from the browser tools. See:
-    # https://github.com/CircleCI-Public/browser-tools-orb/blob/master/src/commands/install-chrome.yml#L131
-    - run:
-        name: Install Chrome
-        command: |
-          SUDO='sudo'
-          CHROME_VERSION='latest'
-          if [[ "$CHROME_VERSION" == "latest" ]]; then
-            CHROME_URL="https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
-          else
-            CHROME_URL="https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${CHROME_VERSION}-1_amd64.deb"
-          fi
-          curl --silent --show-error --location --fail --retry 3 \
-            --output google-chrome.deb $CHROME_URL
-          $SUDO apt-get update
-          # The pipe will install any dependencies missing
-          $SUDO dpkg -i google-chrome.deb || $SUDO apt-get -fy install
-          rm -rf google-chrome.deb
-          $SUDO sed -i 's|HERE/chrome"|HERE/chrome" --disable-setuid-sandbox --no-sandbox|g' "/opt/google/chrome/google-chrome"
-          which google-chrome
-          google-chrome --version
+    - browser-tools/install-chromedriver
     # Prepare for artifact and test results
     - run: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS
     # Force cleanup to make deterministic.
@@ -83,14 +53,9 @@ jobs:
     # This would show what we restored
     # - run: find ~/.rubygems || true
     - run:
-        name: Update Rubygems
-        command: sudo gem update --system --silent --no-document
-        environment:
-          REALLY_GEM_UPDATE_SYSTEM: 1
-    - run:
         name: Update bundler to match Gemfile.lock
         command: >
-          sudo sh -c 'yes | gem install bundler --force --no-document
+          sudo sh -c 'yes | gem install bundler --no-document
           -v "$(cat Gemfile.lock | tail -1 | tr -d \\\\" \\\\")"'
     - run:
         name: Bundler Version
@@ -127,7 +92,7 @@ jobs:
           cp {database.ci,database}.yml
     - run:
         name: Create database
-        command: bundle exec rake db:create db:schema:load --trace
+        command: bundle exec rake db:setup
     # Start testing
     - run:
         name: Check for whitespace issues.

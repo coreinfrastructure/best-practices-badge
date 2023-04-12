@@ -52,7 +52,7 @@ task(:ci).clear.enhance %w[
 desc 'Ensure that rbenv or rvm are set up in PATH'
 task :rbenv_rvm_setup do
   path = ENV.fetch('PATH', nil)
-  if !path.include?('.rbenv') && !path.include?('.rvm')
+  if !path.include?('.rbenv') && !path.include?('.rvm') && !path.include?('.asdf')
     raise RuntimeError 'Must have rbenv or rvm in PATH'
   end
 end
@@ -198,7 +198,7 @@ file 'license_finder_report.html' => [
 end
 
 # Don't do whitespace checks on these YAML files:
-YAML_WS_EXCEPTIONS = ':!test/vcr_cassettes/*.yml'
+YAML_WS_EXCEPTIONS ||= ':!test/vcr_cassettes/*.yml'
 
 desc 'Check for trailing whitespace in latest proposed (git) patch.'
 task :whitespace_check do

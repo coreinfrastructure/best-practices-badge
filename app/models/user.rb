@@ -43,9 +43,7 @@ class User < ApplicationRecord
   # Email addresses are stored as encrypted values.
   # If a key isn't provided, use a bogus one to make testing easy.
   attr_encrypted :email, algorithm: 'aes-256-gcm', key: [
-    (
-        ENV['EMAIL_ENCRYPTION_KEY'] || TEST_EMAIL_ENCRYPTION_KEY
-      )
+    ENV['EMAIL_ENCRYPTION_KEY'] || TEST_EMAIL_ENCRYPTION_KEY
   ].pack('H*')
 
   # Email addresses are indexed as blind indexes of downcased email addresses,
@@ -53,9 +51,7 @@ class User < ApplicationRecord
   # Usage: User.where(email: 'test@example.org')
   # or:    User.where(email: 'test@example.org', provider: 'local')
   blind_index :email, key: [
-    (
-        ENV['EMAIL_BLIND_INDEX_KEY'] || TEST_EMAIL_BLIND_INDEX_KEY
-      )
+    ENV['EMAIL_BLIND_INDEX_KEY'] || TEST_EMAIL_BLIND_INDEX_KEY
   ].pack('H*'), expression: ->(v) { v.try(:downcase) }
 
   scope :created_since, (

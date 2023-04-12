@@ -5,12 +5,14 @@ http_interactions:
     uri: https://github.com/login/oauth/access_token
     body:
       encoding: UTF-8
-      string: client_id=3e90194c70b57b71188e&client_secret=d2e3f002838f611a514b84a1727bf6e500a67d2b&code=f3ce2461894395a7a752&grant_type=authorization_code&redirect_uri=http%3A%2F%2F127.0.0.1%3A31337%2Fauth%2Fgithub%2Fcallback
+      string: code=4d2a6f77d93dc6aa9782&grant_type=authorization_code&redirect_uri=http%3A%2F%2F127.0.0.1%3A31337%2Fauth%2Fgithub%2Fcallback
     headers:
       User-Agent:
-      - Faraday v1.0.1
+      - Faraday v2.7.4
       Content-Type:
       - application/x-www-form-urlencoded
+      Authorization:
+      - Basic M2U5MDE5NGM3MGI1N2I3MTE4OGU6ZDJlM2YwMDI4MzhmNjExYTUxNGI4NGExNzI3YmY2ZTUwMGE2N2QyYg==
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
@@ -23,18 +25,16 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Sat, 18 Apr 2020 19:01:31 GMT
+      - Tue, 11 Apr 2023 06:05:27 GMT
       Content-Type:
       - application/x-www-form-urlencoded; charset=utf-8
       Transfer-Encoding:
       - chunked
-      Status:
-      - 200 OK
       Vary:
       - Accept-Encoding, Accept, X-Requested-With
-      - X-PJAX
+      - X-PJAX, X-PJAX-Container, Turbo-Visit, Turbo-Frame
       Etag:
-      - W/"cfc6f65ad67af39a23c1e46499ee0478"
+      - W/"2bd42d6b683201b0aa7ed0799d62eacb"
       Cache-Control:
       - max-age=0, private, must-revalidate
       Strict-Transport-Security:
@@ -44,30 +44,40 @@ http_interactions:
       X-Content-Type-Options:
       - nosniff
       X-Xss-Protection:
-      - 1; mode=block
+      - '0'
       Referrer-Policy:
       - origin-when-cross-origin, strict-origin-when-cross-origin
-      Expect-Ct:
-      - max-age=2592000, report-uri="https://api.github.com/_private/browser/errors"
       Content-Security-Policy:
-      - 'default-src ''none''; base-uri ''self''; block-all-mixed-content; connect-src
-        ''self'' uploads.github.com www.githubstatus.com collector.githubapp.com api.github.com
-        www.google-analytics.com github-cloud.s3.amazonaws.com github-production-repository-file-5c1aeb.s3.amazonaws.com
-        github-production-upload-manifest-file-7fdce7.s3.amazonaws.com github-production-user-asset-6210df.s3.amazonaws.com
-        cdn.optimizely.com logx.optimizely.com/v1/events wss://live.github.com; font-src
-        github.githubassets.com; form-action ''self'' github.com gist.github.com;
-        frame-ancestors ''none''; frame-src render.githubusercontent.com; img-src
-        ''self'' data: github.githubassets.com identicons.github.com collector.githubapp.com
-        github-cloud.s3.amazonaws.com *.githubusercontent.com; manifest-src ''self'';
-        media-src ''none''; script-src github.githubassets.com; style-src ''unsafe-inline''
-        github.githubassets.com'
+      - 'default-src ''none''; base-uri ''self''; block-all-mixed-content; child-src
+        github.com/assets-cdn/worker/ gist.github.com/assets-cdn/worker/; connect-src
+        ''self'' uploads.github.com objects-origin.githubusercontent.com www.githubstatus.com
+        collector.github.com raw.githubusercontent.com api.github.com github-cloud.s3.amazonaws.com
+        github-production-repository-file-5c1aeb.s3.amazonaws.com github-production-upload-manifest-file-7fdce7.s3.amazonaws.com
+        github-production-user-asset-6210df.s3.amazonaws.com cdn.optimizely.com logx.optimizely.com/v1/events
+        *.actions.githubusercontent.com productionresultssa0.blob.core.windows.net/
+        productionresultssa1.blob.core.windows.net/ productionresultssa2.blob.core.windows.net/
+        productionresultssa3.blob.core.windows.net/ productionresultssa4.blob.core.windows.net/
+        wss://*.actions.githubusercontent.com github-production-repository-image-32fea6.s3.amazonaws.com
+        github-production-release-asset-2e65be.s3.amazonaws.com insights.github.com
+        wss://alive.github.com; font-src github.githubassets.com; form-action ''self''
+        github.com gist.github.com objects-origin.githubusercontent.com; frame-ancestors
+        ''none''; frame-src viewscreen.githubusercontent.com notebooks.githubusercontent.com;
+        img-src ''self'' data: github.githubassets.com media.githubusercontent.com
+        camo.githubusercontent.com identicons.github.com avatars.githubusercontent.com
+        github-cloud.s3.amazonaws.com objects.githubusercontent.com objects-origin.githubusercontent.com
+        secured-user-images.githubusercontent.com/ user-images.githubusercontent.com/
+        private-user-images.githubusercontent.com opengraph.githubassets.com github-production-user-asset-6210df.s3.amazonaws.com
+        customer-stories-feed.github.com spotlights-feed.github.com *.githubusercontent.com;
+        manifest-src ''self''; media-src github.com user-images.githubusercontent.com/
+        secured-user-images.githubusercontent.com/ private-user-images.githubusercontent.com;
+        script-src github.githubassets.com; style-src ''unsafe-inline'' github.githubassets.com;
+        worker-src github.com/assets-cdn/worker/ gist.github.com/assets-cdn/worker/'
       X-Github-Request-Id:
-      - 3186:3A16:43438A:640FE2:5E9B4E8B
+      - D1B2:924A:953C56:DB058A:6434F8A7
     body:
       encoding: UTF-8
-      string: access_token=57f69eb8b89259927aa100d6477d7fbb9b90d690&scope=read%3Aorg%2Cuser%3Aemail&token_type=bearer
-    http_version: 
-  recorded_at: Sat, 18 Apr 2020 19:01:31 GMT
+      string: access_token=REDACTED&scope=read%3Aorg%2Cuser%3Aemail&token_type=bearer
+  recorded_at: Tue, 11 Apr 2023 06:05:27 GMT
 - request:
     method: get
     uri: https://api.github.com/user
@@ -76,9 +86,9 @@ http_interactions:
       string: ''
     headers:
       User-Agent:
-      - Faraday v1.0.1
+      - Faraday v2.7.4
       Authorization:
-      - Bearer 57f69eb8b89259927aa100d6477d7fbb9b90d690
+      - Bearer REDACTED
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
@@ -91,28 +101,20 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Sat, 18 Apr 2020 19:01:32 GMT
+      - Tue, 11 Apr 2023 06:05:27 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
       - chunked
-      Status:
-      - 200 OK
-      X-Ratelimit-Limit:
-      - '5000'
-      X-Ratelimit-Remaining:
-      - '4997'
-      X-Ratelimit-Reset:
-      - '1587239738'
       Cache-Control:
       - private, max-age=60, s-maxage=60
       Vary:
       - Accept, Authorization, Cookie, X-GitHub-OTP
       - Accept-Encoding, Accept, X-Requested-With
       Etag:
-      - W/"93165c0242a3bb58fedd562c7daa9505"
+      - W/"7903db4a4e7c553725f0b01e5121708155b9ffd93b0d3d3b6ddb032dd1a6a310"
       Last-Modified:
-      - Sat, 18 Apr 2020 19:01:30 GMT
+      - Wed, 22 Mar 2023 03:30:28 GMT
       X-Oauth-Scopes:
       - read:org, user:email
       X-Accepted-Oauth-Scopes:
@@ -121,10 +123,23 @@ http_interactions:
       - 3e90194c70b57b71188e
       X-Github-Media-Type:
       - github.v3; format=json
+      X-Github-Api-Version-Selected:
+      - '2022-11-28'
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4931'
+      X-Ratelimit-Reset:
+      - '1681193742'
+      X-Ratelimit-Used:
+      - '69'
+      X-Ratelimit-Resource:
+      - core
       Access-Control-Expose-Headers:
       - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
-        X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval,
-        X-GitHub-Media-Type, Deprecation, Sunset
+        X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes,
+        X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO,
+        X-GitHub-Request-Id, Deprecation, Sunset
       Access-Control-Allow-Origin:
       - "*"
       Strict-Transport-Security:
@@ -134,18 +149,17 @@ http_interactions:
       X-Content-Type-Options:
       - nosniff
       X-Xss-Protection:
-      - 1; mode=block
+      - '0'
       Referrer-Policy:
       - origin-when-cross-origin, strict-origin-when-cross-origin
       Content-Security-Policy:
       - default-src 'none'
       X-Github-Request-Id:
-      - 30A6:447F:3F21D4:912755:5E9B4E8B
+      - BBEE:3D87:993EBA:13BA43F:6434F8A7
     body:
       encoding: ASCII-8BIT
-      string: '{"login":"ciitest","id":19290351,"node_id":"MDQ6VXNlcjE5MjkwMzUx","avatar_url":"https://avatars2.githubusercontent.com/u/19290351?v=4","gravatar_id":"","url":"https://api.github.com/users/ciitest","html_url":"https://github.com/ciitest","followers_url":"https://api.github.com/users/ciitest/followers","following_url":"https://api.github.com/users/ciitest/following{/other_user}","gists_url":"https://api.github.com/users/ciitest/gists{/gist_id}","starred_url":"https://api.github.com/users/ciitest/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/ciitest/subscriptions","organizations_url":"https://api.github.com/users/ciitest/orgs","repos_url":"https://api.github.com/users/ciitest/repos","events_url":"https://api.github.com/users/ciitest/events{/privacy}","received_events_url":"https://api.github.com/users/ciitest/received_events","type":"User","site_admin":false,"name":null,"company":null,"blog":"","location":null,"email":null,"hireable":null,"bio":null,"public_repos":2,"public_gists":0,"followers":0,"following":0,"created_at":"2016-05-10T16:20:37Z","updated_at":"2020-04-18T19:01:30Z"}'
-    http_version: 
-  recorded_at: Sat, 18 Apr 2020 19:01:32 GMT
+      string: '{"login":"bestpracticestest","id":128565976,"node_id":"U_kgDOB6nC2A","avatar_url":"https://avatars.githubusercontent.com/u/128565976?v=4","gravatar_id":"","url":"https://api.github.com/users/bestpracticestest","html_url":"https://github.com/bestpracticestest","followers_url":"https://api.github.com/users/bestpracticestest/followers","following_url":"https://api.github.com/users/bestpracticestest/following{/other_user}","gists_url":"https://api.github.com/users/bestpracticestest/gists{/gist_id}","starred_url":"https://api.github.com/users/bestpracticestest/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/bestpracticestest/subscriptions","organizations_url":"https://api.github.com/users/bestpracticestest/orgs","repos_url":"https://api.github.com/users/bestpracticestest/repos","events_url":"https://api.github.com/users/bestpracticestest/events{/privacy}","received_events_url":"https://api.github.com/users/bestpracticestest/received_events","type":"User","site_admin":false,"name":null,"company":null,"blog":"","location":null,"email":null,"hireable":null,"bio":null,"twitter_username":null,"public_repos":4,"public_gists":0,"followers":0,"following":0,"created_at":"2023-03-22T03:30:28Z","updated_at":"2023-03-22T03:30:28Z"}'
+  recorded_at: Tue, 11 Apr 2023 06:05:27 GMT
 - request:
     method: get
     uri: https://api.github.com/user/emails
@@ -154,11 +168,11 @@ http_interactions:
       string: ''
     headers:
       User-Agent:
-      - Faraday v1.0.1
+      - Faraday v2.7.4
       Accept:
       - application/vnd.github.v3
       Authorization:
-      - Bearer 57f69eb8b89259927aa100d6477d7fbb9b90d690
+      - Bearer REDACTED
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
   response:
@@ -169,26 +183,18 @@ http_interactions:
       Server:
       - GitHub.com
       Date:
-      - Sat, 18 Apr 2020 19:01:32 GMT
+      - Tue, 11 Apr 2023 06:05:27 GMT
       Content-Type:
       - application/json; charset=utf-8
       Transfer-Encoding:
       - chunked
-      Status:
-      - 200 OK
-      X-Ratelimit-Limit:
-      - '5000'
-      X-Ratelimit-Remaining:
-      - '4996'
-      X-Ratelimit-Reset:
-      - '1587239738'
       Cache-Control:
       - private, max-age=60, s-maxage=60
       Vary:
       - Accept, Authorization, Cookie, X-GitHub-OTP
       - Accept-Encoding, Accept, X-Requested-With
       Etag:
-      - W/"3fa9f69c1e8e14cd899e54a7f2c49fd5"
+      - W/"87ebab9068555f24c7370f2a3be44f583d5a577a75179d4ed573fd3d3206dc70"
       X-Oauth-Scopes:
       - read:org, user:email
       X-Accepted-Oauth-Scopes:
@@ -197,90 +203,23 @@ http_interactions:
       - 3e90194c70b57b71188e
       X-Github-Media-Type:
       - github.v3
-      Access-Control-Expose-Headers:
-      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
-        X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval,
-        X-GitHub-Media-Type, Deprecation, Sunset
-      Access-Control-Allow-Origin:
-      - "*"
-      Strict-Transport-Security:
-      - max-age=31536000; includeSubdomains; preload
-      X-Frame-Options:
-      - deny
-      X-Content-Type-Options:
-      - nosniff
-      X-Xss-Protection:
-      - 1; mode=block
-      Referrer-Policy:
-      - origin-when-cross-origin, strict-origin-when-cross-origin
-      Content-Security-Policy:
-      - default-src 'none'
-      X-Github-Request-Id:
-      - 5947:55EB:599AC6:94E669:5E9B4E8C
-    body:
-      encoding: ASCII-8BIT
-      string: '[{"email":"dankohn+ciitest@gmail.com","primary":true,"verified":true,"visibility":"public"}]'
-    http_version: 
-  recorded_at: Sat, 18 Apr 2020 19:01:32 GMT
-- request:
-    method: get
-    uri: https://api.github.com/repos/ciitest2/test-repo-shared
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      Accept:
-      - application/vnd.github.v3+json
-      User-Agent:
-      - Octokit Ruby Gem 4.18.0
-      Content-Type:
-      - application/json
-      Authorization:
-      - token 57f69eb8b89259927aa100d6477d7fbb9b90d690
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Server:
-      - GitHub.com
-      Date:
-      - Sat, 18 Apr 2020 19:01:38 GMT
-      Content-Type:
-      - application/json; charset=utf-8
-      Transfer-Encoding:
-      - chunked
-      Status:
-      - 200 OK
+      X-Github-Api-Version-Selected:
+      - '2022-11-28'
       X-Ratelimit-Limit:
       - '5000'
       X-Ratelimit-Remaining:
-      - '4995'
+      - '4930'
       X-Ratelimit-Reset:
-      - '1587239738'
-      Cache-Control:
-      - private, max-age=60, s-maxage=60
-      Vary:
-      - Accept, Authorization, Cookie, X-GitHub-OTP
-      - Accept-Encoding, Accept, X-Requested-With
-      Etag:
-      - W/"8fdd55922396a683442a3f96c23da4f8"
-      Last-Modified:
-      - Thu, 16 Apr 2020 20:32:29 GMT
-      X-Oauth-Scopes:
-      - read:org, user:email
-      X-Accepted-Oauth-Scopes:
-      - repo
-      X-Oauth-Client-Id:
-      - 3e90194c70b57b71188e
-      X-Github-Media-Type:
-      - github.v3; format=json
+      - '1681193742'
+      X-Ratelimit-Used:
+      - '70'
+      X-Ratelimit-Resource:
+      - core
       Access-Control-Expose-Headers:
       - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
-        X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval,
-        X-GitHub-Media-Type, Deprecation, Sunset
+        X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes,
+        X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO,
+        X-GitHub-Request-Id, Deprecation, Sunset
       Access-Control-Allow-Origin:
       - "*"
       Strict-Transport-Security:
@@ -290,229 +229,195 @@ http_interactions:
       X-Content-Type-Options:
       - nosniff
       X-Xss-Protection:
-      - 1; mode=block
-      Referrer-Policy:
-      - origin-when-cross-origin, strict-origin-when-cross-origin
-      Content-Security-Policy:
-      - default-src 'none'
-      X-Github-Request-Id:
-      - 3235:32C3:50372D:8879FE:5E9B4E91
-    body:
-      encoding: ASCII-8BIT
-      string: '{"id":256323404,"node_id":"MDEwOlJlcG9zaXRvcnkyNTYzMjM0MDQ=","name":"test-repo-shared","full_name":"ciitest2/test-repo-shared","private":false,"owner":{"login":"ciitest2","id":63817525,"node_id":"MDQ6VXNlcjYzODE3NTI1","avatar_url":"https://avatars3.githubusercontent.com/u/63817525?v=4","gravatar_id":"","url":"https://api.github.com/users/ciitest2","html_url":"https://github.com/ciitest2","followers_url":"https://api.github.com/users/ciitest2/followers","following_url":"https://api.github.com/users/ciitest2/following{/other_user}","gists_url":"https://api.github.com/users/ciitest2/gists{/gist_id}","starred_url":"https://api.github.com/users/ciitest2/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/ciitest2/subscriptions","organizations_url":"https://api.github.com/users/ciitest2/orgs","repos_url":"https://api.github.com/users/ciitest2/repos","events_url":"https://api.github.com/users/ciitest2/events{/privacy}","received_events_url":"https://api.github.com/users/ciitest2/received_events","type":"User","site_admin":false},"html_url":"https://github.com/ciitest2/test-repo-shared","description":":bulb:
-        This is for testing the CII Best Practices BadgeApp :thumbsup:","fork":false,"url":"https://api.github.com/repos/ciitest2/test-repo-shared","forks_url":"https://api.github.com/repos/ciitest2/test-repo-shared/forks","keys_url":"https://api.github.com/repos/ciitest2/test-repo-shared/keys{/key_id}","collaborators_url":"https://api.github.com/repos/ciitest2/test-repo-shared/collaborators{/collaborator}","teams_url":"https://api.github.com/repos/ciitest2/test-repo-shared/teams","hooks_url":"https://api.github.com/repos/ciitest2/test-repo-shared/hooks","issue_events_url":"https://api.github.com/repos/ciitest2/test-repo-shared/issues/events{/number}","events_url":"https://api.github.com/repos/ciitest2/test-repo-shared/events","assignees_url":"https://api.github.com/repos/ciitest2/test-repo-shared/assignees{/user}","branches_url":"https://api.github.com/repos/ciitest2/test-repo-shared/branches{/branch}","tags_url":"https://api.github.com/repos/ciitest2/test-repo-shared/tags","blobs_url":"https://api.github.com/repos/ciitest2/test-repo-shared/git/blobs{/sha}","git_tags_url":"https://api.github.com/repos/ciitest2/test-repo-shared/git/tags{/sha}","git_refs_url":"https://api.github.com/repos/ciitest2/test-repo-shared/git/refs{/sha}","trees_url":"https://api.github.com/repos/ciitest2/test-repo-shared/git/trees{/sha}","statuses_url":"https://api.github.com/repos/ciitest2/test-repo-shared/statuses/{sha}","languages_url":"https://api.github.com/repos/ciitest2/test-repo-shared/languages","stargazers_url":"https://api.github.com/repos/ciitest2/test-repo-shared/stargazers","contributors_url":"https://api.github.com/repos/ciitest2/test-repo-shared/contributors","subscribers_url":"https://api.github.com/repos/ciitest2/test-repo-shared/subscribers","subscription_url":"https://api.github.com/repos/ciitest2/test-repo-shared/subscription","commits_url":"https://api.github.com/repos/ciitest2/test-repo-shared/commits{/sha}","git_commits_url":"https://api.github.com/repos/ciitest2/test-repo-shared/git/commits{/sha}","comments_url":"https://api.github.com/repos/ciitest2/test-repo-shared/comments{/number}","issue_comment_url":"https://api.github.com/repos/ciitest2/test-repo-shared/issues/comments{/number}","contents_url":"https://api.github.com/repos/ciitest2/test-repo-shared/contents/{+path}","compare_url":"https://api.github.com/repos/ciitest2/test-repo-shared/compare/{base}...{head}","merges_url":"https://api.github.com/repos/ciitest2/test-repo-shared/merges","archive_url":"https://api.github.com/repos/ciitest2/test-repo-shared/{archive_format}{/ref}","downloads_url":"https://api.github.com/repos/ciitest2/test-repo-shared/downloads","issues_url":"https://api.github.com/repos/ciitest2/test-repo-shared/issues{/number}","pulls_url":"https://api.github.com/repos/ciitest2/test-repo-shared/pulls{/number}","milestones_url":"https://api.github.com/repos/ciitest2/test-repo-shared/milestones{/number}","notifications_url":"https://api.github.com/repos/ciitest2/test-repo-shared/notifications{?since,all,participating}","labels_url":"https://api.github.com/repos/ciitest2/test-repo-shared/labels{/name}","releases_url":"https://api.github.com/repos/ciitest2/test-repo-shared/releases{/id}","deployments_url":"https://api.github.com/repos/ciitest2/test-repo-shared/deployments","created_at":"2020-04-16T20:32:25Z","updated_at":"2020-04-16T20:32:29Z","pushed_at":"2020-04-16T20:32:27Z","git_url":"git://github.com/ciitest2/test-repo-shared.git","ssh_url":"git@github.com:ciitest2/test-repo-shared.git","clone_url":"https://github.com/ciitest2/test-repo-shared.git","svn_url":"https://github.com/ciitest2/test-repo-shared","homepage":null,"size":2,"stargazers_count":0,"watchers_count":0,"language":null,"has_issues":true,"has_projects":true,"has_downloads":true,"has_wiki":true,"has_pages":false,"forks_count":0,"mirror_url":null,"archived":false,"disabled":false,"open_issues_count":0,"license":{"key":"mit","name":"MIT
-        License","spdx_id":"MIT","url":"https://api.github.com/licenses/mit","node_id":"MDc6TGljZW5zZTEz"},"forks":0,"open_issues":0,"watchers":0,"default_branch":"master","permissions":{"admin":false,"push":true,"pull":true},"temp_clone_token":"","network_count":0,"subscribers_count":2}'
-    http_version: 
-  recorded_at: Sat, 18 Apr 2020 19:01:38 GMT
-- request:
-    method: get
-    uri: https://api.github.com/repos/ciitest2/test-repo
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      Accept:
-      - application/vnd.github.v3+json
-      User-Agent:
-      - Octokit Ruby Gem 4.18.0
-      Content-Type:
-      - application/json
-      Authorization:
-      - token 57f69eb8b89259927aa100d6477d7fbb9b90d690
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Server:
-      - GitHub.com
-      Date:
-      - Sat, 18 Apr 2020 19:01:40 GMT
-      Content-Type:
-      - application/json; charset=utf-8
-      Transfer-Encoding:
-      - chunked
-      Status:
-      - 200 OK
-      X-Ratelimit-Limit:
-      - '5000'
-      X-Ratelimit-Remaining:
-      - '4994'
-      X-Ratelimit-Reset:
-      - '1587239738'
-      Cache-Control:
-      - private, max-age=60, s-maxage=60
-      Vary:
-      - Accept, Authorization, Cookie, X-GitHub-OTP
-      - Accept-Encoding, Accept, X-Requested-With
-      Etag:
-      - W/"578a1a41dce1c3df409040bf390bf368"
-      Last-Modified:
-      - Thu, 16 Apr 2020 20:30:50 GMT
-      X-Oauth-Scopes:
-      - read:org, user:email
-      X-Accepted-Oauth-Scopes:
-      - repo
-      X-Oauth-Client-Id:
-      - 3e90194c70b57b71188e
-      X-Github-Media-Type:
-      - github.v3; format=json
-      Access-Control-Expose-Headers:
-      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
-        X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval,
-        X-GitHub-Media-Type, Deprecation, Sunset
-      Access-Control-Allow-Origin:
-      - "*"
-      Strict-Transport-Security:
-      - max-age=31536000; includeSubdomains; preload
-      X-Frame-Options:
-      - deny
-      X-Content-Type-Options:
-      - nosniff
-      X-Xss-Protection:
-      - 1; mode=block
-      Referrer-Policy:
-      - origin-when-cross-origin, strict-origin-when-cross-origin
-      Content-Security-Policy:
-      - default-src 'none'
-      X-Github-Request-Id:
-      - 314B:7D70:2B04AA:613737:5E9B4E93
-    body:
-      encoding: ASCII-8BIT
-      string: '{"id":256323078,"node_id":"MDEwOlJlcG9zaXRvcnkyNTYzMjMwNzg=","name":"test-repo","full_name":"ciitest2/test-repo","private":false,"owner":{"login":"ciitest2","id":63817525,"node_id":"MDQ6VXNlcjYzODE3NTI1","avatar_url":"https://avatars3.githubusercontent.com/u/63817525?v=4","gravatar_id":"","url":"https://api.github.com/users/ciitest2","html_url":"https://github.com/ciitest2","followers_url":"https://api.github.com/users/ciitest2/followers","following_url":"https://api.github.com/users/ciitest2/following{/other_user}","gists_url":"https://api.github.com/users/ciitest2/gists{/gist_id}","starred_url":"https://api.github.com/users/ciitest2/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/ciitest2/subscriptions","organizations_url":"https://api.github.com/users/ciitest2/orgs","repos_url":"https://api.github.com/users/ciitest2/repos","events_url":"https://api.github.com/users/ciitest2/events{/privacy}","received_events_url":"https://api.github.com/users/ciitest2/received_events","type":"User","site_admin":false},"html_url":"https://github.com/ciitest2/test-repo","description":":bulb:
-        This is for testing the CII Best Practices BadgeApp :thumbsup:","fork":false,"url":"https://api.github.com/repos/ciitest2/test-repo","forks_url":"https://api.github.com/repos/ciitest2/test-repo/forks","keys_url":"https://api.github.com/repos/ciitest2/test-repo/keys{/key_id}","collaborators_url":"https://api.github.com/repos/ciitest2/test-repo/collaborators{/collaborator}","teams_url":"https://api.github.com/repos/ciitest2/test-repo/teams","hooks_url":"https://api.github.com/repos/ciitest2/test-repo/hooks","issue_events_url":"https://api.github.com/repos/ciitest2/test-repo/issues/events{/number}","events_url":"https://api.github.com/repos/ciitest2/test-repo/events","assignees_url":"https://api.github.com/repos/ciitest2/test-repo/assignees{/user}","branches_url":"https://api.github.com/repos/ciitest2/test-repo/branches{/branch}","tags_url":"https://api.github.com/repos/ciitest2/test-repo/tags","blobs_url":"https://api.github.com/repos/ciitest2/test-repo/git/blobs{/sha}","git_tags_url":"https://api.github.com/repos/ciitest2/test-repo/git/tags{/sha}","git_refs_url":"https://api.github.com/repos/ciitest2/test-repo/git/refs{/sha}","trees_url":"https://api.github.com/repos/ciitest2/test-repo/git/trees{/sha}","statuses_url":"https://api.github.com/repos/ciitest2/test-repo/statuses/{sha}","languages_url":"https://api.github.com/repos/ciitest2/test-repo/languages","stargazers_url":"https://api.github.com/repos/ciitest2/test-repo/stargazers","contributors_url":"https://api.github.com/repos/ciitest2/test-repo/contributors","subscribers_url":"https://api.github.com/repos/ciitest2/test-repo/subscribers","subscription_url":"https://api.github.com/repos/ciitest2/test-repo/subscription","commits_url":"https://api.github.com/repos/ciitest2/test-repo/commits{/sha}","git_commits_url":"https://api.github.com/repos/ciitest2/test-repo/git/commits{/sha}","comments_url":"https://api.github.com/repos/ciitest2/test-repo/comments{/number}","issue_comment_url":"https://api.github.com/repos/ciitest2/test-repo/issues/comments{/number}","contents_url":"https://api.github.com/repos/ciitest2/test-repo/contents/{+path}","compare_url":"https://api.github.com/repos/ciitest2/test-repo/compare/{base}...{head}","merges_url":"https://api.github.com/repos/ciitest2/test-repo/merges","archive_url":"https://api.github.com/repos/ciitest2/test-repo/{archive_format}{/ref}","downloads_url":"https://api.github.com/repos/ciitest2/test-repo/downloads","issues_url":"https://api.github.com/repos/ciitest2/test-repo/issues{/number}","pulls_url":"https://api.github.com/repos/ciitest2/test-repo/pulls{/number}","milestones_url":"https://api.github.com/repos/ciitest2/test-repo/milestones{/number}","notifications_url":"https://api.github.com/repos/ciitest2/test-repo/notifications{?since,all,participating}","labels_url":"https://api.github.com/repos/ciitest2/test-repo/labels{/name}","releases_url":"https://api.github.com/repos/ciitest2/test-repo/releases{/id}","deployments_url":"https://api.github.com/repos/ciitest2/test-repo/deployments","created_at":"2020-04-16T20:30:46Z","updated_at":"2020-04-16T20:30:50Z","pushed_at":"2020-04-16T20:30:48Z","git_url":"git://github.com/ciitest2/test-repo.git","ssh_url":"git@github.com:ciitest2/test-repo.git","clone_url":"https://github.com/ciitest2/test-repo.git","svn_url":"https://github.com/ciitest2/test-repo","homepage":null,"size":2,"stargazers_count":0,"watchers_count":0,"language":null,"has_issues":true,"has_projects":true,"has_downloads":true,"has_wiki":true,"has_pages":false,"forks_count":0,"mirror_url":null,"archived":false,"disabled":false,"open_issues_count":0,"license":{"key":"mit","name":"MIT
-        License","spdx_id":"MIT","url":"https://api.github.com/licenses/mit","node_id":"MDc6TGljZW5zZTEz"},"forks":0,"open_issues":0,"watchers":0,"default_branch":"master","permissions":{"admin":false,"push":false,"pull":true},"temp_clone_token":"","network_count":0,"subscribers_count":1}'
-    http_version: 
-  recorded_at: Sat, 18 Apr 2020 19:01:40 GMT
-- request:
-    method: get
-    uri: https://chromedriver.storage.googleapis.com/LATEST_RELEASE_84.0.4147
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-      Accept:
-      - "*/*"
-      User-Agent:
-      - Ruby
-      Host:
-      - chromedriver.storage.googleapis.com
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      X-Guploader-Uploadid:
-      - ABg5-UyvvaRYGlEV1_w6dDaXJthdrDE1tHJCD-Hd3gwBNSGtJPpOVoL4uf3WU1hUAH85f66eIiASPSo6_ZuH-8sJS_lI-Dl3ZQ
-      Expires:
-      - Sun, 30 Aug 2020 03:35:41 GMT
-      Date:
-      - Sun, 30 Aug 2020 02:35:41 GMT
-      Last-Modified:
-      - Thu, 28 May 2020 21:05:12 GMT
-      Etag:
-      - '"f90fc89bccbabdd8582026a34268cdaf"'
-      X-Goog-Generation:
-      - '1590699912883468'
-      X-Goog-Metageneration:
-      - '1'
-      X-Goog-Stored-Content-Encoding:
-      - identity
-      X-Goog-Stored-Content-Length:
-      - '12'
-      Content-Type:
-      - text/plain
-      X-Goog-Hash:
-      - crc32c=BKzR+w==
-      - md5=+Q/Im8y6vdhYICajQmjNrw==
-      X-Goog-Storage-Class:
-      - STANDARD
-      Accept-Ranges:
-      - bytes
-      Content-Length:
-      - '12'
-      Server:
-      - UploadServer
-      Cache-Control:
-      - public, max-age=3600
-      Age:
-      - '1489'
-      Alt-Svc:
-      - h3-29=":443"; ma=2592000,h3-27=":443"; ma=2592000,h3-T051=":443"; ma=2592000,h3-T050=":443";
-        ma=2592000,h3-Q050=":443"; ma=2592000,h3-Q046=":443"; ma=2592000,h3-Q043=":443";
-        ma=2592000,quic=":443"; ma=2592000; v="46,43"
-    body:
-      encoding: UTF-8
-      string: 84.0.4147.30
-    http_version: 
-  recorded_at: Sun, 30 Aug 2020 03:00:30 GMT
-- request:
-    method: get
-    uri: https://chromedriver.storage.googleapis.com/LATEST_RELEASE_88.0.4324
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-      Accept:
-      - "*/*"
-      User-Agent:
-      - Ruby
-      Host:
-      - chromedriver.storage.googleapis.com
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      X-Guploader-Uploadid:
-      - ABg5-UwfEnUWWwWm8Z3gkH5Il8-BAJUnCivu4Gkjmg7njwqAlVB5uwSZPoq0rB0_GXrrmEoRTDvm_7HKRCONoI0yWQ8
-      Expires:
-      - Sun, 31 Jan 2021 22:26:35 GMT
-      Date:
-      - Sun, 31 Jan 2021 21:26:35 GMT
-      Last-Modified:
-      - Wed, 20 Jan 2021 19:13:58 GMT
-      Etag:
-      - '"47e538869e3640d729ae7da0db09717f"'
-      X-Goog-Generation:
-      - '1611170038601812'
-      X-Goog-Metageneration:
-      - '1'
-      X-Goog-Stored-Content-Encoding:
-      - identity
-      X-Goog-Stored-Content-Length:
-      - '12'
-      Content-Type:
-      - text/plain
-      Content-Language:
-      - en
-      X-Goog-Hash:
-      - crc32c=S7TafQ==
-      - md5=R+U4hp42QNcprn2g2wlxfw==
-      X-Goog-Storage-Class:
-      - STANDARD
-      Accept-Ranges:
-      - bytes
-      Content-Length:
-      - '12'
-      Server:
-      - UploadServer
-      Cache-Control:
-      - public, max-age=3600
-      Age:
       - '0'
-      Alt-Svc:
-      - h3-29=":443"; ma=2592000,h3-T051=":443"; ma=2592000,h3-Q050=":443"; ma=2592000,h3-Q046=":443";
-        ma=2592000,h3-Q043=":443"; ma=2592000,quic=":443"; ma=2592000; v="46,43"
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      X-Github-Request-Id:
+      - BBF0:3759:8F205D:1274849:6434F8A7
     body:
-      encoding: UTF-8
-      string: 88.0.4324.96
-    http_version: 
-  recorded_at: Sun, 31 Jan 2021 21:26:35 GMT
-recorded_with: VCR 5.0.0
+      encoding: ASCII-8BIT
+      string: '[{"email":"bestpracticestest@yagni.co","primary":true,"verified":true,"visibility":"private"},{"email":"128565976+bestpracticestest@users.noreply.github.com","primary":false,"verified":true,"visibility":null}]'
+  recorded_at: Tue, 11 Apr 2023 06:05:27 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/andrewfader/test-repo
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Octokit Ruby Gem 6.1.1
+      Content-Type:
+      - application/json
+      Authorization:
+      - token REDACTED
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Tue, 11 Apr 2023 06:05:34 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Cache-Control:
+      - private, max-age=60, s-maxage=60
+      Vary:
+      - Accept, Authorization, Cookie, X-GitHub-OTP
+      - Accept-Encoding, Accept, X-Requested-With
+      Etag:
+      - W/"2f05804a6b8970f225e05308e755d8e87a962b0f4776d88e954fa7fd19c895ce"
+      Last-Modified:
+      - Mon, 06 Aug 2018 03:25:38 GMT
+      X-Oauth-Scopes:
+      - read:org, user:email
+      X-Accepted-Oauth-Scopes:
+      - repo
+      X-Oauth-Client-Id:
+      - 3e90194c70b57b71188e
+      X-Github-Media-Type:
+      - github.v3; format=json
+      X-Github-Api-Version-Selected:
+      - '2022-11-28'
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4929'
+      X-Ratelimit-Reset:
+      - '1681193742'
+      X-Ratelimit-Used:
+      - '71'
+      X-Ratelimit-Resource:
+      - core
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes,
+        X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO,
+        X-GitHub-Request-Id, Deprecation, Sunset
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - '0'
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      X-Github-Request-Id:
+      - A246:49B6:8F775B:127F9B7:6434F8AE
+    body:
+      encoding: ASCII-8BIT
+      string: '{"id":617290115,"node_id":"R_kgDOJMsZgw","name":"test-repo","full_name":"andrewfader/test-repo","private":false,"owner":{"login":"andrewfader","id":565924,"node_id":"MDQ6VXNlcjU2NTkyNA==","avatar_url":"https://avatars.githubusercontent.com/u/565924?v=4","gravatar_id":"","url":"https://api.github.com/users/andrewfader","html_url":"https://github.com/andrewfader","followers_url":"https://api.github.com/users/andrewfader/followers","following_url":"https://api.github.com/users/andrewfader/following{/other_user}","gists_url":"https://api.github.com/users/andrewfader/gists{/gist_id}","starred_url":"https://api.github.com/users/andrewfader/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/andrewfader/subscriptions","organizations_url":"https://api.github.com/users/andrewfader/orgs","repos_url":"https://api.github.com/users/andrewfader/repos","events_url":"https://api.github.com/users/andrewfader/events{/privacy}","received_events_url":"https://api.github.com/users/andrewfader/received_events","type":"User","site_admin":false},"html_url":"https://github.com/andrewfader/test-repo","description":":bulb:
+        This is for testing the CII Best Practices BadgeApp :thumbsup:","fork":true,"url":"https://api.github.com/repos/andrewfader/test-repo","forks_url":"https://api.github.com/repos/andrewfader/test-repo/forks","keys_url":"https://api.github.com/repos/andrewfader/test-repo/keys{/key_id}","collaborators_url":"https://api.github.com/repos/andrewfader/test-repo/collaborators{/collaborator}","teams_url":"https://api.github.com/repos/andrewfader/test-repo/teams","hooks_url":"https://api.github.com/repos/andrewfader/test-repo/hooks","issue_events_url":"https://api.github.com/repos/andrewfader/test-repo/issues/events{/number}","events_url":"https://api.github.com/repos/andrewfader/test-repo/events","assignees_url":"https://api.github.com/repos/andrewfader/test-repo/assignees{/user}","branches_url":"https://api.github.com/repos/andrewfader/test-repo/branches{/branch}","tags_url":"https://api.github.com/repos/andrewfader/test-repo/tags","blobs_url":"https://api.github.com/repos/andrewfader/test-repo/git/blobs{/sha}","git_tags_url":"https://api.github.com/repos/andrewfader/test-repo/git/tags{/sha}","git_refs_url":"https://api.github.com/repos/andrewfader/test-repo/git/refs{/sha}","trees_url":"https://api.github.com/repos/andrewfader/test-repo/git/trees{/sha}","statuses_url":"https://api.github.com/repos/andrewfader/test-repo/statuses/{sha}","languages_url":"https://api.github.com/repos/andrewfader/test-repo/languages","stargazers_url":"https://api.github.com/repos/andrewfader/test-repo/stargazers","contributors_url":"https://api.github.com/repos/andrewfader/test-repo/contributors","subscribers_url":"https://api.github.com/repos/andrewfader/test-repo/subscribers","subscription_url":"https://api.github.com/repos/andrewfader/test-repo/subscription","commits_url":"https://api.github.com/repos/andrewfader/test-repo/commits{/sha}","git_commits_url":"https://api.github.com/repos/andrewfader/test-repo/git/commits{/sha}","comments_url":"https://api.github.com/repos/andrewfader/test-repo/comments{/number}","issue_comment_url":"https://api.github.com/repos/andrewfader/test-repo/issues/comments{/number}","contents_url":"https://api.github.com/repos/andrewfader/test-repo/contents/{+path}","compare_url":"https://api.github.com/repos/andrewfader/test-repo/compare/{base}...{head}","merges_url":"https://api.github.com/repos/andrewfader/test-repo/merges","archive_url":"https://api.github.com/repos/andrewfader/test-repo/{archive_format}{/ref}","downloads_url":"https://api.github.com/repos/andrewfader/test-repo/downloads","issues_url":"https://api.github.com/repos/andrewfader/test-repo/issues{/number}","pulls_url":"https://api.github.com/repos/andrewfader/test-repo/pulls{/number}","milestones_url":"https://api.github.com/repos/andrewfader/test-repo/milestones{/number}","notifications_url":"https://api.github.com/repos/andrewfader/test-repo/notifications{?since,all,participating}","labels_url":"https://api.github.com/repos/andrewfader/test-repo/labels{/name}","releases_url":"https://api.github.com/repos/andrewfader/test-repo/releases{/id}","deployments_url":"https://api.github.com/repos/andrewfader/test-repo/deployments","created_at":"2023-03-22T04:28:40Z","updated_at":"2018-08-06T03:25:38Z","pushed_at":"2018-08-06T03:25:36Z","git_url":"git://github.com/andrewfader/test-repo.git","ssh_url":"git@github.com:andrewfader/test-repo.git","clone_url":"https://github.com/andrewfader/test-repo.git","svn_url":"https://github.com/andrewfader/test-repo","homepage":"","size":2,"stargazers_count":0,"watchers_count":0,"language":null,"has_issues":false,"has_projects":true,"has_downloads":true,"has_wiki":true,"has_pages":false,"has_discussions":false,"forks_count":0,"mirror_url":null,"archived":false,"disabled":false,"open_issues_count":0,"license":{"key":"mit","name":"MIT
+        License","spdx_id":"MIT","url":"https://api.github.com/licenses/mit","node_id":"MDc6TGljZW5zZTEz"},"allow_forking":true,"is_template":false,"web_commit_signoff_required":false,"topics":[],"visibility":"public","forks":0,"open_issues":0,"watchers":0,"default_branch":"master","permissions":{"admin":false,"maintain":false,"push":false,"triage":false,"pull":true},"temp_clone_token":"","parent":{"id":617286216,"node_id":"R_kgDOJMsKSA","name":"test-repo","full_name":"bestpracticestest/test-repo","private":false,"owner":{"login":"bestpracticestest","id":128565976,"node_id":"U_kgDOB6nC2A","avatar_url":"https://avatars.githubusercontent.com/u/128565976?v=4","gravatar_id":"","url":"https://api.github.com/users/bestpracticestest","html_url":"https://github.com/bestpracticestest","followers_url":"https://api.github.com/users/bestpracticestest/followers","following_url":"https://api.github.com/users/bestpracticestest/following{/other_user}","gists_url":"https://api.github.com/users/bestpracticestest/gists{/gist_id}","starred_url":"https://api.github.com/users/bestpracticestest/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/bestpracticestest/subscriptions","organizations_url":"https://api.github.com/users/bestpracticestest/orgs","repos_url":"https://api.github.com/users/bestpracticestest/repos","events_url":"https://api.github.com/users/bestpracticestest/events{/privacy}","received_events_url":"https://api.github.com/users/bestpracticestest/received_events","type":"User","site_admin":false},"html_url":"https://github.com/bestpracticestest/test-repo","description":":bulb:
+        This is for testing the CII Best Practices BadgeApp :thumbsup:","fork":true,"url":"https://api.github.com/repos/bestpracticestest/test-repo","forks_url":"https://api.github.com/repos/bestpracticestest/test-repo/forks","keys_url":"https://api.github.com/repos/bestpracticestest/test-repo/keys{/key_id}","collaborators_url":"https://api.github.com/repos/bestpracticestest/test-repo/collaborators{/collaborator}","teams_url":"https://api.github.com/repos/bestpracticestest/test-repo/teams","hooks_url":"https://api.github.com/repos/bestpracticestest/test-repo/hooks","issue_events_url":"https://api.github.com/repos/bestpracticestest/test-repo/issues/events{/number}","events_url":"https://api.github.com/repos/bestpracticestest/test-repo/events","assignees_url":"https://api.github.com/repos/bestpracticestest/test-repo/assignees{/user}","branches_url":"https://api.github.com/repos/bestpracticestest/test-repo/branches{/branch}","tags_url":"https://api.github.com/repos/bestpracticestest/test-repo/tags","blobs_url":"https://api.github.com/repos/bestpracticestest/test-repo/git/blobs{/sha}","git_tags_url":"https://api.github.com/repos/bestpracticestest/test-repo/git/tags{/sha}","git_refs_url":"https://api.github.com/repos/bestpracticestest/test-repo/git/refs{/sha}","trees_url":"https://api.github.com/repos/bestpracticestest/test-repo/git/trees{/sha}","statuses_url":"https://api.github.com/repos/bestpracticestest/test-repo/statuses/{sha}","languages_url":"https://api.github.com/repos/bestpracticestest/test-repo/languages","stargazers_url":"https://api.github.com/repos/bestpracticestest/test-repo/stargazers","contributors_url":"https://api.github.com/repos/bestpracticestest/test-repo/contributors","subscribers_url":"https://api.github.com/repos/bestpracticestest/test-repo/subscribers","subscription_url":"https://api.github.com/repos/bestpracticestest/test-repo/subscription","commits_url":"https://api.github.com/repos/bestpracticestest/test-repo/commits{/sha}","git_commits_url":"https://api.github.com/repos/bestpracticestest/test-repo/git/commits{/sha}","comments_url":"https://api.github.com/repos/bestpracticestest/test-repo/comments{/number}","issue_comment_url":"https://api.github.com/repos/bestpracticestest/test-repo/issues/comments{/number}","contents_url":"https://api.github.com/repos/bestpracticestest/test-repo/contents/{+path}","compare_url":"https://api.github.com/repos/bestpracticestest/test-repo/compare/{base}...{head}","merges_url":"https://api.github.com/repos/bestpracticestest/test-repo/merges","archive_url":"https://api.github.com/repos/bestpracticestest/test-repo/{archive_format}{/ref}","downloads_url":"https://api.github.com/repos/bestpracticestest/test-repo/downloads","issues_url":"https://api.github.com/repos/bestpracticestest/test-repo/issues{/number}","pulls_url":"https://api.github.com/repos/bestpracticestest/test-repo/pulls{/number}","milestones_url":"https://api.github.com/repos/bestpracticestest/test-repo/milestones{/number}","notifications_url":"https://api.github.com/repos/bestpracticestest/test-repo/notifications{?since,all,participating}","labels_url":"https://api.github.com/repos/bestpracticestest/test-repo/labels{/name}","releases_url":"https://api.github.com/repos/bestpracticestest/test-repo/releases{/id}","deployments_url":"https://api.github.com/repos/bestpracticestest/test-repo/deployments","created_at":"2023-03-22T04:11:18Z","updated_at":"2018-08-06T03:25:38Z","pushed_at":"2018-08-06T03:25:36Z","git_url":"git://github.com/bestpracticestest/test-repo.git","ssh_url":"git@github.com:bestpracticestest/test-repo.git","clone_url":"https://github.com/bestpracticestest/test-repo.git","svn_url":"https://github.com/bestpracticestest/test-repo","homepage":"","size":2,"stargazers_count":0,"watchers_count":0,"language":null,"has_issues":false,"has_projects":true,"has_downloads":true,"has_wiki":true,"has_pages":false,"has_discussions":false,"forks_count":1,"mirror_url":null,"archived":false,"disabled":false,"open_issues_count":0,"license":{"key":"mit","name":"MIT
+        License","spdx_id":"MIT","url":"https://api.github.com/licenses/mit","node_id":"MDc6TGljZW5zZTEz"},"allow_forking":true,"is_template":false,"web_commit_signoff_required":false,"topics":[],"visibility":"public","forks":1,"open_issues":0,"watchers":0,"default_branch":"master"},"source":{"id":58476744,"node_id":"MDEwOlJlcG9zaXRvcnk1ODQ3Njc0NA==","name":"test-repo","full_name":"ciitest/test-repo","private":false,"owner":{"login":"ciitest","id":19290351,"node_id":"MDQ6VXNlcjE5MjkwMzUx","avatar_url":"https://avatars.githubusercontent.com/u/19290351?v=4","gravatar_id":"","url":"https://api.github.com/users/ciitest","html_url":"https://github.com/ciitest","followers_url":"https://api.github.com/users/ciitest/followers","following_url":"https://api.github.com/users/ciitest/following{/other_user}","gists_url":"https://api.github.com/users/ciitest/gists{/gist_id}","starred_url":"https://api.github.com/users/ciitest/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/ciitest/subscriptions","organizations_url":"https://api.github.com/users/ciitest/orgs","repos_url":"https://api.github.com/users/ciitest/repos","events_url":"https://api.github.com/users/ciitest/events{/privacy}","received_events_url":"https://api.github.com/users/ciitest/received_events","type":"User","site_admin":false},"html_url":"https://github.com/ciitest/test-repo","description":":bulb:
+        This is for testing the CII Best Practices BadgeApp :thumbsup:","fork":false,"url":"https://api.github.com/repos/ciitest/test-repo","forks_url":"https://api.github.com/repos/ciitest/test-repo/forks","keys_url":"https://api.github.com/repos/ciitest/test-repo/keys{/key_id}","collaborators_url":"https://api.github.com/repos/ciitest/test-repo/collaborators{/collaborator}","teams_url":"https://api.github.com/repos/ciitest/test-repo/teams","hooks_url":"https://api.github.com/repos/ciitest/test-repo/hooks","issue_events_url":"https://api.github.com/repos/ciitest/test-repo/issues/events{/number}","events_url":"https://api.github.com/repos/ciitest/test-repo/events","assignees_url":"https://api.github.com/repos/ciitest/test-repo/assignees{/user}","branches_url":"https://api.github.com/repos/ciitest/test-repo/branches{/branch}","tags_url":"https://api.github.com/repos/ciitest/test-repo/tags","blobs_url":"https://api.github.com/repos/ciitest/test-repo/git/blobs{/sha}","git_tags_url":"https://api.github.com/repos/ciitest/test-repo/git/tags{/sha}","git_refs_url":"https://api.github.com/repos/ciitest/test-repo/git/refs{/sha}","trees_url":"https://api.github.com/repos/ciitest/test-repo/git/trees{/sha}","statuses_url":"https://api.github.com/repos/ciitest/test-repo/statuses/{sha}","languages_url":"https://api.github.com/repos/ciitest/test-repo/languages","stargazers_url":"https://api.github.com/repos/ciitest/test-repo/stargazers","contributors_url":"https://api.github.com/repos/ciitest/test-repo/contributors","subscribers_url":"https://api.github.com/repos/ciitest/test-repo/subscribers","subscription_url":"https://api.github.com/repos/ciitest/test-repo/subscription","commits_url":"https://api.github.com/repos/ciitest/test-repo/commits{/sha}","git_commits_url":"https://api.github.com/repos/ciitest/test-repo/git/commits{/sha}","comments_url":"https://api.github.com/repos/ciitest/test-repo/comments{/number}","issue_comment_url":"https://api.github.com/repos/ciitest/test-repo/issues/comments{/number}","contents_url":"https://api.github.com/repos/ciitest/test-repo/contents/{+path}","compare_url":"https://api.github.com/repos/ciitest/test-repo/compare/{base}...{head}","merges_url":"https://api.github.com/repos/ciitest/test-repo/merges","archive_url":"https://api.github.com/repos/ciitest/test-repo/{archive_format}{/ref}","downloads_url":"https://api.github.com/repos/ciitest/test-repo/downloads","issues_url":"https://api.github.com/repos/ciitest/test-repo/issues{/number}","pulls_url":"https://api.github.com/repos/ciitest/test-repo/pulls{/number}","milestones_url":"https://api.github.com/repos/ciitest/test-repo/milestones{/number}","notifications_url":"https://api.github.com/repos/ciitest/test-repo/notifications{?since,all,participating}","labels_url":"https://api.github.com/repos/ciitest/test-repo/labels{/name}","releases_url":"https://api.github.com/repos/ciitest/test-repo/releases{/id}","deployments_url":"https://api.github.com/repos/ciitest/test-repo/deployments","created_at":"2016-05-10T16:25:22Z","updated_at":"2018-08-06T03:25:38Z","pushed_at":"2018-08-06T03:25:36Z","git_url":"git://github.com/ciitest/test-repo.git","ssh_url":"git@github.com:ciitest/test-repo.git","clone_url":"https://github.com/ciitest/test-repo.git","svn_url":"https://github.com/ciitest/test-repo","homepage":"","size":2,"stargazers_count":0,"watchers_count":0,"language":"Python","has_issues":true,"has_projects":true,"has_downloads":true,"has_wiki":true,"has_pages":false,"has_discussions":false,"forks_count":2,"mirror_url":null,"archived":false,"disabled":false,"open_issues_count":0,"license":{"key":"mit","name":"MIT
+        License","spdx_id":"MIT","url":"https://api.github.com/licenses/mit","node_id":"MDc6TGljZW5zZTEz"},"allow_forking":true,"is_template":false,"web_commit_signoff_required":false,"topics":[],"visibility":"public","forks":2,"open_issues":0,"watchers":0,"default_branch":"master"},"network_count":2,"subscribers_count":0}'
+  recorded_at: Tue, 11 Apr 2023 06:05:34 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/andrewfader/test-repo
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - application/vnd.github.v3+json
+      User-Agent:
+      - Octokit Ruby Gem 6.1.1
+      Content-Type:
+      - application/json
+      Authorization:
+      - token REDACTED
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - GitHub.com
+      Date:
+      - Tue, 11 Apr 2023 06:05:34 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Cache-Control:
+      - private, max-age=60, s-maxage=60
+      Vary:
+      - Accept, Authorization, Cookie, X-GitHub-OTP
+      - Accept-Encoding, Accept, X-Requested-With
+      Etag:
+      - W/"2f05804a6b8970f225e05308e755d8e87a962b0f4776d88e954fa7fd19c895ce"
+      Last-Modified:
+      - Mon, 06 Aug 2018 03:25:38 GMT
+      X-Oauth-Scopes:
+      - read:org, user:email
+      X-Accepted-Oauth-Scopes:
+      - repo
+      X-Oauth-Client-Id:
+      - 3e90194c70b57b71188e
+      X-Github-Media-Type:
+      - github.v3; format=json
+      X-Github-Api-Version-Selected:
+      - '2022-11-28'
+      X-Ratelimit-Limit:
+      - '5000'
+      X-Ratelimit-Remaining:
+      - '4928'
+      X-Ratelimit-Reset:
+      - '1681193742'
+      X-Ratelimit-Used:
+      - '72'
+      X-Ratelimit-Resource:
+      - core
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes,
+        X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO,
+        X-GitHub-Request-Id, Deprecation, Sunset
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - '0'
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      X-Github-Request-Id:
+      - A24A:2534:DF7AD5:1C7D5DD:6434F8AE
+    body:
+      encoding: ASCII-8BIT
+      string: '{"id":617290115,"node_id":"R_kgDOJMsZgw","name":"test-repo","full_name":"andrewfader/test-repo","private":false,"owner":{"login":"andrewfader","id":565924,"node_id":"MDQ6VXNlcjU2NTkyNA==","avatar_url":"https://avatars.githubusercontent.com/u/565924?v=4","gravatar_id":"","url":"https://api.github.com/users/andrewfader","html_url":"https://github.com/andrewfader","followers_url":"https://api.github.com/users/andrewfader/followers","following_url":"https://api.github.com/users/andrewfader/following{/other_user}","gists_url":"https://api.github.com/users/andrewfader/gists{/gist_id}","starred_url":"https://api.github.com/users/andrewfader/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/andrewfader/subscriptions","organizations_url":"https://api.github.com/users/andrewfader/orgs","repos_url":"https://api.github.com/users/andrewfader/repos","events_url":"https://api.github.com/users/andrewfader/events{/privacy}","received_events_url":"https://api.github.com/users/andrewfader/received_events","type":"User","site_admin":false},"html_url":"https://github.com/andrewfader/test-repo","description":":bulb:
+        This is for testing the CII Best Practices BadgeApp :thumbsup:","fork":true,"url":"https://api.github.com/repos/andrewfader/test-repo","forks_url":"https://api.github.com/repos/andrewfader/test-repo/forks","keys_url":"https://api.github.com/repos/andrewfader/test-repo/keys{/key_id}","collaborators_url":"https://api.github.com/repos/andrewfader/test-repo/collaborators{/collaborator}","teams_url":"https://api.github.com/repos/andrewfader/test-repo/teams","hooks_url":"https://api.github.com/repos/andrewfader/test-repo/hooks","issue_events_url":"https://api.github.com/repos/andrewfader/test-repo/issues/events{/number}","events_url":"https://api.github.com/repos/andrewfader/test-repo/events","assignees_url":"https://api.github.com/repos/andrewfader/test-repo/assignees{/user}","branches_url":"https://api.github.com/repos/andrewfader/test-repo/branches{/branch}","tags_url":"https://api.github.com/repos/andrewfader/test-repo/tags","blobs_url":"https://api.github.com/repos/andrewfader/test-repo/git/blobs{/sha}","git_tags_url":"https://api.github.com/repos/andrewfader/test-repo/git/tags{/sha}","git_refs_url":"https://api.github.com/repos/andrewfader/test-repo/git/refs{/sha}","trees_url":"https://api.github.com/repos/andrewfader/test-repo/git/trees{/sha}","statuses_url":"https://api.github.com/repos/andrewfader/test-repo/statuses/{sha}","languages_url":"https://api.github.com/repos/andrewfader/test-repo/languages","stargazers_url":"https://api.github.com/repos/andrewfader/test-repo/stargazers","contributors_url":"https://api.github.com/repos/andrewfader/test-repo/contributors","subscribers_url":"https://api.github.com/repos/andrewfader/test-repo/subscribers","subscription_url":"https://api.github.com/repos/andrewfader/test-repo/subscription","commits_url":"https://api.github.com/repos/andrewfader/test-repo/commits{/sha}","git_commits_url":"https://api.github.com/repos/andrewfader/test-repo/git/commits{/sha}","comments_url":"https://api.github.com/repos/andrewfader/test-repo/comments{/number}","issue_comment_url":"https://api.github.com/repos/andrewfader/test-repo/issues/comments{/number}","contents_url":"https://api.github.com/repos/andrewfader/test-repo/contents/{+path}","compare_url":"https://api.github.com/repos/andrewfader/test-repo/compare/{base}...{head}","merges_url":"https://api.github.com/repos/andrewfader/test-repo/merges","archive_url":"https://api.github.com/repos/andrewfader/test-repo/{archive_format}{/ref}","downloads_url":"https://api.github.com/repos/andrewfader/test-repo/downloads","issues_url":"https://api.github.com/repos/andrewfader/test-repo/issues{/number}","pulls_url":"https://api.github.com/repos/andrewfader/test-repo/pulls{/number}","milestones_url":"https://api.github.com/repos/andrewfader/test-repo/milestones{/number}","notifications_url":"https://api.github.com/repos/andrewfader/test-repo/notifications{?since,all,participating}","labels_url":"https://api.github.com/repos/andrewfader/test-repo/labels{/name}","releases_url":"https://api.github.com/repos/andrewfader/test-repo/releases{/id}","deployments_url":"https://api.github.com/repos/andrewfader/test-repo/deployments","created_at":"2023-03-22T04:28:40Z","updated_at":"2018-08-06T03:25:38Z","pushed_at":"2018-08-06T03:25:36Z","git_url":"git://github.com/andrewfader/test-repo.git","ssh_url":"git@github.com:andrewfader/test-repo.git","clone_url":"https://github.com/andrewfader/test-repo.git","svn_url":"https://github.com/andrewfader/test-repo","homepage":"","size":2,"stargazers_count":0,"watchers_count":0,"language":null,"has_issues":false,"has_projects":true,"has_downloads":true,"has_wiki":true,"has_pages":false,"has_discussions":false,"forks_count":0,"mirror_url":null,"archived":false,"disabled":false,"open_issues_count":0,"license":{"key":"mit","name":"MIT
+        License","spdx_id":"MIT","url":"https://api.github.com/licenses/mit","node_id":"MDc6TGljZW5zZTEz"},"allow_forking":true,"is_template":false,"web_commit_signoff_required":false,"topics":[],"visibility":"public","forks":0,"open_issues":0,"watchers":0,"default_branch":"master","permissions":{"admin":false,"maintain":false,"push":false,"triage":false,"pull":true},"temp_clone_token":"","parent":{"id":617286216,"node_id":"R_kgDOJMsKSA","name":"test-repo","full_name":"bestpracticestest/test-repo","private":false,"owner":{"login":"bestpracticestest","id":128565976,"node_id":"U_kgDOB6nC2A","avatar_url":"https://avatars.githubusercontent.com/u/128565976?v=4","gravatar_id":"","url":"https://api.github.com/users/bestpracticestest","html_url":"https://github.com/bestpracticestest","followers_url":"https://api.github.com/users/bestpracticestest/followers","following_url":"https://api.github.com/users/bestpracticestest/following{/other_user}","gists_url":"https://api.github.com/users/bestpracticestest/gists{/gist_id}","starred_url":"https://api.github.com/users/bestpracticestest/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/bestpracticestest/subscriptions","organizations_url":"https://api.github.com/users/bestpracticestest/orgs","repos_url":"https://api.github.com/users/bestpracticestest/repos","events_url":"https://api.github.com/users/bestpracticestest/events{/privacy}","received_events_url":"https://api.github.com/users/bestpracticestest/received_events","type":"User","site_admin":false},"html_url":"https://github.com/bestpracticestest/test-repo","description":":bulb:
+        This is for testing the CII Best Practices BadgeApp :thumbsup:","fork":true,"url":"https://api.github.com/repos/bestpracticestest/test-repo","forks_url":"https://api.github.com/repos/bestpracticestest/test-repo/forks","keys_url":"https://api.github.com/repos/bestpracticestest/test-repo/keys{/key_id}","collaborators_url":"https://api.github.com/repos/bestpracticestest/test-repo/collaborators{/collaborator}","teams_url":"https://api.github.com/repos/bestpracticestest/test-repo/teams","hooks_url":"https://api.github.com/repos/bestpracticestest/test-repo/hooks","issue_events_url":"https://api.github.com/repos/bestpracticestest/test-repo/issues/events{/number}","events_url":"https://api.github.com/repos/bestpracticestest/test-repo/events","assignees_url":"https://api.github.com/repos/bestpracticestest/test-repo/assignees{/user}","branches_url":"https://api.github.com/repos/bestpracticestest/test-repo/branches{/branch}","tags_url":"https://api.github.com/repos/bestpracticestest/test-repo/tags","blobs_url":"https://api.github.com/repos/bestpracticestest/test-repo/git/blobs{/sha}","git_tags_url":"https://api.github.com/repos/bestpracticestest/test-repo/git/tags{/sha}","git_refs_url":"https://api.github.com/repos/bestpracticestest/test-repo/git/refs{/sha}","trees_url":"https://api.github.com/repos/bestpracticestest/test-repo/git/trees{/sha}","statuses_url":"https://api.github.com/repos/bestpracticestest/test-repo/statuses/{sha}","languages_url":"https://api.github.com/repos/bestpracticestest/test-repo/languages","stargazers_url":"https://api.github.com/repos/bestpracticestest/test-repo/stargazers","contributors_url":"https://api.github.com/repos/bestpracticestest/test-repo/contributors","subscribers_url":"https://api.github.com/repos/bestpracticestest/test-repo/subscribers","subscription_url":"https://api.github.com/repos/bestpracticestest/test-repo/subscription","commits_url":"https://api.github.com/repos/bestpracticestest/test-repo/commits{/sha}","git_commits_url":"https://api.github.com/repos/bestpracticestest/test-repo/git/commits{/sha}","comments_url":"https://api.github.com/repos/bestpracticestest/test-repo/comments{/number}","issue_comment_url":"https://api.github.com/repos/bestpracticestest/test-repo/issues/comments{/number}","contents_url":"https://api.github.com/repos/bestpracticestest/test-repo/contents/{+path}","compare_url":"https://api.github.com/repos/bestpracticestest/test-repo/compare/{base}...{head}","merges_url":"https://api.github.com/repos/bestpracticestest/test-repo/merges","archive_url":"https://api.github.com/repos/bestpracticestest/test-repo/{archive_format}{/ref}","downloads_url":"https://api.github.com/repos/bestpracticestest/test-repo/downloads","issues_url":"https://api.github.com/repos/bestpracticestest/test-repo/issues{/number}","pulls_url":"https://api.github.com/repos/bestpracticestest/test-repo/pulls{/number}","milestones_url":"https://api.github.com/repos/bestpracticestest/test-repo/milestones{/number}","notifications_url":"https://api.github.com/repos/bestpracticestest/test-repo/notifications{?since,all,participating}","labels_url":"https://api.github.com/repos/bestpracticestest/test-repo/labels{/name}","releases_url":"https://api.github.com/repos/bestpracticestest/test-repo/releases{/id}","deployments_url":"https://api.github.com/repos/bestpracticestest/test-repo/deployments","created_at":"2023-03-22T04:11:18Z","updated_at":"2018-08-06T03:25:38Z","pushed_at":"2018-08-06T03:25:36Z","git_url":"git://github.com/bestpracticestest/test-repo.git","ssh_url":"git@github.com:bestpracticestest/test-repo.git","clone_url":"https://github.com/bestpracticestest/test-repo.git","svn_url":"https://github.com/bestpracticestest/test-repo","homepage":"","size":2,"stargazers_count":0,"watchers_count":0,"language":null,"has_issues":false,"has_projects":true,"has_downloads":true,"has_wiki":true,"has_pages":false,"has_discussions":false,"forks_count":1,"mirror_url":null,"archived":false,"disabled":false,"open_issues_count":0,"license":{"key":"mit","name":"MIT
+        License","spdx_id":"MIT","url":"https://api.github.com/licenses/mit","node_id":"MDc6TGljZW5zZTEz"},"allow_forking":true,"is_template":false,"web_commit_signoff_required":false,"topics":[],"visibility":"public","forks":1,"open_issues":0,"watchers":0,"default_branch":"master"},"source":{"id":58476744,"node_id":"MDEwOlJlcG9zaXRvcnk1ODQ3Njc0NA==","name":"test-repo","full_name":"ciitest/test-repo","private":false,"owner":{"login":"ciitest","id":19290351,"node_id":"MDQ6VXNlcjE5MjkwMzUx","avatar_url":"https://avatars.githubusercontent.com/u/19290351?v=4","gravatar_id":"","url":"https://api.github.com/users/ciitest","html_url":"https://github.com/ciitest","followers_url":"https://api.github.com/users/ciitest/followers","following_url":"https://api.github.com/users/ciitest/following{/other_user}","gists_url":"https://api.github.com/users/ciitest/gists{/gist_id}","starred_url":"https://api.github.com/users/ciitest/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/ciitest/subscriptions","organizations_url":"https://api.github.com/users/ciitest/orgs","repos_url":"https://api.github.com/users/ciitest/repos","events_url":"https://api.github.com/users/ciitest/events{/privacy}","received_events_url":"https://api.github.com/users/ciitest/received_events","type":"User","site_admin":false},"html_url":"https://github.com/ciitest/test-repo","description":":bulb:
+        This is for testing the CII Best Practices BadgeApp :thumbsup:","fork":false,"url":"https://api.github.com/repos/ciitest/test-repo","forks_url":"https://api.github.com/repos/ciitest/test-repo/forks","keys_url":"https://api.github.com/repos/ciitest/test-repo/keys{/key_id}","collaborators_url":"https://api.github.com/repos/ciitest/test-repo/collaborators{/collaborator}","teams_url":"https://api.github.com/repos/ciitest/test-repo/teams","hooks_url":"https://api.github.com/repos/ciitest/test-repo/hooks","issue_events_url":"https://api.github.com/repos/ciitest/test-repo/issues/events{/number}","events_url":"https://api.github.com/repos/ciitest/test-repo/events","assignees_url":"https://api.github.com/repos/ciitest/test-repo/assignees{/user}","branches_url":"https://api.github.com/repos/ciitest/test-repo/branches{/branch}","tags_url":"https://api.github.com/repos/ciitest/test-repo/tags","blobs_url":"https://api.github.com/repos/ciitest/test-repo/git/blobs{/sha}","git_tags_url":"https://api.github.com/repos/ciitest/test-repo/git/tags{/sha}","git_refs_url":"https://api.github.com/repos/ciitest/test-repo/git/refs{/sha}","trees_url":"https://api.github.com/repos/ciitest/test-repo/git/trees{/sha}","statuses_url":"https://api.github.com/repos/ciitest/test-repo/statuses/{sha}","languages_url":"https://api.github.com/repos/ciitest/test-repo/languages","stargazers_url":"https://api.github.com/repos/ciitest/test-repo/stargazers","contributors_url":"https://api.github.com/repos/ciitest/test-repo/contributors","subscribers_url":"https://api.github.com/repos/ciitest/test-repo/subscribers","subscription_url":"https://api.github.com/repos/ciitest/test-repo/subscription","commits_url":"https://api.github.com/repos/ciitest/test-repo/commits{/sha}","git_commits_url":"https://api.github.com/repos/ciitest/test-repo/git/commits{/sha}","comments_url":"https://api.github.com/repos/ciitest/test-repo/comments{/number}","issue_comment_url":"https://api.github.com/repos/ciitest/test-repo/issues/comments{/number}","contents_url":"https://api.github.com/repos/ciitest/test-repo/contents/{+path}","compare_url":"https://api.github.com/repos/ciitest/test-repo/compare/{base}...{head}","merges_url":"https://api.github.com/repos/ciitest/test-repo/merges","archive_url":"https://api.github.com/repos/ciitest/test-repo/{archive_format}{/ref}","downloads_url":"https://api.github.com/repos/ciitest/test-repo/downloads","issues_url":"https://api.github.com/repos/ciitest/test-repo/issues{/number}","pulls_url":"https://api.github.com/repos/ciitest/test-repo/pulls{/number}","milestones_url":"https://api.github.com/repos/ciitest/test-repo/milestones{/number}","notifications_url":"https://api.github.com/repos/ciitest/test-repo/notifications{?since,all,participating}","labels_url":"https://api.github.com/repos/ciitest/test-repo/labels{/name}","releases_url":"https://api.github.com/repos/ciitest/test-repo/releases{/id}","deployments_url":"https://api.github.com/repos/ciitest/test-repo/deployments","created_at":"2016-05-10T16:25:22Z","updated_at":"2018-08-06T03:25:38Z","pushed_at":"2018-08-06T03:25:36Z","git_url":"git://github.com/ciitest/test-repo.git","ssh_url":"git@github.com:ciitest/test-repo.git","clone_url":"https://github.com/ciitest/test-repo.git","svn_url":"https://github.com/ciitest/test-repo","homepage":"","size":2,"stargazers_count":0,"watchers_count":0,"language":"Python","has_issues":true,"has_projects":true,"has_downloads":true,"has_wiki":true,"has_pages":false,"has_discussions":false,"forks_count":2,"mirror_url":null,"archived":false,"disabled":false,"open_issues_count":0,"license":{"key":"mit","name":"MIT
+        License","spdx_id":"MIT","url":"https://api.github.com/licenses/mit","node_id":"MDc6TGljZW5zZTEz"},"allow_forking":true,"is_template":false,"web_commit_signoff_required":false,"topics":[],"visibility":"public","forks":2,"open_issues":0,"watchers":0,"default_branch":"master"},"network_count":2,"subscribers_count":0}'
+  recorded_at: Tue, 11 Apr 2023 06:05:34 GMT
+recorded_with: VCR 6.1.0

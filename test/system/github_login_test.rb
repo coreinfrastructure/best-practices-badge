@@ -23,22 +23,15 @@ class GithubLoginTest < ApplicationSystemTestCase
       # When re-recording cassetes you must use DRIVER=chrome
       # Github has an anti bot mechanism that requires real mouse movement
       # to authorize an application.
-      if ENV['GITHUB_PASSWORD'] # for re-recording cassettes
-        find_field id: 'login_field' # Make sure field exists first
-        fill_in 'login_field', with: 'ciitest'
-        fill_in 'password', with: ENV['GITHUB_PASSWORD']
+      unless has_content? 'Logged in'
+        fill_in 'login', with: 'bestpracticestest'
+        fill_in 'password', with: ENV.fetch('GITHUB_PASSWORD', nil)
         click_on 'Sign in'
-        # We don't assume not authorized so look for whether we are on the
-        # authorization page and click authorize if we are
-        if page.has_content?('Test BadgeApp (not for production use)')
-          if ENV['DRIVER'] == 'chrome'
-            click_on 'Authorize dankohn'
-          else
-            puts 'Please run github_login_test.rb with DRIVER=chrome'
-            puts 'Some user interaction is required'
-            assert false
-          end
-        end
+      end
+      # We don't assume not authorized so look for whether we are on the
+      # authorization page and click authorize if we are
+      if page.has_content?('Test BadgeApp (not for production use)')
+        click_on 'Authorize dankohn'
       end
       assert has_content? 'Logged in!'
       assert_equal '/en', current_path
@@ -59,7 +52,7 @@ class GithubLoginTest < ApplicationSystemTestCase
       # we don't do this often. So tell the user how to do it, since the
       # user can figure out how to deal with UI changes better.
       puts "\n\nDon't forget to REVOKE access to the test app on GitHub"
-      puts 'Log in to GitHub as ciitest. Then go to'
+      puts 'Log in to GitHub as bestpracticestest. Then go to'
       puts 'https://github.com/settings/applications.'
       puts 'Revoke the app "Test BadgeApp (not for production use)".\n\n'
     end

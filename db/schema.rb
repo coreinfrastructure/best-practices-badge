@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_03_172721) do
-
+ActiveRecord::Schema[7.0].define(version: 2022_02_03_172721) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_stat_statements"
@@ -20,8 +19,8 @@ ActiveRecord::Schema.define(version: 2022_02_03_172721) do
   create_table "additional_rights", force: :cascade do |t|
     t.integer "project_id", null: false
     t.integer "user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["project_id"], name: "index_additional_rights_on_project_id"
     t.index ["user_id", "project_id"], name: "index_additional_rights_on_user_id_and_project_id", unique: true
     t.index ["user_id"], name: "index_additional_rights_on_user_id"
@@ -36,8 +35,8 @@ ActiveRecord::Schema.define(version: 2022_02_03_172721) do
     t.text "content"
     t.string "searchable_type"
     t.integer "searchable_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["searchable_type", "searchable_id"], name: "index_pg_search_documents_on_searchable_type_and_searchable_id"
   end
 
@@ -50,8 +49,8 @@ ActiveRecord::Schema.define(version: 2022_02_03_172721) do
     t.integer "percent_ge_100", null: false
     t.integer "created_since_yesterday", null: false
     t.integer "updated_since_yesterday", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "reminders_sent", default: 0, null: false
     t.integer "reactivated_after_reminder", default: 0, null: false
     t.integer "active_projects"
@@ -220,8 +219,8 @@ ActiveRecord::Schema.define(version: 2022_02_03_172721) do
     t.string "dynamic_analysis_fixed_status", default: "?", null: false
     t.text "dynamic_analysis_fixed_justification"
     t.text "general_comments"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "crypto_weaknesses_status", default: "?", null: false
     t.text "crypto_weaknesses_justification"
     t.string "test_continuous_integration_status", default: "?", null: false
@@ -250,9 +249,9 @@ ActiveRecord::Schema.define(version: 2022_02_03_172721) do
     t.string "build_reproducible_status", default: "?", null: false
     t.text "build_reproducible_justification"
     t.integer "badge_percentage_0"
-    t.datetime "achieved_passing_at"
-    t.datetime "lost_passing_at"
-    t.datetime "last_reminder_at"
+    t.datetime "achieved_passing_at", precision: nil
+    t.datetime "lost_passing_at", precision: nil
+    t.datetime "last_reminder_at", precision: nil
     t.boolean "disabled_reminders", default: false, null: false
     t.string "implementation_languages", default: ""
     t.integer "lock_version", default: 0
@@ -367,14 +366,14 @@ ActiveRecord::Schema.define(version: 2022_02_03_172721) do
     t.string "achieve_silver_status", default: "Unmet", null: false
     t.text "achieve_silver_justification"
     t.integer "tiered_percentage"
-    t.datetime "repo_url_updated_at"
-    t.datetime "achieved_silver_at"
-    t.datetime "lost_silver_at"
-    t.datetime "achieved_gold_at"
-    t.datetime "lost_gold_at"
-    t.datetime "first_achieved_passing_at"
-    t.datetime "first_achieved_silver_at"
-    t.datetime "first_achieved_gold_at"
+    t.datetime "repo_url_updated_at", precision: nil
+    t.datetime "achieved_silver_at", precision: nil
+    t.datetime "lost_silver_at", precision: nil
+    t.datetime "achieved_gold_at", precision: nil
+    t.datetime "lost_gold_at", precision: nil
+    t.datetime "first_achieved_passing_at", precision: nil
+    t.datetime "first_achieved_silver_at", precision: nil
+    t.datetime "first_achieved_gold_at", precision: nil
     t.string "maintained_status", default: "Met", null: false
     t.text "maintained_justification"
     t.index ["achieved_gold_at"], name: "index_projects_on_achieved_gold_at"
@@ -406,22 +405,22 @@ ActiveRecord::Schema.define(version: 2022_02_03_172721) do
     t.string "password_digest"
     t.string "secret_token"
     t.string "validation_code"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "role"
     t.string "remember_digest"
     t.string "activation_digest"
     t.boolean "activated", default: false
-    t.datetime "activated_at"
+    t.datetime "activated_at", precision: nil
     t.string "reset_digest"
-    t.datetime "reset_sent_at"
+    t.datetime "reset_sent_at", precision: nil
     t.string "preferred_locale", default: "en"
-    t.datetime "last_login_at"
+    t.datetime "last_login_at", precision: nil
     t.string "encrypted_email"
     t.string "encrypted_email_iv"
     t.string "email_bidx"
     t.boolean "use_gravatar", default: false, null: false
-    t.datetime "can_login_starting_at"
+    t.datetime "can_login_starting_at", precision: nil
     t.boolean "blocked", default: false, null: false
     t.text "blocked_rationale"
     t.index ["email_bidx"], name: "email_local_unique_bidx", unique: true, where: "((provider)::text = 'local'::text)"
@@ -436,7 +435,7 @@ ActiveRecord::Schema.define(version: 2022_02_03_172721) do
     t.string "event", null: false
     t.string "whodunnit"
     t.text "object"
-    t.datetime "created_at"
+    t.datetime "created_at", precision: nil
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 

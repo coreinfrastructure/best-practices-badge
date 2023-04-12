@@ -92,7 +92,7 @@ gem 'railties', '~> 7.0.4' # Rails. Rails core, loads rest of Rails
 gem 'rails-i18n', '~> 7.0.4' # Localizations for Rails built-ins
 gem 'redcarpet', '~> 3.5' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '~> 5.1', require: false # For .scss files (CSS extension)
-gem 'scout_apm', '~> 4.1' # Monitor for memory leaks
+gem 'scout_apm' # Monitor for memory leaks
 gem 'secure_headers', '~> 6.3' # Add hardening measures to HTTP headers
 # WARNING!!!!
 # CHECK DEPLOYMENT FIRST IF YOU UPDATE sprockets-rails.

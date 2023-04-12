@@ -82,7 +82,7 @@ gem 'pg_search', '~> 2.3' # PostgreSQL full-text search
 gem 'puma', '~> 6.2' # Faster webserver; recommended by Heroku
 gem 'puma_worker_killer', '~> 0.3' # Band-aid: Restart to limit memory use
 gem 'rack-attack', '~> 6.6' # Implement rate limiting
-gem 'rack-cors', '~> 1.0' # Enable CORS so JavaScript clients can get JSON
+gem 'rack-cors', '~> 2.0' # Enable CORS so JavaScript clients can get JSON
 gem 'rack-headers_filter', '~> 0.0.1' # Filter out "dangerous" headers
 # We no longer say: gem 'rails', '6.1.7.3' # Our web framework
 # but instead load only what we use (to reduce memory use and attack surface).

@@ -9,6 +9,7 @@ version: 2.1
 #
 orbs:
   browser-tools: circleci/browser-tools@1.4.1
+  codecov: codecov/codecov@3.2.4
 jobs:
   build:
     working_directory: ~/coreinfrastructure/best-practices-badge
@@ -129,6 +130,7 @@ jobs:
         path: test/html_reports
     - store_artifacts:
         path: /tmp/circleci-test-results
+    - codecov/upload
   # I haven't found a reliable way to calculate HEROKU_APP just once,
   # so it gets recalculated. This approach still greatly reduces
   # duplication.

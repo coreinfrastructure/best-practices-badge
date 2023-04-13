@@ -422,7 +422,7 @@ GEM
     sawyer (0.9.2)
       addressable (>= 2.3.5)
       faraday (>= 0.17.3, < 3)
-    scout_apm (4.1.2)
+    scout_apm (5.3.3)
       parser
     secure_headers (6.5.0)
     selenium-webdriver (4.8.6)
@@ -562,7 +562,7 @@ DEPENDENCIES
   rubocop-rails (= 2.19.0)
   ruby-graphviz (= 1.2.5)
   sass-rails (~> 5.1)
-  scout_apm (~> 4.1)
+  scout_apm
   secure_headers (~> 6.3)
   selenium-webdriver
   spring (~> 4.1)

@@ -41,7 +41,7 @@ jobs:
       # Update by consulting: https://github.com/actions/checkout/releases
       # We include the hash after '@', and comment "pin @SIMPLE-NAME"; this is
       # the naming convention of https://github.com/mheap/pin-github-action
-      - uses: actions/checkout@83b7061638ee4956cf7545a6f7efe594e5ad0247 # pin @v3.5.1
+      - uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # pin @v3.5.2
 
       # Runs a single command using the runners shell
       - name: Run a one-line script

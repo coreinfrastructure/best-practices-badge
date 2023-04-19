@@ -2,4 +2,5 @@
 skip = .git,*.pdf,*.svg,locales,vcr_cassettes,*.rake
 # reenable - used as .attribute in .rb as well
 # rouge - name of the repo
-ignore-words-list = reenable,rouge
+# Suh - name
+ignore-words-list = reenable,rouge,suh

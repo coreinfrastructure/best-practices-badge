@@ -26,7 +26,7 @@ gem 'activerecord', '~> 7.0.6' # Rails. ORM and query system.
 gem 'activesupport', '~> 7.0.6' # Rails. Underlying library.
 # gem 'activetext' # Not used. Text editor that fails to support markdown.
 gem 'attr_encrypted', '~> 4'
-gem 'bcrypt', '~> 3.1.18' # Security - for salted hashed interated passwords
+gem 'bcrypt', '~> 3.1.18' # Security - for salted hashed interacted passwords
 gem 'blind_index', '~> 2.3.0' # Index encrypted email addresses
 gem 'bootstrap-sass', '~> 3.4'
 gem 'bootstrap-social-rails', '~> 4.12'

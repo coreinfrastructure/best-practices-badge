@@ -1440,7 +1440,7 @@ That said, there's no harm in running it, here's how:
 git gc's has an "--aggressive" option, but I suggest avoiding it,
 as that is almost never what you want.
 
-If you are desparate for space you can make the repo a shallow copy
+If you are desperate for space you can make the repo a shallow copy
 instead, but then you do not have the full git history.
 
 ## API

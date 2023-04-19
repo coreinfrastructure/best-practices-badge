@@ -15,7 +15,7 @@ To modify the *production* site data, use -P instead of -S.
 Updates use JSON format; remember to use double-quotes around all strings
 in the JSON format. Typically the JSON will modify criteria data; for
 a CRITERION, the status value is in field CRITERION_status
-nd the corresponding text justification is in CRITERION_justification.
+and the corresponding text justification is in CRITERION_justification.
 A CRITERION_status can be Met, Unmnet, ?, or N/A.
 
 Note: For modification to work, you need to authenticate to the BadgeApp

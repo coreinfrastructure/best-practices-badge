@@ -41,7 +41,7 @@
   "version_semver_status": "Unmet",
   "version_semver_justification": "There's really only one expected final user, the Linux Foundation site.  The code is deployed there using git.  Therefore, git commit id's are enough for that purpose.  That said, major changes *are* recorded using Semantic Versioning (SemVer).",
   "version_tags_status": "Unmet",
-  "version_tags_justification": "Git commit id's are used, since there's realy only 1 primary user the need for a clearly-discussed version number is less important.",
+  "version_tags_justification": "Git commit id's are used, since there's really only 1 primary user the need for a clearly-discussed version number is less important.",
   "changelog_status": "Met",
   "changelog_justification": "CHANGELOG file is in top directory, see: https://github.com/coreinfrastructure/best-practices-badge/blob/master/CHANGELOG.md",
   "changelog_vulns_status": "Met",

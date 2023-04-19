@@ -32,7 +32,7 @@ The "doc/" directory has information you may find helpful, for example:
 
 -   [governance.md](doc/governance.md) describes our governance model
     (how we decide things)
--   [implementation.md](doc/implementation.md) provies implementation details
+-   [implementation.md](doc/implementation.md) provides implementation details
 -   [background.md](doc/background.md) provides background info on criteria
 
 If you want *change* the criteria, see below.

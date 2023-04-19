@@ -344,7 +344,7 @@ bundle install       # Install gems we use in Gemfile.lock, including Rails
 # "bundle" installs additional commands - ensure we can find them,
 # by rehashing if we're using rbenv.
 # This is especially important because it appears that the
-# asset complation process needs some commands to work and it doesn't
+# asset compilation process needs some commands to work and it doesn't
 # always report unexpected failures.  Without this, later JavaScript
 # may mysteriously fail because the assets aren't quite correct.
 if is_command rbenv ; then

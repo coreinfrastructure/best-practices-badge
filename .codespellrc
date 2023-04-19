@@ -1,4 +1,4 @@
 [codespell]
 skip = .git,*.pdf,*.svg,locales,vcr_cassettes,*.rake
-# 
-# ignore-words-list = 
+# reenable - used as .attribute in .rb as well
+ignore-words-list = reenable

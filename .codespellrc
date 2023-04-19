@@ -1,4 +1,5 @@
 [codespell]
 skip = .git,*.pdf,*.svg,locales,vcr_cassettes,*.rake
 # reenable - used as .attribute in .rb as well
-ignore-words-list = reenable
+# rouge - name of the repo
+ignore-words-list = reenable,rouge

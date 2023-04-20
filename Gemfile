@@ -25,7 +25,7 @@ gem 'activerecord', '~> 7.0.4' # Rails. ORM and query system.
 # gem 'activestorage' # Not used. Attaches cloud files to ActiveRecord.
 gem 'activesupport', '~> 7.0.4' # Rails. Underlying library.
 # gem 'activetext' # Not used. Text editor that fails to support markdown.
-gem 'attr_encrypted', github: 'andrewfader/attr_encrypted'
+gem 'attr_encrypted', '~> 4'
 gem 'bcrypt', '~> 3.1.18' # Security - for salted hashed interated passwords
 gem 'blind_index', '~> 2.3.0' # Index encrypted email addresses
 gem 'bootstrap-sass', '~> 3.4'

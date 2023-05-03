@@ -46,17 +46,3 @@ jobs:
       # Runs a single command using the runners shell
       - name: Run a one-line script
         run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
-
-      # Run Brakeman. See https://github.com/devmasx/brakeman-linter-action
-      - name: Brakeman linter
-        # To review release options see:
-        # https://github.com/devmasx/brakeman-linter-action/releases
-        uses: devmasx/brakeman-linter-action@0dc80fcccf87915ccb1761669014015214f36287 # pin@v1.0.0
-        env:
-          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'

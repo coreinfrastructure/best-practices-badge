@@ -33,7 +33,7 @@ gem 'bootstrap-social-rails', '~> 4.12'
 gem 'bootstrap_form', '~> 2.7'
 gem 'bundler' # Ensure it's available
 # Note: if webpacker is used, see chartkick website for added instructions
-gem 'chartkick', '~> 4.0' # Chart project_stats
+gem 'chartkick', '~> 5.0' # Chart project_stats
 gem 'faraday-retry', '~> 2.1' # Force retry of faraday requests for reliability
 # We no longger use "fastly-rails"; it doesn't support Rails 6+.
 # They recommend switching to the "fastly" gem (aka "fastly-ruby"),

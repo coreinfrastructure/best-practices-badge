@@ -236,6 +236,22 @@ You can solve this by cleaning out its repo:
 
 Then redeploy (e.g., by going to Heroku and forcibly rerunning a deploy step).
 
+## Updating gem `translation`
+
+Testing the `translation` gem is a little tricky, because it's primarily
+a small shim to an external service *and* we hook a shim around it.
+Our current process:
+
+1. In the local main branch run `rake translation:sync` to synchronize things
+   to a known state. If that changes anything, create a branch and create
+   a pull request for that current state.
+2. Still in the local branch, update the gem. Now re-run
+   `rake translation:sync`. Check to see if anything has changes.
+   Nothing should have changed (unless a translator managed to edit something
+   at exactly the right time), and it should report no errors connecting
+   to the translation system. If all is okay, then updating the translation
+   process is fine.
+
 ## See also
 
 Project participation and interface:

@@ -88,7 +88,9 @@ GEM
       sassc (>= 2.0.0)
     bootstrap-social-rails (4.12.0)
       railties (>= 3.1)
-    bootstrap_form (2.7.0)
+    bootstrap_form (5.2.1)
+      actionpack (>= 6.0)
+      activemodel (>= 6.0)
     builder (3.2.4)
     bullet (7.0.7)
       activesupport (>= 3.0.0)
@@ -503,7 +505,7 @@ DEPENDENCIES
   bootsnap
   bootstrap-sass (~> 3.4)
   bootstrap-social-rails (~> 4.12)
-  bootstrap_form (~> 2.7)
+  bootstrap_form (~> 5.2)
   bullet
   bundler
   bundler-audit

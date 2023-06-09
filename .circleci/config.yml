@@ -10,6 +10,7 @@ version: 2.1
 orbs:
   browser-tools: circleci/browser-tools@1.4.1
   codecov: codecov/codecov@3.2.4
+  dscar-brakeman: naokikimura/dscar-brakeman@0.9.0
 jobs:
   build:
     working_directory: ~/coreinfrastructure/best-practices-badge
@@ -132,6 +133,8 @@ jobs:
         path: /tmp/circleci-test-results
     - codecov/upload:
         file: coverage/codecov-result.json
+    - dscar-brakeman/analyze
+
   # I haven't found a reliable way to calculate HEROKU_APP just once,
   # so it gets recalculated. This approach still greatly reduces
   # duplication.

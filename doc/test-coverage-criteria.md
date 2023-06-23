@@ -65,4 +65,3 @@ Thoughts?
 See: <https://lists.coreinfrastructure.org/pipermail/cii-badges/2016-December/000350.html>
 
 Note that Ruby doesn't support branch coverage testing.
-

@@ -65,5 +65,3 @@ We document here the 4 false positives, and why they are false positives:
       does not realize that this is a Rails 4 app with the correct
       configuration.  In addition, our application also uses Twitter's
       secure_headers gem, which adds even more security-related headers.
-
-

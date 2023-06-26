@@ -281,6 +281,8 @@ en:
         <br><br>
         If you didn't receive your activation link,
         please sign up again and we will send you a new one.
+        If you've already created an account here via GitHub, please log in
+        using GitHub instead.
       name: Name
       email: Email
       preferred_locale: Preferred locale

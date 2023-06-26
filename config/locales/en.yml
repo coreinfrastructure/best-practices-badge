@@ -37,8 +37,7 @@ en:
       Login
     footer_text_html: >-
       <small> <strong>Need help? Have a question? See a problem?
-      Please <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#64;lists&#46;coreinfrastructure&#46;or&#103;">send
-      an email</a> </em>or <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
+      Please <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
       target="_blank" rel="noopener">file an issue</a></em>.</strong> © 2015-2021
       <a href="https://openssf.org" target="_blank" rel="noopener">Open Source
       Security Foundation</a>, a <a href="https://www.linuxfoundation.org/"
@@ -615,8 +614,7 @@ en:
           <strong>Please 'submit' often</strong> to save your
           work (you can always go back and edit more later). <br><br>
           If you need help, have a question, or see a problem,
-          please <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">send
-          an email</a> </em>or <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
+          please <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
           target="_blank" rel="noopener">file an issue</a></em>.
     form_basics:
       project_name:
@@ -973,8 +971,6 @@ en:
       If you have suggestions on how to improve the criteria or
       badge web application, please file an issue at:
       https://github.com/coreinfrastructure/best-practices-badge/issues
-      If you made changes to your project to get a badge, please let us know
-      via email at cii-badges-questions@lists.coreinfrastructure.org.
       One of our goals is to encourage projects to make some improvements.
       We put some of these reports on the public wiki; please let us know
       if you do NOT want the changes publicly posted at

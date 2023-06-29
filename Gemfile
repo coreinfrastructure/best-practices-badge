@@ -17,7 +17,7 @@ ruby File.read('.ruby-version').strip
 # gem 'actioncable' # Not used. Client/server comm channel.
 # gem 'activestorage' # Not used. Attaches cloud files to ActiveRecord.
 gem 'actionmailer', '~> 7.0.4' # Rails. Send email.
-gem 'actionpack', '~> 7.0.4' # Rails. MVC framework.
+gem 'actionpack', '~> 7.0.5' # Rails. MVC framework.
 gem 'actionview', '~> 7.0.4' # Rails. View.
 gem 'activejob', '~> 7.0.4' # Rails. Async jobs.
 gem 'activemodel', '~> 7.0.4' # Rails. Model basics.

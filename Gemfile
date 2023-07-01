@@ -16,7 +16,7 @@ ruby File.read('.ruby-version').strip
 # Loading only what we use reduces memory use & attack surface.
 # gem 'actioncable' # Not used. Client/server comm channel.
 # gem 'activestorage' # Not used. Attaches cloud files to ActiveRecord.
-gem 'actionmailer', '~> 7.0.5.1' # Rails. Send email.
+gem 'actionmailer', '~> 7.0.5' # Rails. Send email.
 gem 'actionpack', '~> 7.0.5.1' # Rails. MVC framework.
 gem 'actionview', '~> 7.0.5.1' # Rails. View.
 gem 'activejob', '~> 7.0.5.1' # Rails. Async jobs.
@@ -89,7 +89,7 @@ gem 'rack-headers_filter', '~> 0.0.1' # Filter out "dangerous" headers
 # We load sprockets-rails, but its version number isn't kept in sync.
 # Note: Update the gem versions of action* and railties in sync.
 gem 'railties', '~> 7.0.5.1' # Rails. Rails core, loads rest of Rails
-gem 'rails-i18n', '~> 7.0.5.1' # Localizations for Rails built-ins
+gem 'rails-i18n', '~> 7.0.7' # Localizations for Rails built-ins
 gem 'redcarpet', '~> 3.5' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '~> 5.1', require: false # For .scss files (CSS extension)
 gem 'scout_apm' # Monitor for memory leaks

@@ -31,10 +31,9 @@ fr:
       <i class="fa fa-sign-in" aria-hidden="true"></i> S'identifier
     footer_text_html: >-
       <small> <strong>Vous avez besoin d'aide ? Vous avez une
-      question ? Vous voyez un problème ? Merci d'<em><a href="mailto:&#99;ii&#45;badges&#45;questions&#64;lists&#46;coreinfrastructure&#46;or&#103;">envoyer
-      un email</a></em> ou de <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
-      target="_blank" rel="noopener">reporter un problème</a></i>.</strong>
-      © 2015-2018 <a href="https://openssf.org" target="_blank"
+      question ? Vous voyez un problème ? Merci de <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
+      target="_blank" rel="noopener">reporter un problème</a></em>.</strong>
+      © 2015-2021 <a href="https://openssf.org" target="_blank"
       rel="noopener">Open Source Security Foundation</a>, un projet
       collaboratif de la <a href="https://www.linuxfoundation.org/"
       target="_blank" rel="noopener">Fondation Linux</a>. Tous
@@ -98,7 +97,8 @@ fr:
         à moins qu'il s'agisse d'une obligation légale.  <br><br>
         Si vous n'avez pas reçu votre lien d'activation, veuillez
         vous inscrire à nouveau et nous vous enverrons un nouveau
-        lien.
+        lien. Si vous avez déjà créé un compte ici avec GitHub,
+        identifiez-vous plutôt en utilisant GitHub.
       name: Nom
       email: Email
       password: Mot de passe
@@ -550,8 +550,7 @@ fr:
           enregistrer votre travail (vous pouvez toujours revenir
           en arrière et éditer plus tard). <br><br> Si vous avez
           besoin d'aide, voulez poser une question ou voyez un
-          problème, veuillez <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">envoyer
-          un email</a> </em>ou<em> <a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
+          problème, veuillez <em> <a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
           target="_blank" rel="noopener">signaler un problème</a></em>.
         badge_alt: Le niveau de badge pour le projet %{id} est
           %{level}
@@ -848,10 +847,18 @@ fr:
     gained_level_part2: |-
       Ajoutez votre badge à votre projet et/ou site de dépôt ;
       vous l'avez mérité :
-    gained_level_part3: |-
-      Nous vous encourageons vivement à ajouter ou à améliorer le texte de justification,
-      y compris par l'ajout d'URL qui redirigent vers plus d'informations. Si vous avez des suggestions sur la façon d'améliorer les critères ou l'application Web du badge, veuillez soumettre un problème sur : https://github.com/coreinfrastructure/best-practices-badge/issues Si vous avez apporté des modifications à votre projet pour obtenir un badge, veuillez nous le faire savoir par email à cii-badges-questions@lists.coreinfrastructure.org. L'un de nos objectifs est d'encourager les projets à apporter des améliorations. Nous mettons certains de ces rapports sur le wiki public ; veuillez nous en informer si vous ne souhaitez PAS que les changements soient publiés publiquement à
-      https://github.com/coreinfrastructure/best-practices-badge/wiki/Impacts Merci et félicitations.
+    gained_level_part3: "Nous vous encourageons vivement à ajouter
+      ou à améliorer le texte de justification,\ny compris par
+      l'ajout d'URL qui redirigent vers plus d'informations. Si
+      vous avez des suggestions sur la façon d'améliorer les critères
+      ou l'application Web du badge, veuillez soumettre un problème
+      sur : https://github.com/coreinfrastructure/best-practices-badge/issues\nL'un
+      de nos objectifs est d'encourager les projets à apporter
+      des améliorations. Nous mettons certains de ces rapports
+      sur le wiki public ; veuillez nous en informer si vous ne
+      souhaitez PAS que les changements soient publiés publiquement
+      à\nhttps://github.com/coreinfrastructure/best-practices-badge/wiki/Impacts
+      \nMerci et félicitations.\n"
     lost_level_message: |-
       Nous sommes désolés, mais votre projet n'a plus le badge « %{old_level} »
       et est maintenant « %{new_level} ».

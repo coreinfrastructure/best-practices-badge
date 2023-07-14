@@ -30,7 +30,7 @@ class UsersController < ApplicationController
     @pagy, @projects = pagy(select_needed(@user.projects))
     @pagy_locale = I18n.locale.to_s # Pagy requires a string version
 
-    # Don't bother paginating the projects wtih additional rights,
+    # Don't bother paginating the projects with additional rights,
     # we practically never have that many and the interface would be confusing.
     @projects_additional_rights =
       select_needed(Project.includes(:user).joins(:additional_rights)
@@ -170,7 +170,7 @@ class UsersController < ApplicationController
     # private data.  However, we also want to be prepared so that
     # if there *is* a breach, we reduce its impact.
     # These lines instruct others to disable indexing and caching of
-    # user data, so that if private data is inadvertantly released,
+    # user data, so that if private data is inadvertently released,
     # it is much less likely to be easily available to others via
     # web-crawled data (such as from search engines) or via caches.
     # The goal is to make it harder for adversaries to get leaked data.

@@ -438,7 +438,7 @@ We could download these images and re-serve them (such as via a proxy),
 but copying or proxying the images
 using our own site might be considered a copyright violation
 and would also impose the need for significant extra resources.
-Thus, since we do not serve avatars ourselves, we must direct requestors
+Thus, since we do not serve avatars ourselves, we must direct requesters
 to them, so at the very least the requestor's externally-visible IP address
 must be visible to the external avatar service (so the image can be provided).
 To provide additional privacy, we would like to also
@@ -864,7 +864,7 @@ able to reconstitute it (including its data).
 #### Cloud & CDN deployment allow quick scale-up
 
 We can quickly add more resources if more requests are made.
-See the design section "availability through scaleability" below
+See the design section "availability through scalability" below
 for more about how we handle scaling up.
 
 #### Timeout
@@ -1195,7 +1195,7 @@ and the most concerning ones fit in one of these categories:
 Criminal organizations may try to DDoS us for money, but there's no
 strong reason for us to pay the extortion fee.
 We expect that people will be willing to come back to the site later
-if it's down, and we have scaleability countermeasures to reduce their
+if it's down, and we have scalability countermeasures to reduce their
 effectiveness.  If the attack is ongoing, several of the services we use
 would have a financial incentive to help us counter the attacks.
 This makes the attacks themselves less likely
@@ -1253,7 +1253,7 @@ to improve security:
 using a simple design,
 applying secure design principles,
 limiting memory-unsafe language use, and
-increasing availability through scaleability.
+increasing availability through scalability.
 
 The design, including the security-related items identified here,
 were developed through our
@@ -1307,7 +1307,7 @@ it to the appropriate controller.
 *   Repudiation. N/A.
 *   Information disclosure. These simply deliver untrusted data to components
     we trust to handle it properly.
-*   Denial of service. We use scaleability, caching, a CDN,
+*   Denial of service. We use scalability, caching, a CDN,
     and rapid recovery to help deal with denial of service attacks.
     Large denial of service attacks are hard to counter, and we don't claim
     to be able to prevent them.
@@ -1586,7 +1586,7 @@ including all 8 principles from
   application is just looking for the presence or absence of certain
   data patterns, and never executes data from the project.
 
-### Availability through scaleability
+### Availability through scalability
 
 Availability is, as always, especially challenging.
 Our primary approach is to ensure that the design scales.
@@ -2909,7 +2909,7 @@ which we've had to specially handle.
 Library `omniauth` has a publicly-known vulnerability CVE-2015-9284.
 We have chosen to counter vulnerability CVE-2015-9284 by installing a
 third-party countermeasure, `omniauth-rails_csrf_protection` and ensuring
-that our configuation counters the problem.
+that our configuration counters the problem.
 This is the
 [recommended approach on the omniauth wiki](https://github.com/omniauth/omniauth/wiki/Resolving-CVE-2015-9284)
 given discussion on
@@ -3070,7 +3070,7 @@ the assurance case here to determine how to counter that risk.
 
 ## Quality assurance
 
-We continously review our processes and their results to see if there
+We continuously review our processes and their results to see if there
 are systemic problems, and if so, try to address them.
 In particular, we try to maximize automation, including automated tests
 and automated security analysis, to reduce the risk that the deployed
@@ -3220,7 +3220,7 @@ believe they are acceptable:
     have a process that supports rapid update.
 *   *DDoS.*
     We use a variety of techniques to reduce the impact of DDoS attacks.
-    These include using a scaleable cloud service,
+    These include using a scalable cloud service,
     using a Content Delivery Network (CDN), and requiring
     the system to return to operation quickly after
     a DDoS attack has ended.

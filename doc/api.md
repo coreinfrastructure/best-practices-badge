@@ -240,7 +240,7 @@ to download all of it.
 See the [best\_practices\_modify.py](./best_practices_modify.py)
 program to see how to programmatically *modify* project data.
 Note that if you want to *modify* project data, you have to
-take a few extra steps to authenticate youself
+take a few extra steps to authenticate yourself
 (to prove that you're authorized to do this).
 
 ## Query (Search)
@@ -469,7 +469,7 @@ At one time, when a locale was not provided, English (en) was assumed.
 However, that made it impossible to distinguish between
 "use the browser's preferred locale" and "use English".
 
-Now, if no locale is selected, the application will redirect requestors
+Now, if no locale is selected, the application will redirect requesters
 to the best matching locale (as recommended by the accept-language
 value provided by the browser, with English as the last resort).
 The API has an important exception: if JSON format is requested, no

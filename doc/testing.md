@@ -174,7 +174,7 @@ the `bestpracticestest` user, that user account has no privileges worth taking.
 
 In addition, we create special keys that are recorded in the cassettes,
 and those keys are revoked at the end of the test.
-Thus, any acccess key stored in the cassette won't work later anyway.
+Thus, any access key stored in the cassette won't work later anyway.
 
 ## Troubleshooting
 

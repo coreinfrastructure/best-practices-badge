@@ -169,5 +169,5 @@ group :production do
 end
 
 # Post-install message from autoprefixer-rails:
-# autoprefixer-rails was deprected. Migration guide:
+# autoprefixer-rails was deprecated. Migration guide:
 # https://github.com/ai/autoprefixer-rails/wiki/Deprecated

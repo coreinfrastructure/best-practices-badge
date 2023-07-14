@@ -57,7 +57,7 @@ class ApplicationController < ActionController::Base
   # How long (in seconds) will the badge be stored on the CDN before being
   # re-requested? This is used by set_cache_control_header.
   # A longer time reduces server load, but if we produce a wrong/obsolete
-  # answer it will be wrong/obsolete for this long unless we explictly purge.
+  # answer it will be wrong/obsolete for this long unless we explicitly purge.
   # 86400 = 1 day, 864000 = 10 days
   BADGE_CACHE_MAX_AGE = (ENV['BADGEAPP_BADGE_CACHE_MAX_AGE'] || '864000').to_i
 

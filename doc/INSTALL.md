@@ -43,7 +43,7 @@ Some organizations use an SSL/TLS interception proxy, which intercepts all
 SSL/TLS traffic.
 If you must work with those, and you are willing to completely trust that proxy,
 then you need to download and install that proxy's certificates.
-E.G., to install them on Ubuntu, when your current directorty has the
+E.G., to install them on Ubuntu, when your current directory has the
 certificates as .crt files, run this:
 
 ~~~~sh
@@ -163,7 +163,7 @@ On Linux-like systems, you can do this by running this on a command line:
 xdg-open http://localhost:3000
 ~~~~
 
-Within the web browser you can click on "sign in" to create a new acount,
+Within the web browser you can click on "sign in" to create a new account,
 and "log in" later after you've created an account.
 You can also create your own projects.
 
@@ -350,7 +350,7 @@ be sure to test after updating any gems.
 It may be useful to occasionally test that our installer script is working
 as expected.  We have a branch set up on GitHub which is configured to do just
 that, test-dev-install.  In order to test the install script, you must have
-write priveleges to the GitHub git repository.  If you do, you can trigger a
+write privileges to the GitHub git repository.  If you do, you can trigger a
 test by running
 
 ~~~~

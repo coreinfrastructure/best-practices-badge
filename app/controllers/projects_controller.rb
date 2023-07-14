@@ -474,7 +474,7 @@ class ProjectsController < ApplicationController
   end
   # rubocop:enable Metrics/AbcSize
 
-  # Forceably set additional_rights on project "id" given string description
+  # Forcibly set additional_rights on project "id" given string description
   # Presumes permissions are granted & valid syntax in new_additional_rights
   # rubocop:disable Metrics/MethodLength
   def update_additional_rights_forced(id, new_additional_rights)

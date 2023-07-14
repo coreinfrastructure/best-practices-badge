@@ -309,7 +309,7 @@ Please generally follow the
 [community Ruby style guide](https://github.com/bbatsov/ruby-style-guide)
 and the complementary
 [community Rails style guide](https://github.com/bbatsov/rails-style-guide).
-Our continous integration setups runs Rubocop on each commit to ensure they're
+Our continuous integration setups runs Rubocop on each commit to ensure they're
 being followed.
 For example, in Ruby:
 
@@ -968,7 +968,7 @@ Then run the following command:
 ~~~~
 
 Note at the end of this script it will run `rake` to run a full system test,
-and then (if everyhing worked correctly) a `git commit -as` will be run.
+and then (if everything worked correctly) a `git commit -as` will be run.
 Next you should create and push a new CircleCI build image
 as describe in the dockerfiles [README](dockerfiles/README.md).
 Finally, modify `.circleci/config.yml` as described in the dockerfiles

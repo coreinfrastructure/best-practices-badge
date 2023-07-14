@@ -853,7 +853,7 @@ That may seem surprising, however:
 * The main main stress on the system is badge requests,
   and we offload practically all of that work to our CDN.
 * We run multiple threads (so we can handle a number of simultaneous requests).
-* We agressively use fragment caching stored in our
+* We aggressively use fragment caching stored in our
   server-side data cache store.
 * We ensure that JavaScript and such are set to cache
   on the client side, so are normally sent only once to a given client.
@@ -1015,7 +1015,7 @@ We want GitHub users to think of this
 as &#8220;just another badge to get.&#8221;
 
 We intend to sign up for a few badges so we can
-evalute their onboarding process,
+evaluate their onboarding process,
 e.g., Travis (CI automation), Code Climate (code quality checker including
 BrakeMan), Coveralls (code coverage), Hound (code style),
 Gymnasium (checks dependencies), HCI (looks at your documentation).
@@ -1354,7 +1354,7 @@ and
 ## fake_production
 
 If you want to debug a problem that only appears in a production-like
-envionment, try the 'fake_production' environment.
+environment, try the 'fake_production' environment.
 Here is how to enable it:
 
 ~~~~

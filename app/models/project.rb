@@ -261,7 +261,7 @@ class Project < ApplicationRecord
   # in a project.  These are:
   # :criterion_passing -
   #   'Met' (or 'N/A' if applicable) has been selected for the criterion
-  #   and all requred justification text (including url's) have been entered  #
+  #   and all required justification text (including url's) have been entered  #
   # :criterion_failing -
   #   'Unmet' has been selected for a MUST criterion'.
   # :criterion_barely -

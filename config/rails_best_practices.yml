@@ -36,8 +36,8 @@ RemoveUnusedMethodsInModelsCheck: { except_methods: [
   'Criteria#met_justification_or_url_required?', # Used in ERB template
   'Criteria#keys',
   'Criteria#suggested?', # Used in ERB template; doesn't notice.
-  'Project#created_since', # Scope called dynamincally
-  'Project#updated_since', # Scope called dynamincally
+  'Project#created_since', # Scope called dynamically
+  'Project#updated_since', # Scope called dynamically
   'Project#in_progress', # Scope used for search & in test, but tool misses it
   'Project#passing', # Scope used for search & in test, but tool misses it
   'Criterion#must?', # Used in ERB template; doesn't notice.

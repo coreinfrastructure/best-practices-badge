@@ -34,7 +34,7 @@ class GithubProjectTest < ApplicationSystemTestCase
         if page.has_content?('Test BadgeApp (not for production use)')
           puts 'Please delete github_login.yml cassette and rerun' \
                ' github_login_test.rb with DRIVER=chrome to authorize' \
-               ' the test envrionment app'
+               ' the test environment app'
         end
       end
       assert_equal num + 1, ActionMailer::Base.deliveries.size

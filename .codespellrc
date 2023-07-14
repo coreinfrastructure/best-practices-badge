@@ -4,4 +4,5 @@ skip = .git,*.pdf,*.svg,locales,vcr_cassettes,*.rake
 # rouge - name of the repo
 # Suh - name
 # projets - French used in a test
-ignore-words-list = reenable,rouge,suh,projets
+# requestor - as requested in the original PR
+ignore-words-list = reenable,rouge,suh,projets,requestor

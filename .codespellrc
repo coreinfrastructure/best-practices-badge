@@ -1,5 +1,7 @@
 [codespell]
 skip = .git,*.pdf,*.svg,locales,vcr_cassettes,*.rake
+# French phrase uses in tests
+ignore-regex = mis à jour
 # reenable - used as .attribute in .rb as well
 # rouge - name of the repo
 # Suh - name

@@ -1,0 +1,10 @@
+[codespell]
+skip = .git,*.pdf,*.svg,locales,vcr_cassettes,*.rake
+# French phrase uses in tests
+ignore-regex = mis à jour
+# reenable - used as .attribute in .rb as well
+# rouge - name of the repo
+# Suh - name
+# projets - French used in a test
+# requestor - as requested in the original PR
+ignore-words-list = reenable,rouge,suh,projets,requestor

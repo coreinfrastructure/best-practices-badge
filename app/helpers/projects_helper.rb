@@ -82,9 +82,9 @@ module ProjectsHelper
   end
 
   # Render all the status_choosers in the given minor section.
-  # This takes a rediculous number of parameters, because we have to
+  # This takes a ridiculous number of parameters, because we have to
   # select the correct minor section & then pass the information the
-  # status_chooser needs (which also needs a rediculous number).
+  # status_chooser needs (which also needs a ridiculous number).
   # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
   # rubocop:disable Metrics/ParameterLists
   def render_minor_status(

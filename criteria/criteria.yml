@@ -536,7 +536,7 @@
             many cryptographic algorithms have some weaknesses, yet for
             backwards-compatibility it may sometimes be appropriate to use
             the algorithm anyway.
-            "EAX" appears to be a name, not an abbrevation.
+            "EAX" appears to be a name, not an abbreviation.
             The paper describing EAX,
             <a href="http://csrc.nist.gov/groups/ST/toolkit/BCM/documents/proposedmodes/eax/eax-spec.pdf">"A
             Conventional Authenticated-Encryption Mode" by

@@ -862,7 +862,7 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
     then updating the "standard" libraries as a security update will
     leave these additional copies still vulnerable.
     This is especially an issue for cloud-based systems;
-    if the cloud provider updates their "standard" libaries but the program
+    if the cloud provider updates their "standard" libraries but the program
     won't use them, then the updates don't actually help.
     See, e.g.,
     <a href="http://spot.livejournal.com/312320.html">"Chromium: Why it isn't in Fedora yet as a proper package" by Tom Callaway</a>.

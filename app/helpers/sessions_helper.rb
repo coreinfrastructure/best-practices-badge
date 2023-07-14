@@ -260,7 +260,7 @@ module SessionsHelper
     url.match(GITHUB_PATTERN).captures.join('/')
   end
 
-  # Check if refering url is internal, if so, save it.
+  # Check if referring url is internal, if so, save it.
   def store_internal_referer
     return if request.referer.nil?
 

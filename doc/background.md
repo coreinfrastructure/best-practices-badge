@@ -232,7 +232,7 @@ importance, and these may suggest some metrics
     > website), messages/month (e.g., email, bug tracker, etc.), number of
     > commits/month, number of committers, etc.)
 
-2.  &#8220;Advertize and market your project.&#8221; In particular, successful
+2.  &#8220;Advertise and market your project.&#8221; In particular, successful
     growth projects are frequently projects that have added at least one
     new developer in the growth stage.
 
@@ -391,8 +391,8 @@ reviews, Compare the leading programs&#8217; basic attributes to your needs,
 and then Analyze the top candidates in more depth. This set of Identify,
 Read Reviews, Compare, and Analyze can be abbreviated as &#8220;IRCA&#8221;.
 Important attributes to consider include functionality, cost, market
-share, support, maintenance, reliability, performance, scaleability,
-useability, security, flexibility/customizability, interoperability, and
+share, support, maintenance, reliability, performance, scalability,
+usability, security, flexibility/customizability, interoperability, and
 legal/license issues.
 
 Its section on security mentions some metrics that might be useful:
@@ -408,10 +408,10 @@ Its section on security mentions some metrics that might be useful:
     Thus they do not provide the kinds of measures desired for this task.
 
 -   Reports of (many) vulnerabilities that are
-    &#8220;unforgiveable&#8221; (MITRE
+    &#8220;unforgivable&#8221; (MITRE
     identifies criteria for identifying vulnerabilities that are
     especially easy to find, and thus are
-    &#8220;unforgiveable&#8221;) \[Christey2007\].
+    &#8220;unforgivable&#8221;) \[Christey2007\].
 
 -   It is *known* that external organizations have or are reviewing the
     software, e.g., OpenBSD. However, some organizations (like OpenBSD)
@@ -1645,7 +1645,7 @@ be useful.
 FAIL.&#8221; *The Open Source Way*.
 <https://www.theopensourceway.org/wiki/How_to_tell_if_a_FLOSS_project_is_doomed_to_FAIL>
 
-\[Christey2007\] Christey, Steve. Unforgiveable Vulnerabilities.
+\[Christey2007\] Christey, Steve. Unforgivable Vulnerabilities.
 2007-08-02. <http://cve.mitre.org/docs/docs-2007/unforgivable.pdf>
 
 \[Crowston2003\] Crowston, K., H. Annabi, and J. Howison. &#8220;Defining open

@@ -55,7 +55,7 @@ The *real* name of a project, for our purposes, is the
 URL for its repository, and where that is not available, the
 project "front page" URL can help find it.
 Most projects have a human-readable name, and we provide a search
-mechanims, but these names are not enough to uniquely identify a project.
+mechanisms, but these names are not enough to uniquely identify a project.
 The same human-readable name can be used for many different projects
 (including project forks), and the same project may go by many different names.
 In many cases it will be useful to point to other names for the project

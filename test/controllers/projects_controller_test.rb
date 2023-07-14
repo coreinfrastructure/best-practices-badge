@@ -594,8 +594,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
         params: { format: 'svg' }
     assert_response :success
     assert_equal contents('badge-passing.svg'), @response.body
-    # NOTE: Requestors MUST use the ".json"
-    # suffix to requst the data in JSON format
+    # NOTE: Requesters MUST use the ".json"
+    # suffix to request the data in JSON format
     # (and NOT use the HTTP Accept header to try to select the output format).
     # Therefore we don't need to include "Accept" as part of "Vary".
     assert_equal 'Accept-Encoding', @response.headers['Vary']

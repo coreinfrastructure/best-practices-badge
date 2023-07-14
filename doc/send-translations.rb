@@ -122,7 +122,7 @@ def load_language(lang)
 end
 
 # If real, use PATCH to change segment id's translation to new_value
-# Return true iff sucessful
+# Return true iff successful
 def change_translation(id, new_value)
   # puts("#{id} : #{new_value}")
   return true unless $REAL
@@ -148,7 +148,7 @@ def change_translation(id, new_value)
 end
 
 # If real, use POST to segment id's translation to new_value
-# Return true iff sucessful
+# Return true iff successful
 def post_translation(key, lang, source, new_value)
   return true unless $REAL
 

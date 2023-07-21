@@ -220,7 +220,7 @@ not support other source hosting repositories (i.e., Forges).
 
 > Signed releases attest to the provenance of the artifact.
 
-> This check looks for the following filenames in the project's last five [release assets](https://docs.github.com/en/repositories/releasing-projects-on-github/about-releases): [*.minisig](https://github.com/jedisct1/minisign), *.asc (pgp), *.sig, *.sign, [*.intoto.jsonl](https://slsa.dev).
+> This check looks for the following filenames in the project's last five [release assets](https://docs.github.com/en/repositories/releasing-projects-on-github/about-releases): ...
 
 This maps to OpenSSF Best Practices badge `signed_releases`:
 

@@ -776,6 +776,7 @@
           #autofill: TODO
       - documentation_security:
           category: MUST
+          na_allowed: true
           met_url_required: true
           rationale: >
             Writing the specification helps the developers think about the

@@ -246,11 +246,11 @@ To modify the text of the criteria, edit these files:
 - config/locales/en.yml - YAML file that includes criteria and details text
 - criteria/criteria.yml - YAML file that includes other criteria information
 
-Note that the file "doc/criteria.md" (which reports the "passing" criteria)
+Note that the file "docs/criteria.md" (which reports the "passing" criteria)
 is a *generated* file, generated from those files, and is
 automatically regenerated when "rake" is run.
 This generated file is checked into git so that it's accessible via GitHub.
-The file "doc/other.md" is currently hand-edited; we intend for it to be
+The file "docs/other.md" is currently hand-edited; we intend for it to be
 automatically generated in the same way, but that isn't true at the
 time of this writing.
 
@@ -1113,7 +1113,7 @@ and were researched separately:
 * gitlab: URL <https://github.com/NARKOZ/gitlab/blob/master/LICENSE.txt> reveals this to be license BSD-2-Clause.
 * colored: URL <https://github.com/defunkt/colored/blob/master/LICENSE> reveals this to be license MIT.
 
-For more on license decisions see doc/dependency_decisions.yml.
+For more on license decisions see docs/dependency_decisions.yml.
 You can also run 'rake' and see the generated report
 license_finder_report.html.
 

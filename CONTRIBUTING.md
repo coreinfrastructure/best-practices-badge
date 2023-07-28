@@ -28,16 +28,16 @@ via our
 For general discussion, feel free to use the
 [cii-badges mailing list](https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges).
 
-The "doc/" directory has information you may find helpful, for example:
+The "docs/" directory has information you may find helpful, for example:
 
--   [governance.md](doc/governance.md) describes our governance model
+-   [governance.md](docs/governance.md) describes our governance model
     (how we decide things)
--   [implementation.md](doc/implementation.md) provides implementation details
--   [background.md](doc/background.md) provides background info on criteria
+-   [implementation.md](docs/implementation.md) provides implementation details
+-   [background.md](docs/background.md) provides background info on criteria
 
 If you want *change* the criteria, see below.
 
-The [INSTALL.md](doc/INSTALL.md) file explains how to install the program
+The [INSTALL.md](docs/INSTALL.md) file explains how to install the program
 locally (highly recommended if you're going to make code changes).
 It also provides a quick start guide.
 
@@ -45,7 +45,7 @@ If you're new to the project (or FLOSS in general), the
 [Up-for-grabs](https://github.com/coreinfrastructure/best-practices-badge/labels/up-for-grabs)
 issues are smaller tasks that may typically take 1-3 days.
 You are welcome aboard!
-The [roadmap.md](doc/roadmap.md) file provides an overview of future plans.
+The [roadmap.md](docs/roadmap.md) file provides an overview of future plans.
 See [CODE OF CONDUCT](./CODE_OF_CONDUCT.md) for our code of conduct;
 in short, "Be excellent to each other".
 
@@ -97,7 +97,7 @@ We achieve this by splitting proposals into two kinds:
 ### Developer Certificate of Origin (DCO)
 
 All contributions (including pull requests) must agree to
-the [Developer Certificate of Origin (DCO) version 1.1](doc/dco.txt).
+the [Developer Certificate of Origin (DCO) version 1.1](docs/dco.txt).
 This is exactly the same one created and used by the Linux kernel developers
 and posted on <http://developercertificate.org/>.
 This is a developer's certification that he or she has the right to
@@ -156,7 +156,7 @@ We also release the software as open source software so others can review it.
 Since early detection and impact reduction can never be perfect, we also try to
 detect and repair problems during deployment as quickly as possible.
 This is *especially* true for security issues; see our
-[security information](doc/security.md) for more.
+[security information](docs/security.md) for more.
 
 ### No trailing whitespace
 
@@ -268,25 +268,25 @@ there are some additional steps we will need to take.
 And of course, you need to convince us that you'll produce trustworthy
 translations, because others are counting on you.
 
-More information is in [doc/translators.md](doc/translators.md).
+More information is in [docs/translators.md](docs/translators.md).
 
 ## Criteria changes
 
 Changing *criteria* can have a much larger impact on participating
 projects than simply changing the supporting software, so we have special
 rules about them. For those rules, see
-[governance.md](doc/governance.md).
+[governance.md](docs/governance.md).
 
 For the technical details on how to implement new criteria,
 or modify existing criteria (including their text, details, rationale,
 and scoring criteria), see
-[implementation.md](doc/implementation.md).
+[implementation.md](docs/implementation.md).
 
 ## Code changes
 
 To make changes to the "BadgeApp" web application that implements the criteria,
-you may find the following helpful; [INSTALL.md](doc/INSTALL.md)
-(installation information) and [implementation.md](doc/implementation.md)
+you may find the following helpful; [INSTALL.md](docs/INSTALL.md)
+(installation information) and [implementation.md](docs/implementation.md)
 (implementation information).
 
 The code should strive to be DRY (don't repeat yourself),
@@ -499,7 +499,7 @@ and ensure that third parties can't use interactions for tracking.
 When sending an email to an existing account, use the original account
 email not the claimed email address sent now; for why, see
 [Hacking GitHub with Unicode's dotless 'i'](https://eng.getwisdom.io/hacking-github-with-unicode-dotless-i/).
-For more about security, see [security](doc/security.md).
+For more about security, see [security](docs/security.md).
 
 We want the software to have decent performance for typical users.
 [Our goal is interaction in 1 second or less after making a request](https://developers.google.com/web/fundamentals/performance/rail).
@@ -789,11 +789,11 @@ in separate executables (if so, no problem).
 Most software licensed using the GPL version 2.0 is actually
 GPL-2.0+ (GPL version 2 or later), and GPL version 3 is known to be
 compatible with the Apache 2.0 license, so this is not a common problem.
-For more on license decisions see doc/dependency_decisions.yml;
+For more on license decisions see docs/dependency_decisions.yml;
 you can also run 'rake' and see the generated report
 license_finder_report.html.
 Once you've checked, you can approve a library and its license with the
-this command (this quickly modifies doc/dependency_decisions.yml;
+this command (this quickly modifies docs/dependency_decisions.yml;
 you can edit the file as well):
 
 ~~~~
@@ -925,7 +925,7 @@ make the update work.
 
 Specially check any update of nokogiri or loofah;
 we specially analyze those to prevent vulnerabilities in our
-[security assurance case](./doc/security.md).
+[security assurance case](./docs/security.md).
 
 #### Updating Ruby (and handling Ruby updates)
 

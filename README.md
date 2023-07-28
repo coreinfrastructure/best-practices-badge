@@ -170,6 +170,11 @@ Here is a summary of the gold criteria, with requirements in bold
 * **[Have a hardened project website, repo, and download site](docs/gother.md#hardened_site)**
 * **[Have a security review (internal or external)](docs/gother.md#security_review)**
 
+## Directory "doc" is now "docs"
+
+If you've used this system in the past, you may have referred to our `doc`
+subdirectory for documentation. We have renamed that to a `docs` subdirectory.
+
 ## License
 
 All material here is released under the [MIT license](./LICENSE).

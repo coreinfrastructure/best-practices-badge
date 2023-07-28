@@ -149,7 +149,7 @@ end
 desc 'Run markdownlint (mdl) - check for markdown problems on **.md files'
 task :markdownlint do
   style_file = 'config/markdown_style.rb'
-  sh "bundle exec mdl -s #{style_file} *.md doc/*.md"
+  sh "bundle exec mdl -s #{style_file} *.md docs/*.md"
 end
 
 # Apply JSCS to look for issues in JavaScript files.
@@ -178,21 +178,21 @@ task :load_self_json do
   url = 'https://master.bestpractices.coreinfrastructure.org/projects/1.json'
   contents = URI.parse(url).open.read
   pretty_contents = JSON.pretty_generate(JSON.parse(contents))
-  File.write('doc/self.json', pretty_contents)
+  File.write('docs/self.json', pretty_contents)
 end
 
 # We use a file here because we do NOT want to run this check if there's
 # no need.  We use the file 'license_okay' as a marker to record that we
 # HAVE run this program locally.
 desc 'Examine licenses of reused components; see license_finder docs.'
-file 'license_okay' => ['Gemfile.lock', 'doc/dependency_decisions.yml'] do
+file 'license_okay' => ['Gemfile.lock', 'docs/dependency_decisions.yml'] do
   sh 'bundle exec license_finder && touch license_okay'
 end
 
 desc 'Create license report'
 file 'license_finder_report.html' => [
   'Gemfile.lock',
-  'doc/dependency_decisions.yml'
+  'docs/dependency_decisions.yml'
 ] do
   sh 'bundle exec license_finder report --format html > license_finder_report.html'
 end
@@ -238,22 +238,22 @@ rule '.html' => '.md' do |t|
   sh "script/my-markdown \"#{t.source}\" | script/my-patch-html > \"#{t.name}\""
 end
 
-markdown_files = Rake::FileList.new('*.md', 'doc/*.md')
+markdown_files = Rake::FileList.new('*.md', 'docs/*.md')
 
 # Use this task to locally generate HTML files from .md (markdown)
 task 'html_from_markdown' => markdown_files.ext('.html')
 
-file 'doc/criteria.md' =>
+file 'docs/criteria.md' =>
      [
        'criteria/criteria.yml', 'config/locales/en.yml',
-       'doc/criteria-header.markdown', 'doc/criteria-footer.markdown',
+       'docs/criteria-header.markdown', 'docs/criteria-footer.markdown',
        './gen_markdown.rb'
      ] do
   sh './gen_markdown.rb'
 end
 
 # Name task so we don't have to use the filename
-task generate_criteria_doc: 'doc/criteria.md' do
+task generate_criteria_doc: 'docs/criteria.md' do
 end
 
 desc 'Use fasterer to report Ruby constructs that perform poorly'

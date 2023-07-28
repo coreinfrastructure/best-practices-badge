@@ -62,8 +62,8 @@ end
 # rubocop:enable Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
 
 # Generate results
-$stdout.reopen('doc/criteria.md', 'w') || abort('Cannot write')
-print_file('doc/criteria-header.markdown')
+$stdout.reopen('docs/criteria.md', 'w') || abort('Cannot write')
+print_file('docs/criteria-header.markdown')
 FullCriteriaHash['0'].each do |major, major_value|
   puts ''
   puts "### #{major}"
@@ -78,4 +78,4 @@ FullCriteriaHash['0'].each do |major, major_value|
     puts '</ul>'
   end
 end
-print_file('doc/criteria-footer.markdown')
+print_file('docs/criteria-footer.markdown')

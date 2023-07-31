@@ -1,5 +1,5 @@
 <% cache true do -%>
-<% if ENV['PUBLIC_HOSTNAME'] == 'bestpractices.coreinfrastructure.org' -%>
+<% if not in_development? -%>
 # This is the real production system for the CII Best Practices badge.
 <%
   locale_prefixes = I18n.available_locales.map { |loc| "/#{loc}" }

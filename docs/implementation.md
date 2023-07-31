@@ -63,8 +63,13 @@ The application is configured by various environment variables:
   project was last sent a reminder
 * RAILS_ENV (default 'development'): Rails environment, one of
   'test', 'development', 'fake_production', and 'production'.
-  The main/master, staging, and production systems set this to 'production'.
+  The main/master, staging, and production systems set this to 'production',
+  because we want our final test systems to be as
+  "most like the real production system as practical".
   See the discussion below about fake_production.
+* BADGEAPP_REAL_PRODUCTION: Has a non-empty value (conventionally "true") if
+  this is the *true* production system. If not present, we show the user a
+  warning that this isn't the production system.
 * BADGEAPP_DAY_FOR_MONTHLY: Day of the month to monthly activities, e.g.,
   send out monthly reminders.  Default 5.  Set to 0 to disable monthly acts.
 * FASTLY_CLIENT_IP_REQUIRED: If present, download the Fastly list of

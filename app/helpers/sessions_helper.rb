@@ -8,7 +8,6 @@
 module SessionsHelper
   SESSION_TTL = 48.hours # Automatically log off session if inactive this long
   RESET_SESSION_TIMER = 1.hour # Active sessions older than this reset timer
-  PRODUCTION_HOSTNAME = 'bestpractices.coreinfrastructure.org'
   GITHUB_PATTERN = %r{
     \Ahttps://github.com/([A-Za-z0-9_.-]+)/([A-Za-z0-9_.-]+)/?\Z
   }x.freeze
@@ -190,10 +189,8 @@ module SessionsHelper
   # Returns true iff this is not the REAL final production system,
   # including the master/main and staging systems.
   # It only returns false if we are "truly in production"
-  def in_development?(hostname = ENV.fetch('PUBLIC_HOSTNAME', nil))
-    return true if hostname.nil?
-
-    hostname != PRODUCTION_HOSTNAME
+  def in_development?(is_real = ENV.fetch('BADGEAPP_REAL_PRODUCTION', nil))
+    return is_real.nil?
   end
 
   # Redirects to stored location (or to the default)

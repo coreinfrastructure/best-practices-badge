@@ -144,6 +144,7 @@ class ReportMailer < ApplicationMailer
     @month_display = month_display
     @last_stat_in_prev_month = last_stat_in_prev_month
     @last_stat_in_prev_prev_month = last_stat_in_prev_prev_month
+    @hostname = ENV.fetch('PUBLIC_HOSTNAME', 'localhost')
     set_standard_headers
     I18n.with_locale(I18n.default_locale) do
       mail(

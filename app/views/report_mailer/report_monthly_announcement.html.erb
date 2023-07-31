@@ -42,7 +42,7 @@ Here are the projects that first achieved a
     @projects[level].each do |project|
       new_achievements = true
 %>
-<li><a href="https://bestpractices.coreinfrastructure.org/projects/<%= project.id %>"><%= project.name %> at <%= project.achieved_passing_at %></a>
+<li><a href="https://<%= @hostname %>/projects/<%= project.id %>"><%= project.name %> at <%= project.achieved_passing_at %></a>
 <%
     end # each
 %>
@@ -65,4 +65,4 @@ end
 <p>
 Do you know a project that doesn't have a badge yet?
 Please suggest to them that they
-<a href="https://bestpractices.coreinfrastructure.org/">get a badge now</a>!
+<a href="https://<%= @hostname %>/">get a badge now</a>!

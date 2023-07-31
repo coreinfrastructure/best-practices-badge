@@ -186,7 +186,7 @@ end
 # HAVE run this program locally.
 desc 'Examine licenses of reused components; see license_finder docs.'
 file 'license_okay' => ['Gemfile.lock', 'docs/dependency_decisions.yml'] do
-  sh 'bundle exec license_finder && touch license_okay'
+  sh 'bundle exec license_finder --decisions_file docs/dependency_decisions.yml && touch license_okay'
 end
 
 desc 'Create license report'

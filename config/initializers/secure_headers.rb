@@ -10,6 +10,7 @@ SecureHeaders::Configuration.default do |config|
   normal_src += ['https://' + ENV['PUBLIC_HOSTNAME'] + '.global.ssl.fastly.net'] if ENV['PUBLIC_HOSTNAME']
   normal_src += ['https://' + ENV['PUBLIC_HOSTNAME_ALT'] + '.global.ssl.fastly.net'] if ENV['PUBLIC_HOSTNAME_ALT']
   normal_src += ['https://' + ENV['PUBLIC_HOSTNAME_ALT']] if ENV['PUBLIC_HOSTNAME_ALT']
+  normal_src += ['https://' + ENV['PUBLIC_HOSTNAME_ALT2']] if ENV['PUBLIC_HOSTNAME_ALT2']
   config.hsts = "max-age=#{20.years.to_i}; includeSubDomains; preload"
   config.x_frame_options = 'DENY'
   config.x_content_type_options = 'nosniff'

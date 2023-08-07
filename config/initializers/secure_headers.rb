@@ -9,6 +9,7 @@ SecureHeaders::Configuration.default do |config|
   normal_src = ["'self'"]
   normal_src += ['https://' + ENV['PUBLIC_HOSTNAME'] + '.global.ssl.fastly.net'] if ENV['PUBLIC_HOSTNAME']
   normal_src += ['https://' + ENV['PUBLIC_HOSTNAME_ALT'] + '.global.ssl.fastly.net'] if ENV['PUBLIC_HOSTNAME_ALT']
+  normal_src += ['https://' + ENV['PUBLIC_HOSTNAME_ALT']] if ENV['PUBLIC_HOSTNAME_ALT']
   config.hsts = "max-age=#{20.years.to_i}; includeSubDomains; preload"
   config.x_frame_options = 'DENY'
   config.x_content_type_options = 'nosniff'
@@ -20,9 +21,8 @@ SecureHeaders::Configuration.default do |config|
   config.csp = {
     # Control information sources
     default_src: normal_src,
-    img_src: [
-      'secure.gravatar.com', 'avatars.githubusercontent.com',
-      "'self'"
+    img_src: normal_src + [
+      'secure.gravatar.com', 'avatars.githubusercontent.com'
     ],
     object_src: ["'none'"],
     script_src: normal_src,

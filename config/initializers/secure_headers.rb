@@ -7,11 +7,8 @@
 # rubocop:disable Metrics/BlockLength
 SecureHeaders::Configuration.default do |config|
   normal_src = ["'self'"]
-  def alternate_url(hostname)
-    return 'https://' + hostname + '.global.ssl.fastly.net'
-  end
-  normal_src += [fastly_alternate(ENV['PUBLIC_HOSTNAME'])] if ENV['PUBLIC_HOSTNAME']
-  normal_src += [fastly_alternate(ENV['PUBLIC_HOSTNAME_ALT'])] if ENV['PUBLIC_HOSTNAME_ALT']
+  normal_src += ['https://' + ENV['PUBLIC_HOSTNAME'] + '.global.ssl.fastly.net'] if ENV['PUBLIC_HOSTNAME']
+  normal_src += ['https://' + ENV['PUBLIC_HOSTNAME_ALT'] + '.global.ssl.fastly.net'] if ENV['PUBLIC_HOSTNAME_ALT']
   config.hsts = "max-age=#{20.years.to_i}; includeSubDomains; preload"
   config.x_frame_options = 'DENY'
   config.x_content_type_options = 'nosniff'

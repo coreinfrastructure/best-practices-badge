@@ -22,9 +22,7 @@
     type="font/woff2" crossorigin>
   <link rel="preload" href="<%=
     image_path('cci-logo-header.png') %>" as="image" type="image/png">
-  <%= auto_discovery_link_tag :atom,
-                              { controller: 'projects', action: 'feed' },
-                              { title: t('feed_title') } %>
+  <link rel="alternate" type="application/atom+xml" title="<%= t('feed_title') %>" href="/<%= I18n.locale %>/feed" />
   <link rel="publisher" href="https://plus.google.com/+LinuxfoundationOrg" />
 <% end # cache for this locale -%>
 <%# Provide info on all alternate locales for search engines, etc. See: -%>

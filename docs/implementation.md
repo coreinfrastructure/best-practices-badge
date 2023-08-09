@@ -72,6 +72,7 @@ The application is configured by various environment variables:
   warning that this isn't the production system.
 * BADGEAPP_DAY_FOR_MONTHLY: Day of the month to monthly activities, e.g.,
   send out monthly reminders.  Default 5.  Set to 0 to disable monthly acts.
+* BADGEAPP_FROM: Email address to send email from.
 * FASTLY_CLIENT_IP_REQUIRED: If present, download the Fastly list of
   client IPs, and only let those IPs make requests.  Enabling this
   counters cloud piercing.  This isn't on by default, but the environment

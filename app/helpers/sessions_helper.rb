@@ -27,6 +27,7 @@ module SessionsHelper
   # rubocop: disable Metrics/AbcSize
   def force_locale_url(original_url, locale)
     url = URI.parse(original_url)
+    Rails.logger.info "DEBUG: original_url=<#{url}> host=#{url.host}"
     # Remove locale from query string and main path.  The removing
     # substitution will sometimes remove too much, so we prepend a '/'
     # if that happens.
@@ -36,6 +37,7 @@ module SessionsHelper
     new_path.chomp!('/') if locale || new_path != '/'
     # Recreate path, but now forcibly include the locale.
     url.path = (locale.present? ? '/' + locale.to_s : '') + new_path
+    Rails.logger.info "DEBUG: modified url=<#{url}> host=#{url.host}"
     url.to_s
   end
   # rubocop: enable Metrics/AbcSize

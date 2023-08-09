@@ -28,8 +28,6 @@ module SessionsHelper
   def force_locale_url(original_url, locale)
     url = URI.parse(original_url)
     Rails.logger.info "DEBUG: original_url=<#{url}> host=#{url.host}"
-    url.host = ENV.fetch('PUBLIC_HOSTNAME', url.host)
-    Rails.logger.info "DEBUG: newhostname_url=<#{url}> host=#{url.host}"
     # Remove locale from query string and main path.  The removing
     # substitution will sometimes remove too much, so we prepend a '/'
     # if that happens.

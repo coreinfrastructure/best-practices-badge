@@ -32,7 +32,7 @@ SecureHeaders::Configuration.default do |config|
     base_uri: ["'self'"],
     block_all_mixed_content: true, # see http://www.w3.org/TR/mixed-content/
     frame_ancestors: ["'none'"],
-    form_action: ["'self'"] # This counters some XSS busters
+    form_action: normal_src # This counters some XSS busters
   }
   config.cookies = {
     secure: true, # mark all cookies as Secure

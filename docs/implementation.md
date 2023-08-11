@@ -595,6 +595,28 @@ stored as environment variables.
 The variable names of Oauth2 credentials are "GITHUB_KEY" and "GITHUB_SECRET".
 If running on heroku, set config variables by following instructions on [2].
 
+If you need to set this up for your own instance, go to
+<https://github.com/settings/applications/new>
+to "Register a new OAuth application" and create a corresponding new token.
+Here's how we created the "staging" token for staging.bestpractices.dev:
+
+* Application Name: Best Practices Badge (Staging)
+* Homepage URL: https://staging.bestpractices.dev
+* Authorization callback URL: https://staging.bestpractices.dev/auth/github/callback
+* We enabled "device flow" because it might be useful someday.
+
+Similarly, here are the settings for the
+"production" token for www.bestpractices.dev:
+
+* Application Name: Best Practices Badge
+* Homepage URL: https://www.bestpractices.dev
+* Authorization callback URL: https://www.bestpractices.dev/auth/github/callback
+* We enabled "device flow" because it might be useful someday.
+
+You can see the status of these tokens on GitHub here:
+<https://github.com/settings/developers>
+under "OAuth applications".
+
 If running locally, these variables need to be set up.
 We have set up a file '.env' at the top level which has stub values,
 formatted like this, so that it automatically starts up
@@ -616,7 +638,7 @@ GITHUB_KEY='client id' GITHUB_SECRET='client secret' rails s
 where *client id* and *client secret* are registered OAuth2 credentials
 of the app.
 
-The authorization callback URL in GitHub is:
+The authorization callback URL in GitHub for this dummy application is:
 <http://localhost:3000/auth/github>
 
 [1] <https://github.com/settings/applications/new>

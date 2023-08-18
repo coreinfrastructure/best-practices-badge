@@ -79,6 +79,9 @@ en:
     login_with_github_html: <span class="fa fa-github"></span> Log in with GitHub
     login_automatic_signup: >-
       Log in with GitHub will automatically perform a sign up if necessary.
+      Sign up will only occur if authorize the sign up to GitHub;
+      you'll need to re-authorize if you only signed in to
+      bestpractices.coreinfastructure.org (as our domain name has changed).
       If you sign up, your name (as provided to GitHub) and GitHub nickname
       will be shown publicly, and you can change your name at any time.
       Your email address will be kept private and

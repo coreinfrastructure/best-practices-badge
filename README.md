@@ -175,6 +175,20 @@ Here is a summary of the gold criteria, with requirements in bold
 If you've used this system in the past, you may have referred to our `doc`
 subdirectory for documentation. We have renamed that to a `docs` subdirectory.
 
+## Main site
+
+We have recently moved to the new main site
+<https://www.bestpractices.dev>.
+For many years the main site was at
+<https://bestpractices.coreinfrastructure.org>.
+However, the Core Infrastructure Initiative (CII) has ended, and we have
+become part of the Open Source Security Foundation (OpenSSF).
+Therefore, it made sense to change the domain name so it's no longer tied
+to the CII. The domain name is much shorter, too.
+We use the "www" subdomain because there are technical challenges using
+a top-level domain with our CDN; it's more efficient to use the subdomain.
+
+
 ## License
 
 All material here is released under the [MIT license](./LICENSE).

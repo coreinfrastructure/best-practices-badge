@@ -5,6 +5,11 @@
 # Any one gem is listed no more than once (to prevent referring to
 # different version numbers in different environments).
 
+# Updating Rails-related gems requires simultaneously updating them.
+# You may need to update all of their versions below. Then run this:
+# bundle update actionmailer actionpack actionview activejob activemodel \
+#        activerecord activesupport railties rails-i18n rails
+
 source 'https://rubygems.org'
 
 # Use current ruby version (as stated in .ruby-version file)

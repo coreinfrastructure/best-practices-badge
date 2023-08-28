@@ -108,7 +108,7 @@ GEM
       xpath (~> 3.2)
     capybara-slow_finder_errors (0.1.5)
       capybara (~> 3.0)
-    chartkick (4.2.1)
+    chartkick (5.0.4)
     chef-utils (18.2.7)
       concurrent-ruby
     code_analyzer (0.5.5)
@@ -512,7 +512,7 @@ DEPENDENCIES
   bundler
   bundler-audit
   capybara-slow_finder_errors
-  chartkick (~> 4.0)
+  chartkick (~> 5.0)
   codecov
   dotenv-rails (~> 2.7)
   eslintrb

@@ -52,7 +52,7 @@ Interesting pages include:
 * **[Design](./docs/design.md)** - our basic design
 * Current **[implementation](./docs/implementation.md)**  - notes about the
   BadgeApp implementation
-* **[security](./docs/security.md)**  - notes about BadgeApp security
+* **[security](./docs/assurance-case.md)**  - notes about BadgeApp security, specifically its assurance case
 * **[testing](./docs/testing.md)**  - notes about BadgeApp automated tests
 * **[api](./docs/api.md)** - Application Programming Interface (API), including data downloads
 * **[Installation](./docs/INSTALL.md)**  - Installation and quick start

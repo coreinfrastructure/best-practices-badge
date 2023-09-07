@@ -88,10 +88,10 @@ The application is configured by various environment variables:
   "production" or "fake_production". Plausible values are
   "debug", "info", and "warn". Default is "info". See:
   <http://guides.rubyonrails.org/debugging_rails_applications.html>
-* EMAIL_ENCRYPTION_KEY: Key to decrypt email addresses.
+* EMAIL_ENCRYPTION_KEY: Key to decrypt the stored user email addresses.
   Hexadecimal string, must be 64 hex digits (==32 bytes==256 bits).
   Used by aes-256-gcm (256-bit AES in GCM mode).
-* EMAIL_BLIND_INDEX_KEY: Key for blind index created for email
+* EMAIL_BLIND_INDEX_KEY: Key for blind index created for user email addresses
   (used by PBKDF2-HMAC-SHA256).  Must be 64 hex digits (==32 bytes==256 bits).
 * BADGEAPP_DENY_LOGIN: If a non-blank value is set ("true" is recommended),
   then no on can log in, no one can create a new account (sign up),
@@ -155,6 +155,17 @@ The application is configured by various environment variables:
 * `BADGE_CACHE_STALE_AGE` : Time (in seconds) badges are served by the CDN
   if it can't get a new value from us.
   Default 8640000 (100 days), is forced to be at least 2x`BADGE_CACHE_MAX_AGE`
+* `BADGEAPP_SEND_EMAIL_*`: Various environment variables that configure how the
+  BadgeApp sends email to an email server (a kind of Mail Transfer Agent (MTA))
+  that will then be sent on to others. See `config/environments/production.rb`.
+* `BADGEAPP_SEND_EMAIL_ADDRESS`: The domain of the MTA to send email to, e.g.,
+   `smtp.sendgrid.net`. Note that this is NOT the email address of the
+   *sender* but the domain of the remote mail server (the MTA) that will be
+   *receiving* the email and then send it on.
+* `BADGEAPP_SEND_EMAIL_PORT`: Port of the MTA. Default is 587.
+* `BADGEAPP_SEND_EMAIL_USERNAME`: Username for logging into the MTA
+* `BADGEAPP_SEND_EMAIL_PASSWORD`: Password for logging into the MTA
+* `BADGEAPP_SEND_EMAIL_DOMAIN`: Domain to report to the MTA (for HELO)
 
 You can make cryptographically random values (such as keys)
 using "rails secret".  E.g., to create 64 random hexadecimal digits, use:

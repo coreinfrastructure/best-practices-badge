@@ -120,7 +120,7 @@ Rails.application.configure do
     # the remote mail server (the MTA) that will be *receiving* the email and then send it on.
     address: ENV.fetch('BADGEAPP_SEND_EMAIL_ADDRESS', 'smtp.sendgrid.net'),
     # Avoid using port 25, use a TLS port instead.
-    port: ENV.fetch('BADGEAPP_SEND_EMAIL_PORT', '587'),
+    port: ENV.fetch('BADGEAPP_SEND_EMAIL_PORT', '465'),
     # "plain" authtication would send the password in the clear if sent on port 25.
     # However, we're assuming that we're using TLS to send email to the MTA.
     authentication: :plain,
@@ -129,12 +129,27 @@ Rails.application.configure do
     password: ENV.fetch('BADGEAPP_SEND_EMAIL_PASSWORD', nil),
     # This is used for the HELO announcement to the MTA:
     domain: ENV.fetch('BADGEAPP_SEND_EMAIL_DOMAIN', 'heroku.com'),
-    # Force the use of TLS
-    enable_starttls: true
-    # This would use TLS opportunistically, but would send email and passwords in the clear
+    # The following controls how we use TLS for hop-to-hop (point-to-point) encryption of
+    # our emails to the MTA.
+    # *Force* the direct use of TLS when sending email to the MTA. It's simple, which is an
+    # advantage for security. This typically uses port 465 (not 587).
+    # Amazon calls this "TLS Wrapper" in:
+    # https://docs.aws.amazon.com/ses/latest/dg/smtp-connect.html
+    tls: true
+    #
+    # This would use TLS opportunistically, via STARTTLS.
+    # However, it would send email and passwords in the clear
     # if it can't. It's enough to counter most passive threats, but an active threat agent
-    # could cause TLS to fail & force us to send things in the clear.
+    # could cause TLS to fail & force us to send things in the clear. So we won't use it.
+    # This would typically use port 587.
     # enable_starttls_auto: true
+    #
+    # This would use STARTTLS but force the use of TLS. This works, but there are concerns
+    # that starting the protocol *not* in TLS mode and *then* switching to TLS creates a
+    # window of opportunity for problems as well as unnecessary complexity.
+    # So while this is a reasonable alternative, for now we won't use it.
+    # This would typically use port 587.
+    # enable_starttls: true
   }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to

@@ -162,10 +162,13 @@ The application is configured by various environment variables:
    `smtp.sendgrid.net`. Note that this is NOT the email address of the
    *sender* but the domain of the remote mail server (the MTA) that will be
    *receiving* the email and then send it on.
-* `BADGEAPP_SEND_EMAIL_PORT`: Port of the MTA. Default is 587.
+* `BADGEAPP_SEND_EMAIL_PORT`: Port of the MTA. Use one that forces TLS or
+   or modify the config file.
 * `BADGEAPP_SEND_EMAIL_USERNAME`: Username for logging into the MTA
 * `BADGEAPP_SEND_EMAIL_PASSWORD`: Password for logging into the MTA
 * `BADGEAPP_SEND_EMAIL_DOMAIN`: Domain to report to the MTA (for HELO)
+* `SENDGRID_USERNAME` and `SENDGRID_PASSWORD`: These were once used for sending email,
+  but these are *not* used any more.
 
 You can make cryptographically random values (such as keys)
 using "rails secret".  E.g., to create 64 random hexadecimal digits, use:

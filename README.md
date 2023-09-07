@@ -188,7 +188,6 @@ to the CII. The domain name is much shorter, too.
 We use the "www" subdomain because there are technical challenges using
 a top-level domain with our CDN; it's more efficient to use the subdomain.
 
-
 ## License
 
 All material here is released under the [MIT license](./LICENSE).

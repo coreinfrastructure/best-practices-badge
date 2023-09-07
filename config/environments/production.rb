@@ -98,20 +98,58 @@ Rails.application.configure do
   # https://github.com/ankane/secure_rails
   config.action_controller.asset_host = host
 
-  # Configure email server.
+  # Configure email server we use for sending email to others. This server will,
+  # by definition, be a Mail Transfer Agent (MTA).
   # For discussion about how to do this, see:
+  # https://guides.rubyonrails.org/action_mailer_basics.html
   # https://www.railstutorial.org/book/account_activation_password_reset
-  config.action_mailer.raise_delivery_errors = true
+  # We used to use SendGrid; see its documentation for more about that.
+  # For more about configuring Amazon SES SMTP interface, see:
+  # https://docs.aws.amazon.com/ses/latest/dg/send-email-smtp.html
+  #
+  # TODO: Eventually we should set raise_delivery_errors = true and handle exceptions,
+  # so that we can do retries, and put email sending in a separate thread.
+  # However, in the current code, if we raise delivery errors we cause paths to fail
+  # such as updating a project when the email system isn't working. We'd rather let the
+  # projects update, even when the email system isn't working properly.
+  config.action_mailer.raise_delivery_errors = false
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.default_url_options = { host: host }
   ActionMailer::Base.smtp_settings = {
-    address: 'smtp.sendgrid.net',
-    port: '587',
+    # NOTE: 'address' is NOT the email address of the *sender* but the domain of
+    # the remote mail server (the MTA) that will be *receiving* the email and then send it on.
+    address: ENV.fetch('BADGEAPP_SEND_EMAIL_ADDRESS', 'smtp.sendgrid.net'),
+    # Avoid using port 25, use a TLS port instead.
+    port: ENV.fetch('BADGEAPP_SEND_EMAIL_PORT', '465'),
+    # "plain" authtication would send the password in the clear if sent on port 25.
+    # However, we're assuming that we're using TLS to send email to the MTA.
     authentication: :plain,
-    user_name: ENV.fetch('SENDGRID_USERNAME', nil),
-    password: ENV.fetch('SENDGRID_PASSWORD', nil),
-    domain: 'heroku.com',
-    enable_starttls_auto: true
+    # This is the authentication data we'll send to the MTA to be authorized to send email
+    user_name: ENV.fetch('BADGEAPP_SEND_EMAIL_USERNAME', nil),
+    password: ENV.fetch('BADGEAPP_SEND_EMAIL_PASSWORD', nil),
+    # This is used for the HELO announcement to the MTA:
+    domain: ENV.fetch('BADGEAPP_SEND_EMAIL_DOMAIN', 'heroku.com'),
+    # The following controls how we use TLS for hop-to-hop (point-to-point) encryption of
+    # our emails to the MTA.
+    # *Force* the direct use of TLS when sending email to the MTA. It's simple, which is an
+    # advantage for security. This typically uses port 465 (not 587).
+    # Amazon calls this "TLS Wrapper" in:
+    # https://docs.aws.amazon.com/ses/latest/dg/smtp-connect.html
+    tls: true
+    #
+    # This would use TLS opportunistically, via STARTTLS.
+    # However, it would send email and passwords in the clear
+    # if it can't. It's enough to counter most passive threats, but an active threat agent
+    # could cause TLS to fail & force us to send things in the clear. So we won't use it.
+    # This would typically use port 587.
+    # enable_starttls_auto: true
+    #
+    # This would use STARTTLS but force the use of TLS. This works, but there are concerns
+    # that starting the protocol *not* in TLS mode and *then* switching to TLS creates a
+    # window of opportunity for problems as well as unnecessary complexity.
+    # So while this is a reasonable alternative, for now we won't use it.
+    # This would typically use port 587.
+    # enable_starttls: true
   }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to

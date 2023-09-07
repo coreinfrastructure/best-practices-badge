@@ -103,6 +103,9 @@ Rails.application.configure do
   # For discussion about how to do this, see:
   # https://guides.rubyonrails.org/action_mailer_basics.html
   # https://www.railstutorial.org/book/account_activation_password_reset
+  # We used to use SendGrid; see its documentation for more about that.
+  # For more about configuring Amazon SES SMTP interface, see:
+  # https://docs.aws.amazon.com/ses/latest/dg/send-email-smtp.html
   #
   # TODO: Eventually we should set raise_delivery_errors = true and handle exceptions,
   # so that we can do retries, and put email sending in a separate thread.

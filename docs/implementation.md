@@ -1123,14 +1123,15 @@ See the Action mailer basics guide at
 and Hartl's Rails tutorial, e.g.:
 <https://www.railstutorial.org/book/account_activation_password_reset#sec-email_in_production>
 
-To install sendgrid on Heroku to make this work, use:
+We used to use SendGrid. You *can* just use SendGrid directly.
+You can also install sendgrid on Heroku to provide some extra functions doing this:
 
 ~~~~sh
 heroku addons:create sendgrid:starter
 ~~~~
 
 If you plan to handle a lot of queries, you probably want to use a CDN.
-It's currently set up for Fastly.
+It's currently set up to use Fastly.
 
 ## Badge SVG
 

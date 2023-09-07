@@ -394,7 +394,8 @@ learning about our users' activities (and thus maintaining user privacy):
   (e.g., to activate a local account), but those links go directly back
   to our site for that given purpose, and do not reveal information to
   anyone else.
-  We use SendGrid to send email, but we have specifically configured the
+  You need to configure the MTA used to send email before you can use it.
+  We used to use SendGrid to send email; we have specifically configured the
   [SendGrid X-SMTPAPI header to disable all of its trackers we know of](https://sendgrid.com/docs/ui/account-and-settings/tracking/),
   which are clicktrack, ganalytics, subscriptiontrack, and opentrack.
   For example, we have never used ganalytics, but by expressly disabling it,
@@ -1956,17 +1957,20 @@ as of 2015-12-14:
    but the data is sufficiently low value, and there aren't
    good alternatives for low value data like this.
    This isn't as bad as it might appear, because we prefer encrypted
-   channels for transmitting all emails. Our application attempts to send
+   channels for transmitting all emails.
+   Historically our application attempts to send
    messages to its MTA using TLS (using `enable_starttls_auto: true`),
-   and that MTA (SendGrid) then attempts to transfer the email the rest
+   and that MTA then attempts to transfer the email the rest
    of the way using TLS if the recipient's email system supports it
    (see <https://sendgrid.com/docs/Glossary/tls.html>).
    This is good protection against passive attacks, and is relatively decent
    protection against active attacks if the user chooses an email system
    that supports TLS (an active attacker has to get between the email
    MTAs, which is often not easy).
+   More recently we're using `enable_starttls: true` which *forces* email to be
+   encrypted point-to-point.
    If users don't like that, they can log in via GitHub and use GitHub's
-   forgotten password system.
+   system for dealing with forgotten passwords.
    The file `config/initializers/filter_parameter_logging.rb`
    intentionally filters passwords so that they are not included in the log.
    We require that local user passwords have a minimum length

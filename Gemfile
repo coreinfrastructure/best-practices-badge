@@ -106,6 +106,8 @@ gem 'secure_headers', '~> 6.3' # Add hardening measures to HTTP headers
 # WARNING!!!!
 gem 'sprockets-rails', '3.4.2' # Rails. Asset precompilation
 gem 'uglifier', '~> 4.2.0', require: false # Minify JavaScript
+gem 'sentry-ruby'
+gem 'sentry-rails'
 
 group :development, :test do
   gem 'awesome_print' # Pretty print Ruby objects

@@ -45,6 +45,7 @@ class User < ApplicationRecord
   attr_encrypted :email, algorithm: 'aes-256-gcm', key: [
     ENV['EMAIL_ENCRYPTION_KEY'] || TEST_EMAIL_ENCRYPTION_KEY
   ].pack('H*')
+  encrypts :new_email
 
   # Email addresses are indexed as blind indexes of downcased email addresses,
   # so we can efficiently search for them while keeping them encrypted.

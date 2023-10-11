@@ -419,22 +419,22 @@ end
 def normalize_string(value, locale)
   # Remove trailing whitespace
   value.sub!(/\s+$/, '')
-  return value unless value.include?('<')
+  return value if value.exclude?('<')
 
   # Google Translate generates html text that has predictable errors.
   # The last entry mitigates the target=... vulnerability.  We don't need
   # to "counter" attacks from ourselves, but it does no harm and it's
   # easier to protect against everything.
-  value.gsub(/< a /, '<a ')
+  value.gsub('< a ', '<a ')
        .gsub(/< \057/, '</')
        .gsub(/<\057 /, '</')
-       .gsub(/<Strong>/, '<strong>')
-       .gsub(/<Em>/, '<em>')
+       .gsub('<Strong>', '<strong>')
+       .gsub('<Em>', '<em>')
        .gsub(/ Href *=/, 'href=')
-       .gsub(/href = /, 'href=')
-       .gsub(/class = /, 'class=')
-       .gsub(/target = /, 'target=')
-       .gsub(/target="_ blank">/, 'target="_blank">')
+       .gsub('href = ', 'href=')
+       .gsub('class = ', 'class=')
+       .gsub('target = ', 'target=')
+       .gsub('target="_ blank">', 'target="_blank">')
        .gsub(/target="_blank" *>/, 'target="_blank" rel="noopener">')
        .gsub(%r{https: // }, 'https://')
        .gsub(%r{href="/en/}, "href=\"/#{locale}/")
@@ -608,7 +608,7 @@ task :create_project_insertion_command do
   project_id = data_hash['id']
   puts "Inserting project id #{project_id}"
   # Escape JSON using SQL escape ' -> '', so we can use it in a SQL command
-  escaped_json = "'" + file_contents.gsub(/'/, "''") + "'"
+  escaped_json = "'" + file_contents.gsub("'", "''") + "'"
   sql_command = 'insert into projects select * from ' + "json_populate_record(NULL::projects, #{escaped_json});"
   File.write('project.sql', sql_command)
   puts 'File project.sql created. To use this, do the following (examples):'

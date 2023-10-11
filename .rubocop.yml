@@ -262,3 +262,5 @@ Style/RequireOrder:
   Enabled: false
 Style/YodaExpression:
   Enabled: false
+Metrics/BlockLength:
+  Max: 36

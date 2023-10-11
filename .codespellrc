@@ -7,4 +7,4 @@ ignore-regex = mis à jour
 # Suh - name
 # projets - French used in a test
 # requestor - as requested in the original PR
-ignore-words-list = reenable,rouge,suh,projets,requestor
+ignore-words-list = reenable,rouge,suh,projets,requestor,secur

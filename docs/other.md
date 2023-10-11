@@ -358,7 +358,7 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
 
     *Details*: The project might not achieve the roadmap,
     and that's fine; the purpose of the roadmap is to help potential
-    users and constributors understand the intended direction of the
+    users and contributors understand the intended direction of the
     project. It need not be detailed.
 
 *   <a name="documentation_architecture"></a>

@@ -234,7 +234,7 @@ If you want to propose specific *changes* to a translation, and you are
 not a trusted translator, there are two main options:
 
 * The usual option is to open an issue and simply propose the text changes.
-  Make sure you tell us which locale you're referrring to!
+  Make sure you tell us which locale you're referring to!
 * You *can* propose changes as edits to the appropriate files in
   `config/locales`, but unlike most changes that will not work directly.
   One of the trusted translators will then need to hand-copy

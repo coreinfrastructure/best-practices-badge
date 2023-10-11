@@ -143,7 +143,7 @@ class Chief
   # rubocop:disable Metrics/PerceivedComplexity
   def apply_changes(project, changes)
     changes.each do |key, data|
-      next unless ALLOWED_FIELDS.include?(key)
+      next if ALLOWED_FIELDS.exclude?(key)
       next unless update_value?(project, key, data)
 
       # Store change:

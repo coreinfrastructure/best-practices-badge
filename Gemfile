@@ -126,9 +126,9 @@ group :development, :test do
   gem 'pronto-rails_best_practices', '0.11.0'
   gem 'pronto-rubocop', '0.11.5'
   # gem 'railroader', '4.3.8' # Security static analyzer. OSS fork of Brakeman
-  gem 'rubocop', '1.50.1', require: false # Style checker
-  gem 'rubocop-performance', '1.17.1', require: false # Performance cops
-  gem 'rubocop-rails', '2.19.0', require: false # Rails-specific cops
+  gem 'rubocop', '1.56.4', require: false # Style checker
+  gem 'rubocop-performance', '1.19.1', require: false # Performance cops
+  gem 'rubocop-rails', '2.21.2', require: false # Rails-specific cops
   gem 'ruby-graphviz', '1.2.5' # This is used for bundle viz
   gem 'spring', '~> 4.1'
   # Do NOT upgrade to vcr 6.*, as that is not OSS:

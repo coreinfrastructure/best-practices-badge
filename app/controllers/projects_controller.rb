@@ -752,7 +752,7 @@ class ProjectsController < ApplicationController
   # rubocop:disable Metrics/AbcSize
   def sort_projects
     # Sort, if there is a requested order (otherwise use default created_at)
-    return unless params[:sort].present? && ALLOWED_SORT.include?(params[:sort])
+    return if params[:sort].blank? || ALLOWED_SORT.exclude?(params[:sort])
 
     sort_direction = params[:sort_direction] == 'desc' ? ' desc' : ' asc'
     sort_index = ALLOWED_SORT.index(params[:sort])

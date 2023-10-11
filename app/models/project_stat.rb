@@ -141,10 +141,10 @@ class ProjectStat < ApplicationRecord
   # returns nil if no ProjectStat is available in that month.
   # Note that created_at is an index, so this should be extremely fast.
   def self.last_in_month(query_date)
-    ProjectStat.all
-               .where('created_at >= ?', query_date.beginning_of_month)
-               .where('created_at <= ?', query_date.end_of_month)
-               .reorder(:created_at).last
+    ProjectStat
+      .where('created_at >= ?', query_date.beginning_of_month)
+      .where('created_at <= ?', query_date.end_of_month)
+      .reorder(:created_at).last
   end
 
   # Return the name of the field for a given level 0..2
@@ -167,7 +167,7 @@ class ProjectStat < ApplicationRecord
   # system reports instead of user interaction.
   # rubocop:disable Metrics/MethodLength
   def self.percent_field_description(level, percentage)
-    return "Bad level #{level}" unless Project::LEVEL_IDS.include?(level.to_s)
+    return "Bad level #{level}" if Project::LEVEL_IDS.exclude?(level.to_s)
 
     level_i = level.to_i
     percentage_i = percentage.to_i

@@ -1101,7 +1101,7 @@ ALL_DETECTIVES =
     HardenedSitesDetective (Name1Detective)
   ].freeze
 
-  where Name1Detective corrosponds to the new class created in name1_detective.  Without following the naming convention chief will not run the new detective.
+  where Name1Detective corresponds to the new class created in name1_detective.  Without following the naming convention chief will not run the new detective.
 
   A template detective called blank_detective.rb is supplied with the project with internal documentation as to how to use it.
 

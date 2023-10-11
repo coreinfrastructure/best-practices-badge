@@ -606,7 +606,7 @@ class Project < ApplicationRecord
   end
 
   def need_a_base_url
-    return unless repo_url.blank? && homepage_url.blank?
+    return if repo_url.present? || homepage_url.present?
 
     errors.add :base, I18n.t('error_messages.need_home_page_or_url')
   end

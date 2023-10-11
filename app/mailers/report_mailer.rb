@@ -64,7 +64,7 @@ class ReportMailer < ApplicationMailer
     user = User.find(project.user_id)
     return if user.nil?
     return unless user.email?
-    return unless user.email.include?('@')
+    return if user.email.exclude?('@')
 
     @project_info_url =
       project_url(@project, locale: user.preferred_locale.to_sym)
@@ -95,7 +95,7 @@ class ReportMailer < ApplicationMailer
     user = User.find(project.user_id)
     return if user.nil?
     return unless user.email?
-    return unless user.email.include?('@')
+    return if user.email.exclude?('@')
 
     @project_info_url =
       project_url(@project, locale: user.preferred_locale.to_sym)
@@ -163,7 +163,7 @@ class ReportMailer < ApplicationMailer
     user = User.find(project.user_id)
     return if user.nil?
     return unless user.email?
-    return unless user.email.include?('@')
+    return if user.email.exclude?('@')
 
     @project_info_url =
       project_url(@project, locale: user.preferred_locale.to_sym)

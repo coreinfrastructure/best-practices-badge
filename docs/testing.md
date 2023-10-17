@@ -202,13 +202,11 @@ Sometimes recording a cassette will fail; see the discussion above.
 
 ### On Linux
 
-You need to install phantomjs with: `npm install phantomjs-prebuilt`
-
-If you're getting a phantomjs error, go to your `cii-best-practices` directory and try uninstalling phantomjs with: `npm uninstall phantomjs-prebuilt`. You may also need to set your PATH to run npm binaries: `PATH="$PATH:node_modules/.bin/" rake`.
+You may also need to set your PATH to run npm binaries: `PATH="$PATH:node_modules/.bin/" rake`.
 
 ### Mac
 
-If you didn't previously run `./install-badge-dev-env`, install phantomjs with `brew install phantomjs`.
+Run `./install-badge-dev-env` 
 
 ### Binding.pry
 

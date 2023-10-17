@@ -161,7 +161,6 @@ case "$manager" in
     # We'll use the brew version. Install these to rebuild rbenv:
     # add_pkg openssl libyaml libffi
     add_pkg rbenv ruby-build graphviz postgres cmake
-    brew cask install phantomjs ;;
 
   apt-get)
     # We'll use the system version.  If you want to use the latest one
@@ -172,7 +171,7 @@ case "$manager" in
     add_pkg autoconf bison build-essential libssl-dev libyaml-dev \
             libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev \
             libgdbm-dev postgresql-server-dev-all postgresql \
-            postgresql-contrib cmake nodejs phantomjs graphviz \
+            postgresql-contrib cmake nodejs graphviz \
             pkg-config;;
   yum|dnf)
     add_pkg gcc openssl-devel libyaml-devel libffi-devel readline-devel \
@@ -212,7 +211,6 @@ case "$manager" in
     brew services start postgres
     ;;
   yum|dnf)
-    npm install phantomjs-prebuilt
     npm_path="node_modules/.bin"
     PATH="$(pwd)/$npm_path:$PATH"
     export PATH

@@ -473,17 +473,6 @@ or the tests.  On CircleCI you can choose to rebuild.
 Where possible, try to find and fix the problem; we have worked to
 eliminate this, and at this point believe we have fixed it.
 
-If you use an old version of PhantomJS (e.g., if you use
-Ubuntu 14.04 and install PhantomJS via apt-get), you'll see this
-message during tests:
-
-> You're running an old version of PhantomJS,
-> update to >= 2.1.1 for a better experience.
-
-You can eliminate the warnings about old versions of PhantomJS
-by uninstalling the old version and installing a
-[current version of PhantomJS](http://phantomjs.org/download.html).
-
 ### Security, privacy, and performance
 
 Pay attention to security, and work *with* (not against) our

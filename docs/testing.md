@@ -206,7 +206,7 @@ You may also need to set your PATH to run npm binaries: `PATH="$PATH:node_module
 
 ### Mac
 
-Run `./install-badge-dev-env` 
+Run `./install-badge-dev-env`
 
 ### Binding.pry
 

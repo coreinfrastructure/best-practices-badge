@@ -120,8 +120,6 @@ jobs:
     - store_artifacts:
         path: /tmp/circleci-artifacts
     - store_artifacts:
-        path: coverage
-    - store_artifacts:
         path: license_finder_report.html
     - store_artifacts:
         path: log/test.log

@@ -19,7 +19,13 @@
       </p>
     </div><%# end of column with banner and main text %>
     <div class="col-md-4 col-sm-5">
-      <div class="home-badge center-block"></div>
+    <div class="row">
+      <div class="col-sm-12">
+       <!-- Note: This doesn't include width/height so it'll scale -->
+       <%= image_tag 'openssf_bestpracticesbadge.svg',
+                     alt: 'Best Practices Badge logo', title: 'Best Practices Badge logo' %>
+      </div>
+    </div>
     <div class="row">
       <div class="col-sm-12">
         <br><br>

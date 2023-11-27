@@ -141,7 +141,7 @@ Here is a summary of the silver criteria, with requirements in bold
 * **[Define/document project governance](docs/other.md#governance)**
 * **[Another will have the necessary access rights if someone dies](docs/other.md#access_continuity)**
 * *["Bus factor" of 2 or more](docs/other.md#bus_factor)*
-* **[Document security requirements](docs/other.md#security_requirements)**
+* **[Document security requirements](docs/other.md#documentation_security)**
 * **[Have an assurance case explaining why security requirements are met](docs/other.md#assurance_case)**
 * **[Have a quick start guide](docs/other.md#documentation_quick_start)**
 * *[Follow accessibility best practices](docs/other.md#accessibility_best_practices)*

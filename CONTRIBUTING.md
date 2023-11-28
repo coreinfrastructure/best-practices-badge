@@ -28,6 +28,13 @@ via our
 For general discussion, feel free to use the
 [cii-badges mailing list](https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges).
 
+We use GitHub. You may find
+[GitHub CLI (`gh`)](https://github.com/coreinfrastructure/best-practices-badge.git)
+helpful if you're using the command line.
+It supports commands like `gh auth login` (login) and
+`gh pr create` (create a new pull request
+with the current branch).
+
 The "docs/" directory has information you may find helpful, for example:
 
 -   [governance.md](docs/governance.md) describes our governance model

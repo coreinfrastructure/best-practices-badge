@@ -726,7 +726,7 @@
             it is important to have a governance model, and clearly define
             it, so that all participants and potential participants will
             know how decisions will be made. This was inspired by the
-            <a href="https://projects.ow2.org/bin/view/ow2/OMM">OW2 Open-source Maturity Model</a>,
+            <a href="https://web.archive.org/web/20171123114606/https://projects.ow2.org/bin/view/ow2/OMM">OW2 Open-source Maturity Model</a>,
             in particular RDMP-1 and STK-1.
           #autofill: TODO
       - code_of_conduct:
@@ -855,7 +855,7 @@
           met_justification_required: true
           rationale: >
             This was inspired by
-            <a href="https://projects.ow2.org/bin/view/ow2/OMM">DFCT-1.2</a>
+            <a href="https://web.archive.org/web/20171123114606/https://projects.ow2.org/bin/view/ow2/OMM">DFCT-1.2</a>
           #autofill:TODO
   - Reporting: !!omap
     - Bug-reporting process: !!omap

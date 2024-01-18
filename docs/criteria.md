@@ -605,4 +605,4 @@ Development processes and security:
 * [design.md](design.md) - Architectural design information
 * [implementation.md](implementation.md) - Implementation notes
 * [testing.md](testing.md) - Information on testing
-* [assurance-case.md](assurance-case.md) - Why it's adequately secure (assurance case)
+* [security.md](security.md) - Why it's adequately secure (assurance case)

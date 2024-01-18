@@ -717,8 +717,8 @@ en:
         hide_details: Hide details
         show_all_details: Show all details
         hide_all_details: Hide all details
-        show_met_title: Show completed criteria
-        show_met_html: Show completed criteria
+        show_met_title: Show complete and incomplete criteria
+        show_met_html: Show complete and incomplete criteria
         hide_met_title: Show only incomplete criteria (showing only unmet
           and unknown)
         hide_met_html: Show only incomplete criteria

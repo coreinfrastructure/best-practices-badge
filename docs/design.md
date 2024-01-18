@@ -415,7 +415,7 @@ In some cases, a criterion may require some justification
 or a URL in the justification to be enough to satisfy the criterion for
 a badge.  See the [criteria](./criteria.md) or
 application form for the current exact rules.
-A synonym for 'satifying' a criterion is 'passing' a criterion.
+A synonym for 'satisfying' a criterion is 'passing' a criterion.
 
 We have an 'autofill' system that fills in some data automatically.
 

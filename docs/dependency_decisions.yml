@@ -524,3 +524,9 @@
       in its README
     :versions: []
     :when: 2020-11-06 14:47:00.991793938 Z
+- - :permit
+  - MIT AND (BSD-2-Clause OR GPL-2.0-or-later)
+  - :who:
+    :why:
+    :versions: []
+    :when: 2024-01-18 16:10:46.361805391 Z

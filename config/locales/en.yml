@@ -717,11 +717,11 @@ en:
         hide_details: Hide details
         show_all_details: Show all details
         hide_all_details: Hide all details
-        show_met_title: Show met & N/A criteria
-        show_met_html: Show met &amp; N/A
-        hide_met_title: Hide met & N/A criteria (leaving unmet
+        show_met_title: Show complete and incomplete criteria
+        show_met_html: Show complete and incomplete criteria
+        hide_met_title: Show only incomplete criteria (showing only unmet
           and unknown)
-        hide_met_html: Hide met &amp; N/A
+        hide_met_html: Show only incomplete criteria
         passing_alt: Enough for a badge!
         barely_alt: Barely enough for a badge.
         failing_alt: Not enough for a badge.

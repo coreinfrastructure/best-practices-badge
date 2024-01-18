@@ -326,7 +326,7 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
     all participants and potential participants will know how decisions
     will be made.
     This was inspired by the
-    <a href="https://projects.ow2.org/bin/view/ow2/OMM">OW2 Open-source Maturity Model</a>,
+    <a href="https://web.archive.org/web/20171123114606/https://projects.ow2.org/bin/view/ow2/OMM">OW2 Open-source Maturity Model</a>,
     in particular RDMP-1 and STK-1.
 
 *   <a name="roles_responsibilities"></a>
@@ -623,7 +623,7 @@ Upgrade some "passing" level SHOULD and SUGGESTED:
     <sup>[<a href="#maintenance_or_update">maintenance_or_update</a>]</sup>
 
     *Rationale*:
-    This was inspired by <a href="https://projects.ow2.org/bin/view/ow2/OMM">DFCT-1.2</a>
+    This was inspired by <a href="https://web.archive.org/web/20171123114606/https://projects.ow2.org/bin/view/ow2/OMM">DFCT-1.2</a>
 
 ### Reporting
 

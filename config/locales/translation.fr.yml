@@ -68,14 +68,17 @@ fr:
       savoir plus sur les cookies.</i></a>
     no_login_time: "(Aucune heure précédente enregistrée.)"
     login_automatic_signup: >-
-      La connection avec GitHub effectuera automatiquement une
-      inscription si nécessaire. Si vous vous inscrivez, votre
-      nom (tel que renseigné par GitHub) et votre identifiant
-      GitHub seront affichés publiquement, et vous pouvez changer
-      votre nom à tout moment. Votre adresse email sera maintenue
-      secrète et seulement utilisée pour les interactions relatives
-      aux badges ; nous ne la transmettrons pas à des parties
-      tierces à moins qu'il s'agisse d'une obligation légale.
+      La connexion à GitHub effectuera automatiquement une inscription
+      si nécessaire. L'inscription n'aura lieu que si vous autorisez
+      l'inscription à GitHub ; vous devrez réautoriser cela si
+      vous êtes uniquement connecté à bestpractices.coreinfastructure.org
+      (notre nom de domaine a changé). Si vous vous inscrivez,
+      votre nom (tel que fourni à GitHub) et votre pseudo GitHub
+      seront affichés publiquement et vous pourrez modifier votre
+      nom à tout moment. Votre adresse e-mail restera privée et
+      utilisée uniquement pour les interactions liées aux badges ;
+      nous ne les fournirons pas à des tiers, sauf si cela est
+      légalement requis.
     login_disabled: Toutes les connexions sont temporairement
       désactivées
     cannot_login_yet: >-

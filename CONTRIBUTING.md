@@ -606,7 +606,7 @@ Here are some other tools we sometimes use for checking quality or security,
 though they are not currently integrated
 into the default "rake" checking task:
 
-* OWASP ZAP web application security scanner.
+* ZAP web application security scanner.
   You are encouraged to use this and other web application scanners to find and
   fix problems.
 * Google Chrome auditor.  View a web page, then select menu / more tools /

@@ -883,7 +883,7 @@ zh-CN:
         details: >-
           动态分析工具通过执行特定输入来检查软件。例如，项目可以使用模糊工具（例如，<a href="http://lcamtuf.coredump.cx/afl/">
           American Fuzzy Lop </a>）或Web应用扫描程序（例如，<a href ="https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">
-          OWASP ZAP </a>或<a href="http://w3af.org/"> w3af </a>）。在某些情况下，<a
+          ZAP </a>或<a href="http://w3af.org/"> w3af </a>）。在某些情况下，<a
           href="https://github.com/google/oss-fuzz#introduction">
           OSS-Fuzz </a>项目可以对您的项目应用模糊测试。为满足此条款，动态分析工具需要以某种方式改变输入，以寻找各种问题，或者将其作为一个具有至少80％分支覆盖率的自动测试套件。
           <a href="https://en.wikipedia.org/wiki/Dynamic_program_analysis">动态分析维基百科页面</a>和<a

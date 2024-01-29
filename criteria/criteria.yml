@@ -1396,7 +1396,7 @@
             more contributors have an increased likelihood of continuing.
             <a href="http://www.alluxio.org/docs/master/en/Contributing-to-Alluxio.html">Alluxio uses SMALLFIX</a>
             and
-            <a href="https://github.com/zaproxy/zaproxy/issues?q=is%3Aopen+is%3Aissue+label%3AIdealFirstBug">OWASP ZAP uses IdealFirstBug</a>.
+            <a href="https://github.com/zaproxy/zaproxy/issues?q=is%3Aopen+is%3Aissue+label%3AIdealFirstBug">ZAP uses IdealFirstBug</a>.
             This is related to criterion installation_development_quick.
       - require_2FA:
           category: MUST

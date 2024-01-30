@@ -15,7 +15,7 @@ class ProjectsController < ApplicationController
   skip_before_action :redir_missing_locale, only: :badge
 
   before_action :set_project,
-                only: %i[edit update delete_form destroy show show_json]
+                only: %i[edit update delete_form destroy show show_json show_markdown]
   before_action :require_logged_in, only: :create
   before_action :can_edit_else_redirect, only: %i[edit update]
   before_action :can_control_else_redirect, only: %i[destroy delete_form]
@@ -27,7 +27,7 @@ class ProjectsController < ApplicationController
   # have a cached version that works for everyone):
   # before_action :set_cache_control_headers, only: [:index, :show, :badge]
   # We *can* cache the badge result, and that's what matters anyway.
-  before_action :set_cache_control_headers, only: %i[badge show_json]
+  before_action :set_cache_control_headers, only: %i[badge show_json show_markdown]
 
   helper_method :repo_data
 
@@ -164,6 +164,12 @@ class ProjectsController < ApplicationController
 
   # GET /projects/1.json
   def show_json
+    # Tell CDN the surrogate key so we can quickly erase it later
+    set_surrogate_key_header @project.record_key
+  end
+
+  # GET /projects/1.md
+  def show_markdown
     # Tell CDN the surrogate key so we can quickly erase it later
     set_surrogate_key_header @project.record_key
   end

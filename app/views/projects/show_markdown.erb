@@ -1,0 +1,33 @@
+<%-
+  # TODO: Ensure we filter @criteria_level
+  criteria_level = @criteria_level || '0'
+  def criterion_to_checkbox(value)
+    case value
+    when 'Met', 'N/A'
+      '[x]'
+    else
+      '[ ]'
+    end
+  end
+# TODO: Major & minor levels should be marked "done" if contents done
+# TODO: Show criterion text, details (optional), internationalize
+-%>
+Project: <%= @project.name %>
+
+ID: <%= @project.id %>
+
+Criteria level: <%= @criteria_level %>
+
+<%- FullCriteriaHash[criteria_level].each do |major, major_info| -%>
+- [ ] <%= major %>
+<%-   major_info.each do |minor, minor_info| -%>
+  - [ ] <%= minor %>
+<%-     minor_info.each do |criterion, criterion_info| -%>
+    - <%= criterion_to_checkbox(@project["#{criterion}_status".to_sym])
+      %> [<%= criterion %>]
+<%-     end -%>
+<%-   end -%>
+<%- end -%>
+<%-
+  byebug
+%>

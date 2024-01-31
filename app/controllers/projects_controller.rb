@@ -742,7 +742,7 @@ class ProjectsController < ApplicationController
 
   def set_optional_criteria_level
     # Apply input filter on criteria_level. If invalid/empty it becomes ''
-    requested_criteria_level = criteria_level_params[:criteria_level]
+    requested_criteria_level = criteria_level_params[:criteria_level] || ''
     @criteria_level =
       if requested_criteria_level.match?(/\A[0-2]\Z/)
         requested_criteria_level.to_str

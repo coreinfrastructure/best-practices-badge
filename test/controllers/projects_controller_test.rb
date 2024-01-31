@@ -266,7 +266,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     get "/fr/projects/#{@project.id}.md?criteria_level=0"
     assert_response :success
     # Split up text to fool spellchecker
-    assert_includes @response.body, 'Le ' + 'pro' + 'jet ' + ' DOIT'
+    assert_includes @response.body, 'Le ' + 'pro' + 'jet ' + 'DOIT'
     assert_includes @response.body, 'Argent'
     assert_not_includes @response.body, 'Passing'
     assert_not_includes @response.body, 'Silver'

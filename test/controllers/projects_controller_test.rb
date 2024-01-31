@@ -244,10 +244,32 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal [], body['additional_rights']
   end
 
-  test 'should show markdown with locale' do
+  test 'should show markdown for all levels when level not said' do
     get "/en/projects/#{@project.id}.md"
     assert_response :success
     assert_includes @response.body, 'The project website MUST provide information on how'
+    assert_includes @response.body, 'Passing'
+    assert_includes @response.body, 'Silver'
+    assert_includes @response.body, 'Gold'
+  end
+
+  test 'should show markdown for one given level' do
+    get "/en/projects/#{@project.id}.md?criteria_level=0"
+    assert_response :success
+    assert_includes @response.body, 'The project website MUST provide information on how'
+    assert_includes @response.body, 'Passing'
+    assert_not_includes @response.body, 'Silver'
+    assert_not_includes @response.body, 'Gold'
+  end
+
+  test 'Markdown generates correctly for French' do
+    get "/fr/projects/#{@project.id}.md?criteria_level=0"
+    assert_response :success
+    assert_includes @response.body, 'Le projet DOIT'
+    assert_includes @response.body, 'Argent'
+    assert_not_includes @response.body, 'Passing'
+    assert_not_includes @response.body, 'Silver'
+    assert_not_includes @response.body, 'Gold'
   end
 
   test 'should get edit' do

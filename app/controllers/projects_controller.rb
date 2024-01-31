@@ -20,7 +20,7 @@ class ProjectsController < ApplicationController
   before_action :can_edit_else_redirect, only: %i[edit update]
   before_action :can_control_else_redirect, only: %i[destroy delete_form]
   before_action :require_adequate_deletion_rationale, only: :destroy
-  before_action :set_criteria_level, only: %i[show edit update]
+  before_action :set_criteria_level, only: %i[show edit update show_markdown]
 
   # Cache with Fastly CDN.  We can't use this header, because logged-in
   # and not-logged-in users see different things (and thus we can't

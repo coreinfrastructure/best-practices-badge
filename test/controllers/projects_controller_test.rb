@@ -244,6 +244,12 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal [], body['additional_rights']
   end
 
+  test 'should show markdown with locale' do
+    get "/en/projects/#{@project.id}.md"
+    assert_response :success
+    assert_includes @response.body, 'The project website MUST provide information on how'
+  end
+
   test 'should get edit' do
     log_in_as(@project.user)
     assert_equal(

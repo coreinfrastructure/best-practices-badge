@@ -22,7 +22,8 @@
   - *<%= t("headings.#{minor}") %>*
 <%-     minor_info.each do |criterion, criterion_info| -%>
     - <%= criterion_to_checkbox(@project["#{criterion}_status".to_sym])
-      %> <%= t("criteria.#{criteria_level}.#{criterion}.description")
+      %> <%=
+        t("criteria.#{criteria_level}.#{criterion}.description").html_safe
       %><%=
         # Only add a "details" tag with details if there *are* any details
         # "Details" and the other strings here are from trusted sources.

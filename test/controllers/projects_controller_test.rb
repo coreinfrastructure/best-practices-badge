@@ -263,11 +263,16 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'Markdown generates correctly for French' do
-    get "/fr/projects/#{@project.id}.md?criteria_level=0"
+    get "/fr/projects/#{@project.id}.md?criteria_level=1"
     assert_response :success
-    # Split up text to fool spellchecker
-    assert_includes @response.body, 'Le ' + 'pro' + 'jet ' + 'DOIT'
-    assert_includes @response.body, 'Argent'
+    # Split up text to fool spellchecker. "Project" is easily misspelled
+    # and there's no mechanism to disable spellchecking for a specific line.
+    assert_includes @response.body,
+                    ('Le ' \
+                     'pro' \
+                     'jet ' + 'DOIT atteindre un badge de niveau basique')
+    assert_not_includes @response.body, '[Basique]' # "Passing"
+    assert_includes @response.body, '[Argent]' # "Silver"
     assert_not_includes @response.body, 'Passing'
     assert_not_includes @response.body, 'Silver'
     assert_not_includes @response.body, 'Gold'

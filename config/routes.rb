@@ -130,6 +130,8 @@ Rails.application.routes.draw do
         get 'delete_form' => 'projects#delete_form'
         get '' => 'projects#show_json',
             constraints: ->(req) { req.format == :json }
+        get '' => 'projects#show_markdown',
+            constraints: ->(req) { req.format == :md }
         get ':criteria_level(.:format)' => 'projects#show',
             constraints: { criteria_level: VALID_CRITERIA_LEVEL }
         get ':criteria_level/edit(.:format)' => 'projects#edit',

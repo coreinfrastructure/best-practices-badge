@@ -20,7 +20,8 @@ class ProjectsController < ApplicationController
   before_action :can_edit_else_redirect, only: %i[edit update]
   before_action :can_control_else_redirect, only: %i[destroy delete_form]
   before_action :require_adequate_deletion_rationale, only: :destroy
-  before_action :set_criteria_level, only: %i[show edit update show_markdown]
+  before_action :set_criteria_level, only: %i[show edit update]
+  before_action :set_optional_criteria_level, only: %i[show_markdown]
 
   # Cache with Fastly CDN.  We can't use this header, because logged-in
   # and not-logged-in users see different things (and thus we can't
@@ -737,6 +738,17 @@ class ProjectsController < ApplicationController
   def set_criteria_level
     @criteria_level = criteria_level_params[:criteria_level] || '0'
     @criteria_level = '0' unless @criteria_level.match?(/\A[0-2]\Z/)
+  end
+
+  def set_optional_criteria_level
+    # Apply input filter on criteria_level. If invalid/empty it becomes ''
+    requested_criteria_level = criteria_level_params[:criteria_level] || ''
+    @criteria_level =
+      if requested_criteria_level.match?(/\A[0-2]\Z/)
+        requested_criteria_level.to_str
+      else
+        ''
+      end
   end
 
   def set_valid_query_url

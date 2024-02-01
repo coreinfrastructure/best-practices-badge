@@ -244,10 +244,38 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal [], body['additional_rights']
   end
 
-  test 'should show markdown with locale' do
+  test 'should show markdown for all levels when level not said' do
     get "/en/projects/#{@project.id}.md"
     assert_response :success
     assert_includes @response.body, 'The project website MUST provide information on how'
+    assert_includes @response.body, 'Passing'
+    assert_includes @response.body, 'Silver'
+    assert_includes @response.body, 'Gold'
+  end
+
+  test 'should show markdown for one given level' do
+    get "/en/projects/#{@project.id}.md?criteria_level=0"
+    assert_response :success
+    assert_includes @response.body, 'The project website MUST provide information on how'
+    assert_includes @response.body, 'Passing'
+    assert_not_includes @response.body, 'Silver'
+    assert_not_includes @response.body, 'Gold'
+  end
+
+  test 'Markdown generates correctly for French' do
+    get "/fr/projects/#{@project.id}.md?criteria_level=1"
+    assert_response :success
+    # Split up text to fool spellchecker. "Project" is easily misspelled
+    # and there's no mechanism to disable spellchecking for a specific line.
+    assert_includes @response.body,
+                    ('Le ' \
+                     'pro' \
+                     'jet ' + 'DOIT atteindre un badge de niveau basique')
+    assert_not_includes @response.body, '[Basique]' # "Passing"
+    assert_includes @response.body, '[Argent]' # "Silver"
+    assert_not_includes @response.body, 'Passing'
+    assert_not_includes @response.body, 'Silver'
+    assert_not_includes @response.body, 'Gold'
   end
 
   test 'should get edit' do

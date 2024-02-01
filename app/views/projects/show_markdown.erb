@@ -1,5 +1,11 @@
 <%-
-  criteria_level = @criteria_level || '0'
+  # @criteria_level should always be a string, but handle nil gracefully.
+  if @criteria_level.blank? then
+    criteria_levels = Criteria.keys # All levels
+  else
+    criteria_levels = [@criteria_level]
+  end
+
   def criterion_to_checkbox(value)
     case value
     when 'Met', 'N/A'
@@ -12,9 +18,11 @@
 -%>
 # <%= @project.name %>
 
-[<%= @project.name
-  %>](https://bestpractices.dev/projects/<%= @project.id
-  %>?criteria_level=<%= criteria_level %>):
+<%- criteria_levels.each do |criteria_level| -%>
+
+## [<%= t("projects.form_early.level.#{criteria_level}")
+    %>](https://www.bestpractices.dev/projects/<%= @project.id
+  %>?criteria_level=<%= criteria_level %>)
 
 <%- FullCriteriaHash[criteria_level].each do |major, major_info| -%>
 - **<%= t("headings.#{major}") %>**
@@ -44,5 +52,5 @@
 <%-     end -%>
 <%-   end -%>
 <%- end -%>
-
+<%- end -%>
 <%= Time.new.iso8601 %>

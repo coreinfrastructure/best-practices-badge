@@ -16,6 +16,7 @@ Here's help on how to make contributions, divided into the following sections:
 * reuse (supply chain for third-party components, including updating them),
 * keeping up the main branch, and
 * handling the rename of the "master" branch to "main".
+* governance
 
 ## General information
 
@@ -1031,3 +1032,15 @@ git fetch origin
 git branch -u origin/main main
 git remote set-head origin -a
 ~~~~
+
+## Governance
+
+This project is led by the OpenSSF Best Practices Badge
+Technical Steering Committee (TSC).
+For current members, see [TSC.md](./TSC.md).
+The TSC is supported by a technical lead.
+
+The file [governance.md](docs/governance.md) describes our governance model
+(how we decide things) in more detail.
+That file is considered "incorporated by reference" by this
+CONTRIBUTING document.

@@ -38,13 +38,16 @@ en:
     footer_text_html: >-
       <small> <strong>Need help? Have a question? See a problem?
       Please <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
-      target="_blank" rel="noopener">file an issue</a></em>.</strong> © 2015-2021
+      target="_blank" rel="noopener">file an issue</a></em>.</strong>
+      Copyright © 
+      <a href="https://www.bestpractices.dev" target="_blank" rel="noopener">OpenSSF Best Practices Badge a Series of LF Projects, LLC</a>.
+      For web site terms of use, trademark policy and other project policies please see <a href="https://lfprojects.org" target="_blank" rel="noopener">https://lfprojects.org</a>.
+      For more information, see the websites of the
       <a href="https://openssf.org" target="_blank" rel="noopener">Open Source
-      Security Foundation</a>, a <a href="https://www.linuxfoundation.org/"
-      target="_blank" rel="noopener">Linux Foundation</a> Collaborative Project.
+      Security Foundation (OpenSSF)</a> and <a href="https://www.linuxfoundation.org/"
+      target="_blank" rel="noopener">The Linux Foundation</a>.
       All Rights Reserved. Please see our <a href="https://www.linuxfoundation.org/privacy"
-      target="_blank" rel="noopener">privacy policy</a> and <a href="https://www.linuxfoundation.org/terms"
-      target="_blank" rel="noopener">terms of use</a>. </small>
+      target="_blank" rel="noopener">privacy policy</a>.</small>
   admin_only: Admin only.
   account_activations:
     activated: >

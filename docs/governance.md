@@ -24,9 +24,11 @@ Technical Steering Committee (TSC).
 For current members, see [TSC.md](./TSC.md).
 
 TSC decisions are by majority vote.
-Decisions can be electronic (e.g., a mailing list or
-electronic voting system) or in a meeting (in person or a teleconference),
+Decisions can be asynchronous/electronic (e.g., a mailing list or
+electronic voting system) or synchronous/meeting (e.g., in an
+in-person meeting or a teleconference),
 at the choice of the TSC members.
+A synchronous meeting requires a quorum of a majority of TSC members.
 In case of a tie, the OpenSSF Best Practices Badge
 technical lead can break the tie.
 
@@ -39,6 +41,10 @@ The OpenSSF TAC can add or remove members in the OpenSSF Best
 Practices Badge TSC by TAC majority vote. This is not intended to
 be a common practice, but this mechanism prevents the TSC from being
 overly insular.
+
+TSC members represent themselves, not their employers.
+We note TSC employers because we want to ensure that no single organization
+controls this project.
 
 ## TSC Powers
 
@@ -106,8 +112,7 @@ e.g., MIT license for the source code.
 ## Technical Lead
 
 Many of the day-to-day maintenance tasks of the OpenSSF Best Practices Badge
-are managed by the OpenSSF Best Practices Badge are managed
-by the OpenSSF Best Practices Badge technical lead.
+are managed by the OpenSSF Best Practices Badge technical lead.
 
 The technical lead reports to the OpenSSF TSC, including on significant
 work or decisions to be made.
@@ -137,6 +142,7 @@ Committers are those with authority to directly make changes
 to the main branch of the code.
 The TSC and technical lead can add or revoke commit privilege
 (the TSC overrides the technical lead in case of a conflict).
+Committers can accept contributions from contributors.
 
 ## Contributors
 

@@ -313,7 +313,7 @@ GEM
       get_process_mem (~> 0.2)
       puma (>= 2.7)
     racc (1.7.1)
-    rack (2.2.8)
+    rack (2.2.8.1)
     rack-attack (6.7.0)
       rack (>= 1.0, < 4)
     rack-cors (2.0.1)

@@ -21,7 +21,7 @@ However, we need to review external contributions to maintain quality.
 
 This project is led by the OpenSSF Best Practices Badge
 Technical Steering Committee (TSC).
-For current members, see [TSC.md](./TSC.md).
+For the list of current members, see [TSC.md](./TSC.md).
 
 TSC decisions are by majority vote.
 Decisions can be asynchronous/electronic (e.g., a mailing list or

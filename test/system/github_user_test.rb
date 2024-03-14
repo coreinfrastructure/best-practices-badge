@@ -15,12 +15,12 @@ class GithubUserTest < ApplicationSystemTestCase
     click_link 'Log in with GitHub'
     assert has_content? 'Logged in!'
     # Check a user can't edit a project they don't own on app or GitHub
-    click_on 'Projects', exact: true
+    click_on '&nbsp;Projects', exact: true
     click_on 'Pathfinder OS'
     assert_not has_content? 'Edit'
     # Check a user can edit a project they own on Github
     # We do this here because this should not require github interaction
-    click_on 'Projects', exact: true
+    click_on '&nbsp;Projects', exact: true
     click_on 'Mars Ascent Vehicle (MAV)'
     assert has_content? 'Edit'
     click_on 'Account'

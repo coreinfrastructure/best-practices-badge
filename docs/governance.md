@@ -28,9 +28,11 @@ Decisions can be asynchronous/electronic (e.g., a mailing list or
 electronic voting system) or synchronous/meeting (e.g., in an
 in-person meeting or a teleconference),
 at the choice of the TSC members.
-A synchronous meeting requires a quorum of a majority of TSC members.
-In case of a tie, the OpenSSF Best Practices Badge
-technical lead can break the tie.
+A synchronous meeting requires a quorum of at least 50% of TSC members.
+In an asynchronous meeting all TSC members are considered present and a
+majority must vote for the vote to be valid.
+If there is a tie, the OpenSSF Best Practices Badge
+technical lead can break the tie (but is not obligated to do so).
 
 This TSC reports to the OpenSSF Best Practices Working Group, who in
 turn report to the OpenSSF Technical Advisory Council (TAC).
@@ -40,11 +42,14 @@ The TSC can add or remove members to itself (again, by majority vote).
 The OpenSSF TAC can add or remove members in the OpenSSF Best
 Practices Badge TSC by TAC majority vote. This is not intended to
 be a common practice, but this mechanism prevents the TSC from being
-overly insular.
+overly insular and enables a restart if all TSC members are unable to
+continue their roles.
 
 TSC members represent themselves, not their employers.
 We note TSC employers because we want to ensure that no single organization
 controls this project.
+
+For general practices see the "TSC Voting" section below.
 
 ## TSC Powers
 
@@ -128,9 +133,11 @@ for this project, and the project's goal is to help
 the FLOSS community overall.
 
 The technical lead has commit rights on the software, and administrative
-rights to the production site, and can add or remove those rights to others
+rights to the production site (both web app admin rights and rights
+to its infrastructure).
+The technical lead can add or remove those rights to others
 to further the goals of the project
-(subject to being overruled by the TSC).
+(subject, as always, to being overruled by the TSC).
 Those with commit rights can make changes
 (subject to caveats described below) and accept changes
 (typically pull requests) submitted by others.

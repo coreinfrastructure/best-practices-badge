@@ -13,6 +13,9 @@ Members represent themselves, not their employers.
 We note employers because we want to ensure that no single organization
 controls this project.
 
-The "@" indicates the GitHub id.
+The initial "@" indicates the GitHub id.
+
+TSC members do not necessarily have admin access to the production
+web application, but they may.
 
 See [governance](governance.md) for more information.

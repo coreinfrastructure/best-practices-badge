@@ -132,17 +132,10 @@ task :bundle_audit do
         echo "Cannot update bundle-audit database; using current data."
       fi
       if [ "$apply_bundle_audit" = 't' ] ; then
-        # Ignore CVE-2015-9284 (omniauth); We have mitigated this with a
-        # third-party countermeasure (omniauth-rails_csrf_protection) in:
-        # https://github.com/coreinfrastructure/best-practices-badge/pull/1298
-        # Ignore CVE-2021-41182 CVE-2021-41183 CVE-2021-41184 CVE-2022-31160
-        # (jquery-ui-rails 6.0.1); the client-side
-        # JavaScript never receives untrusted data. Also, we never use position(), and
-        # thus we never use its "of" parameter that's vulnerable to XSS, and we don't
-        # use DatePicker.
-        bundle exec bundle audit check --ignore CVE-2015-9284 \
-                                       --ignore CVE-2021-41182 --ignore CVE-2021-41183 \
-                                       --ignore CVE-2021-41184 --ignore CVE-2022-31160
+        # Sometimes there are vulnerability reports that aren't exploitable in our system.
+        # When upgrading isn't easy, we'll identify those cases (and rationale) in
+        # the file .bundler-audit.yml
+        bundle exec bundle audit check
       else
         true
       fi

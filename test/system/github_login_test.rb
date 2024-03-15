@@ -38,12 +38,13 @@ class GithubLoginTest < ApplicationSystemTestCase
       assert_equal num + 1, ActionMailer::Base.deliveries.size
       # Check a user can edit a project they can edit on Github
       # This particular check requires GitHub interaction so we do it here
-      click_on 'Projects'
+      # We use a "find" to disambiguate requests
+      find('#projects_page').click
       assert has_content? 'Justified perfect project'
       click_on 'Justified perfect project'
       assert has_content? 'Edit'
       # Check a user cannot edit a Github project they CAN'T push to.
-      click_on 'Projects'
+      find('#projects_page').click
       click_on 'Unjustified perfect project'
       assert_not has_content? 'Edit'
     end

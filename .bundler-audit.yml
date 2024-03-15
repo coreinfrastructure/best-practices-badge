@@ -1,0 +1,20 @@
+# Configure bundle-audit
+
+# Identify dependencies that have CVE entries but
+# are not exploitable vulnerabilities in our application.
+
+ignore:
+  # Ignore these vulnerabilities in jquery-ui-rails. This client-side JavaScript library
+  # never receives untrusted data. Also, we never use position(), and
+  # thus we never use its "of" parameter that's vulnerable to XSS, and we don't
+  # use DatePicker.
+  - CVE-2021-41182
+  - CVE-2021-41183
+  - CVE-2021-41184
+  - CVE-2022-31160
+
+# At one time we ignored CVE-2015-9284 (omniauth), because we mitigated this with a
+# third-party countermeasure (omniauth-rails_csrf_protection) in:
+# https://github.com/coreinfrastructure/best-practices-badge/pull/1298
+# This is no longer necessary, so we removed that.
+

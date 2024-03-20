@@ -45,7 +45,7 @@
              }) %>
       <div class="panel-collapse collapse in">
         <ul class="list-group">
-          <li class="list-group-item"><h3><%= t('headings.Identification') %></h3>
+          <li class="list-group-item"><h3 id="section_identification"><%= t('headings.Identification') %></h3>
             <%= render(partial: 'form_basics',
                  locals:
                    {
@@ -211,7 +211,7 @@
                 '1', 'Security', 'Secure development knowledge',
                 f, project, is_disabled
               ) %>
-          <li class="list-group-item"><h3><%=
+          <li class="list-group-item"><h3 id="section_use_basic_good_cryptographic_practices"><%=
             t('Use basic good cryptographic practices',
               scope: :headings) %></h3>
 

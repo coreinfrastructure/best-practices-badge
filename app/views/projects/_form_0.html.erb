@@ -52,7 +52,7 @@
              }) %>
       <div class="panel-collapse collapse in">
         <ul class="list-group">
-          <li class="list-group-item"><h3><%= t('headings.Identification') %></h3>
+          <li class="list-group-item"><h3 id="section_identification"><%= t('headings.Identification') %></h3>
 
             <%= render(partial: 'form_basics',
                        locals:
@@ -200,7 +200,7 @@
           </li>
 
    <%# Note: render() accepts met_suppress: ..., unmet_placeholder:  ... %>
-          <li class="list-group-item"><h3><%= t('headings.Basic project website content') %></h3>
+          <li class="list-group-item"><h3 id="section_basic_project_website_content"><%= t('headings.Basic project website content') %></h3>
             <%= render_status 'description_good', f, project, '0', is_disabled %>
 
             <%= render_status 'interact', f, project, '0', is_disabled %>
@@ -209,7 +209,7 @@
 
             <%= render_status 'contribution_requirements', f, project, '0', is_disabled, true %>
           </li>
-          <li class="list-group-item"><h3><%=
+          <li class="list-group-item"><h3 id="section_floss_license"><%=
             t('FLOSS license',
               scope: :headings) %></h3>
 
@@ -495,7 +495,7 @@
                 '0', 'Security', 'Secure development knowledge',
                 f, project, is_disabled
               ) %>
-          <li class="list-group-item"><h3><%=
+          <li class="list-group-item"><h3 id="section_use_basic_good_cryptographic_practices"><%=
             t('Use basic good cryptographic practices',
               scope: :headings) %></h3>
 

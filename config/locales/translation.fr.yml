@@ -615,12 +615,12 @@ fr:
         hide_details: Masquer les détails
         show_all_details: Afficher tous les détails
         hide_all_details: Masquer tous les détails
-        show_met_title: Afficher les critères atteints & N/A
-        show_met_html: Afficher atteints &amp; N/A
+        show_met_title: Afficher les critères atteints et incomplets
+        show_met_html: Afficher les critères atteints et incomplets
         hide_met_title: >-
-          Masquer les critères atteints & N/A (en laissant les
-          critères non satisfaits et inconnus)
-        hide_met_html: Masquer atteints &amp; N/A
+          Afficher uniquement les critères incomplets (affichant
+          uniquement les critères non satisfaits et inconnus)
+        hide_met_html: Afficher uniquement les critères incomplets
         passing_alt: Assez pour un badge !
         barely_alt: À peine suffisant pour un badge.
         failing_alt: Pas assez pour un badge.
@@ -2224,9 +2224,9 @@ fr:
         details: >-
           Le projet pourrait ne pas atteindre la feuille de route,
           et c'est acceptable ; le but de la feuille de route
-          est d'aider les utilisateurs potentiels et les contributeurs
+          est d'aider les utilisateurs et les contributeurs potentiels
           à comprendre l'orientation prévue du projet. Elle ne
-          doit pas être détaillée.
+          doit nécessairement pas être détaillée.
       documentation_architecture:
         description: >-
           Le projet DOIT inclure la documentation de l'architecture

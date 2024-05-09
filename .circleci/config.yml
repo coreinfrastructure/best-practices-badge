@@ -29,7 +29,7 @@ jobs:
         PG_USER: ubuntu
         RAILS_ENV: test
         RACK_ENV: test
-    - image: cimg/postgres@sha256:sha256:23f8b7c8f4362ab6a88235f5c2f030e94fda54d7a80bbfaa2a50a03cbdd2b997 # pin :13.14
+    - image: cimg/postgres@sha256:23f8b7c8f4362ab6a88235f5c2f030e94fda54d7a80bbfaa2a50a03cbdd2b997 # pin :13.14
       environment:
         POSTGRES_USER: ubuntu
         POSTGRES_DB: circle_ruby_test

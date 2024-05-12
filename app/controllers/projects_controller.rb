@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Copyright 2015-2017, the Linux Foundation, IDA, and the
+# Copyright the Linux Foundation, IDA, and the
 # OpenSSF Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
@@ -276,7 +276,7 @@ class ProjectsController < ApplicationController
   def update
     if repo_url_change_allowed?
       # Send CDN purge early, to give it time to distribute purge request
-      purge_cdn_project
+      @project.purge_cdn_project
       old_badge_level = @project.badge_level
       project_params.each do |key, user_value| # mass assign
         @project[key] = user_value
@@ -298,8 +298,30 @@ class ProjectsController < ApplicationController
         # after saving.
         if @project.save
           successful_update(format, old_badge_level, @criteria_level)
+          # We must send a purge later, not just now, due to a subtle race
+          # condition. Here's what is going on.
+          # The server and the CDN communicate over TCP/IP. This *server*
+          # will always produce the newest information once it's committed.
+          # However, TCP/IP does *NOT* guarantee that different replies
+          # from a server will be received (by the CDN) in the same order that
+          # they were sent. This means that the CDN can receive *old* data
+          # after # receiving a purge request and newer data, resulting in
+          # a CDN caches with obsolete data that will be held for a long time.
+          # A solution: Wait a short time, then send *another* purge. That way
+          # even if the CDN receives updates out-of-order, that old data will
+          # be purged. The next request following this additional purge will
+          # receive the updated data, and then the CDN will have correct data.
+          #
+          # Note: ActiveJob by default stores jobs in RAM. If the system is
+          # restarted while a job is active, and jobs are stored in RAM, the
+          # job will be lost and not executed. The long-term solution is to put
+          # jobs in the database.
+          PurgeCdnProjectJob.set(
+            wait: BADGE_PURGE_DELAY.seconds
+          ).perform_later(@project)
           # Also send CDN purge last, to increase likelihood of being purged
-          purge_cdn_project
+          # and replaced with correct data even before the delayed purpose.
+          @project.purge_cdn_project
         else
           format.html { render :edit, criteria_level: @criteria_level }
           format.json do
@@ -338,7 +360,7 @@ class ProjectsController < ApplicationController
       end
       format.json { head :no_content }
     end
-    purge_cdn_project
+    @project.purge_cdn_project
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
@@ -605,12 +627,6 @@ class ProjectsController < ApplicationController
 
   def integer_list?(value)
     !(value =~ /\A[1-9][0-9]{0,15}( *, *[1-9][0-9]{0,15}){0,20}\z/).nil?
-  end
-
-  # Purge data about this project from the CDN (if the CDN has any)
-  def purge_cdn_project
-    cdn_badge_key = @project.record_key
-    FastlyRails.purge_by_key cdn_badge_key
   end
 
   # Maximum number of GitHub repos to retrieve when retrieving a list of

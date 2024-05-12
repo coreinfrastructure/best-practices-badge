@@ -545,6 +545,12 @@ class Project < ApplicationRecord
       .reorder('last_reminder_at')
   end
 
+  # Purge data about this project from the CDN (if the CDN has any)
+  def purge_cdn_project
+    cdn_badge_key = record_key
+    FastlyRails.purge_by_key cdn_badge_key
+  end
+
   private
 
   # def all_active_criteria_passing?

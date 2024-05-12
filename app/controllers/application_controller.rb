@@ -6,6 +6,7 @@
 
 require 'ipaddr'
 
+# rubocop: disable Metrics/ClassLength
 class ApplicationController < ActionController::Base
   include Pagy::Backend
 
@@ -71,6 +72,9 @@ class ApplicationController < ActionController::Base
     (ENV['BADGEAPP_BADGE_CACHE_MAX_AGE'] || '8640000').to_i,
     2 * BADGE_CACHE_MAX_AGE
   ].max
+
+  # Delay in seconds before a delayed purge
+  BADGE_PURGE_DELAY = (ENV['BADGEAPP_PURGE_DELAY'] || '8').to_i
 
   BADGE_CACHE_SURROGATE_CONTROL =
     "max-age=#{BADGE_CACHE_MAX_AGE}, stale-if-error=#{BADGE_CACHE_STALE_AGE}"
@@ -288,3 +292,4 @@ class ApplicationController < ActionController::Base
 
   include SessionsHelper
 end
+# rubocop: enable Metrics/ClassLength

@@ -318,7 +318,7 @@ class ProjectsController < ApplicationController
           # jobs in the database.
           PurgeCdnProjectJob.set(
             wait: BADGE_PURGE_DELAY.seconds
-          ).perform_later(@project)
+          ).perform_later(@project.record_key)
           # Also send CDN purge last, to increase likelihood of being purged
           # and replaced with correct data even before the delayed purpose.
           @project.purge_cdn_project

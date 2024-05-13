@@ -224,6 +224,11 @@ The current Badge Project technical lead is David A. Wheeler.
 
 To see the current list of TSC members, see [TSC.md](./TSC.md).
 
+## Underlying charter
+
+For our legal basis, see the
+[Best Practices Badge Technical Charter](Best-Practices-Badge-Technical-Charter-Final-2024-04-30.pdf).
+
 ## See also
 
 Project participation and interface:

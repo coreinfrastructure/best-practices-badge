@@ -18,4 +18,5 @@ The initial "@" indicates the GitHub id.
 TSC members do not necessarily have admin access to the production
 web application, but they may.
 
-See [governance](governance.md) for more information.
+See [governance](governance.md) for more information, as well as the
+[Best Practices Badge Technical Charter](Best-Practices-Badge-Technical-Charter-Final-2024-04-30.pdf).

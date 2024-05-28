@@ -133,9 +133,11 @@ class User < ApplicationRecord
     save!
   end
 
-  # Sends activation email.
+  # Sends activation email, and records time sent (to limit resends)
   def send_activation_email
     UserMailer.account_activation(self).deliver_now
+    self.activation_email_sent_at = Time.zone.now
+    save!(touch: false)
   end
 
   # Sets the password reset attributes.

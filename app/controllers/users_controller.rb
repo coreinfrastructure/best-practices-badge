@@ -70,7 +70,9 @@ class UsersController < ApplicationController
     end
     @user = User.find_by(email: user_params[:email])
     if @user
-      if !@user.activated # User exists but is not activated; retry activation
+      # User exists but is not activated; retry activation
+      if !@user.activated &&
+         !activation_email_too_soon(@user.activation_email_sent_at)
         regenerate_activation_digest
         @user.send_activation_email
       end
@@ -162,6 +164,20 @@ class UsersController < ApplicationController
   # rubocop: enable Metrics/MethodLength, Metrics/AbcSize
 
   private
+
+  DELAY_BETWEEN_ACTIVATION_EMAILS = Integer(
+    (ENV['BADGEAPP_DELAY_BETWEEN_ACTIVATION_EMAIL'] ||
+     24.hours.seconds.to_s), 10
+  ).seconds
+
+  # Return true iff sent_at is too soon (compared to the current time)
+  # to send an activation email.
+  def activation_email_too_soon(sent_at)
+    # We've never sent one before, so it's obviously not too soon.
+    return false if sent_at.blank?
+
+    DELAY_BETWEEN_ACTIVATION_EMAILS.since(sent_at) > Time.zone.now
+  end
 
   def enable_maximum_privacy_headers
     # Harden the response by maximizing HTTP headers of user data

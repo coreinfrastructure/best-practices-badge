@@ -7,4 +7,5 @@ ignore-regex = mis à jour
 # Suh - name
 # projets - French used in a test
 # requestor - as requested in the original PR
-ignore-words-list = reenable,rouge,suh,projets,requestor,secur
+# socioeconomic - The standard CODE_OF_CONDUCT does not use a hyphen.
+ignore-words-list = reenable,rouge,suh,projets,requestor,secur,socioeconomic

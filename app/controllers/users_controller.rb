@@ -70,11 +70,16 @@ class UsersController < ApplicationController
     end
     @user = User.find_by(email: user_params[:email])
     if @user
-      # User exists but is not activated; retry activation
-      if !@user.activated &&
-         !activation_email_too_soon(@user.activation_email_sent_at)
-        regenerate_activation_digest
-        @user.send_activation_email
+      # If user exists but is not activated, retry activation unless too soon
+      if !@user.activated
+        # Rate limit activation emails, else attackers can really annoy others
+        if activation_email_too_soon(@user.activation_email_sent_at)
+          # Logger doesn't escape, but user.id is just a number so no problem
+          Rails.logger.info "Activation request too soon for #{@user.id}"
+        else
+          regenerate_activation_digest
+          @user.send_activation_email
+        end
       end
     else
       @user = User.new(user_params)

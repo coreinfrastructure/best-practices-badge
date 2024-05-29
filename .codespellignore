@@ -1,5 +1,5 @@
-# French phrase uses in tests
-mis à jour
+# French phrase used in tests: mis à jour
+mis
 
 # reenable - used as .attribute in .rb as well
 reenable
@@ -10,12 +10,14 @@ rouge
 # Suh - name
 suh
 
-# projets - French used in a test
+# projets - French term used in a test
 projets
+
 # requestor - as requested in the original PR
 requestor
 
 #
 secur
-# socioeconomic - The standard CODE_OF_CONDUCT does not use a hyphen.
-socioeconomic
+
+# socioeconomic - Don't change the standard CODE_OF_CONDUCT for hyphenation
+socio-economic

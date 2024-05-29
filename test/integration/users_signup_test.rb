@@ -153,6 +153,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
                 password_confirmation: 'a-g00d!Xpassword'
         }
       }
+      assert_equal 0, ActionMailer::Base.deliveries.size
       assert_difference 'User.count', 1 do
         post users_path, params: login_params
       end
@@ -160,12 +161,17 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
       assert_no_difference 'User.count' do
         post users_path, params: login_params
       end
-      assert_equal 2, ActionMailer::Base.deliveries.size
+      # This second attempt should fail because of rate limiting
+      assert_equal 1, ActionMailer::Base.deliveries.size
       user = assigns(:user)
       assert_not user.activated?
       # Valid activation token
-      get edit_account_activation_path(user.activation_token,
-                                       email: user.email)
+      # Here we check activation, which is harder than it
+      # might seem; for discussion see above.
+      user.create_activation_digest
+      user.save!
+      # get edit_account_activation_path(id: user.id, email: user.email)
+      get "/en/account_activations/#{user.activation_token}/edit?email=#{user.email}"
       assert user.reload.activated?
       follow_redirect!
       assert_template 'sessions/new'

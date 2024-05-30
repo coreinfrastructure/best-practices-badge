@@ -131,7 +131,7 @@ some blank lines and the signed-off-by text above;
 then configure git to use that as a commit template.  For example:
 
 ````sh
-git config commit.template ~/cii-best-practices-badge/git-template
+git config commit.template ~/best-practices-badge/git-template
 ````
 
 It's not practical to fix old contributions in git, so if one is forgotten,

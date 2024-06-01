@@ -33,14 +33,18 @@ fr:
       <small> <strong>Vous avez besoin d'aide ? Vous avez une
       question ? Vous voyez un problème ? Merci de <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
       target="_blank" rel="noopener">reporter un problème</a></em>.</strong>
-      © 2015-2021 <a href="https://openssf.org" target="_blank"
-      rel="noopener">Open Source Security Foundation</a>, un projet
-      collaboratif de la <a href="https://www.linuxfoundation.org/"
-      target="_blank" rel="noopener">Fondation Linux</a>. Tous
-      droits réservés. Consultez notre <a href="https://www.linuxfoundation.org/privacy"
-      target="_blank" rel="noopener">politique de confidentialité</a>
-      et nos <a href="https://www.linuxfoundation.org/terms" target="_blank"
-      rel="noopener">conditions d'utilisation</a>. </small>
+      Copyright © <a href="https://www.bestpractices.dev" target="_blank"
+      rel="noopener">OpenSSF Best Practices Badge a Series of
+      LF Projects, LLC</a>. Pour les conditions d'utilisation
+      du site web, la politique de marque ou autres règlements
+      du projet, voir <a href="https://lfprojects.org" target="_blank"
+      rel="noopener">ces règlements</a>. Pour plus d'information,
+      voir les sites web de l'<a href="https://openssf.org" target="_blank"
+      rel="noopener">Open Source Security Foundation (OpenSSF)</a>
+      et de la <a href="https://www.linuxfoundation.org/" target="_blank"
+      rel="noopener">Fondation Linux</a>. Tous droits réservés.
+      Consultez notre <a href="https://www.linuxfoundation.org/privacy"
+      target="_blank" rel="noopener">politique de confidentialité</a>.</small>
     account: Compte
     choose_locale: Choisir la langue
     toggle_navigation: Choisir ou non la navigation repliable

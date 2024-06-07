@@ -156,6 +156,35 @@ Committers can accept contributions from contributors.
 Contributors are those who choose to contribute to the project.
 See [CONTRIBUTING](../CONTRIBUTING.md).
 
+## Web application admin
+
+A very few people have been granted the admin privilege within the
+web application. In general, the TSC and/or technical lead initiates
+inviting someone to have this admin privilege, it's usually not granted
+on request.
+Admin privilege is only considered for those who have consistently demonstrated
+(1) trustworthiness, (2) support for the badge project, and
+(3) need for this privilege (e.g., through repeated reasonable requests
+that we have to act on).
+
+The admin privilege in the web application allows that user to
+edit/update any badge entry or user data, as well as see all this data.
+Note that we *do* keep a record of every change made to badge entry
+data and who made the change, even for admins.
+
+The purpose of granting admin privilege is to
+enable that individual to immediately fix *any* of the issues
+in the badges or users. We recommend that admins fix projects so that
+individual projects can fix their own problems in the future.
+
+Admin is a position of high trust. In particular, admins must not
+abuse their access to the email addresses of every user (which are
+private).  We don't want to have many admins.
+However, we also don't want any one person to be a bottleneck.
+
+Note that web application admin is not the same as having direct
+access/control over the underlying database or container.
+
 ## Process
 
 We generally use the GitHub issue tracker and pull requests for managing

@@ -20,6 +20,7 @@ class GithubBasicDetective < Detective
   OUTPUTS = %i[
     name license discussion_status repo_public_status repo_track_status
     repo_distributed_status contribution_status implementation_languages
+    version_tags_status
   ].freeze
 
   # These are the 'correct' display case for SPDX for OSI-approved licenses.
@@ -71,6 +72,10 @@ class GithubBasicDetective < Detective
     full_list = raw_language_data.sort_by(&:last).reverse.map(&:first)
     shorter_list = full_list - EXCLUDE_IMPLEMENTATION_LANGUAGES
     shorter_list.join(', ')
+  end
+
+  def version_shaped_tag_in(tag_data)
+    return tag_data.pluck(:name).any? { |tag| tag.match?(/^v?\d+\.\d+\.\d+$/) }
   end
 
   # Individual detectives must implement "analyze"
@@ -170,6 +175,15 @@ class GithubBasicDetective < Detective
         confidence: 3,
         explanation: 'GitHub API implementation language analysis'
       }
+
+      # Check for version tags
+      if version_shaped_tag_in(client.tags(fullname))
+        results[:version_tags_status] = {
+          value: 'Met',
+          confidence: 2,
+          explanation: 'Version tags are present in the code repository'
+        }
+      end
     end
 
     results

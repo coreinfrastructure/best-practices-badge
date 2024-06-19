@@ -267,7 +267,7 @@ fi
 if [ "$DO_LOCAL_RBENV" = 'yes' ] ; then
   echo 'Downloading and installing rbenv from GitHub' >&2
   if ! [ -d ~/.rbenv ] ; then
-    git clone git://github.com/rbenv/rbenv.git ~/.rbenv
+    git clone https://github.com/rbenv/rbenv.git ~/.rbenv
   fi
   # Following performed in subshell so as not to change working directory.
   (
@@ -297,7 +297,7 @@ if [ "${MYINSTALL_RBENV_BUNDLER}" = 'yes' ] && \
    ! [ -e "$HOME/.rbenv/plugins/bundler" ] ; then
   echo 'Downloading and installing rbenv-bundler from GitHub' >&2
   mkdir -p "$HOME/.rbenv/plugins/"
-  git clone git://github.com/carsomyr/rbenv-bundler.git \
+  git clone https://github.com/carsomyr/rbenv-bundler.git \
             "$HOME/.rbenv/plugins/bundler"
 fi
 

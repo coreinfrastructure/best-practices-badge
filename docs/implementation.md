@@ -791,7 +791,7 @@ If you want to restore a deleted project, or reset its values,
 we have some tools to help.
 
 Put the project data in JSON form in the file "project.json"
-(at the top of the tree, typically in "~/cii-best-practices-badge").
+(at the top of the tree, typically in "~/best-practices-badge").
 If this was a recent deletion, then you can simply copy the JSON-formatted
 data from the email documenting the deletion.
 
@@ -1089,7 +1089,7 @@ It's easy to invoke and resolves it in a number of cases.
 
 ## Implementation of Detectives.
 
-The detective classes are located in the directory often located in the directory ./workspace/cii-best-practices-badge/app/lib.  This directory contains all of the detectives and has a very specific naming convention.  All new detectives must be named name1_detective.rb.  This name is important as it will be called by the primary code chief.rb which calls and collects the results of all of the detective classes.
+The detective classes are located in the directory often located in the directory ./workspace/best-practices-badge/app/lib.  This directory contains all of the detectives and has a very specific naming convention.  All new detectives must be named name1_detective.rb.  This name is important as it will be called by the primary code chief.rb which calls and collects the results of all of the detective classes.
 
 To integrate a new class chief.rb must be edited in the following line.
 
@@ -1140,9 +1140,9 @@ It's currently set up to use Fastly.
 
 The SVG files for badges are:
 
-- <https://img.shields.io/badge/cii_best_practices-passing-green.svg>
-- <https://img.shields.io/badge/cii_best_practices-in_progress-yellow.svg>
-- <https://img.shields.io/badge/cii_best_practices-failing-red.svg>
+- <https://img.shields.io/badge/openssf_best_practices-passing-green.svg>
+- <https://img.shields.io/badge/openssf_best_practices-in_progress-yellow.svg>
+- <https://img.shields.io/badge/openssf_best_practices-failing-red.svg>
 
 ## Licenses of the software used by BadgeApp
 

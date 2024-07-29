@@ -66,8 +66,8 @@ GEM
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
       tzinfo (~> 2.0)
-    addressable (2.8.6)
-      public_suffix (>= 2.0.2, < 6.0)
+    addressable (2.8.7)
+      public_suffix (>= 2.0.2, < 7.0)
     ansi (1.5.0)
     argon2-kdf (0.2.0)
     ast (2.4.2)
@@ -91,8 +91,8 @@ GEM
     bootstrap-social-rails (4.12.0)
       railties (>= 3.1)
     bootstrap_form (2.7.0)
-    builder (3.2.4)
-    bullet (7.1.6)
+    builder (3.3.0)
+    bullet (7.2.0)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
     bundler-audit (0.9.1)
@@ -111,36 +111,37 @@ GEM
     capybara-slow_finder_errors (0.1.5)
       capybara (~> 3.0)
     chartkick (4.2.1)
-    chef-utils (18.4.12)
+    chef-utils (18.5.0)
       concurrent-ruby
     code_analyzer (0.5.5)
       sexp_processor
     codecov (0.6.0)
       simplecov (>= 0.15, < 0.22)
     coderay (1.1.3)
-    concurrent-ruby (1.3.1)
+    concurrent-ruby (1.3.3)
     crack (1.0.0)
       bigdecimal
       rexml
     crass (1.0.6)
     csv (3.3.0)
     date (3.3.4)
-    docile (1.4.0)
+    docile (1.4.1)
     dotenv (2.8.1)
     dotenv-rails (2.8.1)
       dotenv (= 2.8.1)
       railties (>= 3.2)
     encryptor (3.0.0)
-    erubi (1.12.0)
+    erubi (1.13.0)
     erubis (2.7.0)
     eslintrb (2.1.0)
       execjs
       multi_json (>= 1.3)
       rake
     execjs (2.9.1)
-    faraday (2.9.1)
+    faraday (2.10.0)
       faraday-net_http (>= 2.0, < 3.2)
-    faraday-net_http (3.1.0)
+      logger
+    faraday-net_http (3.1.1)
       net-http
     faraday-retry (2.2.1)
       faraday (~> 2.0)
@@ -156,7 +157,7 @@ GEM
       prime
       racc
       text (>= 1.3.0)
-    gitlab (4.19.0)
+    gitlab (4.20.1)
       httparty (~> 0.20)
       terminal-table (>= 1.5.1)
     globalid (1.2.1)
@@ -182,7 +183,7 @@ GEM
     jquery-ui-rails (6.0.1)
       railties (>= 3.2.16)
     json (2.7.2)
-    jwt (2.8.1)
+    jwt (2.8.2)
       base64
     kramdown (2.4.0)
       rexml
@@ -198,6 +199,7 @@ GEM
       with_env (= 1.1.0)
       xml-simple (~> 1.1.9)
     locale (2.1.4)
+    logger (1.6.0)
     lograge (0.14.0)
       actionpack (>= 4)
       activesupport (>= 4)
@@ -221,8 +223,8 @@ GEM
       mixlib-shellout
     method_source (1.1.0)
     mini_mime (1.1.5)
-    minitest (5.23.1)
-    minitest-reporters (1.6.1)
+    minitest (5.24.1)
+    minitest-reporters (1.7.1)
       ansi
       builder
       minitest (>= 5.0)
@@ -232,7 +234,7 @@ GEM
     mixlib-cli (2.1.8)
     mixlib-config (3.0.27)
       tomlrb
-    mixlib-shellout (3.2.7)
+    mixlib-shellout (3.2.8)
       chef-utils
     msgpack (1.7.2)
     multi_json (1.15.0)
@@ -240,7 +242,7 @@ GEM
       bigdecimal (~> 3.1)
     net-http (0.4.1)
       uri
-    net-imap (0.4.12)
+    net-imap (0.4.14)
       date
       net-protocol
     net-pop (0.1.2)
@@ -250,7 +252,7 @@ GEM
     net-smtp (0.5.0)
       net-protocol
     nio4r (2.7.3)
-    nokogiri (1.16.5-x86_64-linux)
+    nokogiri (1.16.7-x86_64-linux)
       racc (~> 1.4)
     oauth2 (2.0.9)
       faraday (>= 0.17.3, < 3.0)
@@ -280,11 +282,11 @@ GEM
     paper_trail (12.3.0)
       activerecord (>= 5.2)
       request_store (~> 1.1)
-    parallel (1.24.0)
-    parser (3.3.2.0)
+    parallel (1.25.1)
+    parser (3.3.4.0)
       ast (~> 2.4.1)
       racc
-    pg (1.5.6)
+    pg (1.5.7)
     pg_search (2.3.6)
       activerecord (>= 5.2)
       activesupport (>= 5.2)
@@ -314,7 +316,7 @@ GEM
     pry-byebug (3.10.1)
       byebug (~> 11.0)
       pry (>= 0.13, < 0.15)
-    public_suffix (5.0.5)
+    public_suffix (6.0.1)
     puma (6.4.2)
       nio4r (~> 2.0)
     puma_worker_killer (0.3.1)
@@ -391,8 +393,8 @@ GEM
     request_store (1.7.0)
       rack (>= 1.4)
     require_all (3.0.0)
-    rexml (3.2.8)
-      strscan (>= 3.0.9)
+    rexml (3.3.2)
+      strscan
     rubocop (1.57.0)
       base64 (~> 0.1.1)
       json (~> 2.3)
@@ -442,13 +444,13 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
-    sentry-rails (5.17.3)
+    sentry-rails (5.18.2)
       railties (>= 5.0)
-      sentry-ruby (~> 5.17.3)
-    sentry-ruby (5.17.3)
+      sentry-ruby (~> 5.18.2)
+    sentry-ruby (5.18.2)
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
-    sexp_processor (4.17.1)
+    sexp_processor (4.17.2)
     simplecov (0.21.2)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
@@ -473,7 +475,7 @@ GEM
       unicode-display_width (>= 1.1.1, < 3)
     text (1.3.1)
     thor (1.3.1)
-    tilt (2.3.0)
+    tilt (2.4.0)
     timeout (0.4.1)
     tomlrb (2.0.3)
     translation (1.37)
@@ -500,7 +502,7 @@ GEM
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
-    websocket (1.2.10)
+    websocket (1.2.11)
     websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -510,7 +512,7 @@ GEM
     xpath (3.2.0)
       nokogiri (~> 1.8)
     yaml-lint (0.1.2)
-    zeitwerk (2.6.15)
+    zeitwerk (2.6.17)
 
 PLATFORMS
   x86_64-linux

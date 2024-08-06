@@ -107,7 +107,7 @@ URL for your fork, and press <kbd>Enter</kbd> to download the fork.
 Once it's done, change into the newly-created directory:
 
 ~~~~sh
-cd cii-best-practices-badge
+cd best-practices-badge
 ~~~~
 
 ## Installing the development environment
@@ -291,7 +291,7 @@ git remote add upstream https://github.com/coreinfrastructure/best-practices-bad
 
 <!-- If you have edit rights, do this instead:
 git clone <https://github.com/coreinfrastructure/best-practices-badge.git>
-cd cii-best-practices-badge
+cd best-practices-badge
 -->
 
 ### Installing the project environment
@@ -303,7 +303,7 @@ We will do completely separate per-project Gem installs,
 to prevent potential interference issues in the development environment.
 Here's a way to do that.
 We presume that your current directory is the top directory of the project,
-aka cii-best-practices-badge.
+aka best-practices-badge.
 
 ~~~~
 # Force install Ruby 2.3.1 using rbenv:
@@ -369,7 +369,7 @@ In order to completely remove the Badge app, perform the following steps:
 1.  Remove the database entries Badge app.  This can be done by running
     "rake db:drop && RAILS_ENV=test rake db:drop"
 
-2.  Remove the cii-best-practices-badge directory. (WARNING: This will remove
+2.  Remove the best-practices-badge directory. (WARNING: This will remove
     any and all local branches that have not been pushed to your remote git
     repository.
 

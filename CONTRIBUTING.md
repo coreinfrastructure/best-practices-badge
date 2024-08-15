@@ -151,6 +151,9 @@ See the section on reuse for their license requirements
 (they don't need to be MIT, but all required components must be
 open source software).
 
+The data *managed* by this application is released under different
+open data licenses. See the README for more information.
+
 ### We are proactive
 
 In general we try to be proactive to detect and eliminate

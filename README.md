@@ -190,8 +190,9 @@ a top-level domain with our CDN; it's more efficient to use the subdomain.
 
 ## License
 
-All material here is released under the [MIT license](./LICENSE).
-All material that is not executable, including all text when not executed,
+All material in this repository is released under the [MIT license](./LICENSE).
+All material in this repository that is not executable,
+including all text when not executed,
 is also released under the
 [Creative Commons Attribution 3.0 International (CC BY 3.0) license](https://creativecommons.org/licenses/by/3.0/) or later.
 In SPDX terms, everything here is licensed under MIT;
@@ -203,3 +204,23 @@ other components with their own licenses.
 Not all components we depend on are MIT-licensed, but all
 *required* components are FLOSS. We prevent licensing issues
 using various processes (see [CONTRIBUTING](./CONTRIBUTING.md)).
+
+The data *managed* by this software is under different highly-permissive
+[open data](https://opendefinition.org/od/2.1/en/) licenses,
+depending on when the data was last updated:
+
+* Data updated on or after 2024-08-23T12:00:00Z is released under the
+  [Community Data License Agreement – Permissive, Version 2.0](https://cdla.dev/permissive-2-0/).
+  This means that a Data Recipient
+  may share the Data, with or without modifications, so long as the
+  Data Recipient makes available the text of this agreement with
+  the shared Data.
+  This agreement does *not* impose any restriction or obligations
+  with respect to the use, modification, or sharing of Results.
+* Otherwise, data updated on or after 2017-02-20T12:00:00Z is released under the
+  [Creative Commons Attribution 3.0 International (CC BY 3.0) license](https://creativecommons.org/licenses/by/3.0/) or later.
+* Otherwise, data is released under the
+  [Creative Commons Attribution 3.0 International (CC BY 3.0) license](https://creativecommons.org/licenses/by/3.0/).
+
+Submitters of data retain copyright (if any), and
+the project license is unaffected.

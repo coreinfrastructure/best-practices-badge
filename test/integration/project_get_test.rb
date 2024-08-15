@@ -37,7 +37,7 @@ class ProjectGetTest < ActionDispatch::IntegrationTest
 
     # Check hardening headers
     assert_equal(
-      "default-src 'self'; base-uri 'self'; block-all-mixed-content; " \
+      "default-src 'self'; base-uri 'self'; " \
       "form-action 'self'; frame-ancestors 'none'; " \
       "img-src 'self' secure.gravatar.com avatars.githubusercontent.com; " \
       "object-src 'none'; script-src 'self'; style-src 'self'",

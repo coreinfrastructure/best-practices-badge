@@ -210,7 +210,7 @@ The data *managed* by this software is under different highly-permissive
 depending on when the data was last updated:
 
 * Data updated on or after 2024-08-23T12:00:00Z is released under the
-  [Community Data License Agreement – Permissive, Version 2.0](https://cdla.dev/permissive-2-0/).
+  [Community Data License Agreement – Permissive, Version 2.0 (CDLA-Permissive-2.0)](https://cdla.dev/permissive-2-0/).
   This means that a Data Recipient
   may share the Data, with or without modifications, so long as the
   Data Recipient makes available the text of this agreement with
@@ -218,9 +218,15 @@ depending on when the data was last updated:
   This agreement does *not* impose any restriction or obligations
   with respect to the use, modification, or sharing of Results.
 * Otherwise, data updated on or after 2017-02-20T12:00:00Z is released under the
-  [Creative Commons Attribution 3.0 International (CC BY 3.0) license](https://creativecommons.org/licenses/by/3.0/) or later.
+  [Creative Commons Attribution 3.0 International (CC BY 3.0) license or later (CC-BY-3.0+)](https://creativecommons.org/licenses/by/3.0/).
 * Otherwise, data is released under the
-  [Creative Commons Attribution 3.0 International (CC BY 3.0) license](https://creativecommons.org/licenses/by/3.0/).
+  [Creative Commons Attribution 3.0 International (CC BY 3.0) license (CC-BY-3.0)](https://creativecommons.org/licenses/by/3.0/).
+
+The *complete* collection of data *managed* by this application is thus
+licensed with the SPDX license expression "(CC-BY-3.0 AND CDLA-Permissive-2.0)".
+Only a few old entries are under the CC-BY-3.0, so if you omitted those
+oldest data values, the dataset is released under the expression
+"(CC-BY-3.0+ AND CDLA-Permissive-2.0)".
 
 Submitters of data retain copyright (if any), and
 the project license is unaffected.

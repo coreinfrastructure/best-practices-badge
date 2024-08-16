@@ -27,7 +27,7 @@ class Project < ApplicationRecord
   ENTRY_LICENSE_EXPLICIT_DATE = Time.iso8601('2017-02-20T12:00:00Z')
 
   # When did we switch to CDLA-Permissive-2.0?
-  ENTRY_LICENSE_CDLA_PERMISSIVE_2_0_DATE = Time.iso8601('2024-08-23T12:00:00Z')
+  ENTRY_LICENSE_CDLA_PERMISSIVE_20_DATE = Time.iso8601('2024-08-23T12:00:00Z')
 
   STATUS_CHOICE = %w[? Met Unmet].freeze
   STATUS_CHOICE_NA = (STATUS_CHOICE + %w[N/A]).freeze
@@ -357,15 +357,15 @@ class Project < ApplicationRecord
     updated_at >= ENTRY_LICENSE_EXPLICIT_DATE
   end
 
-  def show_cdla_permissive_2_0_license?
-    updated_at >= ENTRY_LICENSE_CDLA_PERMISSIVE_2_0_DATE
+  def show_cdla_permissive_20_license?
+    updated_at >= ENTRY_LICENSE_CDLA_PERMISSIVE_20_DATE
   end
 
   # Which field should we display for the data license?
   # Using the project's last updated_at value, return the name of the
   # field in i18n "projects.show" to display as the license.
   def data_license_field
-    if show_cdla_permissive_2_0_license?
+    if show_cdla_permissive_20_license?
       'cdla_permissive_20_html'
     elsif show_entry_license?
       'cc_by_3plus_html'

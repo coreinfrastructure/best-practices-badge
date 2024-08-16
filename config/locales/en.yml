@@ -560,7 +560,7 @@ en:
       updated_at_html: "<strong>last updated on</strong> %{when}."
       last_lost_html: Last lost passing badge on %{when}.
       last_achieved_html: Last achieved passing badge on %{when}.
-      cdla_20_html: >-
+      cdla_permissive_20_html: >-
         This data is available under the
         <a href="https://cdla.dev/permissive-2-0/"
         >Community Data License Agreement – Permissive, Version 2.0

@@ -26,8 +26,8 @@ ru:
     ru: Русский
     zh-CN: Китайский (упрощенный)
     es: Испанский
-    sw:
-    pt-BR:
+    sw: суахили
+    pt-BR: бразильский португальский
   layouts:
     cii_best_practices: Передовая практика OpenSSF
     projects: Проекты
@@ -494,6 +494,7 @@ ru:
         права (если есть) сохраняются за вами, а лицензия на проект
         не изменяется. <br> <br>
       edit_status: Изменить данные для значка проекта
+      submit_cdla_permissive_20_html:
     show:
       edit: Изменить
       delete: Удалить
@@ -527,6 +528,7 @@ ru:
         но должны указывать соответствующие ссылки. При распространении,
         пожалуйста, указывайте "%{user} and the OpenSSF Best Practices
         badge contributors".
+      cdla_permissive_20_html:
     form_early:
       badge_intro:
         description: >-
@@ -1434,12 +1436,20 @@ ru:
           Проект ОБЯЗАН использовать по крайней мере один автоматизированный
           набор тестов, опубликованный как свободное ПО (этот
           набор тестов может поддерживаться как отдельный проект
-          свободного ПО).
+          свободного ПО). Проект ОБЯЗАН ясно показывать или иметь
+          документацию о том, как запускать наборы тестов (например,
+          через непрерывную интеграцию (CI) или используя файлы
+          документации, такие как BUILD.md, README.md или CONTRIBUTING.md).
         details: >-
           Проект МОЖЕТ использовать несколько автоматизированных
-          наборов тестов (например, тот, который работает быстро,
+          наборов тестов (например, один, который работает быстро,
           а другой - более тщательный, но требует специального
-          оборудования).
+          оборудования). Существует множество каркасов (frameworks)
+          и систем поддержки тестирования, включая <a href="https://www.seleniumhq.org/">Selenium</a>
+          (автоматизация веб-браузера), <a href="https://junit.org">Junit</a>
+          (JVM, Java), <a href="https://CRAN.R-project.org/package=RUnit">RUnit</a>
+          (R), <a href="https://cran.r-project.org/web/packages/testthat/index.html">testthat</a>
+          (R).
       test_invocation:
         description: >-
           Запуск набора тестов СЛЕДУЕТ реализовывать стандартным
@@ -1774,9 +1784,9 @@ ru:
         details: Эти хеши могут быть изменены при передаче.
       vulnerabilities_fixed_60_days:
         description: >-
-          НЕДОПУСТИМО оставлять незакрытыми уязвимости средней
-          или высокой степени серьезности, опубликованные более
-          60 дней назад.
+          НЕДОПУСТИМО оставлять незакрытыми уязвимости со степенью
+          серьезности средней или выше, опубликованные более 60
+          дней назад.
         details: >-
           Уязвимость должна быть исправлена ​​и выпущена самим
           проектом (патчи могут быть разработаны в другом месте).
@@ -3018,19 +3028,24 @@ ru:
     intro_p06_html:
     intro_p07_html:
     intro_p08_html:
-    structure_p01_html:
+    structure_p01_html: "<p></p><h2 id='criteria_structure'>Структура
+      критериев</h2>"
     structure_p02_html:
     structure_p03_html:
-    other_p01_html:
+    other_p01_html: >-
+      <p></p><h2 id='criteria_other_projects'>Связь с другими
+      проектами</h2>
     other_p02_html:
-    automation_p01_html:
+    automation_p01_html: >-
+      <p></p><h2 id='criteria_automation'>Критерии автоматизации</h2>
     automation_p02_html:
     automation_p03_html:
     automation_p04_html:
-    changes_p01_html:
+    changes_p01_html: "<p></p><h2 id='criteria_changes'>Изменения
+      со временем</h2>"
     changes_p02_html:
     changes_p03_html:
-    keywords_p01_html:
+    keywords_p01_html: "<p></p><h2 id='keywords'>Ключевые слова</h2>"
     keywords_p02_html:
     keywords_p03_html:
     keywords_p04_html:
@@ -3062,9 +3077,9 @@ ru:
     achieving_p04_html:
     achieving_p05_html:
     achieving_p06_html:
-    terminology_p01_html:
+    terminology_p01_html: "<p></p><h2 id='criteria_terminology'>Терминология</h2>"
     terminology_p02_html:
-    terminology_p03_html:
+    terminology_p03_html: "<p>Вот несколько ключевых терминов:</p><ul>"
     terminology_p04_html:
     terminology_p05_html:
     terminology_p06_html:
@@ -3072,18 +3087,56 @@ ru:
     terminology_p08_html:
     terminology_p09_html:
     terminology_p10_html:
-    noncriteria_p01_html:
-    noncriteria_p02_html:
-    noncriteria_p03_html:
-    noncriteria_p04_html:
-    noncriteria_p05_html:
-    noncriteria_p06_html:
-    noncriteria_p07_html:
-    noncriteria_p08_html:
-    noncriteria_p09_html:
+    noncriteria_p01_html: >-
+      <p></p><h2 id='criteria_noncriteria'>Что не относится к
+      критериям</h2>
+    noncriteria_p02_html: "<p>Критерии:<ul>"
+    noncriteria_p03_html: >-
+      <li><em>не</em> требуют какой-либо конкретной технологии,
+      продукта или услуги. Например, они <em>не</em> должны требовать
+      git, GitHub или GitLab. Критерии <em>могут</em> содержать
+      рекомендации и помощь в распространенных случаях, поскольку
+      эта информация может помочь людям понять критерии и соответствовать
+      им. Для проектов, использующих git или GitHub, существует
+      специальная автоматизация, которая помогает пользователям
+      в таких распространенных случаях, но она не является <em>обязательной</em>
+      . Таким образом, по мере появления новых инструментов и
+      возможностей проекты могут быстро переключаться на них.
+      В качестве исключения критерии требуют наличие веб-страницы
+      проекта и TLS.
+    noncriteria_p04_html: >-
+      <li><em>не</em> требуют и не запрещают какой-либо конкретный
+      язык программирования. Они требуют принятия дополнительных
+      мер для определенных <em>классов</em> языков программирования,
+      но это другое.
+    noncriteria_p05_html: >-
+      <li><em>никогда</em> не требуют использования несвободного
+      ПО, проприетарных услуг или технологий, поскольку многие
+      разработчики <a href="https://www.gnu.org/philosophy/free-sw.ru.html"
+      rel="nofollow">свободного ПО</a> отвергли бы такие критерии.
+      Проекты <em>могут</em> использовать и/или зависеть от несвободных
+      элементов.
+    noncriteria_p06_html: >-
+      <li><em>не</em> требуют активной разработки или обсуждения
+      пользователями внутри проекта. Некоторые проекты с высокой
+      степенью зрелости редко меняются и поэтому могут быть малоактивными.
+      Однако критерии <em>требуют</em> , чтобы проект реагировал
+      на сообщения об уязвимостях.
+    noncriteria_p07_html: "<li><em>не</em> требуют платы за получение
+      значка."
+    noncriteria_p08_html: >-
+      <li><em>не</em> требуют одновременного выполнения всех критериев;
+      большинство проектов реализуют их постепенно.</ul>
+    noncriteria_p09_html: >-
+      <p>Проходной уровень не включает критерии, которые были
+      бы непрактичны для проекта, выполняемого одним человеком,
+      например, чего-то, требующего значительной суммы денег.
+      Многие проекты FLOSS небольшие, и мы не хотим исключать
+      их подобным образом.
     identify_p01_html:
     identify_p02_html:
-    criteria_why_p01_html:
+    criteria_why_p01_html: "<h2 id='criteria_why'>Зачем нужны
+      критерии?</h2>"
     criteria_why_p02_html:
     criteria_why_p03_html:
     criteria_why_p04_html:

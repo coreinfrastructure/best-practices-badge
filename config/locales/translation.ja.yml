@@ -261,6 +261,7 @@ ja:
       updated_at_html: "<strong>最終更新日</strong> %{when}"
       last_lost_html: 最後に%{when}にバッジ合格できませんでした。
       last_achieved_html: 最後に%{when}にバッジ合格を達成しました。
+      cdla_permissive_20_html:
     edit:
       submit_cc_by_3plus_html: >-
         プロジェクトに関するこのデータを送信することにより、少なくとも、<a href="https://creativecommons.org/licenses/by/3.0/us"
@@ -281,6 +282,7 @@ ja:
       lost_badge: プロジェクトはバッジを失いました
       static_analysis_updated_html: 基準 static_analysis の要件を更新しました。この基準の正当性を追加してください。
       edit_status: プロジェクトのバッジステータスを表示する
+      submit_cdla_permissive_20_html:
     form_basics:
       project_name:
         description: プロジェクトの名前は何ですか？

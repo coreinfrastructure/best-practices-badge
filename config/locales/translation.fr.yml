@@ -363,6 +363,7 @@ fr:
         %{when}."
       last_lost_html: Le dernier badge perdu l'a été le %{when}.
       last_achieved_html: Le dernier badge obtenu l'a été le %{when}.
+      cdla_permissive_20_html:
     edit:
       submit_cc_by_3plus_html: >-
         En soumettant ces données sur le projet, vous acceptez
@@ -399,6 +400,7 @@ fr:
         Nous avons mis à jour nos exigences pour le critère static_analysis.
         Veuillez ajouter une justification pour ce critère.
       edit_status: Éditer le statut du badge du projet
+      submit_cdla_permissive_20_html:
     form_basics:
       project_name:
         description: Quel est le nom intelligible du projet ?

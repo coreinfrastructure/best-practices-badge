@@ -374,6 +374,7 @@ de:
         %{when}."
       last_lost_html: 'Letztes verlorenes Badge: %{when}.'
       last_achieved_html: 'Letztes erreichtes Badge: %{when}.'
+      cdla_permissive_20_html:
     edit:
       submit_cc_by_3plus_html: >-
         Indem Sie diese Daten über das Projekt eingeben, stimmen
@@ -411,6 +412,7 @@ de:
         aktualisiert. Bitte fügen Sie eine Rechtfertigung für
         dieses Kriterium hinzu.
       edit_status: Bearbeiten des Projekt-Badge-Status
+      submit_cdla_permissive_20_html:
     form_basics:
       project_name:
         description: Was ist der von Menschen lesbare Name des

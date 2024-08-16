@@ -371,6 +371,7 @@ sw:
       save_and_continue:
       submit_and_exit:
       submit_cc_by_3plus_html:
+      submit_cdla_permissive_20_html:
     show:
       edit:
       delete:
@@ -383,6 +384,7 @@ sw:
       last_achieved_html:
       cc_by_3plus_html:
       cc_by_3only_html:
+      cdla_permissive_20_html:
     form_early:
       badge_intro:
         description:

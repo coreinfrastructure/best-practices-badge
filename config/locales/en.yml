@@ -171,11 +171,15 @@ en:
         <a href="https://opensource.org/licenses/MIT">MIT</a> license
         (projects pursuing a badge are under their respective licenses).
         All publicly-available non-code content
-        managed by the badging application is
-        released under at least the <a href="https://creativecommons.org/licenses/by/3.0/">Creative
-        Commons Attribution License version 3.0 (CC-BY-3.0)</a>;
-        newer non-code content is released under CC-BY version
-        3.0 or later (CC-BY-3.0+). If referencing collectively
+        managed by the badging application that was added or edited
+        after 2024-08-23 is released under the
+        <a href="https://cdla.dev/permissive-2-0/"
+        >Community Data License Agreement – Permissive, Version 2.0
+        (CDLA-Permissive-2.0)</a>.
+        Previous contributions were licensed under either the
+        <a href="https://creativecommons.org/licenses/by/3.0/">Creative
+        Commons Attribution License version 3.0 (CC-BY-3.0)</a>, or as
+        CC-BY version 3.0 or later (CC-BY-3.0+). If referencing collectively
         or not otherwise noted, please credit the OpenSSF Best Practices
         badge contributors.
       share_header_html: >-
@@ -532,6 +536,19 @@ en:
         are free to share and adapt the data, but they must give
         appropriate credit. You retain copyright (if any), and
         the project license is unaffected.<br><br>
+      submit_cdla_permissive_20_html: >-
+        By submitting this data about the project you agree to
+        release it under at least the
+        <a href="https://cdla.dev/permissive-2-0/"
+        >Community Data License Agreement – Permissive, Version 2.0</a>.
+        This means that a Data Recipient
+        may share the Data, with or without modifications, so long as the
+        Data Recipient makes available the text of this agreement with
+        the shared Data.
+        This agreement does <i>not</i> impose any restriction or obligations
+        with respect to the use, modification, or sharing of Results.
+        You retain copyright (if any), and
+        the project license is unaffected.<br><br>
     show:
       edit: Edit
       delete: Delete
@@ -543,6 +560,17 @@ en:
       updated_at_html: "<strong>last updated on</strong> %{when}."
       last_lost_html: Last lost passing badge on %{when}.
       last_achieved_html: Last achieved passing badge on %{when}.
+      cdla_permissive_20_html: >-
+        This data is available under the
+        <a href="https://cdla.dev/permissive-2-0/"
+        >Community Data License Agreement – Permissive, Version 2.0
+        (CDLA-Permissive-2.0)</a>.
+        This means that a Data Recipient
+        may share the Data, with or without modifications, so long as the
+        Data Recipient makes available the text of this agreement with
+        the shared Data.
+        Please credit %{user} and the OpenSSF Best Practices badge
+        contributors.<br><br>
       cc_by_3plus_html: >-
         This data is available under the <a href="https://creativecommons.org/licenses/by/3.0/us"
         target="_blank" rel="noopener">Creative Commons Attribution version 3.0

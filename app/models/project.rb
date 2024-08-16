@@ -26,6 +26,9 @@ class Project < ApplicationRecord
   # (CC-BY-3.0+)?
   ENTRY_LICENSE_EXPLICIT_DATE = Time.iso8601('2017-02-20T12:00:00Z')
 
+  # When did we switch to CDLA-Permissive-2.0?
+  ENTRY_LICENSE_CDLA_PERMISSIVE_20_DATE = Time.iso8601('2024-08-23T12:00:00Z')
+
   STATUS_CHOICE = %w[? Met Unmet].freeze
   STATUS_CHOICE_NA = (STATUS_CHOICE + %w[N/A]).freeze
   MIN_SHOULD_LENGTH = 5
@@ -352,6 +355,26 @@ class Project < ApplicationRecord
   # if the updated_at field indicates there was agreement to it.
   def show_entry_license?
     updated_at >= ENTRY_LICENSE_EXPLICIT_DATE
+  end
+
+  def show_cdla_permissive_20_license?
+    updated_at >= ENTRY_LICENSE_CDLA_PERMISSIVE_20_DATE
+  end
+
+  # Which field should we display for the data license?
+  # Using the project's last updated_at value, return the name of the
+  # field in i18n "projects.show" to display as the license.
+  def data_license_field
+    if show_cdla_permissive_20_license?
+      'cdla_permissive_20_html'
+    elsif show_entry_license?
+      'cc_by_3plus_html'
+    else
+      # This is older data and the user didn't indicate anything,
+      # so the "terms of use" of CII apply, which said that unless
+      # otherwise noted it's released under CC-BY-3.0 only.
+      'cc_by_3only_html'
+    end
   end
 
   # Update the badge percentage for a given level (expressed as a number;

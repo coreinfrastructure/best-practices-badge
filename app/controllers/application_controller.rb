@@ -109,6 +109,14 @@ class ApplicationController < ActionController::Base
   end
   # rubocop:enable Naming/AccessorMethodName
 
+  # Ensure this page is NOT remotely cached.
+  def disable_cache
+    # Misleadingly, "no-cache" *allows* caching. We must use 'no-store'
+    # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control
+    response.headers['Cache-Control'] = 'no-store'
+    # We could remove header 'Surrogate-Control' but I found no need to do so.
+  end
+
   # Omit useless unchanged session cookie by not-logged-in users
   # to improve performance & privacy.
   # For example, setting a cookie disables some caches.
@@ -222,6 +230,10 @@ class ApplicationController < ActionController::Base
     #
     best_locale = find_best_locale
     preferred_url = force_locale_url(request.original_url, best_locale)
+
+    # Where we go varies by browser, so we can't cache this redirect
+    disable_cache
+
     # It's not clear what status code to provide on a locale-based redirect.
     # However, we must avoid 301 (Moved Permanently), because it is certainly
     # not a permanent move.

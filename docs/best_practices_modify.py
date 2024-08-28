@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# Modify bestpractices.coreinfrastructure.org project entries via API
+# Modify www.bestpractices.dev project entries via API
 
 # Copyright the Linux Foundation and the
 # CII Best Practices badge contributors
@@ -62,8 +62,8 @@ from urllib.request import urlopen
 
 # Plausible base URLs.
 LOCAL_BASE_URL = 'http://localhost:3000/'
-STAGING_BASE_URL = 'https://staging.bestpractices.coreinfrastructure.org/'
-PRODUCTION_BASE_URL = 'https://bestpractices.coreinfrastructure.org/'
+STAGING_BASE_URL = 'https://staging.bestpractices.dev/'
+PRODUCTION_BASE_URL = 'https://www.bestpractices.dev/'
 
 COOKIE_NAME = '_BadgeApp_session'
 

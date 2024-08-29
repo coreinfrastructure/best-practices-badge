@@ -209,12 +209,21 @@ def write_to_project(base_url, id, updated_data, session_cookie):
             auth_token, csrf_token, updated_session_cookie)
     return status == 200
 
+class CustomFormatter(argparse.ArgumentDefaultsHelpFormatter, argparse.RawDescriptionHelpFormatter):
+    """
+    Show the epilog in a way that preserves the linebreaks.
+    Suggested at:
+    https://bugs.python.org/issue13023
+    """
+    pass
+
 def main():
     """Main entry for command line interface"""
 
     # Create argument parser, then parse command line arguments with it.
     parser = argparse.ArgumentParser(
             description='Modify project data on BadgeApp',
+            formatter_class=CustomFormatter,
             epilog=__doc__
     )
     parser.add_argument('-C', '--cookie',

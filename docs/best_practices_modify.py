@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# Modify bestpractices.coreinfrastructure.org project entries via API
+# Modify www.bestpractices.dev project entries via API
 
 # Copyright the Linux Foundation and the
 # CII Best Practices badge contributors
@@ -62,8 +62,8 @@ from urllib.request import urlopen
 
 # Plausible base URLs.
 LOCAL_BASE_URL = 'http://localhost:3000/'
-STAGING_BASE_URL = 'https://staging.bestpractices.coreinfrastructure.org/'
-PRODUCTION_BASE_URL = 'https://bestpractices.coreinfrastructure.org/'
+STAGING_BASE_URL = 'https://staging.bestpractices.dev/'
+PRODUCTION_BASE_URL = 'https://www.bestpractices.dev/'
 
 COOKIE_NAME = '_BadgeApp_session'
 
@@ -209,12 +209,21 @@ def write_to_project(base_url, id, updated_data, session_cookie):
             auth_token, csrf_token, updated_session_cookie)
     return status == 200
 
+class CustomFormatter(argparse.ArgumentDefaultsHelpFormatter, argparse.RawDescriptionHelpFormatter):
+    """
+    Show the epilog in a way that preserves the linebreaks.
+    Suggested at:
+    https://bugs.python.org/issue13023
+    """
+    pass
+
 def main():
     """Main entry for command line interface"""
 
     # Create argument parser, then parse command line arguments with it.
     parser = argparse.ArgumentParser(
             description='Modify project data on BadgeApp',
+            formatter_class=CustomFormatter,
             epilog=__doc__
     )
     parser.add_argument('-C', '--cookie',

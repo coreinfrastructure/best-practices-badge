@@ -310,7 +310,19 @@
                 '0', 'Basics', 'Other', f, project, is_disabled
               ) %>
         </ul>
-
+      <% if current_user && current_user.admin? %>
+        <div class="row">
+        <div class="col-xs-12">
+          <br>
+            New owner id (a positive integer):
+            <%= f.text_field :user_id,
+                             hide_label: true, class:"form-control",
+                             placeholder: nil,
+                             spellcheck: false,
+                             disabled: is_disabled %>
+        </div>
+        </div>
+      <% end %>
       <div class="row">
       <div class="col-xs-12">
         <br>

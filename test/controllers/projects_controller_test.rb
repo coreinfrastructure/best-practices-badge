@@ -589,6 +589,34 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal new_name, @project.name
   end
 
+  test 'admin can change owner of other users project' do
+    log_in_as(@admin)
+    old_user = @project.user
+    assert_not_equal @admin.id, old_user.id
+    # Admin will own this project after this instruction.
+    patch "/en/projects/#{@project.id}", params: {
+      project: { user_id: @admin.id }
+    }
+    assert_redirected_to project_path(assigns(:project))
+    @project.reload
+    assert_equal @admin.id, @project.user_id
+  end
+
+  # We don't currently allow normal users to change the owner to
+  # anyone else, in case the recipient doesn't want it.
+  test 'Normal user cannot change owner of their own project' do
+    # Verify test setup - @project is owned by @user
+    assert_equal @project.user_id, @user.id
+    log_in_as(@user)
+    patch "/en/projects/#{@project.id}", params: {
+      project: { user_id: @admin.id }
+    }
+    assert_redirected_to project_path(assigns(:project))
+    @project.reload
+    # Notice that nothing has changed.
+    assert_equal @project.user_id, @user.id
+  end
+
   test 'Cannot evade /badge match with /badge/..' do
     get "/projects/#{@perfect_passing_project.id}/badge/..",
         params: { format: 'svg' }

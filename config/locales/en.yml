@@ -141,6 +141,8 @@ en:
       p2_html: >-
         You can easily see the <a href="/en/criteria/0">criteria for the
         passing badge</a>.
+        Automated analysis will determine many of the criteria answers for you
+        (and prevent obviously incorrect answers).
         More information on the OpenSSF Best Practices Badging program is
         <a href='https://github.com/coreinfrastructure/best-practices-badge'>available
         on GitHub</a>. <a href="/en/project_stats">Project statistics</a>

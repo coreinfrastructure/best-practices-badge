@@ -593,6 +593,11 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     log_in_as(@admin)
     old_user = @project.user
     assert_not_equal @admin.id, old_user.id
+    # We SHOULD see the option to change the owner id
+    get "/en/projects/#{@project.id}/edit"
+    assert_response :success
+    assert_includes @response.body, 'New owner id'
+    # Let's ensure we CAN change it.
     # Admin will own this project after this instruction.
     patch "/en/projects/#{@project.id}", params: {
       project: { user_id: @admin.id }
@@ -608,6 +613,11 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     # Verify test setup - @project is owned by @user
     assert_equal @project.user_id, @user.id
     log_in_as(@user)
+    # We should NOT see the option to change the owner id
+    get "/en/projects/#{@project.id}/edit"
+    assert_response :success
+    assert_not_includes @response.body, 'New owner id'
+    # Let's ensure we can't change it.
     patch "/en/projects/#{@project.id}", params: {
       project: { user_id: @admin.id }
     }

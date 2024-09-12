@@ -202,7 +202,11 @@ class Project < ApplicationRecord
               message: :begin_with_cpe
             }
 
-  validates :user_id, presence: true
+  validates :user_id,
+            numericality: {
+              only_integer: true,
+              greater_than_or_equal_to: 1
+            }
 
   Criteria.each_value do |criteria|
     criteria.each_value do |criterion|

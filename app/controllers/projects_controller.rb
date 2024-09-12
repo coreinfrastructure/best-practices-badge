@@ -274,11 +274,15 @@ class ProjectsController < ApplicationController
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   # rubocop:disable Metrics/PerceivedComplexity
   def update
-    if repo_url_change_allowed?
+    # Only accept updates if there's no repo_url change OR if change is ok
+    if repo_url_unchanged_or_change_allowed?
       # Send CDN purge early, to give it time to distribute purge request
       @project.purge_cdn_project
       old_badge_level = @project.badge_level
-      project_params.each do |key, user_value| # mass assign
+      final_project_params = project_params
+      # Only admins can *directly* change the project owner (user_id)
+      final_project_params = project_params.except('user_id') unless current_user.admin?
+      final_project_params.each do |key, user_value| # mass assign
         @project[key] = user_value
       end
       Chief.new(@project, client_factory).autofill
@@ -611,7 +615,7 @@ class ProjectsController < ApplicationController
   # But otherwise normal users can't change the repo_urls in less than
   # REPO_URL_CHANGE_DELAY days.  Allowing users to change repo_urls, but only
   # with large delays, reduces the administration effort required.
-  def repo_url_change_allowed?
+  def repo_url_unchanged_or_change_allowed?
     return true unless @project.repo_url?
     return true if project_params[:repo_url].nil?
     return true if current_user.admin?

@@ -223,6 +223,7 @@ zh-CN:
       updated_at_html: "<strong>最后更新于</strong> %{when}。"
       last_lost_html: 最后在%{when}丢失通过徽章。
       last_achieved_html: 最后在 %{when} 获得通过徽章。
+      cdla_permissive_20_html:
     edit:
       submit_cc_by_3plus_html: >-
         通过提交有关该项目的数据，您同意至少在<a href="https://creativecommons.org/licenses/by/3.0/us"
@@ -241,6 +242,7 @@ zh-CN:
       static_analysis_updated_html: >-
         我们更新了<a href="#static_analysis"> static_analysis </a>条款的要求。请为此条款添加说明。
       edit_status: 编辑项目徽章状态
+      submit_cdla_permissive_20_html:
     form_basics:
       project_name:
         description: 项目的人类可读的名称是什么？

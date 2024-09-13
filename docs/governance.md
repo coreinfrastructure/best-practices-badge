@@ -15,10 +15,117 @@ Core Infrastructure Initiative (CII) project.
 In terms of
 ["Governance models" (Gardler and Hanganu)](http://oss-watch.ac.uk/resources/governancemodels) the badging project is a bazaar -
 contributions are gladly welcomed from anyone.
-The project is led by a single technical lead designated by the OpenSSF.
-The technical lead has final say on decisions (and thus is
-something of a "benevolent dictator"), but the technical
-lead is subject to being overruled or replaced by the OpenSSF.
+However, we need to review external contributions to maintain quality.
+
+### Technical Steering Committee (TSC)
+
+This project is led by the OpenSSF Best Practices Badge
+Technical Steering Committee (TSC).
+For the list of current members, see [TSC.md](./TSC.md).
+
+TSC decisions are by majority vote.
+Decisions can be asynchronous/electronic (e.g., a mailing list or
+electronic voting system) or synchronous/meeting (e.g., in an
+in-person meeting or a teleconference),
+at the choice of the TSC members.
+A synchronous meeting requires a quorum of at least 50% of TSC members.
+In an asynchronous meeting all TSC members are considered present and a
+majority must vote for the vote to be valid.
+If there is a tie, the OpenSSF Best Practices Badge
+technical lead can break the tie (but is not obligated to do so).
+
+This TSC reports to the OpenSSF Best Practices Working Group, who in
+turn report to the OpenSSF Technical Advisory Council (TAC).
+
+The TSC can add or remove members to itself (again, by majority vote).
+
+The OpenSSF TAC can add or remove members in the OpenSSF Best
+Practices Badge TSC by TAC majority vote. This is not intended to
+be a common practice, but this mechanism prevents the TSC from being
+overly insular and enables a restart if all TSC members are unable to
+continue their roles.
+
+TSC members represent themselves, not their employers.
+We note TSC employers because we want to ensure that no single organization
+controls this project.
+
+For general practices see the "TSC Voting" section below.
+
+## TSC Powers
+
+The TSC may (1) establish work flow procedures for the submission,
+approval, and closure/archiving of projects, (2) set requirements
+for the promotion of Contributors to Committer status, as applicable,
+and (3) amend, adjust, refine and/or eliminate the roles of
+Contributors, and Committers, and create new roles, and publicly
+document any TSC roles, as it sees fit.
+
+The TSC may elect a TSC Chair, who will preside over meetings of
+the TSC and will serve until their resignation or replacement by
+the TSC.  The TSC Chair, or any other TSC member so designated by
+the TSC, will serve as the primary communication contact between
+the Project and OpenSSF, a directed fund of The Linux Foundation.
+
+The TSC will be responsible for all aspects of oversight relating
+to the Project, which may include:
+
+1. coordinating the technical direction of the Project; approving
+   project or system proposals (including, but not limited to, incubation,
+2. deprecation, and changes to a sub-project’s scope);
+3. organizing sub-projects and removing sub-projects;
+4. creating sub-committees or working groups to focus on cross-project
+   technical issues and requirements;
+5. appointing representatives to work with other open source or
+   open standards communities;
+6. establishing community norms, workflows, issuing releases,
+   and security issue reporting policies;
+7. approving and implementing policies and processes for contributing
+   and coordinating with
+   the series manager of the Project (as provided for in the Series
+   Agreement, the “Series Manager”) to resolve matters or concerns
+   that may arise;
+8. discussions, seeking consensus, and where necessary, voting on
+   technical matters relating to the code base that affect multiple
+   projects; and
+   coordinating any marketing, events, or communications regarding the Project.
+
+In practice, the TSC delegates many tasks to the technical lead, who
+serves the TSC.
+
+## TSC Voting
+
+1. While the Project aims to operate as a consensus-based community,
+   if any TSC decision requires a vote to move the Project forward,
+   the voting members of the TSC will vote on a one vote per voting
+   member basis.
+2. Quorum for TSC meetings requires at least fifty percent of all
+   voting members of the TSC to be present. The TSC may continue to
+   meet if quorum is not met but will be prevented from making any
+   decisions at the meeting.
+3. Except as provided in Technical Charter Section 7.c. and 8.a, decisions
+   by vote at a meeting require a majority vote of those in attendance,
+   provided quorum is met. Decisions made by electronic vote without
+   a meeting require a majority vote of all voting members of the TSC.
+4. In the event a vote cannot be resolved by the TSC, any voting
+   member of the TSC may refer the matter to the Series Manager for
+   assistance in reaching a resolution.
+   They may also contact the OpenSSF Best Practices WG.
+
+Technical Charter sections 7.c and 8.a identify the licensing requirements,
+e.g., MIT license for the source code.
+
+## Technical Lead
+
+Many of the day-to-day maintenance tasks of the OpenSSF Best Practices Badge
+are managed by the OpenSSF Best Practices Badge technical lead.
+
+The technical lead reports to the OpenSSF TSC, including on significant
+work or decisions to be made.
+The technical lead's decisions can be
+overruled by the OpenSSF TSC at any time.
+In addition, the OpenSSF TSC can replace the technical lead at any time
+(as always, by majority vote).
+
 Also, since the project is FLOSS, the project can be forked;
 this ability to fork also provides a check against despotism.
 The technical lead's job is focus on doing what's best
@@ -26,11 +133,57 @@ for this project, and the project's goal is to help
 the FLOSS community overall.
 
 The technical lead has commit rights on the software, and administrative
-rights to the production site, and can add or remove those rights to others.
+rights to the production site (both web app admin rights and rights
+to its infrastructure).
+The technical lead can add or remove those rights to others
+to further the goals of the project
+(subject, as always, to being overruled by the TSC).
 Those with commit rights can make changes
 (subject to caveats described below) and accept changes
 (typically pull requests) submitted by others.
 These changes include changes to the process and contribution requirements.
+
+## Committers
+
+Committers are those with authority to directly make changes
+to the main branch of the code.
+The TSC and technical lead can add or revoke commit privilege
+(the TSC overrides the technical lead in case of a conflict).
+Committers can accept contributions from contributors.
+
+## Contributors
+
+Contributors are those who choose to contribute to the project.
+See [CONTRIBUTING](../CONTRIBUTING.md).
+
+## Web application admin
+
+A very few people have been granted the admin privilege within the
+web application. In general, the TSC and/or technical lead initiates
+inviting someone to have this admin privilege, it's usually not granted
+on request.
+Admin privilege is only considered for those who have consistently demonstrated
+(1) trustworthiness, (2) support for the badge project, and
+(3) need for this privilege (e.g., through repeated reasonable requests
+that we have to act on).
+
+The admin privilege in the web application allows that user to
+edit/update any badge entry or user data, as well as see all this data.
+Note that we *do* keep a record of every change made to badge entry
+data and who made the change, even for admins.
+
+The purpose of granting admin privilege is to
+enable that individual to immediately fix *any* of the issues
+in the badges or users. We recommend that admins fix projects so that
+individual projects can fix their own problems in the future.
+
+Admin is a position of high trust. In particular, admins must not
+abuse their access to the email addresses of every user (which are
+private).  We don't want to have many admins.
+However, we also don't want any one person to be a bottleneck.
+
+Note that web application admin is not the same as having direct
+access/control over the underlying database or container.
 
 ## Process
 
@@ -41,7 +194,7 @@ For details, including contribution requirements, see
 Note that we emphasize two-person review for anything other than
 low-risk contributions.
 
-This project requires two-factor authentication (2FA).
+This project requires two-factor authentication (2FA) for direct commit rights.
 In addition, this project does not accept SMS as the second factor.
 
 Issues that we have determined are especially important, particularly
@@ -49,7 +202,7 @@ if they will take a while, are added to the "next" milestone
 (which identifies "what should be prioritized next").
 
 We expect people to focus on improving the project, not attacking other
-people.  Please strive to "Be excellent to each other."
+people. Please strive to "Be excellent to each other."
 For more information, see our [Code of Conduct](../CODE_OF_CONDUCT.md).
 
 ## Criteria changes
@@ -97,7 +250,13 @@ Speeding adding of a criterion is expected to be extremely unusual.
 ## Current people
 
 The current Badge Project technical lead is David A. Wheeler.
-Others with commit rights include Jason Dossett.
+
+To see the current list of TSC members, see [TSC.md](./TSC.md).
+
+## Underlying charter
+
+For our legal basis, see the
+[Best Practices Badge Technical Charter](Best-Practices-Badge-Technical-Charter-Final-2024-04-30.pdf).
 
 ## See also
 

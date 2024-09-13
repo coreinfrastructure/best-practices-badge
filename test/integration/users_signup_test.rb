@@ -83,6 +83,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
       # Ensure invalid activation token won't work.
       # get edit_account_activation_path('invalid_token', locale: :en)
       get "/en/account_activations/0000/edit?email=#{user.email}"
+      follow_redirect!
       assert_not user_logged_in?
       #       # Valid token, wrong email
       #       get edit_account_activation_path(
@@ -121,8 +122,8 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
       user.create_activation_digest
       user.save!
       get "/en/account_activations/#{user.activation_token}/edit?email=#{user.email}"
-      assert user.reload.activated?
       follow_redirect!
+      assert user.reload.activated?
       assert_template 'sessions/new'
       assert_not user_logged_in?
       assert_not user.login_allowed_now?
@@ -144,28 +145,37 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
   # rubocop: disable Metrics/BlockLength
   test 'resend account activation for unactivated account' do
     VCR.use_cassette('resend_account_activation_for_unactivated_account') do
+      user = User.find_by(email: 'forgetful@example.com')
+      assert_not user.activated?
       get signup_path
       login_params = {
         user: {
           name: 'Example User',
-                email: 'user@example.com',
-                password:              'a-g00d!Xpassword',
-                password_confirmation: 'a-g00d!Xpassword'
+                email: 'forgetful@example.com',
+                password:              'password',
+                password_confirmation: 'password'
         }
       }
-      assert_difference 'User.count', 1 do
+      assert_equal 0, ActionMailer::Base.deliveries.size
+      assert_no_difference 'User.count' do
         post users_path, params: login_params
       end
       assert_equal 1, ActionMailer::Base.deliveries.size
       assert_no_difference 'User.count' do
         post users_path, params: login_params
       end
-      assert_equal 2, ActionMailer::Base.deliveries.size
-      user = assigns(:user)
-      assert_not user.activated?
-      # Valid activation token
-      get edit_account_activation_path(user.activation_token,
-                                       email: user.email)
+      # This second attempt should not send an email because of rate limiting
+      assert_equal 1, ActionMailer::Base.deliveries.size
+      # Provide valid activation token
+      # might seem; for discussion on why, see above. So we don't say:
+      # get edit_account_activation_path(id: user.id, email: user.email)
+      # We don't normally store the activation token. For test purposes,
+      # Instead of trying to read the email sent, we just re-create a
+      # token and use it instead.
+      user.create_activation_digest
+      user.save!
+      get "/en/account_activations/#{user.activation_token}/edit?email=#{user.email}"
+      # Now it's activated. We must reload to see the new user value.
       assert user.reload.activated?
       follow_redirect!
       assert_template 'sessions/new'

@@ -71,9 +71,15 @@ module ProjectsHelper
   # Generate HTML for minor heading
   def minor_header_html(minor)
     # rubocop:disable Rails/OutputSafety
+    # Section ids are section_ followed by lowercased letters, digits, _ for space
+    # We strip out everything else.
+    section_id = 'section_' + minor.downcase.tr(' ', '_').gsub(/[^a-z0-9_-]/, '')
+
     safe_join(
       [
-        '<li class="list-group-item"><h3>'.html_safe,
+        '<li class="list-group-item"><h3 id="'.html_safe,
+        section_id,
+        '">'.html_safe,
         t(minor, scope: [:headings]),
         '</h3>'.html_safe
       ]

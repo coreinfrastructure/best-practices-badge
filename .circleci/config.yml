@@ -3,9 +3,11 @@ version: 2.1
 # OpenSSF Scorecard. You can see the hash pins on the various "image:"
 # values. That prevents downloading of later subversions AND of later
 # updates. When you *DO* want to update, you can easily find out the hash
-# of a given docker container by just running something like:
-# > docker pull circleci/postgres:11.5-ram
-# This will return with the SHA-256 hash of the current version.
+# of a given docker container via:
+# https://hub.docker.com/r/cimg/postgres/tags
+# For more info: https://circleci.com/developer/images/image/cimg/postgres
+# You could also run something like:
+# > docker pull circleci/postgres:13.14
 #
 orbs:
   browser-tools: circleci/browser-tools@1.4.1
@@ -27,7 +29,7 @@ jobs:
         PG_USER: ubuntu
         RAILS_ENV: test
         RACK_ENV: test
-    - image: cimg/postgres@sha256:baf39240249c9aeaaf09a3052e3663a5e99fa515c38ed6293b6689ffa15bb48e # pin :11.17
+    - image: cimg/postgres@sha256:86e5a2c769da73ad7c6fa2de1b520d44566c146ba9f5c33382be023754804128 # pin :14.11
       environment:
         POSTGRES_USER: ubuntu
         POSTGRES_DB: circle_ruby_test

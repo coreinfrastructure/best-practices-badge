@@ -38,13 +38,16 @@ en:
     footer_text_html: >-
       <small> <strong>Need help? Have a question? See a problem?
       Please <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
-      target="_blank" rel="noopener">file an issue</a></em>.</strong> © 2015-2021
+      target="_blank" rel="noopener">file an issue</a></em>.</strong>
+      Copyright © 
+      <a href="https://www.bestpractices.dev" target="_blank" rel="noopener">OpenSSF Best Practices Badge a Series of LF Projects, LLC</a>.
+      For web site terms of use, trademark policy and other project policies please see <a href="https://lfprojects.org" target="_blank" rel="noopener">these policies</a>.
+      For more information, see the websites of the
       <a href="https://openssf.org" target="_blank" rel="noopener">Open Source
-      Security Foundation</a>, a <a href="https://www.linuxfoundation.org/"
-      target="_blank" rel="noopener">Linux Foundation</a> Collaborative Project.
+      Security Foundation (OpenSSF)</a> and <a href="https://www.linuxfoundation.org/"
+      target="_blank" rel="noopener">The Linux Foundation</a>.
       All Rights Reserved. Please see our <a href="https://www.linuxfoundation.org/privacy"
-      target="_blank" rel="noopener">privacy policy</a> and <a href="https://www.linuxfoundation.org/terms"
-      target="_blank" rel="noopener">terms of use</a>. </small>
+      target="_blank" rel="noopener">privacy policy</a>.</small>
   admin_only: Admin only.
   account_activations:
     activated: >
@@ -138,6 +141,8 @@ en:
       p2_html: >-
         You can easily see the <a href="/en/criteria/0">criteria for the
         passing badge</a>.
+        Automated analysis will determine many of the criteria answers for you
+        (and prevent obviously incorrect answers).
         More information on the OpenSSF Best Practices Badging program is
         <a href='https://github.com/coreinfrastructure/best-practices-badge'>available
         on GitHub</a>. <a href="/en/project_stats">Project statistics</a>
@@ -168,11 +173,15 @@ en:
         <a href="https://opensource.org/licenses/MIT">MIT</a> license
         (projects pursuing a badge are under their respective licenses).
         All publicly-available non-code content
-        managed by the badging application is
-        released under at least the <a href="https://creativecommons.org/licenses/by/3.0/">Creative
-        Commons Attribution License version 3.0 (CC-BY-3.0)</a>;
-        newer non-code content is released under CC-BY version
-        3.0 or later (CC-BY-3.0+). If referencing collectively
+        managed by the badging application that was added or edited
+        after 2024-08-23 is released under the
+        <a href="https://cdla.dev/permissive-2-0/"
+        >Community Data License Agreement – Permissive, Version 2.0
+        (CDLA-Permissive-2.0)</a>.
+        Previous contributions were licensed under either the
+        <a href="https://creativecommons.org/licenses/by/3.0/">Creative
+        Commons Attribution License version 3.0 (CC-BY-3.0)</a>, or as
+        CC-BY version 3.0 or later (CC-BY-3.0+). If referencing collectively
         or not otherwise noted, please credit the OpenSSF Best Practices
         badge contributors.
       share_header_html: >-
@@ -529,6 +538,19 @@ en:
         are free to share and adapt the data, but they must give
         appropriate credit. You retain copyright (if any), and
         the project license is unaffected.<br><br>
+      submit_cdla_permissive_20_html: >-
+        By submitting this data about the project you agree to
+        release it under at least the
+        <a href="https://cdla.dev/permissive-2-0/"
+        >Community Data License Agreement – Permissive, Version 2.0</a>.
+        This means that a Data Recipient
+        may share the Data, with or without modifications, so long as the
+        Data Recipient makes available the text of this agreement with
+        the shared Data.
+        This agreement does <i>not</i> impose any restriction or obligations
+        with respect to the use, modification, or sharing of Results.
+        You retain copyright (if any), and
+        the project license is unaffected.<br><br>
     show:
       edit: Edit
       delete: Delete
@@ -540,6 +562,17 @@ en:
       updated_at_html: "<strong>last updated on</strong> %{when}."
       last_lost_html: Last lost passing badge on %{when}.
       last_achieved_html: Last achieved passing badge on %{when}.
+      cdla_permissive_20_html: >-
+        This data is available under the
+        <a href="https://cdla.dev/permissive-2-0/"
+        >Community Data License Agreement – Permissive, Version 2.0
+        (CDLA-Permissive-2.0)</a>.
+        This means that a Data Recipient
+        may share the Data, with or without modifications, so long as the
+        Data Recipient makes available the text of this agreement with
+        the shared Data.
+        Please credit %{user} and the OpenSSF Best Practices badge
+        contributors.<br><br>
       cc_by_3plus_html: >-
         This data is available under the <a href="https://creativecommons.org/licenses/by/3.0/us"
         target="_blank" rel="noopener">Creative Commons Attribution version 3.0

@@ -33,14 +33,18 @@ fr:
       <small> <strong>Vous avez besoin d'aide ? Vous avez une
       question ? Vous voyez un problème ? Merci de <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
       target="_blank" rel="noopener">reporter un problème</a></em>.</strong>
-      © 2015-2021 <a href="https://openssf.org" target="_blank"
-      rel="noopener">Open Source Security Foundation</a>, un projet
-      collaboratif de la <a href="https://www.linuxfoundation.org/"
-      target="_blank" rel="noopener">Fondation Linux</a>. Tous
-      droits réservés. Consultez notre <a href="https://www.linuxfoundation.org/privacy"
-      target="_blank" rel="noopener">politique de confidentialité</a>
-      et nos <a href="https://www.linuxfoundation.org/terms" target="_blank"
-      rel="noopener">conditions d'utilisation</a>. </small>
+      Copyright © <a href="https://www.bestpractices.dev" target="_blank"
+      rel="noopener">OpenSSF Best Practices Badge a Series of
+      LF Projects, LLC</a>. Pour les conditions d'utilisation
+      du site web, la politique de marque ou autres règlements
+      du projet, voir <a href="https://lfprojects.org" target="_blank"
+      rel="noopener">ces règlements</a>. Pour plus d'information,
+      voir les sites web de l'<a href="https://openssf.org" target="_blank"
+      rel="noopener">Open Source Security Foundation (OpenSSF)</a>
+      et de la <a href="https://www.linuxfoundation.org/" target="_blank"
+      rel="noopener">Fondation Linux</a>. Tous droits réservés.
+      Consultez notre <a href="https://www.linuxfoundation.org/privacy"
+      target="_blank" rel="noopener">politique de confidentialité</a>.</small>
     account: Compte
     choose_locale: Choisir la langue
     toggle_navigation: Choisir ou non la navigation repliable
@@ -359,6 +363,7 @@ fr:
         %{when}."
       last_lost_html: Le dernier badge perdu l'a été le %{when}.
       last_achieved_html: Le dernier badge obtenu l'a été le %{when}.
+      cdla_permissive_20_html:
     edit:
       submit_cc_by_3plus_html: >-
         En soumettant ces données sur le projet, vous acceptez
@@ -395,6 +400,7 @@ fr:
         Nous avons mis à jour nos exigences pour le critère static_analysis.
         Veuillez ajouter une justification pour ce critère.
       edit_status: Éditer le statut du badge du projet
+      submit_cdla_permissive_20_html:
     form_basics:
       project_name:
         description: Quel est le nom intelligible du projet ?
@@ -615,12 +621,12 @@ fr:
         hide_details: Masquer les détails
         show_all_details: Afficher tous les détails
         hide_all_details: Masquer tous les détails
-        show_met_title: Afficher les critères atteints & N/A
-        show_met_html: Afficher atteints &amp; N/A
+        show_met_title: Afficher les critères atteints et incomplets
+        show_met_html: Afficher les critères atteints et incomplets
         hide_met_title: >-
-          Masquer les critères atteints & N/A (en laissant les
-          critères non satisfaits et inconnus)
-        hide_met_html: Masquer atteints &amp; N/A
+          Afficher uniquement les critères incomplets (affichant
+          uniquement les critères non satisfaits et inconnus)
+        hide_met_html: Afficher uniquement les critères incomplets
         passing_alt: Assez pour un badge !
         barely_alt: À peine suffisant pour un badge.
         failing_alt: Pas assez pour un badge.
@@ -2224,9 +2230,9 @@ fr:
         details: >-
           Le projet pourrait ne pas atteindre la feuille de route,
           et c'est acceptable ; le but de la feuille de route
-          est d'aider les utilisateurs potentiels et les contributeurs
+          est d'aider les utilisateurs et les contributeurs potentiels
           à comprendre l'orientation prévue du projet. Elle ne
-          doit pas être détaillée.
+          doit nécessairement pas être détaillée.
       documentation_architecture:
         description: >-
           Le projet DOIT inclure la documentation de l'architecture

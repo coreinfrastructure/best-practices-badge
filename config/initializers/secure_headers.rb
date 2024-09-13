@@ -30,7 +30,9 @@ SecureHeaders::Configuration.default do |config|
     style_src: normal_src,
     # Harden CSP against attacks in other ways
     base_uri: ["'self'"],
-    block_all_mixed_content: true, # see http://www.w3.org/TR/mixed-content/
+    # This option is deprecated and marked obsolete in its specification,
+    # so we no longer include it:
+    # block_all_mixed_content: true, # see http://www.w3.org/TR/mixed-content/
     frame_ancestors: ["'none'"],
     form_action: normal_src # This counters some XSS busters
   }

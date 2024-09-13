@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_02_03_172721) do
+ActiveRecord::Schema[7.0].define(version: 2024_05_28_224233) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_stat_statements"
@@ -33,8 +33,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_03_172721) do
 
   create_table "pg_search_documents", id: :serial, force: :cascade do |t|
     t.text "content"
-    t.string "searchable_type"
     t.integer "searchable_id"
+    t.string "searchable_type"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.index ["searchable_type", "searchable_id"], name: "index_pg_search_documents_on_searchable_type_and_searchable_id"
@@ -423,6 +423,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_02_03_172721) do
     t.datetime "can_login_starting_at", precision: nil
     t.boolean "blocked", default: false, null: false
     t.text "blocked_rationale"
+    t.datetime "activation_email_sent_at"
     t.index ["email_bidx"], name: "email_local_unique_bidx", unique: true, where: "((provider)::text = 'local'::text)"
     t.index ["email_bidx"], name: "index_users_on_email_bidx"
     t.index ["last_login_at"], name: "index_users_on_last_login_at"

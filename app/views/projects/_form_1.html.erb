@@ -45,7 +45,7 @@
              }) %>
       <div class="panel-collapse collapse in">
         <ul class="list-group">
-          <li class="list-group-item"><h3><%= t('headings.Identification') %></h3>
+          <li class="list-group-item"><h3 id="section_identification"><%= t('headings.Identification') %></h3>
             <%= render(partial: 'form_basics',
                  locals:
                    {
@@ -79,7 +79,7 @@
 
       <% unless is_disabled %>
         <div class="panel-footer text-center">
-          <%= t 'projects.edit.submit_cc_by_3plus_html' %>
+          <%= t 'projects.edit.submit_cdla_permissive_20_html' %>
           <%= f.button t('projects.edit.save_and_continue'), type: 'submit', name: 'continue',
               value: 'changecontrol', class:"btn btn-success btn-submit" %>
           <%= f.submit t('projects.edit.submit_and_exit'), class:"btn btn-success btn-submit" %>
@@ -107,7 +107,7 @@
         </ul>
         <% unless is_disabled %>
           <div class="panel-footer text-center">
-            <%= t 'projects.edit.submit_cc_by_3plus_html' %>
+            <%= t 'projects.edit.submit_cdla_permissive_20_html' %>
             <%= f.button t('projects.edit.save_and_continue'), type: 'submit', name: 'continue',
               value: 'reporting', class:"btn btn-success btn-submit" %>
             <%= f.submit t('projects.edit.submit_and_exit'), class:"btn btn-success btn-submit" %>
@@ -138,7 +138,7 @@
         </ul>
         <% unless is_disabled %>
           <div class="panel-footer text-center">
-            <%= t 'projects.edit.submit_cc_by_3plus_html' %>
+            <%= t 'projects.edit.submit_cdla_permissive_20_html' %>
             <%= f.button t('projects.edit.save_and_continue'), type: 'submit', name: 'continue',
               value: 'quality', class:"btn btn-success btn-submit" %>
             <%= f.submit t('projects.edit.submit_and_exit'), class:"btn btn-success btn-submit" %>
@@ -187,7 +187,7 @@
         </ul>
         <% unless is_disabled %>
           <div class="panel-footer text-center">
-            <%= t 'projects.edit.submit_cc_by_3plus_html' %>
+            <%= t 'projects.edit.submit_cdla_permissive_20_html' %>
             <%= f.button t('projects.edit.save_and_continue'), type: 'submit', name: 'continue',
               value: 'security', class:"btn btn-success btn-submit" %>
             <%= f.submit t('projects.edit.submit_and_exit'), class:"btn btn-success btn-submit" %>
@@ -211,7 +211,7 @@
                 '1', 'Security', 'Secure development knowledge',
                 f, project, is_disabled
               ) %>
-          <li class="list-group-item"><h3><%=
+          <li class="list-group-item"><h3 id="section_use_basic_good_cryptographic_practices"><%=
             t('Use basic good cryptographic practices',
               scope: :headings) %></h3>
 
@@ -242,7 +242,7 @@
         </ul>
         <% unless is_disabled %>
           <div class="panel-footer text-center">
-            <%= t 'projects.edit.submit_cc_by_3plus_html' %>
+            <%= t 'projects.edit.submit_cdla_permissive_20_html' %>
             <%= f.button t('projects.edit.save_and_continue'), type: 'submit', name: 'continue',
               value: 'analysis', class:"btn btn-success btn-submit" %>
             <%= f.submit t('projects.edit.submit_and_exit'), class:"btn btn-success btn-submit" %>
@@ -273,7 +273,7 @@
         </ul>
         <% unless is_disabled %>
           <div class="panel-footer text-center">
-            <%= t 'projects.edit.submit_cc_by_3plus_html' %>
+            <%= t 'projects.edit.submit_cdla_permissive_20_html' %>
             <%= f.button t('projects.edit.save_and_continue'), type: 'submit', name: 'continue',
               value: 'future', class:"btn btn-success btn-submit" %>
             <%= f.submit t('projects.edit.submit_and_exit'), class:"btn btn-success btn-submit" %>
@@ -286,16 +286,10 @@
       <br>
       <div class="center">
       <% if is_disabled %>
-        <% if project.show_entry_license? %>
-          <%= t 'projects.show.cc_by_3plus_html', user: project.user_display_name %>
-        <% else %>
-          <!-- This is older data and the user didn't indicate anything,
-               so the "terms of use" of CII apply, which said that unless
-               otherwise noted it's released under CC-BY-3.0 only. -->
-          <%= t 'projects.show.cc_by_3only_html', user: project.user_display_name %>
-        <% end %>
+        <%= t "projects.show.#{project.data_license_field}",
+              user: project.user_display_name %>
       <% else %>
-        <%= t 'projects.edit.submit_cc_by_3plus_html' %>
+        <%= t 'projects.edit.submit_cdla_permissive_20_html' %>
         <%= f.button t('projects.edit.save_and_continue'), type: 'submit', name: 'continue',
           value: 'Save', class:"btn btn-success btn-submit" %>
         <%= f.submit t('projects.edit.submit_and_exit'), class:"btn btn-success btn-submit" %>

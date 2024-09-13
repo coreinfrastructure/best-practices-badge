@@ -45,7 +45,7 @@ We document here the 4 false positives, and why they are false positives:
       Evidence: In your session_store.rb file you are not using ActiveRecord to
       store session data. This will let rails to use a cookie based session
       and it can expose your web application to a session replay attack.
-      filename ./cii-best-practices-badge/config/initializers/session_store.rb"
+      filename ./best-practices-badge/config/initializers/session_store.rb"
     - Dawnscanner is correct that we use a cookie based store.  However,
       we counter session replay attacks in a different way: we force times
       into the session, and time out old cookies.  Since we do this by hand,

@@ -796,7 +796,7 @@ en:
         to take a few extra steps.
         Typically this just involves sending an email.
         For more information, see the encryption section of <a
-        href="https://www.linuxfoundation.org/resources/publications/understanding-us-export-controls-with-os-projects/"
+        href="https://www.linuxfoundation.org/resources/publications/understanding-us-export-controls-with-open-source-projects"
         ><i>Understanding Open Source Technology &amp;
         US Export Controls</i></a>.
       dont_use_crypto: >-

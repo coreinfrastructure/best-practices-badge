@@ -212,12 +212,12 @@ http_interactions:
       - 23E2:46A7:9D4F0:12BEA2:5E42E09E
     body:
       encoding: ASCII-8BIT
-      string: '[{"name":"somedoc.md","path":"docs/somedoc.md","sha":"9edec62594ff28249393febd3111da1cf8ccc6ff","size":21,"url":"https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/docs/somedoc.md?ref=master","html_url":"https://github.com/david-a-wheeler/test-badge-project/blob/master/docs/somedoc.md","git_url":"https://api.github.com/repos/david-a-wheeler/test-badge-project/git/blobs/9edec62594ff28249393febd3111da1cf8ccc6ff","download_url":"https://raw.githubusercontent.com/david-a-wheeler/test-badge-project/master/docs/somedoc.md","type":"file","_links":{"self":"https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/docs/somedoc.md?ref=master","git":"https://api.github.com/repos/david-a-wheeler/test-badge-project/git/blobs/9edec62594ff28249393febd3111da1cf8ccc6ff","html":"https://github.com/david-a-wheeler/test-badge-project/blob/master/docs/somedoc.md"}}]'
+      string: '[{"name":"somedoc.md","path":"doc/somedoc.md","sha":"9edec62594ff28249393febd3111da1cf8ccc6ff","size":21,"url":"https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/doc/somedoc.md?ref=master","html_url":"https://github.com/david-a-wheeler/test-badge-project/blob/master/doc/somedoc.md","git_url":"https://api.github.com/repos/david-a-wheeler/test-badge-project/git/blobs/9edec62594ff28249393febd3111da1cf8ccc6ff","download_url":"https://raw.githubusercontent.com/david-a-wheeler/test-badge-project/master/doc/somedoc.md","type":"file","_links":{"self":"https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/doc/somedoc.md?ref=master","git":"https://api.github.com/repos/david-a-wheeler/test-badge-project/git/blobs/9edec62594ff28249393febd3111da1cf8ccc6ff","html":"https://github.com/david-a-wheeler/test-badge-project/blob/master/doc/somedoc.md"}}]'
     http_version: 
   recorded_at: Tue, 11 Feb 2020 17:13:02 GMT
 - request:
     method: get
-    uri: https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/docs/somedoc.md
+    uri: https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/doc/somedoc.md
     body:
       encoding: US-ASCII
       string: ''
@@ -286,12 +286,12 @@ http_interactions:
       - DF37:53DC:1DCBE:44CDE:5E42E09E
     body:
       encoding: ASCII-8BIT
-      string: '{"name":"somedoc.md","path":"docs/somedoc.md","sha":"9edec62594ff28249393febd3111da1cf8ccc6ff","size":21,"url":"https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/docs/somedoc.md?ref=master","html_url":"https://github.com/david-a-wheeler/test-badge-project/blob/master/docs/somedoc.md","git_url":"https://api.github.com/repos/david-a-wheeler/test-badge-project/git/blobs/9edec62594ff28249393febd3111da1cf8ccc6ff","download_url":"https://raw.githubusercontent.com/david-a-wheeler/test-badge-project/master/docs/somedoc.md","type":"file","content":"IyBEb2N1bWVudGF0aW9uIEZpbGUK\n","encoding":"base64","_links":{"self":"https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/docs/somedoc.md?ref=master","git":"https://api.github.com/repos/david-a-wheeler/test-badge-project/git/blobs/9edec62594ff28249393febd3111da1cf8ccc6ff","html":"https://github.com/david-a-wheeler/test-badge-project/blob/master/docs/somedoc.md"}}'
+      string: '{"name":"somedoc.md","path":"doc/somedoc.md","sha":"9edec62594ff28249393febd3111da1cf8ccc6ff","size":21,"url":"https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/doc/somedoc.md?ref=master","html_url":"https://github.com/david-a-wheeler/test-badge-project/blob/master/doc/somedoc.md","git_url":"https://api.github.com/repos/david-a-wheeler/test-badge-project/git/blobs/9edec62594ff28249393febd3111da1cf8ccc6ff","download_url":"https://raw.githubusercontent.com/david-a-wheeler/test-badge-project/master/doc/somedoc.md","type":"file","content":"IyBEb2N1bWVudGF0aW9uIEZpbGUK\n","encoding":"base64","_links":{"self":"https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/doc/somedoc.md?ref=master","git":"https://api.github.com/repos/david-a-wheeler/test-badge-project/git/blobs/9edec62594ff28249393febd3111da1cf8ccc6ff","html":"https://github.com/david-a-wheeler/test-badge-project/blob/master/doc/somedoc.md"}}'
     http_version: 
   recorded_at: Tue, 11 Feb 2020 17:13:02 GMT
 - request:
     method: get
-    uri: https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/docs/somedoc.md
+    uri: https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/doc/somedoc.md
     body:
       encoding: US-ASCII
       string: ''
@@ -360,12 +360,12 @@ http_interactions:
       - E5CD:4262:923BA:116EEC:5E42E09E
     body:
       encoding: ASCII-8BIT
-      string: '{"name":"somedoc.md","path":"docs/somedoc.md","sha":"9edec62594ff28249393febd3111da1cf8ccc6ff","size":21,"url":"https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/docs/somedoc.md?ref=master","html_url":"https://github.com/david-a-wheeler/test-badge-project/blob/master/docs/somedoc.md","git_url":"https://api.github.com/repos/david-a-wheeler/test-badge-project/git/blobs/9edec62594ff28249393febd3111da1cf8ccc6ff","download_url":"https://raw.githubusercontent.com/david-a-wheeler/test-badge-project/master/docs/somedoc.md","type":"file","content":"IyBEb2N1bWVudGF0aW9uIEZpbGUK\n","encoding":"base64","_links":{"self":"https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/docs/somedoc.md?ref=master","git":"https://api.github.com/repos/david-a-wheeler/test-badge-project/git/blobs/9edec62594ff28249393febd3111da1cf8ccc6ff","html":"https://github.com/david-a-wheeler/test-badge-project/blob/master/docs/somedoc.md"}}'
+      string: '{"name":"somedoc.md","path":"doc/somedoc.md","sha":"9edec62594ff28249393febd3111da1cf8ccc6ff","size":21,"url":"https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/doc/somedoc.md?ref=master","html_url":"https://github.com/david-a-wheeler/test-badge-project/blob/master/doc/somedoc.md","git_url":"https://api.github.com/repos/david-a-wheeler/test-badge-project/git/blobs/9edec62594ff28249393febd3111da1cf8ccc6ff","download_url":"https://raw.githubusercontent.com/david-a-wheeler/test-badge-project/master/doc/somedoc.md","type":"file","content":"IyBEb2N1bWVudGF0aW9uIEZpbGUK\n","encoding":"base64","_links":{"self":"https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/doc/somedoc.md?ref=master","git":"https://api.github.com/repos/david-a-wheeler/test-badge-project/git/blobs/9edec62594ff28249393febd3111da1cf8ccc6ff","html":"https://github.com/david-a-wheeler/test-badge-project/blob/master/doc/somedoc.md"}}'
     http_version: 
   recorded_at: Tue, 11 Feb 2020 17:13:02 GMT
 - request:
     method: get
-    uri: https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/docs/somedoc.md
+    uri: https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/doc/somedoc.md
     body:
       encoding: US-ASCII
       string: ''
@@ -434,7 +434,7 @@ http_interactions:
       - E5FB:1AE9:2D676:72941:5E42E09F
     body:
       encoding: ASCII-8BIT
-      string: '{"name":"somedoc.md","path":"docs/somedoc.md","sha":"9edec62594ff28249393febd3111da1cf8ccc6ff","size":21,"url":"https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/docs/somedoc.md?ref=master","html_url":"https://github.com/david-a-wheeler/test-badge-project/blob/master/docs/somedoc.md","git_url":"https://api.github.com/repos/david-a-wheeler/test-badge-project/git/blobs/9edec62594ff28249393febd3111da1cf8ccc6ff","download_url":"https://raw.githubusercontent.com/david-a-wheeler/test-badge-project/master/docs/somedoc.md","type":"file","content":"IyBEb2N1bWVudGF0aW9uIEZpbGUK\n","encoding":"base64","_links":{"self":"https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/docs/somedoc.md?ref=master","git":"https://api.github.com/repos/david-a-wheeler/test-badge-project/git/blobs/9edec62594ff28249393febd3111da1cf8ccc6ff","html":"https://github.com/david-a-wheeler/test-badge-project/blob/master/docs/somedoc.md"}}'
+      string: '{"name":"somedoc.md","path":"doc/somedoc.md","sha":"9edec62594ff28249393febd3111da1cf8ccc6ff","size":21,"url":"https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/doc/somedoc.md?ref=master","html_url":"https://github.com/david-a-wheeler/test-badge-project/blob/master/doc/somedoc.md","git_url":"https://api.github.com/repos/david-a-wheeler/test-badge-project/git/blobs/9edec62594ff28249393febd3111da1cf8ccc6ff","download_url":"https://raw.githubusercontent.com/david-a-wheeler/test-badge-project/master/doc/somedoc.md","type":"file","content":"IyBEb2N1bWVudGF0aW9uIEZpbGUK\n","encoding":"base64","_links":{"self":"https://api.github.com/repos/david-a-wheeler/test-badge-project/contents/doc/somedoc.md?ref=master","git":"https://api.github.com/repos/david-a-wheeler/test-badge-project/git/blobs/9edec62594ff28249393febd3111da1cf8ccc6ff","html":"https://github.com/david-a-wheeler/test-badge-project/blob/master/doc/somedoc.md"}}'
     http_version: 
   recorded_at: Tue, 11 Feb 2020 17:13:03 GMT
 recorded_with: VCR 4.0.0

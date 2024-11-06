@@ -2293,7 +2293,7 @@ en:
           to list secure design principles (such as Saltzer and
           Schroeer) and common implementation security weaknesses
           (such as the OWASP top 10 or CWE/SANS top 25), and show
-          how each are countered. The <a href="https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/security.md">BadgeApp
+          how each are countered. The <a href="https://github.com/coreinfrastructure/best-practices-badge/blob/main/docs/assurance-case.md">BadgeApp
           assurance case</a> may be a useful example. This is
           related to documentation_security, documentation_architecture,
           and implement_secure_design.

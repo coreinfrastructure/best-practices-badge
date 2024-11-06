@@ -9,7 +9,7 @@
 This program programmatically modifies BadgeApp projects.
 
 An example of using this on the command line is
-doc/best-practices-modify.py -S 1 '{"test_status": "Met"}'
+docs/best_practices_modify.py -S 1 '{"test_status": "Met"}'
 which modifies project 1 on the staging site.
 To modify the *production* site data, use -P instead of -S.
 Updates use JSON format; remember to use double-quotes around all strings

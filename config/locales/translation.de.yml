@@ -2717,7 +2717,7 @@ de:
           (wie Saltzer und Schroeer) und gemeinsame Implementierungssicherheitsschwächen
           (wie die OWASP Top 10 oder CWE/SANS Top 25) aufzurufen
           und zu zeigen, wie diesen entgegengewirkt wird. Die
-          <a href="https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/security.md">
+          <a href="https://github.com/coreinfrastructure/best-practices-badge/blob/main/docs/assurance-case.md">
           BadgeApp Assurance Case </a> kann ein nützliches Beispiel
           sein. Dies bezieht sich auf documentation_security,
           documentation_architecture und implement_secure_design.

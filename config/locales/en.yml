@@ -291,8 +291,12 @@ en:
         only used for badging-related interactions; we will not provide it
         to third parties unless it is legally required.
         <br><br>
-        If you didn't receive your activation link,
-        please sign up again and we will send you a new one.
+        There will be a delay before you receive your activation link email.
+        You must use the activation link in that email
+        before you can use the account.
+        If you didn't receive your activation link, and it's been a while,
+        please sign up again and we will send you a new one (once the
+        activation delay expires).
         If you've already created an account here via GitHub, please log in
         using GitHub instead.
       name: Name

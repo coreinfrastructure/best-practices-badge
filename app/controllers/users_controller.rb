@@ -17,8 +17,33 @@ class UsersController < ApplicationController
   include SessionsHelper
 
   def index
-    @pagy, @users = pagy(User.all)
+    user_result = search_users
+    @pagy, @users = pagy(user_result)
     @pagy_locale = I18n.locale.to_s # Pagy requires a string version
+  end
+
+  # Search users. Search is ONLY supported for admin, so that we can't leak
+  # email data about users, and to discourage people from being harassed
+  # if they can be searched by name. It also counters DoS, since we will
+  # refuse to provide a service we don't want to provide.
+  # For normal users we ignore search parameters.
+  def search_users
+    result = User.all
+    if current_user.admin?
+      # Only admins can apply a search.
+      if params[:name].present?
+        # To maximize finding, use a case-sensitive "find anywhere" search.
+        # If we wanted an exact case-sensitive search we would do this:
+        # result = result.where(name: params[:name])
+        result = result.where('lower(name) LIKE ?',
+                              "%#{params[:name].strip.downcase}%")
+      end
+      if params[:email].present?
+        # We presume email is stored as citext, which is case-insensitive.
+        result = result.where(email: params[:email].strip)
+      end
+    end
+    result
   end
 
   # rubocop: disable Metrics/MethodLength, Metrics/AbcSize

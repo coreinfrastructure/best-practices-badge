@@ -18,7 +18,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     log_in_as(@admin)
     get '/en/users'
     assert_response :success
-    assert_includes @response.body, 'All users'
+    assert_includes @response.body, 'Users'
   end
 
   test 'should get new' do
@@ -53,6 +53,40 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, project.name
     assert_includes @response.body,
                     I18n.t('users.show.projects_additional_rights')
+  end
+
+  test 'Admin can search by name, case-insensitive' do
+    log_in_as(@admin)
+    get '/en/users?name=test'
+    assert_response :success
+    assert_includes @response.body, 'French Test'
+    assert_not_includes @response.body, 'Mark Watney'
+  end
+
+  test 'Admin can search by email, case-insensitive' do
+    log_in_as(@admin)
+    # Stored email address is 'CaseSensitive@example.org'
+    get '/en/users?email=casesensitive@example.org'
+    assert_response :success
+    assert_includes @response.body, 'Case Sensitive'
+    assert_not_includes @response.body, 'Mark Watney'
+  end
+
+  test 'Non-admin will be UNABLE to search by name' do
+    log_in_as(@other_user)
+    get '/en/users?name=test'
+    assert_response :success
+    # The search is ignored, so we'll just see unrelated entries
+    assert_includes @response.body, 'Mark Watney'
+  end
+
+  test 'Non-admin will be UNABLE search by email, case-insensitive' do
+    log_in_as(@other_user)
+    # Stored email address is 'CaseSensitive@example.org'
+    get '/en/users?email=casesensitive@example.org'
+    assert_response :success
+    # The search is ignored, so we'll just see unrelated entries
+    assert_includes @response.body, 'Mark Watney'
   end
 
   test 'indicate admin is admin to admin' do

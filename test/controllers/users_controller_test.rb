@@ -69,6 +69,17 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     get '/en/users?email=casesensitive@example.org'
     assert_response :success
     assert_includes @response.body, 'Case Sensitive'
+    assert_not_includes @response.body, 'French Test'
+    assert_not_includes @response.body, 'Mark Watney'
+  end
+
+  test 'Admin can search by name ORed with email, case-insensitive' do
+    log_in_as(@admin)
+    # Stored email address is 'CaseSensitive@example.org'
+    get '/en/users?name=Test&email=github-user@example.com'
+    assert_response :success
+    assert_includes @response.body, 'French Test'
+    assert_includes @response.body, 'GitHub The User'
     assert_not_includes @response.body, 'Mark Watney'
   end
 

@@ -153,7 +153,7 @@ group :development do
   # this also keeps some gems happy that don't realize that loading
   # only *parts* of Rails is fine:
   gem 'rails', '~> 7.0.8' # Rails (our web framework)
-  # To update the translation gem, see the process docs in doc/testing.md
+  # To update the translation gem, see the process docs in docs/testing.md
   gem 'translation', '1.37' # translation.io - translation service
   gem 'web-console' # In-browser debugger; use <% console %> or console
 end

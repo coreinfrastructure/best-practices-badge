@@ -1392,7 +1392,7 @@ ja:
           href="https://www.nist.gov/publications/software-assurance-using-structured-assurance-case-models">「構造化された保証ケースモデルを使用したソフトウェア保証」、Thomas
           Rhodes他、NIST Interagency Report 7608 </a>）。信頼境界は、データまたは実行がその信頼レベル、例えば、典型的なウェブアプリケーションにおけるサーバの境界、を変更する境界である。安全な設計原則（SaltzerやSchroeerなど）と一般的な実装セキュリティの弱点（OWASPトップ10やCWE
           / SANSトップ25など）をリストし、それぞれがどのように対抗しているかを示すのは一般的です。 <a
-          href="https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/security.md">
+          href="https://github.com/coreinfrastructure/best-practices-badge/blob/main/docs/assurance-case.md">
           BadgeAppの保証ケース</a>は良い参考例になるかもしれません。これは、documentation_security、documentation_architecture、およびimplement_secure_designに関連しています。
       achieve_passing:
         description: プロジェクトは合格レベルバッジに達成しなければなりません。

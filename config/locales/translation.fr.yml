@@ -2841,7 +2841,7 @@ fr:
           de conception sécurisés (tels que Saltzer et Schroeer)
           et des faiblesses de sécurité courantes de l'implémentation
           (comme le OWASP top 10 ou le CWE/SANS top 25) et de
-          montrer comment chacun est contré. L'<a href="https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/security.md">analyse
+          montrer comment chacun est contré. L'<a href="https://github.com/coreinfrastructure/best-practices-badge/blob/main/docs/assurance-case.md">analyse
           de fiabilité de BadgeApp</a> peut être un exemple utile.
           Ceci est lié à documentation_security, documentation_architecture
           et implement_secure_design.

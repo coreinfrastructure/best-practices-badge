@@ -143,7 +143,7 @@ ru:
       p2_html: >-
         Более подробную информацию о программе значков OpenSSF
         "Передовая практика", в том числе о происхождении программы
-        и <a href='https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/criteria.md'>критериях</a>,
+        и <a href='https://github.com/coreinfrastructure/best-practices-badge/blob/main/docs/criteria.md'>критериях</a>,
         можно найти на <a href='https://github.com/coreinfrastructure/best-practices-badge'>странице
         проекта на GitHub</a>. Имеются <a href="/ru/project_stats">проектная
         статистика</a> и <a href="/ru/criteria_stats">статистика
@@ -2195,7 +2195,7 @@ ru:
           and Schroeer) и общие слабости безопасности в реализации
           (такие как OWASP Top 10 или CWE/SANS Top 25), и показывают,
           как противодействовать каждой из них. Полезным примером
-          может служить <a href="https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/security.md">BadgeApp
+          может служить <a href="https://github.com/coreinfrastructure/best-practices-badge/blob/main/docs/assurance-case.md">BadgeApp
           assurance case</a>. Этот критерий связан с documentation_security,
           documentation_architecture и implement_secure_design.
       documentation_current:

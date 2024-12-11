@@ -23,7 +23,7 @@ jobs:
       CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
       CIRCLE_TEST_REPORTS: /tmp/circleci-test-results
     docker:
-    - image: afader/cii-bestpractices@sha256:c692fea707a2bd6cdca3f47af6405cd698cd969350e740f8291bf5700204fa01 # pin :3.2.2-browsers
+    - image: drdavidawheeler/cii-bestpractices@sha256:6bb1268e9f849949263ccaae409a0b336b0ff38e478a99a7979763c45805e69b # pin :3.3.6-browsers
       environment:
         PG_HOST: localhost
         PG_USER: ubuntu

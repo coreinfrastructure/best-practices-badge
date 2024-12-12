@@ -46,10 +46,10 @@ jobs:
     - run: pwd
     - run: ls -l
     - run: |
-      ruby --version
-      node --version
-      java --version
-      google-chrome --version
+        ruby --version
+        node --version
+        java --version
+        google-chrome --version
     # Prepare for artifact and test results
     - run: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS
     # Force cleanup to make deterministic.

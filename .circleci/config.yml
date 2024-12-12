@@ -161,26 +161,22 @@ jobs:
     steps:
       - checkout
       - run:
-          # We don't pin these, as Heroku doesn't support pinning.
-          # In any case, these aren't included in the final result, nor used
-          # in the process of testing the final result... they're
-          # just tools we use to *transfer* the final result to deployment.
           # We are downloading these tools from a trusted source, so we *do*
           # want to use the latest version, not a pinned version.
+          # Heroku doesn't support pinning these anyway.
+          # These aren't included in the final result, nor used
+          # in the process of testing the final result... they're
+          # just tools we use to *transfer* the final result to deployment.
+          # The shell installer loads and installs the actual tool.
+          # We aren't using pipe-to-shell, but downloading and printing a
+          # sha256 of the installer, to help us notice potential problems.
+          # See: https://devcenter.heroku.com/articles/heroku-cli
           name: Download Heroku CLI tools (to easily control maintenance mode)
           command: |
-            cd /usr/local/lib
-            rm -f /usr/local/bin/heroku
-            wget https://cli-assets.heroku.com/heroku-linux-x64.tar.gz
-            tar xzf heroku-linux-x64.tar.gz
-      - run:
-          name: Install Heroku CLI tools
-          command: |
-            rm -f /usr/local/bin/heroku
-            ln -s /usr/local/lib/heroku/bin/heroku /usr/local/bin/heroku
-            # If basic node binary doesn't work,
-            # fall back to whatever node is on the PATH
-            /usr/local/lib/heroku/bin/node -v || rm /usr/local/lib/heroku/bin/node
+            wget https://cli-assets.heroku.com/install-ubuntu.sh
+            sha256 install-ubuntu.sh
+            chmod a+x install-ubuntu.sh
+            sh install-ubuntu.sh
       - run:
           name: Deploy to Heroku
           command: |

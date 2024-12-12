@@ -174,15 +174,23 @@ jobs:
           # See: https://devcenter.heroku.com/articles/heroku-cli
           name: Download Heroku CLI tools (to easily control maintenance mode)
           command: |
+            # Heroku installer has a bug, it only recognizes /usr/local/bin
+            # if it's inside a sequence, Solution: provide it twice.
+            export PATH="$PATH:/usr/local/bin:/usr/local/bin"
+            echo "** PATH=$PATH"
             rm -f install.sh
+            echo "** Getting installer"
             wget https://cli-assets.heroku.com/install.sh
+            echo "** Computing SHA-256 of installer"
             sha256sum install.sh
+            echo "** Running installer"
             chmod a+x install.sh
             sh install.sh
       - run:
           name: Deploy to Heroku
+          # export PATH="$PATH:$(pwd)/heroku/bin"
           command: |
-            export PATH="$PATH:$(pwd)/heroku/bin"
+            export PATH="$PATH:/usr/local/bin:/usr/local/bin"
             export HEROKU_APP="$CIRCLE_BRANCH"-bestpractices
             # Set file .netrc so "git push heroku ..." will work later.
             # Heroku uses HEROKU_API_KEY, but git only knows about ~/.netrc.
@@ -202,10 +210,10 @@ jobs:
             # https://stackoverflow.com/questions/10451330/clean-git-repo-on-heroku
             # https://stackoverflow.com/questions/36111040/error-message-after-successfully-pushing-to-heroku
             GIT_CURL_VERBOSE=1 GIT_TRACE=1 git push heroku "$CIRCLE_BRANCH:master"
-      - run:
-            # This may no longer be necessary
-            name: Setup Heroku
-            command: bash .circleci/setup-heroku.sh
+      # - run:
+      #       # This may no longer be necessary
+      #       name: Setup Heroku
+      #       command: bash .circleci/setup-heroku.sh
       - run:
           name: Migrate DB
           command: |

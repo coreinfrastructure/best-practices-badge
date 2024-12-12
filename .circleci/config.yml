@@ -154,7 +154,10 @@ jobs:
   # duplication.
   deploy:
     docker:
-      - image: buildpack-deps@sha256:73f48ef53511ce25f37dc17849fb467925f1bfdcb758c77e8437284158a251ce # pin :bionic
+      # We'll use buildpack-deps because it's widely used & reliable.
+      # https://hub.docker.com/_/buildpack-deps (see the release tab)
+      # We'll use "bookworm", at time of this writing the latest release.
+      - image: buildpack-deps@sha256:0ab7c71d79bd872a655352313f52121a6bcff2ffbac86045c95275339c23dd99 # pin :bookworm
     steps:
       - checkout
       - run:

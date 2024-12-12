@@ -23,6 +23,7 @@ jobs:
       CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
       CIRCLE_TEST_REPORTS: /tmp/circleci-test-results
     docker:
+    # If you update this, update it below.
     - image: drdavidawheeler/cii-bestpractices@sha256:6bb1268e9f849949263ccaae409a0b336b0ff38e478a99a7979763c45805e69b # pin :3.3.6-browsers
       environment:
         PG_HOST: localhost
@@ -154,27 +155,15 @@ jobs:
   # duplication.
   deploy:
     docker:
-      # We'll use buildpack-deps because it's widely used & reliable.
-      # https://hub.docker.com/_/buildpack-deps (see the release tab)
-      # We'll use "bookworm", at time of this writing the latest release.
-      - image: buildpack-deps@sha256:0ab7c71d79bd872a655352313f52121a6bcff2ffbac86045c95275339c23dd99 # pin :bookworm
+    # We have to use an image - let's use the same image as for building
+    - image: drdavidawheeler/cii-bestpractices@sha256:6bb1268e9f849949263ccaae409a0b336b0ff38e478a99a7979763c45805e69b # pin :3.3.6-browsers
+      environment:
+        PG_HOST: localhost
+        PG_USER: ubuntu
+        RAILS_ENV: test
+        RACK_ENV: test
     steps:
       - checkout
-      - run:
-          name: Download node package manager using nvm
-          command: |
-            echo "** PATH=$PATH"
-            # Install node per:
-            # https://nodejs.org/en/download/package-manager
-            # installs nvm (Node Version Manager)
-            echo "** Download nvm installer"
-            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh > nvm-install.sh
-            sha256sum nvm-install.sh
-            echo "** Install nvm"
-            bash nvm-install.sh
-            echo "** Install node.js"
-            # download and install Node.js (you may need to restart the terminal)
-            nvm install 22
       - run:
           # We are downloading these tools from a trusted source, so we *do*
           # want to use the latest version, not a pinned version.
@@ -194,8 +183,6 @@ jobs:
             echo "** Node version:"
             node -v # should print `v22.12.0`
             # verifies the right npm version is in the environment
-            echo "** npm version:"
-            npm -v
             echo "** Getting installer"
             rm -f install.sh
             wget https://cli-assets.heroku.com/install.sh

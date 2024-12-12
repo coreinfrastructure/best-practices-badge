@@ -167,10 +167,20 @@ jobs:
           # just tools we use to *transfer* the final result to deployment.
           # We are downloading these tools from a trusted source, so we *do*
           # want to use the latest version, not a pinned version.
-          name: Install Heroku CLI tools (to easily control maintenance mode)
+          name: Download Heroku CLI tools (to easily control maintenance mode)
           command: |
+            cd /usr/local/lib
+            rm -f /usr/local/bin/heroku
             wget https://cli-assets.heroku.com/heroku-linux-x64.tar.gz
             tar xzf heroku-linux-x64.tar.gz
+      - run:
+          name: Install Heroku CLI tools
+          command: |
+            rm -f /usr/local/bin/heroku
+            ln -s /usr/local/lib/heroku/bin/heroku /usr/local/bin/heroku
+            # If basic node binary doesn't work,
+            # fall back to whatever node is on the PATH
+            /usr/local/lib/heroku/bin/node -v || rm /usr/local/lib/heroku/bin/node
       - run:
           name: Deploy to Heroku
           command: |

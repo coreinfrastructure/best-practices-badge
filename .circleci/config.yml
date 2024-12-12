@@ -169,14 +169,16 @@ jobs:
           # just tools we use to *transfer* the final result to deployment.
           # The shell installer loads and installs the actual tool.
           # We aren't using pipe-to-shell, but downloading and printing a
-          # sha256 of the installer, to help us notice potential problems.
+          # sha256 of the install program first.
+          # This provides a log to help us notice potential problems.
           # See: https://devcenter.heroku.com/articles/heroku-cli
           name: Download Heroku CLI tools (to easily control maintenance mode)
           command: |
-            wget https://cli-assets.heroku.com/install-ubuntu.sh
-            sha256sum install-ubuntu.sh
-            chmod a+x install-ubuntu.sh
-            sh install-ubuntu.sh
+            rm -f install.sh
+            wget https://cli-assets.heroku.com/install.sh
+            sha256sum install.sh
+            chmod a+x install.sh
+            sh install.sh
       - run:
           name: Deploy to Heroku
           command: |

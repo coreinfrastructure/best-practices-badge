@@ -174,7 +174,7 @@ jobs:
           name: Download Heroku CLI tools (to easily control maintenance mode)
           command: |
             wget https://cli-assets.heroku.com/install-ubuntu.sh
-            sha256 install-ubuntu.sh
+            sha256sum install-ubuntu.sh
             chmod a+x install-ubuntu.sh
             sh install-ubuntu.sh
       - run:

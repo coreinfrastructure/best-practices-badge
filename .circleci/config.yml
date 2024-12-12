@@ -161,6 +161,21 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Download node package manager using nvm
+          command: |
+            echo "** PATH=$PATH"
+            # Install node per:
+            # https://nodejs.org/en/download/package-manager
+            # installs nvm (Node Version Manager)
+            echo "** Download nvm installer"
+            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh > nvm-install.sh
+            sha256sum nvm-install.sh
+            echo "** Install nvm"
+            bash nvm-install.sh
+            echo "** Install node.js"
+            # download and install Node.js (you may need to restart the terminal)
+            nvm install 22
+      - run:
           # We are downloading these tools from a trusted source, so we *do*
           # want to use the latest version, not a pinned version.
           # Heroku doesn't support pinning these anyway.
@@ -174,12 +189,15 @@ jobs:
           # See: https://devcenter.heroku.com/articles/heroku-cli
           name: Download Heroku CLI tools (to easily control maintenance mode)
           command: |
-            # Heroku installer has a bug, it only recognizes /usr/local/bin
-            # if it's inside a sequence, Solution: provide it twice.
-            export PATH="$PATH:/usr/local/bin:/usr/local/bin"
             echo "** PATH=$PATH"
-            rm -f install.sh
+            # verifies the right Node.js version is in the environment
+            echo "** Node version:"
+            node -v # should print `v22.12.0`
+            # verifies the right npm version is in the environment
+            echo "** npm version:"
+            npm -v
             echo "** Getting installer"
+            rm -f install.sh
             wget https://cli-assets.heroku.com/install.sh
             echo "** Computing SHA-256 of installer"
             sha256sum install.sh

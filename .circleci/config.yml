@@ -10,7 +10,7 @@ version: 2.1
 # > docker pull circleci/postgres:13.14
 #
 orbs:
-  browser-tools: circleci/browser-tools@1.4.1
+  browser-tools: circleci/browser-tools@1.4.9
   codecov: codecov/codecov@3.2.4
   dscar-brakeman: naokikimura/dscar-brakeman@0.9.0
 jobs:
@@ -23,7 +23,7 @@ jobs:
       CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
       CIRCLE_TEST_REPORTS: /tmp/circleci-test-results
     docker:
-    - image: afader/cii-bestpractices@sha256:c692fea707a2bd6cdca3f47af6405cd698cd969350e740f8291bf5700204fa01 # pin :3.2.2-browsers
+    - image: drdavidawheeler/cii-bestpractices@sha256:6bb1268e9f849949263ccaae409a0b336b0ff38e478a99a7979763c45805e69b # pin :3.3.6-browsers
       environment:
         PG_HOST: localhost
         PG_USER: ubuntu
@@ -35,9 +35,21 @@ jobs:
         POSTGRES_DB: circle_ruby_test
     steps:
     - checkout
+    # For more on browser-tools integration with the main image, see:
+    # https://circleci.com/developer/images/image/cimg/ruby
+    # https://circleci.com/developer/orbs/orb/circleci/browser-tools
+    # https://github.com/CircleCI-Public/browser-tools-orb
+    # Chromedriver is finicky. browser-tools-orb version 1.4.2 fixed problems:
+    # https://github.com/CircleCI-Public/browser-tools-orb/issues/75
+    # https://github.com/CircleCI-Public/browser-tools-orb/releases/tag/v1.4.2
+    - browser-tools/install-chromedriver
     - run: pwd
     - run: ls -l
-    - browser-tools/install-chromedriver
+    - run: |
+        ruby --version
+        node --version
+        java --version
+        google-chrome --version
     # Prepare for artifact and test results
     - run: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS
     # Force cleanup to make deterministic.

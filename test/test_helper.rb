@@ -69,6 +69,10 @@ WebMock.disable_net_connect!(allow_localhost: true, allow: driver_urls)
 require 'vcr'
 VCR.configure do |config|
   config.ignore_localhost = true
+  # We use Google Chrome for testing, which chattily updates.
+  # Ignore those, as it's the test infrastructure, not the software under test
+  config.ignore_hosts('127.0.0.1', 'localhost',
+                      'googlechromelabs.github.io', 'storage.googleapis.com')
   config.cassette_library_dir = 'test/vcr_cassettes'
   config.hook_into :webmock
   # Sometimes we have the "same" query but with and without per_page=...

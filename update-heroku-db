@@ -1,0 +1,77 @@
+#!/bin/sh
+
+# Help update Heroku production database version. using pg:copy approach
+# (our database is <10GB). For info see:
+# https://devcenter.heroku.com/articles/upgrading-heroku-postgres-databases
+
+# READ BEFORE USING THIS SCRIPT. It requires heroku admin privileges.
+
+# YOU MUST SET THESE FIRST, PER INSTRUCTIONS BELOW
+# You can use either the 'add-on name' or the 'color name'
+# Then set up per the INSTRUCTIONS below.
+OLD='postgresql-rugged-68728' # or HEROKU_POSTGRESQL_CYAN_URL
+NEW='postgresql-rectangular-58316' # or HEROKU_POSTGRESQL_GREEN_URL
+
+# INSTRUCTIONS
+
+# heroku config:set --app production-bestpractices SYSTEM_ANNOUNCEMENT='System will soon go down for about 10 minutes for database maintenance'
+
+# Now run:
+# heroku pg:info --app production-bestpractices
+# You'll see something like:
+# === DATABASE_URL, HEROKU_POSTGRESQL_CYAN_URL
+# Plan:                  Standard 0
+# Status:                Available
+# Data Size:             303 MB / 64 GB (0.46%)
+# Tables:                9
+# PG Version:            14.13
+# ...
+# Add-on:                postgresql-rugged-68728
+
+# Make sure the "Data Size" is <10GB.
+# Plan should be "Standard 0".
+# Copy "Add-on" to "OLD" value above.
+
+# Now create a new database:
+# heroku addons:create heroku-postgresql:standard-0 --app production-bestpractices
+# It will respond with the new 'add-on' name - COPY THIS, e.g,
+# postgresql-rectangular-58316 is being created in the background...
+
+# Run this to wait:
+# heroku pg:wait --app production-bestpractices
+
+# Run this to verify you have 2 databases, one is empty:
+# heroku pg:info --app production-bestpractices
+
+# Copy the new database name to NEW (above).
+
+# Now you can run this script.
+
+# Stop script on failure or an attempt to read an undefined variable.
+# Show commands as they're executed.
+
+set -eux
+
+date
+
+echo 'Updating production database'
+heroku maintenance:on --app production-bestpractices
+
+echo 'Backing up to staging (now that we know it cannot change further)'
+rake production_to_staging
+
+echo 'Backing up to local'
+rake pull_production
+
+echo 'Copying to new database'
+heroku pg:copy DATABASE_URL "$NEW" --app production-bestpractices --confirm production-bestpractices
+
+heroku pg:promote "$NEW" --app production-bestpractices
+
+heroku config:unset --app production-bestpractices SYSTEM_ANNOUNCEMENT
+heroku maintenance:off --app production-bestpractices
+
+date
+
+echo "Now test by logging in to production system. Once satisfied run:"
+echo "heroku addons:destroy $OLD --app production-bestpractices --confirm production-bestpractices"

@@ -23,7 +23,6 @@ task(:default).clear.enhance %w[
   html_from_markdown
   eslint
   report_code_statistics
-  update_chromedriver
   test
 ]
 # Temporarily removed fasterer
@@ -762,22 +761,6 @@ task :test_dev_install do
     git push origin test-dev-install
     git checkout main
   TEST_BRANCH_SHELL
-end
-
-# JavaScript tests end up running .chromedriver-helper, which is downloaded
-# and cached.  Update the cached version.
-desc 'Update webdrivers/chromedriver'
-if Rails.env.production? || Rails.env == 'fake_production'
-  task :update_chromedriver do
-    puts 'Skipping update_chromedriver (libraries not available).'
-  end
-else
-  task :update_chromedriver do
-    require 'webdrivers'
-    # force-upgrade to the latest version of chromedriver
-    # Note: This is *NOT* Rails' "update" method, ignore Rails/SaveBang.
-    Webdrivers::Chromedriver.update
-  end
 end
 
 # Run some slower tests. Doing this on *every* automated test run would be

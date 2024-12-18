@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_05_28_224233) do
+ActiveRecord::Schema[7.0].define(version: 2024_12_18_182207) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_stat_statements"
@@ -435,8 +435,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_28_224233) do
     t.integer "item_id", null: false
     t.string "event", null: false
     t.string "whodunnit"
-    t.text "object"
+    t.text "old_yaml_object"
     t.datetime "created_at", precision: nil
+    t.jsonb "object"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 

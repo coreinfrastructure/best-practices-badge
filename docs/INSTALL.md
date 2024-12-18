@@ -84,11 +84,7 @@ It's not needed to *run* the software, but it's used for various headless tests
 so you need it to run some automated tests.
 The easy way to do this is to download it from
 <https://www.google.com/chrome>.
-If you don't install Chrome, and you try to run the tests, the test suite
-will internally try to run `rake update_chromedriver` and you will
-see odd error messages such as `ArgumentError: wrong first argument`,
-an error in `lib/tasks/default.rake`, errors from bundle, and a report
-that the error is from `Tasks: TOP => default => update_chromedriver`.
+Chromedriver is now managed by selenium.
 
 ## Forking the repo
 

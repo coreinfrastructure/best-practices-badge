@@ -98,7 +98,6 @@ end
 # https://github.com/titusfortner/webdrivers/wiki/Using-with-VCR-or-WebMock
 # https://github.com/titusfortner/webdrivers/issues/109
 
-require 'webdrivers'
 require 'uri'
 
 # With activesupport gem

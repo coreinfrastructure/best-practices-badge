@@ -84,9 +84,6 @@ jobs:
         command: >
           bundle check ||
           bundle install --jobs=4 --retry=3
-    - run:
-       name: Update Chromedriver
-       command: bundle exec rake update_chromedriver
     # Here's how we could show more:
     # - run: find ~/.rubygems || true
     # - run: find ~/.bundle || true

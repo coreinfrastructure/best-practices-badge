@@ -879,7 +879,7 @@ task convert_papertrail_yaml_to_json: :environment do
   # since that loads what we need.
   PaperTrail::Version.where.not(old_yaml_object: nil).find_each do |version|
     # Show progress
-    puts "#{version.item_id} #{version.event} #{version.created_at}" \
+    puts "#{version.item_id} #{version.event} #{version.created_at} " \
          "#{version.whodunnit} " \
          "#{version.old_yaml_object[0..200].tr("\n", ' ')}\n\n"
     # rubocop:disable Rails/SkipsModelValidations

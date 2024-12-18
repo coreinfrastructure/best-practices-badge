@@ -2600,7 +2600,7 @@ and how it helps make the software more secure:
   revealed to unauthorized individuals.
   Here are important examples of our negative testing:
     - local logins with wrong or unfilled passwords will lead to login failure
-      (see `test/features/login_test.rb`).
+      (see `test/system/login_test.rb`).
     - projects cannot be edited ("patched") by a timed-out session
       or a session lacking a signed timeout value
       (see `test/controllers/projects_controller_test.rb`)

@@ -873,6 +873,18 @@ task update_bad_password_db: :environment do
   BadPassword.force_load
 end
 
+desc 'Convert old papertrail version values from YAML to json'
+task convert_papertrail_yaml_to_json: :environment do
+  # We request access to the full environment; that makes this easier to do
+  # since that loads what we need.
+  PaperTrail::Version.where.not(old_yaml_object: nil).find_each do |version|
+    # Show progress
+    puts "#{version.item_id} #{version.event} #{version.created_at} #{version.whodunnit} #{version.old_yaml_object[0..200].gsub("\n",' ')}\n\n"
+    version.update_columns old_yaml_object: nil,
+                           object: YAML.unsafe_load(version.old_yaml_object)
+  end
+end
+
 desc 'Update SVG badge images from shields.io'
 task :update_badge_images do
   # require 'Paleta'

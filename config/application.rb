@@ -26,5 +26,4 @@ end
 
 Rails.application.configure do
   config.middleware.use Rack::Attack
-  config.active_record.legacy_connection_handling = false
 end

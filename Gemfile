@@ -171,7 +171,7 @@ group :test do
 end
 
 group :production do
-  gem 'rack-timeout', '~> 0.6.3' # Timeout; https://github.com/heroku/rack-timeout
+  gem 'rack-timeout', '~> 0.7.0' # Timeout; https://github.com/heroku/rack-timeout
   gem 'rails_12factor', '~> 0.0.3'
 end
 

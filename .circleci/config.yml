@@ -108,8 +108,7 @@ jobs:
     - run:
         name:  Run pronto GitHub
         command: >
-          bundle exec pronto run -f github text
-          -c=$(git log --pretty=format:%H | tail -1) --exit-code
+          pronto run -f github text -c=$(git log --pretty=format:%H | tail -1) --exit-code
     # Temporarily disable bundle doctor; trying to run it produces an error.
     # - run: bundle exec bundle doctor
     - run: bundle exec rake bundle_audit

@@ -37,6 +37,14 @@ class GithubBasicDetectiveTest < ActiveSupport::TestCase
       # stub test project by ciitest?
       assert_equal 'Python', results[:implementation_languages][:value]
 
+      # Can we correctly detect version-shaped tags?
+      assert_equal 'Met', results[:version_tags_status][:value]
+
+      assert_not detective.version_shaped_tag_in([])
+      assert_not detective.version_shaped_tag_in([{ name: 'foobar' }])
+      assert detective.version_shaped_tag_in([{ name: '1.2.3' }])
+      assert detective.version_shaped_tag_in([{ name: '1.2.3' }, { name: 'foobar' }])
+
       # Do several unit tests of language_cleanup, it's more complex.
       # This does not invoke network calls, we are directly providing
       # test values to more thoroughly test the method language_cleanup.

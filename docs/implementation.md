@@ -231,7 +231,7 @@ Put the image in "app/assets/images/project-logos-originals",
 copy it to "app/assets/images/project-logos" and rescale to 48 pixels high,
 and modify the home page text "app/views/static_pages/home.html.erb".
 
-Here's an example of how we got the OWASP ZAP logo into the originals
+Here's an example of how we got the ZAP logo into the originals
 directory:
 
 ~~~sh
@@ -1111,7 +1111,7 @@ ALL_DETECTIVES =
 
 ## Analysis
 
-We use the OWASP ZAP web application scanner to find potential
+We use the ZAP web application scanner to find potential
 vulnerabilities.
 This lets us fulfill the "dynamic analysis" criterion.
 

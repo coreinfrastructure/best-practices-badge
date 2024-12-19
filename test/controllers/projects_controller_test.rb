@@ -881,6 +881,12 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'update', @project_two.versions.last.event
     assert_equal @project_two.user.id,
                  @project_two.versions.last.whodunnit.to_i
+    # Use PaperTrail to retrieve old version.
+    # This assumes we're storing this using JSON (probably jsonb),
+    # *not* the default YAML. YAML stores very specific data types, including
+    # a specialized timezone type, that we don't want. By storing with
+    # JSON we reduce storage use, increase query speed, and avoid
+    # various deserialization problems.
     assert_equal old_repo_url, @project_two.versions.last.reify.repo_url
   end
 

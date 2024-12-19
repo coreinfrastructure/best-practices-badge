@@ -114,7 +114,7 @@ jobs:
         command: '[[ ! -s "$(git rev-parse --git-dir)/shallow" ]] || git fetch --unshallow'
     - run:
         name:  Run test suite (both system and non-system tests)
-        command: bundle exec rails test:system test
+        command: bundle exec rails test:all
     - run:
         name:  Run pronto GitHub
         command: >

@@ -15,8 +15,10 @@ class FastlyRailsTest < ActiveSupport::TestCase
   # include a valid Fastly key in the test data
   test 'purge_by_key fails on bad key' do
     VCR.use_cassette('fastly_no_key') do
-      # *Force* use of the key
-      FastlyRails.purge_by_key('foo', true)
+      assert_nothing_raised do
+        # *Force* use of the key
+        FastlyRails.purge_by_key('foo', true)
+      end
     end
   end
 
@@ -29,14 +31,18 @@ class FastlyRailsTest < ActiveSupport::TestCase
     # We set a nonsense localhost base  for this test.
     # VCR can't record "failure to connect", so we'll
     # instead force a failure to connect so we can test its handling.
-    FastlyRails.purge_by_key('foo', true, 'https://localhost:0/')
+    assert_nothing_raised do
+      FastlyRails.purge_by_key('foo', true, 'https://localhost:0/')
+    end
   end
 
   test 'purge_all keeps working even if port fails' do
     # *Force* use of the key, since we don't have one set.
-    # We set a nonsense localhost base  for this test.
+    # We set a nonsense localhost base for this test.
     # VCR can't record "failure to connect", so we'll
     # instead force a failure to connect so we can test its handling.
-    FastlyRails.purge_all(true, 'https://localhost:0/')
+    assert_nothing_raised do
+      FastlyRails.purge_all(true, 'https://localhost:0/')
+    end
   end
 end

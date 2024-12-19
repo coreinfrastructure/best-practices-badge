@@ -27,3 +27,9 @@ end
 Rails.application.configure do
   config.middleware.use Rack::Attack
 end
+
+# Prepare for future deprecation.
+# to_time will always preserve the timezone offset of the receiver in Rails 8.0.
+# This opts into the new 8.0 behavior
+
+ActiveSupport.to_time_preserves_timezone = true

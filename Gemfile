@@ -105,7 +105,7 @@ gem 'secure_headers', '~> 7' # Add hardening measures to HTTP headers
 # The gem sprockets-rails version 3.4.1 (from 3.2.2) caused a regression
 # in deployment (icons no longer displayed) that does NOT occur locally.
 # WARNING!!!!
-gem 'sprockets-rails', '3.4.2' # Rails. Asset precompilation
+gem 'sprockets-rails', '3.5.2' # Rails. Asset precompilation
 gem 'uglifier', '~> 4.2.0', require: false # Minify JavaScript
 gem 'sentry-ruby'
 gem 'sentry-rails'

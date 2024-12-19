@@ -385,9 +385,9 @@ class Project < ApplicationRecord
   # 0=passing), and update relevant event datetime if needed.
   # It presumes the lower-level percentages (if relevant) are calculated.
   def update_badge_percentage(level, current_time)
-    old_badge_percentage = self["badge_percentage_#{level}".to_sym]
+    old_badge_percentage = self[:"badge_percentage_#{level}"]
     update_prereqs(level) if level.to_i.nonzero?
-    self["badge_percentage_#{level}".to_sym] =
+    self[:"badge_percentage_#{level}"] =
       calculate_badge_percentage(level)
     update_passing_times(level, old_badge_percentage, current_time)
   end
@@ -659,20 +659,20 @@ class Project < ApplicationRecord
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def update_passing_times(level, old_badge_percentage, current_time)
     level_name = COMPLETED_BADGE_LEVELS[level.to_i] # E.g., 'passing'
-    current_percentage = self["badge_percentage_#{level}".to_sym]
+    current_percentage = self[:"badge_percentage_#{level}"]
     # If something is wrong, don't modify anything!
     return if current_percentage.blank? || old_badge_percentage.blank?
 
     current_percentage_i = current_percentage.to_i
     old_badge_percentage_i = old_badge_percentage.to_i
     if current_percentage_i >= 100 && old_badge_percentage_i < 100
-      self["achieved_#{level_name}_at".to_sym] = current_time
-      first_achieved_field = "first_achieved_#{level_name}_at".to_sym
+      self[:"achieved_#{level_name}_at"] = current_time
+      first_achieved_field = :"first_achieved_#{level_name}_at"
       if self[first_achieved_field].blank? # First time? Set that too!
         self[first_achieved_field] = current_time
       end
     elsif current_percentage_i < 100 && old_badge_percentage_i >= 100
-      self["lost_#{level_name}_at".to_sym] = current_time
+      self[:"lost_#{level_name}_at"] = current_time
     end
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
@@ -691,9 +691,9 @@ class Project < ApplicationRecord
     return if level <= 0
 
     # The following works because BADGE_LEVELS[1] is 'passing', etc:
-    achieved_previous_level = "achieve_#{BADGE_LEVELS[level]}_status".to_sym
+    achieved_previous_level = :"achieve_#{BADGE_LEVELS[level]}_status"
 
-    if self["badge_percentage_#{level - 1}".to_sym] >= 100
+    if self[:"badge_percentage_#{level - 1}"] >= 100
       return if self[achieved_previous_level] == 'Met'
 
       self[achieved_previous_level] = 'Met'

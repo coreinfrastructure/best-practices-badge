@@ -7,7 +7,7 @@
 # Support translation.io.  See:
 # https://translation.io/david-a-wheeler/cii-best-practices-badge/
 
-if Rails.env.development? || Rails.env.test?
+if Rails.env.local?
   require 'translation'
   TranslationIO.configure do |config|
     config.api_key        = ENV['TRANSLATION_IO_KEY'] || ''

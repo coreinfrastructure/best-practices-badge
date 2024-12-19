@@ -629,7 +629,7 @@ task change_owner: :environment do
   # Project.update_all_badge_percentages(Criteria.keys)
   ARGV.shift # Drop rake task name
   ARGV.shift # Drop '--'
-  project_number = Integer(ARGV[0]) # Raise exceptions on non-integers
+  project_number = Integer(ARGV.first) # Raise exceptions on non-integers
   user_number = Integer(ARGV[1])
   # Retrieve and print current project/owner
   project = Project.find(project_number.to_i)
@@ -808,8 +808,8 @@ end
 desc 'Search for users with given email (for GDPR requests)'
 task search_email: :environment do
   ARGV.shift # Drop rake task name
-  ARGV.shift if ARGV[0] == '--' # Skip garbage
-  email = ARGV[0]
+  ARGV.shift if ARGV.first == '--' # Skip garbage
+  email = ARGV.first
   puts "Searching for email '#{email}'; matching ids and names are:"
   real_search_email(email)
   puts 'End of results.'
@@ -836,8 +836,8 @@ end
 desc 'Search for users with given case-insensitive name (for GDPR requests)'
 task search_name: :environment do
   ARGV.shift # Drop rake task name
-  ARGV.shift if ARGV[0] == '--' # Skip garbage
-  name = ARGV[0]
+  ARGV.shift if ARGV.first == '--' # Skip garbage
+  name = ARGV.first
   puts "Searching for name '#{name}' ignoring case; matching ids and names are:"
   real_search_name(name)
   puts 'End of results.'
@@ -848,8 +848,8 @@ end
 desc 'Search for users with NAME and EMAIL (for GDPR requests)'
 task search_user: :environment do
   ARGV.shift # Drop rake task name
-  ARGV.shift if ARGV[0] == '--' # Skip garbage
-  name = ARGV[0]
+  ARGV.shift if ARGV.first == '--' # Skip garbage
+  name = ARGV.first
   email = ARGV[1]
   puts "Searching for name '#{name}', email #{email} (ignoring case for both)"
   real_search_name(name)

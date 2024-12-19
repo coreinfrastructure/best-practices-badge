@@ -21,4 +21,4 @@ Rails.application.config.assets.paths << Rails.root.join('config', 'locales')
 # already added.
 # Rails.application.config.assets.precompile += %w( search.js )
 
-Rails.application.config.assets.precompile = ["manifest.js"]
+Rails.application.config.assets.precompile = ['manifest.js']

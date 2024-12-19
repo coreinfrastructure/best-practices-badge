@@ -39,7 +39,7 @@ class UserMailerTest < ActionMailer::TestCase
     assert_equal ['text/plain; charset=UTF-8', 'text/html; charset=UTF-8'],
                  mail.parts.map(&:content_type)
     # Ensure that the reset token is actually being passed:
-    assert_match user.reset_token, mail.parts[0].body.to_s
+    assert_match user.reset_token, mail.parts.first.body.to_s
     assert_match CGI.escape(user.email), mail.body.encoded
     # Ensure that email has settings to disable tracking
     assert_not_nil mail['X-SMTPAPI'].unparsed_value

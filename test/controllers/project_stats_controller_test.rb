@@ -48,7 +48,7 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
     get '/en/project_stats.csv'
     assert_response :success
     contents = CSV.parse(@response.body, headers: true)
-    assert_equal 'id', contents.headers[0]
+    assert_equal 'id', contents.headers.first
 
     expected_headers = %w[
       id percent_ge_0 percent_ge_25 percent_ge_50
@@ -214,7 +214,7 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
     # Verify that we can parse the result as JSON
     contents = JSON.parse(@response.body)
     assert_equal 4, contents.length
-    assert_not contents[0].empty?
+    assert_not contents.first.empty?
   end
 
   test 'Test /project_stats/gold.json' do
@@ -224,7 +224,7 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
     # Verify that we can parse the result as JSON
     contents = JSON.parse(@response.body)
     assert_equal 4, contents.length
-    assert_not contents[0].empty?
+    assert_not contents.first.empty?
   end
 
   test 'Test /en/project_stats/silver_and_gold.json' do

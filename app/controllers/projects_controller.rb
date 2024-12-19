@@ -91,7 +91,7 @@ class ProjectsController < ApplicationController
         ids = @projects.limit(2).ids
         if ids.size == 1
           suffix = request&.format&.symbol == :json ? '.json' : ''
-          redirect_to "/#{locale}/projects/#{ids[0]}#{suffix}",
+          redirect_to "/#{locale}/projects/#{ids.first}#{suffix}",
                       status: :moved_permanently
         else
           # If there's not one entry, show the project index instead.
@@ -130,7 +130,7 @@ class ProjectsController < ApplicationController
       # But in practice, ids are as "permanent" as anything on the web gets.
       # If we say it's moved permanently, then browsers & caches &
       # search engines will do the right thing, so that's the status used.
-      redirect_to "/projects/#{id_list[0]}/badge#{suffix}",
+      redirect_to "/projects/#{id_list.first}/badge#{suffix}",
                   status: :moved_permanently
     end
   end
@@ -450,7 +450,7 @@ class ProjectsController < ApplicationController
     )
                 .deliver_now
     # To simplify certain tests, return list of project ids newly passing
-    projects[0].ids
+    projects.first.ids
   end
   # rubocop:enable Metrics/MethodLength
   private_class_method :send_monthly_announcement
@@ -511,7 +511,7 @@ class ProjectsController < ApplicationController
   # Presumes permissions are granted & valid syntax in new_additional_rights
   # rubocop:disable Metrics/MethodLength
   def update_additional_rights_forced(id, new_additional_rights)
-    command = new_additional_rights[0]
+    command = new_additional_rights.first
     new_list = new_additional_rights[1..-1].split(',').map(&:to_i).uniq.sort
     if command == '-'
       AdditionalRight.where(project_id: id, user_id: new_list).destroy_all
@@ -544,7 +544,7 @@ class ProjectsController < ApplicationController
     # the input will already have gone through client-side validation.
     return unless VALID_ADD_RIGHTS_CHANGES.match?(additional_rights_changes)
     # *Only* those who *control* the entry can remove additional editors
-    return if additional_rights_changes[0] == '-' && !can_control?
+    return if additional_rights_changes.first == '-' && !can_control?
 
     update_additional_rights_forced(@project.id, additional_rights_changes)
   end

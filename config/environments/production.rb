@@ -90,7 +90,7 @@ Rails.application.configure do
   # config.cache_store = :mem_cache_store
 
   # Figure out public hostname
-  host = (ENV['PUBLIC_HOSTNAME'] || 'public-hostname-not-configured')
+  host = ENV['PUBLIC_HOSTNAME'] || 'public-hostname-not-configured'
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = 'http://assets.example.com'

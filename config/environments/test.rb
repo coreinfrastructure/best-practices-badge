@@ -33,7 +33,8 @@ Rails.application.configure do
     { size: (ENV['RAILS_CACHE_SIZE'] || '128').to_i.megabytes }
 
   # Raise exceptions instead of rendering exception templates.
-  config.action_dispatch.show_exceptions = false
+  # This makes it easier to detect uncaught exceptions during testing.
+  config.action_dispatch.show_exceptions = :none
 
   # Raise exceptions during test if a translation is missing
   config.i18n.raise_on_missing_translations = true

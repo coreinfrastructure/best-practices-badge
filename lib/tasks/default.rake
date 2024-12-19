@@ -691,7 +691,9 @@ end
 
 Rake::Task['test:run'].enhance ['test:features']
 
-# Modify system so 'test' forces runnning of system tests
+# Modify system so 'rake test' forces running of system tests.
+# NB: it's best to run 'rake test:all' or 'rails test:all' as that
+# is clearer.
 task test: 'test:system'
 
 # This is the task to run every day, e.g., to record statistics

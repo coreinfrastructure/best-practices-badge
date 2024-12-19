@@ -55,7 +55,7 @@ gem 'jquery-rails', '~> 4.4' # JavaScript jQuery library (for Rails)
 gem 'lograge', '~> 0.12' # Simplify logs
 gem 'mail', '~> 2.7' # Ruby mail handler
 #
-gem 'octokit', '~> 6.1' # GitHub's official Ruby API
+gem 'octokit', '~> 7' # GitHub's official Ruby API
 gem 'omniauth-github', '~> 2.0' # Authentication to GitHub (get project info)
 #
 # Counter CVE-2015-9284 in the omniauth 1.X series.
@@ -120,12 +120,12 @@ group :development, :test do
   gem 'license_finder', '~> 7.0'
   gem 'mdl', '0.12.0'
   # NOTE: If you update pronto you may need to update other pronto-* gems
-  gem 'pronto', '0.11.1'
+  gem 'pronto', '0.11.2'
   # TODO: Use pronto-railroader, once there is one.
   # gem 'pronto-brakeman', '0.9.1'
-  gem 'pronto-eslint', '0.11.1'
-  gem 'pronto-rails_best_practices', '0.11.0'
-  gem 'pronto-rubocop', '0.11.5'
+  gem 'pronto-eslint', '~> 0.11'
+  gem 'pronto-rails_best_practices', '~> 0.11'
+  gem 'pronto-rubocop', '~> 0.11.5'
   # gem 'railroader', '4.3.8' # Security static analyzer. OSS fork of Brakeman
   gem 'rubocop', '1.57.0', require: false # Style checker
   gem 'rubocop-performance', '1.19.1', require: false # Performance cops

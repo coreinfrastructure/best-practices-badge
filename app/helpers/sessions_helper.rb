@@ -33,7 +33,7 @@ module SessionsHelper
     # if that happens.
     url.query = remove_locale_query(url.query)
     new_path = url.path.gsub(%r{\A\/[a-z]{2}(-[A-Za-z0-9-]+)?(\/|\z)}, '')
-    new_path.prepend('/') if new_path.empty? || new_path[0] != '/'
+    new_path.prepend('/') if new_path.empty? || new_path.first != '/'
     new_path.chomp!('/') if locale || new_path != '/'
     # Recreate path, but now forcibly include the locale.
     url.path = (locale.present? ? '/' + locale.to_s : '') + new_path
@@ -249,7 +249,7 @@ module SessionsHelper
   def get_github_owner(url)
     return unless url.present? && valid_github_url?(url)
 
-    url.match(GITHUB_PATTERN).captures[0]
+    url.match(GITHUB_PATTERN).captures.first
   end
 
   def get_github_path(url)

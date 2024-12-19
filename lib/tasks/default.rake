@@ -8,6 +8,8 @@
 
 require 'json'
 
+# NOTE: Our default runs test:all, not just test.
+# We want to make sure things work using *all* our tests.
 task(:default).clear.enhance %w[
   rbenv_rvm_setup
   bundle
@@ -23,7 +25,7 @@ task(:default).clear.enhance %w[
   html_from_markdown
   eslint
   report_code_statistics
-  test
+  test:all
 ]
 # Temporarily removed fasterer
 # Waiting for Ruby 2.4 support: https://github.com/seattlerb/ruby_parser/issues/239
@@ -691,10 +693,13 @@ end
 
 Rake::Task['test:run'].enhance ['test:features']
 
-# Modify system so 'rake test' forces running of system tests.
-# NB: it's best to run 'rake test:all' or 'rails test:all' as that
-# is clearer.
-task test: 'test:system'
+# This would modify system so 'rake test' forces running of system tests.
+# NB: it's best to run 'rake test:all' or 'rails test:all' to run all tests,
+# as that is clearer.
+# We *used* to do this, but now that Rails has a 'test:all' we prefer
+# using that instead. This way, you can use 'rails test' to run the
+# subset of non-system tests, the usual Rails default.
+# task test: 'test:system'
 
 # This is the task to run every day, e.g., to record statistics
 # Configure your system (e.g., Heroku) to run this daily.  If you're using

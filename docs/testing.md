@@ -73,7 +73,7 @@ Here's how a Rails system test normally works, as explained in
 * The selenium-webdriver gem, which provides a Ruby API for using the...
 * ... WebDriver protocol in order to interact with...
 * A WebDriver tool such as chromedriver or geckodriver, which…
-* Is automatically downloaded by the webdrivers gem.
+* Is automatically downloaded by the selenium gem.
  The WebDriver tool automates...
 * A browser, such as Chrome."
 
@@ -183,7 +183,7 @@ Do your best to avoid creating flapping tests; they slow development and test,
 cause unnecessary work (because they typically warn of the wrong things),
 and reduce confidence in the entire test suite.
 
-Flapping tests are a challenge, especially with browser automation that requires JavaScript. Examine the `until` loop in the `ensure_choice` method of [login_test.rb](https://github.com/coreinfrastructure/best-practices-badge/blob/master/test/features/login_test.rb) for one approach to make sure that actions are occurring before testing for their impact.
+Flapping tests are a challenge, especially with browser automation that requires JavaScript. Examine the `until` loop in the `ensure_choice` method of [login_test.rb](https://github.com/coreinfrastructure/best-practices-badge/blob/main/test/system/login_test.rb) for one approach to make sure that actions are occurring before testing for their impact.
 
 It's quite helpful to debug a flapping test by running it multiple times. If you're using bash shell, you can run `repeat 10 rails t test/features/can_login_test.rb` by adding the following to your `~/.bash_profile`:
 

@@ -99,7 +99,7 @@ gem 'rails-i18n', '~> 7.0.10' # Localizations for Rails built-ins # 7.1.5
 gem 'redcarpet', '~> 3.5' # Process markdown in form textareas (justifications)
 gem 'sass-rails', '~> 5.1', require: false # For .scss files (CSS extension)
 gem 'scout_apm' # Monitor for memory leaks
-gem 'secure_headers', '~> 6.3' # Add hardening measures to HTTP headers
+gem 'secure_headers', '~> 7' # Add hardening measures to HTTP headers
 # WARNING!!!!
 # CHECK DEPLOYMENT FIRST IF YOU UPDATE sprockets-rails.
 # The gem sprockets-rails version 3.4.1 (from 3.2.2) caused a regression
@@ -167,7 +167,6 @@ group :test do
   gem 'rails-controller-testing', '~> 1.0' # for `assigns` and `assert_template`
   gem 'selenium-webdriver'
   # We don't list "simplecov"; code depends on it & brings it in
-  gem 'webdrivers'
   gem 'webmock', '~> 3.0', require: false
 end
 

@@ -8,13 +8,13 @@
 # https://medium.com/@tariq.m.islam/container-deployments-a-lesson-in-deterministic-ops-a4a467b14a03
 # You can get the hash value for a specific image by using "docker images"
 # and querying about REPOSITORY:TAG, for example:
-# docker pull cimg/ruby:3.2.2-browsers
+# docker pull cimg/ruby:3.3.6-browsers
 # will return:
-#3.2.2-browsers: Pulling from cimg/ruby
-#Digest: sha256:bb2edbe41336dd713fd6aae84b3af0b6633d16f752dbe235b8abbaea436482dc
+#3.3.6-browsers: Pulling from cimg/ruby
+#Digest: sha256:e172a7f210a7ccb48983f83614bd84a85f16589ad61040483565ee62a489a44b
 # For more about Docker pinning, see:
 # https://docs.docker.com/engine/reference/commandline/pull/#pull-an-image-by-digest-immutable-identifier
-# So instead of something like "FROM cimg/ruby:3.2.2-browsers", we indicate
+# So instead of something like "FROM cimg/ruby:3.3.6-browsers", we indicate
 # the sha256 hash, and note the "pin" value.
 
 # $ docker pull cimg/ruby:3.3.6-browsers

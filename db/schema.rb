@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_12_18_182207) do
+ActiveRecord::Schema[7.1].define(version: 2024_12_19_131058) do
   create_schema "heroku_ext"
 
   # These are extensions that must be enabled in order to support this database
@@ -35,8 +35,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_18_182207) do
 
   create_table "pg_search_documents", id: :serial, force: :cascade do |t|
     t.text "content"
-    t.string "searchable_type"
     t.integer "searchable_id"
+    t.string "searchable_type"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.index ["searchable_type", "searchable_id"], name: "index_pg_search_documents_on_searchable_type_and_searchable_id"
@@ -437,7 +437,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_12_18_182207) do
     t.integer "item_id", null: false
     t.string "event", null: false
     t.string "whodunnit"
-    t.text "old_yaml_object"
     t.datetime "created_at", precision: nil
     t.jsonb "object"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"

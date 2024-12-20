@@ -119,16 +119,16 @@ group :development, :test do
   gem 'license_finder', '~> 7.0'
   gem 'mdl', '0.12.0'
   # NOTE: If you update pronto you may need to update other pronto-* gems
-  gem 'pronto'
+  gem 'pronto', '~> 0.11'
   # TODO: Use pronto-railroader, once there is one.
   # gem 'pronto-brakeman', '0.9.1'
-  gem 'pronto-eslint'
-  gem 'pronto-rails_best_practices'
-  gem 'pronto-rubocop'
+  gem 'pronto-eslint', '~> 0.11'
+  gem 'pronto-rails_best_practices', '~> 0.11'
+  gem 'pronto-rubocop', '~> 0.11'
   # gem 'railroader', '4.3.8' # Security static analyzer. OSS fork of Brakeman
-  gem 'rubocop', require: false # Style checker
-  gem 'rubocop-performance', require: false # Performance cops
-  gem 'rubocop-rails', require: false # Rails-specific cops
+  gem 'rubocop', '~> 1.6', require: false # Style checker
+  gem 'rubocop-performance', '~> 1.20', require: false # Performance cops
+  gem 'rubocop-rails', '~> 2.21', require: false # Rails-specific cops
   gem 'ruby-graphviz', '1.2.5' # This is used for bundle viz
   gem 'spring', '~> 4.1'
   # Do NOT upgrade to vcr 6.*, as that is not OSS:

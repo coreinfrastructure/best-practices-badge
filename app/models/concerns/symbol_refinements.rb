@@ -7,11 +7,11 @@
 module SymbolRefinements
   refine Symbol do
     def status
-      "#{self}_status".to_sym
+      :"#{self}_status"
     end
 
     def justification
-      "#{self}_justification".to_sym
+      :"#{self}_justification"
     end
   end
 end

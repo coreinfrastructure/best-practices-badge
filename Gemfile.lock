@@ -602,7 +602,7 @@ DEPENDENCIES
   imagesLoaded_rails (~> 4.1)
   jbuilder (~> 2.11)
   jquery-rails (~> 4.4)
-  json
+  json (~> 2.0)
   license_finder (~> 7.0)
   lograge (~> 0.12)
   mail (~> 2.7)
@@ -615,7 +615,7 @@ DEPENDENCIES
   pagy (~> 6.0)
   paleta (~> 0.3)
   paper_trail (~> 15.2.0)
-  pg
+  pg (~> 1.4)
   pg_search (~> 2.3)
   pronto (= 0.11.1)
   pronto-eslint (= 0.11.1)

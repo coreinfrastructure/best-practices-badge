@@ -40,15 +40,15 @@ class ProjectStat < ApplicationRecord
     Project.transaction do
       # Count projects at different levels of completion
       STAT_VALUES.each do |completion|
-        public_send "percent_ge_#{completion}=", Project.gteq(completion).count
+        public_send :"percent_ge_#{completion}=", Project.gteq(completion).count
         next if completion.to_i.zero? # Don't record percentage "0" > level 0
 
-        public_send "percent_1_ge_#{completion}=",
+        public_send :"percent_1_ge_#{completion}=",
                     Project.where(
                       'badge_percentage_1 >= ?',
                       completion.to_i
                     ).count
-        public_send "percent_2_ge_#{completion}=",
+        public_send :"percent_2_ge_#{completion}=",
                     Project.where(
                       'badge_percentage_2 >= ?',
                       completion.to_i

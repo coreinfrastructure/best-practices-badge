@@ -145,7 +145,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   test 'JSON provides reasonable results when not logged in, but NOT email' do
     get "/en/users/#{@user.id}.json"
     assert_response :success
-    assert_equal '{', @response.body[0]
+    assert_equal '{', @response.body.first
     assert_not_includes @response.body, 'example.com' # Must NOT include email
     json_response = JSON.parse(@response.body)
     assert_equal @user.id, json_response['id']
@@ -220,7 +220,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
         user: { name: 'Not here', email: 'nonsense@example.org' }
       }
     end
-    assert_response 302
+    assert_response :found
     assert_redirected_to root_url
     @new_user = User.find_by(email: 'nonsense@example.org')
     assert_not_nil @new_user
@@ -352,9 +352,9 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_no_difference 'User.count' do
       delete "/en/users/#{@user.id}"
     end
-    assert_response 302
+    assert_response :found
     follow_redirect!
-    assert_response 200
+    assert_response :ok
     my_assert_select '.alert-danger', 'Cannot delete a user who owns projects.'
   end
 

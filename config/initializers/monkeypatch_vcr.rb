@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-if Rails.env.test? || Rails.env.development?
+if Rails.env.local?
   # https://github.com/vcr/vcr/blob/master/lib/vcr/library_hooks/webmock.rb
 
   module VCR

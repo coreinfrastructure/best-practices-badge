@@ -237,7 +237,7 @@ GEM
       net-smtp
     marcel (1.0.4)
     matrix (0.4.2)
-    mdl (0.12.0)
+    mdl (0.13.0)
       kramdown (~> 2.3)
       kramdown-parser-gfm (~> 1.1)
       mixlib-cli (~> 2.1, >= 2.1.1)
@@ -599,7 +599,7 @@ DEPENDENCIES
   license_finder (~> 7.0)
   lograge (~> 0.12)
   mail (~> 2.7)
-  mdl (= 0.12.0)
+  mdl (= 0.13.0)
   minitest-reporters
   minitest-retry
   octokit (~> 7)

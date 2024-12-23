@@ -117,7 +117,7 @@ group :development, :test do
   gem 'eslintrb'
   gem 'json', '~> 2.0'
   gem 'license_finder', '~> 7.0'
-  gem 'mdl', '0.12.0'
+  gem 'mdl', '0.13.0'
   # NOTE: If you update pronto you may need to update other pronto-* gems
   gem 'pronto', '~> 0.11'
   # TODO: Use pronto-railroader, once there is one.

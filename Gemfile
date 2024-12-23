@@ -44,7 +44,7 @@ gem 'faraday-retry', '~> 2.1' # Force retry of faraday requests for reliability
 # They recommend switching to the "fastly" gem (aka "fastly-ruby"),
 # but fastly-ruby is not designed to support multi-threading, so we
 # call the Fastly API directly instead.
-gem 'font_awesome5_rails'
+gem 'font-awesome-rails', '~> 4.7'
 gem 'http_accept_language', '~> 2.1' # Determine user's preferred locale
 gem 'httparty' # HTTP convenience. rake fix_use_gravatar
 gem 'imagesLoaded_rails', '~> 4.1' # JavaScript - enable wait for image load

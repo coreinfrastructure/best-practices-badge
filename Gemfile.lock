@@ -634,6 +634,7 @@ DEPENDENCIES
   rubocop-rails (~> 2.21)
   ruby-graphviz (= 1.2.5)
   sass-rails (~> 6.0)
+  sassc-rails
   scout_apm
   secure_headers (~> 7)
   selenium-webdriver

@@ -18,7 +18,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     log_in_as(@admin)
     get '/en/users'
     assert_response :success
-    assert_includes @response.body, 'All users'
+    assert_includes @response.body, 'Users'
   end
 
   test 'should get new' do
@@ -53,6 +53,51 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, project.name
     assert_includes @response.body,
                     I18n.t('users.show.projects_additional_rights')
+  end
+
+  test 'Admin can search by name, case-insensitive' do
+    log_in_as(@admin)
+    get '/en/users?name=test'
+    assert_response :success
+    assert_includes @response.body, 'French Test'
+    assert_not_includes @response.body, 'Mark Watney'
+  end
+
+  test 'Admin can search by email, case-insensitive' do
+    log_in_as(@admin)
+    # Stored email address is 'CaseSensitive@example.org'
+    get '/en/users?email=casesensitive@example.org'
+    assert_response :success
+    assert_includes @response.body, 'Case Sensitive'
+    assert_not_includes @response.body, 'French Test'
+    assert_not_includes @response.body, 'Mark Watney'
+  end
+
+  test 'Admin can search by name ORed with email, case-insensitive' do
+    log_in_as(@admin)
+    # Stored email address is 'CaseSensitive@example.org'
+    get '/en/users?name=Test&email=github-user@example.com'
+    assert_response :success
+    assert_includes @response.body, 'French Test'
+    assert_includes @response.body, 'GitHub The User'
+    assert_not_includes @response.body, 'Mark Watney'
+  end
+
+  test 'Non-admin will be UNABLE to search by name' do
+    log_in_as(@other_user)
+    get '/en/users?name=test'
+    assert_response :success
+    # The search is ignored, so we'll just see unrelated entries
+    assert_includes @response.body, 'Mark Watney'
+  end
+
+  test 'Non-admin will be UNABLE search by email, case-insensitive' do
+    log_in_as(@other_user)
+    # Stored email address is 'CaseSensitive@example.org'
+    get '/en/users?email=casesensitive@example.org'
+    assert_response :success
+    # The search is ignored, so we'll just see unrelated entries
+    assert_includes @response.body, 'Mark Watney'
   end
 
   test 'indicate admin is admin to admin' do
@@ -100,7 +145,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   test 'JSON provides reasonable results when not logged in, but NOT email' do
     get "/en/users/#{@user.id}.json"
     assert_response :success
-    assert_equal '{', @response.body[0]
+    assert_equal '{', @response.body.first
     assert_not_includes @response.body, 'example.com' # Must NOT include email
     json_response = JSON.parse(@response.body)
     assert_equal @user.id, json_response['id']
@@ -175,7 +220,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
         user: { name: 'Not here', email: 'nonsense@example.org' }
       }
     end
-    assert_response 302
+    assert_response :found
     assert_redirected_to root_url
     @new_user = User.find_by(email: 'nonsense@example.org')
     assert_not_nil @new_user
@@ -307,9 +352,9 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_no_difference 'User.count' do
       delete "/en/users/#{@user.id}"
     end
-    assert_response 302
+    assert_response :found
     follow_redirect!
-    assert_response 200
+    assert_response :ok
     my_assert_select '.alert-danger', 'Cannot delete a user who owns projects.'
   end
 

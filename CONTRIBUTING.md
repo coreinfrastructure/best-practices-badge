@@ -167,7 +167,7 @@ We also release the software as open source software so others can review it.
 Since early detection and impact reduction can never be perfect, we also try to
 detect and repair problems during deployment as quickly as possible.
 This is *especially* true for security issues; see our
-[security information](docs/security.md) for more.
+[security information](docs/assurance-case.md) for more.
 
 ### No trailing whitespace
 
@@ -499,7 +499,7 @@ and ensure that third parties can't use interactions for tracking.
 When sending an email to an existing account, use the original account
 email not the claimed email address sent now; for why, see
 [Hacking GitHub with Unicode's dotless 'i'](https://eng.getwisdom.io/hacking-github-with-unicode-dotless-i/).
-For more about security, see [security](docs/security.md).
+For more about security, see [security](docs/assurance-case.md).
 
 We want the software to have decent performance for typical users.
 [Our goal is interaction in 1 second or less after making a request](https://developers.google.com/web/fundamentals/performance/rail).
@@ -610,7 +610,7 @@ Here are some other tools we sometimes use for checking quality or security,
 though they are not currently integrated
 into the default "rake" checking task:
 
-* OWASP ZAP web application security scanner.
+* ZAP web application security scanner.
   You are encouraged to use this and other web application scanners to find and
   fix problems.
 * Google Chrome auditor.  View a web page, then select menu / more tools /
@@ -925,7 +925,7 @@ make the update work.
 
 Specially check any update of nokogiri or loofah;
 we specially analyze those to prevent vulnerabilities in our
-[security assurance case](./docs/security.md).
+[security assurance case](./docs/assurance-case.md).
 
 #### Updating Ruby (and handling Ruby updates)
 

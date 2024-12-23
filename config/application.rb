@@ -26,5 +26,12 @@ end
 
 Rails.application.configure do
   config.middleware.use Rack::Attack
-  config.active_record.legacy_connection_handling = false
 end
+
+# Prepare for future deprecation.
+# to_time will always preserve the full timezone rather than the
+# offset of the receiver in Rails 8.1.
+# This opts into the new 8.1 behavior.
+# In our case it doesn't matter, the only timezone we use is UTC.
+
+ActiveSupport.to_time_preserves_timezone = :zone

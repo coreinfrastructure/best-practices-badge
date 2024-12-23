@@ -530,3 +530,15 @@
     :why:
     :versions: []
     :when: 2024-01-18 16:10:46.361805391 Z
+- - :approve
+  - rdoc
+  - :who: David A. Wheeler
+    :why: Its 'ruby' license <https://ruby.github.io/rdoc/LICENSE_rdoc.html> causes us no problems. Rdoc is used to generate documentation for Ruby code, which we don't do. It allows us to use GPLv2, and since we don't bring it into our executable, that's fine. Even if it did, we're allowed to use this under clause 4 which says "You may modify and include the part of the software into any other software (possibly commercial)."
+    :versions: []
+    :when: 2024-12-17 22:44:57.269493189 Z
+- - :approve
+  - reline
+  - :who: David A. Wheeler
+    :why: This 'ruby' license allows us to use BSD-3-Clause per <https://github.com/ruby/reline/blob/master/BSDL> which is a common permissive OSS license.
+    :versions: []
+    :when: 2024-12-17 22:45:07.274958385 Z

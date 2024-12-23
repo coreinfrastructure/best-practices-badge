@@ -1884,9 +1884,11 @@ as of 2015-12-14:
    because of their wide support and efficiency.
    We use the default Rails CookieStore mechanism to store sessions;
    it is both simple and much faster than alternatives.
-   Rails implements an automatic authentication mechanism (using a
-   secret key) to ensure that clients cannot undetectably change
-   these cookies; a changed value is thrown away.
+   Rails implements an automatic cookie authentication mechanism (using a
+   secret key referred to as `secret_key_base`)
+   to ensure that clients cannot undetectably change
+   these cookies; a changed value created without being re-authenticated
+   is thrown away.
    Logged-in users have their user id stored in this authenticated cookie
    (There is also a `session_id`, not currently used.)
    Session data is intentionally kept small, because of the limited
@@ -2512,6 +2514,45 @@ However, rails_best_practices is only run in development and test,
 where the environment and input data are trusted,
 so we believe this is not a real vulnerability.
 
+#### Checked-in `tmp/local_secret.txt` appears to have a secret
+
+The file `tmp/local_secret.txt` may appear to be a security vulnerability.
+That's because it's a key (it's the value of `secret_key_base` for
+development and test environments) whose value is checked into a public
+version-controlled repository.
+
+However, it is not a vulnerability. This value is *only* used during
+test and development. The fact that its value is public is
+irrelevant, since those systems are not publicly accessible, or don't
+have any real secrets, or both.
+
+We set this file for the following reasons;
+
+1. It's convenient to have a *constant* value of
+   `secret_key_base`, because it means it's much easier to halt and
+   restart during development and test. Having it change on every restart
+   makes development and test much harder.
+2. It eliminates occasional test failures in parallelized testing.
+   At the time of this writing, when Rails needs a value for `secret_key_base`
+   and cannot find it in the environment variable `SECRET_KEY_BASE` or a file,
+   it creates a new value for `secret_key_base` and stores it in the file
+   `tmp/local_secret.txt`.
+   [A race condition results](https://github.com/rails/rails/issues/53661),
+   because if tests are running in parallel, other tests may try to load the
+   file before it's been created by another process.
+   I've verified in the Rails code that if this file exists,
+   its content is used.
+
+In the staging and production environments we provide a truly secret value for
+the environment variable `SECRET_KEY_BASE`. When this environment variable
+is set, it is used instead. Their values are the ones
+we actually need to keep private. We do *not* check in their values.
+
+For more information:
+
+* <https://apidock.com/rails/Rails/Application/secret_key_base>
+* <https://apidock.com/rails/v7.1.3.2/Rails/Application/generate_local_secret>
+
 #### Information Exposure from actioncable
 
 The "actioncable" module was identified as potentially vulnerable to
@@ -2600,7 +2641,7 @@ and how it helps make the software more secure:
   revealed to unauthorized individuals.
   Here are important examples of our negative testing:
     - local logins with wrong or unfilled passwords will lead to login failure
-      (see `test/features/login_test.rb`).
+      (see `test/system/login_test.rb`).
     - projects cannot be edited ("patched") by a timed-out session
       or a session lacking a signed timeout value
       (see `test/controllers/projects_controller_test.rb`)

@@ -29,3 +29,7 @@ ignore:
 # third-party countermeasure (omniauth-rails_csrf_protection) in:
 # https://github.com/coreinfrastructure/best-practices-badge/pull/1298
 # This is no longer necessary, so we removed that.
+
+  # vuln in the carousel component of bootstrap
+  # component not used
+  - CVE-2024-6484

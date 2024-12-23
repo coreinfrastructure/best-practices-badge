@@ -298,7 +298,7 @@ list of projects in the requested format. The "as" parameter changes this:
     is shown instead.
 
 See
-[app/controllers/projects\_controller.rb](https://github.com/coreinfrastructure/best-practices-badge/blob/master/app/controllers/projects_controller.rb)
+[app/controllers/projects\_controller.rb](https://github.com/coreinfrastructure/best-practices-badge/blob/main/app/controllers/projects_controller.rb)
 if you want to see the implementation's source code.
 
 ## Downloading the database

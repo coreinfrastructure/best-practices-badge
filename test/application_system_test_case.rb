@@ -7,8 +7,8 @@ require 'test_helper'
 require 'capybara/rails'
 require 'capybara/minitest'
 require 'selenium/webdriver'
-require 'webdrivers'
 
+# webdrivers are now managed by selenium
 # Set up a test environment to run client-side JavaScript.
 # Setup Capybara -> selenium -> webdriver -> headless chrome/chromium. See:
 # https://robots.thoughtbot.com/headless-feature-specs-with-chrome

@@ -8,6 +8,8 @@
 
 require 'json'
 
+# NOTE: Our default runs test:all, not just test.
+# We want to make sure things work using *all* our tests.
 task(:default).clear.enhance %w[
   rbenv_rvm_setup
   bundle
@@ -23,8 +25,7 @@ task(:default).clear.enhance %w[
   html_from_markdown
   eslint
   report_code_statistics
-  update_chromedriver
-  test
+  test:all
 ]
 # Temporarily removed fasterer
 # Waiting for Ruby 2.4 support: https://github.com/seattlerb/ruby_parser/issues/239
@@ -628,7 +629,7 @@ task change_owner: :environment do
   # Project.update_all_badge_percentages(Criteria.keys)
   ARGV.shift # Drop rake task name
   ARGV.shift # Drop '--'
-  project_number = Integer(ARGV[0]) # Raise exceptions on non-integers
+  project_number = Integer(ARGV.first) # Raise exceptions on non-integers
   user_number = Integer(ARGV[1])
   # Retrieve and print current project/owner
   project = Project.find(project_number.to_i)
@@ -692,8 +693,13 @@ end
 
 Rake::Task['test:run'].enhance ['test:features']
 
-# Modify system so 'test' forces runnning of system tests
-task test: 'test:system'
+# This would modify system so 'rake test' forces running of system tests.
+# NB: it's best to run 'rake test:all' or 'rails test:all' to run all tests,
+# as that is clearer.
+# We *used* to do this, but now that Rails has a 'test:all' we prefer
+# using that instead. This way, you can use 'rails test' to run the
+# subset of non-system tests, the usual Rails default.
+# task test: 'test:system'
 
 # This is the task to run every day, e.g., to record statistics
 # Configure your system (e.g., Heroku) to run this daily.  If you're using
@@ -764,22 +770,6 @@ task :test_dev_install do
   TEST_BRANCH_SHELL
 end
 
-# JavaScript tests end up running .chromedriver-helper, which is downloaded
-# and cached.  Update the cached version.
-desc 'Update webdrivers/chromedriver'
-if Rails.env.production? || Rails.env == 'fake_production'
-  task :update_chromedriver do
-    puts 'Skipping update_chromedriver (libraries not available).'
-  end
-else
-  task :update_chromedriver do
-    require 'webdrivers'
-    # force-upgrade to the latest version of chromedriver
-    # Note: This is *NOT* Rails' "update" method, ignore Rails/SaveBang.
-    Webdrivers::Chromedriver.update
-  end
-end
-
 # Run some slower tests. Doing this on *every* automated test run would be
 # slow things down, and the odds of them being problems are small enough
 # that the slowdown is less worthwhile.  Also, some of the tests (like the
@@ -818,8 +808,8 @@ end
 desc 'Search for users with given email (for GDPR requests)'
 task search_email: :environment do
   ARGV.shift # Drop rake task name
-  ARGV.shift if ARGV[0] == '--' # Skip garbage
-  email = ARGV[0]
+  ARGV.shift if ARGV.first == '--' # Skip garbage
+  email = ARGV.first
   puts "Searching for email '#{email}'; matching ids and names are:"
   real_search_email(email)
   puts 'End of results.'
@@ -846,8 +836,8 @@ end
 desc 'Search for users with given case-insensitive name (for GDPR requests)'
 task search_name: :environment do
   ARGV.shift # Drop rake task name
-  ARGV.shift if ARGV[0] == '--' # Skip garbage
-  name = ARGV[0]
+  ARGV.shift if ARGV.first == '--' # Skip garbage
+  name = ARGV.first
   puts "Searching for name '#{name}' ignoring case; matching ids and names are:"
   real_search_name(name)
   puts 'End of results.'
@@ -858,8 +848,8 @@ end
 desc 'Search for users with NAME and EMAIL (for GDPR requests)'
 task search_user: :environment do
   ARGV.shift # Drop rake task name
-  ARGV.shift if ARGV[0] == '--' # Skip garbage
-  name = ARGV[0]
+  ARGV.shift if ARGV.first == '--' # Skip garbage
+  name = ARGV.first
   email = ARGV[1]
   puts "Searching for name '#{name}', email #{email} (ignoring case for both)"
   real_search_name(name)
@@ -871,6 +861,22 @@ end
 desc 'Update Database list of bad passwords from raw-bad-passwords-lowercase'
 task update_bad_password_db: :environment do
   BadPassword.force_load
+end
+
+desc 'Convert old papertrail version values from YAML to json'
+task convert_papertrail_yaml_to_json: :environment do
+  # We request access to the full environment; that makes this easier to do
+  # since that loads what we need.
+  PaperTrail::Version.where.not(old_yaml_object: nil).find_each do |version|
+    # Show progress
+    puts "#{version.item_id} #{version.event} #{version.created_at} " \
+         "#{version.whodunnit} " \
+         "#{version.old_yaml_object[0..200].tr("\n", ' ')}\n\n"
+    # rubocop:disable Rails/SkipsModelValidations
+    version.update_columns old_yaml_object: nil,
+                           object: YAML.unsafe_load(version.old_yaml_object)
+    # rubocop:enable Rails/SkipsModelValidations
+  end
 end
 
 desc 'Update SVG badge images from shields.io'

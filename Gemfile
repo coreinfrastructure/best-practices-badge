@@ -21,14 +21,14 @@ ruby File.read('.ruby-version').strip
 # Loading only what we use reduces memory use & attack surface.
 # gem 'actioncable' # Not used. Client/server comm channel.
 # gem 'activestorage' # Not used. Attaches cloud files to ActiveRecord.
-gem 'actionmailer', '~> 7.0.8' # Rails. Send email.
-gem 'actionpack', '~> 7.0.8' # Rails. MVC framework.
-gem 'actionview', '~> 7.0.8' # Rails. View.
-gem 'activejob', '~> 7.0.8' # Rails. Async jobs.
-gem 'activemodel', '~> 7.0.8' # Rails. Model basics.
-gem 'activerecord', '~> 7.0.8' # Rails. ORM and query system.
+gem 'actionmailer', '~> 8.0.1' # Rails. Send email.
+gem 'actionpack', '~> 8.0.1' # Rails. MVC framework.
+gem 'actionview', '~> 8.0.1' # Rails. View.
+gem 'activejob', '~> 8.0.1' # Rails. Async jobs.
+gem 'activemodel', '~> 8.0.1' # Rails. Model basics.
+gem 'activerecord', '~> 8.0.1' # Rails. ORM and query system.
 # gem 'activestorage' # Not used. Attaches cloud files to ActiveRecord.
-gem 'activesupport', '~> 7.0.8' # Rails. Underlying library.
+gem 'activesupport', '~> 8.0.1' # Rails. Underlying library.
 # gem 'activetext' # Not used. Text editor that fails to support markdown.
 gem 'attr_encrypted', '~> 4'
 gem 'bcrypt', '~> 3.1.18' # Security - for salted hashed interacted passwords
@@ -50,11 +50,11 @@ gem 'httparty' # HTTP convenience. rake fix_use_gravatar
 gem 'imagesLoaded_rails', '~> 4.1' # JavaScript - enable wait for image load
 gem 'jbuilder', '~> 2.11' # Template mechanism for JSON format results
 gem 'jquery-rails', '~> 4.4' # JavaScript jQuery library (for Rails)
-gem 'jquery-ui-rails', '~> 6.0' # JavaScript jQueryUI library (for Rails)
+# We once used 'jquery-ui-rails', JavaScript jQueryUI library (for Rails),
+# for jquery-ui/autocomplete (a polyfill for missing functionality in Safari).
 gem 'lograge', '~> 0.12' # Simplify logs
 gem 'mail', '~> 2.7' # Ruby mail handler
-#
-gem 'octokit', '~> 6.1' # GitHub's official Ruby API
+gem 'octokit', '~> 7' # GitHub's official Ruby API
 gem 'omniauth-github', '~> 2.0' # Authentication to GitHub (get project info)
 #
 # Counter CVE-2015-9284 in the omniauth 1.X series.
@@ -81,11 +81,11 @@ gem 'omniauth-github', '~> 2.0' # Authentication to GitHub (get project info)
 gem 'omniauth-rails_csrf_protection'
 gem 'pagy', '~> 6.0'
 gem 'paleta', '~> 0.3' # Color manipulation, used for badges
-gem 'paper_trail', '~> 12.3' # Record previous versions of project data
+gem 'paper_trail', '~> 16.0' # Record previous versions of project data
 gem 'pg', '~> 1.4' # PostgreSQL database, used for data storage
 gem 'pg_search', '~> 2.3' # PostgreSQL full-text search
-gem 'puma', '~> 6.4' # Faster webserver; recommended by Heroku
-gem 'puma_worker_killer', '~> 0.3' # Band-aid: Restart to limit memory use
+gem 'puma', '~> 6.5' # Faster webserver; recommended by Heroku
+gem 'puma_worker_killer', '~> 1.0' # Band-aid: Restart to limit memory use
 gem 'rack-attack', '~> 6.7' # Implement rate limiting
 gem 'rack-cors', '~> 2.0' # Enable CORS so JavaScript clients can get JSON
 gem 'rack-headers_filter', '~> 0.0.1' # Filter out "dangerous" headers
@@ -93,18 +93,18 @@ gem 'rack-headers_filter', '~> 0.0.1' # Filter out "dangerous" headers
 # but instead load only what we use (to reduce memory use and attack surface).
 # We load sprockets-rails, but its version number isn't kept in sync.
 # Note: Update the gem versions of action* and railties in sync.
-gem 'railties', '~> 7.0.8' # Rails. Rails core, loads rest of Rails
-gem 'rails-i18n', '~> 7.0.8' # Localizations for Rails built-ins
+gem 'railties', '~> 8.0.1' # Rails. Rails core, loads rest of Rails
+gem 'rails-i18n', '~> 8.0.1' # Localizations for Rails built-ins
 gem 'redcarpet', '~> 3.5' # Process markdown in form textareas (justifications)
-gem 'sass-rails', '~> 5.1', require: false # For .scss files (CSS extension)
+gem 'sassc-rails' # compiles .scss (css replacement) drop-in replacement for sass-rails
 gem 'scout_apm' # Monitor for memory leaks
-gem 'secure_headers', '~> 6.3' # Add hardening measures to HTTP headers
+gem 'secure_headers', '~> 7' # Add hardening measures to HTTP headers
 # WARNING!!!!
 # CHECK DEPLOYMENT FIRST IF YOU UPDATE sprockets-rails.
 # The gem sprockets-rails version 3.4.1 (from 3.2.2) caused a regression
 # in deployment (icons no longer displayed) that does NOT occur locally.
 # WARNING!!!!
-gem 'sprockets-rails', '3.4.2' # Rails. Asset precompilation
+gem 'sprockets-rails', '3.5.2' # Rails. Asset precompilation
 gem 'uglifier', '~> 4.2.0', require: false # Minify JavaScript
 gem 'sentry-ruby'
 gem 'sentry-rails'
@@ -119,16 +119,16 @@ group :development, :test do
   gem 'license_finder', '~> 7.0'
   gem 'mdl', '0.12.0'
   # NOTE: If you update pronto you may need to update other pronto-* gems
-  gem 'pronto', '0.11.1'
+  gem 'pronto', '~> 0.11'
   # TODO: Use pronto-railroader, once there is one.
   # gem 'pronto-brakeman', '0.9.1'
-  gem 'pronto-eslint', '0.11.1'
-  gem 'pronto-rails_best_practices', '0.11.0'
-  gem 'pronto-rubocop', '0.11.5'
+  gem 'pronto-eslint', '~> 0.11'
+  gem 'pronto-rails_best_practices', '~> 0.11'
+  gem 'pronto-rubocop', '~> 0.11'
   # gem 'railroader', '4.3.8' # Security static analyzer. OSS fork of Brakeman
-  gem 'rubocop', '1.57.0', require: false # Style checker
-  gem 'rubocop-performance', '1.19.1', require: false # Performance cops
-  gem 'rubocop-rails', '2.21.2', require: false # Rails-specific cops
+  gem 'rubocop', '~> 1.6', require: false # Style checker
+  gem 'rubocop-performance', '~> 1.20', require: false # Performance cops
+  gem 'rubocop-rails', '~> 2.21', require: false # Rails-specific cops
   gem 'ruby-graphviz', '1.2.5' # This is used for bundle viz
   gem 'spring', '~> 4.1'
   # Do NOT upgrade to vcr 6.*, as that is not OSS:
@@ -151,7 +151,7 @@ group :development do
   # We bring in full rails in development in case we need it for debugging;
   # this also keeps some gems happy that don't realize that loading
   # only *parts* of Rails is fine:
-  gem 'rails', '~> 7.0.8' # Rails (our web framework)
+  gem 'rails', '~> 8.0.1' # Rails (our web framework)
   # To update the translation gem, see the process docs in doc/testing.md
   gem 'translation', '1.37' # translation.io - translation service
   gem 'web-console' # In-browser debugger; use <% console %> or console
@@ -166,12 +166,11 @@ group :test do
   gem 'rails-controller-testing', '~> 1.0' # for `assigns` and `assert_template`
   gem 'selenium-webdriver'
   # We don't list "simplecov"; code depends on it & brings it in
-  gem 'webdrivers'
   gem 'webmock', '~> 3.0', require: false
 end
 
 group :production do
-  gem 'rack-timeout', '~> 0.6.3' # Timeout; https://github.com/heroku/rack-timeout
+  gem 'rack-timeout', '~> 0.7.0' # Timeout; https://github.com/heroku/rack-timeout
   gem 'rails_12factor', '~> 0.0.3'
 end
 

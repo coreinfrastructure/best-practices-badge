@@ -1,7 +1,7 @@
 <% require 'cgi' %>
 
 <div class="jumbotron">
-<h2 class>All users</h2>
+<h2 class>Users</h2>
 
 <ul class="users">
   <% @users.each do |user| %>
@@ -21,5 +21,16 @@
   <% end %>
 </ul>
 <%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>
+
+<% if current_user&.admin? %>
+<h2 class>New Search (case-insensitive)</h2>
+ <%= form_for users_path, method: 'get', enforce_utf8: true do %>
+  <label for="name"><%= 'Name' %></label>
+  <%= text_field_tag :name, params[:name], size: 40, placeholder: 'User name' %>
+  <label for="email"><%= 'Email' %></label>
+  <%= text_field_tag :email, params[:email], size: 60, placeholder: 'User email' %>
+  <%= submit_tag 'User Search', name: nil %>
+ <% end %>
+<% end %>
 
 </div>

@@ -1039,7 +1039,7 @@ ja:
           動的解析ツールは、ソフトウェアを特定の入力で実行して検査します。たとえば、プロジェクトは、ファジングツール（<a
           href="http://lcamtuf.coredump.cx/afl/">アメリカンファジーロップ</a>など）やウェブ
           アプリケーション スキャナ（例：<a href="https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project">
-          OWASP ZAP </a>または<a href="https://w3af.org/"> w3af </a>）です。場合によっては、<a
+          ZAP </a>または<a href="https://w3af.org/"> w3af </a>）です。場合によっては、<a
           href="https://github.com/google/oss-fuzz#introduction">
           OSS-Fuzz </a>プロジェクトがプロジェクトにファズテストを適用する可能性があります。この基準のために、動的分析ツールは、様々な種類の問題を探すために何らかの方法で入力を変更するか<em>または</em>少なくとも80％のブランチ
           カバレッジを持つ自動テスト スイートである必要があります。 <a href="https://en.wikipedia.org/wiki/Dynamic_program_analysis">動的解析に関するWikipediaのページ</a>と<a
@@ -1392,7 +1392,7 @@ ja:
           href="https://www.nist.gov/publications/software-assurance-using-structured-assurance-case-models">「構造化された保証ケースモデルを使用したソフトウェア保証」、Thomas
           Rhodes他、NIST Interagency Report 7608 </a>）。信頼境界は、データまたは実行がその信頼レベル、例えば、典型的なウェブアプリケーションにおけるサーバの境界、を変更する境界である。安全な設計原則（SaltzerやSchroeerなど）と一般的な実装セキュリティの弱点（OWASPトップ10やCWE
           / SANSトップ25など）をリストし、それぞれがどのように対抗しているかを示すのは一般的です。 <a
-          href="https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/security.md">
+          href="https://github.com/coreinfrastructure/best-practices-badge/blob/main/docs/assurance-case.md">
           BadgeAppの保証ケース</a>は良い参考例になるかもしれません。これは、documentation_security、documentation_architecture、およびimplement_secure_designに関連しています。
       achieve_passing:
         description: プロジェクトは合格レベルバッジに達成しなければなりません。

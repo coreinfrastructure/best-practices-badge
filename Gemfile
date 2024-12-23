@@ -154,7 +154,7 @@ group :development do
   # only *parts* of Rails is fine:
   gem 'rails', '~> 8.0.1' # Rails (our web framework)
   # To update the translation gem, see the process docs in doc/testing.md
-  gem 'translation', '1.37' # translation.io - translation service
+  gem 'translation', '1.41' # translation.io - translation service
   gem 'web-console' # In-browser debugger; use <% console %> or console
 end
 

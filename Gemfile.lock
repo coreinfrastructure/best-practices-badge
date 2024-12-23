@@ -131,7 +131,7 @@ GEM
       bigdecimal
       rexml
     crass (1.0.6)
-    csv (3.3.1)
+    csv (3.3.2)
     date (3.4.1)
     docile (1.4.1)
     dotenv (2.8.1)

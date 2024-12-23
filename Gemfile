@@ -54,8 +54,7 @@ gem 'jquery-rails', '~> 4.4' # JavaScript jQuery library (for Rails)
 # for jquery-ui/autocomplete (a polyfill for missing functionality in Safari).
 gem 'lograge', '~> 0.12' # Simplify logs
 gem 'mail', '~> 2.7' # Ruby mail handler
-#
-gem 'octokit', '~> 6.1' # GitHub's official Ruby API
+gem 'octokit', '~> 7' # GitHub's official Ruby API
 gem 'omniauth-github', '~> 2.0' # Authentication to GitHub (get project info)
 #
 # Counter CVE-2015-9284 in the omniauth 1.X series.
@@ -85,7 +84,7 @@ gem 'paleta', '~> 0.3' # Color manipulation, used for badges
 gem 'paper_trail', '~> 16.0' # Record previous versions of project data
 gem 'pg', '~> 1.4' # PostgreSQL database, used for data storage
 gem 'pg_search', '~> 2.3' # PostgreSQL full-text search
-gem 'puma', '~> 6.4' # Faster webserver; recommended by Heroku
+gem 'puma', '~> 6.5' # Faster webserver; recommended by Heroku
 gem 'puma_worker_killer', '~> 0.3' # Band-aid: Restart to limit memory use
 gem 'rack-attack', '~> 6.7' # Implement rate limiting
 gem 'rack-cors', '~> 2.0' # Enable CORS so JavaScript clients can get JSON
@@ -97,7 +96,7 @@ gem 'rack-headers_filter', '~> 0.0.1' # Filter out "dangerous" headers
 gem 'railties', '~> 8.0.1' # Rails. Rails core, loads rest of Rails
 gem 'rails-i18n', '~> 8.0.1' # Localizations for Rails built-ins
 gem 'redcarpet', '~> 3.5' # Process markdown in form textareas (justifications)
-gem 'sass-rails', '~> 5.1', require: false # For .scss files (CSS extension)
+gem 'sass-rails', '~> 6.0', require: false # For .scss files (CSS extension)
 gem 'scout_apm' # Monitor for memory leaks
 gem 'secure_headers', '~> 7' # Add hardening measures to HTTP headers
 # WARNING!!!!
@@ -120,16 +119,16 @@ group :development, :test do
   gem 'license_finder', '~> 7.0'
   gem 'mdl', '0.12.0'
   # NOTE: If you update pronto you may need to update other pronto-* gems
-  gem 'pronto', '0.11.1'
+  gem 'pronto', '~> 0.11'
   # TODO: Use pronto-railroader, once there is one.
   # gem 'pronto-brakeman', '0.9.1'
-  gem 'pronto-eslint', '0.11.1'
-  gem 'pronto-rails_best_practices', '0.11.0'
-  gem 'pronto-rubocop', '0.11.5'
+  gem 'pronto-eslint', '~> 0.11'
+  gem 'pronto-rails_best_practices', '~> 0.11'
+  gem 'pronto-rubocop', '~> 0.11'
   # gem 'railroader', '4.3.8' # Security static analyzer. OSS fork of Brakeman
-  gem 'rubocop', '1.57.0', require: false # Style checker
-  gem 'rubocop-performance', '1.19.1', require: false # Performance cops
-  gem 'rubocop-rails', '2.21.2', require: false # Rails-specific cops
+  gem 'rubocop', '~> 1.6', require: false # Style checker
+  gem 'rubocop-performance', '~> 1.20', require: false # Performance cops
+  gem 'rubocop-rails', '~> 2.21', require: false # Rails-specific cops
   gem 'ruby-graphviz', '1.2.5' # This is used for bundle viz
   gem 'spring', '~> 4.1'
   # Do NOT upgrade to vcr 6.*, as that is not OSS:

@@ -165,7 +165,7 @@ class ProjectStatsController < ApplicationController
   # rubocop: disable Style/MethodCalledOnDoEndBlock
   LEVEL0_GT0_FIELDS =
     ProjectStat::STAT_VALUES_GT0.map do |e|
-      "percent_ge_#{e}".to_sym
+      :"percent_ge_#{e}"
     end.freeze
   # rubocop: enable Style/MethodCalledOnDoEndBlock
 
@@ -351,7 +351,7 @@ class ProjectStatsController < ApplicationController
   # rubocop: disable Style/MethodCalledOnDoEndBlock
   LEVEL1_GT25_FIELDS =
     ProjectStat::STAT_VALUES_GT25.map do |e|
-      "percent_1_ge_#{e}".to_sym
+      :"percent_1_ge_#{e}"
     end.freeze
   # rubocop: enable Style/MethodCalledOnDoEndBlock
 
@@ -385,7 +385,7 @@ class ProjectStatsController < ApplicationController
   # rubocop: disable Style/MethodCalledOnDoEndBlock
   LEVEL2_GT25_FIELDS =
     ProjectStat::STAT_VALUES_GT25.map do |e|
-      "percent_2_ge_#{e}".to_sym
+      :"percent_2_ge_#{e}"
     end.freeze
   # rubocop: enable Style/MethodCalledOnDoEndBlock
 

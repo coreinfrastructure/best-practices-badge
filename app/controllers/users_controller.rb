@@ -148,7 +148,7 @@ class UsersController < ApplicationController
     changeset.each do |key, change|
       # Only consider "change" if it is in the expected form [old, new]
       if change.is_a?(Array) && change.length == 2
-        result[key] = change if change[0] != change[1]
+        result[key] = change if change.first != change[1]
       end
     end
     result['email'] = [old_email, new_email] unless old_email == new_email

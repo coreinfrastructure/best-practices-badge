@@ -13,7 +13,7 @@ module ProjectStatsHelper
             type: 'time',
             unit: 'day',
             unitStepSize: 1,
-            # Setting min & max rotation speeds diplay. See:
+            # Setting min & max rotation speeds display. See:
             # https://www.chartjs.org/docs/latest/general/performance.html
             ticks: { minRotation: 30, maxRotation: 30 },
             # Set time format (changed from older chartkick). See:

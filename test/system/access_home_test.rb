@@ -19,7 +19,8 @@ class AccessHomeTest < ApplicationSystemTestCase
 
   test 'Header has links' do
     visit root_path(locale: :en)
-    assert find_link('Projects').visible?
+    # use an id to ensure we are referring to the correct one
+    assert find('#projects_page').visible?
     assert find_link('Sign Up').visible?
     assert find_link('Login').visible?
   end

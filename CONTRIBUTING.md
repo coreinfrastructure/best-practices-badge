@@ -16,6 +16,7 @@ Here's help on how to make contributions, divided into the following sections:
 * reuse (supply chain for third-party components, including updating them),
 * keeping up the main branch, and
 * handling the rename of the "master" branch to "main".
+* governance
 
 ## General information
 
@@ -28,16 +29,23 @@ via our
 For general discussion, feel free to use the
 [cii-badges mailing list](https://lists.coreinfrastructure.org/mailman/listinfo/cii-badges).
 
-The "doc/" directory has information you may find helpful, for example:
+We use GitHub. You may find
+[GitHub CLI (`gh`)](https://github.com/coreinfrastructure/best-practices-badge.git)
+helpful if you're using the command line.
+It supports commands like `gh auth login` (login) and
+`gh pr create` (create a new pull request
+with the current branch).
 
--   [governance.md](doc/governance.md) describes our governance model
+The "docs/" directory has information you may find helpful, for example:
+
+-   [governance.md](docs/governance.md) describes our governance model
     (how we decide things)
--   [implementation.md](doc/implementation.md) provies implementation details
--   [background.md](doc/background.md) provides background info on criteria
+-   [implementation.md](docs/implementation.md) provides implementation details
+-   [background.md](docs/background.md) provides background info on criteria
 
 If you want *change* the criteria, see below.
 
-The [INSTALL.md](doc/INSTALL.md) file explains how to install the program
+The [INSTALL.md](docs/INSTALL.md) file explains how to install the program
 locally (highly recommended if you're going to make code changes).
 It also provides a quick start guide.
 
@@ -45,7 +53,7 @@ If you're new to the project (or FLOSS in general), the
 [Up-for-grabs](https://github.com/coreinfrastructure/best-practices-badge/labels/up-for-grabs)
 issues are smaller tasks that may typically take 1-3 days.
 You are welcome aboard!
-The [roadmap.md](doc/roadmap.md) file provides an overview of future plans.
+The [roadmap.md](docs/roadmap.md) file provides an overview of future plans.
 See [CODE OF CONDUCT](./CODE_OF_CONDUCT.md) for our code of conduct;
 in short, "Be excellent to each other".
 
@@ -97,7 +105,7 @@ We achieve this by splitting proposals into two kinds:
 ### Developer Certificate of Origin (DCO)
 
 All contributions (including pull requests) must agree to
-the [Developer Certificate of Origin (DCO) version 1.1](doc/dco.txt).
+the [Developer Certificate of Origin (DCO) version 1.1](docs/dco.txt).
 This is exactly the same one created and used by the Linux kernel developers
 and posted on <http://developercertificate.org/>.
 This is a developer's certification that he or she has the right to
@@ -123,7 +131,7 @@ some blank lines and the signed-off-by text above;
 then configure git to use that as a commit template.  For example:
 
 ````sh
-git config commit.template ~/cii-best-practices-badge/git-template
+git config commit.template ~/best-practices-badge/git-template
 ````
 
 It's not practical to fix old contributions in git, so if one is forgotten,
@@ -143,6 +151,9 @@ See the section on reuse for their license requirements
 (they don't need to be MIT, but all required components must be
 open source software).
 
+The data *managed* by this application is released under different
+open data licenses. See the README for more information.
+
 ### We are proactive
 
 In general we try to be proactive to detect and eliminate
@@ -156,7 +167,7 @@ We also release the software as open source software so others can review it.
 Since early detection and impact reduction can never be perfect, we also try to
 detect and repair problems during deployment as quickly as possible.
 This is *especially* true for security issues; see our
-[security information](doc/security.md) for more.
+[security information](docs/assurance-case.md) for more.
 
 ### No trailing whitespace
 
@@ -234,7 +245,7 @@ If you want to propose specific *changes* to a translation, and you are
 not a trusted translator, there are two main options:
 
 * The usual option is to open an issue and simply propose the text changes.
-  Make sure you tell us which locale you're referrring to!
+  Make sure you tell us which locale you're referring to!
 * You *can* propose changes as edits to the appropriate files in
   `config/locales`, but unlike most changes that will not work directly.
   One of the trusted translators will then need to hand-copy
@@ -268,25 +279,25 @@ there are some additional steps we will need to take.
 And of course, you need to convince us that you'll produce trustworthy
 translations, because others are counting on you.
 
-More information is in [doc/translators.md](doc/translators.md).
+More information is in [docs/translators.md](docs/translators.md).
 
 ## Criteria changes
 
 Changing *criteria* can have a much larger impact on participating
 projects than simply changing the supporting software, so we have special
 rules about them. For those rules, see
-[governance.md](doc/governance.md).
+[governance.md](docs/governance.md).
 
 For the technical details on how to implement new criteria,
 or modify existing criteria (including their text, details, rationale,
 and scoring criteria), see
-[implementation.md](doc/implementation.md).
+[implementation.md](docs/implementation.md).
 
 ## Code changes
 
 To make changes to the "BadgeApp" web application that implements the criteria,
-you may find the following helpful; [INSTALL.md](doc/INSTALL.md)
-(installation information) and [implementation.md](doc/implementation.md)
+you may find the following helpful; [INSTALL.md](docs/INSTALL.md)
+(installation information) and [implementation.md](docs/implementation.md)
 (implementation information).
 
 The code should strive to be DRY (don't repeat yourself),
@@ -309,7 +320,7 @@ Please generally follow the
 [community Ruby style guide](https://github.com/bbatsov/ruby-style-guide)
 and the complementary
 [community Rails style guide](https://github.com/bbatsov/rails-style-guide).
-Our continous integration setups runs Rubocop on each commit to ensure they're
+Our continuous integration setups runs Rubocop on each commit to ensure they're
 being followed.
 For example, in Ruby:
 
@@ -473,17 +484,6 @@ or the tests.  On CircleCI you can choose to rebuild.
 Where possible, try to find and fix the problem; we have worked to
 eliminate this, and at this point believe we have fixed it.
 
-If you use an old version of PhantomJS (e.g., if you use
-Ubuntu 14.04 and install PhantomJS via apt-get), you'll see this
-message during tests:
-
-> You're running an old version of PhantomJS,
-> update to >= 2.1.1 for a better experience.
-
-You can eliminate the warnings about old versions of PhantomJS
-by uninstalling the old version and installing a
-[current version of PhantomJS](http://phantomjs.org/download.html).
-
 ### Security, privacy, and performance
 
 Pay attention to security, and work *with* (not against) our
@@ -499,7 +499,7 @@ and ensure that third parties can't use interactions for tracking.
 When sending an email to an existing account, use the original account
 email not the claimed email address sent now; for why, see
 [Hacking GitHub with Unicode's dotless 'i'](https://eng.getwisdom.io/hacking-github-with-unicode-dotless-i/).
-For more about security, see [security](doc/security.md).
+For more about security, see [security](docs/assurance-case.md).
 
 We want the software to have decent performance for typical users.
 [Our goal is interaction in 1 second or less after making a request](https://developers.google.com/web/fundamentals/performance/rail).
@@ -610,7 +610,7 @@ Here are some other tools we sometimes use for checking quality or security,
 though they are not currently integrated
 into the default "rake" checking task:
 
-* OWASP ZAP web application security scanner.
+* ZAP web application security scanner.
   You are encouraged to use this and other web application scanners to find and
   fix problems.
 * Google Chrome auditor.  View a web page, then select menu / more tools /
@@ -789,11 +789,11 @@ in separate executables (if so, no problem).
 Most software licensed using the GPL version 2.0 is actually
 GPL-2.0+ (GPL version 2 or later), and GPL version 3 is known to be
 compatible with the Apache 2.0 license, so this is not a common problem.
-For more on license decisions see doc/dependency_decisions.yml;
+For more on license decisions see docs/dependency_decisions.yml;
 you can also run 'rake' and see the generated report
 license_finder_report.html.
 Once you've checked, you can approve a library and its license with the
-this command (this quickly modifies doc/dependency_decisions.yml;
+this command (this quickly modifies docs/dependency_decisions.yml;
 you can edit the file as well):
 
 ~~~~
@@ -925,7 +925,7 @@ make the update work.
 
 Specially check any update of nokogiri or loofah;
 we specially analyze those to prevent vulnerabilities in our
-[security assurance case](./doc/security.md).
+[security assurance case](./docs/assurance-case.md).
 
 #### Updating Ruby (and handling Ruby updates)
 
@@ -968,7 +968,7 @@ Then run the following command:
 ~~~~
 
 Note at the end of this script it will run `rake` to run a full system test,
-and then (if everyhing worked correctly) a `git commit -as` will be run.
+and then (if everything worked correctly) a `git commit -as` will be run.
 Next you should create and push a new CircleCI build image
 as describe in the dockerfiles [README](dockerfiles/README.md).
 Finally, modify `.circleci/config.yml` as described in the dockerfiles
@@ -1035,3 +1035,15 @@ git fetch origin
 git branch -u origin/main main
 git remote set-head origin -a
 ~~~~
+
+## Governance
+
+This project is led by the OpenSSF Best Practices Badge
+Technical Steering Committee (TSC).
+For current members, see [TSC.md](./TSC.md).
+The TSC is supported by a technical lead.
+
+The file [governance.md](docs/governance.md) describes our governance model
+(how we decide things) in more detail.
+That file is considered "incorporated by reference" by this
+CONTRIBUTING document.

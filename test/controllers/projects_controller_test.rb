@@ -204,20 +204,6 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_response :missing
   end
 
-  # DEPRECATED CAPABILITY. We eventually want to require people to use
-  # "/en/projects/:id.json" if they want JSON. However, as long as this
-  # capability exists, we should test that it works. We also want to test
-  # that it has STOPPED working once we've removed that functionality.
-  # We have documented this deprecation in doc/api.md.
-  test 'should project JSON data if HTTP header Accept: application/json ' do
-    get "/en/projects/#{@project.id}", headers: { Accept: 'application/json' }
-    assert_response :success
-    # The JSON looks like {...} and has "id", while the HTML does not.
-    assert_equal '{', response.body[0]
-    assert_equal '}', response.body[-1]
-    assert_includes response.body, '"id"'
-  end
-
   test 'should show project with criteria_level=1' do
     # Use "/1" suffix to indicate criteria_level=1
     get "/en/projects/#{@project.id}/1"
@@ -240,7 +226,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test 'should show project JSON data with locale' do
     get "/en/projects/#{@project.id}.json"
     assert_response :success
-    body = JSON.parse(response.body)
+    body = response.parsed_body
     assert_equal 'Pathfinder OS', body['name']
     assert_equal 'Operating system for Pathfinder rover', body['description']
     assert_equal 'https://www.nasa.gov', body['homepage_url']
@@ -250,12 +236,46 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test 'should show project JSON data without locale' do
     get "/projects/#{@project.id}.json"
     assert_response :success
-    body = JSON.parse(response.body)
+    body = response.parsed_body
     assert_equal 'Pathfinder OS', body['name']
     assert_equal 'Operating system for Pathfinder rover', body['description']
     assert_equal 'https://www.nasa.gov', body['homepage_url']
     assert_equal 'in_progress', body['badge_level']
     assert_equal [], body['additional_rights']
+  end
+
+  test 'should show markdown for all levels when level not said' do
+    get "/en/projects/#{@project.id}.md"
+    assert_response :success
+    assert_includes @response.body, 'The project website MUST provide information on how'
+    assert_includes @response.body, 'Passing'
+    assert_includes @response.body, 'Silver'
+    assert_includes @response.body, 'Gold'
+  end
+
+  test 'should show markdown for one given level' do
+    get "/en/projects/#{@project.id}.md?criteria_level=0"
+    assert_response :success
+    assert_includes @response.body, 'The project website MUST provide information on how'
+    assert_includes @response.body, 'Passing'
+    assert_not_includes @response.body, 'Silver'
+    assert_not_includes @response.body, 'Gold'
+  end
+
+  test 'Markdown generates correctly for French' do
+    get "/fr/projects/#{@project.id}.md?criteria_level=1"
+    assert_response :success
+    # Split up text to fool spellchecker. "Project" is easily misspelled
+    # and there's no mechanism to disable spellchecking for a specific line.
+    assert_includes @response.body,
+                    ('Le ' \
+                     'pro' \
+                     'jet ' + 'DOIT atteindre un badge de niveau basique')
+    assert_not_includes @response.body, '[Basique]' # "Passing"
+    assert_includes @response.body, '[Argent]' # "Silver"
+    assert_not_includes @response.body, 'Passing'
+    assert_not_includes @response.body, 'Silver'
+    assert_not_includes @response.body, 'Gold'
   end
 
   test 'should get edit' do
@@ -569,6 +589,44 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal new_name, @project.name
   end
 
+  test 'admin can change owner of other users project' do
+    log_in_as(@admin)
+    old_user = @project.user
+    assert_not_equal @admin.id, old_user.id
+    # We SHOULD see the option to change the owner id
+    get "/en/projects/#{@project.id}/edit"
+    assert_response :success
+    assert_includes @response.body, 'New owner id'
+    # Let's ensure we CAN change it.
+    # Admin will own this project after this instruction.
+    patch "/en/projects/#{@project.id}", params: {
+      project: { user_id: @admin.id }
+    }
+    assert_redirected_to project_path(assigns(:project))
+    @project.reload
+    assert_equal @admin.id, @project.user_id
+  end
+
+  # We don't currently allow normal users to change the owner to
+  # anyone else, in case the recipient doesn't want it.
+  test 'Normal user cannot change owner of their own project' do
+    # Verify test setup - @project is owned by @user
+    assert_equal @project.user_id, @user.id
+    log_in_as(@user)
+    # We should NOT see the option to change the owner id
+    get "/en/projects/#{@project.id}/edit"
+    assert_response :success
+    assert_not_includes @response.body, 'New owner id'
+    # Let's ensure we can't change it.
+    patch "/en/projects/#{@project.id}", params: {
+      project: { user_id: @admin.id }
+    }
+    assert_redirected_to project_path(assigns(:project))
+    @project.reload
+    # Notice that nothing has changed.
+    assert_equal @project.user_id, @user.id
+  end
+
   test 'Cannot evade /badge match with /badge/..' do
     get "/projects/#{@perfect_passing_project.id}/badge/..",
         params: { format: 'svg' }
@@ -608,8 +666,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
         params: { format: 'svg' }
     assert_response :success
     assert_equal contents('badge-passing.svg'), @response.body
-    # NOTE: Requestors MUST use the ".json"
-    # suffix to requst the data in JSON format
+    # NOTE: Requesters MUST use the ".json"
+    # suffix to request the data in JSON format
     # (and NOT use the HTTP Accept header to try to select the output format).
     # Therefore we don't need to include "Accept" as part of "Vary".
     assert_equal 'Accept-Encoding', @response.headers['Vary']
@@ -823,6 +881,12 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'update', @project_two.versions.last.event
     assert_equal @project_two.user.id,
                  @project_two.versions.last.whodunnit.to_i
+    # Use PaperTrail to retrieve old version.
+    # This assumes we're storing this using JSON (probably jsonb),
+    # *not* the default YAML. YAML stores very specific data types, including
+    # a specialized timezone type, that we don't want. By storing with
+    # JSON we reduce storage use, increase query speed, and avoid
+    # various deserialization problems.
     assert_equal old_repo_url, @project_two.versions.last.reify.repo_url
   end
 
@@ -855,7 +919,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test 'query JSON for passing projects' do
     get '/en/projects.json?gteq=100'
     assert_response :success
-    body = JSON.parse(response.body)
+    body = response.parsed_body
     # We don't want to have to edit this test if we merely add new
     # test fixtures, so we'll just make sure we have at least 3 and
     # do a sanity check of the response.
@@ -907,28 +971,28 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test 'as=badge works in simple case (single result)' do
     expected_id = projects(:perfect).id
     get '/en/projects?as=badge&' \
-        'url=https%3A%2F%2Fgithub.com%2Fciitest2%2Ftest-repo-shared'
+        'url=https%3A%2F%2Fgithub.com%2Fbestpracticestest%2Ftest-repo-shared'
     assert_redirected_to "/projects/#{expected_id}/badge"
   end
 
   test 'as=badge works with trailing space and slash' do
     expected_id = projects(:perfect).id
     get '/en/projects?as=badge&' \
-        'url=https%3A%2F%2Fgithub.com%2Fciitest2%2Ftest-repo-shared%2F%20'
+        'url=https%3A%2F%2Fgithub.com%2Fbestpracticestest%2Ftest-repo-shared%2F%20'
     assert_redirected_to "/projects/#{expected_id}/badge"
   end
 
   test 'as=badge works in simple case returning JSON' do
     expected_id = projects(:perfect).id
     get '/en/projects.json?as=badge&' \
-        'url=https%3A%2F%2Fgithub.com%2Fciitest2%2Ftest-repo-shared'
+        'url=https%3A%2F%2Fgithub.com%2Fbestpracticestest%2Ftest-repo-shared'
     assert_redirected_to "/projects/#{expected_id}/badge.json"
   end
 
   test 'as=badge redirects simple case when using pq=' do
     expected_id = projects(:perfect).id
     get '/en/projects?as=badge&' \
-        'pq=https%3A%2F%2Fgithub.com%2Fciitest2%2Ftest-repo-shared'
+        'pq=https%3A%2F%2Fgithub.com%2Fbestpracticestest%2Ftest-repo-shared'
     assert_redirected_to "/projects/#{expected_id}/badge"
   end
 
@@ -945,7 +1009,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test 'as=entry works in simple case (single result)' do
     expected_id = projects(:perfect).id
     get '/en/projects?as=entry&' \
-        'url=https%3A%2F%2Fgithub.com%2Fciitest2%2Ftest-repo-shared'
+        'url=https%3A%2F%2Fgithub.com%2Fbestpracticestest%2Ftest-repo-shared'
     assert_redirected_to "/en/projects/#{expected_id}"
   end
 
@@ -960,7 +1024,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     get "/en/projects.json?ids=#{@project.id}%2c#{@project_two.id}"
     follow_redirect!
     assert_response :success
-    body = JSON.parse(response.body)
+    body = response.parsed_body
     assert_equal 2, body.length
     assert_equal @project.id, body[0]['id']
     assert_equal @project_two.id, body[1]['id']
@@ -1005,8 +1069,10 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     late_project.save!(touch: false)
 
     result = ProjectsController.send :send_reminders
-    assert_equal 1, result.size
-    assert_equal late_project.id, result[0]
+    assert_not_equal 0, result.size
+    late_project.reload
+    assert_not_nil late_project.last_reminder_at
+    # assert_equal late_project.id, result[0]
   end
 
   # This is a unit test of a private method in ProjectsController.

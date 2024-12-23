@@ -40,15 +40,15 @@ class ProjectStat < ApplicationRecord
     Project.transaction do
       # Count projects at different levels of completion
       STAT_VALUES.each do |completion|
-        public_send "percent_ge_#{completion}=", Project.gteq(completion).count
+        public_send :"percent_ge_#{completion}=", Project.gteq(completion).count
         next if completion.to_i.zero? # Don't record percentage "0" > level 0
 
-        public_send "percent_1_ge_#{completion}=",
+        public_send :"percent_1_ge_#{completion}=",
                     Project.where(
                       'badge_percentage_1 >= ?',
                       completion.to_i
                     ).count
-        public_send "percent_2_ge_#{completion}=",
+        public_send :"percent_2_ge_#{completion}=",
                     Project.where(
                       'badge_percentage_2 >= ?',
                       completion.to_i
@@ -141,10 +141,10 @@ class ProjectStat < ApplicationRecord
   # returns nil if no ProjectStat is available in that month.
   # Note that created_at is an index, so this should be extremely fast.
   def self.last_in_month(query_date)
-    ProjectStat.all
-               .where('created_at >= ?', query_date.beginning_of_month)
-               .where('created_at <= ?', query_date.end_of_month)
-               .reorder(:created_at).last
+    ProjectStat
+      .where('created_at >= ?', query_date.beginning_of_month)
+      .where('created_at <= ?', query_date.end_of_month)
+      .reorder(:created_at).last
   end
 
   # Return the name of the field for a given level 0..2
@@ -167,7 +167,7 @@ class ProjectStat < ApplicationRecord
   # system reports instead of user interaction.
   # rubocop:disable Metrics/MethodLength
   def self.percent_field_description(level, percentage)
-    return "Bad level #{level}" unless Project::LEVEL_IDS.include?(level.to_s)
+    return "Bad level #{level}" if Project::LEVEL_IDS.exclude?(level.to_s)
 
     level_i = level.to_i
     percentage_i = percentage.to_i

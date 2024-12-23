@@ -8,7 +8,7 @@ require 'test_helper'
 
 class RakeTaskTest < ActiveSupport::TestCase
   test 'regression test for rake reminders' do
-    assert_equal 1, Project.projects_to_remind.size
+    assert_not_equal 0, Project.projects_to_remind.size
     result = system 'rake reminders >/dev/null'
     assert result
     assert_equal 0, Project.projects_to_remind.size

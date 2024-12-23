@@ -26,6 +26,9 @@ class Project < ApplicationRecord
   # (CC-BY-3.0+)?
   ENTRY_LICENSE_EXPLICIT_DATE = Time.iso8601('2017-02-20T12:00:00Z')
 
+  # When did we switch to CDLA-Permissive-2.0?
+  ENTRY_LICENSE_CDLA_PERMISSIVE_20_DATE = Time.iso8601('2024-08-23T12:00:00Z')
+
   STATUS_CHOICE = %w[? Met Unmet].freeze
   STATUS_CHOICE_NA = (STATUS_CHOICE + %w[N/A]).freeze
   MIN_SHOULD_LENGTH = 5
@@ -199,7 +202,11 @@ class Project < ApplicationRecord
               message: :begin_with_cpe
             }
 
-  validates :user_id, presence: true
+  validates :user_id,
+            numericality: {
+              only_integer: true,
+              greater_than_or_equal_to: 1
+            }
 
   Criteria.each_value do |criteria|
     criteria.each_value do |criterion|
@@ -261,7 +268,7 @@ class Project < ApplicationRecord
   # in a project.  These are:
   # :criterion_passing -
   #   'Met' (or 'N/A' if applicable) has been selected for the criterion
-  #   and all requred justification text (including url's) have been entered  #
+  #   and all required justification text (including url's) have been entered  #
   # :criterion_failing -
   #   'Unmet' has been selected for a MUST criterion'.
   # :criterion_barely -
@@ -354,13 +361,33 @@ class Project < ApplicationRecord
     updated_at >= ENTRY_LICENSE_EXPLICIT_DATE
   end
 
+  def show_cdla_permissive_20_license?
+    updated_at >= ENTRY_LICENSE_CDLA_PERMISSIVE_20_DATE
+  end
+
+  # Which field should we display for the data license?
+  # Using the project's last updated_at value, return the name of the
+  # field in i18n "projects.show" to display as the license.
+  def data_license_field
+    if show_cdla_permissive_20_license?
+      'cdla_permissive_20_html'
+    elsif show_entry_license?
+      'cc_by_3plus_html'
+    else
+      # This is older data and the user didn't indicate anything,
+      # so the "terms of use" of CII apply, which said that unless
+      # otherwise noted it's released under CC-BY-3.0 only.
+      'cc_by_3only_html'
+    end
+  end
+
   # Update the badge percentage for a given level (expressed as a number;
   # 0=passing), and update relevant event datetime if needed.
   # It presumes the lower-level percentages (if relevant) are calculated.
   def update_badge_percentage(level, current_time)
-    old_badge_percentage = self["badge_percentage_#{level}".to_sym]
-    update_prereqs(level) unless level.to_i.zero?
-    self["badge_percentage_#{level}".to_sym] =
+    old_badge_percentage = self[:"badge_percentage_#{level}"]
+    update_prereqs(level) if level.to_i.nonzero?
+    self[:"badge_percentage_#{level}"] =
       calculate_badge_percentage(level)
     update_passing_times(level, old_badge_percentage, current_time)
   end
@@ -545,6 +572,12 @@ class Project < ApplicationRecord
       .reorder('last_reminder_at')
   end
 
+  # Purge data about this project from the CDN (if the CDN has any)
+  def purge_cdn_project
+    cdn_badge_key = record_key
+    FastlyRails.purge_by_key cdn_badge_key
+  end
+
   private
 
   # def all_active_criteria_passing?
@@ -606,7 +639,7 @@ class Project < ApplicationRecord
   end
 
   def need_a_base_url
-    return unless repo_url.blank? && homepage_url.blank?
+    return if repo_url.present? || homepage_url.present?
 
     errors.add :base, I18n.t('error_messages.need_home_page_or_url')
   end
@@ -618,7 +651,7 @@ class Project < ApplicationRecord
     # Give percentage, but only up to 99% (so "100%" always means "complete")
     # The tertiary operator is clearer & faster than using [...].min
     result = ((portion * 100.0) / total).round
-    result > 99 ? 99 : result
+    [result, 99].min
   end
 
   # Update achieved_..._at & lost_..._at fields given level as number
@@ -626,20 +659,20 @@ class Project < ApplicationRecord
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def update_passing_times(level, old_badge_percentage, current_time)
     level_name = COMPLETED_BADGE_LEVELS[level.to_i] # E.g., 'passing'
-    current_percentage = self["badge_percentage_#{level}".to_sym]
+    current_percentage = self[:"badge_percentage_#{level}"]
     # If something is wrong, don't modify anything!
     return if current_percentage.blank? || old_badge_percentage.blank?
 
     current_percentage_i = current_percentage.to_i
     old_badge_percentage_i = old_badge_percentage.to_i
     if current_percentage_i >= 100 && old_badge_percentage_i < 100
-      self["achieved_#{level_name}_at".to_sym] = current_time
-      first_achieved_field = "first_achieved_#{level_name}_at".to_sym
+      self[:"achieved_#{level_name}_at"] = current_time
+      first_achieved_field = :"first_achieved_#{level_name}_at"
       if self[first_achieved_field].blank? # First time? Set that too!
         self[first_achieved_field] = current_time
       end
     elsif current_percentage_i < 100 && old_badge_percentage_i >= 100
-      self["lost_#{level_name}_at".to_sym] = current_time
+      self[:"lost_#{level_name}_at"] = current_time
     end
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
@@ -658,9 +691,9 @@ class Project < ApplicationRecord
     return if level <= 0
 
     # The following works because BADGE_LEVELS[1] is 'passing', etc:
-    achieved_previous_level = "achieve_#{BADGE_LEVELS[level]}_status".to_sym
+    achieved_previous_level = :"achieve_#{BADGE_LEVELS[level]}_status"
 
-    if self["badge_percentage_#{level - 1}".to_sym] >= 100
+    if self[:"badge_percentage_#{level - 1}"] >= 100
       return if self[achieved_previous_level] == 'Met'
 
       self[achieved_previous_level] = 'Met'

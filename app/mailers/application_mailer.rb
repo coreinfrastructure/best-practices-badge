@@ -8,7 +8,7 @@
 # See the other files in this directory for mailers that do something.
 
 class ApplicationMailer < ActionMailer::Base
-  default from: "badgeapp@#{ENV['PUBLIC_HOSTNAME'].presence || 'localhost'}"
+  default from: ENV.fetch('BADGEAPP_FROM', "badgeapp@#{ENV.fetch('PUBLIC_HOSTNAME', 'localhost')}")
   layout 'mailer'
 
   # Maximize privacy in the emails we send.

@@ -64,13 +64,14 @@ class ReportMailer < ApplicationMailer
     user = User.find(project.user_id)
     return if user.nil?
     return unless user.email?
-    return unless user.email.include?('@')
+    return if user.email.exclude?('@')
 
     @project_info_url =
       project_url(@project, locale: user.preferred_locale.to_sym)
     @email_destination = user.email
     @new_level = new_badge_level
     @old_level = old_badge_level
+    @hostname = ENV.fetch('PUBLIC_HOSTNAME', 'localhost')
     set_standard_headers
     I18n.with_locale(user.preferred_locale.to_sym) do
       mail(
@@ -94,7 +95,7 @@ class ReportMailer < ApplicationMailer
     user = User.find(project.user_id)
     return if user.nil?
     return unless user.email?
-    return unless user.email.include?('@')
+    return if user.email.exclude?('@')
 
     @project_info_url =
       project_url(@project, locale: user.preferred_locale.to_sym)
@@ -143,6 +144,7 @@ class ReportMailer < ApplicationMailer
     @month_display = month_display
     @last_stat_in_prev_month = last_stat_in_prev_month
     @last_stat_in_prev_prev_month = last_stat_in_prev_prev_month
+    @hostname = ENV.fetch('PUBLIC_HOSTNAME', 'localhost')
     set_standard_headers
     I18n.with_locale(I18n.default_locale) do
       mail(
@@ -161,7 +163,7 @@ class ReportMailer < ApplicationMailer
     user = User.find(project.user_id)
     return if user.nil?
     return unless user.email?
-    return unless user.email.include?('@')
+    return if user.email.exclude?('@')
 
     @project_info_url =
       project_url(@project, locale: user.preferred_locale.to_sym)

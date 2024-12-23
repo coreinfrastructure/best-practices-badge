@@ -160,8 +160,7 @@ case "$manager" in
   brew)
     # We'll use the brew version. Install these to rebuild rbenv:
     # add_pkg openssl libyaml libffi
-    add_pkg rbenv ruby-build graphviz postgres cmake
-    brew cask install phantomjs ;;
+    add_pkg rbenv ruby-build graphviz postgres cmake ;;
 
   apt-get)
     # We'll use the system version.  If you want to use the latest one
@@ -172,7 +171,7 @@ case "$manager" in
     add_pkg autoconf bison build-essential libssl-dev libyaml-dev \
             libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev \
             libgdbm-dev postgresql-server-dev-all postgresql \
-            postgresql-contrib cmake nodejs phantomjs graphviz \
+            postgresql-contrib cmake nodejs graphviz \
             pkg-config;;
   yum|dnf)
     add_pkg gcc openssl-devel libyaml-devel libffi-devel readline-devel \
@@ -212,7 +211,6 @@ case "$manager" in
     brew services start postgres
     ;;
   yum|dnf)
-    npm install phantomjs-prebuilt
     npm_path="node_modules/.bin"
     PATH="$(pwd)/$npm_path:$PATH"
     export PATH
@@ -269,7 +267,7 @@ fi
 if [ "$DO_LOCAL_RBENV" = 'yes' ] ; then
   echo 'Downloading and installing rbenv from GitHub' >&2
   if ! [ -d ~/.rbenv ] ; then
-    git clone git://github.com/rbenv/rbenv.git ~/.rbenv
+    git clone https://github.com/rbenv/rbenv.git ~/.rbenv
   fi
   # Following performed in subshell so as not to change working directory.
   (
@@ -299,7 +297,7 @@ if [ "${MYINSTALL_RBENV_BUNDLER}" = 'yes' ] && \
    ! [ -e "$HOME/.rbenv/plugins/bundler" ] ; then
   echo 'Downloading and installing rbenv-bundler from GitHub' >&2
   mkdir -p "$HOME/.rbenv/plugins/"
-  git clone git://github.com/carsomyr/rbenv-bundler.git \
+  git clone https://github.com/carsomyr/rbenv-bundler.git \
             "$HOME/.rbenv/plugins/bundler"
 fi
 
@@ -344,7 +342,7 @@ bundle install       # Install gems we use in Gemfile.lock, including Rails
 # "bundle" installs additional commands - ensure we can find them,
 # by rehashing if we're using rbenv.
 # This is especially important because it appears that the
-# asset complation process needs some commands to work and it doesn't
+# asset compilation process needs some commands to work and it doesn't
 # always report unexpected failures.  Without this, later JavaScript
 # may mysteriously fail because the assets aren't quite correct.
 if is_command rbenv ; then

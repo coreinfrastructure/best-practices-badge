@@ -37,15 +37,17 @@ en:
       Login
     footer_text_html: >-
       <small> <strong>Need help? Have a question? See a problem?
-      Please <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#64;lists&#46;coreinfrastructure&#46;or&#103;">send
-      an email</a> </em>or <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
-      target="_blank" rel="noopener">file an issue</a></em>.</strong> © 2015-2021
+      Please <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
+      target="_blank" rel="noopener">file an issue</a></em>.</strong>
+      Copyright © 
+      <a href="https://www.bestpractices.dev" target="_blank" rel="noopener">OpenSSF Best Practices Badge a Series of LF Projects, LLC</a>.
+      For web site terms of use, trademark policy and other project policies please see <a href="https://lfprojects.org" target="_blank" rel="noopener">these policies</a>.
+      For more information, see the websites of the
       <a href="https://openssf.org" target="_blank" rel="noopener">Open Source
-      Security Foundation</a>, a <a href="https://www.linuxfoundation.org/"
-      target="_blank" rel="noopener">Linux Foundation</a> Collaborative Project.
+      Security Foundation (OpenSSF)</a> and <a href="https://www.linuxfoundation.org/"
+      target="_blank" rel="noopener">The Linux Foundation</a>.
       All Rights Reserved. Please see our <a href="https://www.linuxfoundation.org/privacy"
-      target="_blank" rel="noopener">privacy policy</a> and <a href="https://www.linuxfoundation.org/terms"
-      target="_blank" rel="noopener">terms of use</a>. </small>
+      target="_blank" rel="noopener">privacy policy</a>.</small>
   admin_only: Admin only.
   account_activations:
     activated: >
@@ -80,6 +82,9 @@ en:
     login_with_github_html: <span class="fa fa-github"></span> Log in with GitHub
     login_automatic_signup: >-
       Log in with GitHub will automatically perform a sign up if necessary.
+      Sign up will only occur if you authorize the sign up to GitHub;
+      you'll need to re-authorize this if you've only signed in to
+      bestpractices.coreinfastructure.org (our domain name has changed).
       If you sign up, your name (as provided to GitHub) and GitHub nickname
       will be shown publicly, and you can change your name at any time.
       Your email address will be kept private and
@@ -136,6 +141,8 @@ en:
       p2_html: >-
         You can easily see the <a href="/en/criteria/0">criteria for the
         passing badge</a>.
+        Automated analysis will determine many of the criteria answers for you
+        (and prevent obviously incorrect answers).
         More information on the OpenSSF Best Practices Badging program is
         <a href='https://github.com/coreinfrastructure/best-practices-badge'>available
         on GitHub</a>. <a href="/en/project_stats">Project statistics</a>
@@ -166,11 +173,15 @@ en:
         <a href="https://opensource.org/licenses/MIT">MIT</a> license
         (projects pursuing a badge are under their respective licenses).
         All publicly-available non-code content
-        managed by the badging application is
-        released under at least the <a href="https://creativecommons.org/licenses/by/3.0/">Creative
-        Commons Attribution License version 3.0 (CC-BY-3.0)</a>;
-        newer non-code content is released under CC-BY version
-        3.0 or later (CC-BY-3.0+). If referencing collectively
+        managed by the badging application that was added or edited
+        after 2024-08-23 is released under the
+        <a href="https://cdla.dev/permissive-2-0/"
+        >Community Data License Agreement – Permissive, Version 2.0
+        (CDLA-Permissive-2.0)</a>.
+        Previous contributions were licensed under either the
+        <a href="https://creativecommons.org/licenses/by/3.0/">Creative
+        Commons Attribution License version 3.0 (CC-BY-3.0)</a>, or as
+        CC-BY version 3.0 or later (CC-BY-3.0+). If referencing collectively
         or not otherwise noted, please credit the OpenSSF Best Practices
         badge contributors.
       share_header_html: >-
@@ -282,6 +293,8 @@ en:
         <br><br>
         If you didn't receive your activation link,
         please sign up again and we will send you a new one.
+        If you've already created an account here via GitHub, please log in
+        using GitHub instead.
       name: Name
       email: Email
       preferred_locale: Preferred locale
@@ -525,6 +538,19 @@ en:
         are free to share and adapt the data, but they must give
         appropriate credit. You retain copyright (if any), and
         the project license is unaffected.<br><br>
+      submit_cdla_permissive_20_html: >-
+        By submitting this data about the project you agree to
+        release it under at least the
+        <a href="https://cdla.dev/permissive-2-0/"
+        >Community Data License Agreement – Permissive, Version 2.0</a>.
+        This means that a Data Recipient
+        may share the Data, with or without modifications, so long as the
+        Data Recipient makes available the text of this agreement with
+        the shared Data.
+        This agreement does <i>not</i> impose any restriction or obligations
+        with respect to the use, modification, or sharing of Results.
+        You retain copyright (if any), and
+        the project license is unaffected.<br><br>
     show:
       edit: Edit
       delete: Delete
@@ -536,6 +562,17 @@ en:
       updated_at_html: "<strong>last updated on</strong> %{when}."
       last_lost_html: Last lost passing badge on %{when}.
       last_achieved_html: Last achieved passing badge on %{when}.
+      cdla_permissive_20_html: >-
+        This data is available under the
+        <a href="https://cdla.dev/permissive-2-0/"
+        >Community Data License Agreement – Permissive, Version 2.0
+        (CDLA-Permissive-2.0)</a>.
+        This means that a Data Recipient
+        may share the Data, with or without modifications, so long as the
+        Data Recipient makes available the text of this agreement with
+        the shared Data.
+        Please credit %{user} and the OpenSSF Best Practices badge
+        contributors.<br><br>
       cc_by_3plus_html: >-
         This data is available under the <a href="https://creativecommons.org/licenses/by/3.0/us"
         target="_blank" rel="noopener">Creative Commons Attribution version 3.0
@@ -615,8 +652,7 @@ en:
           <strong>Please 'submit' often</strong> to save your
           work (you can always go back and edit more later). <br><br>
           If you need help, have a question, or see a problem,
-          please <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">send
-          an email</a> </em>or <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
+          please <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
           target="_blank" rel="noopener">file an issue</a></em>.
     form_basics:
       project_name:
@@ -714,11 +750,11 @@ en:
         hide_details: Hide details
         show_all_details: Show all details
         hide_all_details: Hide all details
-        show_met_title: Show met & N/A criteria
-        show_met_html: Show met &amp; N/A
-        hide_met_title: Hide met & N/A criteria (leaving unmet
+        show_met_title: Show complete and incomplete criteria
+        show_met_html: Show complete and incomplete criteria
+        hide_met_title: Show only incomplete criteria (showing only unmet
           and unknown)
-        hide_met_html: Hide met &amp; N/A
+        hide_met_html: Show only incomplete criteria
         passing_alt: Enough for a badge!
         barely_alt: Barely enough for a badge.
         failing_alt: Not enough for a badge.
@@ -760,7 +796,7 @@ en:
         to take a few extra steps.
         Typically this just involves sending an email.
         For more information, see the encryption section of <a
-        href="https://www.linuxfoundation.org/resources/publications/understanding-us-export-controls-with-os-projects/"
+        href="https://www.linuxfoundation.org/resources/publications/understanding-us-export-controls-with-open-source-projects"
         ><i>Understanding Open Source Technology &amp;
         US Export Controls</i></a>.
       dont_use_crypto: >-
@@ -973,8 +1009,6 @@ en:
       If you have suggestions on how to improve the criteria or
       badge web application, please file an issue at:
       https://github.com/coreinfrastructure/best-practices-badge/issues
-      If you made changes to your project to get a badge, please let us know
-      via email at cii-badges-questions@lists.coreinfrastructure.org.
       One of our goals is to encourage projects to make some improvements.
       We put some of these reports on the public wiki; please let us know
       if you do NOT want the changes publicly posted at
@@ -1789,7 +1823,7 @@ en:
           passwords MUST be stored as iterated hashes with a per-user
           salt by using a key stretching (iterated) algorithm
           (e.g., Argon2id, Bcrypt, Scrypt, or PBKDF2). See also
-          <a href="https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html">OWASP Password Storage Cheat Sheet</a>).
+          <a href="https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html">OWASP Password Storage Cheat Sheet</a>.
         details: >-
           This criterion applies only when the software is enforcing
           authentication of users using passwords for external users
@@ -2206,7 +2240,7 @@ en:
         details: >-
           The project might not achieve the roadmap, and that's
           fine; the purpose of the roadmap is to help potential
-          users and constributors understand the intended direction
+          users and contributors understand the intended direction
           of the project. It need not be detailed.
       documentation_architecture:
         description: >-
@@ -2259,7 +2293,7 @@ en:
           to list secure design principles (such as Saltzer and
           Schroeer) and common implementation security weaknesses
           (such as the OWASP top 10 or CWE/SANS top 25), and show
-          how each are countered. The <a href="https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/security.md">BadgeApp
+          how each are countered. The <a href="https://github.com/coreinfrastructure/best-practices-badge/blob/main/docs/assurance-case.md">BadgeApp
           assurance case</a> may be a useful example. This is
           related to documentation_security, documentation_architecture,
           and implement_secure_design.

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Copyright 2015-2017, the Linux Foundation, IDA, and the
+# Copyright the Linux Foundation, IDA, and the
 # OpenSSF Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
@@ -15,19 +15,20 @@ class ProjectsController < ApplicationController
   skip_before_action :redir_missing_locale, only: :badge
 
   before_action :set_project,
-                only: %i[edit update delete_form destroy show show_json]
+                only: %i[edit update delete_form destroy show show_json show_markdown]
   before_action :require_logged_in, only: :create
   before_action :can_edit_else_redirect, only: %i[edit update]
   before_action :can_control_else_redirect, only: %i[destroy delete_form]
   before_action :require_adequate_deletion_rationale, only: :destroy
   before_action :set_criteria_level, only: %i[show edit update]
+  before_action :set_optional_criteria_level, only: %i[show_markdown]
 
   # Cache with Fastly CDN.  We can't use this header, because logged-in
   # and not-logged-in users see different things (and thus we can't
   # have a cached version that works for everyone):
   # before_action :set_cache_control_headers, only: [:index, :show, :badge]
   # We *can* cache the badge result, and that's what matters anyway.
-  before_action :set_cache_control_headers, only: %i[badge show_json]
+  before_action :set_cache_control_headers, only: %i[badge show_json show_markdown]
 
   helper_method :repo_data
 
@@ -90,7 +91,7 @@ class ProjectsController < ApplicationController
         ids = @projects.limit(2).ids
         if ids.size == 1
           suffix = request&.format&.symbol == :json ? '.json' : ''
-          redirect_to "/#{locale}/projects/#{ids[0]}#{suffix}",
+          redirect_to "/#{locale}/projects/#{ids.first}#{suffix}",
                       status: :moved_permanently
         else
           # If there's not one entry, show the project index instead.
@@ -129,7 +130,7 @@ class ProjectsController < ApplicationController
       # But in practice, ids are as "permanent" as anything on the web gets.
       # If we say it's moved permanently, then browsers & caches &
       # search engines will do the right thing, so that's the status used.
-      redirect_to "/projects/#{id_list[0]}/badge#{suffix}",
+      redirect_to "/projects/#{id_list.first}/badge#{suffix}",
                   status: :moved_permanently
     end
   end
@@ -164,6 +165,12 @@ class ProjectsController < ApplicationController
 
   # GET /projects/1.json
   def show_json
+    # Tell CDN the surrogate key so we can quickly erase it later
+    set_surrogate_key_header @project.record_key
+  end
+
+  # GET /projects/1.md
+  def show_markdown
     # Tell CDN the surrogate key so we can quickly erase it later
     set_surrogate_key_header @project.record_key
   end
@@ -267,11 +274,15 @@ class ProjectsController < ApplicationController
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   # rubocop:disable Metrics/PerceivedComplexity
   def update
-    if repo_url_change_allowed?
+    # Only accept updates if there's no repo_url change OR if change is ok
+    if repo_url_unchanged_or_change_allowed?
       # Send CDN purge early, to give it time to distribute purge request
-      purge_cdn_project
+      @project.purge_cdn_project
       old_badge_level = @project.badge_level
-      project_params.each do |key, user_value| # mass assign
+      final_project_params = project_params
+      # Only admins can *directly* change the project owner (user_id)
+      final_project_params = project_params.except('user_id') unless current_user.admin?
+      final_project_params.each do |key, user_value| # mass assign
         @project[key] = user_value
       end
       Chief.new(@project, client_factory).autofill
@@ -291,8 +302,30 @@ class ProjectsController < ApplicationController
         # after saving.
         if @project.save
           successful_update(format, old_badge_level, @criteria_level)
+          # We must send a purge later, not just now, due to a subtle race
+          # condition. Here's what is going on.
+          # The server and the CDN communicate over TCP/IP. This *server*
+          # will always produce the newest information once it's committed.
+          # However, TCP/IP does *NOT* guarantee that different replies
+          # from a server will be received (by the CDN) in the same order that
+          # they were sent. This means that the CDN can receive *old* data
+          # after # receiving a purge request and newer data, resulting in
+          # a CDN caches with obsolete data that will be held for a long time.
+          # A solution: Wait a short time, then send *another* purge. That way
+          # even if the CDN receives updates out-of-order, that old data will
+          # be purged. The next request following this additional purge will
+          # receive the updated data, and then the CDN will have correct data.
+          #
+          # Note: ActiveJob by default stores jobs in RAM. If the system is
+          # restarted while a job is active, and jobs are stored in RAM, the
+          # job will be lost and not executed. The long-term solution is to put
+          # jobs in the database.
+          PurgeCdnProjectJob.set(
+            wait: BADGE_PURGE_DELAY.seconds
+          ).perform_later(@project.record_key)
           # Also send CDN purge last, to increase likelihood of being purged
-          purge_cdn_project
+          # and replaced with correct data even before the delayed purpose.
+          @project.purge_cdn_project
         else
           format.html { render :edit, criteria_level: @criteria_level }
           format.json do
@@ -331,7 +364,7 @@ class ProjectsController < ApplicationController
       end
       format.json { head :no_content }
     end
-    purge_cdn_project
+    @project.purge_cdn_project
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
@@ -417,7 +450,7 @@ class ProjectsController < ApplicationController
     )
                 .deliver_now
     # To simplify certain tests, return list of project ids newly passing
-    projects[0].ids
+    projects.first.ids
   end
   # rubocop:enable Metrics/MethodLength
   private_class_method :send_monthly_announcement
@@ -474,11 +507,11 @@ class ProjectsController < ApplicationController
   end
   # rubocop:enable Metrics/AbcSize
 
-  # Forceably set additional_rights on project "id" given string description
+  # Forcibly set additional_rights on project "id" given string description
   # Presumes permissions are granted & valid syntax in new_additional_rights
   # rubocop:disable Metrics/MethodLength
   def update_additional_rights_forced(id, new_additional_rights)
-    command = new_additional_rights[0]
+    command = new_additional_rights.first
     new_list = new_additional_rights[1..-1].split(',').map(&:to_i).uniq.sort
     if command == '-'
       AdditionalRight.where(project_id: id, user_id: new_list).destroy_all
@@ -511,7 +544,7 @@ class ProjectsController < ApplicationController
     # the input will already have gone through client-side validation.
     return unless VALID_ADD_RIGHTS_CHANGES.match?(additional_rights_changes)
     # *Only* those who *control* the entry can remove additional editors
-    return if additional_rights_changes[0] == '-' && !can_control?
+    return if additional_rights_changes.first == '-' && !can_control?
 
     update_additional_rights_forced(@project.id, additional_rights_changes)
   end
@@ -582,7 +615,7 @@ class ProjectsController < ApplicationController
   # But otherwise normal users can't change the repo_urls in less than
   # REPO_URL_CHANGE_DELAY days.  Allowing users to change repo_urls, but only
   # with large delays, reduces the administration effort required.
-  def repo_url_change_allowed?
+  def repo_url_unchanged_or_change_allowed?
     return true unless @project.repo_url?
     return true if project_params[:repo_url].nil?
     return true if current_user.admin?
@@ -598,12 +631,6 @@ class ProjectsController < ApplicationController
 
   def integer_list?(value)
     !(value =~ /\A[1-9][0-9]{0,15}( *, *[1-9][0-9]{0,15}){0,20}\z/).nil?
-  end
-
-  # Purge data about this project from the CDN (if the CDN has any)
-  def purge_cdn_project
-    cdn_badge_key = @project.record_key
-    FastlyRails.purge_by_key cdn_badge_key
   end
 
   # Maximum number of GitHub repos to retrieve when retrieving a list of
@@ -631,10 +658,14 @@ class ProjectsController < ApplicationController
     # we pass a per_page value to control this.  For more information, see:
     # https://developer.github.com/v3/#pagination
     github.auto_paginate = false
-    repos = github.repos(
-      nil,
-      sort: 'pushed', per_page: MAX_GITHUB_REPOS_FROM_USER
-    )
+    begin
+      repos = github.repos(
+        nil,
+        sort: 'pushed', per_page: MAX_GITHUB_REPOS_FROM_USER
+      )
+    rescue Octokit::Unauthorized
+      return
+    end
     return if repos.blank?
 
     # Find & remove the repos already in our database.
@@ -729,6 +760,17 @@ class ProjectsController < ApplicationController
     @criteria_level = '0' unless @criteria_level.match?(/\A[0-2]\Z/)
   end
 
+  def set_optional_criteria_level
+    # Apply input filter on criteria_level. If invalid/empty it becomes ''
+    requested_criteria_level = criteria_level_params[:criteria_level] || ''
+    @criteria_level =
+      if requested_criteria_level.match?(/\A[0-2]\Z/)
+        requested_criteria_level.to_str
+      else
+        ''
+      end
+  end
+
   def set_valid_query_url
     # Rewrites /projects?q=&status=failing to /projects?status=failing
     original = request.original_url
@@ -748,7 +790,7 @@ class ProjectsController < ApplicationController
   # rubocop:disable Metrics/AbcSize
   def sort_projects
     # Sort, if there is a requested order (otherwise use default created_at)
-    return unless params[:sort].present? && ALLOWED_SORT.include?(params[:sort])
+    return if params[:sort].blank? || ALLOWED_SORT.exclude?(params[:sort])
 
     sort_direction = params[:sort_direction] == 'desc' ? ' desc' : ' asc'
     sort_index = ALLOWED_SORT.index(params[:sort])
@@ -776,7 +818,7 @@ class ProjectsController < ApplicationController
     end
     format.json { render :show, status: :ok, location: @project }
     new_badge_level = @project.badge_level
-    return unless new_badge_level != old_badge_level
+    return if new_badge_level == old_badge_level
 
     # TODO: Eventually deliver_later
     ReportMailer.project_status_change(

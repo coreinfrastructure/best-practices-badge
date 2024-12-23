@@ -37,9 +37,9 @@ class ProjectGetTest < ActionDispatch::IntegrationTest
 
     # Check hardening headers
     assert_equal(
-      "default-src 'self'; base-uri 'self'; block-all-mixed-content; " \
+      "default-src 'self'; base-uri 'self'; " \
       "form-action 'self'; frame-ancestors 'none'; " \
-      "img-src secure.gravatar.com avatars.githubusercontent.com 'self'; " \
+      "img-src 'self' secure.gravatar.com avatars.githubusercontent.com; " \
       "object-src 'none'; script-src 'self'; style-src 'self'",
       @response.headers['Content-Security-Policy']
     )
@@ -96,7 +96,7 @@ class ProjectGetTest < ActionDispatch::IntegrationTest
   test 'Redirect malformed query string criteria_level,2' do
     get project_path(id: @project_one.id, locale: 'en') + '?criteria_level,2'
     # Should redirect
-    assert_response 301
+    assert_response :moved_permanently
     assert_redirected_to project_path(
       id: @project_one.id, locale: 'en', criteria_level: 2
     )
@@ -105,7 +105,7 @@ class ProjectGetTest < ActionDispatch::IntegrationTest
   test 'Redirect malformed query string criteria_level,1' do
     get project_path(id: @project_one.id, locale: 'de') + '?criteria_level,1'
     # Should redirect
-    assert_response 301
+    assert_response :moved_permanently
     assert_redirected_to project_path(
       id: @project_one.id, locale: 'de', criteria_level: 1
     )
@@ -114,7 +114,7 @@ class ProjectGetTest < ActionDispatch::IntegrationTest
   test 'Redirect malformed query string criteria_level,0' do
     get project_path(id: @project_one.id, locale: 'fr') + '?criteria_level,0'
     # Should redirect
-    assert_response 301
+    assert_response :moved_permanently
     assert_redirected_to project_path(
       id: @project_one.id, locale: 'fr', criteria_level: 0
     )

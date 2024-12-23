@@ -72,7 +72,7 @@ class Criteria
       # Creates class instances on first use and after reload! in rails console
       CriteriaHash.each do |level, level_hash|
         level_hash.each do |criterion|
-          name = criterion[0].to_sym
+          name = criterion.first.to_sym
           ((@criteria ||= {})[level] ||= {})[name] =
             new({ name: name, level: level }.merge(criterion[1]))
           ((@criteria_levels ||= {})[name] ||= []).append(level)
@@ -132,7 +132,7 @@ class Criteria
   end
 
   def initialize(*parameters)
-    super(*parameters)
+    super
     freeze
   end
 

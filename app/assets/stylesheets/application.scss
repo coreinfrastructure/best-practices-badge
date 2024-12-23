@@ -10,13 +10,8 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
- * Note that this uses jquery-ui/autocomplete (to do a polyfill for Safari).
- * There are reports that jquery-ui interferes with bootstrap; I hope those
- * have been resolved.
- *
  *= require_tree .
  *= require_self
- *= require jquery-ui/autocomplete
  *= require rails_bootstrap_forms
  *= require bootstrap-social
  *= require font-awesome

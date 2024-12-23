@@ -4,7 +4,7 @@
       # to query GitHub, and we don't want to make duplicate external requests
       @cached_can_edit = can_edit?
       if @cached_can_edit %>
-      <li><%= link_to Icon[:'fa-edit'] + t('.edit'), edit_project_path(@project, criteria_level: @criteria_level), rel: 'nofollow ugc' %></li>
+    <li><%= link_to Icon[:'fa-edit'] + t('.edit'), edit_project_path(@project, criteria_level: @criteria_level), rel: 'nofollow ugc' %></li>
     <% end %>
     <% if can_control? %>
       <li><%= link_to Icon[:'fa-times-circle'] + t('.delete'), project_path(@project) + '/delete_form', rel: 'nofollow ugc' %></li>

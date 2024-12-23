@@ -3,67 +3,55 @@ version: 2.1
 # OpenSSF Scorecard. You can see the hash pins on the various "image:"
 # values. That prevents downloading of later subversions AND of later
 # updates. When you *DO* want to update, you can easily find out the hash
-# of a given docker container by just running something like:
-# > docker pull circleci/postgres:11.5-ram
-# This will return with the SHA-256 hash of the current version.
+# of a given docker container via:
+# https://hub.docker.com/r/cimg/postgres/tags
+# For more info: https://circleci.com/developer/images/image/cimg/postgres
+# You could also run something like:
+# > docker pull circleci/postgres:13.14
 #
-# This CircleCI orb doesn't seem to work, so I gave up:
-# orbs:
-#   browser-tools: circleci/browser-tools@1.1.1
-# When I try to later run "browser-tools/install-browser-tools" or similar,
-# CircleCI reports that the file doesn't exist (which is true).
-# It's not clear *why* the file doesn't exist. So we instead force-install
-# a browser for testing below.
+orbs:
+  browser-tools: circleci/browser-tools@1.4.9
+  codecov: codecov/codecov@3.2.4
+  dscar-brakeman: naokikimura/dscar-brakeman@0.9.0
 jobs:
   build:
     working_directory: ~/coreinfrastructure/best-practices-badge
     parallelism: 1
+    resource_class: medium
     shell: /bin/bash --login
     environment:
       CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
       CIRCLE_TEST_REPORTS: /tmp/circleci-test-results
     docker:
-    - image: afader/cii-bestpractices@sha256:bc9f83b4b42b3aebae1c6bd333ce49286d9ca0015b68e494d6dd8b0f2ada948f # pin :3.0.5-browsers
+    # If you update this, update it below.
+    - image: drdavidawheeler/cii-bestpractices@sha256:6bb1268e9f849949263ccaae409a0b336b0ff38e478a99a7979763c45805e69b # pin :3.3.6-browsers
       environment:
         PG_HOST: localhost
         PG_USER: ubuntu
         RAILS_ENV: test
         RACK_ENV: test
-    - image: circleci/postgres@sha256:7a993db59e844d1c9c7a6b4685be57cd4e79173d8e5c25f48b8bb752e53fffdf # pin :11.5-ram
+    # Pin cimg/postgres:16.
+    - image: cimg/postgres@sha256:2e4f1a965bdd9ba77aa6a0a7b93968c07576ba2a8a7cf86d5eb7b31483db1378 # pin :16.4
       environment:
         POSTGRES_USER: ubuntu
         POSTGRES_DB: circle_ruby_test
     steps:
     - checkout
+    # For more on browser-tools integration with the main image, see:
+    # https://circleci.com/developer/images/image/cimg/ruby
+    # https://circleci.com/developer/orbs/orb/circleci/browser-tools
+    # https://github.com/CircleCI-Public/browser-tools-orb
+    # Chromedriver is finicky. browser-tools-orb version 1.4.2 fixed problems:
+    # https://github.com/CircleCI-Public/browser-tools-orb/issues/75
+    # https://github.com/CircleCI-Public/browser-tools-orb/releases/tag/v1.4.2
+    - browser-tools/install-chromedriver
     - run: pwd
     - run: ls -l
-    # This should install the orb, but it doesn't work.
-    # - run:
-    #     name: Install browser tools
-    #     command: browser-tools/install-browser-tools
-    #
-    # We instead manually force installation of Chrome using a code
-    # snippet from the browser tools. See:
-    # https://github.com/CircleCI-Public/browser-tools-orb/blob/master/src/commands/install-chrome.yml#L131
-    - run:
-        name: Install Chrome
-        command: |
-          SUDO='sudo'
-          CHROME_VERSION='latest'
-          if [[ "$CHROME_VERSION" == "latest" ]]; then
-            CHROME_URL="https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
-          else
-            CHROME_URL="https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${CHROME_VERSION}-1_amd64.deb"
-          fi
-          curl --silent --show-error --location --fail --retry 3 \
-            --output google-chrome.deb $CHROME_URL
-          $SUDO apt-get update
-          # The pipe will install any dependencies missing
-          $SUDO dpkg -i google-chrome.deb || $SUDO apt-get -fy install
-          rm -rf google-chrome.deb
-          $SUDO sed -i 's|HERE/chrome"|HERE/chrome" --disable-setuid-sandbox --no-sandbox|g' "/opt/google/chrome/google-chrome"
-          which google-chrome
-          google-chrome --version
+    - run: |
+        ruby --version
+        node --version
+        java --version
+        google-chrome --version
     # Prepare for artifact and test results
     - run: mkdir -p $CIRCLE_ARTIFACTS $CIRCLE_TEST_REPORTS
     # Force cleanup to make deterministic.
@@ -76,21 +64,12 @@ jobs:
         # Find the most recently generated cache used
         # Find a cache corresponding to this particular Gemfile.lock checksum
         - v7-dep-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
-        - v7-dep-{{ arch }}-{{ .Branch }}-
-        - v7-dep-{{ arch }}-
-        # This was suggested, but it seems like a bad idea to me:
-        # - v7-dep-
     # This would show what we restored
     # - run: find ~/.rubygems || true
     - run:
-        name: Update Rubygems
-        command: sudo gem update --system --silent --no-document
-        environment:
-          REALLY_GEM_UPDATE_SYSTEM: 1
-    - run:
         name: Update bundler to match Gemfile.lock
         command: >
-          sudo sh -c 'yes | gem install bundler --force --no-document
+          sudo sh -c 'yes | gem install bundler --no-document
           -v "$(cat Gemfile.lock | tail -1 | tr -d \\\\" \\\\")"'
     - run:
         name: Bundler Version
@@ -101,14 +80,9 @@ jobs:
         command: >
           bundle check ||
           bundle install --jobs=4 --retry=3
-    - run:
-       name: Update Chromedriver
-       command: bundle exec rake update_chromedriver
     # Here's how we could show more:
     # - run: find ~/.rubygems || true
     # - run: find ~/.bundle || true
-    # - run: find ~/.rbenv || true
-    # - run: find vendor/bundle || true
     # - run: find ~ -name "*rack-timeout*" || true
     # Save dependency cache
     - save_cache:
@@ -116,10 +90,6 @@ jobs:
         paths:
           - ~/.rubygems
           - ~/.bundle
-          # Not used in current config; we include these just in case they
-          # get used later:
-          - ~/.rbenv/versions
-          - vendor/bundle
     - run:
         name: Configure database
         command: |
@@ -127,19 +97,18 @@ jobs:
           cp {database.ci,database}.yml
     - run:
         name: Create database
-        command: bundle exec rake db:create db:schema:load --trace
+        command: bundle exec rake db:setup
     # Start testing
     - run:
         name: Check for whitespace issues.
         command: '[[ ! -s "$(git rev-parse --git-dir)/shallow" ]] || git fetch --unshallow'
     - run:
         name:  Run test suite (both system and non-system tests)
-        command: bundle exec rails test:system test
+        command: bundle exec rails test:all
     - run:
         name:  Run pronto GitHub
         command: >
-          bundle exec pronto run -f github text
-          -c=$(git log --pretty=format:%H | tail -1) --exit-code
+          pronto run -f github text -c=$(git log --pretty=format:%H | tail -1) --exit-code
     # Temporarily disable bundle doctor; trying to run it produces an error.
     # - run: bundle exec bundle doctor
     - run: bundle exec rake bundle_audit
@@ -164,29 +133,56 @@ jobs:
         path: test/html_reports
     - store_artifacts:
         path: /tmp/circleci-test-results
+    - codecov/upload:
+        file: coverage/codecov-result.json
+    - dscar-brakeman/analyze
+
   # I haven't found a reliable way to calculate HEROKU_APP just once,
   # so it gets recalculated. This approach still greatly reduces
   # duplication.
   deploy:
     docker:
-      - image: buildpack-deps@sha256:73f48ef53511ce25f37dc17849fb467925f1bfdcb758c77e8437284158a251ce # pin :bionic
+    # We have to use an image - let's use the same image as for building
+    - image: drdavidawheeler/cii-bestpractices@sha256:6bb1268e9f849949263ccaae409a0b336b0ff38e478a99a7979763c45805e69b # pin :3.3.6-browsers
+      environment:
+        PG_HOST: localhost
+        PG_USER: ubuntu
+        RAILS_ENV: test
+        RACK_ENV: test
     steps:
       - checkout
       - run:
-          # We don't pin these, as Heroku doesn't support pinning.
-          # In any case, these aren't included in the final result, nor used
-          # in the process of testing the final result... they're
-          # just tools we use to *transfer* the final result to deployment.
           # We are downloading these tools from a trusted source, so we *do*
           # want to use the latest version, not a pinned version.
-          name: Install Heroku CLI tools (to easily control maintenance mode)
+          # Heroku doesn't support pinning these anyway.
+          # These aren't included in the final result, nor used
+          # in the process of testing the final result... they're
+          # just tools we use to *transfer* the final result to deployment.
+          # The shell installer loads and installs the actual tool.
+          # We aren't using pipe-to-shell, but downloading and printing a
+          # sha256 of the install program first.
+          # This provides a log to help us notice potential problems.
+          # See: https://devcenter.heroku.com/articles/heroku-cli
+          name: Download Heroku CLI tools (to easily control maintenance mode)
           command: |
-            wget https://cli-assets.heroku.com/heroku-linux-x64.tar.gz
-            tar xzf heroku-linux-x64.tar.gz
+            echo "** PATH=$PATH"
+            # verifies the right Node.js version is in the environment
+            echo "** Node version:"
+            node -v # should print `v22.12.0`
+            # verifies the right npm version is in the environment
+            echo "** Getting installer"
+            rm -f install.sh
+            wget https://cli-assets.heroku.com/install.sh
+            echo "** Computing SHA-256 of installer"
+            sha256sum install.sh
+            echo "** Running installer"
+            chmod a+x install.sh
+            sh install.sh
       - run:
           name: Deploy to Heroku
+          # export PATH="$PATH:$(pwd)/heroku/bin"
           command: |
-            export PATH="$PATH:$(pwd)/heroku/bin"
+            export PATH="$PATH:/usr/local/bin:/usr/local/bin"
             export HEROKU_APP="$CIRCLE_BRANCH"-bestpractices
             # Set file .netrc so "git push heroku ..." will work later.
             # Heroku uses HEROKU_API_KEY, but git only knows about ~/.netrc.
@@ -206,10 +202,10 @@ jobs:
             # https://stackoverflow.com/questions/10451330/clean-git-repo-on-heroku
             # https://stackoverflow.com/questions/36111040/error-message-after-successfully-pushing-to-heroku
             GIT_CURL_VERBOSE=1 GIT_TRACE=1 git push heroku "$CIRCLE_BRANCH:master"
-      - run:
-            # This may no longer be necessary
-            name: Setup Heroku
-            command: bash .circleci/setup-heroku.sh
+      # - run:
+      #       # This may no longer be necessary
+      #       name: Setup Heroku
+      #       command: bash .circleci/setup-heroku.sh
       - run:
           name: Migrate DB
           command: |

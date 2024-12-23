@@ -374,6 +374,7 @@ de:
         %{when}."
       last_lost_html: 'Letztes verlorenes Badge: %{when}.'
       last_achieved_html: 'Letztes erreichtes Badge: %{when}.'
+      cdla_permissive_20_html:
     edit:
       submit_cc_by_3plus_html: >-
         Indem Sie diese Daten über das Projekt eingeben, stimmen
@@ -411,6 +412,7 @@ de:
         aktualisiert. Bitte fügen Sie eine Rechtfertigung für
         dieses Kriterium hinzu.
       edit_status: Bearbeiten des Projekt-Badge-Status
+      submit_cdla_permissive_20_html:
     form_basics:
       project_name:
         description: Was ist der von Menschen lesbare Name des
@@ -2715,7 +2717,7 @@ de:
           (wie Saltzer und Schroeer) und gemeinsame Implementierungssicherheitsschwächen
           (wie die OWASP Top 10 oder CWE/SANS Top 25) aufzurufen
           und zu zeigen, wie diesen entgegengewirkt wird. Die
-          <a href="https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/security.md">
+          <a href="https://github.com/coreinfrastructure/best-practices-badge/blob/main/docs/assurance-case.md">
           BadgeApp Assurance Case </a> kann ein nützliches Beispiel
           sein. Dies bezieht sich auf documentation_security,
           documentation_architecture und implement_secure_design.

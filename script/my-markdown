@@ -48,7 +48,7 @@ end
 
 # Generate results.
 
-title = ARGV[0]
+title = ARGV.first
 
 puts <<-GENERATED_HTML_HEADER
   <!DOCTYPE html>

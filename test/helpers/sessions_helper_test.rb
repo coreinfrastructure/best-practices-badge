@@ -66,21 +66,11 @@ class SessionsHelperTest < ActionView::TestCase
                    'https://a.b/projects/1?criteria_level=2&locale=ja', :fr
                  )
   end
-  class StubOctokitPermissions
-    attr_reader :push
-
-    def initialize(admin, push, pull)
-      @admin = admin
-      @push = push
-      @pull = pull
-    end
-  end
-
   class StubOctokitResult
-    attr_reader :permissions
+    attr_accessor :permissions
 
     def initialize(admin, push, pull)
-      @permissions = StubOctokitPermissions.new(admin, push, pull)
+      self.permissions = { admin: admin, push: push, pull: pull }
     end
   end
 

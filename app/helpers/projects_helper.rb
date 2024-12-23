@@ -71,9 +71,15 @@ module ProjectsHelper
   # Generate HTML for minor heading
   def minor_header_html(minor)
     # rubocop:disable Rails/OutputSafety
+    # Section ids are section_ followed by lowercased letters, digits, _ for space
+    # We strip out everything else.
+    section_id = 'section_' + minor.downcase.tr(' ', '_').gsub(/[^a-z0-9_-]/, '')
+
     safe_join(
       [
-        '<li class="list-group-item"><h3>'.html_safe,
+        '<li class="list-group-item"><h3 id="'.html_safe,
+        section_id,
+        '">'.html_safe,
         t(minor, scope: [:headings]),
         '</h3>'.html_safe
       ]
@@ -82,9 +88,9 @@ module ProjectsHelper
   end
 
   # Render all the status_choosers in the given minor section.
-  # This takes a rediculous number of parameters, because we have to
+  # This takes a ridiculous number of parameters, because we have to
   # select the correct minor section & then pass the information the
-  # status_chooser needs (which also needs a rediculous number).
+  # status_chooser needs (which also needs a ridiculous number).
   # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
   # rubocop:disable Metrics/ParameterLists
   def render_minor_status(

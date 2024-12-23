@@ -69,6 +69,10 @@ WebMock.disable_net_connect!(allow_localhost: true, allow: driver_urls)
 require 'vcr'
 VCR.configure do |config|
   config.ignore_localhost = true
+  # We use Google Chrome for testing, which chattily updates.
+  # Ignore those, as it's the test infrastructure, not the software under test
+  config.ignore_hosts('127.0.0.1', 'localhost',
+                      'googlechromelabs.github.io', 'storage.googleapis.com')
   config.cassette_library_dir = 'test/vcr_cassettes'
   config.hook_into :webmock
   # Sometimes we have the "same" query but with and without per_page=...
@@ -82,7 +86,7 @@ VCR.configure do |config|
   # end
   # config.match_on [:skip_changers]
   # Allow calls needed by test drivers
-  config.ignore_hosts(*driver_urls)
+  # config.ignore_hosts(*driver_urls)
 end
 
 # The chromedriver occasionally calls out with its own API,
@@ -94,16 +98,15 @@ end
 # https://github.com/titusfortner/webdrivers/wiki/Using-with-VCR-or-WebMock
 # https://github.com/titusfortner/webdrivers/issues/109
 
-require 'webdrivers'
 require 'uri'
 
 # With activesupport gem
-driver_hosts =
-  Webdrivers::Common.subclasses.map do |this_driver|
-    URI(this_driver.base_url).host
-  end
+# driver_hosts =
+# Webdrivers::Common.subclasses.map do |this_driver|
+# URI(this_driver.base_url).host
+# end
 
-VCR.configure { |config| config.ignore_hosts(*driver_hosts) }
+# VCR.configure { |config| config.ignore_hosts(*driver_hosts) }
 
 # NOTE: We *could* speed up test execution by disabling PaperTrail
 # except in cases where we check PaperTrail results. PaperTrail records all
@@ -228,14 +231,14 @@ module ActiveSupport
         'info' => {
           'name' => 'CII Test',
           'email' => 'test@example.com',
-          'nickname' => 'ciitest'
+          'nickname' => 'bestpracticestest'
         }
       }
     end
 
     def vcr_oauth_token(cassette)
       github_login_vcr_file = "test/vcr_cassettes/#{cassette}.yml"
-      return Null unless File.exist?(github_login_vcr_file)
+      return unless File.exist?(github_login_vcr_file)
 
       y = YAML.load_file(github_login_vcr_file).with_indifferent_access
       query_string = y[:http_interactions][0][:response][:body][:string]

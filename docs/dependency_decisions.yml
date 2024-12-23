@@ -1,0 +1,544 @@
+---
+- - :permit
+  - MIT
+  - :who: David A. Wheeler
+    :why: This is OSI-approved OSS license, and the license of BadgeApp
+    :when: 2015-12-17 15:37:53.518652272 Z
+- - :permit
+  - New BSD
+  - :who: David A. Wheeler
+    :why: OSI-approved OSS license BSD-3-Clause, known compatible with MIT
+    :when: 2015-12-17 15:40:01.131233040 Z
+- - :permit
+  - 2-clause BSDL
+  - :who: David A. Wheeler
+    :why: OSI-approved OSS license BSD-2-Clause, known compatible with MIT
+    :when: 2015-12-17 15:40:09.473789072 Z
+- - :permit
+  - LGPLv2+
+  - :who: David A. Wheeler
+    :why: OSI-approved OSS license LGPL-2.0+, known compatible with MIT
+    :when: 2016-06-07 17:30-0400
+- - :permit
+  - ISC
+  - :who: David A. Wheeler
+    :why: This is OSI-approved OSS license, permissive, known MIT compatible
+    :when: 2019-09-01 22:01-0400
+- - :permit
+  - CC0-1.0
+  - :who: David A. Wheeler
+    :why: CC0 is essentially public domain, compatible with everything
+    :when: 2019-09-01 22:01-0400
+- - :permit
+  - CC-BY-3.0
+  - :who: David A. Wheeler
+    :why: Permissive license
+    :when: 2019-09-01 22:01-0400
+- - :permit
+  - CC-BY-4.0
+  - :who: David A. Wheeler
+    :why: Permissive license
+    :when: 2019-09-01 22:01-0400
+- - :permit
+  - Unlicense
+  - :who: David A. Wheeler
+    :why: Permissive license
+    :when: 2019-09-01 22:01-0400
+- - :permit
+  - Mozilla Public License 2.0
+  - :who: David A. Wheeler
+    :why: Well-known OSS license
+    :when: 2019-09-01 22:01-0400
+- - :permit
+  - Simplified BSD
+  - :who: David A. Wheeler
+    :why: Permissive OSS license
+    :when: 2019-09-01 22:01-0400
+- - :permit
+  - Apache 2.0
+  - :who: David A. Wheeler
+    :why: OSI-approved OSS license Apache 2.0, known compatible with MIT. Potential
+      issues with GPL-2.0-only, but fine with GPL-2.0+ and GPL-3.0
+    :when: 2020-08-21 21:01:32 EDT
+- - :permit
+  - GPL-2.0-or-later
+  - :who: David A. Wheeler
+    :why: OSI-approved OSS license GPL-2.0-or-later, known compatible with MIT. Known
+      to be fine with Apache 2.0.
+    :when: 2020-08-21 21:01:32 EDT
+- - :permit
+  - GPLv2+
+  - :who: David A. Wheeler
+    :why: OSI-approved OSS license GPL-2.0-or-later, known compatible with MIT. Known
+      to be fine with Apache 2.0.
+    :when: 2020-08-21 21:01:32 EDT
+- - :permit
+  - GPL-3.0-only
+  - :who: David A. Wheeler
+    :why: OSI-approved OSS license GPL-3.0-only, known compatible with MIT. Known
+      to be fine with Apache 2.0.
+    :when: 2020-08-21 21:01:32 EDT
+- - :permit
+  - GPL-3.0-or-later
+  - :who: David A. Wheeler
+    :why: OSI-approved OSS license GPL-3.0-or-later, known compatible with MIT. Known
+      to be fine with Apache 2.0.
+    :when: 2020-08-21 21:01:32 EDT
+- - :permit
+  - "(MIT OR Apache-2.0)"
+  - :who: David A. Wheeler
+    :why: MIT is one of the options, and MIT is fine
+    :when: 2019-09-01 22:01-0400
+- - :permit
+  - "(WTFPL OR MIT)"
+  - :who: David A. Wheeler
+    :why: MIT is one of the options, and MIT is fine
+    :when: 2019-09-01 22:01-0400
+- - :permit
+  - "(BSD-2-Clause OR MIT OR Apache-2.0)"
+  - :who: David A. Wheeler
+    :why: MIT is one of the options, and MIT is fine
+    :when: 2019-09-01 22:01-0400
+- - :permit
+  - BSD-3-Clause OR MIT
+  - :who: David A. Wheeler
+    :why: MIT is one of the options, and MIT is fine
+    :when: 2019-09-01 22:01-0400
+- - :permit
+  - "(MIT AND BSD-3-Clause)"
+  - :who: David A. Wheeler
+    :why: Both are fine
+    :when: 2019-09-01 22:01-0400
+- - :permit
+  - "(BSD-3-Clause OR GPL-2.0)"
+  - :who: David A. Wheeler
+    :why: MIT is one of the options, and MIT is fine
+    :when: 2019-09-01 22:01-0400
+- - :permit
+  - "(MIT AND Zlib)"
+  - :who: David A. Wheeler
+    :why: Both are fine
+    :when: 2019-09-01 22:01-0400
+- - :approve
+  - rake
+  - &1
+    :who: David A. Wheeler
+    :why: It's actually MIT license per https://github.com/ruby/rake
+    :when: 2015-12-17 15:47:53.894712861 Z
+- - :approve
+  - MIT
+  - *1
+- - :approve
+  - pg
+  - &2
+    :who: David A. Wheeler
+    :why: Actual license is SPDX license expression '(BSD-2-Clause OR Ruby)' as shown
+      in https://github.com/ged/ruby-pg/blob/master/LICENSE
+    :when: 2015-12-17 16:02:10.446729059 Z
+- - :approve
+  - "(BSD-2-Clause OR Ruby)"
+  - *2
+- - :approve
+  - xml-simple
+  - &3
+    :who: David A. Wheeler
+    :why: Actual license is '(BSD-2-Clause OR Ruby)'; file https://github.com/maik/xml-simple/blob/master/README.md
+      says It is free software, and may be redistributed under the terms specified
+      in the COPYING file of the current Ruby distribution. This would be https://www.ruby-lang.org/en/about/license.txt
+      - and this is now (BSD-2-Clause OR Ruby), which has no issues.
+    :when: 2015-12-17 16:12:01.024528531 Z
+- - :approve
+  - "(BSD-2-Clause OR Ruby)"
+  - *3
+- - :approve
+  - byebug
+  - &4
+    :who: David A. Wheeler
+    :why: The gemspec says this is ISC license but it's not. File https://github.com/deivid-rodriguez/byebug/blob/master/LICENSE
+      is BSD-2-Clause, not ISC - https://spdx.org/licenses/ISC.html https://spdx.org/licenses/BSD-2-Clause
+      However, both ISC and BSD-2-Clause are OSI-approved licenses with no issues.
+      Also, The software is not *distributed* with byebug enabled (it's only used
+      during debugging).
+    :when: 2015-12-17 16:18:14.448593848 Z
+- - :approve
+  - BSD-2-Clause
+  - *4
+- - :approve
+  - colored
+  - &5
+    :who: David A. Wheeler
+    :why: The gemspec does not define the license.  However, tracking it to its repository
+      shows that its license is MIT at https://github.com/defunkt/colored/blob/master/LICENSE
+    :when: 2015-12-17 16:26:47.407347936 Z
+- - :approve
+  - MIT
+  - *5
+- - :approve
+  - json
+  - &6
+    :who: David A. Wheeler
+    :why: Running 'gem server' and viewing localhost:8808, we see that json 1.8.1
+      is bundled with Ruby, and thus has its license of https://www.ruby-lang.org/en/about/license.txt
+      which is (BSD-2-Clause OR Ruby). json 1.8.3's repository is at https://github.com/flori/json/tree/master
+      and according to https://github.com/flori/json/blob/master/COPYING this is (GPL-2.0
+      OR Ruby). This is clearly GPL-2.0 compatible.
+    :when: 2015-12-17 16:28:08.522364532 Z
+- - :approve
+  - "((BSD-2-Clause OR Ruby) AND (GPL-2.0 OR Ruby))"
+  - *6
+- - :approve
+  - bundler-audit
+  - :who: David A. Wheeler
+    :why: bundler-audit is a separate executable, and its GPL-3.0 license is known
+      to be compatible with Apache-2.0 anyway, so no known issue.
+    :when: 2015-12-17 16:37:46.944680154 Z
+- - :approve
+  - rubyzip
+  - :who: David A. Wheeler
+    :why: Its README file at https://github.com/rubyzip/rubyzip says that 'Rubyzip
+      is distributed under the same license as ruby. See <http://www.ruby-lang.org/en/LICENSE.txt>.'
+      This is (BSD-2-Clause OR Ruby), so no issues.
+    :when: 2015-12-17 16:40:49.742365613 Z
+- - :approve
+  - fastercsv
+  - &7
+    :who: David A. Wheeler
+    :why: Page http://fastercsv.rubyforge.org/ viewing LICENSE shows "Distributed
+      under the user‘s choice of the GPL Version 2 (see COPYING for details) or the
+      Ruby software license by James Edward Gray II." The latter refers to http://www.ruby-lang.org/en/LICENSE.txt
+      which in SPDX is (BSD-2-Clause or Ruby). Nothing is incompatible with BSD-2-Clause,
+      so there cannot be any problem.
+    :when: 2015-12-17 16:48:41.817542725 Z
+- - :approve
+  - "(GPL-2.0 OR BSD-2-Clause OR Ruby)"
+  - *7
+- - :approve
+  - gitlab
+  - &8
+    :who: David A. Wheeler
+    :why: File https://github.com/NARKOZ/gitlab/blob/master/LICENSE.txt has the BSD-2-Clause
+      text in it.
+    :when: 2015-12-17 16:53:07.506348427 Z
+- - :approve
+  - BSD-2-Clause
+  - *8
+- - :approve
+  - highline
+  - &9
+    :who: David A. Wheeler
+    :why: File https://github.com/JEG2/highline/blob/master/LICENSE says Distributed
+      under the user's choice of the {GPL Version 2}[http://www.gnu.org/licenses/old-licenses/gpl-2.0.html]
+      (see COPYING for details) or the {Ruby software license}[http://www.ruby-lang.org/en/LICENSE.txt]
+      by James Edward Gray II and Greg Brown. The current Ruby license is (BSD-2-Clause
+      OR Ruby), which is compatible with everything.  The unusual way the Ruby software
+      license is referenced could intend to permit the old license, but the old license
+      is (GPL-2.0 OR Ruby), which is still clearly compatible with GPL-2.0 and I am
+      unaware of any other incompatibilities.  Besides, it is unlikely the old one
+      is meant. On 2015-12-17 the last merged change was 3 days earlier, so this is
+      clearly an active project, suggesting that the current Ruby license is the one
+      that is accepted.
+    :when: 2015-12-17 17:00:56.453607377 Z
+- - :approve
+  - "(GPL-2.0 OR BSD-2-Clause OR Ruby)"
+  - *9
+- - :approve
+  - launchy
+  - :who: David A. Wheeler
+    :why: 'ISC license. Known OSS license (basically 2-clause BSD). See https://github.com/copiousfreetime/launchy/blob/master/LICENSE
+
+      '
+    :when: 2015-12-17 17:09:18.274813788 Z
+- - :approve
+  - curb
+  - :who: David A. Wheeler
+    :why: 'Actual license is Ruby license, known OSS license.  See <https://github.com/taf2/curb/blob/master/LICENSE>
+
+      '
+    :when: 2015-12-17 16:02:10.446729059 Z
+- - :approve
+  - curb-fu
+  - :who: David A. Wheeler
+    :why: 'Actual license is Ruby license, known OSS license. See <http://www.rubydoc.info/gems/curb-fu/0.6.2>
+
+      '
+    :when: 2015-12-17 16:02:10.446729059 Z
+- - :approve
+  - mixlib-cli
+  - :who: David A. Wheeler
+    :why: 'Apache 2.0 okay as long as GPL-2.0 only does not conflict, and no conflicts
+      identified.
+
+      '
+    :when: 2015-12-17 17:13:57.316335083 Z
+- - :approve
+  - addressable
+  - :who: David A. Wheeler
+    :why: 'Apache 2.0 okay as long as GPL-2.0 only does not conflict, and no conflicts
+      identified.
+
+      '
+    :when: 2015-12-17 17:14:19.144833431 Z
+- - :approve
+  - mixlib-config
+  - :who: David A. Wheeler
+    :why: 'Apache 2.0 okay as long as GPL-2.0 only does not conflict, and no conflicts
+      identified.
+
+      '
+    :when: 2015-12-17 17:14:33.457195760 Z
+- - :approve
+  - thread_safe
+  - :who: David A. Wheeler
+    :why: 'Apache 2.0 okay as long as GPL-2.0 only does not conflict, and no conflicts
+      identified.
+
+      '
+    :when: 2015-12-17 17:14:44.331125510 Z
+- - :approve
+  - secure_headers
+  - :who: David A. Wheeler
+    :why: Apache 2.0 okay as long as GPL-2.0 only does not conflict, and no conflicts
+      identified
+    :when: 2016-03-07 16:37:10.600203350 Z
+- - :approve
+  - colorize
+  - :who: David A. Wheeler
+    :why: This license is actually GPL-2.0 (2.0 or later), which has no conflicts
+      with Apache 2.0.  This is documented at https://github.com/fazibear/colorize
+      .  In addition, the library is in a separate executable (fasterer) from any
+      Apache 2.0 code.
+    :when: 2016-03-19 18:16:39.548315050 Z
+- - :approve
+  - xpath
+  - :who: Samir Khakimov
+    :why: MIT License in README
+    :when: 2016-03-24 19:56:00.309479000 Z
+- - :approve
+  - ffi
+  - :who: Samir Khakimov
+    :why: BSD-3-Clause License https://github.com/ffi/ffi/blob/master/LICENSE
+    :when: 2016-04-04 16:50:00.000000000 Z
+- - :approve
+  - selenium-webdriver
+  - :who: Samir Khakimov
+    :why: Apache 2.0
+    :when: 2016-04-04 16:50:00.000000000 Z
+- - :approve
+  - codecov
+  - :who: Dan Kohn
+    :why: MIT
+    :when: 2016-05-10 15:49:14.036712000 Z
+- - :approve
+  - bundler
+  - :who: Dan Kohn
+    :why: MIT
+    :when: 2016-05-11 16:50:00.000000000 Z
+- - :approve
+  - ruby-graphviz
+  - :who: Jason Dossett
+    :why: The Gem is actually GPL-2.0+ (as determined from examninging file headers)
+      and therefore is compatible with other common licenses including Apache-2.0.  It
+      is also used only to implement bundle viz, and thus isn't linked into the main
+      program but is instead linked only into bundler which is MIT.
+    :versions: []
+    :when: 2017-03-22 15:04:54.137880644 Z
+- - :approve
+  - gettext
+  - :who: David A. Wheeler
+    :why: License is "Ruby or LGPLv3+". Ruby license is compatible with rest of the
+      work.  In addition, LGPLv3+ is fine to include in larger works (even proprietary
+      works!) so it is not a problem.  Only one side of an "or" needs to be acceptable,
+      and in this case both sides are acceptable, so there is no license problem.
+    :versions: []
+    :when: 2017-05-09 17:51:30.490314988 Z
+- - :approve
+  - locale
+  - :who: David A. Wheeler
+    :why: License is "Ruby or LGPLv3+". Ruby license is compatible with rest of the
+      work.  In addition, LGPLv3+ is fine to include in larger works (even proprietary
+      works!) so it is not a problem.  Only one side of an "or" needs to be acceptable,
+      and in this case both sides are acceptable, so there is no license problem.
+    :versions: []
+    :when: 2017-05-09 17:52:32.770053521 Z
+- - :approve
+  - ansi
+  - :who: Dan Kohn
+    :why: OSI-approved OSS license BSD-2-Clause, known compatible with MIT
+    :versions: []
+    :when: 2017-06-02 04:25:11.659354000 Z
+- - :approve
+  - newrelic_rpm
+  - :who: David A. Wheeler
+    :why: This is a monitoring tool, not needed for execution
+    :versions: []
+    :when: 2017-06-05 21:56:32.298665472 Z
+- - :approve
+  - msgpack
+  - :who: David A. Wheeler
+    :why: Apache 2.0 is OSS; no problems detected
+    :versions: []
+    :when: 2017-06-10 16:31:40.705500086 Z
+- - :approve
+  - scout_apm
+  - :who: Dan Kohn
+    :why: Proprietary but available under license while we use service for debugging
+    :versions: []
+    :when: 2017-06-10 18:12:56.899860000 Z
+- - :approve
+  - blankslate
+  - :who: David A. Wheeler
+    :why: 'MIT license, which is already approved.  Unfortunately license_finder does
+      not detect this, probably because the license file has an unusual name. See:
+      https://github.com/masover/blankslate/blob/master/MIT-LICENSE'
+    :versions: []
+    :when: 2017-11-18 19:27:38.823188201 Z
+- - :approve
+  - websocket-driver
+  - :who: David A. Wheeler
+    :why: Apache 2.0 fine
+    :versions: []
+    :when: 2019-06-21 15:44:20.445069226 Z
+- - :approve
+  - websocket-extensions
+  - :who: David A. Wheeler
+    :why: Apache 2.0 fine
+    :versions: []
+    :when: 2019-06-21 15:44:25.990437363 Z
+- - :license
+  - fsevents
+  - MIT
+  - :who: David A. Wheeler
+    :why: Looked at website, license is documented there
+    :versions: []
+    :when: 2019-09-02 02:20:00.210265947 Z
+- - :approve
+  - ansi-html
+  - :who: David A. Wheeler
+    :why: Apache 2.0 license fine
+    :versions: []
+    :when: 2019-09-02 02:23:59.692068043 Z
+- - :approve
+  - aws-sign2
+  - &10
+    :who: David A. Wheeler
+    :why: Apache 2.0 license fine
+    :versions: []
+    :when: 2019-09-02 02:24:33.898351871 Z
+- - :approve
+  - caseless
+  - *10
+- - :approve
+  - detect-libc
+  - :who: David A. Wheeler
+    :why: Apache 2.0 license fine
+    :versions: []
+    :when: 2019-09-02 02:25:14.005617233 Z
+- - :approve
+  - faye-websocket
+  - :who: David A. Wheeler
+    :why: Apache 2.0 license fine
+    :versions: []
+    :when: 2019-09-02 02:25:21.773091381 Z
+- - :approve
+  - forever-agent
+  - :who: David A. Wheeler
+    :why: Apache 2.0 license fine
+    :versions: []
+    :when: 2019-09-02 02:25:27.930077556 Z
+- - :approve
+  - oauth-sign
+  - :who: David A. Wheeler
+    :why: Apache 2.0 license fine
+    :versions: []
+    :when: 2019-09-02 02:25:39.059491312 Z
+- - :approve
+  - request
+  - :who: David A. Wheeler
+    :why: Apache 2.0 license fine
+    :versions: []
+    :when: 2019-09-02 02:25:43.785568960 Z
+- - :approve
+  - spdx-correct
+  - :who: David A. Wheeler
+    :why: Apache 2.0 license fine
+    :versions: []
+    :when: 2019-09-02 02:25:53.194473053 Z
+- - :approve
+  - true-case-path
+  - :who: David A. Wheeler
+    :why: Apache 2.0 license fine
+    :versions: []
+    :when: 2019-09-02 02:26:00.712627758 Z
+- - :approve
+  - tslib
+  - :who: David A. Wheeler
+    :why: Apache 2.0 license fine
+    :versions: []
+    :when: 2019-09-02 02:26:06.657948258 Z
+- - :approve
+  - tunnel-agent
+  - :who: David A. Wheeler
+    :why: Apache 2.0 license fine
+    :versions: []
+    :when: 2019-09-02 02:26:14.402036439 Z
+- - :approve
+  - validate-npm-package-license
+  - :who: David A. Wheeler
+    :why: Apache 2.0 license fine
+    :versions: []
+    :when: 2019-09-02 02:26:27.535264974 Z
+- - :approve
+  - "@xtuc/long"
+  - :who: David A. Wheeler
+    :why: Apache 2.0 license fine
+    :versions: []
+    :when: 2019-09-02 02:27:34.361457037 Z
+- - :approve
+  - async-foreach
+  - :who: David A. Wheeler
+    :why: Dual-licensed under MIT and GPL, which is fine for us
+    :versions: []
+    :when: 2019-09-02 02:30:20.393097928 Z
+- - :approve
+  - cyclist
+  - :who: David A. Wheeler
+    :why: Really just MIT license, see https://github.com/mafintosh/cyclist
+    :versions: []
+    :when: 2019-09-02 02:31:43.935148363 Z
+- - :approve
+  - json-schema
+  - :who: David A. Wheeler
+    :why: Really just MIT license, see https://github.com/justinrainbow/json-schema/blob/master/LICENSE
+    :versions: []
+    :when: 2019-09-02 02:32:29.789409443 Z
+- - :approve
+  - ruby2_keywords
+  - :who: ''
+    :why: WHY
+    :versions: []
+    :when: 2020-11-06 14:45:41.934956613 Z
+- - :approve
+  - ruby2_keywords
+  - :who: David A. Wheeler
+    :why: Licensed under 2-Clause BSD license (an already approved license) as stated
+      in its README
+    :versions: []
+    :when: 2020-11-06 14:47:00.991793938 Z
+- - :permit
+  - MIT AND (BSD-2-Clause OR GPL-2.0-or-later)
+  - :who:
+    :why:
+    :versions: []
+    :when: 2024-01-18 16:10:46.361805391 Z
+- - :approve
+  - rdoc
+  - :who: David A. Wheeler
+    :why: Its 'ruby' license <https://ruby.github.io/rdoc/LICENSE_rdoc.html> causes us no problems. Rdoc is used to generate documentation for Ruby code, which we don't do. It allows us to use GPLv2, and since we don't bring it into our executable, that's fine. Even if it did, we're allowed to use this under clause 4 which says "You may modify and include the part of the software into any other software (possibly commercial)."
+    :versions: []
+    :when: 2024-12-17 22:44:57.269493189 Z
+- - :approve
+  - reline
+  - :who: David A. Wheeler
+    :why: This 'ruby' license allows us to use BSD-3-Clause per <https://github.com/ruby/reline/blob/master/BSDL> which is a common permissive OSS license.
+    :versions: []
+    :when: 2024-12-17 22:45:07.274958385 Z

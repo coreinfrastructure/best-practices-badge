@@ -7,11 +7,10 @@
 # rubocop:disable Metrics/BlockLength
 SecureHeaders::Configuration.default do |config|
   normal_src = ["'self'"]
-  if ENV['PUBLIC_HOSTNAME']
-    fastly_alternate = 'https://' + ENV['PUBLIC_HOSTNAME'] +
-                       '.global.ssl.fastly.net'
-    normal_src += [fastly_alternate]
-  end
+  normal_src += ['https://' + ENV['PUBLIC_HOSTNAME'] + '.global.ssl.fastly.net'] if ENV['PUBLIC_HOSTNAME']
+  normal_src += ['https://' + ENV['PUBLIC_HOSTNAME_ALT'] + '.global.ssl.fastly.net'] if ENV['PUBLIC_HOSTNAME_ALT']
+  normal_src += ['https://' + ENV['PUBLIC_HOSTNAME_ALT']] if ENV['PUBLIC_HOSTNAME_ALT']
+  normal_src += ['https://' + ENV['PUBLIC_HOSTNAME_ALT2']] if ENV['PUBLIC_HOSTNAME_ALT2']
   config.hsts = "max-age=#{20.years.to_i}; includeSubDomains; preload"
   config.x_frame_options = 'DENY'
   config.x_content_type_options = 'nosniff'
@@ -23,18 +22,19 @@ SecureHeaders::Configuration.default do |config|
   config.csp = {
     # Control information sources
     default_src: normal_src,
-    img_src: [
-      'secure.gravatar.com', 'avatars.githubusercontent.com',
-      "'self'"
+    img_src: normal_src + [
+      'secure.gravatar.com', 'avatars.githubusercontent.com'
     ],
     object_src: ["'none'"],
     script_src: normal_src,
     style_src: normal_src,
     # Harden CSP against attacks in other ways
     base_uri: ["'self'"],
-    block_all_mixed_content: true, # see http://www.w3.org/TR/mixed-content/
+    # This option is deprecated and marked obsolete in its specification,
+    # so we no longer include it:
+    # block_all_mixed_content: true, # see http://www.w3.org/TR/mixed-content/
     frame_ancestors: ["'none'"],
-    form_action: ["'self'"] # This counters some XSS busters
+    form_action: normal_src # This counters some XSS busters
   }
   config.cookies = {
     secure: true, # mark all cookies as Secure

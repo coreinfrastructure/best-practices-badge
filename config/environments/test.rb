@@ -13,7 +13,7 @@ Rails.application.configure do
   # test suite. You never need to work with it otherwise. Remember that
   # your test database is "scratch space" for the test suite and is wiped
   # and recreated between test runs. Don't rely on the data there!
-  config.cache_classes = true
+  config.cache_classes = false
 
   # Do not eager load code on boot. This avoids loading your whole application
   # just for the purpose of running a single test. If you are using a tool that
@@ -33,7 +33,8 @@ Rails.application.configure do
     { size: (ENV['RAILS_CACHE_SIZE'] || '128').to_i.megabytes }
 
   # Raise exceptions instead of rendering exception templates.
-  config.action_dispatch.show_exceptions = false
+  # This makes it easier to detect uncaught exceptions during testing.
+  config.action_dispatch.show_exceptions = :none
 
   # Raise exceptions during test if a translation is missing
   config.i18n.raise_on_missing_translations = true

@@ -536,7 +536,7 @@
             many cryptographic algorithms have some weaknesses, yet for
             backwards-compatibility it may sometimes be appropriate to use
             the algorithm anyway.
-            "EAX" appears to be a name, not an abbrevation.
+            "EAX" appears to be a name, not an abbreviation.
             The paper describing EAX,
             <a href="http://csrc.nist.gov/groups/ST/toolkit/BCM/documents/proposedmodes/eax/eax-spec.pdf">"A
             Conventional Authenticated-Encryption Mode" by
@@ -726,7 +726,7 @@
             it is important to have a governance model, and clearly define
             it, so that all participants and potential participants will
             know how decisions will be made. This was inspired by the
-            <a href="https://projects.ow2.org/bin/view/ow2/OMM">OW2 Open-source Maturity Model</a>,
+            <a href="https://web.archive.org/web/20171123114606/https://projects.ow2.org/bin/view/ow2/OMM">OW2 Open-source Maturity Model</a>,
             in particular RDMP-1 and STK-1.
           #autofill: TODO
       - code_of_conduct:
@@ -776,6 +776,7 @@
           #autofill: TODO
       - documentation_security:
           category: MUST
+          na_allowed: true
           met_url_required: true
           rationale: >
             Writing the specification helps the developers think about the
@@ -854,7 +855,7 @@
           met_justification_required: true
           rationale: >
             This was inspired by
-            <a href="https://projects.ow2.org/bin/view/ow2/OMM">DFCT-1.2</a>
+            <a href="https://web.archive.org/web/20171123114606/https://projects.ow2.org/bin/view/ow2/OMM">DFCT-1.2</a>
           #autofill:TODO
   - Reporting: !!omap
     - Bug-reporting process: !!omap
@@ -1395,7 +1396,7 @@
             more contributors have an increased likelihood of continuing.
             <a href="http://www.alluxio.org/docs/master/en/Contributing-to-Alluxio.html">Alluxio uses SMALLFIX</a>
             and
-            <a href="https://github.com/zaproxy/zaproxy/issues?q=is%3Aopen+is%3Aissue+label%3AIdealFirstBug">OWASP ZAP uses IdealFirstBug</a>.
+            <a href="https://github.com/zaproxy/zaproxy/issues?q=is%3Aopen+is%3Aissue+label%3AIdealFirstBug">ZAP uses IdealFirstBug</a>.
             This is related to criterion installation_development_quick.
       - require_2FA:
           category: MUST

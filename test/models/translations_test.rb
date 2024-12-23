@@ -48,7 +48,7 @@ class TranslationsTest < ActiveSupport::TestCase
   # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def acceptable_html_string(text)
-    return true unless text.include?('<') # Can't be a problem, no '<'
+    return true if text.exclude?('<') # Can't be a problem, no '<'
 
     # First, detect common mistakes.
     # Require HTML tags to start in a lowercase Latin letter.

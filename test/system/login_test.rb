@@ -70,7 +70,7 @@ class LoginTest < ApplicationSystemTestCase
                         'static_analysis. Please add a justification for ' \
                         'this criterion.'
 
-    fill_in 'project_name', with: 'It doesnt matter'
+    fill_in 'project_name', with: 'It does not matter'
     # Below we are clicking the final save button, it has a value of ''
     click_button('Save', exact: true)
     assert_equal edit_project_path(@project, locale: :en), current_path

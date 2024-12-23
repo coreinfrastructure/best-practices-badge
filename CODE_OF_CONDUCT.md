@@ -28,7 +28,7 @@ Examples of unacceptable behavior include: 
 
 ## Reporting
 
-For incidents occuring in the OpenSSF community, contact [conduct@openssf.org](mailto:conduct@openssf.org).
+For incidents occurring in the OpenSSF community, contact [conduct@openssf.org](mailto:conduct@openssf.org).
 
 You can expect a response within three business days. When reporting a potential Code of Conduct violation, please include the following information in your report:
 

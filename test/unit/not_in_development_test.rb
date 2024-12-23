@@ -11,7 +11,7 @@ require 'test_helper'
 class NotInDevelopmentTest < ActiveSupport::TestCase
   test 'The production system will say it is NOT in development' do
     ac = ApplicationController.new
-    assert ac.in_development?('staging.coreinfrastructure.org')
-    assert_not ac.in_development?('bestpractices.coreinfrastructure.org')
+    assert ac.in_development?
+    assert_not ac.in_development?('true')
   end
 end

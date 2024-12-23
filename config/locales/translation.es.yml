@@ -96,7 +96,7 @@ es:
       p2_html: >-
         M&aacute;s informaci&oacute;n acerca del programa que
         confiere la insignia de Mejores Pr&aacute;cticas, incluyendo
-        sus antecedentes y <a href='https://github.com/coreinfrastructure/best-practices-badge/blob/master/doc/criteria.md'>criterios</a>
+        sus antecedentes y <a href='https://github.com/coreinfrastructure/best-practices-badge/blob/main/docs/criteria.md'>criterios</a>
         aplicables se puede encontrar en <a href='https://github.com/coreinfrastructure/best-practices-badge'>GitHub</a>.
         <a href="/es/project_stats">Las estad&iacute;sticas del
         proyecto</a> y las <a href="/es/criteria_stats">estad&iacute;sticas
@@ -313,6 +313,7 @@ es:
       save_and_continue:
       submit_and_exit:
       submit_cc_by_3plus_html:
+      submit_cdla_permissive_20_html:
     show:
       edit:
       delete:
@@ -325,6 +326,7 @@ es:
       last_achieved_html:
       cc_by_3plus_html:
       cc_by_3only_html:
+      cdla_permissive_20_html:
     form_early:
       badge_intro:
         description:

@@ -17,9 +17,50 @@ class UsersController < ApplicationController
   include SessionsHelper
 
   def index
-    @pagy, @users = pagy(User.all)
+    user_result = search_users
+    @pagy, @users = pagy(user_result)
     @pagy_locale = I18n.locale.to_s # Pagy requires a string version
   end
+
+  # Search users for desired_name (which is presumed to be non-empty)
+  def search_name(desired_name)
+    # To maximize finding, use a case-sensitive "find anywhere" search.
+    # An exact case-sensitive search would for names look like this:
+    # result = result.where(name: params[:name])
+    User.where('lower(name) LIKE ?', "%#{desired_name.strip.downcase}%")
+  end
+
+  # Search users for desired_email (which is presumed to be non-empty)
+  def search_email(desired_email)
+    # We presume email is stored as citext, which is case-insensitive.
+    User.where(email: desired_email.strip)
+  end
+
+  # Search users. Search is ONLY supported for admin, so that we can't leak
+  # email data about users, and to discourage people from being harassed
+  # if they can be searched by name. It also counters DoS, since we will
+  # refuse to provide a service we don't want to provide.
+  # For normal users we ignore search parameters.
+  # rubocop: disable Metrics/MethodLength
+  def search_users
+    result = User.all
+    if current_user.admin?
+      # Only admins can apply a search.
+      desired_name = params[:name]
+      desired_email = params[:email]
+      if desired_name.present? && desired_email.present?
+        # Use "or" not the usual "and", to maximize chances of finding
+        # a result (e.g., for a GDPR search).
+        result = search_name(desired_name).or(search_email(desired_email))
+      elsif desired_name.present?
+        result = search_name(desired_name)
+      elsif desired_email.present?
+        result = search_email(desired_email)
+      end
+    end
+    result
+  end
+  # rubocop: enable Metrics/MethodLength
 
   # rubocop: disable Metrics/MethodLength, Metrics/AbcSize
   def show
@@ -30,7 +71,7 @@ class UsersController < ApplicationController
     @pagy, @projects = pagy(select_needed(@user.projects))
     @pagy_locale = I18n.locale.to_s # Pagy requires a string version
 
-    # Don't bother paginating the projects wtih additional rights,
+    # Don't bother paginating the projects with additional rights,
     # we practically never have that many and the interface would be confusing.
     @projects_additional_rights =
       select_needed(Project.includes(:user).joins(:additional_rights)
@@ -70,9 +111,16 @@ class UsersController < ApplicationController
     end
     @user = User.find_by(email: user_params[:email])
     if @user
-      if !@user.activated # User exists but is not activated; retry activation
-        regenerate_activation_digest
-        @user.send_activation_email
+      # If user exists but is not activated, retry activation unless too soon
+      if !@user.activated
+        # Rate limit activation emails, else attackers can really annoy others
+        if activation_email_too_soon(@user.activation_email_sent_at)
+          # Logger doesn't escape, but user.id is just a number so no problem
+          Rails.logger.info "Activation request too soon for #{@user.id}"
+        else
+          regenerate_activation_digest
+          @user.send_activation_email
+        end
       end
     else
       @user = User.new(user_params)
@@ -100,7 +148,7 @@ class UsersController < ApplicationController
     changeset.each do |key, change|
       # Only consider "change" if it is in the expected form [old, new]
       if change.is_a?(Array) && change.length == 2
-        result[key] = change if change[0] != change[1]
+        result[key] = change if change.first != change[1]
       end
     end
     result['email'] = [old_email, new_email] unless old_email == new_email
@@ -163,6 +211,20 @@ class UsersController < ApplicationController
 
   private
 
+  DELAY_BETWEEN_ACTIVATION_EMAILS = Integer(
+    (ENV['BADGEAPP_DELAY_BETWEEN_ACTIVATION_EMAIL'] ||
+     24.hours.seconds.to_s), 10
+  ).seconds
+
+  # Return true iff sent_at is too soon (compared to the current time)
+  # to send an activation email.
+  def activation_email_too_soon(sent_at)
+    # We've never sent one before, so it's obviously not too soon.
+    return false if sent_at.blank?
+
+    DELAY_BETWEEN_ACTIVATION_EMAILS.since(sent_at) > Time.zone.now
+  end
+
   def enable_maximum_privacy_headers
     # Harden the response by maximizing HTTP headers of user data
     # for privacy. We do this by inhibiting indexing and caching.
@@ -170,7 +232,7 @@ class UsersController < ApplicationController
     # private data.  However, we also want to be prepared so that
     # if there *is* a breach, we reduce its impact.
     # These lines instruct others to disable indexing and caching of
-    # user data, so that if private data is inadvertantly released,
+    # user data, so that if private data is inadvertently released,
     # it is much less likely to be easily available to others via
     # web-crawled data (such as from search engines) or via caches.
     # The goal is to make it harder for adversaries to get leaked data.

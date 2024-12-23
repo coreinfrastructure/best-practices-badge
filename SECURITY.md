@@ -48,5 +48,4 @@ about contributions.
 For a description in more detail about the security requirements
 of this system, and the security assurance case that explains
 why we think we this system is adequately secure, see our
-[security assurance case](doc/security.md).
-
+[security assurance case](docs/assurance-case.md).

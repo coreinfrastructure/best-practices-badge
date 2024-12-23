@@ -1,0 +1,4 @@
+[codespell]
+skip = .git,*.pdf,*.svg,locales,vcr_cassettes,*.rake
+
+ignore-words: .codespellignore

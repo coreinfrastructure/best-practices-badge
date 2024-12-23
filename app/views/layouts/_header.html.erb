@@ -21,7 +21,7 @@
       <ul class='nav navbar-nav navbar-right'>
         <li><%= yield :insert_progress_bar %></li>
         <%= yield :nav_extras %>
-        <li><%= link_to Icon[:'fa-list'] + t(:projects, scope: :layouts), projects_path %></li>
+        <li><%= link_to Icon[:'fa-list'] + t(:projects, scope: :layouts), projects_path, id: 'projects_page' %></li>
 
         <% if logged_in? %>
           <li class="dropdown">

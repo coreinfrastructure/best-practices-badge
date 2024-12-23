@@ -41,7 +41,7 @@ a <%= t("projects.form_early.level.#{level}") %> badge in <%= @month_display %>:
       new_achievements = true -%>
 * <%= project.name %>
   at <%= project.achieved_passing_at %>
-  https://bestpractices.coreinfrastructure.org/projects/<%= project.id %>
+  https://<%= @hostname %>/projects/<%= project.id %>
 <%
     end # loop over projects
 %>
@@ -60,4 +60,4 @@ end
 
 Do you know a project that doesn't have a badge yet?
 Please suggest to them that they get a badge now, by visiting:
-https://bestpractices.coreinfrastructure.org
+https://<%= @hostname %>

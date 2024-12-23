@@ -14,3 +14,4 @@ Octokit.configure do |c|
   c.client_secret = ENV.fetch('GITHUB_SECRET', nil)
   c.auto_paginate = true
 end
+Octokit.default_media_type = 'application/vnd.github.v3+json'

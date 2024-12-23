@@ -19,7 +19,13 @@
       </p>
     </div><%# end of column with banner and main text %>
     <div class="col-md-4 col-sm-5">
-      <div class="home-badge center-block"></div>
+    <div class="row">
+      <div class="col-sm-12">
+       <!-- Note: This doesn't include width/height so it'll scale -->
+       <%= image_tag 'openssf_bestpracticesbadge.svg',
+                     alt: 'Best Practices Badge logo', title: 'Best Practices Badge logo' %>
+      </div>
+    </div>
     <div class="row">
       <div class="col-sm-12">
         <br><br>
@@ -90,7 +96,7 @@
                       alt: 'GnuPG', title: 'GnuPG' %></a>
       <a href="<%= projects_dir %>/24" class="earner-logo">
         <%= image_tag 'project-logos/ZAP.png', width: 48, height: 48,
-                      alt: 'OWASP ZAP', title: 'OWASP ZAP' %></a>
+                      alt: 'ZAP', title: 'ZAP' %></a>
       <a href="<%= projects_dir %>/249" class="earner-logo">
         <%= image_tag 'project-logos/gnu.png', width: 50, height: 48,
                       alt: 'GNU Make', title: 'GNU Make' %><span

@@ -29,9 +29,7 @@ Rails.application.configure do
 end
 
 # Prepare for future deprecation.
-# to_time will always preserve the full timezone rather than the
-# offset of the receiver in Rails 8.1.
-# This opts into the new 8.1 behavior.
-# In our case it doesn't matter, the only timezone we use is UTC.
+# to_time will always preserve the timezone offset of the receiver in Rails 8.0.
+# This opts into the new 8.0 behavior
 
-ActiveSupport.to_time_preserves_timezone = :zone
+ActiveSupport.to_time_preserves_timezone = true

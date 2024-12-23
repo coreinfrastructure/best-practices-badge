@@ -455,7 +455,7 @@ input[type="text"].form-control, .inputbox-look, textarea.form-control  {
 
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
   .main-badge-ques {
-    background: image-url('questions_page_badge@2x.png') no-repeat top left;
+    background: image-url('openssf_bestpracticesbadge.svg') no-repeat top left;
     @include background_size(140px,140px);
   }
 }
@@ -469,7 +469,7 @@ input[type="text"].form-control, .inputbox-look, textarea.form-control  {
     margin-bottom: 10px;
     width: 100px;
     height: 100px;
-    background: image-url('questions_page_badge.png') no-repeat top left;
+    background: image-url('openssf_bestpracticesbadge.svg') no-repeat top left;
     background-size: 80px 80px;
   }
 }

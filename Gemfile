@@ -35,7 +35,7 @@ gem 'bcrypt', '~> 3.1.18' # Security - for salted hashed interacted passwords
 gem 'blind_index', '~> 2.3.0' # Index encrypted email addresses
 gem 'bootstrap-sass', '~> 3.4'
 gem 'bootstrap-social-rails', '~> 4.12'
-gem 'bootstrap_form', '~> 2.7'
+gem 'bootstrap_form', '~> 5.4'
 gem 'bundler' # Ensure it's available
 # Note: if webpacker is used, see chartkick website for added instructions
 gem 'chartkick', '~> 4.0' # Chart project_stats

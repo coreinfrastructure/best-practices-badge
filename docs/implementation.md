@@ -173,7 +173,7 @@ The application is configured by various environment variables:
 You can make cryptographically random values (such as keys)
 using "rails secret".  E.g., to create 64 random hexadecimal digits, use:
 
-> rails secret | head -c64 ; echo
+> rails secret &#124; head -c64 ; echo
 
 This can be set on Heroku.  For example, to change the maximum number
 of email reminders to inactive projects on production-bestpractices:

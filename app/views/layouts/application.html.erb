@@ -17,13 +17,14 @@
   <link rel="preload" href="<%=
     javascript_path('application') %>" as="script"
     type="application/javascript">
+  <%# This preloads only the "regular" Font Awesome fonts. %>
   <link rel="preload" href="<%=
-    font_path('fontawesome-webfont.woff2') %>" as="font"
+    font_path('fa-regular-400.woff2') %>" as="font"
     type="font/woff2" crossorigin>
   <link rel="preload" href="<%=
     image_path('cci-logo-header.png') %>" as="image" type="image/png">
   <link rel="alternate" type="application/atom+xml" title="<%= t('feed_title') %>" href="/<%= I18n.locale %>/feed" />
-  <link rel="publisher" href="https://plus.google.com/+LinuxfoundationOrg" />
+  <link rel="publisher" href="https://www.linuxfoundation.org/" />
 <% end # cache for this locale -%>
 <%# Provide info on all alternate locales for search engines, etc. See: -%>
 <%# https://support.google.com/webmasters/answer/189077?hl=en -%>

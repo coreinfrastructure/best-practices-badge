@@ -29,12 +29,9 @@ en:
     profile: Profile
     settings: Settings
     choose_locale: Choose locale
-    logout_html: <i class="fa fa-sign-out" aria-hidden="true"></i>
-      Logout
-    signup_html: <i class="fa fa-user-plus" aria-hidden="true"></i>
-      Sign Up
-    login_html: <i class="fa fa-sign-in" aria-hidden="true"></i>
-      Login
+    logout_html: Logout
+    signup_html: Sign Up
+    login_html: Login
     footer_text_html: >-
       <small> <strong>Need help? Have a question? See a problem?
       Please <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
@@ -79,7 +76,7 @@ en:
     update_password: Update password
   sessions:
     login_header: Log in
-    login_with_github_html: <span class="fa fa-github"></span> Log in with GitHub
+    login_with_github_html: Log in with GitHub
     login_automatic_signup: >-
       Log in with GitHub will automatically perform a sign up if necessary.
       Sign up will only occur if you authorize the sign up to GitHub;

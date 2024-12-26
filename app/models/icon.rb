@@ -13,14 +13,16 @@ class Icon
     ICONS_TO_GENERATE = %i[
       fa-address-card
       fa-edit
-      fa-github
       fa-list
       fa-plus
-      fa-sign-in
-      fa-sign-out
+      fa-sign-in-alt
+      fa-sign-out-alt
       fa-times-circle
       fa-user
       fa-user-plus
+    ].freeze
+    BRAND_ICONS_TO_GENERATE = %i[
+      fa-github
     ].freeze
 
     # Return the SafeBuffer text that represents icon "key".
@@ -39,12 +41,18 @@ class Icon
       ICONS_TO_GENERATE.each do |name|
         @icon_data[name] = my_icon_tag(name.to_s)
       end
+      # Brands must be handled specially
+      fab_html_safe = 'fab'.html_safe
+      BRAND_ICONS_TO_GENERATE.each do |name|
+        @icon_data[name] = my_icon_tag(name.to_s, fab_html_safe)
+      end
       # Should we freeze it?
       nil
     end
 
     private
 
+    # Default class.
     # Unfortunately, rubocop doesn't realize that concatenating
     # constants we define is safe.
     # rubocop: disable Rails/OutputSafety
@@ -52,10 +60,11 @@ class Icon
     # rubocop: enable Rails/OutputSafety
 
     # Returns the tag for a given icon as a SafeBuffer.
-    # In font-awesome 5, the category "fab" is used for brands,
-    # while "fas" is used for general (solid) icons.
+    # In font-awesome 5, the category "fab" is used for brands.
     # Currently we use an icon file; in the future we
     # might use a reference to an SVG or SVG sprite.
+    # Note: Double-check loading of the language icon if you change things.
+    # I needed to handle it specially using this approach.
     def my_icon_tag(icon, category = FA_HTML_SAFE)
       # Unfortunately, rubocop doesn't realize that concatenating
       # constants we define is safe.

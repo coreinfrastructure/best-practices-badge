@@ -35,13 +35,13 @@
               <% end %>
               <li class="divider"></li>
               <li>
-                <%= link_to t(:logout_html, scope: :layouts), logout_path, method: "delete" %>
+                <%= link_to Icon[:'fa-sign-out-alt'] + t(:logout_html, scope: :layouts), logout_path, method: "delete" %>
               </li>
             </ul>
           </li>
         <% else %>
-          <li><%= link_to t(:signup_html, scope: :layouts), signup_path %></li>
-          <li><%= link_to t(:login_html, scope: :layouts), login_path %></li>
+          <li><%= link_to Icon[:'fa-user-plus'] + t(:signup_html, scope: :layouts), signup_path %></li>
+          <li><%= link_to Icon[:'fa-sign-in-alt'] + t(:login_html, scope: :layouts), login_path %></li>
         <% end %>
         <% cache [I18n.locale, request.original_fullpath] do %>
           <li class="dropdown">

@@ -943,7 +943,7 @@ zh-CN:
         description: 该项目必须采取行为守则，并将其发布在标准的位置。
         details: >-
           项目可能能够提高社区的文明程度，并通过采取行为守则来规定对可接受的行为的期望。这可以帮助在发生问题之前避免问题，并使项目成为更加欢迎的地方来鼓励贡献。这应该只关注项目社区/工作场所的行为。行为规范的示例是<a
-          href="http://contributor-covenant.org/">贡献者约定行为准则</a>和Linux内核<a
+          href="https://contributor-covenant.org/">贡献者约定行为准则</a>和Linux内核<a
           href =“https://www.kernel.org/doc/html/latest/process/code-of-conflict.html">代码冲突</a>。
       roles_responsibilities:
         description: >-

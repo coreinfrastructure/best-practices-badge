@@ -34,12 +34,9 @@ de:
     account: Konto
     profile: Profil
     settings: Einstellungen
-    logout_html: <i class="fa fa-sign-out" aria-hidden="true"></i>
-      Abmelden
-    signup_html: >-
-      <i class="fa fa-user-plus" aria-hidden="true"></i> Registrieren
-    login_html: <i class="fa fa-sign-in" aria-hidden="true"></i>
-      Anmelden
+    logout_html: Abmelden
+    signup_html: Registrieren
+    login_html: Anmelden
     footer_text_html: >-
       <small><strong>Brauchen Sie Hilfe? Haben Sie eine Frage?
       Sehen Sie ein Problem? Bitte <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">senden
@@ -83,8 +80,7 @@ de:
     update_password: Passwort aktualisieren
   sessions:
     login_header: Einloggen
-    login_with_github_html: <span class="fa fa-github"></span>
-      Mit GitHub anmelden
+    login_with_github_html: Mit GitHub anmelden
     or: oder
     email: E-Mail
     password: Passwort

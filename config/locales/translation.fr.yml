@@ -23,12 +23,9 @@ fr:
     users: Utilisateurs
     profile: Profil
     settings: Paramètres
-    logout_html: >-
-      <i class="fa fa-sign-out" aria-hidden="true"></i> Déconnection
-    signup_html: >-
-      <i class="fa fa-user-plus" aria-hidden="true"></i> S'inscrire
-    login_html: >-
-      <i class="fa fa-sign-in" aria-hidden="true"></i> S'identifier
+    logout_html: Déconnection
+    signup_html: S'inscrire
+    login_html: S'identifier
     footer_text_html: >-
       <small> <strong>Vous avez besoin d'aide ? Vous avez une
       question ? Vous voyez un problème ? Merci de <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
@@ -50,8 +47,7 @@ fr:
     toggle_navigation: Choisir ou non la navigation repliable
   sessions:
     login_header: S'identifier
-    login_with_github_html: >-
-      <span class="fa fa-github"></span> Connectez-vous avec GitHub
+    login_with_github_html: Connectez-vous avec GitHub
     or: ou
     email: Email
     password: Mot de passe

@@ -35,14 +35,9 @@ es:
     profile: Perfil
     settings: Ajustes
     choose_locale: Elige la configuración regional
-    logout_html: >-
-      <span class="glyphicon glyphicon-log-out"></span> Cerrar
-      sesión
-    signup_html: <span class="glyphicon glyphicon-user"></span>
-      Registrarse
-    login_html: >-
-      <span class="glyphicon glyphicon-log-in"></span> Iniciar
-      sesión
+    logout_html: Cerrar sesión
+    signup_html: Registrarse
+    login_html: Iniciar sesión
     footer_text_html:
     toggle_navigation:
   admin_only:
@@ -65,7 +60,7 @@ es:
     update_password:
   sessions:
     login_header:
-    login_with_github_html:
+    login_with_github_html: Iniciar sesión con GitHub
     or:
     email:
     password:

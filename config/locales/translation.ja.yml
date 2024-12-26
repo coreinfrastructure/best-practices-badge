@@ -34,9 +34,9 @@ ja:
     account: アカウント
     profile: プロフィール
     settings: 設定
-    logout_html: <i class="fa fa-sign-out" aria-hidden="true"></i>ログアウト
-    signup_html: <i class="fa fa-user-plus" aria-hidden="true"></i>サインアップ
-    login_html: <i class="fa fa-sign-in" aria-hidden="true"></i>ログイン
+    logout_html: ログアウト
+    signup_html: サインアップ
+    login_html: ログイン
     footer_text_html: >-
       <small> <strong>疑問、質問、または問題がある場合は<em> <a href="mailto:&#99;ii&#45;badges&#45;questions&#64;lists&#46;coreinfrastructure&#46;or&#103;">電子メールで報告する</a></em>か、<em>
       <a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
@@ -68,8 +68,7 @@ ja:
     update_password: パスワードを更新してください
   sessions:
     login_header: ログイン
-    login_with_github_html: <span class="fa fa-github"></span>
-      GitHub でログインする
+    login_with_github_html: GitHub でログインする
     or: または
     email: 電子メール
     password: パスワード

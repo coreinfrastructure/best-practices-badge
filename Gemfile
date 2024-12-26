@@ -114,7 +114,7 @@ group :development, :test do
   gem 'awesome_print' # Pretty print Ruby objects
   gem 'bullet' # Avoid n+1 queries
   gem 'bundler-audit'
-  gem 'dotenv-rails', '~> 2.7'
+  gem 'dotenv-rails', '~> 3.1'
   gem 'eslintrb'
   gem 'json', '~> 2.0'
   gem 'license_finder', '~> 7.0'

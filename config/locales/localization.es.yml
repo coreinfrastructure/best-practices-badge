@@ -69,7 +69,7 @@ es:
         Ó: O
         Ú: U
         Ü: U
-        Ñ: N
+        Ñ: "N"
   spree:
     date_picker:
       first_day: 1

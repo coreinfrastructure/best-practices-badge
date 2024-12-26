@@ -87,7 +87,7 @@ fr:
         Ù: U
         Û: U
         Ü: U
-        Ÿ: Y
+        Ÿ: "Y"
   spree:
     date_picker:
       first_day: 0

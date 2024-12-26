@@ -36,11 +36,9 @@ sw:
     profile: Maelezo mafupi
     settings: Mipangilio
     choose_locale: Chagua eneo
-    logout_html: <i class="fa fa-sign-out" aria-hidden="true"></i>
-      Ondoka
+    logout_html: Ondoka
     signup_html:
-    login_html: <i class="fa fa-sign-in" aria-hidden="true"></i>
-      Ingia
+    login_html: Ingia
     footer_text_html: >-
       <small> <strong>Unahitaji msaada? Una swali? Unaona hitilafu?
       Tafadhali <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#64;lists&#46;coreinfrastructure&#46;or&#103;">tuma
@@ -82,8 +80,7 @@ sw:
     update_password:
   sessions:
     login_header: Ingia
-    login_with_github_html: <span class="fa fa-github"></span>Ingia
-      kwa kutumia GitHub
+    login_with_github_html: Ingia kwa kutumia GitHub
     login_automatic_signup: >-
       Ingio inayotumia GitHub itajisajili kiatomati ikiwa ni lazima.
       Ukijisajili, jina lako (kama lilivyopewa GitHub) na jina

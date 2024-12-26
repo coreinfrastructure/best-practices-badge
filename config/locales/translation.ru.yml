@@ -35,13 +35,9 @@ ru:
     account: Учетная запись
     profile: Профиль
     settings: Настройки
-    logout_html: <span class="glyphicon glyphicon-log-out"></span>
-      Выйти
-    signup_html: >-
-      <span class="glyphicon glyphicon-user"></span> Зарегистрироваться
-    login_html: >-
-      <span class="glyphicon glyphicon-log-in"></span> Войти в
-      систему
+    logout_html: Выйти
+    signup_html: Зарегистрироваться
+    login_html: Войти в систему
     footer_text_html: >-
       <small> <strong>Нужна помощь? Есть вопрос? Видите ошибку?
       Пожалуйста, отправьте <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">электронное
@@ -87,8 +83,7 @@ ru:
     update_password: Обновление пароля
   sessions:
     login_header: Войти
-    login_with_github_html: <span class="fa fa-github"></span>
-      Войти через GitHub
+    login_with_github_html: Войти через GitHub
     or: или
     email: Электронная почта
     password: Пароль

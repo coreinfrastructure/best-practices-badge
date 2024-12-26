@@ -21,12 +21,9 @@ zh-CN:
     users: 用户
     profile: 资料
     settings: 设置
-    logout_html: "<span class =“glyphicon glyphicon-log-out”></span>
-      注销"
-    signup_html: <span class="glyphicon glyphicon-user"></span>
-      注册
-    login_html: <span class="glyphicon glyphicon-log-in"></span>
-      登录
+    logout_html: 注销
+    signup_html: 注册
+    login_html: 登录
     footer_text_html: >-
       <small> <strong>需要帮助？有疑问？发现问题？请 <a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">发送邮件</a>
       或 <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
@@ -42,8 +39,7 @@ zh-CN:
     toggle_navigation: 切换可折叠导航
   sessions:
     login_header: 登录
-    login_with_github_html: <span class="fa fa-github"></span>
-      使用GitHub账户登录
+    login_with_github_html: 使用GitHub账户登录
     or: 或
     email: 电子邮件
     password: 密码

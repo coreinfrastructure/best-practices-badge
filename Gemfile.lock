@@ -172,7 +172,7 @@ GEM
     get_process_mem (1.0.0)
       bigdecimal (>= 2.0)
       ffi (~> 1.0)
-    gettext (3.4.4)
+    gettext (3.4.9)
       erubi
       locale (>= 2.0.5)
       prime
@@ -516,8 +516,8 @@ GEM
     tilt (2.5.0)
     timeout (0.4.3)
     tomlrb (2.0.3)
-    translation (1.37)
-      gettext (~> 3.2, >= 3.2.5, <= 3.4.4)
+    translation (1.41)
+      gettext (~> 3.2, >= 3.2.5, <= 3.4.9)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     uglifier (4.2.1)
@@ -643,7 +643,7 @@ DEPENDENCIES
   sentry-ruby
   spring (~> 4.1)
   sprockets-rails (= 3.5.2)
-  translation (= 1.37)
+  translation (= 1.41)
   uglifier (~> 4.2.0)
   vcr (< 5.1)
   web-console

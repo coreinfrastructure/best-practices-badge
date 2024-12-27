@@ -54,6 +54,11 @@ environment ENV.fetch('RAILS_ENV') { 'development' }
 # Allow puma to be restarted by `rails restart` command.
 plugin :tmp_restart
 
+# Use solid_queue as the ActiveJob backend. This stores jobs in a database,
+# so scheduled jobs will happen even if the system crashes.
+# Set the environment variable if you want it activated (e.g., in production)
+plugin :solid_queue if ENV['SOLID_QUEUE_IN_PUMA'] # || Rails.env.development?
+
 # Use puma_worker_killer to occasionally restart.
 # This is a band-aid to counter memory growth.
 # There's a performance hit (restart time + cache loss), but it

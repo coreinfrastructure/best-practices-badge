@@ -239,5 +239,12 @@ Rails.application.configure do
     # Do nothing if it's unavailable (this happens if we didn't load the gem)
   end
   # rubocop:enable Lint/HandleExceptions
+
+  # Configure active_job to use solid_queue as its back end when in production.
+  config.active_job.queue_adapter = :solid_queue
+  # We intentionally use *one* database for both the jobs and everythihg else.
+  # This greatly simplifies backup, maintenance, etc. If you wanted the
+  # jobs to go into their own database, you'd need to do something like:
+  # config.solid_queue.connects_to = { database: { writing: :queue } }
 end
 # rubocop:enable Metrics/BlockLength

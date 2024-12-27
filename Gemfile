@@ -100,6 +100,7 @@ gem 'redcarpet', '~> 3.5' # Process markdown in form textareas (justifications)
 gem 'sassc-rails' # compiles .scss (css replacement) drop-in replacement for sass-rails
 gem 'scout_apm' # Monitor for memory leaks
 gem 'secure_headers', '~> 7' # Add hardening measures to HTTP headers
+gem 'solid_queue', '~> 1.1' # ActiveJob database backend
 # WARNING!!!!
 # CHECK DEPLOYMENT FIRST IF YOU UPDATE sprockets-rails.
 # The gem sprockets-rails version 3.4.1 (from 3.2.2) caused a regression

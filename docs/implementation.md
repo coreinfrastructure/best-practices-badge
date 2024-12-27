@@ -169,6 +169,8 @@ The application is configured by various environment variables:
 * `BADGEAPP_SEND_EMAIL_DOMAIN`: Domain to report to the MTA (for HELO)
 * `SENDGRID_USERNAME` and `SENDGRID_PASSWORD`: These were once used for sending email,
   but these are *not* used any more.
+* `SOLID_QUEUE_IN_PUMA`: If set (recommended value is `true`), the ActiveJob
+  backend `solid_queue` is used. Should be set in staging and in production.
 
 You can make cryptographically random values (such as keys)
 using "rails secret".  E.g., to create 64 random hexadecimal digits, use:

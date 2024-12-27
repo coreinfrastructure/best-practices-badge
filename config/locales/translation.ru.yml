@@ -40,17 +40,21 @@ ru:
     login_html: Войти в систему
     footer_text_html: >-
       <small> <strong>Нужна помощь? Есть вопрос? Видите ошибку?
-      Пожалуйста, отправьте <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">электронное
-      письмо</a></em> или <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
+      Пожалуйста, отправьте <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
       target="_blank" rel="noopener">вопрос на GitHub</a></em>.</strong>
-      © 2015-2018 <a href="https://openssf.org" target="_blank"
-      rel="noopener">Open Source Security Foundation</a>, a <a
-      href="https://www.linuxfoundation.org/" target="_blank"
-      rel="noopener">Linux Foundation</a> Collaborative Project.
-      All Rights Reserved. Please see our <a href="https://www.linuxfoundation.org/privacy"
-      target="_blank" rel="noopener">privacy policy</a> and <a
-      href="https://www.linuxfoundation.org/terms" target="_blank"
-      rel="noopener">terms of use</a>. </small>
+      © <a href="https://www.bestpractices.dev" target="_blank"
+      rel="noopener">OpenSSF Best Practices Badge a Series of
+      LF Projects, LLC</a>. Условия использования, правила торговых
+      марок и прочие формальные документы проекта можно найти
+      <a href="https://lfprojects.org" target="_blank" rel="noopener">здесь</a>.
+      Дополнительную информацию можно найти на вебсайтах <a href="https://openssf.org"
+      target="_blank" rel="noopener">Open Source Security Foundation
+      (OpenSSF)</a> и <a href="https://www.linuxfoundation.org/"
+      target="_blank" rel="noopener">The Linux Foundation</a>.
+      Все права сохранены. См. <a href="https://www.linuxfoundation.org/privacy"
+      target="_blank" rel="noopener">правила конфиденциальности</a>
+      и <a href="https://www.linuxfoundation.org/terms" target="_blank"
+      rel="noopener">условия использования</a>.</small>
     choose_locale: Выберите язык
     toggle_navigation:
   admin_only: Только администратор.
@@ -136,31 +140,42 @@ ru:
         с большей вероятностью создают более качественное и защищенное
         программное обеспечение.
       p2_html: >-
-        Более подробную информацию о программе значков OpenSSF
-        "Передовая практика", в том числе о происхождении программы
-        и <a href='https://github.com/coreinfrastructure/best-practices-badge/blob/main/docs/criteria.md'>критериях</a>,
-        можно найти на <a href='https://github.com/coreinfrastructure/best-practices-badge'>странице
-        проекта на GitHub</a>. Имеются <a href="/ru/project_stats">проектная
+        Критерии для значка Passing легко найти на <a href="/ru/criteria/0">соответствующей
+        странице</a>. Автоматический анализ определит за вас результат
+        по многим критериям (и предупредит очевидно неверные ответы).
+        Более подробную информацию о программе значков "Передовая
+        практика OpenSSF". Имеются <a href="/ru/project_stats">проектная
         статистика</a> и <a href="/ru/criteria_stats">статистика
         по критериям</a>. <a href="/ru/projects">Страница проектов</a>
         показывает участвующие проекты и позволяет делать запросы
         по базе проектов (например, вы можете найти <a href="/ru/projects?gteq=100">проекты
         со значком Passing</a>). Вы также можете взглянуть на
         <a href='/ru/projects/1/0'>пример (в котором мы пытаемся
-        получить наш собственный значок)</a>.
+        получить наш собственный значок)</a>. Этот проект раньше
+        был известен под именем «Передовая практика Core Infrastructure
+        Initiative (CII)». Теперь его ведет <a href="https://github.com/ossf/wg-best-practices-os-developers"
+        >рабочая группа по передовой практике (Best Practices
+        Working Group)</a> фонда <a href="https://openssf.org/">OpenSSF</a>.
+        Фонд входит в <a href="https://www.linuxfoundation.org/">Linux
+        Foundation (LF)</a>. Проект был официально переименован
+        24 декабря 2021 года.
       p3_html: >-
         <em>Конфиденциальность и юридические вопросы</em>: см.
         нашу <a href="https://www.linuxfoundation.org/privacy">политику
         конфиденциальности</a>, <a href="/ru/cookies">замечание
         про cookies</a> и <a href="https://www.linuxfoundation.org/terms">условия
-        использования</a>. Все общедоступное содержимое, не являющееся
-        программным кодом, выпущено под лицензией как минимум
-        <a href="https://creativecommons.org/licenses/by/3.0/">Creative
-        Commons Attribution версии 3.0 (CC-BY-3.0)</a>; более
-        новый содержимое, не являющееся кодом, выпущено под CC-BY
-        версии 3.0 или выше (CC-BY-3.0+). Для коллективной ссылки
-        или если не указано иное, пожалуйста, ссылайтесь на "OpenSSF
-        Best Practices badge contributors".
+        использования</a>. Собственно код приложения выпущен под
+        <a href="https://opensource.org/licenses/MIT">лицензией
+        MIT</a>. Все общедоступное содержимое, не являющееся программным
+        кодом, добавленное или измененное после 23 августа 2024
+        года выпущено под лицензией <a href="https://cdla.dev/permissive-2-0/"
+        >Community Data License Agreement – Permissive, версия
+        2.0 (CDLA-Permissive-2.0)</a>. Более ранние материалы
+        распространяются под лицензией либо <a href="https://creativecommons.org/licenses/by/3.0/">Creative
+        Commons Attribution License версии 3.0 (CC-BY-3.0)</a>,
+        либо CC-BY версии 3.0 или выше (CC-BY-3.0+). Для коллективной
+        ссылки или если не указано иное, пожалуйста, ссылайтесь
+        на "OpenSSF Best Practices badge contributors".
       check_us_out: Посетите веб-сайт значков "Передовая практика
         OpenSSF"!
       share_header_html: "<p>Поделиться: </p>"
@@ -2177,21 +2192,21 @@ ru:
           в безопасности реализации нейтрализованы.
         details: >-
           Обоснованием является «документальное подтверждение,
-          которое дает убедительное и обоснованное доказательство
+          которое дает убедительное и корректное доказательство
           того, что указанный набор критических заявлений относительно
           свойств системы адекватно оправдан для данного приложения
           в данной среде» (перевод выдержки из <a href="http://nvlpubs.nist.gov/nistpubs/ir/2009/ir7608.pdf">"Software
           Assurance Using Structured Assurance Case Models", Thomas
           Rhodes et al, NIST Interagency Report 7608</a>). Границы
-          доверия - это границы, где данные или выполнение кода
-          изменяют уровень доверия, например границы сервера в
-          типичном веб-приложении. В обосновании обычно перечисляются
+          доверия - это границы, на которых меняется уровень доверия
+          к данным или выполнению кода, например границы сервера
+          в типичном веб-приложении. В обосновании обычно перечисляются
           принципы безопасного проектирования (такие как Saltzer
           and Schroeer) и общие слабости безопасности в реализации
-          (такие как OWASP Top 10 или CWE/SANS Top 25), и показывают,
+          (такие как OWASP Top 10 или CWE/SANS Top 25), и показывается,
           как противодействовать каждой из них. Полезным примером
-          может служить <a href="https://github.com/coreinfrastructure/best-practices-badge/blob/main/docs/assurance-case.md">BadgeApp
-          assurance case</a>. Этот критерий связан с documentation_security,
+          может служить <a href="https://github.com/coreinfrastructure/best-practices-badge/blob/main/docs/assurance-case.md">обоснование
+          для BadgeApp</a>. Этот критерий связан с documentation_security,
           documentation_architecture и implement_secure_design.
       documentation_current:
         description: >-

@@ -87,9 +87,9 @@ GEM
     benchmark (0.4.0)
     bigdecimal (3.1.8)
     bindex (0.8.1)
-    blind_index (2.3.2)
-      activesupport (>= 5.2)
-      argon2-kdf (>= 0.1.1)
+    blind_index (2.6.1)
+      activesupport (>= 7)
+      argon2-kdf (>= 0.2)
     bootsnap (1.18.4)
       msgpack (~> 1.2)
     bootstrap-sass (3.4.1)
@@ -578,7 +578,7 @@ DEPENDENCIES
   attr_encrypted (~> 4)
   awesome_print
   bcrypt (~> 3.1.18)
-  blind_index (~> 2.3.0)
+  blind_index (~> 2.6.1)
   bootsnap
   bootstrap-sass (~> 3.4)
   bootstrap-social-rails (~> 4.12)

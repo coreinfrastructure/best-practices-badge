@@ -130,7 +130,7 @@ group :development, :test do
   # gem 'railroader', '4.3.8' # Security static analyzer. OSS fork of Brakeman
   gem 'rubocop', '~> 1.6', require: false # Style checker
   gem 'rubocop-performance', '~> 1.20', require: false # Performance cops
-  gem 'rubocop-rails', '~> 2.21', require: false # Rails-specific cops
+  gem 'rubocop-rails', '~> 2.28', require: false # Rails-specific cops
   gem 'ruby-graphviz', '1.2.5' # This is used for bundle viz
   gem 'spring', '~> 4.1'
   # Do NOT upgrade to vcr 6.*, as that is not OSS:

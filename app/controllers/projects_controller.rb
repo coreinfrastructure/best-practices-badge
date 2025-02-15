@@ -848,10 +848,28 @@ class ProjectsController < ApplicationController
   end
 
   # Clean up url; returns nil if given nil.
+  # In particular, remove trailing slashes
   def clean_url(url)
-    return url if url.nil?
+    return url if url.blank?
+    return url if url == '/'
+    return url if url.last != '/'
 
-    url.gsub(%r{\/+\z}, '')
+    # Remove trailing slashes.
+    # Attackers could make this version slow: url.gsub(%r{\/+\z}, '')
+    # Start from the last character and move backwards
+    i = url.length - 1
+
+    # Find the index of the last non-slash character
+    while i >= 0 && url[i] == '/'
+      i -= 1
+    end
+
+    # If the string was all slashes or empty, return a single slash
+    if i == -1
+      return '/'
+    else
+      return url[0..i]
+    end
   end
 end
 # rubocop:enable Metrics/ClassLength

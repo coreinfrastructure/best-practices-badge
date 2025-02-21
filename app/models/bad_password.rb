@@ -30,4 +30,28 @@ class BadPassword < ApplicationRecord
       BadPassword.create!(bad_password_array)
     end
   end
+
+  # Return true iff forbidden exists in BadPassword, but don't do SQL logging.
+  # The production environment runs at :info debug level, which
+  # doesn't log individual SQL queries. However, it's possible to change the
+  # log level to :debug (0), or start the application in a non-production
+  # setting that has debug level. This is the default during testing,
+  # for example. At :debug level, individual
+  # SQL queries *are* logged. To prevent accidentally revealing passwords
+  # through the logs, we will *not* check the bad password database
+  # at log level 0 (debug).
+  #
+  # I originally wanted to use Rails.logger.silence to do this.
+  # However, there is no clear evidence it's
+  # thread-safe, and much evidence it isn't. Simply disabling logging of the
+  # global logging object is *not* okay. If we simply silenced logging,
+  # we would sometimes disable logging of other events.
+  # Since we only check for unlogged passwords as an extra help for users,
+  # losing this isn't a problem.
+  def self.unlogged_exists?(forbidden)
+    # We will do a lookup in the test environment *or* if the log level
+    # is not debug log level (level 0).
+    lookup = Rails.env.test? || (Rails.logger.level != 0)
+    lookup && exists?(forbidden)
+  end
 end

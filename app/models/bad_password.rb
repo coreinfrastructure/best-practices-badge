@@ -30,4 +30,17 @@ class BadPassword < ApplicationRecord
       BadPassword.create!(bad_password_array)
     end
   end
+
+  # Return true iff forbidden exists in BadPassword, *without* SQL logging.
+  # The production environment normally runs at :info debug level, which
+  # doesn't log individual SQL queries. However, it's possible to raise that
+  # level, or start the application in a non-production setting that has
+  # a higher level. To prevent accidentally revealing passwords, we will
+  # force queries against the bad password data to *never* be logged.
+  # This does mean that these SQL queries are never logged.
+  def self.silent_exists?(forbidden)
+    Rails.logger.silence do
+      exists?(forbidden)
+    end
+  end
 end

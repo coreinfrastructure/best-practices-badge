@@ -3421,7 +3421,7 @@ graphical notation has many advantages over CAE graphical notation:
    as text instead.
 
 In our SACM diagrams we've sometimes omitted the bigdot when there is a
-single connection from one element to antoher.
+single connection from one element to another.
 This is not strictly compliant.
 One advantage of using “bigdot” even in these
 cases would be that it would make it much easier to add

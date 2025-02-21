@@ -6,7 +6,7 @@
 
 class PasswordValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
-    return unless BadPassword.silent_exists?(forbidden: value.downcase)
+    return unless BadPassword.unlogged_exists?(forbidden: value.downcase)
 
     record.errors.add attribute,
                       options[:message] ||

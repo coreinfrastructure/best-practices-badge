@@ -48,10 +48,20 @@ class BadPassword < ApplicationRecord
   # we would sometimes disable logging of other events.
   # Since we only check for unlogged passwords as an extra help for users,
   # losing this isn't a problem.
+
+  # Should we do the bad password lookups?
+  # We will do a lookup in the test environment *or* if the log level
+  # is not debug log level (level 0).
+  # The ||= is because Rails reloads. It's okay if it recalculates this
+  # twice if it's false, it'll produce the same result each time.
+  DO_LOOKUPS ||= Rails.env.test? || (Rails.logger.level != 0)
+
+  # Provide warning if we are NOT actually doing the bad password lookups.
+  # We want to make sure we avoid logging those lookups, by not doing them,
+  # but we want to warn that it's happening.
+  Rails.logger.info('Bad password lookups disabled') unless DO_LOOKUPS
+
   def self.unlogged_exists?(forbidden)
-    # We will do a lookup in the test environment *or* if the log level
-    # is not debug log level (level 0).
-    lookup = Rails.env.test? || (Rails.logger.level != 0)
-    lookup && exists?(forbidden)
+    DO_LOOKUPS && exists?(forbidden)
   end
 end

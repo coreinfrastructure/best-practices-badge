@@ -177,6 +177,11 @@ class Badge
   private
 
   def load_svg(level)
+    # Defensive programming: only allow valid levels.
+    # This was checked earlier, but we re-check here so we're sure *and*
+    # that static analysis tools will know we've checked it.
+    return '' unless self.class.valid?(level)
+
     File.read("app/assets/images/badge_static_#{level}.svg")
   end
 end

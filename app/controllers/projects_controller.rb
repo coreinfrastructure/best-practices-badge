@@ -526,7 +526,8 @@ class ProjectsController < ApplicationController
   end
   # rubocop:enable Metrics/MethodLength
 
-  VALID_ADD_RIGHTS_CHANGES = /\A[+-](\d+(,\d+)*)+\z/.freeze
+  # Rights changes, if provided, must match this pattern.
+  VALID_ADD_RIGHTS_CHANGES = /\A *[+-] *\d+ *(, *\d+)*\z/.freeze
 
   # Examine proposed changes to additional rights - if okay, call
   # update_additional_rights_forced to do them.
@@ -851,7 +852,9 @@ class ProjectsController < ApplicationController
   def clean_url(url)
     return url if url.nil?
 
-    url.gsub(%r{\/+\z}, '')
+    # Remove all trailing slashes. Even "/" becomes the empty string
+    url = url.chop while url.end_with?('/')
+    url
   end
 end
 # rubocop:enable Metrics/ClassLength

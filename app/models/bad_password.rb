@@ -55,25 +55,30 @@ class BadPassword < ApplicationRecord
     OpenSSL::HMAC.hexdigest('SHA512', BADPWKEY_BYTES, pw)
   end
 
+  # Load "bad passwords" from a file, up to "max" count.
   # rubocop:disable Metrics/MethodLength
-  def self.bad_passwords_from_file
+  def self.bad_passwords_from_file(max = nil)
     require 'zlib'
     bad_password_array = []
+    count = 0
     Zlib::GzipReader.open('raw-bad-passwords-lowercase.txt.gz') do |gz|
       gz.each_line do |line|
         pw = line.chomp.downcase.freeze
         hashed_pw = hash_password(pw)
         bad_password_array.push({ forbidden_hash: hashed_pw })
+        count += 1
+        break unless max.nil? || max < count
       end
     end
     bad_password_array
   end
   # rubocop:enable Metrics/MethodLength
 
-  # Force load into the database the list of bad passwords.
-  def self.force_load
+  # Force load into the database the list of bad passwords, up to max number.
+  # We have a "max" so that testing doesn't take forever.
+  def self.force_load(max = nil)
     BadPassword.delete_all
-    bad_password_array = bad_passwords_from_file
+    bad_password_array = bad_passwords_from_file(max)
     # Update all in one transaction, or it will take a *long* time
     transaction do
       # TODO: Speed this up with Rails 6's "insert_all!" (bulk insert)

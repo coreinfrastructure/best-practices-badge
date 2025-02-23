@@ -14,10 +14,11 @@ class BadPasswordTest < ActiveSupport::TestCase
     assert_not BadPassword.unlogged_exists?('asjfdksajdklfajdfkjaslkdfj')
   end
 
-  # We don't run BadPassword.force_load in the test suite.
-  # It takes a long time to run.
-  # test 'Load full bad password list' do
-  #   BadPassword.force_load
-  #   assert BadPassword.unlogged_exists?('10101010')
-  # end
+  # Running BadPassword.force_load without limit would take a *long* time.
+  # For testing purposes, we load a few values and make sure it's found.
+  test 'Load full bad password list' do
+    BadPassword.force_load
+    assert BadPassword.unlogged_exists?('10101010')
+    assert_not BadPassword.unlogged_exists?('A_decent_pass_Maybe?_581905012')
+  end
 end

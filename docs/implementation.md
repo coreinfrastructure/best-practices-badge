@@ -93,6 +93,14 @@ The application is configured by various environment variables:
   Used by aes-256-gcm (256-bit AES in GCM mode).
 * EMAIL_BLIND_INDEX_KEY: Key for blind index created for user email addresses
   (used by PBKDF2-HMAC-SHA256).  Must be 64 hex digits (==32 bytes==256 bits).
+* BADGEAPP_BADPWKEY: Key used for additional protection for passwords
+  when checking the bad password database. The list of bad passwords
+  is converted by HMAC (using SHA-512 and this key) before being stored in
+  the database, and the same happens to passwords before the database is
+  asked to compare them. We recommend setting this to a cryptographically
+  random 512-bit value; you can get that with `openssl rand -hex 128` or
+  similar. Then run `rake update_bad_password_db` to load the database
+  with the bad password list (it will take a few minutes to load them all).
 * BADGEAPP_DENY_LOGIN: If a non-blank value is set ("true" is recommended),
   then no on can log in, no one can create a new account (sign up),
   and no one can do anything that requires being logged (users are always

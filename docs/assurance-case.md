@@ -543,7 +543,7 @@ We *do* consider this data higher-value and protect them specially.
 
 User passwords for local accounts are only stored on the server as
 iterated per-user salted hashes (using bcrypt), and thus cannot
-be retrieved in an unencrypted form.
+be retrieved in an unencrypted form later on from a recorded database.
 
 Any user password sent to the system is sent by the application router
 to the "update" method of the user controller
@@ -562,6 +562,44 @@ The unencrypted email address may remain for a while in server memory
 until that memory is recycled, but we assume that the underlying
 system will protect memory during the time before it is garbage-collected
 and reused.
+
+To help users avoid the *worst* passwords, we check proposed passwords
+against a list of bad passwords and don't allow passwords to change to them.
+This complies with NIST Special Publication 800-63B section 5.1.1.2.
+That list is long, so for speed we keep this list in the database
+(if we kept it in memory it would use a lot of memory).
+We don't trust long-term storage, so it's vital that we *never* record
+in logs a query that includes an unencrypted password.
+Also, while we trust our database and its connections, we want to limit
+privileges where we can. Thus, we take two steps to protect passwords
+while we check them against the bad password list in the database:
+
+1. We disable the bad password check if the log level is set to debug
+   (which logs SQL queries) and we aren't running a test.
+   It's better to disable the bad password check than to risk exposing
+   a password. When this occurs, a warning it noted in the log.
+   Note that the production environments settings do *not* use log level
+   debug by default anyway, but we want to make sure it won't happen.
+2. Instead of storing the bad passwords directly, we stored keyed HMAC
+   values of them, and the new password must *also* be converted into a
+   keyed HMAC for comparison. The key is a secret for the application.
+   This means that even if an attacker gains control over the database
+   and/or can read communications to it (which we assume they can't do),
+   the attacker would have to use a brute-force to find the key
+   (we recommend 512 bits), *then* use that key to compute HMACs to attempt
+   to discover a user's password. Rekeying the bad password database
+   is trivial, when desired. A new key can be set in `BADGEAPP_BADPWKEY`
+   and then you can run `rake update_bad_password_db` (it takes a few minutes).
+   We do this to protect passwords used for queries between the application
+   and the database, to counter someone snooping it.
+   We *never* store the HMAC of the password anywhere. We instead use
+   bcrypt for stored passwords (it's designed for that).
+   Strictly speaking using HMAC isn't necessary, since we don't store it,
+   but providing another layer of protections for passwords seemed appropriate.
+   Theoretically a user could choose another password that isn't
+   on the bad password list but matches its HMAC; that's so astronomically
+   unlikely that it won't happen, and even if it did, it would just mean
+   that the user would have to choose a different password.
 
 #### Remember me token
 
@@ -1946,9 +1984,9 @@ as of 2015-12-14:
 6. *User management.*
    Local passwords have a minimum length (8) and cannot be
    a member of a set of known-bad passwords.  We allow much longer passwords.
-   This complies with draft NIST Special Publication 800-63B,
+   This complies with NIST Special Publication 800-63B,
    "Digital Authentication Guideline: Authentication and Lifecycle Management"
-   dated Thu, 24 Nov 2016 08:15:51 -0500 <https://pages.nist.gov/800-63-3/>.
+   <https://pages.nist.gov/800-63-3/sp800-63b.html> section 5.1.1.2.
    We expect users to
    protect their own passwords; we do not try to protect users from themselves.
    The system is not fast enough for a naive password-guesser to succeed

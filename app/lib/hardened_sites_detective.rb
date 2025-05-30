@@ -29,8 +29,7 @@ class HardenedSitesDetective < Detective
   UNMET_MISSING =
     {
       value: 'Unmet', confidence: 5,
-      explanation: '// One or more of the required security hardening headers ' \
-                   'is missing.'
+      explanation: 'Required security hardening headers missing: '
     }.freeze
   UNMET_NOSNIFF =
     {
@@ -43,10 +42,14 @@ class HardenedSitesDetective < Detective
 
   # Check the given list of header hashes to make sure that all expected
   # keys are present.
-  def security_fields_present?(headers_list)
-    result = true
+  def missing_security_fields(headers_list)
+    result = []
     headers_list.each do |headers|
-      result &&= CHECK.reduce(true) { |acc, elem| acc & headers.key?(elem) }
+      CHECK.each do |required_item|
+        if !headers.key?(required_item)
+          result.append("#{required_item}")
+        end
+      end
     end
     result
   end
@@ -85,10 +88,16 @@ class HardenedSitesDetective < Detective
     if homepage_url.present? && repo_url.present?
       homepage_headers = get_headers(evidence, homepage_url)
       repo_headers = get_headers(evidence, repo_url)
-      hardened = security_fields_present?([homepage_headers, repo_headers])
-      @results[:hardened_site_status] = hardened ? MET : UNMET_MISSING
-      hardened ||= check_nosniff?([homepage_headers, repo_headers])
-      @results[:hardened_site_status] = UNMET_NOSNIFF unless hardened
+      missing_hardened = missing_security_fields([homepage_headers, repo_headers])
+      @results[:hardened_site_status] =
+        if missing_hardened.empty?
+          MET
+        else
+          result = UNMET_MISSING.deep_dup # clone but result is not frozen
+          result[:explanation] += missing_hardened.join(',')
+        end
+      # hardened ||= check_nosniff?([homepage_headers, repo_headers])
+      # @results[:hardened_site_status] = UNMET_NOSNIFF unless hardened
     end
     @results
   end

@@ -7,20 +7,16 @@
 # Determine if project sites support HTTPS
 
 class HardenedSitesDetective < Detective
-  # Field name, must be in lowercase.
-  XCTO = 'x-content-type-options'
-
-  # The sole allowed value for the X-Content-Type-Options header.
-  NOSNIFF = 'nosniff'
-
   # All of the security-hardening headers that need to be present to pass.
   # They're listed in the same order as the criteria text.
+  # We don't list 'x-frame-options' here because there's a CSP alternative.
+  # Technically 'x-content-type-options' must be 'nosniff' but if you can
+  # set it at all, you can set it correctly, so we don't bother to dig further.
   # Field names must be in lowercase here.
-  CHECK =
-    [
-      'content-security-policy', 'strict-transport-security',
-      XCTO, 'x-frame-options'
-    ].freeze
+  REQUIRED_FIELDS = %w[
+    content-security-policy strict-transport-security
+    x-content-type-options
+  ].freeze
   MET =
     {
       value: 'Met', confidence: 3,
@@ -40,18 +36,32 @@ class HardenedSitesDetective < Detective
   INPUTS = %i[repo_url homepage_url].freeze
   OUTPUTS = [:hardened_site_status].freeze
 
-  # Check the given list of header hashes to make sure that all expected
-  # keys are present.
-  def missing_security_fields(headers_list)
+  # Check the given hash of header values to make sure that all expected
+  # keys are present. Return a list of missing fields (preferably empty).
+  def missing_security_fields(headers)
     result = []
-    headers_list.each do |headers|
-      CHECK.each do |required_item|
-        if !headers.key?(required_item)
-          result.append("#{required_item}")
-        end
+    REQUIRED_FIELDS.each do |required_item|
+      if !headers.key?(required_item)
+        result.append(required_item.to_s)
       end
     end
     result
+  end
+
+  # Return a list of missing frame-options fields (preferably empty).
+  # Using content-security-policy's frame-ancestors is a valid way to do it.
+  # Instead of parsing content-security-policy,
+  # we just check for the string 'frame-ancestors'. That can be fooled by
+  # weird CSPs, but this isn't expected to be a problem, and people who do
+  # that are just hurting themselves.
+  def missing_frame_options(headers)
+    if headers.key?('x-frame-options') ||
+       (headers.key?('content-security-policy') &&
+        headers['content-security-policy'].include?('frame-ancestors'))
+      []
+    else
+      ['x-frame-options']
+    end
   end
 
   # Perform GET request, and return either an empty hash (if the GET is
@@ -69,42 +79,52 @@ class HardenedSitesDetective < Detective
     results.transform_keys { |k| k.to_s.downcase(:ascii) }
   end
 
-  # Inspect the X-Content-Type-Options headers and make sure that they have the
-  # only allowed value.
-  def check_nosniff?(headers_list)
-    result = true
-    headers_list.each do |response_headers|
-      xcto = response_headers[XCTO]
-      result &&= xcto.nil? ? false : xcto.casecmp(NOSNIFF).zero?
+  # Given evidence and a URL, return the list of problems with it.
+  def problems_in_url(evidence, url)
+    headers = get_headers(evidence, url)
+    problems = missing_security_fields(headers)
+    problems += missing_frame_options(headers)
+    if problems.empty?
+      problems
+    else
+      ["#{url}: #{problems.join(', ')}"]
     end
-    result
+  end
+
+  # Given evidence and set of URLs, return the list of problems with the URLs
+  def problems_in_urls(evidence, urls)
+    all_problems = []
+    urls.each do |url|
+      all_problems += problems_in_url(evidence, url)
+    end
+    all_problems
   end
 
   # Internal method that does the inspection work for the 'analyze' method.
-  def check_urls(evidence, homepage_url, repo_url)
-    @results = {}
+  # rubocop:disable Metrics/MethodLength
+  def report_on_check_urls(evidence, homepage_url, repo_url)
+    results = {}
     # Only complain if we have *both* a homepage_url AND repo_url.
     # When that isn't true other criteria will catch it first.
     if homepage_url.present? && repo_url.present?
-      homepage_headers = get_headers(evidence, homepage_url)
-      repo_headers = get_headers(evidence, repo_url)
-      missing_hardened = missing_security_fields([homepage_headers, repo_headers])
-      @results[:hardened_site_status] =
-        if missing_hardened.empty?
+      urls = [homepage_url, repo_url].to_set
+      all_problems = problems_in_urls(evidence, urls)
+      results[:hardened_site_status] =
+        if all_problems.empty?
           MET
         else
-          result = UNMET_MISSING.deep_dup # clone but result is not frozen
-          result[:explanation] += missing_hardened.join(',')
+          answer = UNMET_MISSING.deep_dup # clone but result is not frozen
+          answer[:explanation] += all_problems.join(', ')
+          answer
         end
-      # hardened ||= check_nosniff?([homepage_headers, repo_headers])
-      # @results[:hardened_site_status] = UNMET_NOSNIFF unless hardened
     end
-    @results
+    results
   end
+  # rubocop:enable Metrics/MethodLength
 
   # Analyze the home page and repository URLs to make sure that security
   # hardening headers are returned in the headers of a GET response.
   def analyze(evidence, current)
-    check_urls(evidence, current[:homepage_url], current[:repo_url])
+    report_on_check_urls(evidence, current[:homepage_url], current[:repo_url])
   end
 end

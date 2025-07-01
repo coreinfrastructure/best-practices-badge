@@ -260,7 +260,7 @@ GEM
       builder
       minitest (>= 5.0)
       ruby-progressbar
-    minitest-retry (0.2.3)
+    minitest-retry (0.2.5)
       minitest (>= 5.0)
     mixlib-cli (2.1.8)
     mixlib-config (3.0.27)

@@ -280,8 +280,14 @@ class ProjectsController < ApplicationController
       @project.purge_cdn_project
       old_badge_level = @project.badge_level
       final_project_params = project_params
-      # Only admins can *directly* change the project owner (user_id)
-      final_project_params = project_params.except('user_id') unless current_user.admin?
+      # Determine if we're trying to change ownership.
+      # Only admins and owner (can_control?) can change ownership
+      new_owner = final_project_params[:user_id]
+      owner_change = new_owner.present? && (new_owner == final_project_params[:user_id_repeat]) && User.exists?(id: new_owner)
+      if !can_control? || !owner_change
+        final_project_params = final_project_params.except('user_id')
+      end
+      final_project_params = final_project_params.except('user_id_repeat')
       final_project_params.each do |key, user_value| # mass assign
         @project[key] = user_value
       end

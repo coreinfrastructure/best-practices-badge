@@ -596,35 +596,95 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     # We SHOULD see the option to change the owner id
     get "/en/projects/#{@project.id}/edit"
     assert_response :success
-    assert_includes @response.body, 'New owner id'
+    assert_includes @response.body, 'Repeated new owner id'
+
+    # Ensure it won't change if we don't give repeat id
+    patch "/en/projects/#{@project.id}", params: {
+      project: { user_id: @admin.id }
+    }
+    assert_redirected_to project_path(assigns(:project))
+    @project.reload
+    assert_not_equal @admin.id, @project.user_id
+    assert_equal old_user.id, @project.user_id
+
+    # Ensure it won't change if we repeat id doesn't match
+    patch "/en/projects/#{@project.id}", params: {
+      project: { user_id: @admin.id, repeat_user_id: @admin.id + 1 }
+    }
+    assert_redirected_to project_path(assigns(:project))
+    @project.reload
+    assert_equal old_user.id, @project.user_id
+
+    # Ensure it won't change if user doesn't exist
+    # Admin will own this project after this instruction.
+    # We'll assume this does not exist :-)
+    no_such_uid = 999_999_999_999_999
+    patch "/en/projects/#{@project.id}", params: {
+      project: { user_id: no_such_uid, user_id_repeat: no_such_uid }
+    }
+    assert_redirected_to project_path(assigns(:project))
+    @project.reload
+    assert_not_equal no_such_uid, @project.user_id
+    assert_equal old_user.id, @project.user_id
+
     # Let's ensure we CAN change it.
     # Admin will own this project after this instruction.
     patch "/en/projects/#{@project.id}", params: {
-      project: { user_id: @admin.id }
+      project: { user_id: @admin.id, user_id_repeat: @admin.id }
     }
     assert_redirected_to project_path(assigns(:project))
     @project.reload
     assert_equal @admin.id, @project.user_id
   end
 
-  # We don't currently allow normal users to change the owner to
-  # anyone else, in case the recipient doesn't want it.
-  test 'Normal user cannot change owner of their own project' do
+  # We allow normal users of their own project to change
+  # the owner to anyone else.
+  # If recipient doesn't want it, they can reassign again.
+  test 'Normal user change ownership of their own project' do
     # Verify test setup - @project is owned by @user
     assert_equal @project.user_id, @user.id
     log_in_as(@user)
-    # We should NOT see the option to change the owner id
+
     get "/en/projects/#{@project.id}/edit"
     assert_response :success
-    assert_not_includes @response.body, 'New owner id'
+    # We should see the option to change the owner id
+    assert_includes @response.body, 'Repeated new owner id'
+
+    # Let's ensure we can change it.
+    patch "/en/projects/#{@project.id}", params: {
+      project: { user_id: @admin.id, user_id_repeat: @admin.id }
+    }
+    assert_redirected_to project_path(assigns(:project))
+    @project.reload
+    # Notice that ownership has changed.
+    assert_equal @project.user_id, @admin.id
+  end
+
+  # Don't allow users other than admin or owner to change the owner.
+  test 'Normal user cannot change ownership of a project they do not own' do
+    test_user = users(:test_user_mark)
+    # Create additional rights during test, not as a fixure.
+    # The fixture would require correct references to *other* fixture ids.
+    new_right = AdditionalRight.new(
+      user_id: test_user.id,
+      project_id: @project.id
+    )
+    new_right.save!
+    log_in_as(test_user)
+
+    get "/en/projects/#{@project.id}/edit"
+    assert_response :success
+    # We should NOT see the option to change the owner id
+    assert_not_includes @response.body, 'Repeated new owner id'
+
     # Let's ensure we can't change it.
     patch "/en/projects/#{@project.id}", params: {
-      project: { user_id: @admin.id }
+      project: { user_id: @admin.id, user_id_repeat: @admin.id }
     }
     assert_redirected_to project_path(assigns(:project))
     @project.reload
     # Notice that nothing has changed.
-    assert_equal @project.user_id, @user.id
+    assert_not_equal @project.user_id, @admin.id
   end
 
   test 'Cannot evade /badge match with /badge/..' do

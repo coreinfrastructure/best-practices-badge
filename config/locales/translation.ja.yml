@@ -282,6 +282,8 @@ ja:
       static_analysis_updated_html: 基準 static_analysis の要件を更新しました。この基準の正当性を追加してください。
       edit_status: プロジェクトのバッジステータスを表示する
       submit_cdla_permissive_20_html:
+      new_owner:
+      new_owner_repeat:
     form_basics:
       project_name:
         description: プロジェクトの名前は何ですか？

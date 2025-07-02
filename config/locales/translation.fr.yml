@@ -397,6 +397,8 @@ fr:
         Veuillez ajouter une justification pour ce critère.
       edit_status: Éditer le statut du badge du projet
       submit_cdla_permissive_20_html:
+      new_owner:
+      new_owner_repeat:
     form_basics:
       project_name:
         description: Quel est le nom intelligible du projet ?

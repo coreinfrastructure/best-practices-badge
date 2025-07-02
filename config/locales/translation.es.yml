@@ -309,6 +309,8 @@ es:
       submit_and_exit:
       submit_cc_by_3plus_html:
       submit_cdla_permissive_20_html:
+      new_owner:
+      new_owner_repeat:
     show:
       edit:
       delete:

@@ -239,6 +239,8 @@ zh-CN:
         我们更新了<a href="#static_analysis"> static_analysis </a>条款的要求。请为此条款添加说明。
       edit_status: 编辑项目徽章状态
       submit_cdla_permissive_20_html:
+      new_owner:
+      new_owner_repeat:
     form_basics:
       project_name:
         description: 项目的人类可读的名称是什么？

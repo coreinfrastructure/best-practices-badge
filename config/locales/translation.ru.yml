@@ -505,6 +505,8 @@ ru:
         не изменяется. <br> <br>
       edit_status: Изменить данные для значка проекта
       submit_cdla_permissive_20_html:
+      new_owner:
+      new_owner_repeat:
     show:
       edit: Изменить
       delete: Удалить

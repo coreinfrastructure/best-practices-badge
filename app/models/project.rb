@@ -56,10 +56,12 @@ class Project < ApplicationRecord
     license general_comments user_id disabled_reminders lock_version
     level additional_rights_changes
   ].freeze
+  PROJECT_USER_ID_REPEAT = %i[user_id_repeat].freeze # Repeat to change owner
   ALL_CRITERIA_STATUS = Criteria.all.map(&:status).freeze
   ALL_CRITERIA_JUSTIFICATION = Criteria.all.map(&:justification).freeze
   PROJECT_PERMITTED_FIELDS = (PROJECT_OTHER_FIELDS + ALL_CRITERIA_STATUS +
-                              ALL_CRITERIA_JUSTIFICATION).freeze
+                              ALL_CRITERIA_JUSTIFICATION +
+                              PROJECT_USER_ID_REPEAT).freeze
 
   default_scope { order(:created_at) }
 

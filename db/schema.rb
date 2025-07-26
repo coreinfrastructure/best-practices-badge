@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_27_211821) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_22_215212) do
   create_schema "heroku_ext"
 
   # These are extensions that must be enabled in order to support this database
@@ -29,8 +29,8 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_27_211821) do
   end
 
   create_table "bad_passwords", id: false, force: :cascade do |t|
-    t.string "forbidden"
-    t.index ["forbidden"], name: "index_bad_passwords_on_forbidden"
+    t.string "forbidden_hash"
+    t.index ["forbidden_hash"], name: "index_bad_passwords_on_forbidden_hash"
   end
 
   create_table "pg_search_documents", id: :serial, force: :cascade do |t|

@@ -525,6 +525,8 @@ en:
         on your project page (see the "how to embed it" text just
         below if you don't know how to do that).
       lost_badge: Project has lost a badge.
+      new_owner: Owner id (a positive integer), change to change ownership
+      new_owner_repeat: Repeated new owner id (to confirm an ownership change)
       static_analysis_updated_html: >-
         We have updated our requirements for the criterion
         static_analysis. Please add

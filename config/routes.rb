@@ -157,6 +157,9 @@ Rails.application.routes.draw do
     get '/signout' => 'sessions#destroy', as: :signout
     delete 'logout' => 'sessions#destroy'
 
+    get 'unsubscribe' => 'unsubscribe#show'
+    post 'unsubscribe' => 'unsubscribe#create'
+
     # No other route, send a 404 ("not found").
     match '*path', via: :all, to: 'static_pages#error_404'
   end

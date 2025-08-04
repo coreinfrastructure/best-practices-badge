@@ -7,3 +7,11 @@
 <p>
 <%= t 'report_mailer.ending' %>
 </p>
+
+<%# Security: Include unsubscribe link for email notifications %>
+<% if @unsubscribe_url %>
+<hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+<p style="font-size: 12px; color: #666; margin-top: 20px;">
+  <%= t 'report_mailer.unsubscribe_notice_html', unsubscribe_url: @unsubscribe_url %>
+</p>
+<% end %>

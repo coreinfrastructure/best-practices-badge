@@ -110,6 +110,44 @@ en:
       Sorry, you cannot log in yet.
       As an anti-spam measure, there is a delay after activating
       a local account before you can log in.
+  unsubscribe:
+    header: Unsubscribe
+    description: >-
+      We're sorry to see you go. Please review the information below and 
+      confirm your unsubscribe request.
+    email_label: Email Address
+    email_help: The email address to unsubscribe
+    email_readonly_help: This email address cannot be changed
+    issued_label: Issued Date
+    issued_help: The date when this unsubscribe link was generated
+    token_label: Unsubscribe Token
+    token_help: Secure token for verification (truncated for display)
+    token_readonly_help: This token cannot be changed and is used for security verification
+    reason_label: Reason for unsubscribing (optional)
+    reason_help: Optional feedback to help us improve (max 500 characters)
+    reason_placeholder: Tell us why you're unsubscribing (optional)
+    submit: Unsubscribe
+    cancel: Cancel
+    confirm_message: Are you sure you want to unsubscribe from all communications?
+    processing: Processing...
+    # Success messages
+    success: You have been successfully unsubscribed from our communications.
+    processed: Your unsubscribe request has been processed.
+    # Error messages
+    invalid_email: Please enter a valid email address.
+    invalid_token: Invalid unsubscribe token. Please check the token from your email.
+    invalid_issued_date: Invalid or expired issued date. Please use a current unsubscribe link.
+    missing_issued_date: Missing issued date. Please use the unsubscribe link from your email.
+    invalid_email_format: Please enter a valid email address format.
+    invalid_token_format: Invalid token format. Please copy the token exactly from your email.
+    missing_parameters: Email address, unsubscribe token, and issued date are required.
+    invalid_parameters: Invalid parameters provided.
+    rate_limit_exceeded: Too many unsubscribe attempts. Please try again later.
+    error: An error occurred while processing your request. Please try again later.
+    # Privacy and security notices
+    privacy_notice: >-
+      Your privacy is important to us. This unsubscribe process is secure and 
+      your information will be handled according to our privacy policy.
   static_pages:
     error_404:
       heading: "Error 404: Page Not Found"
@@ -1025,6 +1063,12 @@ en:
       Please see the following URL for more information:
     ending: >-
       --- David A. Wheeler, OpenSSF Best Practices Badge Lead
+    unsubscribe_notice_html: >-
+      To unsubscribe from these email notifications, please visit:
+      <a href="%{unsubscribe_url}">%{unsubscribe_url}</a>
+    unsubscribe_notice_text: >-
+      To unsubscribe from these email notifications, please visit:
+      %{unsubscribe_url}
   user_mailer:
     account_activation:
       before_html: |-

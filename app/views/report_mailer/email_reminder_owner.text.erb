@@ -5,3 +5,9 @@
       project_badge_percentage_0: @project.badge_percentage_0 %>
 
 <%= t 'report_mailer.ending' %>
+
+<% if @unsubscribe_url %>
+
+---
+<%= t 'report_mailer.unsubscribe_notice_text', unsubscribe_url: @unsubscribe_url %>
+<% end %>

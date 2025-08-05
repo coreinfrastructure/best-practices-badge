@@ -6,14 +6,14 @@
 
 # Helper module for unsubscribe functionality
 module UnsubscribeHelper
-  # Security: Generate secure unsubscribe token with issued date
-  # This method can be used in mailers to include unsubscribe links
+  # Security: Generate secure unsubscribe token with email and issued date
+  # This method generates tokens using only email and date, no database access
   #
-  # @param user [User] The user to generate the token for
-  # @param issued_date [Date] The date when the email was issued (default: today)
+  # @param email [String] The email address to generate the token for
+  # @param issued_date [Date/String] The date when the email was issued
   # @return [String] A secure HMAC-based token
-  def generate_unsubscribe_token(user, issued_date = Date.current)
-    return nil if user.nil? || issued_date.nil?
+  def generate_unsubscribe_token(email, issued_date)
+    return nil if email.blank? || issued_date.nil?
     
     # Security: Use dedicated unsubscribe secret key from environment
     secret_key = ENV['BADGEAPP_UNSUBSCRIBE_KEY'] || Rails.application.secret_key_base
@@ -21,8 +21,25 @@ module UnsubscribeHelper
     # Security: Use HMAC with secret key for token generation
     # Include issued date in the message for time-based validation
     date_str = issued_date.is_a?(String) ? issued_date : issued_date.strftime('%Y-%m-%d')
-    message = "#{user.id}:#{user.email}:#{date_str}"
+    message = "#{email}:#{date_str}"
     OpenSSL::HMAC.hexdigest('SHA256', secret_key, message)
+  end
+
+  # Security: Generate new unsubscribe token with current date
+  # This method determines current date and generates token with issued date
+  #
+  # @param email [String] The email address to generate the token for
+  # @return [Array] Array containing [issued_date_string, token]
+  def generate_new_unsubscribe_token(email)
+    return [nil, nil] if email.blank?
+    
+    # Get current date in YYYY-MM-DD format
+    issued_date = Date.current.strftime('%Y-%m-%d')
+    
+    # Generate token using email and current date
+    token = generate_unsubscribe_token(email, issued_date)
+    
+    [issued_date, token]
   end
 
   # Security: Generate secure unsubscribe URL with issued date
@@ -41,7 +58,7 @@ module UnsubscribeHelper
       return nil
     end
     
-    token = generate_unsubscribe_token(user, issued_date)
+    token = generate_unsubscribe_token(user.email, issued_date)
     return nil if token.nil?
     
     date_str = issued_date.is_a?(String) ? issued_date : issued_date.strftime('%Y-%m-%d')
@@ -61,14 +78,14 @@ module UnsubscribeHelper
   end
 
   # Security: Verify unsubscribe token with time-based validation
-  # This method uses constant-time comparison to prevent timing attacks
+  # This method uses constant-time comparison and NO database access
   #
-  # @param user [User] The user to verify the token for
+  # @param email [String] The email address to verify the token for
   # @param token [String] The token to verify
   # @param issued_date [Date/String] The issued date from the request
   # @return [Boolean] True if the token is valid and within time window
-  def verify_unsubscribe_token(user, token, issued_date)
-    return false if user.nil? || token.blank? || issued_date.nil?
+  def verify_unsubscribe_token(email, token, issued_date)
+    return false if email.blank? || token.blank? || issued_date.nil?
     
     # Security: Validate issued date format and range
     unless valid_issued_date?(issued_date)
@@ -80,8 +97,8 @@ module UnsubscribeHelper
       return false
     end
     
-    # Security: Generate expected token for comparison
-    expected_token = generate_unsubscribe_token(user, issued_date)
+    # Security: Generate expected token for comparison (no database access)
+    expected_token = generate_unsubscribe_token(email, issued_date)
     return false if expected_token.nil?
     
     # Security: Use constant-time comparison to prevent timing attacks

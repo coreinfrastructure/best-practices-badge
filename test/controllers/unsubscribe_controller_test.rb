@@ -20,7 +20,7 @@ class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
     
     @issued_date = Date.current
     # Generate a valid token for testing
-    @valid_token = generate_unsubscribe_token(@user, @issued_date)
+    @valid_token = generate_unsubscribe_token(@user.email, @issued_date)
     @invalid_token = 'invalid_token_123'
   end
 
@@ -97,7 +97,7 @@ class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
   # Security: Test expired issued date
   test 'should reject expired issued date' do
     old_date = Date.current - 35.days # Older than default 30 days
-    old_token = generate_unsubscribe_token(@user, old_date)
+    old_token = generate_unsubscribe_token(@user.email, old_date)
     
     post unsubscribe_path, params: {
       email: @user.email,
@@ -112,7 +112,7 @@ class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
   # Security: Test future issued date
   test 'should reject future issued date' do
     future_date = Date.current + 2.days
-    future_token = generate_unsubscribe_token(@user, future_date)
+    future_token = generate_unsubscribe_token(@user.email, future_date)
     
     post unsubscribe_path, params: {
       email: @user.email,
@@ -277,10 +277,10 @@ class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
   private
 
   # Helper method to generate unsubscribe token (matches controller logic)
-  def generate_unsubscribe_token(user, issued_date = Date.current)
+  def generate_unsubscribe_token(email, issued_date = Date.current)
     secret_key = ENV['BADGEAPP_UNSUBSCRIBE_KEY'] || Rails.application.secret_key_base
     date_str = issued_date.is_a?(String) ? issued_date : issued_date.strftime('%Y-%m-%d')
-    message = "#{user.id}:#{user.email}:#{date_str}"
+    message = "#{email}:#{date_str}"
     OpenSSL::HMAC.hexdigest('SHA256', secret_key, message)
   end
 end

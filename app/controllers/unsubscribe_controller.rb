@@ -9,6 +9,9 @@ class UnsubscribeController < ApplicationController
   include SessionsHelper
   include UnsubscribeHelper
 
+  # Security: Skip locale redirection for unsubscribe links (they come from emails)
+  skip_before_action :redir_missing_locale
+
   # Security: Enable CSRF protection for all actions
   protect_from_forgery with: :exception
 
@@ -19,57 +22,48 @@ class UnsubscribeController < ApplicationController
   # Display the unsubscribe form with email, token, and issued date
   # for confirmation.
   def show
-    validate_unsubscribe_params
+    return unless validate_unsubscribe_params
     # Set display values for the form (read-only)
     @email = params[:email]
     @token = params[:token]
-    @issued_date = params[:issued]&.strftime('%Y-%m-%d')
+    @issued_date = params[:issued]
   end
 
   # POST /unsubscribe
   # Process the unsubscribe request
   def create
-    validate_unsubscribe_params
+    return unless validate_unsubscribe_params
     begin
       # Security: Use parameterized queries and validate input
       email = params[:email]
-      issued_date = params[:issued]&.strftime('%Y-%m-%d')
+      issued_date = params[:issued]  # Already in YYYY-MM-DD format
       token = params[:token]
 
-      # Security: FIRST check that token is valid.
-      # We *only* check if there's an email once we've verified that we
-      # sent the authentication token in the first place.
-      if verify_unsubscribe_token(user, token, issued_date)
-
-        # Find user by email using ActiveRecord's safe parameter binding
-        # Security: Use safe database queries with parameterized statements
-        # Note: it's okay to reveal if the user exists at this point. That's
-        # because the requestor already knows this, as proven by
-        # having a valid unsubscribe message token from us
-        # *with* the email address, authentication token, and issue date.
-        user = User.where('LOWER(email) = LOWER(?)', email).first
-
-        if user.nil?
-          flash[:notice] = t('unsubscribe.failure')
-        else
-          # Use database transaction for atomicity
-          ActiveRecord::Base.transaction do
-            # Update user's subscription preferences
-            user.update!(
-              notification_emails: false,
-              updated_at: Time.current
-            )
-
-            # Security: Log the unsubscribe action (without PII)
-            log_unsubscribe_action(user, request, success: true)
-            flash[:notice] = t('unsubscribe.success')
-          end
-      else
+      # Security: Validate token FIRST - this gives specific error responses
+      unless verify_unsubscribe_token(email, token, issued_date)
         # Security: Log potential security incident (without PII)
-        log_unsubscribe_action(user, request, success: false)
+        Rails.logger.warn "Invalid unsubscribe token attempt for email domain: #{email.split('@').last}"
         flash[:error] = t('unsubscribe.invalid_token')
         render :show, status: :unprocessable_entity
         return
+      end
+
+      # Use database transaction for atomicity
+      ActiveRecord::Base.transaction do
+        # Update ALL users with exact matching email address (case-sensitive)
+        # Security: Use safe database queries with parameterized statements
+        updated_count = User.where(email: email, notification_emails: true)
+                           .update_all(notification_emails: false, updated_at: Time.current)
+
+        if updated_count.zero?
+          flash[:error] = t('unsubscribe.no_matching_accounts')
+          render :show, status: :unprocessable_entity
+          return
+        end
+
+        # Security: Log the unsubscribe action (without PII)
+        Rails.logger.info "Unsubscribe success: #{updated_count} accounts updated for domain: #{email.split('@').last}"
+        flash[:notice] = t('unsubscribe.success', count: updated_count)
       end
 
     rescue ActiveRecord::RecordInvalid => e
@@ -126,17 +120,6 @@ class UnsubscribeController < ApplicationController
     token.match?(/\A[a-zA-Z0-9]+\z/)
   end
 
-  # Security: Verify unsubscribe token using constant-time comparison
-  def valid_unsubscribe_token?(user, token)
-    verify_unsubscribe_token(user, token, @parsed_issued_date)
-  end
-
-  # Security: Generate secure unsubscribe token
-  def generate_unsubscribe_token(user)
-    # Delegate to helper method with issued date
-    super(user, @parsed_issued_date)
-  end
-
   # Security: Validate all unsubscribe parameters
   def validate_unsubscribe_params
     email = params[:email]
@@ -147,7 +130,7 @@ class UnsubscribeController < ApplicationController
     if email.blank? || token.blank? || issued.blank?
       flash[:error] = t('unsubscribe.missing_parameters')
       render :show, status: :bad_request
-      return
+      return false
     end
 
     # Security: First check parameter lengths to counter DoS
@@ -156,7 +139,9 @@ class UnsubscribeController < ApplicationController
        !valid_issued_format?(issued)
       flash[:error] = t('unsubscribe.invalid_parameters')
       render :show, status: :bad_request
-      return
+      return false
     end
+    
+    true
   end
 end

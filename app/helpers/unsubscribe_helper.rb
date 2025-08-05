@@ -100,7 +100,7 @@ module UnsubscribeHelper
       
       # Security: Check date format is valid YYYY-MM-DD
       date_str = date.strftime('%Y-%m-%d')
-      return false unless date_str.match?(/^\d{4}-\d{2}-\d{2}$/)
+      return false unless date_str.match?(/\A\d{4,}-\d{2}-\d{2}\z/)
       
       # Security: Check date is not in future (with small tolerance for clock skew)
       return false if date > Date.current + 1.day

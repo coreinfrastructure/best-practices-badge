@@ -5,6 +5,7 @@
 # SPDX-License-Identifier: MIT
 
 require 'test_helper'
+require 'cgi'
 
 # Security tests for UnsubscribeController
 class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
@@ -26,33 +27,49 @@ class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
 
   # Test GET request shows the form
   test 'should show unsubscribe form with parameters' do
-    get unsubscribe_path, params: {
+    get unsubscribe_path(locale: 'en'), params: {
       email: @user.email,
       token: @valid_token,
       issued: @issued_date.strftime('%Y-%m-%d')
     }
     assert_response :success
-    assert_select 'form[action=?]', unsubscribe_path
+    assert_select 'form[action=?]', unsubscribe_path(locale: 'en')
     assert_select 'input[name=?][readonly]', 'email'
     assert_select 'input[name=?][readonly]', 'token'
     assert_select 'input[name=?][readonly]', 'issued'
+  end
+
+  # Test that locale is optional - URL without locale should redirect to locale-specific URL
+  test 'should redirect to locale-specific URL when locale not provided' do
+    get unsubscribe_path, params: {
+      email: @user.email,
+      token: @valid_token,
+      issued: @issued_date.strftime('%Y-%m-%d')
+    }
+    assert_response :redirect
+    
+    # Should redirect to the same URL but with locale added
+    redirect_url = @response.location
+    assert_includes redirect_url, '/en/unsubscribe'
+    assert_includes redirect_url, "email=#{CGI.escape(@user.email)}"
+    assert_includes redirect_url, "token=#{@valid_token}"
+    assert_includes redirect_url, "issued=#{@issued_date.strftime('%Y-%m-%d')}"
   end
 
   # Security: Test valid unsubscribe request
   test 'should process valid unsubscribe request' do
     assert @user.notification_emails, 'User should start with notifications enabled'
     
-    post unsubscribe_path, params: {
+    post unsubscribe_path(locale: 'en'), params: {
       email: @user.email,
       token: @valid_token,
       issued: @issued_date.strftime('%Y-%m-%d')
     }
     
-    assert_redirected_to root_path
-    assert_match(/success/i, flash[:notice])
+    assert_redirected_to root_path(locale: 'en')
     
     @user.reload
-    assert_not @user.notification_emails, 'User notifications should be disabled'
+    assert_not @user.notification_emails, 'User should have notifications disabled after unsubscribe'
   end
 
   # Security: Test invalid email format

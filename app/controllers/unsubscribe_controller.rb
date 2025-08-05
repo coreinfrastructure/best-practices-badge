@@ -9,9 +9,6 @@ class UnsubscribeController < ApplicationController
   include SessionsHelper
   include UnsubscribeHelper
 
-  # Security: Skip locale redirection for unsubscribe links (they come from emails)
-  skip_before_action :redir_missing_locale
-
   # Security: Enable CSRF protection for all actions
   protect_from_forgery with: :exception
 

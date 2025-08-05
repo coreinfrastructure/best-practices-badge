@@ -77,6 +77,39 @@ module UnsubscribeHelper
     )
   end
 
+  # Security: Generate unsubscribe URL without explicit locale
+  # This allows the system to redirect to the user's preferred locale
+  #
+  # @param user [User] The user to generate the URL for
+  # @param issued_date [Date] The date when the email was issued (default: today)
+  # @return [String] A complete unsubscribe URL that will redirect to user's locale
+  def generate_unsubscribe_url_auto_locale(user, issued_date = Date.current)
+    return nil if user.nil? || issued_date.nil?
+    
+    # Security: Validate issued date first
+    unless valid_issued_date?(issued_date)
+      Rails.logger.warn "Invalid issued date for unsubscribe URL: #{issued_date}"
+      return nil
+    end
+    
+    token = generate_unsubscribe_token(user.email, issued_date)
+    return nil if token.nil?
+    
+    date_str = issued_date.is_a?(String) ? issued_date : issued_date.strftime('%Y-%m-%d')
+    
+    # Security: Generate URL without locale - system will redirect to user's preferred locale
+    # Use Rails URL helpers for security and proper encoding
+    url_for(
+      controller: 'unsubscribe',
+      action: 'show',
+      email: user.email,
+      token: token,
+      issued: date_str,
+      only_path: false,
+      protocol: Rails.application.config.force_ssl ? 'https' : 'http'
+    )
+  end
+
   # Security: Verify unsubscribe token with time-based validation
   # This method uses constant-time comparison and NO database access
   #

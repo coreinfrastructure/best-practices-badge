@@ -57,10 +57,10 @@ module UnsubscribeHelper
   # This method uses constant-time comparison and NO database access
   #
   # @param email [String] The email address to verify the token for
-  # @param token [String] The token to verify
   # @param issued_date [Date/String] The issued date from the request
+  # @param token [String] The token to verify
   # @return [Boolean] True if the token is valid and within time window
-  def verify_unsubscribe_token(email, token, issued_date)
+  def verify_unsubscribe_token(email, issued_date, token)
     return false if email.blank? || token.blank? || issued_date.nil?
 
     # Security: Validate issued date format and range

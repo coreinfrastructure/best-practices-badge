@@ -551,7 +551,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_04_120000) do
     t.index ["email_bidx"], name: "email_local_unique_bidx", unique: true, where: "((provider)::text = 'local'::text)"
     t.index ["email_bidx"], name: "index_users_on_email_bidx"
     t.index ["last_login_at"], name: "index_users_on_last_login_at"
-    t.index ["notification_emails"], name: "index_users_on_notification_emails"
     t.index ["uid"], name: "index_users_on_uid"
   end
 

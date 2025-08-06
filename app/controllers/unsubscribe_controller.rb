@@ -9,10 +9,6 @@ class UnsubscribeController < ApplicationController
   include SessionsHelper
   include UnsubscribeHelper
 
-  # Security: Skip automatic locale redirect for unsubscribe functionality
-  # We handle locale separately to support direct unsubscribe links
-  skip_before_action :redir_missing_locale
-
   # Security: Enable CSRF protection for all actions
   protect_from_forgery with: :exception
 
@@ -43,7 +39,7 @@ class UnsubscribeController < ApplicationController
       # Security: Validate token FIRST - this gives specific error responses
       unless verify_unsubscribe_token(email, token, issued_date)
         # Security: Log potential security incident (without PII)
-        Rails.logger.warn "Invalid unsubscribe token attempt for email domain: #{email.split('@').last}"
+        Rails.logger.info "Invalid unsubscribe token attempt for email domain: #{email.split('@').last}"
         flash[:error] = t('unsubscribe.invalid_token')
         render :show, status: :unprocessable_entity
         return
@@ -92,56 +88,31 @@ class UnsubscribeController < ApplicationController
     token = params[:token]
     issued_param = params[:issued]
 
-    # Security: First check parameter lengths to prevent DoS attacks
-    # This takes precedence over missing parameter checks
-    if (email && email.length > 254) ||
-       (token && token.length > 64) ||  # HMAC-SHA256 tokens are exactly 64 chars
-       (issued_param && issued_param.length > 12)
+    # Step 1: Check for required parameters
+    if email.blank? || token.blank? || issued_param.blank?
+      flash[:error] = t('unsubscribe.missing_parameters')
+      render :show, status: :bad_request
+      return false
+    end
+
+    # Step 2: Check parameter lengths to prevent DoS attacks
+    if email.length > 254 || token.length > 64 || issued_param.length > 12
       flash[:error] = t('unsubscribe.invalid_parameters')
       render :show, status: :bad_request
       return false
     end
 
-    # Security: Check for required parameters
-    missing_fields = []
-    missing_fields << 'email' if email.blank?
-    missing_fields << 'token' if token.blank?
-    missing_fields << 'issued date' if issued_param.blank?
-
-    if missing_fields.any?
-      # If only issued date is missing, use specific message for test compatibility
-      if missing_fields == ['issued date']
-        flash[:error] = "Missing required issued date parameter"
-      else
-        flash[:error] = t('unsubscribe.missing_parameters')
-      end
-      render :show, status: :bad_request
-      return false
-    end
-
-    # Now validate individual field formats
-    unless valid_email_format?(email)
+    # Step 3: Validate individual field formats
+    unless valid_email_format?(email) && valid_token_format?(token) && valid_issued_format?(issued_param)
       flash[:error] = t('unsubscribe.invalid_parameters')
       render :show, status: :bad_request
       return false
     end
 
-    unless valid_token_format?(token)
-      flash[:error] = t('unsubscribe.invalid_parameters')
-      render :show, status: :bad_request
-      return false
-    end
-
-    unless valid_issued_format?(issued_param)
-      flash[:error] = t('unsubscribe.invalid_issued_date')
-      render :show, status: :bad_request
-      return false
-    end
-
-    # Parse and store issued date for use in actions
+    # Step 4: Parse and validate issued date
     @issued_date = parse_issued_date(issued_param)
     unless @issued_date
-      flash[:error] = t('unsubscribe.invalid_issued_date')
+      flash[:error] = t('unsubscribe.invalid_parameters')
       render :show, status: :bad_request
       return false
     end

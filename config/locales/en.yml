@@ -136,7 +136,6 @@ en:
     # Error messages
     invalid_email: Please enter a valid email address.
     invalid_token: Invalid unsubscribe token. Please check the token from your email.
-    invalid_issued_date: Invalid or expired issued date. Please use a current unsubscribe link.
     missing_issued_date: Missing issued date. Please use the unsubscribe link from your email.
     invalid_email_format: Please enter a valid email address format.
     invalid_token_format: Invalid token format. Please copy the token exactly from your email.

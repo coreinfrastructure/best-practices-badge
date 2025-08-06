@@ -135,18 +135,17 @@ module UnsubscribeHelper
     end
   end
 
-  # Security: Validate email format
+  # Security: Validate email format  
   # @param email [String] Email to validate
   # @return [Boolean] True if email format is valid
   def valid_email_format?(email)
     return false if email.blank?
     return false if email.length > 254 # RFC 5321 limit
 
-    # Use loose regex for international domains and UTF-8 usernames
-    email.match?(/\A[^@]+.*+\z/)
-  end
-
-  # Security: Validate token format and length
+    # Use very loose email validation - just check for @ symbol
+    # Rely on view escaping for XSS protection rather than restricting email formats
+    email.include?('@')
+  end  # Security: Validate token format and length
   # @param token [String] Token to validate
   # @return [Boolean] True if token format is valid
   def valid_token_format?(token)

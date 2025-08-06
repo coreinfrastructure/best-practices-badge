@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-# Copyright 2015-2017, the Linux Foundation, IDA, and the
+# Copyright the Linux Foundation and the
 # OpenSSF Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
 # Helper module for unsubscribe functionality
 module UnsubscribeHelper
-  # Security: Generate secure unsubscribe token with email and issued date
+  # Generate secure unsubscribe token with email and issued date.
   # This method generates tokens using only email and date, no database access
   #
   # @param email [String] The email address to generate the token for
@@ -25,7 +25,7 @@ module UnsubscribeHelper
     OpenSSL::HMAC.hexdigest('SHA256', secret_key, message)
   end
 
-  # Security: Generate new unsubscribe token with current date
+  # Generate new unsubscribe token with current date.
   # This method determines current date and generates token with issued date
   #
   # @param email [String] The email address to generate the token for
@@ -42,7 +42,7 @@ module UnsubscribeHelper
     [issued_date, token]
   end
 
-  # Security: Generate secure unsubscribe URL with issued date
+  # Generate secure unsubscribe URL with issued date
   # This method creates a complete URL that can be used in emails
   #
   # @param user [User] The user to generate the URL for
@@ -59,6 +59,8 @@ module UnsubscribeHelper
     # Use Rails URL helpers for security and proper encoding
     url_params = {
       controller: 'unsubscribe',
+      # This creates an odd URL, but strictly speaking, we are *editing*
+      # the subscription, not merely *showing* it, so this seems appropriate:
       action: 'edit',
       email: user.email,
       token: token,

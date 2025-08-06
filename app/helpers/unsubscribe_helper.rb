@@ -50,7 +50,35 @@ module UnsubscribeHelper
   # @param locale [String] Optional locale for the URL (default: current locale)
   # @return [String] A complete unsubscribe URL with token and issued date
   def generate_unsubscribe_url(user, issued_date = Date.current, locale: I18n.locale)
-    generate_unsubscribe_url_internal(user, issued_date, locale)
+    return nil if user.nil? || issued_date.nil?
+
+    # Security: Validate issued date first
+    unless valid_issued_date?(issued_date)
+      Rails.logger.warn "Invalid issued date for unsubscribe URL: #{issued_date}"
+      return nil
+    end
+
+    token = generate_unsubscribe_token(user.email, issued_date)
+    return nil if token.nil?
+
+    date_str = normalize_date_string(issued_date)
+
+    # Security: Generate URL with proper parameters
+    # Use Rails URL helpers for security and proper encoding
+    url_params = {
+      controller: 'unsubscribe',
+      action: 'show',
+      email: user.email,
+      token: token,
+      issued: date_str,
+      only_path: false,
+      protocol: Rails.application.config.force_ssl ? 'https' : 'http'
+    }
+
+    # Add locale if provided
+    url_params[:locale] = locale if locale
+
+    url_for(url_params)
   end
 
   # Security: Verify unsubscribe token with time-based validation
@@ -160,43 +188,6 @@ module UnsubscribeHelper
   end
 
   private
-
-  # Internal URL generation method to eliminate duplication
-  # @param user [User] The user to generate the URL for
-  # @param issued_date [Date] The date when the email was issued
-  # @param locale [String, nil] Optional locale for the URL
-  # @return [String, nil] Complete unsubscribe URL or nil if invalid
-  def generate_unsubscribe_url_internal(user, issued_date, locale)
-    return nil if user.nil? || issued_date.nil?
-
-    # Security: Validate issued date first
-    unless valid_issued_date?(issued_date)
-      Rails.logger.warn "Invalid issued date for unsubscribe URL: #{issued_date}"
-      return nil
-    end
-
-    token = generate_unsubscribe_token(user.email, issued_date)
-    return nil if token.nil?
-
-    date_str = normalize_date_string(issued_date)
-
-    # Security: Generate URL with proper parameters
-    # Use Rails URL helpers for security and proper encoding
-    url_params = {
-      controller: 'unsubscribe',
-      action: 'show',
-      email: user.email,
-      token: token,
-      issued: date_str,
-      only_path: false,
-      protocol: Rails.application.config.force_ssl ? 'https' : 'http'
-    }
-
-    # Add locale if provided
-    url_params[:locale] = locale if locale
-
-    url_for(url_params)
-  end
 
   # Normalize date to YYYY-MM-DD string format
   # @param date [Date/String] Date to normalize

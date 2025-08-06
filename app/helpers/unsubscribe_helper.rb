@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 
 # Copyright the Linux Foundation and the
 # OpenSSF Best Practices badge contributors
@@ -6,6 +5,9 @@
 
 # Helper module for unsubscribe functionality
 module UnsubscribeHelper
+   # Maximum unsubscribe token age in days from environment (computed once at startup)
+  MAX_TOKEN_AGE_DAYS = (ENV['BADGEAPP_UNSUBSCRIBE_DAYS'] || '30').to_i
+
   # Generate secure unsubscribe token with email and issued date.
   # This method generates tokens using only email and date, no database access
   #
@@ -116,8 +118,7 @@ module UnsubscribeHelper
 
       # Security: Check date is not too far in past
       # (prevents malicious use of old stolen unsubscribe link)
-      max_age_days = max_token_age_days
-      return false if date < Date.current - max_age_days.days
+      return false if date < Date.current - MAX_TOKEN_AGE_DAYS.days
 
       true
     rescue ArgumentError, TypeError
@@ -160,13 +161,5 @@ module UnsubscribeHelper
 
     # Strict YYYY-MM-DD format
     issued.match?(/\A\d{4}-\d{2}-\d{2}\z/)
-  end
-
-  private
-
-  # Get maximum token age in days from environment
-  # @return [Integer] Maximum age in days
-  def max_token_age_days
-    (ENV['BADGEAPP_UNSUBSCRIBE_DAYS'] || '30').to_i
   end
 end

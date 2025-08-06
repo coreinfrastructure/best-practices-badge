@@ -122,8 +122,8 @@ class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
       issued: old_date.strftime('%Y-%m-%d')
     }
 
-    assert_response :bad_request
-    assert_match(/invalid.*parameters/i, flash[:error])
+    assert_response :unprocessable_entity  # Token verification fails for expired date
+    assert_match(/invalid.*token/i, flash[:error])
   end
 
   # Security: Test future issued date
@@ -137,8 +137,8 @@ class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
       issued: future_date.strftime('%Y-%m-%d')
     }
 
-    assert_response :bad_request
-    assert_match(/invalid.*parameters/i, flash[:error])
+    assert_response :unprocessable_entity  # Token verification fails for future date
+    assert_match(/invalid.*token/i, flash[:error])
   end
 
   # Security: Test missing parameters

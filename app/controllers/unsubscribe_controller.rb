@@ -109,14 +109,6 @@ class UnsubscribeController < ApplicationController
       return false
     end
 
-    # Step 4: Parse and validate issued date
-    @issued_date = parse_issued_date(issued_param)
-    unless @issued_date
-      flash[:error] = t('unsubscribe.invalid_parameters')
-      render :show, status: :bad_request
-      return false
-    end
-
     true
   end
 end

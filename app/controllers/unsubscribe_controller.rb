@@ -23,7 +23,7 @@ class UnsubscribeController < ApplicationController
     # Set display values for the form (read-only)
     @email = params[:email]
     @token = params[:token]
-    @issued_date_display = params[:issued]  # String for display
+    @issued = params[:issued]  # String for display
   end
 
   # POST /unsubscribe
@@ -33,11 +33,11 @@ class UnsubscribeController < ApplicationController
     begin
       # Security: Use parameterized queries and validate input
       email = params[:email]
-      issued_date = params[:issued]  # Already in YYYY-MM-DD format
+      issued = params[:issued]  # Already in YYYY-MM-DD format
       token = params[:token]
 
       # Security: Validate token FIRST - this gives specific error responses
-      unless verify_unsubscribe_token(email, token, issued_date)
+      unless verify_unsubscribe_token(email, token, issued)
         # Security: Log potential security incident (without PII)
         Rails.logger.info "Invalid unsubscribe token attempt for email domain: #{email.split('@').last}"
         flash[:error] = t('unsubscribe.invalid_token')

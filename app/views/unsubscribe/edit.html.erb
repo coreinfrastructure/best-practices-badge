@@ -1,101 +1,63 @@
-<br>
 <h1 class='center'><%= t('unsubscribe.header') %></h1>
 
 <div class="row">
   <div class="col-md-6 col-md-offset-3">
-    <div class="center-block">
-      <p class="text-center">
-        <%= t('unsubscribe.description') %>
-      </p>
+    <p class="text-center">
+      <%= t('unsubscribe.description') %>
+    </p>
 
-      <%# Security: Display any error messages safely %>
-      <% if flash[:error] %>
-        <div class="alert alert-danger" role="alert">
-          <%= sanitize(flash[:error], tags: %w[]) %>
-        </div>
-      <% end %>
+    <%# Display flash messages %>
+    <% if flash[:error] %>
+      <div class="alert alert-danger" role="alert">
+        <%= flash[:error] %>
+      </div>
+    <% end %>
 
-      <% if flash[:notice] %>
-        <div class="alert alert-info" role="alert">
-          <%= sanitize(flash[:notice], tags: %w[]) %>
-        </div>
-      <% end %>
+    <% if flash[:notice] %>
+      <div class="alert alert-info" role="alert">
+        <%= flash[:notice] %>
+      </div>
+    <% end %>
 
-      <%# Security: Use form_with with CSRF protection and secure defaults %>
-      <%= form_with url: unsubscribe_path, method: :post, local: true, class: 'form-horizontal' do |form| %>
-        <%# Security: Include CSRF token automatically %>
+    <%= form_with url: unsubscribe_path, method: :post, local: true do |f| %>
+      <%# Hidden fields to pass the actual values %>
+      <%= hidden_field_tag :email, @email %>
+      <%= hidden_field_tag :token, @token %>
+      <%= hidden_field_tag :issued, @issued %>
 
-        <div class="form-group">
-          <%= form.label :email, t('unsubscribe.email_label'), class: 'control-label' %>
-          <%# Security: Display email as read-only field %>
-          <%= form.email_field :email,
-                class: 'form-control',
-                readonly: true,
-                value: sanitize(@email || '', tags: %w[]),
-                style: 'background-color: #f5f5f5;' %>
-          <small class="help-block"><%= t('unsubscribe.email_readonly_help') %></small>
-        </div>
+      <%# Read-only display fields %>
+      <%= f.label :email, t('unsubscribe.email_label') %>
+      <%= f.email_field :email, value: @email, readonly: true, 
+                        class: "form-control", 
+                        style: "background-color: #f5f5f5;" %>
 
-        <div class="form-group">
-          <%= form.label :issued, t('unsubscribe.issued_label'), class: 'control-label' %>
-          <%# Security: Display issued date as read-only field %>
-          <%= form.text_field :issued,
-                class: 'form-control',
-                readonly: true,
-                value: sanitize(@issued_date_display || '', tags: %w[]),
-                style: 'background-color: #f5f5f5;' %>
-          <small class="help-block"><%= t('unsubscribe.issued_help') %></small>
-        </div>
+      <%= f.label :issued, t('unsubscribe.issued_label') %>
+      <%= f.text_field :issued, value: @issued, readonly: true,
+                       class: "form-control",
+                       style: "background-color: #f5f5f5;" %>
 
-        <div class="form-group">
-          <%= form.label :token, t('unsubscribe.token_label'), class: 'control-label' %>
-          <%# Security: Display token as read-only field (truncated for display) %>
-          <%= form.text_field :token,
-                class: 'form-control',
-                readonly: true,
-                value: sanitize(@token ? "#{@token[0..8]}..." : '', tags: %w[]),
-                style: 'background-color: #f5f5f5;' %>
-          <small class="help-block"><%= t('unsubscribe.token_readonly_help') %></small>
-        </div>
+      <%= f.label :token, t('unsubscribe.token_label') %>
+      <%= f.text_field :token, value: (@token ? "#{@token[0..8]}..." : ""), readonly: true,
+                       class: "form-control",
+                       style: "background-color: #f5f5f5;" %>
 
-        <%# Security: Hidden fields to pass the actual values %>
-        <%= hidden_field_tag :email, sanitize(@email || '', tags: %w[]) %>
-        <%= hidden_field_tag :token, sanitize(@token || '', tags: %w[]) %>
-        <%= hidden_field_tag :issued, sanitize(@issued_date_display || '', tags: %w[]) %>
+      <%# Optional reason field %>
+      <%= f.label :reason, t('unsubscribe.reason_label') %>
+      <%= f.text_area :reason, class: "form-control", rows: 3, maxlength: 500,
+                      placeholder: t('unsubscribe.reason_placeholder') %>
+      <small class="help-block"><%= t('unsubscribe.reason_help') %></small>
 
-        <%# Security: Optional reason field with length limits %>
-        <div class="form-group">
-          <%= form.label :reason, t('unsubscribe.reason_label'), class: 'control-label' %>
-          <%= form.text_area :reason,
-                class: 'form-control',
-                rows: 3,
-                maxlength: 500,
-                placeholder: t('unsubscribe.reason_placeholder') %>
-          <small class="help-block"><%= t('unsubscribe.reason_help') %></small>
-        </div>
+      <%# Honeypot field for bot detection %>
+      <div style="display: none;">
+        <%= f.text_field :website, autocomplete: 'off', tabindex: '-1' %>
+      </div>
 
-        <%# Security: Add honeypot field to detect bots %>
-        <div style="display: none;">
-          <%= form.text_field :website, autocomplete: 'off', tabindex: '-1' %>
-        </div>
-
-        <div class="form-group text-center">
-          <%# Security: Use button with nonce for any inline scripts %>
-          <%= form.submit t('unsubscribe.submit'),
-                class: 'btn btn-primary',
-                data: {
-                  confirm: t('unsubscribe.confirm_message'),
-                  disable_with: t('unsubscribe.processing')
-                } %>
-          <%= link_to t('unsubscribe.cancel'), root_path,
-                class: 'btn btn-default',
-                rel: 'nofollow' %>
-        </div>
-
-        <%# Security: Add additional CSRF protection %>
-        <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
-      <% end %>
-
-    </div>
+      <div class="text-center">
+        <%= f.submit t('unsubscribe.submit'), class: "btn btn-primary",
+                     data: { confirm: t('unsubscribe.confirm_message'),
+                             disable_with: t('unsubscribe.processing') } %>
+        <%= link_to t('unsubscribe.cancel'), root_path, class: "btn btn-default" %>
+      </div>
+    <% end %>
   </div>
 </div>

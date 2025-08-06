@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 # Copyright the Linux Foundation and the
 # OpenSSF Best Practices badge contributors

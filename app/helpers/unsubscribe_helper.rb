@@ -231,26 +231,4 @@ module UnsubscribeHelper
 
     nil
   end
-
-  # Helper: Obfuscate email for display (privacy)
-  # @param email [String] The email to obfuscate
-  # @return [String] Obfuscated email
-  def obfuscate_email(email)
-    return '' if email.blank?
-
-    parts = email.split('@')
-    return email if parts.length != 2
-
-    local, domain = parts
-    return email if domain.nil?
-
-    # Show first and last character of local part, hide middle
-    if local.length <= 2
-      obfuscated_local = '*' * local.length
-    else
-      obfuscated_local = local[0] + '*' * (local.length - 2) + local[-1]
-    end
-
-    "#{obfuscated_local}@#{domain}"
-  end
 end

@@ -36,7 +36,6 @@ The unsubscribe feature provides a secure way for users to opt out of email noti
 - **Timing attack mitigation**: Random delays for non-existent emails
 - **Secure headers**: X-Frame-Options, X-XSS-Protection, Content-Type-Options
 - **Content Security Policy**: Restricts script execution and resource loading
-- **Email obfuscation**: Partially hides email addresses in UI
 
 ### 6. Error Handling
 - **Graceful degradation**: Handles database errors without exposing internals
@@ -88,7 +87,6 @@ post 'unsubscribe' => 'unsubscribe#create'
 - Time-based token generation and verification utilities
 - URL generation with issued date for email templates
 - Privacy-preserving logging functions
-- Email obfuscation for display
 - Date validation and parsing utilities
 
 ### Database Migration

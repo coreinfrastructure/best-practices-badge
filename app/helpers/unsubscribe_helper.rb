@@ -53,16 +53,6 @@ module UnsubscribeHelper
     generate_unsubscribe_url_internal(user, issued_date, locale)
   end
 
-  # Security: Generate unsubscribe URL without explicit locale
-  # This allows the system to redirect to the user's preferred locale
-  #
-  # @param user [User] The user to generate the URL for
-  # @param issued_date [Date] The date when the email was issued (default: today)
-  # @return [String] A complete unsubscribe URL that will redirect to user's locale
-  def generate_unsubscribe_url_auto_locale(user, issued_date = Date.current)
-    generate_unsubscribe_url_internal(user, issued_date, nil)
-  end
-
   # Security: Verify unsubscribe token with time-based validation
   # This method uses constant-time comparison and NO database access
   #
@@ -167,57 +157,6 @@ module UnsubscribeHelper
 
     # Strict YYYY-MM-DD format
     issued.match?(/\A\d{4}-\d{2}-\d{2}\z/)
-  end
-
-  # Security: Check if a user can be unsubscribed
-  # This method verifies user state and subscription status
-  #
-  # @param user [User] The user to check
-  # @return [Boolean] True if the user can be unsubscribed, false otherwise
-  def can_unsubscribe?(user)
-    return false if user.nil?
-    return false if user.blocked?
-
-    # Only allow unsubscribe for users who have notifications enabled
-    user.notification_emails?
-  end
-
-  # Security: Log unsubscribe action safely (without PII)
-  # This method logs unsubscribe actions for audit purposes
-  #
-  # @param user [User] The user who unsubscribed
-  # @param request [ActionDispatch::Request] The request object for IP logging
-  # @param success [Boolean] Whether the unsubscribe was successful
-  def log_unsubscribe_action(user, request, success: true)
-    return if user.nil? || request.nil?
-
-    # Security: Log without exposing PII
-    # We only record at debug level, because we already log a lot.
-    Rails.logger.debug(
-      "Unsubscribe #{success ? 'success' : 'failure'}: " \
-      "user_id=#{user.id}, " \
-      "ip=#{request.remote_ip}, " \
-      "user_agent=#{request.user_agent&.truncate(100)}"
-    )
-  end
-
-  # Helper: Parse and validate issued date from request parameters
-  # @param issued_param [String] The issued date parameter from request
-  # @return [Date, nil] Parsed date or nil if invalid
-  def parse_issued_date(issued_param)
-    return nil if issued_param.blank?
-
-    begin
-      # Security: Strict date parsing for YYYY-MM-DD format
-      return nil unless issued_param.match?(/^\d{4}-\d{2}-\d{2}$/)
-
-      date = Date.parse(issued_param)
-      return date if valid_issued_date?(date)
-    rescue ArgumentError
-      # Invalid date format
-    end
-
-    nil
   end
 
   private

@@ -61,9 +61,16 @@ BADGEAPP_UNSUBSCRIBE_DAYS=30
 
 ### Routes
 ```ruby
+# Within scope '(:locale)', locale: LEGAL_LOCALE block
 get 'unsubscribe' => 'unsubscribe#show'
 post 'unsubscribe' => 'unsubscribe#create'
 ```
+
+**Locale Support**: 
+- **With locale**: `/en/unsubscribe` - works directly in English locale
+- **Without locale**: `/unsubscribe` - redirects to user's preferred locale (e.g., `/en/unsubscribe`)
+- **Email links**: Commonly include locale for immediate localized experience
+- **Browser detection**: When no locale provided, uses browser language preferences
 
 ### Controller: `UnsubscribeController`
 - Handles both GET (form display) and POST (processing) requests

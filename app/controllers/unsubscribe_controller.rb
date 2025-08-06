@@ -138,7 +138,7 @@ class UnsubscribeController < ApplicationController
       render :show, status: :bad_request
       return false
     end
-    
+
     true
   end
 end

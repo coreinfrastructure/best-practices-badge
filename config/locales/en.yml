@@ -116,28 +116,18 @@ en:
       We're sorry you no longer want to receive notifications.
       If you are certain, please confirm your notification unsubscribe request.
     email_label: Email Address
-    email_help: The email address to unsubscribe
-    email_readonly_help: This email address cannot be changed
     issued_label: Issued Date
-    issued_help: The date when this unsubscribe link was generated
     token_label: Unsubscribe Token
-    token_help: Secure token for verification (truncated for display)
-    token_readonly_help: This token cannot be changed and is used for security verification
     submit: Unsubscribe
     confirm_message: Are you sure you want to unsubscribe from all communications?
     processing: Processing...
     # Success messages
     success: You have been successfully unsubscribed from our communications.
-    processed: Your unsubscribe request has been processed.
     # Error messages
-    invalid_email: Please enter a valid email address.
     invalid_token: Invalid unsubscribe token. Please check the token from your email.
-    missing_issued_date: Missing issued date. Please use the unsubscribe link from your email.
-    invalid_email_format: Please enter a valid email address format.
-    invalid_token_format: Invalid token format. Please copy the token exactly from your email.
+    no_matching_accounts: No matching accounts found with notification emails enabled.
     missing_parameters: "Missing required parameters: email address, unsubscribe token, and issued date."
     invalid_parameters: Invalid parameters provided.
-    rate_limit_exceeded: Too many unsubscribe attempts. Please try again later.
     error: An error occurred while processing your request. Please try again later.
   static_pages:
     error_404:

@@ -10,17 +10,17 @@ module UnsubscribeHelper
   # This method generates tokens using only email and date, no database access
   #
   # @param email [String] The email address to generate the token for
-  # @param issued_date [Date/String] The date when the email was issued
+  # @param issued_date [String] The date when the email was issued
   # @return [String] A secure HMAC-based token
   def generate_unsubscribe_token(email, issued_date)
     return nil if email.blank? || issued_date.nil?
+    return nil unless foo.is_a?(String) # We expect strings
 
     # Security: Use dedicated unsubscribe secret key from environment
     secret_key = ENV['BADGEAPP_UNSUBSCRIBE_KEY'] || Rails.application.secret_key_base
 
     # Security: Use HMAC with secret key for token generation
     # Include issued date in the message for time-based validation
-    date_str = normalize_date_string(issued_date)
     message = "#{email}:#{date_str}"
     OpenSSL::HMAC.hexdigest('SHA256', secret_key, message)
   end
@@ -29,11 +29,11 @@ module UnsubscribeHelper
   # This method determines current date and generates token with issued date
   #
   # @param email [String] The email address to generate the token for
-  # @return [Array] Array containing [issued_date_string, token]
+  # @return [issued_date_string, token]
   def generate_new_unsubscribe_token(email)
     return [nil, nil] if email.blank?
 
-    # Get current date in YYYY-MM-DD format
+    # Get current date as string in YYYY-MM-DD format
     issued_date = Date.current.strftime('%Y-%m-%d')
 
     # Generate token using email and current date
@@ -46,10 +46,9 @@ module UnsubscribeHelper
   # This method creates a complete URL that can be used in emails
   #
   # @param user [User] The user to generate the URL for
-  # @param issued_date [Date] The date when the email was issued (default: today)
   # @param locale [String] Optional locale for the URL (default: current locale)
   # @return [String] A complete unsubscribe URL with token and issued date
-  def generate_unsubscribe_url(user, issued_date = Date.current, locale: I18n.locale)
+  def generate_unsubscribe_url(user, locale: I18n.locale)
     return nil if user.nil? || issued_date.nil?
 
     # Security: Validate issued date first
@@ -58,10 +57,7 @@ module UnsubscribeHelper
       return nil
     end
 
-    token = generate_unsubscribe_token(user.email, issued_date)
-    return nil if token.nil?
-
-    date_str = normalize_date_string(issued_date)
+    issued_date, token = generate_new_unsubscribe_token(user.email)
 
     # Security: Generate URL with proper parameters
     # Use Rails URL helpers for security and proper encoding
@@ -70,7 +66,7 @@ module UnsubscribeHelper
       action: 'show',
       email: user.email,
       token: token,
-      issued: date_str,
+      issued: issued_date,
       only_path: false,
       protocol: Rails.application.config.force_ssl ? 'https' : 'http'
     }
@@ -85,19 +81,14 @@ module UnsubscribeHelper
   # This method uses constant-time comparison and NO database access
   #
   # @param email [String] The email address to verify the token for
-  # @param issued_date [Date/String] The issued date from the request
+  # @param issued_date [String] The issued date from the request
   # @param token [String] The token to verify
   # @return [Boolean] True if the token is valid and within time window
   def verify_unsubscribe_token(email, issued_date, token)
     return false if email.blank? || token.blank? || issued_date.nil?
 
-    # Security: Validate issued date format and range
+    # Security: Validate issued date format and time window
     unless valid_issued_date?(issued_date)
-      return false
-    end
-
-    # Security: Check if token is within valid time window
-    unless token_within_valid_period?(issued_date)
       return false
     end
 
@@ -109,45 +100,28 @@ module UnsubscribeHelper
     ActiveSupport::SecurityUtils.secure_compare(expected_token, token)
   end
 
-  # Security: Validate issued date format and reasonableness
-  # @param issued_date [Date/String] The date to validate
+  # Security: Validate issued date format and time window
+  # @param issued_date [String] The date to validate
   # @return [Boolean] True if date is valid and within acceptable range
   def valid_issued_date?(issued_date)
     return false if issued_date.blank?
 
-    begin
-      # Convert string to Date if needed
-      date = parse_date(issued_date)
+    # Security: First check if date format is valid YYYY-MM-DD
+    return false unless valid_issued_format?(issued_date)
 
-      # Security: Check date format is valid YYYY-MM-DD
-      date_str = date.strftime('%Y-%m-%d')
-      return false unless valid_date_format?(date_str)
+    begin
+      # Convert string to Date
+      date = Date.parse(issued_date)
 
       # Security: Check date is not in future (with small tolerance for clock skew)
       return false if date > Date.current + 1.day
 
-      # Security: Check date is not too far in past (prevents replay attacks)
+      # Security: Check date is not too far in past
+      # (prevents malicious use of old stolen unsubscribe link)
       max_age_days = max_token_age_days
       return false if date < Date.current - max_age_days.days
 
       true
-    rescue ArgumentError, TypeError
-      false
-    end
-  end
-
-  # Security: Check if token is within valid time period
-  # @param issued_date [Date/String] The issued date to check
-  # @return [Boolean] True if within valid period
-  def token_within_valid_period?(issued_date)
-    return false if issued_date.blank?
-
-    begin
-      date = parse_date(issued_date)
-      max_age_days = max_token_age_days
-
-      # Security: Token is valid if issued date is within the allowed window
-      date >= Date.current - max_age_days.days && date <= Date.current
     rescue ArgumentError, TypeError
       false
     end
@@ -161,9 +135,12 @@ module UnsubscribeHelper
     return false if email.length > 254 # RFC 5321 limit
 
     # Use very loose email validation - just check for @ symbol
-    # Rely on view escaping for XSS protection rather than restricting email formats
+    # Rely on view escaping for XSS protection rather than restricting
+    # the email formats, because there's a lot of variation in email formats
     email.include?('@')
-  end  # Security: Validate token format and length
+  end
+
+  # Security: Validate token format and length
   # @param token [String] Token to validate
   # @return [Boolean] True if token format is valid
   def valid_token_format?(token)
@@ -189,30 +166,9 @@ module UnsubscribeHelper
 
   private
 
-  # Normalize date to YYYY-MM-DD string format
-  # @param date [Date/String] Date to normalize
-  # @return [String] Date in YYYY-MM-DD format
-  def normalize_date_string(date)
-    date.is_a?(String) ? date : date.strftime('%Y-%m-%d')
-  end
-
-  # Parse date from string or return date as-is
-  # @param date_input [Date/String] Date to parse
-  # @return [Date] Parsed date
-  def parse_date(date_input)
-    date_input.is_a?(String) ? Date.parse(date_input) : date_input
-  end
-
   # Get maximum token age in days from environment
   # @return [Integer] Maximum age in days
   def max_token_age_days
     (ENV['BADGEAPP_UNSUBSCRIBE_DAYS'] || '30').to_i
-  end
-
-  # Validate date string format (YYYY-MM-DD)
-  # @param date_str [String] Date string to validate
-  # @return [Boolean] True if format is valid
-  def valid_date_format?(date_str)
-    date_str.match?(/\A\d{4,}-\d{2}-\d{2}\z/)
   end
 end

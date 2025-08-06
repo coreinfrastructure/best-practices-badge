@@ -36,7 +36,8 @@ class UnsubscribeController < ApplicationController
       issued = params[:issued]  # Already in YYYY-MM-DD format
       token = params[:token]
 
-      # Security: Validate token FIRST - this gives specific error responses
+      # Security: Validate token before checking the database.
+      # This gives specific error responses
       unless verify_unsubscribe_token(email, token, issued)
         # Security: Log potential security incident (without PII)
         Rails.logger.info "Invalid unsubscribe token attempt for email domain: #{email.split('@').last}"

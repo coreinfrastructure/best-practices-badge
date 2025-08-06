@@ -6,19 +6,6 @@
       <%= t('unsubscribe.description') %>
     </p>
 
-    <%# Display flash messages %>
-    <% if flash[:error] %>
-      <div class="alert alert-danger" role="alert">
-        <%= flash[:error] %>
-      </div>
-    <% end %>
-
-    <% if flash[:notice] %>
-      <div class="alert alert-info" role="alert">
-        <%= flash[:notice] %>
-      </div>
-    <% end %>
-
     <%= form_with url: unsubscribe_path, method: :post, local: true do |f| %>
       <%# Hidden fields to pass the actual values %>
       <%= hidden_field_tag :email, @email %>
@@ -41,22 +28,10 @@
                        class: "form-control",
                        style: "background-color: #f5f5f5;" %>
 
-      <%# Optional reason field %>
-      <%= f.label :reason, t('unsubscribe.reason_label') %>
-      <%= f.text_area :reason, class: "form-control", rows: 3, maxlength: 500,
-                      placeholder: t('unsubscribe.reason_placeholder') %>
-      <small class="help-block"><%= t('unsubscribe.reason_help') %></small>
-
-      <%# Honeypot field for bot detection %>
-      <div style="display: none;">
-        <%= f.text_field :website, autocomplete: 'off', tabindex: '-1' %>
-      </div>
-
       <div class="text-center">
         <%= f.submit t('unsubscribe.submit'), class: "btn btn-primary",
                      data: { confirm: t('unsubscribe.confirm_message'),
                              disable_with: t('unsubscribe.processing') } %>
-        <%= link_to t('unsubscribe.cancel'), root_path, class: "btn btn-default" %>
       </div>
     <% end %>
   </div>

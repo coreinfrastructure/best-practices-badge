@@ -123,11 +123,7 @@ en:
     token_label: Unsubscribe Token
     token_help: Secure token for verification (truncated for display)
     token_readonly_help: This token cannot be changed and is used for security verification
-    reason_label: Reason for unsubscribing (optional)
-    reason_help: Optional feedback to help us improve (max 500 characters)
-    reason_placeholder: Tell us why you're unsubscribing (optional)
     submit: Unsubscribe
-    cancel: Cancel
     confirm_message: Are you sure you want to unsubscribe from all communications?
     processing: Processing...
     # Success messages

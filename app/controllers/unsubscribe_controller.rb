@@ -18,7 +18,7 @@ class UnsubscribeController < ApplicationController
   # GET /unsubscribe
   # Display the unsubscribe form with email, token, and issued date
   # for confirmation.
-  def show
+  def edit
     return unless validate_unsubscribe_params
     # Set display values for the form (read-only)
     @email = params[:email]
@@ -41,7 +41,7 @@ class UnsubscribeController < ApplicationController
         # Security: Log potential security incident (without PII)
         Rails.logger.info "Invalid unsubscribe token attempt for email domain: #{email.split('@').last}"
         flash[:error] = t('unsubscribe.invalid_token')
-        render :show, status: :unprocessable_entity
+        render :edit, status: :unprocessable_entity
         return
       end
 
@@ -54,7 +54,7 @@ class UnsubscribeController < ApplicationController
 
         if updated_count.zero?
           flash[:error] = t('unsubscribe.no_matching_accounts')
-          render :show, status: :unprocessable_entity
+          render :edit, status: :unprocessable_entity
           return
         end
 
@@ -67,13 +67,13 @@ class UnsubscribeController < ApplicationController
       # Security: Log error without exposing internal details
       Rails.logger.error "Unsubscribe database error: #{e.class}"
       flash[:error] = t('unsubscribe.error')
-      render :show, status: :internal_server_error
+      render :edit, status: :internal_server_error
       return
     rescue StandardError => e
       # Security: Log error without exposing internal details
       Rails.logger.error "Unsubscribe processing error: #{e.class}"
       flash[:error] = t('unsubscribe.error')
-      render :show, status: :internal_server_error
+      render :edit, status: :internal_server_error
       return
     end
 
@@ -91,21 +91,21 @@ class UnsubscribeController < ApplicationController
     # Step 1: Check for required parameters
     if email.blank? || token.blank? || issued_param.blank?
       flash[:error] = t('unsubscribe.missing_parameters')
-      render :show, status: :bad_request
+      render :edit, status: :bad_request
       return false
     end
 
     # Step 2: Check parameter lengths to prevent DoS attacks
     if email.length > 254 || token.length > 64 || issued_param.length > 12
       flash[:error] = t('unsubscribe.invalid_parameters')
-      render :show, status: :bad_request
+      render :edit, status: :bad_request
       return false
     end
 
     # Step 3: Validate individual field formats
     unless valid_email_format?(email) && valid_issued_format?(issued_param) && valid_token_format?(token)
       flash[:error] = t('unsubscribe.invalid_parameters')
-      render :show, status: :bad_request
+      render :edit, status: :bad_request
       return false
     end
 

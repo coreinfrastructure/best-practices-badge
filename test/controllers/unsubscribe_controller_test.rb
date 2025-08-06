@@ -25,8 +25,8 @@ class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
     @invalid_token = 'a' * 64  # Long enough to pass format validation but cryptographically invalid
   end
 
-  # Test GET request shows the form
-  test 'should show unsubscribe form with parameters' do
+  # Test GET request shows the edit form
+  test 'should show unsubscribe edit form with parameters' do
     get unsubscribe_path(locale: 'en'), params: {
       email: @user.email,
       token: @valid_token,

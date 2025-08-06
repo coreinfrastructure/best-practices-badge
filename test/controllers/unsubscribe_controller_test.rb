@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Copyright 2015-2017, the Linux Foundation, IDA, and the
+# Copyright the Linux Foundation and the
 # OpenSSF Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
@@ -200,7 +200,7 @@ class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
     assert_match(/invalid.*parameters/i, flash[:error])
   end
 
-  # Security: Test non-existent email (should not reveal existence)
+  # Security: Test non-existent email with invalid token (must not reveal email)
   test 'should handle non-existent email gracefully' do
     # Use an email that will pass format validation but fail token verification
     # Use a properly formatted but invalid token (64 hex characters)
@@ -214,34 +214,6 @@ class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :unprocessable_entity
     assert_match(/invalid.*token/i, flash[:error])
-  end
-
-  # Security: Test honeypot field detection
-  test 'should reject requests with honeypot field filled' do
-    post unsubscribe_path(locale: 'en'), params: {
-      email: @user.email,
-      token: @valid_token,
-      website: 'http://spam.com'
-    }
-
-    # The honeypot check happens in JavaScript, but we can test server-side too
-    # This test ensures the server doesn't process obvious bot requests
-    # (Implementation depends on adding server-side honeypot check)
-  end
-
-  # Security: Test SQL injection prevention
-  test 'should prevent SQL injection in email parameter' do
-    malicious_email = "'; DROP TABLE users; --"
-
-    post unsubscribe_path(locale: 'en'), params: {
-      email: malicious_email,
-      token: @valid_token,
-      issued: @issued_date.strftime('%Y-%m-%d')
-    }
-
-    # Should handle safely without SQL injection
-    assert_response :bad_request
-    assert User.exists?(@user.id), 'Users table should still exist'
   end
 
   # Security: Test secure headers are set

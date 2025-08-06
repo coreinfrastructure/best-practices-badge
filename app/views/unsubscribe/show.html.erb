@@ -1,9 +1,3 @@
-<%# Security: Set Content Security Policy for this page %>
-<% content_for :head do %>
-  <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; script-src 'self' 'nonce-<%= @nonce %>'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; form-action 'self';">
-<% end %>
-
 <br>
 <h1 class='center'><%= t('unsubscribe.header') %></h1>
 
@@ -102,55 +96,6 @@
         <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
       <% end %>
 
-      <%# Security: Information about data handling %>
-      <div class="text-center margin-top">
-        <small class="text-muted">
-          <%= t('unsubscribe.privacy_notice') %>
-        </small>
-      </div>
     </div>
   </div>
 </div>
-
-<%# Security: Add client-side validation script with nonce %>
-<script nonce="<%= @nonce %>">
-  (function() {
-    'use strict';
-
-    // Security: Client-side form validation
-    document.addEventListener('DOMContentLoaded', function() {
-      var form = document.querySelector('form');
-      var emailField = document.querySelector('#email');
-      var tokenField = document.querySelector('#token');
-      var websiteField = document.querySelector('#website');
-
-      if (form && emailField && tokenField) {
-        form.addEventListener('submit', function(e) {
-          // Security: Check honeypot field
-          if (websiteField && websiteField.value !== '') {
-            e.preventDefault();
-            return false;
-          }
-
-          // Security: Validate email format
-          var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-          if (!emailRegex.test(emailField.value)) {
-            alert('<%= j t('unsubscribe.invalid_email_format') %>');
-            e.preventDefault();
-            return false;
-          }
-
-          // Security: Validate token format
-          var tokenRegex = /^[a-zA-Z0-9\-_=]+$/;
-          if (!tokenRegex.test(tokenField.value) || tokenField.value.length < 32) {
-            alert('<%= j t('unsubscribe.invalid_token_format') %>');
-            e.preventDefault();
-            return false;
-          }
-
-          return true;
-        });
-      }
-    });
-  })();
-</script>

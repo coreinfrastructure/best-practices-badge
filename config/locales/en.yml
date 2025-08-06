@@ -113,8 +113,8 @@ en:
   unsubscribe:
     header: Unsubscribe
     description: >-
-      We're sorry to see you go. Please review the information below and
-      confirm your unsubscribe request.
+      We're sorry you no longer want to receive notifications.
+      If you are certain, please confirm your notification unsubscribe request.
     email_label: Email Address
     email_help: The email address to unsubscribe
     email_readonly_help: This email address cannot be changed
@@ -143,10 +143,6 @@ en:
     invalid_parameters: Invalid parameters provided.
     rate_limit_exceeded: Too many unsubscribe attempts. Please try again later.
     error: An error occurred while processing your request. Please try again later.
-    # Privacy and security notices
-    privacy_notice: >-
-      Your privacy is important to us. This unsubscribe process is secure and
-      your information will be handled according to our privacy policy.
   static_pages:
     error_404:
       heading: "Error 404: Page Not Found"

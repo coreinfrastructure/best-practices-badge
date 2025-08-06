@@ -7,26 +7,26 @@
     </p>
 
     <%= form_with url: unsubscribe_path, method: :post, local: true do |f| %>
-      <%# Hidden fields to pass the actual values %>
+      <%# Hidden fields to pass the actual full values for form submission %>
       <%= hidden_field_tag :email, @email %>
       <%= hidden_field_tag :token, @token %>
       <%= hidden_field_tag :issued, @issued %>
 
-      <%# Read-only display fields %>
-      <%= f.label :email, t('unsubscribe.email_label') %>
-      <%= f.email_field :email, value: @email, readonly: true, 
-                        class: "form-control", 
-                        style: "background-color: #f5f5f5;" %>
+      <%# Read-only display fields - these show user-friendly values but are not submitted %>
+      <%= label_tag :display_email, t('unsubscribe.email_label') %>
+      <%= text_field_tag :display_email, @email, readonly: true, 
+                         class: "form-control", 
+                         style: "background-color: #f5f5f5;" %>
 
-      <%= f.label :issued, t('unsubscribe.issued_label') %>
-      <%= f.text_field :issued, value: @issued, readonly: true,
-                       class: "form-control",
-                       style: "background-color: #f5f5f5;" %>
+      <%= label_tag :display_issued, t('unsubscribe.issued_label') %>
+      <%= text_field_tag :display_issued, @issued, readonly: true,
+                         class: "form-control",
+                         style: "background-color: #f5f5f5;" %>
 
-      <%= f.label :token, t('unsubscribe.token_label') %>
-      <%= f.text_field :token, value: (@token ? "#{@token[0..8]}..." : ""), readonly: true,
-                       class: "form-control",
-                       style: "background-color: #f5f5f5;" %>
+      <%= label_tag :display_token, t('unsubscribe.token_label') %>
+      <%= text_field_tag :display_token, (@token ? "#{@token[0..8]}..." : ""), readonly: true,
+                         class: "form-control",
+                         style: "background-color: #f5f5f5;" %>
 
       <div class="text-center">
         <%= f.submit t('unsubscribe.submit'), class: "btn btn-primary",

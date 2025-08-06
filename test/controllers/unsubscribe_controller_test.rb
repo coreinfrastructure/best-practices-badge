@@ -34,9 +34,13 @@ class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
     }
     assert_response :success
     assert_select 'form[action=?]', unsubscribe_path(locale: 'en')
-    assert_select 'input[name=?][readonly]', 'email'
-    assert_select 'input[name=?][readonly]', 'token'
-    assert_select 'input[name=?][readonly]', 'issued'
+    assert_select 'input[name=?][readonly]', 'display_email'
+    assert_select 'input[name=?][readonly]', 'display_token'
+    assert_select 'input[name=?][readonly]', 'display_issued'
+    # Test that hidden fields contain the actual values for form submission
+    assert_select 'input[type=hidden][name=email]'
+    assert_select 'input[type=hidden][name=token]'
+    assert_select 'input[type=hidden][name=issued]'
   end
 
   # Test that locale is optional - URL without locale should redirect to locale-specific URL

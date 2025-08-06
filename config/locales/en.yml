@@ -119,10 +119,10 @@ en:
     issued_label: Issued Date
     token_label: Unsubscribe Token
     submit: Unsubscribe
-    confirm_message: Are you sure you want to unsubscribe from all communications?
+    confirm_message: Are you sure you want to unsubscribe from all notifications?
     processing: Processing...
     # Success messages
-    success: You have been successfully unsubscribed from our communications.
+    success: You have been successfully unsubscribed from our notifications.
     # Error messages
     invalid_token: Invalid unsubscribe token. Please check the token from your email.
     no_matching_accounts: No matching accounts found with notification emails enabled.

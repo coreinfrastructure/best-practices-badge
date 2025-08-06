@@ -55,28 +55,28 @@ class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
     }
 
     assert_response :success
-    
+
     # Verify the response body doesn't contain unescaped script tags
     # This is the key security test - raw HTML should not appear in the response
     refute_includes @response.body, '<script>example</script>'
-    
+
     # Verify that the dangerous content appears escaped in the HTML source
     assert_includes @response.body, '&lt;script&gt;example&lt;/script&gt;'
-    
+
     # Verify display field exists (Rails automatically escapes the content)
     assert_select 'input[name="display_email"]'
-    
+
     # Verify hidden field contains the original email for proper form submission
     assert_select 'input[type="hidden"][name="email"]' do |elements|
       hidden_email_value = elements.first['value']
       assert_equal xss_email, hidden_email_value
     end
-    
+
     # Verify form would submit correctly with all required hidden fields
     assert_select 'form[action=?]', unsubscribe_path(locale: 'en')
     assert_select 'input[type="hidden"][name="token"][value=?]', valid_token
     assert_select 'input[type="hidden"][name="issued"][value=?]', @issued_date.strftime('%Y-%m-%d')
-    
+
     # Additional test: Verify that form submission would work correctly with XSS email
     # Create a user with the XSS email to test actual unsubscribe functionality
     xss_user = User.create!(
@@ -87,14 +87,14 @@ class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
       activated: true,
       notification_emails: true
     )
-    
+
     # Test that POST request with XSS email works correctly (no XSS injection)
     post unsubscribe_path(locale: 'en'), params: {
       email: xss_email,
       token: valid_token,
       issued: @issued_date.strftime('%Y-%m-%d')
     }
-    
+
     assert_redirected_to root_path(locale: 'en')
     xss_user.reload
     assert_not xss_user.notification_emails, 'User with XSS email should be unsubscribed'

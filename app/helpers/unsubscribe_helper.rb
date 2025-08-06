@@ -205,7 +205,8 @@ module UnsubscribeHelper
     return if user.nil? || request.nil?
 
     # Security: Log without exposing PII
-    Rails.logger.info(
+    # We only record at debug level, because we already log a lot.
+    Rails.logger.debug(
       "Unsubscribe #{success ? 'success' : 'failure'}: " \
       "user_id=#{user.id}, " \
       "ip=#{request.remote_ip}, " \

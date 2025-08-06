@@ -151,7 +151,7 @@ module UnsubscribeHelper
   # @return [Boolean] True if token format is valid
   def valid_token_format?(token)
     return false if token.blank?
-    
+
     # HMAC-SHA256 produces 64-character hex strings
     return false if token.length != 64
 

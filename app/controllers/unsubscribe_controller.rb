@@ -94,7 +94,7 @@ class UnsubscribeController < ApplicationController
 
     # Security: First check parameter lengths to prevent DoS attacks
     # This takes precedence over missing parameter checks
-    if (email && email.length > 254) || 
+    if (email && email.length > 254) ||
        (token && token.length > 64) ||  # HMAC-SHA256 tokens are exactly 64 chars
        (issued_param && issued_param.length > 12)
       flash[:error] = t('unsubscribe.invalid_parameters')

@@ -65,7 +65,7 @@ get 'unsubscribe' => 'unsubscribe#show'
 post 'unsubscribe' => 'unsubscribe#create'
 ```
 
-**Locale Support**: 
+**Locale Support**:
 - **With locale**: `/en/unsubscribe` - works directly in English locale
 - **Without locale**: `/unsubscribe` - redirects to user's preferred locale (e.g., `/en/unsubscribe`)
 - **Email links**: Commonly include locale for immediate localized experience
@@ -109,13 +109,13 @@ class UserMailer < ApplicationMailer
 
   def notification_email(user)
     @user = user
-    
+
     # Only send if user has notifications enabled
     return unless user.notification_emails?
-    
+
     # Generate unsubscribe URL with current date
     @unsubscribe_url = generate_unsubscribe_url(user, Date.current)
-    
+
     mail(to: user.email, subject: 'Notification')
   end
 end
@@ -126,7 +126,7 @@ end
 Comprehensive test suite includes:
 - Valid and invalid token testing with issued dates
 - Time-based validation (expired/future dates)
-- Input validation testing  
+- Input validation testing
 - Rate limiting verification
 - SQL injection prevention
 - XSS protection validation

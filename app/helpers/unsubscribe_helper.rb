@@ -14,14 +14,14 @@ module UnsubscribeHelper
   # @return [String] A secure HMAC-based token
   def generate_unsubscribe_token(email, issued_date)
     return nil if email.blank? || issued_date.nil?
-    return nil unless foo.is_a?(String) # We expect strings
+    return nil unless email.is_a?(String) && issued_date.is_a?(String)
 
     # Security: Use dedicated unsubscribe secret key from environment
     secret_key = ENV['BADGEAPP_UNSUBSCRIBE_KEY'] || Rails.application.secret_key_base
 
     # Security: Use HMAC with secret key for token generation
     # Include issued date in the message for time-based validation
-    message = "#{email}:#{date_str}"
+    message = "#{email}:#{issued_date}"
     OpenSSL::HMAC.hexdigest('SHA256', secret_key, message)
   end
 
@@ -49,21 +49,17 @@ module UnsubscribeHelper
   # @param locale [String] Optional locale for the URL (default: current locale)
   # @return [String] A complete unsubscribe URL with token and issued date
   def generate_unsubscribe_url(user, locale: I18n.locale)
-    return nil if user.nil? || issued_date.nil?
+    return nil if user.nil?
 
-    # Security: Validate issued date first
-    unless valid_issued_date?(issued_date)
-      Rails.logger.warn "Invalid issued date for unsubscribe URL: #{issued_date}"
-      return nil
-    end
-
+    # Generate current date and token
     issued_date, token = generate_new_unsubscribe_token(user.email)
+    return nil if token.nil?
 
     # Security: Generate URL with proper parameters
     # Use Rails URL helpers for security and proper encoding
     url_params = {
       controller: 'unsubscribe',
-      action: 'show',
+      action: 'edit',
       email: user.email,
       token: token,
       issued: issued_date,

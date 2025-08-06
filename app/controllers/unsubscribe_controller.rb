@@ -103,7 +103,7 @@ class UnsubscribeController < ApplicationController
     end
 
     # Step 3: Validate individual field formats
-    unless valid_email_format?(email) && valid_token_format?(token) && valid_issued_format?(issued_param)
+    unless valid_email_format?(email) && valid_issued_format?(issued_param) && valid_token_format?(token)
       flash[:error] = t('unsubscribe.invalid_parameters')
       render :show, status: :bad_request
       return false

@@ -14,8 +14,8 @@
 
       <%# Read-only display fields - these show user-friendly values but are not submitted %>
       <%= label_tag :display_email, t('unsubscribe.email_label') %>
-      <%= text_field_tag :display_email, @email, readonly: true, 
-                         class: "form-control", 
+      <%= text_field_tag :display_email, @email, readonly: true,
+                         class: "form-control",
                          style: "background-color: #f5f5f5;" %>
 
       <%= label_tag :display_issued, t('unsubscribe.issued_label') %>

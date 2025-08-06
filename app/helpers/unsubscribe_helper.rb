@@ -127,7 +127,7 @@ module UnsubscribeHelper
     end
   end
 
-  # Security: Validate email format  
+  # Security: Validate email format
   # @param email [String] Email to validate
   # @return [Boolean] True if email format is valid
   def valid_email_format?(email)

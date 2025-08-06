@@ -11,7 +11,7 @@ class UnsubscribeController < ApplicationController
 
   # Security: Enable CSRF protection for form submissions (create action)
   protect_from_forgery with: :exception
-  
+
   # Security: Skip CSRF for unsubscribe actions since users access via email links
   # The unsubscribe process has its own strong security via HMAC token validation
   # which is more secure than CSRF tokens for this use case

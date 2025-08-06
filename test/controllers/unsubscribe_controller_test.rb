@@ -209,7 +209,7 @@ class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
     # Use an email that will pass format validation but fail token verification
     # Use a properly formatted but invalid token (64 hex characters)
     invalid_token = 'a' * 64  # Valid format but wrong token
-    
+
     post unsubscribe_path(locale: 'en'), params: {
       email: 'nonexistent@example.com',
       token: invalid_token,

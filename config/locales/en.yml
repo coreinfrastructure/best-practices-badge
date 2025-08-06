@@ -140,7 +140,7 @@ en:
     missing_issued_date: Missing issued date. Please use the unsubscribe link from your email.
     invalid_email_format: Please enter a valid email address format.
     invalid_token_format: Invalid token format. Please copy the token exactly from your email.
-    missing_parameters: Email address, unsubscribe token, and issued date are required.
+    missing_parameters: "Missing required parameters: email address, unsubscribe token, and issued date."
     invalid_parameters: Invalid parameters provided.
     rate_limit_exceeded: Too many unsubscribe attempts. Please try again later.
     error: An error occurred while processing your request. Please try again later.

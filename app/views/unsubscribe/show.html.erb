@@ -48,7 +48,7 @@
           <%= form.text_field :issued, 
                 class: 'form-control', 
                 readonly: true,
-                value: sanitize(@issued_date || '', tags: %w[]),
+                value: sanitize(@issued_date_display || '', tags: %w[]),
                 style: 'background-color: #f5f5f5;' %>
           <small class="help-block"><%= t('unsubscribe.issued_help') %></small>
         </div>
@@ -67,7 +67,7 @@
         <%# Security: Hidden fields to pass the actual values %>
         <%= hidden_field_tag :email, sanitize(@email || '', tags: %w[]) %>
         <%= hidden_field_tag :token, sanitize(@token || '', tags: %w[]) %>
-        <%= hidden_field_tag :issued, sanitize(@issued_date || '', tags: %w[]) %>
+        <%= hidden_field_tag :issued, sanitize(@issued_date_display || '', tags: %w[]) %>
         
         <%# Security: Optional reason field with length limits %>
         <div class="form-group">

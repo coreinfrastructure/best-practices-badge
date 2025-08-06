@@ -20,7 +20,7 @@ module UnsubscribeHelper
 
     # Security: Use HMAC with secret key for token generation
     # Include issued date in the message for time-based validation
-    date_str = issued_date.is_a?(String) ? issued_date : issued_date.strftime('%Y-%m-%d')
+    date_str = normalize_date_string(issued_date)
     message = "#{email}:#{date_str}"
     OpenSSL::HMAC.hexdigest('SHA256', secret_key, message)
   end
@@ -50,31 +50,7 @@ module UnsubscribeHelper
   # @param locale [String] Optional locale for the URL (default: current locale)
   # @return [String] A complete unsubscribe URL with token and issued date
   def generate_unsubscribe_url(user, issued_date = Date.current, locale: I18n.locale)
-    return nil if user.nil? || issued_date.nil?
-
-    # Security: Validate issued date first
-    unless valid_issued_date?(issued_date)
-      Rails.logger.warn "Invalid issued date for unsubscribe URL: #{issued_date}"
-      return nil
-    end
-
-    token = generate_unsubscribe_token(user.email, issued_date)
-    return nil if token.nil?
-
-    date_str = issued_date.is_a?(String) ? issued_date : issued_date.strftime('%Y-%m-%d')
-
-    # Security: Generate URL with proper locale and parameters
-    # Use Rails URL helpers for security and proper encoding
-    url_for(
-      controller: 'unsubscribe',
-      action: 'show',
-      locale: locale,
-      email: user.email,
-      token: token,
-      issued: date_str,
-      only_path: false,
-      protocol: Rails.application.config.force_ssl ? 'https' : 'http'
-    )
+    generate_unsubscribe_url_internal(user, issued_date, locale)
   end
 
   # Security: Generate unsubscribe URL without explicit locale
@@ -84,30 +60,7 @@ module UnsubscribeHelper
   # @param issued_date [Date] The date when the email was issued (default: today)
   # @return [String] A complete unsubscribe URL that will redirect to user's locale
   def generate_unsubscribe_url_auto_locale(user, issued_date = Date.current)
-    return nil if user.nil? || issued_date.nil?
-
-    # Security: Validate issued date first
-    unless valid_issued_date?(issued_date)
-      Rails.logger.warn "Invalid issued date for unsubscribe URL: #{issued_date}"
-      return nil
-    end
-
-    token = generate_unsubscribe_token(user.email, issued_date)
-    return nil if token.nil?
-
-    date_str = issued_date.is_a?(String) ? issued_date : issued_date.strftime('%Y-%m-%d')
-
-    # Security: Generate URL without locale - system will redirect to user's preferred locale
-    # Use Rails URL helpers for security and proper encoding
-    url_for(
-      controller: 'unsubscribe',
-      action: 'show',
-      email: user.email,
-      token: token,
-      issued: date_str,
-      only_path: false,
-      protocol: Rails.application.config.force_ssl ? 'https' : 'http'
-    )
+    generate_unsubscribe_url_internal(user, issued_date, nil)
   end
 
   # Security: Verify unsubscribe token with time-based validation
@@ -146,17 +99,17 @@ module UnsubscribeHelper
 
     begin
       # Convert string to Date if needed
-      date = issued_date.is_a?(String) ? Date.parse(issued_date) : issued_date
+      date = parse_date(issued_date)
 
       # Security: Check date format is valid YYYY-MM-DD
       date_str = date.strftime('%Y-%m-%d')
-      return false unless date_str.match?(/\A\d{4,}-\d{2}-\d{2}\z/)
+      return false unless valid_date_format?(date_str)
 
       # Security: Check date is not in future (with small tolerance for clock skew)
       return false if date > Date.current + 1.day
 
       # Security: Check date is not too far in past (prevents replay attacks)
-      max_age_days = (ENV['BADGEAPP_UNSUBSCRIBE_DAYS'] || '30').to_i
+      max_age_days = max_token_age_days
       return false if date < Date.current - max_age_days.days
 
       true
@@ -172,14 +125,49 @@ module UnsubscribeHelper
     return false if issued_date.blank?
 
     begin
-      date = issued_date.is_a?(String) ? Date.parse(issued_date) : issued_date
-      max_age_days = (ENV['BADGEAPP_UNSUBSCRIBE_DAYS'] || '30').to_i
+      date = parse_date(issued_date)
+      max_age_days = max_token_age_days
 
       # Security: Token is valid if issued date is within the allowed window
       date >= Date.current - max_age_days.days && date <= Date.current
     rescue ArgumentError, TypeError
       false
     end
+  end
+
+  # Security: Validate email format
+  # @param email [String] Email to validate
+  # @return [Boolean] True if email format is valid
+  def valid_email_format?(email)
+    return false if email.blank?
+    return false if email.length > 254 # RFC 5321 limit
+
+    # Use loose regex for international domains and UTF-8 usernames
+    email.match?(/\A[^@]+.*+\z/)
+  end
+
+  # Security: Validate token format and length
+  # @param token [String] Token to validate
+  # @return [Boolean] True if token format is valid
+  def valid_token_format?(token)
+    return false if token.blank?
+    
+    # HMAC-SHA256 produces 64-character hex strings
+    return false if token.length != 64
+
+    # Security: Ensure token contains only hex characters
+    token.match?(/\A[a-f0-9]{64}\z/)
+  end
+
+  # Security: Validate issued date format
+  # @param issued [String] Issued date string to validate
+  # @return [Boolean] True if format is valid
+  def valid_issued_format?(issued)
+    return false if issued.blank?
+    return false if issued.length < 10 || issued.length > 12
+
+    # Strict YYYY-MM-DD format
+    issued.match?(/\A\d{4}-\d{2}-\d{2}\z/)
   end
 
   # Security: Check if a user can be unsubscribed
@@ -231,5 +219,71 @@ module UnsubscribeHelper
     end
 
     nil
+  end
+
+  private
+
+  # Internal URL generation method to eliminate duplication
+  # @param user [User] The user to generate the URL for
+  # @param issued_date [Date] The date when the email was issued
+  # @param locale [String, nil] Optional locale for the URL
+  # @return [String, nil] Complete unsubscribe URL or nil if invalid
+  def generate_unsubscribe_url_internal(user, issued_date, locale)
+    return nil if user.nil? || issued_date.nil?
+
+    # Security: Validate issued date first
+    unless valid_issued_date?(issued_date)
+      Rails.logger.warn "Invalid issued date for unsubscribe URL: #{issued_date}"
+      return nil
+    end
+
+    token = generate_unsubscribe_token(user.email, issued_date)
+    return nil if token.nil?
+
+    date_str = normalize_date_string(issued_date)
+
+    # Security: Generate URL with proper parameters
+    # Use Rails URL helpers for security and proper encoding
+    url_params = {
+      controller: 'unsubscribe',
+      action: 'show',
+      email: user.email,
+      token: token,
+      issued: date_str,
+      only_path: false,
+      protocol: Rails.application.config.force_ssl ? 'https' : 'http'
+    }
+
+    # Add locale if provided
+    url_params[:locale] = locale if locale
+
+    url_for(url_params)
+  end
+
+  # Normalize date to YYYY-MM-DD string format
+  # @param date [Date/String] Date to normalize
+  # @return [String] Date in YYYY-MM-DD format
+  def normalize_date_string(date)
+    date.is_a?(String) ? date : date.strftime('%Y-%m-%d')
+  end
+
+  # Parse date from string or return date as-is
+  # @param date_input [Date/String] Date to parse
+  # @return [Date] Parsed date
+  def parse_date(date_input)
+    date_input.is_a?(String) ? Date.parse(date_input) : date_input
+  end
+
+  # Get maximum token age in days from environment
+  # @return [Integer] Maximum age in days
+  def max_token_age_days
+    (ENV['BADGEAPP_UNSUBSCRIBE_DAYS'] || '30').to_i
+  end
+
+  # Validate date string format (YYYY-MM-DD)
+  # @param date_str [String] Date string to validate
+  # @return [Boolean] True if format is valid
+  def valid_date_format?(date_str)
+    date_str.match?(/\A\d{4,}-\d{2}-\d{2}\z/)
   end
 end

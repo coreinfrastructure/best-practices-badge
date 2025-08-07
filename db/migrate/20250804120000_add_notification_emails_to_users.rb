@@ -12,6 +12,12 @@ class AddNotificationEmailsToUsers < ActiveRecord::Migration[8.0]
       dir.up do
         # Update existing users to have notifications enabled
         User.update_all(notification_emails: true)
+
+        # Set notification_emails to false for users who have at least one project
+        # with disabled_reminders = true (migrating from project-level to user-level setting)
+        User.joins(:projects)
+            .where(projects: { disabled_reminders: true })
+            .update_all(notification_emails: false)
       end
     end
   end

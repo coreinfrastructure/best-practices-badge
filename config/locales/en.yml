@@ -807,6 +807,12 @@ en:
         (Advanced) Disable inactivity reminder (we recommend you
         leave this unchecked; note that project entries
         must be edited to change whether or not reminders are sent)
+      reminder_notification_note:
+        title: 'Email Notification Settings'
+        description_html: >-
+          To disable inactivity reminder emails, please edit your
+          <a href="/users/edit">user profile settings</a>.
+          This setting applies to all your projects.
       general_comments:
         description: 'Other general comments about the project:'
         placeholder: Additional Comments (in markdown)
@@ -892,11 +898,9 @@ en:
       If your project does not have a badge, and you haven't updated its badge
       entry for at least 30 days, we'll normally send you an inactivity
       reminder about every 30-60 days.
-      You can disable these inactivity reminder messages at any time;
-      just edit your badge entry at
-      <a href="%{project_info_url}#project_disabled_reminders">%{project_info_url}#project_disabled_reminders</a>
-      to turn on "disable inactivity reminder".
-      Remember to <i>edit</i> the project entry if you want to change the value.
+      You can disable these inactivity reminder messages at any time by
+      editing your <a href="/users/edit">user account settings</a>
+      to turn off "Email notifications".
       If your project has earned a passing badge, or its
       badge entry has been edited within 30 days,
       then no inactivity reminder will be sent.
@@ -923,11 +927,9 @@ en:
       If your project does not have a badge, and you haven't updated its badge
       entry for at least 30 days, we'll normally send you an inactivity
       reminder about every 30-60 days.
-      You can disable these inactivity reminder messages at any time;
-      just edit your badge entry at
-      %{project_info_url}#project_disabled_reminders
-      to turn on "disable inactivity reminder".
-      Be sure to edit the project entry if you want to change whether
+      You can disable these inactivity reminder messages at any time by
+      editing your user account settings to turn off "Email notifications".
+      Be sure to edit your user profile settings if you want to change whether
       or not you receive inactivity reminders!
       If your project has earned a passing badge, or its
       badge entry has been edited within 30 days,
@@ -971,11 +973,10 @@ en:
       <p>
       We don't send reminders if you continue to update your badge entry,
       and we only send reminders approximately every 30-60 days.  However,
-      if you want to disable these reminder messages, edit your badge entry at
-      <a href="%{project_info_url}#project_disabled_reminders">%{project_info_url}#project_disabled_reminders</a>
-      to turn on "disable inactivity reminder".
-      Be sure to edit the project entry, don't just display it, if you
-      want to change whether or not you'll receive an inactivity reminder.
+      if you want to disable these reminder messages, edit your
+      <a href="/users/edit">user account settings</a>
+      to turn off "Email notifications".
+      This setting applies to all your projects.
       We hope you'll instead keep working at it
       and eventually earn the badge.
       </p>
@@ -1010,11 +1011,9 @@ en:
 
       We don't send reminders if you continue to update your badge entry,
       and we only send reminders approximately every 30-60 days.  However,
-      if you want to disable these reminder messages, edit your badge entry at
-      %{project_info_url}#project_disabled_reminders
-      to turn on "disable inactivity reminder".
-      Be sure to edit the project entry, don't just display it, if you
-      want to change whether or not you'll receive an inactivity reminder.
+      if you want to disable these reminder messages, edit your
+      user account settings to turn off "Email notifications".
+      This setting applies to all your projects.
       We hope you'll instead keep working at it
       and eventually earn the badge.
 

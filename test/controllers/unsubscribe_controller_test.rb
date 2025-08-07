@@ -8,6 +8,7 @@ require 'test_helper'
 require 'cgi'
 
 # Security tests for UnsubscribeController
+# rubocop:disable Metrics/ClassLength
 class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
   def setup
     @user = User.create!(
@@ -22,7 +23,7 @@ class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
     @issued_date = Date.current
     # Generate a valid token for testing
     @valid_token = generate_unsubscribe_token(@user.email, @issued_date)
-    @invalid_token = 'a' * 64  # Long enough to pass format validation but cryptographically invalid
+    @invalid_token = 'a' * 64 # Long enough to pass format validation but cryptographically invalid
   end
 
   # Test GET request shows the edit form
@@ -58,7 +59,7 @@ class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
 
     # Verify the response body doesn't contain unescaped script tags
     # This is the key security test - raw HTML should not appear in the response
-    refute_includes @response.body, '<script>example</script>'
+    assert_not_includes @response.body, '<script>example</script>'
 
     # Verify that the dangerous content appears escaped in the HTML source
     assert_includes @response.body, '&lt;script&gt;example&lt;/script&gt;'
@@ -141,7 +142,7 @@ class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
       issued: @issued_date.strftime('%Y-%m-%d')
     }
 
-    assert_response :bad_request  # Format validation fails early
+    assert_response :bad_request # Format validation fails early
     assert_match(/invalid.*parameters/i, flash[:error])
   end
 
@@ -183,7 +184,7 @@ class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
       issued: old_date.strftime('%Y-%m-%d')
     }
 
-    assert_response :unprocessable_entity  # Token verification fails for expired date
+    assert_response :unprocessable_entity # Token verification fails for expired date
     assert_match(/invalid.*token/i, flash[:error])
   end
 
@@ -198,7 +199,7 @@ class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
       issued: future_date.strftime('%Y-%m-%d')
     }
 
-    assert_response :unprocessable_entity  # Token verification fails for future date
+    assert_response :unprocessable_entity # Token verification fails for future date
     assert_match(/invalid.*token/i, flash[:error])
   end
 
@@ -235,7 +236,7 @@ class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
 
   # Security: Test email length validation
   test 'should reject overly long email' do
-    long_email = 'a' * 250 + '@example.com'
+    long_email = ('a' * 250) + '@example.com'
 
     post unsubscribe_path(locale: 'en'), params: {
       email: long_email,
@@ -265,7 +266,7 @@ class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
   test 'should handle non-existent email gracefully' do
     # Use an email that will pass format validation but fail token verification
     # Use a properly formatted but invalid token (64 hex characters)
-    invalid_token = 'a' * 64  # Valid format but wrong token
+    invalid_token = 'a' * 64 # Valid format but wrong token
 
     post unsubscribe_path(locale: 'en'), params: {
       email: 'nonexistent@example.com',
@@ -296,3 +297,4 @@ class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
     OpenSSL::HMAC.hexdigest('SHA256', secret_key, message)
   end
 end
+# rubocop:enable Metrics/ClassLength

@@ -488,7 +488,8 @@ class Project < ApplicationRecord
     #
     # Select projects eligible for reminders =
     #   in_progress and not_recently_lost_badge
-    #   and inactive and not_recently_reminded and valid_email and owner_accepts_emails.
+    #   and inactive and not_recently_reminded and valid_email
+    #   and owner_accepts_emails.
     # where these terms are defined as:
     #   in_progress = badge_percentage less than 100%.
     #   not_recently_lost_badge = lost_passing_at IS NULL OR
@@ -537,7 +538,7 @@ class Project < ApplicationRecord
       .joins(:user).references(:user) # Need this to check email address
       .where('user_id IS NOT NULL') # Safety check
       .where('users.encrypted_email IS NOT NULL')
-      .where('users.notification_emails = ?', true)
+      .where(users: { notification_emails: true })
       .reorder(Arel.sql('COALESCE(last_reminder_at, projects.updated_at)'))
       .first(MAX_REMINDERS)
   end

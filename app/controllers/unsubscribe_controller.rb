@@ -15,7 +15,7 @@ class UnsubscribeController < ApplicationController
   # Security: Skip CSRF for unsubscribe actions since users access via email links
   # The unsubscribe process has its own strong security via HMAC token validation
   # which is more secure than CSRF tokens for this use case
-  skip_before_action :verify_authenticity_token, only: [:edit, :create]
+  skip_before_action :verify_authenticity_token, only: %i[edit create]
 
   # Omit useless unchanged session cookie for performance & privacy
   before_action :omit_unchanged_session_cookie
@@ -25,28 +25,32 @@ class UnsubscribeController < ApplicationController
   # for confirmation.
   def edit
     return unless validate_unsubscribe_params
+
     # Set display values for the form (read-only)
     @email = params[:email]
-    @issued = params[:issued]  # YYYY-MM-DD
+    @issued = params[:issued] # YYYY-MM-DD
     @token = params[:token]
   end
 
   # POST /unsubscribe
   # Process the unsubscribe request
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def create
     return unless validate_unsubscribe_params
+
     begin
       # Security: Use parameterized queries and validate input
       email = params[:email]
-      issued = params[:issued]  # YYYY-MM-DD
+      issued = params[:issued] # YYYY-MM-DD
       token = params[:token]
 
       # Security: Validate token before checking the database.
       # This gives specific error responses
       unless verify_unsubscribe_token(email, issued, token)
         # Security: Log potential security incident (without PII)
-        Rails.logger.info "Invalid unsubscribe token attempt for email domain: #{email.split('@').last}"
-        flash[:error] = t('unsubscribe.invalid_token')
+        email_domain = email.split('@').last
+        Rails.logger.info "Invalid unsubscribe token attempt for email domain: #{email_domain}"
+        flash.now[:error] = t('unsubscribe.invalid_token')
         render :edit, status: :unprocessable_entity
         return
       end
@@ -55,20 +59,25 @@ class UnsubscribeController < ApplicationController
       ActiveRecord::Base.transaction do
         # Update ALL users with exact matching email address (case-sensitive)
         # Security: Use safe database queries with parameterized statements
+        # Note: update_all is safe here since we're only updating a simple boolean field
+        # and we've already validated all inputs above
+        # rubocop:disable Rails/SkipsModelValidations
         updated_count = User.where(email: email, notification_emails: true)
-                           .update_all(notification_emails: false, updated_at: Time.current)
+                            .update_all(notification_emails: false,
+                                        updated_at: Time.current)
+        # rubocop:enable Rails/SkipsModelValidations
 
         if updated_count.zero?
-          flash[:error] = t('unsubscribe.no_matching_accounts')
+          flash.now[:error] = t('unsubscribe.no_matching_accounts')
           render :edit, status: :unprocessable_entity
           return
         end
 
         # Security: Log the unsubscribe action (without PII)
-        Rails.logger.info "Unsubscribe success: #{updated_count} accounts updated for domain: #{email.split('@').last}"
+        email_domain = email.split('@').last
+        Rails.logger.info "Unsubscribe success: #{updated_count} accounts updated for domain: #{email_domain}"
         flash[:notice] = t('unsubscribe.success', count: updated_count)
       end
-
     rescue ActiveRecord::RecordInvalid => e
       # Security: Log error without exposing internal details
       Rails.logger.error "Unsubscribe database error: #{e.class}"
@@ -85,10 +94,12 @@ class UnsubscribeController < ApplicationController
 
     redirect_to root_path
   end
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
   private
 
   # Security: Validate all unsubscribe parameters
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def validate_unsubscribe_params
     email = params[:email]
     issued = params[:issued]
@@ -96,25 +107,29 @@ class UnsubscribeController < ApplicationController
 
     # Step 1: Check for required parameters
     if email.blank? || issued.blank? || token.blank?
-      flash[:error] = t('unsubscribe.missing_parameters')
+      flash.now[:error] = t('unsubscribe.missing_parameters')
       render :edit, status: :bad_request
       return false
     end
 
     # Step 2: Check parameter lengths to prevent DoS attacks
     if email.length > 254 || issued.length > 12 || token.length > 64
-      flash[:error] = t('unsubscribe.invalid_parameters')
+      flash.now[:error] = t('unsubscribe.invalid_parameters')
       render :edit, status: :bad_request
       return false
     end
 
     # Step 3: Validate individual field formats
-    unless valid_email_format?(email) && valid_issued_format?(issued) && valid_token_format?(token)
-      flash[:error] = t('unsubscribe.invalid_parameters')
+    valid_formats = valid_email_format?(email) &&
+                    valid_issued_format?(issued) &&
+                    valid_token_format?(token)
+    unless valid_formats
+      flash.now[:error] = t('unsubscribe.invalid_parameters')
       render :edit, status: :bad_request
       return false
     end
 
     true
   end
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 end

@@ -1,0 +1,54 @@
+---
+http_interactions:
+- request:
+    method: head
+    uri: https://secure.gravatar.com/avatar/2cebd35550bdeeb25dd5ac9136c4dbd0?d=404
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Thu, 07 Aug 2025 00:24:41 GMT
+      Content-Type:
+      - text/html; charset=utf-8
+      Content-Length:
+      - '13'
+      Connection:
+      - keep-alive
+      Last-Modified:
+      - Wed, 11 Jan 1984 08:00:00 GMT
+      Link:
+      - <https://gravatar.com/avatar/2cebd35550bdeeb25dd5ac9136c4dbd0?d=404>; rel="canonical"
+      Access-Control-Allow-Origin:
+      - "*"
+      Etag:
+      - '"404"'
+      Cache-Control:
+      - max-age=300
+      Expires:
+      - Thu, 07 Aug 2025 00:29:41 GMT
+      Alt-Svc:
+      - h3=":443"; ma=86400
+      X-Nc:
+      - MISS dca 2
+      Server-Timing:
+      - a8c-cdn, dc;desc=dca, cache;desc=MISS;dur=37.0
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version: 
+  recorded_at: Thu, 07 Aug 2025 00:24:41 GMT
+recorded_with: VCR 5.0.0

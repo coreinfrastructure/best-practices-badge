@@ -811,7 +811,7 @@ en:
         title: 'Email Notification Settings'
         description_html: >-
           To disable inactivity reminder emails, please edit your
-          <a href="/users/edit">user profile settings</a>.
+          <a href="/users/%{user_id}/edit">user profile settings</a>.
           This setting applies to all your projects.
       general_comments:
         description: 'Other general comments about the project:'
@@ -899,7 +899,7 @@ en:
       entry for at least 30 days, we'll normally send you an inactivity
       reminder about every 30-60 days.
       You can disable these inactivity reminder messages at any time by
-      editing your <a href="/users/edit">user account settings</a>
+      editing your <a href="/users/%{user_id}/edit">user account settings</a>
       to turn off "Email notifications".
       If your project has earned a passing badge, or its
       badge entry has been edited within 30 days,
@@ -928,7 +928,7 @@ en:
       entry for at least 30 days, we'll normally send you an inactivity
       reminder about every 30-60 days.
       You can disable these inactivity reminder messages at any time by
-      editing your user account settings to turn off "Email notifications".
+      editing your user account settings at /users/%{user_id}/edit to turn off "Email notifications".
       Be sure to edit your user profile settings if you want to change whether
       or not you receive inactivity reminders!
       If your project has earned a passing badge, or its
@@ -974,7 +974,7 @@ en:
       We don't send reminders if you continue to update your badge entry,
       and we only send reminders approximately every 30-60 days.  However,
       if you want to disable these reminder messages, edit your
-      <a href="/users/edit">user account settings</a>
+      <a href="/users/%{user_id}/edit">user account settings</a>
       to turn off "Email notifications".
       This setting applies to all your projects.
       We hope you'll instead keep working at it
@@ -1012,7 +1012,7 @@ en:
       We don't send reminders if you continue to update your badge entry,
       and we only send reminders approximately every 30-60 days.  However,
       if you want to disable these reminder messages, edit your
-      user account settings to turn off "Email notifications".
+      user account settings at /users/%{user_id}/edit to turn off "Email notifications".
       This setting applies to all your projects.
       We hope you'll instead keep working at it
       and eventually earn the badge.

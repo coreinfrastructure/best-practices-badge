@@ -342,7 +342,7 @@
         <br>
         <div class="alert alert-info">
           <strong><%= t('projects.misc.reminder_notification_note.title') %></strong>
-          <%= t('projects.misc.reminder_notification_note.description_html') %>
+          <%= t('projects.misc.reminder_notification_note.description_html', user_id: current_user&.id) %>
         </div>
       </div>
       </div>

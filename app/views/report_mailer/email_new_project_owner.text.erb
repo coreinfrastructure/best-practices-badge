@@ -5,6 +5,7 @@
 <%= @project_info_url %>
 
 <%= t 'report_mailer.new_project_part3_text',
-      project_info_url: @project_info_url %>
+      project_info_url: @project_info_url,
+      user_id: @project.user_id %>
 
 <%= t 'report_mailer.ending' %>

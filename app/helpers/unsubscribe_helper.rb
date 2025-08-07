@@ -113,21 +113,19 @@ module UnsubscribeHelper
     # Security: First check if date format is valid YYYY-MM-DD
     return false unless valid_issued_format?(issued_date)
 
-    begin
-      # Convert string to Date
-      date = Date.parse(issued_date)
+    # Convert string to Date, won't raise exceptions because we know format OK
+    date = Date.parse(issued_date)
 
-      # Security: Check date is not in future (with small tolerance for clock skew)
-      return false if date > Date.current + 1.day
+    # Security: Check date is not in future.
+    # We don't need tolerance for clock skew because the date we're checking
+    # should be a date we sent earlier.
+    return false if date > Date.current
 
-      # Security: Check date is not too far in past
-      # (prevents malicious use of old stolen unsubscribe link)
-      return false if date < Date.current - MAX_TOKEN_AGE_DAYS.days
+    # Security: Check date is not too far in past
+    # (prevents malicious use of old stolen unsubscribe link)
+    return false if date < Date.current - MAX_TOKEN_AGE_DAYS.days
 
-      true
-    rescue ArgumentError, TypeError
-      false
-    end
+    true
   end
 
   # Security: Validate email format

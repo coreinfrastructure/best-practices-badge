@@ -251,7 +251,7 @@ class UsersController < ApplicationController
   def user_params
     user_params = params.require(:user).permit(
       :provider, :uid, :name, :email, :password,
-      :password_confirmation, :preferred_locale
+      :password_confirmation, :preferred_locale, :notification_emails
     )
     # Remove the password and password confirmation keys for empty values
     user_params.delete(:password) if user_params[:password].blank?

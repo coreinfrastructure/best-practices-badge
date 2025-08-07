@@ -377,5 +377,71 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     follow_redirect!
     my_assert_select '.alert-success', 'User deleted.'
   end
+
+  test 'logged in user can change own notification_emails setting' do
+    log_in_as(@user, password: 'password1')
+    original_value = @user.notification_emails
+    new_value = !original_value
+
+    VCR.use_cassette('logged_in_user_can_change_own_notification_emails_setting') do
+      patch "/en/users/#{@user.id}", params: {
+        user: { notification_emails: new_value }
+      }
+    end
+
+    assert_redirected_to user_path(@user)
+    @user.reload
+    assert_equal new_value, @user.notification_emails
+  end
+
+  test 'logged in user can see notification_emails field in edit form' do
+    log_in_as(@user, password: 'password1')
+
+    get "/en/users/#{@user.id}/edit"
+
+    assert_response :success
+    assert_includes @response.body, 'notification_emails'
+    assert_includes @response.body, 'Email notifications'
+  end
+
+  test 'logged in user cannot change other user notification_emails setting' do
+    log_in_as(@user, password: 'password1')
+    original_value = @other_user.notification_emails
+    new_value = !original_value
+
+    patch "/en/users/#{@other_user.id}", params: {
+      user: { notification_emails: new_value }
+    }
+
+    assert_redirected_to root_url
+    @other_user.reload
+    assert_equal original_value, @other_user.notification_emails
+  end
+
+  test 'logged in user cannot see other user edit form' do
+    log_in_as(@user, password: 'password1')
+
+    get "/en/users/#{@other_user.id}/edit"
+
+    assert_redirected_to root_url
+    follow_redirect!
+    assert_includes @response.body, 'Sorry, you are not allowed to do that.'
+  end
+
+  test 'admin can change any user notification_emails setting' do
+    log_in_as(@admin)
+    original_value = @user.notification_emails
+    new_value = !original_value
+
+    VCR.use_cassette('admin_can_change_any_user_notification_emails_setting') do
+      patch "/en/users/#{@user.id}", params: {
+        user: { notification_emails: new_value }
+      }
+    end
+
+    assert_redirected_to user_path(@user)
+    @user.reload
+    assert_equal new_value, @user.notification_emails
+  end
 end
 # rubocop:enable Metrics/ClassLength

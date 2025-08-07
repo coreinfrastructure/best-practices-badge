@@ -325,6 +325,8 @@ en:
       update_user_info: Update User Information
       save_changes: Save changes
       inadequate_privileges: Sorry, you are not allowed to do that.
+      notification_emails: Email notifications
+      notification_emails_help: Receive email notifications about your projects
     update:
       profile_updated: Profile updated
     show:

@@ -78,18 +78,6 @@ class UnsubscribeController < ApplicationController
         Rails.logger.info "Unsubscribe success: #{updated_count} accounts updated for domain: #{email_domain}"
         flash[:notice] = t('unsubscribe.success', count: updated_count)
       end
-    rescue ActiveRecord::RecordInvalid => e
-      # Security: Log error without exposing internal details
-      Rails.logger.error "Unsubscribe database error: #{e.class}"
-      flash[:error] = t('unsubscribe.error')
-      render :edit, status: :internal_server_error
-      return
-    rescue StandardError => e
-      # Security: Log error without exposing internal details
-      Rails.logger.error "Unsubscribe processing error: #{e.class}"
-      flash[:error] = t('unsubscribe.error')
-      render :edit, status: :internal_server_error
-      return
     end
 
     redirect_to root_path

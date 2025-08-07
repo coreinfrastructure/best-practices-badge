@@ -287,6 +287,50 @@ class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
     assert_equal '1; mode=block', response.headers['X-XSS-Protection']
   end
 
+  # Test zero updated count scenario - when no matching users found with notification_emails=true
+  test 'should handle no matching accounts to unsubscribe' do
+    # Create a user with notification_emails already disabled
+    user_already_unsubscribed = User.create!(
+      name: 'Already Unsubscribed User',
+      email: 'already_unsubscribed@example.com',
+      provider: 'local',
+      password: 'valid_password_123',
+      activated: true,
+      notification_emails: false
+    )
+
+    # Generate token for the already unsubscribed user
+    token = generate_unsubscribe_token(user_already_unsubscribed.email, @issued_date)
+
+    post unsubscribe_path(locale: 'en'), params: {
+      email: user_already_unsubscribed.email,
+      token: token,
+      issued: @issued_date.strftime('%Y-%m-%d')
+    }
+
+    assert_response :unprocessable_entity
+    assert_match(/no.*matching.*accounts/i, flash[:error])
+    
+    # Verify user state remains unchanged
+    user_already_unsubscribed.reload
+    assert_not user_already_unsubscribed.notification_emails, 'User should remain unsubscribed'
+  end
+
+  # Test no matching users scenario with different approach - user with different email
+  test 'should handle unsubscribe request for non-existent email' do
+    non_existent_email = 'nonexistent@example.com'
+    token = generate_unsubscribe_token(non_existent_email, @issued_date)
+
+    post unsubscribe_path(locale: 'en'), params: {
+      email: non_existent_email,
+      token: token,
+      issued: @issued_date.strftime('%Y-%m-%d')
+    }
+
+    assert_response :unprocessable_entity
+    assert_match(/no.*matching.*accounts/i, flash[:error])
+  end
+
   private
 
   # Helper method to generate unsubscribe token (matches controller logic)

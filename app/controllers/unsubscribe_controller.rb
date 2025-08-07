@@ -54,29 +54,26 @@ class UnsubscribeController < ApplicationController
       return
     end
 
-    # Use database transaction for atomicity
-    ActiveRecord::Base.transaction do
-      # Update ALL users with exact matching email address (case-sensitive)
-      # Security: Use safe database queries with parameterized statements
-      # Note: update_all is safe here since we're only updating a simple boolean field
-      # and we've already validated all inputs above
-      # rubocop:disable Rails/SkipsModelValidations
-      updated_count = User.where(email: email, notification_emails: true)
-                          .update_all(notification_emails: false,
-                                      updated_at: Time.current)
-      # rubocop:enable Rails/SkipsModelValidations
+    # Update ALL users with exact matching email address (case-sensitive)
+    # Security: Use safe database queries with parameterized statements
+    # Note: update_all is safe here since we're only updating a simple boolean field
+    # and we've already validated all inputs above
+    # rubocop:disable Rails/SkipsModelValidations
+    updated_count = User.where(email: email, notification_emails: true)
+                        .update_all(notification_emails: false,
+                                    updated_at: Time.current)
+    # rubocop:enable Rails/SkipsModelValidations
 
-      if updated_count.zero?
-        flash.now[:error] = t('unsubscribe.no_matching_accounts')
-        render :edit, status: :unprocessable_entity
-        return
-      end
-
-      # Security: Log the unsubscribe action (without PII)
-      email_domain = email.split('@').last
-      Rails.logger.info "Unsubscribe success: #{updated_count} accounts updated for domain: #{email_domain}"
-      flash[:notice] = t('unsubscribe.success', count: updated_count)
+    if updated_count.zero?
+      flash.now[:error] = t('unsubscribe.no_matching_accounts')
+      render :edit, status: :unprocessable_entity
+      return
     end
+
+    # Security: Log the unsubscribe action (without PII)
+    email_domain = email.split('@').last
+    Rails.logger.info "Unsubscribe success: #{updated_count} accounts updated for domain: #{email_domain}"
+    flash[:notice] = t('unsubscribe.success', count: updated_count)
 
     redirect_to root_path
   end

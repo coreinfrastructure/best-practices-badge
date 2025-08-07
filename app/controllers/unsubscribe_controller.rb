@@ -38,46 +38,44 @@ class UnsubscribeController < ApplicationController
   def create
     return unless validate_unsubscribe_params
 
-    begin
-      # Security: Use parameterized queries and validate input
-      email = params[:email]
-      issued = params[:issued] # YYYY-MM-DD
-      token = params[:token]
+    # Security: Use parameterized queries and validate input
+    email = params[:email]
+    issued = params[:issued] # YYYY-MM-DD
+    token = params[:token]
 
-      # Security: Validate token before checking the database.
-      # This gives specific error responses
-      unless verify_unsubscribe_token(email, issued, token)
-        # Security: Log potential security incident (without PII)
-        email_domain = email.split('@').last
-        Rails.logger.info "Invalid unsubscribe token attempt for email domain: #{email_domain}"
-        flash.now[:error] = t('unsubscribe.invalid_token')
+    # Security: Validate token before checking the database.
+    # This gives specific error responses
+    unless verify_unsubscribe_token(email, issued, token)
+      # Security: Log potential security incident (without PII)
+      email_domain = email.split('@').last
+      Rails.logger.info "Invalid unsubscribe token attempt for email domain: #{email_domain}"
+      flash.now[:error] = t('unsubscribe.invalid_token')
+      render :edit, status: :unprocessable_entity
+      return
+    end
+
+    # Use database transaction for atomicity
+    ActiveRecord::Base.transaction do
+      # Update ALL users with exact matching email address (case-sensitive)
+      # Security: Use safe database queries with parameterized statements
+      # Note: update_all is safe here since we're only updating a simple boolean field
+      # and we've already validated all inputs above
+      # rubocop:disable Rails/SkipsModelValidations
+      updated_count = User.where(email: email, notification_emails: true)
+                          .update_all(notification_emails: false,
+                                      updated_at: Time.current)
+      # rubocop:enable Rails/SkipsModelValidations
+
+      if updated_count.zero?
+        flash.now[:error] = t('unsubscribe.no_matching_accounts')
         render :edit, status: :unprocessable_entity
         return
       end
 
-      # Use database transaction for atomicity
-      ActiveRecord::Base.transaction do
-        # Update ALL users with exact matching email address (case-sensitive)
-        # Security: Use safe database queries with parameterized statements
-        # Note: update_all is safe here since we're only updating a simple boolean field
-        # and we've already validated all inputs above
-        # rubocop:disable Rails/SkipsModelValidations
-        updated_count = User.where(email: email, notification_emails: true)
-                            .update_all(notification_emails: false,
-                                        updated_at: Time.current)
-        # rubocop:enable Rails/SkipsModelValidations
-
-        if updated_count.zero?
-          flash.now[:error] = t('unsubscribe.no_matching_accounts')
-          render :edit, status: :unprocessable_entity
-          return
-        end
-
-        # Security: Log the unsubscribe action (without PII)
-        email_domain = email.split('@').last
-        Rails.logger.info "Unsubscribe success: #{updated_count} accounts updated for domain: #{email_domain}"
-        flash[:notice] = t('unsubscribe.success', count: updated_count)
-      end
+      # Security: Log the unsubscribe action (without PII)
+      email_domain = email.split('@').last
+      Rails.logger.info "Unsubscribe success: #{updated_count} accounts updated for domain: #{email_domain}"
+      flash[:notice] = t('unsubscribe.success', count: updated_count)
     end
 
     redirect_to root_path

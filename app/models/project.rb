@@ -488,7 +488,7 @@ class Project < ApplicationRecord
     #
     # Select projects eligible for reminders =
     #   in_progress and not_recently_lost_badge and not_disabled_reminders
-    #   and inactive and not_recently_reminded and valid_email.
+    #   and inactive and not_recently_reminded and valid_email and owner_accepts_emails.
     # where these terms are defined as:
     #   in_progress = badge_percentage less than 100%.
     #   not_recently_lost_badge = lost_passing_at IS NULL OR
@@ -499,6 +499,7 @@ class Project < ApplicationRecord
     #     more than 60 days ago. Notice that if recently_reminded is null
     #     (no reminders have been sent), only the other criteria matter.
     #   valid_email = users.encrypted_email (joined) is not null
+    #   owner_accepts_emails = users.notification_emails is true
     # Prioritize. Sort by the last_reminder_at datetime
     #   (use updated_at if last_reminder_at is null), oldest first.
     #   Since last_reminder_at gets updated with a newer datetime when
@@ -538,6 +539,7 @@ class Project < ApplicationRecord
       .joins(:user).references(:user) # Need this to check email address
       .where('user_id IS NOT NULL') # Safety check
       .where('users.encrypted_email IS NOT NULL')
+      .where('users.notification_emails = ?', true)
       .reorder(Arel.sql('COALESCE(last_reminder_at, projects.updated_at)'))
       .first(MAX_REMINDERS)
   end

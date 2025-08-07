@@ -810,7 +810,8 @@ en:
       reminder_notification_note:
         title: 'Email Notification Settings'
         description_html: >-
-          To disable inactivity reminder emails, please edit your
+          If you are the owner of this badge entry and want
+          to disable inactivity reminder emails, please edit your
           <a href="/users/%{user_id}/edit">user profile settings</a>.
           This setting applies to all your projects.
       general_comments:

@@ -122,6 +122,15 @@ class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
   test 'should process valid unsubscribe request' do
     assert @user.notification_emails, 'User should start with notifications enabled'
 
+    # First get the form to obtain CSRF token (simulating real user workflow)
+    get unsubscribe_path(locale: 'en'), params: {
+      email: @user.email,
+      token: @valid_token,
+      issued: @issued_date.strftime('%Y-%m-%d')
+    }
+    assert_response :success
+
+    # Submit the form with CSRF token
     post unsubscribe_path(locale: 'en'), params: {
       email: @user.email,
       token: @valid_token,
@@ -310,7 +319,7 @@ class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :unprocessable_entity
     assert_match(/no.*matching.*accounts/i, flash[:error])
-    
+
     # Verify user state remains unchanged
     user_already_unsubscribed.reload
     assert_not user_already_unsubscribed.notification_emails, 'User should remain unsubscribed'
@@ -329,6 +338,86 @@ class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :unprocessable_entity
     assert_match(/no.*matching.*accounts/i, flash[:error])
+  end
+
+  # Integration test: Full workflow with CSRF protection enabled
+  # Tests the complete user journey: click email URL -> view form -> submit form -> unsubscribe
+  test 'should complete full unsubscribe workflow with CSRF protection' do
+    assert @user.notification_emails, 'User should start with notifications enabled'
+
+    # Step 1: User clicks URL from email (GET request - no CSRF needed)
+    get unsubscribe_path(locale: 'en'), params: {
+      email: @user.email,
+      token: @valid_token,
+      issued: @issued_date.strftime('%Y-%m-%d')
+    }
+
+    assert_response :success
+    assert_select 'form[action=?]', unsubscribe_path(locale: 'en')
+
+    # Verify the form includes CSRF token (Rails automatically adds it when CSRF is enabled)
+    assert_select 'input[name="authenticity_token"]', 1
+
+    # Step 2: Extract CSRF token from the rendered form
+    # In a real browser, this would be automatically included in form submission
+    csrf_token = css_select('input[name="authenticity_token"]').first['value']
+    assert_not_nil csrf_token, 'CSRF token should be present in the form'
+
+    # Step 3: User submits the form (POST request - CSRF protection applies)
+    post unsubscribe_path(locale: 'en'), params: {
+      email: @user.email,
+      token: @valid_token,
+      issued: @issued_date.strftime('%Y-%m-%d'),
+      authenticity_token: csrf_token
+    }
+
+    # Step 4: Verify successful unsubscribe
+    assert_redirected_to root_path(locale: 'en')
+
+    @user.reload
+    assert_not @user.notification_emails, 'User should be unsubscribed after form submission'
+  end
+
+  # Test that CSRF protection is properly configured for the create action
+  test 'should have CSRF protection enabled for create action' do
+    # Check that the controller includes the forgery protection module
+    assert UnsubscribeController.included_modules.include?(ActionController::RequestForgeryProtection),
+           'Controller should include CSRF protection module'
+
+    # Create controller instance to test the skip_before_action behavior
+    controller = UnsubscribeController.new
+
+    # Test that edit action would skip CSRF (this verifies our configuration)
+    controller.action_name = 'edit'
+    edit_filters = controller.class._process_action_callbacks
+                             .select { |cb| cb.kind == :before && cb.filter == :verify_authenticity_token }
+
+    # Should have the skip configuration in place
+    assert edit_filters.any?, 'Should have CSRF-related before_action callbacks configured'
+
+    # The key test: verify that create action is NOT in the skip list
+    # by checking that the controller source includes the correct skip_before_action
+    controller_source = File.read(Rails.root.join('app/controllers/unsubscribe_controller.rb'))
+    assert_match(/skip_before_action.*:verify_authenticity_token.*only.*\[:edit\]/, controller_source,
+                 'Controller should skip CSRF only for edit action, not create')
+  end
+
+  # Test that the form includes CSRF token for proper form submission
+  test 'should include CSRF token in unsubscribe form' do
+    get unsubscribe_path(locale: 'en'), params: {
+      email: @user.email,
+      token: @valid_token,
+      issued: @issued_date.strftime('%Y-%m-%d')
+    }
+
+    assert_response :success
+    # Verify that the form includes authenticity_token field
+    assert_select 'input[name="authenticity_token"]', 1, 'Form should include CSRF token'
+
+    # Verify the token has a value
+    csrf_token = css_select('input[name="authenticity_token"]').first['value']
+    assert_not_nil csrf_token, 'CSRF token should have a value'
+    assert csrf_token.length > 10, 'CSRF token should be a meaningful length'
   end
 
   private

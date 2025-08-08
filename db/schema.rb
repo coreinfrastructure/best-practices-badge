@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_04_120000) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_22_215212) do
   create_schema "heroku_ext"
 
   # These are extensions that must be enabled in order to support this database
@@ -547,7 +547,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_04_120000) do
     t.boolean "blocked", default: false, null: false
     t.text "blocked_rationale"
     t.datetime "activation_email_sent_at"
-    t.boolean "notification_emails", default: true, null: false
     t.index ["email_bidx"], name: "email_local_unique_bidx", unique: true, where: "((provider)::text = 'local'::text)"
     t.index ["email_bidx"], name: "index_users_on_email_bidx"
     t.index ["last_login_at"], name: "index_users_on_last_login_at"

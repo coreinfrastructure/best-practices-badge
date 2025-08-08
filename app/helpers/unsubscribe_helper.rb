@@ -89,7 +89,7 @@ module UnsubscribeHelper
   # @param token [String] The token to verify
   # @return [Boolean] True if the token is valid and within time window
   def verify_unsubscribe_token(email, issued_date, token)
-    return false if email.blank? || token.blank? || issued_date.nil?
+    return false if email.blank? || token.blank? || issued_date.blank?
 
     # Security: Validate issued date format and time window
     unless valid_issued_date?(issued_date)

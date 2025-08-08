@@ -11,16 +11,16 @@
 # See how all your routes lay out with "rake routes".
 
 # This regex defines all legal locale values:
-LEGAL_LOCALE = /(?:#{I18n.available_locales.join('|')})/.freeze
+LEGAL_LOCALE ||= /(?:#{I18n.available_locales.join('|')})/.freeze
 
 # This regex is used to verify criteria levels in routes:
-VALID_CRITERIA_LEVEL = /[0-2]/.freeze
+VALID_CRITERIA_LEVEL ||= /[0-2]/.freeze
 
 # Confirm that number-only id is provided
-VALID_ID = /[1-9][0-9]*/.freeze
+VALID_ID ||= /[1-9][0-9]*/.freeze
 
 # Valid values for static badge display
-VALID_STATIC_VALUE = /0|[1-9]{1,2}|passing|silver|gold/.freeze
+VALID_STATIC_VALUE ||= /0|[1-9]{1,2}|passing|silver|gold/.freeze
 
 Rails.application.routes.draw do
   # First, handle routing of special cases.
@@ -156,6 +156,9 @@ Rails.application.routes.draw do
     get 'auth/:provider/callback' => 'sessions#create'
     get '/signout' => 'sessions#destroy', as: :signout
     delete 'logout' => 'sessions#destroy'
+
+    get 'unsubscribe' => 'unsubscribe#edit'
+    post 'unsubscribe' => 'unsubscribe#create'
 
     # No other route, send a 404 ("not found").
     match '*path', via: :all, to: 'static_pages#error_404'

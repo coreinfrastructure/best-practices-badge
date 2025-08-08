@@ -340,11 +340,10 @@
       <div class="row">
       <div class="col-xs-12">
         <br>
-        <%= f.form_group :disabled_reminders do %>
-          <%= f.check_box :disabled_reminders, disabled: is_disabled do
-                t('projects.misc.disabled_reminders')
-              end %>
-        <% end %>
+        <div class="alert alert-info">
+          <strong><%= t('projects.misc.reminder_notification_note.title') %></strong>
+          <%= t('projects.misc.reminder_notification_note.description_html', user_id: current_user&.id) %>
+        </div>
       </div>
       </div>
 

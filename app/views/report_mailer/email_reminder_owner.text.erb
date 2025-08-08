@@ -2,6 +2,13 @@
       project_name: @project.name,
       project_info_url: @project_info_url,
       project_updated_at: @project.updated_at,
-      project_badge_percentage_0: @project.badge_percentage_0 %>
+      project_badge_percentage_0: @project.badge_percentage_0,
+      user_id: @project.user_id %>
 
 <%= t 'report_mailer.ending' %>
+
+<% if @unsubscribe_url %>
+
+---
+<%= t 'report_mailer.unsubscribe_notice_text', unsubscribe_url: @unsubscribe_url %>
+<% end %>

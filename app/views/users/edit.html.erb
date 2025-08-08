@@ -22,6 +22,10 @@
          f.select :preferred_locale, locale_names, {}, {class: "form-control"}
        %>
 
+       <%= f.label :notification_emails, t('users.edit.notification_emails') %>
+       <%= f.check_box :notification_emails, class: "form-check-input" %>
+       <small class="form-text text-muted"><%= t('users.edit.notification_emails_help') %></small>
+
        <% if @user.provider == 'local' %>
          <%= f.label :password, t('users.new.password') %>
          <%= f.password_field :password, autocomplete: "off", class:"form-control" %>

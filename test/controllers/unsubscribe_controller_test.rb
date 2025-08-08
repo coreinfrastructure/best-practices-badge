@@ -403,11 +403,60 @@ class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
     assert csrf_token.length > 10, 'CSRF token should be a meaningful length'
   end
 
+  # Test key rotation functionality - token should fail if generated with unknown key
+  test 'should reject token generated with unknown key not in rotation' do
+    # Test keys for rotation - using the verify helper directly for this test
+    test_keys = %w[first_test_key_12345 second_test_key_67890]
+    unknown_key = 'unknown_test_key_99999'
+
+    # Generate token with unknown key
+    token_with_unknown_key = generate_unsubscribe_token(
+      @user.email,
+      @issued_date,
+      key: unknown_key
+    )
+
+    # Test verification should fail when unknown key token is used
+    assert_not verify_unsubscribe_token(
+      @user.email,
+      @issued_date.strftime('%Y-%m-%d'),
+      token_with_unknown_key,
+      keys: test_keys
+    ), 'Token generated with unknown key should be invalid'
+
+    # Test verification should succeed when token is generated with a key in the set
+    token_with_known_key = generate_unsubscribe_token(
+      @user.email,
+      @issued_date,
+      key: test_keys[1]
+    )
+
+    assert verify_unsubscribe_token(
+      @user.email,
+      @issued_date.strftime('%Y-%m-%d'),
+      token_with_known_key,
+      keys: test_keys
+    ), 'Token generated with known key should be valid'
+  end
+
   private
 
+  # Helper method to verify unsubscribe token using the UnsubscribeHelper
+  def verify_unsubscribe_token(email, issued_date, token, keys: nil)
+    helper_class =
+      Class.new do
+        include UnsubscribeHelper
+      end
+    helper_class.new.verify_unsubscribe_token(email, issued_date, token, keys: keys)
+  end
+
   # Helper method to generate unsubscribe token (matches controller logic)
-  def generate_unsubscribe_token(email, issued_date = Date.current)
-    secret_key = ENV['BADGEAPP_UNSUBSCRIBE_KEY'] || Rails.application.secret_key_base
+  def generate_unsubscribe_token(email, issued_date = Date.current, key: nil)
+    # Use the same logic as the helper for key selection
+    keys_env = ENV['BADGEAPP_UNSUBSCRIBE_KEYS'] || Rails.application.secret_key_base
+    keys = keys_env.split(',').map(&:strip).reject(&:empty?)
+    secret_key = key || keys.first
+
     date_str = issued_date.is_a?(String) ? issued_date : issued_date.strftime('%Y-%m-%d')
     message = "#{email}:#{date_str}"
     OpenSSL::HMAC.hexdigest('SHA256', secret_key, message)

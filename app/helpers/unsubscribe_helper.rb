@@ -9,24 +9,30 @@ module UnsubscribeHelper
   # Maximum unsubscribe token age in days from environment (computed once at startup)
   MAX_TOKEN_AGE_DAYS = (ENV['BADGEAPP_UNSUBSCRIBE_DAYS'] || '30').to_i
 
+  # Unsubscribe secret keys for key rotation (computed once at startup)
+  # This allows tokens generated with any of these keys to be valid
+  # Format: comma-separated list of keys, with the first being the current key for generation
+  UNSUBSCRIBE_KEYS =
+    begin
+      keys_env = ENV['BADGEAPP_UNSUBSCRIBE_KEYS'] || Rails.application.secret_key_base
+      keys_env.split(',').map(&:strip).reject(&:empty?).freeze
+    end
+
   # Generate secure unsubscribe token with email and issued date.
   # This method generates tokens using only email and date, no database access
   #
   # @param email [String] The email address to generate the token for
   # @param issued_date [String] The date when the email was issued
+  # @param key [String] Optional secret key to use (defaults to first key in UNSUBSCRIBE_KEYS)
   # @return [String] A secure HMAC-based token
-  def generate_unsubscribe_token(email, issued_date)
+  def generate_unsubscribe_token(email, issued_date, key: UNSUBSCRIBE_KEYS.first)
     return if email.blank? || issued_date.nil?
     return unless email.is_a?(String) && issued_date.is_a?(String)
-
-    # Security: Use dedicated unsubscribe secret key from environment
-    secret_key = ENV['BADGEAPP_UNSUBSCRIBE_KEY'] ||
-                 Rails.application.secret_key_base
 
     # Security: Use HMAC with secret key for token generation
     # Include issued date in the message for time-based validation
     message = "#{email}:#{issued_date}"
-    OpenSSL::HMAC.hexdigest('SHA256', secret_key, message)
+    OpenSSL::HMAC.hexdigest('SHA256', key, message)
   end
 
   # Generate new unsubscribe token with current date.
@@ -83,26 +89,51 @@ module UnsubscribeHelper
 
   # Security: Verify unsubscribe token with time-based validation
   # This method uses constant-time comparison and NO database access
+  # Tries all keys in the provided keys array for key rotation support
   #
   # @param email [String] The email address to verify the token for
   # @param issued_date [String] The issued date from the request
   # @param token [String] The token to verify
+  # @param keys [Array<String>] Optional keys array to use (defaults to UNSUBSCRIBE_KEYS)
   # @return [Boolean] True if the token is valid and within time window
-  def verify_unsubscribe_token(email, issued_date, token)
+  def verify_unsubscribe_token(email, issued_date, token, keys: UNSUBSCRIBE_KEYS)
     return false if email.blank? || token.blank? || issued_date.blank?
+    return false if keys.blank?
 
     # Security: Validate issued date format and time window
-    unless valid_issued_date?(issued_date)
-      return false
+    return false unless valid_issued_date?(issued_date)
+
+    # Security: Try verification with each key in the array
+    verify_token_with_keys(email, issued_date, token, keys)
+  end
+
+  private
+
+  # Security: Try verification with each key in the array
+  # This supports key rotation - tokens generated with any of the keys will be valid
+  #
+  # @param email [String] The email address to verify the token for
+  # @param issued_date [String] The issued date from the request
+  # @param token [String] The token to verify
+  # @param keys [Array<String>] Keys array to try for verification
+  # @return [Boolean] True if any key successfully verifies the token
+  def verify_token_with_keys(email, issued_date, token, keys)
+    keys.each do |key|
+      next if key.blank?
+
+      # Security: Generate expected token for comparison (no database access)
+      expected_token = generate_unsubscribe_token(email, issued_date, key: key)
+      next if expected_token.nil?
+
+      # Security: Use constant-time comparison to prevent timing attacks
+      return true if ActiveSupport::SecurityUtils.secure_compare(expected_token, token)
     end
 
-    # Security: Generate expected token for comparison (no database access)
-    expected_token = generate_unsubscribe_token(email, issued_date)
-    return false if expected_token.nil?
-
-    # Security: Use constant-time comparison to prevent timing attacks
-    ActiveSupport::SecurityUtils.secure_compare(expected_token, token)
+    # If we get here, none of the keys worked
+    false
   end
+
+  public
 
   # Security: Validate issued date format and time window
   # @param issued_date [String] The date to validate

@@ -289,6 +289,8 @@ ru:
       update_user_info: Обновление информации о пользователе
       save_changes: Сохранить изменения
       inadequate_privileges:
+      notification_emails:
+      notification_emails_help:
     update:
       profile_updated: Профиль обновлен
     show:
@@ -775,6 +777,9 @@ ru:
         <strong>Предупреждение!</strong> Это не производственная
         система; это тестовый уровень.
       close: Закрыть
+      reminder_notification_note:
+        title:
+        description_html:
     delete:
       done: Проект успешно удален.
     delete_form:
@@ -941,6 +946,8 @@ ru:
       надеемся, что вы вместо этого продолжите работать над анкетой\nи
       в конечном итоге заработаете значок.\n\nСпасибо за ваше
       время."
+    unsubscribe_notice_html:
+    unsubscribe_notice_text:
   user_mailer:
     account_activation:
       before_html: |-
@@ -3155,3 +3162,18 @@ ru:
     criteria_why_p05_html:
     self_certification_p01_html:
     self_certification_p02_html:
+  unsubscribe:
+    header:
+    description:
+    email_label:
+    issued_label:
+    token_label:
+    submit:
+    confirm_message:
+    processing:
+    success:
+    invalid_token:
+    no_matching_accounts:
+    missing_parameters:
+    invalid_parameters:
+    error:

@@ -139,6 +139,8 @@ de:
       save_changes: Änderungen speichern
       inadequate_privileges: Verzeihung, das dürfen Sie night
         tun.
+      notification_emails:
+      notification_emails_help:
     update:
       profile_updated: Profil aktualisiert
     show:
@@ -664,6 +666,9 @@ de:
         <strong>Warnung!</strong> Dies ist nicht das Produktionssystem.
         Dies ist eine Teststufe.
       close: Geschlossesn
+      reminder_notification_note:
+        title:
+        description_html:
     delete:
       done: Das Projekt wurde erfolgreich gelöscht.
     delete_form:
@@ -876,6 +881,8 @@ de:
       Wir hoffen, dass Sie stattdessen weiter daran arbeiten
       und schließlich das Abzeichen verdienen.
       Vielen Dank für Ihre Zeit.
+    unsubscribe_notice_html:
+    unsubscribe_notice_text:
   user_mailer:
     account_activation:
       before_html: |-
@@ -3272,3 +3279,18 @@ de:
     criteria_why_p05_html:
     self_certification_p01_html:
     self_certification_p02_html:
+  unsubscribe:
+    header:
+    description:
+    email_label:
+    issued_label:
+    token_label:
+    submit:
+    confirm_message:
+    processing:
+    success:
+    invalid_token:
+    no_matching_accounts:
+    missing_parameters:
+    invalid_parameters:
+    error:

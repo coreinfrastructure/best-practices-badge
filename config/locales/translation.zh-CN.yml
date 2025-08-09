@@ -98,6 +98,8 @@ zh-CN:
       update_user_info: 更新用户信息
       save_changes: 保存更改
       inadequate_privileges: 抱歉，您不能这样做。
+      notification_emails:
+      notification_emails_help:
   project_stats:
     index:
       project_stats_header: 项目统计
@@ -350,6 +352,9 @@ zh-CN:
       justification_required_warning: 警告：需要更长的理由。
       in_development_warning_html: "<strong>警告！</strong>这不是生产系统;这是一个测试层。"
       close: 关闭
+      reminder_notification_note:
+        title:
+        description_html:
     delete:
       done: 项目已成功删除。
     delete_form:
@@ -572,6 +577,8 @@ zh-CN:
       我们希望您继续努力
       并最终获得徽章。
       感谢您的时间。
+    unsubscribe_notice_html:
+    unsubscribe_notice_text:
   project_name_unknown: "(未知名称)"
   locale_name:
     en: 英文
@@ -1486,3 +1493,18 @@ zh-CN:
     criteria_why_p05_html:
     self_certification_p01_html: <h3 id="criteria_self_certification">为什么要自我认证？</h3>
     self_certification_p02_html:
+  unsubscribe:
+    header:
+    description:
+    email_label:
+    issued_label:
+    token_label:
+    submit:
+    confirm_message:
+    processing:
+    success:
+    invalid_token:
+    no_matching_accounts:
+    missing_parameters:
+    invalid_parameters:
+    error:

@@ -65,8 +65,20 @@ module UnsubscribeHelper
     issued_date, token = generate_new_unsubscribe_token(email)
     return if token.nil?
 
-    # Security: Generate URL with proper parameters
-    # Use Rails URL helpers for security and proper encoding
+    # Build URL parameters and generate URL
+    url_params = build_unsubscribe_url_params(email, token, issued_date, locale)
+    url_for(url_params)
+  end
+
+  private
+
+  # Build URL parameters for unsubscribe URL generation
+  # @param email [String] Email address
+  # @param token [String] Generated token
+  # @param issued_date [String] Date token was issued
+  # @param locale [String, nil] Locale for the URL
+  # @return [Hash] URL parameters
+  def build_unsubscribe_url_params(email, token, issued_date, locale)
     url_params = {
       controller: 'unsubscribe',
       # This creates an odd URL, but strictly speaking, we are *editing*
@@ -81,9 +93,10 @@ module UnsubscribeHelper
 
     # Add locale if provided
     url_params[:locale] = locale if locale
-
-    url_for(url_params)
+    url_params
   end
+
+  public
 
   # Security: Verify unsubscribe token with time-based validation
   # This method uses constant-time comparison and NO database access

@@ -936,14 +936,15 @@ task :generate_unsubscribe_url, [:email] => :environment do |_t, args|
   protocol = Rails.application.config.force_ssl ? 'https' : 'http'
 
   # Create a simple module that provides URL options without modifying globals
-  url_helper = Module.new do
-    include Rails.application.routes.url_helpers
-    include UnsubscribeHelper
+  url_helper =
+    Module.new do
+      include Rails.application.routes.url_helpers
+      include UnsubscribeHelper
 
-    define_method :default_url_options do
-      { host: base_url, protocol: protocol }
+      define_method :default_url_options do
+        { host: base_url, protocol: protocol }
+      end
     end
-  end
 
   # Extend an object with our helper module
   helper_instance = Object.new.extend(url_helper)

@@ -1145,5 +1145,158 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_nil p.send(:clean_url, nil)
     assert_equal 'x/z', p.send(:clean_url, 'x/z')
   end
+
+  # Test repo_data with mock client to check basic functionality
+  test 'repo_data with valid github client returns processed repos' do
+    controller = ProjectsController.new
+
+    # Mock github client that returns successful data
+    mock_github = Object.new
+    mock_github.define_singleton_method(:auto_paginate=) { |value| }
+    mock_github.define_singleton_method(:repos) do |user, **options|
+      [
+        OpenStruct.new(
+          html_url: 'https://github.com/user/testrepo',
+          full_name: 'user/testrepo',
+          fork: false,
+          homepage: 'https://example.com'
+        ),
+        OpenStruct.new(
+          html_url: 'https://github.com/user/anotherepo',
+          full_name: 'user/anotherepo',
+          fork: true,
+          homepage: nil
+        )
+      ]
+    end
+
+    result = controller.send(:repo_data, mock_github)
+
+    assert_not_nil result
+    assert_equal 2, result.length
+    assert_equal 'user/anotherepo', result[0][0] # Should be sorted by name
+    assert_equal true, result[0][1] # fork status
+    assert_equal 'user/testrepo', result[1][0]
+    assert_equal false, result[1][1] # fork status
+  end
+
+  test 'repo_data with unauthorized exception returns nil' do
+    controller = ProjectsController.new
+
+    # Create a mock object that mimics the Octokit client
+    mock_github = Class.new do
+      def auto_paginate=(value)
+        # Mock implementation
+      end
+
+      def repos(user, sort:, per_page:)
+        raise Octokit::Unauthorized.new(response_status: 401, response_body: 'Unauthorized')
+      end
+    end.new
+
+    result = controller.send(:repo_data, mock_github)
+
+    assert_nil result
+  end
+
+  test 'repo_data with empty repos returns nil' do
+    controller = ProjectsController.new
+
+    # Mock github client that returns empty array
+    mock_github = Object.new
+    mock_github.define_singleton_method(:auto_paginate=) { |value| }
+    mock_github.define_singleton_method(:repos) do |user, **options|
+      []
+    end
+
+    result = controller.send(:repo_data, mock_github)
+
+    assert_nil result
+  end
+
+  test 'repo_data filters out existing projects' do
+    controller = ProjectsController.new
+    existing_repo_url = 'https://github.com/user/existingrepo'
+
+    # Create a project with existing repo URL
+    Project.create!(
+      name: 'Existing Project',
+      repo_url: existing_repo_url,
+      homepage_url: 'https://example.com',
+      user: @user
+    )
+
+    # Mock github client that returns repos including the existing one
+    mock_github = Object.new
+    mock_github.define_singleton_method(:auto_paginate=) { |value| }
+    mock_github.define_singleton_method(:repos) do |user, **options|
+      [
+        OpenStruct.new(
+          html_url: existing_repo_url,
+          full_name: 'user/existingrepo',
+          fork: false,
+          homepage: nil
+        ),
+        OpenStruct.new(
+          html_url: 'https://github.com/user/newrepo',
+          full_name: 'user/newrepo',
+          fork: false,
+          homepage: nil
+        )
+      ]
+    end
+
+    result = controller.send(:repo_data, mock_github)
+
+    assert_not_nil result
+    assert_equal 1, result.length
+    assert_equal 'user/newrepo', result[0][0] # Only the new repo should be returned
+  end
+
+  test 'repo_data with nil repos returns nil' do
+    controller = ProjectsController.new
+
+    # Mock github client that returns nil
+    mock_github = Object.new
+    mock_github.define_singleton_method(:auto_paginate=) { |value| }
+    mock_github.define_singleton_method(:repos) do |user, **options|
+      nil
+    end
+
+    result = controller.send(:repo_data, mock_github)
+
+    assert_nil result
+  end
+
+  test 'repo_data sorts repositories by full_name' do
+    controller = ProjectsController.new
+
+    # Mock github client with unsorted repos
+    mock_github = Object.new
+    mock_github.define_singleton_method(:auto_paginate=) { |value| }
+    mock_github.define_singleton_method(:repos) do |user, **options|
+      [
+        OpenStruct.new(
+          html_url: 'https://github.com/user/zrepo',
+          full_name: 'user/zrepo',
+          fork: false,
+          homepage: nil
+        ),
+        OpenStruct.new(
+          html_url: 'https://github.com/user/arepo',
+          full_name: 'user/arepo',
+          fork: true,
+          homepage: 'https://example.com'
+        )
+      ]
+    end
+
+    result = controller.send(:repo_data, mock_github)
+
+    assert_not_nil result
+    assert_equal 2, result.length
+    assert_equal 'user/arepo', result[0][0] # Should be first after sorting
+    assert_equal 'user/zrepo', result[1][0] # Should be second after sorting
+  end
 end
 # rubocop:enable Metrics/ClassLength

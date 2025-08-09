@@ -660,8 +660,8 @@ class ProjectsController < ApplicationController
   # We omit repos that are already pursuing a badge.
   # rubocop:disable Style/MethodCalledOnDoEndBlock, Metrics/MethodLength
   # rubocop:disable Metrics/AbcSize
-  def repo_data
-    github = Octokit::Client.new access_token: session[:user_token]
+  def repo_data(github = nil)
+    github ||= Octokit::Client.new access_token: session[:user_token]
     # Take extra steps to prevent a timeout when retrieving repo data.
     # If we enable auto_pagination we get a list of all the repos, but it
     # appears that GitHub sometimes hangs in those cases if the user has

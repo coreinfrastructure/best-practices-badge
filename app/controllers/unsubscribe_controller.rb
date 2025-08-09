@@ -12,9 +12,6 @@ class UnsubscribeController < ApplicationController
   # Security: Enable CSRF protection for form submissions (create action)
   protect_from_forgery with: :exception
 
-  # Omit useless unchanged session cookie for performance & privacy
-  before_action :omit_unchanged_session_cookie
-
   # GET /unsubscribe
   # Display the unsubscribe form with email, token, and issued date
   # for confirmation.

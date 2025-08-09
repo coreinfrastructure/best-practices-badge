@@ -154,6 +154,8 @@ fr:
       save_changes: Enregistrer les modifications
       inadequate_privileges: Désolé, vous n'êtes pas autorisé
         à faire cela.
+      notification_emails:
+      notification_emails_help:
   project_stats:
     index:
       project_stats_header: Statistiques du projet
@@ -662,6 +664,9 @@ fr:
         <strong>Avertissement !</strong> Ceci n'est pas le système
         de production ; c'est un niveau de test.
       close: Fermer
+      reminder_notification_note:
+        title:
+        description_html:
     delete:
       done: Le projet a été supprimé avec succès.
     delete_form:
@@ -932,6 +937,8 @@ fr:
       pour activer la « désactivation du rappel d'inactivité ». Vérifiez que vous éditez le projet de badge, au lieu de seulement le consulter, pour pouvoir changer si vous voulez ou non recevoir le rappel d'inactivité.
       Nous espérons que vous continuerez à travailler sur votre soumission pour finalement obtenir le badge.
       Merci pour votre attention.
+    unsubscribe_notice_html:
+    unsubscribe_notice_text:
   project_name_unknown: "(Nom inconnu)"
   locale_name:
     en: Anglais
@@ -3676,3 +3683,18 @@ fr:
       peuvent être annulées. Nous utilisons également l'automatisation
       pour remplacer les fausses déclarations lorsque nous pouvons
       être sûrs des résultats. </p>
+  unsubscribe:
+    header:
+    description:
+    email_label:
+    issued_label:
+    token_label:
+    submit:
+    confirm_message:
+    processing:
+    success:
+    invalid_token:
+    no_matching_accounts:
+    missing_parameters:
+    invalid_parameters:
+    error:

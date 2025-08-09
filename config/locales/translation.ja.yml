@@ -108,6 +108,8 @@ ja:
       update_user_info: ユーザー情報を更新します
       save_changes: 変更内容を保存します
       inadequate_privileges: その操作は許可されていません。
+      notification_emails:
+      notification_emails_help:
     update:
       profile_updated: プロフィールが更新されました
     show:
@@ -414,6 +416,9 @@ ja:
       justification_required_warning: 警告：もっと長い正当性が必要です。
       in_development_warning_html: "<strong>警告！</strong>これは本番システムではありません。これはテスト段階です。"
       close: クローズ
+      reminder_notification_note:
+        title:
+        description_html:
     delete:
       done: プロジェクトは正常に削除されました
     delete_form:
@@ -595,6 +600,8 @@ ja:
       リマインダーを受け取らなくても、今後も継続的に活動に取り組み、
       最終的にバッジを獲得してください。
       ご協力ありがとうございます。
+    unsubscribe_notice_html:
+    unsubscribe_notice_text:
   user_mailer:
     account_activation:
       before_html: |-
@@ -1815,3 +1822,18 @@ ja:
     self_certification_p01_html: <h3 id="criteria_self_certification">なぜ自己認証なのか？</h3>
     self_certification_p02_html: >-
       <p> 私たちが自己認証を採用した理由は、多くのプロジェクト（小さなプロジェクトであっても）が参加できるようにするためです。何百万ものFLOSSプロジェクトがあり、サードパーティにお金を払って個々に評価することはできません。プロジェクトが虚偽の主張をするリスクはありますが、そのリスクは小さく、ユーザーが自分で主張を確認でき、虚偽の主張を無効にすることができます。また、自動化を使用して虚偽の主張を無効にできるため、結果に自信を持つことができます。</p>
+  unsubscribe:
+    header:
+    description:
+    email_label:
+    issued_label:
+    token_label:
+    submit:
+    confirm_message:
+    processing:
+    success:
+    invalid_token:
+    no_matching_accounts:
+    missing_parameters:
+    invalid_parameters:
+    error:

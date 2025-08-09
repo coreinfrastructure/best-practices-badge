@@ -178,6 +178,8 @@ pt-BR:
       update_user_info:
       save_changes:
       inadequate_privileges:
+      notification_emails:
+      notification_emails_help:
     update:
       profile_updated:
     show:
@@ -417,6 +419,9 @@ pt-BR:
       justification_required_warning:
       in_development_warning_html:
       close:
+      reminder_notification_note:
+        title:
+        description_html:
     delete:
       done:
   report_mailer:
@@ -439,6 +444,8 @@ pt-BR:
     in_html_add:
     lost_level_message:
     ending:
+    unsubscribe_notice_html:
+    unsubscribe_notice_text:
   user_mailer:
     account_activation:
       before_html: Olá
@@ -994,3 +1001,18 @@ pt-BR:
     criteria_why_p05_html:
     self_certification_p01_html:
     self_certification_p02_html:
+  unsubscribe:
+    header:
+    description:
+    email_label:
+    issued_label:
+    token_label:
+    submit:
+    confirm_message:
+    processing:
+    success:
+    invalid_token:
+    no_matching_accounts:
+    missing_parameters:
+    invalid_parameters:
+    error:

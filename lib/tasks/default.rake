@@ -931,8 +931,9 @@ task :generate_unsubscribe_url, [:email] => :environment do |_t, args|
 
   email = args.email.strip
 
+  # Invoking the helper is complicated because it calls Rails libraries.
   # Configure URL options for the rake environment (read-only)
-  base_url = ENV['BADGEAPP_HOST'] || 'bestpractices.dev'
+  base_url = ENV['PUBLIC_HOSTNAME'] || 'bestpractices.dev'
   protocol = Rails.application.config.force_ssl ? 'https' : 'http'
 
   # Create a simple module that provides URL options without modifying globals

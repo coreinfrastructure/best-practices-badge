@@ -7,9 +7,6 @@
     </p>
 
     <%= form_with url: unsubscribe_path, method: :post, local: true do |f| %>
-      <%# CSRF protection - Rails should automatically include this, but we ensure it's present %>
-      <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
-
       <%# Hidden fields to pass the actual full values for form submission %>
       <%= hidden_field_tag :email, @email %>
       <%= hidden_field_tag :token, @token %>

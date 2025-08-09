@@ -106,7 +106,7 @@ class ReportMailer < ApplicationMailer
     @email_destination = user.email
 
     # Security: Generate unsubscribe URL for this email
-    @unsubscribe_url = generate_unsubscribe_url(user, locale: user.preferred_locale.to_sym)
+    @unsubscribe_url = generate_unsubscribe_url(user.email, locale: user.preferred_locale.to_sym)
 
     set_standard_headers
     I18n.with_locale(user.preferred_locale.to_sym) do

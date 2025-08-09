@@ -55,15 +55,14 @@ module UnsubscribeHelper
   # Generate secure unsubscribe URL with issued date
   # This method creates a complete URL that can be used in emails
   #
-  # @param user [User] The user to generate the URL for
+  # @param email [String] The email address to generate the URL for
   # @param locale [String] Optional locale for the URL (default: current locale)
   # @return [String] A complete unsubscribe URL with token and issued date
-  # rubocop:disable Metrics/MethodLength
-  def generate_unsubscribe_url(user, locale: I18n.locale)
-    return if user.nil?
+  def generate_unsubscribe_url(email, locale: I18n.locale)
+    return if email.blank?
 
     # Generate current date and token
-    issued_date, token = generate_new_unsubscribe_token(user.email)
+    issued_date, token = generate_new_unsubscribe_token(email)
     return if token.nil?
 
     # Security: Generate URL with proper parameters
@@ -73,7 +72,7 @@ module UnsubscribeHelper
       # This creates an odd URL, but strictly speaking, we are *editing*
       # the subscription, not merely *showing* it, so this seems appropriate:
       action: 'edit',
-      email: user.email,
+      email: email,
       token: token,
       issued: issued_date,
       only_path: false,
@@ -85,7 +84,6 @@ module UnsubscribeHelper
 
     url_for(url_params)
   end
-  # rubocop:enable Metrics/MethodLength
 
   # Security: Verify unsubscribe token with time-based validation
   # This method uses constant-time comparison and NO database access

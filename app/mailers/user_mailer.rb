@@ -23,7 +23,7 @@ class UserMailer < ApplicationMailer
     send_time = (Time.now.utc + ACTIVATION_MESSAGE_DELAY_TIME).to_i
     new_smtpapi = normal_smtpapi_json.dup
     new_smtpapi['send_at'] = send_time
-    new_smtpapi.to_json.to_s.freeze
+    new_smtpapi.to_json.freeze
   end
 
   def account_activation(user)

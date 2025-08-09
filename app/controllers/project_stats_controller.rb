@@ -97,7 +97,7 @@ class ProjectStatsController < ApplicationController
   # so small that for simplicity we include this method in this controller.
   def render_json_fast(dataset)
     headers['Content-Type'] = 'application/json'
-    render body: JSON.fast_generate(dataset)
+    render body: JSON.generate(dataset)
   end
 
   # GET /project_stats
@@ -456,7 +456,7 @@ class ProjectStatsController < ApplicationController
     dataset =
       [0, 1, 2].map do |level|
         desired_field =
-          "percent#{level.positive? ? '_' + level.to_s : ''}_ge_100"
+          "percent#{'_' + level.to_s if level.positive?}_ge_100"
         series_dataset =
           stat_data.reduce({}) do |h, e|
             h.merge(e.created_at =>
@@ -492,7 +492,7 @@ class ProjectStatsController < ApplicationController
     end
     dataset
   end
-  # rubocop: end Metrics/MethodLength
+  # rubocop:enable Metrics/MethodLength
 
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
   # GET /:locale/project_stats/percent_earning.json

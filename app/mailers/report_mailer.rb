@@ -28,6 +28,7 @@
 class ReportMailer < ApplicationMailer
   include SessionsHelper
   include UnsubscribeHelper
+
   REPORT_EMAIL_DESTINATION = 'cii-badge-log@lists.coreinfrastructure.org'
 
   # Report to Linux Foundation that a project's status has changed.

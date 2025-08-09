@@ -55,15 +55,15 @@ class PasswordResetsController < ApplicationController
     end
   end
 
-  private
-
   DELAY_BETWEEN_RESET_PASSWORDS = Integer(
-    (ENV['DELAY_BETWEEN_RESET_PASSWORDS'] || 4.hours.seconds.to_s), 10
+    ENV['DELAY_BETWEEN_RESET_PASSWORDS'] || 4.hours.seconds.to_s, 10
   ).seconds
+
+  private
 
   # Return true iff sent_at is too soon (compared to the current time)
   # to send a reset password request.
-  def reset_password_too_soon(sent_at)
+  def reset_password_too_soon?(sent_at)
     # We've never sent one before, so it's obviously not too soon.
     return false if sent_at.blank?
 
@@ -77,7 +77,7 @@ class PasswordResetsController < ApplicationController
     # Once a password reset has been sent, wait at least
     # DELAY_BETWEEN_RESET_PASSWORDS before sending another so attackers
     # can't badger our users with password reset requests.
-    return if reset_password_too_soon(user.reset_sent_at)
+    return if reset_password_too_soon?(user.reset_sent_at)
 
     @user.create_reset_digest
     @user.send_password_reset_email

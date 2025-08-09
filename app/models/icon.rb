@@ -50,14 +50,14 @@ class Icon
       nil
     end
 
-    private
-
     # Default class.
     # Unfortunately, rubocop doesn't realize that concatenating
     # constants we define is safe.
     # rubocop: disable Rails/OutputSafety
     FA_HTML_SAFE = 'fa'.html_safe
     # rubocop: enable Rails/OutputSafety
+
+    private
 
     # Returns the tag for a given icon as a SafeBuffer.
     # In font-awesome 5, the category "fab" is used for brands.

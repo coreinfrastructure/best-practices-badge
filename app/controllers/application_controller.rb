@@ -38,7 +38,7 @@ class ApplicationController < ActionController::Base
   before_action :set_locale_to_best_available
 
   # Force http -> https
-  before_action :redirect_https
+  before_action :redirect_https?
 
   # Validate client IP address (if only some IP addresses are allowed);
   # counters cloud piercing.
@@ -143,6 +143,10 @@ class ApplicationController < ActionController::Base
     request.session_options[:skip] = true
   end
 
+  # Special case: If the requested format is JSON or CSV, don't bother
+  # redirecting, because JSON and CSV are normally the same in any locale.
+  DO_NOT_REDIRECT_LOCALE = %w[json csv].freeze
+
   private
 
   # *Always* include the locale when generating a URL.
@@ -177,7 +181,7 @@ class ApplicationController < ActionController::Base
 
   # See: http://stackoverflow.com/questions/4329176/
   #   rails-how-to-redirect-from-http-example-com-to-https-www-example-com
-  def redirect_https
+  def redirect_https?
     if Rails.application.config.force_ssl && !request.ssl?
       redirect_to protocol: 'https://', status: :moved_permanently
     end
@@ -210,10 +214,6 @@ class ApplicationController < ActionController::Base
 
     I18n.default_locale
   end
-
-  # Special case: If the requested format is JSON or CSV, don't bother
-  # redirecting, because JSON and CSV are normally the same in any locale.
-  DO_NOT_REDIRECT_LOCALE = %w[json csv].freeze
 
   # If locale is not provided in the URL, redirect to best option.
   # NOTE: This is intentionally skipped by some calls, e.g., session create.

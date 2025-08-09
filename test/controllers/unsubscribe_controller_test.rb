@@ -407,7 +407,7 @@ class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
     )
 
     # Test verification should fail when unknown key token is used
-    assert_not verify_unsubscribe_token(
+    assert_not verify_unsubscribe_token?(
       @user.email,
       @issued_date.strftime('%Y-%m-%d'),
       token_with_unknown_key,
@@ -421,7 +421,7 @@ class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
       key: test_keys[1]
     )
 
-    assert verify_unsubscribe_token(
+    assert verify_unsubscribe_token?(
       @user.email,
       @issued_date.strftime('%Y-%m-%d'),
       token_with_known_key,
@@ -432,12 +432,12 @@ class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
   private
 
   # Helper method to verify unsubscribe token using the UnsubscribeHelper
-  def verify_unsubscribe_token(email, issued_date, token, keys: nil)
+  def verify_unsubscribe_token?(email, issued_date, token, keys: nil)
     helper_class =
       Class.new do
         include UnsubscribeHelper
       end
-    helper_class.new.verify_unsubscribe_token(email, issued_date, token, keys: keys)
+    helper_class.new.verify_unsubscribe_token?(email, issued_date, token, keys: keys)
   end
 
   # Helper method to generate unsubscribe token (matches controller logic)

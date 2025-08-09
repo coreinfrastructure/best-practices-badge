@@ -581,13 +581,13 @@ class Project < ApplicationRecord
     FastlyRails.purge_by_key cdn_badge_key
   end
 
+  WHAT_IS_ENOUGH = %i[criterion_passing criterion_barely].freeze
+
   private
 
   # def all_active_criteria_passing?
   #   Criteria.active.all? { |criterion| enough? criterion }
   # end
-
-  WHAT_IS_ENOUGH = %i[criterion_passing criterion_barely].freeze
 
   # This method is mirrored in assets/project-form.js as isEnough
   # If you change this method, change isEnough accordingly.

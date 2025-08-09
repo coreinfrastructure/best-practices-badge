@@ -62,7 +62,7 @@ Style/DisableCopsWithinSourceCodeDirective:
   Enabled: false
 # This is a terrible idea and will never happen. Sometimes there's
 # no need for a full Rails environment; we only want to bring in a
-# Rails environment when it's encessary.
+# Rails environment when it's necessary.
 Rails/RakeEnvironment:
   Enabled: false
 
@@ -124,7 +124,7 @@ Style/AsciiComments:
   Enabled: false
 #
 # The following are newer cops which have disabled because
-# we aren't ready for them right now. It's diffult to do things "all at once".
+# we aren't ready for them right now. It's difficult to do things "all at once".
 # Instead, we'll get things running first (ignoring these cops), and
 # later try to slowly comply with them or reject them.
 # See issue #1069, which tracks this decision.

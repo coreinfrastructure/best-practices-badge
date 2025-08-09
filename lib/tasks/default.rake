@@ -920,3 +920,35 @@ task :update_badge_images do
           test/fixtures/files/badge-88.svg
   REMINDERS
 end
+
+desc 'Generate unsubscribe URL for email address in brackets'
+task :generate_unsubscribe_url, [:email] => :environment do |_t, args|
+  if args.email.blank?
+    puts 'Error: Email address is required'
+    puts 'Usage: rake generate_unsubscribe_url[user@example.com]'
+    exit 1
+  end
+
+  email = args.email.strip
+
+  # Configure URL options for the rake environment (read-only)
+  base_url = ENV['BADGEAPP_HOST'] || 'bestpractices.dev'
+  protocol = Rails.application.config.force_ssl ? 'https' : 'http'
+
+  # Create a simple module that provides URL options without modifying globals
+  url_helper = Module.new do
+    include Rails.application.routes.url_helpers
+    include UnsubscribeHelper
+
+    define_method :default_url_options do
+      { host: base_url, protocol: protocol }
+    end
+  end
+
+  # Extend an object with our helper module
+  helper_instance = Object.new.extend(url_helper)
+
+  # Generate URL (nil locale lets browser preference determine locale)
+  url = helper_instance.generate_unsubscribe_url(email, locale: nil)
+  puts url
+end

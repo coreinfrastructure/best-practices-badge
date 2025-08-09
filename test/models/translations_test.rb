@@ -38,7 +38,7 @@ class TranslationsTest < ActiveSupport::TestCase
   end
 
   # Return true if x is a "simple" (non-compound) non-string type
-  def simple_type(x)
+  def simple_type?(x)
     x.is_a?(Symbol) || x.is_a?(Numeric) || x.in?([true, false, nil]) ||
       x.is_a?(Proc)
   end
@@ -47,7 +47,7 @@ class TranslationsTest < ActiveSupport::TestCase
   # *and* have only the permitted HTML tags & attributes.
   # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-  def acceptable_html_string(text)
+  def acceptable_html_string?(text)
     return true if text.exclude?('<') # Can't be a problem, no '<'
 
     # First, detect common mistakes.
@@ -95,10 +95,10 @@ class TranslationsTest < ActiveSupport::TestCase
     elsif translation.kind_of?(Hash)
       translation.each { |key, part| check_text(part, from + [key]) }
     elsif translation.kind_of?(String) # includes safe_html
-      assert acceptable_html_string(translation.to_s),
+      assert acceptable_html_string?(translation.to_s),
              "Locale text failure in #{from.join('.')} : #{translation}"
     else
-      assert simple_type(translation),
+      assert simple_type?(translation),
              "Locale text type failure in #{from.join('.')} : #{translation}"
     end
   end

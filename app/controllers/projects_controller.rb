@@ -403,6 +403,23 @@ class ProjectsController < ApplicationController
     end
   end
 
+  # Rights changes, if provided, must match this pattern.
+  VALID_ADD_RIGHTS_CHANGES = /\A *[+-] *\d+ *(, *\d+)*\z/.freeze
+
+  # Number of days before a user may change repo_url. See below.
+  # NOTE: If you change this value, you may also need to change
+  # file config/locales/en.yml key repo_url_limits.
+  REPO_URL_CHANGE_DELAY = 180
+
+  # We have had past reports of problems when 80 repos are available, so
+  # set this to a lower number.
+  MAX_GITHUB_REPOS_FROM_USER = 50
+
+  HTML_INDEX_FIELDS = 'projects.id, projects.name, description, ' \
+                      'homepage_url, repo_url, license, projects.user_id, ' \
+                      'achieved_passing_at, projects.updated_at, badge_percentage_0, ' \
+                      'tiered_percentage'
+
   private
 
   # Send reminders to users for inactivity. Return array of project ids
@@ -532,9 +549,6 @@ class ProjectsController < ApplicationController
   end
   # rubocop:enable Metrics/MethodLength
 
-  # Rights changes, if provided, must match this pattern.
-  VALID_ADD_RIGHTS_CHANGES = /\A *[+-] *\d+ *(, *\d+)*\z/.freeze
-
   # Examine proposed changes to additional rights - if okay, call
   # update_additional_rights_forced to do them.
   # rubocop:disable Metrics/CyclomaticComplexity
@@ -586,18 +600,13 @@ class ProjectsController < ApplicationController
   # That is, they're the same ignoring the scheme
   # (this is true if the user switches between http and https)
   # and ignoring any trailing '/'.
-  def basically_same(url1, url2)
+  def basically_same?(url1, url2)
     # Blank urls don't make any sense. Consider them not the same.
     return false if url1.blank?
     return false if url2.blank?
 
     extracted_url(url1) == extracted_url(url2)
   end
-
-  # Number of days before a user may change repo_url. See below.
-  # NOTE: If you change this value, you may also need to change
-  # file config/locales/en.yml key repo_url_limits.
-  REPO_URL_CHANGE_DELAY = 180
 
   # Return true iff the project can change its repo_url because the
   # REPO_URL_CHANGE_DELAY has expired
@@ -627,7 +636,7 @@ class ProjectsController < ApplicationController
     return true if project_params[:repo_url].nil?
     return true if current_user.admin?
 
-    return true if basically_same(project_params[:repo_url], @project.repo_url)
+    return true if basically_same?(project_params[:repo_url], @project.repo_url)
 
     repo_url_delay_expired?
   end
@@ -644,7 +653,6 @@ class ProjectsController < ApplicationController
   # repos about a given user.  Limit this to prevent timeouts.
   # We have had past reports of problems when 80 repos are available, so
   # set this to a lower number.
-  MAX_GITHUB_REPOS_FROM_USER = 50
 
   # Retrieve a set of (GitHub) repositories managed by the current user.
   # We intentionally retrieve a subset (to self-protect from overlong lists
@@ -690,11 +698,6 @@ class ProjectsController < ApplicationController
   end
   # rubocop:enable Metrics/AbcSize
   # rubocop:enable Style/MethodCalledOnDoEndBlock, Metrics/MethodLength
-
-  HTML_INDEX_FIELDS = 'projects.id, projects.name, description, ' \
-                      'homepage_url, repo_url, license, projects.user_id, ' \
-                      'achieved_passing_at, projects.updated_at, badge_percentage_0, ' \
-                      'tiered_percentage'
 
   # Retrieve project data using the various query parameters.
   # The parameters determine what to select *and* fields to load

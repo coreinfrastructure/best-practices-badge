@@ -12,14 +12,11 @@ class UnsubscribeController < ApplicationController
   # Security: Enable CSRF protection for form submissions (create action)
   protect_from_forgery with: :exception
 
-  # Omit useless unchanged session cookie for performance & privacy
-  before_action :omit_unchanged_session_cookie
-
   # GET /unsubscribe
   # Display the unsubscribe form with email, token, and issued date
   # for confirmation.
   def edit
-    return unless validate_unsubscribe_params
+    return unless validate_unsubscribe_params?
 
     # Set display values for the form (read-only)
     @email = params[:email]
@@ -31,7 +28,7 @@ class UnsubscribeController < ApplicationController
   # Process the unsubscribe request
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def create
-    return unless validate_unsubscribe_params
+    return unless validate_unsubscribe_params?
 
     # Security: Use parameterized queries and validate input
     email = params[:email]
@@ -40,7 +37,7 @@ class UnsubscribeController < ApplicationController
 
     # Security: Validate token before checking the database.
     # This gives specific error responses
-    unless verify_unsubscribe_token(email, issued, token)
+    unless verify_unsubscribe_token?(email, issued, token)
       # Security: Log potential security incident (without PII)
       email_domain = email.split('@').last
       Rails.logger.info "Invalid unsubscribe token attempt for email domain: #{email_domain}"
@@ -78,7 +75,7 @@ class UnsubscribeController < ApplicationController
 
   # Security: Validate all unsubscribe parameters
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-  def validate_unsubscribe_params
+  def validate_unsubscribe_params?
     email = params[:email]
     issued = params[:issued]
     token = params[:token]

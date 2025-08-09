@@ -263,6 +263,7 @@ module ActiveSupport
     # The problem is that assert_select fails oddly when running a global
     # "rails test" (though it works fine if running "rails test FILENAME").
     # To solve this, we re-implement assert_select so we have a working version.
+    # rubocop:disable Naming/PredicateMethod
     def my_assert_select(selector, contents)
       results = css_select(selector)
       results.each do |selection|
@@ -270,6 +271,7 @@ module ActiveSupport
       end
       false
     end
+    # rubocop:enable Naming/PredicateMethod
   end
   # rubocop: enable Metrics/ClassLength
 end

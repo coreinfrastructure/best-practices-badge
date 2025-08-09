@@ -7,7 +7,7 @@
 class AccountActivationsController < ApplicationController
   # Time in seconds after activating local account before login allowed.
   LOCAL_LOGIN_COOLOFF_TIME =
-    Integer((ENV['LOCAL_LOGIN_COOLOFF_TIME'] || '3600'), 10)
+    Integer(ENV['LOCAL_LOGIN_COOLOFF_TIME'] || '3600', 10)
 
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def edit

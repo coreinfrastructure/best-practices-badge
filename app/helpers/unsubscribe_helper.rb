@@ -107,7 +107,7 @@ module UnsubscribeHelper
   # @param token [String] The token to verify
   # @param keys [Array<String>] Optional keys array to use (defaults to UNSUBSCRIBE_KEYS)
   # @return [Boolean] True if the token is valid and within time window
-  def verify_unsubscribe_token(email, issued_date, token, keys: UNSUBSCRIBE_KEYS)
+  def verify_unsubscribe_token?(email, issued_date, token, keys: UNSUBSCRIBE_KEYS)
     return false if email.blank? || token.blank? || issued_date.blank?
     return false if keys.blank?
 
@@ -115,7 +115,7 @@ module UnsubscribeHelper
     return false unless valid_issued_date?(issued_date)
 
     # Security: Try verification with each key in the array
-    verify_token_with_keys(email, issued_date, token, keys)
+    verify_token_with_keys?(email, issued_date, token, keys)
   end
 
   private
@@ -128,7 +128,7 @@ module UnsubscribeHelper
   # @param token [String] The token to verify
   # @param keys [Array<String>] Keys array to try for verification
   # @return [Boolean] True if any key successfully verifies the token
-  def verify_token_with_keys(email, issued_date, token, keys)
+  def verify_token_with_keys?(email, issued_date, token, keys)
     keys.each do |key|
       next if key.blank?
 

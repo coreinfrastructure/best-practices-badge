@@ -261,7 +261,7 @@ class User < ApplicationRecord
   end
 
   # Return true if there's a gravatar for this user
-  def gravatar_exists
+  def gravatar_exists?
     # The ?d=404 forces "not found" error code if none is found.
     # We use "head" because we don't need the full data at this point.
     response = HTTParty.head(lookup_gravatar_url + '?d=404')

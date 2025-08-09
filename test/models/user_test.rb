@@ -171,7 +171,7 @@ class UserTest < ActiveSupport::TestCase
       assert user.email.present?, "Email not present for #{user.name}"
       assert user.provider.present?, "Provider not present for #{user.name}"
       assert(
-        (user.provider != 'local' || user.password_digest.present?),
+        user.provider != 'local' || user.password_digest.present?,
         "Local user has no password: #{user.name}, #{user.email}"
       )
       # An incorrect bidx could lead to confusing test results, so we

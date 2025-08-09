@@ -215,7 +215,7 @@ module SessionsHelper
     end
   end
 
-  def session_expired
+  def session_expired?
     return true unless session.key?(:time_last_used)
 
     last_used = session[:time_last_used]
@@ -223,7 +223,7 @@ module SessionsHelper
   end
 
   def validate_session_timestamp
-    return unless logged_in? && session_expired
+    return unless logged_in? && session_expired?
 
     reset_session
     # Set "current_user" to invalid value (session hash is not empty)

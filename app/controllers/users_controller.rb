@@ -99,7 +99,7 @@ class UsersController < ApplicationController
     # Force redirect if current_user cannot edit.  Otherwise, the process
     # of displaying the edit fields (with their defaults) could cause an
     # unauthorized exposure of an email address.
-    redirect_to @user unless current_user_can_edit(@user)
+    redirect_to @user unless current_user_can_edit?(@user)
   end
 
   # rubocop: disable Metrics/MethodLength, Metrics/AbcSize
@@ -114,7 +114,7 @@ class UsersController < ApplicationController
       # If user exists but is not activated, retry activation unless too soon
       if !@user.activated
         # Rate limit activation emails, else attackers can really annoy others
-        if activation_email_too_soon(@user.activation_email_sent_at)
+        if activation_email_too_soon?(@user.activation_email_sent_at)
           # Logger doesn't escape, but user.id is just a number so no problem
           Rails.logger.info "Activation request too soon for #{@user.id}"
         else
@@ -126,7 +126,7 @@ class UsersController < ApplicationController
       @user = User.new(user_params)
       @user.provider = 'local'
       @user.preferred_locale = I18n.locale.to_s
-      @user.use_gravatar = @user.gravatar_exists # this is local
+      @user.use_gravatar = @user.gravatar_exists? # this is local
       if @user.save
         @user.send_activation_email
       end
@@ -173,7 +173,7 @@ class UsersController < ApplicationController
       # the change (e.g., because it's by an admin or by someone who broke
       # into their account), the user will know about it.
       UserMailer.user_update(@user, changes).deliver_now
-      @user.use_gravatar = @user.gravatar_exists if @user.provider == 'local'
+      @user.use_gravatar = @user.gravatar_exists? if @user.provider == 'local'
       flash[:success] = t('.profile_updated')
       locale_prefix = '/' + I18n.locale.to_s
       redirect_to "#{locale_prefix}/users/#{@user.id}"
@@ -209,16 +209,16 @@ class UsersController < ApplicationController
   end
   # rubocop: enable Metrics/MethodLength, Metrics/AbcSize
 
-  private
-
   DELAY_BETWEEN_ACTIVATION_EMAILS = Integer(
-    (ENV['BADGEAPP_DELAY_BETWEEN_ACTIVATION_EMAIL'] ||
-     24.hours.seconds.to_s), 10
+    ENV['BADGEAPP_DELAY_BETWEEN_ACTIVATION_EMAIL'] ||
+     24.hours.seconds.to_s, 10
   ).seconds
+
+  private
 
   # Return true iff sent_at is too soon (compared to the current time)
   # to send an activation email.
-  def activation_email_too_soon(sent_at)
+  def activation_email_too_soon?(sent_at)
     # We've never sent one before, so it's obviously not too soon.
     return false if sent_at.blank?
 
@@ -269,7 +269,7 @@ class UsersController < ApplicationController
   end
 
   # Return true if current_user can edit account 'user'
-  def current_user_can_edit(user)
+  def current_user_can_edit?(user)
     return false unless current_user
 
     user == current_user || current_user.admin?
@@ -278,7 +278,7 @@ class UsersController < ApplicationController
   # Confirms that this user can edit; sets @user to the user to process
   def redir_unless_current_user_can_edit
     @user = User.find(params[:id])
-    return if current_user_can_edit(@user)
+    return if current_user_can_edit?(@user)
 
     flash[:danger] = t('users.edit.inadequate_privileges')
     redirect_to(root_path)

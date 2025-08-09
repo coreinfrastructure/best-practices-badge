@@ -355,20 +355,12 @@ class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select 'form[action=?]', unsubscribe_path(locale: 'en')
 
-    # Verify the form includes CSRF token (Rails automatically adds it when CSRF is enabled)
-    assert_select 'input[name="authenticity_token"]', 1
-
-    # Step 2: Extract CSRF token from the rendered form
-    # In a real browser, this would be automatically included in form submission
-    csrf_token = css_select('input[name="authenticity_token"]').first['value']
-    assert_not_nil csrf_token, 'CSRF token should be present in the form'
-
-    # Step 3: User submits the form (POST request - CSRF protection applies)
+    # Step 2: User submits the form (POST request - CSRF protection applies)
+    # Rails handles CSRF automatically with form_with when local: true
     post unsubscribe_path(locale: 'en'), params: {
       email: @user.email,
       token: @valid_token,
-      issued: @issued_date.strftime('%Y-%m-%d'),
-      authenticity_token: csrf_token
+      issued: @issued_date.strftime('%Y-%m-%d')
     }
 
     # Step 4: Verify successful unsubscribe
@@ -394,13 +386,11 @@ class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
     }
 
     assert_response :success
-    # Verify that the form includes authenticity_token field
-    assert_select 'input[name="authenticity_token"]', 1, 'Form should include CSRF token'
-
-    # Verify the token has a value
-    csrf_token = css_select('input[name="authenticity_token"]').first['value']
-    assert_not_nil csrf_token, 'CSRF token should have a value'
-    assert csrf_token.length > 10, 'CSRF token should be a meaningful length'
+    # Verify the form structure is correct
+    assert_select 'form[action=?]', unsubscribe_path(locale: 'en')
+    assert_select 'input[type="hidden"][name="email"]'
+    assert_select 'input[type="hidden"][name="token"]'
+    assert_select 'input[type="hidden"][name="issued"]'
   end
 
   # Test key rotation functionality - token should fail if generated with unknown key

@@ -55,25 +55,36 @@ module UnsubscribeHelper
   # Generate secure unsubscribe URL with issued date
   # This method creates a complete URL that can be used in emails
   #
-  # @param user [User] The user to generate the URL for
+  # @param email [String] The email address to generate the URL for
   # @param locale [String] Optional locale for the URL (default: current locale)
   # @return [String] A complete unsubscribe URL with token and issued date
-  # rubocop:disable Metrics/MethodLength
-  def generate_unsubscribe_url(user, locale: I18n.locale)
-    return if user.nil?
+  def generate_unsubscribe_url(email, locale: I18n.locale)
+    return if email.blank?
 
     # Generate current date and token
-    issued_date, token = generate_new_unsubscribe_token(user.email)
+    issued_date, token = generate_new_unsubscribe_token(email)
     return if token.nil?
 
-    # Security: Generate URL with proper parameters
-    # Use Rails URL helpers for security and proper encoding
+    # Build URL parameters and generate URL
+    url_params = build_unsubscribe_url_params(email, token, issued_date, locale)
+    url_for(url_params)
+  end
+
+  private
+
+  # Build URL parameters for unsubscribe URL generation
+  # @param email [String] Email address
+  # @param token [String] Generated token
+  # @param issued_date [String] Date token was issued
+  # @param locale [String, nil] Locale for the URL
+  # @return [Hash] URL parameters
+  def build_unsubscribe_url_params(email, token, issued_date, locale)
     url_params = {
       controller: 'unsubscribe',
       # This creates an odd URL, but strictly speaking, we are *editing*
       # the subscription, not merely *showing* it, so this seems appropriate:
       action: 'edit',
-      email: user.email,
+      email: email,
       token: token,
       issued: issued_date,
       only_path: false,
@@ -82,10 +93,10 @@ module UnsubscribeHelper
 
     # Add locale if provided
     url_params[:locale] = locale if locale
-
-    url_for(url_params)
+    url_params
   end
-  # rubocop:enable Metrics/MethodLength
+
+  public
 
   # Security: Verify unsubscribe token with time-based validation
   # This method uses constant-time comparison and NO database access

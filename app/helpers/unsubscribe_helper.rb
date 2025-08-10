@@ -9,13 +9,20 @@ module UnsubscribeHelper
   # Maximum unsubscribe token age in days from environment (computed once at startup)
   MAX_TOKEN_AGE_DAYS = (ENV['BADGEAPP_UNSUBSCRIBE_DAYS'] || '30').to_i
 
+  # Compute key array from comma-separated string
+  # @param keys_string [String] Comma-separated string of keys
+  # @return [Array<String>] Array of keys with empty ones removed and frozen
+  def self.compute_key_array(keys_string)
+    keys_string.split(',').map(&:strip).reject(&:empty?).freeze
+  end
+
   # Unsubscribe secret keys for key rotation (computed once at startup)
   # This allows tokens generated with any of these keys to be valid
   # Format: comma-separated list of keys, with the first being the current key for generation
   UNSUBSCRIBE_KEYS =
     begin
       keys_env = ENV['BADGEAPP_UNSUBSCRIBE_KEYS'] || Rails.application.secret_key_base
-      keys_env.split(',').map(&:strip).reject(&:empty?).freeze
+      compute_key_array(keys_env)
     end
 
   # Generate secure unsubscribe token with email and issued date.

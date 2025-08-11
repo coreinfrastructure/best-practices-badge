@@ -4,6 +4,11 @@
 # OpenSSF Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
+# Handles user authentication and session management.
+# Supports both OAuth (GitHub) and local email/password authentication.
+# Manages session creation, destruction, and security measures like
+# session fixation protection.
+#
 class SessionsController < ApplicationController
   include SessionsHelper
 
@@ -11,7 +16,9 @@ class SessionsController < ApplicationController
   # because we don't really want the locale.
   skip_before_action :redir_missing_locale, only: :create
 
-  # Show login screen ("new" shows the page for trying to create a session)
+  # Display login form or redirect if already logged in.
+  # Supports `GET /login`.
+  # @return [void]
   def new
     if logged_in?
       flash[:success] = t('sessions.already_logged_in')
@@ -22,7 +29,10 @@ class SessionsController < ApplicationController
     end
   end
 
-  # Attempt to create a session. In other words, attempt to log in.
+  # Process login attempt via OAuth or local authentication.
+  # Handles session fixation protection and various authentication methods.
+  # Supports `POST /login`.
+  # @return [void]
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def create
     counter_fixation # Counter session fixation (but save forwarding url)
@@ -40,7 +50,9 @@ class SessionsController < ApplicationController
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
-  # Log out
+  # Log out current user and redirect to home page.
+  # Supports `DELETE /logout`.
+  # @return [void]
   def destroy
     log_out if logged_in?
     flash[:success] = t('sessions.signed_out')
@@ -49,7 +61,11 @@ class SessionsController < ApplicationController
 
   private
 
-  # Perform tasks for a user who just successfully logged in.
+  # Performs post-login setup for authenticated users.
+  # Records login time, displays welcome message, and redirects appropriately.
+  #
+  # @param user [User] The authenticated user
+  # @return [void]
   def successful_login(user)
     log_in user
     redirect_back_or root_url
@@ -68,8 +84,9 @@ class SessionsController < ApplicationController
     # rubocop: enable Rails/SkipsModelValidations
   end
 
-  # We want to save the forwarding url of a session but
-  # still need to counter session fixation,  this does it
+  # Protects against session fixation while preserving forwarding URL.
+  # Resets the session but maintains the intended redirect destination.
+  # @return [void]
   def counter_fixation
     ref_url = session[:forwarding_url] # Save forwarding url
     I18n.locale = session[:locale]
@@ -77,6 +94,9 @@ class SessionsController < ApplicationController
     session[:forwarding_url] = ref_url # Reload forwarding url
   end
 
+  # Handles local email/password authentication.
+  # Validates credentials and processes login if successful.
+  # @return [void]
   def local_login
     user = User.find_by provider: 'local', email: params[:session][:email]
     if user&.authenticate(params[:session][:password])
@@ -87,6 +107,9 @@ class SessionsController < ApplicationController
     end
   end
 
+  # Handles OAuth authentication via GitHub.
+  # Creates or finds user account and establishes session.
+  # @return [void]
   def omniauth_login
     auth = request.env['omniauth.auth']
     user = User.find_by(provider: auth['provider'], uid: auth['uid']) ||
@@ -97,6 +120,11 @@ class SessionsController < ApplicationController
     successful_login(user)
   end
 
+  # Validates account status and processes local login.
+  # Checks for account activation, login restrictions, and remember-me option.
+  #
+  # @param user [User] The user attempting to log in
+  # @return [void]
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def local_login_procedure(user)
     if !user.activated?

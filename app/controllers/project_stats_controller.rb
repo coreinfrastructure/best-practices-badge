@@ -38,7 +38,7 @@ class ProjectStatsController < ApplicationController
   # and thus do not cache statistics for long.
   LOG_TIME_SLOP = 5 * 60 # 5 minutes
 
-  # Only cache for 120 seconds if we're within the slop time.
+  # Only cache for 120 seconds if we're about to do an update
   CACHE_TIME_WITHIN_SLOP = 120
 
   SECONDS_IN_A_DAY = 24 * 60 * 60 # 24 hours, 60 minutes, 60 seconds
@@ -47,6 +47,7 @@ class ProjectStatsController < ApplicationController
   # the fact that a log event will occur at "log_time". If the current
   # time and log time are within CACHE_TIME_WITHIN_SLOP, return a small
   # cache value.
+  # @param seconds_since_midnight [Object] Number of seconds elapsed since midnight
   def cache_time(seconds_since_midnight)
     time_left = LOG_TIME - seconds_since_midnight
     if time_left.abs < LOG_TIME_SLOP
@@ -68,6 +69,7 @@ class ProjectStatsController < ApplicationController
     # just use the built-in Rails mechanism for setting Cache-Control:
     expires_in seconds_left, public: true
   end
+  # @param dataset [Object] The data collection to process
 
   # These controllers often generate a lot of JSON. More info:
   # https://guides.rubyonrails.org/layouts_and_rendering.html
@@ -470,6 +472,7 @@ class ProjectStatsController < ApplicationController
 
     render_json_fast dataset
   end
+  # @param fields [Array] Array of field names for chart creation
 
   # Return JSON-formatted chart data with the given fields
   # rubocop: disable Metrics/MethodLength

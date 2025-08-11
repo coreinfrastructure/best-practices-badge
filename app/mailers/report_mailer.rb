@@ -24,14 +24,20 @@
 # only sent in one language anyway (translators have enough work to do,
 # let's not ask them to translate unused text!).
 
+# Mailer for report email notifications.
 # rubocop:disable Metrics/MethodLength, Metrics/ClassLength
 class ReportMailer < ApplicationMailer
   include SessionsHelper
   include UnsubscribeHelper
 
+  # Configuration constant for report email destination.
+
   REPORT_EMAIL_DESTINATION = 'cii-badge-log@lists.coreinfrastructure.org'
 
   # Report to Linux Foundation that a project's status has changed.
+  # @param project [Project] The project whose badge status has changed
+  # @param old_badge_status [String] The previous badge level (e.g., 'in_progress', 'passing')
+  # @param new_badge_status [String] The new badge level after the change
   def project_status_change(project, old_badge_status, new_badge_status)
     @project = project
     @old_badge_status = old_badge_status
@@ -48,6 +54,9 @@ class ReportMailer < ApplicationMailer
   end
 
   # Return subject line for given badge status.  Uses current I18n.locale.
+  # @param old_badge_level [String] The previous badge level
+  # @param new_badge_level [String] The new badge level
+  # @param lost_level [Boolean] True if the project lost badge status
   def subject_for(old_badge_level, new_badge_level, lost_level)
     if lost_level
       t('report_mailer.subject_no_longer_passing', old_level: old_badge_level)
@@ -57,6 +66,10 @@ class ReportMailer < ApplicationMailer
   end
 
   # Create email to badge entry owner about their new badge status
+  # @param project [Project] The project whose badge status changed
+  # @param old_badge_level [String] The previous badge level
+  # @param new_badge_level [String] The new badge level
+  # @param lost_level [Boolean] True if the project lost badge status
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
   # rubocop:disable Metrics/PerceivedComplexity
   def email_owner(project, old_badge_level, new_badge_level, lost_level)
@@ -89,6 +102,7 @@ class ReportMailer < ApplicationMailer
   # rubocop:enable Metrics/PerceivedComplexity
 
   # Create reminder email to inactive badge entry owner
+  # @param project [Project] The project for which to send a reminder
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
   def email_reminder_owner(project)
     return if project.nil? || project.id.nil? || project.user_id.nil?
@@ -122,6 +136,7 @@ class ReportMailer < ApplicationMailer
 
   # Report on reminders sent.  This is internal, so we haven't bothered
   # to internationalize this.
+  # @param projects [Array<Project>] List of projects that were sent reminders
   def report_reminder_summary(projects)
     @report_destination = REPORT_EMAIL_DESTINATION
     return if projects.nil?
@@ -164,6 +179,7 @@ class ReportMailer < ApplicationMailer
   end
 
   # Email user when they add a new project.
+  # @param project [Project] The newly created project to send welcome email for
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
   def email_new_project_owner(project)
     return if project.nil? || project.id.nil? || project.user_id.nil?
@@ -189,6 +205,9 @@ class ReportMailer < ApplicationMailer
 
   # Report if a project is deleted.  "deletion_rationale" is untrusted
   # data from a user.
+  # @param project [Project] The project that was deleted
+  # @param user [User] The user who deleted the project
+  # @param deletion_rationale [String] User-provided reason for deletion
   def report_project_deleted(project, user, deletion_rationale)
     @report_destination = REPORT_EMAIL_DESTINATION
     @project = project

@@ -192,7 +192,7 @@ class ApplicationController < ActionController::Base
 
   # Fail if the client IP is invalid.
   # raise exception if text value client_ip isn't in valid_client_ips
-  # @param client_ip [Object] The client IP address to validate
+  # @param client_ip [String] The client IP address to validate
   # @param allowed_ips [Array] Array of allowed IP addresses
   def fail_if_invalid_client_ip(client_ip, allowed_ips)
     return if client_ip.blank?

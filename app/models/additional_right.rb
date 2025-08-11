@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+# Model class for additional right data management.
+#
+
 class AdditionalRight < ApplicationRecord
   # List additional rights of users for a given project.
   # This is a simple associative table (between project and user).

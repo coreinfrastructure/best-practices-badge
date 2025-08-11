@@ -4,6 +4,8 @@
 # OpenSSF Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
+# Controller for static pages functionality.
+#
 class StaticPagesController < ApplicationController
   include SessionsHelper
 
@@ -59,6 +61,8 @@ class StaticPagesController < ApplicationController
     )
   end
 
+  # Implement robots.txt functionality.
+  # @return [void]
   def robots
     respond_to :text
     expires_in 6.hours, public: true

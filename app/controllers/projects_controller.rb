@@ -59,14 +59,17 @@ class ProjectsController < ApplicationController
   ALLOWED_AS = %w[badge entry].freeze
 
   # "Normal case" index after projects are retrieved
+  # @return [void]
   def show_normal_index
     select_data_subset
     sort_projects
     @projects
   end
 
-  # GET /projects
-  # GET /projects.json
+  # Display projects index with filtering, sorting, and alternative view
+  # redirects. Handles badge and entry view redirections.
+  # Supports `GET /projects` and `GET /projects.json`.
+  # @return [void]
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   # rubocop:disable Metrics/PerceivedComplexity, Metrics/BlockNesting
   def index
@@ -107,8 +110,10 @@ class ProjectsController < ApplicationController
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
   # rubocop:enable Metrics/PerceivedComplexity, Metrics/BlockNesting
 
-  # Redirect to the *single* relevant badge entry, if there is one.
-  # We take a *list* of ids, because if there's >1, it's not unique.
+  # Redirect to the single relevant badge entry, if there is one.
+  # Handles cases where search results in 0, 1, or multiple matches.
+  # @param id_list [Array<Integer>] List of project IDs from search
+  # @return [void]
   # rubocop:disable Metrics/MethodLength
   def redir_to_badge(id_list)
     count = id_list.size
@@ -136,7 +141,10 @@ class ProjectsController < ApplicationController
   end
   # rubocop:disable Metrics/MethodLength
 
-  # GET /projects/1
+  # Display individual project details with malformed query fixes.
+  # Redirects malformed criteria_level queries to proper format.
+  # Supports `GET /projects/1`.
+  # @return [void]
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def show
     # Omit useless unchanged session cookie for performance & privacy
@@ -163,25 +171,35 @@ class ProjectsController < ApplicationController
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
-  # GET /projects/1.json
+  # Return project data in JSON format with CDN cache headers.
+  # Supports `GET /projects/1.json`.
+  # @return [void]
   def show_json
     # Tell CDN the surrogate key so we can quickly erase it later
     set_surrogate_key_header @project.record_key
   end
 
-  # GET /projects/1.md
+  # Return project data in Markdown format with CDN cache headers.
+  # Supports `GET /projects/1.md`.
+  # @return [void]
   def show_markdown
     # Tell CDN the surrogate key so we can quickly erase it later
     set_surrogate_key_header @project.record_key
   end
 
-  # GET /projects/:id/delete_form(.:format)
+  # Display project deletion confirmation form.
+  # Supports `GET /projects/:id/delete_form(.:format)`.
+  # @return [void]
   def delete_form; end
 
+  # Database fields needed for badge display (performance optimization)
   BADGE_PROJECT_FIELDS =
     'id, name, updated_at, tiered_percentage, ' \
     'badge_percentage_0, badge_percentage_1, badge_percentage_2'
 
+  # Generate and serve project badge in SVG or JSON format.
+  # Optimized to select only necessary fields for performance.
+  # @return [void]
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def badge
     # Don't use "set_project", but instead specifically find the project
@@ -211,14 +229,18 @@ class ProjectsController < ApplicationController
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
-  # GET /projects/new
+  # Display new project form with GitHub integration support.
+  # Supports `GET /projects/new`.
+  # @return [void]
   def new
     use_secure_headers_override(:allow_github_form_action)
     store_location_and_locale
     @project = Project.new
   end
 
-  # GET /projects/:id/edit(.:format)
+  # Display project edit form.
+  # Supports `GET /projects/:id/edit(.:format)`.
+  # @return [void]
   def edit
     return unless @project.notify_for_static_analysis?('0')
 
@@ -226,8 +248,10 @@ class ProjectsController < ApplicationController
     flash.now[:danger] = message
   end
 
-  # POST /projects
-  # POST /projects.json
+  # Create a new project with automatic URL cleanup and duplicate detection.
+  # Performs autofill and sends notification email on successful creation.
+  # Supports `POST /projects` and `POST /projects.json`.
+  # @return [void]
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   # Try to create a new project entry.
   # Clean up repo_url and homepage_url specially to make it easier to
@@ -269,8 +293,10 @@ class ProjectsController < ApplicationController
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
-  # PATCH/PUT /projects/1
-  # PATCH/PUT /projects/1.json
+  # Update project with validation, autofill, and CDN cache management.
+  # Handles ownership changes and repo URL restrictions.
+  # Supports `PATCH/PUT /projects/1` and `PATCH/PUT /projects/1.json`.
+  # @return [void]
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   # rubocop:disable Metrics/PerceivedComplexity
   def update
@@ -351,9 +377,11 @@ class ProjectsController < ApplicationController
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
   # rubocop:enable Metrics/PerceivedComplexity
 
-  # DELETE /projects/1
-  # DELETE /projects/1.json
-  # Form parameter "deletion_rationale" has the user-provided rationale.
+  # Delete project and send notification email with rationale.
+  # Purges CDN cache and redirects to project list.
+  # Supports `DELETE /projects/1` and `DELETE /projects/1.json`.
+  # Form parameter **deletion_rationale** has the user-provided rationale.
+  # @return [void]
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def destroy
     @project.destroy!
@@ -374,6 +402,7 @@ class ProjectsController < ApplicationController
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
+  # Database fields for feed display (performance optimization).
   # The /feed only displays a small set of the project fields, so only
   # extract the ones we use.  This optimization is worth it because
   # users poll the feed *and* it can include many projects.
@@ -387,6 +416,8 @@ class ProjectsController < ApplicationController
                         'badge_percentage_2, ' \
                         'homepage_url, repo_url, description, user_id'
 
+  # Generate Atom feed of recently updated projects.
+  # @return [void]
   def feed
     # @projects = Project.select(FEED_DISPLAY_FIELDS).
     #  limit(50).reorder(updated_at: :desc, id: :asc).includes(:user)
@@ -394,6 +425,8 @@ class ProjectsController < ApplicationController
     respond_to { |format| format.atom }
   end
 
+  # Display reminders summary for admin users only.
+  # @return [void]
   def reminders_summary
     if current_user_is_admin?
       respond_to { |format| format.html }
@@ -403,18 +436,21 @@ class ProjectsController < ApplicationController
     end
   end
 
+  # Regex pattern for validating repository rights changes.
   # Rights changes, if provided, must match this pattern.
   VALID_ADD_RIGHTS_CHANGES = /\A *[+-] *\d+ *(, *\d+)*\z/.freeze
 
-  # Number of days before a user may change repo_url. See below.
+  # Number of days before a user may change repo_url.
   # NOTE: If you change this value, you may also need to change
-  # file config/locales/en.yml key repo_url_limits.
+  # file `config/locales/en.yml` key `repo_url_limits`.
   REPO_URL_CHANGE_DELAY = 180
 
+  # Maximum number of GitHub repositories to fetch from a user.
   # We have had past reports of problems when 80 repos are available, so
   # set this to a lower number.
   MAX_GITHUB_REPOS_FROM_USER = 50
 
+  # Database fields for HTML index display (performance optimization)
   HTML_INDEX_FIELDS = 'projects.id, projects.name, description, ' \
                       'homepage_url, repo_url, license, projects.user_id, ' \
                       'achieved_passing_at, projects.updated_at, badge_percentage_0, ' \
@@ -455,6 +491,11 @@ class ProjectsController < ApplicationController
   # disabled & the data is forged anyway) or the "real" production site.
   # Do *not* call this on the "master" or "staging" tiers,
   # because we don't want to bother our users.
+  # Sends monthly announcement emails for projects that achieved badges.
+  # Generates and delivers a report email with statistics comparing the
+  # previous month to the month before that, highlighting new badge recipients.
+  # @return [Array<Integer>] Array of project IDs that newly achieved passing
+  #   badge status in the previous month
   # rubocop:disable Metrics/MethodLength
   def self.send_monthly_announcement
     consider_today = Time.zone.today
@@ -478,6 +519,11 @@ class ProjectsController < ApplicationController
   # rubocop:enable Metrics/MethodLength
   private_class_method :send_monthly_announcement
 
+  # Validates if a query parameter key-value pair is allowed.
+  # Performs validation based on parameter type (integer, text, or other).
+  # @param key [String] The query parameter key to validate
+  # @param value [String] The query parameter value to validate
+  # @return [Boolean] True if the query parameter is allowed, false otherwise
   def allowed_query?(key, value)
     return false if value.blank?
     return positive_integer?(value) if INTEGER_QUERIES.include?(key.to_sym)
@@ -487,6 +533,11 @@ class ProjectsController < ApplicationController
     allowed_other_query?(key, value)
   end
 
+  # Validates specific query parameter types not covered by general validation.
+  # Handles special parameter types like sort, sort_direction, status, etc.
+  # @param key [String] The query parameter key to validate
+  # @param value [String] The query parameter value to validate
+  # @return [Boolean] True if the query parameter is allowed, false otherwise
   # rubocop:disable Metrics/CyclomaticComplexity
   def allowed_other_query?(key, value)
     return ALLOWED_SORT.include?(value) if key == 'sort'
@@ -500,20 +551,29 @@ class ProjectsController < ApplicationController
   end
   # rubocop:enable Metrics/CyclomaticComplexity
 
-  # Returns true if current_user can edit, else redirect to a different URL
+  # Verifies that the current user can edit the project, or redirects to root.
+  # Used as a before_action filter to enforce edit permissions.
+  # @return [Boolean] True if user can edit, otherwise redirects to root path
   def can_edit_else_redirect
     return true if can_edit?
 
     redirect_to root_path
   end
 
-  # Returns true if current_user can control, else redirect to a different URL
+  # Verifies that the current user can control the project, or redirects to root.
+  # Used as a before_action filter to enforce control permissions.
+  # @return [Boolean] True if user can control, otherwise redirects to root
   def can_control_else_redirect
     return true if can_control?
 
     redirect_to root_path
   end
 
+  # Validates that deletion rationale meets minimum requirements.
+  # Ensures non-admin users provide adequate justification (20+ chars with
+  # 15+ non-whitespace) for project deletion to prevent abuse.
+  # @return [Boolean] True if rationale is adequate, otherwise redirects
+  #   to deletion form with error message
   # rubocop:disable Metrics/AbcSize
   def require_adequate_deletion_rationale
     return true if current_user&.admin?
@@ -530,8 +590,13 @@ class ProjectsController < ApplicationController
   end
   # rubocop:enable Metrics/AbcSize
 
-  # Forcibly set additional_rights on project "id" given string description
-  # Presumes permissions are granted & valid syntax in new_additional_rights
+  # Forcibly updates additional rights for a project with validated input.
+  # Adds or removes user edit permissions based on command prefix.
+  # Assumes permissions are validated and syntax is correct.
+  # @param id [Integer] The project ID to update
+  # @param new_additional_rights [String] Command string with format
+  #   "+user1,user2" (add) or "-user1,user2" (remove)
+  # @return [void]
   # rubocop:disable Metrics/MethodLength
   def update_additional_rights_forced(id, new_additional_rights)
     command = new_additional_rights.first
@@ -549,8 +614,11 @@ class ProjectsController < ApplicationController
   end
   # rubocop:enable Metrics/MethodLength
 
-  # Examine proposed changes to additional rights - if okay, call
-  # update_additional_rights_forced to do them.
+  # Validates and processes additional rights changes from request parameters.
+  # Performs input validation and permission checks before delegating to
+  # update_additional_rights_forced. Only users with control permissions
+  # can remove additional editors.
+  # @return [void] Silently returns if validation fails or no changes requested
   # rubocop:disable Metrics/CyclomaticComplexity
   def update_additional_rights
     return unless can_edit? # Double-check - must be able to edit
@@ -571,6 +639,10 @@ class ProjectsController < ApplicationController
   end
   # rubocop:enable Metrics/CyclomaticComplexity
 
+  # Creates a GitHub client factory based on current user authentication.
+  # Returns authenticated client if user is logged in via GitHub, otherwise
+  # returns unauthenticated client.
+  # @return [Proc] A procedure that returns an Octokit::Client instance
   def client_factory
     proc do
       if current_user.nil? || current_user.provider != 'github'
@@ -581,25 +653,34 @@ class ProjectsController < ApplicationController
     end
   end
 
-  # Never trust parameters from the scary internet,
-  # only allow the white list through.
+  # Filters request parameters to only allow whitelisted project fields.
+  # Security measure to prevent mass assignment vulnerabilities.
+  # @return [ActionController::Parameters] Permitted parameters for project
   def project_params
     params.require(:project).permit(Project::PROJECT_PERMITTED_FIELDS)
   end
 
+  # Permits and extracts criteria_level parameter from request.
+  # Used for filtering projects by criteria level.
+  # @return [ActionController::Parameters] Permitted criteria_level parameter
   def criteria_level_params
     params.permit([:criteria_level])
   end
 
-  # Return an extracted URL without its scheme ('http:') & trailing '/'.
+  # Extracts URL without scheme and trailing slash for comparison.
+  # Used for URL normalization when checking if URLs are essentially the same.
+  # @param url [String] The URL to extract and normalize
+  # @return [String] Normalized URL without scheme and trailing slash
   def extracted_url(url)
     url.split('://', 2)[1].chomp('/')
   end
 
-  # Return true iff the urls are "basically the same".
-  # That is, they're the same ignoring the scheme
-  # (this is true if the user switches between http and https)
-  # and ignoring any trailing '/'.
+  # Compares two URLs to determine if they are essentially the same.
+  # Ignores differences in scheme (http vs https) and trailing slashes.
+  # Used for validating repo URL changes.
+  # @param url1 [String] First URL to compare
+  # @param url2 [String] Second URL to compare
+  # @return [Boolean] True if URLs are basically the same, false otherwise
   def basically_same?(url1, url2)
     # Blank urls don't make any sense. Consider them not the same.
     return false if url1.blank?
@@ -608,8 +689,9 @@ class ProjectsController < ApplicationController
     extracted_url(url1) == extracted_url(url2)
   end
 
-  # Return true iff the project can change its repo_url because the
-  # REPO_URL_CHANGE_DELAY has expired
+  # Checks if the repository URL change delay period has expired.
+  # Projects can only change repo URLs after a delay to prevent abuse.
+  # @return [Boolean] True if delay has expired or no previous update recorded
   def repo_url_delay_expired?
     repo_url_updated_at = @project.repo_url_updated_at
     return true if repo_url_updated_at.nil?
@@ -617,20 +699,13 @@ class ProjectsController < ApplicationController
     repo_url_updated_at < REPO_URL_CHANGE_DELAY.days.ago
   end
 
-  # Determine if there is a change in repo_url, and if there is,
-  # if it's allowed.
-  # We are trying to counter subtle attacks where
-  # a project tries to claim the good reputation or effort of another project
-  # by constantly switching its repo_url to other projects and/or nonsense.
-  # The underlying problem is that names/identities are hard; the repo_url
-  # (when present) is the closest to an "identity" that we have for a project.
-  # We have to allow it to change sometimes (because it sometimes does), but
-  # it should be a rare "sticky" event.
-  # There are various special cases, e.g., you can always set the repo_url
-  # if it's nil, the setter is an admin, or if only the scheme is changed.
-  # But otherwise normal users can't change the repo_urls in less than
-  # REPO_URL_CHANGE_DELAY days.  Allowing users to change repo_urls, but only
-  # with large delays, reduces the administration effort required.
+  # Validates if a change is allowed w.r.t. repository URL changes (if any).
+  # If the URL isn't being changed, returns true.
+  # Otherwise, whether or not it's allowed depends on various factors.
+  # Prevents subtle attacks where projects switch URLs to claim reputation
+  # of other projects. Allows changes in special cases (admin users, scheme
+  # changes only, or after delay period).
+  # @return [Boolean] True if repo URL change is allowed, false otherwise
   def repo_url_unchanged_or_change_allowed?
     return true unless @project.repo_url?
     return true if project_params[:repo_url].nil?
@@ -641,10 +716,18 @@ class ProjectsController < ApplicationController
     repo_url_delay_expired?
   end
 
+  # Validates if a string represents a positive integer.
+  # Accepts 1-16 digit positive integers (no leading zeros except for "0").
+  # @param value [String] The string value to validate
+  # @return [Boolean] True if string is a valid positive integer
   def positive_integer?(value)
     !(value =~ /\A[1-9][0-9]{0,15}\z/).nil?
   end
 
+  # Validates if a string represents a comma-separated list of integers.
+  # Accepts up to 21 positive integers separated by commas with optional spaces.
+  # @param value [String] The string value to validate as integer list
+  # @return [Boolean] True if string is a valid integer list
   def integer_list?(value)
     !(value =~ /\A[1-9][0-9]{0,15}( *, *[1-9][0-9]{0,15}){0,20}\z/).nil?
   end
@@ -654,10 +737,12 @@ class ProjectsController < ApplicationController
   # We have had past reports of problems when 80 repos are available, so
   # set this to a lower number.
 
-  # Retrieve a set of (GitHub) repositories managed by the current user.
-  # We intentionally retrieve a subset (to self-protect from overlong lists
-  # that might lead to a timeout), so we prioritize recently pushed repos.
-  # We omit repos that are already pursuing a badge.
+  # Retrieves GitHub repositories managed by the current user.
+  # Returns prioritized recently-pushed repos, excluding those already
+  # pursuing badges. Limits results to prevent timeouts.
+  # @param github [Octokit::Client, nil] Optional GitHub client instance
+  # @return [Array<Array>, nil] Array of repo data arrays [name, fork,
+  #   homepage, html_url] or nil if unauthorized/no repos
   # rubocop:disable Style/MethodCalledOnDoEndBlock, Metrics/MethodLength
   # rubocop:disable Metrics/AbcSize
   def repo_data(github = nil)
@@ -699,8 +784,10 @@ class ProjectsController < ApplicationController
   # rubocop:enable Metrics/AbcSize
   # rubocop:enable Style/MethodCalledOnDoEndBlock, Metrics/MethodLength
 
-  # Retrieve project data using the various query parameters.
-  # The parameters determine what to select *and* fields to load
+  # Retrieves and filters project data based on query parameters.
+  # Applies various filters including status, comparison operators, text
+  # search, URL search, and ID lists to build the projects query.
+  # @return [ActiveRecord::Relation] Filtered projects relation
   # rubocop:disable Metrics/PerceivedComplexity
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
   # rubocop:disable Metrics/MethodLength
@@ -726,7 +813,11 @@ class ProjectsController < ApplicationController
     @projects
   end
 
-  # Subset to only the rows and fields we need
+  # Optimizes data selection and implements pagination.
+  # Selects minimal fields for HTML requests, includes associations for JSON
+  # to prevent N+1 queries, and sets up pagination with count tracking.
+  # @return [void] Modifies @projects, @pagy, @count, and @pagy_locale instance
+  #   variables
   def select_data_subset
     # If we're supplying html (common case), select only needed fields
     format = request&.format&.symbol
@@ -749,6 +840,10 @@ class ProjectsController < ApplicationController
   # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
   # rubocop:enable Metrics/PerceivedComplexity
 
+  # Sets the homepage URL for a project based on GitHub repository data.
+  # Prefers the repository's homepage field if available, otherwise uses
+  # the repository URL itself.
+  # @return [String, nil] The determined homepage URL or nil if no repo data
   def set_homepage_url
     retrieved_repo_data = repo_data
     return if retrieved_repo_data.nil?
@@ -760,16 +855,24 @@ class ProjectsController < ApplicationController
     repo[2].present? ? repo[2] : @project.repo_url
   end
 
-  # Use callbacks to share common setup or constraints between actions.
+  # Callback to load project instance from params[:id].
+  # Used as before_action to set @project for actions that need it.
+  # @return [void] Sets @project instance variable
   def set_project
     @project = Project.find(params[:id])
   end
 
+  # Sets and validates criteria level from parameters.
+  # Ensures criteria_level is a valid level (0-2), defaulting to '0'.
+  # @return [void] Sets @criteria_level instance variable
   def set_criteria_level
     @criteria_level = criteria_level_params[:criteria_level] || '0'
     @criteria_level = '0' unless @criteria_level.match?(/\A[0-2]\Z/)
   end
 
+  # Sets optional criteria level with validation, allowing empty values.
+  # Similar to set_criteria_level but permits empty string for optional use.
+  # @return [void] Sets @criteria_level instance variable to valid level or ''
   def set_optional_criteria_level
     # Apply input filter on criteria_level. If invalid/empty it becomes ''
     requested_criteria_level = criteria_level_params[:criteria_level] || ''
@@ -781,6 +884,10 @@ class ProjectsController < ApplicationController
       end
   end
 
+  # Generates a clean URL by removing invalid query parameters.
+  # Validates query parameters and rebuilds URL with only allowed ones,
+  # removing empty query strings entirely.
+  # @return [String] Cleaned URL with valid query parameters only
   def set_valid_query_url
     # Rewrites /projects?q=&status=failing to /projects?status=failing
     original = request.original_url
@@ -796,7 +903,10 @@ class ProjectsController < ApplicationController
     parsed.to_s
   end
 
-  # If a valid "sort" parameter is provided, sort @projects in "sort_direction"
+  # Applies sorting to the projects collection based on URL parameters.
+  # Validates sort parameter against allowed values and applies direction
+  # (asc/desc) with fallback ordering by created_at.
+  # @return [void] Modifies @projects instance variable with new ordering
   # rubocop:disable Metrics/AbcSize
   def sort_projects
     # Sort, if there is a requested order (otherwise use default created_at)
@@ -810,6 +920,13 @@ class ProjectsController < ApplicationController
   end
   # rubocop:enable Metrics/AbcSize
 
+  # Handles successful project update responses and badge level changes.
+  # Generates appropriate redirects, sends status change emails, and displays
+  # congratulations or warning messages based on badge level changes.
+  # @param format [ActionController::MimeResponds::Collector] Response format
+  # @param old_badge_level [String] Previous badge level before update
+  # @param criteria_level [String] Current criteria level for navigation
+  # @return [void] Renders response and sends emails as needed
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   # TODO: Break this into smaller pieces
   def successful_update(format, old_badge_level, criteria_level)
@@ -851,13 +968,20 @@ class ProjectsController < ApplicationController
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
+  # Generates URL anchor fragment for form navigation.
+  # Creates anchor tag for specific form sections, excluding the generic "Save".
+  # @return [String] URL anchor fragment (e.g., "#section_name") or empty string
   def url_anchor
     return '#' + params[:continue] unless params[:continue] == 'Save'
 
     ''
   end
 
-  # Clean up url; returns nil if given nil.
+  # Normalizes URLs by removing trailing slashes.
+  # Ensures consistent URL format for comparison and storage.
+  # @param url [String, nil] The URL to clean
+  # @return [String, nil] Cleaned URL without trailing slashes, or nil if
+  #   input was nil
   def clean_url(url)
     return url if url.nil?
 

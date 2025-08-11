@@ -5,6 +5,8 @@
 # SPDX-License-Identifier: MIT
 
 # rubocop: disable Metrics/ClassLength
+# Controller for users functionality.
+#
 class UsersController < ApplicationController
   # NOTE: If a "before" filter renders or redirects, the action will not run,
   # and other additional filters scheduled to run after it are cancelled.
@@ -16,6 +18,8 @@ class UsersController < ApplicationController
   before_action :enable_maximum_privacy_headers
   include SessionsHelper
 
+  # Displays list of resources.
+  # @return [void]
   def index
     user_result = search_users
     @pagy, @users = pagy(user_result)
@@ -23,6 +27,7 @@ class UsersController < ApplicationController
   end
 
   # Search users for desired_name (which is presumed to be non-empty)
+  # @param desired_name [String] The name to search for (case-insensitive partial match)
   def search_name(desired_name)
     # To maximize finding, use a case-sensitive "find anywhere" search.
     # An exact case-sensitive search would for names look like this:
@@ -31,6 +36,7 @@ class UsersController < ApplicationController
   end
 
   # Search users for desired_email (which is presumed to be non-empty)
+  # @param desired_email [String] The email address to search for (exact match)
   def search_email(desired_email)
     # We presume email is stored as citext, which is case-insensitive.
     User.where(email: desired_email.strip)
@@ -88,6 +94,8 @@ class UsersController < ApplicationController
       ) - @projects
   end
 
+  # Displays form for creating new resource.
+  # @return [void]
   def new
     @user = User.new
   end
@@ -143,6 +151,9 @@ class UsersController < ApplicationController
   # old and new have the same value (so we must remove it).
   # In addition, because email values are encrypted, we have to separately
   # report the old and new values if they changed.
+  # @param changeset [Hash] Hash of field changes from ActiveModel
+  # @param old_email [String] The previous email address before change
+  # @param new_email [String] The new email address after change
   def cleanup_changes(changeset, old_email, new_email)
     result = {}
     changeset.each do |key, change|
@@ -225,6 +236,8 @@ class UsersController < ApplicationController
     DELAY_BETWEEN_ACTIVATION_EMAILS.since(sent_at) > Time.zone.now
   end
 
+  # Enable privacy headers to the maximum we can.
+  # @return [void]
   def enable_maximum_privacy_headers
     # Harden the response by maximizing HTTP headers of user data
     # for privacy. We do this by inhibiting indexing and caching.
@@ -248,6 +261,7 @@ class UsersController < ApplicationController
     response.set_header('Cache-Control', 'private, no-store')
   end
 
+  # Reply with only permitted user parameters and ensure required ones are present
   def user_params
     user_params = params.require(:user).permit(
       :provider, :uid, :name, :email, :password,
@@ -260,7 +274,7 @@ class UsersController < ApplicationController
     user_params
   end
 
-  # Confirms a logged-in user.
+  # Confirm this is logged-in user; redirect if not
   def redir_unless_logged_in
     return if logged_in?
 
@@ -275,7 +289,7 @@ class UsersController < ApplicationController
     user == current_user || current_user.admin?
   end
 
-  # Confirms that this user can edit; sets @user to the user to process
+  # Confirm that this user can edit; sets @user to the user to process
   def redir_unless_current_user_can_edit
     @user = User.find(params[:id])
     return if current_user_can_edit?(@user)
@@ -284,6 +298,8 @@ class UsersController < ApplicationController
     redirect_to(root_path)
   end
 
+  # Handles regenerate activation digest functionality.
+  # @return [void]
   def regenerate_activation_digest
     @user.activation_token = User.new_token
     @user.activation_digest = User.digest(@user.activation_token)
@@ -292,6 +308,7 @@ class UsersController < ApplicationController
 
   # If we're sending an HTML project table, select only the fields needed.
   # This significantly reduces memory allocations.
+  # @param dataset [ActiveRecord::Relation] The project dataset to optimize
   def select_needed(dataset)
     return dataset unless request.format.symbol == :html
 

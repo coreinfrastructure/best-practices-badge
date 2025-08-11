@@ -6,6 +6,11 @@
 
 require 'ipaddr'
 
+# Base controller for the Best Practices Badge application.
+# Provides common functionality including session management, security headers,
+# locale handling, HTTPS enforcement, and CDN cache configuration.
+# All other controllers inherit from this class.
+#
 # rubocop: disable Metrics/ClassLength
 class ApplicationController < ActionController::Base
   include Pagy::Backend
@@ -14,6 +19,10 @@ class ApplicationController < ActionController::Base
   # That way we tell if the session value has changed, and potentially
   # omit it if it has not changed.
   before_action :record_original_session
+
+  # Records the current session state for comparison later.
+  # Used to detect session changes and optimize session cookie transmission.
+  # @return [void]
   def record_original_session
     @original_session = session.to_h
   end
@@ -48,7 +57,11 @@ class ApplicationController < ActionController::Base
   # we don't need.
   before_action :add_http_permissions_policy
 
-  # Record user_id, e.g., so it can be recorded in logs
+  # Append user information to the log payload for request tracking.
+  # Records the current user's ID in logs when user is logged in.
+  #
+  # @param payload [Hash] The log payload hash to append information to
+  # @return [void]
   # https://github.com/roidrage/lograge/issues/23
   def append_info_to_payload(payload)
     super
@@ -76,17 +89,19 @@ class ApplicationController < ActionController::Base
   # Delay in seconds before a delayed purge
   BADGE_PURGE_DELAY = (ENV['BADGEAPP_PURGE_DELAY'] || '8').to_i
 
+  # Combined cache control header value for CDN surrogate control
   BADGE_CACHE_SURROGATE_CONTROL =
     "max-age=#{BADGE_CACHE_MAX_AGE}, stale-if-error=#{BADGE_CACHE_STALE_AGE}"
 
-  # Set the cache control headers
+  # Configures CDN and browser cache control headers for optimal performance.
+  # Sets different cache policies for CDN (Fastly) vs. end-user browsers.
   # More info:
-  # https://docs.fastly.com/en/guides/configuring-caching
-  # https://docs.fastly.com/en/guides/serving-stale-content
-  # Simlulates what this did: https://github.com/fastly/fastly-rails
+  # - https://docs.fastly.com/en/guides/configuring-caching
+  # - https://docs.fastly.com/en/guides/serving-stale-content
+  # Simulates what this did: https://github.com/fastly/fastly-rails
   # In particular:
   # https://github.com/fastly/fastly-rails/blob/master/lib/fastly-rails/
-  # action_controller/cache_control_headers.rb
+  # @return [void]
   # rubocop:disable Naming/AccessorMethodName
   def set_cache_control_headers
     # Configure our CDN (Fastly) to cache data for a while, and
@@ -100,16 +115,22 @@ class ApplicationController < ActionController::Base
     response.headers['Cache-Control'] = 'public, no-cache'
   end
 
-  # Set headers for a CDN surrogate key. See:
-  # https://github.com/fastly/fastly-rails
+  # Sets CDN surrogate key headers for cache management.
   # The keys are normally created via methods in the model.
+  # Enables targeted purging of cached content by surrogate keys.
+  # See: https://github.com/fastly/fastly-rails
+  #
+  # @param surrogate_keys [Array<String>] Keys for cache identification
+  # @return [void]
   def set_surrogate_key_header(*surrogate_keys)
     # request.session_options[:skip] = true  # No Set-Cookie
     response.headers['Surrogate-Key'] = surrogate_keys.join(' ')
   end
   # rubocop:enable Naming/AccessorMethodName
 
-  # Ensure this page is NOT remotely cached.
+  # Completely disables caching for sensitive pages.
+  # Uses **no-store** to prevent any caching of the response.
+  # @return [void]
   def disable_cache
     # Misleadingly, "no-cache" *allows* caching. We must use 'no-store'
     # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control
@@ -117,14 +138,14 @@ class ApplicationController < ActionController::Base
     # We could remove header 'Surrogate-Control' but I found no need to do so.
   end
 
-  # Omit useless unchanged session cookie by not-logged-in users
-  # to improve performance & privacy.
-  # For example, setting a cookie disables some caches.
-  # *DO NOT* set error messages in the flash area after calling this method,
-  # because flashes are stored in the session.
-  # This is vaguely inspired by, but takes a different approach, to
-  # https://stackoverflow.com/questions/5435494/
-  # rails-3-disabling-session-cookies
+  # Omit unchanged session cookies.
+  # This can improve performance and privacy for anonymous users by not sending
+  # unnecessary session cookies when the session hasn't changed.
+  #
+  # **Important:** Do not set flash messages after calling this method,
+  # as flashes are stored in the session. Don't set Rails CSRF tokens either,
+  # as they are also in the session.
+  # Inspired by https://stackoverflow.com/questions/5435494/rails-3-disabling-session-cookies
   # You can verify this directly by running commands such as:
   # curl -svo ,out --max-redirs 10 http://localhost:3000/en
   # and verifying the absence of the header Set-Cookie header,
@@ -135,7 +156,8 @@ class ApplicationController < ActionController::Base
   # with the result that logged-in users couldn't log out (via /logout).
   # Don't call this routine from a session management function or a
   # page that leads to database changes (an edit page); those set the CSRF
-  # counter token, so calling this routine will cause those actions to fail.
+  # counter token, so calling this routine will cause those actions to fail
+  # @return [void]
   def omit_unchanged_session_cookie
     # Only take this action if not-logged-in and session cookie is unchanged
     return unless !logged_in? && session.to_h == @original_session
@@ -143,29 +165,35 @@ class ApplicationController < ActionController::Base
     request.session_options[:skip] = true
   end
 
-  # Special case: If the requested format is JSON or CSV, don't bother
-  # redirecting, because JSON and CSV are normally the same in any locale.
+  # Response formats that should not trigger locale redirects.
+  # JSON and CSV are locale-independent, so don't redirect to add locale.
   DO_NOT_REDIRECT_LOCALE = %w[json csv].freeze
 
   private
 
-  # *Always* include the locale when generating a URL.
-  # Historically we omitted the locale when it was "en", but then we could
-  # not tell the difference between "use en" and "use the browser's locale".
-  # So, we now *always* include the locale in the URL once we know what it is;
-  # if there's no locale in the URL, that means we must use heuristics
+  # Ensures all URLs include the current locale parameter.
+  # Always includes locale in URLs for consistent internationalization,
+  # even when the locale matches the default.
+  # If there's no locale in the URL, that means we must use heuristics
   # to figure out what it should be and redirect to that locale.
+  # Once we know the locale, we want to stick to it consistently.
   # To omit the locale for "en",
   # see this: http://stackoverflow.com/questions/5261521/
   # how-to-avoid-adding-the-default-locale-in-generated-urls
   # { locale: I18n.locale == I18n.default_locale ? nil : I18n.locale }
+  #
+  # @param options [Hash] Additional URL options to merge
+  # @return [Hash] URL options with locale included
   # rubocop: disable Style/OptionHash
   def default_url_options(options = {})
     { locale: I18n.locale }.merge options
   end
   # rubocop: enable Style/OptionHash
 
+  # Fail if the client IP is invalid.
   # raise exception if text value client_ip isn't in valid_client_ips
+  # @param client_ip [String] The client IP address to validate
+  # @param allowed_ips [Array] Array of allowed IP addresses
   def fail_if_invalid_client_ip(client_ip, allowed_ips)
     return if client_ip.blank?
 
@@ -179,6 +207,7 @@ class ApplicationController < ActionController::Base
           'Invalid client IP'
   end
 
+  # Redirect http: to https: in normal production use.
   # See: http://stackoverflow.com/questions/4329176/
   #   rails-how-to-redirect-from-http-example-com-to-https-www-example-com
   def redirect_https?
@@ -202,7 +231,7 @@ class ApplicationController < ActionController::Base
   # the user hasn't specified a locale in the URL *and* the browser hasn't
   # requested a locale.  Geolocation is problematic: some user's locales
   # will not be the common one in the geolocation, and we must avoid
-  # online services (that would leak user IP addresses to those services).
+  # online services that would leak user IP addresses to those services.
   # Browsers often provide ACCEPT_LANGUAGE (which in turn is often provided
   # by the operating system), so we should not need geolocation anyway.
   def find_best_locale

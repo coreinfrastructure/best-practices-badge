@@ -5,6 +5,7 @@
 # SPDX-License-Identifier: MIT
 
 module ProjectStatsHelper
+  # Configuration constant for date chart options.
   DATE_CHART_OPTIONS = {
     scales:
       {

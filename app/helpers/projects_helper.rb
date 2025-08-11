@@ -4,6 +4,7 @@
 # OpenSSF Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
+# Helper module providing projects view functionality.
 # rubocop:disable Metrics/ModuleLength
 module ProjectsHelper
   MARKDOWN_RENDERER = Redcarpet::Render::HTML.new(
@@ -26,6 +27,8 @@ module ProjectsHelper
       fork_header(fork_repos) + fork_repos
   end
 
+  # Handles fork and original functionality.
+  # @param retrieved_repo_data - Repository data from GitHub API
   def fork_and_original(retrieved_repo_data)
     if retrieved_repo_data.blank?
       NO_REPOS
@@ -34,16 +37,19 @@ module ProjectsHelper
     end
   end
 
+  # @param original_repos [Array] Array of original (non-fork) repositories
   def original_header(original_repos)
     original_repos.blank? ? [] : [[t('.original_repos'), '', 'none']]
   end
 
+  # @param fork_repos [Array] Array of forked repositories
   def fork_header(fork_repos)
     fork_repos.blank? ? [] : [[t('.fork_repos'), '', 'none']]
   end
 
   # Render markdown.  This is safe because the markdown renderer in use is
   # configured with filter_html:true, but rubocop has no way to know that.
+  # @param content [String] The content to render as Markdown
   # rubocop:disable Rails/OutputSafety
   def markdown(content)
     return '' if content.nil?
@@ -66,9 +72,10 @@ module ProjectsHelper
       }
     )
   end
-  # rubocop:enable Metrics/ParameterLists
 
   # Generate HTML for minor heading
+  # @param minor [Object] The minor heading text
+  # rubocop:enable Metrics/ParameterLists
   def minor_header_html(minor)
     # rubocop:disable Rails/OutputSafety
     # Section ids are section_ followed by lowercased letters, digits, _ for space
@@ -112,10 +119,12 @@ module ProjectsHelper
     # rubocop:enable Rails/OutputSafety
     results
   end
-  # rubocop:enable Metrics/ParameterLists
-  # rubocop:enable Metrics/MethodLength,Metrics/AbcSize
 
   # Return HTML for a sortable header.
+  # @param title [String] The title text for the sortable header
+  # @param field_name [Object] The database field name for sorting
+  # rubocop:enable Metrics/ParameterLists
+  # rubocop:enable Metrics/MethodLength,Metrics/AbcSize
   def sortable_header(title, field_name)
     new_params = params.merge(sort: field_name)
                        .permit(ProjectsController::ALLOWED_QUERY_PARAMS)
@@ -137,6 +146,7 @@ module ProjectsHelper
 
   # Given tiered percentage as integer value, return its string representation
   # Returns nil if given blank value.
+  # @param value [Object] The value to process
   # rubocop:disable Metrics/MethodLength
   def tiered_percent_as_string(value)
     return if value.blank?
@@ -157,13 +167,14 @@ module ProjectsHelper
   # We sometimes insert <wbr> after sequences of these characters.
   WORD_BREAK_DIVIDERS = /([,_\-.]+)/.freeze
 
-  # rubocop:disable Rails/OutputSafety
   # This text is considered safe, so we can directly mark it as such.
+  # rubocop:disable Rails/OutputSafety
   SAFE_WORD_BREAK = '<wbr>'.html_safe
   # rubocop:enable Rails/OutputSafety
 
   # Insert wbr (HTML word break) after _ etc. per WORD_BREAK_DIVIDERS.
   # The text is presumed to be unsafe.  We produce a safe (escaped) HTML result.
+  # @param text [String] The text content to break down into words
   def word_breakdown(text)
     safe_join(
       text.split(WORD_BREAK_DIVIDERS).each_with_index.map do |fragment, i|

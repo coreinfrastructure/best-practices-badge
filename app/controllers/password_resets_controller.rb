@@ -42,6 +42,8 @@ class PasswordResetsController < ApplicationController
     redirect_to root_url
   end
 
+  # Updates an existing resource.
+  # @return [void]
   def update
     new_password = nested_params(:user, :password)
     if new_password.nil? || new_password == ''
@@ -55,6 +57,7 @@ class PasswordResetsController < ApplicationController
     end
   end
 
+  # Configuration constant for delay between reset passwords.
   DELAY_BETWEEN_RESET_PASSWORDS = Integer(
     ENV['DELAY_BETWEEN_RESET_PASSWORDS'] || 4.hours.seconds.to_s, 10
   ).seconds
@@ -63,6 +66,7 @@ class PasswordResetsController < ApplicationController
 
   # Return true iff sent_at is too soon (compared to the current time)
   # to send a reset password request.
+  # @return [Boolean]
   def reset_password_too_soon?(sent_at)
     # We've never sent one before, so it's obviously not too soon.
     return false if sent_at.blank?
@@ -70,6 +74,9 @@ class PasswordResetsController < ApplicationController
     DELAY_BETWEEN_RESET_PASSWORDS.since(sent_at) > Time.zone.now
   end
 
+  # Handles email reset password instance method functionality.
+  # @param user [User] The user instance
+  # @return [Object] Method return value
   def email_reset_password(user)
     # Local password resets only make sense for local users
     return unless user.provider == 'local'
@@ -83,10 +90,12 @@ class PasswordResetsController < ApplicationController
     @user.send_password_reset_email
   end
 
+  # Handles user params - only returns what's permitted
   def user_params
     params.require(:user).permit(:password, :password_confirmation)
   end
 
+  # Obtain User information
   def obtain_user
     @user = User.find_by(email: params[:email])
   end
@@ -99,7 +108,7 @@ class PasswordResetsController < ApplicationController
     end
   end
 
-  # Checks expiration of reset token.
+  # Reject expired reset requests via redirect, else do nothing
   def require_unexpired_reset
     return unless @user.password_reset_expired?
 
@@ -109,6 +118,8 @@ class PasswordResetsController < ApplicationController
 
   # Return params[outer][inner] but handle nil gracefully by returning nil.
   # This makes it easier to avoid nil dereferences.
+  # @param outer [Object] The outer parameter key
+  # @param inner [Object] The inner parameter key within outer
   def nested_params(outer, inner)
     return if params.nil? || !params.key?(outer)
     return unless params[outer].key?(inner)

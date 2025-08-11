@@ -21,6 +21,8 @@ class Rack::Attack
     "/#{loc}/login"
   end.append('/login').to_set
 
+  # Configuration constant for signup paths.
+
   SIGNUP_PATHS = I18n.available_locales.map do |loc|
     "/#{loc}/users"
   end.append('/users').to_set

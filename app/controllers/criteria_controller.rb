@@ -4,11 +4,17 @@
 # OpenSSF Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
+# Controller for criteria functionality.
+#
 class CriteriaController < ApplicationController
+  # Displays list of resources.
+  # @return [void]
   def index
     set_params
   end
 
+  # Displays individual resource details.
+  # @return [void]
   def show
     set_criteria_level
     set_params
@@ -16,6 +22,8 @@ class CriteriaController < ApplicationController
 
   private
 
+  # Sets criteria_level value.
+  # @return [void]
   def set_criteria_level
     @criteria_level = params[:criteria_level] || '0'
     @criteria_level = '0' unless @criteria_level.match?(/\A[0-2]\Z/)
@@ -30,6 +38,9 @@ class CriteriaController < ApplicationController
 
   # Convert user-provided parameter "name" into true/false.
   # This is untrusted input, be cautious with it.
+  # @param name [String] The name name
+  # @param default_value [Object] The default value parameter
+  # @return [Boolean]
   def boolean_param(name, default_value = true)
     if params.key?(name)
       user_value = params[name]

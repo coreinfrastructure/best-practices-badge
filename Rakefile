@@ -6,4 +6,8 @@
 
 require File.expand_path('config/application', __dir__)
 
-Rails.application.load_tasks
+# Guard against loading tasks multiple times to prevent constant warnings
+
+unless Rake::Task.task_defined?('stats') || Rake::Task.task_defined?('environment') || defined?(STATS_DIRECTORIES)
+  Rails.application.load_tasks
+end

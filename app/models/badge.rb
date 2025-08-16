@@ -135,7 +135,10 @@ class Badge
     # Class methods
     include Enumerable
 
-    # Create Badge static values as we need them.
+    # Creates and caches Badge instances for the given level.
+    # @param level [String, Integer] the badge level (percentage 0-99 or 'passing', 'silver', 'gold')
+    # @return [Badge] the badge instance for the specified level
+    # @raise [ArgumentError] if level is not valid
     def [](level)
       raise ArgumentError unless valid?(level)
 
@@ -143,39 +146,60 @@ class Badge
       @badges[level] ||= new(level)
     end
 
+    # Returns all badge instances for all acceptable levels.
+    # Creates badges if they don't exist yet.
+    # @return [Array<Badge>] array of all badge instances
     def all
       create_all unless @badges&.length == 103
       ACCEPTABLE_INPUTS.map { |level| self[level] }
     end
 
+    # Creates badge instances for all acceptable levels.
+    # Initializes the internal badges cache.
+    # @return [void]
     def create_all
       @badges = {}
       ACCEPTABLE_INPUTS.each { |level| @badges[level] = new(level) }
     end
 
+    # Iterates over all badge instances.
+    # Implements Enumerable interface.
+    # @yield [Badge] each badge instance
+    # @return [Badge] self for method chaining
     def each
       all.each { |badge| yield badge }
       self
     end
 
+    # Checks if the given level is valid for badge creation.
+    # @param level [String, Integer] the level to validate
+    # @return [Boolean] true if level is acceptable
     def valid?(level)
       ACCEPTABLE_INPUTS.include?(level)
     end
   end
 
-  # Instance methods
+  # Creates a new Badge instance for the specified level.
+  # Loads the corresponding SVG content from static files.
+  # @param level [String, Integer] the badge level
+  # @raise [ArgumentError] if level is not valid
   def initialize(level)
     raise ArgumentError unless self.class.valid?(level)
 
     @svg = load_svg(level)
   end
 
+  # Returns the SVG content as a string.
+  # @return [String] the badge SVG content
   def to_s
     svg
   end
 
   private
 
+  # Loads SVG content from the corresponding static file.
+  # @param level [String, Integer] the badge level
+  # @return [String] the SVG file content or empty string if invalid
   def load_svg(level)
     # Defensive programming: only allow valid levels.
     # This was checked earlier, but we re-check here so we're sure *and*

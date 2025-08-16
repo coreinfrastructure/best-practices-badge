@@ -324,7 +324,7 @@ desc 'Copy active production database into development (if normal one fails)'
 task :pull_production_alternative do
   puts 'Getting production database (alternative)'
   sh 'heroku pg:backups:capture --app production-bestpractices && ' \
-     'curl -o db/latest.dump `heroku pg:backups:public-url ' \
+     'curl -o db/latest.dump `heroku pg:backups:url ' \
      '     --app production-bestpractices` && ' \
      'rake db:reset && ' \
      'pg_restore --verbose --clean --no-acl --no-owner -U `whoami` ' \
@@ -348,14 +348,14 @@ end
 # heroku pg:backups:capture --app production-bestpractices
 desc 'Copy production database backup to main stage, overwriting main database'
 task :production_to_main do
-  sh 'heroku pg:backups:restore $(heroku pg:backups:public-url ' \
+  sh 'heroku pg:backups:restore $(heroku pg:backups:url ' \
      '--app production-bestpractices) DATABASE_URL --app master-bestpractices'
   sh 'heroku run:detached bundle exec rake db:migrate --app master-bestpractices'
 end
 
 desc 'Copy production database backup to staging, overwriting staging database'
 task :production_to_staging do
-  sh 'heroku pg:backups:restore $(heroku pg:backups:public-url ' \
+  sh 'heroku pg:backups:restore $(heroku pg:backups:url ' \
      '--app production-bestpractices) DATABASE_URL ' \
      '--app staging-bestpractices --confirm staging-bestpractices'
   sh 'heroku run:detached bundle exec rake db:migrate --app staging-bestpractices'

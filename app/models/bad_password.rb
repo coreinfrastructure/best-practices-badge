@@ -50,12 +50,16 @@ class BadPassword < ApplicationRecord
   Rails.logger.info('BADGEAPP_BADPWKEY unset') if BADPWKEY == DEFAULT_BADPWKEY
   BADPWKEY_BYTES ||= [BADPWKEY].pack('H*')
 
-  # Return string representation of HMAC of pw (password)
+  # Returns HMAC-SHA512 hash of the given password using the configured key.
+  # @param pw [String] the password to hash
+  # @return [String] hexadecimal representation of the HMAC hash
   def self.hash_password(pw)
     OpenSSL::HMAC.hexdigest('SHA512', BADPWKEY_BYTES, pw)
   end
 
-  # Load "bad passwords" from a file, up to "max" count.
+  # Loads bad passwords from compressed file and returns array of hashed records.
+  # @param max [Integer, nil] maximum number of passwords to load, nil for all
+  # @return [Array<Hash>] array of hashes with :forbidden_hash keys
   # rubocop:disable Metrics/MethodLength
   def self.bad_passwords_from_file(max = nil)
     require 'zlib'
@@ -74,8 +78,10 @@ class BadPassword < ApplicationRecord
   end
   # rubocop:enable Metrics/MethodLength
 
-  # Force load into the database the list of bad passwords, up to max number.
-  # We have a "max" so that testing doesn't take forever.
+  # Forces reload of bad password database from file.
+  # Deletes all existing records and loads fresh data from file.
+  # @param max [Integer, nil] maximum number of passwords to load for testing
+  # @return [void]
   def self.force_load(max = nil)
     BadPassword.delete_all
     bad_password_array = bad_passwords_from_file(max)
@@ -86,30 +92,24 @@ class BadPassword < ApplicationRecord
     end
   end
 
-  # Return true iff forbidden exists in BadPassword, but don't do SQL logging.
-  # The production environment runs at :info debug level, which
-  # doesn't log individual SQL queries. However, it's possible to change the
-  # log level to :debug (0), or start the application in a non-production
-  # setting that has debug level. This is the default during testing,
-  # for example. At :debug level, individual
-  # SQL queries *are* logged. To prevent accidentally revealing passwords
-  # through the logs, we will *not* check the bad password database
-  # at log level 0 (debug).
+  # Check if a password exists in the "bad password" database.
+  # It will only execute the database check if we should do lookups at all
+  # (because they won't be logged), otherwise it always returns false.
+  # This presents exposure of password-related info in logs. Even if the
+  # information was logged, it only exposes keyed HMAC hashes,
+  # so even SQL query logs don't reveal actual passwords, but we're
+  # being extra-cautions.
   #
   # I originally wanted to use Rails.logger.silence to do this.
-  # However, there is no clear evidence it's
+  # However, there is no clear evidence that `Rails.logger.silence` is
   # thread-safe, and much evidence it isn't. Simply disabling logging of the
-  # global logging object is *not* okay. If we simply silenced logging,
-  # we would sometimes disable logging of other events.
-  # Since we only check for unlogged passwords as an extra help for users,
-  # losing this functionality isn't a serious problem.
+  # global logging object is *not* okay, because that would
+  # sometimes disable logging of other events.
   # It's better to not check for bad passwords to ensure *no* password
   # is ever exposed.
   #
-  # Note that we only checked keyed cryptographic hashes. That way, even
-  # if an attacker manages to see the queries, they'll also need the key
-  # before they can *start* doing brute-force searches for a password.
-
+  # @param pw [String] the password to check
+  # @return [Boolean] true if password is found in bad password database
   def self.unlogged_exists?(pw)
     pw_hash = hash_password(pw.downcase)
     DO_LOOKUPS && exists?(forbidden_hash: pw_hash)

@@ -104,7 +104,10 @@ class User < ApplicationRecord
   VALID_LOCALES_STRINGS = I18n.available_locales.map(&:to_s)
   validates :preferred_locale, inclusion: { in: VALID_LOCALES_STRINGS }
 
-  # Returns the hash digest of the given string.
+  # Returns the hash digest of the given string using BCrypt.
+  # Uses minimum cost for testing, normal cost for production.
+  # @param string [String] the string to hash
+  # @return [String] BCrypt hash digest of the string
   def self.digest(string)
     cost =
       if ActiveModel::SecurePassword.min_cost
@@ -115,6 +118,10 @@ class User < ApplicationRecord
     BCrypt::Password.create(string, cost: cost)
   end
 
+  # Creates a new user from OAuth authentication data.
+  # Sets the user as activated and sends a welcome email if email is provided.
+  # @param auth [Hash] OAuth authentication hash containing provider, uid, info
+  # @return [User] the created and saved user instance
   def self.create_with_omniauth(auth)
     @user = User.new(
       provider: auth[:provider], uid: auth[:uid],
@@ -126,21 +133,24 @@ class User < ApplicationRecord
     @user
   end
 
-  # Activates an account.
+  # Activates an account by setting activated flag and timestamp.
+  # @return [Boolean] true if save was successful
   def activate
     self.activated = true
     self.activated_at = Time.zone.now
     save!
   end
 
-  # Sends activation email, and records time sent (to limit resends)
+  # Sends activation email and records the time sent to limit resends.
+  # @return [Boolean] true if save was successful
   def send_activation_email
     UserMailer.account_activation(self).deliver_now
     self.activation_email_sent_at = Time.zone.now
     save!(touch: false)
   end
 
-  # Sets the password reset attributes.
+  # Sets the password reset attributes including token, digest, and timestamp.
+  # @return [Boolean] true if save was successful
   def create_reset_digest
     self.reset_token = User.new_token
     self.reset_digest = User.digest(reset_token)
@@ -148,29 +158,36 @@ class User < ApplicationRecord
     save!(touch: false)
   end
 
-  # Sends password reset email.
+  # Sends password reset email to the user.
+  # @return [Mail::Message] the delivered email message
   def send_password_reset_email
     UserMailer.password_reset(self).deliver_now
   end
 
   # Sends welcome email to GitHub users.
+  # @return [Mail::Message] the delivered email message
   def send_github_welcome_email
     UserMailer.github_welcome(self).deliver_now
   end
 
+  # Returns the decrypted email address or error message if decryption fails.
+  # @return [String] the email address or 'CANNOT_DECRYPT' if decryption fails
   def email_if_decryptable
     email
   rescue OpenSSL::Cipher::CipherError
     'CANNOT_DECRYPT'
   end
 
+  # Checks if the user has admin role.
+  # @return [Boolean] true if user role is 'admin'
   def admin?
     role == 'admin'
   end
 
-  # Return "true" if can_login_starting_at for this user is null or has passed.
-  # Return "false" otherwise (that is, if we are still cooling off)
-  # Always return "false" for an unactivated account.
+  # Checks if the user is allowed to login now.
+  # Returns true if can_login_starting_at is null or has passed.
+  # Returns false if we are still in cooloff period or account is unactivated.
+  # @return [Boolean] true if login is allowed now
   def login_allowed_now?
     return false unless activated?
 
@@ -178,19 +195,25 @@ class User < ApplicationRecord
     start_time.blank? || Time.zone.now >= start_time
   end
 
-  # Returns a random token
+  # Generates a new random URL-safe base64 token.
+  # @return [String] a random URL-safe base64 encoded token
   def self.new_token
     SecureRandom.urlsafe_base64
   end
 
-  # Remembers a user in the database for use in persistent sessions
+  # Remembers a user in the database for use in persistent sessions.
+  # Generates and stores a remember token and its digest.
+  # @return [Boolean] true if save was successful
   def remember
     self.remember_token = User.new_token
     self.remember_digest = User.digest(remember_token)
     save!(touch: false)
   end
 
-  # Returns true if the given token matches the digest
+  # Checks if the given token matches the stored digest for the specified attribute.
+  # @param attribute [String, Symbol] the attribute name (e.g., 'remember', 'activation')
+  # @param token [String] the token to verify
+  # @return [Boolean] true if token matches the digest
   def authenticated?(attribute, token)
     digest = public_send(:"#{attribute}_digest")
     return false if digest.nil?
@@ -198,21 +221,26 @@ class User < ApplicationRecord
     BCrypt::Password.new(digest).is_password?(token)
   end
 
-  # Forgets a user
+  # Forgets a user by clearing the remember digest.
+  # @return [Boolean] true if save was successful
   def forget
     self.remember_digest = nil
     save!(validate: false, touch: false)
   end
 
-  # Returns true if a password reset has expired.
+  # Checks if a password reset request has expired (older than 2 hours).
+  # @return [Boolean] true if password reset has expired
   def password_reset_expired?
     reset_sent_at < 2.hours.ago
   end
 
-  # Rekey (change the key of) the email address of the user, given the old key.
+  # Re-encrypts the user's email address with a new encryption key.
   # Note that this will reset the IV, since we do *NOT* want to reuse IVs.
   # This does not SAVE the user data - do a save afterwards if you want that!
   # This will raise an exception if the old key doesn't work.
+  # @param old_key [String] the old encryption key used to decrypt the email
+  # @return [void]
+  # @raise [OpenSSL::Cipher::CipherError] if the old key is incorrect
   def rekey(old_key)
     return if encrypted_email_iv.blank? || encrypted_email.blank?
 
@@ -232,16 +260,19 @@ class User < ApplicationRecord
 
   GRAVATAR_PREFIX = 'https://secure.gravatar.com/avatar/'
 
-  # Return URL for an image suitable for doing a lookup on gravatar
-  # (used for local users).  This is the *real* one based on the email MD5
+  # Returns URL for Gravatar lookup based on email MD5 hash.
+  # This is the real Gravatar URL used for local users.
+  # @return [String] the Gravatar URL for lookup
   def lookup_gravatar_url
     GRAVATAR_PREFIX + Digest::MD5.hexdigest(email.downcase)
   end
 
   BOGUS_GRAVATAR_MD5 = '0' * 32
 
-  # Return URL for an image suitable for sharing to the public as a gravatar
-  # URL.  This will NOT share the MD5 unless we're to use it.
+  # Returns URL for Gravatar image suitable for public sharing.
+  # Uses real Gravatar URL if use_gravatar is true, otherwise uses bogus hash.
+  # This prevents sharing the email MD5 unless explicitly allowed.
+  # @return [String] the public-safe Gravatar URL
   def revealable_gravatar_url
     if use_gravatar
       lookup_gravatar_url
@@ -250,8 +281,10 @@ class User < ApplicationRecord
     end
   end
 
-  # Returns avatar URL, for use in img src="...". This URL must
-  # return an image with the correct size.
+  # Returns avatar URL for use in img src attribute.
+  # Returns GitHub avatar for GitHub users, Gravatar for others.
+  # This URL must return an image with the correct size (80px).
+  # @return [String] the avatar URL
   def avatar_url
     if provider == 'github'
       "https://avatars.githubusercontent.com/#{nickname}?size=80"
@@ -260,7 +293,9 @@ class User < ApplicationRecord
     end
   end
 
-  # Return true if there's a gravatar for this user
+  # Checks if a Gravatar exists for this user's email address.
+  # Uses HTTP HEAD request with ?d=404 to force 404 if no Gravatar exists.
+  # @return [Boolean] true if Gravatar exists
   def gravatar_exists?
     # The ?d=404 forces "not found" error code if none is found.
     # We use "head" because we don't need the full data at this point.
@@ -270,7 +305,9 @@ class User < ApplicationRecord
     response.code == 200
   end
 
-  # Creates and assigns the activation token and digest.
+  # Creates and assigns the activation token and digest for email verification.
+  # Called before user creation to set up account activation.
+  # @return [void]
   def create_activation_digest
     self.activation_token  = User.new_token
     self.activation_digest = User.digest(activation_token)

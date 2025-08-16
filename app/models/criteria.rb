@@ -29,17 +29,25 @@ class Criteria
     # Class methods
     include Enumerable
 
+    # Retrieves criteria for a specific level.
+    # @param key [String, Symbol] the criteria level key
+    # @return [Hash] criteria hash for the specified level
     def [](key)
       instantiate if @criteria.blank?
       @criteria[key]
     end
 
+    # Returns active (non-future) criteria for a specific level.
+    # @param level [String, Integer] the badge level
+    # @return [Array<Criteria>] array of active criteria for the level
     def active(level)
       instantiate if @criteria.blank?
       @active ||= {}
       @active[level] ||= @criteria[level].values.reject(&:future?)
     end
 
+    # Returns all unique criteria names across all levels.
+    # @return [Array<Symbol>] array of all criteria names
     def all
       instantiate if @criteria.blank?
       @criteria.values.map(&:keys).flatten.uniq
@@ -61,13 +69,17 @@ class Criteria
     #   @criteria.each_key { |level_key| yield level_key }
     # end
 
-    # This returns an array of all levels where a particular criterion of
-    # a given name is present.
+    # Returns all levels where a particular criterion is present.
+    # @param criterion [String, Symbol] the criterion name
+    # @return [Array<String>] array of levels containing this criterion
     def get_levels(criterion)
       instantiate if @criteria.blank?
       @criteria_levels[criterion]
     end
 
+    # Creates class instances from CriteriaHash on first use.
+    # Populates @criteria and @criteria_levels class variables.
+    # @return [void]
     def instantiate
       # Creates class instances on first use and after reload! in rails console
       CriteriaHash.each do |level, level_hash|
@@ -111,6 +123,8 @@ class Criteria
     # rubocop:enable Metrics/AbcSize,Metrics/MethodLength
   end
 
+  # Returns the localized description for this criterion.
+  # @return [String, nil] HTML-safe description text or nil if not found
   def description
     key = "criteria.#{level}.#{name}.description"
     return unless I18n.exists?(key)
@@ -121,26 +135,35 @@ class Criteria
     # rubocop:enable Rails/OutputSafety
   end
 
+  # Returns the localized details for this criterion.
+  # @return [String, nil] HTML-safe details text or nil if not found
   def details
     get_text_if_exists(:details)
   end
 
   delegate :present?, to: :details, prefix: true
 
+  # Checks if this criterion is marked as future (not yet active).
+  # @return [Boolean] true if criterion is for future implementation
   def future?
     future == true
   end
 
+  # Creates a new Criteria instance and freezes it for immutability.
+  # @param parameters [Array] initialization parameters
   def initialize(*parameters)
     super
     freeze
   end
 
+  # Checks if a URL is required in the justification for 'Met' status.
+  # @return [Boolean] true if URL is required for Met justification
   def met_url_required?
-    # Is a URL required in the justification to be passing with met?
     met_url_required == true
   end
 
+  # Checks if justification text is required for 'Met' status.
+  # @return [Boolean] true if justification is required for Met status
   def met_justification_required?
     met_justification_required == true
   end

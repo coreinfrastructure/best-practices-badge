@@ -95,11 +95,14 @@ class SessionsController < ApplicationController
   end
 
   # Handles local email/password authentication.
-  # Validates credentials and processes login if successful.
   # @return [void]
   def local_login
-    user = User.find_by provider: 'local', email: params[:session][:email]
-    if user&.authenticate(params[:session][:password])
+    user = User.authenticate_local_user(
+      params[:session][:email],
+      params[:session][:password]
+    )
+
+    if user
       local_login_procedure(user)
     else
       flash.now[:danger] = t('sessions.invalid_combo')

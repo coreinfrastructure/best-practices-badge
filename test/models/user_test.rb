@@ -180,5 +180,76 @@ class UserTest < ActiveSupport::TestCase
       assert_equal User.generate_email_bidx(user.email), user.email_bidx
     end
   end
+
+  test 'authenticate_local_user returns user with valid credentials' do
+    user = users(:test_user)
+    authenticated_user = User.authenticate_local_user(user.email, 'password')
+    assert_equal user, authenticated_user
+  end
+
+  test 'authenticate_local_user returns nil with invalid password' do
+    user = users(:test_user)
+    authenticated_user = User.authenticate_local_user(user.email, 'wrong_password')
+    assert_nil authenticated_user
+  end
+
+  test 'authenticate_local_user returns nil with non-existent email' do
+    authenticated_user = User.authenticate_local_user('nonexistent@example.com', 'password')
+    assert_nil authenticated_user
+  end
+
+  test 'verify_password_against_hash works correctly' do
+    password = 'test_password'
+    hash = User.digest(password)
+
+    # Should return true for correct password
+    assert User.verify_password_against_hash?(hash, password)
+
+    # Should return false for incorrect password
+    assert_not User.verify_password_against_hash?(hash, 'wrong_password')
+  end
+
+  test 'authenticate_local_user timing protection against email enumeration' do
+    user = users(:test_user)
+
+    # Warm up and reduce noise by running multiple iterations
+    10.times do
+      User.authenticate_local_user(user.email, 'wrong_password')
+      User.authenticate_local_user('nonexistent@example.com', 'wrong_password')
+    end
+
+    # Collect 50 samples of each scenario for statistical analysis
+    existing_email_times = []
+    nonexistent_email_times = []
+
+    50.times do
+      # Time existing email with wrong password
+      start_time = Time.current
+      User.authenticate_local_user(user.email, 'wrong_password')
+      existing_email_times << (Time.current - start_time)
+
+      # Time non-existent email
+      start_time = Time.current
+      User.authenticate_local_user('nonexistent@example.com', 'wrong_password')
+      nonexistent_email_times << (Time.current - start_time)
+    end
+
+    # Sort and remove outliers (best and worst 10 from each set)
+    existing_trimmed = existing_email_times.sort[10..-11]
+    nonexistent_trimmed = nonexistent_email_times.sort[10..-11]
+
+    # Calculate averages of the trimmed data
+    existing_avg = existing_trimmed.sum / existing_trimmed.size
+    nonexistent_avg = nonexistent_trimmed.sum / nonexistent_trimmed.size
+
+    # Compare the averages - they should be similar
+    # Allow 50% variance for test environment noise, but should be much closer in practice
+    timing_ratio = [existing_avg, nonexistent_avg].max / [existing_avg, nonexistent_avg].min
+    assert timing_ratio < 1.5,
+           "Timing difference too large (#{timing_ratio.round(3)}x) - " \
+           'potential timing attack vulnerability. ' \
+           "Existing avg: #{existing_avg.round(6)}s, " \
+           "Nonexistent avg: #{nonexistent_avg.round(6)}s"
+  end
 end
 # rubocop:enable Metrics/ClassLength

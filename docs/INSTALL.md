@@ -326,17 +326,37 @@ git config --global transfer.fsckobjects true
 git config --global fetch.fsckobjects true
 ~~~~
 
-### Consequences of our install approach
+### Consequences of our developmental install approach with rbenv
 
-Some documents about Rails will tell you to execute "bin/rake" instead of
-"rake" or to use "bundle exec ..." to execute programs.
-Using rbenv-bundler (above) eliminates the need for that.
-While "bundle exec..." or "bin/..." are widely used, they are also
-extremely error-prone user interfaces; if you forget the prefixes,
+Some documents about Rails will tell you to execute `bundle exec COMMAND`
+or perhaps `bin/COMMAND` instead of "COMMAND" for commands like
+`rake` or `rails`. These approaches ensure you use the project-specific
+set of gems (a "virtual environment").
+
+While "bundle exec..." or perhaps "bin/..." are widely used, they are also
+extremely error-prone user interfaces; if you forget to include the prefixes,
 then it can *appear* to work yet subtly do the wrong thing.
+
+Using rbenv-bundler (as we do above) eliminates the need for that.
 Using rbev-bundler means that the *easy* way is the *correct* way.
 A vitally important way to prevent defects is to make the *easy* way
 the *correct* way.
+
+Here's how it works: `bundle` supports setting up the correct environment
+with `bundle exec`. Of course, typing `bundle exec` in front of every command
+is a pain, so the `bin/` directory makes it a *little* easier.
+Rails' `rails app:update:bin` and `bundle binstub NAME`
+were used to create stubs in `bin/` so that if you
+run *those*, they'll run `bundle exec` so the right gems will be used.
+The `rbenv-bundler` program then creates global stubs that will invoke the
+correct `bin/` program *without* needing to type the prefix at all
+(similar to how `rbenv` runs the "correct" ruby without needing to type in
+a prefix at all, through special stubs).
+
+There's no free lunch. If you want to add a new command from a gem, you must
+run `bundle binstubs GEMNAME` and then `rbenv rehash`. That's a rare
+event, so the trade-off seems worth it. Do *NOT* use `bundle binstubs --all`,
+that will overwrite the binstubs of rails and friends.
 
 You can use "bundle outdated" to show the gems that are outdated;
 be sure to test after updating any gems.

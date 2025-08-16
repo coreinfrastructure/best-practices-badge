@@ -7,6 +7,11 @@
 require 'application_system_test_case'
 
 class GithubLoginTest < ApplicationSystemTestCase
+  teardown do
+    OmniAuth.config.test_mode = false
+    OmniAuth.config.mock_auth[:github] = nil
+  end
+
   # rubocop:disable Metrics/BlockLength
   test 'Can sign up with GitHub' do
     configure_omniauth_mock unless ENV['GITHUB_PASSWORD']

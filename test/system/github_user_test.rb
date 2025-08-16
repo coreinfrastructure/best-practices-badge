@@ -7,6 +7,11 @@
 require 'application_system_test_case'
 
 class GithubUserTest < ApplicationSystemTestCase
+  teardown do
+    OmniAuth.config.test_mode = false
+    OmniAuth.config.mock_auth[:github] = nil
+  end
+
   test 'GitHub user has correct edit rights' do
     configure_omniauth_mock
 
@@ -27,6 +32,8 @@ class GithubUserTest < ApplicationSystemTestCase
     # Regression test, make sure GitHub users can logout
     assert has_content? 'Logout'
     click_on 'Logout'
+    # Wait for logout redirect to complete
+    assert has_content? 'Logged out!'
     assert_equal '/en', current_path
   end
 
@@ -42,6 +49,8 @@ class GithubUserTest < ApplicationSystemTestCase
     # Regression test, make sure GitHub users can logout
     assert has_content? 'Logout'
     click_on 'Logout'
+    # Wait for logout redirect to complete
+    assert has_content? 'Logged out!'
     assert_equal '/en', current_path
     # TODO: We should check to ensure that on login we switch to the
     # preferred_locale, no matter what it is.

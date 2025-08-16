@@ -7,6 +7,11 @@
 require 'application_system_test_case'
 
 class GithubProjectTest < ApplicationSystemTestCase
+  teardown do
+    OmniAuth.config.test_mode = false
+    OmniAuth.config.mock_auth[:github] = nil
+  end
+
   # rubocop:disable Metrics/BlockLength
   test 'Can Create new project via GitHub login' do
     configure_omniauth_mock('github_project') unless ENV['GITHUB_PASSWORD']
@@ -64,6 +69,8 @@ class GithubProjectTest < ApplicationSystemTestCase
       # Regression test, make sure GitHub users can logout
       assert has_content? 'Logout'
       click_on 'Logout'
+      # Wait for logout redirect to complete
+      assert has_content? 'Logged out!'
       assert_equal '/en', current_path
     end
     if ENV['GITHUB_PASSWORD'] # revoke OAuth authorization

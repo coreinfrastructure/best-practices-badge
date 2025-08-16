@@ -1,8 +1,9 @@
-#!/bin/sh
+#!/bin/bash
 echo 'install-badge-dev-env: Auto-install development environment for BadgeApp.'
 echo 'See INSTALL.md for more information.'
 echo
 echo 'Make sure your system is up-to-date before running this!'
+echo 'Set environment variable MYINSTALL_SYSTEM_INSTALL_PACKAGES=no if wanted.'
 
 # Set configure options defaults; set their values with environment variables.
 if [ "$(uname)" != 'Darwin' ] ; then  # NOT MacOS
@@ -76,6 +77,7 @@ add_to_path () {
   if [ -e "$1" ] ; then
     # shellcheck disable=SC2039
     local pattern
+    # shellcheck disable=SC2001
     pattern="PATH=.*"$(echo "$3" | sed -e "s/\./\\\./g")
     if ! grep "$pattern" "$1" > /dev/null ; then
       echo "Modifying $1 to add $3 to path. NOTE: Use this command:"
@@ -172,7 +174,7 @@ case "$manager" in
             libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev \
             libgdbm-dev postgresql-server-dev-all postgresql \
             postgresql-contrib cmake nodejs graphviz \
-            pkg-config;;
+            pkg-config shellcheck;;
   yum|dnf)
     add_pkg gcc openssl-devel libyaml-devel libffi-devel readline-devel \
             zlib-devel gdbm-devel ncurses-devel postgresql-devel cmake npm \
@@ -193,7 +195,10 @@ if [ "$MYINSTALL_SYSTEM_INSTALL_PACKAGES" = 'yes' ] ; then
   echo 'About to install system packages with the command:'
   echo "  ${MYINSTALL_SYSTEM_INSTALL_PREFIX} $installer $PACKAGES"
   # shellcheck disable=SC2086
-  $MYINSTALL_SYSTEM_INSTALL_PREFIX $installer $PACKAGES
+  if ! $MYINSTALL_SYSTEM_INSTALL_PREFIX $installer $PACKAGES; then
+    echo 'Install failed. Press enter to continue anyway, control-C to stop.'
+    read -r
+  fi
 else
   echo 'Skipping system package install.'
 fi
@@ -310,8 +315,13 @@ if [ "$MYINSTALL_RBENV" = 'yes' ] && is_command rbenv ; then
   ruby_version=$(cat .ruby-version)
   if [ "$(uname)" != 'Darwin' ] && ! can_build_ruby; then
     echo 'Updating ruby-build with GitHub version.'
-    git clone https://github.com/rbenv/ruby-build.git \
-        "$HOME/.rbenv/plugins/ruby-build"
+    if [ ! -d "$HOME/.rbenv/plugins/ruby-build" ] ; then
+      git clone https://github.com/rbenv/ruby-build.git \
+          "$HOME/.rbenv/plugins/ruby-build"
+    else
+      echo 'ruby-build directory exists, updating...'
+      (cd "$HOME/.rbenv/plugins/ruby-build" && git pull)
+    fi
   else
     echo 'ruby-build up to date.'
   fi
@@ -327,17 +337,27 @@ echo
 echo 'STAGE 5: Install gems (including bundler and Rails)'
 
 gem sources --add https://rubygems.org  # Ensure you're getting gems here
-gem update --system
-# Tell rbenv about that
-if is_command rbenv ; then
-  rbenv rehash
-fi
-gem install bundler  # Install the "bundler" gem package manager.
+
+# Install the exact bundler version specified in Gemfile.lock to avoid conflicts
+bundler_version=$(grep -A 1 "^BUNDLED WITH" Gemfile.lock | tail -1 | tr -d ' ')
+echo "Installing bundler version $bundler_version (per Gemfile.lock)"
+gem install bundler --version="$bundler_version"
+
 # If we're using rbenv, ensure it can find "bundle" and friends.
 if is_command rbenv ; then
   rbenv rehash
 fi
-bundle install       # Install gems we use in Gemfile.lock, including Rails
+
+# Install gems using the exact bundler version
+bundle "_${bundler_version}_" install
+
+# Ensure that bin/COMMAND always runs the correct versions of gems,
+# even when gems are updated later. That way you don't HAVE to
+# say "bundle exec COMMAND" to load the correct libraries, you can instead
+# say bin/COMMAND
+# The rbenv-bundler tool uses this capability so you can simply say COMMAND
+# (it builds on bundle binstubs).
+# bundle binstubs
 
 # "bundle" installs additional commands - ensure we can find them,
 # by rehashing if we're using rbenv.
@@ -351,10 +371,16 @@ fi
 
 echo
 echo 'STAGE 6: Set up database for development if necessary'
-echo 'Make sure PostgreSQL superuser role for current user exists.'
-if ! sudo -u postgres createuser -s "$(whoami)"
-then
-  echo "Warning: Did not create user $(whoami)"
+
+DB_USER="$(whoami)"
+if psql -t -c "SELECT 1 FROM pg_roles WHERE rolname='${DB_USER}'" postgres \
+        2>/dev/null | grep -q 1; then
+    echo "PostgreSQL user ${DB_USER} already exists"
+else
+    echo "Creating PostgreSQL user ${DB_USER}"
+    if ! sudo -u postgres createuser -s "${DB_USER}"; then
+        echo "Warning: Could not create PostgreSQL user ${DB_USER}"
+    fi
 fi
 
 # Is the database already set up?
@@ -368,8 +394,8 @@ fi
 
 case "$db_present" in
 false)
-  echo 'Database not present. Running "rake db:setup" to seed with dummy data'
-  rake db:setup ;;
+  echo 'Database not present. Running "bundle exec rake db:setup" to seed with dummy data'
+  bundle exec rake db:setup ;;
 true)
   echo 'Skipping "rake db:setup" - the database appears to be present' ;;
 *)
@@ -410,24 +436,23 @@ if ! git config user.name > /dev/null ; then
   echo 'You may change it with: git config --global user.email "EMAIL ADDRESS"'
 fi
 
-
 echo
 echo 'FINAL STAGE: Test to see if it is working'
+
+# On initial setup the test in feed_test.rb will fail with an
+# ActiveRecord::EnvironmentMismatchError
+# Running db:migrate in the test environment fixes the error.
+bundle exec rake db:migrate RAILS_ENV=test
 
 # We don't want to force everyone do this, but a check on install
 # if the tools already happen to be available seems reasonable.
 if is_command shellcheck ; then
   echo 'Statically checking this install command'
-  shellcheck install-badge-dev-env
+  shellcheck install-badge-dev-env || echo 'Please review these issues.'
 fi
-
-# On initial setup the test in feed_test.rb will fail with an
-# ActiveRecord::EnvironmentMismatchError
-# Running db:migrate in the test environment fixes the error.
-bin/rake db:migrate RAILS_ENV=test
 
 echo 'All done! Please reopen your terminal or run'
 echo '"source ~/.bashrc" to adjust your PATH.'
-echo 'Then run "rake" to check the install.'
-echo 'Run "rails server" and use a web browser'
+echo 'Then run "bundle exec rake" to check the install.'
+echo 'Run "bundle exec rails server" and use a web browser'
 echo 'to view localhost:3000 to see it run.'

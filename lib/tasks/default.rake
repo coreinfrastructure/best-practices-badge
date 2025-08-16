@@ -107,43 +107,67 @@ task :report_code_statistics do
   end
 end
 
-# rubocop: disable Metrics/BlockLength
+# rubocop:disable Metrics/BlockLength
 desc 'Run bundle-audit - check for known vulnerabilities in dependencies'
 task :bundle_audit do
-  verbose(true) do
-    sh <<-RETRY_BUNDLE_AUDIT_SHELL
-      apply_bundle_audit=t
-      if ping -q -c 1 github.com > /dev/null 2> /dev/null; then
-        echo "Have network access, trying to update bundle-audit database."
-        tries_left=10
-        while [ "$tries_left" -gt 0 ] ; do
-          if bundle exec bundle audit update ; then
-            echo 'Successful bundle audit update.'
-            break
-          fi
-          sleep 2
-          tries_left=$((tries_left - 1))
-          echo "Bundle audit update failed. Number of tries left=$tries_left"
-        done
-        if [ "$tries_left" -eq 0 ] ; then
-          echo "Bundle audit update failed after multiple attempts. Skipping."
-          apply_bundle_audit=f
-        fi
-      else
-        echo "Cannot update bundle-audit database; using current data."
-      fi
-      if [ "$apply_bundle_audit" = 't' ] ; then
-        # Sometimes there are vulnerability reports that aren't exploitable in our system.
-        # When upgrading isn't easy, we'll identify those cases (and rationale) in
-        # the file .bundler-audit.yml
-        bundle exec bundle audit check
-      else
-        true
-      fi
-    RETRY_BUNDLE_AUDIT_SHELL
+  require 'socket'
+
+  def network_available?
+    Socket.tcp('github.com', 443, connect_timeout: 5) { true }
+  rescue StandardError
+    false
+  end
+
+  # rubocop:disable Metrics/MethodLength
+  def bundle_audit_update_successful?
+    max_retries = 4
+    current_try = 0
+
+    while current_try < max_retries
+      cmd_options = { out: File::NULL, err: File::NULL }
+      if system('bundle exec bundle audit update', cmd_options)
+        puts 'Successful bundle audit update.' if verbose
+        return true
+      end
+
+      current_try += 1
+      remaining = max_retries - current_try
+      if verbose
+        puts "Bundle audit update failed. Number of tries left=#{remaining}"
+      end
+      sleep 2 if current_try < max_retries
+    end
+
+    if verbose
+      puts 'Bundle audit update failed after multiple attempts. Skipping.'
+    end
+    false
+  end
+  # rubocop:enable Metrics/MethodLength
+
+  apply_bundle_audit =
+    if network_available?
+      if verbose
+        puts 'Have network access, trying to update ' \
+             'bundle-audit database.'
+      end
+      bundle_audit_update_successful?
+    else
+      if verbose
+        puts 'Cannot update bundle-audit database; ' \
+             'using current data.'
+      end
+      true
+    end
+
+  if apply_bundle_audit
+    # Sometimes there are vulnerability reports that aren't exploitable in
+    # our system. When upgrading isn't easy, we'll identify those cases
+    # (and rationale) in the file .bundler-audit.yml
+    sh 'bundle exec bundle audit check'
   end
 end
-# rubocop: enable Metrics/BlockLength
+# rubocop:enable Metrics/BlockLength
 
 # NOTE: If you don't want mdl to be run on a markdown file, rename it to
 # end in ".markdown" instead.  (E.g., for markdown fragments.)
@@ -212,10 +236,26 @@ end
 
 desc 'Check YAML syntax (except project.yml, which is not straight YAML)'
 task :yaml_syntax_check do
+  require 'English'
+
   # Don't check "project.yml" - it's not a straight YAML file, but instead
   # it's processed by ERB (even though the filename doesn't admit it).
-  sh "find . -name '*.yml' ! -name 'projects.yml' ! -path './railroader/*' " \
-     "! -path './vendor/*' -exec bundle exec yaml-lint {} + ;"
+  puts 'Checking YAML syntax...'
+
+  find_cmd = "find . -name '*.yml' ! -name 'projects.yml' " \
+             "! -path './railroader/*' ! -path './vendor/*' " \
+             '-exec bundle exec yaml-lint {} + 2>&1'
+
+  output = `#{find_cmd}`
+  exit_status = $CHILD_STATUS.exitstatus
+
+  if exit_status.zero?
+    puts 'YAML syntax check completed successfully.'
+  else
+    puts 'YAML syntax check failed:'
+    puts output
+    exit exit_status
+  end
 end
 
 # The following are invoked as needed.

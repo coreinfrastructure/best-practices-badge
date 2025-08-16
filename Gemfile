@@ -79,14 +79,14 @@ gem 'omniauth-github', '~> 2.0' # Authentication to GitHub (get project info)
 # the "standard way to resolve this issue".
 # When we update to omniauth 2.X series we can remove this.
 gem 'omniauth-rails_csrf_protection'
-gem 'pagy', '~> 6.0'
+gem 'pagy', '~> 6.0' # Paginator for web pages
 gem 'paleta', '~> 0.3' # Color manipulation, used for badges
 gem 'paper_trail', '~> 16.0' # Record previous versions of project data
 gem 'pg', '~> 1.4' # PostgreSQL database, used for data storage
 gem 'pg_search', '~> 2.3' # PostgreSQL full-text search
 gem 'puma', '~> 6.5' # Faster webserver; recommended by Heroku
 gem 'puma_worker_killer', '~> 1.0' # Band-aid: Restart to limit memory use
-gem 'rack', '< 3'
+gem 'rack', '~> 3.0.18' # interface between web server + web framework (Rails)
 gem 'rack-attack', '~> 6.7' # Implement rate limiting
 gem 'rack-cors', '~> 2.0' # Enable CORS so JavaScript clients can get JSON
 gem 'rack-headers_filter', '~> 0.0.1' # Filter out "dangerous" headers

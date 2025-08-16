@@ -227,28 +227,34 @@ class Project < ApplicationRecord
   # Currently it's just a (possibly empty) list of user ids from
   # AdditionalRight.  If AdditionalRights gains different kinds of rights
   # (e.g., to spec additional owners), this method will need to be tweaked.
+  # Returns string representation of additional rights user IDs for this project.
+  # @return [String] sorted array of user IDs as string
   def additional_rights_to_s
     # "distinct" shouldn't be needed; it's purely defensive here
     list = AdditionalRight.where(project_id: id).distinct.pluck(:user_id)
     list.sort.to_s # Use list.sort.to_s[1..-2] to remove surrounding [ and ]
   end
 
-  # Return string representing badge level; assumes tiered_percentage correct.
-  # This returns 'in_progress' if we aren't passing yet.
+  # Returns string representing badge level based on tiered_percentage.
+  # Assumes tiered_percentage is correct. Returns 'in_progress' if not passing yet.
   # See method badge_level if you want 'in_progress' for < 100.
   # See method badge_value if you want the specific percentage for in_progress.
+  # @return [String] badge level ('in_progress', 'passing', 'silver', or 'gold')
   def badge_level
     # This is *integer* division, so it truncates.
     BADGE_LEVELS[tiered_percentage / 100]
   end
 
+  # Calculates badge percentage for a specific level.
+  # @param level [String, Integer] the badge level to calculate for
+  # @return [Integer] percentage (0-100) of criteria met for this level
   def calculate_badge_percentage(level)
     active = Criteria.active(level)
     met = active.count { |criterion| enough?(criterion) }
     to_percentage met, active.size
   end
 
-  # Does this contain a URL *anywhere* in the (justification) text?
+  # Checks if text contains a URL anywhere in the (justification) text.
   # Note: This regex needs to be logically the same as the one used in the
   # client-side badge calculation, or it may confuse some users.
   # See app/assets/javascripts/*.js function "containsURL".
@@ -260,32 +266,27 @@ class Project < ApplicationRecord
   # with the intentionally strict validation of the project and repo URLs,
   # which *are* traversed by BadgeApp and thus need to be much more strict.
   #
+  # @param text [String, nil] the text to check for URLs
+  # @return [Boolean] true if text contains a URL matching the pattern
   def contains_url?(text)
     return false if !text || text.start_with?('// ')
 
     text =~ %r{https?://[^ ]{5}}
   end
 
-  # Returns a symbol indicating a the status of an particular criterion
-  # in a project.  These are:
-  # :criterion_passing -
-  #   'Met' (or 'N/A' if applicable) has been selected for the criterion
-  #   and all required justification text (including url's) have been entered  #
-  # :criterion_failing -
-  #   'Unmet' has been selected for a MUST criterion'.
-  # :criterion_barely -
-  #   'Unmet' has been selected for a SHOULD or SUGGESTED criterion and
-  #   ,if SHOULD, required justification text has been entered.
-  # :criterion_url_required -
-  #   'Met' has been selected, but a required url in the justification
-  #   text is missing.
-  # :criterion_justification_required -
-  #   Required justification for 'Met', 'N/A' or 'Unmet' selection is missing.
-  # :criterion_unknown -
-  #   The criterion has been left at it's default value and thus the status
-  #   is unknown.
-  # This method is mirrored in assets/project-form.js as getCriterionResult
+  # Returns symbol indicating the status of a particular criterion in this project.
+  # Return values:
+  # - :criterion_passing - 'Met' (or 'N/A' if applicable) selected with required justification
+  # - :criterion_failing - 'Unmet' selected for a MUST criterion
+  # - :criterion_barely - 'Unmet' selected for SHOULD/SUGGESTED with required justification
+  # - :criterion_url_required - 'Met' selected but required URL missing in justification
+  # - :criterion_justification_required - Required justification missing for selection
+  # - :criterion_unknown - Criterion left at default value
+  #
+  # This method is mirrored in assets/project-form.js as getCriterionResult.
   # If you change this method, change getCriterionResult accordingly.
+  # @param criterion [Criteria] the criterion to evaluate
+  # @return [Symbol] status symbol indicating criterion state
   def get_criterion_result(criterion)
     status = self[criterion.name.status]
     justification = self[criterion.name.justification]
@@ -296,6 +297,10 @@ class Project < ApplicationRecord
     get_na_result(criterion, justification)
   end
 
+  # Returns satisfaction data for a specific level and panel.
+  # @param level [String, Integer] the badge level
+  # @param panel [String] the panel name to filter criteria
+  # @return [Hash] hash with :text and :color keys for satisfaction display
   def get_satisfaction_data(level, panel)
     total =
       Criteria[level].values.select do |criterion|
@@ -308,10 +313,11 @@ class Project < ApplicationRecord
     }
   end
 
-  # Return the badge value: 0..99 (the percent) if in progress,
-  # else it returns 'passing', 'silver', or 'gold'.
-  # This presumes that tiered_percentage has already been calculated.
+  # Returns the badge value: 0..99 (percentage) if in progress,
+  # else returns 'passing', 'silver', or 'gold'.
+  # Presumes that tiered_percentage has already been calculated.
   # See method badge_level if you want 'in_progress' for < 100.
+  # @return [Integer, String] percentage (0-99) or badge level string
   def badge_value
     if tiered_percentage < 100
       tiered_percentage
@@ -321,17 +327,11 @@ class Project < ApplicationRecord
     end
   end
 
-  # Return this project's image src URL for its badge image (SVG).
-  # * If the project entry has changed relatively recently,
-  # we give its /badge_static value.  That way, the user sees the
-  # correct result even if the CDN hasn't completed distributing the
-  # new value or a bad key prevents its update.
-  # * If the project entry has NOT changed relatively recently,
-  # we give the /projects/:id/badge value, so that humans who copy the
-  # values without reading directions are more likely to see the URL that
-  # we want them to use in READMEs. We also include a comment in the HTML
-  # view telling people to use the /projects/:id/badge URL, all to encourage
-  # humans to use the correct URL.
+  # Returns this project's image src URL for its badge image (SVG).
+  # - If project entry changed recently: returns /badge_static value for immediate accuracy
+  # - If project entry NOT changed recently: returns /projects/:id/badge for correct README usage
+  # This ensures users see correct results while encouraging proper URL usage.
+  # @return [String] URL path for the badge image
   def badge_src_url
     if updated_at > 24.hours.ago # Has this entry changed relatively recently?
       "/badge_static/#{badge_value}"
@@ -340,10 +340,11 @@ class Project < ApplicationRecord
     end
   end
 
-  # Flash a message to update static_analysis if the user is updating
-  # for the first time since we added met_justification_required that
-  # criterion
-
+  # Checks if user should be notified to update static_analysis criterion.
+  # Flashes message if user is updating for the first time since we added
+  # met_justification_required to that criterion.
+  # @param level [String, Integer] the badge level to check
+  # @return [Boolean] true if notification should be shown
   def notify_for_static_analysis?(level)
     status = self[Criteria[level][:static_analysis].name.status]
     result = get_criterion_result(Criteria[level][:static_analysis])
@@ -351,25 +352,30 @@ class Project < ApplicationRecord
       status.met? && result == :criterion_justification_required
   end
 
-  # Send owner an email they add a new project.
+  # Sends owner an email when they add a new project.
+  # @return [Mail::Message] the delivered email message
   def send_new_project_email
     ReportMailer.email_new_project_owner(self).deliver_now
   end
 
-  # Return true if we should show an explicit license for the data.
-  # Old entries did not set a license; we only want to show entry licenses
+  # Checks if we should show an explicit license for the data.
+  # Old entries did not set a license; we only show entry licenses
   # if the updated_at field indicates there was agreement to it.
+  # @return [Boolean] true if entry license should be displayed
   def show_entry_license?
     updated_at >= ENTRY_LICENSE_EXPLICIT_DATE
   end
 
+  # Checks if we should show CDLA-Permissive-2.0 license.
+  # @return [Boolean] true if CDLA-Permissive-2.0 license should be displayed
   def show_cdla_permissive_20_license?
     updated_at >= ENTRY_LICENSE_CDLA_PERMISSIVE_20_DATE
   end
 
-  # Which field should we display for the data license?
-  # Using the project's last updated_at value, return the name of the
+  # Determines which field to display for the data license.
+  # Uses the project's last updated_at value to return the name of the
   # field in i18n "projects.show" to display as the license.
+  # @return [String] i18n field name for the appropriate license
   def data_license_field
     if show_cdla_permissive_20_license?
       'cdla_permissive_20_html'
@@ -383,9 +389,12 @@ class Project < ApplicationRecord
     end
   end
 
-  # Update the badge percentage for a given level (expressed as a number;
-  # 0=passing), and update relevant event datetime if needed.
-  # It presumes the lower-level percentages (if relevant) are calculated.
+  # Updates the badge percentage for a given level and relevant event datetime.
+  # Level is expressed as a number (0=passing). Presumes lower-level percentages
+  # are already calculated if relevant.
+  # @param level [String, Integer] the badge level (0=passing, 1=silver, 2=gold)
+  # @param current_time [Time] the current time for timestamp updates
+  # @return [void]
   def update_badge_percentage(level, current_time)
     old_badge_percentage = self[:"badge_percentage_#{level}"]
     update_prereqs(level) if level.to_i.nonzero?
@@ -394,8 +403,9 @@ class Project < ApplicationRecord
     update_passing_times(level, old_badge_percentage, current_time)
   end
 
-  # Compute the 'tiered percentage' value 0..300. This gives partial credit,
-  # but only if you've completed a previous level.
+  # Computes the 'tiered percentage' value 0..300.
+  # Gives partial credit, but only if you've completed a previous level.
+  # @return [Integer] tiered percentage (0-99, 100-199, or 200-299)
   def compute_tiered_percentage
     if badge_percentage_0 < 100
       badge_percentage_0
@@ -406,11 +416,15 @@ class Project < ApplicationRecord
     end
   end
 
+  # Updates the tiered_percentage field with computed value.
+  # @return [Integer] the updated tiered percentage
   def update_tiered_percentage
     self.tiered_percentage = compute_tiered_percentage
   end
 
-  # Update the badge percentages for all levels.
+  # Updates the badge percentages for all levels.
+  # Creates a single datetime value for consistency across all level updates.
+  # @return [void]
   def update_badge_percentages
     # Create a single datetime value so that they are consistent
     current_time = Time.now.utc
@@ -420,17 +434,21 @@ class Project < ApplicationRecord
     update_tiered_percentage # Update the 'tiered_percentage' number 0..300
   end
 
-  # Return owning user's name for purposes of display.
+  # Returns owning user's name for display purposes.
+  # @return [String, nil] user name or nickname for display
   def user_display_name
     user_name || user_nickname
   end
 
-  # Update badge percentages for all project entries, and send emails
-  # to any project where this causes loss or gain of a badge.
-  # Use this after the badging rules have changed.
-  # We precalculate and store percentages in the database;
-  # this speeds up many actions, but it means that a change in the rules
-  # doesn't automatically change the precalculated values.
+  # Updates badge percentages for all project entries and sends emails
+  # for any project where this causes loss or gain of a badge.
+  # Use this after badging rules have changed. We precalculate and store
+  # percentages in the database for speed, but rule changes don't automatically
+  # update the precalculated values.
+  # @param levels [Array<String>] array of levels to update
+  # @raise [TypeError] if levels is not an Array
+  # @raise [ArgumentError] if any level is invalid
+  # @return [void]
   # rubocop:disable Metrics/MethodLength
   def self.update_all_badge_percentages(levels)
     raise TypeError, 'levels must be an Array' unless levels.is_a?(Array)
@@ -473,8 +491,11 @@ class Project < ApplicationRecord
   # Minimum number of days since project was last sent a reminder
   LAST_SENT_REMINDER = (ENV['BADGEAPP_LAST_SENT_REMINDER'] || 60).to_i
 
-  # Return which projects should be reminded to work on their badges.  See:
-  # https://github.com/coreinfrastructure/best-practices-badge/issues/487
+  # Returns projects that should be reminded to work on their badges.
+  # See: https://github.com/coreinfrastructure/best-practices-badge/issues/487
+  # Selects in-progress projects that are inactive, not recently reminded,
+  # have valid email, and owner accepts emails. Uses single database query.
+  # @return [ActiveRecord::Relation] projects eligible for reminders
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def self.projects_to_remind
     # This is computed entirely using the ActiveRecord query interface
@@ -575,7 +596,8 @@ class Project < ApplicationRecord
       .reorder('last_reminder_at')
   end
 
-  # Purge data about this project from the CDN (if the CDN has any)
+  # Purges data about this project from the CDN if any exists.
+  # @return [void]
   def purge_cdn_project
     cdn_badge_key = record_key
     FastlyRails.purge_by_key cdn_badge_key
@@ -589,15 +611,21 @@ class Project < ApplicationRecord
   #   Criteria.active.all? { |criterion| enough? criterion }
   # end
 
-  # This method is mirrored in assets/project-form.js as isEnough
+  # Checks if criterion result is sufficient (passing or barely passing).
+  # This method is mirrored in assets/project-form.js as isEnough.
   # If you change this method, change isEnough accordingly.
+  # @param criterion [Criteria] the criterion to check
+  # @return [Boolean] true if criterion is sufficient
   def enough?(criterion)
     result = get_criterion_result(criterion)
     WHAT_IS_ENOUGH.include?(result)
   end
 
-  # This method is mirrored in assets/project-form.js as getColor
+  # Returns HSL color value based on completion percentage.
+  # This method is mirrored in assets/project-form.js as getColor.
   # If you change this method, change getColor accordingly.
+  # @param value [Float] completion percentage (0.0 to 1.0)
+  # @return [String] HSL color string
   def get_color(value)
     hue = (value * 120).round
     "hsl(#{hue}, 100%, 50%)"

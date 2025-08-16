@@ -118,6 +118,49 @@ class User < ApplicationRecord
     BCrypt::Password.create(string, cost: cost)
   end
 
+  # Verifies a password against a BCrypt hash in a centralized location.
+  # This method encapsulates the password verification algorithm so it can be
+  # easily changed in the future if needed.
+  #
+  # @param hash_digest [String] The BCrypt hash digest to verify against
+  # @param password [String] The password to verify
+  # @return [Boolean] True if password matches the hash, false otherwise
+  def self.verify_password_against_hash?(hash_digest, password)
+    BCrypt::Password.new(hash_digest).is_password?(password)
+  end
+
+  # Dummy value used to do extra work when there's no user.
+  # This way attackers can't determine, through timing, if a user is present
+  # in the database. The value being digested is irrelevant, because when
+  # this hash value is used we will *always* reject the request eventually.
+  DUMMY_HASH = digest('dummy_password_for_timing_protection')
+
+  # Authenticates a local user by email and password in constant time.
+  # This prevents timing attacks from enumerating present email addresses.
+  # Returns the authenticated user if credentials are valid, nil otherwise.
+  #
+  # @param email [String] The user's email address
+  # @param password [String] The user's password
+  # @return [User, nil] The authenticated user or nil if authentication fails
+  def self.authenticate_local_user(email, password)
+    user = find_by(provider: 'local', email: email)
+
+    if user
+      # User exists, verify against their actual password hash
+      authenticated = user.authenticate(password)
+    else
+      # User doesn't exist in our database. Perform a dummy verification
+      # (whose result we will ignore) prevent
+      # timing attacks from revealing that the user is not present in
+      # our database.
+      verify_password_against_hash?(DUMMY_HASH, password)
+      authenticated = false
+    end
+
+    # Only return the user if both user exists AND authentication succeeded
+    user if user && authenticated
+  end
+
   # Creates a new user from OAuth authentication data.
   # Sets the user as activated and sends a welcome email if email is provided.
   # @param auth [Hash] OAuth authentication hash containing provider, uid, info
@@ -218,7 +261,7 @@ class User < ApplicationRecord
     digest = public_send(:"#{attribute}_digest")
     return false if digest.nil?
 
-    BCrypt::Password.new(digest).is_password?(token)
+    User.verify_password_against_hash?(digest, token)
   end
 
   # Forgets a user by clearing the remember digest.

@@ -113,6 +113,7 @@ class SessionsController < ApplicationController
   # Handles OAuth authentication via GitHub.
   # Creates or finds user account and establishes session.
   # @return [void]
+  # rubocop:disable Metrics/AbcSize
   def omniauth_login
     auth = request.env['omniauth.auth']
     user = User.find_by(provider: auth['provider'], uid: auth['uid']) ||
@@ -122,17 +123,17 @@ class SessionsController < ApplicationController
     user.name ||= user.nickname
 
     # TEMPORARY DEBUGGING
-    Rails.logger.debug "DEBUG OAuth: About to login user #{user.id}"
-    Rails.logger.debug "DEBUG OAuth: Session before: #{session.inspect}"
+    Rails.logger.debug { "DEBUG OAuth: About to login user #{user.id}" }
+    Rails.logger.debug { "DEBUG OAuth: Session before: #{session.inspect}" }
 
     successful_login(user)
 
     # TEMPORARY DEBUGGING
-    Rails.logger.debug "DEBUG OAuth: Session after successful_login:
-  #{session.inspect}"
-    Rails.logger.debug "DEBUG OAuth: logged_in? = #{logged_in?}"
-    Rails.logger.debug "DEBUG OAuth: current_user = #{current_user&.id}"
+    Rails.logger.debug { "DEBUG OAuth: Session after successful_login: #{session.inspect}" }
+    Rails.logger.debug { "DEBUG OAuth: logged_in? = #{logged_in?}" }
+    Rails.logger.debug { "DEBUG OAuth: current_user = #{current_user&.id}" }
   end
+  # rubocop:enable Metrics/AbcSize
 
   # Validates account status and processes local login.
   # Checks for account activation, login restrictions, and remember-me option.

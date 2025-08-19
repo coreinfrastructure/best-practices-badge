@@ -11,7 +11,8 @@ class BadgeStaticController < ApplicationController
   skip_before_action :redir_missing_locale, only: :show
 
   # Cache this using the CDN
-  before_action :set_cache_control_headers, only: %i[show]
+  skip_before_action :set_default_cache_control, only: %i[show]
+  before_action :cache_on_cdn, only: %i[show]
 
   # rubocop:disable Metrics/MethodLength
   def show

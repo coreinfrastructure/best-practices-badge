@@ -23,12 +23,12 @@ class ProjectsController < ApplicationController
   before_action :set_criteria_level, only: %i[show edit update]
   before_action :set_optional_criteria_level, only: %i[show_markdown]
 
-  # Cache with Fastly CDN.  We can't use this header, because logged-in
-  # and not-logged-in users see different things (and thus we can't
-  # have a cached version that works for everyone):
-  # before_action :set_cache_control_headers, only: [:index, :show, :badge]
-  # We *can* cache the badge result, and that's what matters anyway.
-  before_action :set_cache_control_headers, only: %i[badge show_json show_markdown]
+  # Cache with CDN. We can only do this when we don't display the
+  # header (which changes for logged-in users), use a flash, or
+  # have a form to fill in (these use session values).
+  skip_before_action :set_default_cache_control, only:
+                     %i[badge show_json show_markdown]
+  before_action :cache_on_cdn, only: %i[badge show_json show_markdown]
 
   helper_method :repo_data
 
@@ -206,9 +206,6 @@ class ProjectsController < ApplicationController
     # (Fastly can), so that when we remove this key from the cache, all
     # related cache entries will be removed.
     set_surrogate_key_header @project.record_key
-
-    # Never send session cookie
-    omit_session_cookie
 
     respond_to do |format|
       format.svg do

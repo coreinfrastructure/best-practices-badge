@@ -18,12 +18,10 @@ class StaticPagesController < ApplicationController
   skip_before_action :redir_missing_locale,
                      only: %i[robots error_404 google_verifier]
 
-  # Omit useless unchanged session cookie for performance & privacy
+  # Omit session cookie.
   # We *must not* set error messages in the flash area,
   # because flashes are stored in the session.
-  # Static pages operations never set the flash, so we can do this
-  # in all cases as part of the before_action.
-  before_action :omit_unchanged_session_cookie
+  before_action :omit_session_cookie, only: %i[robots google_verifier]
 
   def home; end
 

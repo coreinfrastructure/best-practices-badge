@@ -109,9 +109,18 @@ class ApplicationController < ActionController::Base
     # In deployment this heading is *only* used by the CDN, and is stripped
     # so that it does *not* go to client browsers.
     response.headers['Surrogate-Control'] = BADGE_CACHE_SURROGATE_CONTROL
-    # Set the cache values for ordinary browsers (all *other* than the CDN).
-    # The "no-cache" term is a little misleading, it *is* cached, but
-    # the cache value must be verified (via the CDN) before its use.
+    # Set the cache values control values.
+    # These values are have very misleading names,
+    # but they are the standard terms.
+    # 'public' simply means "anyone can store a copy".
+    # The 'no-store' only means *web browsers* can cache must validate
+    # before using it, CDNs ignore 'no-store'.
+    # Thus, this result *is* cached! This setting means that:
+    # - the CDN *DOES* cache it, and doesn't keep verifying its value with
+    #   the backing server. Instead, this data will be served directly
+    #   from the CDN until it times out or is expressly purged.
+    # - the web browser can cache it, but it must verify with the CDN
+    #   if the value is current each time before displaying it.
     response.headers['Cache-Control'] = 'public, no-cache'
   end
 
@@ -138,13 +147,20 @@ class ApplicationController < ActionController::Base
     # We could remove header 'Surrogate-Control' but I found no need to do so.
   end
 
-  # Omit unchanged session cookies.
+  # Omit session cookie.
   # This can improve performance and privacy for anonymous users by not sending
   # unnecessary session cookies when the session hasn't changed.
   #
-  # **Important:** Do not set flash messages after calling this method,
-  # as flashes are stored in the session. Don't set Rails CSRF tokens either,
-  # as they are also in the session.
+  # **Important:** This has limited functionality.
+  # - Don't display the longer header, as that depends on whether or not
+  #   users are logged in, and we need the system to not cache that.
+  #   Having a cookie makes it obvious to the CDN "don't cache this".
+  #   In the longer term we may modify the system so that the header
+  #   is constant and user-side JavaScript can omit items that can't be used,
+  #   which would make the pages's CDN cache behavior MUCH better.
+  # - Do not set flash messages after calling this method,
+  #   as flashes are stored in the session.
+  # - Don't set Rails CSRF tokens either, as they are also in the session.
   # Inspired by https://stackoverflow.com/questions/5435494/rails-3-disabling-session-cookies
   # You can verify this directly by running commands such as:
   # curl -svo ,out --max-redirs 10 http://localhost:3000/en
@@ -158,12 +174,17 @@ class ApplicationController < ActionController::Base
   # page that leads to database changes (an edit page); those set the CSRF
   # counter token, so calling this routine will cause those actions to fail
   # @return [void]
-  def omit_unchanged_session_cookie
-    # Only take this action if not-logged-in and session cookie is unchanged
-    return unless !logged_in? && session.to_h == @original_session
-
+  def omit_session_cookie
     request.session_options[:skip] = true
   end
+
+  # Omit unchanged session cookie.
+  # This has limited utility, see the comments on omit_session_cookie.
+  # Only take this action if not-logged-in and session cookie is unchanged
+  # def omit_unchanged_session_cookie
+  #   return unless !logged_in? && session.to_h == @original_session
+  #   omit_session_cookie
+  # end
 
   # Response formats that should not trigger locale redirects.
   # JSON and CSV are locale-independent, so don't redirect to add locale.

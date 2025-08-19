@@ -71,11 +71,15 @@ class User < ApplicationRecord
   validates :email, presence: true, length: { maximum: 255 }, email: true
 
   # We check uniqueness of local account email addresses *both* here in
-  # the model *and* also directly in the database (via unique_local_email).
-  # The uniqueness check here in the model provides better error messages
+  # the model *and* also directly in the database.
+  # The database also enforces this uniqueness through
+  # the index `email_bidx` in file `db/schema.rb`.
+  # We also perform a uniqueness check here in the model,
+  # because it provides better error messages
   # and works regardless of the underlying RDBMS.  The RDBMS-level index
-  # check, however, is immune to races where supported (PostgreSQL does),
-  # because the RDBMS is the final arbiter.
+  # check, however, is immune to races where partial indexes
+  # are supported (PostgreSQL does support them) and
+  # because the RDBMS is the final arbiter of data validations.
   validates :email, uniqueness: { scope: :provider, case_sensitive: false },
                     if: ->(u) { u.provider == 'local' }
 

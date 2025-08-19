@@ -31,7 +31,7 @@ class ProjectGetTest < ActionDispatch::IntegrationTest
     # Check some normal headers
     assert_equal('text/html; charset=utf-8', @response.headers['Content-Type'])
     assert_equal(
-      # Note that this test *is* seing the rack middleware result!
+      # Note that this test *is* seeing the rack middleware result!
       'private, no-cache',
       @response.headers['Cache-Control']
     )

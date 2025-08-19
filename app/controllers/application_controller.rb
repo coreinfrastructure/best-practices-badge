@@ -16,16 +16,9 @@ class ApplicationController < ActionController::Base
   include Pagy::Backend
 
   # Record the original session value in "original_session".
-  # That way we tell if the session value has changed, and potentially
+  # That way can we tell if the session value has changed, and potentially
   # omit it if it has not changed.
   before_action :record_original_session
-
-  # Records the current session state for comparison later.
-  # Used to detect session changes and optimize session cookie transmission.
-  # @return [void]
-  def record_original_session
-    @original_session = session.to_h
-  end
 
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
@@ -44,6 +37,7 @@ class ApplicationController < ActionController::Base
   before_action :redir_missing_locale
 
   # Set the locale, based on best available information.
+  # The locale in the URL always takes precedent.
   before_action :set_locale_to_best_available
 
   # Force http -> https
@@ -56,6 +50,19 @@ class ApplicationController < ActionController::Base
   # Use the new HTTP security header, "permissions policy", to disable things
   # we don't need.
   before_action :add_http_permissions_policy
+
+  # Set the default cache control, which inhibits external caching.
+  # If you *want* caching, you must apply:
+  # skip_before_action :set_default_cache_control
+  # We use before_action and override CSRF cache control
+  before_action :set_default_cache_control
+
+  # Records the current session state for comparison later.
+  # Used to detect session changes and optimize session cookie transmission.
+  # @return [void]
+  def record_original_session
+    @original_session = session.to_h
+  end
 
   # Append user information to the log payload for request tracking.
   # Records the current user's ID in logs when user is logged in.
@@ -93,8 +100,30 @@ class ApplicationController < ActionController::Base
   BADGE_CACHE_SURROGATE_CONTROL =
     "max-age=#{BADGE_CACHE_MAX_AGE}, stale-if-error=#{BADGE_CACHE_STALE_AGE}"
 
-  # Configures CDN and browser cache control headers for optimal performance.
-  # Sets different cache policies for CDN (Fastly) vs. end-user browsers.
+  # Set default cache control - don't externally cache.
+  # This is the safe behavior, so we make it the default.
+  # Fewer pages are cacheable than you might initially expect.
+  # Most of the pages on this site vary depending on whether or not
+  # you're logged in (because the header varies), so we can't cache most
+  # of the pages. Many pages can also display a "flash" error message
+  # and/or have CSRF protections that are per-user.
+  # If we ever change the system so that the pages are mostly
+  # the *same* regardless of the logged-in situation and whether or not
+  # flashes were present, we could be more aggressive about caching.
+  # This does NOT impact static images which are handled separately.
+  def set_default_cache_control
+    # Override Rails default behavior by setting stricter cache control
+    # This will be our baseline, and if CSRF protection overrides it,
+    # we'll handle that in the after_action
+    response.headers['Cache-Control'] = 'private, no-cache'
+  end
+
+  # Externally *CACHE* this result: ask the CDN to cache it, and for browsers
+  # to optionally cache it but validate its contents before display.
+  # Calls which use this must ALSO apply:
+  # skip_before_action :set_default_cache_control
+  # and should set:
+  # set_surrogate_key_header VALUE
   # More info:
   # - https://docs.fastly.com/en/guides/configuring-caching
   # - https://docs.fastly.com/en/guides/serving-stale-content
@@ -103,18 +132,19 @@ class ApplicationController < ActionController::Base
   # https://github.com/fastly/fastly-rails/blob/master/lib/fastly-rails/
   # @return [void]
   # rubocop:disable Naming/AccessorMethodName
-  def set_cache_control_headers
+  def cache_on_cdn
     # Configure our CDN (Fastly) to cache data for a while, and
     # serve old data if the system has an error for some reason.
     # In deployment this heading is *only* used by the CDN, and is stripped
     # so that it does *not* go to client browsers.
     response.headers['Surrogate-Control'] = BADGE_CACHE_SURROGATE_CONTROL
+
     # Set the cache values control values.
-    # These values are have very misleading names,
-    # but they are the standard terms.
+    # The value 'no-cache' is a standard but misleading name, it permits
+    # the web browser to have a *local* cache but it requires the web
+    # browser to revalidate the data before each use, and this direction
+    # is ignored by the CDN (Fastly).
     # 'public' simply means "anyone can store a copy".
-    # The 'no-store' only means *web browsers* can cache must validate
-    # before using it, CDNs ignore 'no-store'.
     # Thus, this result *is* cached! This setting means that:
     # - the CDN *DOES* cache it, and doesn't keep verifying its value with
     #   the backing server. Instead, this data will be served directly
@@ -122,6 +152,7 @@ class ApplicationController < ActionController::Base
     # - the web browser can cache it, but it must verify with the CDN
     #   if the value is current each time before displaying it.
     response.headers['Cache-Control'] = 'public, no-cache'
+    omit_session_cookie
   end
 
   # Sets CDN surrogate key headers for cache management.
@@ -143,7 +174,7 @@ class ApplicationController < ActionController::Base
   def disable_cache
     # Misleadingly, "no-cache" *allows* caching. We must use 'no-store'
     # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control
-    response.headers['Cache-Control'] = 'no-store'
+    response.headers['Cache-Control'] = 'private, no-store'
     # We could remove header 'Surrogate-Control' but I found no need to do so.
   end
 

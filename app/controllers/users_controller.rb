@@ -18,6 +18,12 @@ class UsersController < ApplicationController
   before_action :enable_maximum_privacy_headers
   include SessionsHelper
 
+  # These are the permitted parameters in compute_user_params.
+  PERMITTED_PARAMS = %i[
+    name email password password_confirmation
+    preferred_locale notification_emails
+  ].freeze
+
   # Displays list of resources.
   # @return [void]
   def index
@@ -117,7 +123,8 @@ class UsersController < ApplicationController
       render 'new', status: :forbidden
       return
     end
-    @user = User.find_by(email: user_params[:email])
+    user_parameter_values = compute_user_params
+    @user = User.find_by(email: user_parameter_values[:email])
     if @user
       # If user exists but is not activated, retry activation unless too soon
       if !@user.activated
@@ -131,7 +138,7 @@ class UsersController < ApplicationController
         end
       end
     else
-      @user = User.new(user_params)
+      @user = User.new(user_parameter_values)
       @user.provider = 'local'
       @user.preferred_locale = I18n.locale.to_s
       @user.use_gravatar = @user.gravatar_exists? # this is local
@@ -170,15 +177,16 @@ class UsersController < ApplicationController
   def update
     @user = User.find(params[:id])
     old_email = @user&.email_if_decryptable
-    @user.assign_attributes(user_params)
+    user_parameter_values = compute_user_params
+    @user.assign_attributes(user_parameter_values)
     changes = cleanup_changes(
       @user.changes, old_email, @user.email_if_decryptable
     )
     if @user.save
       # If user changed his own locale, switch to it.  It's possible for an
       # *admin* to change someone else's locale, in that case leave it alone.
-      if current_user == @user && user_params[:preferred_locale]
-        I18n.locale = user_params[:preferred_locale].to_sym
+      if current_user == @user && user_parameter_values[:preferred_locale]
+        I18n.locale = user_parameter_values[:preferred_locale].to_sym
       end
       # Email user on every change.  That way, if the user did *not* initiate
       # the change (e.g., because it's by an admin or by someone who broke
@@ -261,12 +269,12 @@ class UsersController < ApplicationController
     response.set_header('Cache-Control', 'private, no-store')
   end
 
-  # Reply with only permitted user parameters and ensure required ones are present
-  def user_params
-    user_params = params.require(:user).permit(
-      :provider, :uid, :name, :email, :password,
-      :password_confirmation, :preferred_locale, :notification_emails
-    )
+  # Reply with only permitted user parameters and ensure required
+  # ones are present
+  def compute_user_params
+    # Base parameters that all users can modify for their own account
+    # NOTE: We don't allow *anyone* to modify :provider and :uid.
+    user_params = params.require(:user).permit(PERMITTED_PARAMS)
     # Remove the password and password confirmation keys for empty values
     user_params.delete(:password) if user_params[:password].blank?
     user_params.delete(:password_confirmation) if

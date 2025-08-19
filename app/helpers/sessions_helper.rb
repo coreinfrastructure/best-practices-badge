@@ -43,13 +43,14 @@ module SessionsHelper
 
   # Low-level route to set user as being logged in.
   # This doesn't set the last_login_at or forward elsewhere.
+  # rubocop:disable Metrics/AbcSize
   def log_in(user)
-    Rails.logger.debug "DEBUG: log_in called for user #{user.id}"
+    Rails.logger.debug { "DEBUG: log_in called for user #{user.id}" }
 
     session[:user_id] = user.id
     # DEBUG - added
     session[:time_last_used] = Time.now.utc
-    Rails.logger.debug "DEBUG: session after log_in: #{session.inspect}"
+    Rails.logger.debug { "DEBUG: session after log_in: #{session.inspect}" }
 
     # Switch to user's preferred locale
     I18n.locale = user.preferred_locale.to_sym
@@ -59,6 +60,7 @@ module SessionsHelper
       session[:forwarding_url], I18n.locale
     )
   end
+  # rubocop:enable Metrics/AbcSize
 
   # Returns the user corresponding to the remember token cookie
   # rubocop:disable Metrics/MethodLength
@@ -83,8 +85,8 @@ module SessionsHelper
   # Returns true if the user is logged in, false otherwise.
   def logged_in?
     # TEMPORARY DEBUG
-    Rails.logger.debug "DEBUG: logged_in? check - session[:user_id]: #{session[:user_id]}"
-    Rails.logger.debug "DEBUG: current_user: #{current_user&.id}"
+    Rails.logger.debug { "DEBUG: logged_in? check - session[:user_id]: #{session[:user_id]}" }
+    Rails.logger.debug { "DEBUG: current_user: #{current_user&.id}" }
 
     !current_user.nil?
   end

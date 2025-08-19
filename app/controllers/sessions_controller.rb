@@ -121,17 +121,7 @@ class SessionsController < ApplicationController
     session[:user_token] = auth['credentials']['token']
     session[:github_name] = auth['info']['nickname']
     user.name ||= user.nickname
-
-    # TEMPORARY DEBUGGING
-    Rails.logger.debug { "DEBUG OAuth: About to login user #{user.id}" }
-    Rails.logger.debug { "DEBUG OAuth: Session before: #{session.inspect}" }
-
     successful_login(user)
-
-    # TEMPORARY DEBUGGING
-    Rails.logger.debug { "DEBUG OAuth: Session after successful_login: #{session.inspect}" }
-    Rails.logger.debug { "DEBUG OAuth: logged_in? = #{logged_in?}" }
-    Rails.logger.debug { "DEBUG OAuth: current_user = #{current_user&.id}" }
   end
   # rubocop:enable Metrics/AbcSize
 

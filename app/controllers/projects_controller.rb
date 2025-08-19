@@ -77,11 +77,6 @@ class ProjectsController < ApplicationController
     if validated_url == request.original_url
       retrieve_projects
 
-      # Omit useless unchanged session cookie for performance & privacy
-      # We *must not* set error messages in the flash area after this,
-      # because flashes are stored in the session.
-      omit_unchanged_session_cookie
-
       if params[:as] == 'badge' # Redirect to badge view
         # We redirect, instead of responding directly with the answer, because
         # then the requesting browser and CDN will handle repeat requests.
@@ -147,11 +142,6 @@ class ProjectsController < ApplicationController
   # @return [void]
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def show
-    # Omit useless unchanged session cookie for performance & privacy
-    # We *must not* set error messages in the flash area after this,
-    # because flashes are stored in the session.
-    omit_unchanged_session_cookie
-
     # Fix malformed queries of form "/en/projects/188?criteria_level,2"
     # These produce parsed.query_values of {"criteria_level,2"=>nil}
     # They end up as weird special keys, so this is the easy way to detect them
@@ -212,10 +202,13 @@ class ProjectsController < ApplicationController
     @project = Project.select(BADGE_PROJECT_FIELDS).find(params[:id])
 
     # Tell CDN the surrogate key so we can quickly erase it later
+    # We presume the CDN can associate multiple items with one key
+    # (Fastly can), so that when we remove this key from the cache, all
+    # related cache entries will be removed.
     set_surrogate_key_header @project.record_key
 
     # Never send session cookie
-    request.session_options[:skip] = true
+    omit_session_cookie
 
     respond_to do |format|
       format.svg do

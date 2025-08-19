@@ -105,11 +105,10 @@ jobs:
     - run:
         name:  Run test suite (both system and non-system tests)
         command: bundle exec rails test:all
-# Disable pronto GitHub
-#    - run:
-#       name:  Run pronto GitHub
-#        command: >
-#         pronto run -f github text -c=$(git log --pretty=format:%H | tail -1) --exit-code
+    - run:
+        name:  Run pronto GitHub
+        command: >
+          pronto run -f github text -c=$(git log --pretty=format:%H | tail -1) --exit-code
     # Temporarily disable bundle doctor; trying to run it produces an error.
     # - run: bundle exec bundle doctor
     - run: bundle exec rake bundle_audit

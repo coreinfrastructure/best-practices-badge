@@ -24,6 +24,8 @@
   handled by CSV.generate.
 
   To make this reusable, we use @model (not ProjectStat).
+
+  Note: #{@model.table_name} is a trusted value (we create our table names).
 -%>
 <%=
   raw(

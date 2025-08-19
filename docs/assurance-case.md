@@ -1756,7 +1756,8 @@ list the additional items added since 2013.
    built-in protection against SQL injection.  SQL commands are not used
    directly, instead Rails includes Active Record, which implements an
    Object Relational Mapping (ORM) with parameterized commands.
-   SQL commands are never issued directly by the custom code.
+   SQL commands containing untrusted inputs
+   are never issued directly by the custom code.
    The shell is not used to download or process file contents (e.g., from
    repositories), instead, various Ruby APIs acquire and process it directly.
 2. Broken Authentication and Session Management.

@@ -463,35 +463,53 @@ function ToggleExpandAllPanels(e) {
   expandAllPanels();
 }
 
-function scrollToHash() {
-  var offset = $(window.location.hash).offset();
-  if (offset) {
-    var scrollto = offset.top - 100; // minus fixed header height
-    $('html, body').animate({scrollTop:scrollto}, 0);
+function scrollToAnchor() {
+  var hash = window.location.hash;
+  if (!hash) {
+    return;
   }
+
+  var $target = $(hash);
+  if (!$target.length) {
+    return;
+  }
+
+  var $navbar = $('.navbar-fixed-top');
+  var navbarHeight = $navbar.length ? $navbar.outerHeight() : 100;
+  var targetTop = $target.offset().top;
+  var scrollPosition = targetTop - navbarHeight;
+
+  $('html, body').animate({scrollTop: scrollPosition}, 0);
 }
 
 function showHash() {
-  if ($(window.location.hash).length) {
-    var parentPane = $(window.location.hash).parents('.panel');
-    if (parentPane.length) {
-      var loc = $(parentPane).find('.can-collapse');
-      if ($(loc).hasClass('collapsed')) {
-        globalIgnoreHashChange = true;
-        loc.click();
-        globalIgnoreHashChange = false;
-        // We need to wait a bit for animations to finish before scrolling.
-        $(parentPane).find('.panel-collapse')
-          .on('shown.bs.collapse', function() {
-            scrollToHash();
-          });
-      } else {
-        // This helps Chrome scroll to the right place on page load
-        setTimeout(function() {
-          scrollToHash();
-        }, 0);
-      }
+  var hash = window.location.hash;
+  if (!hash || !$(hash).length) {
+    return;
+  }
+
+  var $target = $(hash);
+  var $parentPane = $target.parents('.panel');
+
+  if ($parentPane.length) {
+    var $collapseButton = $parentPane.find('.can-collapse');
+    if ($collapseButton.hasClass('collapsed')) {
+      // Panel needs to be opened - scroll after it opens
+      globalIgnoreHashChange = true;
+      $collapseButton.click();
+      globalIgnoreHashChange = false;
+
+      // Schedule scroll after panel finishes opening
+      $parentPane.find('.panel-collapse').one('shown.bs.collapse', function() {
+        requestAnimationFrame(scrollToAnchor);
+      });
+    } else {
+      // Panel already open - scroll after next reflow
+      requestAnimationFrame(scrollToAnchor);
     }
+  } else {
+    // No parent panel - scroll after next reflow
+    requestAnimationFrame(scrollToAnchor);
   }
 }
 
@@ -694,9 +712,24 @@ function setupProjectForm() {
 
   getAllPanelsReady();
 
+  // Handle anchor on page load/refresh
+  showHash();
+
   $(window).on('hashchange', function(e) {
     if (!globalIgnoreHashChange && $(window.location.hash).length) {
       showHash();
+    }
+  });
+
+  // Handle when user presses enter in URL bar with existing hash
+  $(window).on('focus', function(e) {
+    if (window.location.hash) {
+      // Small delay to let browser's default anchor behavior complete
+      setTimeout(function() {
+        if (!globalIgnoreHashChange) {
+          showHash();
+        }
+      }, 10);
     }
   });
 }

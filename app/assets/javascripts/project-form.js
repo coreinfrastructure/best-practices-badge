@@ -475,6 +475,9 @@ function scrollToAnchor() {
   }
 
   var $navbar = $('.navbar-fixed-top');
+  if (!$navbar) {
+    return;
+  }
   var navbarHeight = $navbar.length ? $navbar.outerHeight() : 100;
   var targetTop = $target.offset().top;
   var scrollPosition = targetTop - navbarHeight;
@@ -491,7 +494,7 @@ function showHash() {
   var $target = $(hash);
   var $parentPane = $target.parents('.panel');
 
-  if ($parentPane.length) {
+  if ($parentPane && $parentPane.length) {
     var $collapseButton = $parentPane.find('.can-collapse');
     if ($collapseButton.hasClass('collapsed')) {
       // Panel needs to be opened - scroll after it opens

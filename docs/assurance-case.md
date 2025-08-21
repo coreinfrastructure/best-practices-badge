@@ -1384,7 +1384,7 @@ in production, access requires special Heroku keys.
 
 The DBMS does not know which user the BadgeApp
 is operating on behalf of, and does not have separate privileges.
-However, the BadgeApp uses ActiveRecord and prepared statements,
+However, the BadgeApp uses ActiveRecord and parameterized statements,
 making it unlikely that an attacker can use SQL injections to
 insert malicious queries.
 
@@ -1753,11 +1753,14 @@ list the additional items added since 2013.
 
 1. Injection.
    BadgeApp is implemented in Ruby on Rails, which has
-   built-in protection against SQL injection.  SQL commands are not used
-   directly, instead Rails includes Active Record, which implements an
+   built-in protection against SQL injection.  SQL commands are generally
+   not used directly, instead Rails includes ActiveRecord, which implements an
    Object Relational Mapping (ORM) with parameterized commands.
-   SQL commands containing untrusted inputs
-   are never issued directly by the custom code.
+   In a few rare cases SQL commands (or fragments of them) are created directly,
+   but these SQL commands never use unparameterized untrusted inputs.
+   Any inputs to SQL commands are always parameterized, trusted, or both,
+   typically using its parametrized mechanisms or similar mechanisms such as
+   `sanitize_sql_like`.
    The shell is not used to download or process file contents (e.g., from
    repositories), instead, various Ruby APIs acquire and process it directly.
 2. Broken Authentication and Session Management.
@@ -2032,7 +2035,7 @@ as of 2015-12-14:
    and the data is not used in command interpreters (such as SQL or shell).
    SQL injection is countered by Rails' built-in database query mechanisms,
    we primarily use specialized routines like find() that counter
-   SQL injection, but parameterized queries are also allowed
+   SQL injection, but parameterized queries are also allowed for untrusted data
    (and also counter SQL injection).
    XSS, CSS injection, and Ajax injection are
    countered using Rails' HTML sanitization

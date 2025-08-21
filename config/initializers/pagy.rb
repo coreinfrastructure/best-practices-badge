@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Pagy initializer file (3.8.3)
+# Pagy initializer file (9.4.0)
 # Customize only what you really need.
 # Extras
 # See https://ddnexus.github.io/pagy/extras
@@ -35,31 +35,11 @@ require 'pagy/extras/bootstrap'
 # See https://ddnexus.github.io/pagy/extras/bulma
 # require 'pagy/extras/bulma'
 
-# Foundation extra: Add nav, nav_js and combo_nav_js helpers and templates for Foundation pagination
-# See https://ddnexus.github.io/pagy/extras/foundation
-# require 'pagy/extras/foundation'
-
-# Materialize extra: Add nav, nav_js and combo_nav_js helpers for Materialize pagination
-# See https://ddnexus.github.io/pagy/extras/materialize
-# require 'pagy/extras/materialize'
-
 # Navs extra: Add nav_js and combo_nav_js javascript helpers
 # Notice: the other frontend extras add their own framework-styled versions,
 # so require this extra only if you need the unstyled version
 # See https://ddnexus.github.io/pagy/extras/navs
 # require 'pagy/extras/navs'
-
-# Semantic extra: Add nav, nav_js and combo_nav_js helpers for Semantic UI pagination
-# See https://ddnexus.github.io/pagy/extras/semantic
-# require 'pagy/extras/semantic'
-
-# UIkit extra: Add nav helper and templates for UIkit pagination
-# See https://ddnexus.github.io/pagy/extras/uikit
-# require 'pagy/extras/uikit'
-
-# Multi size var used by the *_nav_js helpers
-# See https://ddnexus.github.io/pagy/extras/navs#steps
-# Pagy::DEFAULT[:steps] = { 0 => [2,3,3,2], 540 => [3,5,5,3], 720 => [5,7,7,5] }   # example
 
 # Feature Extras
 
@@ -75,8 +55,8 @@ require 'pagy/extras/bootstrap'
 # Items extra: Allow the client to request a custom number of items per page with an optional selector UI
 # See https://ddnexus.github.io/pagy/extras/items
 # require 'pagy/extras/items'
-# Pagy::DEFAULT[:items_param] = :items    # default
-# Pagy::DEFAULT[:max_items]   = 100       # default
+# Pagy::DEFAULT[:limit_param] = :limit    # default
+# Pagy::DEFAULT[:limit_max]   = 100       # default
 
 # Overflow extra: Allow for easy handling of overflowing pages
 # See https://ddnexus.github.io/pagy/extras/overflow
@@ -108,8 +88,8 @@ require 'pagy/extras/trim'
 
 # Instance variables
 # See https://ddnexus.github.io/pagy/api/pagy#instance-variables
-# Pagy::DEFAULT[:items] = 20                                   # default
-Pagy::DEFAULT[:items] = 30
+# Pagy::DEFAULT[:limit] = 20                                   # default
+Pagy::DEFAULT[:limit] = 30
 
 # Other Variables
 # See https://ddnexus.github.io/pagy/api/pagy#other-variables
@@ -118,7 +98,10 @@ Pagy::DEFAULT[:items] = 30
 # Pagy::DEFAULT[:params]     = {}                              # default
 # Pagy::DEFAULT[:anchor]     = '#anchor'                       # example
 # Pagy::DEFAULT[:link_extra] = 'data-remote="true"'            # example
-Pagy::DEFAULT[:size] = [2, 4, 4, 2]
+# Pagy::DEFAULT[:size] = [2, 4, 4, 2]  # Array format no longer supported in v9
+# Use integer size with :ends option instead for similar functionality
+Pagy::DEFAULT[:size] = 4
+Pagy::DEFAULT[:ends] = true
 
 # Rails
 

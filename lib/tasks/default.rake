@@ -6,6 +6,12 @@
 
 # Rake tasks for BadgeApp
 
+# If you use our standard development environment using `rbenv` you usually
+# don't need to prefix commands with "bundle exec" or "bin/" to ensure
+# you're running in the correct Ruby virtual environment.
+# However, the rake tasks generally use "bundle exec" to be *sure* that
+# we're in the correct environment, regardless of the circumstance.
+
 require 'json'
 
 # NOTE: Our default runs test:all, not just test.
@@ -173,8 +179,7 @@ end
 # end in ".markdown" instead.  (E.g., for markdown fragments.)
 desc 'Run markdownlint (mdl) - check for markdown problems on **.md files'
 task :markdownlint do
-  style_file = 'config/markdown_style.rb'
-  sh "bundle exec mdl -s #{style_file} *.md docs/*.md"
+  sh "bundle exec mdl *.md docs/*.md"
 end
 
 # Apply JSCS to look for issues in JavaScript files.

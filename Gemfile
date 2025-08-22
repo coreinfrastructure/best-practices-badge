@@ -120,13 +120,8 @@ group :development, :test do
   gem 'json', '~> 2.0'
   gem 'license_finder', '~> 7.0'
   gem 'mdl', '0.13.0'
-  # NOTE: If you update pronto you may need to update other pronto-* gems
-  gem 'pronto', '~> 0.11'
-  # TODO: Use pronto-railroader, once there is one.
-  # gem 'pronto-brakeman', '0.9.1'
-  gem 'pronto-eslint', '~> 0.11'
-  gem 'pronto-rails_best_practices', '~> 0.11'
-  gem 'pronto-rubocop', '~> 0.11'
+  # Removed pronto gems - comprehensive linting now handled by rake default
+  gem 'rails_best_practices', '~> 1.20' # Rails code quality analyzer
   # gem 'railroader', '4.3.8' # Security static analyzer. OSS fork of Brakeman
   gem 'rubocop', '~> 1.6', require: false # Style checker
   gem 'rubocop-performance', '~> 1.20', require: false # Performance cops

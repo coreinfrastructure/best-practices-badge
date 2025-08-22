@@ -103,18 +103,8 @@ jobs:
         name: Check for whitespace issues.
         command: '[[ ! -s "$(git rev-parse --git-dir)/shallow" ]] || git fetch --unshallow'
     - run:
-        name:  Run test suite (both system and non-system tests)
-        command: bundle exec rails test:all
-    - run:
-        name:  Run pronto GitHub
-        command: >
-          pronto run -f github text -c=$(git log --pretty=format:%H | tail -1) --exit-code
-    # Temporarily disable bundle doctor; trying to run it produces an error.
-    # - run: bundle exec bundle doctor
-    - run: bundle exec rake bundle_audit
-    - run: bundle exec rake whitespace_check
-    - run: bundle exec rake license_finder_report.html
-    - run: script/report_code_statistics
+        name: Run comprehensive checks and tests (rake default)
+        command: bundle exec rake
     # Save test results
     - store_test_results:
         path: /tmp/circleci-test-results

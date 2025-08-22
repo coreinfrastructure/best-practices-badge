@@ -104,7 +104,7 @@ jobs:
         command: '[[ ! -s "$(git rev-parse --git-dir)/shallow" ]] || git fetch --unshallow'
     - run:
         name: Run comprehensive checks and tests (rake default)
-        command: bundle exec rake
+        command: CI=true bundle exec rake
     # Save test results
     - store_test_results:
         path: /tmp/circleci-test-results

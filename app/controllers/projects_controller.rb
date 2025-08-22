@@ -647,7 +647,7 @@ class ProjectsController < ApplicationController
   # Security measure to prevent mass assignment vulnerabilities.
   # @return [ActionController::Parameters] Permitted parameters for project
   def project_params
-    params.require(:project).permit(Project::PROJECT_PERMITTED_FIELDS)
+    params.expect(project: Project::PROJECT_PERMITTED_FIELDS)
   end
 
   # Permits and extracts criteria_level parameter from request.

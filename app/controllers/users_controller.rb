@@ -274,7 +274,7 @@ class UsersController < ApplicationController
   def compute_user_params
     # Base parameters that all users can modify for their own account
     # NOTE: We don't allow *anyone* to modify :provider and :uid.
-    user_params = params.require(:user).permit(PERMITTED_PARAMS)
+    user_params = params.expect(user: PERMITTED_PARAMS)
     # Remove the password and password confirmation keys for empty values
     user_params.delete(:password) if user_params[:password].blank?
     user_params.delete(:password_confirmation) if

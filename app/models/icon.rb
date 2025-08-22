@@ -31,10 +31,11 @@ class Icon
       @icon_data&.fetch(key)
     end
 
-    # Useful for debugging
-    def keys
-      @icon_data.keys
-    end
+    # Useful for debugging. Equivalent to:
+    # def keys
+    #   @icon_data.keys
+    # end
+    delegate :keys, to: :@icon_data
 
     def initialize_class
       @icon_data = {}

@@ -504,7 +504,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     patch "/en/projects/#{@project.id}.json", params: {
       project: new_project_data
     }
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
   end
 
   # rubocop: disable Metrics/BlockLength

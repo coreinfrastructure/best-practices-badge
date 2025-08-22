@@ -33,9 +33,9 @@ gem 'activesupport', '~> 8.0.1' # Rails. Underlying library.
 gem 'attr_encrypted', '~> 4'
 gem 'bcrypt', '~> 3.1.18' # Security - for salted hashed interacted passwords
 gem 'blind_index', '~> 2.6.1' # Index encrypted email addresses
-gem 'bootstrap-sass', '~> 3.4'
+gem 'bootstrap-sass', '~> 3.4' # Use bootstrap v3
 gem 'bootstrap-social-rails', '~> 4.12'
-gem 'bootstrap_form', '~> 2.7'
+gem 'bootstrap_form', '~> 2.7' # DO NOT update unless updating bootstrap
 gem 'bundler' # Ensure it's available
 # Note: if webpacker is used, see chartkick website for added instructions
 gem 'chartkick', '~> 4.0' # Chart project_stats
@@ -86,9 +86,9 @@ gem 'pg', '~> 1.4' # PostgreSQL database, used for data storage
 gem 'pg_search', '~> 2.3' # PostgreSQL full-text search
 gem 'puma', '~> 6.5' # Faster webserver; recommended by Heroku
 gem 'puma_worker_killer', '~> 1.0' # Band-aid: Restart to limit memory use
-gem 'rack', '~> 3.0.18' # interface between web server + web framework (Rails)
+gem 'rack', '~> 3.2.0' # interface between web server + web framework (Rails)
 gem 'rack-attack', '~> 6.7' # Implement rate limiting
-gem 'rack-cors', '~> 2.0' # Enable CORS so JavaScript clients can get JSON
+gem 'rack-cors', '~> 3.0' # Enable CORS so JavaScript clients can get JSON
 gem 'rack-headers_filter', '~> 0.0.1' # Filter out "dangerous" headers
 # We no longer say: gem 'rails', '6.1.7.3' # Our web framework
 # but instead load only what we use (to reduce memory use and attack surface).

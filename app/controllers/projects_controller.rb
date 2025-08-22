@@ -276,7 +276,7 @@ class ProjectsController < ApplicationController
       else
         format.html { render :new }
         format.json do
-          render json: @project.errors, status: :unprocessable_entity
+          render json: @project.errors, status: :unprocessable_content
         end
       end
     end
@@ -351,7 +351,7 @@ class ProjectsController < ApplicationController
         else
           format.html { render :edit, criteria_level: @criteria_level }
           format.json do
-            render json: @project.errors, status: :unprocessable_entity
+            render json: @project.errors, status: :unprocessable_content
           end
         end
       end

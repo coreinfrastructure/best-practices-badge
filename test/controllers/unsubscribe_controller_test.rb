@@ -163,7 +163,7 @@ class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
       issued: @issued_date.strftime('%Y-%m-%d')
     }
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
     assert_match(/invalid.*token/i, flash[:error])
 
     @user.reload
@@ -193,7 +193,7 @@ class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
       issued: old_date.strftime('%Y-%m-%d')
     }
 
-    assert_response :unprocessable_entity # Token verification fails for expired date
+    assert_response :unprocessable_content # Token verification fails for expired date
     assert_match(/invalid.*token/i, flash[:error])
   end
 
@@ -208,7 +208,7 @@ class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
       issued: future_date.strftime('%Y-%m-%d')
     }
 
-    assert_response :unprocessable_entity # Token verification fails for future date
+    assert_response :unprocessable_content # Token verification fails for future date
     assert_match(/invalid.*token/i, flash[:error])
   end
 
@@ -283,7 +283,7 @@ class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
       issued: @issued_date.strftime('%Y-%m-%d')
     }
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
     assert_match(/invalid.*token/i, flash[:error])
   end
 
@@ -317,7 +317,7 @@ class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
       issued: @issued_date.strftime('%Y-%m-%d')
     }
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
     assert_match(/no.*matching.*accounts/i, flash[:error])
 
     # Verify user state remains unchanged
@@ -336,7 +336,7 @@ class UnsubscribeControllerTest < ActionDispatch::IntegrationTest
       issued: @issued_date.strftime('%Y-%m-%d')
     }
 
-    assert_response :unprocessable_entity
+    assert_response :unprocessable_content
     assert_match(/no.*matching.*accounts/i, flash[:error])
   end
 

@@ -42,7 +42,7 @@ class UnsubscribeController < ApplicationController
       email_domain = email.split('@').last
       Rails.logger.info "Invalid unsubscribe token attempt for email domain: #{email_domain}"
       flash.now[:error] = t('unsubscribe.invalid_token')
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
       return
     end
 
@@ -58,7 +58,7 @@ class UnsubscribeController < ApplicationController
 
     if updated_count.zero?
       flash.now[:error] = t('unsubscribe.no_matching_accounts')
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
       return
     end
 

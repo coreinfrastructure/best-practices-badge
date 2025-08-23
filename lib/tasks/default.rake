@@ -57,7 +57,7 @@ task :rbenv_rvm_setup do
 
   path = ENV.fetch('PATH', nil)
   if !path.include?('.rbenv') && !path.include?('.rvm') && !path.include?('.asdf')
-    raise 'Must have rbenv or rvm in PATH'
+    raise StandardError, 'Must have rbenv or rvm in PATH'
   end
 end
 

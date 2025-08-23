@@ -5,6 +5,7 @@
 # SPDX-License-Identifier: MIT
 
 require 'test_helper'
+require 'ostruct'
 
 # rubocop:disable Metrics/ClassLength
 class ProjectsControllerTest < ActionDispatch::IntegrationTest

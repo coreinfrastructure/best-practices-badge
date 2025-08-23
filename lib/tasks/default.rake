@@ -52,9 +52,12 @@ task(:ci).clear.enhance %w[
 # Simple smoke test to avoid development environment misconfiguration
 desc 'Ensure that rbenv or rvm are set up in PATH'
 task :rbenv_rvm_setup do
+  # Skip this check in CI environments where Ruby is managed differently
+  next if ENV['CI']
+
   path = ENV.fetch('PATH', nil)
   if !path.include?('.rbenv') && !path.include?('.rvm') && !path.include?('.asdf')
-    raise RuntimeError 'Must have rbenv or rvm in PATH'
+    raise StandardError, 'Must have rbenv or rvm in PATH'
   end
 end
 

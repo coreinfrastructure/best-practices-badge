@@ -187,7 +187,7 @@ end
 # end in ".markdown" instead.  (E.g., for markdown fragments.)
 desc 'Run markdownlint (mdl) - check for markdown problems on **.md files'
 task :markdownlint do
-  sh "bundle exec mdl *.md docs/*.md"
+  sh 'bundle exec mdl *.md docs/*.md'
 end
 
 # Apply JSCS to look for issues in JavaScript files.

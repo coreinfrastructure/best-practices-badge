@@ -1,6 +1,13 @@
 # Configuration file for tool rails_best_practices
 # Note: Inside { } you can use "except_methods:" and "ignored_files:" to omit
 # some checks.
+
+# Equivalent to : --features --spec --without-color --exclude railroader/
+features: true
+spec: true
+without_color: true
+exclude: ["railroader/"]
+
 AddModelVirtualAttributeCheck: { }
 AlwaysAddDbIndexCheck: { }
 CheckSaveReturnValueCheck: { }

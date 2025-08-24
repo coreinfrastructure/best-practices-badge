@@ -72,14 +72,16 @@ task :rbenv_rvm_setup do
   end
 end
 
-desc 'Run Rubocop with options'
+desc 'Run Rubocop'
 task :rubocop do
-  sh 'bundle exec rubocop -D --format progress'
+  # The default configuration is in .rubocop.yml
+  sh 'bundle exec rubocop'
 end
 
 desc 'Run rails_best_practices with options'
 task :rails_best_practices do
-  sh 'bundle exec rails_best_practices --features --spec --without-color --exclude railroader/'
+  # The default configuration is in config/rails_best_practices.yml
+  sh 'bundle exec rails_best_practices'
 end
 
 desc 'Setup railroader if needed'
@@ -183,10 +185,12 @@ task :bundle_audit do
 end
 # rubocop:enable Metrics/BlockLength
 
+# Use markdownlint to examine the usual markdown files.
 # NOTE: If you don't want mdl to be run on a markdown file, rename it to
 # end in ".markdown" instead.  (E.g., for markdown fragments.)
 desc 'Run markdownlint (mdl) - check for markdown problems on **.md files'
 task :markdownlint do
+  # The default configuration is in .mdlrc + style config/markdown_style.rb
   sh 'bundle exec mdl *.md docs/*.md'
 end
 
@@ -436,6 +440,7 @@ else
     t.pattern = 'app/assets/javascripts/*.js'
     # If you modify the exclude_pattern, also modify file .eslintignore
     t.exclude_pattern = 'app/assets/javascripts/application.js'
+    # The configuration is in .eslintrc
     t.options = :eslintrc
   end
 end

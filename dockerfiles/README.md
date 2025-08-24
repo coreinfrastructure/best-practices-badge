@@ -14,15 +14,20 @@ installed on your computer (Install instructions are
 2. "cd" into that directory and modify the Dockerfile
    to point to the correct base image.
 3. Log in to DockerHub
+
     ~~~~sh
     docker login -u <username>
     ~~~~
+
 4. Build the docker image (replace `<tag>` below with for example
    `2.5.1-stretch`.
+
     ~~~~sh
     docker build -t <username>/cii-bestpractices:<tag> .
     ~~~~
+
 5. Push your image.
+
     ~~~~sh
     docker push <username>/cii-bestpractices:<tag>
     ~~~~

@@ -17,6 +17,7 @@
 # minimize what we install in production, and we try to make our
 # CI system similar to production.
 
+require 'English'
 require 'json'
 
 # NOTE: Our default runs test:all, not just test.
@@ -191,7 +192,8 @@ end
 desc 'Run markdownlint (mdl) - check for markdown problems on **.md files'
 task :markdownlint do
   # The default configuration is in .mdlrc + style config/markdown_style.rb
-  sh 'bundle exec mdl *.md docs/*.md'
+  # Exclude temporary files beginning with comma
+  sh 'find . -name "*.md" ! -name ",*" -print0 | xargs -0 bundle exec mdl'
 end
 
 # Apply JSCS to look for issues in JavaScript files.
@@ -242,24 +244,45 @@ end
 # Don't do whitespace checks on these YAML files:
 YAML_WS_EXCEPTIONS ||= ':!test/vcr_cassettes/*.yml'
 
-desc 'Check for trailing whitespace in latest proposed (git) patch.'
+desc 'Check for trailing whitespace in all text files.'
 task :whitespace_check do
-  if ENV['CI'] # CircleCI modifies database.yml
-    sh "git diff --check -- . ':!config/database.yml' #{YAML_WS_EXCEPTIONS}"
+  puts 'Checking for trailing whitespace...'
+
+  # Find all files, exclude directories we don't want, exclude comma-prefixed
+  # files, use file to identify text files, then check for trailing whitespace
+  # This won't handle filenames with \n but those shouldn't be in our repo!
+  cmd = <<~SHELL
+    find . -type f ! -name ',*' \
+      ! -path './vendor/*' ! -path './node_modules/*' \
+      ! -path './railroader/*' ! -path './tmp/*' ! -path './.git/*' \
+      ! -path './log/*' ! -path './test/vcr_cassettes/*' \
+      ! -path './license_finder_report.html' \
+      ! -path './coverage/index.html' \
+      -print0 | \
+    xargs -0 file | \
+    awk -F': ' '$2 ~ /(text|script)/ && $2 !~ /(executable|binary)/ \
+      {print $1}' | \
+    xargs grep -l '[[:space:]]$' 2>/dev/null || true
+  SHELL
+
+  output = `#{cmd}`
+
+  if output.empty?
+    puts 'No trailing whitespace found.'
   else
-    sh "git diff --check -- . #{YAML_WS_EXCEPTIONS}"
+    puts 'Trailing whitespace found in these files:'
+    puts output
+    exit 1
   end
 end
 
 desc 'Check YAML syntax (except project.yml, which is not straight YAML)'
 task :yaml_syntax_check do
-  require 'English'
-
   # Don't check "project.yml" - it's not a straight YAML file, but instead
   # it's processed by ERB (even though the filename doesn't admit it).
   puts 'Checking YAML syntax...'
 
-  find_cmd = "find . -name '*.yml' ! -name 'projects.yml' " \
+  find_cmd = "find . -name '*.yml' ! -name 'projects.yml' ! -name ',*' " \
              "! -path './railroader/*' ! -path './vendor/*' " \
              '-exec bundle exec yaml-lint {} + 2>&1'
 

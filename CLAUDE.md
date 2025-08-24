@@ -25,7 +25,7 @@ This is the **OpenSSF Best Practices Badge** project (formerly CII Best Practice
 ### Code Quality & Linting
 
 - `rake` or `rake default` - Run complete CI pipeline (linting, tests, security checks).
-- `rake rubocop` - Ruby style checker  
+- `rake rubocop` - Ruby style checker
 - `rake rails_best_practices` - Rails-specific best practices source checker
 - `rake markdownlint` - Markdown linting
 - `rake eslint` - JavaScript linting
@@ -83,7 +83,7 @@ not done on the local system.
 Security is *extremely* important to this project. Some features:
 
 - **Encrypted Data**: User emails encrypted with AES-256-GCM
-- **Blind Indexing**: Email searches use blind indices for privacy  
+- **Blind Indexing**: Email searches use blind indices for privacy
 - **CSRF Protection**: All forms protected with Rails CSRF tokens
 - **Rate Limiting**: Uses `rack-attack` for DoS protection
 - **Content Security Policy**: Strict CSP headers via `secure_headers` gem
@@ -121,7 +121,7 @@ The file `docs/assurance-case.md` explains why we *believe* this is secure.
 
 ## Key Configuration Files
 
-- `config/application.rb` - Core Rails app configuration  
+- `config/application.rb` - Core Rails app configuration
 - `config/routes.rb` - Complex routing with locale support
 - `lib/tasks/default.rake` - Custom rake tasks including full CI pipeline
 
@@ -169,7 +169,7 @@ Security is *VERY* important in this application.
 Key environment variables for development:
 
 - `RAILS_ENV` - Rails environment (development/test/production)
-- `EMAIL_ENCRYPTION_KEY` - 64 hex digits for email encryption  
+- `EMAIL_ENCRYPTION_KEY` - 64 hex digits for email encryption
 - `EMAIL_BLIND_INDEX_KEY` - 64 hex digits for email search indices
 - `BADGEAPP_REAL_PRODUCTION` - Set to "true" only on true production site
 - `PUBLIC_HOSTNAME` - Hostname for the application
@@ -192,7 +192,7 @@ Key environment variables for development:
 ### Security Considerations
 
 - Badge image URLs must be canonical for CDN caching
-- All user input requires validation and sanitization  
+- All user input requires validation and sanitization
 - Session timeouts are enforced - don't extend arbitrarily
 - Rate limiting is aggressive - be aware when testing
 
@@ -206,6 +206,9 @@ Key environment variables for development:
 - `test/` - Comprehensive test suite
 
 ## Miscellaneous
+
+IMPORTANT: Never have trailing whitespace in text-like files including
+source code and markdown files.
 
 IMPORTANT: When creating temporary files, always prefix their names with
 a comma to distinguish them.

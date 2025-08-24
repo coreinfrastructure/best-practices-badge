@@ -6,7 +6,7 @@
 features: true
 spec: true
 without_color: true
-exclude: ["railroader/"]
+exclude: ["railroader/", "^,.*"]
 
 AddModelVirtualAttributeCheck: { }
 AlwaysAddDbIndexCheck: { }

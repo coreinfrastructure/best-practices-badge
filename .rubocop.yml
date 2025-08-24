@@ -56,6 +56,7 @@ AllCops:
     - 'railroader/**/*'
     - '.pryrc'
     - 'license_okay'
+    - ',*'
 
 # This will ALWAYS be disabled. We *want* to be able disable cops.
 Style/DisableCopsWithinSourceCodeDirective:

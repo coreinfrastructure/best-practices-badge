@@ -1900,9 +1900,9 @@ We take a number of steps to counter misconfiguration.
 We have strived to enable secure defaults from the start.
 We use a number of [external online checkers](#online-checkers)
 to detect common HTTPS misconfiguration problems (see below).
-We use Brakeman, which can detect
+We use Brakeman and CodeQL, which can detect
 some misconfigurations in Rails applications.
-We invoke a static analysis tool (Brakeman) as part of
+We invoke static analysis tools (Brakeman and CodeQL) as part of
 our continuous integration pipeline.
 
 However, our primary mechanism for countering misconfigurations is by
@@ -2646,7 +2646,7 @@ and how it helps make the software more secure:
   Our style checking tools detect misleading indentation;
   <a href="http://www.dwheeler.com/essays/apple-goto-fail.html#indentation">this
   counters the mistake in the Apple goto fail vulnerability</a>.
-* Source code weakness analyzer (for finding vulnerabilities in custom code).
+* Source code weakness analyzers (for finding vulnerabilities in custom code).
   A source code weakness analyzer, also known as a security vulnerability
   scanner, examines the source code to identify vulnerabilities.
   This is one of many kinds of "static analysis" tools, that is, a tool
@@ -2654,7 +2654,9 @@ and how it helps make the software more secure:
   cases of specific inputs).
   We use Brakeman, a source code weakness analyzer that focuses
   on finding security issues in Ruby on Rails applications.
-  Note that this is separate from the automatic detection of
+  We also use CodeQL, another source code weakness analyzer that's
+  general-purpose and reviews both the Ruby and JavaScript code.
+  Note that this is all separate from the automatic detection of
   third-party components with publicly-known vulnerabilities;
   see the [supply chain](#supply-chain) section for how we counter those.
 * FLOSS.  Reviewability is important for security.

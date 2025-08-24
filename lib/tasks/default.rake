@@ -74,13 +74,13 @@ end
 
 desc 'Run Rubocop'
 task :rubocop do
-  # Note: default configuration in .rubocop.yml
+  # The default configuration is in .rubocop.yml
   sh 'bundle exec rubocop'
 end
 
 desc 'Run rails_best_practices with options'
 task :rails_best_practices do
-  # Note: default configuration in config/rails_best_practices.yml
+  # The default configuration is in config/rails_best_practices.yml
   sh 'bundle exec rails_best_practices'
 end
 
@@ -190,6 +190,7 @@ end
 # end in ".markdown" instead.  (E.g., for markdown fragments.)
 desc 'Run markdownlint (mdl) - check for markdown problems on **.md files'
 task :markdownlint do
+  # The default configuration is in .mdlrc + style config/markdown_style.rb
   sh 'bundle exec mdl *.md docs/*.md'
 end
 
@@ -439,6 +440,7 @@ else
     t.pattern = 'app/assets/javascripts/*.js'
     # If you modify the exclude_pattern, also modify file .eslintignore
     t.exclude_pattern = 'app/assets/javascripts/application.js'
+    # The configuration is in .eslintrc
     t.options = :eslintrc
   end
 end

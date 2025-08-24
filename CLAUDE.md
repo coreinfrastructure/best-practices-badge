@@ -204,3 +204,8 @@ Key environment variables for development:
 - `docs/` - Extensive documentation including security assurance case
 - `lib/tasks/default.rake` - CI pipeline and custom tasks
 - `test/` - Comprehensive test suite
+
+## Miscellaneous
+
+IMPORTANT: When creating temporary files, always prefix their names with
+a comma to distinguish them.

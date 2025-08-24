@@ -135,10 +135,7 @@ GEM
     csv (3.3.5)
     date (3.4.1)
     docile (1.4.1)
-    dotenv (2.8.1)
-    dotenv-rails (2.8.1)
-      dotenv (= 2.8.1)
-      railties (>= 3.2)
+    dotenv (3.1.8)
     drb (2.2.3)
     encryptor (3.0.0)
     erb (5.0.2)
@@ -612,7 +609,7 @@ DEPENDENCIES
   capybara-slow_finder_errors
   chartkick (~> 4.0)
   codecov
-  dotenv-rails (~> 2.7)
+  dotenv (~> 3.0)
   eslintrb
   faraday-retry (~> 2.1)
   font_awesome5_rails

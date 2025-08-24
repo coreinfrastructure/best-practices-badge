@@ -115,7 +115,7 @@ group :development, :test do
   gem 'awesome_print' # Pretty print Ruby objects
   gem 'bullet' # Avoid n+1 queries
   gem 'bundler-audit' # Alert if Gemfile.lock gems have known vulnerabilities
-  gem 'dotenv-rails', '~> 2.7' # Load env vars from .env files into Rails ENV
+  gem 'dotenv', '~> 3.0' # Load env vars from .env files into Rails ENV
   gem 'eslintrb' # Linter for JavaScript code.
   gem 'json', '~> 2.0' # Process JSON format
   gem 'license_finder', '~> 7.0' # Verify that all sw licenses are acceptable

@@ -30,21 +30,21 @@ gem 'activerecord', '~> 8.0.1' # Rails. ORM and query system.
 # gem 'activestorage' # Not used. Attaches cloud files to ActiveRecord.
 gem 'activesupport', '~> 8.0.1' # Rails. Underlying library.
 # gem 'activetext' # Not used. Text editor that fails to support markdown.
-gem 'attr_encrypted', '~> 4'
+gem 'attr_encrypted', '~> 4' # Simplify encrypting model attributes
 gem 'bcrypt', '~> 3.1.18' # Security - for salted hashed interacted passwords
-gem 'blind_index', '~> 2.6.1' # Index encrypted email addresses
+gem 'blind_index', '~> 2.6.1' # Index encrypted data (email addresses)
 gem 'bootstrap-sass', '~> 3.4' # Use bootstrap v3
-gem 'bootstrap-social-rails', '~> 4.12'
+gem 'bootstrap-social-rails', '~> 4.12' # Pretty social media buttons
 gem 'bootstrap_form', '~> 2.7' # DO NOT update unless updating bootstrap
 gem 'bundler' # Ensure it's available
 # Note: if webpacker is used, see chartkick website for added instructions
 gem 'chartkick', '~> 4.0' # Chart project_stats
 gem 'faraday-retry', '~> 2.1' # Force retry of faraday requests for reliability
-# We no longger use "fastly-rails"; it doesn't support Rails 6+.
+# We no longer use "fastly-rails"; it doesn't support Rails 6+.
 # They recommend switching to the "fastly" gem (aka "fastly-ruby"),
 # but fastly-ruby is not designed to support multi-threading, so we
 # call the Fastly API directly instead.
-gem 'font_awesome5_rails'
+gem 'font_awesome5_rails' # Font Awesome 5 web fonts, CSS, JavaScript for Rails
 gem 'http_accept_language', '~> 2.1' # Determine user's preferred locale
 gem 'httparty' # HTTP convenience. rake fix_use_gravatar
 gem 'imagesLoaded_rails', '~> 4.1' # JavaScript - enable wait for image load
@@ -57,17 +57,18 @@ gem 'mail', '~> 2.7' # Ruby mail handler
 gem 'octokit', '~> 7' # GitHub's official Ruby API
 gem 'omniauth-github', '~> 2.0' # Authentication to GitHub (get project info)
 #
-# Counter CVE-2015-9284 in the omniauth 1.X series.
-# The omniauth gem 1.X series has a vulnerability if GET requests are used
-# for login, and it was left unfixed for years. A countermeasure is using POST.
+# Gem omniauth-rails_csrf_protection protects omniauth logins and
+# provides a propert integration of omniauth with Rails.
+# This requires explanation.
+# Gem omniauth 1.x series has vulnerability CVE-2015-9284 if GET requests
+# are used.
+# OmniAuth gem 2.x requires POST requests by default, which is a
+# security improvement.
+# However, omniAuth 2.x uses Rack's built-in AuthenticityToken class,
+# NOT Rails' CSRF system. When using Rails, we need to instead use Rails'
+# ActionController::RequestForgeryProtection for CSRF proteciton.
 # For a discussion on this countermeasure see:
 # <https://github.com/omniauth/omniauth/wiki/Resolving-CVE-2015-9284>.
-# We are *not* vulnerable, because we use the POST method for /auth; see:
-# app/views/sessions/new.html.erb
-# For added protection we also use a
-# writing the omniauth folks STILL have not fixed it (!). There is a shim
-# a third party that *does* fix it. I don't know the person who created
-# this shim, but I reviewed the code and it looks okay.
 # At one time I did this:
 # gem 'omniauth-rails_csrf_protection',
 #    git: 'https://github.com/cookpad/omniauth-rails_csrf_protection.git',
@@ -77,8 +78,7 @@ gem 'omniauth-github', '~> 2.0' # Authentication to GitHub (get project info)
 # However, using a git reference busts CI pipeline caching, slowing down
 # all testing, and over time we've become more comfortable that this is
 # the "standard way to resolve this issue".
-# When we update to omniauth 2.X series we can remove this.
-gem 'omniauth-rails_csrf_protection'
+gem 'omniauth-rails_csrf_protection', '~> 1.0' # integrate omniauth with rails
 gem 'pagy', '~> 9.0' # Paginator for web pages
 gem 'paleta', '~> 0.3' # Color manipulation, used for badges
 gem 'paper_trail', '~> 16.0' # Record previous versions of project data
@@ -97,7 +97,7 @@ gem 'rack-headers_filter', '~> 0.0.1' # Filter out "dangerous" headers
 gem 'railties', '~> 8.0.1' # Rails. Rails core, loads rest of Rails
 gem 'rails-i18n', '~> 8.0.1' # Localizations for Rails built-ins
 gem 'redcarpet', '~> 3.5' # Process markdown in form textareas (justifications)
-gem 'sassc-rails' # compiles .scss (css replacement) drop-in replacement for sass-rails
+gem 'sassc-rails' # compiles .scss (css replacement), replaces sass-rails
 gem 'scout_apm' # Monitor for memory leaks
 gem 'secure_headers', '~> 7' # Add hardening measures to HTTP headers
 gem 'solid_queue', '~> 1.1' # ActiveJob database backend
@@ -108,18 +108,18 @@ gem 'solid_queue', '~> 1.1' # ActiveJob database backend
 # WARNING!!!!
 gem 'sprockets-rails', '3.5.2' # Rails. Asset precompilation
 gem 'uglifier', '~> 4.2.0', require: false # Minify JavaScript
-gem 'sentry-ruby'
-gem 'sentry-rails'
+gem 'sentry-ruby' # Support Sentry real-time crash reporting
+gem 'sentry-rails' # Support Sentry real-time crash reporting
 
 group :development, :test do
   gem 'awesome_print' # Pretty print Ruby objects
   gem 'bullet' # Avoid n+1 queries
-  gem 'bundler-audit'
-  gem 'dotenv-rails', '~> 2.7'
-  gem 'eslintrb'
-  gem 'json', '~> 2.0'
-  gem 'license_finder', '~> 7.0'
-  gem 'mdl', '0.13.0'
+  gem 'bundler-audit' # Alert if Gemfile.lock gems have known vulnerabilities
+  gem 'dotenv-rails', '~> 2.7' # Load env vars from .env files into Rails ENV
+  gem 'eslintrb' # Linter for JavaScript code.
+  gem 'json', '~> 2.0' # Process JSON format
+  gem 'license_finder', '~> 7.0' # Verify that all sw licenses are acceptable
+  gem 'mdl', '0.13.0' # Markdownlint - linter for markdown format
   # Removed pronto gems - comprehensive linting now handled by rake default
   gem 'rails_best_practices', '~> 1.20' # Rails code quality analyzer
   # gem 'railroader', '4.3.8' # Security static analyzer. OSS fork of Brakeman
@@ -127,7 +127,7 @@ group :development, :test do
   gem 'rubocop-performance', '~> 1.20', require: false # Performance cops
   gem 'rubocop-rails', '~> 2.28', require: false # Rails-specific cops
   gem 'ruby-graphviz', '1.2.5' # This is used for bundle viz
-  gem 'spring', '~> 4.1'
+  gem 'spring', '~> 4.1' # Preloader to speed development+test
   # Do NOT upgrade to vcr 6.*, as that is not OSS:
   gem 'vcr', '< 5.1' # Record network responses for later test reuse
   gem 'yaml-lint', '~> 0.1.2' # Check YAML file syntax
@@ -136,7 +136,7 @@ end
 # The "fake_production" environment is very much like production, however,
 # we enable a few debug tools to help us find "production-only" bugs.
 group :fake_production, :development, :test do
-  gem 'pry-byebug'
+  gem 'pry-byebug' # debug tool
 end
 
 group :development do
@@ -155,20 +155,20 @@ group :development do
 end
 
 group :test do
-  gem 'capybara-slow_finder_errors', require: false
-  gem 'codecov', require: false
-  gem 'minitest-reporters', require: false
-  gem 'minitest-retry', require: false # Avoid Capybara false positives
+  gem 'capybara-slow_finder_errors', require: false # ID slow Capybara finders
+  gem 'codecov', require: false # Report test code coverage
+  gem 'minitest-reporters', require: false # Improve minitest output format
+  gem 'minitest-retry', require: false # Retry- avoid Capybara false failures
   # Note: Updating 'rails-controller-testing' to '1.0.5' causes failures
   gem 'rails-controller-testing', '~> 1.0' # for `assigns` and `assert_template`
-  gem 'selenium-webdriver'
+  gem 'selenium-webdriver' # Automates browser i/f for Rails system testing
   # We don't list "simplecov"; code depends on it & brings it in
-  gem 'webmock', '~> 3.0', require: false
+  gem 'webmock', '~> 3.0', require: false # Mock HTTP requests for testing
 end
 
 group :production do
   gem 'rack-timeout', '~> 0.7.0' # Timeout; https://github.com/heroku/rack-timeout
-  gem 'rails_12factor', '~> 0.0.3'
+  gem 'rails_12factor', '~> 0.0.3' # make 12-factor - PROBABLY UNNEEDED
 end
 
 # Post-install message from autoprefixer-rails:

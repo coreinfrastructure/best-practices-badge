@@ -304,7 +304,7 @@ support for instantclick.
 One trick for improving Rails performance is to invoke streaming.
 [Streaming with Rails 4](https://www.sitepoint.com/streaming-with-rails-4/)
 and
-[ActionContoller:Streaming](http://api.rubyonrails.org/classes/ActionController/Streaming.html)
+[ActionController:Streaming](http://api.rubyonrails.org/classes/ActionController/Streaming.html)
 explains the basics for streaming HTML content.
 [Streaming large data responses with Rails](https://coderwall.com/p/kad56a/streaming-large-data-responses-with-rails)
 discusses how to do this with other formats (e.g., JSON).
@@ -415,7 +415,7 @@ In some cases, a criterion may require some justification
 or a URL in the justification to be enough to satisfy the criterion for
 a badge.  See the [criteria](./criteria.md) or
 application form for the current exact rules.
-A synonym for 'satifying' a criterion is 'passing' a criterion.
+A synonym for 'satisfying' a criterion is 'passing' a criterion.
 
 We have an 'autofill' system that fills in some data automatically.
 

@@ -2629,7 +2629,7 @@ en:
           then updating the "standard" libraries as a security
           update will leave these additional copies still vulnerable.
           This is especially an issue for cloud-based systems;
-          if the cloud provider updates their "standard" libaries
+          if the cloud provider updates their "standard" libraries
           but the program won't use them, then the updates don't
           actually help. See, e.g., <a href="https://spot.livejournal.com/312320.html">"Chromium:
           Why it isn't in Fedora yet as a proper package" by Tom
@@ -2952,7 +2952,7 @@ en:
           from source files and get exactly the same bit-for-bit
           result.  In some cases, this can be resolved by forcing
           some sort order. JavaScript developers may consider
-          using npm shrinkwrap and webpack OccurenceOrderPlugin.
+          using npm shrinkwrap and webpack OccurrenceOrderPlugin.
           GCC and clang users may find the -frandom-seed option
           useful. The build environment (including the toolset)
           can often be defined for external parties by specifying

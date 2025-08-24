@@ -551,7 +551,7 @@ end
 # - https://github.com/aurels/translation-gem/issues/13
 # - https://github.com/yaml/libyaml/issues/46
 # We save and restore the en version around the sync to resolve.
-# Ths task only runs in development, since the gem is only loaded then.
+# The task only runs in development, since the gem is only loaded then.
 if Rails.env.development?
   Rake::Task['translation:sync'].enhance %w[ensure_main backup_en] do
     at_exit do

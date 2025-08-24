@@ -7,6 +7,42 @@ We also use other techniques to detect problems ahead-of-time; see
 [CONTRIBUTING.md](../CONTRIBUTING.md) for more about the other
 analysis tools and processes we use.
 
+## Testing infrastructure summary
+
+We use **MiniTest** as the core testing framework, which
+is Rails' default testing library providing `ActiveSupport::TestCase`
+for unit tests and `ActionDispatch::IntegrationTest` for integration
+testing. Rails provides testing infrastructure
+including transactional test support (automatic database rollbacks),
+**fixtures** (YAML-based test data loaded from `test/fixtures/*.yml`
+files that populate the test database with known data sets), and
+specialized assertions for controllers and views.
+
+**SimpleCov** provides code coverage analysis and formatted results.
+It integrates with **Codecov** for coverage
+reporting. The **minitest-retry** gem automatically
+retries flaky tests in CI environments for better test reliability,
+while **minitest-reporters** enhances output formatting.
+
+For system testing that involves browser automation, **Capybara** serves
+as the high-level DSL and testing framework that provides Ruby methods for
+interacting with web pages (clicking buttons, filling forms, asserting
+page content). Capybara calls on the **Selenium WebDriver**,
+which acts as the lower-level
+browser automation protocol that actually controls the web browser
+instance. The `ApplicationSystemTestCase` configures both headless and
+visible web browser drivers through Selenium.
+
+**WebMock** handles HTTP request mocking during tests, preventing
+real network calls and providing predictable responses, with carefully
+configured allowlists for Chrome driver update URLs to prevent test
+interference. **VCR** (Video Cassette Recorder) works alongside WebMock
+to record real HTTP interactions into "cassettes" - YAML files stored in
+`test/vcr_cassettes/` that capture the complete request-response cycle
+including headers and body content. These cassettes can then be replayed
+in subsequent test runs, allowing tests to use real API responses without
+making actual network calls.
+
 ## Workflow
 
 Please review the Rails documentation on [testing](http://guides.rubyonrails.org/testing.html). Pull requests should endeavor to increase, not decrease test coverage, as monitored in [Codecov](https://codecov.io/gh/coreinfrastructure/best-practices-badge).

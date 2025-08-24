@@ -58,7 +58,7 @@ gem 'octokit', '~> 7' # GitHub's official Ruby API
 gem 'omniauth-github', '~> 2.0' # Authentication to GitHub (get project info)
 #
 # Gem omniauth-rails_csrf_protection protects omniauth logins and
-# provides a propert integration of omniauth with Rails.
+# provides a proper integration of omniauth with Rails.
 # This requires explanation.
 # Gem omniauth 1.x series has vulnerability CVE-2015-9284 if GET requests
 # are used.

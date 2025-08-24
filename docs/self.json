@@ -136,7 +136,7 @@
   "created_at": "2015-10-23T22:02:10.544Z",
   "updated_at": "2015-11-27T14:21:35.145Z",
   "crypto_weaknesses_status": "Met",
-  "crypto_weaknesses_justification": "The only cryptography used directly by this application is bcrypt  (used for storing passwords as salted iterated hashes).  At the time of this writing, no serious breaks are known in bcrypt.  The application also dependes on the web server's https configuration, but that is out of scope for this code.",
+  "crypto_weaknesses_justification": "The only cryptography used directly by this application is bcrypt  (used for storing passwords as salted iterated hashes).  At the time of this writing, no serious breaks are known in bcrypt.  The application also depends on the web server's https configuration, but that is out of scope for this code.",
   "crypto_alternatives_status": "Unmet",
   "crypto_alternatives_justification": "Nothing in the code inhibits or prevents the use of PFS; that is a property of the website's web server.  The program uses bcrypt - and only bcrypt - for hashing passwords.  It does allow for increasing the bcrypt 'cost' parameter, which could counter some attacks if a weakness in bcrypt is found in the future.",
   "test_continuous_integration_status": "Met",

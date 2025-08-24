@@ -76,7 +76,7 @@ class Rack::Attack
   # rate slower than badge images, so enforce a slower rate.
   # We define a non-badge requests as anything either requesting JSON or
   # not matching the badge path. Allowing badge images to be requested
-  # more quickly is not a sercurity issue; badge images
+  # more quickly is not a security issue; badge images
   # are cached by the CDN, are especially fast, and are expected to be
   # requested much more often anyway (e.g., ~30 at time via /projects).
   # As noted above, this limit does NOT apply to static files (like images)

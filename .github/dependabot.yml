@@ -26,7 +26,7 @@ updates:
     schedule:
       interval: "daily"
     ignore:
-      # Do not "update" vcr. Later versions switched to a non-OSS licnese.
+      # Do not "update" vcr. Later versions switched to a non-OSS license.
       # This dependency is *only* used during testing,
       # so any unintentional vulnerabilities in it don't matter.
       - dependency-name: "vcr"

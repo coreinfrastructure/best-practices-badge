@@ -66,7 +66,7 @@ gem 'omniauth-github', '~> 2.0' # Authentication to GitHub (get project info)
 # security improvement.
 # However, omniAuth 2.x uses Rack's built-in AuthenticityToken class,
 # NOT Rails' CSRF system. When using Rails, we need to instead use Rails'
-# ActionController::RequestForgeryProtection for CSRF proteciton.
+# ActionController::RequestForgeryProtection for CSRF protection.
 # For a discussion on this countermeasure see:
 # <https://github.com/omniauth/omniauth/wiki/Resolving-CVE-2015-9284>.
 # At one time I did this:

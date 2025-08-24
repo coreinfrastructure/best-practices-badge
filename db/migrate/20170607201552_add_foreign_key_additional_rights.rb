@@ -10,7 +10,7 @@ class AddForeignKeyAdditionalRights < ActiveRecord::Migration[5.1]
 
     # Normally in Rails we'd use this to add a reference with a foreign key:
     # # add_reference :uploads, :user, foreign_key: true
-    # or use the alise "belongs_to".
+    # or use the alias "belongs_to".
     # However, we *already* have columns for user_id and project_id,
     # so we'll just add what we need.
     add_foreign_key :additional_rights, :users

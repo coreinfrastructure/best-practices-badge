@@ -1609,13 +1609,13 @@ point to guidelines to follow (like CERT's).
     See the <a href="http://cwe.mitre.org/data/definitions/120.html">CWE</a>.
     <sup>[<a href="#validate_the_tainted_string">validate_the_tainted_string</a>]</sup>
 
-*   <a name="validate_the_tainted_integer_on_caculation"></a>
+*   <a name="validate_the_tainted_integer_on_calculation"></a>
     The integer values
     from untrusted sources MUST be avoided the integer overflow or wraparound.
     (e.g., <a href="http://www.cert.org/secure-coding/research/secure-coding-standards.cfm">CERT</a>,
     <a href="https://www.owasp.org/index.php/OWASP_Secure_Coding_Practices_-_Quick_Reference_Guide)">OWASP</a>
     See the <a href="http://cwe.mitre.org/data/definitions/190.html">CWE</a>.
-    <sup>[<a href="#validate_the_tainted_integer_on_caculation">validate_the_tainted_integer_on_caculation</a>]</sup>
+    <sup>[<a href="#validate_the_tainted_integer_on_calculation">validate_the_tainted_integer_on_calculation</a>]</sup>
 
 *   <a name="validate_the_malloc_size"></a>
     Appropriate size limits

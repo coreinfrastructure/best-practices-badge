@@ -158,7 +158,7 @@ function getUnmetResult(criterion, justification) {
 
 // Determine result for a given criterion, which is one of the following:
 //  criterion_passing, criterion_barely, criterion_justification_required
-//  criterion_url_requrired, criterion_unknown, criterion_failing
+//  criterion_url_required, criterion_unknown, criterion_failing
 //
 // This function is mirrored in app/models/project.rb by "get_criterion_result"
 // If you change this function change "get_criterion_result" accordingly.

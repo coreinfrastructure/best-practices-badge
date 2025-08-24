@@ -1587,7 +1587,7 @@ but we discussed possibly upgrading them.
     (e.g., scripting languages where the source code is used directly
     instead of being compiled), select "N/A". In some cases, this can
     resolved by forcing some sort order. JavaScript developers may
-    consider using npm shrinkwrap and webpack OccurenceOrderPlugin.
+    consider using npm shrinkwrap and webpack OccurrenceOrderPlugin.
     GCC and clang users may find the -frandom-seed option useful.
     The build environment (including the toolset) can often be defined for
     external parties by specifying the cryptographic hash of a specific

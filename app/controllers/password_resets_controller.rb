@@ -14,6 +14,10 @@ class PasswordResetsController < ApplicationController
 
   def edit; end
 
+  # Process password reset requests.
+  # NOTE: Rate limiting for password reset requests is handled by Rack::Attack
+  # (see config/initializers/rack_attack.rb)
+  #
   # NOTE: password resets *always* reply with the same message, in all cases.
   # At one time we replied with error reports if there was no account or if
   # there was a GitHub account (not a local account) with the email address.

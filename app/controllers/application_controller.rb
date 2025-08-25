@@ -28,6 +28,9 @@ class ApplicationController < ActionController::Base
   before_action :set_paper_trail_whodunnit
 
   # Limit time before must log in again.
+  # The `validate_session_timestamp` will log out users once their
+  # login session time has expired, and it's checked before any main
+  # action unless specifically exempted.
   before_action :validate_session_timestamp
   after_action :persist_session_timestamp
 

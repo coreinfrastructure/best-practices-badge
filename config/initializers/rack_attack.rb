@@ -11,6 +11,7 @@
 # Use recommended format of Rack::Attack config
 # rubocop: disable Style/ClassAndModuleChildren
 # rubocop: disable Style/IfUnlessModifier, Style/MethodCalledOnDoEndBlock
+# rubocop: disable Metrics/ClassLength
 class Rack::Attack
   # Configure Rack::Attack to do rate limiting.
 
@@ -105,7 +106,10 @@ class Rack::Attack
   # Another common method of attack is to use a swarm of computers with
   # different IPs to try brute-forcing a password for a specific account.
 
+  # RATE LIMITING FOR LOGIN ATTEMPTS BY IP ADDRESS
   # Throttle POST requests to /login by IP address
+  # Prevents brute force attacks from single IP
+  # Limit: 20 login attempts per 20 seconds per IP address
   #
   # Key: "rack::attack:#{Time.now.to_i/:period}:logins/ip:#{req.ip}"
   unless Rails.env.test?
@@ -120,7 +124,10 @@ class Rack::Attack
     end
   end
 
+  # RATE LIMITING FOR LOGIN ATTEMPTS BY EMAIL ADDRESS
   # Throttle POST requests to /login by email param
+  # Prevents brute force attacks targeting specific accounts
+  # Limit: 5 login attempts per 20 seconds per email address
   #
   # Key: "rack::attack:#{Time.now.to_i/:period}:logins/email:#{req.email}"
   #
@@ -141,7 +148,10 @@ class Rack::Attack
     end
   end
 
-  ### Throttle local signup to /users by IP address
+  # RATE LIMITING FOR ACCOUNT CREATION BY IP ADDRESS
+  # Throttle local signup to /users by IP address
+  # Prevents automated account creation attacks
+  # Limit: 20 signup attempts per 10 seconds per IP address
   #
   # Key: "rack::attack:#{Time.now.to_i/:period}:signup/ip:#{req.ip}"
   #
@@ -158,6 +168,29 @@ class Rack::Attack
       period: (ENV['RATE_SIGNUP_IP_PERIOD'] || 10.seconds).to_i
     ) do |req|
       if SIGNUP_PATHS.include?(req.path) && req.post?
+        ClientIp.acquire(req)
+      end
+    end
+  end
+
+  # Create a set of possible password reset paths
+  PASSWORD_RESET_PATHS = I18n.available_locales.map do |loc|
+    "/#{loc}/password_resets"
+  end.append('/password_resets').to_set
+
+  # RATE LIMITING FOR PASSWORD RESET REQUESTS BY IP ADDRESS
+  # Throttle POST requests to /password_resets by IP address
+  # Prevents abuse of password reset functionality
+  # Limit: 10 password reset attempts per 60 seconds per IP address
+  #
+  # Key: "rack::attack:#{Time.now.to_i/:period}:password_resets/ip:#{req.ip}"
+  unless Rails.env.test?
+    throttle(
+      'password_resets/ip',
+      limit: (ENV['RATE_PASSWORD_RESET_IP_LIMIT'] || 10).to_i,
+      period: (ENV['RATE_PASSWORD_RESET_IP_PERIOD'] || 60.seconds).to_i
+    ) do |req|
+      if PASSWORD_RESET_PATHS.include?(req.path) && req.post?
         ClientIp.acquire(req)
       end
     end
@@ -232,3 +265,4 @@ class Rack::Attack
 end
 # rubocop: enable Style/IfUnlessModifier, Style/MethodCalledOnDoEndBlock
 # rubocop: enable Style/ClassAndModuleChildren
+# rubocop: enable Metrics/ClassLength

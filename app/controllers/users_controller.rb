@@ -116,6 +116,9 @@ class UsersController < ApplicationController
     redirect_to @user unless current_user_can_edit?(@user)
   end
 
+  # Create new user account (signup functionality).
+  # NOTE: Rate limiting for account creation is handled by Rack::Attack
+  # (see config/initializers/rack_attack.rb)
   # rubocop: disable Metrics/MethodLength, Metrics/AbcSize
   def create
     if Rails.application.config.deny_login

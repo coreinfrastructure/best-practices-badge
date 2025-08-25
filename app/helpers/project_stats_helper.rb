@@ -12,15 +12,18 @@ module ProjectStatsHelper
         x:
           {
             type: 'time',
-            unit: 'day',
-            unitStepSize: 1,
             # Setting min & max rotation speeds display. See:
             # https://www.chartjs.org/docs/latest/general/performance.html
-            ticks: { minRotation: 30, maxRotation: 30 },
+            ticks: {
+              minRotation: 30,
+              maxRotation: 30,
+              stepSize: 1 # MIGRATED: from unitStepSize
+            },
             # Set time format (changed from older chartkick). See:
             # https://www.chartjs.org/docs/latest/axes/cartesian/time.html
             # and https://git.io/fxCyr
             time: {
+              unit: 'day', # MIGRATED: from root level
               # Use these ISO 8601 formats so we're language-neutral
               displayFormats: {
                 day: 'yyyy-MM-dd', month: 'yyyy-MM',

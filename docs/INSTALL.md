@@ -117,7 +117,8 @@ So at the command line just run:
 ~~~~
 
 This will automatically create a database and seed it with dummy data
-(by running "rake db:setup").
+(by running "rake db:setup"). This will set up the test and development
+databases with "seeded" data per `db/seeds.rb`.
 
 If that fails, see the section later on "What does install-badge-dev-env do?"
 to manually do what it's trying to do.

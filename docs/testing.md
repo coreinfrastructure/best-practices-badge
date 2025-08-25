@@ -7,6 +7,17 @@ We also use other techniques to detect problems ahead-of-time; see
 [CONTRIBUTING.md](../CONTRIBUTING.md) for more about the other
 analysis tools and processes we use.
 
+## Quickstart
+
+Run `rake test` to run tests (`rake test:all` for all tests).
+You can also use `rails test` and 'rails test:all`.
+
+You can run `rails s` to start the server.
+Use your web browser to view `localhost:3000`.
+
+See the file `db/seed.rb` to see the starting dummy test data for development.
+For testing see the `test/fixtures/` directory.
+
 ## Testing infrastructure summary
 
 We use **MiniTest** as the core testing framework, which

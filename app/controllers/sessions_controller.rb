@@ -32,6 +32,8 @@ class SessionsController < ApplicationController
   # Process login attempt via OAuth or local authentication.
   # Handles session fixation protection and various authentication methods.
   # Supports `POST /login`.
+  # NOTE: Rate limiting for login attempts is handled by Rack::Attack
+  # (see config/initializers/rack_attack.rb)
   # @return [void]
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def create
@@ -44,6 +46,12 @@ class SessionsController < ApplicationController
     elsif params[:session][:provider] == 'local'
       local_login
     else
+      # There is no information disclosure in this error message.
+      # This path happens when (1) we are allowing logins (information we
+      # freely disclose), and (2) the user has failed to log in using the
+      # login process that they selected.
+      # This path only reveals that the login failed for some reason;
+      # it does not reveal whether or not the account exists.
       flash.now[:danger] = t('sessions.incorrect_login_info')
       render 'new'
     end

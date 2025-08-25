@@ -108,6 +108,10 @@ class User < ApplicationRecord
   VALID_LOCALES_STRINGS = I18n.available_locales.map(&:to_s)
   validates :preferred_locale, inclusion: { in: VALID_LOCALES_STRINGS }
 
+  MAX_NICKNAME_LENGTH_GITHUB = 39
+  validates :nickname, length: { maximum: MAX_NICKNAME_LENGTH_GITHUB },
+            if: :github_user?
+
   # Returns the hash digest of the given string using BCrypt.
   # Uses minimum cost for testing, normal cost for production.
   # @param string [String] the string to hash
@@ -147,8 +151,19 @@ class User < ApplicationRecord
   # @param password [String] The user's password
   # @return [User, nil] The authenticated user or nil if authentication fails
   def self.authenticate_local_user(email, password)
+    # This call to find_by is *not* vulnerable to a timing attack
+    # that would leak the presence of a given local user email address.
+    # The database has a partial index on provider 'local', as you can verify
+    # in file db/schema.rb table "users" index "email_local_unique_bidx".
+    # Since it's indexed, the search is essentially instantaneous and has
+    # the same amount of time whether or not the email address is present.
+    # We enforce uniqueness among local email addresses, so it's never a large
+    # number of records (it's at most one).
     user = find_by(provider: 'local', email: email)
 
+    # This sequence ensures we always do *one* crypto comparison algorithm,
+    # whether or not the user exists, eliminating timing attacks since
+    # both branches perform the same calculation.
     if user
       # User exists, verify against their actual password hash
       authenticated = user.authenticate(password)
@@ -170,11 +185,18 @@ class User < ApplicationRecord
   # @param auth [Hash] OAuth authentication hash containing provider, uid, info
   # @return [User] the created and saved user instance
   def self.create_with_omniauth(auth)
+    # We'll enforce some limits to prevent serious bugs in the GitHub response
     @user = User.new(
       provider: auth[:provider], uid: auth[:uid],
-      name: auth[:info][:name], email: auth[:info][:email],
-      nickname: auth[:info][:nickname], activated: true
+      name: auth[:info][:name]&.slice(0, 255),
+      email: auth[:info][:email]&.slice(0, 255),
+      nickname: auth[:info][:nickname]&.slice(0, MAX_NICKNAME_LENGTH_GITHUB),
+      activated: true
     )
+    # GitHub is a trusted service for us, so not validating its info
+    # isn't a problem. If GitHub becomes malicious, validations
+    # won't save us. We did a few slides to prevent
+    # some of the worst nonsense earlier in this method.
     @user.save!(validate: false)
     @user.send_github_welcome_email if @user.email
     @user
@@ -358,6 +380,12 @@ class User < ApplicationRecord
   def create_activation_digest
     self.activation_token  = User.new_token
     self.activation_digest = User.digest(activation_token)
+  end
+
+  private
+
+  def github_user?
+    provider == 'github'
   end
 end
 # rubocop:enable Metrics/ClassLength

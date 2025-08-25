@@ -89,7 +89,15 @@ module SessionsHelper
     logged_in? && current_user.admin?
   end
 
-  # Remembers a user in a persistent session.
+  # Remembers a user in a persistent session in a permanent cookie.
+  # This is cryptographically secure, because we protect it in the permanent
+  # cookies using Rails' mechanisms. This means that if an attacker
+  # gains access to the remember token (e.g., by capturing the browser's
+  # cookie values), the attacker will be gain persistent access to the
+  # user's account. However, this is *not* considered a vulnerability, since
+  # that is the *point* of the remember token, and this only occurs when
+  # a user specifically requests it. We could try to add device fingerprinting,
+  # but an attacker could forge that.
   def remember(user)
     user.remember
     cookies.permanent.signed[:user_id] = user.id

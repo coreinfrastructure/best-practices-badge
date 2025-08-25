@@ -37,6 +37,7 @@ task(:default).clear.enhance %w[
   html_from_markdown
   eslint
   report_code_statistics
+  percent_gems_up_to_date
   test:all
 ]
 # Temporarily removed fasterer
@@ -124,17 +125,17 @@ task :report_code_statistics do
   end
 end
 
+# Helper function to check network availability
+def network_available?
+  require 'socket'
+  Socket.tcp('github.com', 443, connect_timeout: 5) { true }
+rescue StandardError
+  false
+end
+
 # rubocop:disable Metrics/BlockLength
 desc 'Run bundle-audit - check for known vulnerabilities in dependencies'
 task :bundle_audit do
-  require 'socket'
-
-  def network_available?
-    Socket.tcp('github.com', 443, connect_timeout: 5) { true }
-  rescue StandardError
-    false
-  end
-
   # rubocop:disable Metrics/MethodLength
   def bundle_audit_update_successful?
     max_retries = 4
@@ -185,6 +186,51 @@ task :bundle_audit do
   end
 end
 # rubocop:enable Metrics/BlockLength
+
+# We don't normally print a list of out-of-date gems, that would create
+# a lot of output that is normally useless. The developer can always run
+# "bundle outdated" if that's important.
+desc 'Report percentage of gems that are up-to-date if network available'
+task :percent_gems_up_to_date do
+  if network_available?
+    begin
+      bundle_list_output = `bundle list 2>/dev/null`
+      if $CHILD_STATUS.success?
+        total_gems =
+          bundle_list_output.lines.count do |line|
+            line.match?(/^\s+\*\s/)
+          end
+        outdated_output = `bundle outdated 2>/dev/null`
+        outdated_count =
+          $CHILD_STATUS.success? ? 0 : count_outdated_gems(outdated_output)
+        up_to_date = total_gems - outdated_count
+        percent =
+          if total_gems.zero?
+            100.0
+          else
+            (up_to_date.to_f / total_gems * 100).round(1)
+          end
+
+        puts "Gem stats: out-of-date=#{outdated_count}, " \
+             "up-to-date=#{up_to_date}, total=#{total_gems}, " \
+             "%up-to-date=#{percent}%"
+      else
+        puts 'Unable to determine total gem count'
+      end
+    rescue StandardError => e
+      puts "Error checking gem status: #{e.message}"
+    end
+  else
+    puts 'Network not available, skipping gem status check'
+  end
+end
+
+# Helper function to count outdated gems from bundle outdated output
+def count_outdated_gems(outdated_output)
+  lines = outdated_output.lines
+  gem_header_index = lines.find_index { |line| line.start_with?('Gem') }
+  gem_header_index ? lines.length - gem_header_index - 1 : 0
+end
 
 # Use markdownlint to examine the usual markdown files.
 # NOTE: If you don't want mdl to be run on a markdown file, rename it to

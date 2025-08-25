@@ -52,7 +52,7 @@ checked in, run `rake whitespace_check`. Fix problems reported
 by the linters.
 
 Once all linters pass, run `rails test:all` to ensure all
-tests passs.
+tests pass.
 
 ### Development Environment Shortcut
 

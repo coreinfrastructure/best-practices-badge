@@ -42,6 +42,18 @@ For specific files:
 Don't run `rails_best_practices` to analyze individual files, as
 it needs the full context to do its best.
 
+### Workflow
+
+After making significant changes to source code, ALWAYS
+run linters. If you changed any Ruby files, run `rubocop` on them,
+then run `rake rails_best_practices`. If you modify any markdown files,
+run `mdl` on them. After that, if you changed any files that will be
+checked in, run `rake whitespace_check`. Fix problems reported
+by the linters.
+
+Once all linters pass, run `rails test:all` to ensure all
+tests passs.
+
 ### Development Environment Shortcut
 
 As a convenience, in the development environment you don't need to use
@@ -205,10 +217,14 @@ Key environment variables for development:
 - `lib/tasks/default.rake` - CI pipeline and custom tasks
 - `test/` - Comprehensive test suite
 
+## Temporary File Convention
+
+- ALL temporary files' filenames must be prefixed with a comma
+  (e.g., `,temp-notes.md`, `,migration-plan.txt`)
+- This applies to documentation, scratch files, migration plans, etc.
+- The linting tools are configured to ignore comma-prefixed files
+
 ## Miscellaneous
 
 IMPORTANT: Never have trailing whitespace in text-like files including
 source code and markdown files.
-
-IMPORTANT: When creating temporary files, always prefix their names with
-a comma to distinguish them.

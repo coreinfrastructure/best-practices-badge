@@ -1761,6 +1761,10 @@ list the additional items added since 2013.
    Any inputs to SQL commands are always parameterized, trusted, or both,
    typically using its parametrized mechanisms or similar mechanisms such as
    `sanitize_sql_like`.
+   Note: Admin user search intentionally does NOT escape LIKE wildcards
+   (% and _) to support GDPR compliance and legal requests requiring
+   pattern matching. This is safe because only admin users can access
+   this functionality (UsersController#search_name).
    The shell is not used to download or process file contents (e.g., from
    repositories), instead, various Ruby APIs acquire and process it directly.
 2. Broken Authentication and Session Management.

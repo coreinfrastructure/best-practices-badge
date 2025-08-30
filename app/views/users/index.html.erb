@@ -23,12 +23,13 @@
 <%== pagy_bootstrap_nav(@pagy) if @pagy.pages > 1 %>
 
 <% if current_user&.admin? %>
-<h2 class>New Search (case-insensitive)</h2>
+<h2 class>New Search</h2>
+<p><strong>Name search is case-insensitive and supports wildcards:</strong> Use % for zero or more characters and _ for exactly one character.</p>
  <%= form_for users_path, method: 'get', enforce_utf8: true do %>
   <label for="name"><%= 'Name' %></label>
-  <%= text_field_tag :name, params[:name], size: 40, placeholder: 'User name' %>
+  <%= text_field_tag :name, params[:name], size: 40, placeholder: 'User name (case-insensitive, % and _)' %>
   <label for="email"><%= 'Email' %></label>
-  <%= text_field_tag :email, params[:email], size: 60, placeholder: 'User email' %>
+  <%= text_field_tag :email, params[:email], size: 60, placeholder: 'User email (case-insensitive exact match)' %>
   <%= submit_tag 'User Search', name: nil %>
  <% end %>
 <% end %>

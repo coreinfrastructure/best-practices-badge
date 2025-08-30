@@ -10,6 +10,15 @@
 # bundle update actionmailer actionpack actionview activejob activemodel \
 #        activerecord activesupport railties rails-i18n rails
 
+# NOTE: When updating you may see a spurious message like this:
+#   WARN: Unresolved or ambiguous specs during Gem::Specification.reset:
+#       stringio (>= 0)
+#       Available/installed versions of this gem:
+#       - 3.1.7
+#       - 3.1.1
+#   WARN: Clearing out unresolved specs. Try 'gem cleanup <gem>'
+# It's basically spurious. Run `gem cleanup stringio` and move on.
+
 source 'https://rubygems.org'
 
 # Use current ruby version (as stated in .ruby-version file)
@@ -123,7 +132,7 @@ group :development, :test do
   # Removed pronto gems - comprehensive linting now handled by rake default
   gem 'rails_best_practices', '~> 1.20' # Rails code quality analyzer
   # gem 'railroader', '4.3.8' # Security static analyzer. OSS fork of Brakeman
-  gem 'rubocop', '~> 1.6', require: false # Style checker
+  gem 'rubocop', '~> 1.80', require: false # Style checker
   gem 'rubocop-performance', '~> 1.20', require: false # Performance cops
   gem 'rubocop-rails', '~> 2.28', require: false # Rails-specific cops
   gem 'ruby-graphviz', '1.2.5' # This is used for bundle viz

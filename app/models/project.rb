@@ -231,7 +231,7 @@ class Project < ApplicationRecord
   # @return [String] sorted array of user IDs as string
   def additional_rights_to_s
     # "distinct" shouldn't be needed; it's purely defensive here
-    list = AdditionalRight.where(project_id: id).distinct.pluck(:user_id)
+    list = AdditionalRight.for_project(id).distinct.pluck(:user_id)
     list.sort.to_s # Use list.sort.to_s[1..-2] to remove surrounding [ and ]
   end
 

@@ -65,25 +65,13 @@ class Project < ApplicationRecord
 
   default_scope { order(:created_at) }
 
-  scope :created_since, (
-    lambda do |time|
-      where(Project.arel_table[:created_at].gteq(time))
-    end
-  )
+  scope :created_since, ->(time) { where(created_at: time..) }
 
-  scope :gteq, (
-    lambda do |floor|
-      where(Project.arel_table[:tiered_percentage].gteq(floor.to_i))
-    end
-  )
+  scope :gteq, ->(floor) { where(tiered_percentage: floor.to_i..) }
 
   scope :in_progress, -> { lteq(99) }
 
-  scope :lteq, (
-    lambda do |ceiling|
-      where(Project.arel_table[:tiered_percentage].lteq(ceiling.to_i))
-    end
-  )
+  scope :lteq, ->(ceiling) { where(tiered_percentage: ..ceiling.to_i) }
 
   scope :passing, -> { gteq(100) }
 
@@ -145,11 +133,7 @@ class Project < ApplicationRecord
     # using: { tsearch: { any_word: true } }
   )
 
-  scope :updated_since, (
-    lambda do |time|
-      where(Project.arel_table[:updated_at].gteq(time))
-    end
-  )
+  scope :updated_since, ->(time) { where(updated_at: time..) }
 
   # Record information about a project.
   # We'll also record previous versions of information:

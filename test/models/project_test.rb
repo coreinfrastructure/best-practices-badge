@@ -305,5 +305,239 @@ class ProjectTest < ActiveSupport::TestCase
       end
     end
   end
+
+  # =========================================================================
+  # Unit tests for Project scopes - added before Rails modernization
+  # These tests ensure that scope behavior remains identical when we
+  # modernize from Arel syntax to Rails 7+ range syntax
+  # =========================================================================
+
+  test 'created_since scope filters projects by creation time' do
+    # Create test projects with specific creation times
+    old_time = 3.days.ago
+    recent_time = 1.hour.ago
+
+    old_project = Project.create!(
+      user: @user,
+      name: 'Old Project',
+      homepage_url: 'https://old.example.com',
+      repo_url: 'https://github.com/old/project',
+      created_at: old_time
+    )
+
+    recent_project = Project.create!(
+      user: @user,
+      name: 'Recent Project',
+      homepage_url: 'https://recent.example.com',
+      repo_url: 'https://github.com/recent/project',
+      created_at: recent_time
+    )
+
+    # Test filtering with 2.days.ago threshold
+    results = Project.created_since(2.days.ago)
+    assert_includes results, recent_project,
+                    'Recent project should be included'
+    assert_not_includes results, old_project,
+                        'Old project should be excluded'
+
+    # Test filtering with 4.days.ago threshold (should include both)
+    results_all = Project.created_since(4.days.ago)
+    assert_includes results_all, recent_project,
+                    'Recent project should be included'
+    assert_includes results_all, old_project,
+                    'Old project should be included'
+
+    # Test filtering with 30.minutes.ago threshold (should exclude both)
+    results_none = Project.created_since(30.minutes.ago)
+    assert_not_includes results_none, recent_project,
+                        'Recent project should be excluded'
+    assert_not_includes results_none, old_project,
+                        'Old project should be excluded'
+  end
+
+  test 'updated_since scope filters projects by update time' do
+    # Create a project and update it at a specific time
+    project = Project.create!(
+      user: @user,
+      name: 'Test Project',
+      homepage_url: 'https://test.example.com',
+      repo_url: 'https://github.com/test/project'
+    )
+
+    # Update the project 2 hours ago
+    travel_to(2.hours.ago) do
+      project.update!(name: 'Updated Test Project')
+    end
+
+    # Create another project that hasn't been updated recently
+    old_project = projects(:one) # This is from fixtures, updated in 2000
+
+    # Test filtering
+    results = Project.updated_since(3.hours.ago)
+    assert_includes results, project,
+                    'Recently updated project should be included'
+    assert_not_includes results, old_project,
+                        'Old project should be excluded'
+
+    # Test with 1.hour.ago threshold (should exclude our test project)
+    results_none = Project.updated_since(1.hour.ago)
+    assert_not_includes results_none, project,
+                        'Project updated 2 hours ago should be excluded'
+  end
+
+  test 'gteq scope filters projects by tiered_percentage >=threshold' do
+    # Use existing fixtures that have known tiered_percentage values
+    # From fixtures: tiered_percentage values are 0, 87, 113, 239, 300
+
+    # Test filtering with 100 threshold (should include 113, 239, 300)
+    results_100 = Project.gteq(100)
+    passing_projects = results_100.pluck(:tiered_percentage).sort
+
+    assert_operator passing_projects.min, :>=, 100,
+                    'All results should be >= 100'
+    assert_includes passing_projects, 113,
+                    'Should include project with 113%'
+    assert_includes passing_projects, 239,
+                    'Should include project with 239%'
+    assert_includes passing_projects, 300,
+                    'Should include project with 300%'
+
+    # Test filtering with 200 threshold (should include 239, 300)
+    results_200 = Project.gteq(200)
+    high_projects = results_200.pluck(:tiered_percentage).sort
+
+    assert_operator high_projects.min, :>=, 200,
+                    'All results should be >= 200'
+    assert_includes high_projects, 239,
+                    'Should include project with 239%'
+    assert_includes high_projects, 300,
+                    'Should include project with 300%'
+    assert_equal 2, high_projects.length,
+                 'Should have exactly 2 projects >= 200%'
+
+    # Test filtering with 0 threshold (should include all projects)
+    results_0 = Project.gteq(0)
+    all_percentages = results_0.pluck(:tiered_percentage)
+    assert_operator all_percentages.length, :>, 5,
+                    'Should include multiple projects'
+
+    # Test filtering with very high threshold (should include none)
+    results_500 = Project.gteq(500)
+    assert_equal 0, results_500.count, 'No projects should have >= 500%'
+  end
+
+  test 'lteq scope filters projects by tiered_percentage <=threshold' do
+    # Test filtering with 100 threshold (should include 0, 87)
+    results_100 = Project.lteq(100)
+    low_projects = results_100.pluck(:tiered_percentage).sort
+
+    assert_operator low_projects.max, :<=, 100,
+                    'All results should be <= 100'
+    assert_includes low_projects, 0, 'Should include projects with 0%'
+    assert_includes low_projects, 87, 'Should include project with 87%'
+
+    # Test filtering with 50 threshold (should include only 0)
+    results_50 = Project.lteq(50)
+    very_low_projects = results_50.pluck(:tiered_percentage).sort
+
+    assert_operator very_low_projects.max, :<=, 50,
+                    'All results should be <= 50'
+    assert_includes very_low_projects, 0, 'Should include projects with 0%'
+
+    # Test filtering with 500 threshold (should include all projects)
+    results_500 = Project.lteq(500)
+    all_percentages = results_500.pluck(:tiered_percentage)
+    assert_operator all_percentages.length, :>, 5,
+                    'Should include multiple projects'
+  end
+
+  test 'gteq and lteq scopes can be chained together' do
+    # Test range filtering: 80% <= tiered_percentage <= 120%
+    results = Project.gteq(80).lteq(120)
+    range_percentages = results.pluck(:tiered_percentage).sort
+
+    range_percentages.each do |percentage|
+      assert_operator percentage, :>=, 80, "#{percentage} should be >= 80"
+      assert_operator percentage, :<=, 120, "#{percentage} should be <= 120"
+    end
+
+    # Should include 87 and 113, but not 0, 239, or 300
+    assert_includes range_percentages, 87,
+                    'Should include project with 87%'
+    assert_includes range_percentages, 113,
+                    'Should include project with 113%'
+  end
+
+  test 'passing scope is equivalent to gteq(100)' do
+    # The passing scope should return the same results as gteq(100)
+    passing_results = Project.passing.ids.sort
+    gteq_results = Project.gteq(100).ids.sort
+
+    assert_equal gteq_results, passing_results,
+                 'passing scope should equal gteq(100)'
+  end
+
+  test 'in_progress scope is equivalent to lteq(99)' do
+    # The in_progress scope should return the same results as lteq(99)
+    in_progress_results = Project.in_progress.ids.sort
+    lteq_results = Project.lteq(99).ids.sort
+
+    assert_equal lteq_results, in_progress_results,
+                 'in_progress scope should equal lteq(99)'
+  end
+
+  test 'scope methods handle edge cases correctly' do
+    # Test with nil/empty parameters (should not crash)
+    assert_nothing_raised do
+      Project.gteq(nil).count
+      Project.lteq(nil).count
+    end
+
+    # Test with string parameters (should be converted to integers)
+    string_results = Project.gteq('100').pluck(:tiered_percentage)
+    integer_results = Project.gteq(100).pluck(:tiered_percentage)
+
+    assert_equal integer_results.sort, string_results.sort,
+                 'String and integer params should give same results'
+
+    # Test with negative numbers
+    negative_results = Project.gteq(-10)
+    all_results = Project.all
+
+    assert_equal all_results.count, negative_results.count,
+                 'Negative threshold should include all projects'
+  end
+
+  test 'time-based scopes work correctly with Time objects' do
+    # Test created_since with various Time formats
+    time_formats = [
+      2.days.ago,
+      Time.zone.parse('2023-01-01'),
+      Date.yesterday,
+      Time.zone.parse('2023-06-01')
+    ]
+
+    time_formats.each do |time_format|
+      assert_nothing_raised do
+        results = Project.created_since(time_format)
+        assert_respond_to results, :count, 'Should return a relation'
+      end
+    end
+  end
+
+  test 'scopes maintain proper ActiveRecord::Relation behavior' do
+    # Ensure scopes return proper ActiveRecord relations, not arrays
+    created_since_relation = Project.created_since(1.day.ago)
+    gteq_relation = Project.gteq(50)
+    lteq_relation = Project.lteq(150)
+
+    [created_since_relation, gteq_relation, lteq_relation].each do |rel|
+      assert_kind_of ActiveRecord::Relation, rel,
+                     'Should return ActiveRecord::Relation'
+      assert_respond_to rel, :where, 'Should be chainable with scopes'
+      assert_respond_to rel, :limit, 'Should be chainable with limit'
+      assert_respond_to rel, :order, 'Should be chainable with order'
+    end
+  end
 end
 # rubocop:enable Metrics/ClassLength

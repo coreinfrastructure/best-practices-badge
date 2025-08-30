@@ -352,7 +352,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       user_id: users(:test_user_mark).id,
       project_id: @project.id
     ).save!
-    assert_equal 2, AdditionalRight.where(project_id: @project.id).count
+    assert_equal 2, AdditionalRight.for_project(@project.id).count
     log_in_as(@project.user)
     # Run patch (the point of the test), which invokes the 'update' method
     patch "/en/projects/#{@project.id}", params: {
@@ -362,7 +362,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     }
     # TODO: Weird http/https discrepancy in test
     # assert_redirected_to project_path(@project, locale: :en)
-    assert_equal 0, AdditionalRight.where(project_id: @project.id).count
+    assert_equal 0, AdditionalRight.for_project(@project.id).count
   end
 
   # Negative test
@@ -375,7 +375,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       user_id: users(:test_user_mark).id,
       project_id: @project.id
     ).save!
-    assert_equal 2, AdditionalRight.where(project_id: @project.id).count
+    assert_equal 2, AdditionalRight.for_project(@project.id).count
     log_in_as(users(:test_user_melissa))
     # Run patch (the point of the test), which invokes the 'update' method
     patch "/en/projects/#{@project.id}", params: {
@@ -386,7 +386,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     # tries to remove an "additional rights" user, we just ignore it.
     # If we add an error report, we should check for that error report here.
     assert_redirected_to root_path(locale: 'en')
-    assert_equal 2, AdditionalRight.where(project_id: @project.id).count
+    assert_equal 2, AdditionalRight.for_project(@project.id).count
   end
 
   # Negative test

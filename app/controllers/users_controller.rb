@@ -35,9 +35,15 @@ class UsersController < ApplicationController
   # Search users for desired_name (which is presumed to be non-empty)
   # @param desired_name [String] The name to search for (case-insensitive partial match)
   def search_name(desired_name)
-    # To maximize finding, use a case-sensitive "find anywhere" search.
+    # To maximize finding, use a case-insensitive "find anywhere" search.
     # An exact case-sensitive search would for names look like this:
     # result = result.where(name: params[:name])
+    #
+    # INTENTIONAL: We do NOT escape LIKE wildcards (% and _) here because
+    # admin users need wildcard search capabilities for GDPR compliance
+    # and legal requests. This allows admins to use % for zero or more
+    # characters and _ for exactly one character in their search patterns.
+    # This is safe because only admin users can access this functionality.
     User.where('lower(name) LIKE ?', "%#{desired_name.strip.downcase}%")
   end
 

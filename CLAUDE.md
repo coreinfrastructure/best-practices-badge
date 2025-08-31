@@ -39,8 +39,14 @@ For specific files:
 - `mdl FILENAME.md` - Markdownlint only the file `FILENAME.md`
 - `rubocop FILENAME.rb` - Run rubocop on just `FILENAME.rb`
 
-Don't run `rails_best_practices` to analyze individual files, as
-it needs the full context to do its best.
+Don't run `rails_best_practices` to analyze individual files.
+The `rails_best_practices` program needs the full context of all files
+to do its best.
+
+You may run `rubocop -a` (safe autocorrect), but
+do NOT run `rubocop -A` (unsafe autocorrect) without express approval
+and WARN that `-A` is unsafe. Rubocop's unsafe autocorrect makes many mistakes
+and in nearly all cases should be avoided.
 
 ### Workflow
 

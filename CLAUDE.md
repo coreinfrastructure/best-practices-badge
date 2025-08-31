@@ -43,10 +43,19 @@ Don't run `rails_best_practices` to analyze individual files.
 The `rails_best_practices` program needs the full context of all files
 to do its best.
 
-You may run `rubocop -a` (safe autocorrect), but
-do NOT run `rubocop -A` (unsafe autocorrect) without express approval
-and WARN that `-A` is unsafe. Rubocop's unsafe autocorrect makes many mistakes
-and in nearly all cases should be avoided.
+**IMPORTANT**: You may ONLY use `rubocop -a` (safe autocorrect)
+for RuboCop corrections.
+
+**NEVER use `rubocop -A` (unsafe autocorrect)** -
+it frequently introduces subtle bugs by making assumptions
+about code context that are incorrect. Examples include:
+
+- Changing array methods to string methods (`.drop()` vs `[1..]`)
+- Changing hash syntax that breaks in complex ActiveRecord queries
+
+Always use `-a` (safe) and manually review any remaining suggestions from
+`rubocop` without flags to determine if they're actually appropriate
+for the specific context.
 
 ### Workflow
 

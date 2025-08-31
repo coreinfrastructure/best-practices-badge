@@ -6,7 +6,6 @@
 
 require 'addressable/uri'
 require 'net/http'
-require 'set'
 
 # rubocop:disable Metrics/ClassLength
 class ProjectsController < ApplicationController

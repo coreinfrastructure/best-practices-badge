@@ -5,7 +5,6 @@
 # SPDX-License-Identifier: MIT
 
 require 'test_helper'
-require 'set'
 
 # rubocop:disable Metrics/ClassLength
 class CriteriaTest < ActiveSupport::TestCase

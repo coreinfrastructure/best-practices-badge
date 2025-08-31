@@ -8,8 +8,6 @@
 
 # This assumes that "ClientIp.acquire" works correctly.
 
-require 'set'
-
 # Use recommended format of Rack::Attack config
 # rubocop: disable Style/ClassAndModuleChildren
 # rubocop: disable Style/IfUnlessModifier, Style/MethodCalledOnDoEndBlock

@@ -6,8 +6,6 @@
 
 # Determine if project sites support HTTPS
 
-require 'set'
-
 class HardenedSitesDetective < Detective
   # All of the security-hardening headers that need to be present to pass.
   # They're listed in the same order as the criteria text.

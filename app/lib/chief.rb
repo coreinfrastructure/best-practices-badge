@@ -13,8 +13,6 @@
 # the Detective INPUTS and OUTPUTS to determine what order to run, and
 # run them in parallel in an appropriate order.
 
-require 'set'
-
 # rubocop:disable Metrics/ClassLength
 class Chief
   # Confidence level (1..5) where automation result will *override*

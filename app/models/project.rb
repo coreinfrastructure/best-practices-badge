@@ -536,7 +536,7 @@ class Project < ApplicationRecord
       .where('badge_percentage_0 < 100')
       .where('lost_passing_at IS NULL OR lost_passing_at < ?',
              LOST_PASSING_REMINDER.days.ago)
-      .where('projects.updated_at < ?', LAST_UPDATED_REMINDER.days.ago)
+      .where(projects: { updated_at: ...LAST_UPDATED_REMINDER.days.ago })
       .where('last_reminder_at IS NULL OR last_reminder_at < ?',
              LAST_SENT_REMINDER.days.ago)
       .joins(:user).references(:user) # Need this to check email address

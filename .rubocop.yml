@@ -265,3 +265,7 @@ Style/YodaExpression:
   Enabled: false
 Metrics/BlockLength:
   Max: 36
+Lint/RedundantRequireStatement:
+  Enabled: true  # Let RuboCop remove truly redundant requires
+Rails/WhereRange:
+  Enabled: true  # Modern Rails range syntax is cleaner and equivalent

@@ -589,8 +589,8 @@ class ProjectsController < ApplicationController
   # @return [void]
   # rubocop:disable Metrics/MethodLength
   def update_additional_rights_forced(id, new_additional_rights)
-    command = new_additional_rights.first
-    new_list = new_additional_rights.drop(1).split(',').map(&:to_i).uniq.sort
+    command = new_additional_rights[0] # rubocop:disable Style/ArrayFirstLast
+    new_list = new_additional_rights[1..].split(',').map(&:to_i).sort.uniq
     if command == '-'
       AdditionalRight.where(project_id: id, user_id: new_list).destroy_all
     else # '+'

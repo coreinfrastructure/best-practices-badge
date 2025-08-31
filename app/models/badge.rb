@@ -4,8 +4,6 @@
 # OpenSSF Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
-require 'set'
-
 # rubocop: disable Metrics/ClassLength
 class Badge
   ACCEPTABLE_PERCENTAGES = (0..99).to_a.freeze

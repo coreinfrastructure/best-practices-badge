@@ -33,7 +33,7 @@ plugins:
 
 AllCops:
   EnabledByDefault: true
-  TargetRubyVersion: 2.5
+  TargetRubyVersion: 3.3
   DisplayCopNames: true
   DisplayStyleGuide: true
   Include:
@@ -265,3 +265,14 @@ Style/YodaExpression:
   Enabled: false
 Metrics/BlockLength:
   Max: 36
+Lint/RedundantRequireStatement:
+  Enabled: true  # Let RuboCop remove truly redundant requires
+Rails/WhereRange:
+  Enabled: true  # Modern Rails range syntax is cleaner and equivalent
+
+# The cop Performance/ArraySemiInfiniteRangeSlice
+# was created due to a mistake in a microbenchmark. Worse, it can raise
+# invalid complaints on strings. We've expressly disabled it, with this
+# comment, to avoid the risk of later re-enabling it.
+Performance/ArraySemiInfiniteRangeSlice:
+  Enabled: false # Do NOT enable this

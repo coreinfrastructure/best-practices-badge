@@ -101,7 +101,7 @@ class ApplicationController < ActionController::Base
 
   # Combined cache control header value for CDN surrogate control
   BADGE_CACHE_SURROGATE_CONTROL =
-    "max-age=#{BADGE_CACHE_MAX_AGE}, stale-if-error=#{BADGE_CACHE_STALE_AGE}"
+    "max-age=#{BADGE_CACHE_MAX_AGE}, stale-if-error=#{BADGE_CACHE_STALE_AGE}".freeze
 
   # Set default cache control - don't externally cache.
   # This is the safe behavior, so we make it the default.

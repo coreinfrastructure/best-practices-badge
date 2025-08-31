@@ -10,7 +10,7 @@ module SessionsHelper
   RESET_SESSION_TIMER = 1.hour # Active sessions older than this reset timer
   GITHUB_PATTERN = %r{
     \Ahttps://github.com/([A-Za-z0-9_.-]+)/([A-Za-z0-9_.-]+)/?\Z
-  }x.freeze
+  }x
   require 'uri'
 
   # Remove the "locale=value", if any, from the url_query provided

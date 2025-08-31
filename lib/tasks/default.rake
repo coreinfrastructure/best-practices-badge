@@ -684,7 +684,6 @@ def link_okay?(link)
   fetchable?(link)
 end
 
-require 'set'
 def validate_links_in_string(translation, from, seen)
   translation.scan(/href=["'][^"']+["']/).each do |snippet|
     link = snippet[6..-2]

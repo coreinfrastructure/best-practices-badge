@@ -10,10 +10,10 @@ include ActionView::Helpers::TextHelper
 
 # rubocop:disable Metrics/ClassLength
 class LoginTest < ApplicationSystemTestCase
-  CHECK = /result_symbol_check/.freeze
-  DASH = /result_symbol_dash/.freeze
-  QUESTION = /result_symbol_question/.freeze
-  X = /result_symbol_x/.freeze
+  CHECK = /result_symbol_check/
+  DASH = /result_symbol_dash/
+  QUESTION = /result_symbol_question/
+  X = /result_symbol_x/
 
   setup do
     # FastlyRails is no longer in use.

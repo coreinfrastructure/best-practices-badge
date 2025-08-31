@@ -165,7 +165,7 @@ module ProjectsHelper
   # rubocop:enable Metrics/MethodLength
 
   # We sometimes insert <wbr> after sequences of these characters.
-  WORD_BREAK_DIVIDERS = /([,_\-.]+)/.freeze
+  WORD_BREAK_DIVIDERS = /([,_\-.]+)/
 
   # This text is considered safe, so we can directly mark it as such.
   # rubocop:disable Rails/OutputSafety

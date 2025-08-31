@@ -48,7 +48,7 @@ class Project < ApplicationRecord
 
   # All badge levels as IDs. Useful for enumerating "all levels" as:
   # Project::LEVEL_IDS.each do |level| ... end
-  LEVEL_ID_NUMBERS = (0..(COMPLETED_BADGE_LEVELS.length - 1)).freeze
+  LEVEL_ID_NUMBERS = (0..(COMPLETED_BADGE_LEVELS.length - 1))
   LEVEL_IDS = LEVEL_ID_NUMBERS.map(&:to_s)
 
   PROJECT_OTHER_FIELDS = %i[
@@ -173,7 +173,7 @@ class Project < ApplicationRecord
   # We have to allow embedded spaces, e.g., "Jupyter Notebook".
   VALID_LANGUAGE_LIST =
     %r{\A(|-| ([A-Za-z0-9!\#$%'()*+.\/\:;=?@\[\]^~ -]+
-        (,\ ?[A-Za-z0-9!\#$%'()*+.\/\:;=?@\[\]^~ -]+)*))\Z}x.freeze
+        (,\ ?[A-Za-z0-9!\#$%'()*+.\/\:;=?@\[\]^~ -]+)*))\Z}x
   validates :implementation_languages,
             length: { maximum: MAX_SHORT_STRING_LENGTH },
             format: {
@@ -536,8 +536,7 @@ class Project < ApplicationRecord
       .where('badge_percentage_0 < 100')
       .where('lost_passing_at IS NULL OR lost_passing_at < ?',
              LOST_PASSING_REMINDER.days.ago)
-      .where('projects.updated_at < ?',
-             LAST_UPDATED_REMINDER.days.ago)
+      .where('projects.updated_at < ?', LAST_UPDATED_REMINDER.days.ago)
       .where('last_reminder_at IS NULL OR last_reminder_at < ?',
              LAST_SENT_REMINDER.days.ago)
       .joins(:user).references(:user) # Need this to check email address
@@ -576,7 +575,7 @@ class Project < ApplicationRecord
       .select('projects.*, users.encrypted_email as user_encrypted_email')
       .joins(:user).references(:user) # Need this to check email address
       .where('last_reminder_at IS NOT NULL')
-      .where('last_reminder_at >= ?', 14.days.ago)
+      .where(last_reminder_at: 14.days.ago..)
       .reorder('last_reminder_at')
   end
 

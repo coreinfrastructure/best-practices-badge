@@ -44,15 +44,9 @@ class ProjectStat < ApplicationRecord
         next if completion.to_i.zero? # Don't record percentage "0" > level 0
 
         public_send :"percent_1_ge_#{completion}=",
-                    Project.where(
-                      'badge_percentage_1 >= ?',
-                      completion.to_i
-                    ).count
+                    Project.where(badge_percentage_1: completion.to_i..).count
         public_send :"percent_2_ge_#{completion}=",
-                    Project.where(
-                      'badge_percentage_2 >= ?',
-                      completion.to_i
-                    ).count
+                    Project.where(badge_percentage_2: completion.to_i..).count
       end
       self.projects_edited = Project.where('created_at < updated_at').count
 
@@ -142,8 +136,8 @@ class ProjectStat < ApplicationRecord
   # Note that created_at is an index, so this should be extremely fast.
   def self.last_in_month(query_date)
     ProjectStat
-      .where('created_at >= ?', query_date.beginning_of_month)
-      .where('created_at <= ?', query_date.end_of_month)
+      .where(created_at: query_date.beginning_of_month..)
+      .where(created_at: ..query_date.end_of_month)
       .reorder(:created_at).last
   end
 

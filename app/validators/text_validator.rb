@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: MIT
 
 class TextValidator < ActiveModel::EachValidator
-  INVALID_CONTROL = /[\x01-\x08\x0b\x0c\x0e-\x1f]/.freeze
+  INVALID_CONTROL = /[\x01-\x08\x0b\x0c\x0e-\x1f]/
   def text_acceptable?(value)
     return true if value.nil?
     return false unless value.valid_encoding?

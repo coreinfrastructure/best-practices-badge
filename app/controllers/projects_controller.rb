@@ -6,6 +6,7 @@
 
 require 'addressable/uri'
 require 'net/http'
+require 'set'
 
 # rubocop:disable Metrics/ClassLength
 class ProjectsController < ApplicationController
@@ -53,7 +54,7 @@ class ProjectsController < ApplicationController
   ).freeze
 
   # Used to validate deletion rationale.
-  AT_LEAST_15_NON_WHITESPACE = /\A\s*(\S\s*){15}.*/.freeze
+  AT_LEAST_15_NON_WHITESPACE = /\A\s*(\S\s*){15}.*/
 
   # as= values, which redirect to alternative views
   ALLOWED_AS = %w[badge entry].freeze
@@ -428,7 +429,7 @@ class ProjectsController < ApplicationController
 
   # Regex pattern for validating repository rights changes.
   # Rights changes, if provided, must match this pattern.
-  VALID_ADD_RIGHTS_CHANGES = /\A *[+-] *\d+ *(, *\d+)*\z/.freeze
+  VALID_ADD_RIGHTS_CHANGES = /\A *[+-] *\d+ *(, *\d+)*\z/
 
   # Number of days before a user may change repo_url.
   # NOTE: If you change this value, you may also need to change
@@ -590,7 +591,7 @@ class ProjectsController < ApplicationController
   # rubocop:disable Metrics/MethodLength
   def update_additional_rights_forced(id, new_additional_rights)
     command = new_additional_rights.first
-    new_list = new_additional_rights[1..-1].split(',').map(&:to_i).uniq.sort
+    new_list = new_additional_rights.drop(1).split(',').map(&:to_i).uniq.sort
     if command == '-'
       AdditionalRight.where(project_id: id, user_id: new_list).destroy_all
     else # '+'
@@ -769,7 +770,7 @@ class ProjectsController < ApplicationController
 
     repos.map do |repo|
       [repo.full_name, repo.fork, repo.homepage, repo.html_url]
-    end.compact
+    end
   end
   # rubocop:enable Metrics/AbcSize
   # rubocop:enable Style/MethodCalledOnDoEndBlock, Metrics/MethodLength

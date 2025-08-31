@@ -116,7 +116,7 @@ gem 'solid_queue', '~> 1.1' # ActiveJob database backend
 # in deployment (icons no longer displayed) that does NOT occur locally.
 # WARNING!!!!
 gem 'sprockets-rails', '3.5.2' # Rails. Asset precompilation
-gem 'uglifier', '~> 4.2.0', require: false # Minify JavaScript
+gem 'terser', '~> 1.1', require: false # Minify JavaScript
 gem 'sentry-ruby' # Support Sentry real-time crash reporting
 gem 'sentry-rails' # Support Sentry real-time crash reporting
 

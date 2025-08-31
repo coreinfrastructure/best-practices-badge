@@ -22,8 +22,11 @@ require 'json'
 
 # NOTE: Our default runs test:all, not just test.
 # We want to make sure things work using *all* our tests.
+# We do the whitespace check early, so it will fail early.
+# AI assistants just can't help but add whitespace at the end of lines.
 task(:default).clear.enhance %w[
   rbenv_rvm_setup
+  whitespace_check
   bundle
   bundle_audit
   generate_criteria_doc
@@ -32,7 +35,6 @@ task(:default).clear.enhance %w[
   rails_best_practices
   license_okay
   license_finder_report.html
-  whitespace_check
   yaml_syntax_check
   html_from_markdown
   eslint
@@ -1079,4 +1081,9 @@ task :generate_unsubscribe_url, [:email] => :environment do |_t, args|
   # Generate URL (nil locale lets browser preference determine locale)
   url = helper_instance.generate_unsubscribe_url(email, locale: nil)
   puts url
+end
+
+desc 'Print hello as simple smoke test.'
+task :hello do
+  puts 'Hello'
 end

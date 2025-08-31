@@ -24,7 +24,10 @@ This is the **OpenSSF Best Practices Badge** project (formerly CII Best Practice
 
 ### Code Quality & Linting
 
-- `rake` or `rake default` - Run complete CI pipeline (linting, tests, security checks).
+- `rake default` - Run local CI/CD pipeline (linting, tests, etc.).
+   Don't just use `rake` without arguments, Claude's user permission
+   system can't permit that without permitting all rake commands.
+   Some additional checks (e.g., Brakeman) run on GitHub's CI/CD pipeline.
 - `rake rubocop` - Ruby style checker
 - `rake rails_best_practices` - Rails-specific best practices source checker
 - `rake markdownlint` - Markdown linting
@@ -238,6 +241,29 @@ Key environment variables for development:
   (e.g., `,temp-notes.md`, `,migration-plan.txt`)
 - This applies to documentation, scratch files, migration plans, etc.
 - The linting tools are configured to ignore comma-prefixed files
+
+## Rails Conventions
+
+This application mostly follows Rails 5+ baseline conventions with
+selective upgrades:
+
+* It most follows Rails 5 conventions in terms of
+  directory structure, extensive use of `Rails.application.config.*`,
+  an asset pipeline with a Rails 5+ Sprockets setup, and initializer structure.
+* It has some pre-Rails 5 remnants:
+  - No `config.load_defaults` in application.rb (would be Rails 5.1+)
+  - Manual framework defaults instead of version-specific defaults
+  - Some older asset organization (app/assets/javascripts vs modern
+    app/javascript)
+* Some Rails 6+ features in use:
+  - Modern gems: E.g., Rails, `solid_queue`, `secure_headers`
+  - Security configurations: Advanced CSRF, CSP headers
+  - Database setup: Modern PostgreSQL configuration
+
+We want to slowly move to more recent Rails conventions. However, rapid
+moves like the direct use of `rails app:update` or adding `load_defaults
+8.0` is likely to cause a cascade of many changes, leading to
+many hard-to-fix failures with little obvious external benefit.
 
 ## Miscellaneous
 

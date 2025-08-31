@@ -40,7 +40,7 @@ Rails.application.configure do
   config.assets.compress = true
 
   # Compress JavaScripts and CSS.
-  config.assets.js_compressor = :uglifier
+  config.assets.js_compressor = :terser
   config.assets.css_compressor = :sass
 
   # Do not allow "live compilation" using the assets pipeline

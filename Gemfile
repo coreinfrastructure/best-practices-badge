@@ -63,7 +63,7 @@ gem 'jquery-rails', '~> 4.4' # JavaScript jQuery library (for Rails)
 # for jquery-ui/autocomplete (a polyfill for missing functionality in Safari).
 gem 'lograge', '~> 0.12' # Simplify logs
 gem 'mail', '~> 2.7' # Ruby mail handler
-gem 'octokit', '~> 7' # GitHub's official Ruby API
+gem 'octokit', '~> 10' # GitHub's official Ruby API
 gem 'omniauth-github', '~> 2.0' # Authentication to GitHub (get project info)
 #
 # Gem omniauth-rails_csrf_protection protects omniauth logins and

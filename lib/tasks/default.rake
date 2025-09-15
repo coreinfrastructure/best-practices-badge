@@ -986,6 +986,101 @@ task search_user: :environment do
   exit(0) # Work around rake
 end
 
+desc 'Search stdin tab-separated values "Name" and "Email 1" (for GDPR)'
+task search_users_tsv: :environment do
+  # Read 1 line, which are the tab-separated-value headers
+  # Find the column numbers for 'Name' and 'Email 1', case-insensitive
+  # (if no 'Email 1', try 'Email').
+  header_line = STDIN.readline.chomp
+  headers = header_line.split("\t")
+
+  # Find column indices case-insensitively
+  name_col = headers.find_index { |h| h.casecmp('name').zero? }
+  email_col = headers.find_index { |h| h.casecmp('email 1').zero? } ||
+              headers.find_index { |h| h.casecmp('email').zero? }
+
+  unless name_col && email_col
+    puts "Error: Could not find columns 'Name' and 'Email[ 1]'"
+    puts "Found headers: #{headers.inspect}"
+    exit(1)
+  end
+
+  # In a loop, read a line from stdin, it's tab separated.
+  # Find 'name' and 'email' from corresponding columns
+  # In the loop, find them.
+  STDIN.each_line do |line|
+    fields = line.chomp.split("\t")
+    name = fields[name_col]&.strip
+    email = fields[email_col]&.strip
+
+    if name.present?
+      real_search_name(name)
+    end
+    if email.present?
+      real_search_email(email)
+    end
+    puts '---'
+  end
+end
+
+# Helper function, escape characters for shell
+def shell_escape(s)
+  # Prepend `\` in front of chars unless A-Za-z0-9._@
+  return '""' if s.blank?
+
+  # Escape by surrounding with double quotes and escaping double quotes and backslashes
+  '"' + s.gsub('\\', '\\\\').gsub('"', '\\"') + '"'
+end
+
+def shell_escape_if_known(s)
+  if s.blank? || s == '??'
+    'UNKNOWN'
+  elsif s == 'David' || s == 'Luke'
+    'UNKNOWN' # Too generic for a search, don't try.
+  else
+    shell_escape(s)
+  end
+end
+
+desc 'Search remotely stdin tab-separated values "Name" and "Email" (for GDPR)'
+task search_remote_users_tsv: :environment do
+  # Read 1 line, which are the tab-separated-value headers
+  # Find the column numbers for 'Name' and 'Email 1', case-insensitive
+  # (if no 'Email 1', try 'Email').
+  header_line = STDIN.readline.chomp
+  headers = header_line.split("\t")
+
+  # Find column indices case-insensitively
+  name_col = headers.find_index { |h| h.casecmp('name').zero? }
+  email_col = headers.find_index { |h| h.casecmp('email 1').zero? } ||
+              headers.find_index { |h| h.casecmp('email').zero? }
+  email2_col = headers.find_index { |h| h.casecmp('email 2').zero? }
+
+  unless name_col && email_col
+    puts "Error: Could not find columns 'Name' and 'Email[ 1]'"
+    puts "Found headers: #{headers.inspect}"
+    exit(1)
+  end
+
+  # In a loop, read a line from stdin, it's tab separated.
+  # Find 'name' and 'email' from corresponding columns
+  # We're passing through a remote shell so we must shell escape everything.
+  STDIN.each_line do |line|
+    fields = line.chomp.split("\t")
+    name = shell_escape_if_known(fields[name_col]&.strip)
+    email = shell_escape_if_known(fields[email_col]&.strip.delete_prefix('email: '))
+
+    system("heroku run --app production-bestpractices rake search_user -- #{name} #{email}")
+    if email2_col
+      email2 = shell_escape_if_known(fields[email2_col]&.strip)
+      if email2 != 'UNKNOWN'
+        system("heroku run --app production-bestpractices rake search_email -- #{email2}")
+      end
+    end
+    puts '---'
+  end
+end
+
 desc 'Update Database list of bad passwords from raw-bad-passwords-lowercase'
 task update_bad_password_db: :environment do
   BadPassword.force_load

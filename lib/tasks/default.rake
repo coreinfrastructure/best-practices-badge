@@ -1035,8 +1035,6 @@ end
 def shell_escape_if_known(s)
   if s.blank? || s == '??'
     'UNKNOWN'
-  elsif s == 'David' || s == 'Luke'
-    'UNKNOWN' # Too generic for a search, don't try.
   else
     shell_escape(s)
   end
@@ -1068,7 +1066,7 @@ task search_remote_users_tsv: :environment do
   STDIN.each_line do |line|
     fields = line.chomp.split("\t")
     name = shell_escape_if_known(fields[name_col]&.strip)
-    email = shell_escape_if_known(fields[email_col]&.strip.delete_prefix('email: '))
+    email = shell_escape_if_known(fields[email_col]&.strip&.delete_prefix('email: '))
 
     system("heroku run --app production-bestpractices rake search_user -- #{name} #{email}")
     if email2_col

@@ -148,11 +148,13 @@ echo 'STAGE 2: Identifying and install system packages'
 # git should already be installed, but we'll make sure of it.
 is_command git || add_pkg git
 
+# curl is helpful for installing and debugging things, so let's install it.
+is_command curl || add_pkg curl
+
 # Install a bootstrap version of Ruby, if we don't already have one.
 # We'll actually install a specific version later, but this will help us
 # bootstrap the installation and building of that version.
 is_command ruby || add_pkg ruby
-
 
 # We will build ruby via rbenv and ruby-build. This requires either those
 # packages themselves, or a number of other packages to build them.

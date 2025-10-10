@@ -14,8 +14,29 @@ web application administrators.
 Being an admin is a position of high trust. Admins must not
 abuse their access, which includes the ability to edit or delete
 arbitrary project badge entries and user profiles.
-In particular, admins can see the email addresses of every user (which are
-private); keep those private.
+In particular, admins can see the email addresses of every user.
+
+You *must* keep user email addresses private. Many email addresses are
+publicly known, but not all.
+
+## Becoming an admin
+
+To become an admin, you must first create a user account on
+<https://www.bestpractices.dev/> by using "Log in" (for a GitHub account)
+or "Sign up" (for a local email + password account).
+
+A system admin will then give your account admin privileges
+following the instructions in [implementation.md](./implementation.md).
+
+Optional: If you want, you can go here to create a gravatar image:
+<https://gravatar.com/>.
+If you set up a gravatar image, it will show on many sites
+(including this one) when describing you.
+You'll need to tell Gravatar the email address that you use for login
+and/or for GitHub.
+Gravatar lets sites look up image based on the
+[*cryptographic hash*](https://docs.gravatar.com/rest/hash/) of an email
+address; we do *not* send unencrypted email addresses to Gravatar!
 
 ## GDPR requests
 
@@ -130,3 +151,39 @@ in practice it generally is not.
 
 We don't transfer ownership until we're sure it should be owned by another.
 That way, attackers can't simply "take over" a badge entry by asking for it.
+
+## Deleting bad data
+
+Some users don't understand the site, and may make mistakes.
+Help them do the right thing.
+
+However, some users are actors who act in bad faith.
+They'll try to create bogus project badge entries, typically to increase
+search engine optimiation (SEO). Our site marks project badge entry data
+so that badge entries never improve SEO, but bad faith actors may not care.
+Some are happy to scam their customers *and* hurt the public, as long
+as they receive money for their malicious activities.
+Others simply like to put malicious data online.
+
+Our site doesn't host images, limits what you can post, and (again)
+postings on it do not improve SEO. So we're
+not an interesting target for most people who like to create false data.
+Still, please help us remove anything that is false.
+
+If you've determined someone is acting in bad faith (not just
+confused or making an honest mistake),
+*immediately* delete their malicious data and their account.
+Don't bother contacting them. That is a waste of everyone's time and
+delays fixing the problem.
+
+## Security and logging
+
+We've tried to make this a secure application.
+See our [assurance case](./assurance-case.md) if you have any questions
+on why we think this is adequately secure. If you think you found a weakness,
+file a private GitHub report immediately, or contact the TSC.
+
+Web application data changes (including of web application administrators)
+are logged. So if necessary, we can review exactly what changed
+and even revert it. However, that's a pain to do. We'd prefer that
+fixes be right the first time.

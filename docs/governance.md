@@ -185,6 +185,9 @@ However, we also don't want any one person to be a bottleneck.
 Note that web application admin is not the same as having direct
 access/control over the underlying database or container.
 
+See [admin](./admin.md) for more information about being a
+web application administrator.
+
 ## Process
 
 We generally use the GitHub issue tracker and pull requests for managing

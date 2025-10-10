@@ -34,9 +34,9 @@ If you set up a gravatar image, it will show on many sites
 (including this one) when describing you.
 You'll need to tell Gravatar the email address that you use for login
 and/or for GitHub.
-Gravatar lets sites look up image based on the
-[*cryptographic hash*](https://docs.gravatar.com/rest/hash/) of an email
-address; we do *not* send unencrypted email addresses to Gravatar!
+Note that Gravatar lets sites look up an avatar image of a user based on the
+[*cryptographic hash*](https://docs.gravatar.com/rest/hash/) of their email
+address. We *never* send unencrypted email addresses to Gravatar!
 
 ## GDPR requests
 
@@ -83,7 +83,7 @@ legally obligated to comply with them.
 
 However, you have an account on the
 OpenSSF Best Practices badge site here:
-https://www.bestpractices.dev/en/users/XYZ
+`https://www.bestpractices.dev/en/users/XYZ`
 This account currently owns one or more project badge entries.
 
 Here's our problem. We can't delete user accounts that own 1+ badge entries,
@@ -135,10 +135,11 @@ You might write something like this:
 
 <blockquote>
 We've received a request to change the owner of the project badge entry
-<https://www.bestpractices.dev/en/projects/XYZ>
+`https://www.bestpractices.dev/en/projects/XYZ`
 that is currently owned by user
-<https://www.bestpractices.dev/en/users/XY> to user
-<https://www.bestpractices.dev/en/users/YZ>.
+`https://www.bestpractices.dev/en/users/XY`
+to user
+`https://www.bestpractices.dev/en/users/YZ`
 
 Please confirm if this is approved, or reject if it is not.
 </blockquote>

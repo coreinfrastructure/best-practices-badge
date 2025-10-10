@@ -188,6 +188,13 @@ to the CII. The domain name is much shorter, too.
 We use the "www" subdomain because there are technical challenges using
 a top-level domain with our CDN; it's more efficient to use the subdomain.
 
+## Governance and administration
+
+See [governance](docs/governance.md) for how this project is governed,
+[TSC](docs/TSC.md) for current best practices badge
+project technical steering committee (TSC) members, and
+[admin](docs/admin.md) for information to web site application administrators.
+
 ## License
 
 All material in this repository is released under the [MIT license](./LICENSE).

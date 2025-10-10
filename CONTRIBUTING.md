@@ -869,6 +869,20 @@ gem version and also update all of its transitive dependencies:
 bundle update GEM_NAME && rake
 ~~~~
 
+You may see an error like this:
+
+~~~~
+WARN: Unresolved or ambiguous specs during Gem::Specification.reset:
+      stringio (>= 0)
+      Available/installed versions of this gem:
+      - 3.1.7
+      - 3.1.1
+WARN: Clearing out unresolved specs. Try 'gem cleanup <gem>'
+~~~~
+
+Ignore that, it's a side-effect of how we currently install things. Run
+`gem cleanup stringio`.
+
 If that works commit the change with a "git comment -as" with summary
 'Update gem GEM_NAME (OLD_VERSION_NUMBER-&gt;NEW_VERSION_NUMBER)'.
 

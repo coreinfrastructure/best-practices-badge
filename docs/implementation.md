@@ -686,7 +686,7 @@ and so on. Neverthess it is fundamentally the same as this SQL command:
 
 ~~~~
 echo "UPDATE projects SET user_id = {OWNER_NUM} WHERE id = {PROJECT_NUM}" | \
-  heroku pg:psql --app production-bestpractices
+  heroku pg:psql DATABASE_URL --app production-bestpractices
 ~~~~
 
 ## Database content viewing and editing
@@ -717,14 +717,21 @@ Here are a few examples (replace the "heroku pg:psql..." with "rails db"
 to do it locally):
 
 ~~~~sh
+# Who is user 1?
 echo "SELECT * FROM users WHERE users.id = 1" | \
-  heroku pg:psql --app master-bestpractices
+  heroku pg:psql DATABASE_URL --app production-bestpractices
+# Find user by name
 echo "SELECT * FROM users WHERE name = 'David A. Wheeler'" | \
-  heroku pg:psql --app master-bestpractices
+  heroku pg:psql DATABASE_URL --app production-bestpractices
+# List all current web application admins
+echo "SELECT id,name FROM users WHERE role = 'admin'" | \
+  heroku pg:psql DATABASE_URL -a production-bestpractices
+# Give the specified user admin privileges
 echo "UPDATE users SET role = 'admin' where id = 25" | \
-  heroku pg:psql --app master-bestpractices
+  heroku pg:psql DATABASE_URL --app production-bestpractices
+# Change owner of project, forcibly
 echo "UPDATE projects SET user_id = 25 WHERE id = 1" | \
-  heroku pg:psql --app master-bestpractices
+  heroku pg:psql DATABASE_URL --app production-bestpractices
 ~~~~
 
 You can force-create new users and make them admins
@@ -741,7 +748,7 @@ echo "INSERT INTO users (provider,uid,name,nickname,email,role,activated,
   created_at,updated_at)
   VALUES ('github',GITHUB_UID,FULL_USER_NAME,
   GITHUB_USERNAME,EMAIL,'admin',t,now(),now());" | \
-  heroku pg:psql --app master-bestpractices
+  heroku pg:psql DATABASE_URL --app production-bestpractices
 ~~~~
 
 You can
@@ -790,9 +797,9 @@ was created as part of the rationale.
 
 ~~~~sh
 echo "UPDATE users SET blocked=true, blocked_rationale='...' WHERE id = 13323;"|
-  heroku pg:psql --app production-bestpractices
+  heroku pg:psql DATABASE_URL --app production-bestpractices
 echo "DELETE FROM projects WHERE user_id = 13323;" | \
-  heroku pg:psql --app production-bestpractices
+  heroku pg:psql DATABASE_URL --app production-bestpractices
 ~~~~
 
 ## Recovering a deleted or mangled project entry
@@ -828,7 +835,7 @@ If you want the data to be on the true production site, you'll need
 privileges to execute database commands, then run this:
 
 ~~~~
-    heroku pg:psql --app production-bestpractices < project.sql
+    heroku pg:psql DATABASE_URL --app production-bestpractices < project.sql
 ~~~~
 
 ## Server-side data cache store
@@ -949,26 +956,26 @@ be busy serving badge files.
 Here's how to reset the heroku-local plugin:
 
 ~~~~sh
-heroku plugins:uninstall heroku-local --app master-bestpractices
-heroku plugins --app master-bestpractices
+heroku plugins:uninstall heroku-local --app production-bestpractices
+heroku plugins --app production-bestpractices
 ~~~~
 
 The latter automatically reinstalls heroku-local.
 This information is from: <https://github.com/heroku/heroku/issues/1690>.
 
 Normally you should just push changes to "master" first, so that
-CircleCI will test it.  If you want to push directly to Heroku
+CircleCI will test it.  If you want to push directly to Heroku staging
 (and have the necessary rights):
 
 ~~~~
-git remote add heroku https://git.heroku.com/master-bestpractices.git
+git remote add heroku-staging https://git.heroku.com/staging-bestpractices.git
 ~~~~
 
 Now you can directly deploy to Heroku:
 
 ~~~~
-git checkout master
-git push heroku master
+git checkout staging
+git push heroku-staging staging
 ~~~~
 
 ## Auditing

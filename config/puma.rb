@@ -40,14 +40,16 @@ environment ENV.fetch('RAILS_ENV') { 'development' }
 #
 # preload_app!
 
-# The code in the `on_worker_boot` will be called if you are using
+# The code in the `before_worker_boot` will be called if you are using
 # clustered mode by specifying a number of `workers`. After each worker
 # process is booted this block will be run, if you are using `preload_app!`
 # option you will want to use this block to reconnect to any threads
 # or connections that may have been created at application boot, Ruby
 # cannot share connections between processes.
+# Note: In Puma 7+, the hook was renamed from `on_worker_boot` to
+# `before_worker_boot`.
 #
-# on_worker_boot do
+# before_worker_boot do
 #   ActiveRecord::Base.establish_connection if defined?(ActiveRecord)
 # end
 
@@ -58,13 +60,3 @@ plugin :tmp_restart
 # so scheduled jobs will happen even if the system crashes.
 # Set the environment variable if you want it activated (e.g., in production)
 plugin :solid_queue if ENV['SOLID_QUEUE_IN_PUMA'] # || Rails.env.development?
-
-# Use puma_worker_killer to occasionally restart.
-# This is a band-aid to counter memory growth.
-# There's a performance hit (restart time + cache loss), but it
-# forcibly gets rid of junk in memory.
-before_fork do
-  require 'puma_worker_killer'
-
-  PumaWorkerKiller.enable_rolling_restart(8 * 3600) # Every 8 hours in seconds
-end

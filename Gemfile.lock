@@ -174,9 +174,6 @@ GEM
     fugit (1.11.2)
       et-orbi (~> 1, >= 1.2.11)
       raabro (~> 1.4)
-    get_process_mem (1.0.0)
-      bigdecimal (>= 2.0)
-      ffi (~> 1.0)
     gettext (3.4.9)
       erubi
       locale (>= 2.0.5)
@@ -360,12 +357,8 @@ GEM
       date
       stringio
     public_suffix (6.0.2)
-    puma (6.6.1)
+    puma (7.0.4)
       nio4r (~> 2.0)
-    puma_worker_killer (1.0.0)
-      bigdecimal (>= 2.0)
-      get_process_mem (>= 0.2)
-      puma (>= 2.7)
     raabro (1.4.0)
     racc (1.8.1)
     rack (3.2.3)
@@ -640,8 +633,7 @@ DEPENDENCIES
   pg (~> 1.4)
   pg_search (~> 2.3)
   pry-byebug
-  puma (~> 6.5)
-  puma_worker_killer (~> 1.0)
+  puma (~> 7.0)
   rack (~> 3.2.3)
   rack-attack (~> 6.7)
   rack-cors (~> 3.0)

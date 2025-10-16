@@ -86,7 +86,7 @@ GEM
     base64 (0.3.0)
     bcrypt (3.1.20)
     benchmark (0.4.1)
-    bigdecimal (3.3.0)
+    bigdecimal (3.3.1)
     bindex (0.8.1)
     blind_index (2.7.0)
       activesupport (>= 7.1)
@@ -119,7 +119,7 @@ GEM
     capybara-slow_finder_errors (0.1.5)
       capybara (~> 3.0)
     chartkick (5.2.1)
-    chef-utils (18.8.11)
+    chef-utils (18.8.46)
       concurrent-ruby
     code_analyzer (0.5.5)
       sexp_processor
@@ -138,7 +138,7 @@ GEM
     dotenv (3.1.8)
     drb (2.2.3)
     encryptor (3.0.0)
-    erb (5.0.2)
+    erb (5.1.1)
     erubi (1.13.1)
     erubis (2.7.0)
     eslintrb (2.1.0)
@@ -248,7 +248,7 @@ GEM
     method_source (1.1.0)
     mini_mime (1.1.5)
     mini_portile2 (2.8.9)
-    minitest (5.25.5)
+    minitest (5.26.0)
     minitest-reporters (1.7.1)
       ansi
       builder
@@ -368,7 +368,7 @@ GEM
       logger
       rack (>= 3.0.14)
     rack-headers_filter (0.0.1)
-    rack-protection (4.1.1)
+    rack-protection (4.2.1)
       base64 (>= 0.1.0)
       logger (>= 1.6.0)
       rack (>= 3.0.0, < 4)

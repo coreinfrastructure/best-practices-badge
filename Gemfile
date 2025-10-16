@@ -91,7 +91,7 @@ gem 'omniauth-rails_csrf_protection', '~> 1.0' # integrate omniauth with rails
 gem 'pagy', '~> 9.0' # Paginator for web pages
 gem 'paleta', '~> 0.3' # Color manipulation, used for badges
 gem 'paper_trail', '~> 16.0' # Record previous versions of project data
-gem 'pg', '~> 1.4' # PostgreSQL database, used for data storage
+gem 'pg', '~> 1.6' # PostgreSQL database, used for data storage
 gem 'pg_search', '~> 2.3' # PostgreSQL full-text search
 gem 'puma', '~> 7.0' # Faster webserver; recommended by Heroku
 gem 'rack', '~> 3.2.3' # interface between web server + web framework (Rails)

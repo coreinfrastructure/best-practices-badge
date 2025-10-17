@@ -89,7 +89,9 @@ require 'pagy/extras/trim'
 # Instance variables
 # See https://ddnexus.github.io/pagy/api/pagy#instance-variables
 # Pagy::DEFAULT[:limit] = 20                                   # default
-Pagy::DEFAULT[:limit] = 30
+# Reduced from 30 to 20 to reduce memory usage, especially for deep
+# pagination requests from crawlers that nowadays are overwhelming.
+Pagy::DEFAULT[:limit] = 20
 
 # Other Variables
 # See https://ddnexus.github.io/pagy/api/pagy#other-variables

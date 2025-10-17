@@ -11,7 +11,7 @@
 class GcCompactMiddleware
   def initialize(app)
     @app = app
-    @last_compact_time = Time.now
+    @last_compact_time = Time.zone.now
     @interval = (ENV['BADGEAPP_GC_COMPACT_MINUTES'] || 120).to_i * 60
     @mutex = Mutex.new
   end
@@ -25,7 +25,7 @@ class GcCompactMiddleware
   private
 
   def time_to_compact?
-    Time.now - @last_compact_time >= @interval
+    Time.zone.now - @last_compact_time >= @interval
   end
 
   # This method handles multiple threads. Here's how:
@@ -39,8 +39,8 @@ class GcCompactMiddleware
   def schedule_compact(env)
     scheduled = false
     @mutex.synchronize do
-      if Time.now - @last_compact_time >= @interval
-        @last_compact_time = Time.now
+      if Time.zone.now - @last_compact_time >= @interval
+        @last_compact_time = Time.zone.now
         scheduled = true
       end
     end

@@ -357,7 +357,7 @@ GEM
       date
       stringio
     public_suffix (6.0.2)
-    puma (7.0.4)
+    puma (7.1.0)
       nio4r (~> 2.0)
     raabro (1.4.0)
     racc (1.8.1)
@@ -633,7 +633,7 @@ DEPENDENCIES
   pg (~> 1.4)
   pg_search (~> 2.3)
   pry-byebug
-  puma (~> 7.0)
+  puma (~> 7.1)
   rack (~> 3.2.3)
   rack-attack (~> 6.8)
   rack-cors (~> 3.0)

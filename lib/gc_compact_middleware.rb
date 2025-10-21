@@ -14,9 +14,22 @@ class GcCompactMiddleware
     @last_compact_time = Time.zone.now
     @interval = (ENV['BADGEAPP_GC_COMPACT_MINUTES'] || 120).to_i * 60
     @mutex = Mutex.new
+    @first_call = true
+    # Log initialization at WARN level so it appears even with WARN log level
+    Rails.logger.warn "GcCompactMiddleware initialized: interval=#{@interval}s (#{@interval / 60}min), next_compact_at=#{@last_compact_time + @interval}"
   end
 
   def call(env)
+    # Log first call only, to verify middleware is actually being invoked
+    if @first_call
+      @mutex.synchronize do
+        if @first_call
+          Rails.logger.warn 'GcCompactMiddleware: First request received, middleware is active'
+          @first_call = false
+        end
+      end
+    end
+
     response = @app.call(env)
     schedule_compact(env) if time_to_compact?
     response
@@ -44,12 +57,17 @@ class GcCompactMiddleware
         scheduled = true
       end
     end
-    (env['rack.after_reply'] ||= []) << -> { compact } if scheduled
+    if scheduled
+      Rails.logger.warn "GcCompactMiddleware: Scheduling compaction, next_compact_at=#{@last_compact_time + @interval}"
+      (env['rack.after_reply'] ||= []) << -> { compact }
+    end
   end
 
   def compact
-    Rails.logger.info 'GC.compact started'
+    Rails.logger.warn 'GC.compact started'
     GC.compact
-    Rails.logger.info 'GC.compact completed'
+    Rails.logger.warn 'GC.compact completed'
+  rescue => e
+    Rails.logger.error "GC.compact failed: #{e.class}: #{e.message}"
   end
 end

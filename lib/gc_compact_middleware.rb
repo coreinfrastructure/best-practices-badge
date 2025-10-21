@@ -69,7 +69,5 @@ class GcCompactMiddleware
     Rails.logger.warn 'GC.compact started'
     GC.compact
     Rails.logger.warn 'GC.compact completed'
-  rescue StandardError => e
-    Rails.logger.error "GC.compact failed: #{e.class}: #{e.message}"
   end
 end

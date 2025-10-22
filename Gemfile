@@ -167,6 +167,7 @@ group :test do
   gem 'codecov', require: false # Report test code coverage
   gem 'minitest-reporters', require: false # Improve minitest output format
   gem 'minitest-retry', require: false # Retry- avoid Capybara false failures
+  gem 'ostruct' # OpenStruct; future-proof for Ruby 3.5+
   # Note: Updating 'rails-controller-testing' to '1.0.5' causes failures
   gem 'rails-controller-testing', '~> 1.0' # for `assigns` and `assert_template`
   gem 'selenium-webdriver' # Automates browser i/f for Rails system testing

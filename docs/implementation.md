@@ -1545,6 +1545,35 @@ Some discussions about this:
 * [Malloc doubles Ruby memory](https://www.speedshop.co/2017/12/04/malloc-doubles-ruby-memory.html)
 * [Benchmark of memory allocators](https://medium.com/@andresakata/benchmark-of-memory-allocators-on-a-multi-threaded-ruby-program-354ec4dc2e7e)
 
+## Known harmless warnings (Ruby 3.4 + Bundler 2.5.x)
+
+When running Ruby 3.4+ with Bundler 2.5.x, you may see harmless warnings like:
+
+```
+warning: already initialized constant Gem::Platform::JAVA
+warning: previous definition of JAVA was here
+```
+
+**Cause**: Bundler 2.5.23 was released before Ruby 3.4 and redefines platform
+constants that Ruby 3.4's RubyGems already defines. This is a known
+compatibility issue between Bundler 2.5.x and Ruby 3.4's RubyGems 3.7.2.
+
+**Impact**: None. The warnings are cosmetic; the constants have identical
+values and functionality is unaffected.
+
+**Solution**: Update to Bundler 2.7.x or later, which is designed for
+Ruby 3.4 compatibility:
+
+```bash
+gem install bundler --version '~> 2.7.0'
+bundle update --bundler
+# Update CircleCI Docker images to include Bundler 2.7.x
+```
+
+**Note**: We intentionally deferred this Bundler update to separate concerns
+from the Ruby 3.4 upgrade. The warnings can be safely ignored until the
+Bundler update is performed.
+
 ## See also
 
 Project participation and interface:

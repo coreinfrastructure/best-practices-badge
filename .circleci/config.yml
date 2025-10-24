@@ -13,8 +13,48 @@ orbs:
   browser-tools: circleci/browser-tools@1.4.9
   codecov: codecov/codecov@3.2.4
   dscar-brakeman: naokikimura/dscar-brakeman@0.9.0
+
+# WARNING: In some cases you MUST update the cache version control value.
+# WHEN TO BUMP: Increment the version number (e.g., v8 -> v9) when:
+#   - Upgrading Ruby major/minor version (e.g., 3.4 -> 3.5)
+#   - Upgrading Bundler major version (e.g., 2.7 -> 2.8)
+#   - Gems cached with old versions cause issues
+# DON'T BUMP for: Gemfile.lock changes or patch updates
+# TO UPDATE: Search for "v.*-dep-" and update the number (2 occurrences below)
+# We don't do this with YAML anchors because they don't work with
+# CircleCI's template syntax.
+
+# Reusable executors - define Docker images once, use them multiple times
+executors:
+  ruby-postgres:
+    docker:
+      # Primary image - Ruby with browsers for testing
+      # When updating Ruby: update SHA256 here, tag comment, and cache version below
+      - image: drdavidawheeler/cii-bestpractices@sha256:97770a22ec2c88bf9fa028cc136446129f33e15df62bb4c0dc65f2c25d22ffe7 # pin :3.4.1-browsers
+        environment:
+          PG_HOST: localhost
+          PG_USER: ubuntu
+          RAILS_ENV: test
+          RACK_ENV: test
+      # Secondary image - PostgreSQL for database
+      - image: cimg/postgres@sha256:2e4f1a965bdd9ba77aa6a0a7b93968c07576ba2a8a7cf86d5eb7b31483db1378 # pin :16.4
+        environment:
+          POSTGRES_USER: ubuntu
+          POSTGRES_DB: circle_ruby_test
+
+  ruby-only:
+    docker:
+      # Single Ruby image for deployment job (doesn't need PostgreSQL)
+      - image: drdavidawheeler/cii-bestpractices@sha256:97770a22ec2c88bf9fa028cc136446129f33e15df62bb4c0dc65f2c25d22ffe7 # pin :3.4.1-browsers
+        environment:
+          PG_HOST: localhost
+          PG_USER: ubuntu
+          RAILS_ENV: test
+          RACK_ENV: test
+
 jobs:
   build:
+    executor: ruby-postgres
     working_directory: ~/coreinfrastructure/best-practices-badge
     parallelism: 1
     resource_class: medium
@@ -22,19 +62,6 @@ jobs:
     environment:
       CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
       CIRCLE_TEST_REPORTS: /tmp/circleci-test-results
-    docker:
-    # If you update this, update it below.
-    - image: drdavidawheeler/cii-bestpractices@sha256:97770a22ec2c88bf9fa028cc136446129f33e15df62bb4c0dc65f2c25d22ffe7 # pin :3.4.1-browsers
-      environment:
-        PG_HOST: localhost
-        PG_USER: ubuntu
-        RAILS_ENV: test
-        RACK_ENV: test
-    # Pin cimg/postgres:16.
-    - image: cimg/postgres@sha256:2e4f1a965bdd9ba77aa6a0a7b93968c07576ba2a8a7cf86d5eb7b31483db1378 # pin :16.4
-      environment:
-        POSTGRES_USER: ubuntu
-        POSTGRES_DB: circle_ruby_test
     steps:
     - checkout
     # For more on browser-tools integration with the main image, see:
@@ -61,8 +88,9 @@ jobs:
     # Restore the dependency cache
     - restore_cache:
         keys:
-        # Find the most recently generated cache used
-        # Find a cache corresponding to this particular Gemfile.lock checksum
+        # Cache version control.
+        # Find a cache corresponding to this particular Gemfile.lock checksum.
+        # When updating, change BOTH this line and save_cache below
         - v8-dep-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
     # This would show what we restored
     # - run: find ~/.rubygems || true
@@ -86,6 +114,9 @@ jobs:
     # - run: find ~ -name "*rack-timeout*" || true
     # Save dependency cache
     - save_cache:
+        # Cache version control.
+        # Find a cache corresponding to this particular Gemfile.lock checksum.
+        # When updating, change BOTH this line and save_cache below
         key: v8-dep-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
         paths:
           - ~/.rubygems
@@ -131,14 +162,7 @@ jobs:
   # so it gets recalculated. This approach still greatly reduces
   # duplication.
   deploy:
-    docker:
-    # We have to use an image - let's use the same image as for building
-    - image: drdavidawheeler/cii-bestpractices@sha256:97770a22ec2c88bf9fa028cc136446129f33e15df62bb4c0dc65f2c25d22ffe7 # pin :3.4.1-browsers
-      environment:
-        PG_HOST: localhost
-        PG_USER: ubuntu
-        RAILS_ENV: test
-        RACK_ENV: test
+    executor: ruby-only
     steps:
       - checkout
       - run:

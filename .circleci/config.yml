@@ -24,7 +24,7 @@ jobs:
       CIRCLE_TEST_REPORTS: /tmp/circleci-test-results
     docker:
     # If you update this, update it below.
-    - image: drdavidawheeler/cii-bestpractices@sha256:6bb1268e9f849949263ccaae409a0b336b0ff38e478a99a7979763c45805e69b # pin :3.3.6-browsers
+    - image: drdavidawheeler/cii-bestpractices@sha256:97770a22ec2c88bf9fa028cc136446129f33e15df62bb4c0dc65f2c25d22ffe7 # pin :3.4.1-browsers
       environment:
         PG_HOST: localhost
         PG_USER: ubuntu
@@ -63,7 +63,7 @@ jobs:
         keys:
         # Find the most recently generated cache used
         # Find a cache corresponding to this particular Gemfile.lock checksum
-        - v7-dep-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+        - v8-dep-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
     # This would show what we restored
     # - run: find ~/.rubygems || true
     - run:
@@ -86,7 +86,7 @@ jobs:
     # - run: find ~ -name "*rack-timeout*" || true
     # Save dependency cache
     - save_cache:
-        key: v7-dep-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+        key: v8-dep-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
         paths:
           - ~/.rubygems
           - ~/.bundle
@@ -133,7 +133,7 @@ jobs:
   deploy:
     docker:
     # We have to use an image - let's use the same image as for building
-    - image: drdavidawheeler/cii-bestpractices@sha256:6bb1268e9f849949263ccaae409a0b336b0ff38e478a99a7979763c45805e69b # pin :3.3.6-browsers
+    - image: drdavidawheeler/cii-bestpractices@sha256:97770a22ec2c88bf9fa028cc136446129f33e15df62bb4c0dc65f2c25d22ffe7 # pin :3.4.1-browsers
       environment:
         PG_HOST: localhost
         PG_USER: ubuntu

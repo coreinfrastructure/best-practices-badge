@@ -321,6 +321,7 @@ GEM
     omniauth-rails_csrf_protection (1.0.2)
       actionpack (>= 4.2)
       omniauth (~> 2.0)
+    ostruct (0.6.3)
     pagy (9.4.0)
     paleta (0.3.0)
     paper_trail (16.0.0)
@@ -627,6 +628,7 @@ DEPENDENCIES
   octokit (~> 7)
   omniauth-github (~> 2.0)
   omniauth-rails_csrf_protection (~> 1.0)
+  ostruct
   pagy (~> 9.0)
   paleta (~> 0.3)
   paper_trail (~> 16.0)
@@ -667,7 +669,7 @@ DEPENDENCIES
   yaml-lint (~> 0.1.2)
 
 RUBY VERSION
-   ruby 3.3.6p108
+   ruby 3.4.1p0
 
 BUNDLED WITH
-   2.5.23
+   2.7.2

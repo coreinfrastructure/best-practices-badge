@@ -132,7 +132,7 @@ group :development, :test do
   gem 'rails_best_practices', '~> 1.20' # Rails code quality analyzer
   # gem 'railroader', '4.3.8' # Security static analyzer. OSS fork of Brakeman
   gem 'rubocop', '~> 1.80', require: false # Style checker
-  gem 'rubocop-performance', '~> 1.20', require: false # Performance cops
+  gem 'rubocop-performance', '~> 1.26', require: false # Performance cops
   gem 'rubocop-rails', '~> 2.28', require: false # Rails-specific cops
   gem 'ruby-graphviz', '1.2.5' # This is used for bundle viz
   gem 'spring', '~> 4.1' # Preloader to speed development+test

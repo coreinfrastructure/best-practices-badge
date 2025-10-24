@@ -347,7 +347,7 @@ GEM
     prime (0.1.4)
       forwardable
       singleton
-    prism (1.4.0)
+    prism (1.6.0)
     pry (0.15.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -488,11 +488,9 @@ GEM
       parser
     secure_headers (7.1.0)
     securerandom (0.4.1)
-    selenium-webdriver (4.36.0)
+    selenium-webdriver (4.37.0)
       base64 (~> 0.2)
-      json (<= 2.13.2)
       logger (~> 1.4)
-      prism (~> 1.0, < 1.5)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 4.0)
       websocket (~> 1.0)

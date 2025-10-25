@@ -147,15 +147,16 @@ module SessionsHelper
       session[:github_name] == get_github_owner(url)
   end
 
-  # Retrieve list of GitHub projects for a user, used when displaying
-  # user profile. Returns up to 100 most recently updated repositories
+  # Retrieve list of public GitHub projects for a user, used when displaying
+  # user profile. Returns up to 100 most recently updated public repositories
   # across all types (owned, org member, collaborator).
+  # Only public repos are returned since badges are for public projects.
   # We don't retrieve *all* of them, because for some users that would
   # produce an overwhelming number.
   # Returns empty array on error to prevent 500 errors.
   def github_user_projects(client = Octokit::Client)
     github = client.new access_token: session[:user_token]
-    github.repos(type: 'all', sort: 'updated', per_page: 100)
+    github.repos(type: 'public', sort: 'updated', per_page: 100)
           .map(&:html_url).compact_blank
   rescue Octokit::Error => e
     Rails.logger.warn(

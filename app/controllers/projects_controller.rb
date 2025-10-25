@@ -147,6 +147,10 @@ class ProjectsController < ApplicationController
     # They end up as weird special keys, so this is the easy way to detect them
     # We fix these malformed queries to increase the chance that a user
     # will find the intended data.
+    # Optimization: only parse URL if query string contains malformed pattern
+    query = request.query_string
+    return if query.exclude?('criteria_level,')
+
     parsed = Addressable::URI.parse(request.original_url)
     if parsed&.query_values&.include?('criteria_level,2')
       redirect_to project_path(@project, criteria_level: 2),

@@ -28,9 +28,9 @@
 class AdditionalRight < ApplicationRecord
   # Associates this additional right with a specific project.
   # When the project is destroyed, all associated additional rights are
-  # deleted.
+  # deleted. Touch project to invalidate caches when rights change.
   # @return [Project] the project this right applies to
-  belongs_to :project
+  belongs_to :project, touch: true
 
   # Associates this additional right with a specific user.
   # When the user is destroyed, all their additional rights are deleted.

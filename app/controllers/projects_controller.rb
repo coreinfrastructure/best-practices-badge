@@ -587,24 +587,28 @@ class ProjectsController < ApplicationController
   # Forcibly updates additional rights for a project with validated input.
   # Adds or removes user edit permissions based on command prefix.
   # Assumes permissions are validated and syntax is correct.
+  # Each change touches the project (via touch: true), incrementing lock_version.
   # @param id [Integer] The project ID to update
   # @param new_additional_rights [String] Command string with format
   #   "+user1,user2" (add) or "-user1,user2" (remove)
-  # @return [void]
+  # @return [Integer] Number of successful changes made (for lock_version sync)
   # rubocop:disable Metrics/MethodLength
   def update_additional_rights_forced(id, new_additional_rights)
     command = new_additional_rights[0] # rubocop:disable Style/ArrayFirstLast
     new_list = new_additional_rights[1..].split(',').map(&:to_i).sort.uniq
+    changes_made = 0
     if command == '-'
-      AdditionalRight.where(project_id: id, user_id: new_list).destroy_all
+      changes_made = AdditionalRight.where(project_id: id, user_id: new_list).destroy_all.count
     else # '+'
       new_list.each do |u|
         # Add one-by-one; if a user doesn't exist, we can still do the others
         if User.exists?(id: u)
           AdditionalRight.create!(project_id: id, user_id: u).save!
+          changes_made += 1
         end
       end
     end
+    changes_made
   end
   # rubocop:enable Metrics/MethodLength
 
@@ -612,6 +616,8 @@ class ProjectsController < ApplicationController
   # Performs input validation and permission checks before delegating to
   # update_additional_rights_forced. Only users with control permissions
   # can remove additional editors.
+  # Each change touches the project (via touch: true), so we increment the
+  # in-memory lock_version to match, preventing optimistic locking conflicts.
   # @return [void] Silently returns if validation fails or no changes requested
   # rubocop:disable Metrics/CyclomaticComplexity
   def update_additional_rights
@@ -629,7 +635,10 @@ class ProjectsController < ApplicationController
     # *Only* those who *control* the entry can remove additional editors
     return if additional_rights_changes.first == '-' && !can_control?
 
-    update_additional_rights_forced(@project.id, additional_rights_changes)
+    changes_made = update_additional_rights_forced(@project.id, additional_rights_changes)
+    # Each change touched the project, incrementing lock_version in DB.
+    # Sync our in-memory lock_version to prevent optimistic locking conflict.
+    @project.lock_version += changes_made if changes_made.positive?
   end
   # rubocop:enable Metrics/CyclomaticComplexity
 

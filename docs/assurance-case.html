@@ -1,0 +1,3662 @@
+  <!DOCTYPE html>
+  <html>
+  <head>
+  <title>docs/assurance-case.md</title>
+  </head>
+  <body>
+<h1>BadgeApp Security: Its Assurance Case</h1>
+
+<!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
+
+<p>Security is important and challenging.
+This document describes why we think this software (the &quot;BadgeApp&quot;)
+is adequately secure.
+In other words, this document is the &quot;assurance case&quot; for the BadgeApp.
+This document is the result of continuous threat/attack modeling
+while the system is developed and maintained, and it is modified
+as the situation changes.
+For simplicity, this document also serves as detailed documentation of
+the security requirements, since in this case we found it
+easier to put them all in one document.</p>
+
+<p>Sadly, perfection is rare; we really want your help.
+If you find a vulnerability, please see
+<a href="../CONTRIBUTING.html#how_to_report_vulnerabilities">CONTRIBUTING.md#how_to_report_vulnerabilities</a>
+for how to submit a vulnerability report.
+For more technical information on the implementation, see
+<a href="implementation.html">implementation.md</a>.</p>
+
+<p>You can see a video summarizing an older version of
+this assurance case (as of September 2017),
+along with some more general information about developing secure software:
+<a href="https://www.youtube.com/watch?v=5a5D4d6hcEY">&quot;How to Develop Secure Applications: The BadgeApp Example&quot; by David A. Wheeler, 2017-09-18</a>.
+For more information on developing secure software, see
+<a href="http://www.dwheeler.com/secure-programs/">&quot;Secure Programming HOWTO&quot; by David A. Wheeler</a>.
+<a href="https://www.ida.org/idamedia/Corporate/Files/Publications/IDA_Documents/ITSD/2019/P-9278.pdf"><em>A Sample Security Assurance Case Pattern</em> by David A. Wheeler (2018)</a>
+shows how to create an assurance case for your project, using
+a version of this assurance case as an example.</p>
+
+<p>We thank Scott Ankrum (MITRE)
+for analyzing an earlier version of this assurance case.
+He provided a number of helpful comments and provided a lot of feedback
+in how to convert its notation from the
+Claims, Arguments, and Evidence (CAE) notation to
+Structured Assurance Case Metamodel (SACM) notation.
+For his initial work in converting this assurance case to SACM notation,
+see
+&lt;a href=&quot;<a href="https://www.researchgate.net/publication/351854207_BadgeApp_Assurance_Case_in_SACM_Notation">https://www.researchgate.net/publication/351854207_BadgeApp_Assurance_Case_in_SACM_Notation</a>&quot;</p>
+
+<blockquote>
+<p><i>BadgeApp Assurance Case in SACM Notation</i> by T. Scott Ankrum,
+The MITRE Corporation, May 2021</a>.</p>
+</blockquote>
+
+<h2>Assurance case summary</h2>
+
+<p>The following figures summarize why we think this application
+is adequately secure (more detail is provided in the rest of this document):
+The figures are simply a summary; the text below provides the details.</p>
+
+<h3>Top level assurance case in SACM notation</h3>
+
+<p>We are in the early stages of switching from
+Claims, Arguments, and Evidence (CAE) notation to the
+Structured Assurance Case Metamodel (SACM) graphical notation.
+We&#39;ve converted the top level to SACM notation, and here it is:</p>
+
+<p><img src="./assurance-case-toplevel-sacm.svg" alt="Assurance case summary"/></p>
+
+<h3>Assurance case in CAE notation</h3>
+
+<p>Currently our full assurance case is recorded in CAE notation.
+Here is the assurance case summary in CAE notation:</p>
+
+<p><img src="./assurance-case.png" alt="Assurance case summary"/>
+<img src="./assurance-case-lifecycle.png" alt="Assurance case in lifecycle"/>
+<img src="./assurance-case-implementation.png" alt="Assurance case in implementation"/>
+<img src="./assurance-case-other-lifecycle.png" alt="Assurance case in other processes"/></p>
+
+<h3>Overall approach</h3>
+
+<p>Our overall security approach is called
+defense-in-breadth, that is, we consider
+security (including security countermeasures) in all
+our relevant software life cycle processes (including
+requirements, design, implementation, and verification).
+In each software life cycle process we
+identify the specific issues that most need to be addressed,
+and then address them.</p>
+
+<p>We do <em>not</em> use a waterfall model for software development.
+It&#39;s important to note that when we use the word <em>process</em> it
+has a completely different meaning from a <em>stage</em> (aka <em>phase</em>).
+Instead, we use the word &quot;process&quot; with its standard meaning in
+software and systems engineering, that is,
+a &quot;process&quot; is just a &quot;set of interrelated or interacting activities
+that transforms inputs into outputs&quot; (ISO/IEC/IEEE 12207:2017).
+In a waterfall model, these processes are done to completion
+in a strict sequence of stages (where each stage occurs for some
+period of time).
+That is, you create all of the requirements in
+one stage, then do all the design in the next stage, and so on.
+Winston Royce&#39;s paper &quot;Managing the Development of Large Software Systems&quot;
+(1970) notes that in software development this naive waterfall approach
+&quot;is risky and invites failure&quot; - in practice
+&quot;design iterations are never confined to the successive steps&quot;.
+We obviously <em>do</em> determine what the software will do differently
+(requirements), as well as design, implement, and verify it, so we
+certainly do have these processes.
+However, as with almost all real software development projects,
+we perform these processes in parallel, iterating and
+feeding back as appropriate.
+Trying to make decisions without feedback is extremely dangerous, e.g., see
+<a href="https://www.younglingfeynman.com/essays/physicsenvy">How Our Physics Envy Results In False Confidence In Our Organizations</a>.
+Each process is (notionally) run in parallel;
+each receives inputs and produces outputs.</p>
+
+<p>To help make sure that we &quot;cover all important cases&quot;, most of
+this assurance case is organized by the life cycle processes
+as defined by ISO/IEC/IEEE 12207:2017,
+<i>Systems and software engineering - Software life cycle processes</i>.
+We consider every process, and include in the assurance case every
+process important to it.
+We don&#39;t claim that we conform to this standard, instead, we simply
+use the 12207 structure to help ensure that we&#39;ve considered
+all of the lifecycle processes.</p>
+
+<p>There are other ways to organize assurance cases, and we have taken
+steps to ensure that issues that would covered by them are indeed covered.
+An alternate way to view security issues is to discuss
+&quot;process, product, and people&quot;;
+we evaluate the product in the verification process, and
+the people in the human resources process.
+It is important to secure the enabling environments, including the
+development environments and test environment; it may not be obvious,
+but that is covered by the infrastructure management process.
+At the end we cover certifications and controls, which also help us
+reduce the risk of failing to identify something important.</p>
+
+<p>The following sections are organized following the assurance case figures:</p>
+
+<ul>
+<li>We begin with the overall security requirements.
+This includes not just the high-level requirements in terms
+of confidentiality, integrity, and availability, but also
+access control in terms of identification, authentication (login),
+and authorization.  Authentication
+is a cross-cutting and critical supporting security mechanism, so
+it&#39;s easier to describe it all in one place.</li>
+<li>This is followed in the software life cycle processes, focusing on
+the software lifecycle technical processes:
+design, implementation, integration and verification,
+transition (deployment) and operations, and maintenance.
+We omit requirements, since that was covered earlier.
+This is a merger of the second and third assurance case figures
+(implementation is shown in a separate figure because there is so much
+to it, but in the text we merge the contents of these two figures).</li>
+<li>We then discuss security implemented by other life cycle processes,
+broken into the main 12207 headings:
+agreement processes, organizational project-enabling processes, and
+technical management processes.
+Note that the organizational project-enabling processes include
+infrastructure management (where we discuss security of the
+development and test environment)
+and human resource management (where we discuss the knowledge of
+the key people involved in development).</li>
+<li>We close with a discussion of certifications and controls.
+Certification processes
+can help us find something we missed, as well as provide confidence
+that we haven&#39;t missed anything important).
+Note that the project receives its own badge
+(the CII best practices badge),
+which provides additional evidence that it applies best practices
+that can lead to more secure software.
+Similarly, selecting IA controls can help us review important issues
+to ensure that the system will be adequately secure in its intended
+environment (including any compensating controls added to its environment).
+We controls in the context of the
+<a href="https://www.cisecurity.org/controls/">Center for Internet Security (CIS) Controls</a>
+(aka critical controls).</li>
+</ul>
+
+<p>We conclude with a short discussion of residual risks,
+describe the vulnerability report handling process, and make
+a final appeal to report to us if you find a vulnerability.</p>
+
+<p>In this assurance case we typically point to source code or tests as
+evidence, and not the results of the tests themselves. We do not
+ship to production unless tests pass, so there is usually no reason to
+see the test results unless a test fails.
+That said, the test results for the master branch
+are available if desired at:
+<a href="https://app.circleci.com/pipelines/github/coreinfrastructure/best-practices-badge?branch=master">https://app.circleci.com/pipelines/github/coreinfrastructure/best-practices-badge?branch=master</a></p>
+
+<p>(Note to editors: to edit the figures above, edit the .odg file, then
+export to .png so that it can viewed on GitHub.)</p>
+
+<h2>CAE notation</h2>
+
+<p>Our full assurance case is currently described in CAE notation.</p>
+
+<p>Claims, Arguments and Evidence (CAE) notation
+is a simple notation often used for assurance cases.
+In CAE notation,
+Ovals are claims or sub-claims, while rounded rectangles are the supporting
+arguments justifying the claims.
+Evidence, where shown, are in rectangles.</p>
+
+<p>We do not show most evidence in the figures, but provide the evidence in
+the supporting text below instead, because large figures are time-consuming
+to edit and for our purposes providing most evidence only in the supporting
+test is adequate.</p>
+
+<h2>Structured Assurance Case Metamodel (SACM) Graphical Notation</h2>
+
+<p>Some figures of this assurance case uses a subset of the
+<a href="Structured%20Assurance%20Case%20Metamodel%20(SACM)">Object Management Group (OMG) Structured Assurance Case Metamodel (SACM)</a>
+graphical notation.
+The OMG specification, which is publicly available, defines SACM in detail.
+In this section we&#39;ll explain the subset of SACM
+graphical notation and conventions that we use.</p>
+
+<p>Assurance cases typically use one of three graphical notations:
+<a href="https://www.adelard.com/asce/choosing-asce/cae.html">Claims- Arguments- Evidence (CAE) notation</a>,
+Goal Structuring Notation (GSN), or the SACM graphical notation.
+The original BadgeApp assurance case used the
+CAE notation because it is simple and the SACM graphical notation did not exist.
+However, the SACM specification version 2.1 added in 2020
+a graphical notation that has many advantages, so we have switched to SACM.
+Later in this document we&#39;ll discuss the advantages of SACM.</p>
+
+<h3>Explanation of SACM Notation Subset</h3>
+
+<p>Here is the subset of the SACM graphical notation that we use:</p>
+
+<ol>
+<li><em>Claim</em>.
+A claim is a statement that can be either true or false (not both).
+A claim is represented as a rectangle (we fill them with light blue 3),
+A claim that supports another claim is also called a subclaim.
+It is equivalent to the CAE Claim and GSN Goal.</li>
+<li><em>ArtifactReference</em>, which is used for  <em>evidence</em>.
+An ArtifactReference refers to some artifact (such as a piece of information),
+and is represented as a shadowed rectangle.
+When an ArtifactReference is used to support a claim,
+which is the only way we use them, they&#39;re also called evidence.
+The official SACM graphical notation includes an angled arrow in its icon,
+but our tools don&#39;t easily support that.
+As we use them this is equivalent to the CAE Evidence and GSN Solution.</li>
+<li><em>ArgumentReasoning</em> aka <em>argument</em>.
+An argument explains why the supporting claims and evidence justify
+the claim.
+It is represented as a half-open rectangle
+(we fill them with light magenta 4).</li>
+<li><em>AssertedInference</em> and <em>AssertedEvidence</em>, aka kinds of <em>relationships</em>.
+SACM terminology is that an AssertedInference shows that a claim supports
+another claim, and an AssertedEvidence shows that an ArtifactReference
+(evidence) supports a claim.
+But they have the same graphical representation, and
+we&#39;ll just call both relationships.
+They are shown as directed lines with a bigdot
+and an arrowhead pointing to the claim(s) or relationship being justified.
+SACM relationships (AssertRelationships) can do more,
+but we do not use the other forms.</li>
+<li><em>ArgumentPackage</em> aka <em>package</em>.
+An argument package is a grouping of argumention elements.
+This lets us break the information into multiple pages.
+We show this as a scroll; the official SACM graphical symbol is complicated
+and not supported by our drawing tool.
+It is equivalent to the GSN Module.</li>
+<li><em>asCited Claim</em>.
+An asCited Claim is a claim expanded elsewhere, that is, a cross-reference.
+Its description text shows its containing package, followed by the
+claim id in square brackets.
+This is represented as a bracketed rectangle.</li>
+</ol>
+
+<p><img src="./sacm.svg" alt="SACM notation summary"/></p>
+
+<p>The text shows an ID and colon (in bold), followed by whitespace and
+its description.</p>
+
+<p>The SACM graphical notation includes many other features (such as
+contexts and other kinds of relationships) that we don&#39;t use.
+In SACM these elements can have &quot;notes&quot; attached to them; the equivalent
+to notes is the text in this document.
+The notes may refer to added evidence and/or arguments.
+We don&#39;t use many other constructs, such as SACM contexts.
+The paper
+&quot;A Visual Notation for the Representation of Assurance Cases using SACM&quot;
+(2020) provides more information, but unfortunately that paper
+is not publicly available.</p>
+
+<p>In the rest of this document we will often use the term &quot;argument&quot;
+for SACM’s ArgumentReasoning, and &quot;evidence&quot; for ArtifactReference,
+because these are simpler terms.</p>
+
+<h3>Conventions</h3>
+
+<p>Here are some conventions we use:</p>
+
+<ul>
+<li>Our convention is that the argument description completes the phrase
+&quot;The claim is justified by these subclaims/evidence because (TEXT)&quot;.</li>
+<li>Where possible, the first or second word in the description
+is distinctive.  That makes it easier to see what is most important.
+We try to put phrases like &quot;is secure&quot; or &quot;is countered&quot; last;
+those aren&#39;t distinctive, since many
+claims are about security or about countering something.</li>
+<li>We structure this as primarily claims and subordinate subclaims,
+instead of as arguments and subordinate arguments, per 2020 feedback from
+MITRE. This is an improvement; since claims are each true/false statements,
+the relationship between them is usually much clearer doing it this way.</li>
+</ul>
+
+<h2>Security Requirements</h2>
+
+<p>We believe the basic security requirements have been identified and met,
+as described below.
+The security requirements identified here were developed through our
+requirements process, which merges
+three related processes in ISO/IEC/IEEE 12207
+(business or mission analysis, stakeholder needs and requirements definition,
+and systems/software requirements definition).</p>
+
+<p>Security requirements are often divided into three areas called the
+&quot;CIA triad&quot;: confidentiality, integrity, and availability.
+We do the same here below, including a discussion of why we
+believe those requirements are met.
+These justifications depend on other processes
+(e.g., that the design is sound, the implementation is not vulnerable,
+verification is adequate), which we will justify later.
+This is followed by a discussion of access control, and then
+a discussion showing that the
+the assets &amp; threat actors have been identified &amp; addressed.</p>
+
+<p>See the design section for discussion about why we believe is not possible
+to bypass the mechanisms discussed below.</p>
+
+<h3>Confidentiality</h3>
+
+<h4>User privacy maintained</h4>
+
+<p>One of our key requirements is to
+&quot;protect users and their privacy&quot;.
+Here is a brief discussion on how we do that.</p>
+
+<p>First, the basics.
+We work hard to comply with the
+EU General Data Protection Regulation (GDPR), which has many requirements
+related to privacy.
+We have a separate document that details how we
+implement privacy in the CII Best Practices Badge site and comply with
+the GDPR:
+<a href="https://docs.google.com/document/d/1qarSkCJacjoMeu1k6p5JQXvPt-0xUqzKy3OW8zmGvpg">Privacy in the CII Best Practices site, focusing on the GDPR</a>.
+As discussed later, non-public data is kept confidential
+both at rest and in motion
+(in particular, email addresses are protected).</p>
+
+<p>Part of our privacy requirement is that we
+&quot;don&#39;t expose user activities to unrelated sites (including social media
+sites) without that user&#39;s consent&quot;;
+here is how we do that.</p>
+
+<p>We must first define what we mean by an unrelated site.
+A &quot;related&quot; site is a site that we are directly using to provide our service,
+in particular our cloud provider (Heroku which runs on
+Amazon&#39;s EC2 cloud-computing platform), CDN provider (Fastly),
+authorization and avatar services provider (GitHub),
+external avatar services (Gravatar),
+and logging / intrusion detection service.
+As a practical matter, related sites must (under various circumstances)
+receive some information about the user (at least that the user
+is trying to do something).
+This is true for all websites, so it&#39;s true for our site as well.
+In those cases we have selected partners we believe are trustworthy, and
+we have some kind of relationship with them.</p>
+
+<p>However, there is no reason unrelated sites
+<em>must</em> see what our users are doing,
+so we take many steps to prevent unrelated sites from
+learning about our users&#39; activities (and thus maintaining user privacy):</p>
+
+<ul>
+<li>We directly serve all our own assets ourselves,
+including JavaScript, images, and fonts.
+In particular, we do not have <em>any</em> embedded automatically-downloaded
+references (transclusions)
+in our web pages to external JavaScript or fonts.
+Since we serve these assets ourselves, and not via external
+third parties, external sites never receive any request from a user
+when they view our pages.
+As a result, user privacy is maintained: what a user views on our site
+is never revealed by our actions to unrelated sites.
+This also aids security; even if an attacker subverts some other site&#39;s
+JavaScript or font, that will not directly affect us because we do not embed
+references some other site&#39;s JavaScript or font in our web pages.
+Many sites don&#39;t do this and should probably consider it.
+This policy is enforced by our CSP policy.</li>
+<li>We do not serve ads and we plan to have no ads in the future.
+That said, if we ever did serve ads, we expect that we
+would also serve them from our site, just like any other asset, to
+ensure that third parties did not receive unauthorized information.</li>
+<li>We do not use any web analytics service that uses tracking codes or
+external assets.
+We log and store logs using only services we control or have a direct
+partnership with.</li>
+<li>The email we send is privacy-respecting.
+The email contents we send do not have img links (which might expose
+when an email is read). In some cases we have hyperlinks
+(e.g., to activate a local account), but those links go directly back
+to our site for that given purpose, and do not reveal information to
+anyone else.
+You need to configure the MTA used to send email before you can use it.
+We used to use SendGrid to send email; we have specifically configured the
+<a href="https://sendgrid.com/docs/ui/account-and-settings/tracking/">SendGrid X-SMTPAPI header to disable all of its trackers we know of</a>,
+which are clicktrack, ganalytics, subscriptiontrack, and opentrack.
+For example, we have never used ganalytics, but by expressly disabling it,
+it will stay disabled even if SendGrid decided to enable it by default
+in the future.</li>
+<li>We do have links to social media sites (e.g., from the home page), but we
+do this in a privacy-respecting manner.
+It would be easy to use techniques like embedding images
+from external (third party) social media sites,
+but we intentionally do not do that, because that would expose to an
+external unrelated site what our users are doing without their knowledge.
+We instead use the approach described in
+<a href="https://jonsuh.com/blog/social-share-links/#use-share-urls">&quot;Responsible Social Share Links&quot; by Jonathan Suh (March 26, 2015), specifically using share URLs</a>.
+In this approach, if a user does not press the link,
+the social media site never receives any information.
+Instead, a social media site
+<em>only</em> receives information when the user takes a direct action to
+request it (e.g., a click), and that site only receives information from
+the specific user who requested it.</li>
+</ul>
+
+<p>Note that user avatar images are handled specially. We consider
+the few avatar-serving domains that we use as related sites.
+This issue may not be obvious, so here we&#39;ll explain it further.
+A user can choose a representative avatar
+(currently via GitHub or Gravatar).
+Anyone who requests that user&#39;s information page will
+receive an <code>img</code> reference to that user-selected avatar so that
+the requestor can see it.
+External avatar images are only shown from specific domains
+(&#39;secure.gravatar.com&#39; or &#39;avatars.githubusercontent.com&#39;), they are
+only included if the user has an avatar, and they are only shown to
+others through this mechanism if that user&#39;s information was requested.
+This functionality is useful, because these images can help others remember
+who the user is.</p>
+
+<p>We have considered ways to further limit information sharing with avatar
+services even though they are related sites (and thus we do not <em>have</em>
+to limit information sharing any further).
+We have had some success, but current law and technology provide challenges.
+We could download these images and re-serve them (such as via a proxy),
+but copying or proxying the images
+using our own site might be considered a copyright violation
+and would also impose the need for significant extra resources.
+Thus, since we do not serve avatars ourselves, we must direct requesters
+to them, so at the very least the requestor&#39;s externally-visible IP address
+must be visible to the external avatar service (so the image can be provided).
+To provide additional privacy, we would like to also
+limit requestor headers and third-party cookies when using third-party
+avatar services
+(since these are the primary mechanisms that reveal more information
+about the requestor to the third party avatar service).
+Here is our current state:</p>
+
+<ul>
+<li>We think we have a decent solution for limiting
+requestor headers from being sent to avatar services.
+We have added the <code>referrerpolicy=&quot;no-referrer&quot;</code> attribute to the image
+as discussed in the
+<a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img">Mozilla img documentation</a>.
+While this attribute is technically experimental,
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/referrerPolicy">the referrerpolicy attribute on images is widely supported</a>,
+including by Chrome, Firefox, and Opera.</li>
+<li>Unfortunately, we have not found a <em>good</em> way to prevent
+third-party cookies from being sent to avatar services.
+<a href="https://stackoverflow.com/questions/51549390/how-to-disable-third-party-cookie-for-img-tags">There are discussions on how to disable third party cookies for img tags</a>,
+but currently-known mechanisms are very complex, require inline CSS
+invocations, and have dubious reliability.
+We hope that future web standards will add the ability to easily
+prevent the unnecessary revelation of third-party cookies.</li>
+</ul>
+
+<p>Note that we consider that things are very different
+when a user actively clicks on a hypertext link to go to a different web site.
+In this case, the user has <em>actively</em> selected to visit that different web site,
+and thus expressly consented to the usual actions that occur when visiting
+a different web site.
+The different web site must know the IP address of the user anyway
+(to send the data), and any cookie communications with that site involve
+that other site.
+We do allow referrer information to be sent in this case.
+When a user actively selects a hypertext link, it is normal web behavior
+for the receiving site to be provided with information on the referrer
+via the &quot;referer&quot; (sic) HTTP header as specified in
+<a href="https://tools.ietf.org/html/rfc1945#page-44">RFC 1945 (HTTP 1.0) from May 1996</a>.
+This referrer information reports where the user &quot;came from&quot;.
+This information is useful for many circumstances, including notifying
+recipients that people are discovering their site using our site.
+It would be <em>possible</em> for us to
+<a href="https://geekthis.net/post/hide-http-referer-headers/">disable sending referrer information</a>
+(e.g., by using <code>rel=&quot;noreferrer&quot;</code> in hypertext links or
+by setting a referrer policy via HTTP or the meta tag), but this
+would inhibit normal default web behavior.
+However, when users expressly choose to click on a link from our site,
+there is express consent to visit the other site,
+so we do not see this an issue.
+In addition, users who do not want to share referrer information can
+configure their browser to omit referrer information; this would
+be a much better choice for users who do not want referrer information
+to be shared.
+Information on how to disable referrer heading information is
+available from multiple sources, e.g.,
+<a href="https://www.addictivetips.com/vpn/change-referer-header-settings/">&quot;How to Change Referer Header Settings: Why It’s Useful&quot; by John Anthony</a>,
+<a href="https://www.technipages.com/firefox-enable-disable-referrer">&quot;Turn Referrer Headers On or Off in Firefox&quot; by Mitch Bartlet</a>,
+and
+<a href="https://proprivacy.com/guides/change-referer-header-settings">&quot;Why Should you Change your Referer Header settings &amp; How to do it&quot; by Douglas Crawford</a>.</p>
+
+<p>Of course, to access any site on the Internet
+the user must use various services and
+computers, and some of those could be privacy-exposing.
+For example, the user must make a request to a DNS service to find our
+service, and user requests must transit multiple Internet routers.
+We cannot control the systems that users choose to use; instead, we ensure that
+users can choose what services and computers they will trust.
+The BadgeApp does not filter out any particular source
+(other than temporary blocks if the source becomes a source of attack).
+Therefore, users who do not want their activities monitored
+could choose to use a network and computer they trust,
+a Virtual Private Network (VPN), or an anonymity network such as Tor
+to provide additional privacy when they interact with the BadgeApp.</p>
+
+<h4>Almost all data is not confidential</h4>
+
+<p>We try to store as little confidential information as we reasonably can,
+as this limits the impact of any confidentiality breach.
+Almost all data we collect is considered public, e.g., all project data,
+who owns the project information, and GitHub user names.
+Therefore, we don&#39;t need to keep those confidential.</p>
+
+<p>For each user account we store some other data.
+Some we present to the public, such as claimed user name,
+creation time, and edit times; we present these as we consider that
+public information.
+We do not present the user&#39;s preferred locale to the public, under the
+theory that we don&#39;t know of a reason someone else would
+have a legitimate reason to know that.
+However, all of this is not considered sensitive data and it is certainly
+not identifying information, so we would not consider it a breach
+if someone else got this information (such as the preferred locale).</p>
+
+<p>Non-public data is kept confidential.
+In our case, the non-public data that must be kept confidential
+are the user passwords, the &quot;remember me&quot; token (login nonce)
+if the user has enabled the remember me function, and user email addresses.
+We <em>do</em> consider this data higher-value and protect them specially.</p>
+
+<h4>User passwords</h4>
+
+<p>User passwords for local accounts are only stored on the server as
+iterated per-user salted hashes (using bcrypt), and thus cannot
+be retrieved in an unencrypted form later on from a recorded database.</p>
+
+<p>Any user password sent to the system is sent by the application router
+to the &quot;update&quot; method of the user controller
+(<code>app/controllers/users_controller.rb</code>).  The update method invokes the
+&quot;save&quot; method of the user model (<code>app/models/user.rb</code>).
+The user model includes the standards Rails
+<code>has_secure_password</code> request, which tells the system to save
+the password after it has been encrypted with bcrypt
+(instead of storing it directly), and to later do comparisons using
+only the bcrypted value.</p>
+
+<p>Note that no normal request can later retrieve a password, because
+it is immediately encrypted on change or check and the original
+unencrypted password is discarded.
+The unencrypted email address may remain for a while in server memory
+until that memory is recycled, but we assume that the underlying
+system will protect memory during the time before it is garbage-collected
+and reused.</p>
+
+<p>To help users avoid the <em>worst</em> passwords, we check proposed passwords
+against a list of bad passwords and don&#39;t allow passwords to change to them.
+This complies with NIST Special Publication 800-63B section 5.1.1.2.
+That list is long, so for speed we keep this list in the database
+(if we kept it in memory it would use a lot of memory).
+We don&#39;t trust long-term storage, so it&#39;s vital that we <em>never</em> record
+in logs a query that includes an unencrypted password.
+Also, while we trust our database and its connections, we want to limit
+privileges where we can. Thus, we take two steps to protect passwords
+while we check them against the bad password list in the database:</p>
+
+<ol>
+<li>We disable the bad password check if the log level is set to debug
+(which logs SQL queries) and we aren&#39;t running a test.
+It&#39;s better to disable the bad password check than to risk exposing
+a password. When this occurs, a warning it noted in the log.
+Note that the production environments settings do <em>not</em> use log level
+debug by default anyway, but we want to make sure it won&#39;t happen.</li>
+<li>Instead of storing the bad passwords directly, we stored keyed HMAC
+values of them, and the new password must <em>also</em> be converted into a
+keyed HMAC for comparison. The key is a secret for the application.
+This means that even if an attacker gains control over the database
+and/or can read communications to it (which we assume they can&#39;t do),
+the attacker would have to use a brute-force to find the key
+(we recommend 512 bits), <em>then</em> use that key to compute HMACs to attempt
+to discover a user&#39;s password. Rekeying the bad password database
+is trivial, when desired. A new key can be set in <code>BADGEAPP_BADPWKEY</code>
+and then you can run <code>rake update_bad_password_db</code> (it takes a few minutes).
+We do this to protect passwords used for queries between the application
+and the database, to counter someone snooping it.
+We <em>never</em> store the HMAC of the password anywhere. We instead use
+bcrypt for stored passwords (it&#39;s designed for that).
+Strictly speaking using HMAC isn&#39;t necessary, since we don&#39;t store it,
+but providing another layer of protections for passwords seemed appropriate.
+Theoretically a user could choose another password that isn&#39;t
+on the bad password list but matches its HMAC; that&#39;s so astronomically
+unlikely that it won&#39;t happen, and even if it did, it would just mean
+that the user would have to choose a different password.</li>
+</ol>
+
+<h4>Remember me token</h4>
+
+<p>Users may choose to &quot;remember me&quot; to automatically re-login on
+that specific browser if they use a local account.
+This is done by enabling the &quot;remember me&quot; checkbox when logging in to
+a session.
+If a user does enable &quot;remember me&quot; we implement automatic
+login when the user makes later requests.  This is implemented using a
+cryptographically random nonce stored in the user&#39;s web browser
+cookie store as a permanent cookie.
+Note that this nonce does not include the user&#39;s original password.
+On the server side this nonce is encrypted via bcrypt just like
+user passwords are stored.</p>
+
+<p>Here is how we do this: Any attempt to login is routed to the
+&quot;new&quot; method of the sessions controller in
+<code>app/controllers/sessions_controller.rb</code>, which calls method
+<code>local_login</code>, and if login is successful it
+calls <code>local_login_procedure</code>.
+If the user selected <code>remember_me</code>, the
+<code>local_login_procedure</code> will call the <code>remember</code> method in
+the user model (in <code>app/models/user.rb</code>) to create and store the
+<code>remember_token</code> in the user&#39;s cookie store and the corresponding
+bcrypted value on the server.
+The user may log out later (often by having their log in session time out).</p>
+
+<p>Whenever the system needs to determine who the current user is,
+it calls method <code>current_user</code> (in <code>app/helpers/sessions_helper.rb</code>).
+If the user is not logged in, but has a <code>remember_me</code> token that
+matches the hashed token on the server, this method automatically
+logs the user back in.
+See the section on authentication for more information.</p>
+
+<p>The system does not have the unencrypted <code>remember_token</code> for any
+given user (only its bcrypted form), so the system cannot later reveal the
+<code>remember_token</code> to anyone else.</p>
+
+<p>In file <code>test/integration/users_login_test.rb</code> we verify that the
+password is not stored as cleartext in the user cookie.</p>
+
+<h4>Email addresses</h4>
+
+<p>Email addresses are only revealed to the owner of the email address and to
+administrators.</p>
+
+<p>We must store email addresses,
+because we need those for various purposes.
+In particular, we must be able to contact badge entry owners
+to discuss badge issues (e.g., to ask for clarification).
+We also user email addresses as the user id for &quot;local&quot; accounts.
+Since we must store them,
+we strive to not reveal user email addresses to others
+(with the exception of administrators, who are trusted and thus
+can see them).</p>
+
+<p>Here are the only ways that user email addresses can be revealed
+(use <code>grep -Ri &#39;user.*\.email&#39; ./</code> to verify):</p>
+
+<ul>
+<li>Mailers (in <code>app/mailers/</code>).  The application sometimes sends email, and
+in all cases email is sent via mailers.  Unsurprisingly, we need destination
+email addresses to send email.  However, in all cases we only
+send emails to a single user, with possible &quot;cc&quot; or &quot;bcc&quot; to a
+(trusted) administrator.  That way, user email addresses cannot leak
+to other users via email.  This can be verified by examining the
+mailers in directory <code>app/mailers/</code> and their corresponding views in
+<code>app/views/*_mailer/</code>. Even the rake task <code>mass_email</code>
+(defined in file lib/tasks/default.rake),
+which can send a message such as &quot;we have been breached&quot; to
+all users, sends a separate email to each user using a mailer.
+A special case is when a user changes their email address: in that case,
+information is sent to both email addresses, but technically that is still
+an email to a single user, and this is only done when someone is logged
+in with authorization to change the user email address.</li>
+<li>The only <em>normal</em> way to display user email addresses is to invoke
+a view of a user or a list of users.  However, these invoke
+user views defined in <code>app/views/users/</code>, and all of these views only
+provide a user email address if the current user is the user
+being displayed
+or the current user is an administrator.  This is true for views in both
+HTML and JSON formats.
+In addition, while we directly display the email address when local users
+are editing it (we must, so that users can change it), when user
+records are shown (not edited) the email address is only available via
+a hypertext link, and not directly displayed on the screen, to reduce
+the risk of revealing an email address while using sharing a screen.
+The following automated tests verify that email addresses
+are not provided without authorization:
+
+<ul>
+<li><code>should NOT show email address when not logged in</code></li>
+<li><code>JSON should NOT show email address when not logged in</code></li>
+<li><code>should NOT show email address when logged in as another user</code></li>
+<li><code>JSON should NOT show email address when logged in as another user</code></li>
+</ul></li>
+<li>The <code>reminders_summary</code> view in
+<code>app/views/projects/reminders_summary.html.erb</code>
+does display user email addresses, but this is only displayed when a
+request is routed to the <code>reminders_summary</code> method of the projects controller
+(<code>app/controllers/projects_controller.rb</code>), and this method only displays
+that view to administrators.
+This is verified by the automated test
+<code>Reminders path redirects for non-admin</code>.</li>
+<li>As a special case, a user email address is included as a hidden field in
+a local user password reset in <code>app/views/password_resets/edit.html.erb</code>.
+However, this is only displayed if the user is routed to the &quot;edit&quot;
+method of <code>app/controllers/password_resets_controller.rb</code> and successfully
+meets two criterion (configured using <code>before_action</code>):
+<code>require_valid_user</code> and <code>require_unexpired_reset</code>.
+The first criterion requires that the user be activated and provide the
+correct reset authentication token that was emailed to the user;
+anyone who can do this can already receive or intercept that user&#39;s email.
+The need for the correct authentication token
+is verified by the automated test <code>password resets</code>.</li>
+</ul>
+
+<p>As documented in CONTRIBUTING.md, we forbid including email
+addresses in server-side caches, so that accidentally sharing the
+wrong cache won&#39;t reveal email addresses.
+Most of the rest of this document describes the other
+measures we take to prevent turning unintentional mistakes
+into exposures of this data.</p>
+
+<p>Note: As discussed further in the later section on &quot;Encrypted email addresses&quot;,
+we also encrypt the email addresses using AES with 256-bit keys in
+GCM mode (&#39;aes-256-gcm&#39;).  We also hash the email addresses, so they
+can be indexed, using the hashed key algorithm PBKDF2-HMAC-SHA256.
+These are strong, well-tested algorithms.
+We encrypt email addresses, to provide protection for data at rest,
+and never provide the keys to the database system
+(so someone who can only see what the database handles, or can
+get a copy of it, will not see sensitive data including
+raw passwords and unencrypted email addresses).
+These are considered additional hardening measures, and so are
+discussed further in the section on hardening.</p>
+
+<p>Password reset requests (for local users) trigger an email,
+but that email is sent to the address as provided by the original account;
+emails are <em>not</em> sent to whatever email address is provided by the
+reset requestor (who might be an attacker).
+These email addresses match in the sense of <code>find_by</code>, which is a
+case-insensitive match, but since it is sometimes possible for an attacker
+to create another email account that &quot;matches&quot; in a case-insensitive way
+to an existing account, we always use the known-correct email address.
+You can verify this by reviewing
+<code>app/controllers/password_resets_controller.rb</code>.
+This approach completely counters the attack described in
+<a href="https://eng.getwisdom.io/hacking-github-with-unicode-dotless-i/">Hacking GitHub with Unicode&#39;s dotless &#39;i&#39;</a>.</p>
+
+<p>The presence or absence of an email address is not revealed by the
+authentication system (countering enumeration or verification attacks):</p>
+
+<ol>
+<li>Local account creation always reports that the account must be
+verified by checking the delivered email, whether or not the email
+account exists. Thus, attempting to create a local account won&#39;t
+reveal if the account exists to others.</li>
+<li>Password reset requests do <em>not</em> vary depending
+on whether or not the email address is present as a local account.</li>
+<li>Failed login requests for local accounts simply reports that
+the login failed; they do not indicate if the email address is present.</li>
+</ol>
+
+<h4>HTTPS</h4>
+
+<p>HTTPS (specifically the TLS protocol)
+is used to encrypt all communications between users
+and the application.
+This protects the confidentiality and integrity of all data in motion,
+and provides confidence to users that they are contacting the correct server.</p>
+
+<p>We force the use of HTTPS by setting
+<code>config.force_ssl</code> to <code>true</code> in the
+<code>config/environments/production.rb</code> (the production configuration).
+This enables a number of hardening mechanisms in Rails, including
+TLS redirection (which redirects HTTP to HTTPS).
+(There is a debug mode to disable this, <code>DISABLE_FORCE_SSL</code>,
+but this is not normally set in production and can only be set by
+a system administrators with deployment platform access.)</p>
+
+<p>As discussed in the hardening section
+&quot;Force the use of HTTPS, including via HSTS&quot; (below), we take a number of
+additional steps to try to make users always use HTTPS.
+We also use <a href="#online-checkers">online checkers</a> (discussed below)
+to verify that our TLS configuration is secure in production.</p>
+
+<h3>Integrity</h3>
+
+<p>As noted above,
+HTTPS is used to protect the integrity of all communications between
+users and the application, as well as to authenticate the server
+to the user.</p>
+
+<h4>Data modification requires authorization</h4>
+
+<p>Data modification requires authorization.</p>
+
+<p>Here we describe how these authorization rules are enforced.
+We first discuss how to modify data through the BadgeApp application,
+and then note that data can also be modified by modifying it via the
+underlying database and platform.
+For more about the authorization rules themselves,
+see the section on authorization.
+Note that gaining authorization first requires logging in
+(which in turn requires both identification and authentication).</p>
+
+<p>The only kinds of data that can be modified involve a project or a user,
+and this data can only be modified through the application as follows:</p>
+
+<ul>
+<li>Project:
+Any project edit or deletion request is routed to the appropriate
+method in the projects controller in
+<code>app/controllers/projects_controller.rb</code>.
+Users cannot invoke any other method to modify a project other than
+the four methods corresponding to the requests identified below, and
+these cannot be executed unless the appropriate authentication check
+has succeeded:
+
+<ul>
+<li>In the case of an <code>edit</code> or <code>update</code> request, there is a <code>before_action</code>
+that verifies that the request is authorized using the check method
+<code>can_edit_else_redirect</code>.
+(Note: technically only <code>update</code> needs authentication, since
+<code>edit</code> simply displays a form to fill out.  However, to reduce
+user confusion, we prevent <em>displaying</em> a form for editing data
+unless the user is authorized to later perform an update.)
+This inability to edit a project without authorization
+is verified by automated tests
+<code>should fail to update project if not logged in</code> and
+<code>should fail to update other users project</code>.</li>
+<li>In the case of a <code>delete_form</code> or <code>destroy</code> request,
+there is a <code>before_action</code>
+that verifies that the request is authorized using the check method
+<code>can_control_else_redirect</code>.
+(Note: Again, technically only <code>destroy</code> needs authentication, but
+to reduce user confusion we will not even display the form for destroying
+a project unless the user is authorized to destroy it.)
+This inability to destroy a project without authorization
+is verified by automated tests
+<code>should not destroy project if no one is logged in</code> and
+<code>should not destroy project if logged in as different user</code>.</li>
+</ul></li>
+<li>User:
+Any user edit or deletion request is routed to the appropriate
+method in the user controller in
+<code>app/controllers/users_controller.rb</code>.
+These cannot be executed unless the appropriate authentication check
+has succeeded.
+In the case of an <code>edit</code> or <code>update</code> or <code>destroy</code> request,
+there is a <code>before_action</code>
+that verifies that the request is authorized using the check method
+<code>redir_unless_current_user_can_edit</code>.
+Users cannot invoke any other method to modify a user.
+This inability to edit or destroy a user without authorization
+is verified by these automated tests:
+
+<ul>
+<li><code>should redirect edit when not logged in</code></li>
+<li><code>should redirect edit when logged in as wrong user</code></li>
+<li><code>should redirect update when not logged in</code></li>
+<li><code>should redirect update when logged in as wrong user</code></li>
+<li><code>should redirect destroy when not logged in</code></li>
+<li><code>should redirect destroy when logged in as wrong non-admin user</code></li>
+</ul></li>
+</ul>
+
+<p>The <code>additional_rights</code> table, described below, is edited as
+part of editing its corresponding project or deleting its
+corresponding user, and so does not need to be discussed separately.
+No other data can be modified by normal users.</p>
+
+<p>It is also possible to directly modify the underlying database
+that records the data.
+However, only an administrator with deployment platform access
+is authorized to do that, and few people have that privilege.
+The deployment platform infrastructure verifies authentication and
+authorization.</p>
+
+<p>There is an odd special case involving the repository URL <code>repo_url</code>.
+We are trying to counter subtle attacks where
+a project tries to claim the good reputation or effort of another project
+by constantly switching its <code>repo_url</code> to other projects and/or nonsense.
+The underlying problem is that names/identities are hard; the <code>repo_url</code>
+(when present) is the closest to an &quot;identity&quot; that we have for a project.
+We have to allow it to change sometimes (because it sometimes does), but
+it should be a rare &quot;sticky&quot; event.
+There are various special cases, e.g., you can always set the <code>repo_url</code>
+if it&#39;s nil, the setter is an admin, or if only the scheme is changed.
+But otherwise normal users can&#39;t change the <code>repo_urls</code> in less than
+<code>REPO_URL_CHANGE_DELAY</code> days (a constant set in the projects controller).
+Allowing users to change <code>repo_urls</code>, but only
+with large delays, reduces the administration effort required.
+By doing this, we help protect the integrity of the overall database
+from potentially-malicious authorized users.</p>
+
+<h4>Modification to official application requires authorization via GitHub</h4>
+
+<p>Modifications to the official BadgeApp application require
+authorization via GitHub.
+We use GitHub for managing the source code and issue tracker; it
+has an authentication and authorization system for this purpose.</p>
+
+<h3>Availability</h3>
+
+<p>As with any publicly-accessible website,
+we cannot prevent an attacker with significant
+resources from temporarily overwhelming the system through
+a distributed denial-of-service (DDos) attacks.
+So instead, we focus on various kinds of resilience against DDoS attacks,
+and use other measures (such as backups) to maximize availability.
+Thus, even if the system is taken down temporarily, we expect to be
+able to reconstitute it (including its data).</p>
+
+<h4>Cloud &amp; CDN deployment allow quick scale-up</h4>
+
+<p>We can quickly add more resources if more requests are made.
+See the design section &quot;availability through scalability&quot; below
+for more about how we handle scaling up.</p>
+
+<h4>Timeout</h4>
+
+<p>All user requests have a timeout in production.
+That way, the system is not permanently &quot;stuck&quot; on a request.
+This is set by setting <code>Rack::Timeout.service_timeout</code>
+in file <code>config/environments/production.rb</code>.</p>
+
+<h4>Can return to operation quickly after DDoS ended</h4>
+
+<p>The system can return to operation quickly after
+a DDoS attack has ended.</p>
+
+<h4>Login disabled mode</h4>
+
+<p>We have implemented a &quot;login disabled mode&quot;
+(aka <code>BADGEAPP_DENY_LOGIN</code> mode) that we can quickly enable.</p>
+
+<p>This mode is an intentionally degraded mode of operation
+that prevents any changes by users (daily statistics
+creates are unaffected).
+More specifically, if this mode is enabled
+then no one can log in to the BadgeApp application,
+no one can create a new account (sign up),
+and no one can do anything that requires being logged in
+(users are always treated as if they are not logged in).</p>
+
+<p>This mode is intended to make some services available
+if there is a serious exploitable
+security vulnerability that can only be exploited by users who are
+logged in or can appear to be logged in.  Unlike <em>completely</em> disabling the
+site, this mode allows people to see current information
+(such as badge status, project data, and public user data).
+This mode is useful because it can stop many attacks, while still providing
+some services.</p>
+
+<p>This mode is enabled by setting the
+environmental variable <code>BADGEAPP_DENY_LOGIN</code> to a
+non-blank value (<code>true</code> is recommended).
+Note that application administrators cannot log in, or use their privileges,
+when this mode is enabled.
+Only hosting site administrators can turn this mode
+on or off (since they&#39;re the only ones who can set environment variables).</p>
+
+<p>This mode is checked on application startup by
+<code>config/initializers/deny_login.rb</code> which sets the boolean variable
+<code>Rails.application.config.deny_login</code>.
+Its effects can be verified by running
+<code>grep -R &#39;Rails.application.config.deny_login&#39; app/</code>;
+they are as follows:</p>
+
+<ul>
+<li>Users are never considered logged in, even if they already logged in.
+This is enforced in the <code>current_user</code> method in
+<code>app/helpers/sessions_helper.rb</code> - this always returns null (not logged in)
+when this deny mode is enabled.
+This is verified by test
+<code>current_user returns nil when deny_login</code>.</li>
+<li>Attempts to login are rejected via the <code>create</code> method
+of the session controller, per <code>app/controllers/sessions_controller.rb</code>.
+Technically this isn&#39;t necessary, since being logged in is ignored,
+but this rejection will alert users who start trying to log in before
+this mode was enabled.
+This is verified by test <code>local login fails if deny_login</code>.</li>
+<li>Attempts to create a new user account are rejected
+via the <code>create</code> method of the user controller, per
+<code>app/controllers/users_controller.rb</code>.
+We do not want the user database to change while this mode is in effect.
+This is verified by test
+<code>cannot create local user if login disabled</code></li>
+</ul>
+
+<p>Some views are also changed when this view is enabled.
+These changes are not security-critical.
+Instead, these changes provide users immediate feedback
+to help them understand that this special mode has been enabled.</p>
+
+<h4>Multiple backups</h4>
+
+<p>We routinely backup the database every day
+and retain multiple versions of backups.
+That way, if the project data is corrupted, we can restore the
+database to a previous state.</p>
+
+<h4>See also</h4>
+
+<p>Later in this assurance case we&#39;ll note other
+capabilities that also aid availability:</p>
+
+<ul>
+<li>As noted later in the hardening section, we also have rate limits on
+incoming requests, including the number of requests a
+client IP address can make in a given period.
+This provides a small amount of additional automated protection against
+being overwhelmed.</li>
+<li>As noted later in the &quot;Recovery plan including backups&quot;,
+we have a recovery plan that builds on our multiple backups.</li>
+</ul>
+
+<h3>Access Control</h3>
+
+<p>Many of the CIA triad requirements address &quot;authorized&quot; users,
+and that requires knowing what &quot;authorized&quot; means.
+Thus, like nearly all systems, we must address access control,
+which we can divide into identification, authentication, and authorization.
+Identity, authentication, and authorization are handled in a traditional
+manner, as described below.</p>
+
+<h4>Identification</h4>
+
+<p>Normal users must must first identify themselves in one of two ways:
+(1) as a GitHub user with their github account name, or
+(2) as a custom &quot;local&quot; user with their email address.</p>
+
+<p>The BadgeApp application runs on a deployment platform (Heroku),
+which has its own login mechanisms.
+Only those few administrators with deployment platform access have
+authorization to log in there, and those are protected by the
+deployment platform supplier (and thus we do not consider them further here).
+The login credentials in these cases are protected.</p>
+
+<h4>Authentication</h4>
+
+<p>As with most systems, it&#39;s critically
+important that authentication work correctly.
+Therefore, in this section we&#39;ll go into some detail about how
+authentication works within the BadgeApp application.</p>
+
+<p>This system implements two kinds of users: local and remote.
+Local users log in using a password, but
+user passwords are only stored on the server as
+iterated salted hashes (using bcrypt).
+Remote users use a remote system (we currently only support GitHub)
+using the widely-used OAUTH protocol.
+At the time the application was written, the recommendation
+was to <em>not</em> use libraries like Devise, because they were not mature at
+the time. Such libraries have become much more mature, but as of yet
+there hasn&#39;t been a good reason to change.</p>
+
+<p>The key code for authentication is the &quot;sessions&quot; controller file
+<code>app/controllers/sessions_controller.rb</code>.
+In this section we only consider the login mechanism
+built into the BadgeApp.  Heroku has its own login mechanisms, which must
+be carefully controlled but are out of scope here.</p>
+
+<p>A user who views &quot;/login&quot; will be routed to GET sessions#new, which returns
+the login page.  From there:</p>
+
+<ul>
+<li>A local user login will POST that information to /login, which is
+routed to session#create along with parameters such as session[email]
+and session[password].  If the bcrypt&#39;ed hash of the password matches
+the stored hash, the user is accepted.
+If password doesn&#39;t match, the login is rejected.
+This is verified with these tests:
+
+<ul>
+<li><code>Can login and edit using custom account</code></li>
+<li><code>Cannot login with local username and wrong password</code></li>
+<li><code>Cannot login with local username and blank password</code></li>
+</ul></li>
+<li>A remote user login (pushing the &quot;log in with GitHub&quot; button) will
+invoke GET &quot;/auth/github&quot;.  The application then begin an omniauth
+login, by redirecting the user to &quot;<a href="https://github.com/login?">https://github.com/login?</a>&quot;
+with URL parameters of <code>client_id</code> and <code>return_to</code>.
+When the GitHub login completes, then per the omniauth spec there&#39;s a
+redirect back to our site to /auth/github/callback, which is
+routed to session#create along with values such as
+the parameter session[provider] set to &#39;GitHub&#39;, which we then check
+by using the omniauth-github gem (this is the &quot;callback phase&quot;).
+If we confirm that GitHub asserts that the user is authenticated,
+then we accept GitHub&#39;s ruling for that github user and log them in.
+This interaction with GitHub uses <code>GITHUB_KEY</code> and <code>GITHUB_SECRET</code>.
+For more information, see the documentation on omniauth-github.
+Note that we trust GitHub to verify a GitHub account (as we must).
+This is verified as part of the test <code>Has link to GitHub Login</code>.</li>
+</ul>
+
+<p>The first thing that session#create does is run <code>counter_fixation</code>;
+this counters session fixation attacks
+(it also saves the forwarding url, in case we want to return to it).</p>
+
+<p>Local users may choose to &quot;remember me&quot; to automatically re-login on
+that specific browser if they use a local account.
+This is implemented using a
+cryptographically random nonce called <code>remember_token</code> that is
+stored in the user&#39;s cookie store as a permanent cookie.
+It&#39;s cryptographically random because it is created by the user model
+method <code>self.new_token</code> which calls <code>SecureRandom.urlsafe_base64</code>.
+This <code>remember_token</code> acts like a password, which is verified against a
+<code>remember_digest</code> value stored in the server
+that is an iterated salted hash (using bcrypt).
+This &quot;remember me&quot; functionality cannot reveal the user&#39;s
+original password, and if the server&#39;s user database is
+compromised an attacker cannot easily determine the nonce used to log in.
+The nonce is protected in transit by HTTPS (discussed elsewhere).
+The <code>user_id</code> stored by the user is signed by the server.</p>
+
+<p>As with any &quot;remember me&quot; system, this functionality has a
+weakness: if the user&#39;s system is compromised, others can copy the
+<code>remember_token</code> value and then log in as that user using the token
+if they use it before it expires.
+But this weakness is fundamental to any &quot;remember me&quot;
+functionality, and users must opt in to enable &quot;remember me&quot;
+(by default users must enter their password on each login,
+and the login becomes invalid when the user logs out or when
+the user exits the entire browser, because the cookie for login
+is only a session cookie).
+The &quot;remember me&quot; box was originally implemented
+in commit e79decec67.</p>
+
+<p>A session is created for each user who successfully logs in.</p>
+
+<h4>Authorization</h4>
+
+<p>Users who have not authenticated themselves can only perform
+actions allowed to anyone in the public (e.g., view the home page,
+view the list of projects, and view the information about each project).
+Once users are authenticated they are authorized to perform certain
+additional actions depending on their permissions.</p>
+
+<p>The permissions system is intentionally simple.
+As noted above,
+every user has an account, either a &#39;local&#39; account or an external
+system account (currently we support GitHub as an external account).
+A user with role=&#39;admin&#39; is an administrator;
+few users are administrators, and only those with direct platform (Heroku)
+access can set a user to be an administrator.</p>
+
+<p>Anyone can create a normal user account.
+Only that user, or an administrator, can edit or delete a user account.</p>
+
+<p>A user can create as many project entries as desired.
+Each project entry gets a new unique project id and is
+owned by the user who created the project entry.</p>
+
+<p>There are two kinds of rights over project data:
+&quot;control&quot; rights and &quot;edit&quot; rights.</p>
+
+<p>&quot;Control&quot; rights mean you can delete the project AND
+change who else is allowed to edit (they control their projects&#39;
+entry in the <code>additional_rights</code> table). Anyone with control rights
+also has edit rights.  The project owner has control
+rights to the projects they own,
+and admins have control rights over all projects.
+This is determined by the method <code>can_control?</code>.</p>
+
+<p>&quot;Edit&quot; rights mean you can edit the project entry. If you have
+control rights over a project you also have edit rights.
+In addition, fellow committers on GitHub for that project (if on GitHub),
+and users in the <code>additional_rights</code> table
+who have their <code>user_id</code> listed for that project, get edit rights
+for that project.</p>
+
+<p>If a GitHub user tries to edit a project on GitHub, and the user
+is not the badge owner, we permit edits in the following cases:</p>
+
+<ol>
+<li>The user is the repo owner. We can tell this because their login nickname
+matches the user name of the repo owner on GitHub.</li>
+<li>GitHub reports that the user is allowed to edit the project.
+We determine this (as of 2020-04-16) by using the GitHub repos API
+<a href="https://api.github.com/:owner/:repo">https://api.github.com/:owner/:repo</a> and checking the field &quot;permissions&quot;.
+We consider a user with <code>push</code> permissions an editor of the project,
+and thus someone who can edit the badge entry.
+This request only lists the permissions for that one repo, so this works
+relatively quickly even if a GitHub user has many permissions.
+(At one time we asked for a list of all user permissions, but that
+times out if a user has many permissions, and we didn&#39;t really want
+most of that data anyway.)
+We trust GitHub to provide correct data if it provides this data,
+but asking for this data causes delay (as we wait for this response)
+and there&#39;s a small risk that GitHub might stop reporting this data
+(it is not well-documented).  We&#39;ve countered those concerns with other
+steps. In particular, in most cases editors are either badge owners and/or
+the repo owner, and we check that first. This is faster, and in most
+cases editing will keep working even if GitHub stops reporting this
+data. In addition, the <code>additional_rights</code> table can always provide
+this functionality no matter what.</li>
+</ol>
+
+<p>The <code>additional_rights</code> table adds support for groups so that they can
+edit project entries in arbitrary cases
+(e.g., when the project is not on GitHub or a user
+is not on GitHub).
+This is determined by the method <code>can_edit?</code>.</p>
+
+<p>This means that
+a project entry can only be edited (and deleted) by the entry creator,
+an administrator, by others who can prove that they
+can edit that GitHub repository (if it is on GitHub), and by those
+authorized to edit via the <code>additional_rights</code> table.
+Anyone can see the project entry results once they are saved.</p>
+
+<p>We expressly include tests in our test suite
+of our authorization system
+to check that accounts cannot perform actions they are not authorized
+to perform (e.g., edit a project that they do not have edit rights to,
+or delete a project they do not control).
+It&#39;s important to test that certain actions that <em>must</em> fail for
+security reasons do indeed fail.
+For more, see the earlier section justifying the claim that
+&quot;Data modification requires authorization&quot;.</p>
+
+<h3>Assets &amp; threat actors identified &amp; addressed</h3>
+
+<h4>Assets</h4>
+
+<p>As should be clear from the basic requirements above, our assets are:</p>
+
+<ul>
+<li>  User passwords, especially for confidentiality.
+Unencrypted user passwords are the most critical
+to protect. As noted above, we protect these with bcrypt;
+we never store user passwords in an unencrypted or recoverable form.</li>
+<li>  The &quot;remember me&quot; nonce if a user requests it - we protect
+its confidentiality on the server side.</li>
+<li>  User email addresses, especially for confidentiality.</li>
+<li>  Project data, primarily for integrity and availability.
+We back these up to support availability.</li>
+</ul>
+
+<h4>Threat Agents</h4>
+
+<p>We have few insiders, and they are fully trusted to <em>not</em>
+perform intentionally-hostile actions.</p>
+
+<p>Thus, the threat agents we&#39;re primarily concerned about are outsiders,
+and the most concerning ones fit in one of these categories:</p>
+
+<ul>
+<li> people who enjoy taking over systems (without monetary benefit)</li>
+<li> criminal organizations who want to take emails and/or passwords
+as a way to take over others&#39; accounts (to break confidentiality).
+Note that our one-way iterated salted hashes counter easy access
+to passwords, so the most sensitive data is more difficult to obtain.</li>
+<li> criminal organizations who want destroy all our data and hold it for
+ransom (i.e., &quot;ransomware&quot; organizations).  Note that our backups
+help counter this.</li>
+</ul>
+
+<p>Criminal organizations may try to DDoS us for money, but there&#39;s no
+strong reason for us to pay the extortion fee.
+We expect that people will be willing to come back to the site later
+if it&#39;s down, and we have scalability countermeasures to reduce their
+effectiveness.  If the attack is ongoing, several of the services we use
+would have a financial incentive to help us counter the attacks.
+This makes the attacks themselves less likely
+(since there would be no financial benefit to them).</p>
+
+<p>Like many commercial sites,
+we do not have the (substantial) resources necessary
+to counter a state actor who decided to directly attack our site.
+However, there&#39;s no reason a state actor would directly attack the site
+(we don&#39;t store anything that valuable), so while many are very capable,
+we do not expect them to be a threat to this site.</p>
+
+<h3>Other Notes on Security Requirements</h3>
+
+<p>Here are a few other notes about the security requirements.</p>
+
+<p>It is difficult to implement truly secure software.
+One challenge is that BadgeApp must accept, store, and retrieve data from
+untrusted (non-admin) users.
+In addition, BadgeApp must also go out
+to untrusted websites with untrusted contents,
+using URLs provided by untrusted users,
+to gather data about those projects (so it can automatically fill in data).
+By &quot;untrusted&quot; we mean sites that might attempt to attack BadgeApp, e.g.,
+by providing malicious data or by being unresponsive.
+We have taken a number of steps to reduce the likelihood
+of vulnerabilities, and to reduce the impact of vulnerabilities
+where they exist.
+In particular, retrieval of external information is subject to a timeout,
+we use Ruby (a memory-safe language),
+and exceptions halt automated processing for that entry (which merely
+disables automated data gathering for that entry).</p>
+
+<p>Here we have identified the key security requirements and why we believe
+they&#39;ve been met overall.  However, there is always the possibility that
+a mistake could lead to failure to meet these requirements.
+It is not possible to eliminate all possible risks; instead,
+we focus on <em>managing</em> risks.
+We manage our security risks by
+implementing security in our software life cycle processes.
+We also protect our development environment and choose people
+who will help support this.
+The following sections describe how we&#39;ve managed our security-related risks.</p>
+
+<h2>Security in Design</h2>
+
+<p>We emphasize security in the architectural design.</p>
+
+<p>We first present a brief summary of the high-level design,
+followed by the results of threat modeling that are based on the design
+(this entire document is the result of threat modeling in the
+broader sense).
+The then discuss approaches we are using in the design
+to improve security:
+using a simple design,
+applying secure design principles,
+limiting memory-unsafe language use, and
+increasing availability through scalability.</p>
+
+<p>The design, including the security-related items identified here,
+were developed through our
+design process, which merges
+three related processes in ISO/IEC/IEEE 12207
+(architecture definition process, design definition process, and
+system analysis process).
+In particular, the STRIDE analysis results (below) are the primary output
+of our system analysis process.</p>
+
+<h3>High-level Design</h3>
+
+<p>The following figure shows a high-level design of the implementation:</p>
+
+<p><img src="./design.png" alt="Design"/></p>
+
+<p>See the <a href="./implementation.html">implementation</a> file to
+see a more detailed discussion of the software design.</p>
+
+<h3>Threat model focusing on design</h3>
+
+<p>There are many approaches for threat (attack) modeling, e.g., a
+focus on attackers, assets, or the design.
+We have already discussed attackers and assets; here we focus on the design.</p>
+
+<p>Here we have decided to apply a simplified version of
+Microsoft&#39;s STRIDE approach for threat modeling.
+As explained in
+<a href="https://msdn.microsoft.com/en-us/library/ee823878%28v=cs.20%29.aspx">The STRIDE Threat Model</a>, each major design component is examined for:</p>
+
+<ul>
+<li>  Spoofing identity. An example of identity spoofing is illegally accessing and then using another user&#39;s authentication information, such as username and password.</li>
+<li>  Tampering with data. Data tampering involves the malicious modification of data. Examples include unauthorized changes made to persistent data, such as that held in a database, and the alteration of data as it flows between two computers over an open network, such as the Internet.</li>
+<li>  Repudiation. Repudiation threats are associated with users who deny performing an action without other parties having any way to prove otherwise - for example, a user performs an illegal operation in a system that lacks the ability to trace the prohibited operations. Non-repudiation refers to the ability of a system to counter repudiation threats. For example, a user who purchases an item might have to sign for the item upon receipt. The vendor can then use the signed receipt as evidence that the user did receive the package.</li>
+<li>  Information disclosure. Information disclosure threats involve the exposure of information to individuals who are not supposed to have access to it-for example, the ability of users to read a file that they were not granted access to, or the ability of an intruder to read data in transit between two computers.</li>
+<li>  Denial of service. Denial of service (DoS) attacks deny service to valid users-for example, by making a Web server temporarily unavailable or unusable. You must protect against certain types of DoS threats simply to improve system availability and reliability.</li>
+<li>  Elevation of privilege. In this type of threat, an unprivileged user gains privileged access and thereby has sufficient access to compromise or destroy the entire system. Elevation of privilege threats include those situations in which an attacker has effectively penetrated all system defenses and become part of the trusted system itself, a dangerous situation indeed.</li>
+</ul>
+
+<p>The diagram shown earlier is not a data flow diagram
+(DFD), but it can be interpreted as one by interpreting
+the arrows as two-way data flows.
+This is frankly too detailed for such a simple system, so we will
+group rectangles together into a smaller set of processes as shown below.</p>
+
+<h4>Web server, Web App Interface, and Router</h4>
+
+<p>The web server and webapp interface accept untrusted data and deliver
+it to the appropriate controller.</p>
+
+<ul>
+<li>  Spoofing identity. N/A, identity is irrelevant because it&#39;s untrusted.</li>
+<li>  Tampering with data. Data is only accepted by the web server via HTTPS.</li>
+<li>  Repudiation. N/A.</li>
+<li>  Information disclosure. These simply deliver untrusted data to components
+we trust to handle it properly.</li>
+<li>  Denial of service. We use scalability, caching, a CDN,
+and rapid recovery to help deal with denial of service attacks.
+Large denial of service attacks are hard to counter, and we don&#39;t claim
+to be able to prevent them.</li>
+<li>  Elevation of privilege. By itself these components provide no privilege.</li>
+</ul>
+
+<h4>Controllers, Models, Views</h4>
+
+<ul>
+<li>  Spoofing identity. Identities are authenticated before they are used.
+Session values are sent back to the user, but stored in an encrypted
+container and only the server has the encryption key.</li>
+<li>  Tampering with data.
+User authorization is checked before changes are permitted.</li>
+<li>  Repudiation. N/A.</li>
+<li>  Information disclosure.  Sensitive data (passwords and email addresses)
+is not displayed in any view unless the user is an authorized admin.
+Our contributing documentation expressly forbids storing email addresses
+in the Rails cache; that way, if we accidentally display the wrong
+cache, no email address will be revealed.</li>
+<li>  Denial of service. See earlier comments on DoS.</li>
+<li>  Elevation of privilege.  These are written in a memory-safe language,
+and written defensively (since normal users are untrusted).
+There&#39;s no known way to use an existing
+privilege to gain more privileges.
+In addition, the application has no built-in mechanism
+for turning normal users into administrators; this must be done using
+the SQL interface that is only available to those who have admin rights
+to access the SQL database.  That&#39;s no guarantee of invulnerability,
+but it means that there&#39;s no pre-existing code that can be triggered
+to cause the change.</li>
+</ul>
+
+<h4>DBMS</h4>
+
+<p>There is no direct access for normal users to the DBMS;
+in production, access requires special Heroku keys.</p>
+
+<p>The DBMS does not know which user the BadgeApp
+is operating on behalf of, and does not have separate privileges.
+However, the BadgeApp uses ActiveRecord and parameterized statements,
+making it unlikely that an attacker can use SQL injections to
+insert malicious queries.</p>
+
+<ul>
+<li>  Spoofing identity. N/A, the database doesn&#39;t track identities.</li>
+<li>  Tampering with data. The BadgeApp is trusted to make correct requests.</li>
+<li>  Repudiation. N/A.</li>
+<li>  Information disclosure.  The BadgeApp is trusted to make correct requests.</li>
+<li>  Denial of service. See earlier comments on DoS.</li>
+<li>  Elevation of privilege.  N/A, the DBMS doesn&#39;t separate privileges.</li>
+</ul>
+
+<h4>Chief and Detectives</h4>
+
+<ul>
+<li>  Spoofing identity. N/A, these simply collect data.</li>
+<li>  Tampering with data. These use HTTPS when provided HTTPS URLs.</li>
+<li>  Repudiation. N/A.</li>
+<li>  Information disclosure.  These simply retrieve and summarize
+information that is publicly available, using URLs provided by users.</li>
+<li>  Denial of service.  Timeouts are in place so that if the project
+isn&#39;t responsive, eventually the system automatically recovers.</li>
+<li>  Elevation of privilege.  These are written in a memory-safe language,
+and written defensively (since the project sites are untrusted).</li>
+</ul>
+
+<h4>Admin CLI</h4>
+
+<p>There is a command line interface (CLI) for admins.
+This is the Heroku CLI.
+Admins must use their unique credentials to log in.
+<a href="https://github.com/heroku/cli/blob/master/http.go">The channel between the admin and the Heroku site is encrypted using TLS</a>.</p>
+
+<ul>
+<li>  Spoofing identity. Every admin has a unique credential.</li>
+<li>  Tampering with data. The communication channel is encrypted.</li>
+<li>  Repudiation. Admins have unique credentials.</li>
+<li>  Information disclosure.  The channel is encrypted in motion.</li>
+<li>  Denial of service.  Heroku has a financial incentive to keep this
+available, and takes steps to do so.</li>
+<li>  Elevation of privilege.  N/A; anyone allowed to use this is privileged.</li>
+</ul>
+
+<h4>Translation service and I18n text</h4>
+
+<p>This software is internationalized.</p>
+
+<p>All text used for display is in the directory &quot;config/locales&quot;; on the figure
+this is shown as I18n (internationalized) text.
+The source text specific to the application is in English
+in file config/locales/en.yml.
+The &quot;rake translation:sync&quot; command, which is executed within the
+<em>development</em> environment, transmits the current version of en.yml
+to the site translation.io, and loads the current text from translation.io into
+the various config/locales files.
+Only authorized translators are given edit rights to translations on
+translation.io.</p>
+
+<p>We consider translation.io and our translators as trusted.
+That said, we impose a variety of security safeguards as if they were not
+trusted.  That way, if something happens (e.g., someone&#39;s account is
+subverted), then the damage that can be done is limited.</p>
+
+<p>Here are the key security safeguards:</p>
+
+<ul>
+<li>During &quot;translation:sync&quot; synchronization,
+the &quot;en.yml&quot; file downloaded from translation.io is erased, and
+the original &quot;en.yml&quot; is restored.  Thus, translation.io <em>cannot</em> modify
+the English source text.</li>
+<li>After synchronization, and on every test run (including deployment to a tier),
+<em>every</em> text segment (including English) is checked, including to
+ensure that <em>only</em> an allowlisted set of HTML tags
+and attributes (at most) are
+included in every text.  The tests will fail, and the system will not be
+deployed, if any other tags or attributes are used.
+This set does not include dangerous tags such as &lt;script&gt;.
+The test details are in <code>test/models/translations_test.rb</code>.
+Thus, while a translation can be wrong or be defaced,
+what it can include in the HTML (and thus attack users) is very limited.
+Although not relevant to security, it&#39;s worth noting that these tests
+also check for many errors in translation.  For example, only Latin
+lowercase letters are allowed after &quot;&lt;&quot; and &quot;&lt;/&quot;; these protect
+against following these sequences with whitespace or a Cyrillic &quot;a&quot;.</li>
+<li>Synchronization simply transfers the updated translations to the
+directory config/locales.  This is then reviewed by a committer before
+committing, and goes through tiers as usual.</li>
+</ul>
+
+<p>We don&#39;t want the text defaced, and take a number of steps to prevent it.
+That said, what&#39;s more important is ensuring that defaced text is unlikely
+to turn into an attack on our users, so we take <em>extra</em> cautions
+to prevent that.</p>
+
+<p>Given these safeguards, here is how we deal with STRIDE:</p>
+
+<ul>
+<li>  Spoofing identity. Every translator has a unique credential.</li>
+<li>  Tampering with data. Translators other than admins are only given edit
+rights for a particular locale.  The damage is limited, because
+the text must pass through an HTML sanitizer.</li>
+<li>  Repudiation. Those authorized on translation.io have unique credentials.</li>
+<li>  Information disclosure.  The channel is encrypted in motion, and in
+any case other than passwords this is all public information.</li>
+<li>  Denial of service.  Translation.io has a financial incentive to keep its
+service available, and takes steps to do so.
+At run-time the system uses its internal text copy, so if
+translation.io stops working for a while, our site can continue working.
+If it stayed down, we could switch to another service or do it ourselves.</li>
+<li>  Elevation of privilege.  A translator cannot edit the source text files
+by this mechanism.  Sanitization checks limit the damage that can be done.</li>
+</ul>
+
+<h3><a name="simple-design"></a>Simple design</h3>
+
+<p>This web application has a simple design.
+It is a standard Ruby on Rails design with models, views, and controllers.
+In production it is accessed via a web server (Puma) and
+builds on a relational database database system (PostgreSQL).
+The software is multi-process and is intended to be multi-threaded
+(see the <a href="../CONTRIBUTING.html">CONTRIBUTING.md</a> file for more about this).
+The database system itself is trusted, and the database managed
+by the database system is not directly accessible by untrusted users.
+The application runs on Linux kernel and uses some standard operating system
+facilities and libraries (e.g., to provide TLS).
+All interaction between the users and the web application go over
+an encrypted channel using TLS.
+There is some JavaScript served to the client,
+but no security decisions depend on code that runs on the client.</p>
+
+<p>The custom code has been kept as small as possible, in particular, we&#39;ve
+tried to keep it DRY (don&#39;t repeat yourself).</p>
+
+<p>From a user&#39;s point of view,
+users potentially create an id, then log in and enter data
+about projects (as new or updated data).
+Users can log in using a local account or by using their GitHub account.
+Non-admin users are not trusted.
+The entry of project data (and potentially periodically) triggers
+an evaluation of data about the project, which automatically fills in
+data about the project.
+Projects that meet certain criteria earn a badge, which is displayed
+by requesting a specific URL.
+A &quot;Chief&quot; class and &quot;Detective&quot; classes attempt to get data about a project
+and analyze that data; this project data is also untrusted
+(in particular, filenames, file contents, issue tracker information and
+contents, etc., are all untrusted).</p>
+
+<h3>Secure design principles</h3>
+
+<p>Applying various secure design principles helps us avoid
+security problems in the first place.
+The most widely-used list of security design principles, and
+one we build on, is the list developed by
+<a href="http://web.mit.edu/Saltzer/www/publications/protection/">Saltzer and Schroeder</a>.</p>
+
+<p>Here are a number of secure design principles and how we follow them,
+including all 8 principles from
+<a href="http://web.mit.edu/Saltzer/www/publications/protection/">Saltzer and Schroeder</a>:</p>
+
+<ul>
+<li>Economy of mechanism (keep the design as simple and small as practical,
+e.g., by adopting sweeping simplifications).
+We discuss this in more detail in the section
+&quot;<a href="#simple-design">simple design</a>&quot;.</li>
+<li>Fail-safe defaults (access decisions should deny by default):
+Access decisions are deny by default.</li>
+<li>Complete mediation (every access that might be limited must be
+checked for authority and be non-bypassable):
+Every access that might be limited is checked for authority and
+non-bypassable.  Security checks are in the controllers, not the router,
+because multiple routes can lead to the same controller
+(this is per Rails security guidelines).
+When entering data, JavaScript code on the client shows whether or not
+the badge has been achieved, but the client-side code is <em>not</em> the
+final authority (it&#39;s merely a convenience).  The final arbiter of
+badge acceptance is server-side code, which is not bypassable.</li>
+<li>Open design (security mechanisms should not depend on attacker
+ignorance of its design, but instead on more easily protected and
+changed information like keys and passwords):
+The entire program is open source software and subject to inspection.
+Keys are kept in separate files not included in the public repository.</li>
+<li>Separation of privilege (multi-factor authentication,
+such as requiring both a password and a hardware token,
+is stronger than single-factor authentication):
+We don&#39;t use multi-factor authentication because the risks from compromise
+are smaller compared to many other systems
+(it&#39;s almost entirely public data, and failures generally can be recovered
+through backups).</li>
+<li>Least privilege (processes should operate with the
+least privilege necessary): The application runs as a normal user,
+not a privileged user like &quot;root&quot;.  It must have read/write access to
+its database, so it has that privilege.</li>
+<li>Least common mechanism (the design should minimize the mechanisms
+common to more than one user and depended on by all users,
+e.g., directories for temporary files):
+No shared temporary directory is used.  Each time a new request is made,
+new objects are instantiated; this makes the program generally thread-safe
+as well as minimizing mechanisms common to more than one user.
+The database is shared, but each table row has access control implemented
+which limits sharing to those authorized to share.</li>
+<li>Psychological acceptability
+(the human interface must be designed for ease of use,
+designing for &quot;least astonishment&quot; can help):
+The application presents a simple login and &quot;fill in the form&quot;
+interface, so it should be acceptable.</li>
+<li>Limited attack surface (the attack surface, the set of the different
+points where an attacker can try to enter or extract data, should be limited):
+The application has a limited attack surface.
+As with all Ruby on Rails applications, all access must go through the
+router to the controllers; the controllers then check for access permission.
+There are few routes, and few controller methods are publicly accessible.
+The underlying database is configured to <em>not</em> be publicly accessible.
+Many of the operations use numeric ids (e.g., which project), which are
+simply numbers (limiting the opportunity for attack because numbers are
+trivial to validate).</li>
+<li>Input validation with allowlists
+(inputs should typically be checked to determine if they are valid
+before they are accepted; this validation should use allowlists
+(which only accept known-good values),
+not denylists (which attempt to list known-bad values)):
+In data provided directly to the web application,
+input validation is done with allowlists through controllers and models.
+Parameters are first checked in the controllers using the Ruby on Rails
+&quot;strong parameter&quot; mechanism, which ensures that only an allowlisted set
+of parameters are accepted at all.
+Once the parameters are accepted, Ruby on Rails&#39;
+<a href="http://guides.rubyonrails.org/active_record_validations.html">active record validations</a>
+are used.
+All project parameters are checked by the model, in particular,
+status values (the key values used for badges) are checked against
+an allowlist of values allowed for that criterion.
+There are a number of freetext fields (name, license, and the
+justifications); since they are freetext these are the hardest
+to allowlist.
+That said, we even impose restrictions on freetext, in particular,
+they must be valid UTF-8, they must not include control characters
+(other than \n and \r), and they have maximum lengths.
+These checks by themselves cannot counter certain attacks;
+see the text on security in implementation for the discussion on
+how this application counters SQL injection, XSS, and CSRF attacks.
+URLs are also limited by length and an allowlisted regex, which counters
+some kinds of attacks.
+When project data (new or edited) is provided, all proposed status values
+are checked to ensure they are one of the legal criteria values for
+that criterion (Met, Unmet, ?, or N/A depending on the criterion).
+Once project data is received, the application tries to get some
+values from the project itself; this data may be malevolent, but the
+application is just looking for the presence or absence of certain
+data patterns, and never executes data from the project.</li>
+</ul>
+
+<h3>Availability through scalability</h3>
+
+<p>Availability is, as always, especially challenging.
+Our primary approach is to ensure that the design scales.</p>
+
+<p>As a Ruby on Rails application, it is designed so each request can
+be processed separately on separate processes.
+We use the &#39;puma&#39; web server to serve multiple processes
+(so attackers must have many multiple simultaneous requests to keep
+them all busy),
+and timeouts are used (once a request times out, the process is
+automatically killed and the server can process a new request).
+The system is designed to be easily scalable (just add more worker
+processes), so we can quickly purchase additional computing resources
+to handle requests if needed.</p>
+
+<p>The system is currently deployed to Heroku, which imposes a hard
+time limit for each request; thus, if a request gets stuck
+(say during autofill by a malevolent actor who responds slowly),
+eventually the timeout will cause the response to stop and the
+system will become ready for another request.</p>
+
+<p>We use a Content Delivery Network (CDN), specifically Fastly,
+to provide cached values of badges.
+These are the most resource-intense kind of request, simply because
+they happen so often.
+As long as the CDN is up, even if the application crashes the
+then-current data will stay available until the system recovers.</p>
+
+<p>The system is configured so all requests go through the CDN (Fastly),
+then through Heroku; each provides us with some DDoS protections.
+If the system starts up with Fastly configured, then the software
+loads the set of valid Fastly IP addresses, and rejects any requests
+from other IPs.  This prevents &quot;cloud piercing&quot;.
+This does use the value of the header X-Forwarded-For, which could
+be provided by an attacker, but Heroku guarantees a particular order
+so we only retrieve the value that we can trust (through Heroku).
+This has been verified to work, because all of the following are rejected:</p>
+<pre><code>curl https://master-bestpractices.herokuapp.com/
+curl -H "X-Forwarded-For: 23.235.32.1" \
+     https://master-bestpractices.herokuapp.com/
+curl -H "X-Forwarded-For: 23.235.32.1,23.235.32.1" \
+     https://master-bestpractices.herokuapp.com/
+</code></pre>
+<p><a href="https://cpdos.org/">Systems that use CDNs can be vulnerable to the Cache Poisoned Denial of Service (CPDoS) family of vulnerabilities</a>.
+We do use a CDN (Fastly), but our brief research
+suggests that this site is not vulnerable to CPDoS.
+The resarchers of CPDoS posted what they found vulnerable, and their
+&quot;Fastly&quot; column has empty rows for &quot;Heroku&quot; and &quot;Rails&quot;.
+Unfortunately they don&#39;t directly list Puma (our webserver),
+but Puma is the recommended webserver by Heroku for Rails and
+is the usual choice.</p>
+
+<p>The system implements a variety of server-side caches, in particular,
+it widely uses fragment caching.  This is primarily to improve performance,
+but it also helps with availability against a DDoS, because
+once a result has been cached it requires very little effort to
+serve the same information again.</p>
+
+<p>A determined attacker with significant resources could disable the
+system through a distributed denial-of-service (DDoS) attack.
+However, this site doesn&#39;t have any particular political agenda,
+and taking it down is unlikely to provide monetary gain.
+Thus, this site doesn&#39;t seem as likely a target for a long-term DDoS
+attack, and there is not much else we can do to counter DDoS
+by an attacker with significant resources without having
+significant resources ourselves.</p>
+
+<h3>Memory-safe languages</h3>
+
+<p>All the code we have written (aka the custom code)
+is written in memory-safe languages
+(Ruby and JavaScript), so the vulnerabilities of memory-unsafe
+languages (such as C and C++) cannot occur in the custom code.
+This also applies to most of the code in the directly depended libraries.</p>
+
+<p>Some lower-level reused components (e.g., the operating system kernel,
+database management system, encryption library, and some of the Ruby gems)
+do have C/C++, but these are widely used components where we have
+good reason to believe that developers are directly working to mitigate
+the problems from memory-unsafe languages.
+See the section below on supply chain (reuse) for more.</p>
+
+<h2>Security in Implementation</h2>
+
+<p>Most implementation vulnerabilities are due to common types
+of implementation errors or common misconfigurations,
+so countering them greatly reduces security risks.</p>
+
+<p>To reduce the risk of security vulnerabilities in implementation we
+have focused on countering the OWASP Top 10,
+both the
+<a href="https://www.owasp.org/index.php/Top_10_2013-Top_10">OWASP Top 10 (2013)</a>
+and
+<a href="https://www.owasp.org/index.php/Top_10-2017_Top_10">OWASP Top 10 (2017)</a>.
+To counter common misconfigurations, we apply the
+<a href="http://guides.rubyonrails.org/security.html">Ruby on Rails Security Guide</a>.
+We have also taken steps to harden the application.
+Finally, we try to stay vigilant when new kinds of vulnerabilities are
+reported that apply to this application, and make adjustments.
+Below is how we&#39;ve done each, in turn.</p>
+
+<h3>Common implementation vulnerability types countered (OWASP top 10)</h3>
+
+<p>The OWASP Top 10
+(<a href="https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project">details</a>)
+represents &quot;a broad consensus about what the most
+critical web application security flaws are.&quot;
+When this application was originally developed, the current version was
+<a href="https://www.owasp.org/index.php/Top_10_2013-Top_10">OWASP Top 10 (2013)</a>.
+Since that time the 2017 version, aka
+<a href="https://www.owasp.org/index.php/Top_10-2017_Top_10">OWASP Top 10 (2017)</a>,
+has become available.
+We address all of the issues identified in both lists.
+By ensuring that we address all of them,
+we address all of the most critical and common flaws for
+this we application.</p>
+
+<p>Here are the OWASP top 10
+and how we attempt to reduce their risks in BadgeApp.
+We list them in order of the ten 2013 items, and then (starting at #11)
+list the additional items added since 2013.</p>
+
+<ol>
+<li>Injection.
+BadgeApp is implemented in Ruby on Rails, which has
+built-in protection against SQL injection.  SQL commands are generally
+not used directly, instead Rails includes ActiveRecord, which implements an
+Object Relational Mapping (ORM) with parameterized commands.
+In a few rare cases SQL commands (or fragments of them) are created directly,
+but these SQL commands never use unparameterized untrusted inputs.
+Any inputs to SQL commands are always parameterized, trusted, or both,
+typically using its parametrized mechanisms or similar mechanisms such as
+<code>sanitize_sql_like</code>.
+Note: Admin user search intentionally does NOT escape LIKE wildcards
+(% and _) to support GDPR compliance and legal requests requiring
+pattern matching. This is safe because only admin users can access
+this functionality (UsersController#search_name).
+The shell is not used to download or process file contents (e.g., from
+repositories), instead, various Ruby APIs acquire and process it directly.</li>
+<li>Broken Authentication and Session Management.
+Sessions are created and destroyed through a common
+Rails mechanism, including an encrypted and signed cookie authentication
+value.</li>
+<li>Cross-Site Scripting (XSS).
+We use Rails&#39; built-in XSS
+countermeasures, in particular, its &quot;safe&quot; HTML mechanisms such
+as SafeBuffer.  By default, Rails always applies HTML escapes
+on strings displayed through views unless they are marked as safe.
+<a href="http://yehudakatz.com/2010/02/01/safebuffers-and-rails-3-0/">SafeBuffers and Rails 3.0</a>
+discusses this in more detail.
+This greatly reduces the risk of mistakes leading to XSS vulnerabilities.
+In addition, we use a restrictive Content Security Policy (CSP).
+Our CSP, for example, tells web browsers to not execute any JavaScript
+included in HTML (JavaScript must be in separate JavaScript files).
+This makes limits damage even if an attacker gets something into
+the generated HTML.</li>
+<li>Insecure Direct Object References.
+The only supported direct object references are for publicly available
+objects (stylesheets, etc.).
+All other requests go through routers and controllers,
+which determine what may be accessed.</li>
+<li>Security Misconfiguration.
+See the section on <a href="#misconfiguration">countering misconfiguration</a>.</li>
+<li>Sensitive Data Exposure.
+We generally do not store sensitive data; most of the data about projects
+is intended to be public.  We do store email addresses, and work to
+prevent them from exposure.
+The local passwords are potentially the most sensitive; stolen passwords
+allow others to masquerade as that user, possibly on other sites
+if the user reuses the password on other sites.
+Local passwords are encrypted with bcrypt
+(this is a well-known iterated salted hash algorithm) using a per-user salt.
+We don&#39;t store email addresses in the Rails cache, so if even if the
+wrong cache is used an email address won&#39;t be exposed.
+We use HTTPS to establish an encrypted link between the server and users,
+to prevent sensitive data (like passwords) from being disclosed in motion.</li>
+<li>Missing Function Level Access Control.
+The system depends on server-side routers and controllers for
+access control.  There is some client-side JavaScript, but no
+access control depends on it.</li>
+<li> Cross-Site Request Forgery (CSRF or XSRF).
+We use the built-in Rails CSRF countermeasure, where csrf tokens
+are included in replies and checked on POST inputs.
+We also set cookies with SameSite=Lax, which automatically counters
+CSRF on supported browsers (such as Chrome).
+Our restrictive Content Security Policy (CSP) helps here, too.
+For more information, see the
+<a href="http://guides.rubyonrails.org/security.html#cross-site-request-forgery-csrf">Ruby on Rails Guide on Security (CSRF)</a> and
+<a href="http://api.rubyonrails.org/classes/ActionController/RequestForgeryProtection.html">ActionController request forgery protection</a>.
+We can walk through various cases to show that this problem cannot occur
+with user Alice, attacker Mallory, and our server:
+
+<ul>
+<li>If Alice is not logged in, Alice has no currently-active
+privileges for CSRF to exploit.</li>
+<li>We&#39;ll assume Alice knows that logging into Mallory&#39;s
+site is not the same as logging into our site,
+that our anti-spoofing (&quot;frame busting&quot;) techniques work, and that
+TLS (with certificates) works correctly.
+Thus, Mallory can&#39;t just show a &quot;login here&quot; page that Alice will use.
+From here on, we&#39;ll assume that Alice is logged in normally through
+our website, and that Mallory will try to convince Alice to click
+on something on a website controlled by Mallory to create
+a CSRF attack (which tries to fool our site through Alice).</li>
+<li>If Alice contacts Mallory&#39;s website, Alice won&#39;t send the session cookie
+(so Mallory can&#39;t directly spoof Alice&#39;s session).
+Mallory could create HTML (e.g., hyperlinks and forms) for Alice;
+if Alice selects something on Mallory&#39;s HTML,
+Alice will send a request to our server.
+That request from Alice using Mallory&#39;s data could be either a GET/HEAD
+or something else (such as POST).
+So now, let&#39;s consider those two sub-cases:
+
+<ul>
+<li>GET and HEAD are by design never dangerous requests;
+our server merely shows data that Alice is already allowed to see.
+So there is no problem in this case.</li>
+<li>If the request is something else (such as POST),
+then there are two sub-sub-cases:
+
+<ul>
+<li>If the request is something else (such as POST),
+and Alice is using a browser with SameSite cookie support, Alice
+will not send the cookie data - and thus on this request it
+would be as if Alice was not logged in (which is safe).</li>
+<li>If the request is something else (such as POST),
+and Alice is using
+a browser without SameSite=Lax support, our server will check to
+ensure that the form and cookie data provided by Alice match,
+and only allow actions if they match.
+In this final case, Mallory never got the cookie data,
+so Mallory cannot create a form to match it, foiling Mallory.
+Thus, our approach completely counters CSRF.</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>Using Components with Known Vulnerabilities.
+See the maintenance process.</li>
+<li>Unvalidated Redirects and Forwards.
+Redirects and forwards are used sparingly, and they are validated.</li>
+<li>XML External Entities (XXE). This was added in 2017 as &quot;A4&quot;.
+Old versions of Rails were vulnerable to some XML external entity
+attacks, but the XML parameters parser was removed from core in Rails 4.0,
+and we do not re-add that optional feature.
+Since we do not accept XML input from untrusted sources, we
+cannot be vulnerable.
+We do <em>generate</em> XML (for the Atom feed), but that&#39;s different.
+One area where we may <em>appear</em> to be vulnerable, but we
+believe we are not, involves nokogiri, libxml2, and
+<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2016-9318">CVE-2016-9318</a>.
+The analysis of Nokogiri is further discussed below in the section
+on supply chain.</li>
+<li>Insecure Deserialization. This was added in 2017 as &quot;A8&quot;.
+This vulnerability would permit remote code execution or
+sensitive object manipulation on affected platforms.
+The application itself only accepts JSON and HTML fields (POST or GET).
+The JSON parser only deserializes to trusted standard objects
+which are never executed.
+A key component we use, Rails&#39; Action Controller,
+<a href="http://guides.rubyonrails.org/action_controller_overview.html#hash-and-array-parameters">does implement hash and array parameters</a>,
+but these only generate hashes and arrays - there is no
+general deserializer that could lead to an insecurity.</li>
+<li>Insufficient Logging and Monitoring. This was added in 2017 as &quot;A10&quot;.
+We do logging and monitoring, as discussed elsewhere.</li>
+</ol>
+
+<p>Broken Access Control was added in 2017 as &quot;A5&quot;, but it&#39;s
+really just a merge of the
+2013&#39;s A4 (Insecure Direct Object References)
+2013&#39;s A7 (Missing Function Level Access Control), which we&#39;ve
+covered as discussed above.
+Thus, we don&#39;t list that separately.</p>
+
+<p>We continue to cover the 2013 A8 (Cross-Site Request Forgery (CSRF))
+and 2013 A10 (Unvalidated Redirects and Forwards), even thought they are
+not listed in the 2017 edition of the OWASP top 10.</p>
+
+<h3><a name="misconfiguration"></a>Common misconfiguration errors countered: Ruby on Rails Security Guide</h3>
+
+<p>A common security problem with applications is misconfiguration;
+here is how we reduce the risks from misconfiguration.</p>
+
+<p>We take a number of steps to counter misconfiguration.
+We have strived to enable secure defaults from the start.
+We use a number of <a href="#online-checkers">external online checkers</a>
+to detect common HTTPS misconfiguration problems (see below).
+We use Brakeman and CodeQL, which can detect
+some misconfigurations in Rails applications.
+We invoke static analysis tools (Brakeman and CodeQL) as part of
+our continuous integration pipeline.</p>
+
+<p>However, our primary mechanism for countering misconfigurations is by
+identifying and apply ing the most-relevant security guide available.</p>
+
+<p>This entire application is built on Ruby on Rails.
+The Ruby on Rails developers provide a
+<a href="http://guides.rubyonrails.org/security.html">Ruby on Rails Security Guide</a>,
+which identifies what they believe are the most important areas to
+check for securing such applications.
+Since this guide is focused on the infrastructure we use, we think this is
+the most important guide for us to focus on.</p>
+
+<p>We apply the entire guide.
+Here is a discussion on how we apply the entire guide, per its chapters
+as of 2015-12-14:</p>
+
+<ol>
+<li><em>Introduction.</em> N/A.</li>
+<li><em>Sessions.</em>
+We use sessions, and use session cookies to store them
+because of their wide support and efficiency.
+We use the default Rails CookieStore mechanism to store sessions;
+it is both simple and much faster than alternatives.
+Rails implements an automatic cookie authentication mechanism (using a
+secret key referred to as <code>secret_key_base</code>)
+to ensure that clients cannot undetectably change
+these cookies; a changed value created without being re-authenticated
+is thrown away.
+Logged-in users have their user id stored in this authenticated cookie
+(There is also a <code>session_id</code>, not currently used.)
+Session data is intentionally kept small, because of the limited
+amount of data available in a cookie.
+To counteract session hijacking, we configure the production
+environment to always communicate over an encrypted channel using TLS
+(see file <code>config/environments/production.rb</code> which sets
+<code>config.force_ssl</code> to true).
+The design allows users to drop cookies at any time
+(at worse they may have to re-login to get another session cookie).
+One complaint about Rails&#39; traditional CookieStore is that if someone
+gets a copy of a session cookie, they can log in as that user, even
+if the cookie is years old and the user logged out.
+(e.g., because someone got a backup copied).
+Our countermeasure is to time out inactive sessions, by
+also storing a <code>time_last_used</code> in the session
+cookie (the UTC time the cookie was last used).
+Once the time expires, then even if someone else later gets an old
+cookie value, it cannot be used to log into the system.</li>
+<li><em>Cross-Site Request Forgery (CSRF).</em>
+We use the standard REST operations with their standard meanings
+(GET, POST, etc., with the standard Rails method workaround).
+We have a CSRF required security token implemented using
+<code>protect_from_forgery</code> built into the application-wide controller
+<code>app/controllers/application_controller.rb</code>
+(we do not use cookies.permanent or similar, a contra-indicator).
+Also, we set cookies with SameSite=Lax; this is a useful hardening
+countermeasure in browsers that support it.</li>
+<li><em>Redirection and Files.</em>
+The application uses relatively few redirects; those that do involve
+the &quot;id&quot;, which only works if it can find the value corresponding to
+the id first (which is an allowlist).
+File uploads aren&#39;t directly supported; the application does
+temporarily load some files (as part of autofill), but those filenames
+and contents are not directly made available to any other user
+(indeed, they&#39;re thrown away once autofill completes; caching may
+keep them, but that simply allows re-reading of data already acquired).
+The files aren&#39;t put into a filesystem, so there&#39;s no
+opportunity for executable code to be put into the filesystem this way.
+There is no arbitrary file downloading capability, and private files
+(e.g., with keys) are not in the docroot.</li>
+<li><em>Intranet and Admin Security.</em>
+Some users have &#39;admin&#39; privileges, but these additional privileges
+simply let them edit other project records.
+Any other direct access requires logging in to the production system
+through a separate log in (e.g., to use &#39;rails console&#39;).
+Indirect access (e.g., to update the code the site runs)
+requires separately logging into
+GitHub and performing a valid git push (this must also pass through the
+continuous integration test suite).
+It&#39;s possible to directly push to the Heroku sites to deploy software,
+but this requires the credentials for directly logging into the
+relevant tier (e.g., production), and only authorized system administrators
+have those credentials.</li>
+<li><em>User management.</em>
+Local passwords have a minimum length (8) and cannot be
+a member of a set of known-bad passwords.  We allow much longer passwords.
+This complies with NIST Special Publication 800-63B,
+&quot;Digital Authentication Guideline: Authentication and Lifecycle Management&quot;
+<a href="https://pages.nist.gov/800-63-3/sp800-63b.html">https://pages.nist.gov/800-63-3/sp800-63b.html</a> section 5.1.1.2.
+We expect users to
+protect their own passwords; we do not try to protect users from themselves.
+The system is not fast enough for a naive password-guesser to succeed
+guessing local passwords via network access (unless the password
+is really bad).
+The forgotten-password system for local accounts
+uses email; that has its weaknesses,
+but the data is sufficiently low value, and there aren&#39;t
+good alternatives for low value data like this.
+This isn&#39;t as bad as it might appear, because we prefer encrypted
+channels for transmitting all emails.
+Historically our application attempts to send
+messages to its MTA using TLS (using <code>enable_starttls_auto: true</code>),
+and that MTA then attempts to transfer the email the rest
+of the way using TLS if the recipient&#39;s email system supports it
+(see <a href="https://sendgrid.com/docs/Glossary/tls.html">https://sendgrid.com/docs/Glossary/tls.html</a>).
+This is good protection against passive attacks, and is relatively decent
+protection against active attacks if the user chooses an email system
+that supports TLS (an active attacker has to get between the email
+MTAs, which is often not easy).
+More recently we&#39;re using <code>enable_starttls: true</code> which <em>forces</em> email to be
+encrypted point-to-point.
+If users don&#39;t like that, they can log in via GitHub and use GitHub&#39;s
+system for dealing with forgotten passwords.
+The file <code>config/initializers/filter_parameter_logging.rb</code>
+intentionally filters passwords so that they are not included in the log.
+We require that local user passwords have a minimum length
+(see the User model), and this is validated by the server
+(in some cases the minimum length is also checked by the web client,
+but this is not depended on).
+Ruby&#39;s regular expression (regex) language oddly interprets &quot;^&quot; and &quot;$&quot;,
+which can lead to defects (you&#39;re supposed to use \A and \Z instead).
+However, Ruby&#39;s format validator and the &quot;Brakeman&quot; tool both detect
+this common mistake with regexes, so this should be unlikely.
+Since the project data is public, manipulating the &#39;id&#39; cannot reveal
+private public data.  We don&#39;t consider the list of valid users
+private either, so again, manipulating &#39;id&#39; cannot reveal anything private.</li>
+<li><em>Injection.</em>
+We use allowlists to validate project data entered into the system.
+When acquiring data from projects during autofill, we do only for the
+presence or absence of patterns; the data is not stored (other than caching)
+and the data is not used in command interpreters (such as SQL or shell).
+SQL injection is countered by Rails&#39; built-in database query mechanisms,
+we primarily use specialized routines like find() that counter
+SQL injection, but parameterized queries are also allowed for untrusted data
+(and also counter SQL injection).
+XSS, CSS injection, and Ajax injection are
+countered using Rails&#39; HTML sanitization
+(by default strings are escaped when generating HTML).
+The program doesn&#39;t call out to the command line or use a routine
+that directly does so, e.g., there&#39;s no call
+to system()... so command injection won&#39;t work either.
+The software resists header injection including response splitting;
+headers are typically not dynamically generated, most redirections
+(using <code>redirect_to</code>) are to static locations, and the rest are based
+on filtered locations.
+We use a restrictive CSP setting to limit damage if all those fail.</li>
+<li><em>Unsafe Query Generation.</em>
+We use the default Rails behavior, in particular, we leave
+<code>deep_munge</code> at its default value
+(this default value counters a number of vulnerabilities).</li>
+<li><em>Default Headers.</em>
+We use at least the default security HTTP headers,
+which help counter some attacks.
+We harden the headers further, in particular via the
+<a href="https://github.com/twitter/secureheaders"><code>secure_headers</code></a> gem.
+For example, we use a restrictive Content Security Policy (CSP) header.
+For more information, see the hardening section.</li>
+</ol>
+
+<p>The
+<a href="http://guides.rubyonrails.org/security.html">Ruby on Rails Security Guide</a>
+is the official Rails guide, so it is the primary guide we consult.
+That said, we do look for other sources for recommendations,
+and consider them where they make sense.</p>
+
+<p>In particular, the
+<a href="https://github.com/ankane/secure_rails"><code>ankane/secure_rails</code></a> guide
+has some interesting tips.
+Most of them were were already doing, but an especially interesting
+tip was to
+&quot;Prevent host header injection -
+add the following to config/environments/production.rb&quot;:</p>
+<pre><code>config.action_controller.default_url_options = {host: "www.yoursite.com"}
+config.action_controller.asset_host = "www.yoursite.com"
+</code></pre>
+<p>We already did the first one, but we also added the second.</p>
+
+<p>In many Rails configurations this is a critically-required configuration,
+and failing to follow these steps could lead in part
+to a potential compromise.
+In our particular configuration the host value is set
+by a trusted entity (Heroku), so we were never vulnerable,
+but there is no reason to depend on the value Heroku provides.
+We know the correct values, so we forcibly set them.
+This ensures that even if a user provides a &quot;host&quot; value,
+and for some reason Heroku allows it to pass through or we
+switch to a different computation engine provider,
+we will not use this value; we will instead use a preset trusted value.</p>
+
+<h3>Hardening</h3>
+
+<p>We also use various mechanisms to harden the system against attack.
+These attempt to thwart or slow attack even if the system has a vulnerability
+not countered by the main approaches described elsewhere in this document.</p>
+
+<h4>Force the use of HTTPS, including via HSTS</h4>
+
+<p>We take a number of steps to force the use of HTTPS instead of HTTP.</p>
+
+<p>The &quot;coreinfrastructure.org&quot; domain is included in
+<a href="https://hstspreload.org/?domain=coreinfrastructure.org">Chrome&#39;s HTTP Strict Transport Security (HSTS) preload list</a>.
+This is a list of sites that are hardcoded into Chrome as being HTTPS only
+(some other browsers also use this list), so in many cases browsers
+will automatically use HTTPS (even if HTTP is requested).</p>
+
+<p>If the web browser uses HTTP anyway,
+our CDN (Fastly) is configured to redirect HTTP to HTTPS.
+If our CDN is misconfigured or skipped for some reason, the application
+will also redirect the user from HTTP to HTTPS if queried directly.
+This is because in production <code>config.force_ssl</code> is set to true,
+which enables a number of hardening mechanisms in Rails, including
+TLS redirection (which redirects HTTP to HTTPS), secure cookies,
+and HTTP Strict Transport Security (HSTS).
+HSTS tells browsers to always use HTTPS in the future for this site,
+so once the user contacts the site once, it will use HTTPS in the future.
+See
+<a href="http://eftimov.net/rails-tls-hsts-cookies">&quot;Rails, Secure Cookies, HSTS and friends&quot; by Ilija Eftimov (2015-12-14)</a>
+for more about the impact of <code>force_ssl</code>.</p>
+
+<h4>Hardened outgoing HTTP headers, including restrictive CSP</h4>
+
+<p>We harden the outgoing HTTP headers, in particular, we use a
+restrictive Content Security Policy (CSP) header with just
+&quot;normal sources&quot; (<code>normal_src</code>).  We do send a
+Cross-Origin Resource Sharing (CORS) header when an origin is specified,
+but the CORS header does <em>not</em> share credentials.</p>
+
+<p>CSP is perhaps one of the most important hardening items,
+since it prevents execution of injected JavaScript).
+The HTTP headers are hardened via the
+<a href="https://github.com/twitter/secureheaders"><code>secure_headers</code></a> gem,
+developed by Twitter to enable a number of HTTP headers for hardening.
+We check that the HTTP headers are hardened in the test file
+<code>test/integration/project_get_test.rb</code>; that way, when we upgrade
+the <code>secure_headers</code> gem, we can be confident that the headers continue to
+be restrictive.
+The test checks for the HTTP header values when loading a project entry,
+since that is the one most at risk from user-provided data.
+That said, the hardening HTTP headers are basically the same for all
+pages except for <code>/project_stats</code>, and that page doesn&#39;t display
+any user-provided data.
+We have separately checked the CSP values we use with
+<a href="https://csp-evaluator.withgoogle.com/">https://csp-evaluator.withgoogle.com/</a>;
+the only warning it mentioned is that the our &quot;default-src&quot; allows &#39;self&#39;,
+and it notes that
+&quot;&#39;self&#39; can be problematic if you host JSONP, Angular
+or user uploaded files.&quot;  That is true, but irrelevant, because we don&#39;t
+host any of them.</p>
+
+<p>The HTTP headers <em>do</em> include a
+Cross-Origin Resource Sharing (CORS) header when an origin is specified.
+We do this so that client-side JavaScript served by other systems can
+acquire data directly from our site (e.g., to download JSON data to
+extract and display).
+CORS disables the usual shared-origin policy, which is always a concern.
+However, the CORS header expressly does <em>not</em> share credentials, and
+our automated tests verify this (both when an origin is sent, and when
+one is not).  The CORS header <em>only</em> allows GET; while an attacker <em>could</em>
+set the method= attribute, that wouldn&#39;t have any useful effect, because
+the attacker won&#39;t have credentials (except for themselves, and
+attackers can always change the data they legitimately have rights to
+on the BadgeApp).
+A CORS header does make it <em>slightly</em> easier to perform
+a DDoS attack (since JavaScript clients can make excessive data demands),
+but a DDoS attack can be performed without it, and our usual DDoS
+protection measures (including caching and scaling) still apply.</p>
+
+<h4>Cookie limits</h4>
+
+<p>Cookies have various restrictions (also via the
+<a href="https://github.com/twitter/secureheaders"><code>secure_headers</code></a> gem).
+They have httponly=true (which counters many JavaScript-based attacks),
+secure=true (which is irrelevant because we always use HTTPS but it
+can&#39;t hurt), and SameSite=Lax (which counters CSRF attacks on
+web browsers that support it).</p>
+
+<p>We also use the Rails 5.2 default setting which embeds
+the expiry information in encrypted or signed cookies value to
+improve security.
+Embedding and checking expiration data
+makes it harder to exploit these cookies.
+See
+<a href="https://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html#expiry-in-signed-or-encrypted-cookie-is-now-embedded-in-the-cookies-values">expiry in signed or encrypted cookie is now embedded in the cookies values</a>.</p>
+
+<h4>CSRF token hardening</h4>
+
+<p>We use two additional CSRF token hardening techniques
+to further harden the system against CSRF attacks.
+Both of these techniques are Rails 5 additions:</p>
+
+<ul>
+<li>We enable per-form CSRF tokens
+(<code>Rails.application.config.action_controller.</code> <code>per_form_csrf_tokens</code>).</li>
+<li>We enable origin-checking CSRF mitigation
+(<code>Rails.application.config.action_controller.</code>
+<code>forgery_protection_origin_check</code>).</li>
+</ul>
+
+<p>These help counter CSRF, in addition to our other measures.</p>
+
+<h4>Incoming rate limits</h4>
+
+<p>Rate limits provide an automated partial
+countermeasure against denial-of-service and password-guessing attacks.
+These are implemented by Rack::Attack and have two parts, a
+&quot;LIMIT&quot; (maximum count) and a &quot;PERIOD&quot; (length of period of time,
+in seconds, where that limit is not to be exceeded).
+If unspecified they have the default values specified in
+<code>config/initializers/rack_attack.rb</code>.  These settings are
+(where &quot;IP&quot; or &quot;ip&quot; means &quot;client IP address&quot;, and &quot;req&quot; means &quot;requests&quot;):</p>
+
+<ul>
+<li>req/ip</li>
+<li>logins/ip</li>
+<li>logins/email</li>
+<li>signup/ip</li>
+</ul>
+
+<p>We also have a set of simple FAIL2BAN settings that temporarily
+bans an IP address if it makes too many &quot;suspicious&quot; requests.
+The exact production settings are not documented here, since we
+don&#39;t want to tell attackers what we look for.
+This isn&#39;t the same thing as having a <em>real</em>
+web application firewall, but it&#39;s simple and counters some
+trivial attacks.</p>
+
+<p>To determine the remote client IP address (for our purposes) we use the
+the next-to-last value of the comma-space-separated value
+<code>HTTP_X_FORWARDED_FOR</code> (from the HTTP header X-Forwarded-For).
+That&#39;s because the last value of <code>HTTP_X_FORWARDED_FOR</code>
+is always our CDN (which intercepts it first), and the previous
+value is set by our CDN to whatever IP address the CDN got.
+The web server is configured so it will only accept connections from the
+CDN - this prevents web piercing, and means that we can trust that the
+client IP value we receive is only from the CDN (which we trust for
+this purpose).
+A client can always set X-Forwarded-For and try to spoof something,
+but those entries are always earlier in the list
+(so we can easily ignore them).</p>
+
+<h4>Outgoing email rate limit</h4>
+
+<p>We enable rate limits on outgoing reminder emails.
+We send reminder emails to projects that have not updated their
+badge entry in a long time. The detailed algorithm that prioritizes projects
+is in <code>app/models/project.rb</code> class method <code>self.projects_to_remind</code>.
+It sorts by reminder date, so we always cycle through before returning to
+a previously-reminded project.</p>
+
+<p>We have a hard rate limit on the number of emails we will send out each
+time; this keeps us from looking like a spammer.</p>
+
+<h4>Encrypted email addresses</h4>
+
+<p>We encrypt email addresses within the database, and never
+send the decryption or index keys to the database system.
+This provides protection of this data at rest, and also means that
+even if an attacker can view the data within the database, that attacker
+will not receive sensitive information.
+Email addresses are encrypted as described here, and almost all other
+data is considered public or at least not sensitive
+(the exception are passwords, which are
+specially encrypted as described above).</p>
+
+<p>A little context may be useful here.
+We work hard to comply with various privacy-related regulations,
+including the European General Data Protection Regulation (GDPR).
+We do not believe that encrypting email addresses is strictly
+required by the GDPR.
+Still, we want to not just meet requirements, we want to exceed them.
+Encrypting email addresses makes it even harder for attackers to get this
+information, because it&#39;s encrypted at rest and not available by extracting
+data from the database system.</p>
+
+<p>First, it is useful to note why we encrypt just email addresses
+(and passwords), and not all data.
+Most obviously, almost all data we manage is public anyway.
+In addition,
+the easy ways to encrypt data aren&#39;t available to us. Transparent Data
+Encryption (TDE) is not a capability of PostgreSQL. Whole-database
+encryption can be done with other tricks but it is extremely expensive
+on Heroku.
+Therefore, we encrypt data that is more sensitive, instead of
+encrypting everything.</p>
+
+<p>We encrypt email addresses using the Rails-specific approach outlined in
+<a href="https://shorts.dokkuapp.com/securing-user-emails-in-rails/">&quot;Securing User Emails in Rails&quot; by Andrew Kane (May 14, 2018)</a>.
+We use the gem <code>attr_encrypted</code> to encrypt email addresses, and
+gem <code>blind_index</code> to index encrypted email addresses.
+This approach builds on standard general-purpose approaches for
+encrypting data and indexing the data, e.g., see
+<a href="https://www.sitepoint.com/how-to-search-on-securely-encrypted-database-fields/">&quot;How to Search on Securely Encrypted Database Fields&quot; by Scott Arciszewski</a>.
+The important aspect here is that we encrypt the data (so it cannot be
+revealed by those without the encryption key),
+and we also create cryptographic keyed hashes of the data (so
+we can search on the data if we have the hash key).
+The latter value is called a &quot;blind index&quot;.</p>
+
+<p>We encrypt the email addresses using AES with 256-bit keys in
+GCM mode (&#39;aes-256-gcm&#39;).  AES is a well-accepted widely-used
+encryption algorithm.  A 256-bit key is especially strong.
+The GCM mode is a widely-used strong encryption mode; it provides
+an integrity (&quot;authentication&quot;) mechanism.
+Each separate encryption uses a separate long initialization vector (IV)
+created using a cryptographically-strong random number generator.</p>
+
+<p>We also hash the email addresses, so they can be indexed.
+Indexing is necessary so that we can quickly find matching email addresses
+(e.g., for local user login).
+We hash them using the hashed key algorithm PBKDF2-HMAC-SHA256.
+SHA-256 is a widely-used cryptographic hash algorithm (in the SHA-2 family),
+and unlike SHA-1 it is not broken.
+Using sha256 directly would be vulnerable to a length extension attack.
+A length extension attack is probably irrelevant in this circumstance,
+but just in case, we counter that anyway.
+We counter the length extension problem by using HMAC and PBKDF2.
+HMAC is defined in RFC 2104, which is the algorithm
+H(K XOR opad, H(K XOR ipad, text)).
+This enables us to use a private key on the hash, counters length
+extension, and is very well-studied.
+We also use PBKDF2 for key extension.  This is another well-studied
+and widely-accepted algorithm.
+For our purposes we believe PBKDF2-HMAC-SHA256 is
+far stronger than needed, and thus is quite sufficient
+to protect the information.
+The hashes are of email addresses after they&#39;ve been downcased;
+this supports case-insensitive searching for email addresses.</p>
+
+<p>The two keys used for email encryption are
+<code>EMAIL_ENCRYPTION_KEY</code> and <code>EMAIL_BLIND_INDEX_KEY</code>.
+Both are 256 bits long (aka 64 hexadecimal digits long).
+The production values for both keys were independently created as
+cryptographically random values using <code>rails secret</code>.</p>
+
+<p>Implementation note: the indexes created by <code>blind_index</code> always
+end in a newline.  That doesn&#39;t matter for security, but it can cause
+debugging problems if you weren&#39;t expecting that.</p>
+
+<p>Note that <code>attr_encrypted</code> depends on the gem <code>encryptor</code>.
+Encryptor version 2.0.0 had a
+<a href="https://github.com/attr-encrypted/encryptor/pull/22">major security bug when using AES-*-GCM algorithms</a>.
+We do not use that version, but instead use
+a newer version that does not have that vulnerability.
+Some old documentation recommends using
+<code>attr_encryptor</code> instead because of this vulnerability, but the
+vulnerability has since been fixed and
+<code>attr_encryptor</code> is no longer maintained.
+Vulnerabilities are never a great sign, but we do take it as a good sign
+that the developers of encryptor were willing to make a breaking change
+to fix a security vulnerabilities.</p>
+
+<p>We could easily claim this as a way to support confidentiality,
+instead of simply as a hardening measure.
+We only claim email encryption
+as a hardening measure because we must still support
+two-way encryption and decryption, and the keys must remain available
+to the application.
+As a result, email encryption only counters some specific attack methods.
+That said, we believe this encryption adds an additional layer of defense
+to protect email addresses from being revealed.</p>
+
+<h4>Gravatar restricted</h4>
+
+<p>We use gravatar to provide user icons for local (custom) accounts.
+Many users have created gravatar icons, and those who have
+created those icons have clearly consented to their use for them.</p>
+
+<p>However, accessing gravatar icons requires the MD5 cryptographic
+hash of downcased email addresses.
+Users who have created gravatar icons have already consented to
+this, but we want to hide even the MD5 cryptographic hashes of
+those who have not so consented.</p>
+
+<p>Therefore, we track for each user whether or not they should
+use a gravatar icon, as the boolean field <code>use_gravatar</code>.
+Currently this is can only be true for
+local users (for GitHub users we use their GitHub icon).
+Whenever a new local user account is created or changed,
+we check if there is an active gravatar icon, and set use_gravatar
+accordingly.  We also intend to occasionally iterate through
+local users to reset this (so that users won&#39;t need to remember
+to manipulate their BadgeApp user account).
+We will then only use the gravatar MD5 when there is an
+actual gravatar icon to refer to; otherwise, we use a bogus
+MD5 value.
+Thus, local users who do not have a gravatar account will not
+even have the MD5 of their email address revealed.</p>
+
+<p>This is almost certainly not required by regulations such as the GDPR,
+since without this measure we would only expose MD5s of email addresses,
+and only in certain cases.  But we want to exceed expectations,
+and this is one way we do that.</p>
+
+<h3>Making adjustments</h3>
+
+<p>We want to counter all common vulnerabilities, not just those
+listed in the OWASP top 10 or those mentioned in the configuration guide.
+Therefore, we monitor information to learn about new types of vulnerabilities,
+and make adjustments as necessary.</p>
+
+<p>For example, a common vulnerability not reported in the 2013 OWASP top 10
+is the use of <code>target=</code> in the &quot;a&quot; tag that does not have <code>_self</code>
+as its value.
+This is discussed in, for example,
+<a href="https://www.jitbit.com/alexblog/256-targetblank---the-most-underestimated-vulnerability-ever/">&quot;Target=&quot;_blank&quot; - the most underestimated vulnerability ever&quot; by Alex Yumashev, May 4, 2016</a>.
+This was not noted in the OWASP top 10 of 2013,
+which is unsurprising, since the problem with target=
+was not widely known until 2016.
+Note that no one had to report the vulnerability about this particular
+application; we noticed it on our own.</p>
+
+<p>Today we discourage the use of target=, because removing target= completely
+eliminates the vulnerability.  When target= is used,
+which is sometimes valuable to avoid the risk of user data loss,
+we require that <code>rel=&quot;noopener&quot;</code> always be used with <code>target=</code>
+(this is the standard mitigation for <code>target=</code>).</p>
+
+<p>We learned about this type of vulnerability after the application was
+originally developed, through our monitoring of sites that discuss
+general vulnerabilities.
+To address the <code>target=</code> vulnerability, we:</p>
+
+<ul>
+<li>modified the application to counter the vulnerability,</li>
+<li>documented in CONTRIBUTING.md that it&#39;s not acceptable to have bare target=
+values (we discourage their use, and when they need to be used, they
+must be used with rel=&quot;noopener&quot;)</li>
+<li>modified the translation:sync routine to automatically insert the
+<code>rel=&quot;noopener&quot;</code> mitigations for all target= values when they aren&#39;t
+already present</li>
+<li>modified the test suite to try to detect unmitigated uses of target=
+in key pages (the home page, project index, and single project page)</li>
+<li>modified the test suit to examine all text managed by config/locales
+(this is nearly all text) to detect use of target= with an immediate
+termination (this is the common failure mode, since rel=... should
+instead follow it).</li>
+</ul>
+
+<p>While this doesn&#39;t <em>guarantee</em> there is no vulnerability, this certainly
+reduces the risks.</p>
+
+<h3><a name="reuse"></a><a name="supply-chain"></a>Securely reuse (supply chain)</h3>
+
+<p>Like all modern software, we reuse components developed by others.
+We can&#39;t eliminate all risks, and
+if we rewrote all the software (instead of reusing software)
+we would risk creating vulnerabilities in own code.
+See <a href="../CONTRIBUTING.html">CONTRIBUTING.md</a> for more about how we
+reduce the risks of reused code.</p>
+
+<h4>Review before use</h4>
+
+<p>We consider the code we reuse
+(e.g., libraries and frameworks) before adding them, to reduce
+the risk of unintentional and intentional vulnerabilities from them.
+In particular:</p>
+
+<ul>
+<li>We look at the website of any component we intend to add to our
+direct dependencies to see if it appears to be relatively low risk
+(does it have clear documentation, is there evidence of serious
+security concerns, does it have multiple developers, who is the lead, etc.).</li>
+<li>We prefer the use of popular components (where problems
+are more likely to be identified and addressed).</li>
+<li>We prefer software that self-proclaims a version number of 1.0 or higher.</li>
+<li>We strongly prefer software that does not bring in a large number
+of new dependencies (as determined by bundler).
+If it is a large number, we consider even more carefully
+and/or suggest that the developer reduce their dependencies
+(often the dependencies are only for development and test).</li>
+<li>In some cases we review the code ourselves.  This primarily happens
+when there are concerns raised by one of the previous steps.</li>
+</ul>
+
+<p>We require that all components that are <em>required</em> for use
+have FLOSS licenses.  This enables review by us and by others.
+We prefer common FLOSS licenses.
+A FLOSS component with a rarely-used license, particularly a
+GPL-incompatible one, is less likely to be reviewed by others because
+in most cases fewer people will contribute to it.
+We use <code>license_finder</code> to ensure that the licenses are what we expect,
+and that the licenses do not change to an unusual license
+in later versions.</p>
+
+<h3>Get authentic version</h3>
+
+<p>We work to ensure that we are getting the authentic version of the software.
+We counter man-in-the-middle (MITM) attacks when downloading gems
+because the Gemfile configuration uses an HTTPS source to the
+standard place for loading gems (<a href="https://rubygems.org">https://rubygems.org</a>).
+We double-check names before we add them to the Gemfile to counter
+typosquatting attacks.</p>
+
+<h3>Use package manager</h3>
+
+<p>We use package managers, primarily bundler, to download and track
+software with the correct version numbers.
+This makes it much easier to maintain the software later
+(see the maintenance process discussion).</p>
+
+<h3>Special analysis</h3>
+
+<p>Sometimes tools or reports suggest we may have vulnerabilities
+in how we reuse components.
+We are grateful for those tools and reports that help us identify
+places to us to examine further!
+Below are specialized analysis justifying why we believe we do not
+have vulnerabilities in these areas.</p>
+
+<h4>XXE from Nokogiri / libxml2</h4>
+
+<p>One area where we may <em>appear</em> to be vulnerable, but we
+believe we are not, involves nokogiri, libxml2, and
+<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2016-9318">CVE-2016-9318</a>.
+This was identified as a potential issue in an
+<a href="https://snyk.io/test/github/coreinfrastructure/best-practices-badge?severity=high&severity=medium&severity=low">analysis by Snyk</a>.
+Here is our analysis justifying why we believe our use of
+nokogiri and libxml2 are not a vulnerability in our application.</p>
+
+<p>The Nokogiri gem is able to do analysis on HTML and XML documents.
+As noted in
+<a href="https://github.com/sparklemotion/nokogiri/issues/1582">Nokogiri #1582</a>,
+&quot;applications using Nokogiri 1.5.4 (circa June 2012) and later
+are not vulnerable to this CVE (CVE-2016-9318)
+unless opting into the DTDLOAD option and opting out of the NONET option.
+Note that by default, Nokogiri turns off both DTD loading and
+network access, treating all docs as untrusted docs. This behavior
+is independent of the version of libxml2 used.&quot;</p>
+
+<p>Like practically all Rails applications, we use
+rails-html-sanitizer, which uses loofah, which uses nokogiri,
+which uses libxml.
+So we <em>do</em> use Nokogiri in production to process untrusted data.
+However, we do <em>not</em> use Nokogiri in production to process incoming XML,
+which is the only way this vulnerability can occur.
+In addition, loofah version 2.1.1 has been checked and it never opts
+into DTDLOAD nor does it opt out of NONET
+(as confirmed using &quot;grep -Ri NONET&quot; and &quot;grep -Ri DTDLOAD&quot; on
+the loofah source directory), so nokogiri is never configured in
+production in a way that could be vulnerable anyway.</p>
+
+<p>All other uses of nokogiri (as confirmed by checking Gemfile.lock)
+are only for the automated test suite
+(capybara, chromedriver-helper, rails-dom-testing, and xpath which in
+turn is only used by capybara).
+Nokogiri is extensively used by our automated testing system,
+but in that case we provide the test data to ourselves (so it is trusted).</p>
+
+<h4>XSS from erubis / pronto-rails_best_practices</h4>
+
+<p>The &quot;erubis&quot; module was identified as potentially vulnerable to
+cross-site scripting (XSS) as introduced through
+<code>pronto-rails_best_practices</code>.
+This was identified as a potential issue in an
+<a href="https://snyk.io/test/github/coreinfrastructure/best-practices-badge?severity=high&severity=medium&severity=low">analysis by Snyk</a>.</p>
+
+<p>However, rails_best_practices is only run in development and test,
+where the environment and input data are trusted,
+so we believe this is not a real vulnerability.</p>
+
+<h4>Checked-in <code>tmp/local_secret.txt</code> appears to have a secret</h4>
+
+<p>The file <code>tmp/local_secret.txt</code> may appear to be a security vulnerability.
+That&#39;s because it&#39;s a key (it&#39;s the value of <code>secret_key_base</code> for
+development and test environments) whose value is checked into a public
+version-controlled repository.</p>
+
+<p>However, it is not a vulnerability. This value is <em>only</em> used during
+test and development. The fact that its value is public is
+irrelevant, since those systems are not publicly accessible, or don&#39;t
+have any real secrets, or both.</p>
+
+<p>We set this file for the following reasons;</p>
+
+<ol>
+<li>It&#39;s convenient to have a <em>constant</em> value of
+<code>secret_key_base</code>, because it means it&#39;s much easier to halt and
+restart during development and test. Having it change on every restart
+makes development and test much harder.</li>
+<li>It eliminates occasional test failures in parallelized testing.
+At the time of this writing, when Rails needs a value for <code>secret_key_base</code>
+and cannot find it in the environment variable <code>SECRET_KEY_BASE</code> or a file,
+it creates a new value for <code>secret_key_base</code> and stores it in the file
+<code>tmp/local_secret.txt</code>.
+<a href="https://github.com/rails/rails/issues/53661">A race condition results</a>,
+because if tests are running in parallel, other tests may try to load the
+file before it&#39;s been created by another process.
+I&#39;ve verified in the Rails code that if this file exists,
+its content is used.</li>
+</ol>
+
+<p>In the staging and production environments we provide a truly secret value for
+the environment variable <code>SECRET_KEY_BASE</code>. When this environment variable
+is set, it is used instead. Their values are the ones
+we actually need to keep private. We do <em>not</em> check in their values.</p>
+
+<p>For more information:</p>
+
+<ul>
+<li><a href="https://apidock.com/rails/Rails/Application/secret_key_base">https://apidock.com/rails/Rails/Application/secret_key_base</a></li>
+<li><a href="https://apidock.com/rails/v7.1.3.2/Rails/Application/generate_local_secret">https://apidock.com/rails/v7.1.3.2/Rails/Application/generate_local_secret</a></li>
+</ul>
+
+<h4>Information Exposure from actioncable</h4>
+
+<p>The &quot;actioncable&quot; module was identified as potentially vulnerable to
+information exposure.
+This module is introduced by rails and traceroute.
+This was identified as a potential issue in an
+<a href="https://snyk.io/test/github/coreinfrastructure/best-practices-badge?severity=high&severity=medium&severity=low">analysis by Snyk</a>.</p>
+
+<p>Actioncable structures channels over a single WebSocket connection,
+however, there is
+<a href="https://github.com/rails/rails/issues/25088">no way to filter out any sensitive data from the logs</a>.</p>
+
+<p>We don&#39;t currently use actioncable, and since we don&#39;t use it, there&#39;s
+no sensitive data going over it to worry about.</p>
+
+<p>We could remove actioncable as a dependency, but that turns out to be
+annoying.
+The solution would be to replace the &quot;rails&quot; dependency with a large set
+of its transitive dependencies and then removing actioncable.
+Traceroute could be requested in the development group, and then
+the development group could re-require rails.
+This would make later maintenance a little more difficult, with no
+obvious gain, so we have not done this.</p>
+
+<h2>Security in integration and verification</h2>
+
+<p>When software is modified, it is reviewed by the
+&#39;rake&#39; process, which performs a number of checks and tests.
+Modifications integrated into the master branch
+are further automatically checked.
+See <a href="../CONTRIBUTING.html">CONTRIBUTING.md</a> for more information.</p>
+
+<p>The following is a brief summary of part of our verification process,
+and how it helps make the software more secure:</p>
+
+<ul>
+<li>Style checking tools.
+We intentionally make the code relatively short and clean to ease review
+by both humans and other tools.
+We use rubocop (a Ruby code style checker), rails_best_practices
+(a style checker specific to Rails), and ESLint
+(a style checker for JavaScript).
+We work to have no warnings in the code,
+typically by fixing the problem, though in some cases we will annotate
+in the code that we&#39;re allowing an exception.
+These style tools help us avoid more problematic constructs (in some cases
+avoiding defects that might lead to vulnerabilities), and
+also make the code easier to review
+(by both humans and other programs).
+Our style checking tools detect misleading indentation;
+<a href="http://www.dwheeler.com/essays/apple-goto-fail.html#indentation">this
+counters the mistake in the Apple goto fail vulnerability</a>.</li>
+<li>Source code weakness analyzers (for finding vulnerabilities in custom code).
+A source code weakness analyzer, also known as a security vulnerability
+scanner, examines the source code to identify vulnerabilities.
+This is one of many kinds of &quot;static analysis&quot; tools, that is, a tool
+that doesn&#39;t run the code (and thus is not limited to examining only the
+cases of specific inputs).
+We use Brakeman, a source code weakness analyzer that focuses
+on finding security issues in Ruby on Rails applications.
+We also use CodeQL, another source code weakness analyzer that&#39;s
+general-purpose and reviews both the Ruby and JavaScript code.
+Note that this is all separate from the automatic detection of
+third-party components with publicly-known vulnerabilities;
+see the <a href="#supply-chain">supply chain</a> section for how we counter those.</li>
+<li>FLOSS.  Reviewability is important for security.
+All the required reused components are FLOSS, and our
+custom software is released as Free/Libre and open source software (FLOSS)
+using a well-known FLOSS license (MIT).</li>
+<li>Negative testing.
+The test suite specifically includes tests that should fail for
+security reasons, an approach sometimes called &quot;negative testing&quot;.
+A widespread mistake in test suites is to only test &quot;things that should
+succeed&quot;, and neglecting to test &quot;things that should fail&quot;.
+This is especially important in security, since for security it&#39;s
+often more important to ensure that certain requests <em>fail</em> than to ensure
+that certain requests <em>succeed</em>.
+For an example of the need for negative testing, see
+<a href="https://www.dwheeler.com/essays/apple-goto-fail.html">&quot;The Apple goto fail vulnerability: lessons learned&quot; by David A. Wheeler</a>.
+Missing negative tests are also problematic because
+statement and branch coverage test coverage requirements
+cannot detect <em>missing</em> code, and &quot;failure to fail&quot; is often caused
+by <em>missing</em> code (this wasn&#39;t the case for &quot;goto fail&quot;, but it does happen
+in other cases).
+We do positive testing too, of course, but that&#39;s not usually forgotten.
+For negative testing, we focus on ensuring that incorrect logins will
+fail, that timeouts cause timeouts, that projects and users cannot be
+edited by those unauthorized to do so, and that email addresses are not
+revealed to unauthorized individuals.
+Here are important examples of our negative testing:
+
+<ul>
+<li>local logins with wrong or unfilled passwords will lead to login failure
+(see <code>test/system/login_test.rb</code>).</li>
+<li>projects cannot be edited (&quot;patched&quot;) by a timed-out session
+or a session lacking a signed timeout value
+(see <code>test/controllers/projects_controller_test.rb</code>)</li>
+<li>projects cannot be edited if the user is not logged in, or
+by logged-in normal users
+if they aren&#39;t authorized to edit that project
+(see <code>test/controllers/projects_controller_test.rb</code>)</li>
+<li>projects can&#39;t be destroyed (deleted) if the user isn&#39;t logged in,
+or is logged as a user who does not control the project
+(see <code>test/controllers/projects_controller_test.rb</code>)</li>
+<li>user data cannot be edited (&quot;patched&quot;) if the user isn&#39;t logged in,
+or is logged in as another non-admin user
+(see <code>test/controllers/users_controller_test.rb</code>)</li>
+<li>users can&#39;t be destroyed if the user isn&#39;t logged in, or is logged
+in as another non-admin user
+(see <code>test/controllers/users_controller_test.rb</code>)</li>
+<li>a request to show the edit user page is redirected away
+if the user isn&#39;t logged in, or is logged as another non-admin user -
+this prevents any information leak from the edit page
+(see <code>test/controllers/users_controller_test.rb</code>)</li>
+<li>a user page does not display its email address when the user is
+either (1) not logged in or (2) is logged in but not as an admin.
+(see <code>test/controllers/users_controller_test.rb</code>)</li>
+<li>a user page does not display if the user is an admin if
+the user isn&#39;t logged in, or is logged in as a non-admin user
+(see <code>test/controllers/users_controller_test.rb</code>).
+This makes it slightly harder for attackers to figure out
+the individuals to target (they have additional privileges), while
+still allowing <em>administrators</em> to easily see if a user has
+administrator privileges.</li>
+</ul></li>
+<li>The software has a strong test suite; our policy requires
+at least 90% statement coverage.
+In practice our autoamted test suite coverage is much higher; it has achieved
+100% statement coverage for a long time.
+You can verify this by looking at the &quot;CodeCov&quot; value at the
+<a href="https://github.com/coreinfrastructure/best-practices-badge">BadgeApp repository</a>.
+This strong test suite
+makes it easier to update components (e.g., if a third-party component
+has a publicly disclosed vulnerability).
+The test suite also makes it easier to make other fixes (e.g., to harden
+something) and have fairly high
+confidence that the change did not break functionality.
+It can also counter some vulnerabilities, e.g.,
+<a href="http://www.dwheeler.com/essays/apple-goto-fail.html#coverage">Apple&#39;s
+goto fail vulnerability would have been detected had they
+checked statement coverage</a>.</li>
+</ul>
+
+<p>We have briefly experimented with using the &quot;dawnscanner&quot; security scanner.
+We have decided to <em>not</em> add dawnscanner to the set of scanners that we
+routinely use, because it doesn&#39;t really add any value in our particular
+situation.
+See the <a href="./dawnscanner.html">dawnscanner.md</a> file for more information.</p>
+
+<p>These steps cannot <em>guarantee</em> that there are no vulnerabilities,
+but we think they greatly reduce the risks.</p>
+
+<h2>Transition and operation</h2>
+
+<p>To be secure, the software has to be secure as actually transitioned
+(deployed) and operated securely.</p>
+
+<p>Our transition process has software normally go through tiers.
+At this time there are two deployed tiers: staging and production.
+At one time we also had a &quot;main&quot; aka &quot;master&quot; tier; that ran
+the software at the HEAD of the main (formerly master) branch,
+but to reduce costs we no longer have a tier that deploys the main branch.
+At any time software can be promoted from the main branch
+to the staging tier (using <code>rake deploy_staging</code>). Software that
+runs fine on the staging branch is promoted to production (the &quot;real&quot; system).
+In an emergency we can skip tiers or promote to them in parallel, but
+doing that is rare.</p>
+
+<p>Our operations process has a number of security measures.
+Our deployment provider and CDN provider take steps to be secure.
+Online checkers of our deployed site suggest that we have
+a secure site.
+In addition, we have detection and recovery processes
+that help us limit damage.</p>
+
+<h3>Deployment provider</h3>
+
+<p>We deploy via a cloud provider who takes a number of steps
+to keep our system secure.
+We currently use Heroku for deployment; see the
+<a href="https://www.heroku.com/policy/security">Heroku security policy</a>
+for some information on how they manage security
+(including physical security and environmental safeguards).
+Normal users cannot directly access the database management system (DBMS),
+which on the production system is Postgres.
+Anyone can create a Heroku application and run it on Heroku, however,
+at that point we trust the Postgres developers and the Heroku administrators
+to keep the databases separate.</p>
+
+<p>People can log in via GitHub accounts; in those cases we depend
+on GitHub to correctly authenticate users.
+<a href="https://help.github.com/articles/github-security/">GitHub takes steps to keep itself secure</a>.</p>
+
+<h3><a name="online-checkers"></a>Online checkers</h3>
+
+<p>Various online checkers give us an overall clean bill of health.
+Most of the checkers test our HTTPS (TLS) configuration and
+if common hardening mechanisms are enabled.</p>
+
+<p>For the main bestpractices.coreinfrastructure.org site we have:</p>
+
+<ul>
+<li>An &quot;A+&quot; rating from the
+<a href="https://www.ssllabs.com/ssltest/analyze.html?d=bestpractices.coreinfrastructure.org">Qualys SSL labs check of our TLS configuration</a>
+on 2017-01-14.</li>
+<li>An &quot;A+&quot; rating from the
+<a href="https://securityheaders.io/?q=https%3A%2F%2Fbestpractices.coreinfrastructure.org">securityheaders.io check of our HTTP security headers</a>
+on 2018-01-25.
+Back in 2017-01-14 securityheaders.io
+gave us a slightly lower score (&quot;A&quot;) because we do not include
+&quot;Public-Key-Pins&quot;.  This simply notes that
+we are do not implement HTTP Public Key Pinning (HPKP).
+HPKP counters rogue certificate authorities (CAs), but it also has risks.
+HPKP makes it harder to switch CAs <em>and</em> any error in its configuration,
+at any time, risks serious access problems that are unfixable -
+making HPKP somewhat dangerous to use.
+Many others have come to the same conclusion, and securityheaders.io
+has stopped using HPKP as a grading criterion.</li>
+<li>An all-pass report from the
+<a href="https://www.sslshopper.com/ssl-checker.html#hostname=bestpractices.coreinfrastructure.org">SSLShopper SSL checker</a>
+on 2017-01-14.</li>
+<li>An &quot;A+&quot; rating from the <a href="https://observatory.mozilla.org/analyze.html?host=bestpractices.coreinfrastructure.org">Mozilla Observatory</a> scan summary
+on 2017-01-14.</li>
+<li>A 96% result from <a href="https://www.wormly.com/test_ssl/h/bestpractices.coreinfrastructure.org/i/157.52.75.7/p/443">Wormly</a>.
+The only item not passed was the &quot;SSL Handshake Size&quot; test; the live site
+provides 5667 bytes, and they consider values beyond 4K (with unclear
+units) to be large. This is not a security issue, at most this will
+result in a slower initial connection.  Thus, we don&#39;t plan to worry
+about the missing test.</li>
+</ul>
+
+<h3>Detection</h3>
+
+<p>We have various detection mechanisms to detect problems.
+There are two approaches to detection:</p>
+
+<ul>
+<li>internal (which has access to our internal information, such as logs)</li>
+<li>external (which does not have access to internal information)</li>
+</ul>
+
+<p>We use <em>both</em> detection approaches.
+We tend to focus on the internal approach, which has more information
+available to it.
+The external approaches do not have access
+to as much information, but they see the site as a &quot;typical&quot; user
+would, so combining these approaches has its advantages.</p>
+
+<h4>Internal</h4>
+
+<p>This is a <a href="https://12factor.net/">12 factor app</a>; as such,
+events are streamed to standard out for logging.
+We use the &quot;rails_12factor&quot; to ensure that all Rails logs go to
+standard out, and then use standard Heroku logging mechanisms.
+The logs then go out to other components for further analysis.</p>
+
+<p>System logs are expressly <em>not</em> publicly available.
+They are only shared with a small number of people authorized by the
+Linux Foundation, and are protected information.
+You must have administrator access to our Heroku site or our
+logging management system to gain access to the logs.
+That is because our system logs must include detailed information so that we
+can identify and fix problems (including attacks).
+For example, log entries record the IP address of the requestor,
+email addresses when we send email,
+and the user id (uid) making a request (if the user is logged in).
+We record this information so we can keep the system running properly.
+We also need to keep it for a period of time so we can identify trends,
+including slow-moving attacks.
+For more information, see the
+<a href="https://www.linuxfoundation.org/privacy">Linux Foundation privacy policy</a>.</p>
+
+<p>As an additional protection measure, we take steps to <em>not</em> include
+passwords in logs.
+That&#39;s because people sometimes reuse passwords, so we try to be
+especially careful with passwords.
+File <code>config/initializers/filter_parameter_logging</code> expressly
+filters out the &quot;password&quot; field.</p>
+
+<p>We intentionally omit here, in this public document, details about
+how logs are stored and how anomaly detection is done to
+detect and counter things.</p>
+
+<h4>External</h4>
+
+<p>We are also alerted if the website goes down.</p>
+
+<p>One of those mechanisms is uptime robot:
+<a href="https://uptimerobot.com/dashboard">https://uptimerobot.com/dashboard</a></p>
+
+<h3>Recovery plan including backups</h3>
+
+<p>Once we detect that there is a problem, we have plans
+and mechanisms in place to help us recover,
+including backups.</p>
+
+<p>Once we determine that there is a problem, we must
+determine to a first order the scale of the problem,
+what to do immediately, and what to do over time.</p>
+
+<p>If there is an ongoing security issue, we have a few immediate options
+(other than just leaving the system running).
+We can shut down the system,
+disable internet access to it, or enable the
+application&#39;s <code>BADGEAPP_DENY_LOGIN</code> mode.
+The <code>BADGEAPP_DENY_LOGIN</code> mode is a special degraded mode
+we have pre-positioned that enables key functionality while
+countering some attacks.</p>
+
+<p>We will work with the LF data controller to determine if there has been
+a personal data breach, and help the data controller alert the
+supervisory authority where appropriate.
+The General Data Protection Regulation (GDPR) section 33 requires that
+in the case of a personal data breach, the controller shall
+&quot;without undue delay, and, where feasible, not later than 72 hours
+after having become aware of it, notify the personal data breach to the
+supervisory authority... unless the personal data breach is unlikely to
+result in a risk to the rights and freedoms of natural persons.&quot;</p>
+
+<p>Once we have determined the cause, we would work to quickly determine
+how to fix the software and/or change the configuration to
+address the attack (at least to ensure that integrity and confidentiality
+are maintained).
+As shown elsewhere, we have a variety of tools and tests that help us
+rapidly update the software with confidence.</p>
+
+<p>Once the system is fixed, we might need to alert users.
+We have a pre-created rake task <code>mass_email</code> that lets us quickly
+send email to the users (or a subset) if it strictly necessary.</p>
+
+<p>We might also need to re-encrypt the email addresses with a new key.
+We have pre-created a rake task &quot;rekey&quot; that performs rekeying of
+email addresses should that be necessary.</p>
+
+<p>Finally, we might need to restore from backups.
+We use the standard Rails and PostgreSQL mechanisms for loading backups.
+We backup the database daily, and archive many versions so
+we can restore from them.
+See the <a href="https://devcenter.heroku.com/articles/heroku-postgres-backups#scheduled-backups-retention-limits">Heroku site</a> for retention times.</p>
+
+<p>The update process to the &quot;staging&quot; site backs up the production site
+to the staging site.  This provides an additional backup, and also
+serves as a check to make sure the backup and restore processes are working.</p>
+
+<h2>Maintenance</h2>
+
+<p>What many call the &quot;maintenance&quot; or &quot;sustainment&quot; process is simply
+continuous execution of all our processes.</p>
+
+<p>However, there is a special case related to security:
+detecting when publicly known vulnerabilities are reported in the
+components we use (in our direct or indirect dependencies),
+and then speedily fixing that (usually by updating the component).
+A component could have no publicly-known vulnerabilities when we selected it,
+yet one could be found later.</p>
+
+<p>We use a variety of techniques to detect vulnerabilities that have
+been newly reported to the public, and have a process for
+rapidly responding to them, as described below.
+In some cases a reused component might appear vulnerable but is not;
+for more discussion, including specific examples, see the
+section on <a href="#reuse">reuse</a>.</p>
+
+<h3>Auto-detect vulnerabilities</h3>
+
+<p>We use multiple processes for automatically detecting when the components we
+use have publicly known vulnerabilities.
+We specifically focus on detecting all components with any publicly known
+vulnerability, both in our direct and indirect dependencies.</p>
+
+<p>We detect components with publicly known vulnerabilities
+using 2 different mechanisms: bundle-audit and GitHub.
+Each approach has its advantages, and using multiple mechanisms
+increases the likelihood that we will be alerted quickly.
+These both use the <code>Gemfile*</code> files and the
+National Vulnerability Database aka NVD (the NVD is
+a widely-used database of known vulnerabilities):</p>
+
+<ul>
+<li>bundle-audit compares the entire set of gems (libraries),
+both direct and indirect dependencies, to a database
+of versions with known vulnerabilities.
+The default &#39;rake&#39; task invokes bundle-audit, so every time we run
+&quot;rake&quot; (as part of our build or deploy process)
+we are alerted about publicly known vulnerabilities in the
+components we depend on (directly or not).
+In particular, this is part of our continuous integration test suite.</li>
+<li>GitHub sends alerts to us for known security vulnerabilities found in
+dependencies.  This is a GitHub configuration setting
+(under settings, options, data services).
+This provides us with an immediate warning of a vulnerability,
+even if we are not currently modifying the system.
+This analyzes both Gemfile (direct) and Gemfile.lock
+(indirect) dependencies in Ruby.
+GitHub also includes dependabot, a service that automatically
+creates pull requests to fix vulnerable dependencies.
+These automatically-generated pull requests go through our CI pipeline,
+as would any pull request, so the pull requests go through many checks
+(including our test suite). Presuming they pass, we can accept the
+pull request, speeding our response to any vulnerabilities in components
+we use.
+For more information, see the
+<a href="https://help.github.com/en/github/managing-security-vulnerabilities/about-security-alerts-for-vulnerable-dependencies">GitHub page About Security Alerts for Vulnerable Dependencies</a>.</li>
+</ul>
+
+<p>At one time we also used Gemnasium, but the service we used
+closed in May 2018.  We have two other services, so that loss did not
+substantively impact us.</p>
+
+<p>This approach has a complicated false positive with <code>omniauth</code>
+which we&#39;ve had to specially handle.
+Library <code>omniauth</code> has a publicly-known vulnerability CVE-2015-9284.
+We have chosen to counter vulnerability CVE-2015-9284 by installing a
+third-party countermeasure, <code>omniauth-rails_csrf_protection</code> and ensuring
+that our configuration counters the problem.
+This is the
+<a href="https://github.com/omniauth/omniauth/wiki/Resolving-CVE-2015-9284">recommended approach on the omniauth wiki</a>
+given discussion on
+<a href="https://github.com/omniauth/omniauth/pull/809">pull request 809</a>.
+The omniauth developers have been reluctant to fix this within the
+component they develop because it&#39;s (1) a
+breaking (interface) change and (2) code available to fix it is Rails-specific,
+yet their library can be used in other situations.
+We reviewed the third-party countermeasure&#39;s code and it looks okay.
+See our commit <code>ccdd0e007ee7d6aa</code> for details.
+This is not ideal, but it&#39;s a real-world situation, and we believe
+this approach completely counters the vulnerability.</p>
+
+<h3>Rapid update</h3>
+
+<p>We also have a process for quickly responding to alerts
+of publicly known vulnerabilities, so that we can quickly update,
+automatically test, and ship to production once we&#39;ve been
+alerted to a problem.  If a component we use has a known vulnerability
+we normally simply update and deploy quickly, instead of trying to determine
+if the vulnerability is exploitable in our system, because determining
+exploitability usually takes more effort than
+simply using our highly-automated update process.</p>
+
+<p>The list of libraries we use (transitively) is managed by bundler, so
+updating libraries or sets of libraries can be done quickly.
+Bundler is a Ruby package manager, and it uses the Node Package Manager (NPM)
+to manage JavaScript libraries.
+As noted earlier, our strong automated test suite makes it easy to test this
+updated set, so we can rapidly update libraries, test the result, and
+deploy it.</p>
+
+<p>We have also optimized the component update process through
+using the package manager (bundler) and high test coverage.
+The files Gemfile and Gemfile.lock
+identify the current versions of Ruby gems (Gemfile identifies direct
+dependencies; Gemfile.lock includes all transitive dependencies and
+the exact version numbers).  We can rapidly update libraries by
+updating those files, running &quot;bundle install&quot;, and then using &quot;rake&quot;
+to run various automated checks including a robust test suite.
+Once those pass, we can immediately field the results.</p>
+
+<p>This approach is known to work.
+Commit fdb83380aa71352
+on 2015-11-26 updated nokogiri, in response to a bundle-audit
+report on advisory CVE-2015-1819, &quot;Nokogiri gem contains
+several vulnerabilities in libxml2 and libxslt&quot;.
+When it was publicly reported we were alerted.
+In less than an hour from the time the vulnerability
+was publicly reported we were alerted,
+updated the library, ran the full test suite, and deployed the fixed version
+to our production site.</p>
+
+<p>This automatic detection and remediation
+process does <em>not</em> cover the underlying execution
+platform (e.g., kernel, system packages such as the C and Ruby runtime,
+and the database system (PostgreSQL)).
+We depend on the underlying platform provider (Heroku)
+to update those components and restart as necessary when
+a vulnerability in those components is discovered
+(that service is one of the key reasons we pay them!).</p>
+
+<h2>Acquisition process</h2>
+
+<p>The system depends on a deployment provider (Heroku) and
+content distribution network (CDN) (Fastly).
+We have contracts with them, which provide us with some leverage
+should they fail to do what they say and/or don&#39;t quickly fix
+security-related problems.</p>
+
+<h2>Infrastructure management</h2>
+
+<h3>Security of the development environment</h3>
+
+<p>Subversion of the development environment can easily lead to
+a compromise of the resulting system.
+The key developers use development environments
+specifically configured to be secure.</p>
+
+<p>Anyone who has direct commit rights to the repository
+<em>must not</em> allow other untrusted local users on the same (virtual) machine.
+This counters local vulnerabilities.
+E.g., the Rubocop vulnerability
+CVE-2017-8418 is /tmp file vulnerability, in which
+&quot;Malicious local users could exploit this to tamper
+with cache files belonging to other users.&quot;
+Since we do not allow other untrusted local users on the (virtual) machine
+that has commit rights, a vulnerability cannot be easily exploited
+this way.  If someone without commit rights submits a proposal, we can
+separately review that change.</p>
+
+<p>As noted earlier, we are cautious about the components we use.
+The source code is managed on GitHub;
+<a href="https://help.github.com/articles/github-security/">GitHub takes steps to keep itself secure</a>.</p>
+
+<p>The installation process, as described in the INSTALL.md file,
+includes a few steps to counter some attacks.
+In particular,
+we use the git integrity recommendations from Eric Myhre that check all
+git objects transferred from an external site into our development environment.
+This sets &quot;fsckObjects = true&quot; for transfer (thus also for fetch and receive).</p>
+
+<h3>Test environment lacks protected data</h3>
+
+<p>The continuous integration (CI) test environment runs on CircleCI,
+and does <em>not</em> have direct access to the real-world data.
+Thus, if someone can see the data available on the test environment,
+that does <em>not</em> mean that they will have access to the protected data.</p>
+
+<h2>Human resource management  (people)</h2>
+
+<p>ISO/IEC/IEEE 12207 has a &quot;human resource management&quot; process;
+this is the process that focuses on the people involved.
+Of course, it&#39;s important to have developers who know how to develop software,
+with at least someone in the group who knows how to develop secure software.</p>
+
+<p>The lead software developer,
+<a href="http://www.dwheeler.com/">David A. Wheeler</a>, is an expert in the area
+of developing secure software.
+He has a PhD in Information Technology, a Master&#39;s degree in Computer Science,
+a certificate in Software Engineering, a certificate in
+Information Systems Security, and a BS in Electronics Engineering,
+all from George Mason University (GMU).
+He wrote the book
+<a href="http://www.dwheeler.com/secure-programs/">Secure Programming HOWTO</a>
+and teaches a graduate course at George Mason University (GMU) on
+how to design and implement secure software.
+Dr. Wheeler&#39;s doctoral dissertation,
+<a href="http://www.dwheeler.com/trusting-trust/">Fully Countering Trusting Trust through Diverse Double-Compiling</a>,
+discusses how to counter malicious compilers.</p>
+
+<p>Sam Khakimov was greatly involved in its earlier development.
+He has been developing software for a number of years,
+in a variety of languages.
+He has a Bachelor of Business Admin in Finance and Mathematics
+(CUNY Baruch College Summa Cum Laude Double Major) and a
+Master of Science in Mathematics (New York University) with
+additional coursework in Cyber Security.</p>
+
+<p><a href="http://www.dankohn.com/bio.html">Dan Kohn</a>
+received a bachelor&#39;s degree in Economics and Computer Science
+from the Honors program of Swarthmore College.
+He has long expertise in Ruby on Rails.</p>
+
+<p>Jason Dossett has a PhD in Physics from The University of Texas at Dallas,
+and has been involved in software development for many years.
+He has reviewed and is familiar with the security assurance case
+provided here.</p>
+
+<h2>Project planning</h2>
+
+<p>We plan development, and always consider security as we develop new plans.</p>
+
+<h2>Risk management</h2>
+
+<p>The primary risk we&#39;re concerned about is security, so we have developed
+the assurance case here to determine how to counter that risk.</p>
+
+<h2>Quality assurance</h2>
+
+<p>We continuously review our processes and their results to see if there
+are systemic problems, and if so, try to address them.
+In particular, we try to maximize automation, including automated tests
+and automated security analysis, to reduce the risk that the deployed
+system will produce incorrect results or will be insecure.</p>
+
+<h2>Configuration management</h2>
+
+<p>See the <a href="./governance.html">governance</a> document
+for information on how the project is governed, including
+how important changes are controlled.</p>
+
+<p>For version control we use git, a widely-used
+distributed version control system.</p>
+
+<p>As noted in the requirements section,
+modifications to the official BadgeApp application require
+authentication via GitHub.
+We use GitHub for managing the source code and issue tracker; it
+has an authentication system for this purpose.</p>
+
+<h2>Certifications and Controls</h2>
+
+<h3>Certifications (receive CII best practices badge)</h3>
+
+<p>One way to increase confidence in an application is to pass
+relevant certifcations.  In our case, the BadgeApp is the result
+of an OSS project, so a useful measure is to receive our own
+CII best practices badge.</p>
+
+<p>The CII best practices badging project was established to identify
+best practices that can lead to more secure software.
+The BadgeApp application achieves its own badge.
+This is evidence that the BadgeApp application is
+applying practices expected in a well-run FLOSS project.</p>
+
+<p>You can see the
+<a href="https://bestpractices.coreinfrastructure.org/en/projects/1/0">CII Best Practices Badge entry for the BadgeApp</a>.
+Note that we achieve a gold badge.</p>
+
+<h3>Organizational Controls</h3>
+
+<p>The
+<a href="https://www.cisecurity.org/controls/">Center for Internet Security (CIS) Controls</a>
+are a &quot;prioritized set of actions to protect your organization and data
+from known cyber attack vectors.&quot;
+They are used and supported in many places, e.g.,
+<a href="https://www.sans.org/critical-security-controls">SANS Supports the CIS Critical Security Controls</a>
+through a number of resources and information security courses.</p>
+
+<p>Here we compare the CIS controls to the deployed BadgeApp application.
+The CIS controls are intended for an entire organization,
+while we are focusing on deployment of a single application,
+so many controls don&#39;t make sense in our context.
+Still, it&#39;s still useful to go through a set of
+controls to make sure we are covering what&#39;s important.</p>
+
+<p>For now we only examine the &quot;first 5 CIS controls&quot;, as these
+&quot;eliminate the vast majority of your organization&#39;s vulnerabilities&quot;.</p>
+
+<p>Here are the top CIS controls:</p>
+
+<ol>
+<li>Inventory of Authorized and Unauthorized Devices.
+The application is deployed on Heroku, who perform the task to
+actively manage (inventory, track, and correct)
+all hardware devices on the network.</li>
+<li>Inventory of Authorized and Unauthorized Software.
+The deployed system only has one main authorized program, and only
+authorized administrators can deploy or change software on the system.
+The operating system (including kernel and utilities) and
+database system are managed by Heroku.
+We manage the application; its subcomponents are managed by
+package managers.
+We do not use an allowlisting mechanism because it would be pointless;
+at no time does the running system download software to run
+(not even JavaScript), and only administrators can install software on it.</li>
+<li>Secure Configurations for Hardware and Software on
+Mobile Devices, Laptops, Workstations, and Servers.
+The hardware and the operating system (including kernel and utilities)
+by Heroku; see <a href="https://www.heroku.com/policy/security">Heroku security</a>.
+For the rest we follow strict configuration management processes;
+images (builds) are created using CircleCI and deployed to Heroku
+over an authenticated and encrypted channel.
+These configurations are extensively hardened as described above, and we
+use package management systems to rigorously manage and control updates.</li>
+<li>Continuous Vulnerability Assessment and Remediation.
+We use automated vulnerability scanning tools to
+alert us to publicly-known vulnerabilities in third-party
+components via multiple mechanisms, as described above.
+We remediate and minimize the opportunity for attack by using
+package managers to rapidly perform controlled updates, combined
+with a large automated test suite to rapidly check that the system
+continues to work.
+These scans focus on the reused software components in our application.
+CIS recommends that you use a
+<a href="https://nvd.nist.gov/scap/validated-tools">SCAP-validated vulnerability scanner</a>
+that looks for both code-based vulnerabilities (such as those described by
+Common Vulnerabilities and Exposures entries) and configuration-based
+vulnerabilities (as enumerated by the Common Configuration Enumeration
+Project).  Our system runs on the widely-used Ubuntu OS,
+and <a href="https://www.open-scap.org">Open SCAP</a> is the only OSS scanner
+of that kind that we know of - and it is only SCAP-validated
+for Red Hat.  In addition, we do not control the operating system
+(Heroku does), so it&#39;s not clear that such scanners would do us much good.
+However, in the future, we may attempt to try to use Open SCAP
+as an additional tool.</li>
+<li>Controlled Use of Administrative Privileges.
+We minimize administrative privileges and only use administrative
+accounts when they are required.
+Administrative privileges are strictly limited to a very few
+people who are authorized to do so.
+We do not have &quot;root&quot; privileges on Heroku (Heroku handles that),
+so we cannot give those privileges away, and that greatly reduces the
+need to &quot;implement focused auditing on the use of
+administrative privileged functions and monitor for anomalous behavior.&quot;
+We do not use automated tools to inventory all administrative
+accounts and validate each person.
+We have a single production system, with only a few administrators,
+so automation is not useful in this situation.</li>
+</ol>
+
+<h2>Residual risks</h2>
+
+<p>It is not possible to eliminate all risks.
+Here are a few of the more-prominent residual risks, and why we
+believe they are acceptable:</p>
+
+<ul>
+<li>  <em>External service dependencies.</em>
+We depend on several external services, and if they are subverted
+(externally or by an insider) then our service might be subverted as well.
+The most obvious services we depend on are GitHub, Heroku, and
+Amazon Web Services.
+We use GitHub to maintain the code, and we depend on GitHub to
+authenticate GitHub users.  The website itself runs on Heroku, and
+Heroku in turn depends on Amazon Web Services.
+However, these services have generally good reputations, are
+professionally-managed, and have a history of careful monitoring and
+rapid response to any issue.  It&#39;s not obvious that we would do
+better if we did it ourselves.</li>
+<li>  <em>Third party components.</em>
+As discussed earlier, like all real systems we depend on a large number
+of third party components we did not develop.  These components
+could have unintentional or even intentional vulnerabilities.
+However, recreating them would cost far more time, and since we can make
+mistakes too it&#39;s unlikely that the result would be better. Instead,
+as discussed above, we apply a variety of techniques to manage our risks.
+For example, we check any direct dependency we might add before adding it,
+we auto-detect vulnerabilities (that have become publicly known), and
+have a process that supports rapid update.</li>
+<li>  <em>DDoS.</em>
+We use a variety of techniques to reduce the impact of DDoS attacks.
+These include using a scalable cloud service,
+using a Content Delivery Network (CDN), and requiring
+the system to return to operation quickly after
+a DDoS attack has ended.
+For more information, see the discussion on availability
+in the requirements section (above).
+However, DDoS attacks are fundamentally resource-on-resource attacks,
+so if an attack is powerful enough, we can only counter it by also
+pouring in lots of resources (which is expensive).
+The same is true for almost any other website.</li>
+<li>  <em>Keys are stored in environment variables and processed by the application.</em>
+We use the very common approach of storing keys
+(such as encryption keys) in environment variables, and use
+the application software to apply them.
+This means that an attacker who subverts the entire application or
+underlying system could acquire copies of the keys.
+This includes an attacker who could get a raw copy of a memory dump -
+in such a case, the attacker could see the keys.
+A stronger countermeasure would be to store keys in hardware devices,
+or at least completely separate isolated applications, and then do
+processing with keys in that separate execution environment.
+However, this is more complex to deal with, and we&#39;ve decided it
+just isn&#39;t necessary in our circumstance.  We do partly counter this
+by making it easy for us to change keys.</li>
+<li>  <em>A vulnerability we missed.</em>
+Perfection is hard to achieve.
+We have considered security throughout system development,
+analyzed it for security issues, and documented what we&#39;ve determined
+in this assurance case.
+That said, we could still have missed a vulnerability.
+We have released the information so that others can review it,
+and published a vulnerability report handling process so that
+security analysts can report findings to us.
+We believe we&#39;ve addressed security enough to deploy the system.</li>
+</ul>
+
+<h2>Vulnerability report handling process</h2>
+
+<p>As noted in CONTRIBUTING.md, if anyone finds a
+significant vulnerability, or evidence of one, we ask that they
+send that information to at least one of the security contacts.
+The CONTRIBUTING.md file explains how to report a vulnerability;
+below we describe what happens once vulnerability is reported.</p>
+
+<p>Whoever receives that report will share that information with the
+other security contacts, and one of them will analyze it:</p>
+
+<ul>
+<li>If is not valid, one of the security contacts will reply back to
+the reporter to explain that (if this is a misunderstanding,
+the reporter can reply and start the process again).</li>
+<li>If it is a bug but not security vulnerability, the security contact
+will create an issue as usual for repair.</li>
+<li>If it is a security vulnerability, one of the security contacts will
+fix it in a <em>local</em> git repository and <em>not</em> share it with the world
+until the fix is ready.  An issue will <em>not</em> be filed, since those
+are public.  If it needs review, the review will not be public.
+Discussions will be held, as much as practical, using encrypted
+channels (e.g., using email systems that support hop-to-hop encryption).
+Once the fix is ready, it will be quickly moved through all tiers.
+The goal is to minimize the risk of attackers exploiting the problem
+before it is fixed.  Our goal is to fix any real vulnerability within
+two calendar weeks of a report (and do it faster if practical);
+the actual time will depend on the difficulty of repair.</li>
+</ul>
+
+<p>Once the fix is in the final production system, credit will be
+publicly given to the vulnerability reporter (unless the reporter
+requested otherwise).</p>
+
+<h2>Why are we using SACM graphical notation?</h2>
+
+<p>Historically we used
+<a href="https://www.adelard.com/asce/choosing-asce/cae.html">Claims- Arguments- Evidence (CAE) notation</a>,
+CAE notation is wonderfully simple:
+Claims (including subclaims) are ovals,
+arguments are rounded rectangles, and evidence (references) are rectangles.
+The GSN alternative was too complex (it uses many more symbols) and confusing
+to non-experts (e.g., it uses terms like &quot;Strategy&quot; for an argument).
+In addition, when we started the SACM graphical notation did not exist
+(it was not released until 2020).</p>
+
+<p>Historically the
+<a href="https://www.omg.org/spec/SACM/About-SACM/">Object Management Group (OMG) Structured Assurance Case Metamodel (SACM) specification</a>
+specification has focused on defining a standard interchange
+format for assurance case data.
+<a href="https://www.adelard.com/asce/choosing-asce/standardisation.html">Mappings are available between other notations and the SACM data structures</a>,
+However, we currently aren’t trying to exchange with other systems.
+So while we didn&#39;t know of anything intrinsically wrong with SACM,
+historically the SACM specification wasn’t
+focused on solving any problems we’re trying to solve.
+In addition, we don’t know of any mature OSS tools that directly
+support the SACM data format.
+By policy, any tools we <em>depend</em> on must be OSS, and when we modify the
+code or configuration we must be able to update the assurance case.</p>
+
+<p>However, in 2020 version 2.1 of SACM added a new graphical notation.
+Claims (including subclaims) are rectangles, ArgumentReasoning (aka
+arguments) are open rectangles, ArtifactCitations (used for evidence)
+are shadowed rectangles, and a connection showing an AssertedRelationship
+use intermediate symbols such as &quot;big dots&quot;.</p>
+
+<p>After comparing the notations, we have found that the SACM
+graphical notation has many advantages over CAE graphical notation:</p>
+
+<ol>
+<li>CAE Claim vs. SACM Claim. CAE uses ovals, while SACM uses
+rectangles. SACM has a <em>BIG</em> win here: Rectangles use MUCH less
+space, so complex diagrams are much easier to create &amp; easier to
+understand.</li>
+<li>CAE Argument vs. SACM ArgumentReasoning. CAE uses rounded
+rectangles, while SACM uses a shape I’ll call an &quot;open rectangle”.
+CAE’s rounded rectangles are not very distinct from its evidence
+rectangles, which is a minor negative for the CAE notation. SACM
+initially presented some challenges when using our drawing tool
+(LIbreOffice Draw), but I overcame them:
+
+<ul>
+<li>SACM’s half-rectangle initially presented me with a problem:
+that is <em>NOT</em> a built-in shape for the drawing tool I’m using
+(LIbreOffice Draw). I suspect it’s not a built-in symbol in many
+tools. I was able to work around this by creating a polygon (many
+drawing tools support this, and this is a very easy polygon to
+make). It took a little tweaking, but I managed to create a simple
+polygon with embedded text. In the longer term, the SACM community
+should work to get this easy icon into other drawing tools, to
+simplify its use.</li>
+<li>SACM’s half-rectangle is VERY hard to visually distinguish
+if both it &amp; claims are filled with color. I use color fills
+to help the eye notice type differences. My solution was simple:
+color fill everything <em>except</em> the half-rectangle; this makes
+them all visually distinct.</li>
+</ul></li>
+<li>CAE Evidence vs. SACM ArtifactReference.
+In CAE this is a simple rectangle. In SACM this is a shadowed
+rectangle with an arrow; the arrow is hard to add with simple
+drawing tools, but the shadow is trivial to add with a “shadow”
+property in LibreOffice (and many other drawing tools), and I
+think just the shadow is adequate. The shadow adds slightly more
+space (but MUCH less than ovals), and it takes a moment to draw
+by hand, but I think that’s a reasonable trade-off to ensure
+that they are visually distinct. In addition: I tend to record
+evidence / ArtifactReferences in <em>only</em> text, not in the diagrams,
+because diagrams are time-consuming to maintain. So making
+<em>claims</em> simple to draw, and making evidence/ArtifactReferences
+slightly more complex to draw, is exactly the right tradeoff.</li>
+<li>Visual distinctiveness. In <em>general</em> the CAE icons
+for Claim/Argument/Evidence are not as visually distinct as
+SACM’s Claim/ArgumentReasoning/ArtifactReference, especially
+when they get shaped to the text contents. That’s an overall
+advantage for the SACM graphical notation.</li>
+<li>SACM’s “bigdot”.
+The bigdot, e.g., in AssertedInference, make the diagrams simpler
+by making it easy to move an argument / ArgumentReasoning icon
+away from the flow from supporting claims/evidence to a higher
+claim. It also makes the arrows clearer (you merge flows earlier)
+and that merging makes combinations easier to follow.
+You could also informally do that with CAE, but it’s clearly a part of SACM.</li>
+<li>It has an asCited notation that a claim in one location is described
+elsewhere, a rectangle in another (an asCited Claim). I&#39;ve been using &quot;See...&quot;
+as text instead.</li>
+</ol>
+
+<p>In our SACM diagrams we&#39;ve sometimes omitted the bigdot when there is a
+single connection from one element to another.
+This is not strictly compliant.
+One advantage of using “bigdot” even in these
+cases would be that it would make it much easier to add
+an ArgumentReasoning later.
+However, adding the bigdot in those cases is nontrivial
+extra work when using our basic drawing tools (because we must draw
+the bigdot, two connectors, and connect them all up,
+instead of using a simple direct connection).</p>
+
+<p>We don&#39;t have an easy way to display SACM&#39;s ArgumentPackage and related
+symbols. We just use a &quot;scroll&quot; icon in that case to indicate
+each diagram package.</p>
+
+<p>At first it appeared that there was a problem with
+SACM’s ArgumentReasoning symbol, rectangle open on one side.
+While it’s easy to connect on the
+left/top/bottom, it’s somewhat unclear when trying to connect from
+its bare right-hand-side in its presented orientation
+(because the lines are not visibly connected to another symbol).
+My thanks to Scott Ankrum for pointing this out!
+This not an unusual problem; in data flow diagrams, the &quot;data store&quot;
+symbol is open on both the left and right edges
+(resulting in the same problem).
+One solution, without changing anything, is to prefer to put
+this icon on the right-hand-side of what it connects to.
+Another solution would have been to use another symbol, e.g., an
+an uneven pentagon (“pointer”) or callout symbol (with the little tail).
+However, the paper
+&quot;A Visual Notation for the Representation of Assurance Cases using SACM&quot;
+suggests a simpler solution was intended: horizontally flip the
+rectangle open on one side.</p>
+
+<h2>Future work</h2>
+
+<p><a href="https://resources.sei.cmu.edu/asset_files/TechnicalNote/2010_004_001_15176.pdf">&quot;Evaluating and Mitigating Software Supply Chain Security Risks&quot; by Ellison et al, May 2020</a> has an assurance case focusing on
+supply chain security risks, as well as other information.
+We intend to review it for future ideas.</p>
+
+<h2>Your help is welcome!</h2>
+
+<p>Security is hard; we welcome your help.
+We welcome hardening in general, particularly pull requests
+that actually do the work of hardening.
+We thank many, including Reg Meeson, for reviewing and providing feedback
+on this assurance case.</p>
+
+<p>Please report potential vulnerabilities you find; see
+<a href="../CONTRIBUTING.html">CONTRIBUTING.md</a> for how to submit a vulnerability report.</p>
+
+<h2>See also</h2>
+
+<p>Project participation and interface:</p>
+
+<ul>
+<li><a href="../CONTRIBUTING.html">CONTRIBUTING.md</a> - How to contribute to this project</li>
+<li><a href="INSTALL.html">INSTALL.md</a> - How to install/quick start</li>
+<li><a href="governance.html">governance.md</a> - How the project is governed</li>
+<li><a href="roadmap.html">roadmap.md</a> - Overall direction of the project</li>
+<li><a href="background.html">background.md</a> - Background research</li>
+<li><a href="api.html">api</a> - Application Programming Interface (API), inc. data downloads</li>
+</ul>
+
+<p>Criteria:</p>
+
+<ul>
+<li><a href="https://bestpractices.coreinfrastructure.org/criteria/0">Criteria for passing badge</a></li>
+<li><a href="https://bestpractices.coreinfrastructure.org/criteria">Criteria for all badge levels</a></li>
+</ul>
+
+<p>Development processes and security:</p>
+
+<ul>
+<li><a href="requirements.html">requirements.md</a> - Requirements (what&#39;s it supposed to do?)</li>
+<li><a href="design.html">design.md</a> - Architectural design information</li>
+<li><a href="implementation.html">implementation.md</a> - Implementation notes</li>
+<li><a href="testing.html">testing.md</a> - Information on testing</li>
+<li><a href="assurance-case.html">assurance-case.md</a> - Why it&#39;s adequately secure (assurance case)</li>
+</ul>
+  </body>
+  </html>

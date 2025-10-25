@@ -1,0 +1,198 @@
+  <!DOCTYPE html>
+  <html>
+  <head>
+  <title>docs/admin.md</title>
+  </head>
+  <body>
+<h1>Instructions for Web Application Administrators</h1>
+
+<!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
+
+<p>This document provides basic information for web application administrators
+for the best practices badge site.</p>
+
+<h2>Expectations</h2>
+
+<p>See <a href="governance.html#web_application_admin">governance - Web application admin</a>
+for information on the general expectations for
+web application administrators.</p>
+
+<p>Being an admin is a position of high trust. Admins must not
+abuse their access, which includes the ability to edit or delete
+arbitrary project badge entries and user profiles.
+In particular, admins can see the email addresses of every user.</p>
+
+<p>You <em>must</em> keep user email addresses private. Many email addresses are
+publicly known, but not all.</p>
+
+<h2>Becoming an admin</h2>
+
+<p>To become an admin, you must first create a user account on
+<a href="https://www.bestpractices.dev/">https://www.bestpractices.dev/</a> by using &quot;Log in&quot; (for a GitHub account)
+or &quot;Sign up&quot; (for a local email + password account).</p>
+
+<p>A system admin will then give your account admin privileges
+following the instructions in <a href="./implementation.html">implementation.md</a>.</p>
+
+<p>Optional: If you want, you can go here to create a gravatar image:
+<a href="https://gravatar.com/">https://gravatar.com/</a>.
+If you set up a gravatar image, it will show on many sites
+(including this one) when describing you.
+You&#39;ll need to tell Gravatar the email address that you use for login
+and/or for GitHub.
+Note that Gravatar lets sites look up an avatar image of a user based on the
+<a href="https://docs.gravatar.com/rest/hash/"><em>cryptographic hash</em></a> of their email
+address. We <em>never</em> send unencrypted email addresses to Gravatar!</p>
+
+<h2>GDPR requests</h2>
+
+<p>We, the Linux Foundation, occasionally receive GDPR requests on user
+accounts, e.g., to delete their own accounts.
+We&#39;re only <em>legally</em> obligated to do this for
+individuals located in the EU/EEA. However, by policy, we honor such
+requests from anyone. Typically we receive a collection of requests;
+we then search for each user name and email address.</p>
+
+<p>To search for an individual&#39;s name and email address, go to
+<a href="https://www.bestpractices.dev/en/users">https://www.bestpractices.dev/en/users</a> (log in if necessary).
+Scroll to the bottom to see &quot;New Search&quot;.
+Enter the name and email address. As noted on the page,
+name search is case-insensitive and supports wildcards (use <code>%</code> for
+zero or more characters and <code>_</code> for exactly one character).
+Email search is case-insensitive, but don&#39;t include extraneous information
+such as a trailing <code>.</code> at its end.</p>
+
+<p>In nearly all cases, you won&#39;t find a match. You record that as no
+match and move on.</p>
+
+<p>If there are matches, review the matches to see if they are the actual user.
+If they are, and they own no project badge entries, delete the account
+if that&#39;s what they requested.</p>
+
+<p>If they are present, but they own one or more
+project badge entries, we have a problem.
+The database data consistency criteria require
+every project badge entry to have an owner.
+The admin interface <em>can&#39;t</em> delete a user who owns a project badge entry.
+Sadly, users rarely tell us what they want us to do about this.
+If that&#39;s the case, send an email like this:</p>
+
+<blockquote>
+Hi! Can you help me understand what specifically you want done with your
+request to delete your accounts?
+
+We at the Linux Foundation received a GDPR request (DR234) from you to
+"Delete account and all data". We're sad to see you go, but it's
+your right to make that request and we'll honor it.
+In fact, we honor such requests even when we aren't
+legally obligated to comply with them.
+
+However, you have an account on the
+OpenSSF Best Practices badge site here:
+`https://www.bestpractices.dev/en/users/XYZ`
+This account currently owns one or more project badge entries.
+
+Here's our problem. We can't delete user accounts that own 1+ badge entries,
+because all badge entries must have an owner.
+It's a database data consistency requirement.
+So that leaves us uncertain about what you want us to do.
+
+So: What would you like us to do? Here are the options:
+
+1. Retain your OpenSSF Best Practices badge user account as an exception,
+   and basically leave everything unchanged on that site.
+2. Transfer your project badge entries to someone else,
+   then delete your user account. If that is your preference,
+   please provide the user# to us who is willing to receive the badge entry.
+3. Delete your project badge entries and then delete your user account.
+   Once the project badge entries are deleted, your user account can
+   be deleted.
+
+You can, at any time, perform option 2 or 3 yourself. Simply log in
+and perform the actions you wish to take. You don't need to wait for us
+to do it. However, if you'd prefer that we take these steps on your behalf,
+please let us know what you want us to do.
+
+Thank you.
+</blockquote>
+
+<h2>Badge entry ownership transfer</h2>
+
+<p>The badge system has built-in system to transfer ownership, so the <em>easy</em>
+thing to do is to ask the current badge-owner to log in and
+edit the project badge entry.
+The information is near the bottom of the first tab of the passing badge
+(currently).
+They must know the user number of the new owner, and enter it twice
+(to counter mistyping).</p>
+
+<p>If someone who is <em>not</em> the current badge owner asks us to transfer
+ownership, try to get the <em>current</em> badge owner to do it or agree to the
+transfer. The new owner must have an account (&quot;Log in&quot; on the site to create
+it).</p>
+
+<p>We can&#39;t just transfer ownership to anyone who asks (that&#39;s a security
+problem), but we <em>do</em> need to transfer it if it should. &quot;If it should&quot;
+can be tricky for us to determine.</p>
+
+<p>If you&#39;re communicating by email, and sending email to both parties,
+use &quot;bcc&quot; to ensure neither party can see the other&#39;s email address.
+You might write something like this:</p>
+
+<blockquote>
+We've received a request to change the owner of the project badge entry
+`https://www.bestpractices.dev/en/projects/XYZ`
+that is currently owned by user
+`https://www.bestpractices.dev/en/users/XY`
+to user
+`https://www.bestpractices.dev/en/users/YZ`
+
+Please confirm if this is approved, or reject if it is not.
+</blockquote>
+
+<p>Typically the current owner approves, or the current owner&#39;s email
+address no longer works because they&#39;re no longer an employee (and the
+employer is trying to switch to another employee).
+So while it <em>can</em> be a challenge to determine &quot;who should own this&quot;,
+in practice it generally is not.</p>
+
+<p>We don&#39;t transfer ownership until we&#39;re sure it should be owned by another.
+That way, attackers can&#39;t simply &quot;take over&quot; a badge entry by asking for it.</p>
+
+<h2>Deleting bad data</h2>
+
+<p>Some users don&#39;t understand the site, and may make mistakes.
+Help them do the right thing.</p>
+
+<p>However, some users are actors who act in bad faith.
+They&#39;ll try to create bogus project badge entries, typically to increase
+search engine optimiation (SEO). Our site marks project badge entry data
+so that badge entries never improve SEO, but bad faith actors may not care.
+Some are happy to scam their customers <em>and</em> hurt the public, as long
+as they receive money for their malicious activities.
+Others simply like to put malicious data online.</p>
+
+<p>Our site doesn&#39;t host images, limits what you can post, and (again)
+postings on it do not improve SEO. So we&#39;re
+not an interesting target for most people who like to create false data.
+Still, please help us remove anything that is false.</p>
+
+<p>If you&#39;ve determined someone is acting in bad faith (not just
+confused or making an honest mistake),
+<em>immediately</em> delete their malicious data and their account.
+Don&#39;t bother contacting them. That is a waste of everyone&#39;s time and
+delays fixing the problem.</p>
+
+<h2>Security and logging</h2>
+
+<p>We&#39;ve tried to make this a secure application.
+See our <a href="./assurance-case.html">assurance case</a> if you have any questions
+on why we think this is adequately secure. If you think you found a weakness,
+file a private GitHub report immediately, or contact the TSC.</p>
+
+<p>Web application data changes (including of web application administrators)
+are logged. So if necessary, we can review exactly what changed
+and even revert it. However, that&#39;s a pain to do. We&#39;d prefer that
+fixes be right the first time.</p>
+  </body>
+  </html>

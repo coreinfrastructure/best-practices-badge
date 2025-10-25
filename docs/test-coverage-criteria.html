@@ -1,0 +1,77 @@
+  <!DOCTYPE html>
+  <html>
+  <head>
+  <title>docs/test-coverage-criteria.md</title>
+  </head>
+  <body>
+<h1>Test coverage</h1>
+
+<p>I&#39;m thinking that perhaps we should add some test coverage measurements for higher-level badges (NOT for &quot;passing&quot;).  However, there are many options, and a variety of pros and cons.  Below are some of my own thoughts; I&#39;d like to hear others&#39; thoughts.</p>
+
+<p>Basically, I&#39;m currently thinking about perhaps having a &quot;passing+1&quot; criterion for statement-coverage criterion of 80% or more.  For passing+2, perhaps have a branch coverage of 80% as well.  This coverage measure would be a union of all tests (including unit and system/integration), but only for tests that are themselves FLOSS (so they can get fixed!).  These are easily measured by a variety of tools, and applied in many places.  This is absolutely <em>not</em> fixed in stone – comments welcome.</p>
+
+<p>--- David A. Wheeler</p>
+
+<p>===================================</p>
+
+<p>At the &quot;passing&quot; level we require automated testing, but we intentionally don&#39;t say how much testing is enough.  We instead require that they typically add more tests for major new functionality.  I think that&#39;s the right approach for &quot;passing&quot;.  There is a rationale for this: It&#39;s much easier to add tests once a test framework has been established, so at the &quot;passing&quot; level we&#39;re ensuring projects are on the right path for enabling improvements to their automated test suite.</p>
+
+<p>However – what should we do at higher badge levels?  I think we should expect some minimum kind of automated testing at higher levels.  What&#39;s more, that minimum shouldn&#39;t be some sort of ambiguous feel-good requirement.  Instead, we should have <em>some</em> kind of specific, quantifiable test coverage criteria to give an indication of how good the automated testing is.  To make it consistent, we&#39;d need to pick a <em>specific</em> measure &amp; define a minimum value for badging purposes.  There are complications, though, because there are a <em>lot</em> of ways to measure test coverage <a href="https://en.wikipedia.org/wiki/Code_coverage">https://en.wikipedia.org/wiki/Code_coverage</a> and there will always be reasons to debate any specific threshold.  Note that I am including <em>all</em> tests (unit and system/integration) together.</p>
+
+<p>I believe the most common kinds of test coverage measurement are, in rough order of difficulty:</p>
+
+<ol>
+<li>Statement coverage: % of lines|statements run by at least one test.
+This is what codecov.io does (they only count a line if it&#39;s <em>fully</em>
+executed).  Un-executable (&quot;dead&quot;) code will reduce these scores –
+but that can also reveal problems like Apple&#39;s &quot;goto fail; goto fail;&quot;
+vulnerability <a href="http://www.dwheeler.com/essays/apple-goto-fail.html">http://www.dwheeler.com/essays/apple-goto-fail.html</a>.</li>
+<li>Branch coverage: % branches of each control structure (including if,
+case, for, while) executed.  SQLite achieves 100% branch coverage.</li>
+<li>Decision coverage: For 100% decision coverage, every point of entry
+and exit in the program has been invoked at least once, and every
+decision (branch) in the program has taken all possible outcomes at
+least once.  DO-178B (an avionics standard) requires, if system failure
+is &quot;hazardous&quot;, 100% decision coverage and 100% statement coverage.
+<a href="https://en.wikipedia.org/wiki/Modified_condition/decision_coverage">https://en.wikipedia.org/wiki/Modified_condition/decision_coverage</a></li>
+<li>Modified condition/decision coverage (MC/DC); this is used
+in safety-critical applications (e.g., for avionics software).
+DO-178B requires &quot;catastrophic&quot; effect software to have 100% modified
+condition/decision coverage and 100% statement coverage.  SQLite achieves
+100% MC/DC too.</li>
+</ol>
+
+<p>All of these are structural testing measures, and thus can only measure
+what <em>is</em> in the code.  None can detect by themselves, for example,
+if a project <em>failed</em> to include some test or information in your code.
+There are no obvious solutions to that, though.</p>
+
+<p>Almost every language has FLOSS tools to measure the first two, at least (e.g., GCC users can use gcov/lcov).  The last one is common in safety-critical software, but it&#39;s a really harsh requirement that is less well-supported, so I think we can omit MC/DC for the badging project.  There are other measures, but since they&#39;re less-used, too coarse (e.g., function coverage), or hard to consistently apply across FLOSS projects (e.g., requirements statement coverage).</p>
+
+<p>SQLite is a big advocate of testing; I quote: &quot;The developers of SQLite have found that full coverage testing is an extremely effective method for locating and preventing bugs. Because every single branch instruction in SQLite core code is covered by test cases, the developers can be confident that changes made in one part of the code do not have unintended consequences in other parts of the code. The many new features and performance improvements that have been added to SQLite in recent years would not have been possible without the availability full-coverage testing. Maintaining 100% MC/DC is laborious and time-consuming. The level of effort needed to maintain full-coverage testing is probably not cost effective for a typical application. However, we think that full-coverage testing is justified for a very widely deployed infrastructure library like SQLite, and especially for a database library which by its very nature &#39;remembers&#39; past mistakes.&quot;  Note that while SQLite is FLOSS, the test suite that yields 100% branch coverage and 100% MC/DC is not.  More information: <a href="https://github.com/coreinfrastructure/best-practices-badge/blob/main/docs/background.md">https://github.com/coreinfrastructure/best-practices-badge/blob/main/docs/background.md</a></p>
+
+<p>I think at &quot;passing+1&quot; we should perhaps focus on statement coverage.  It seems to be the more common &quot;starter&quot; measure for test coverage, e.g., it&#39;s what codecov.io uses.  It&#39;s also easier for people to see (it&#39;s sometimes not obvious where branches are, especially for novice programmers).  There&#39;s also an easy justification: Clearly, if your tests aren&#39;t even <em>running</em> many of the program&#39;s statements, you don&#39;t have very good tests.</p>
+
+<p>Next question: How good is &quot;good enough&quot;?  Boris Beizer would say that anything less than 100% is unacceptable.  But I don&#39;t think that must be the answer.  There are many ways to determine if a program is correct – testing is only one of them.  Some conditions are hard to create during testing, and the return-on-investment to get those last few percentages is arguably not worth it.  The time working to get 100% statement coverage might be much better spent on checking the results more thoroughly (which statement coverage does <em>not</em> measure).</p>
+
+<p>The paper &quot;Minimum Acceptable Code Coverage&quot; by Steve Cornett <a href="http://www.bullseye.com/minimum.html">http://www.bullseye.com/minimum.html</a> claims, &quot;Code coverage of 70-80% is a reasonable goal for system test of most projects with most coverage metrics. Use a higher goal for projects specifically organized for high testability or that have high failure costs. Minimum code coverage for unit testing can be 10-20% higher than for system testing… Empirical studies of real projects found that increasing code coverage above 70-80% is time consuming and therefore leads to a relatively slow bug detection rate. Your goal should depend on the risk assessment and economics of the project… Although 100% code coverage may appear like a best possible effort, even 100% code coverage is estimated to only expose about half the faults in a system. Low code coverage indicates inadequate testing, but high code coverage guarantees nothing.&quot;</p>
+
+<p>&quot;TestCoverage&quot; by Martin Fowler (17 April 2012) <a href="http://martinfowler.com/bliki/TestCoverage.html">http://martinfowler.com/bliki/TestCoverage.html</a> points out the problems with coverage measures.  he states that &quot;Test coverage is a useful tool for finding untested parts of a codebase. Test coverage is of little use as a numeric statement of how good your tests are… The trouble is that high coverage numbers are too easy to reach with low quality testing… If you are testing thoughtfully and well, I would expect a coverage percentage in the upper 80s or 90s. I would be suspicious of anything like 100%... Certainly low coverage numbers, say below half, are a sign of trouble. But high numbers don&#39;t necessarily mean much, and lead to ignorance-promoting dashboards.&quot;</p>
+
+<p>It&#39;s interesting to look at the defaults of codecov.io <a href="http://docs.codecov.io/docs/coverage-configuration">http://docs.codecov.io/docs/coverage-configuration</a>.  They define 70% and below as red, 100% as perfectly green, and anything between 70..100 as a range between red and green. This renders ~80% as yellow, and somewhere between ~85% and 90% it starts looking pretty green.</p>
+
+<p>I&#39;m intentionally not separating unit test from integration/system test.  Which approach is appropriate seems very specific to the technology and circumstance.  From the point-of-view of users, if it&#39;s tested, it&#39;s tested.</p>
+
+<p>So for passing+1 if we set a statement-coverage criterion of 80% (or around that), we&#39;d have an easy-to-measure and clearly quantified test coverage criterion.  It&#39;s true that bad test suites can meet that (e.g., by running the code in tests without checking for anything), but I would expect any good automated test suite to meet that criterion (or something like it).  So it&#39;d still weed out projects that have poor tests.</p>
+
+<p>Adding (or using instead) branch coverage, or adding a branch coverage criterion for passing+2, would also seem sensible to me.  Again, say 80%.</p>
+
+<p>We could also add a warning that just adding tests to make the numbers go up, without thinking, is not a good idea.  Instead, they should <em>think</em> about their tests – including what is <em>not</em> getting tested.  Many testing experts I know mirror the concerns of Martin Fowler – it&#39;s easy to game the system by writing &quot;tests&quot; that run a lot of code without seriously checking anything.  I agree that test coverage measures can be misapplied or gamed… but most other measurements can also be misapplied and gamed.  Perhaps the best antidote to that is transparency.  If it&#39;s an OSS project, and the tests are themselves OSS, then poor tests become visible &amp; subject to comment/ridicule.  This implies that perhaps we should require these requirements to be met by a FLOSS test suite – you can have other test suites, but people can&#39;t necessarily see or fix them.</p>
+
+<p>Thoughts?</p>
+
+<p>See: <a href="https://lists.coreinfrastructure.org/pipermail/cii-badges/2016-December/000350.html">https://lists.coreinfrastructure.org/pipermail/cii-badges/2016-December/000350.html</a></p>
+
+<p>Note that Ruby doesn&#39;t support branch coverage testing.</p>
+  </body>
+  </html>

@@ -1,0 +1,304 @@
+  <!DOCTYPE html>
+  <html>
+  <head>
+  <title>docs/governance.md</title>
+  </head>
+  <body>
+<h1>Governance</h1>
+
+<!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
+
+<p>This document briefly describes &quot;how we make decisions&quot; in the
+OpenSSF Best Practices Badge Project.</p>
+
+<h2>Overall</h2>
+
+<p>This project is a Linux Foundation (LF)
+<a href="https://openssf.org/">Open Source Security Foundation (OpenSSF)</a> project.
+The OpenSSF is essentially the successor of the
+Core Infrastructure Initiative (CII) project.</p>
+
+<p>In terms of
+<a href="http://oss-watch.ac.uk/resources/governancemodels">&quot;Governance models&quot; (Gardler and Hanganu)</a> the badging project is a bazaar -
+contributions are gladly welcomed from anyone.
+However, we need to review external contributions to maintain quality.</p>
+
+<h3>Technical Steering Committee (TSC)</h3>
+
+<p>This project is led by the OpenSSF Best Practices Badge
+Technical Steering Committee (TSC).
+For the list of current members, see <a href="./TSC.html">TSC.md</a>.</p>
+
+<p>TSC decisions are by majority vote.
+Decisions can be asynchronous/electronic (e.g., a mailing list or
+electronic voting system) or synchronous/meeting (e.g., in an
+in-person meeting or a teleconference),
+at the choice of the TSC members.
+A synchronous meeting requires a quorum of at least 50% of TSC members.
+In an asynchronous meeting all TSC members are considered present and a
+majority must vote for the vote to be valid.
+If there is a tie, the OpenSSF Best Practices Badge
+technical lead can break the tie (but is not obligated to do so).</p>
+
+<p>This TSC reports to the OpenSSF Best Practices Working Group, who in
+turn report to the OpenSSF Technical Advisory Council (TAC).</p>
+
+<p>The TSC can add or remove members to itself (again, by majority vote).</p>
+
+<p>The OpenSSF TAC can add or remove members in the OpenSSF Best
+Practices Badge TSC by TAC majority vote. This is not intended to
+be a common practice, but this mechanism prevents the TSC from being
+overly insular and enables a restart if all TSC members are unable to
+continue their roles.</p>
+
+<p>TSC members represent themselves, not their employers.
+We note TSC employers because we want to ensure that no single organization
+controls this project.</p>
+
+<p>For general practices see the &quot;TSC Voting&quot; section below.</p>
+
+<h2>TSC Powers</h2>
+
+<p>The TSC may (1) establish work flow procedures for the submission,
+approval, and closure/archiving of projects, (2) set requirements
+for the promotion of Contributors to Committer status, as applicable,
+and (3) amend, adjust, refine and/or eliminate the roles of
+Contributors, and Committers, and create new roles, and publicly
+document any TSC roles, as it sees fit.</p>
+
+<p>The TSC may elect a TSC Chair, who will preside over meetings of
+the TSC and will serve until their resignation or replacement by
+the TSC.  The TSC Chair, or any other TSC member so designated by
+the TSC, will serve as the primary communication contact between
+the Project and OpenSSF, a directed fund of The Linux Foundation.</p>
+
+<p>The TSC will be responsible for all aspects of oversight relating
+to the Project, which may include:</p>
+
+<ol>
+<li>coordinating the technical direction of the Project; approving
+project or system proposals (including, but not limited to, incubation,</li>
+<li>deprecation, and changes to a sub-project’s scope);</li>
+<li>organizing sub-projects and removing sub-projects;</li>
+<li>creating sub-committees or working groups to focus on cross-project
+technical issues and requirements;</li>
+<li>appointing representatives to work with other open source or
+open standards communities;</li>
+<li>establishing community norms, workflows, issuing releases,
+and security issue reporting policies;</li>
+<li>approving and implementing policies and processes for contributing
+and coordinating with
+the series manager of the Project (as provided for in the Series
+Agreement, the “Series Manager”) to resolve matters or concerns
+that may arise;</li>
+<li>discussions, seeking consensus, and where necessary, voting on
+technical matters relating to the code base that affect multiple
+projects; and
+coordinating any marketing, events, or communications regarding the Project.</li>
+</ol>
+
+<p>In practice, the TSC delegates many tasks to the technical lead, who
+serves the TSC.</p>
+
+<h2>TSC Voting</h2>
+
+<ol>
+<li>While the Project aims to operate as a consensus-based community,
+if any TSC decision requires a vote to move the Project forward,
+the voting members of the TSC will vote on a one vote per voting
+member basis.</li>
+<li>Quorum for TSC meetings requires at least fifty percent of all
+voting members of the TSC to be present. The TSC may continue to
+meet if quorum is not met but will be prevented from making any
+decisions at the meeting.</li>
+<li>Except as provided in Technical Charter Section 7.c. and 8.a, decisions
+by vote at a meeting require a majority vote of those in attendance,
+provided quorum is met. Decisions made by electronic vote without
+a meeting require a majority vote of all voting members of the TSC.</li>
+<li>In the event a vote cannot be resolved by the TSC, any voting
+member of the TSC may refer the matter to the Series Manager for
+assistance in reaching a resolution.
+They may also contact the OpenSSF Best Practices WG.</li>
+</ol>
+
+<p>Technical Charter sections 7.c and 8.a identify the licensing requirements,
+e.g., MIT license for the source code.</p>
+
+<h2>Technical Lead</h2>
+
+<p>Many of the day-to-day maintenance tasks of the OpenSSF Best Practices Badge
+are managed by the OpenSSF Best Practices Badge technical lead.</p>
+
+<p>The technical lead reports to the OpenSSF TSC, including on significant
+work or decisions to be made.
+The technical lead&#39;s decisions can be
+overruled by the OpenSSF TSC at any time.
+In addition, the OpenSSF TSC can replace the technical lead at any time
+(as always, by majority vote).</p>
+
+<p>Also, since the project is FLOSS, the project can be forked;
+this ability to fork also provides a check against despotism.
+The technical lead&#39;s job is focus on doing what&#39;s best
+for this project, and the project&#39;s goal is to help
+the FLOSS community overall.</p>
+
+<p>The technical lead has commit rights on the software, and administrative
+rights to the production site (both web app admin rights and rights
+to its infrastructure).
+The technical lead can add or remove those rights to others
+to further the goals of the project
+(subject, as always, to being overruled by the TSC).
+Those with commit rights can make changes
+(subject to caveats described below) and accept changes
+(typically pull requests) submitted by others.
+These changes include changes to the process and contribution requirements.</p>
+
+<h2>Committers</h2>
+
+<p>Committers are those with authority to directly make changes
+to the main branch of the code.
+The TSC and technical lead can add or revoke commit privilege
+(the TSC overrides the technical lead in case of a conflict).
+Committers can accept contributions from contributors.</p>
+
+<h2>Contributors</h2>
+
+<p>Contributors are those who choose to contribute to the project.
+See <a href="../CONTRIBUTING.html">CONTRIBUTING</a>.</p>
+
+<h2>Web application admin</h2>
+
+<p>A very few people have been granted the admin privilege within the
+web application. In general, the TSC and/or technical lead initiates
+inviting someone to have this admin privilege, it&#39;s usually not granted
+on request.
+Admin privilege is only considered for those who have consistently demonstrated
+(1) trustworthiness, (2) support for the badge project, and
+(3) need for this privilege (e.g., through repeated reasonable requests
+that we have to act on).</p>
+
+<p>The admin privilege in the web application allows that user to
+edit/update any badge entry or user data, as well as see all this data.
+Note that we <em>do</em> keep a record of every change made to badge entry
+data and who made the change, even for admins.</p>
+
+<p>The purpose of granting admin privilege is to
+enable that individual to immediately fix <em>any</em> of the issues
+in the badges or users. We recommend that admins fix projects so that
+individual projects can fix their own problems in the future.</p>
+
+<p>Admin is a position of high trust. In particular, admins must not
+abuse their access to the email addresses of every user (which are
+private).  We don&#39;t want to have many admins.
+However, we also don&#39;t want any one person to be a bottleneck.</p>
+
+<p>Note that web application admin is not the same as having direct
+access/control over the underlying database or container.</p>
+
+<p>See <a href="./admin.html">admin</a> for more information about being a
+web application administrator.</p>
+
+<h2>Process</h2>
+
+<p>We generally use the GitHub issue tracker and pull requests for managing
+changes.
+For details, including contribution requirements, see
+<a href="../CONTRIBUTING.html">CONTRIBUTING.md</a>.
+Note that we emphasize two-person review for anything other than
+low-risk contributions.</p>
+
+<p>This project requires two-factor authentication (2FA) for direct commit rights.
+In addition, this project does not accept SMS as the second factor.</p>
+
+<p>Issues that we have determined are especially important, particularly
+if they will take a while, are added to the &quot;next&quot; milestone
+(which identifies &quot;what should be prioritized next&quot;).</p>
+
+<p>We expect people to focus on improving the project, not attacking other
+people. Please strive to &quot;Be excellent to each other.&quot;
+For more information, see our <a href="../CODE_OF_CONDUCT.html">Code of Conduct</a>.</p>
+
+<h2>Criteria changes</h2>
+
+<p>Changing <em>criteria</em> can have a much larger impact on participating
+projects than simply changing the supporting software, so we have special
+rules about them.  Fundamentally, any project that has honestly achieved
+a badge has a right to <em>not</em> have it revoked without notice.</p>
+
+<p>Criteria may be immediately changed if the change will
+not change the <em>meaning</em> of the criteria, e.g.,
+spelling corrections, grammar corrections, trivial reorderings,
+and trivial clarifications.</p>
+
+<p>Criteria may have clarifications and minor exceptions added, but there
+must be an opportunity for discussion.
+Our usual approach is to create an issue and mark it with
+&quot;criteria-clarification&quot;, and in most cases there should also be a notice
+posted to the mailing list.</p>
+
+<p>We expect that the set of criteria will need to be changed in more significant
+ways over time.
+However, if these changes could cause any existing badge-holders to lose
+their badges, these are significant changes.
+These significant changes <em>MUST</em> happen much
+less often and projects <em>MUST</em> be given much more time to either (1) object
+or (2) modify their project to comply <em>and</em> record that in the BadgeApp
+(so that they retain their badges).
+We currently expect that badge criteria will change at most 1/year,
+and that projects will have at <em>least</em> 2 months&#39; warning before the change.
+In that 2-month time, the BadgeApp must provide the necessary mechanisms
+(e.g., using &quot;future&quot; criteria) so that projects can record their new answers
+and thus have ample time to prevent losing their badge.</p>
+
+<p>If adding a new criteria will <em>not</em> cause any existing badge holder
+to lose their badge (e.g., because it is &quot;Met&quot; by default),
+at a <em>minimum</em>
+the proposed criterion <em>MUST</em> be discussed on the mailing list <em>AND</em>
+must have an issue where at <em>least</em> two weeks is allowed for discussion
+and improvement before putting on the live site.
+In addition, there must be a rough consensus that &quot;speedy adding&quot;
+of this criterion is appropriate.
+Speeding adding of a criterion is expected to be extremely unusual.</p>
+
+<h2>Current people</h2>
+
+<p>The current Badge Project technical lead is David A. Wheeler.</p>
+
+<p>To see the current list of TSC members, see <a href="./TSC.html">TSC.md</a>.</p>
+
+<h2>Underlying charter</h2>
+
+<p>For our legal basis, see the
+<a href="Best-Practices-Badge-Technical-Charter-Final-2024-04-30.pdf">Best Practices Badge Technical Charter</a>.</p>
+
+<h2>See also</h2>
+
+<p>Project participation and interface:</p>
+
+<ul>
+<li><a href="../CONTRIBUTING.html">CONTRIBUTING.md</a> - How to contribute to this project</li>
+<li><a href="INSTALL.html">INSTALL.md</a> - How to install/quick start</li>
+<li><a href="governance.html">governance.md</a> - How the project is governed</li>
+<li><a href="roadmap.html">roadmap.md</a> - Overall direction of the project</li>
+<li><a href="background.html">background.md</a> - Background research</li>
+<li><a href="api.html">api</a> - Application Programming Interface (API), inc. data downloads</li>
+</ul>
+
+<p>Criteria:</p>
+
+<ul>
+<li><a href="https://bestpractices.coreinfrastructure.org/criteria/0">Criteria for passing badge</a></li>
+<li><a href="https://bestpractices.coreinfrastructure.org/criteria">Criteria for all badge levels</a></li>
+</ul>
+
+<p>Development processes and security:</p>
+
+<ul>
+<li><a href="requirements.html">requirements.md</a> - Requirements (what&#39;s it supposed to do?)</li>
+<li><a href="design.html">design.md</a> - Architectural design information</li>
+<li><a href="implementation.html">implementation.md</a> - Implementation notes</li>
+<li><a href="testing.html">testing.md</a> - Information on testing</li>
+<li><a href="assurance-case.html">assurance-case.md</a> - Why it&#39;s adequately secure (assurance case)</li>
+</ul>
+  </body>
+  </html>

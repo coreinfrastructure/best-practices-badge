@@ -1,0 +1,189 @@
+  <!DOCTYPE html>
+  <html>
+  <head>
+  <title>docs/unsubscribe-security.md</title>
+  </head>
+  <body>
+<h1>Unsubscribe Feature Security Documentation</h1>
+
+<h2>Overview</h2>
+
+<p>The unsubscribe feature provides a secure way for users to opt out of email notifications. This implementation follows security best practices to prevent abuse and protect user privacy. The system now includes time-based validation with issued dates and uses a dedicated secret key for enhanced security.</p>
+
+<h2>Security Features</h2>
+
+<h3>1. Authentication &amp; Authorization</h3>
+
+<ul>
+<li><strong>HMAC-based tokens</strong>: Uses HMAC-SHA256 with dedicated <code>BADGEAPP_UNSUBSCRIBE_KEYS</code> environment variable</li>
+<li><strong>Time-based validation</strong>: Tokens include issued date and expire after configurable period (default 30 days)</li>
+<li><strong>Constant-time comparison</strong>: Prevents timing attacks when validating tokens</li>
+<li><strong>Token binding</strong>: Tokens are bound to user ID, email, and issued date</li>
+<li><strong>No user enumeration</strong>: Doesn&#39;t reveal whether an email exists in the system</li>
+<li><strong>Easy key rotation</strong>: The <code>BADGEAPP_UNSUBSCRIBE_KEYS</code> environment variable supports multiple (comma-separated) keys.</li>
+<li><strong>CSRF protection</strong>: Requires valid CSRF tokens for form submissions</li>
+</ul>
+
+<h3>2. Input Validation</h3>
+
+<ul>
+<li><strong>Email format validation</strong>: Simplistic validation for email addresses. More isn&#39;t necessary, since only valid email addresses will have an effect. It does limit length to prevent DoS.</li>
+<li><strong>Token format validation</strong>: Ensures tokens contain only safe characters</li>
+<li><strong>Date format validation</strong>: Strict YYYY-MM-DD format validation with range checks</li>
+<li><strong>Length limits</strong>: Prevents DoS attacks with oversized inputs</li>
+<li><strong>Parameter sanitization</strong>: Strips HTML and dangerous characters</li>
+</ul>
+
+<h3>3. Time-Based Security</h3>
+
+<ul>
+<li><strong>Issued date validation</strong>: Links must include valid issued date in YYYY-MM-DD format</li>
+<li><strong>Expiration handling</strong>: Tokens expire after configurable period (BADGEAPP_UNSUBSCRIBE_DAYS)</li>
+<li><strong>Future date prevention</strong>: Rejects tokens with future issued dates</li>
+</ul>
+
+<h3>4. Privacy Protection</h3>
+
+<ul>
+<li><strong>No PII in logs</strong>: Logs only user IDs and domains, not email addresses</li>
+</ul>
+
+<h3>5. Error Handling</h3>
+
+<ul>
+<li><strong>Secure error messages</strong>: Doesn&#39;t leak sensitive information</li>
+<li><strong>Comprehensive logging</strong>: Security events logged for monitoring</li>
+<li><strong>Safe defaults</strong>: Fails securely when validation fails</li>
+</ul>
+
+<h2>Environment Variables</h2>
+
+<h3>Configuration</h3>
+
+<ul>
+<li><code>BADGEAPP_UNSUBSCRIBE_KEYS</code>: 1+ Secret key for HMAC token generation (should be unique and cryptographically random), comma-separated. Uses <code>Rails.application.secret_key_base</code> if that is not available.</li>
+<li><code>BADGEAPP_UNSUBSCRIBE_DAYS</code>: Number of days tokens remain valid (default: 30)</li>
+</ul>
+
+<h3>Example Configuration</h3>
+<pre><code># Generate a random 64-character hex key
+BADGEAPP_UNSUBSCRIBE_KEYS=$(rails secret | head -c64)
+BADGEAPP_UNSUBSCRIBE_DAYS=30
+</code></pre>
+<h2>Implementation Components</h2>
+
+<h3>Routes</h3>
+<pre><code># Within scope '(:locale)', locale: LEGAL_LOCALE block
+get 'unsubscribe' => 'unsubscribe#edit'
+post 'unsubscribe' => 'unsubscribe#create'
+</code></pre>
+<p><strong>Locale Support</strong>:</p>
+
+<ul>
+<li><strong>With locale</strong>: <code>/en/unsubscribe</code> - works directly in English locale</li>
+<li><strong>Without locale</strong>: <code>/unsubscribe</code> - redirects to user&#39;s preferred locale (e.g., <code>/en/unsubscribe</code>)</li>
+<li><strong>Email links</strong>: Commonly include locale for immediate localized experience</li>
+<li><strong>Browser detection</strong>: When no locale provided, uses browser language preferences</li>
+</ul>
+
+<h3>Controller: <code>UnsubscribeController</code></h3>
+
+<ul>
+<li>Handles both GET (form display) and POST (processing) requests</li>
+<li>Validates issued date parameter for time-based security</li>
+<li>Implements comprehensive input validation and security checks</li>
+<li>Uses database transactions for data consistency</li>
+</ul>
+
+<h3>View: <code>app/views/unsubscribe/edit.html.erb</code></h3>
+
+<ul>
+<li>Displays read-only fields email, issued date, and first characters of token</li>
+<li>CSRF-protected form with client-side validation</li>
+</ul>
+
+<h3>Helper: <code>UnsubscribeHelper</code></h3>
+
+<ul>
+<li>Time-based token generation and verification utilities</li>
+<li>URL generation with issued date for email templates</li>
+<li>Privacy-preserving logging functions</li>
+<li>Date validation and parsing utilities</li>
+</ul>
+
+<h3>Database Migration</h3>
+
+<ul>
+<li>Backwards-compatible with existing data</li>
+<li>Adds <code>notification_emails</code> boolean field to users table, which will be
+used from here on.</li>
+<li>Stops using and stops displaying <code>project.disabled_reminders</code>.
+It does not <em>remove</em> the data, in case we need that data in the future.</li>
+<li>Safe default values. If a user has <em>any</em> project with disabled_reminders,
+then the user&#39;s <code>norification_emails</code> will be false (else true).</li>
+</ul>
+
+<h3>Email Integration: <code>ReportMailer</code></h3>
+
+<ul>
+<li>Modified to check user notification preferences. That way, even if it
+accidentally is called to send a notification, it won&#39;t do so.</li>
+<li>Includes new easier-to-use unsubscribe links in reminder emails</li>
+<li>Uses helper methods for secure token generation</li>
+</ul>
+
+<h2>Testing</h2>
+
+<p>Comprehensive test suite includes:</p>
+
+<ul>
+<li>Valid and invalid token testing with issued dates</li>
+<li>Time-based validation (expired/future dates)</li>
+<li>Input validation testing</li>
+<li>Rate limiting verification</li>
+<li>SQL injection prevention</li>
+<li>XSS protection validation</li>
+<li>CSRF protection testing</li>
+<li>Secure header verification</li>
+<li>Notification preference checking</li>
+</ul>
+
+<h2>Security Considerations</h2>
+
+<ol>
+<li><strong>Secret Key Management</strong>: Store <code>BADGEAPP_UNSUBSCRIBE_KEYS</code> securely and rotate it periodically. You can store more than one as a comma-separated list; the first one is used to generate new tokens. To rotate, add a new one at the end, and eventually remove old keys.</li>
+<li><strong>Time Window Configuration</strong>: Balance security vs usability when setting expiration period</li>
+<li><strong>Clock Synchronization</strong>: Ensure server clocks are synchronized to prevent time-based issues</li>
+<li><p><strong>Monitoring</strong>: Log analysis should monitor for:</p>
+
+<ul>
+<li>Unusual numbers of failed unsubscribe attempts</li>
+<li>Rate limit violations</li>
+<li>Invalid token patterns</li>
+<li>Expired token usage attempts</li>
+</ul></li>
+<li><p><strong>GDPR Compliance</strong>: The unsubscribe feature supports data subject rights by allowing users to control their email preferences. Users can easily unsubscribe directly by clicking on an email without logging in. Users can easily control their subscription setting by logging in, where they can enable or disable it as part of their profile.</p></li>
+<li><p><strong>Backup Security</strong>: Even if some tokens are compromised, attackers can only unsubscribe those users, and only until the time runs out. No privilege escalation possible. If a server unsubscribe secret key is exposed, attackers could unsubscribe arbitrary users, but they can&#39;t do anything else, and the key is easily rotated.</p></li>
+</ol>
+
+<h2>Maintenance</h2>
+
+<ul>
+<li>Rotate unsubscribe secret key periodically</li>
+</ul>
+
+<p>Here&#39;s one way to add a key while retaining old keys:</p>
+<pre><code>    heroku run --app staging-bestpractices bash
+
+    BADGEAPP_UNSUBSCRIBE_KEYS="$(rails secret | head -c64),$BADGEAPP_UNSUBSCRIBE_KEYS"
+</code></pre>
+<p>Here&#39;s one way to remove all old keys (do later):</p>
+<pre><code>    heroku run --app staging-bestpractices bash
+
+    BADGEAPP_UNSUBSCRIBE_KEYS="${BADGEAPP_UNSUBSCRIBE_KEYS%%,*}"
+</code></pre>
+<p>After either one logout and restart:</p>
+<pre><code>    heroku restart --app staging-bestpractices
+</code></pre>
+  </body>
+  </html>

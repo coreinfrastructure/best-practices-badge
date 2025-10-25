@@ -1,0 +1,524 @@
+  <!DOCTYPE html>
+  <html>
+  <head>
+  <title>docs/api.md</title>
+  </head>
+  <body>
+<h1>Application Programming Interface (API)</h1>
+
+<!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
+
+<p>BadgeApp is a relatively simple web application, and its
+external application programming interface (API) is simple too.
+The BadgeApp API is a simple RESTful API that follows
+Ruby on Rails REST conventions.</p>
+
+<p>We <em>want</em> people to use our data; please do so!
+However, please don&#39;t overwhelm us.</p>
+
+<p>This document provides a quickstart,
+legal information (the data is released under at least the
+<a href="https://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution License version 3.0 (CC-BY-3.0)</a>),
+a discussion of the most common requests,
+a pointer to a sample analysis program,
+how to query, how to download the database,
+and then various kinds of more specialized information.</p>
+
+<p>All BadgeApp requests are rate-limited. At the time of this writing,
+if you keep requests at 1 request/second or less for anything other than
+badge images you&#39;ll be fine. Badge image rates can be much higher
+(those are specially optimized).</p>
+
+<h2>Quickstart</h2>
+
+<p>Like any RESTful API, use an HTTP verb (like GET) on a resource.</p>
+
+<p>For example, you can get the JSON data for project #1 from the
+real production site (<a href="https://bestpractices.coreinfrastructure.org">https://bestpractices.coreinfrastructure.org</a>)
+by retrieving (a GET) data from this URL:</p>
+<pre><code>https://bestpractices.coreinfrastructure.org/projects/1.json
+</code></pre>
+<p>Note that you can ask for a particular result data format (where
+supported) by adding a period and its format (e.g., &quot;.json&quot;, &quot;.csv&quot;,
+and &quot;.svg&quot;) to the URL before the parameters (if any).
+When using &quot;.&quot; + format, the format name must be all lowercase.</p>
+
+<p>WARNING: Do <em>not</em> use the HTTP header &quot;Accept&quot; to select a format;
+that <em>no longer works</em> (it was previously deprecated).
+Instead, please use the URL itself to request
+the format (e.g., use a URL with &quot;.json&quot; if you want JSON format).
+At one time we allowed this, but that interferes with CDN caching.
+Caches normally just use the URL to determine
+what to cache, and caches work much less well if they have to use other
+parameters to examine the cache.</p>
+
+<p>A GET just retrieves information, and since most information is public,
+in most cases you don&#39;t need to log in for a GET.
+Other operations, like POST or DELETE, require logging in first
+(as is typical, cookies are used to track logged-in sessions).</p>
+
+<p>From here on we&#39;ll omit the scheme (https) and hostname, and
+we&#39;ll indicate variables by beginning their name with &quot;:&quot; (colon).
+So the URL above is an example of this pattern, which retrieves
+information about project :id in a given :format (an empty format
+specifier returns HTML):</p>
+<pre><code>GET /projects/:id(.:format)
+</code></pre>
+<h2>Legal information</h2>
+
+<p>We <em>want</em> people to use the data we supply, so please do so!
+The main requirement is that you provide attribution.</p>
+
+<p>More specifically: As noted on the website front page,
+all publicly-available non-code content managed by the badging application
+is released under at least the
+<a href="https://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution License version 3.0 (CC-BY-3.0)</a>;
+newer non-code content is released under
+CC-BY version 3.0 or later (CC-BY-3.0+).
+If referencing collectively or not
+otherwise noted, please credit the OpenSSF Best Practices badge contributors.</p>
+
+<p>If you use the data for research, we&#39;d love to hear about your results,
+so please do share the results with us if you can.
+That said, you are not legally required to share any results.</p>
+
+<h2>Most common requests</h2>
+
+<p>Here are the most common requests that an external system
+might request.</p>
+
+<ul>
+<li><p><tt>GET /(:locale/)projects/:id(/:level)(.:format)</tt></p>
+
+<p>Request data for project :id in :format. An empty format suffix
+returns HTML, and the &quot;.json&quot; format suffix returns JSON.
+External interfaces should normally request format &quot;json&quot;.
+If &quot;level&quot; is given (0, 1, or 2), that level is shown
+(level is ignored if json format is requested, because we just
+provide <em>all</em> the data when JSON is requested).</p></li>
+<li><p><tt>GET /(:locale/)projects/:id/badge(.:format)</tt></p>
+
+<p>Request the badge display for project :id in :format.  An empty format
+suffix returns SVG, and the &quot;.json&quot; format suffix returns JSON.
+If you just want to the badge status
+of a project, retrieve this as JSON and look at the key badge_level.</p>
+
+<p>WARNING! Do <em>not</em> use the &quot;Accept:&quot; HTTP header to select JSON format,
+as that does not work; use the URL &quot;.json&quot; suffix instead for JSON!</p>
+
+<p>The SVG and JSON badges are specially and rapidly served
+by the Content Delivery Network (CDN) that we use.
+For example, so feel free to using &quot;img src&quot; to embed the SVG
+badges, since they will be returned especially rapidly.</p>
+
+<p>For example, you can embed the badge status of project NNN
+in an HTML document with:</p>
+<pre><code><a href="https://bestpractices.coreinfrastructure.org/projects/NNN">
+  <img src="https://bestpractices.coreinfrastructure.org/projects/NNN/badge">
+</a>
+</code></pre>
+<p>You can also embed the badge status of project NNN in a markdown file with:
+<code>[![OpenSSF Best Practices](https://bestpractices.coreinfrastructure.org/projects/NNN/badge)](https://bestpractices.coreinfrastructure.org/projects/NNN)</code></p></li>
+<li><p><code>GET /(:locale/)projects(.:format)(?:query)</code></p>
+
+<p>Perform a query on the projects to return a list
+of the matching projects, up to the maximum number allowed in a page.
+An empty format suffix returns HTML, the &quot;.json&quot; format suffix returns
+JSON, and the &quot;.csv&quot; format suffix returns CSV format.
+See below for more about the query.</p></li>
+<li><p><code>GET /en/projects(.:format)?as=badge&amp;url=https%3A%2F%2Fgithub.com%2FORG%2FPROJECT</code></p>
+
+<p>Perform a query for a project with the given URL (this can be
+either the repository URL or the home page URL) and redirect to the
+<em>single</em> badge display given that query. This returns status 404
+(not found) if there is no match, and status 409 (conflict) if there
+is more than one match. The URL can be any URL (it doesn&#39;t need to be
+GitHub, that is just an example to show how to do the URL encoding).
+NOTE: there is no &quot;/&quot; after the word <code>projects</code>!</p>
+
+<p>The <code>as=badge</code> option is intended to make it easy to create dashboards
+(at a cost of some performance). If you only know the repository or
+home page URL of a project, and want to display its badge, this API
+entry is designed for you.
+An empty format suffix returns SVG, and the &quot;.json&quot; format suffix
+returns JSON.</p>
+
+<p>There&#39;s a performance penalty for using this interface. This interface
+makes a query each time to the BadgeApp, which then redirects
+the requestor to the actual badge URL (the latter goes through a CDN
+and is thus much faster). You can avoid making the performance penalty
+worse if you follow these rules (if you don&#39;t, your users will endure
+additional unnecessary redirects as the system tries to fix the query):</p>
+
+<ul>
+<li>Use the conventional alphabetic order, <code>as=badge</code> before <code>url=</code></li>
+<li>Use URL encoding, especially in the url. For example, use %3A for &quot;:&quot;
+and %2F for &quot;/&quot;. In many situations you <em>must</em> do this.</li>
+<li>Use the English locale (&#39;/en/&#39;), since the locale isn&#39;t relevant
+(if you omit the locale there will be a locale redirect).</li>
+</ul>
+
+<p>We recommend individual projects use the id-based interface listed above,
+since they already known their id. However, multi-project dashboards
+often do not know every project&#39;s id, so this interface makes it
+easy to get the relevant badge (if any).</p>
+
+<p>Dashboards using this information that want a simple display
+of the OpenSSF Badge result may want to use combine hypertext
+links and the &quot;alt&quot; tag like this, where <code>MY_URL</code> is the URL to be used:</p>
+<pre><code><a href="https://bestpractices.coreinfrastructure.org/projects?as=entry&url=MY_URL">
+  <img src="https://bestpractices.coreinfrastructure.org/projects?as=badge&url=MY_URL" alt="OpenSSF N/A">
+</a>
+</code></pre>
+<p>The &quot;alt&quot; text is shown on failure, and the hyperlink helps both
+accessibility and anyone who wants to learn more about the badge.
+The link uses as=entry; this will show the specific project entry
+if there is exactly one, and otherwise will show the project list of
+matches.</p>
+
+<p>All BadgeApp requests are rate-limited, and requests other than badge
+images have smaller rate limits. So while you can embed this query when
+describing a single project, you can&#39;t really have a page
+full of these queries (such as the img src above using a /projects query).
+If you want to show a large number of OpenSSF badges images all at once,
+it&#39;s better to use the query interface to find its corresponding
+numeric project id (e.g., at the server). Then just use the numeric
+project id reference instead, e.g., generate this instead (where you
+found NUMBER earlier):</p>
+
+<p><img src="https://bestpractices.coreinfrastructure.org/projects/NUMBER/badge" alt="OpenSSF N/A"></p></li>
+</ul>
+
+<h2>Tiered percentage in OpenSSF Best Practices Badge</h2>
+
+<p>The <code>tiered_percentage</code> field of a project
+(shown as the &quot;tiered %&quot; column on the projects page)
+is a number that should be interpreted as a percentage.
+As also explained at the bottom of the
+<a href="https://bestpractices.coreinfrastructure.org/en/projects">projects page</a>,
+this field is 300% (represented as 300) for gold,
+200% (represented as 200) for silver, and
+100% (represented as 100) for passing, plus any
+progress after the highest-earned badge.</p>
+
+<p>For example,
+a project that has earned a passing badge (100%), has completed 40% of the
+silver requirements, and has also completed 20% of the gold requirements,
+will have a value of 140 (meaning 140%).
+We intentionally don&#39;t give credit to much higher badge requirements
+until a previous lower badge is earned,
+because we are trying to encourage earning complete badges.</p>
+
+<p>When there was only a single badge level this represented progress toward
+earning the passing badge (earning it would show 100%).
+When we added higher-level badges, it was clear that there was value in
+having a single number represent broader progress, so we decided to
+implement this number as a &quot;tiered percentage&quot;.
+We think it provides a useful measure of progress.</p>
+
+<p>If all you want is the badge level, we recommend using
+<code>badge_level</code> instead.
+This provides text that represents the currently earned badge level.
+Currently it is one of <code>in_progress</code>, <code>passing</code>, <code>silver</code>, or <code>gold</code>.
+If we add new badge levels (such as <code>platinum</code>) then it will provide
+that new value as appropriate.</p>
+
+<h2>Sample programs</h2>
+
+<p>See the <a href="./best_practices.py">best_practices.py</a> program to see an
+example of how to download and analyze data.
+Notice that since we supply JSON data in pages, you need to retrieve
+all the pages if you want the entire dataset.
+If you retrieve the entire database, store it locally
+(in a file or database system); it intentionally takes some time
+to download all of it.</p>
+
+<p>See the <a href="./best_practices_modify.py">best_practices_modify.py</a>
+program to see how to programmatically <em>modify</em> project data.
+Note that if you want to <em>modify</em> project data, you have to
+take a few extra steps to authenticate yourself
+(to prove that you&#39;re authorized to do this).</p>
+
+<h2>Query (Search)</h2>
+
+<p>The &quot;/projects&quot; URL supports various searches.
+For example, retrieving this URL:</p>
+<pre><code>/projects.json?gteq=90&amp;lteq=99&amp;page=2
+</code></pre>
+<p>Will retrieve a list of project data in JSON format, but only for
+projects with 90% or better passing <em>and</em> less than or equal to 99%
+passing (that is, not completely passing), and will retrieve the second
+page of this list (by default the first page is returned).
+(Beware: If you embed the URL in an HTML document, you must as
+always write <code>&amp;</code> as <code>&amp;amp;</code>.</p>
+
+<p>We reserve the right to change the details, but we do try
+to provide a reasonable interface.
+Most parameters can be combined (in which case all criteria must be met).
+The following search parameters are supported:</p>
+
+<ul>
+<li>  status: &quot;passing&quot;, &quot;in_progress&quot;, &quot;silver&quot;, or &quot;gold&quot;</li>
+<li>  gteq: Integer, % greater than or equal of passing criteria</li>
+<li>  lteq: Integer, % less than or equal of passing criteria.
+Can be combined with gteq</li>
+<li>  url: Text - matches the home page URL or the repo URL exactly.
+Be sure to use URL encoding (%3A for &quot;:&quot; and %2F for &quot;/&quot;).
+This is an &#39;equal to&#39; match, so <code>url=http:%3A%2F%2Fq.com</code>
+will retrieve <code>https://q.com</code> but not <code>https://q.com/repo7</code>.
+See pq= if you want to search for a prefix.
+A trailing space and trailing slash are ignored.  If we add support
+for package URLs (purls), this would retrieve those matches as well.</li>
+<li>  pq: Text, &quot;prefix query&quot; - matches against <em>prefix</em> of URL or name</li>
+<li>  q: Text, &quot;normal query&quot; - match against parsed name, description, URL
+This is implemented by PostgreSQL, so you can use &quot;&amp;&quot; (and),
+&quot;|&quot; (or), and &quot;&#39;text...*&#39;&quot; (prefix).
+Note that URLs cannot include spaces, and &amp;amp; has a special meaning,
+so you typically will need to use URL encoding in a query.
+For example, <code>/en/projects?q=R%20%26%20analysis</code>
+is a search that requires both &quot;R&quot; and &quot;analysis&quot;.
+This search request system breaks URLs into parts, so you can&#39;t use &quot;q&quot; to
+search on a whole URL (use pq instead).</li>
+<li>  page: Page to display (starting at 1)</li>
+</ul>
+
+<p>Once a project query completes, by default the result will be a paged
+list of projects in the requested format. The &quot;as&quot; parameter changes this:</p>
+
+<ul>
+<li>  as=badge : Display the <em>single</em> badge for the resulting project.
+If no project matches the criteria, status 404 (not found) is returned.
+If multiple projects match the criteria, status 409 (conflict) is returned.</li>
+<li>  as=entry : Display the project badge <em>entry</em> for the resulting project.
+If no or multiple projects match, the normal project display
+is shown instead.</li>
+</ul>
+
+<p>See
+<a href="https://github.com/coreinfrastructure/best-practices-badge/blob/main/app/controllers/projects_controller.rb">app/controllers/projects_controller.rb</a>
+if you want to see the implementation&#39;s source code.</p>
+
+<h2>Downloading the database</h2>
+
+<p>We encourage analysis of OSS trends.
+We do provide some search capabilities, but for most analysis
+you will typically need to download the database.
+We can&#39;t anticipate all possible uses, and we&#39;re trying to keep the
+software relatively small &amp; focused.</p>
+
+<p>You can download the project data in JSON and CSV format using typical
+Rails REST conventions. Just add &quot;.json&quot; or &quot;.csv&quot; to the URL.
+You can even do this on a search if we already support the search (e.g.,
+by name).  Similarly, you can download user data in JSON format using
+&quot;.json&quot; at the end of the URL.</p>
+
+<p>There is a current technical limitation in that you must
+request project and user data page-by-page.
+This isn&#39;t hard, just provide a page parameter (e.g., &quot;page=2&quot;).
+This is because Rails does not stream JSON or CSV data by default,
+so if we allowed this the application would download
+the entire database into memory to process it.
+Rails applications <em>can</em> stream data (there are even web pages explaining
+how to do it), but the call for it is rare and there are some
+complications in its implementation, so we just haven&#39;t implemented it yet.</p>
+
+<p>So you can download the projects by repeatedly requesting this
+(changing &quot;1&quot; into 2, 3, etc. until all is loaded):</p>
+
+<blockquote>
+<p><a href="https://bestpractices.coreinfrastructure.org/projects.json?page=1">https://bestpractices.coreinfrastructure.org/projects.json?page=1</a></p>
+</blockquote>
+
+<p>You can similarly load the user data starting from here:</p>
+
+<blockquote>
+<p><a href="https://bestpractices.coreinfrastructure.org/users.json?page=1">https://bestpractices.coreinfrastructure.org/users.json?page=1</a></p>
+</blockquote>
+
+<p>To directly download the user list you must be logged in, and we
+intentionally restrict the information we share about users.
+We only provide basic public information such as name, nickname, and such.
+In particular, we only provide email addresses to
+BadgeApp administrators, because we value the privacy of our users.</p>
+
+<p>As we note about privacy and legal issues,
+please see our <a href="https://www.linuxfoundation.org/privacy">privacy
+policy</a> and <a href="https://www.linuxfoundation.org/terms">terms of
+use</a>.
+All publicly-available non-code content is released under at least the
+<a href="https://creativecommons.org/licenses/by/3.0/">Creative Commons
+Attribution License version 3.0 (CC-BY-3.0)</a>;
+newer non-code content is released under
+CC-BY version 3.0 or later (CC-BY-3.0+).
+If referencing collectively or
+not otherwise noted, please credit the
+&quot;OpenSSF Best Practices badge contributors&quot; and note the license.
+You should also note the website URL as the data source, which is
+<a href="https://bestpractices.coreinfrastructure.org">https://bestpractices.coreinfrastructure.org</a>.</p>
+
+<p>If you are doing research, we urge you do to it responsibly and reproducibly.
+Please be sure to capture the date and time when you began and completed
+capturing this dataset
+(you need both, because the data could be changing
+while you&#39;re downloading it).
+Do what you can to ensure that your research can be
+<a href="https://en.wikipedia.org/wiki/Replication_crisis">replicated</a>.
+Consider the points in
+<a href="https://arxiv.org/pdf/1609.00037v2.pdf">Good Enough Practices in Scientific Computing</a>, a &quot;set of computing tools and techniques
+that every researcher can and should adopt.&quot;
+For example, &quot;Where possible, save data as originally generated (i.e.
+by an instrument or from a survey.&quot;
+These aren&#39;t requirements for using this data, but they are well
+worth considering.</p>
+
+<h2>Full entry point list</h2>
+
+<p>The RESTful interface supports the following interfaces, which is enough
+to programmatically create a new user, login and logout, create project
+data, edit it, and delete it (subject to the authorization rules).
+In particular, viewing with a web browser (which by default emits &#39;GET&#39;)
+a URL with the absolute path &quot;/projects/:id&quot; (where :id is an id number)
+will retrieve HTML that shows the status for project number id.
+A URL with absolute path &quot;/projects/:id.json&quot;
+will retrieve just the status data in JSON format (useful for further
+programmatic processing).</p>
+
+<p>The following shows the HTTP verb (e.g., GET), the URI pattern, and
+the controller#action in the code (important if you need to examine
+the source code itself which is in directory app/controllers/).</p>
+<pre><code>Verb   URI Pattern                        Controller#Action
+GET    /projects/:id(.:format)            projects#show # .json supported.
+GET    /projects/:id/badge(.:format)      projects#badge {:format=>"svg"}
+
+GET    /projects(.:format)                projects#index
+POST   /projects(.:format)                projects#create
+GET    /projects/new(.:format)            projects#new
+GET    /projects/:id/edit(.:format)       projects#edit
+PATCH  /projects/:id(.:format)            projects#update
+PUT    /projects/:id(.:format)            projects#update
+DELETE /projects/:id(.:format)            projects#destroy
+
+GET    /users/new(.:format)               users#new
+GET    /signup(.:format)                  users#new
+GET    /users/:id/edit(.:format)          users#edit
+GET    /users/:id(.:format)               users#show
+
+GET    /sessions/new(.:format)            sessions#new
+GET    /login(.:format)                   sessions#new
+POST   /login(.:format)                   sessions#create
+DELETE /logout(.:format)                  sessions#destroy
+GET    /signout(.:format)                 sessions#destroy
+</code></pre>
+<p>If you install the application you can have it report the routes
+by running &quot;rake routes&quot;.</p>
+
+<h2>Rails _method parameter in POST</h2>
+
+<p>As explained in the
+Rails Guide <a href="http://guides.rubyonrails.org/form_helpers.html#how-do-forms-with-patch-put-or-delete-methods-work-questionmark"><em>Form Helpers</em></a>:</p>
+
+<blockquote>
+<p>The Rails framework encourages RESTful design of your applications, which means you&#39;ll be making a lot of &quot;PATCH&quot; and &quot;DELETE&quot; requests (besides &quot;GET&quot; and &quot;POST&quot;). However, most browsers don&#39;t support methods other than &quot;GET&quot; and &quot;POST&quot; when it comes to submitting forms.  Rails works around this issue by emulating other methods over POST with a hidden input named &quot;_method&quot;, which is set to reflect the desired method.</p>
+</blockquote>
+
+<p>This works in the BadgeApp application too.
+However, note that most requests other than GET (and a few GET requests)
+require a logged-in session, so while this is alternative way to
+<em>make</em> the request, for the request to succeed
+you still have to use a logged-in session
+with adequate authorization.</p>
+
+<h2>Cross-Origin Resource Sharing (CORS)</h2>
+
+<p>The BadgeApp permits some access by client-side JavaScript programs
+that originate from other sites.</p>
+
+<p>Client-side JavaScript programs are, by default, subject to the
+&quot;same origin&quot; policy, which prevents them from arbitrarily accessing
+sites other than where they came from.
+The standard way to give a client-side JavaScript program additional
+privilege is through Cross-Origin Resource Sharing (CORS) HTTP headers.</p>
+
+<p>The BadgeApp provides CORS headers in certain cases when an
+&quot;Origin&quot; is provided.
+When a client-side JavaScript program
+makes a request to a different origin, it provides its &quot;origin&quot;, and
+that allows the BadgeApp to decide what it wants to allow.</p>
+
+<p>The CORS header expressly does <em>not</em> share credentials, and
+<em>only</em> allows GET (or OPTIONS) for a few specific resources.
+If someone provides a good reason to allow more accesses from
+JavaScript clients, we&#39;ll gladly consider it.
+For details, see the BadgeApp source code <code>config/initializers/cors.rb</code>.</p>
+
+<h2>Locale</h2>
+
+<p>Users indicate their locale via the URL.
+We use one of the standard approaches, where the locale is the first
+part of the path.
+For example,
+<a href="https://bestpractices.coreinfrastructure.org/fr/projects">https://bestpractices.coreinfrastructure.org/fr/projects</a>
+selects the locale &quot;fr&quot; (French) when displaying &quot;/projects&quot;.
+This even works at the top page, e.g.,
+<a href="https://bestpractices.coreinfrastructure.org/fr">https://bestpractices.coreinfrastructure.org/fr</a>.
+The application also supports the locale as a query parameter, e.g.,
+<a href="https://bestpractices.coreinfrastructure.org/projects?locale=fr">https://bestpractices.coreinfrastructure.org/projects?locale=fr</a>,
+though that is not the canonical URL format.</p>
+
+<p>At one time, when a locale was not provided, English (en) was assumed.
+However, that made it impossible to distinguish between
+&quot;use the browser&#39;s preferred locale&quot; and &quot;use English&quot;.</p>
+
+<p>Now, if no locale is selected, the application will redirect requesters
+to the best matching locale (as recommended by the accept-language
+value provided by the browser, with English as the last resort).
+The API has an important exception: if JSON format is requested, no
+locale redirection occurs (because JSON isn&#39;t locale-sensitive).
+The request for the badge image (with <code>/projects/NNN/badge</code>)
+is also not redirectored (again, because it isn&#39;t locale-sensitive).</p>
+
+<p>Locales are always exactly 2 lowercase letters, or 2 lowercase letters
+followed by an dash and then more alphanumerics.
+For example, &quot;fr&quot; is French, while &quot;zh-CN&quot; is Chinese (Simplified).
+This convention lets you syntactically distinguish between
+locales and other possible meanings of a URL&#39;s prefix;
+non-locale pages never match the locale syntax.</p>
+
+<h2>Canonical URLs</h2>
+
+<p>The canonical URL format for pathnames is a single &quot;/&quot; for the topmost
+root (which will redirect to the best-matching locale), otherwise there
+is no trailing slash.
+This is the canonical format generated by the Rails router helpers.</p>
+
+<h2>See also</h2>
+
+<p>Project participation and interface:</p>
+
+<ul>
+<li><a href="../CONTRIBUTING.html">CONTRIBUTING.md</a> - How to contribute to this project</li>
+<li><a href="INSTALL.html">INSTALL.md</a> - How to install/quick start</li>
+<li><a href="governance.html">governance.md</a> - How the project is governed</li>
+<li><a href="roadmap.html">roadmap.md</a> - Overall direction of the project</li>
+<li><a href="background.html">background.md</a> - Background research</li>
+<li><a href="api.html">api</a> - Application Programming Interface (API), inc. data downloads</li>
+</ul>
+
+<p>Criteria:</p>
+
+<ul>
+<li><a href="https://bestpractices.coreinfrastructure.org/criteria/0">Criteria for passing badge</a></li>
+<li><a href="https://bestpractices.coreinfrastructure.org/criteria">Criteria for all badge levels</a></li>
+</ul>
+
+<p>Development processes and security:</p>
+
+<ul>
+<li><a href="requirements.html">requirements.md</a> - Requirements (what&#39;s it supposed to do?)</li>
+<li><a href="design.html">design.md</a> - Architectural design information</li>
+<li><a href="implementation.html">implementation.md</a> - Implementation notes</li>
+<li><a href="testing.html">testing.md</a> - Information on testing</li>
+<li><a href="assurance-case.html">assurance-case.md</a> - Why it&#39;s adequately secure (assurance case)</li>
+</ul>
+  </body>
+  </html>

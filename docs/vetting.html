@@ -1,0 +1,145 @@
+  <!DOCTYPE html>
+  <html>
+  <head>
+  <title>docs/vetting.md</title>
+  </head>
+  <body>
+<h1>Vetting of Best Practices badges</h1>
+
+<!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
+
+<p>Here we discuss how we vet best practices badges.
+To give context, we first discuss other vetting approaches
+and why there was a need for an alternative.
+We then discuss how we actually vet the badges.</p>
+
+<h2>Other vetting approaches</h2>
+
+<p>There are many ways to evaluate projects from a security vantage point.
+For example:</p>
+
+<ul>
+<li>The Common Criteria for Information Technology Security Evaluation
+(abbreviated as Common Criteria or CC) is
+an international standard (ISO/IEC 15408) for computer security certification.
+The Common Criteria is a framework within which security functional and
+assurance requirements (SFRs and SARs respectively) can be specified in
+Protection Profiles (PPs).
+Suppliers can then claim what requirements they meet in a Security Target
+(ST), which could cover 0 or more Protection Profile requirements.
+Typically testing labs evaluate products to determine
+whether they meet the claims stated in their STs.
+Going through a testing lab takes many months (often more than a year)
+and requires a significant amount of money to pay the testing lab for
+each product.</li>
+<li>The Federal Information Processing Standard (FIPS) Publication 140-2
+(FIPS PUB 140-2) is a U.S. government computer security standard used
+to approve cryptographic modules.
+It is designed to only evaluate cryptographic modules, and again
+requires a significant amount of time and money to pass.</li>
+<li>Many companies provide services to evaluate software for its security
+and/or evaluate a software development organization.
+Again, these services typically cost a significant amount of time and money.</li>
+</ul>
+
+<h2>Need for an alternative</h2>
+
+<p>There are literally millions of free / libre / open source software (FLOSS)
+programs.
+Many are not funded by larger organizations and do not have a revenue stream
+(they are simply available for free).
+As a result, they simply cannot afford to pay a
+significant (or any) amount of money to go through an evaluation.
+Many are primarily developed by a single individual, so security evaluations
+that require lengthy interactions with developers or lengthy specialized
+documentation will not work.</p>
+
+<p>In many situations the software changes quickly,
+while software-based evaluations generally
+only evaluate a specific version of the software.
+As a result, evaluations can end up only reporting about historical software,
+not the software actually in use.</p>
+
+<p>Finally, many security evaluation processes were originally designed
+to evaluate proprietary software.
+While they <em>can</em> be used to evaluate
+free / libre / open source software (FLOSS),
+they do not take advantage of the many differences between them.
+For example, a significant advantage of FLOSS is that if done well
+it permits worldwide security review,
+both by humans and a variety of analysis tools.
+Yet many evaluation processes do not take into account whether or not
+efforts have been made to enable this this review.</p>
+
+<p>This is not to say that FLOSS <em>cannot</em> be evaluated using these methods.
+FLOSS systems (such as Linux systems and OpenSSL)
+have repeatedly passed CC evaluations, FIPS 140-2 evaluations,
+and various specialized evaluations.
+However, in many cases FLOSS is a poor fit for these other evaluation
+mechanisms.
+This is a problem, because in many areas FLOSS is a leading or at least
+major solution.</p>
+
+<p>We believe there is a need for an approach that helps FLOSS be secure
+that can scale up to the millions of FLOSS programs available today and
+takes advantage of the distinctive nature of FLOSS.</p>
+
+<h2>OpenSSF Badging approach to vetting</h2>
+
+<p>The best practices badge approach is based on self-certification.
+There are literally millions of OSS projects (we counted), so it&#39;s unlikely
+anyone could afford to pay for traditional evaluation processes for even a
+majority of them. We also think requiring fees for every OSS project would
+mean the vast majority of projects would not participate. In addition,
+we focused on &quot;what is important&quot; regardless of whether or not it&#39;s
+easy to automate (though we prefer criteria that can be automatically
+determined where that is reasonable).
+Self-certification best resolved these issues.</p>
+
+<p>The problems of self-certification are well-known, so we have various
+mechanisms to mitigate its problems:</p>
+
+<ul>
+<li>Automation. We work to automatically determine answers, and we will not accept answers where can confirm with high confidence that the answer is false. E.g., if you use &quot;http://&quot; for your project or repo URLs, your project fails the criterion <code>sites_https</code>. That means that the badge is not strictly self-certification, instead, the badge is merely based on it. In the long term we hope to implement more automation. The file criteria/criteria.yml documents how we think various criteria could be automated. Patches to improve automation are joyfully welcomed.  That said, as noted above, we want to focus on what criteria are <em>important</em> - even if we currently require people to determine the answer.</li>
+<li>Public display of answers (for criticism).  People are far more willing to lie in private than in public. It&#39;s been long observed that
+“Sunlight is said to be the best of disinfectants; electric light the most efficient policeman.” See <a href="http://louisville.edu/law/library/special-collections/the-louis-d.-brandeis-collection/other-peoples-money-chapter-v">Louis Brandeis, 1914, “What Publicity Can Do”, in Other People&#39;s Money and How the Bankers Use It</a></li>
+<li>Reduced incentives. We intentionally reduce the incentives for people to create false information.  For example, all links are specifically marked as <code>rel=&quot;nofollow ugc&quot;</code>; this greatly reduces the incentive to do Search Engine Optimization (SEO) hacking by creating nonsense projects.</li>
+<li>Notifications and spot-checks. We (the managers of the badging process) get notifications of various events or suspicious claims for review. Anyone can post an issue disputing a claim, and again, we can check the claim.</li>
+<li>Answers can be overridden by the Linux Foundation (LF) if false. Those who repeatedly falsify information can be kicked off. We do not do this lightly, but the fact that we can reduces the incentive to try.</li>
+<li>FLOSS.  The badging site is itself FLOSS, so if others can identify ways to improve it and even propose implementations of it.</li>
+</ul>
+
+<p>Nothing is perfect; we believe that the approach we&#39;re taking is
+improving the FLOSS available to all, and that is the goal.</p>
+
+<h2>See also</h2>
+
+<p>Project participation and interface:</p>
+
+<ul>
+<li><a href="../CONTRIBUTING.html">CONTRIBUTING.md</a> - How to contribute to this project</li>
+<li><a href="INSTALL.html">INSTALL.md</a> - How to install/quick start</li>
+<li><a href="governance.html">governance.md</a> - How the project is governed</li>
+<li><a href="roadmap.html">roadmap.md</a> - Overall direction of the project</li>
+<li><a href="background.html">background.md</a> - Background research</li>
+<li><a href="api.html">api</a> - Application Programming Interface (API), inc. data downloads</li>
+</ul>
+
+<p>Criteria:</p>
+
+<ul>
+<li><a href="https://bestpractices.coreinfrastructure.org/criteria/0">Criteria for passing badge</a></li>
+<li><a href="https://bestpractices.coreinfrastructure.org/criteria">Criteria for all badge levels</a></li>
+</ul>
+
+<p>Development processes and security:</p>
+
+<ul>
+<li><a href="requirements.html">requirements.md</a> - Requirements (what&#39;s it supposed to do?)</li>
+<li><a href="design.html">design.md</a> - Architectural design information</li>
+<li><a href="implementation.html">implementation.md</a> - Implementation notes</li>
+<li><a href="testing.html">testing.md</a> - Information on testing</li>
+<li><a href="assurance-case.html">assurance-case.md</a> - Why it&#39;s adequately secure (assurance case)</li>
+</ul>
+  </body>
+  </html>

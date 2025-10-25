@@ -15,8 +15,7 @@ class ProjectsController < ApplicationController
   skip_before_action :redir_missing_locale, only: :badge
 
   before_action :set_project,
-                only: %i[edit update delete_form destroy show_json show_markdown]
-  before_action :set_project_show_html, only: :show
+                only: %i[edit update delete_form destroy show show_json show_markdown]
   before_action :require_logged_in, only: :create
   before_action :can_edit_else_redirect, only: %i[edit update]
   before_action :can_control_else_redirect, only: %i[destroy delete_form]
@@ -856,16 +855,6 @@ class ProjectsController < ApplicationController
   # @return [void] Sets @project instance variable
   def set_project
     @project = Project.find(params[:id])
-  end
-
-  # Callback to load project with eager-loaded associations for show action.
-  # Separate from set_project to avoid unnecessary eager loading in other
-  # actions (edit, update, etc.) where the user association isn't needed.
-  # Eager loads user association to prevent N+1 query when accessing
-  # user_display_name in the show view.
-  # @return [void] Sets @project instance variable with eager-loaded associations
-  def set_project_show_html
-    @project = Project.includes(:user).find(params[:id])
   end
 
   # Sets and validates criteria level from parameters.

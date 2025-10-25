@@ -6,7 +6,7 @@
 
 require 'test_helper'
 
-# rubocop: disable Metrics/BlockLength
+# rubocop: disable Metrics/BlockLength, Metrics/ClassLength
 class SessionsHelperTest < ActionView::TestCase
   setup do
     @user = users(:test_user)
@@ -67,10 +67,11 @@ class SessionsHelperTest < ActionView::TestCase
                  )
   end
   class StubOctokitResult
-    attr_accessor :permissions
+    attr_accessor :permissions, :html_url
 
-    def initialize(admin, push, pull)
+    def initialize(admin, push, pull, url = 'https://github.com/test/repo')
       self.permissions = { admin: admin, push: push, pull: pull }
+      self.html_url = url
     end
   end
 
@@ -87,6 +88,25 @@ class SessionsHelperTest < ActionView::TestCase
       else
         raise Octokit::NotFound
       end
+    end
+
+    def repos(**_opts)
+      [
+        StubOctokitResult.new(true, true, true)
+      ]
+    end
+  end
+
+  class StubOctokitErrorClient
+    def initialize(**_params); end
+
+    def repos(**_opts)
+      raise Octokit::Unauthorized.new(
+        method: :get,
+        url: 'https://api.github.com/user/repos',
+        status: 401,
+        body: 'Bad credentials'
+      )
     end
   end
 
@@ -144,5 +164,18 @@ class SessionsHelperTest < ActionView::TestCase
     assert_not valid_github_url? 'https://github.com/asdf/1234/?'
     assert_not valid_github_url? 'https://githubs.com/asdf/1234/'
   end
+
+  test 'github_user_projects returns list' do
+    session[:user_token] = 'fake_token'
+    result = github_user_projects(StubOctokitClient)
+    assert_equal 1, result.length
+    assert_equal 'https://github.com/test/repo', result.first
+  end
+
+  test 'github_user_projects handles errors' do
+    session[:user_token] = 'fake_token'
+    result = github_user_projects(StubOctokitErrorClient)
+    assert_equal [], result
+  end
 end
-# rubocop: enable Metrics/BlockLength
+# rubocop: enable Metrics/BlockLength, Metrics/ClassLength

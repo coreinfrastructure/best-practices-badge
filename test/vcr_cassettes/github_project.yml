@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://api.github.com/user/repos?per_page=50&sort=pushed
+    uri: https://api.github.com/user/repos?per_page=50&sort=pushed&type=public
     body:
       encoding: US-ASCII
       string: ''
@@ -85,7 +85,7 @@ http_interactions:
   recorded_at: Tue, 11 Apr 2023 06:05:43 GMT
 - request:
     method: get
-    uri: https://api.github.com/user/repos?per_page=50&sort=pushed
+    uri: https://api.github.com/user/repos?per_page=50&sort=pushed&type=public
     body:
       encoding: US-ASCII
       string: ''

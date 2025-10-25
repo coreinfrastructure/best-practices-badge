@@ -100,6 +100,12 @@ class UsersController < ApplicationController
     # what is in these lists is radically different.
     return unless @user == current_user && @user.provider == 'github'
 
+    # NOTE: we intentionally only obtain a *subset* of the projects
+    # the user controls using github_user_projects (since otherwise we
+    # could wait a ridiculous amount of time). So in some cases
+    # this won't include all projects the user can actually edit.
+    # That's okay, since we *always* show the projects with additional rights;
+    # this is just an attempt to "sweep up" other data we otherwise lack.
     @edit_projects =
       select_needed(
         Project.includes(:user).where(repo_url: github_user_projects)

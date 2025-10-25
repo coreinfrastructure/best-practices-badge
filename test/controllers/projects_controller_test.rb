@@ -162,8 +162,9 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     log_in_as(@user)
     # We simplify this test by stubbing out the request to GitHub to
     # retrieve information about user repositories.
-    url = 'https://api.github.com/user/repos?per_page=50&sort=pushed'
-    stub_request(:get, url).to_return(status: 200, body: '', headers: {})
+    # Stub GitHub API request (matches any query parameters)
+    stub_request(:get, %r{https://api\.github\.com/user/repos})
+      .to_return(status: 200, body: '', headers: {})
     assert_no_difference('Project.count') do # Post routes to 'create'
       post '/en/projects', params: { project: { name: @project.name } }
     end

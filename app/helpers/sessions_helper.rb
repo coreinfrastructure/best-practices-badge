@@ -147,12 +147,21 @@ module SessionsHelper
       session[:github_name] == get_github_owner(url)
   end
 
-  # Retrieve list of all GitHub projects, used when displaying
-  # user profile.
-  def github_user_projects
-    github = Octokit::Client.new access_token: session[:user_token]
-    github.auto_paginate = true
-    github.repos.map(&:html_url).compact_blank
+  # Retrieve list of GitHub projects for a user, used when displaying
+  # user profile. Returns up to 100 most recently updated repositories
+  # across all types (owned, org member, collaborator).
+  # We don't retrieve *all* of them, because for some users that would
+  # produce an overwhelming number.
+  # Returns empty array on error to prevent 500 errors.
+  def github_user_projects(client = Octokit::Client)
+    github = client.new access_token: session[:user_token]
+    github.repos(type: 'all', sort: 'updated', per_page: 100)
+          .map(&:html_url).compact_blank
+  rescue Octokit::Error => e
+    Rails.logger.warn(
+      "GitHub API error in github_user_projects: #{e.class} - #{e.message}"
+    )
+    []
   end
 
   # Logs out the current user.

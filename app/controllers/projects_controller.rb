@@ -747,11 +747,12 @@ class ProjectsController < ApplicationController
     # By default a call to github.repos will only return the first 30;
     # we pass a per_page value to control this.  For more information, see:
     # https://developer.github.com/v3/#pagination
+    # We only fetch public repos since badges are only for public projects.
     github.auto_paginate = false
     begin
       repos = github.repos(
         nil,
-        sort: 'pushed', per_page: MAX_GITHUB_REPOS_FROM_USER
+        type: 'public', sort: 'pushed', per_page: MAX_GITHUB_REPOS_FROM_USER
       )
     rescue Octokit::Unauthorized
       return

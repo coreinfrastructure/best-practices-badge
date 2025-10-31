@@ -36,11 +36,8 @@ He provided a number of helpful comments and provided a lot of feedback
 in how to convert its notation from the
 Claims, Arguments, and Evidence (CAE) notation to
 Structured Assurance Case Metamodel (SACM) notation.
-For his initial work in converting this assurance case to SACM notation,
-see
-<a href="https://www.researchgate.net/publication/351854207_BadgeApp_Assurance_Case_in_SACM_Notation"
-><i>BadgeApp Assurance Case in SACM Notation</i> by T. Scott Ankrum,
-The MITRE Corporation, May 2021</a>.
+For his initial work in converting this assurance case to SACM notation, see
+[*BadgeApp Assurance Case in SACM Notation* by T. Scott Ankrum, The MITRE Corporation, May 2021](https://www.researchgate.net/publication/351854207_BadgeApp_Assurance_Case_in_SACM_Notation).
 
 ## Assurance case summary
 

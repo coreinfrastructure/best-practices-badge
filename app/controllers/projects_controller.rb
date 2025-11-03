@@ -32,6 +32,9 @@ class ProjectsController < ApplicationController
 
   helper_method :repo_data
 
+  # Cache control for show action - can be disabled via environment variable
+  CACHE_SHOW_PROJECT = ENV['BADGEAPP_CACHE_SHOW_PROJECT'] != 'false'
+
   # These are the only allowed values for "sort" (if a value is provided)
   ALLOWED_SORT =
     %w[

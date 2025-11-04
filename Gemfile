@@ -30,14 +30,14 @@ ruby File.read('.ruby-version').strip
 # Loading only what we use reduces memory use & attack surface.
 # gem 'actioncable' # Not used. Client/server comm channel.
 # gem 'activestorage' # Not used. Attaches cloud files to ActiveRecord.
-gem 'actionmailer', '~> 8.0.1' # Rails. Send email.
-gem 'actionpack', '~> 8.0.1' # Rails. MVC framework.
-gem 'actionview', '~> 8.0.1' # Rails. View.
-gem 'activejob', '~> 8.0.1' # Rails. Async jobs.
-gem 'activemodel', '~> 8.0.1' # Rails. Model basics.
-gem 'activerecord', '~> 8.0.1' # Rails. ORM and query system.
+gem 'actionmailer', '~> 8.1.1' # Rails. Send email.
+gem 'actionpack', '~> 8.1.1' # Rails. MVC framework.
+gem 'actionview', '~> 8.1.1' # Rails. View.
+gem 'activejob', '~> 8.1.1' # Rails. Async jobs.
+gem 'activemodel', '~> 8.1.1' # Rails. Model basics.
+gem 'activerecord', '~> 8.1.1' # Rails. ORM and query system.
 # gem 'activestorage' # Not used. Attaches cloud files to ActiveRecord.
-gem 'activesupport', '~> 8.0.1' # Rails. Underlying library.
+gem 'activesupport', '~> 8.1.1' # Rails. Underlying library.
 # gem 'activetext' # Not used. Text editor that fails to support markdown.
 gem 'attr_encrypted', '~> 4' # Simplify encrypting model attributes
 gem 'bcrypt', '~> 3.1.18' # Security - for salted hashed interacted passwords
@@ -102,7 +102,7 @@ gem 'rack-headers_filter', '~> 0.0.1' # Filter out "dangerous" headers
 # but instead load only what we use (to reduce memory use and attack surface).
 # We load sprockets-rails, but its version number isn't kept in sync.
 # Note: Update the gem versions of action* and railties in sync.
-gem 'railties', '~> 8.0.1' # Rails. Rails core, loads rest of Rails
+gem 'railties', '~> 8.1.1' # Rails. Rails core, loads rest of Rails
 gem 'rails-i18n', '~> 8.0.1' # Localizations for Rails built-ins
 gem 'redcarpet', '~> 3.5' # Process markdown in form textareas (justifications)
 gem 'sassc-rails' # compiles .scss (css replacement), replaces sass-rails
@@ -156,7 +156,7 @@ group :development do
   # We bring in full rails in development in case we need it for debugging;
   # this also keeps some gems happy that don't realize that loading
   # only *parts* of Rails is fine:
-  gem 'rails', '~> 8.0.1' # Rails (our web framework)
+  gem 'rails', '~> 8.1.1' # Rails (our web framework)
   # To update the translation gem, see the process docs in doc/testing.md
   gem 'translation', '1.41' # translation.io - translation service
   gem 'web-console' # In-browser debugger; use <% console %> or console

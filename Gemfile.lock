@@ -325,8 +325,8 @@ GEM
     ostruct (0.6.3)
     pagy (9.4.0)
     paleta (0.3.0)
-    paper_trail (16.0.0)
-      activerecord (>= 6.1)
+    paper_trail (17.0.0)
+      activerecord (>= 7.1)
       request_store (~> 1.4)
     parallel (1.27.0)
     parser (3.3.10.0)
@@ -545,7 +545,7 @@ GEM
       unicode-emoji (~> 4.1)
     unicode-emoji (4.1.0)
     uniform_notifier (1.18.0)
-    uri (1.1.0)
+    uri (1.1.1)
     useragent (0.16.11)
     vcr (5.0.0)
     version_gem (1.1.9)
@@ -630,7 +630,7 @@ DEPENDENCIES
   ostruct
   pagy (~> 9.0)
   paleta (~> 0.3)
-  paper_trail (~> 16.0)
+  paper_trail (~> 17.0)
   pg (~> 1.4)
   pg_search (~> 2.3)
   pry-byebug

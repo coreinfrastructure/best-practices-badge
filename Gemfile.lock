@@ -633,7 +633,7 @@ DEPENDENCIES
   pagy (~> 9.0)
   paleta (~> 0.3)
   paper_trail (~> 16.0)
-  pg (~> 1.4)
+  pg (~> 1.6)
   pg_search (~> 2.3)
   pry-byebug
   puma (~> 7.0)

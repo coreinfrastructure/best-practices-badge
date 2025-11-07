@@ -28,4 +28,4 @@ Rails.application.configure do
   config.middleware.use Rack::Attack
 end
 
-# Note: the only timezone we use it UTC.
+# NOTE: the only timezone we use is UTC.

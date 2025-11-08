@@ -77,9 +77,14 @@ Given that, we'll have support for:
 
 ## High-level implementation plan
 
+The plan is to do some reorganizing to make it easier to add support
+for baseline, then implement baseline.
+
 1. Change URL `criteria_level` so 0,1,2 get permanently redirected
    to passing, silver, gold, and support those new names.
    Ensure that there's only 1 canonical name for data, to reduce spider load.
+   Move the permissions changes to a new form `permissions`, so that
+   people don't need to view/edit "passing" to see/edit permissions.
 2. Add support for `baseline-1` criteria level and at least stub views
    for two baseline-1 criteria, along with their database support.
 3. Add full support for `baseline-1` criteria level

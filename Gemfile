@@ -125,7 +125,7 @@ group :development, :test do
   gem 'bundler-audit' # Alert if Gemfile.lock gems have known vulnerabilities
   gem 'dotenv', '~> 3.0' # Load env vars from .env files into Rails ENV
   gem 'eslintrb' # Linter for JavaScript code.
-  gem 'json', '~> 2.0' # Process JSON format
+  gem 'json', '~> 2.16' # Process JSON format
   gem 'license_finder', '~> 7.0' # Verify that all sw licenses are acceptable
   gem 'mdl', '0.13.0' # Markdownlint - linter for markdown format
   # Removed pronto gems - comprehensive linting now handled by rake default

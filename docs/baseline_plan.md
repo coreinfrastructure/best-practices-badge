@@ -116,6 +116,7 @@ It also shows a separate set of IDs that for the best practices badge criteria t
 Here's an example of a subset of its data, showing some criteria from the best practices badge. I've intentionally chosen an area where baseline and BP badge criteria are more similar to each other:
 
 | Special ID | BP Badge ID | Level | Requirements text | Mapping |
+| --- | --- | --- | -- | --- |
 | B-P-4 | `contribution` | Passing | The information on how to contribute MUST explain the contribution process (e.g., are pull requests used?) (URL required for "met".) | OSPS-GV-03 |
 | B-P-5 | `contribution_requirements` | Passing | The information on how to contribute SHOULD include the requirements for acceptable contributions (e.g., a reference to any required coding standard). (URL required for "met".) | OSPS-GV-03 |
 | B-S-3 | `governance` | Silver | The project MUST clearly define and document its project governance model (the way it makes decisions, including key roles). | OSPS-GV-03, OSPS-GV-01 |
@@ -136,12 +137,14 @@ You'll see that under category "Governance" (OSPS-GV) we have several sub-catego
 
 One sub-category is "OSPS-GV-01 - The project documentation MUST include the roles and responsibilities for members of the project." This includes these controls:
 
-OSPS-GV-01.01
+OSPS-GV-01.01:
+
 * Requirement: While active, the project documentation MUST include a list of project members with access to sensitive resources.
 * Recommendation: Document project participants and their roles through such artifacts as members.md, governance.md, maintainers.md, or similar file within the source code repository of the project. This may be as simple as including names or account handles in a list of maintainers, or more complex depending on the project's governance.
 * Maturity Level 2-3
 
-OSPS-GV-01.02
+OSPS-GV-01.02:
+
 * Requirement: While active, the project documentation MUST include descriptions of the roles and responsibilities for members of the project.
 * Recommendation: Document project participants and their roles through such artifacts as members.md, governance.md, maintainers.md, or similar file within the source code repository of the project.
 * Maturity Level 2-3
@@ -149,12 +152,14 @@ OSPS-GV-01.02
 
 Another sub-category is "OSPS-GV-03 - The project documentation MUST include an explanation of the contribution process." that includes 2 controls:
 
-OSPS-GV-03.01
+OSPS-GV-03.01:
+
 * Requirement: While active, the project documentation MUST include an explanation of the contribution process.
 * Recommendation: Document project participants and their roles through such artifacts as members.md, governance.md, maintainers.md, or similar file within the source code repository of the project. This may be as simple as including names or account handles in a list of maintainers, or more complex depending on the project's governance.
 * Baseline level 2,3
 
-OSPS-GV-01.02
+OSPS-GV-01.02:
+
 * Requirement: While active, the project documentation MUST include descriptions of the roles and responsibilities for members of the project.
 * Recommendation: Document project participants and their roles through such artifacts as members.md, governance.md, maintainers.md, or similar file within the source code repository of the project.
 * Baseline level 2,3

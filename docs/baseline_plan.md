@@ -23,18 +23,31 @@ criteria currently supported by the OpenSSF Best Practices badge as follows:
 
 ## Why support both sets of criteria?
 
-We don't want projects to lose their investment of time in the "metal series",
-many may find its more detailed criteria valuable, and baseline is new.
-Others may want to use the baseline set of criteria because of its mappings
-to regulations or because it's shorter.
-Some projects may want to use both - neither one obviously replaces the other.
+Neither set is a superset of the other, and their overlaps are often complex
+"partial" mappings instead of clean "X covers everything in Y" mappings.
+
+We don't want projects to lose their investment of time in the "metal series".
+Many may find its more detailed criteria valuable, and baseline is new.
+Over 9,000 projects have spent time to try to meet the metal series criteria,
+and we don't want them to think their work is a waste.
+In addition, the traditional criteria include a lot of specifics that are
+lacking in the baseline (e.g., specifics on cryptography, build processes,
+and requiring that the developers know how to develop secure software).
+
+Others may want to use the baseline set of criteria.
+For example, the baseline focuses on mappings to regulations,
+and is singificantly shorter.
+
+Some projects may want to use both sets of criteria.
+As a result, neither one obviously replaces the other.
 
 Therefore, we plan to make some changes to support *both* sets of criteria.
 A given project can use one set of criteria, or the other, or both, at
-their choosing.
+their choosing. A given project is likely to start with one set, and later
+might work to also meet the other.
 
 No set of criteria can fully capture good practices for projects, so being
-able to use both lists has its advantages.
+able to use both sets of criteria has its advantages.
 
 ## Expected result
 

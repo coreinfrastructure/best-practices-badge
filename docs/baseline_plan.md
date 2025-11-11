@@ -99,3 +99,63 @@ for baseline, then implement baseline.
    but *only* when there isn't a human translation. Human translation
    will always be better, but showing English isn't great for those
    who don't speak English.
+
+## Criteria mappings
+
+For the most part the baseline and best practices badge are not the same. In some places they are similar but not identical (so meeting one doesn't always guarantee meeting the other). There are mappings available to help show their relationships.
+
+A form (in English) with the BP Badge criteria are here:
+<https://www.bestpractices.dev/en/criteria>.
+At the time of writing, the current baseline is here: <https://baseline.openssf.org/versions/2025-10-10>.
+
+To understand their similarities, you can see the
+["Compliance Crosswalk Matrix" on the "BP Badges" tab](https://docs.google.com/spreadsheets/d/1an5mx3rayoz3JRFUepD56zgprpwXBXBG70fVZvIMCpA/edit?gid=468811656#gid=468811656).
+This shows each of the best practices badge criteria, mapping each to the baseline criteria most related to them.
+It also shows a separate set of IDs that for the best practices badge criteria that aren't used anywhere else.
+
+Here's an example of a subset of its data, showing some criteria from the best practices badge. I've intentionally chosen an area where baseline and BP badge criteria are more similar to each other:
+
+| Special ID | BP Badge ID | Level | Requirements text | Mapping |
+| B-P-4 | `contribution` | Passing | The information on how to contribute MUST explain the contribution process (e.g., are pull requests used?) (URL required for "met".) | OSPS-GV-03 |
+| B-P-5 | `contribution_requirements` | Passing | The information on how to contribute SHOULD include the requirements for acceptable contributions (e.g., a reference to any required coding standard). (URL required for "met".) | OSPS-GV-03 |
+| B-S-3 | `governance` | Silver | The project MUST clearly define and document its project governance model (the way it makes decisions, including key roles). | OSPS-GV-03, OSPS-GV-01 |
+| B-B-4+ | `contribution_requirements` | Silver | Upgrade contribution_requirements from SHOULD to MUST. "The information on how to contribute MUST include the requirements for acceptable contributions (e.g., a reference to any required coding standard)." | OSPS-GV-03, OSPS-GV-03, OSPS-GV-01 |
+
+Note that `contribution_requirements` becomes a "MUST" at Silver. Note also that the mapping only maps to categories here, not to specific baseline controls.
+
+You can see the
+[current baseline criteria](https://baseline.openssf.org/versions/2025-10-10).
+At its top is the short text of its criteria, followed by details. If you look at the details,
+you'll see "BPB:" entries (best practices badge) with criteria IDs. Use the "Compliance Crosswalk Matrix" to
+map those IDs back to the Best Practices badge criteria ids.
+
+For example, if you go to:
+https://baseline.openssf.org/versions/2025-10-10#osps-gv-03---the-project-documentation-must-include-an-explanation-of-the-contribution-process
+
+You'll see that under category "Governance" (OSPS-GV) we have several sub-categories.
+
+One sub-category is "OSPS-GV-01 - The project documentation MUST include the roles and responsibilities for members of the project." This includes these controls:
+
+OSPS-GV-01.01
+* Requirement: While active, the project documentation MUST include a list of project members with access to sensitive resources.
+* Recommendation: Document project participants and their roles through such artifacts as members.md, governance.md, maintainers.md, or similar file within the source code repository of the project. This may be as simple as including names or account handles in a list of maintainers, or more complex depending on the project's governance.
+* Maturity Level 2-3
+
+OSPS-GV-01.02
+* Requirement: While active, the project documentation MUST include descriptions of the roles and responsibilities for members of the project.
+* Recommendation: Document project participants and their roles through such artifacts as members.md, governance.md, maintainers.md, or similar file within the source code repository of the project.
+* Maturity Level 2-3
+* External Framework Mappings: BPB: B-S-3, B-S-4
+
+Another sub-category is "OSPS-GV-03 - The project documentation MUST include an explanation of the contribution process." that includes 2 controls:
+
+OSPS-GV-03.01
+* Requirement: While active, the project documentation MUST include an explanation of the contribution process.
+* Recommendation: Document project participants and their roles through such artifacts as members.md, governance.md, maintainers.md, or similar file within the source code repository of the project. This may be as simple as including names or account handles in a list of maintainers, or more complex depending on the project's governance.
+* Baseline level 2,3
+
+OSPS-GV-01.02
+* Requirement: While active, the project documentation MUST include descriptions of the roles and responsibilities for members of the project.
+* Recommendation: Document project participants and their roles through such artifacts as members.md, governance.md, maintainers.md, or similar file within the source code repository of the project.
+* Baseline level 2,3
+* External Framework ... BPB: {B-S-3 0 }, {B-S-4 0 }

@@ -116,7 +116,7 @@ It also shows a separate set of IDs that for the best practices badge criteria t
 Here's an example of a subset of its data, showing some criteria from the best practices badge. I've intentionally chosen an area where baseline and BP badge criteria are more similar to each other:
 
 | Special ID | BP Badge ID | Level | Requirements text | Mapping |
-| --- | --- | --- | -- | --- |
+| --- | --- | --- | --- | --- |
 | B-P-4 | `contribution` | Passing | The information on how to contribute MUST explain the contribution process (e.g., are pull requests used?) (URL required for "met".) | OSPS-GV-03 |
 | B-P-5 | `contribution_requirements` | Passing | The information on how to contribute SHOULD include the requirements for acceptable contributions (e.g., a reference to any required coding standard). (URL required for "met".) | OSPS-GV-03 |
 | B-S-3 | `governance` | Silver | The project MUST clearly define and document its project governance model (the way it makes decisions, including key roles). | OSPS-GV-03, OSPS-GV-01 |

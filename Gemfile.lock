@@ -251,7 +251,7 @@ GEM
     method_source (1.1.0)
     mini_mime (1.1.5)
     mini_portile2 (2.8.9)
-    minitest (5.26.0)
+    minitest (5.26.1)
     minitest-reporters (1.7.1)
       ansi
       builder
@@ -415,7 +415,7 @@ GEM
     rails_12factor (0.0.3)
       rails_serve_static_assets
       rails_stdout_logging
-    rails_best_practices (1.23.2)
+    rails_best_practices (1.23.3)
       activesupport
       code_analyzer (~> 0.5.5)
       erubis
@@ -646,7 +646,7 @@ DEPENDENCIES
   rails-controller-testing (~> 1.0)
   rails-i18n (~> 8.0.1)
   rails_12factor (~> 0.0.3)
-  rails_best_practices (~> 1.20)
+  rails_best_practices (~> 1.23)
   railties (~> 8.1.1)
   redcarpet (~> 3.5)
   rubocop (~> 1.80)

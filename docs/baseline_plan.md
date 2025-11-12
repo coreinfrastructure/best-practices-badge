@@ -36,7 +36,7 @@ and requiring that the developers know how to develop secure software).
 
 Others may want to use the baseline set of criteria.
 For example, the baseline focuses on mappings to regulations,
-and is singificantly shorter.
+and is significantly shorter.
 
 Some projects may want to use both sets of criteria.
 As a result, neither one obviously replaces the other.

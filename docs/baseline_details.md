@@ -1513,7 +1513,7 @@ grep -n "criteriaLevel ==\|level ==\|criteria_level ==" app/assets/javascripts/*
 
 **New file**: `app/views/projects/_form_permissions.html.erb`
 
-**Content** (extract permissions section from _form_passing.html.erb):
+**Content** (extract permissions sections from `_form_0.html.erb`):
 
 ```erb
 
@@ -1522,21 +1522,74 @@ grep -n "criteriaLevel ==\|level ==\|criteria_level ==" app/assets/javascripts/*
     <h2><%= t('.permissions_header') %></h2>
     <p><%= t('.permissions_explanation') %></p>
 
-    <% if !is_disabled %>
-      <%= f.fields_for :additional_rights do |rights_form| %>
-        <div class="form-group">
-          <%= rights_form.label :additional_rights_changes, t('.additional_rights') %>
-          <%= rights_form.text_area :additional_rights_changes,
-              class: 'form-control',
-              placeholder: t('.additional_rights_placeholder') %>
-          <%= content_tag(:small, t('.additional_rights_help'), class: 'form-text text-muted') %>
+    <%# Project Ownership Transfer %>
+    <% if !is_disabled && (current_user.admin? || current_user.id == project.user_id) %>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title"><%= t('projects.edit.transfer_ownership') %></h3>
         </div>
-      <% end %>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-xs-12">
+              <%= t 'projects.edit.new_owner' %>:
+              <%= f.text_field :user_id,
+                               hide_label: true, class: "form-control",
+                               placeholder: nil,
+                               spellcheck: false,
+                               disabled: is_disabled %>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12">
+              <%= t 'projects.edit.new_owner_repeat' %>:
+              <%# The user must provide the same value here as user_id to cause an ownership change. %>
+              <input type="text" name="project[user_id_repeat]"
+                     id="project_user_id_repeat" class="form-control"
+                     placeholder="<%= t('projects.edit.new_owner_repeat_placeholder') %>"
+                     spellcheck="false"
+                     <%= 'disabled' if is_disabled %>>
+              <%= content_tag(:small, t('projects.edit.new_owner_help'), class: 'form-text text-muted') %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <%# Additional Rights (Collaborators) %>
+    <% if !is_disabled %>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title"><%= t('.additional_rights_header') %></h3>
+        </div>
+        <div class="panel-body">
+          <%= f.fields_for :additional_rights do |rights_form| %>
+            <div class="form-group">
+              <%= rights_form.label :additional_rights_changes, t('.additional_rights') %>
+              <%= rights_form.text_area :additional_rights_changes,
+                  class: 'form-control',
+                  placeholder: t('.additional_rights_placeholder') %>
+              <%= content_tag(:small, t('.additional_rights_help'), class: 'form-text text-muted') %>
+            </div>
+          <% end %>
+        </div>
+      </div>
     <% end %>
   </div>
 </div>
 
 ```
+
+**Remove from existing forms**: `app/views/projects/_form_0.html.erb` (and `_form_1.html.erb`, `_form_2.html.erb` if present)
+
+Delete the ownership transfer section (search for `text_field :user_id` and `user_id_repeat`) and the additional_rights section. These are now in the dedicated permissions form.
+
+**Action items**:
+
+1. Create the new `_form_permissions.html.erb` with both ownership and collaborator management
+2. Remove the ownership transfer UI from `_form_0.html.erb` (lines with `:user_id` and `user_id_repeat`)
+3. Remove the additional_rights UI from `_form_0.html.erb` (lines with `fields_for :additional_rights`)
+4. Update `projects_controller.rb` to handle `criteria_level == 'permissions'` in the `edit` and `update` actions
+5. Ensure `normalize_criteria_level` handles 'permissions' (already added in Section 1.3)
 
 **Update**: `config/routes.rb`
 
@@ -1551,9 +1604,37 @@ get ':criteria_level/edit(.:format)' => 'projects#edit',
 
 ```
 
-**No changes needed here** - the `VALID_CRITERIA_LEVEL` constant was already updated in step 1.5 to include 'permissions'. The existing routes will automatically accept 'permissions' as a valid criteria_level.
+**No changes needed here** - the `VALID_CRITERIA_LEVEL` constant was already updated in step 1.1 to include 'permissions'. The existing routes will automatically accept 'permissions' as a valid criteria_level.
 
-**Rationale**: Separate permissions management from criteria forms, allowing baseline users to manage permissions without viewing metal series criteria.
+**Email Updates**: Update notification emails that reference permissions/ownership changes
+
+**File**: `app/mailers/project_mailer.rb` (or similar)
+
+If emails reference the permissions page, update links from:
+
+- Old: `/projects/123/0/edit` (permissions were in passing form)
+- New: `/projects/123/permissions/edit` (permissions in dedicated form)
+
+Example email text update:
+
+```ruby
+
+# Before
+
+"To manage collaborators, edit your project: #{project_url(@project, criteria_level: 0)}"
+
+# After
+
+"To manage collaborators or transfer ownership, visit: #{project_url(@project, criteria_level: 'permissions')}"
+
+```
+
+**Rationale**:
+
+- Consolidate ALL permission-related operations (ownership transfer + collaborator management) in one dedicated form
+- Remove permissions UI from criteria forms entirely (cleaner separation of concerns)
+- Allow baseline users to manage permissions without viewing metal series criteria
+- Provide single location for all access control operations
 
 ### 1.11: Update Helper Methods
 
@@ -2067,7 +2148,12 @@ Phase 1 is specifically designed to make adding baseline criteria easier in subs
 - [ ] Bronze synonym works in controllers (maps to '0' internally)
 - [ ] Criteria YAML still uses numeric keys ('0', '1', '2') - NOT changed to named keys
 - [ ] All three badge forms render correctly (_form_0, _form_1, _form_2)
-- [ ] Permissions form accessible and functional
+- [ ] Permissions form accessible at `/projects/{id}/permissions/edit`
+- [ ] Permissions form shows ownership transfer (user_id fields) for owner/admin only
+- [ ] Permissions form shows collaborator management (additional_rights)
+- [ ] Ownership transfer section REMOVED from _form_0, _form_1, _form_2
+- [ ] Additional_rights section REMOVED from _form_0, _form_1, _form_2
+- [ ] Email notifications link to `/permissions/edit` instead of `/0/edit` for permission changes
 - [ ] No broken links in UI
 - [ ] Database queries still work (badge_percentage_0, etc.)
 - [ ] JavaScript continues to work (no console errors)
@@ -3055,32 +3141,43 @@ end
 **Add method** for achievement timestamp management:
 
 ```ruby
+
 # Update achievement timestamps based on percentages
+
 def update_achievement_timestamps
   update_metal_timestamps
   update_baseline_timestamps
 end
 
 # Update baseline achievement timestamps
+
 def update_baseline_timestamps
   update_level_timestamp('baseline-1', badge_percentage_baseline_1)
-  # Will add baseline-2 and baseline-3 later
+
+# Will add baseline-2 and baseline-3 later
+
 end
 
 # Generic method to update achievement timestamp for a level
+
 def update_level_timestamp(level, percentage)
   achieved_field = "achieved_#{level.tr('-', '_')}_at"
   first_achieved_field = "first_#{achieved_field}"
 
   if percentage >= 100
-    # Project achieved this level
+
+# Project achieved this level
+
     self[achieved_field] ||= Time.current
     self[first_achieved_field] ||= Time.current
   else
-    # Project lost this level
+
+# Project lost this level
+
     self[achieved_field] = nil
   end
 end
+
 ```
 
 ### 3.8: Update Controllers for Baseline-1
@@ -4881,13 +4978,18 @@ If critical issues arise:
 9. `app/views/projects/show.html.erb` - Display baseline info
 10. `app/views/projects/index.html.erb` - Add baseline filters
 11. `app/views/project_stats/index.html.erb` - Add baseline statistics
-12. `criteria/criteria.yml` - NO CHANGES (keys stay as '0', '1', '2' for translation compatibility)
-13. `config/initializers/criteria_hash.rb` - Support loading multiple criteria files
-14. `config/locales/en.yml` - Add baseline translations
-15. `config/locales/translation.*.yml` - Add baseline translations (all languages)
-16. `test/models/project_test.rb` - Add baseline tests
-17. `test/controllers/projects_controller_test.rb` - Add baseline tests
-18. `test/integration/project_get_test.rb` - Add baseline route tests
+12. `app/views/projects/_form_0.html.erb` - REMOVE ownership transfer and additional_rights sections
+13. `app/views/projects/_form_1.html.erb` - REMOVE ownership transfer and additional_rights sections (if present)
+14. `app/views/projects/_form_2.html.erb` - REMOVE ownership transfer and additional_rights sections (if present)
+15. `app/views/projects/_form_permissions.html.erb` - CREATE new form with ownership + collaborator management
+16. `app/mailers/project_mailer.rb` - Update links to use `/permissions/edit` for permission changes
+17. `criteria/criteria.yml` - NO CHANGES (keys stay as '0', '1', '2' for translation compatibility)
+18. `config/initializers/criteria_hash.rb` - Support loading multiple criteria files
+19. `config/locales/en.yml` - Add baseline translations
+20. `config/locales/translation.*.yml` - Add baseline translations (all languages)
+21. `test/models/project_test.rb` - Add baseline tests
+22. `test/controllers/projects_controller_test.rb` - Add baseline tests
+23. `test/integration/project_get_test.rb` - Add baseline route tests
 
 ### Note on View Template Files
 

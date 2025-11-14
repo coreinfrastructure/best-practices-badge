@@ -42,6 +42,30 @@ For specific files:
 - `mdl FILENAME.md` - Markdownlint only the file `FILENAME.md`
 - `rubocop FILENAME.rb` - Run rubocop on just `FILENAME.rb`
 
+**Markdown Helper Script**:
+
+After creating or editing markdown files, use the markdown fixer script to automatically fix common markdownlint errors:
+
+```bash
+# Fix markdown file in-place (most common usage):
+script/fix_markdown.rb docs/myfile.md
+
+# See what would be fixed without changing the file:
+script/fix_markdown.rb --dry-run docs/myfile.md
+
+# After fixing, verify with markdownlint:
+mdl docs/myfile.md
+```
+
+The script automatically fixes:
+- MD031: Fenced code blocks surrounded by blank lines
+- MD022: Headers surrounded by blank lines
+- MD032: Lists surrounded by blank lines
+- MD023: Headers at beginning of line (no leading spaces)
+- MD012: Multiple consecutive blank lines
+
+After running the script, manually fix any remaining errors that require human judgment (MD001, MD025, etc.).
+
 Don't run `rails_best_practices` to analyze individual files.
 The `rails_best_practices` program needs the full context of all files
 to do its best.
@@ -62,15 +86,24 @@ for the specific context.
 
 ### Workflow
 
-After making significant changes to source code, ALWAYS
-run linters. If you changed any Ruby files, run `rubocop` on them,
-then run `rake rails_best_practices`. If you modify any markdown files,
-run `mdl` on them. After that, if you changed any files that will be
-checked in, run `rake whitespace_check`. Fix problems reported
-by the linters.
+After making significant changes to source code, ALWAYS run linters:
 
-Once all linters pass, run `rails test:all` to ensure all
-tests pass.
+**For Ruby files**:
+1. Run `rubocop FILENAME.rb` on changed files
+2. Run `rake rails_best_practices` for Rails-specific checks
+3. Fix all reported problems
+
+**For Markdown files**:
+1. Run `script/fix_markdown.rb FILENAME.md` to auto-fix common issues
+2. Run `mdl FILENAME.md` to check for remaining errors
+3. Manually fix any errors that require human judgment (MD001, MD025, etc.)
+
+**For all changed files**:
+1. Run `rake whitespace_check` to catch trailing whitespace
+2. Fix any whitespace issues
+
+**Finally**:
+- Run `rails test:all` to ensure all tests pass
 
 ### Development Environment Shortcut
 

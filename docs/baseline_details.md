@@ -2,7 +2,7 @@
 
 This document provides a detailed implementation plan for adding support for the OpenSSF Baseline criteria to the Best Practices Badge project, as outlined in `baseline_plan.md`.
 
-Like all plans, we will need to make adjustments as we go. The purpose of creating this plan is to reduce the amount of rework necessary to complete it.
+Like all plans, we will need to make adjustments as we go. The purpose of creating this plan is to reduce the amount of rework necessary to complete it. This plan was created after giving Claude Code detailed information, combined with later interactions. In particular, Claude originally wanted to change our internal YAML keys, but that would have caused havoc on our poor long-suffering translators (as all their keys would have been renamed), so human review led to intentionally *not* doing that.
 
 ## Table of Contents
 

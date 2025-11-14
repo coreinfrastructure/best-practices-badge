@@ -1509,11 +1509,131 @@ grep -n "criteriaLevel ==\|level ==\|criteria_level ==" app/assets/javascripts/*
 
 **Rationale**: JavaScript that parses URL parameters needs to accept both numeric (for backward compatibility during transition) and named values.
 
-### 1.10: Create Permissions Form
+### 1.10: Remove Full Project Caching
+
+**Problem**: The forms currently cache the entire project form when `is_disabled` (view-only mode). This creates a large cache footprint for entire forms. Now that systems are downloading the entire site, the cache entries become evicted before they can be used, making this useless. In addition, we want to *only* calculate the set of allowed editors when necessary, and we can't do that with the current setup.
+
+**Files**: `app/views/projects/_form_0.html.erb`, `app/views/projects/_form_1.html.erb`, `app/views/projects/_form_2.html.erb`
+
+**Remove the cache_if block** in each file:
+
+#### Identifying the Matching `end` Statement
+
+**Critical**: The cache_if block wraps nearly the **entire file content**. The matching `end` is at the **very last line** of each file.
+
+**Analysis for `_form_0.html.erb`**:
+
+1. **cache_if opens** (lines 24-26):
+
+   ```erb
+
+   cache_if ProjectsController::CACHE_SHOW_PROJECT && is_disabled,
+            [project, locale, additional_rights_list],
+             expires_in: 12.hours do %>
+
+   ```
+
+2. **Potential end candidates**:
+   - Line 602: `<% end %>` - This closes the `<% if is_disabled %>` block (line 594)
+   - Line 604: `<% end %>` - This closes the `bootstrap_form_for project ... do |f|` block (line 38)
+   - Line 608: `<% end %>` - **THIS closes the cache_if block**
+
+3. **Why line 608 is correct**:
+   - The cache_if at line 24-26 has `do %>` which requires a matching `<% end %>`
+   - It wraps the `form_early` render (line 27) AND the entire `bootstrap_form_for` block
+   - The block structure is:
+
+     ```
+
+     cache_if ... do %>         (line 24-26)
+       <%= render form_early %>  (line 27-32)
+       <div class="row">         (line 34)
+         bootstrap_form_for ... do |f| %>  (line 38)
+           ...form content...
+         <% end %>               (line 604 - closes form_for)
+       </div>                    (line 605-607)
+     <% end %>                   (line 608 - closes cache_if)
+
+     ```
+
+   - Line 608 comes after ALL closing `</div>` tags (lines 605-607)
+   - It's the ONLY `<% end %>` after the form closes that isn't inside an if/else
+
+**Verification for `_form_1.html.erb` and `_form_2.html.erb`**:
+
+- Both have cache_if at lines 19-20
+- Both have the matching `<% end %>` as the **very last line** of the file
+- Same structure: cache wraps the entire form content
+
+**Alternative matches ruled out**:
+
+- ❌ Line 602 (`<% end %>` after submit buttons): Closes the `<% if is_disabled %>` conditional (line 594), NOT the cache
+- ❌ Line 604 (`<% end %>` after center div): Closes the `bootstrap_form_for` block (line 38), NOT the cache
+- ✅ Line 608 (`<% end %>` after all divs): Closes the `cache_if` block - CORRECT
+
+**Performance Benefit**: Removing the cache_if also eliminates the `additional_rights_list` calculation (line 19), which performs a database query (`pluck`) and string join operation on every form render. This variable was **only** used as part of the cache key and serves no other purpose.
+
+**Changes to make**:
+
+**In `_form_0.html.erb`**:
+
+```erb
+# DELETE lines 15-26 (the setup and cache_if opening):
+<%
+   # If the additional rights list changes, invalidate the cache.
+   # If the performance is too slow, we could directly expire it instead,
+   # but that adds a maintenance headache.
+   additional_rights_list = project.additional_rights.pluck(:user_id).join(',')
+
+   # The badge URL has one value for some time after the project entry
+   # is edited, and then changes. To handle that gracefully, we
+   # expire the cache after a period of time.
+   cache_if ProjectsController::CACHE_SHOW_PROJECT && is_disabled,
+           [project, locale, additional_rights_list],
+            expires_in: 12.hours do %>
+
+# DELETE line 608 (the matching end):
+<% end %>
+```
+
+**Note**: The `additional_rights_list` variable (line 19) is **only** used in the cache key (line 25). Removing the cache_if eliminates this unnecessary database query and string processing on every view.
+
+**In `_form_1.html.erb`** and **`_form_2.html.erb`**:
+
+```erb
+
+# DELETE lines 19-20 (the cache_if opening):
+
+<% cache_if ProjectsController::CACHE_SHOW_PROJECT && is_disabled,
+            [project, locale], expires_in: 12.hours do %>
+
+# DELETE the very last line (the matching end):
+
+<% end %>
+
+```
+
+**After removal**: The files will start directly with the form content (the `render form_early` call) and end with the closing `</div>` tags for the HTML structure.
+
+**Testing**:
+
+- Verify forms still render correctly in both edit and view modes
+- Check that removing caching doesn't significantly impact performance (it shouldn't - individual elements may still cache)
+- Ensure no syntax errors from mismatched ends
+
+**Rationale**:
+
+- **Performance**: Eliminates unnecessary `additional_rights_list` calculation (database query + string join) on every form render in `_form_0.html.erb`
+- **Simplicity**: Removes complex full-page caching logic, making forms easier to understand and modify
+- **Flexibility**: Allows more granular caching strategies per-criterion or per-section
+- **Baseline preparation**: Different criteria levels (metal vs baseline) may need different caching strategies
+- **Maintainability**: Reduces code complexity and potential cache invalidation bugs
+
+### 1.11: Create Permissions Form
 
 **New file**: `app/views/projects/_form_permissions.html.erb`
 
-**Content** (extract permissions section from _form_passing.html.erb):
+**Content** (extract permissions sections from `_form_0.html.erb`):
 
 ```erb
 
@@ -1522,21 +1642,74 @@ grep -n "criteriaLevel ==\|level ==\|criteria_level ==" app/assets/javascripts/*
     <h2><%= t('.permissions_header') %></h2>
     <p><%= t('.permissions_explanation') %></p>
 
-    <% if !is_disabled %>
-      <%= f.fields_for :additional_rights do |rights_form| %>
-        <div class="form-group">
-          <%= rights_form.label :additional_rights_changes, t('.additional_rights') %>
-          <%= rights_form.text_area :additional_rights_changes,
-              class: 'form-control',
-              placeholder: t('.additional_rights_placeholder') %>
-          <%= content_tag(:small, t('.additional_rights_help'), class: 'form-text text-muted') %>
+    <%# Project Ownership Transfer %>
+    <% if !is_disabled && (current_user.admin? || current_user.id == project.user_id) %>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title"><%= t('projects.edit.transfer_ownership') %></h3>
         </div>
-      <% end %>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-xs-12">
+              <%= t 'projects.edit.new_owner' %>:
+              <%= f.text_field :user_id,
+                               hide_label: true, class: "form-control",
+                               placeholder: nil,
+                               spellcheck: false,
+                               disabled: is_disabled %>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12">
+              <%= t 'projects.edit.new_owner_repeat' %>:
+              <%# The user must provide the same value here as user_id to cause an ownership change. %>
+              <input type="text" name="project[user_id_repeat]"
+                     id="project_user_id_repeat" class="form-control"
+                     placeholder="<%= t('projects.edit.new_owner_repeat_placeholder') %>"
+                     spellcheck="false"
+                     <%= 'disabled' if is_disabled %>>
+              <%= content_tag(:small, t('projects.edit.new_owner_help'), class: 'form-text text-muted') %>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <%# Additional Rights (Collaborators) %>
+    <% if !is_disabled %>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title"><%= t('.additional_rights_header') %></h3>
+        </div>
+        <div class="panel-body">
+          <%= f.fields_for :additional_rights do |rights_form| %>
+            <div class="form-group">
+              <%= rights_form.label :additional_rights_changes, t('.additional_rights') %>
+              <%= rights_form.text_area :additional_rights_changes,
+                  class: 'form-control',
+                  placeholder: t('.additional_rights_placeholder') %>
+              <%= content_tag(:small, t('.additional_rights_help'), class: 'form-text text-muted') %>
+            </div>
+          <% end %>
+        </div>
+      </div>
     <% end %>
   </div>
 </div>
 
 ```
+
+**Remove from existing forms**: `app/views/projects/_form_0.html.erb` (and `_form_1.html.erb`, `_form_2.html.erb` if present)
+
+Delete the ownership transfer section (search for `text_field :user_id` and `user_id_repeat`) and the additional_rights section. These are now in the dedicated permissions form.
+
+**Action items**:
+
+1. Create the new `_form_permissions.html.erb` with both ownership and collaborator management
+2. Remove the ownership transfer UI from `_form_0.html.erb` (lines with `:user_id` and `user_id_repeat`)
+3. Remove the additional_rights UI from `_form_0.html.erb` (lines with `fields_for :additional_rights`)
+4. Update `projects_controller.rb` to handle `criteria_level == 'permissions'` in the `edit` and `update` actions
+5. Ensure `normalize_criteria_level` handles 'permissions' (already added in Section 1.3)
 
 **Update**: `config/routes.rb`
 
@@ -1551,11 +1724,39 @@ get ':criteria_level/edit(.:format)' => 'projects#edit',
 
 ```
 
-**No changes needed here** - the `VALID_CRITERIA_LEVEL` constant was already updated in step 1.5 to include 'permissions'. The existing routes will automatically accept 'permissions' as a valid criteria_level.
+**No changes needed here** - the `VALID_CRITERIA_LEVEL` constant was already updated in step 1.1 to include 'permissions'. The existing routes will automatically accept 'permissions' as a valid criteria_level.
 
-**Rationale**: Separate permissions management from criteria forms, allowing baseline users to manage permissions without viewing metal series criteria.
+**Email Updates**: Update notification emails that reference permissions/ownership changes
 
-### 1.11: Update Helper Methods
+**File**: `app/mailers/project_mailer.rb` (or similar)
+
+If emails reference the permissions page, update links from:
+
+- Old: `/projects/123/0/edit` (permissions were in passing form)
+- New: `/projects/123/permissions/edit` (permissions in dedicated form)
+
+Example email text update:
+
+```ruby
+
+# Before
+
+"To manage collaborators, edit your project: #{project_url(@project, criteria_level: 0)}"
+
+# After
+
+"To manage collaborators or transfer ownership, visit: #{project_url(@project, criteria_level: 'permissions')}"
+
+```
+
+**Rationale**:
+
+- Consolidate ALL permission-related operations (ownership transfer + collaborator management) in one dedicated form
+- Remove permissions UI from criteria forms entirely (cleaner separation of concerns)
+- Allow baseline users to manage permissions without viewing metal series criteria
+- Provide single location for all access control operations
+
+### 1.12: Update Helper Methods
 
 **File**: `app/helpers/projects_helper.rb`
 
@@ -1599,7 +1800,7 @@ end
 
 **Note**: This helper will be extended in Phase 3 to support baseline levels. The initial implementation (Phase 1) only needs to handle metal series.
 
-### 1.12: Add Badge Percentage Field Mapping to Project Model (CRITICAL)
+### 1.13: Add Badge Percentage Field Mapping to Project Model (CRITICAL)
 
 **File**: `app/models/project.rb`
 
@@ -1717,7 +1918,7 @@ grep -n 'badge_percentage_#{' app/models/project.rb
 
 **CRITICAL**: This must be done before changing to named levels, or field access will fail.
 
-### 1.13: Fix Criteria Model for Named Levels (CRITICAL)
+### 1.14: Fix Criteria Model for Named Levels (CRITICAL)
 
 **File**: `app/models/criteria.rb`
 
@@ -1801,7 +2002,7 @@ end
 
 **CRITICAL**: This must be fixed in Phase 1 before changing YAML keys, or criterion text lookups will fail silently.
 
-### 1.14: Verify View Helper Compatibility
+### 1.15: Verify View Helper Compatibility
 
 **File**: `app/helpers/projects_helper.rb`
 
@@ -1835,7 +2036,7 @@ end
 
 **Rationale**: Ensure view helpers accept named levels. Most helpers should work without changes if they pass the level to model methods that already handle named levels.
 
-### 1.15: Verify JavaScript Compatibility (CRITICAL)
+### 1.16: Verify JavaScript Compatibility (CRITICAL)
 
 **Problem**: JavaScript code may have hardcoded checks for numeric levels ('0', '1', '2') or may parse criteria_level from URLs.
 
@@ -1914,7 +2115,7 @@ rake eslint
 
 **Rationale**: JavaScript errors can be silent and hard to debug. Proactive verification prevents production issues.
 
-### 1.16: Update Tests
+### 1.17: Update Tests
 
 **Files to update**:
 
@@ -1949,7 +2150,7 @@ end
 
 ```
 
-### 1.17: Phase 1 Deployment Steps
+### 1.18: Phase 1 Deployment Steps
 
 **Critical**: Phase 1 changes URL structure. Deploy carefully with monitoring.
 
@@ -2067,7 +2268,12 @@ Phase 1 is specifically designed to make adding baseline criteria easier in subs
 - [ ] Bronze synonym works in controllers (maps to '0' internally)
 - [ ] Criteria YAML still uses numeric keys ('0', '1', '2') - NOT changed to named keys
 - [ ] All three badge forms render correctly (_form_0, _form_1, _form_2)
-- [ ] Permissions form accessible and functional
+- [ ] Permissions form accessible at `/projects/{id}/permissions/edit`
+- [ ] Permissions form shows ownership transfer (user_id fields) for owner/admin only
+- [ ] Permissions form shows collaborator management (additional_rights)
+- [ ] Ownership transfer section REMOVED from _form_0, _form_1, _form_2
+- [ ] Additional_rights section REMOVED from _form_0, _form_1, _form_2
+- [ ] Email notifications link to `/permissions/edit` instead of `/0/edit` for permission changes
 - [ ] No broken links in UI
 - [ ] Database queries still work (badge_percentage_0, etc.)
 - [ ] JavaScript continues to work (no console errors)
@@ -3055,32 +3261,43 @@ end
 **Add method** for achievement timestamp management:
 
 ```ruby
+
 # Update achievement timestamps based on percentages
+
 def update_achievement_timestamps
   update_metal_timestamps
   update_baseline_timestamps
 end
 
 # Update baseline achievement timestamps
+
 def update_baseline_timestamps
   update_level_timestamp('baseline-1', badge_percentage_baseline_1)
-  # Will add baseline-2 and baseline-3 later
+
+# Will add baseline-2 and baseline-3 later
+
 end
 
 # Generic method to update achievement timestamp for a level
+
 def update_level_timestamp(level, percentage)
   achieved_field = "achieved_#{level.tr('-', '_')}_at"
   first_achieved_field = "first_#{achieved_field}"
 
   if percentage >= 100
-    # Project achieved this level
+
+# Project achieved this level
+
     self[achieved_field] ||= Time.current
     self[first_achieved_field] ||= Time.current
   else
-    # Project lost this level
+
+# Project lost this level
+
     self[achieved_field] = nil
   end
 end
+
 ```
 
 ### 3.8: Update Controllers for Baseline-1
@@ -4881,13 +5098,18 @@ If critical issues arise:
 9. `app/views/projects/show.html.erb` - Display baseline info
 10. `app/views/projects/index.html.erb` - Add baseline filters
 11. `app/views/project_stats/index.html.erb` - Add baseline statistics
-12. `criteria/criteria.yml` - NO CHANGES (keys stay as '0', '1', '2' for translation compatibility)
-13. `config/initializers/criteria_hash.rb` - Support loading multiple criteria files
-14. `config/locales/en.yml` - Add baseline translations
-15. `config/locales/translation.*.yml` - Add baseline translations (all languages)
-16. `test/models/project_test.rb` - Add baseline tests
-17. `test/controllers/projects_controller_test.rb` - Add baseline tests
-18. `test/integration/project_get_test.rb` - Add baseline route tests
+12. `app/views/projects/_form_0.html.erb` - REMOVE ownership transfer and additional_rights sections
+13. `app/views/projects/_form_1.html.erb` - REMOVE ownership transfer and additional_rights sections (if present)
+14. `app/views/projects/_form_2.html.erb` - REMOVE ownership transfer and additional_rights sections (if present)
+15. `app/views/projects/_form_permissions.html.erb` - CREATE new form with ownership + collaborator management
+16. `app/mailers/project_mailer.rb` - Update links to use `/permissions/edit` for permission changes
+17. `criteria/criteria.yml` - NO CHANGES (keys stay as '0', '1', '2' for translation compatibility)
+18. `config/initializers/criteria_hash.rb` - Support loading multiple criteria files
+19. `config/locales/en.yml` - Add baseline translations
+20. `config/locales/translation.*.yml` - Add baseline translations (all languages)
+21. `test/models/project_test.rb` - Add baseline tests
+22. `test/controllers/projects_controller_test.rb` - Add baseline tests
+23. `test/integration/project_get_test.rb` - Add baseline route tests
 
 ### Note on View Template Files
 

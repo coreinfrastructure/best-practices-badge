@@ -7,38 +7,48 @@ OpenSSF Best Practices badge project plans to add support for it
 ## What is baseline?
 
 The [OpenSSF Open Source Project Security Baseline (OSPS Baseline)](https://baseline.openssf.org/), aka "baseline", is a set of requirements
-for open source software projects maintained by the
-OpenSSF Security Baseline SIG for improving security.
-The baseline criteria different from the original "metal series" of
+maintained by the OpenSSF Security Baseline SIG for improving security.
+Both the baseline criteria and the original "metal series"
+are intended to help open source software projects improve their security
+and both have 3 levels of criteria.
+
+The baseline criteria are different from the original "metal series" of
 criteria currently supported by the OpenSSF Best Practices badge as follows:
 
 * The "baseline" criteria focus on only having MUST criteria
   (no SHOULD or SUGGESTED criteria), are primarily derived from
-  regulations and standards, and focus on being a shorter list.
+  regulations and standards, and focus on being a shorter list
+  (e.g., baseline-1 has 20 criteria for baseline-1 while passing has 67).
 * The original "metal series" of criteria in the Best Practices badge
   (passing, silver, gold) include criteria that are widely but not universally
   applicable (SHOULD and SUGGESTED), are primarily derived from
-  successful secure OSS projects, and are more willing to accept more criteria
+  successful secure OSS projects, and are willing to accept more criteria
   (including those for quality as long as they also aid security).
 
 ## Why support both sets of criteria?
 
-Neither set is a superset of the other, and their overlaps are often complex
+Neither set of criteria is a clear superset of the other.
+Their overlaps are often complex
 "partial" mappings instead of clean "X covers everything in Y" mappings.
 
 We don't want projects to lose their investment of time in the "metal series".
-Many may find its more detailed criteria valuable, and baseline is new.
-Over 9,000 projects have spent time to try to meet the metal series criteria,
+As of November 2025
+over 9,000 projects have spent time to try to meet the metal series criteria,
+with nearly 2,000 projects achieving at least "passing",
 and we don't want them to think their work is a waste.
-In addition, the traditional criteria include a lot of specifics that are
-lacking in the baseline (e.g., specifics on cryptography, build processes,
-and requiring that the developers know how to develop secure software).
+In addition, many may find the metal series' more detailed criteria valuable,
+as the metal series include a lot of specifics that are
+lacking in the baseline.
+These include specifics on cryptography, build processes,
+and requiring that the developers know how to develop secure software.
 
-Others may want to use the baseline set of criteria.
-For example, the baseline focuses on mappings to regulations,
-and is significantly shorter.
+Others may prefer to use the baseline set of criteria.
+The baseline focuses on mappings to regulations,
+focuses solely on MUSTs, and is significantly shorter, and for some
+these are advantages.
 
 Some projects may want to use both sets of criteria.
+Each list has criteria the other doesn't.
 As a result, neither one obviously replaces the other.
 
 Therefore, we plan to make some changes to support *both* sets of criteria.
@@ -48,6 +58,9 @@ might work to also meet the other.
 
 No set of criteria can fully capture good practices for projects, so being
 able to use both sets of criteria has its advantages.
+In the longer term there may be more work to converge these criteria, but
+there's no obvious short-term way to do this, so doing this incrementally
+where appropriate is more likely to succeed.
 
 ## Expected result
 
@@ -177,3 +190,8 @@ OSPS-GV-01.02:
 * Recommendation: Document project participants and their roles through such artifacts as members.md, governance.md, maintainers.md, or similar file within the source code repository of the project.
 * Baseline level 2,3
 * External Framework ... BPB: {B-S-3 0 }, {B-S-4 0 }
+
+## Detailed plan
+
+See the file [baseline_details](./baseline_details) for more details
+on exactly how this is (currently) planned to be implemented.

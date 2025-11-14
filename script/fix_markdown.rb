@@ -57,35 +57,39 @@ options = {
   verbose: true
 }
 
-OptionParser.new do |opts|
-  opts.on('--dry-run', 'Show what would be fixed without modifying files') do
-    options[:dry_run] = true
-  end
+option_parser =
+  OptionParser.new do |opts|
+    opts.on('--dry-run', 'Show what would be fixed without modifying files') do
+      options[:dry_run] = true
+    end
 
-  opts.on('--quiet', 'Only show summary, not individual fixes') do
-    options[:verbose] = false
-  end
+    opts.on('--quiet', 'Only show summary, not individual fixes') do
+      options[:verbose] = false
+    end
 
-  opts.on('--verbose', 'Show detailed information (default)') do
-    options[:verbose] = true
-  end
+    opts.on('--verbose', 'Show detailed information (default)') do
+      options[:verbose] = true
+    end
 
-  opts.on('--help', 'Show this help message') do
-    puts File.read(__FILE__).split("\n")[7..45].map { |l| l.sub(/^# ?/, '') }.join("\n")
-    exit 0
+    opts.on('--help', 'Show this help message') do
+      help_lines = File.read(__FILE__).split("\n")[7..45].map { |l| l.sub(/^# ?/, '') }
+      puts help_lines.join("\n")
+      exit 0
+    end
   end
-end.parse!
+option_parser.parse!
 
-def fix_markdown(input_file, output_file, options = {})
+# rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+def fix_markdown(input_file, output_file, dry_run: false, verbose: true)
   lines = File.readlines(input_file)
   fixed_lines = []
   fixes_made = 0
   i = 0
-  in_code_fence = false  # Track whether we're inside a code block
+  in_code_fence = false # Track whether we're inside a code block
 
   while i < lines.length
     line = lines[i]
-    prev_line = i > 0 ? lines[i - 1] : nil
+    prev_line = i.positive? ? lines[i - 1] : nil
     next_line = i < lines.length - 1 ? lines[i + 1] : nil
 
     # Check if current line is a code fence (before any other processing)
@@ -102,7 +106,7 @@ def fix_markdown(input_file, output_file, options = {})
       if line =~ /^\s+(#+\s+.+)$/
         line = "#{Regexp.last_match(1)}\n"
         fixes_made += 1
-        warn "Fixed MD023 at line #{i + 1}: removed leading spaces from header" if options[:verbose]
+        warn "Fixed MD023 at line #{i + 1}: removed leading spaces from header" if verbose
       end
     end
 
@@ -124,7 +128,7 @@ def fix_markdown(input_file, output_file, options = {})
       unless prev_line.strip.start_with?('```')
         fixed_lines << "\n"
         fixes_made += 1
-        warn "Fixed MD031 at line #{i + 1}: added blank before code fence" if options[:verbose]
+        warn "Fixed MD031 at line #{i + 1}: added blank before code fence" if verbose
       end
     end
 
@@ -134,7 +138,7 @@ def fix_markdown(input_file, output_file, options = {})
       unless prev_line =~ /^#+\s+/ || prev_line.strip == '---'
         fixed_lines << "\n"
         fixes_made += 1
-        warn "Fixed MD022 at line #{i + 1}: added blank before header" if options[:verbose]
+        warn "Fixed MD022 at line #{i + 1}: added blank before header" if verbose
       end
     end
 
@@ -144,7 +148,7 @@ def fix_markdown(input_file, output_file, options = {})
       unless prev_line =~ /^(\s*)[-*+]\s+/ || prev_line =~ /^(\s*)\d+\.\s+/
         fixed_lines << "\n"
         fixes_made += 1
-        warn "Fixed MD032 at line #{i + 1}: added blank before list" if options[:verbose]
+        warn "Fixed MD032 at line #{i + 1}: added blank before list" if verbose
       end
     end
 
@@ -157,7 +161,7 @@ def fix_markdown(input_file, output_file, options = {})
       unless next_line.strip.start_with?('```')
         fixed_lines << "\n"
         fixes_made += 1
-        warn "Fixed MD031 at line #{i + 2}: added blank after code fence" if options[:verbose]
+        warn "Fixed MD031 at line #{i + 2}: added blank after code fence" if verbose
       end
     end
 
@@ -167,7 +171,7 @@ def fix_markdown(input_file, output_file, options = {})
       unless next_line =~ /^#+\s+/ || next_line.strip == '---' || next_line.strip.start_with?('```')
         fixed_lines << "\n"
         fixes_made += 1
-        warn "Fixed MD022 at line #{i + 2}: added blank after header" if options[:verbose]
+        warn "Fixed MD022 at line #{i + 2}: added blank after header" if verbose
       end
     end
 
@@ -178,7 +182,7 @@ def fix_markdown(input_file, output_file, options = {})
       unless next_is_list
         fixed_lines << "\n"
         fixes_made += 1
-        warn "Fixed MD032 at line #{i + 2}: added blank after list" if options[:verbose]
+        warn "Fixed MD032 at line #{i + 2}: added blank after list" if verbose
       end
     end
 
@@ -189,24 +193,24 @@ def fix_markdown(input_file, output_file, options = {})
   final_lines = []
   prev_was_blank = false
 
-  fixed_lines.each do |line|
-    is_blank = line.strip.empty?
+  fixed_lines.each do |current_line|
+    is_blank = current_line.strip.empty?
 
     # Skip if this is a blank line and previous was also blank
     if is_blank && prev_was_blank
       fixes_made += 1
-      warn "Fixed MD012: removed consecutive blank line" if options[:verbose]
+      warn 'Fixed MD012: removed consecutive blank line' if verbose
       next
     end
 
-    final_lines << line
+    final_lines << current_line
     prev_was_blank = is_blank
   end
 
   # Write fixed content (unless dry-run)
-  if options[:dry_run]
+  if dry_run
     puts "\n[DRY RUN] Would make #{fixes_made} fixes to: #{output_file}"
-    puts "  Run without --dry-run to apply changes"
+    puts '  Run without --dry-run to apply changes'
   else
     File.write(output_file, final_lines.join)
     puts "\n✓ Fixed #{fixes_made} markdown issues in: #{output_file}"
@@ -222,14 +226,15 @@ rescue Errno::EACCES => e
   exit 1
 rescue StandardError => e
   warn "Error: #{e.class} - #{e.message}"
-  warn e.backtrace.join("\n") if options[:verbose]
+  warn e.backtrace.join("\n") if verbose
   exit 1
 end
+# rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
 # Main execution
 if ARGV.empty?
   puts "Usage: #{$PROGRAM_NAME} [OPTIONS] FILE [FILE]"
-  puts "Run with --help for detailed usage information"
+  puts 'Run with --help for detailed usage information'
   exit 1
 end
 
@@ -237,12 +242,12 @@ end
 file_args = ARGV.reject { |arg| arg.start_with?('--') }
 
 if file_args.empty?
-  puts "Error: No input file specified"
+  puts 'Error: No input file specified'
   puts "Usage: #{$PROGRAM_NAME} [OPTIONS] FILE [FILE]"
   exit 1
 end
 
-input_file = file_args[0]
+input_file = file_args.first
 output_file = file_args[1] || input_file
 
 unless File.exist?(input_file)
@@ -256,4 +261,4 @@ unless File.readable?(input_file)
 end
 
 puts "Fixing markdown errors in: #{input_file}" if options[:verbose]
-fix_markdown(input_file, output_file, options)
+fix_markdown(input_file, output_file, **options)

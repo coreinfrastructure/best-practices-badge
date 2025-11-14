@@ -25,9 +25,11 @@ This is the **OpenSSF Best Practices Badge** project (formerly CII Best Practice
 ### Code Quality & Linting
 
 - `rake default` - Run local CI/CD pipeline (linting, tests, etc.).
+
    Don't just use `rake` without arguments, Claude's user permission
    system can't permit that without permitting all rake commands.
    Some additional checks (e.g., Brakeman) run on GitHub's CI/CD pipeline.
+
 - `rake rubocop` - Ruby style checker
 - `rake rails_best_practices` - Rails-specific best practices source checker
 - `rake markdownlint` - Markdown linting
@@ -41,6 +43,33 @@ For specific files:
 
 - `mdl FILENAME.md` - Markdownlint only the file `FILENAME.md`
 - `rubocop FILENAME.rb` - Run rubocop on just `FILENAME.rb`
+
+**Markdown Helper Script**:
+
+After creating or editing markdown files, use the markdown fixer script to automatically fix common markdownlint errors:
+
+```bash
+
+# Fix markdown file in-place (most common usage):
+script/fix_markdown.rb docs/myfile.md
+
+# See what would be fixed without changing the file:
+script/fix_markdown.rb --dry-run docs/myfile.md
+
+# After fixing, verify with markdownlint:
+mdl docs/myfile.md
+
+```
+
+The script automatically fixes:
+
+- MD031: Fenced code blocks surrounded by blank lines
+- MD022: Headers surrounded by blank lines
+- MD032: Lists surrounded by blank lines
+- MD023: Headers at beginning of line (no leading spaces)
+- MD012: Multiple consecutive blank lines
+
+After running the script, manually fix any remaining errors that require human judgment (MD001, MD025, etc.).
 
 Don't run `rails_best_practices` to analyze individual files.
 The `rails_best_practices` program needs the full context of all files
@@ -62,15 +91,28 @@ for the specific context.
 
 ### Workflow
 
-After making significant changes to source code, ALWAYS
-run linters. If you changed any Ruby files, run `rubocop` on them,
-then run `rake rails_best_practices`. If you modify any markdown files,
-run `mdl` on them. After that, if you changed any files that will be
-checked in, run `rake whitespace_check`. Fix problems reported
-by the linters.
+After making significant changes to source code, ALWAYS run linters:
 
-Once all linters pass, run `rails test:all` to ensure all
-tests pass.
+**For Ruby files**:
+
+1. Run `rubocop FILENAME.rb` on changed files
+2. Run `rake rails_best_practices` for Rails-specific checks
+3. Fix all reported problems
+
+**For Markdown files**:
+
+1. Run `script/fix_markdown.rb FILENAME.md` to auto-fix common issues
+2. Run `mdl FILENAME.md` to check for remaining errors
+3. Manually fix any errors that require human judgment (MD001, MD025, etc.)
+
+**For all changed files**:
+
+1. Run `rake whitespace_check` to catch trailing whitespace
+2. Fix any whitespace issues
+
+**Finally**:
+
+- Run `rails test:all` to ensure all tests pass
 
 ### Development Environment Shortcut
 
@@ -238,7 +280,9 @@ Key environment variables for development:
 ## Temporary File Convention
 
 - ALL temporary files' filenames must be prefixed with a comma
+
   (e.g., `,temp-notes.md`, `,migration-plan.txt`)
+
 - This applies to documentation, scratch files, migration plans, etc.
 - The linting tools are configured to ignore comma-prefixed files
 
@@ -248,13 +292,17 @@ This application mostly follows Rails 5+ baseline conventions with
 selective upgrades:
 
 * It most follows Rails 5 conventions in terms of
+
   directory structure, extensive use of `Rails.application.config.*`,
   an asset pipeline with a Rails 5+ Sprockets setup, and initializer structure.
+
 * It has some pre-Rails 5 remnants:
   - No `config.load_defaults` in application.rb (would be Rails 5.1+)
   - Manual framework defaults instead of version-specific defaults
   - Some older asset organization (app/assets/javascripts vs modern
+
     app/javascript)
+
 * Some Rails 6+ features in use:
   - Modern gems: E.g., Rails, `solid_queue`, `secure_headers`
   - Security configurations: Advanced CSRF, CSP headers

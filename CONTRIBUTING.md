@@ -1050,6 +1050,19 @@ git branch -u origin/main main
 git remote set-head origin -a
 ~~~~
 
+## Windows OS
+
+We don't normally test this on the Windows OS.
+If you use Windows, we recommend using
+Windows Subsystem for Linux (WSL).
+
+For Windows you should enable creation of symbolic links
+(e.g., for `AGENTS.md`).
+An easy way is to enable "developer mode"
+(Settings > Update & Security > For developers and enable "Developer mode").
+In addition, in git, set `core.symlinks` to true,
+e.g., `git config core.symlinks true`.
+
 ## Governance
 
 This project is led by the OpenSSF Best Practices Badge

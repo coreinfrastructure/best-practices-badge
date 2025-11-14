@@ -620,11 +620,8 @@ The baseline sync system is designed to intelligently merge upstream updates whi
 1. **Initial Sync**: Download baseline criteria
 
    ```bash
-
    rake baseline:sync
-
-# Creates criteria/baseline_criteria.yml with defaults
-
+   # Creates criteria/baseline_criteria.yml with defaults
    ```
 
 2. **Local Customization**: Edit the YAML to adjust requirements
@@ -645,15 +642,10 @@ The baseline sync system is designed to intelligently merge upstream updates whi
 3. **Upstream Update**: OpenSSF releases new baseline version
 
    ```bash
-
    rake baseline:sync
-
-# Updates description/details if changed
-
-# PRESERVES met_url_required: false
-
-# PRESERVES na_allowed: true
-
+   # Updates description/details if changed
+   # PRESERVES met_url_required: false
+   # PRESERVES na_allowed: true
    ```
 
 **When to Use Local Customization:**
@@ -3062,42 +3054,33 @@ end
 
 **Add method** for achievement timestamp management:
 
+```ruby
 # Update achievement timestamps based on percentages
-
 def update_achievement_timestamps
   update_metal_timestamps
   update_baseline_timestamps
 end
 
 # Update baseline achievement timestamps
-
 def update_baseline_timestamps
   update_level_timestamp('baseline-1', badge_percentage_baseline_1)
-
-# Will add baseline-2 and baseline-3 later
-
+  # Will add baseline-2 and baseline-3 later
 end
 
 # Generic method to update achievement timestamp for a level
-
 def update_level_timestamp(level, percentage)
   achieved_field = "achieved_#{level.tr('-', '_')}_at"
   first_achieved_field = "first_#{achieved_field}"
 
   if percentage >= 100
-
-# Project achieved this level
-
+    # Project achieved this level
     self[achieved_field] ||= Time.current
     self[first_achieved_field] ||= Time.current
   else
-
-# Project lost this level
-
+    # Project lost this level
     self[achieved_field] = nil
   end
 end
-
 ```
 
 ### 3.8: Update Controllers for Baseline-1

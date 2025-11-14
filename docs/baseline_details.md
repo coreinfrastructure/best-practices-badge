@@ -1509,7 +1509,127 @@ grep -n "criteriaLevel ==\|level ==\|criteria_level ==" app/assets/javascripts/*
 
 **Rationale**: JavaScript that parses URL parameters needs to accept both numeric (for backward compatibility during transition) and named values.
 
-### 1.10: Create Permissions Form
+### 1.10: Remove Full Project Caching
+
+**Problem**: The forms currently cache the entire project form when `is_disabled` (view-only mode). This creates a large cache footprint for entire forms. Now that systems are downloading the entire site, the cache entries become evicted before they can be used, making this useless. In addition, we want to *only* calculate the set of allowed editors when necessary, and we can't do that with the current setup.
+
+**Files**: `app/views/projects/_form_0.html.erb`, `app/views/projects/_form_1.html.erb`, `app/views/projects/_form_2.html.erb`
+
+**Remove the cache_if block** in each file:
+
+#### Identifying the Matching `end` Statement
+
+**Critical**: The cache_if block wraps nearly the **entire file content**. The matching `end` is at the **very last line** of each file.
+
+**Analysis for `_form_0.html.erb`**:
+
+1. **cache_if opens** (lines 24-26):
+
+   ```erb
+
+   cache_if ProjectsController::CACHE_SHOW_PROJECT && is_disabled,
+            [project, locale, additional_rights_list],
+             expires_in: 12.hours do %>
+
+   ```
+
+2. **Potential end candidates**:
+   - Line 602: `<% end %>` - This closes the `<% if is_disabled %>` block (line 594)
+   - Line 604: `<% end %>` - This closes the `bootstrap_form_for project ... do |f|` block (line 38)
+   - Line 608: `<% end %>` - **THIS closes the cache_if block**
+
+3. **Why line 608 is correct**:
+   - The cache_if at line 24-26 has `do %>` which requires a matching `<% end %>`
+   - It wraps the `form_early` render (line 27) AND the entire `bootstrap_form_for` block
+   - The block structure is:
+
+     ```
+
+     cache_if ... do %>         (line 24-26)
+       <%= render form_early %>  (line 27-32)
+       <div class="row">         (line 34)
+         bootstrap_form_for ... do |f| %>  (line 38)
+           ...form content...
+         <% end %>               (line 604 - closes form_for)
+       </div>                    (line 605-607)
+     <% end %>                   (line 608 - closes cache_if)
+
+     ```
+
+   - Line 608 comes after ALL closing `</div>` tags (lines 605-607)
+   - It's the ONLY `<% end %>` after the form closes that isn't inside an if/else
+
+**Verification for `_form_1.html.erb` and `_form_2.html.erb`**:
+
+- Both have cache_if at lines 19-20
+- Both have the matching `<% end %>` as the **very last line** of the file
+- Same structure: cache wraps the entire form content
+
+**Alternative matches ruled out**:
+
+- ❌ Line 602 (`<% end %>` after submit buttons): Closes the `<% if is_disabled %>` conditional (line 594), NOT the cache
+- ❌ Line 604 (`<% end %>` after center div): Closes the `bootstrap_form_for` block (line 38), NOT the cache
+- ✅ Line 608 (`<% end %>` after all divs): Closes the `cache_if` block - CORRECT
+
+**Performance Benefit**: Removing the cache_if also eliminates the `additional_rights_list` calculation (line 19), which performs a database query (`pluck`) and string join operation on every form render. This variable was **only** used as part of the cache key and serves no other purpose.
+
+**Changes to make**:
+
+**In `_form_0.html.erb`**:
+
+```erb
+# DELETE lines 15-26 (the setup and cache_if opening):
+<%
+   # If the additional rights list changes, invalidate the cache.
+   # If the performance is too slow, we could directly expire it instead,
+   # but that adds a maintenance headache.
+   additional_rights_list = project.additional_rights.pluck(:user_id).join(',')
+
+   # The badge URL has one value for some time after the project entry
+   # is edited, and then changes. To handle that gracefully, we
+   # expire the cache after a period of time.
+   cache_if ProjectsController::CACHE_SHOW_PROJECT && is_disabled,
+           [project, locale, additional_rights_list],
+            expires_in: 12.hours do %>
+
+# DELETE line 608 (the matching end):
+<% end %>
+```
+
+**Note**: The `additional_rights_list` variable (line 19) is **only** used in the cache key (line 25). Removing the cache_if eliminates this unnecessary database query and string processing on every view.
+
+**In `_form_1.html.erb`** and **`_form_2.html.erb`**:
+
+```erb
+
+# DELETE lines 19-20 (the cache_if opening):
+
+<% cache_if ProjectsController::CACHE_SHOW_PROJECT && is_disabled,
+            [project, locale], expires_in: 12.hours do %>
+
+# DELETE the very last line (the matching end):
+
+<% end %>
+
+```
+
+**After removal**: The files will start directly with the form content (the `render form_early` call) and end with the closing `</div>` tags for the HTML structure.
+
+**Testing**:
+
+- Verify forms still render correctly in both edit and view modes
+- Check that removing caching doesn't significantly impact performance (it shouldn't - individual elements may still cache)
+- Ensure no syntax errors from mismatched ends
+
+**Rationale**:
+
+- **Performance**: Eliminates unnecessary `additional_rights_list` calculation (database query + string join) on every form render in `_form_0.html.erb`
+- **Simplicity**: Removes complex full-page caching logic, making forms easier to understand and modify
+- **Flexibility**: Allows more granular caching strategies per-criterion or per-section
+- **Baseline preparation**: Different criteria levels (metal vs baseline) may need different caching strategies
+- **Maintainability**: Reduces code complexity and potential cache invalidation bugs
+
+### 1.11: Create Permissions Form
 
 **New file**: `app/views/projects/_form_permissions.html.erb`
 
@@ -1636,7 +1756,7 @@ Example email text update:
 - Allow baseline users to manage permissions without viewing metal series criteria
 - Provide single location for all access control operations
 
-### 1.11: Update Helper Methods
+### 1.12: Update Helper Methods
 
 **File**: `app/helpers/projects_helper.rb`
 
@@ -1680,7 +1800,7 @@ end
 
 **Note**: This helper will be extended in Phase 3 to support baseline levels. The initial implementation (Phase 1) only needs to handle metal series.
 
-### 1.12: Add Badge Percentage Field Mapping to Project Model (CRITICAL)
+### 1.13: Add Badge Percentage Field Mapping to Project Model (CRITICAL)
 
 **File**: `app/models/project.rb`
 
@@ -1798,7 +1918,7 @@ grep -n 'badge_percentage_#{' app/models/project.rb
 
 **CRITICAL**: This must be done before changing to named levels, or field access will fail.
 
-### 1.13: Fix Criteria Model for Named Levels (CRITICAL)
+### 1.14: Fix Criteria Model for Named Levels (CRITICAL)
 
 **File**: `app/models/criteria.rb`
 
@@ -1882,7 +2002,7 @@ end
 
 **CRITICAL**: This must be fixed in Phase 1 before changing YAML keys, or criterion text lookups will fail silently.
 
-### 1.14: Verify View Helper Compatibility
+### 1.15: Verify View Helper Compatibility
 
 **File**: `app/helpers/projects_helper.rb`
 
@@ -1916,7 +2036,7 @@ end
 
 **Rationale**: Ensure view helpers accept named levels. Most helpers should work without changes if they pass the level to model methods that already handle named levels.
 
-### 1.15: Verify JavaScript Compatibility (CRITICAL)
+### 1.16: Verify JavaScript Compatibility (CRITICAL)
 
 **Problem**: JavaScript code may have hardcoded checks for numeric levels ('0', '1', '2') or may parse criteria_level from URLs.
 
@@ -1995,7 +2115,7 @@ rake eslint
 
 **Rationale**: JavaScript errors can be silent and hard to debug. Proactive verification prevents production issues.
 
-### 1.16: Update Tests
+### 1.17: Update Tests
 
 **Files to update**:
 
@@ -2030,7 +2150,7 @@ end
 
 ```
 
-### 1.17: Phase 1 Deployment Steps
+### 1.18: Phase 1 Deployment Steps
 
 **Critical**: Phase 1 changes URL structure. Deploy carefully with monitoring.
 

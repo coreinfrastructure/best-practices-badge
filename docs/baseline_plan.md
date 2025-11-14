@@ -25,6 +25,8 @@ criteria currently supported by the OpenSSF Best Practices badge as follows:
   successful secure OSS projects, and are willing to accept more criteria
   (including those for quality as long as they also aid security).
 
+To see the current baseline criteria, view the beginning of this document: <https://baseline.openssf.org/versions/2025-10-10>.
+
 ## Why support both sets of criteria?
 
 Neither set of criteria is a clear superset of the other.

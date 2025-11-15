@@ -1308,5 +1308,11 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'user/arepo', result[0][0] # Should be first after sorting
     assert_equal 'user/zrepo', result[1][0] # Should be second after sorting
   end
+
+  test 'should handle invalid criteria_level by defaulting to passing' do
+    get "/en/projects/#{@project.id}?criteria_level=invalid_level"
+    assert_response :success
+    # Should default to level 0 (passing) without error
+  end
 end
 # rubocop:enable Metrics/ClassLength

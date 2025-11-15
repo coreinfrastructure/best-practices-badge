@@ -7,6 +7,7 @@
 # rubocop:disable Metrics/ClassLength
 class Criteria
   include ActiveModel::Model
+  include LevelConversion # Shared level name/number conversion
 
   ACCESSORS = %i[
     name category level future
@@ -224,22 +225,5 @@ class Criteria
     level_num2 = level_to_number(level2)
     level_num1 > level_num2
   end
-
-  # Convert level name to number for comparison
-  # Baseline levels map to numeric values for ordering purposes
-  # rubocop:disable Lint/DuplicateBranch
-  def level_to_number(level)
-    case level.to_s
-    when '0', 'passing' then 0
-    when '1', 'silver' then 1
-    when 'baseline-1' then 1  # Baseline-1 roughly equivalent to silver
-    when '2', 'gold' then 2
-    when 'baseline-2' then 2  # Baseline-2 roughly equivalent to gold
-    when 'baseline-3' then 3  # Baseline-3 is highest
-    else
-      level.to_i # Fallback for unknown levels
-    end
-  end
-  # rubocop:enable Lint/DuplicateBranch
 end
 # rubocop:enable Metrics/ClassLength

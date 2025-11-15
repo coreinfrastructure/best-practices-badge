@@ -17,6 +17,7 @@ class Project < ApplicationRecord
   using SymbolRefinements
 
   include PgSearch::Model # PostgreSQL-specific text search
+  include LevelConversion # Shared level name/number conversion
 
   # When did we add met_justification_required?
   STATIC_ANALYSIS_JUSTIFICATION_REQUIRED_DATE =
@@ -130,23 +131,6 @@ class Project < ApplicationRecord
   def set_badge_percentage(level, value)
     self[badge_percentage_field_name(level)] = value
   end
-
-  # Convert level name to number for conditional logic
-  # Baseline levels map to numeric values for ordering purposes
-  # rubocop:disable Lint/DuplicateBranch
-  def level_to_number(level)
-    case level.to_s
-    when '0', 'passing' then 0
-    when '1', 'silver' then 1
-    when 'baseline-1' then 1  # Baseline-1 roughly equivalent to silver
-    when '2', 'gold' then 2
-    when 'baseline-2' then 2  # Baseline-2 roughly equivalent to gold
-    when 'baseline-3' then 3  # Baseline-3 is highest
-    else
-      level.to_i
-    end
-  end
-  # rubocop:enable Lint/DuplicateBranch
 
   default_scope { order(:created_at) }
 

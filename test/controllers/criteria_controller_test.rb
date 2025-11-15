@@ -6,6 +6,7 @@
 
 require 'test_helper'
 
+# rubocop:disable Metrics/ClassLength
 class CriteriaControllerTest < ActionDispatch::IntegrationTest
   # test "the truth" do
   #   assert true
@@ -111,4 +112,16 @@ class CriteriaControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, 'Basique'
     assert_includes @response.body, 'Contenu basique du site Web du projet'
   end
+
+  test 'Get gold criteria level' do
+    get '/en/criteria/gold'
+    assert_response :success
+  end
+
+  test 'Get criteria with invalid level defaults to passing' do
+    get '/en/criteria/invalid_level'
+    assert_response :success
+    # Should default to level 0 (passing)
+  end
 end
+# rubocop:enable Metrics/ClassLength

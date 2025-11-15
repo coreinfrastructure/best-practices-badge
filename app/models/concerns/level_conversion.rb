@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Copyright the Linux Foundation, IDA, and the
+# Copyright the Linux Foundation and the
 # OpenSSF Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 

@@ -123,5 +123,11 @@ class CriteriaControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     # Should default to level 0 (passing)
   end
+
+  test 'Get criteria with bronze (synonym for passing)' do
+    get '/en/criteria/bronze'
+    assert_response :success
+    assert_includes @response.body, 'Basic project website content'
+  end
 end
 # rubocop:enable Metrics/ClassLength

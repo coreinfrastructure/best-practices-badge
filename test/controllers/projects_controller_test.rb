@@ -1314,5 +1314,10 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     # Should default to level 0 (passing) without error
   end
+
+  test 'should handle bronze as synonym for passing' do
+    get "/en/projects/#{@project.id}?criteria_level=bronze"
+    assert_response :success
+  end
 end
 # rubocop:enable Metrics/ClassLength

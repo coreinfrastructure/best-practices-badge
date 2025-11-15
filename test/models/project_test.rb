@@ -539,5 +539,30 @@ class ProjectTest < ActiveSupport::TestCase
       assert_respond_to rel, :order, 'Should be chainable with order'
     end
   end
+
+  test 'badge_percentage_field_name returns correct field for baseline-1' do
+    project = projects(:perfect_passing)
+    assert_equal :badge_percentage_baseline_1,
+                 project.badge_percentage_field_name('baseline-1')
+  end
+
+  test 'badge_percentage_field_name returns correct field for baseline-2' do
+    project = projects(:perfect_passing)
+    assert_equal :badge_percentage_baseline_2,
+                 project.badge_percentage_field_name('baseline-2')
+  end
+
+  test 'badge_percentage_field_name returns correct field for baseline-3' do
+    project = projects(:perfect_passing)
+    assert_equal :badge_percentage_baseline_3,
+                 project.badge_percentage_field_name('baseline-3')
+  end
+
+  test 'badge_percentage_field_name handles unknown level with fallback' do
+    project = projects(:perfect_passing)
+    # Test the else branch with an unknown level
+    assert_equal :badge_percentage_unknown,
+                 project.badge_percentage_field_name('unknown')
+  end
 end
 # rubocop:enable Metrics/ClassLength

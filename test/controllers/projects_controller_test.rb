@@ -207,8 +207,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should show project with criteria_level=1' do
-    # Use "/1" suffix to indicate criteria_level=1
-    get "/en/projects/#{@project.id}/1"
+    # Use "/silver" suffix to indicate criteria_level=1
+    get "/en/projects/#{@project.id}/silver"
     assert_response :success
     assert_select(+'a[href=?]', 'https://www.nasa.gov')
     assert_select(+'a[href=?]', 'https://www.nasa.gov/pathfinder')
@@ -1307,6 +1307,17 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 2, result.length
     assert_equal 'user/arepo', result[0][0] # Should be first after sorting
     assert_equal 'user/zrepo', result[1][0] # Should be second after sorting
+  end
+
+  test 'should handle invalid criteria_level by defaulting to passing' do
+    get "/en/projects/#{@project.id}?criteria_level=invalid_level"
+    assert_response :success
+    # Should default to level 0 (passing) without error
+  end
+
+  test 'should handle bronze as synonym for passing' do
+    get "/en/projects/#{@project.id}?criteria_level=bronze"
+    assert_response :success
   end
 end
 # rubocop:enable Metrics/ClassLength

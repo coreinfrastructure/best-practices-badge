@@ -13,8 +13,15 @@
 # This regex defines all legal locale values:
 LEGAL_LOCALE ||= /(?:#{I18n.available_locales.join('|')})/
 
+# Canonical lists of valid criteria level names are defined in:
+# config/initializers/00_criteria_levels.rb
+# This includes: METAL_LEVEL_NAMES, METAL_LEVEL_NUMBERS, BASELINE_LEVEL_NAMES,
+# LEVEL_SYNONYMS, SPECIAL_FORMS, and ALL_CRITERIA_LEVEL_NAMES
+
 # This regex is used to verify criteria levels in routes:
-VALID_CRITERIA_LEVEL ||= /[0-2]/
+# Built from ALL_CRITERIA_LEVEL_NAMES - DO NOT edit this directly
+# To add new levels, update config/initializers/00_criteria_levels.rb
+VALID_CRITERIA_LEVEL ||= /#{Regexp.union(ALL_CRITERIA_LEVEL_NAMES)}/
 
 # Confirm that number-only id is provided
 VALID_ID ||= /[1-9][0-9]*/
@@ -124,6 +131,48 @@ Rails.application.routes.draw do
 
     get 'feed' => 'projects#feed', defaults: { format: 'atom' }
     get 'reminders' => 'projects#reminders_summary'
+
+    # PERFORMANCE NOTE: These route-level redirects are processed early in the request
+    # cycle, before controllers/models are loaded, using minimal memory. They return
+    # 301 Permanent Redirect responses directly from the routing layer.
+
+    # Permanent redirects for old numeric criteria levels to new canonical names
+    # These are single-hop redirects: 0 → passing (not 0 → bronze → passing)
+    get '/:locale/projects/:id/0(.:format)', to: redirect { |params, _req|
+      format_suffix = params[:format] ? ".#{params[:format]}" : ''
+      "/#{params[:locale]}/projects/#{params[:id]}/passing#{format_suffix}"
+    }, status: 301, constraints: { locale: LEGAL_LOCALE, id: VALID_ID }
+    get '/:locale/projects/:id/1(.:format)', to: redirect { |params, _req|
+      format_suffix = params[:format] ? ".#{params[:format]}" : ''
+      "/#{params[:locale]}/projects/#{params[:id]}/silver#{format_suffix}"
+    }, status: 301, constraints: { locale: LEGAL_LOCALE, id: VALID_ID }
+    get '/:locale/projects/:id/2(.:format)', to: redirect { |params, _req|
+      format_suffix = params[:format] ? ".#{params[:format]}" : ''
+      "/#{params[:locale]}/projects/#{params[:id]}/gold#{format_suffix}"
+    }, status: 301, constraints: { locale: LEGAL_LOCALE, id: VALID_ID }
+    get '/:locale/projects/:id/0/edit(.:format)', to: redirect { |params, _req|
+      format_suffix = params[:format] ? ".#{params[:format]}" : ''
+      "/#{params[:locale]}/projects/#{params[:id]}/passing/edit#{format_suffix}"
+    }, status: 301, constraints: { locale: LEGAL_LOCALE, id: VALID_ID }
+    get '/:locale/projects/:id/1/edit(.:format)', to: redirect { |params, _req|
+      format_suffix = params[:format] ? ".#{params[:format]}" : ''
+      "/#{params[:locale]}/projects/#{params[:id]}/silver/edit#{format_suffix}"
+    }, status: 301, constraints: { locale: LEGAL_LOCALE, id: VALID_ID }
+    get '/:locale/projects/:id/2/edit(.:format)', to: redirect { |params, _req|
+      format_suffix = params[:format] ? ".#{params[:format]}" : ''
+      "/#{params[:locale]}/projects/#{params[:id]}/gold/edit#{format_suffix}"
+    }, status: 301, constraints: { locale: LEGAL_LOCALE, id: VALID_ID }
+
+    # Redirect "bronze" to "passing" (common synonym)
+    # Single-hop redirect to canonical form
+    get '/:locale/projects/:id/bronze(.:format)', to: redirect { |params, _req|
+      format_suffix = params[:format] ? ".#{params[:format]}" : ''
+      "/#{params[:locale]}/projects/#{params[:id]}/passing#{format_suffix}"
+    }, status: 301, constraints: { locale: LEGAL_LOCALE, id: VALID_ID }
+    get '/:locale/projects/:id/bronze/edit(.:format)', to: redirect { |params, _req|
+      format_suffix = params[:format] ? ".#{params[:format]}" : ''
+      "/#{params[:locale]}/projects/#{params[:id]}/passing/edit#{format_suffix}"
+    }, status: 301, constraints: { locale: LEGAL_LOCALE, id: VALID_ID }
 
     resources :projects, constraints: { id: VALID_ID } do
       member do

@@ -386,6 +386,20 @@ class ApplicationController < ActionController::Base
   end
   # rubocop: enable Metrics/MethodLength
 
+  # Normalize criteria level parameter to numeric string '0', '1', or '2'
+  # Handles synonyms like 'passing'/'bronze', 'silver', 'gold'
+  # Returns: '0', '1', or '2' (defaults to '0')
+  # rubocop:disable Lint/DuplicateBranch
+  def normalize_criteria_level(level)
+    case level.to_s.downcase
+    when '0', 'passing', 'bronze' then '0'
+    when '1', 'silver' then '1'
+    when '2', 'gold' then '2'
+    else '0' # Default fallback
+    end
+  end
+  # rubocop:enable Lint/DuplicateBranch
+
   include SessionsHelper
 end
 # rubocop: enable Metrics/ClassLength

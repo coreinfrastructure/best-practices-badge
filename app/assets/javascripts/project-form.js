@@ -58,7 +58,9 @@ function getLocale() {
 
 // Return current level based upon parameters in location.search
 function getLevel() {
-  var levelFromUrl = location.pathname.match('projects/[0-9]*/([0-2])');
+  // Match named levels (passing, silver, gold) or numeric (0, 1, 2)
+  var levelPattern = 'projects/[0-9]*/(passing|silver|gold|[0-2])';
+  var levelFromUrl = location.pathname.match(levelPattern);
   if (levelFromUrl) {
     return levelFromUrl[1];
   }

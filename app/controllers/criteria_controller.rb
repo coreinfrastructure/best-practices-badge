@@ -25,8 +25,8 @@ class CriteriaController < ApplicationController
   # Sets criteria_level value.
   # @return [void]
   def set_criteria_level
-    @criteria_level = params[:criteria_level] || '0'
-    @criteria_level = '0' unless @criteria_level.match?(/\A[0-2]\Z/)
+    level_param = params[:criteria_level] || '0'
+    @criteria_level = normalize_criteria_level(level_param)
   end
 
   # Set user-provided parameters (other than criteria_level)

@@ -38,9 +38,9 @@
 
 <br><br>
 <%= t("#{criteria_level}_html", scope: 'projects.form_early.level',
-      passing: %{<a href='#{next_level_prefix}' title='#{t('projects.form_early.level.0')}'>#{image_tag('passing.svg', size: '53x20', alt: t('projects.form_early.level.0'))}</a>}.html_safe,
-      silver: %{<a href='#{next_level_prefix}?criteria_level=1' title='#{t('projects.form_early.level.1')}'>#{image_tag('silver.svg', size: '41x20', alt: t('projects.form_early.level.1'))}</a>}.html_safe,
-      gold: %{<a href='#{next_level_prefix}?criteria_level=2' title='#{t('projects.form_early.level.2')}'>#{image_tag('gold.svg', size: '35x20', alt: t('projects.form_early.level.2'))}</a>}.html_safe,
+      passing: %{<a href='#{next_level_prefix}?criteria_level=passing' title='#{t('projects.form_early.level.0')}'>#{image_tag('passing.svg', size: '53x20', alt: t('projects.form_early.level.0'))}</a>}.html_safe,
+      silver: %{<a href='#{next_level_prefix}?criteria_level=silver' title='#{t('projects.form_early.level.1')}'>#{image_tag('silver.svg', size: '41x20', alt: t('projects.form_early.level.1'))}</a>}.html_safe,
+      gold: %{<a href='#{next_level_prefix}?criteria_level=gold' title='#{t('projects.form_early.level.2')}'>#{image_tag('gold.svg', size: '35x20', alt: t('projects.form_early.level.2'))}</a>}.html_safe,
       ) %>
 
 <%# End column started outside. %>

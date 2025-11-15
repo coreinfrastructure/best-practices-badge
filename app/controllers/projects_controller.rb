@@ -864,8 +864,9 @@ class ProjectsController < ApplicationController
   # Ensures criteria_level is a valid level (0-2), defaulting to '0'.
   # @return [void] Sets @criteria_level instance variable
   def set_criteria_level
-    @criteria_level = criteria_level_params[:criteria_level] || '0'
-    @criteria_level = '0' unless @criteria_level.match?(/\A[0-2]\Z/)
+    # Accept both URL-friendly names and numeric IDs
+    level_param = criteria_level_params[:criteria_level] || '0'
+    @criteria_level = normalize_criteria_level(level_param)
   end
 
   # Sets optional criteria level with validation, allowing empty values.

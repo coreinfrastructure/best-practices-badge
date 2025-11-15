@@ -205,7 +205,8 @@ class Criteria
     return unless field.in? LOCALE_ACCESSORS
 
     Criteria.get_levels(name).reverse_each do |l|
-      next if l.to_i > level.to_i
+      # Compare levels using mapping, not .to_i
+      next if level_higher?(l, level)
 
       t_key = "criteria.#{l}.#{name}.#{field}"
       # Disable HTML output safety. I18n translations are internal data
@@ -216,5 +217,29 @@ class Criteria
     end
     nil
   end
+
+  # Returns true if level1 is higher than level2
+  def level_higher?(level1, level2)
+    level_num1 = level_to_number(level1)
+    level_num2 = level_to_number(level2)
+    level_num1 > level_num2
+  end
+
+  # Convert level name to number for comparison
+  # Baseline levels map to numeric values for ordering purposes
+  # rubocop:disable Lint/DuplicateBranch
+  def level_to_number(level)
+    case level.to_s
+    when '0', 'passing' then 0
+    when '1', 'silver' then 1
+    when 'baseline-1' then 1  # Baseline-1 roughly equivalent to silver
+    when '2', 'gold' then 2
+    when 'baseline-2' then 2  # Baseline-2 roughly equivalent to gold
+    when 'baseline-3' then 3  # Baseline-3 is highest
+    else
+      level.to_i # Fallback for unknown levels
+    end
+  end
+  # rubocop:enable Lint/DuplicateBranch
 end
 # rubocop:enable Metrics/ClassLength

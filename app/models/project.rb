@@ -51,6 +51,33 @@ class Project < ApplicationRecord
   LEVEL_ID_NUMBERS = (0..(COMPLETED_BADGE_LEVELS.length - 1))
   LEVEL_IDS = LEVEL_ID_NUMBERS.map(&:to_s)
 
+  # Mapping from URL-friendly names to internal level IDs
+  # Internal level IDs ('0', '1', '2') are used for:
+  #   - YAML criteria keys (criteria/criteria.yml)
+  #   - I18n translation keys (criteria.0.*, criteria.1.*, etc.)
+  #   - Database field suffixes (badge_percentage_0, badge_percentage_1, etc.)
+  # URL-friendly names ('passing', 'silver', 'gold') are used for:
+  #   - User-facing URLs (/projects/123/passing)
+  #   - Routing and redirects
+  LEVEL_NAME_TO_NUMBER = {
+    'passing' => '0',
+    'silver' => '1',
+    'gold' => '2'
+  }.freeze
+
+  # Reverse mapping: internal level ID to URL-friendly name
+  LEVEL_NUMBER_TO_NAME = {
+    '0' => 'passing',
+    '1' => 'silver',
+    '2' => 'gold',
+    0 => 'passing',
+    1 => 'silver',
+    2 => 'gold'
+  }.freeze
+
+  # All user-facing level names (for URLs, display)
+  METAL_LEVEL_NAMES = %w[passing silver gold].freeze
+
   PROJECT_OTHER_FIELDS = %i[
     name description homepage_url repo_url cpe implementation_languages
     license general_comments user_id lock_version
@@ -62,6 +89,64 @@ class Project < ApplicationRecord
   PROJECT_PERMITTED_FIELDS = (PROJECT_OTHER_FIELDS + ALL_CRITERIA_STATUS +
                               ALL_CRITERIA_JUSTIFICATION +
                               PROJECT_USER_ID_REPEAT).freeze
+
+  # Returns the database field name for a level's badge percentage
+  # Handles mapping from level names (with hyphens) to valid field names
+  # @param level [String] 'passing', 'silver', 'gold', 'baseline-1', etc.
+  # @return [Symbol] field name like :badge_percentage_0 or :badge_percentage_baseline_1
+  # rubocop:disable Metrics/MethodLength
+  def badge_percentage_field_name(level)
+    case level.to_s
+    when '0', 'passing'
+      :badge_percentage_0
+    when '1', 'silver'
+      :badge_percentage_1
+    when '2', 'gold'
+      :badge_percentage_2
+    when 'baseline-1'
+      :badge_percentage_baseline_1
+    when 'baseline-2'
+      :badge_percentage_baseline_2
+    when 'baseline-3'
+      :badge_percentage_baseline_3
+    else
+      # Fallback: convert hyphen to underscore for baseline levels
+      level_normalized = level.to_s.tr('-', '_')
+      :"badge_percentage_#{level_normalized}"
+    end
+  end
+  # rubocop:enable Metrics/MethodLength
+
+  # Convenience method to get badge percentage for a level
+  # @param level [String] criteria level name
+  # @return [Integer] percentage value
+  def badge_percentage_for(level)
+    self[badge_percentage_field_name(level)] || 0
+  end
+
+  # Convenience method to set badge percentage for a level
+  # @param level [String] criteria level name
+  # @param value [Integer] percentage value
+  def set_badge_percentage(level, value)
+    self[badge_percentage_field_name(level)] = value
+  end
+
+  # Convert level name to number for conditional logic
+  # Baseline levels map to numeric values for ordering purposes
+  # rubocop:disable Lint/DuplicateBranch
+  def level_to_number(level)
+    case level.to_s
+    when '0', 'passing' then 0
+    when '1', 'silver' then 1
+    when 'baseline-1' then 1  # Baseline-1 roughly equivalent to silver
+    when '2', 'gold' then 2
+    when 'baseline-2' then 2  # Baseline-2 roughly equivalent to gold
+    when 'baseline-3' then 3  # Baseline-3 is highest
+    else
+      level.to_i
+    end
+  end
+  # rubocop:enable Lint/DuplicateBranch
 
   default_scope { order(:created_at) }
 
@@ -380,10 +465,9 @@ class Project < ApplicationRecord
   # @param current_time [Time] the current time for timestamp updates
   # @return [void]
   def update_badge_percentage(level, current_time)
-    old_badge_percentage = self[:"badge_percentage_#{level}"]
-    update_prereqs(level) if level.to_i.nonzero?
-    self[:"badge_percentage_#{level}"] =
-      calculate_badge_percentage(level)
+    old_badge_percentage = badge_percentage_for(level)
+    update_prereqs(level) if level_to_number(level).nonzero?
+    set_badge_percentage(level, calculate_badge_percentage(level))
     update_passing_times(level, old_badge_percentage, current_time)
   end
 

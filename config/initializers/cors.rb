@@ -79,8 +79,17 @@ CORS_ALLOWED_METHODS = %i[get options].freeze
 # and there's no way to express priority.
 # With regular expressions we can express the patterns unambiguously.
 
+# Build criteria level pattern from canonical lists defined in
+# config/initializers/00_criteria_levels.rb
+# This ensures CORS patterns stay in sync with routing constraints
+# The canonical lists are: METAL_LEVEL_NAMES, METAL_LEVEL_NUMBERS,
+# BASELINE_LEVEL_NAMES, LEVEL_SYNONYMS, SPECIAL_FORMS
+CRITERIA_LEVEL_PATTERN = ALL_CRITERIA_LEVEL_NAMES.join('|')
+
 CORS_DIFFERENTIATED_RESOURCE_PATTERNS = [
-  %r{\A/([a-z]{2}(-[A-Z]{2})?/)?projects(/[1-9][0-9]*(/[1-9][0-9]*)?)?\z},
+  # Match projects with optional ID and optional criteria level (numeric or named)
+  # Pattern auto-updates when new levels are added to routes.rb canonical lists
+  %r{\A/([a-z]{2}(-[A-Z]{2})?/)?projects(/[1-9][0-9]*(/(#{CRITERIA_LEVEL_PATTERN})(/edit)?)?)?\z},
   %r{\A/([a-z]{2}(-[A-Z]{2})?/)?project_stats\z},
   %r{\A/([a-z]{2}(-[A-Z]{2})?/)?users/[1-9][0-9]*\.json\z}
 ].freeze

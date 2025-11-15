@@ -207,8 +207,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should show project with criteria_level=1' do
-    # Use "/1" suffix to indicate criteria_level=1
-    get "/en/projects/#{@project.id}/1"
+    # Use "/silver" suffix to indicate criteria_level=1
+    get "/en/projects/#{@project.id}/silver"
     assert_response :success
     assert_select(+'a[href=?]', 'https://www.nasa.gov')
     assert_select(+'a[href=?]', 'https://www.nasa.gov/pathfinder')

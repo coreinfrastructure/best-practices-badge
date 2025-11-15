@@ -864,9 +864,26 @@ class ProjectsController < ApplicationController
   # Ensures criteria_level is a valid level (0-2), defaulting to '0'.
   # @return [void] Sets @criteria_level instance variable
   def set_criteria_level
-    @criteria_level = criteria_level_params[:criteria_level] || '0'
-    @criteria_level = '0' unless @criteria_level.match?(/\A[0-2]\Z/)
+    # Accept both URL-friendly names and numeric IDs
+    level_param = criteria_level_params[:criteria_level] || '0'
+    @criteria_level = normalize_criteria_level(level_param)
   end
+
+  # Convert criteria level URL parameter to internal format (YAML key format)
+  # Accepts: '0', '1', '2', 'passing', 'bronze', 'silver', 'gold'
+  # Returns: '0', '1', or '2' (internal YAML keys, defaults to '0')
+  # Note: YAML keys remain numeric for translation compatibility
+  # Note: 'bronze' is a common synonym for 'passing' (level 0)
+  # rubocop:disable Lint/DuplicateBranch
+  def normalize_criteria_level(level)
+    case level.to_s.downcase
+    when '0', 'passing', 'bronze' then '0'
+    when '1', 'silver' then '1'
+    when '2', 'gold' then '2'
+    else '0' # default to passing (level 0) for invalid values
+    end
+  end
+  # rubocop:enable Lint/DuplicateBranch
 
   # Sets optional criteria level with validation, allowing empty values.
   # Similar to set_criteria_level but permits empty string for optional use.

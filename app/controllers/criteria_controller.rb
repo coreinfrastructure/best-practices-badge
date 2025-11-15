@@ -25,9 +25,23 @@ class CriteriaController < ApplicationController
   # Sets criteria_level value.
   # @return [void]
   def set_criteria_level
-    @criteria_level = params[:criteria_level] || '0'
-    @criteria_level = '0' unless @criteria_level.match?(/\A[0-2]\Z/)
+    level_param = params[:criteria_level] || '0'
+    @criteria_level = normalize_criteria_level(level_param)
   end
+
+  # Convert criteria level URL parameter to internal format (YAML key format)
+  # Accepts: '0', '1', '2', 'passing', 'bronze', 'silver', 'gold'
+  # Returns: '0', '1', or '2' (defaults to '0')
+  # rubocop:disable Lint/DuplicateBranch
+  def normalize_criteria_level(level)
+    case level.to_s.downcase
+    when '0', 'passing', 'bronze' then '0'
+    when '1', 'silver' then '1'
+    when '2', 'gold' then '2'
+    else '0' # Default fallback
+    end
+  end
+  # rubocop:enable Lint/DuplicateBranch
 
   # Set user-provided parameters (other than criteria_level)
   def set_params

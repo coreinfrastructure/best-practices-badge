@@ -4,6 +4,8 @@
 # OpenSSF Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
+require_relative '../../lib/locale_utils'
+
 # rubocop:disable Metrics/ModuleLength
 module SessionsHelper
   SESSION_TTL = 48.hours # Automatically log off session if inactive this long
@@ -11,35 +13,17 @@ module SessionsHelper
   GITHUB_PATTERN = %r{
     \Ahttps://github.com/([A-Za-z0-9_.-]+)/([A-Za-z0-9_.-]+)/?\Z
   }x
-  require 'uri'
 
   # Remove the "locale=value", if any, from the url_query provided
-  def remove_locale_query(url_query)
-    (url_query || '').gsub(/\Alocale=[^&]*&?|&locale=[^&]*/, '').presence
-  end
+  # Delegates to LocaleUtils for implementation
+  delegate :remove_locale_query, to: :LocaleUtils
 
   # Reply with original_url modified so it has locale "locale".
   # Locale may be nil.
   # The rootmost path always has a trailing slash ("http://a.b.c/").
   # Otherwise, there is never a trailing slash.
-  # To do this, we remove any locale in the query string and
-  # and previously-specified locale.
-  # rubocop: disable Metrics/AbcSize
-  def force_locale_url(original_url, locale)
-    url = URI.parse(original_url)
-    url.host = ENV.fetch('PUBLIC_HOSTNAME', url.host)
-    # Remove locale from query string and main path.  The removing
-    # substitution will sometimes remove too much, so we prepend a '/'
-    # if that happens.
-    url.query = remove_locale_query(url.query)
-    new_path = url.path.gsub(%r{\A\/[a-z]{2}(-[A-Za-z0-9-]+)?(\/|\z)}, '')
-    new_path.prepend('/') if new_path.empty? || new_path.first != '/'
-    new_path.chomp!('/') if locale || new_path != '/'
-    # Recreate path, but now forcibly include the locale.
-    url.path = (locale.present? ? '/' + locale.to_s : '') + new_path
-    url.to_s
-  end
-  # rubocop: enable Metrics/AbcSize
+  # Delegates to LocaleUtils for implementation
+  delegate :force_locale_url, to: :LocaleUtils
 
   # Low-level route to set user as being logged in.
   # This doesn't set the last_login_at or forward elsewhere.

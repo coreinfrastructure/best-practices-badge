@@ -4,6 +4,8 @@
 # OpenSSF Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
+require_relative '../lib/locale_utils'
+
 # rubocop:disable Metrics/BlockLength
 
 # The priority is based upon order of creation:
@@ -41,7 +43,7 @@ LEVEL_REDIRECTS = {
 # Route suffixes for redirect generation (base route and edit route)
 ROUTE_SUFFIXES = ['', '/edit'].freeze
 
-# Build redirect path with locale, reusing existing controller logic
+# Build redirect path with locale
 def build_redirect_path(locale, id, level, suffix, format)
   format_suffix = format ? ".#{format}" : ''
   "/#{locale}/projects/#{id}/#{level}#{suffix}#{format_suffix}"
@@ -58,10 +60,8 @@ def project_level_redirect(_old_level, new_level, status:, locale_in_params:, su
         if locale_in_params
           params[:locale]
         else
-          # Reuse ApplicationController's locale detection logic
-          controller = ApplicationController.new
-          controller.request = req
-          controller.find_best_locale.to_s
+          # Use LocaleUtils for efficient locale detection without instantiating controller
+          LocaleUtils.find_best_locale(req).to_s
         end
       build_redirect_path(locale, params[:id], new_level, suffix, params[:format])
     end,

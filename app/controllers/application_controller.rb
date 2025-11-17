@@ -290,13 +290,7 @@ class ApplicationController < ActionController::Base
   # Browsers often provide ACCEPT_LANGUAGE (which in turn is often provided
   # by the operating system), so we should not need geolocation anyway.
   def find_best_locale
-    browser_locale =
-      http_accept_language.preferred_language_from(
-        Rails.application.config.automatic_locales
-      )
-    return browser_locale if browser_locale.present?
-
-    I18n.default_locale
+    LocaleUtils.find_best_locale(request)
   end
 
   # If locale is not provided in the URL, redirect to best option.

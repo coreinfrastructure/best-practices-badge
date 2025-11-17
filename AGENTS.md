@@ -313,6 +313,15 @@ moves like the direct use of `rails app:update` or adding `load_defaults
 8.0` is likely to cause a cascade of many changes, leading to
 many hard-to-fix failures with little obvious external benefit.
 
+## Simple DRY code
+
+It's critically important to make the code small and
+DRY (don't repeat yourself). If the same function or method is written
+more than once, it's wrong. If many lines are duplicated between
+functions/methods, it's usually wrong.
+
+Prefer having many small pure methods called by others.
+
 ## Miscellaneous
 
 IMPORTANT: Never have trailing whitespace in text-like files including

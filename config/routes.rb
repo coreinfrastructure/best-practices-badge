@@ -29,6 +29,48 @@ VALID_ID ||= /[1-9][0-9]*/
 # Valid values for static badge display
 VALID_STATIC_VALUE ||= /0|[1-9]{1,2}|passing|silver|gold/
 
+# Map of old (deprecated) criteria levels to new (canonical) levels
+# Used to generate redirect routes automatically (DRY)
+LEVEL_REDIRECTS = {
+  '0' => 'passing',
+  '1' => 'silver',
+  '2' => 'gold',
+  'bronze' => 'passing'
+}.freeze
+
+# Route suffixes for redirect generation (base route and edit route)
+ROUTE_SUFFIXES = ['', '/edit'].freeze
+
+# Build redirect path with locale, reusing existing controller logic
+def build_redirect_path(locale, id, level, suffix, format)
+  format_suffix = format ? ".#{format}" : ''
+  "/#{locale}/projects/#{id}/#{level}#{suffix}#{format_suffix}"
+end
+
+# Generate redirect configuration for deprecated criteria levels
+# When locale_in_params=true: 301 permanent (locale from URL, cacheable)
+# When locale_in_params=false: 302 temporary (locale from Accept-Language, varies by user)
+# rubocop:disable Metrics/MethodLength
+def project_level_redirect(_old_level, new_level, status:, locale_in_params:, suffix: '')
+  {
+    to: redirect do |params, req|
+      locale =
+        if locale_in_params
+          params[:locale]
+        else
+          # Reuse ApplicationController's locale detection logic
+          controller = ApplicationController.new
+          controller.request = req
+          controller.find_best_locale.to_s
+        end
+      build_redirect_path(locale, params[:id], new_level, suffix, params[:format])
+    end,
+    status: status,
+    constraints: locale_in_params ? { locale: LEGAL_LOCALE, id: VALID_ID } : { id: VALID_ID }
+  }
+end
+# rubocop:enable Metrics/MethodLength
+
 Rails.application.routes.draw do
   # First, handle routing of special cases.
   # Warning: Routes that don't take a :locale value must include a
@@ -136,43 +178,21 @@ Rails.application.routes.draw do
     # cycle, before controllers/models are loaded, using minimal memory. They return
     # 301 Permanent Redirect responses directly from the routing layer.
 
-    # Permanent redirects for old numeric criteria levels to new canonical names
+    # Generate redirects for all deprecated level names/numbers
     # These are single-hop redirects: 0 → passing (not 0 → bronze → passing)
-    get '/:locale/projects/:id/0(.:format)', to: redirect { |params, _req|
-      format_suffix = params[:format] ? ".#{params[:format]}" : ''
-      "/#{params[:locale]}/projects/#{params[:id]}/passing#{format_suffix}"
-    }, status: 301, constraints: { locale: LEGAL_LOCALE, id: VALID_ID }
-    get '/:locale/projects/:id/1(.:format)', to: redirect { |params, _req|
-      format_suffix = params[:format] ? ".#{params[:format]}" : ''
-      "/#{params[:locale]}/projects/#{params[:id]}/silver#{format_suffix}"
-    }, status: 301, constraints: { locale: LEGAL_LOCALE, id: VALID_ID }
-    get '/:locale/projects/:id/2(.:format)', to: redirect { |params, _req|
-      format_suffix = params[:format] ? ".#{params[:format]}" : ''
-      "/#{params[:locale]}/projects/#{params[:id]}/gold#{format_suffix}"
-    }, status: 301, constraints: { locale: LEGAL_LOCALE, id: VALID_ID }
-    get '/:locale/projects/:id/0/edit(.:format)', to: redirect { |params, _req|
-      format_suffix = params[:format] ? ".#{params[:format]}" : ''
-      "/#{params[:locale]}/projects/#{params[:id]}/passing/edit#{format_suffix}"
-    }, status: 301, constraints: { locale: LEGAL_LOCALE, id: VALID_ID }
-    get '/:locale/projects/:id/1/edit(.:format)', to: redirect { |params, _req|
-      format_suffix = params[:format] ? ".#{params[:format]}" : ''
-      "/#{params[:locale]}/projects/#{params[:id]}/silver/edit#{format_suffix}"
-    }, status: 301, constraints: { locale: LEGAL_LOCALE, id: VALID_ID }
-    get '/:locale/projects/:id/2/edit(.:format)', to: redirect { |params, _req|
-      format_suffix = params[:format] ? ".#{params[:format]}" : ''
-      "/#{params[:locale]}/projects/#{params[:id]}/gold/edit#{format_suffix}"
-    }, status: 301, constraints: { locale: LEGAL_LOCALE, id: VALID_ID }
+    LEVEL_REDIRECTS.each do |old_level, new_level|
+      ROUTE_SUFFIXES.each do |suffix|
+        # Permanent redirect (301) when locale IS provided in URL
+        get "/:locale/projects/:id/#{old_level}#{suffix}(.:format)",
+            **project_level_redirect(old_level, new_level, suffix: suffix,
+                                     status: 301, locale_in_params: true)
 
-    # Redirect "bronze" to "passing" (common synonym)
-    # Single-hop redirect to canonical form
-    get '/:locale/projects/:id/bronze(.:format)', to: redirect { |params, _req|
-      format_suffix = params[:format] ? ".#{params[:format]}" : ''
-      "/#{params[:locale]}/projects/#{params[:id]}/passing#{format_suffix}"
-    }, status: 301, constraints: { locale: LEGAL_LOCALE, id: VALID_ID }
-    get '/:locale/projects/:id/bronze/edit(.:format)', to: redirect { |params, _req|
-      format_suffix = params[:format] ? ".#{params[:format]}" : ''
-      "/#{params[:locale]}/projects/#{params[:id]}/passing/edit#{format_suffix}"
-    }, status: 301, constraints: { locale: LEGAL_LOCALE, id: VALID_ID }
+        # Temporary redirect (302) when locale is NOT provided - varies by user
+        get "/projects/:id/#{old_level}#{suffix}(.:format)",
+            **project_level_redirect(old_level, new_level, suffix: suffix,
+                                     status: 302, locale_in_params: false)
+      end
+    end
 
     resources :projects, constraints: { id: VALID_ID } do
       member do

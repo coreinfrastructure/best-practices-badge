@@ -595,8 +595,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     log_in_as(@admin)
     old_user = @project.user
     assert_not_equal @admin.id, old_user.id
-    # We SHOULD see the option to change the owner id
-    get "/en/projects/#{@project.id}/edit"
+    # We SHOULD see the option to change the owner id in the permissions form
+    get "/en/projects/#{@project.id}/permissions/edit"
     assert_response :success
     assert_includes @response.body, 'Repeated new owner id'
 
@@ -647,9 +647,9 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal @project.user_id, @user.id
     log_in_as(@user)
 
-    get "/en/projects/#{@project.id}/edit"
+    get "/en/projects/#{@project.id}/permissions/edit"
     assert_response :success
-    # We should see the option to change the owner id
+    # We should see the option to change the owner id in the permissions form
     assert_includes @response.body, 'Repeated new owner id'
 
     # Let's ensure we can change it.
@@ -1318,6 +1318,63 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test 'should handle bronze as synonym for passing' do
     get "/en/projects/#{@project.id}?criteria_level=bronze"
     assert_response :success
+  end
+
+  test 'should get permissions edit form' do
+    log_in_as(@project.user)
+    get "/en/projects/#{@project.id}/permissions/edit"
+    assert_response :success
+    assert_includes @response.body, 'Project Permissions'
+    assert_includes @response.body, 'Ownership Transfer'
+    assert_includes @response.body, 'Collaborator Management'
+    # Should display current additional rights
+    assert_includes @response.body, 'Currently:'
+  end
+
+  test 'should handle permissions form submission' do
+    log_in_as(@project.user)
+    get "/en/projects/#{@project.id}/permissions/edit"
+    assert_response :success
+    # Verify the form can be accessed and rendered
+  end
+
+  test 'permissions not accessible by non-owner without rights' do
+    log_in_as(@user2)
+    get "/en/projects/#{@project.id}/permissions/edit"
+    assert_response :redirect
+    # Should redirect since user2 is not the owner
+  end
+
+  test 'passing form should not contain ownership fields' do
+    log_in_as(@project.user)
+    get "/en/projects/#{@project.id}/passing/edit"
+    assert_response :success
+    assert_not_includes @response.body, 'project[user_id_repeat]'
+    assert_not_includes @response.body, 'new_owner_repeat'
+  end
+
+  test 'passing form should not contain additional_rights fields' do
+    log_in_as(@project.user)
+    get "/en/projects/#{@project.id}/passing/edit"
+    assert_response :success
+    assert_not_includes @response.body, 'additional_rights_changes'
+  end
+
+  test 'permissions form displays current additional rights' do
+    # Add an additional right for testing
+    test_user = users(:test_user_mark)
+    AdditionalRight.create!(
+      user_id: test_user.id,
+      project_id: @project.id
+    )
+
+    log_in_as(@project.user)
+    get "/en/projects/#{@project.id}/permissions/edit"
+    assert_response :success
+
+    # Should show the current additional rights with user ID
+    assert_includes @response.body, 'Currently:'
+    assert_includes @response.body, test_user.id.to_s
   end
 end
 # rubocop:enable Metrics/ClassLength

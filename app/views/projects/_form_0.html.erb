@@ -299,64 +299,8 @@
                 '0', 'Basics', 'Other', f, project, is_disabled
               ) %>
         </ul>
-      <% if !is_disabled && current_user &&
-            (current_user.admin? || current_user.id == project.user_id) %>
-        <div class="row">
-        <div class="col-xs-12">
-          <br>
-            <%= t 'projects.edit.new_owner' %>:
-            <%= f.text_field :user_id,
-                             hide_label: true, class:"form-control",
-                             placeholder: nil,
-                             spellcheck: false,
-                             disabled: is_disabled %><br>
-        </div>
-        <div class="col-xs-12">
-          <br>
-            <%= t 'projects.edit.new_owner_repeat' %>:
-            <%# The user must provide the same value here as user_id to
-                cause an ownership change.
-                The client-side pattern here prevents some mistakes.
-                Since it's client-side we don't depend on it for security.
-            %>
-            <input type="text" name="project[user_id_repeat]"
-                   id="project_user_id_repeat" class="form-control"
-                   value="" spellcheck="false" pattern="^(|\d+)$"
-                   placeholder="">
-        </div>
-        </div>
-      <% end %>
-      <div class="row">
-      <div class="col-xs-12">
-        <br>
-        <div class="alert alert-info">
-          <strong><%= t('projects.misc.reminder_notification_note.title') %></strong>
-          <%= t('projects.misc.reminder_notification_note.description_html', user_id: current_user&.id) %>
-        </div>
-      </div>
-      </div>
-
-      <div class="row">
-      <div class="col-xs-12">
-        <%= t 'projects.form_basics.additional_rights_changes.description',
-              current_rights: project.additional_rights_to_s %>
-        <%= render(partial: "details", locals: {
-          criterion: "additional_rights_changes",
-          details:
-            t('projects.form_basics.additional_rights_changes.details_html') })
-        %>
-        <% unless is_disabled %>
-        <%# text_field_tag isn't flexible enough, so create this directly.
-            The client-side pattern here prevents some mistakes,
-            but since it's client-side we don't depend on it for security. %>
-          <input type="text" name="additional_rights_changes"
-                 id="additional_rights_changes" class="form-control"
-                 value="" spellcheck="false"
-                 pattern="^(| *[+-] *(\d+( *, *\d+)*)+)$"
-                 placeholder="<%= t('projects.form_basics.additional_rights_changes.placeholder')%>">
-        <% end # is_disabled %>
-      </div>
-      </div>
+      <%# Ownership transfer and collaborator management moved to
+          /projects/:id/permissions/edit - a dedicated permissions form %>
 
       <br><br>
       <%= f.label :general_comments,

@@ -53,7 +53,7 @@ end
 # When locale_in_params=true: 301 permanent (locale from URL, cacheable)
 # When locale_in_params=false: 302 temporary (locale from Accept-Language, varies by user)
 # rubocop:disable Metrics/MethodLength
-def project_level_redirect(_old_level, new_level, status:, locale_in_params:, suffix: '')
+def project_level_redirect(new_level, status:, locale_in_params:, suffix: '')
   {
     to: redirect do |params, req|
       locale =
@@ -184,12 +184,12 @@ Rails.application.routes.draw do
       ROUTE_SUFFIXES.each do |suffix|
         # Permanent redirect (301) when locale IS provided in URL
         get "/:locale/projects/:id/#{old_level}#{suffix}(.:format)",
-            **project_level_redirect(old_level, new_level, suffix: suffix,
+            **project_level_redirect(new_level, suffix: suffix,
                                      status: 301, locale_in_params: true)
 
         # Temporary redirect (302) when locale is NOT provided - varies by user
         get "/projects/:id/#{old_level}#{suffix}(.:format)",
-            **project_level_redirect(old_level, new_level, suffix: suffix,
+            **project_level_redirect(new_level, suffix: suffix,
                                      status: 302, locale_in_params: false)
       end
     end

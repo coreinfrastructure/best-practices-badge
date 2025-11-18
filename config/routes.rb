@@ -40,56 +40,17 @@ LEVEL_REDIRECTS = {
   'bronze' => 'passing'
 }.freeze
 
-# Route suffixes for redirect generation (base route and edit route)
-ROUTE_SUFFIXES = ['', '/edit'].freeze
-
-# Build redirect path with locale
-def build_redirect_path(locale, id, level, suffix, format)
-  format_suffix = format ? ".#{format}" : ''
-  "/#{locale}/projects/#{id}/#{level}#{suffix}#{format_suffix}"
+# Simplified redirect helper for project routes
+# Detects locale from params or request, builds redirect path
+# When locale is in params: returns 301 permanent redirect (cacheable)
+# When locale is not in params: returns 302 temporary (varies by Accept-Language)
+def redirect_to_level(new_level, suffix: '', status: 302)
+  redirect(status: status) do |params, req|
+    locale = params[:locale] || LocaleUtils.find_best_locale(req).to_s
+    format_suffix = params[:format] ? ".#{params[:format]}" : ''
+    "/#{locale}/projects/#{params[:id]}/#{new_level}#{suffix}#{format_suffix}"
+  end
 end
-
-# Generate redirect configuration for deprecated criteria levels
-# When locale_in_params=true: 301 permanent (locale from URL, cacheable)
-# When locale_in_params=false: 302 temporary (locale from Accept-Language, varies by user)
-# exclude_formats: Array of format symbols to exclude (e.g., [:json, :md])
-# rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-def project_level_redirect(
-  new_level,
-  status:,
-  locale_in_params:,
-  suffix: '',
-  exclude_formats: []
-)
-  {
-    to: redirect(status: status) do |params, req|
-      locale =
-        if locale_in_params
-          params[:locale]
-        else
-          # Use LocaleUtils for efficient locale detection without instantiating controller
-          LocaleUtils.find_best_locale(req).to_s
-        end
-      build_redirect_path(locale, params[:id], new_level, suffix, params[:format])
-    end,
-    # Use lambda constraint to check locale, id, and format
-    constraints: lambda { |req|
-      # Check locale format if it's in params (full match required)
-      locale_ok = !locale_in_params ||
-                  req.params[:locale]&.match?(/\A#{LEGAL_LOCALE.source}\z/)
-      # Check ID is numeric (full match required)
-      id_ok = req.params[:id]&.match?(/\A#{VALID_ID.source}\z/)
-      # Check format is not excluded
-      format_ok = exclude_formats.empty? ||
-                  !exclude_formats.include?(req.format.to_sym)
-      # Don't match malformed queries - let controller handle those
-      no_malformed_query = !req.query_string.include?('criteria_level,')
-      # All conditions must be true
-      locale_ok && id_ok && format_ok && no_malformed_query
-    }
-  }
-end
-# rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
 Rails.application.routes.draw do
   # First, handle routing of special cases.
@@ -196,45 +157,78 @@ Rails.application.routes.draw do
 
     # PERFORMANCE NOTE: These route-level redirects are processed early in the request
     # cycle, before controllers/models are loaded, using minimal memory. They return
-    # 301 Permanent Redirect responses directly from the routing layer.
+    # redirect responses directly from the routing layer.
 
-    # Generate redirects for all deprecated level names/numbers
-    # These are single-hop redirects: 0 → passing (not 0 → bronze → passing)
+    # Redirects for deprecated level names/numbers to canonical names
+    # Single-hop redirects: 0 → passing (not 0 → bronze → passing)
+    # With locale: 301 permanent (cacheable), without locale: 302 temporary (varies by user)
+
     LEVEL_REDIRECTS.each do |old_level, new_level|
-      ROUTE_SUFFIXES.each do |suffix|
-        # Permanent redirect (301) when locale IS provided in URL
-        get "/:locale/projects/:id/#{old_level}#{suffix}(.:format)",
-            **project_level_redirect(new_level, suffix: suffix,
-                                     status: 301, locale_in_params: true)
+      # Show routes: /projects/:id/:old_level -> /projects/:id/:new_level
+      get "/:locale/projects/:id/#{old_level}(.:format)",
+          to: redirect(301) { |p, _|
+            fmt = p[:format] ? ".#{p[:format]}" : ''
+            "/#{p[:locale]}/projects/#{p[:id]}/#{new_level}#{fmt}"
+          },
+          constraints: { id: VALID_ID, locale: LEGAL_LOCALE }
 
-        # Temporary redirect (302) when locale is NOT provided - varies by user
-        get "/projects/:id/#{old_level}#{suffix}(.:format)",
-            **project_level_redirect(new_level, suffix: suffix,
-                                     status: 302, locale_in_params: false)
-      end
+      get "/projects/:id/#{old_level}(.:format)",
+          to: redirect_to_level(new_level, status: 302),
+          constraints: { id: VALID_ID }
+
+      # Edit routes: /projects/:id/:old_level/edit -> /projects/:id/:new_level/edit
+      get "/:locale/projects/:id/#{old_level}/edit(.:format)",
+          to: redirect(301) { |p, _|
+            fmt = p[:format] ? ".#{p[:format]}" : ''
+            "/#{p[:locale]}/projects/#{p[:id]}/#{new_level}/edit#{fmt}"
+          },
+          constraints: { id: VALID_ID, locale: LEGAL_LOCALE }
+
+      get "/projects/:id/#{old_level}/edit(.:format)",
+          to: redirect_to_level(new_level, suffix: '/edit', status: 302),
+          constraints: { id: VALID_ID }
     end
 
     # Redirect routes without criteria_level to /passing (default)
-    # Use temporary redirect (302) since the default may change per-project in future
+    # Always use temporary redirect (302) since default may change per-project in future
     # Must come BEFORE resources :projects to take precedence over default routes
+    # Malformed queries (criteria_level,N) are handled by controller with 301 permanent
 
-    # Edit routes (HTML only - no format exclusions needed)
-    get '/:locale/projects/:id/edit(.:format)',
-        **project_level_redirect('passing', suffix: '/edit',
-                                 status: 302, locale_in_params: true)
-    get '/projects/:id/edit(.:format)',
-        **project_level_redirect('passing', suffix: '/edit',
-                                 status: 302, locale_in_params: false)
-
-    # Show routes (exclude JSON and MD - those have special handling in resources)
+    # Show routes: Exclude JSON and MD formats (handled specially in resources)
     get '/:locale/projects/:id(.:format)',
-        **project_level_redirect('passing', suffix: '',
-                                 status: 302, locale_in_params: true,
-                                 exclude_formats: %i[json md])
+        to: redirect_to_level('passing', status: 302),
+        constraints: lambda { |req|
+          # Check ID is numeric
+          id_ok = req.params[:id]&.match?(/\A#{VALID_ID.source}\z/)
+          # Check locale is valid
+          locale_ok = req.params[:locale]&.match?(/\A#{LEGAL_LOCALE.source}\z/)
+          # Exclude json and md formats
+          format_ok = !%i[json md].include?(req.format.to_sym)
+          # Don't match malformed queries - let controller handle those
+          no_malformed = !req.query_string.include?('criteria_level,')
+          id_ok && locale_ok && format_ok && no_malformed
+        }
+
     get '/projects/:id(.:format)',
-        **project_level_redirect('passing', suffix: '',
-                                 status: 302, locale_in_params: false,
-                                 exclude_formats: %i[json md])
+        to: redirect_to_level('passing', status: 302),
+        constraints: lambda { |req|
+          # Check ID is numeric
+          id_ok = req.params[:id]&.match?(/\A#{VALID_ID.source}\z/)
+          # Exclude json and md formats
+          format_ok = !%i[json md].include?(req.format.to_sym)
+          # Don't match malformed queries - let controller handle those
+          no_malformed = !req.query_string.include?('criteria_level,')
+          id_ok && format_ok && no_malformed
+        }
+
+    # Edit routes: All formats allowed (no malformed edit queries expected)
+    get '/:locale/projects/:id/edit(.:format)',
+        to: redirect_to_level('passing', suffix: '/edit', status: 302),
+        constraints: { id: VALID_ID, locale: LEGAL_LOCALE }
+
+    get '/projects/:id/edit(.:format)',
+        to: redirect_to_level('passing', suffix: '/edit', status: 302),
+        constraints: { id: VALID_ID }
 
     resources :projects, constraints: { id: VALID_ID } do
       member do

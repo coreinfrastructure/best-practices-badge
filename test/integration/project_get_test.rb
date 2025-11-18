@@ -25,7 +25,7 @@ class ProjectGetTest < ActionDispatch::IntegrationTest
     # because the secure_headers gem integrates at the Rack level
     # (thus a controller test does not invoke it).
 
-    get project_path(id: @project_one.id, locale: 'en')
+    get project_path(id: @project_one.id, locale: 'en') + '/passing'
     assert_response :success
 
     # Check some normal headers
@@ -69,7 +69,7 @@ class ProjectGetTest < ActionDispatch::IntegrationTest
   # rubocop:enable Metrics/BlockLength
 
   test 'ensure CORS set when origin set' do
-    get project_path(@project_one, locale: :en),
+    get project_path(@project_one, locale: :en) + '/passing',
         headers: { 'Origin' => 'https://en/example.com' }
     assert_response :success
 
@@ -98,26 +98,20 @@ class ProjectGetTest < ActionDispatch::IntegrationTest
     get project_path(id: @project_one.id, locale: 'en') + '?criteria_level,2'
     # Should redirect
     assert_response :moved_permanently
-    assert_redirected_to project_path(
-      id: @project_one.id, locale: 'en', criteria_level: 2
-    )
+    assert_redirected_to "/en/projects/#{@project_one.id}/gold"
   end
 
   test 'Redirect malformed query string criteria_level,1' do
     get project_path(id: @project_one.id, locale: 'de') + '?criteria_level,1'
     # Should redirect
     assert_response :moved_permanently
-    assert_redirected_to project_path(
-      id: @project_one.id, locale: 'de', criteria_level: 1
-    )
+    assert_redirected_to "/de/projects/#{@project_one.id}/silver"
   end
 
   test 'Redirect malformed query string criteria_level,0' do
     get project_path(id: @project_one.id, locale: 'fr') + '?criteria_level,0'
     # Should redirect
     assert_response :moved_permanently
-    assert_redirected_to project_path(
-      id: @project_one.id, locale: 'fr', criteria_level: 0
-    )
+    assert_redirected_to "/fr/projects/#{@project_one.id}/passing"
   end
 end

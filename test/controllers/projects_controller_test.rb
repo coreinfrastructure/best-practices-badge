@@ -176,7 +176,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should show project' do
-    get "/en/projects/#{@project.id}"
+    get "/en/projects/#{@project.id}/passing"
     assert_response :success
     assert_includes @response.body,
                     'What is the human-readable name of the project'
@@ -192,7 +192,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should show passing project' do
-    get "/en/projects/#{@perfect_passing_project.id}"
+    get "/en/projects/#{@perfect_passing_project.id}/passing"
     assert_response :success
     assert_includes @response.body,
                     'What is the human-readable name of the project'
@@ -217,8 +217,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should show project with criteria_level=2' do
-    # Use parameter criteria_level
-    get "/en/projects/#{@project.id}?criteria_level=2"
+    # Use path-based criteria_level
+    get "/en/projects/#{@project.id}/gold"
     assert_response :success
     assert_select(+'a[href=?]', 'https://www.nasa.gov')
     assert_select(+'a[href=?]', 'https://www.nasa.gov/pathfinder')
@@ -285,7 +285,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal(
       'Logged in! Last login: (No previous time recorded.)', flash['success']
     )
-    get "/en/projects/#{@project.id}/edit"
+    get "/en/projects/#{@project.id}/passing/edit"
     assert_response :success
     assert_includes @response.body, 'Edit Project Badge Status'
   end
@@ -300,7 +300,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     )
     new_right.save!
     log_in_as(test_user)
-    get "/en/projects/#{@project.id}/edit" # Invokes "edit"
+    get "/en/projects/#{@project.id}/passing/edit" # Invokes "edit"
     assert_response :success
     assert_includes @response.body, 'Edit Project Badge Status'
   end
@@ -400,7 +400,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     # the necessary rights.
     test_user = users(:test_user_mark)
     log_in_as(test_user)
-    get "/en/projects/#{@project.id}/edit" # Routes to 'edit'
+    get "/en/projects/#{@project.id}/passing/edit" # Routes to 'edit'
     assert_redirected_to root_url
   end
 
@@ -440,7 +440,9 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       }
     }
     assert_redirected_to project_path(assigns(:project))
-    follow_redirect!
+    follow_redirect! # Follow first redirect to /projects/:id
+    assert_response :redirect # Should redirect again to /projects/:id/passing
+    follow_redirect! # Follow second redirect to /projects/:id/passing
     @project.reload
     assert_equal @project.name, new_name
     # Ensure that replied page uses a /badge_static badge image.
@@ -524,7 +526,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     log_in_as(@project.user)
     patch "/en/projects/#{@project.id}", params: { project: new_project_data1 }
     assert_redirected_to project_path(@project, locale: :en)
-    get "/en/projects/#{@project.id}/edit"
+    get "/en/projects/#{@project.id}/passing/edit"
     assert_includes @response.body, 'Edit Project Badge Status'
     assert_includes @response.body, new_name1
     assert_not_includes @response.body, new_name2
@@ -674,7 +676,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     new_right.save!
     log_in_as(test_user)
 
-    get "/en/projects/#{@project.id}/edit"
+    get "/en/projects/#{@project.id}/passing/edit"
     assert_response :success
     # We should NOT see the option to change the owner id
     assert_not_includes @response.body, 'Repeated new owner id'
@@ -1309,15 +1311,18 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'user/zrepo', result[1][0] # Should be second after sorting
   end
 
-  test 'should handle invalid criteria_level by defaulting to passing' do
-    get "/en/projects/#{@project.id}?criteria_level=invalid_level"
-    assert_response :success
-    # Should default to level 0 (passing) without error
+  test 'should handle missing criteria_level by redirecting to passing' do
+    # When no criteria_level specified, redirect to passing (302)
+    get "/en/projects/#{@project.id}"
+    assert_response :found # 302
+    assert_redirected_to "/en/projects/#{@project.id}/passing"
   end
 
   test 'should handle bronze as synonym for passing' do
-    get "/en/projects/#{@project.id}?criteria_level=bronze"
-    assert_response :success
+    # Bronze redirects to passing (301)
+    get "/en/projects/#{@project.id}/bronze"
+    assert_response :moved_permanently
+    assert_redirected_to "/en/projects/#{@project.id}/passing"
   end
 
   test 'should get permissions edit form' do
@@ -1375,6 +1380,64 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     # Should show the current additional rights with user ID
     assert_includes @response.body, 'Currently:'
     assert_includes @response.body, test_user.id.to_s
+  end
+
+  test 'accessing project without criteria_level redirects to passing' do
+    get "/en/projects/#{@project.id}"
+    assert_response :redirect
+    assert_redirected_to "/en/projects/#{@project.id}/passing"
+  end
+
+  test 'redirect to passing uses temporary redirect (302)' do
+    get "/en/projects/#{@project.id}"
+    assert_response :found # Temporary redirect, not 301 permanent
+  end
+
+  # Test redirects for paths without locale (should detect locale and redirect)
+  test 'project show without locale redirects with locale detection' do
+    get "/projects/#{@project.id}",
+        headers: { HTTP_ACCEPT_LANGUAGE: 'fr,en-US;q=0.7,en;q=0.3' }
+    assert_response :found # 302 temporary
+    assert_redirected_to "/fr/projects/#{@project.id}/passing"
+  end
+
+  test 'project edit without locale redirects with locale detection' do
+    log_in_as(@project.user)
+    get "/projects/#{@project.id}/edit",
+        headers: { HTTP_ACCEPT_LANGUAGE: 'de,en-US;q=0.7,en;q=0.3' }
+    assert_response :found # 302 temporary
+    assert_redirected_to "/de/projects/#{@project.id}/passing/edit"
+  end
+
+  # Test redirects for edit paths without criteria_level
+  test 'project edit with locale but no criteria_level redirects to passing' do
+    log_in_as(@project.user)
+    get "/en/projects/#{@project.id}/edit"
+    assert_response :found # 302 temporary
+    assert_redirected_to "/en/projects/#{@project.id}/passing/edit"
+  end
+
+  # Test that JSON and Markdown formats are NOT redirected to /passing
+  # Note: paths without locale still get locale detection redirect
+  test 'project markdown without locale redirects for locale but not criteria' do
+    get "/projects/#{@project.id}.md"
+    assert_response :redirect
+    # Should redirect to add locale, but not to add /passing
+    assert_match %r{/[a-z]{2}/projects/#{@project.id}\.md\z}, @response.location
+    assert_not_includes @response.location, '/passing'
+  end
+
+  test 'project JSON with locale is not redirected to passing' do
+    get "/en/projects/#{@project.id}.json"
+    assert_response :success
+    body = response.parsed_body
+    assert_equal 'Pathfinder OS', body['name']
+  end
+
+  test 'project markdown with locale is not redirected to passing' do
+    get "/en/projects/#{@project.id}.md"
+    assert_response :success
+    assert_includes @response.body, 'Passing'
   end
 end
 # rubocop:enable Metrics/ClassLength

@@ -13,7 +13,7 @@ class ProjectsControllerSpecialTest < ActionDispatch::IntegrationTest
 
   test 'should fail to edit due to old session' do
     log_in_as(@project.user, make_old: true)
-    get "/en/projects/#{@project.id}/edit"
+    get "/en/projects/#{@project.id}/passing/edit"
     assert_response :found
     assert_redirected_to login_path
   end

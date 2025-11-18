@@ -141,6 +141,7 @@ class ProjectsController < ApplicationController
 
   # Display individual project details with malformed query fixes.
   # Redirects malformed criteria_level queries to proper format.
+  # Note: Redirect for missing criteria_level is now handled in routes.rb
   # Supports `GET /projects/1`.
   # @return [void]
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
@@ -156,14 +157,17 @@ class ProjectsController < ApplicationController
 
     parsed = Addressable::URI.parse(request.original_url)
     if parsed&.query_values&.include?('criteria_level,2')
-      redirect_to project_path(@project, criteria_level: 2),
+      redirect_to "#{project_path(@project)}/gold",
                   status: :moved_permanently
+      return
     elsif parsed&.query_values&.include?('criteria_level,1')
-      redirect_to project_path(@project, criteria_level: 1),
+      redirect_to "#{project_path(@project)}/silver",
                   status: :moved_permanently
+      return
     elsif parsed&.query_values&.include?('criteria_level,0')
-      redirect_to project_path(@project, criteria_level: 0),
+      redirect_to "#{project_path(@project)}/passing",
                   status: :moved_permanently
+      return
     end
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
@@ -278,7 +282,8 @@ class ProjectsController < ApplicationController
         @project.send_new_project_email
         # @project.purge_all
         flash[:success] = t('projects.new.thanks_adding')
-        format.html { redirect_to edit_project_path(@project) }
+        # Redirect to passing level edit form (explicit criteria_level required)
+        format.html { redirect_to "#{project_path(@project)}/passing/edit" }
         format.json { render :show, status: :created, location: @project }
       else
         format.html { render :new }

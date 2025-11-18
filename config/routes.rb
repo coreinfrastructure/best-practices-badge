@@ -52,10 +52,17 @@ end
 # Generate redirect configuration for deprecated criteria levels
 # When locale_in_params=true: 301 permanent (locale from URL, cacheable)
 # When locale_in_params=false: 302 temporary (locale from Accept-Language, varies by user)
-# rubocop:disable Metrics/MethodLength
-def project_level_redirect(new_level, status:, locale_in_params:, suffix: '')
+# exclude_formats: Array of format symbols to exclude (e.g., [:json, :md])
+# rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+def project_level_redirect(
+  new_level,
+  status:,
+  locale_in_params:,
+  suffix: '',
+  exclude_formats: []
+)
   {
-    to: redirect do |params, req|
+    to: redirect(status: status) do |params, req|
       locale =
         if locale_in_params
           params[:locale]
@@ -65,11 +72,24 @@ def project_level_redirect(new_level, status:, locale_in_params:, suffix: '')
         end
       build_redirect_path(locale, params[:id], new_level, suffix, params[:format])
     end,
-    status: status,
-    constraints: locale_in_params ? { locale: LEGAL_LOCALE, id: VALID_ID } : { id: VALID_ID }
+    # Use lambda constraint to check locale, id, and format
+    constraints: lambda { |req|
+      # Check locale format if it's in params (full match required)
+      locale_ok = !locale_in_params ||
+                  req.params[:locale]&.match?(/\A#{LEGAL_LOCALE.source}\z/)
+      # Check ID is numeric (full match required)
+      id_ok = req.params[:id]&.match?(/\A#{VALID_ID.source}\z/)
+      # Check format is not excluded
+      format_ok = exclude_formats.empty? ||
+                  !exclude_formats.include?(req.format.to_sym)
+      # Don't match malformed queries - let controller handle those
+      no_malformed_query = !req.query_string.include?('criteria_level,')
+      # All conditions must be true
+      locale_ok && id_ok && format_ok && no_malformed_query
+    }
   }
 end
-# rubocop:enable Metrics/MethodLength
+# rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
 Rails.application.routes.draw do
   # First, handle routing of special cases.
@@ -193,6 +213,28 @@ Rails.application.routes.draw do
                                      status: 302, locale_in_params: false)
       end
     end
+
+    # Redirect routes without criteria_level to /passing (default)
+    # Use temporary redirect (302) since the default may change per-project in future
+    # Must come BEFORE resources :projects to take precedence over default routes
+
+    # Edit routes (HTML only - no format exclusions needed)
+    get '/:locale/projects/:id/edit(.:format)',
+        **project_level_redirect('passing', suffix: '/edit',
+                                 status: 302, locale_in_params: true)
+    get '/projects/:id/edit(.:format)',
+        **project_level_redirect('passing', suffix: '/edit',
+                                 status: 302, locale_in_params: false)
+
+    # Show routes (exclude JSON and MD - those have special handling in resources)
+    get '/:locale/projects/:id(.:format)',
+        **project_level_redirect('passing', suffix: '',
+                                 status: 302, locale_in_params: true,
+                                 exclude_formats: %i[json md])
+    get '/projects/:id(.:format)',
+        **project_level_redirect('passing', suffix: '',
+                                 status: 302, locale_in_params: false,
+                                 exclude_formats: %i[json md])
 
     resources :projects, constraints: { id: VALID_ID } do
       member do

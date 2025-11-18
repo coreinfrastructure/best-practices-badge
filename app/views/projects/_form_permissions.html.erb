@@ -11,13 +11,19 @@
 </p>
 
 <%# Badge level navigation - permissions is not a badge level %>
-<% next_level_prefix = is_disabled ? project_path : edit_project_path %>
+<%
+  # Generate path-based URLs for badge levels (not query parameters)
+  # Rails auto-generates level_project_path and level_edit_project_path from routes
+  passing_path = is_disabled ? level_project_path(project, 'passing') : level_edit_project_path(project, 'passing')
+  silver_path = is_disabled ? level_project_path(project, 'silver') : level_edit_project_path(project, 'silver')
+  gold_path = is_disabled ? level_project_path(project, 'gold') : level_edit_project_path(project, 'gold')
+%>
 <br>
 <p>
   <%= t('projects.edit.badge_levels_label', default: 'Badge Levels:') %>
-  <a href='<%= next_level_prefix %>?criteria_level=passing' title='<%= t('projects.form_early.level.0') %>'><%= image_tag('passing.svg', size: '53x20', alt: t('projects.form_early.level.0')) %></a>
-  <a href='<%= next_level_prefix %>?criteria_level=silver' title='<%= t('projects.form_early.level.1') %>'><%= image_tag('silver.svg', size: '41x20', alt: t('projects.form_early.level.1')) %></a>
-  <a href='<%= next_level_prefix %>?criteria_level=gold' title='<%= t('projects.form_early.level.2') %>'><%= image_tag('gold.svg', size: '35x20', alt: t('projects.form_early.level.2')) %></a>
+  <a href='<%= passing_path %>' title='<%= t('projects.form_early.level.0') %>'><%= image_tag('passing.svg', size: '53x20', alt: t('projects.form_early.level.0')) %></a>
+  <a href='<%= silver_path %>' title='<%= t('projects.form_early.level.1') %>'><%= image_tag('silver.svg', size: '41x20', alt: t('projects.form_early.level.1')) %></a>
+  <a href='<%= gold_path %>' title='<%= t('projects.form_early.level.2') %>'><%= image_tag('gold.svg', size: '35x20', alt: t('projects.form_early.level.2')) %></a>
 </p>
 
 <%# End column started outside parent %>
@@ -31,7 +37,7 @@
 <div class="row">
   <div class="col-md-12">
     <div>
-      <%= bootstrap_form_for project, url: project_path(project, criteria_level: 'permissions') do |f| %>
+      <%= bootstrap_form_for project, url: put_project_path(project, criteria_level: 'permissions') do |f| %>
         <%= render 'shared/error_messages', object: f.object %>
         <%= f.hidden_field :lock_version %>
 

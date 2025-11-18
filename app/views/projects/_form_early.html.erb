@@ -37,10 +37,17 @@
 <% end %>
 
 <br><br>
+<%
+  # Generate path-based URLs for badge levels (not query parameters)
+  # Rails auto-generates level_project_path and level_edit_project_path from routes
+  passing_path = is_disabled ? level_project_path(project, 'passing') : level_edit_project_path(project, 'passing')
+  silver_path = is_disabled ? level_project_path(project, 'silver') : level_edit_project_path(project, 'silver')
+  gold_path = is_disabled ? level_project_path(project, 'gold') : level_edit_project_path(project, 'gold')
+%>
 <%= t("#{criteria_level}_html", scope: 'projects.form_early.level',
-      passing: %{<a href='#{next_level_prefix}?criteria_level=passing' title='#{t('projects.form_early.level.0')}'>#{image_tag('passing.svg', size: '53x20', alt: t('projects.form_early.level.0'))}</a>}.html_safe,
-      silver: %{<a href='#{next_level_prefix}?criteria_level=silver' title='#{t('projects.form_early.level.1')}'>#{image_tag('silver.svg', size: '41x20', alt: t('projects.form_early.level.1'))}</a>}.html_safe,
-      gold: %{<a href='#{next_level_prefix}?criteria_level=gold' title='#{t('projects.form_early.level.2')}'>#{image_tag('gold.svg', size: '35x20', alt: t('projects.form_early.level.2'))}</a>}.html_safe,
+      passing: %{<a href='#{passing_path}' title='#{t('projects.form_early.level.0')}'>#{image_tag('passing.svg', size: '53x20', alt: t('projects.form_early.level.0'))}</a>}.html_safe,
+      silver: %{<a href='#{silver_path}' title='#{t('projects.form_early.level.1')}'>#{image_tag('silver.svg', size: '41x20', alt: t('projects.form_early.level.1'))}</a>}.html_safe,
+      gold: %{<a href='#{gold_path}' title='#{t('projects.form_early.level.2')}'>#{image_tag('gold.svg', size: '35x20', alt: t('projects.form_early.level.2'))}</a>}.html_safe,
       ) %>
 
 <%# End column started outside. %>

@@ -15,6 +15,9 @@ require 'ipaddr'
 class ApplicationController < ActionController::Base
   include Pagy::Backend
 
+  # Make criteria_level conversion methods available to views
+  helper_method :criteria_level_to_internal, :normalize_criteria_level
+
   # Record the original session value in "original_session".
   # That way can we tell if the session value has changed, and potentially
   # omit it if it has not changed.
@@ -380,16 +383,36 @@ class ApplicationController < ActionController::Base
   end
   # rubocop: enable Metrics/MethodLength
 
-  # Normalize criteria level parameter to internal form
+  # Normalize criteria level to canonical URL-friendly form
   # Handles synonyms like 'passing'/'bronze', 'silver', 'gold'
+  # Converts numeric forms (0, 1, 2) to human-readable names for URL generation
   # Also handles special forms like 'permissions'
-  # Returns: '0', '1', '2', 'permissions', or baseline levels (defaults to '0')
+  # Returns: 'passing', 'silver', 'gold', 'permissions', or baseline levels
+  # Note: Internally (YAML keys, etc.) may still use '0', '1', '2'
   # rubocop:disable Lint/DuplicateBranch
   def normalize_criteria_level(level)
     case level.to_s.downcase
-    when '0', 'passing', 'bronze' then '0'
-    when '1', 'silver' then '1'
-    when '2', 'gold' then '2'
+    when '0', 'passing', 'bronze' then 'passing'
+    when '1', 'silver' then 'silver'
+    when '2', 'gold' then 'gold'
+    when 'permissions' then 'permissions'
+    when 'baseline-1' then 'baseline-1'
+    when 'baseline-2' then 'baseline-2'
+    when 'baseline-3' then 'baseline-3'
+    else 'passing' # Default fallback
+    end
+  end
+  # rubocop:enable Lint/DuplicateBranch
+
+  # Convert URL-friendly criteria level to internal numeric form
+  # Used for rendering partials (e.g., _form_0, _form_1, _form_2)
+  # Returns: '0', '1', '2', 'permissions', or baseline levels
+  # rubocop:disable Lint/DuplicateBranch
+  def criteria_level_to_internal(level)
+    case level.to_s.downcase
+    when 'passing', 'bronze' then '0'
+    when 'silver' then '1'
+    when 'gold' then '2'
     when 'permissions' then 'permissions'
     when 'baseline-1' then 'baseline-1'
     when 'baseline-2' then 'baseline-2'

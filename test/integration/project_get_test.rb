@@ -114,4 +114,26 @@ class ProjectGetTest < ActionDispatch::IntegrationTest
     assert_response :moved_permanently
     assert_redirected_to "/fr/projects/#{@project_one.id}/passing"
   end
+
+  test 'Permissions show page has edit link to permissions edit page' do
+    # Log in as project owner to see edit links
+    log_in_as(users(:test_user))
+    # View the permissions show page
+    get level_project_path(@project_one, 'permissions', locale: 'en')
+    assert_response :success
+    # Verify edit link points to permissions edit page, not passing (0) edit page
+    # 'permissions' stays as 'permissions' (not normalized to a number)
+    assert_select 'a[href=?]', "/en/projects/#{@project_one.id}/permissions/edit"
+  end
+
+  test 'Silver show page has edit link to silver edit page' do
+    # Log in as project owner to see edit links
+    log_in_as(users(:test_user))
+    # View the silver show page
+    get level_project_path(@project_one, 'silver', locale: 'en')
+    assert_response :success
+    # Verify edit link uses human-readable 'silver', not numeric '1'
+    # URLs should always use human-readable forms (passing, silver, gold)
+    assert_select 'a[href=?]', "/en/projects/#{@project_one.id}/silver/edit"
+  end
 end

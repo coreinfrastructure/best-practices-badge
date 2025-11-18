@@ -238,9 +238,11 @@ Rails.application.routes.draw do
         get '' => 'projects#show_markdown',
             constraints: ->(req) { req.format == :md }
         get ':criteria_level(.:format)' => 'projects#show',
-            constraints: { criteria_level: VALID_CRITERIA_LEVEL }
+            constraints: { criteria_level: VALID_CRITERIA_LEVEL },
+            as: :level
         get ':criteria_level/edit(.:format)' => 'projects#edit',
-            constraints: { criteria_level: VALID_CRITERIA_LEVEL }
+            constraints: { criteria_level: VALID_CRITERIA_LEVEL },
+            as: :level_edit
       end
     end
     match(

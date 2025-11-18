@@ -4,7 +4,7 @@
       # to query GitHub, and we don't want to make duplicate external requests
       @cached_can_edit = can_edit?
       if @cached_can_edit %>
-    <li><%= link_to Icon[:'fa-edit'] + t('.edit'), edit_project_path(@project, criteria_level: @criteria_level), rel: 'nofollow ugc' %></li>
+    <li><%= link_to Icon[:'fa-edit'] + t('.edit'), level_edit_project_path(@project, @criteria_level), rel: 'nofollow ugc' %></li>
     <% end %>
     <% if can_control? %>
       <li><%= link_to Icon[:'fa-times-circle'] + t('.delete'), project_path(@project) + '/delete_form', rel: 'nofollow ugc' %></li>
@@ -17,7 +17,7 @@
   </div>
   <div class="col-md-7 col-sm-6">
     <h1 class="m-t-0 h2"><%=@project.try(:name).presence || '(Name Unknown)' %></h2>
-    <%= render "form_#{@criteria_level}", project: @project, is_disabled: true %>
+    <%= render "form_#{criteria_level_to_internal(@criteria_level)}", project: @project, is_disabled: true %>
 <div class="row">
 <div class="col-md-12">
 <strong><%= t '.owned_by' %></strong>
@@ -36,7 +36,7 @@
 <p>
 <%= link_to t('.back'), projects_path %>
 <% if @cached_can_edit %>
-  <%= link_to t('.edit'), edit_project_path(@project), rel: 'nofollow ugc' %>
+  <%= link_to t('.edit'), level_edit_project_path(@project, @criteria_level), rel: 'nofollow ugc' %>
 <% end %>
 <% if can_control? %>
   <%= link_to t('.delete'), { action: :destroy, id: @project.id }, method: :delete, data: { confirm: t('.confirm_delete', project_id: @project.id) } %>

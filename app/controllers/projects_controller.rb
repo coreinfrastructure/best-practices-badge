@@ -866,23 +866,25 @@ class ProjectsController < ApplicationController
   end
 
   # Sets and validates criteria level from parameters.
-  # Ensures criteria_level is a valid level (0-2), defaulting to '0'.
+  # Ensures criteria_level is a valid level, defaulting to 'passing'.
+  # Normalizes numeric forms (0,1,2) and deprecated names to canonical text forms.
   # @return [void] Sets @criteria_level instance variable
   def set_criteria_level
     # Accept both URL-friendly names and numeric IDs
-    level_param = criteria_level_params[:criteria_level] || '0'
+    level_param = criteria_level_params[:criteria_level] || 'passing'
     @criteria_level = normalize_criteria_level(level_param)
   end
 
   # Sets optional criteria level with validation, allowing empty values.
   # Similar to set_criteria_level but permits empty string for optional use.
+  # Normalizes valid levels to canonical text forms.
   # @return [void] Sets @criteria_level instance variable to valid level or ''
   def set_optional_criteria_level
     # Apply input filter on criteria_level. If invalid/empty it becomes ''
     requested_criteria_level = criteria_level_params[:criteria_level] || ''
     @criteria_level =
-      if requested_criteria_level.match?(/\A[0-2]\Z/)
-        requested_criteria_level.to_str
+      if requested_criteria_level.present?
+        normalize_criteria_level(requested_criteria_level)
       else
         ''
       end
@@ -934,7 +936,7 @@ class ProjectsController < ApplicationController
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   # TODO: Break this into smaller pieces
   def successful_update(format, old_badge_level, criteria_level)
-    criteria_level = nil if criteria_level == '0'
+    criteria_level = nil if criteria_level == 'passing'
     # @project.purge
     format.html do
       if params[:continue]

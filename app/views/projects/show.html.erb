@@ -18,6 +18,7 @@
   <div class="col-md-7 col-sm-6">
     <h1 class="m-t-0 h2"><%=@project.try(:name).presence || '(Name Unknown)' %></h2>
     <%= render "form_#{criteria_level_to_internal(@criteria_level)}", project: @project, is_disabled: true %>
+<% unless @criteria_level == 'permissions' %>
 <div class="row">
 <div class="col-md-12">
 <strong><%= t '.owned_by' %></strong>
@@ -44,3 +45,4 @@
 </p>
 </div>
 </div>
+<% end # unless permissions %>

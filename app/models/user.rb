@@ -160,6 +160,7 @@ class User < ApplicationRecord
     # We enforce uniqueness among local email addresses, so it's never a large
     # number of records (it's at most one).
     user = find_by(provider: 'local', email: email)
+    byebug
 
     # This sequence ensures we always do *one* crypto comparison algorithm,
     # whether or not the user exists, eliminating timing attacks since

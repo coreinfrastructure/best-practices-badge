@@ -39,4 +39,32 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
     assert_nothing_raised { a.send(:validate_client_ip_address) }
     Rails.configuration.valid_client_ips = nil # Clean up.
   end
+
+  test 'normalize_criteria_level handles baseline levels' do
+    a = ApplicationController.new
+    assert_equal 'baseline-1', a.normalize_criteria_level('baseline-1')
+    assert_equal 'baseline-2', a.normalize_criteria_level('baseline-2')
+    assert_equal 'baseline-3', a.normalize_criteria_level('baseline-3')
+  end
+
+  test 'normalize_criteria_level handles invalid input with default fallback' do
+    a = ApplicationController.new
+    assert_equal 'passing', a.normalize_criteria_level('invalid')
+    assert_equal 'passing', a.normalize_criteria_level('999')
+    assert_equal 'passing', a.normalize_criteria_level('')
+  end
+
+  test 'criteria_level_to_internal handles baseline levels' do
+    a = ApplicationController.new
+    assert_equal 'baseline-1', a.criteria_level_to_internal('baseline-1')
+    assert_equal 'baseline-2', a.criteria_level_to_internal('baseline-2')
+    assert_equal 'baseline-3', a.criteria_level_to_internal('baseline-3')
+  end
+
+  test 'criteria_level_to_internal handles invalid input with default fallback' do
+    a = ApplicationController.new
+    assert_equal '0', a.criteria_level_to_internal('invalid')
+    assert_equal '0', a.criteria_level_to_internal('999')
+    assert_equal '0', a.criteria_level_to_internal('')
+  end
 end

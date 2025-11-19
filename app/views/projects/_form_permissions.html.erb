@@ -35,11 +35,33 @@
 <%# end row started outside parent %>
 </div>
 
-<% unless is_disabled %>
 <div class="row">
   <div class="col-md-12">
     <div>
-      <%= bootstrap_form_for project, url: put_project_path(project, criteria_level: 'permissions') do |f| %>
+      <% if is_disabled %>
+        <%# Read-only view of permissions %>
+        <br>
+        <div class="panel-group well well-lg well-color">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h2 class="panel-title">
+                <%= t('projects.edit.permissions_panel_title', default: 'Permissions') %>
+              </h2>
+            </div>
+            <div class="panel-collapse collapse in">
+              <ul class="list-group">
+                <li class="list-group-item">
+                  <h3><%= t('projects.edit.collaborator_management', default: 'Collaborator Management') %></h3>
+                  <p><strong><%= t('projects.form_basics.additional_rights_changes.description',
+                        current_rights: project.additional_rights_to_s) %></strong></p>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      <% else %>
+        <%# Editable form %>
+        <%= bootstrap_form_for project, url: put_project_path(project, criteria_level: 'permissions') do |f| %>
         <%= render 'shared/error_messages', object: f.object %>
         <%= f.hidden_field :lock_version %>
 
@@ -62,8 +84,8 @@
                   <p><%= t('projects.edit.permissions_intro', default: 'Manage ownership and collaborator access for this project.') %></p>
 
                   <%# Show ownership transfer for admins and project owners %>
-                  <% if current_user.present? && @project.present? &&
-                        (current_user.admin? || current_user.id == @project.user_id) %>
+                  <% if current_user.present? && project.present? &&
+                        (current_user.admin? || current_user.id == project.user_id) %>
 
                     <%# Ownership Transfer Section %>
                     <div class="row">
@@ -150,8 +172,8 @@
           </div>
         </div>
 
-      <% end # bootstrap_form_for %>
+        <% end # bootstrap_form_for %>
+      <% end # if is_disabled / else %>
     </div>
   </div>
 </div>
-<% end # unless is_disabled %>

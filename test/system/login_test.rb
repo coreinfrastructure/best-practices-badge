@@ -87,15 +87,13 @@ class LoginTest < ApplicationSystemTestCase
     find('#toggle-expand-all-panels').click
     wait_for_jquery
     # NOTE: After routing changes, form state may be different
-    # discussion criterion shows ? when first set to unmet (needs justification)
     ensure_choice 'project_discussion_status_unmet'
     wait_for_jquery # Wait for page to complete update of status icon
-    assert_match QUESTION, find('#discussion_enough')['src']
+    assert_match X, find('#discussion_enough')['src']
 
     ensure_choice 'project_english_status_met'
     wait_for_jquery
-    # english criterion also shows ? initially (form state after save)
-    assert_match QUESTION, find('#english_enough')['src']
+    assert_match CHECK, find('#english_enough')['src']
 
     ensure_choice 'project_contribution_status_met' # No URL given, so fails
     wait_for_jquery
@@ -103,8 +101,7 @@ class LoginTest < ApplicationSystemTestCase
     fill_in 'project_contribution_justification',
             with: 'For more information see: http://www.example.org/'
     wait_for_jquery
-    # Icon update via AJAX may not work in test environment after routing changes
-    assert_match QUESTION, find('#contribution_enough')['src']
+    assert_match CHECK, find('#contribution_enough')['src']
 
     ensure_choice 'project_contribution_requirements_status_unmet' # No URL
     wait_for_jquery
@@ -114,32 +111,28 @@ class LoginTest < ApplicationSystemTestCase
     assert_selector(:css, '#repo_public')
     ensure_choice 'project_repo_public_status_unmet'
     wait_for_jquery
-    # Icons remain as ? after routing changes
-    assert_match QUESTION, find('#repo_public_enough')['src']
+    assert_match X, find('#repo_public_enough')['src']
 
     assert find('#project_repo_distributed_status_')['checked']
     ensure_choice 'project_repo_distributed_status_unmet' # SUGGESTED, so enough
     assert find('#project_repo_distributed_status_unmet')['checked']
     wait_for_jquery
-    assert_match QUESTION, find('#repo_distributed_enough')['src']
+    assert_match DASH, find('#repo_distributed_enough')['src']
 
     # All panels already expanded
     assert_selector(:css, '#report_process')
     ensure_choice 'project_report_process_status_unmet'
     wait_for_jquery
-    assert_match QUESTION, find('#report_process_enough')['src']
+    assert_match X, find('#report_process_enough')['src']
 
     assert_selector(:css, '#english')
-    # Toggle hide met/NA criteria - but since all show as ?, toggle may not work as expected
     find('#toggle-hide-metna-criteria').click
     wait_for_jquery
-    # NOTE: With all criteria showing ?, the toggle behavior may differ
-    # Just verify the toggle button exists and is clickable
+    refute_selector(:css, '#english')
 
     click_on('Submit', match: :first)
     wait_for_jquery
-    # Verify form submitted successfully by checking redirect to show page
-    assert_equal "/en/projects/#{@project.id}/passing", current_path
+    assert_match X, find('#discussion_enough')['src']
   end
   # rubocop:enable Metrics/BlockLength
 

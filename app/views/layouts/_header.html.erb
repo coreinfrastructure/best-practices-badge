@@ -3,16 +3,16 @@
     <nav>
       <div class="navbar-header">
 
+        <div class='nav navbar-nav navbar-left'>
+        <%# don't use root_path, it generates ugly URLs %>
+        <%= link_to t(:cii_best_practices, scope: :layouts), "/#{I18n.locale}", id: 'logo' %>
+       </div>
+
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapsingRightNav" aria-label="<%= t(:toggle_navigation, scope: :layouts) %>">
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-
-        <div class='nav navbar-nav navbar-left'>
-        <%# don't use root_path, it generates ugly URLs %>
-        <%= link_to t(:cii_best_practices, scope: :layouts), "/#{I18n.locale}", id: 'logo' %>
-       </div>
 
       </div>
 

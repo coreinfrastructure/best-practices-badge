@@ -29,20 +29,26 @@
   }
 }
 
+// Use flexbox to vertically center logo and hamburger
+.navbar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 50px;
+}
+
 #logo {
-  background: image-url('openssf_bestpracticesbadge.svg') no-repeat;
-  position: relative;
-  left: 15px;
-  top: -5px;
-  padding: 5px 0 5px 40px;
+  background: image-url('openssf_bestpracticesbadge.svg') no-repeat left center;
+  background-size: 30px 30px;
+  padding-left: 35px;  // Icon width (30px) + 5px spacing
   font-size: 1.2em;
   font-weight: bold;
-  float: left;
   color: #fff;
 }
 
-// Collapse navbar at widths below 1001px to avoid 2-line wrapping
-@media (max-width: 1000px) {
+// Collapse navbar at widths below 1201px to avoid wrapping
+// This overrides Bootstrap's default 768px breakpoint
+@media (max-width: 1200px) {
   .navbar-toggle {
     display: block !important;
   }
@@ -55,6 +61,27 @@
   .navbar-header {
     float: none;
   }
+}
+
+// Medium screens: Keep items horizontal when hamburger menu is expanded
+@media (min-width: 768px) and (max-width: 1200px) {
+  .navbar-collapse.collapse.in {
+    .navbar-nav {
+      float: right !important;
+    }
+    .navbar-nav > li {
+      float: left;
+    }
+  }
+  // Reduce spacing and font size to fit all items including locale
+  .nav.navbar-nav.navbar-right > li > a {
+    font-size: 1em;
+    margin-right: 5px;
+  }
+}
+
+// Small screens: Items vertical when hamburger menu is expanded
+@media (max-width: 767px) {
   .navbar-nav {
     float: none !important;
   }
@@ -64,12 +91,7 @@
 }
 
 // Reduce spacing on wider screens to maximize horizontal space
-@media (min-width: 1001px) {
-  #logo {
-    left: 0;
-    top: 0;
-    margin-bottom: 10px;
-  }
+@media (min-width: 1201px) {
   .navbar .container_padding {
     padding-left: 5px;
     padding-right: 5px;

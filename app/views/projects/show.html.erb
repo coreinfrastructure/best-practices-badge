@@ -3,7 +3,33 @@
       # Cache the value of "can_edit?".  In some cases it will cause us
       # to query GitHub, and we don't want to make duplicate external requests
       @cached_can_edit = can_edit?
-      if @cached_can_edit %>
+    %>
+
+    <%# Section selector dropdown - always visible %>
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        <%= Icon[:'fa-bookmark'] %><%= t('.section_selector') %><b class="caret"></b>
+      </a>
+      <ul class="dropdown-menu reverse-dropdown">
+        <%
+          # Define available sections
+          sections = [
+            { name: t('projects.form_early.level.0'), level: 'passing' },
+            { name: t('projects.form_early.level.1'), level: 'silver' },
+            { name: t('projects.form_early.level.2'), level: 'gold' },
+            { name: t('projects.edit.permissions_panel_title', default: 'Permissions'), level: 'permissions' }
+          ]
+          # Future: Add baseline levels here when implemented
+        %>
+        <% sections.each do |section| %>
+          <li class="<%= 'active' if @criteria_level == section[:level] %>">
+            <%= link_to section[:name], level_project_path(@project, section[:level]) %>
+          </li>
+        <% end %>
+      </ul>
+    </li>
+
+    <% if @cached_can_edit %>
     <li><%= link_to Icon[:'fa-edit'] + t('.edit'), level_edit_project_path(@project, @criteria_level), rel: 'nofollow ugc' %></li>
     <% end %>
     <% if can_control? %>

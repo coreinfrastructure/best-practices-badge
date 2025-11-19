@@ -136,4 +136,16 @@ class ProjectGetTest < ActionDispatch::IntegrationTest
     # URLs should always use human-readable forms (passing, silver, gold)
     assert_select 'a[href=?]', "/en/projects/#{@project_one.id}/silver/edit"
   end
+
+  test 'Section dropdown includes links to other levels' do
+    # View the passing show page
+    get level_project_path(@project_one, 'passing', locale: 'en')
+    assert_response :success
+    # Verify section dropdown contains link to silver level
+    assert_select 'a[href=?]', "/en/projects/#{@project_one.id}/silver"
+    # Verify section dropdown contains link to gold level
+    assert_select 'a[href=?]', "/en/projects/#{@project_one.id}/gold"
+    # Verify section dropdown contains link to permissions
+    assert_select 'a[href=?]', "/en/projects/#{@project_one.id}/permissions"
+  end
 end

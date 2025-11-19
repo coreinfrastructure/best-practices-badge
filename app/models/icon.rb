@@ -12,6 +12,7 @@ class Icon
   class << self
     ICONS_TO_GENERATE = %i[
       fa-address-card
+      fa-bookmark
       fa-edit
       fa-list
       fa-plus

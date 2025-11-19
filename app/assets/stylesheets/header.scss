@@ -41,45 +41,67 @@
   color: #fff;
 }
 
-@media only screen and (min-width: 767px) {
-  #logo
-  {
-    left: 0px;
-    top: 0px;
-    margin-bottom: 10px;
+// Collapse navbar at widths below 1001px to avoid 2-line wrapping
+@media (max-width: 1000px) {
+  .navbar-toggle {
+    display: block !important;
+  }
+  .navbar-collapse.collapse {
+    display: none !important;
+  }
+  .navbar-collapse.collapse.in {
+    display: block !important;
+  }
+  .navbar-header {
+    float: none;
+  }
+  .navbar-nav {
+    float: none !important;
+  }
+  .navbar-nav > li {
+    float: none;
   }
 }
 
-#logo:hover {
-  text-decoration: none;
+// Reduce spacing on wider screens to maximize horizontal space
+@media (min-width: 1001px) {
+  #logo {
+    left: 0;
+    top: 0;
+    margin-bottom: 10px;
+  }
+  .navbar .container_padding {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+  .nav.navbar-nav.navbar-right > li > a {
+    margin-right: 5px;
+  }
 }
 
-//Responsive styles for the header at xs or cell phone size
+// Small screen adjustments
 @media (max-width: 768px) {
   .nav-color {
     padding-top: 10px;
     padding-left: 10px;
   }
-
-  .nav.navbar-nav.navbar-right {
-    // float: right;
-  }
-
-
   .nav.navbar-nav.navbar-right > li > a {
     float: left;
-    display:inline-block;
+    display: inline-block;
     font-size: 0.9em;
-    margin-right: 0px;
+    margin-right: 0;
     margin-left: -5px;
     margin-top: -10px;
-    // padding-bottom: 5px;
   }
-
   .container.container_padding {
     padding-top: 5px;
-    padding-bottom: 0px;
+    padding-bottom: 0;
   }
+  #logo {
+    font-size: 1.2em;
+  }
+}
 
-#logo {font-size: 1.2em;}
+#logo:hover {
+  text-decoration: none;
 }

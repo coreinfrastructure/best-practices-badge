@@ -16,7 +16,7 @@
 <%= render(partial: 'form_early',
            locals:
              {
-               project: project, is_disabled: is_disabled,
+               project: project, view_only: view_only,
                criteria_level: '1', badge_hostname: badge_hostname
              }) %>
 
@@ -45,7 +45,7 @@
             <%= render(partial: 'form_basics',
                  locals:
                    {
-                     project: project, is_disabled: is_disabled,
+                     project: project, view_only: view_only,
                      badge_hostname: badge_hostname, f: f,
                      criteria_level: '1'
                    }) %>
@@ -56,24 +56,24 @@
               ) %>
           <%= render_minor_status(
                 '1', 'Basics', 'Basic project website content',
-                f, project, is_disabled
+                f, project, view_only
               ) %>
           <%= render_minor_status(
-                '1', 'Basics', 'Project oversight', f, project, is_disabled
+                '1', 'Basics', 'Project oversight', f, project, view_only
               ) %>
           <%= render_minor_status(
-                '1', 'Basics', 'Documentation', f, project, is_disabled
+                '1', 'Basics', 'Documentation', f, project, view_only
               ) %>
           <%= render_minor_status(
                 '1', 'Basics', 'Accessibility and internationalization',
-                f, project, is_disabled
+                f, project, view_only
               ) %>
           <%= render_minor_status(
-                '1', 'Basics', 'Other', f, project, is_disabled
+                '1', 'Basics', 'Other', f, project, view_only
               ) %>
           </ul>
 
-      <% unless is_disabled %>
+      <% unless view_only %>
         <div class="panel-footer text-center">
           <%= t 'projects.edit.submit_cdla_permissive_20_html' %>
           <%= f.button t('projects.edit.save_and_continue'), type: 'submit', name: 'continue',
@@ -98,10 +98,10 @@
         <ul class="list-group">
           <%= render_minor_status(
                 '1', 'Change Control', 'Previous versions',
-                f, project, is_disabled
+                f, project, view_only
               ) %>
         </ul>
-        <% unless is_disabled %>
+        <% unless view_only %>
           <div class="panel-footer text-center">
             <%= t 'projects.edit.submit_cdla_permissive_20_html' %>
             <%= f.button t('projects.edit.save_and_continue'), type: 'submit', name: 'continue',
@@ -125,14 +125,14 @@
         <ul class="list-group">
           <%= render_minor_status(
                 '1', 'Reporting', 'Bug-reporting process',
-                f, project, is_disabled
+                f, project, view_only
               ) %>
           <%= render_minor_status(
                 '1', 'Reporting', 'Vulnerability report process',
-                f, project, is_disabled
+                f, project, view_only
               ) %>
         </ul>
-        <% unless is_disabled %>
+        <% unless view_only %>
           <div class="panel-footer text-center">
             <%= t 'projects.edit.submit_cdla_permissive_20_html' %>
             <%= f.button t('projects.edit.save_and_continue'), type: 'submit', name: 'continue',
@@ -155,33 +155,33 @@
       <div class="panel-collapse collapse in remove-in">
         <ul class="list-group">
           <%= render_minor_status(
-                '1', 'Quality', 'Coding standards', f, project, is_disabled
+                '1', 'Quality', 'Coding standards', f, project, view_only
               ) %>
           <%= render_minor_status(
                 '1', 'Quality', 'Working build system',
-                f, project, is_disabled
+                f, project, view_only
               ) %>
           <%= render_minor_status(
                 '1', 'Quality', 'Installation system',
-                f, project, is_disabled
+                f, project, view_only
               ) %>
           <%= render_minor_status(
                 '1', 'Quality', 'Externally-maintained components',
-                f, project, is_disabled
+                f, project, view_only
               ) %>
           <%= render_minor_status(
                 '1', 'Quality', 'Automated test suite',
-                f, project, is_disabled
+                f, project, view_only
               ) %>
           <%= render_minor_status(
                 '1', 'Quality', 'New functionality testing',
-                f, project, is_disabled
+                f, project, view_only
               ) %>
           <%= render_minor_status(
-                '1', 'Quality', 'Warning flags', f, project, is_disabled
+                '1', 'Quality', 'Warning flags', f, project, view_only
               ) %>
         </ul>
-        <% unless is_disabled %>
+        <% unless view_only %>
           <div class="panel-footer text-center">
             <%= t 'projects.edit.submit_cdla_permissive_20_html' %>
             <%= f.button t('projects.edit.save_and_continue'), type: 'submit', name: 'continue',
@@ -205,7 +205,7 @@
         <ul class="list-group">
           <%= render_minor_status(
                 '1', 'Security', 'Secure development knowledge',
-                f, project, is_disabled
+                f, project, view_only
               ) %>
           <li class="list-group-item"><h3 id="section_use_basic_good_cryptographic_practices"><%=
             t('Use basic good cryptographic practices',
@@ -214,7 +214,7 @@
             <span class="criteria-desc">
               <%= t('projects.misc.some_not_crypto_html') %>
             </span>
-            <% if (!is_disabled) %>
+            <% if (!view_only) %>
               <br><br>
               <button class="btn btn-default hidden-print"
                       type="button" id='all_crypto_na'>
@@ -224,19 +224,19 @@
             <% end %>
             <%= render_minor_status(
                   '1', 'Security', 'Use basic good cryptographic practices',
-                  f, project, is_disabled, false
+                  f, project, view_only, false
                 ) %>
           </li>
           <%= render_minor_status(
                 '1', 'Security', 'Secure release',
-                f, project, is_disabled
+                f, project, view_only
               ) %>
           <%= render_minor_status(
                 '1', 'Security', 'Other security issues',
-                f, project, is_disabled
+                f, project, view_only
               ) %>
         </ul>
-        <% unless is_disabled %>
+        <% unless view_only %>
           <div class="panel-footer text-center">
             <%= t 'projects.edit.submit_cdla_permissive_20_html' %>
             <%= f.button t('projects.edit.save_and_continue'), type: 'submit', name: 'continue',
@@ -260,14 +260,14 @@
         <ul class="list-group">
           <%= render_minor_status(
                 '1', 'Analysis', 'Static code analysis',
-                f, project, is_disabled
+                f, project, view_only
               ) %>
           <%= render_minor_status(
                 '1', 'Analysis', 'Dynamic code analysis',
-                f, project, is_disabled
+                f, project, view_only
               ) %>
         </ul>
-        <% unless is_disabled %>
+        <% unless view_only %>
           <div class="panel-footer text-center">
             <%= t 'projects.edit.submit_cdla_permissive_20_html' %>
             <%= f.button t('projects.edit.save_and_continue'), type: 'submit', name: 'continue',
@@ -281,7 +281,7 @@
   </div>
       <br>
       <div class="center">
-      <% if is_disabled %>
+      <% if view_only %>
         <%= t "projects.show.#{project.data_license_field}",
               user: project.user_display_name %>
       <% else %>

@@ -15,7 +15,7 @@
            details: t('projects.form_early.badge_intro.details_html')
 }) %>
 
-<% if is_disabled %>
+<% if view_only %>
   <% next_level_prefix = project_path %>
   <%= t('projects.form_early.got_badge.description_1') %>
   <!-- DO NOT USE /badge_static in README files! --><img src='<%=
@@ -40,9 +40,9 @@
 <%
   # Generate path-based URLs for badge levels (not query parameters)
   # Rails auto-generates level_project_path and level_edit_project_path from routes
-  passing_path = is_disabled ? level_project_path(project, 'passing') : level_edit_project_path(project, 'passing')
-  silver_path = is_disabled ? level_project_path(project, 'silver') : level_edit_project_path(project, 'silver')
-  gold_path = is_disabled ? level_project_path(project, 'gold') : level_edit_project_path(project, 'gold')
+  passing_path = view_only ? level_project_path(project, 'passing') : level_edit_project_path(project, 'passing')
+  silver_path = view_only ? level_project_path(project, 'silver') : level_edit_project_path(project, 'silver')
+  gold_path = view_only ? level_project_path(project, 'gold') : level_edit_project_path(project, 'gold')
 %>
 <%= t("#{criteria_level}_html", scope: 'projects.form_early.level',
       passing: %{<a href='#{passing_path}' title='#{t('projects.form_early.level.0')}'>#{image_tag('passing.svg', size: '53x20', alt: t('projects.form_early.level.0'))}</a>}.html_safe,

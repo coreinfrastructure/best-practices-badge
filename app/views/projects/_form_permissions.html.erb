@@ -15,9 +15,9 @@
 <%
   # Generate path-based URLs for badge levels (not query parameters)
   # Rails auto-generates level_project_path and level_edit_project_path from routes
-  passing_path = is_disabled ? level_project_path(project, 'passing') : level_edit_project_path(project, 'passing')
-  silver_path = is_disabled ? level_project_path(project, 'silver') : level_edit_project_path(project, 'silver')
-  gold_path = is_disabled ? level_project_path(project, 'gold') : level_edit_project_path(project, 'gold')
+  passing_path = view_only ? level_project_path(project, 'passing') : level_edit_project_path(project, 'passing')
+  silver_path = view_only ? level_project_path(project, 'silver') : level_edit_project_path(project, 'silver')
+  gold_path = view_only ? level_project_path(project, 'gold') : level_edit_project_path(project, 'gold')
 %>
 <br>
 <p>
@@ -38,7 +38,7 @@
 <div class="row">
   <div class="col-md-12">
     <div>
-      <% if is_disabled %>
+      <% if view_only %>
         <%# Read-only view of permissions %>
         <br>
         <div class="panel-group well well-lg well-color">
@@ -173,7 +173,7 @@
         </div>
 
         <% end # bootstrap_form_for %>
-      <% end # if is_disabled / else %>
+      <% end # if view_only / else %>
     </div>
   </div>
 </div>

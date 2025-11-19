@@ -61,13 +61,13 @@ module ProjectsHelper
   # Use the status_chooser to render the given criterion.
   # rubocop:disable Metrics/ParameterLists
   def render_status(
-    criterion, f, project, criteria_level, is_disabled, is_last = false
+    criterion, f, project, criteria_level, view_only, is_last = false
   )
     render(
       partial: 'status_chooser',
       locals: {
         f: f, project: project, criteria_level: criteria_level,
-        is_disabled: is_disabled, is_last: is_last,
+        view_only: view_only, is_last: is_last,
         criterion: Criteria[criteria_level][criterion.to_sym]
       }
     )
@@ -101,7 +101,7 @@ module ProjectsHelper
   # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
   # rubocop:disable Metrics/ParameterLists
   def render_minor_status(
-    criteria_level, major, minor, f, project, is_disabled, wrapped = true
+    criteria_level, major, minor, f, project, view_only, wrapped = true
   )
     minor_criteria = FullCriteriaHash[criteria_level][major][minor].keys
     raise NameError if minor_criteria.empty? # Should always be true
@@ -110,7 +110,7 @@ module ProjectsHelper
     results << minor_header_html(minor) if wrapped
     minor_criteria.each do |criterion|
       results << render_status(
-        criterion, f, project, criteria_level, is_disabled,
+        criterion, f, project, criteria_level, view_only,
         criterion == minor_criteria.last
       )
     end

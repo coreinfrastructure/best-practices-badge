@@ -230,20 +230,18 @@ class ApplicationController < ActionController::Base
   # Normalize criteria level to canonical URL-friendly form
   # Handles synonyms like 'passing'/'bronze', 'silver', 'gold'
   # Converts numeric forms (0, 1, 2) to human-readable names for URL generation
-  # Also handles special forms like 'permissions'
   # Returns: 'passing', 'silver', 'gold', 'permissions', or baseline levels
-  # Note: Internally (YAML keys, etc.) may still use '0', '1', '2'
+  # Note: Most routes have constraints, but some don't, so we validate here
   # rubocop:disable Lint/DuplicateBranch
   def normalize_criteria_level(level)
-    case level.to_s.downcase
-    when '0', 'passing', 'bronze' then 'passing'
-    when '1', 'silver' then 'silver'
-    when '2', 'gold' then 'gold'
-    when 'permissions' then 'permissions'
-    when 'baseline-1' then 'baseline-1'
-    when 'baseline-2' then 'baseline-2'
-    when 'baseline-3' then 'baseline-3'
-    else 'passing' # Default fallback
+    case level
+    when '0', 'bronze' then 'passing'
+    when '1' then 'silver'
+    when '2' then 'gold'
+    when 'passing', 'silver', 'gold', 'permissions',
+         'baseline-1', 'baseline-2', 'baseline-3'
+      level
+    else 'passing' # Invalid input defaults to passing
     end
   end
   # rubocop:enable Lint/DuplicateBranch
@@ -251,17 +249,17 @@ class ApplicationController < ActionController::Base
   # Convert URL-friendly criteria level to internal numeric form
   # Used for rendering partials (e.g., _form_0, _form_1, _form_2)
   # Returns: '0', '1', '2', 'permissions', or baseline levels
+  # Note: Most routes have constraints, but some don't, so we validate here
   # rubocop:disable Lint/DuplicateBranch
   def criteria_level_to_internal(level)
-    case level.to_s.downcase
+    case level
     when 'passing', 'bronze' then '0'
     when 'silver' then '1'
     when 'gold' then '2'
-    when 'permissions' then 'permissions'
-    when 'baseline-1' then 'baseline-1'
-    when 'baseline-2' then 'baseline-2'
-    when 'baseline-3' then 'baseline-3'
-    else '0' # Default fallback
+    when '0', '1', '2', 'permissions',
+         'baseline-1', 'baseline-2', 'baseline-3'
+      level
+    else '0' # Invalid input defaults to '0' (passing)
     end
   end
   # rubocop:enable Lint/DuplicateBranch

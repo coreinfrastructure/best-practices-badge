@@ -131,7 +131,6 @@ class LoginTest < ApplicationSystemTestCase
     refute_selector(:css, '#english')
 
     click_on('Submit', match: :first)
-    wait_for_jquery
     assert_match X, find('#discussion_enough')['src']
   end
   # rubocop:enable Metrics/BlockLength

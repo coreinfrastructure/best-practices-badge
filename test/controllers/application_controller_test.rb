@@ -69,5 +69,7 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'baseline-1', a.criteria_level_to_internal('baseline-1')
     assert_equal 'baseline-2', a.criteria_level_to_internal('baseline-2')
     assert_equal 'baseline-3', a.criteria_level_to_internal('baseline-3')
+    # Default
+    assert_equal '0', a.criteria_level_to_internal('unknown_level')
   end
 end

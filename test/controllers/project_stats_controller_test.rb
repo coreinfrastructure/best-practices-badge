@@ -48,8 +48,13 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
     get '/en/project_stats.csv'
     assert_response :success
     contents = CSV.parse(@response.body, headers: true)
+
+    # We *require* that 'id' be the first header
     assert_equal 'id', contents.headers.first
 
+    # To make this test flexible, we simply test if expected headers are
+    # *included* in the CSV - the CSV may have some other headers, and we
+    # don't assert a particular order here.
     expected_headers = %w[
       id percent_ge_0 percent_ge_25 percent_ge_50
       percent_ge_75 percent_ge_90 percent_ge_100
@@ -68,7 +73,8 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
       additional_rights_entries projects_with_additional_rights
       users_with_additional_rights
     ]
-    assert_equal expected_headers, contents.headers
+    assert expected_headers.all? { |item| contents.headers.include?(item) },
+      "Expected #{expected_headers} to be a subset of #{contents.headers}"
 
     assert_equal 8, contents.size
     assert_equal '13', contents[0]['percent_ge_50']

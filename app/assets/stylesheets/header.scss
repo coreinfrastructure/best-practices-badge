@@ -1,4 +1,9 @@
 // Header styles
+
+// Navbar collapse breakpoint - width at which hamburger menu appears
+// This is the maximum width where hamburger shows; items are horizontal above this
+$navbar-collapse-breakpoint: 1200px;
+
 .nav-color {
   background-color: #000;
   padding-top: 10px;
@@ -112,9 +117,9 @@
   color: #fff;
 }
 
-// Collapse navbar at widths below 1201px to avoid wrapping
+// Collapse navbar at widths below breakpoint to avoid wrapping
 // This overrides Bootstrap's default 768px breakpoint
-@media (max-width: 1200px) {
+@media (max-width: $navbar-collapse-breakpoint) {
   .navbar-toggle {
     display: block !important;
   }
@@ -130,7 +135,7 @@
 }
 
 // Medium screens: Keep items horizontal when hamburger menu is expanded
-@media (min-width: 768px) and (max-width: 1200px) {
+@media (min-width: 768px) and (max-width: $navbar-collapse-breakpoint) {
   .navbar-collapse.collapse.in {
     .navbar-nav {
       float: right !important;
@@ -162,7 +167,7 @@
 }
 
 // Reduce spacing on wider screens to maximize horizontal space
-@media (min-width: 1201px) {
+@media (min-width: $navbar-collapse-breakpoint + 1px) {
   // At wide widths, use Bootstrap's float-based layout (NOT flexbox)
   .navbar-header {
     display: block !important;  // Disable flexbox at wide widths
@@ -188,7 +193,9 @@
   }
 
   .nav.navbar-nav.navbar-right > li > a {
-    margin-right: 5px;
+    margin-right: 2px;
+    padding-left: 10px;
+    padding-right: 10px;
   }
 }
 

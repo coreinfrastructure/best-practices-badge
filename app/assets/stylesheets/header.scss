@@ -56,6 +56,12 @@ $navbar-collapse-breakpoint: 1200px;
   margin-right: 20px;
   margin-top: 15px;
   margin-bottom: 15px;
+
+  // Ensure inner progress container fills the width
+  .progress {
+    width: 100%;
+    margin-bottom: 0;
+  }
 }
 
 @media only screen and (min-width: 767px) {
@@ -107,6 +113,24 @@ $navbar-collapse-breakpoint: 1200px;
   }
 }
 
+// Progress bar positioning - two instances for different layouts
+// Collapsed version: shown when hamburger is displayed, centered between logo and hamburger
+.navbar-progress-collapsed {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  justify-content: center;
+
+  #progress-mobile {
+    margin: 0;
+  }
+}
+
+// Expanded version: shown at wide widths, in navbar-right list
+.navbar-progress-expanded {
+  display: none;  // Hidden by default (when hamburger shown)
+}
+
 #logo {
   background: image-url('openssf_bestpracticesbadge.svg') no-repeat left center;
   background-size: 30px 30px;
@@ -131,6 +155,11 @@ $navbar-collapse-breakpoint: 1200px;
   }
   .navbar-header {
     float: none;
+  }
+
+  // When hamburger is displayed, always hide the expanded progress bar
+  .navbar-progress-expanded {
+    display: none !important;
   }
 }
 
@@ -190,7 +219,7 @@ $navbar-collapse-breakpoint: 1200px;
   .navbar-header {
     display: block !important;  // Disable flexbox at wide widths
     float: left !important;
-    width: auto !important;  // Auto width to fit content, not 100%
+    width: auto !important;  // Auto width to fit content
 
     // Remove flexbox pseudo-element hiding only at wide widths
     &::before,
@@ -218,6 +247,15 @@ $navbar-collapse-breakpoint: 1200px;
     margin-right: 2px;
     padding-left: 10px;
     padding-right: 10px;
+  }
+
+  // At wide widths, hide collapsed progress bar and show expanded one
+  .navbar-progress-collapsed {
+    display: none !important;
+  }
+
+  .navbar-progress-expanded {
+    display: list-item !important;  // Show as normal list item
   }
 }
 

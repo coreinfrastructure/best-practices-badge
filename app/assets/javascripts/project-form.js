@@ -667,15 +667,16 @@ function TogglePanel(e) {
 function setupProjectForm() {
   // We're told progress, so don't recalculate - just display it.
   T_HASH = TRANSLATION_HASH_FULL[getLocale()];
-  var badgeProgress = $('#badge-progress');
-  if (badgeProgress && badgeProgress.length) {
+  // Use class selector to handle multiple progress bars (collapsed and expanded)
+  $('.badge-progress').each(function() {
+    var badgeProgress = $(this);
     var percentageScaled = badgeProgress.attr('aria-valuenow');
     if (percentageScaled !== undefined && percentageScaled !== null &&
         percentageScaled !== '') {
       var percentAsString = percentageScaled.toString() + '%';
       badgeProgress.css('width', percentAsString);
     }
-  }
+  });
 
 
   // By default, hide details.  We do the hiding in JavaScript, so

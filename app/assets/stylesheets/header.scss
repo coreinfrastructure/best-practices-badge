@@ -30,11 +30,9 @@
   display: block;
 }
 
-// Override Bootstrap's navbar-brand padding and negative margin
+// Override Bootstrap's navbar-brand negative margin (logo #id has more specific margin)
 .navbar-brand {
-  padding-left: 5px;
-  padding-right: 0;
-  margin-left: 0;  // Override Bootstrap's default -15px
+  margin-left: 0;  // Override Bootstrap's default -15px, #logo sets actual value
 }
 
 // Ensure hamburger button is close to right edge
@@ -89,7 +87,7 @@
   background: image-url('openssf_bestpracticesbadge.svg') no-repeat left center;
   background-size: 30px 30px;
   padding-left: 35px;  // Icon width (30px) + 5px spacing
-  margin-left: 0;  // Override Bootstrap navbar-brand's -15px
+  margin-left: 10px;  // Small left margin for spacing
   font-size: 1.2em;
   font-weight: bold;
   color: #fff;

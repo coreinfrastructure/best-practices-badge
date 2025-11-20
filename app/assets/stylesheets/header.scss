@@ -146,6 +146,30 @@
 
 // Reduce spacing on wider screens to maximize horizontal space
 @media (min-width: 1201px) {
+  // At wide widths, use Bootstrap's float-based layout (NOT flexbox)
+  .navbar-header {
+    display: block !important;  // Disable flexbox at wide widths
+    float: left !important;
+    width: auto !important;  // Auto width to fit content, not 100%
+
+    // Remove flexbox pseudo-element hiding only at wide widths
+    &::before,
+    &::after {
+      display: table !important;  // Restore Bootstrap's clearfix
+      content: " " !important;
+    }
+  }
+
+  .navbar-collapse {
+    display: block !important;
+  }
+
+  .navbar-collapse.collapse {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
   .nav.navbar-nav.navbar-right > li > a {
     margin-right: 5px;
   }

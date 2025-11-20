@@ -40,9 +40,9 @@ $navbar-collapse-breakpoint: 1200px;
   margin-left: 0;  // Override Bootstrap's default -15px, #logo sets actual value
 }
 
-// Ensure hamburger button is close to right edge
+// Ensure hamburger button has space from right edge
 .navbar-toggle {
-  margin-right: 5px;
+  margin-right: 10px;
 }
 
 // Progress bar in navbar (consolidated from projects.scss)
@@ -190,6 +190,10 @@ $navbar-collapse-breakpoint: 1200px;
     display: block !important;
     height: auto !important;
     overflow: visible !important;
+  }
+
+  .nav.navbar-nav.navbar-right {
+    padding-right: 10px;
   }
 
   .nav.navbar-nav.navbar-right > li > a {

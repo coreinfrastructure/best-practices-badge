@@ -4,18 +4,20 @@
  *
  * External gem CSS loaded via Sprockets directives:
  *= require rails_bootstrap_forms
- *= require bootstrap-social
  *= require font_awesome5_webfont
  */
 
-// 1. Bootstrap framework (moved from static_pages.scss)
+// 1. Bootstrap framework (must load BEFORE bootstrap-social)
 @import "bootstrap-sprockets";
 @import "bootstrap";
 
-// 2. Configuration & shared resources
+// 2. Bootstrap extensions (load AFTER bootstrap)
+@import "bootstrap-social";
+
+// 3. Configuration & shared resources
 @import "mixins";
 
-// 3. Base styles (global elements and utilities)
+// 4. Base styles (global elements and utilities)
 @import "base";
 @import "utilities";
 @import "forms";
@@ -61,11 +63,11 @@ textarea {
   padding-right: 3px;
 }
 
-// 4. Layout components (must load AFTER Bootstrap for proper overrides)
+// 5. Layout components (must load AFTER Bootstrap for proper overrides)
 @import "header";
 @import "footer";
 
-// 5. Controller-specific styles
+// 6. Controller-specific styles
 @import "projects";
 @import "users";
 @import "sessions";

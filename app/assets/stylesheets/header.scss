@@ -143,6 +143,10 @@ $navbar-collapse-breakpoint: 1200px;
     .navbar-nav > li {
       float: left;
     }
+    // Dropdowns in horizontal collapsed navbar should appear as overlays
+    .navbar-nav .dropdown-menu {
+      position: absolute;
+    }
   }
   // Reduce spacing and font size to fit all items including locale
   .nav.navbar-nav.navbar-right > li > a {
@@ -163,6 +167,20 @@ $navbar-collapse-breakpoint: 1200px;
   }
   .navbar-nav > li {
     float: none;
+  }
+  // Dropdowns in vertical navbar should flow inline, not overlay
+  .navbar-nav .dropdown-menu {
+    position: static;
+    float: none;
+    width: auto;
+    margin-top: 0;
+    background-color: transparent;
+    border: 0;
+    box-shadow: none;
+  }
+  // Indent dropdown items to show hierarchy
+  .navbar-nav .dropdown-menu > li > a {
+    padding-left: 30px;
   }
 }
 

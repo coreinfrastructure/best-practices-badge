@@ -40,14 +40,22 @@
   margin-right: 5px;
 }
 
-// Vertically center navbar items using Bootstrap 3 approach
-.nav.navbar-nav.navbar-right > li {
-  // Progress bar needs special handling as a block element in navbar
-  .progress {
-    display: inline-block !important;
-    vertical-align: middle !important;
-    margin-top: 15px !important;  // Align with link baseline
-    margin-bottom: 15px !important;
+// Progress bar in navbar (consolidated from projects.scss)
+#progress-mobile {
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  width: 100px;
+  font-size: 0.9em;
+  margin-left: 10px;
+  margin-right: 20px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+@media only screen and (min-width: 767px) {
+  #progress-mobile {
+    width: 110px;
   }
 }
 

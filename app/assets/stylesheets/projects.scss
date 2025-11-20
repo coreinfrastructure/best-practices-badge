@@ -59,30 +59,8 @@ td.project_name {
   padding-right: 5px;
 }
 
-#progress-mobile {
-  position: relative;
-  width: 100px;
-  float: left;
-  display: inline-block;
-  font-size: 0.9em;
-  margin-left: 15px;
-  margin-right: 20px;
-  margin-bottom: 0px;
-  margin-top: -2px;
-}
-
-@media only screen and (min-width: 767px) {
-  #progress-mobile {
-    position: relative;
-    width: 110px;
-    float: left;
-    display: inline-block;
-    font-size: 0.9em;
-    margin-left: 10px;
-    margin-right: 20px;
-    margin-top: 5px;
-  }
-}
+// #progress-mobile styling moved to header.scss
+// (Progress bar is displayed in navbar, so styling belongs there)
 
 // Project badge logo (shown on show/edit/delete pages)
 .main-badge-ques {

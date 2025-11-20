@@ -5,7 +5,8 @@
 }
 
 // Force navbar and all children to full width - testing multiple hypotheses
-.navbar {
+// Use more specific selector to override Bootstrap
+.navbar.navbar-fixed-top {
   width: 100% !important;
   max-width: none !important;
   margin-left: 0 !important;
@@ -76,6 +77,12 @@
   max-width: none !important;
   margin-left: 0 !important;
   margin-right: 0 !important;
+
+  // Remove Bootstrap's clearfix pseudo-elements (they break flexbox)
+  &::before,
+  &::after {
+    display: none !important;
+  }
 }
 
 #logo {

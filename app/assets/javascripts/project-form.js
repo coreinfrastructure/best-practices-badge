@@ -667,7 +667,8 @@ function TogglePanel(e) {
 function setupProjectForm() {
   // We're told progress, so don't recalculate - just display it.
   T_HASH = TRANSLATION_HASH_FULL[getLocale()];
-  // Use class selector to handle multiple progress bars (collapsed and expanded)
+  // Use class selector to handle multiple progress bars
+  // (collapsed and expanded)
   $('.badge-progress').each(function() {
     var badgeProgress = $(this);
     var percentageScaled = badgeProgress.attr('aria-valuenow');

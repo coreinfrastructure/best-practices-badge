@@ -12,17 +12,22 @@
   <%= favicon_link_tag %>
   <%= stylesheet_link_tag    'application', media: 'all' %>
   <%= javascript_include_tag 'application', defer: true %>
-  <link rel="preload" href="<%=
-    stylesheet_path('application') %>" as="style" type="text/css">
-  <link rel="preload" href="<%=
-    javascript_path('application') %>" as="script"
-    type="application/javascript">
-  <%# This preloads only the "regular" Font Awesome fonts. %>
-  <link rel="preload" href="<%=
-    font_path('fa-regular-400.woff2') %>" as="font"
-    type="font/woff2" crossorigin>
-  <link rel="preload" href="<%=
-    image_path('cci-logo-header.png') %>" as="image" type="image/png">
+  <%# Preload resources for faster loading. We don't do this in development;
+    there the debug assets have different names, so preload won't help, and
+    the browser will show misleading warnings about these not being used. %>
+  <% if !Rails.env.development? %>
+    <link rel="preload" href="<%=
+      stylesheet_path('application') %>" as="style" type="text/css">
+    <link rel="preload" href="<%=
+      javascript_path('application') %>" as="script"
+      type="application/javascript">
+    <%# This preloads only the "regular" Font Awesome fonts. %>
+    <link rel="preload" href="<%=
+      font_path('fa-regular-400.woff2') %>" as="font"
+      type="font/woff2" crossorigin>
+    <link rel="preload" href="<%=
+      image_path('cci-logo-header.png') %>" as="image" type="image/png">
+  <% end %>
   <link rel="alternate" type="application/atom+xml" title="<%= t('feed_title') %>" href="/<%= I18n.locale %>/feed" />
   <link rel="publisher" href="https://www.linuxfoundation.org/" />
 <% end # cache for this locale -%>

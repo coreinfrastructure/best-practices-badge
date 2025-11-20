@@ -4,11 +4,47 @@
   padding-top: 10px;
 }
 
+// Force navbar and all children to full width - testing multiple hypotheses
+.navbar {
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.navbar .container-fluid {
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.navbar nav {
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  display: block;
+}
+
+// Override Bootstrap's navbar-brand padding and negative margin
+.navbar-brand {
+  padding-left: 5px;
+  padding-right: 0;
+  margin-left: 0;  // Override Bootstrap's default -15px
+}
+
+// Ensure hamburger button is close to right edge
+.navbar-toggle {
+  margin-right: 5px;
+}
+
 .nav.navbar-nav.navbar-right > li > a {
   color: white;
   font-size: 1.2em;
   margin-right: 10px;
-  margin-top: -10px;
   font-weight: bold;
   &:hover {
   color: #4791FF;
@@ -31,16 +67,22 @@
 
 // Use flexbox to vertically center logo and hamburger
 .navbar-header {
-  display: flex;
-  align-items: center;
+  display: flex !important;
+  flex-direction: row;
+  align-items: stretch;
   justify-content: space-between;
   min-height: 50px;
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
 }
 
 #logo {
   background: image-url('openssf_bestpracticesbadge.svg') no-repeat left center;
   background-size: 30px 30px;
   padding-left: 35px;  // Icon width (30px) + 5px spacing
+  margin-left: 0;  // Override Bootstrap navbar-brand's -15px
   font-size: 1.2em;
   font-weight: bold;
   color: #fff;
@@ -78,6 +120,11 @@
     font-size: 1em;
     margin-right: 5px;
   }
+  // Reduce horizontal padding to maximize space
+  .container.container_padding {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
 }
 
 // Small screens: Items vertical when hamburger menu is expanded
@@ -92,10 +139,6 @@
 
 // Reduce spacing on wider screens to maximize horizontal space
 @media (min-width: 1201px) {
-  .navbar .container_padding {
-    padding-left: 5px;
-    padding-right: 5px;
-  }
   .nav.navbar-nav.navbar-right > li > a {
     margin-right: 5px;
   }
@@ -105,19 +148,20 @@
 @media (max-width: 768px) {
   .nav-color {
     padding-top: 10px;
-    padding-left: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
   }
   .nav.navbar-nav.navbar-right > li > a {
     float: left;
     display: inline-block;
     font-size: 0.9em;
     margin-right: 0;
-    margin-left: -5px;
-    margin-top: -10px;
   }
   .container.container_padding {
     padding-top: 5px;
     padding-bottom: 0;
+    padding-left: 5px;
+    padding-right: 5px;
   }
   #logo {
     font-size: 1.2em;

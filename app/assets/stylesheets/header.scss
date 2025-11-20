@@ -40,6 +40,17 @@
   margin-right: 5px;
 }
 
+// Vertically center navbar items using Bootstrap 3 approach
+.nav.navbar-nav.navbar-right > li {
+  // Progress bar needs special handling as a block element in navbar
+  .progress {
+    display: inline-block !important;
+    vertical-align: middle !important;
+    margin-top: 15px !important;  // Align with link baseline
+    margin-bottom: 15px !important;
+  }
+}
+
 .nav.navbar-nav.navbar-right > li > a {
   color: white;
   font-size: 1.2em;

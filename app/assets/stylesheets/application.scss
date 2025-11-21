@@ -11,7 +11,7 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
 
-// 2. Bootstrap extensions (load AFTER bootstrap)
+// 2. Bootstrap extensions (must load AFTER bootstrap)
 @import "bootstrap-social";
 
 // 3. Configuration & shared resources

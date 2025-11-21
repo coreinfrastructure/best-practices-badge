@@ -58,7 +58,9 @@ function getLocale() {
 
 // Return current level based upon parameters in location.search
 function getLevel() {
-  var levelFromUrl = location.pathname.match('projects/[0-9]*/([0-2])');
+  // Match named levels (passing, silver, gold) or numeric (0, 1, 2)
+  var levelPattern = 'projects/[0-9]*/(passing|silver|gold|[0-2])';
+  var levelFromUrl = location.pathname.match(levelPattern);
   if (levelFromUrl) {
     return levelFromUrl[1];
   }
@@ -665,9 +667,17 @@ function TogglePanel(e) {
 function setupProjectForm() {
   // We're told progress, so don't recalculate - just display it.
   T_HASH = TRANSLATION_HASH_FULL[getLocale()];
-  var percentageScaled = $('#badge-progress').attr('aria-valuenow');
-  var percentAsString = percentageScaled.toString() + '%';
-  $('#badge-progress').css('width', percentAsString);
+  // Use class selector to handle multiple progress bars
+  // (collapsed and expanded)
+  $('.badge-progress').each(function() {
+    var badgeProgress = $(this);
+    var percentageScaled = badgeProgress.attr('aria-valuenow');
+    if (percentageScaled !== undefined && percentageScaled !== null &&
+        percentageScaled !== '') {
+      var percentAsString = percentageScaled.toString() + '%';
+      badgeProgress.css('width', percentAsString);
+    }
+  });
 
 
   // By default, hide details.  We do the hiding in JavaScript, so
@@ -705,7 +715,18 @@ function setupProjectForm() {
   });
 
   if (globalisEditing) {
-    CRITERIA_HASH = CRITERIA_HASH_FULL[getLevel()];
+    var level = getLevel();
+    // Normalize named levels to numeric for CRITERIA_HASH_FULL access
+    if (level === 'passing' || level === 'bronze') {
+      level = '0';
+    }
+    if (level === 'silver') {
+      level = '1';
+    }
+    if (level === 'gold') {
+      level = '2';
+    }
+    CRITERIA_HASH = CRITERIA_HASH_FULL[level];
     $('#project_entry_form').on('criteriaResultHashComplete', function(e) {
       setupProjectFields();
       resetProgressBar();

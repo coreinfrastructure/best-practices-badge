@@ -39,4 +39,37 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
     assert_nothing_raised { a.send(:validate_client_ip_address) }
     Rails.configuration.valid_client_ips = nil # Clean up.
   end
+
+  test 'normalize_criteria_level handles all valid inputs' do
+    a = ApplicationController.new
+    # Numeric to named conversions
+    assert_equal 'passing', a.normalize_criteria_level('0')
+    assert_equal 'silver', a.normalize_criteria_level('1')
+    assert_equal 'gold', a.normalize_criteria_level('2')
+    # Synonym
+    assert_equal 'passing', a.normalize_criteria_level('bronze')
+    # Pass-through values
+    assert_equal 'passing', a.normalize_criteria_level('passing')
+    assert_equal 'permissions', a.normalize_criteria_level('permissions')
+    assert_equal 'baseline-1', a.normalize_criteria_level('baseline-1')
+    assert_equal 'baseline-2', a.normalize_criteria_level('baseline-2')
+    assert_equal 'baseline-3', a.normalize_criteria_level('baseline-3')
+  end
+
+  test 'criteria_level_to_internal handles all valid inputs' do
+    a = ApplicationController.new
+    # Named to numeric conversions
+    assert_equal '0', a.criteria_level_to_internal('passing')
+    assert_equal '0', a.criteria_level_to_internal('bronze')
+    assert_equal '1', a.criteria_level_to_internal('silver')
+    assert_equal '2', a.criteria_level_to_internal('gold')
+    # Pass-through values
+    assert_equal '0', a.criteria_level_to_internal('0')
+    assert_equal 'permissions', a.criteria_level_to_internal('permissions')
+    assert_equal 'baseline-1', a.criteria_level_to_internal('baseline-1')
+    assert_equal 'baseline-2', a.criteria_level_to_internal('baseline-2')
+    assert_equal 'baseline-3', a.criteria_level_to_internal('baseline-3')
+    # Default
+    assert_equal '0', a.criteria_level_to_internal('unknown_level')
+  end
 end

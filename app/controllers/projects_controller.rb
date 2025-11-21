@@ -141,6 +141,7 @@ class ProjectsController < ApplicationController
 
   # Display individual project details with malformed query fixes.
   # Redirects malformed criteria_level queries to proper format.
+  # Note: Redirect for missing criteria_level is now handled in routes.rb
   # Supports `GET /projects/1`.
   # @return [void]
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
@@ -156,14 +157,17 @@ class ProjectsController < ApplicationController
 
     parsed = Addressable::URI.parse(request.original_url)
     if parsed&.query_values&.include?('criteria_level,2')
-      redirect_to project_path(@project, criteria_level: 2),
+      redirect_to "#{project_path(@project)}/gold",
                   status: :moved_permanently
+      return
     elsif parsed&.query_values&.include?('criteria_level,1')
-      redirect_to project_path(@project, criteria_level: 1),
+      redirect_to "#{project_path(@project)}/silver",
                   status: :moved_permanently
+      return
     elsif parsed&.query_values&.include?('criteria_level,0')
-      redirect_to project_path(@project, criteria_level: 0),
+      redirect_to "#{project_path(@project)}/passing",
                   status: :moved_permanently
+      return
     end
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
@@ -278,7 +282,8 @@ class ProjectsController < ApplicationController
         @project.send_new_project_email
         # @project.purge_all
         flash[:success] = t('projects.new.thanks_adding')
-        format.html { redirect_to edit_project_path(@project) }
+        # Redirect to passing level edit form (explicit criteria_level required)
+        format.html { redirect_to "#{project_path(@project)}/passing/edit" }
         format.json { render :show, status: :created, location: @project }
       else
         format.html { render :new }
@@ -861,22 +866,25 @@ class ProjectsController < ApplicationController
   end
 
   # Sets and validates criteria level from parameters.
-  # Ensures criteria_level is a valid level (0-2), defaulting to '0'.
+  # Ensures criteria_level is a valid level, defaulting to 'passing'.
+  # Normalizes numeric forms (0,1,2) and deprecated names to canonical text forms.
   # @return [void] Sets @criteria_level instance variable
   def set_criteria_level
-    @criteria_level = criteria_level_params[:criteria_level] || '0'
-    @criteria_level = '0' unless @criteria_level.match?(/\A[0-2]\Z/)
+    # Accept both URL-friendly names and numeric IDs
+    level_param = criteria_level_params[:criteria_level] || 'passing'
+    @criteria_level = normalize_criteria_level(level_param)
   end
 
   # Sets optional criteria level with validation, allowing empty values.
   # Similar to set_criteria_level but permits empty string for optional use.
+  # Normalizes valid levels to canonical text forms.
   # @return [void] Sets @criteria_level instance variable to valid level or ''
   def set_optional_criteria_level
     # Apply input filter on criteria_level. If invalid/empty it becomes ''
     requested_criteria_level = criteria_level_params[:criteria_level] || ''
     @criteria_level =
-      if requested_criteria_level.match?(/\A[0-2]\Z/)
-        requested_criteria_level.to_str
+      if requested_criteria_level.present?
+        normalize_criteria_level(requested_criteria_level)
       else
         ''
       end
@@ -928,7 +936,7 @@ class ProjectsController < ApplicationController
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   # TODO: Break this into smaller pieces
   def successful_update(format, old_badge_level, criteria_level)
-    criteria_level = nil if criteria_level == '0'
+    criteria_level = nil if criteria_level == 'passing'
     # @project.purge
     format.html do
       if params[:continue]

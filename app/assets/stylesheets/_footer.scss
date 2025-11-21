@@ -1,5 +1,7 @@
 // footer styles
 
+@import "variables";
+
 footer {
   margin-top: 60px;
   padding-top: 5px;
@@ -33,7 +35,7 @@ footer ul li {
   margin-left: 25px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: $screen-sm-min) {
   footer {
     nav {
       float: left;

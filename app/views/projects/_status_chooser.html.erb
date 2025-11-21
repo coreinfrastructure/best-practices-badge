@@ -4,8 +4,8 @@
  criterion_result = project.get_criterion_result(criterion)
 
  cache ['buttons', criterion.to_s, criteria_level, criterion_result,
-        is_disabled, locale, project_criterion_status ] do
-   passing_class = if (criterion_result == :criterion_passing && is_disabled)
+        view_only, locale, project_criterion_status ] do
+   passing_class = if (criterion_result == :criterion_passing && view_only)
                      ' criterion-passing'
                    else
                      ''
@@ -59,16 +59,16 @@
           <fieldset>
           <legend class="hidden"><%= "Criterion [#{criterion}]" %></legend>
           <%= f.radio_button status_symbol, 'Met', label: t('criterion_status.Met'),
-                                                   disabled: is_disabled %>
+                                                   disabled: view_only %>
           <%= f.radio_button status_symbol, 'Unmet', label: t('criterion_status.Unmet'),
-                                                     disabled: is_disabled  %>
+                                                     disabled: view_only  %>
           <% if criterion.na_allowed? %>
             <%= f.radio_button status_symbol, 'N/A', label: t('criterion_status.NA'),
-                                                     disabled: is_disabled  %>
+                                                     disabled: view_only  %>
           <% end %>
           <% unless criterion.minor == 'Prerequisites' %>
             <%= f.radio_button status_symbol, '?', label: '?',
-                                                   disabled: is_disabled  %>
+                                                   disabled: view_only  %>
           <% end %>
           </fieldset>
         </div>
@@ -106,7 +106,7 @@
     <div class="col-xs-12"><%# new section for justification and rule %>
 
     <% justification_symbol = (criterion.to_s + '_justification').to_sym
-       if (is_disabled)
+       if (view_only)
          project_criterion_justification = project[justification_symbol]
          if project_criterion_justification&.presence
            cache ['markdown', project.id, criterion.to_s,
@@ -126,8 +126,8 @@
                       class: 'justification-text', hide_label: true,
                       lang: 'en', spellcheck: true,
                       placeholder:t('projects.misc.in_javascript.unknown_placeholder'),
-                      disabled: is_disabled %>
-    <% end # is_disabled %>
+                      disabled: view_only %>
+    <% end # view_only %>
     <% if is_last %>
       <br>
     <% else %>

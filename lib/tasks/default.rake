@@ -306,6 +306,7 @@ task :whitespace_check do
       ! -path './log/*' ! -path './test/vcr_cassettes/*' \
       ! -path './license_finder_report.html' \
       ! -path './coverage/index.html' \
+      ! -path './public/assets/*' \
       -print0 | \
     xargs -0 file | \
     awk -F': ' '$2 ~ /(text|script)/ && $2 !~ /(executable|binary)/ \
@@ -526,6 +527,12 @@ task :fake_production do
   sh 'RAILS_ENV=fake_production bundle exec rake assets:precompile'
   sh 'RAILS_ENV=fake_production bundle check || bundle install'
   sh 'RAILS_ENV=fake_production rails server -p 4000'
+end
+
+desc 'precompile assets'
+task :precompile do
+  sh 'rm -rf tmp/cache/* public/assets/*'
+  sh 'bundle exec rake assets:precompile'
 end
 
 # rubocop:disable Metrics/MethodLength

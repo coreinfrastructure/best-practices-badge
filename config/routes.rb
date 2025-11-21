@@ -4,6 +4,8 @@
 # OpenSSF Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
+require_relative '../lib/locale_utils'
+
 # rubocop:disable Metrics/BlockLength
 
 # The priority is based upon order of creation:
@@ -13,14 +15,42 @@
 # This regex defines all legal locale values:
 LEGAL_LOCALE ||= /(?:#{I18n.available_locales.join('|')})/
 
+# Canonical lists of valid criteria level names are defined in:
+# config/initializers/00_criteria_levels.rb
+# This includes: METAL_LEVEL_NAMES, METAL_LEVEL_NUMBERS, BASELINE_LEVEL_NAMES,
+# LEVEL_SYNONYMS, SPECIAL_FORMS, and ALL_CRITERIA_LEVEL_NAMES
+
 # This regex is used to verify criteria levels in routes:
-VALID_CRITERIA_LEVEL ||= /[0-2]/
+# Built from ALL_CRITERIA_LEVEL_NAMES - DO NOT edit this directly
+# To add new levels, update config/initializers/00_criteria_levels.rb
+VALID_CRITERIA_LEVEL ||= /#{Regexp.union(ALL_CRITERIA_LEVEL_NAMES)}/
 
 # Confirm that number-only id is provided
 VALID_ID ||= /[1-9][0-9]*/
 
 # Valid values for static badge display
 VALID_STATIC_VALUE ||= /0|[1-9]{1,2}|passing|silver|gold/
+
+# Map of old (deprecated) criteria levels to new (canonical) levels
+# Used to generate redirect routes automatically (DRY)
+LEVEL_REDIRECTS = {
+  '0' => 'passing',
+  '1' => 'silver',
+  '2' => 'gold',
+  'bronze' => 'passing'
+}.freeze
+
+# Simplified redirect helper for project routes
+# Detects locale from params or request, builds redirect path
+# When locale is in params: returns 301 permanent redirect (cacheable)
+# When locale is not in params: returns 302 temporary (varies by Accept-Language)
+def redirect_to_level(new_level, suffix: '', status: 302)
+  redirect(status: status) do |params, req|
+    locale = params[:locale] || LocaleUtils.find_best_locale(req).to_s
+    format_suffix = params[:format] ? ".#{params[:format]}" : ''
+    "/#{locale}/projects/#{params[:id]}/#{new_level}#{suffix}#{format_suffix}"
+  end
+end
 
 Rails.application.routes.draw do
   # First, handle routing of special cases.
@@ -125,6 +155,81 @@ Rails.application.routes.draw do
     get 'feed' => 'projects#feed', defaults: { format: 'atom' }
     get 'reminders' => 'projects#reminders_summary'
 
+    # PERFORMANCE NOTE: These route-level redirects are processed early in the request
+    # cycle, before controllers/models are loaded, using minimal memory. They return
+    # redirect responses directly from the routing layer.
+
+    # Redirects for deprecated level names/numbers to canonical names
+    # Single-hop redirects: 0 → passing (not 0 → bronze → passing)
+    # With locale: 301 permanent (cacheable), without locale: 302 temporary (varies by user)
+
+    LEVEL_REDIRECTS.each do |old_level, new_level|
+      # Show routes: /projects/:id/:old_level -> /projects/:id/:new_level
+      get "/:locale/projects/:id/#{old_level}(.:format)",
+          to: redirect(301) { |p, _|
+            fmt = p[:format] ? ".#{p[:format]}" : ''
+            "/#{p[:locale]}/projects/#{p[:id]}/#{new_level}#{fmt}"
+          },
+          constraints: { id: VALID_ID, locale: LEGAL_LOCALE }
+
+      get "/projects/:id/#{old_level}(.:format)",
+          to: redirect_to_level(new_level, status: 302),
+          constraints: { id: VALID_ID }
+
+      # Edit routes: /projects/:id/:old_level/edit -> /projects/:id/:new_level/edit
+      get "/:locale/projects/:id/#{old_level}/edit(.:format)",
+          to: redirect(301) { |p, _|
+            fmt = p[:format] ? ".#{p[:format]}" : ''
+            "/#{p[:locale]}/projects/#{p[:id]}/#{new_level}/edit#{fmt}"
+          },
+          constraints: { id: VALID_ID, locale: LEGAL_LOCALE }
+
+      get "/projects/:id/#{old_level}/edit(.:format)",
+          to: redirect_to_level(new_level, suffix: '/edit', status: 302),
+          constraints: { id: VALID_ID }
+    end
+
+    # Redirect routes without criteria_level to /passing (default)
+    # Always use temporary redirect (302) since default may change per-project in future
+    # Must come BEFORE resources :projects to take precedence over default routes
+    # Malformed queries (criteria_level,N) are handled by controller with 301 permanent
+
+    # Show routes: Exclude JSON and MD formats (handled specially in resources)
+    get '/:locale/projects/:id(.:format)',
+        to: redirect_to_level('passing', status: 302),
+        constraints: lambda { |req|
+          # Check ID is numeric
+          id_ok = req.params[:id]&.match?(/\A#{VALID_ID.source}\z/)
+          # Check locale is valid
+          locale_ok = req.params[:locale]&.match?(/\A#{LEGAL_LOCALE.source}\z/)
+          # Exclude json and md formats
+          format_ok = !%i[json md].include?(req.format.to_sym)
+          # Don't match malformed queries - let controller handle those
+          no_malformed = !req.query_string.include?('criteria_level,')
+          id_ok && locale_ok && format_ok && no_malformed
+        }
+
+    get '/projects/:id(.:format)',
+        to: redirect_to_level('passing', status: 302),
+        constraints: lambda { |req|
+          # Check ID is numeric
+          id_ok = req.params[:id]&.match?(/\A#{VALID_ID.source}\z/)
+          # Exclude json and md formats
+          format_ok = !%i[json md].include?(req.format.to_sym)
+          # Don't match malformed queries - let controller handle those
+          no_malformed = !req.query_string.include?('criteria_level,')
+          id_ok && format_ok && no_malformed
+        }
+
+    # Edit routes: All formats allowed (no malformed edit queries expected)
+    get '/:locale/projects/:id/edit(.:format)',
+        to: redirect_to_level('passing', suffix: '/edit', status: 302),
+        constraints: { id: VALID_ID, locale: LEGAL_LOCALE }
+
+    get '/projects/:id/edit(.:format)',
+        to: redirect_to_level('passing', suffix: '/edit', status: 302),
+        constraints: { id: VALID_ID }
+
     resources :projects, constraints: { id: VALID_ID } do
       member do
         get 'delete_form' => 'projects#delete_form'
@@ -133,9 +238,11 @@ Rails.application.routes.draw do
         get '' => 'projects#show_markdown',
             constraints: ->(req) { req.format == :md }
         get ':criteria_level(.:format)' => 'projects#show',
-            constraints: { criteria_level: VALID_CRITERIA_LEVEL }
+            constraints: { criteria_level: VALID_CRITERIA_LEVEL },
+            as: :level
         get ':criteria_level/edit(.:format)' => 'projects#edit',
-            constraints: { criteria_level: VALID_CRITERIA_LEVEL }
+            constraints: { criteria_level: VALID_CRITERIA_LEVEL },
+            as: :level_edit
       end
     end
     match(

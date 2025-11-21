@@ -7,6 +7,7 @@
 # rubocop:disable Metrics/ClassLength
 class Criteria
   include ActiveModel::Model
+  include LevelConversion # Shared level name/number conversion
 
   ACCESSORS = %i[
     name category level future
@@ -205,7 +206,8 @@ class Criteria
     return unless field.in? LOCALE_ACCESSORS
 
     Criteria.get_levels(name).reverse_each do |l|
-      next if l.to_i > level.to_i
+      # Compare levels using mapping, not .to_i
+      next if level_higher?(l, level)
 
       t_key = "criteria.#{l}.#{name}.#{field}"
       # Disable HTML output safety. I18n translations are internal data
@@ -215,6 +217,13 @@ class Criteria
       # rubocop:enable Rails/OutputSafety
     end
     nil
+  end
+
+  # Returns true if level1 is higher than level2
+  def level_higher?(level1, level2)
+    level_num1 = level_to_number(level1)
+    level_num2 = level_to_number(level2)
+    level_num1 > level_num2
   end
 end
 # rubocop:enable Metrics/ClassLength

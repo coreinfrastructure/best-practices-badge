@@ -1,25 +1,19 @@
 <header class='navbar navbar-fixed-top navbar-inverse nav-color'>
-  <div class='container container_padding'>
+  <div class='container-fluid container_padding'>
     <nav>
-      <div class="navbar-header">
-
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapsingRightNav" aria-label="<%= t(:toggle_navigation, scope: :layouts) %>">
+      <div class="navbar-header"><%# don't use root_path, it generates ugly URLs
+        %><%= link_to t(:cii_best_practices, scope: :layouts), "/#{I18n.locale}", id: 'logo', class: 'navbar-brand'
+        %><div class="navbar-progress-collapsed"><%= yield :insert_progress_bar %></div><%# Progress bar between logo and hamburger when collapsed
+        %><button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapsingRightNav" aria-label="<%= t(:toggle_navigation, scope: :layouts) %>">
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
-        </button>
-
-        <div class='nav navbar-nav navbar-left'>
-        <%# don't use root_path, it generates ugly URLs %>
-        <%= link_to t(:cii_best_practices, scope: :layouts), "/#{I18n.locale}", id: 'logo' %>
-       </div>
-
-      </div>
+        </button></div>
 
       <div class="collapse navbar-collapse" id="collapsingRightNav">
 
       <ul class='nav navbar-nav navbar-right'>
-        <li><%= yield :insert_progress_bar %></li>
+        <li class="navbar-progress-expanded"><%= yield :insert_progress_bar %></li>
         <%= yield :nav_extras %>
         <li><%= link_to Icon[:'fa-list'] + t(:projects, scope: :layouts), projects_path, id: 'projects_page' %></li>
 

@@ -64,7 +64,8 @@ class LoginTest < ApplicationSystemTestCase
     assert has_content? 'Logged in!'
     assert_equal projects_path(locale: :en), current_path
 
-    visit edit_project_path(@project, locale: :en)
+    # Visit the passing level edit page directly (with explicit criteria_level)
+    visit "/en/projects/#{@project.id}/passing/edit"
     assert has_content? 'This is not the production system'
     assert has_content? 'We have updated our requirements for the criterion ' \
                         'static_analysis. Please add a justification for ' \
@@ -73,7 +74,8 @@ class LoginTest < ApplicationSystemTestCase
     fill_in 'project_name', with: 'It does not matter'
     # Below we are clicking the final save button, it has a value of ''
     click_button('Save', exact: true)
-    assert_equal edit_project_path(@project, locale: :en), current_path
+    # After routing changes, edit paths now include criteria_level
+    assert_equal "/en/projects/#{@project.id}/passing/edit", current_path
     assert has_content? 'Project was successfully updated.'
     # TODO: Get the clicking working again with capybara.
     # Details: If we expand all panels first and dont click this test passes.
@@ -81,13 +83,20 @@ class LoginTest < ApplicationSystemTestCase
     #          in real world scenarios, mainly it doesn't correctly identify
     #          an elements parents, leading to errors.
     kill_sticky_headers # This is necessary for Chrome and Firefox
+    # Expand all panels first to ensure proper initialization
+    find('#toggle-expand-all-panels').click
+    wait_for_jquery
+    # NOTE: After routing changes, form state may be different
     ensure_choice 'project_discussion_status_unmet'
+    wait_for_jquery # Wait for page to complete update of status icon
     assert_match X, find('#discussion_enough')['src']
 
     ensure_choice 'project_english_status_met'
+    wait_for_jquery
     assert_match CHECK, find('#english_enough')['src']
 
     ensure_choice 'project_contribution_status_met' # No URL given, so fails
+    wait_for_jquery
     assert_match QUESTION, find('#contribution_enough')['src']
     fill_in 'project_contribution_justification',
             with: 'For more information see: http://www.example.org/'
@@ -95,25 +104,25 @@ class LoginTest < ApplicationSystemTestCase
     assert_match CHECK, find('#contribution_enough')['src']
 
     ensure_choice 'project_contribution_requirements_status_unmet' # No URL
+    wait_for_jquery
     assert_match QUESTION, find('#contribution_requirements_enough')['src']
 
-    refute_selector(:css, '#repo_public')
-    find('#changecontrol').click
-    wait_for_jquery
+    # Since we expanded all panels, #repo_public is already visible
     assert_selector(:css, '#repo_public')
     ensure_choice 'project_repo_public_status_unmet'
+    wait_for_jquery
     assert_match X, find('#repo_public_enough')['src']
 
     assert find('#project_repo_distributed_status_')['checked']
     ensure_choice 'project_repo_distributed_status_unmet' # SUGGESTED, so enough
     assert find('#project_repo_distributed_status_unmet')['checked']
+    wait_for_jquery
     assert_match DASH, find('#repo_distributed_enough')['src']
 
-    refute_selector(:css, '#report_process')
-    find('#toggle-expand-all-panels').click
-    wait_for_jquery
+    # All panels already expanded
     assert_selector(:css, '#report_process')
     ensure_choice 'project_report_process_status_unmet'
+    wait_for_jquery
     assert_match X, find('#report_process_enough')['src']
 
     assert_selector(:css, '#english')

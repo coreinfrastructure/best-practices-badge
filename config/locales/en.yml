@@ -576,6 +576,7 @@ en:
         You retain copyright (if any), and
         the project license is unaffected.<br><br>
     show:
+      section_selector: Section
       edit: Edit
       delete: Delete
       confirm_delete: >-

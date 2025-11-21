@@ -3,31 +3,18 @@
     followed by starting and finishing another full row. %>
 <% badge_hostname = (ENV['PUBLIC_HOSTNAME'] || 'localhost') %>
 <% provide :insert_progress_bar do %>
-  <div id="progress-mobile" class="progress">
-    <div id="badge-progress"
-         class="progress-bar progress-bar-success badge-progress"
+  <div class="progress-mobile progress">
+    <div class="progress-bar progress-bar-success badge-progress"
          role="progressbar" aria-valuenow="<%= project.badge_percentage_0 %>"
          aria-valuemin="0" aria-valuemax="100">
       <%= project.badge_percentage_0 %>%
     </div>
   </div>
 <% end %>
-<%
-   # If the additional rights list changes, invalidate the cache.
-   # If the performance is too slow, we could directly expire it instead,
-   # but that adds a maintenance headache.
-   additional_rights_list = project.additional_rights.pluck(:user_id).join(',')
-
-   # The badge URL has one value for some time after the project entry
-   # is edited, and then changes. To handle that gracefully, we
-   # expire the cache after a period of time.
-   cache_if ProjectsController::CACHE_SHOW_PROJECT && is_disabled,
-           [project, locale, additional_rights_list],
-            expires_in: 12.hours do %>
 <%= render(partial: 'form_early',
            locals:
              {
-               project: project, is_disabled: is_disabled,
+               project: project, view_only: view_only,
                criteria_level: '0', badge_hostname: badge_hostname
              }) %>
 
@@ -58,7 +45,7 @@
             <%= render(partial: 'form_basics',
                        locals:
                          {
-                           project: project, is_disabled: is_disabled,
+                           project: project, view_only: view_only,
                            badge_hostname: badge_hostname, f: f,
                            criteria_level: '0'
                          }) %>
@@ -76,7 +63,7 @@
                                  'implementation_languages.placeholder'),
                              spellcheck: false,
                              list: 'implementation_language_list',
-                             disabled: is_disabled %>
+                             disabled: view_only %>
            <!-- Some examples from http://wiki.spdx.org/view/FileNoticeExamples -->
            <datalist class="hidden" id="implementation_language_list">
               <option value="-">- (None)</option>
@@ -196,19 +183,19 @@
             <%= f.text_field :cpe,
                   skip_label: true, class:"form-control",
                   placeholder: t('projects.form_basics.cpe.placeholder'),
-                  spellcheck: false, disabled: is_disabled %>
+                  spellcheck: false, disabled: view_only %>
             </div>
           </li>
 
    <%# Note: render() accepts met_suppress: ..., unmet_placeholder:  ... %>
           <li class="list-group-item"><h3 id="section_basic_project_website_content"><%= t('headings.Basic project website content') %></h3>
-            <%= render_status 'description_good', f, project, '0', is_disabled %>
+            <%= render_status 'description_good', f, project, '0', view_only %>
 
-            <%= render_status 'interact', f, project, '0', is_disabled %>
+            <%= render_status 'interact', f, project, '0', view_only %>
 
-            <%= render_status 'contribution', f, project, '0', is_disabled %>
+            <%= render_status 'contribution', f, project, '0', view_only %>
 
-            <%= render_status 'contribution_requirements', f, project, '0', is_disabled, true %>
+            <%= render_status 'contribution_requirements', f, project, '0', view_only, true %>
           </li>
           <li class="list-group-item"><h3 id="section_floss_license"><%=
             t('FLOSS license',
@@ -234,12 +221,12 @@
                 # data is much more likely to be accurate.
                 f.text_field :license,
                              class: 'form-control', hide_label: true,
-                             pattern: '[()A-Za-z0-9\-.+ ]*',
+                             pattern: '[\(\)A-Za-z0-9\-.+ ]*',
                              title:
                                t('projects.form_basics.license.title'),
                              placeholder:
                                t('projects.form_basics.license.placeholder'),
-                             list: 'license_list', disabled: is_disabled %>
+                             list: 'license_list', disabled: view_only %>
            <!-- Some examples from http://wiki.spdx.org/view/FileNoticeExamples -->
            <datalist class="hidden" id="license_list">
               <option value="AGPL-3.0-only">AGPL-3.0-only {GNU Affero General Public License 3.0 only}</option>
@@ -295,85 +282,29 @@
             <hr>
            </div>
 
-            <%= render_status 'floss_license', f, project, '0', is_disabled %>
+            <%= render_status 'floss_license', f, project, '0', view_only %>
 
-            <%= render_status 'floss_license_osi', f, project, '0', is_disabled %>
+            <%= render_status 'floss_license_osi', f, project, '0', view_only %>
 
-            <%= render_status 'license_location', f, project, '0', is_disabled, true %>
+            <%= render_status 'license_location', f, project, '0', view_only, true %>
           <%# End of Basics "identification" section %>
           </li>
 
           <%= render_minor_status(
-                '0', 'Basics', 'Documentation', f, project, is_disabled
+                '0', 'Basics', 'Documentation', f, project, view_only
               ) %>
 
           <%= render_minor_status(
-                '0', 'Basics', 'Other', f, project, is_disabled
+                '0', 'Basics', 'Other', f, project, view_only
               ) %>
         </ul>
-      <% if !is_disabled && current_user &&
-            (current_user.admin? || current_user.id == project.user_id) %>
-        <div class="row">
-        <div class="col-xs-12">
-          <br>
-            <%= t 'projects.edit.new_owner' %>:
-            <%= f.text_field :user_id,
-                             hide_label: true, class:"form-control",
-                             placeholder: nil,
-                             spellcheck: false,
-                             disabled: is_disabled %><br>
-        </div>
-        <div class="col-xs-12">
-          <br>
-            <%= t 'projects.edit.new_owner_repeat' %>:
-            <%# The user must provide the same value here as user_id to
-                cause an ownership change.
-                The client-side pattern here prevents some mistakes.
-                Since it's client-side we don't depend on it for security.
-            %>
-            <input type="text" name="project[user_id_repeat]"
-                   id="project_user_id_repeat" class="form-control"
-                   value="" spellcheck="false" pattern="^(|\d+)$"
-                   placeholder="">
-        </div>
-        </div>
-      <% end %>
-      <div class="row">
-      <div class="col-xs-12">
-        <br>
-        <div class="alert alert-info">
-          <strong><%= t('projects.misc.reminder_notification_note.title') %></strong>
-          <%= t('projects.misc.reminder_notification_note.description_html', user_id: current_user&.id) %>
-        </div>
-      </div>
-      </div>
-
-      <div class="row">
-      <div class="col-xs-12">
-        <%= t 'projects.form_basics.additional_rights_changes.description',
-              current_rights: project.additional_rights_to_s %>
-        <%= render(partial: "details", locals: {
-          criterion: "additional_rights_changes",
-          details:
-            t('projects.form_basics.additional_rights_changes.details_html') })
-        %>
-        <% unless is_disabled %>
-        <%# text_field_tag isn't flexible enough, so create this directly.
-            The client-side pattern here prevents some mistakes,
-            but since it's client-side we don't depend on it for security. %>
-          <input type="text" name="additional_rights_changes"
-                 id="additional_rights_changes" class="form-control"
-                 value="" spellcheck="false"
-                 pattern="^(| *[+-] *(\d+( *, *\d+)*)+)$"
-                 placeholder="<%= t('projects.form_basics.additional_rights_changes.placeholder')%>">
-        <% end # is_disabled %>
-      </div>
-      </div>
+      <%# Ownership transfer and collaborator management moved to
+          /projects/:id/permissions/edit - a dedicated permissions form %>
 
       <br><br>
       <%= f.label :general_comments,
                   t('projects.misc.general_comments.description') %><br>
-      <% if is_disabled %>
+      <% if view_only %>
         <div class="discussion-markdown" id="project_general_comments">
           <%= markdown(project[:general_comments]) %>
         </div>
@@ -383,9 +314,9 @@
                         lang: 'en', spellcheck: true,
                         placeholder:
                           t('projects.misc.general_comments.placeholder'),
-                        disabled: is_disabled %>
+                        disabled: view_only %>
       <% end %>
-      <% unless is_disabled %>
+      <% unless view_only %>
         <div class="panel-footer text-center">
           <%= t 'projects.edit.submit_cdla_permissive_20_html' %>
           <%= f.button t('projects.edit.save_and_continue'), type: 'submit', name: 'continue',
@@ -410,18 +341,18 @@
           <%= render_minor_status(
                 '0', 'Change Control',
                 'Public version-controlled source repository',
-                f, project, is_disabled
+                f, project, view_only
               ) %>
           <%= render_minor_status(
                 '0', 'Change Control', 'Unique version numbering',
-                f, project, is_disabled
+                f, project, view_only
               ) %>
           <%= render_minor_status(
                 '0', 'Change Control', 'Release notes',
-                f, project, is_disabled
+                f, project, view_only
               ) %>
         </ul>
-        <% unless is_disabled %>
+        <% unless view_only %>
           <div class="panel-footer text-center">
             <%= t 'projects.edit.submit_cdla_permissive_20_html' %>
             <%= f.button t('projects.edit.save_and_continue'), type: 'submit', name: 'continue',
@@ -445,15 +376,15 @@
         <ul class="list-group">
           <%= render_minor_status(
                 '0', 'Reporting', 'Bug-reporting process',
-                f, project, is_disabled
+                f, project, view_only
               ) %>
 
           <%= render_minor_status(
                 '0', 'Reporting', 'Vulnerability report process',
-                f, project, is_disabled
+                f, project, view_only
               ) %>
         </ul>
-        <% unless is_disabled %>
+        <% unless view_only %>
           <div class="panel-footer text-center">
             <%= t 'projects.edit.submit_cdla_permissive_20_html' %>
             <%= f.button t('projects.edit.save_and_continue'), type: 'submit', name: 'continue',
@@ -477,25 +408,25 @@
         <ul class="list-group">
           <%= render_minor_status(
                 '0', 'Quality', 'Working build system',
-                f, project, is_disabled
+                f, project, view_only
               ) %>
 
           <%= render_minor_status(
                 '0', 'Quality', 'Automated test suite',
-                f, project, is_disabled
+                f, project, view_only
               ) %>
 
           <%= render_minor_status(
                 '0', 'Quality', 'New functionality testing',
-                f, project, is_disabled
+                f, project, view_only
               ) %>
 
           <%= render_minor_status(
                 '0', 'Quality', 'Warning flags',
-                f, project, is_disabled
+                f, project, view_only
               ) %>
         </ul>
-        <% unless is_disabled %>
+        <% unless view_only %>
           <div class="panel-footer text-center">
             <%= t 'projects.edit.submit_cdla_permissive_20_html' %>
             <%= f.button t('projects.edit.save_and_continue'), type: 'submit', name: 'continue',
@@ -519,7 +450,7 @@
         <ul class="list-group">
           <%= render_minor_status(
                 '0', 'Security', 'Secure development knowledge',
-                f, project, is_disabled
+                f, project, view_only
               ) %>
           <li class="list-group-item"><h3 id="section_use_basic_good_cryptographic_practices"><%=
             t('Use basic good cryptographic practices',
@@ -528,7 +459,7 @@
             <span class="criteria-desc">
               <%= t('projects.misc.some_not_crypto_html') %>
             </span>
-            <% if (!is_disabled) %>
+            <% if (!view_only) %>
               <br><br>
               <button class="btn btn-default hidden-print" type="button" id='all_crypto_na'>
                 <%= t('projects.misc.dont_use_crypto') %>
@@ -538,24 +469,24 @@
             <%# Do *NOT* wrap this with <li>...</li>, we did that already. %>
             <%= render_minor_status(
                   '0', 'Security', 'Use basic good cryptographic practices',
-                  f, project, is_disabled, false
+                  f, project, view_only, false
                 ) %>
           </li>
           <%= render_minor_status(
                 '0', 'Security',
                 'Secured delivery against man-in-the-middle (MITM) attacks',
-                f, project, is_disabled
+                f, project, view_only
               ) %>
           <%= render_minor_status(
                 '0', 'Security', 'Publicly known vulnerabilities fixed',
-                f, project, is_disabled
+                f, project, view_only
               ) %>
           <%= render_minor_status(
                 '0', 'Security', 'Other security issues',
-                f, project, is_disabled
+                f, project, view_only
               ) %>
         </ul>
-        <% unless is_disabled %>
+        <% unless view_only %>
           <div class="panel-footer text-center">
             <%= t 'projects.edit.submit_cdla_permissive_20_html' %>
             <%= f.button t('projects.edit.save_and_continue'), type: 'submit', name: 'continue',
@@ -579,11 +510,11 @@
         <ul class="list-group">
           <%= render_minor_status(
                 '0', 'Analysis', 'Static code analysis',
-                f, project, is_disabled
+                f, project, view_only
               ) %>
           <%= render_minor_status(
                 '0', 'Analysis', 'Dynamic code analysis',
-                f, project, is_disabled
+                f, project, view_only
               ) %>
         </ul>
       </div>
@@ -591,7 +522,7 @@
   </div>
       <br>
       <div class="center">
-      <% if is_disabled %>
+      <% if view_only %>
         <%= t "projects.show.#{project.data_license_field}",
               user: project.user_display_name %>
       <% else %>
@@ -605,4 +536,3 @@
   </div>
 </div>
 </div>
-<% end %>

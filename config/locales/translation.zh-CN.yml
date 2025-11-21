@@ -222,6 +222,7 @@ zh-CN:
       last_lost_html: 最后在%{when}丢失通过徽章。
       last_achieved_html: 最后在 %{when} 获得通过徽章。
       cdla_permissive_20_html:
+      section_selector:
     edit:
       submit_cc_by_3plus_html: >-
         通过提交有关该项目的数据，您同意至少在<a href="https://creativecommons.org/licenses/by/3.0/us"

@@ -362,6 +362,7 @@ fr:
       last_lost_html: Le dernier badge perdu l'a été le %{when}.
       last_achieved_html: Le dernier badge obtenu l'a été le %{when}.
       cdla_permissive_20_html:
+      section_selector:
     edit:
       submit_cc_by_3plus_html: >-
         En soumettant ces données sur le projet, vous acceptez

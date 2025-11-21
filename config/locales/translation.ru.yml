@@ -543,6 +543,7 @@ ru:
         пожалуйста, указывайте "%{user} and the OpenSSF Best Practices
         badge contributors".
       cdla_permissive_20_html:
+      section_selector:
     form_early:
       badge_intro:
         description: >-

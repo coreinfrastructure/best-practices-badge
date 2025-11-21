@@ -46,7 +46,7 @@ $navbar-collapse-breakpoint: 1200px;
 }
 
 // Progress bar in navbar (consolidated from projects.scss)
-#progress-mobile {
+.progress-mobile {
   display: inline-block;
   vertical-align: middle;
   position: relative;
@@ -56,16 +56,11 @@ $navbar-collapse-breakpoint: 1200px;
   margin-right: 20px;
   margin-top: 15px;
   margin-bottom: 15px;
-
-  // Ensure inner progress container fills the width
-  .progress {
-    width: 100%;
-    margin-bottom: 0;
-  }
+  margin-bottom: 0;
 }
 
 @media only screen and (min-width: 767px) {
-  #progress-mobile {
+  .progress-mobile {
     width: 110px;
   }
 }
@@ -121,7 +116,7 @@ $navbar-collapse-breakpoint: 1200px;
   flex: 1;
   justify-content: center;
 
-  #progress-mobile {
+  .progress-mobile {
     margin: 0;
   }
 }
@@ -256,6 +251,7 @@ $navbar-collapse-breakpoint: 1200px;
 
   .navbar-progress-expanded {
     display: list-item !important;  // Show as normal list item
+    margin-right: 15px;  // Space between progress bar and next item
   }
 }
 

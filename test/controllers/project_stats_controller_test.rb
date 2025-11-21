@@ -74,7 +74,7 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
       users_with_additional_rights
     ]
     assert expected_headers.all? { |item| contents.headers.include?(item) },
-      "Expected #{expected_headers} to be a subset of #{contents.headers}"
+           "Expected #{expected_headers} to be a subset of #{contents.headers}"
 
     assert_equal 8, contents.size
     assert_equal '13', contents[0]['percent_ge_50']

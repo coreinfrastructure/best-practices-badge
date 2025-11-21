@@ -3,7 +3,7 @@
     followed by starting and finishing another full row. %>
 <% badge_hostname = (ENV['PUBLIC_HOSTNAME'] || 'localhost') %>
 <% provide :insert_progress_bar do %>
-  <div id="progress-mobile" class="progress">
+  <div class="progress-mobile progress">
     <div class="progress-bar progress-bar-success badge-progress"
          role="progressbar" aria-valuenow="<%= project.badge_percentage_0 %>"
          aria-valuemin="0" aria-valuemax="100">

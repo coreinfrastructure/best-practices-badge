@@ -24,47 +24,6 @@
 @import "utilities";
 @import "forms";
 
-/* Work around a bug in Bootstrap's navigation bar. When the display is narrow,
-   the navigation bar gets longer, but the body padding doesn't adjust.
-   The result is that the navigation bar overlaps the beginning of the
-   body content below it.  This particular workaround is based on:
-   http://stackoverflow.com/questions/10336194/
-   twitter-bootstrap-top-nav-bar-blocking-top-content-of-the-page
-   but note that for us the key breakpoint is width 767px, not 979px.  */
-
-body {
-  padding-top: 80px;
-}
-@media (max-width: 767px) {
-  body {
-    padding-top: 100px;
-  }
-}
-
-html, body {
-  height: 100%;
-}
-
-.container_padding {
-  padding: 1em 0;
-}
-
-.container_margins {
-  min-height: 100%;
-  height: auto;
-  margin: 1.5em auto -9.6em;
-  padding-bottom: 100px;
-}
-
-textarea {
-  min-height: 12ex;
-}
-
-.btn {
-  padding-left: 3px;
-  padding-right: 3px;
-}
-
 // 5. Layout components (must load AFTER Bootstrap for proper overrides)
 @import "header";
 @import "footer";

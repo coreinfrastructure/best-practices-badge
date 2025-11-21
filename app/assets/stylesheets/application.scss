@@ -3,16 +3,18 @@
  * Reorganized to use explicit @import order (not require_tree)
  *
  * External gem CSS loaded via Sprockets directives:
- *= require rails_bootstrap_forms
  *= require font_awesome5_webfont
  */
 
-// 1. Bootstrap framework (must load BEFORE bootstrap-social)
+// 1. Bootstrap framework (must load FIRST)
+// Note: bootstrap-sprockets provides Sass variables/mixins needed by bootstrap
+// so you must import "bootstrap-sprockets" before "bootstrap".
 @import "bootstrap-sprockets";
 @import "bootstrap";
 
 // 2. Bootstrap extensions (must load AFTER bootstrap)
 @import "bootstrap-social";
+@import "rails_bootstrap_forms";
 
 // 3. Configuration & shared resources
 @import "mixins";

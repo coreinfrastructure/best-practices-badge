@@ -1,8 +1,24 @@
 // Header styles
 
 // Navbar collapse breakpoint - width at which hamburger menu appears
-// This is the maximum width where hamburger shows; items are horizontal above this
+// This is the maximum width where hamburger shows;
+// items are horizontal above this
 $navbar-collapse-breakpoint: 1200px;
+
+// LAYOUT STRATEGY - IMPORTANT FOR MAINTAINERS:
+// This navbar uses TWO DIFFERENT layout systems at different breakpoints:
+//
+// 1. NARROW WIDTHS (≤1200px): .navbar-header uses FLEXBOX
+//    - Purpose: Vertically center logo, progress bar, and hamburger button
+//    - Scope: ONLY .navbar-header element, rest uses Bootstrap 3 defaults
+//
+// 2. WIDE WIDTHS (>1200px): Uses FLOAT-BASED layout (Bootstrap 3's approach)
+//    - Purpose: Work WITH Bootstrap 3's float system, not against it
+//    - Scope: All navbar elements use floats
+//
+// These systems are NOT mixed - they switch cleanly at the 1200px breakpoint.
+// Do NOT add flexbox rules at wide widths or float rules inside .navbar-header
+// at narrow widths, as this will create layout conflicts.
 
 .nav-color {
   background-color: #000;
@@ -34,9 +50,10 @@ $navbar-collapse-breakpoint: 1200px;
   display: block;
 }
 
-// Override Bootstrap's navbar-brand negative margin (logo #id has more specific margin)
+// Override Bootstrap's navbar-brand negative margin,
+// #logo sets actual value
 .navbar-brand {
-  margin-left: 0;  // Override Bootstrap's default -15px, #logo sets actual value
+  margin-left: 0;
 }
 
 // Ensure hamburger button has space from right edge
@@ -94,7 +111,8 @@ $navbar-collapse-breakpoint: 1200px;
 }
 
 // Progress bar positioning - two instances for different layouts
-// Collapsed version: shown when hamburger is displayed, centered between logo and hamburger
+// Collapsed version: shown when hamburger is displayed,
+// centered between logo and hamburger
 .navbar-progress-collapsed {
   display: flex;
   align-items: center;
@@ -134,7 +152,9 @@ $navbar-collapse-breakpoint: 1200px;
     display: block !important;
   }
 
-  // Use flexbox to vertically center logo and hamburger
+  // FLEXBOX LAYOUT: Use flexbox to vertically center logo and hamburger
+  // At narrow widths, we need vertical centering
+  // which float-based layouts can't provide
   .navbar-header {
     display: flex;
     flex-direction: row;
@@ -211,7 +231,9 @@ $navbar-collapse-breakpoint: 1200px;
 
 // Reduce spacing on wider screens to maximize horizontal space
 @media (min-width: $navbar-collapse-breakpoint + 1px) {
-  // At wide widths, use Bootstrap's float-based layout (NOT flexbox)
+  // FLOAT-BASED LAYOUT: Switch from flexbox to Bootstrap 3's float system
+  // At wide widths, we work WITH Bootstrap's approach, not against it
+  // WARNING: Do NOT use flexbox here - it will conflict with Bootstrap's navbar
   .navbar-header {
     display: block;
     float: left;

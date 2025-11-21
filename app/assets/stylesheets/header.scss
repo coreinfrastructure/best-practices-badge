@@ -103,7 +103,7 @@ $navbar-collapse-breakpoint: 1200px;
   // Remove Bootstrap's clearfix pseudo-elements (they break flexbox)
   &::before,
   &::after {
-    display: none !important;
+    display: none;
   }
 }
 
@@ -218,8 +218,8 @@ $navbar-collapse-breakpoint: 1200px;
     // Remove flexbox pseudo-element hiding only at wide widths
     &::before,
     &::after {
-      display: table !important;  // Restore Bootstrap's clearfix
-      content: " " !important;
+      display: table;  // Restore Bootstrap's clearfix
+      content: " ";
     }
   }
 

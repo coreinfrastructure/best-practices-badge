@@ -9,29 +9,28 @@ $navbar-collapse-breakpoint: 1200px;
   padding-top: 10px;
 }
 
-// Force navbar and all children to full width - testing multiple hypotheses
-// Use more specific selector to override Bootstrap
+// Navbar width adjustments
 .navbar.navbar-fixed-top {
-  width: 100% !important;
-  max-width: none !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
+  width: 100%;
+  max-width: none;
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .navbar .container-fluid {
-  width: 100% !important;
-  max-width: none !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
+  width: 100%;
+  max-width: none;
+  margin-left: 0;
+  margin-right: 0;
   padding-left: 0;
   padding-right: 0;
 }
 
 .navbar nav {
-  width: 100% !important;
-  max-width: none !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
+  width: 100%;
+  max-width: none;
+  margin-left: 0;
+  margin-right: 0;
   display: block;
 }
 

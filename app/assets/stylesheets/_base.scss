@@ -1,9 +1,6 @@
-// frozen_string_literal: true
+// Base element styles (global HTML elements)
 
 @import "variables";
-
-// Base element styles (global HTML elements)
-// Moved from static_pages.scss during CSS reorganization
 
 /* Work around a bug in Bootstrap's navigation bar. When the display is narrow,
    the navigation bar gets longer, but the body padding doesn't adjust.

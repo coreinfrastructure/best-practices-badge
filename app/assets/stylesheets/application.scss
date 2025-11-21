@@ -1,6 +1,11 @@
 /*
  * Rails asset pipeline manifest for application CSS
- * Reorganized to use explicit @import order (not require_tree)
+ * Reorganized to use explicit @import order (we don't use require_tree)
+ *
+ * For ease of maintenance, we organize CSS in many files.
+ * However, the style commands are merged together on deployment.
+ * So if you want CSS to apply in only some cases, make sure that
+ * your CSS selector is adequately specific.
  *
  * External gem CSS loaded via Sprockets directives:
  *= require font_awesome5_webfont

@@ -1,8 +1,12 @@
-@import "variables";
-
 // Place all the styles related to the Projects controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+// The progress bar is displayed in the header navbar. Thus, the
+// progress bar styling is defined in the _header file.
+
+@import "variables";
+
 // We use "word-wrap: break-word;" to be compatible with IE and Edge,
 // even though word-wrap was renamed to overflow-wrap in CSS3. See:
 // https://makandracards.com/makandra/47957-html-making-browsers-wrap-long-words
@@ -17,8 +21,6 @@ td.license {
 td.project_name {
   word-wrap: break-word;
 }
-
-// === Moved from static_pages.scss during CSS reorganization ===
 
 .criteria-desc {
 }
@@ -57,9 +59,6 @@ td.project_name {
 .badge-progress {
   min-width: 5em;
 }
-
-// #progress-mobile styling moved to header.scss
-// (Progress bar is displayed in navbar, so styling belongs there)
 
 // Project badge logo (shown on show/edit/delete pages)
 .main-badge-ques {

@@ -192,7 +192,7 @@ Rails.application.routes.draw do
     # Redirect routes without criteria_level to /passing (default)
     # Always use temporary redirect (302) since default may change per-project in future
     # Must come BEFORE resources :projects to take precedence over default routes
-    # Malformed queries (criteria_level,N) are handled by controller with 301 permanent
+    # All criteria_level queries (well-formed and malformed) handled by controller
 
     # Show routes: Exclude JSON and MD formats (handled specially in resources)
     get '/:locale/projects/:id(.:format)',
@@ -204,9 +204,9 @@ Rails.application.routes.draw do
           locale_ok = req.params[:locale]&.match?(/\A#{LEGAL_LOCALE.source}\z/)
           # Exclude json and md formats
           format_ok = !%i[json md].include?(req.format.to_sym)
-          # Don't match malformed queries - let controller handle those
-          no_malformed = !req.query_string.include?('criteria_level,')
-          id_ok && locale_ok && format_ok && no_malformed
+          # Don't match any criteria_level queries - let controller handle those
+          no_criteria_level = !req.query_string.include?('criteria_level')
+          id_ok && locale_ok && format_ok && no_criteria_level
         }
 
     get '/projects/:id(.:format)',
@@ -216,9 +216,9 @@ Rails.application.routes.draw do
           id_ok = req.params[:id]&.match?(/\A#{VALID_ID.source}\z/)
           # Exclude json and md formats
           format_ok = !%i[json md].include?(req.format.to_sym)
-          # Don't match malformed queries - let controller handle those
-          no_malformed = !req.query_string.include?('criteria_level,')
-          id_ok && format_ok && no_malformed
+          # Don't match any criteria_level queries - let controller handle those
+          no_criteria_level = !req.query_string.include?('criteria_level')
+          id_ok && format_ok && no_criteria_level
         }
 
     # Edit routes: All formats allowed (no malformed edit queries expected)

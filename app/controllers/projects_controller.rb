@@ -15,7 +15,9 @@ class ProjectsController < ApplicationController
   skip_before_action :redir_missing_locale, only: :badge
 
   before_action :set_project,
-                only: %i[edit update delete_form destroy show show_json show_markdown]
+                only: %i[
+                  edit update delete_form destroy show show_json show_markdown
+                ]
   before_action :require_logged_in, only: :create
   before_action :can_edit_else_redirect, only: %i[edit update]
   before_action :can_control_else_redirect, only: %i[destroy delete_form]
@@ -139,38 +141,15 @@ class ProjectsController < ApplicationController
   end
   # rubocop:disable Metrics/MethodLength
 
-  # Display individual project details with malformed query fixes.
-  # Redirects malformed criteria_level queries to proper format.
+  # Display individual project details with criteria_level query fixes.
+  # Redirects criteria_level queries (well-formed and malformed).
   # Note: Redirect for missing criteria_level is now handled in routes.rb
   # Supports `GET /projects/1`.
   # @return [void]
-  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def show
-    # Fix malformed queries of form "/en/projects/188?criteria_level,2"
-    # These produce parsed.query_values of {"criteria_level,2"=>nil}
-    # They end up as weird special keys, so this is the easy way to detect them
-    # We fix these malformed queries to increase the chance that a user
-    # will find the intended data.
-    # Optimization: only parse URL if query string contains malformed pattern
-    query = request.query_string
-    return if query.exclude?('criteria_level,')
-
-    parsed = Addressable::URI.parse(request.original_url)
-    if parsed&.query_values&.include?('criteria_level,2')
-      redirect_to "#{project_path(@project)}/gold",
-                  status: :moved_permanently
-      return
-    elsif parsed&.query_values&.include?('criteria_level,1')
-      redirect_to "#{project_path(@project)}/silver",
-                  status: :moved_permanently
-      return
-    elsif parsed&.query_values&.include?('criteria_level,0')
-      redirect_to "#{project_path(@project)}/passing",
-                  status: :moved_permanently
-      return
-    end
+    redirect_well_formed_criteria_level_query
+    redirect_malformed_criteria_level_query
   end
-  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   # Return project data in JSON format with CDN cache headers.
   # Supports `GET /projects/1.json`.
@@ -311,7 +290,9 @@ class ProjectsController < ApplicationController
       # Determine if we're trying to change ownership.
       # Only admins and owner (can_control?) can change ownership
       new_owner = final_project_params[:user_id]
-      owner_change = new_owner.present? && (new_owner == final_project_params[:user_id_repeat]) && User.exists?(id: new_owner)
+      owner_change = new_owner.present? &&
+                     (new_owner == final_project_params[:user_id_repeat]) &&
+                     User.exists?(id: new_owner)
       if !can_control? || !owner_change
         final_project_params = final_project_params.except('user_id')
       end
@@ -455,8 +436,8 @@ class ProjectsController < ApplicationController
   # Database fields for HTML index display (performance optimization)
   HTML_INDEX_FIELDS = 'projects.id, projects.name, description, ' \
                       'homepage_url, repo_url, license, projects.user_id, ' \
-                      'achieved_passing_at, projects.updated_at, badge_percentage_0, ' \
-                      'tiered_percentage'
+                      'achieved_passing_at, projects.updated_at, ' \
+                      'badge_percentage_0, tiered_percentage'
 
   private
 
@@ -562,7 +543,7 @@ class ProjectsController < ApplicationController
     redirect_to root_path
   end
 
-  # Verifies that the current user can control the project, or redirects to root.
+  # Verifies that the current user can control the project or redirects to root.
   # Used as a before_action filter to enforce control permissions.
   # @return [Boolean] True if user can control, otherwise redirects to root
   def can_control_else_redirect
@@ -867,7 +848,8 @@ class ProjectsController < ApplicationController
 
   # Sets and validates criteria level from parameters.
   # Ensures criteria_level is a valid level, defaulting to 'passing'.
-  # Normalizes numeric forms (0,1,2) and deprecated names to canonical text forms.
+  # Normalizes numeric forms (0,1,2) and deprecated names to
+  # canonical text forms.
   # @return [void] Sets @criteria_level instance variable
   def set_criteria_level
     # Accept both URL-friendly names and numeric IDs
@@ -888,6 +870,32 @@ class ProjectsController < ApplicationController
       else
         ''
       end
+  end
+
+  # Redirects well-formed criteria_level query parameters to canonical URLs.
+  # Handles queries like "/projects/1?criteria_level=1" → "/projects/1/silver"
+  # @return [void] Performs redirect if criteria_level query param found
+  def redirect_well_formed_criteria_level_query
+    return unless request.query_parameters[:criteria_level]
+
+    normalized = normalize_criteria_level(
+      request.query_parameters[:criteria_level]
+    )
+    redirect_to "#{project_path(@project)}/#{normalized}",
+                status: :moved_permanently
+  end
+
+  # Redirects malformed criteria_level query parameters to canonical URLs.
+  # Handles queries like "/projects/1?criteria_level,2" → "/projects/1/gold"
+  # We someday remove this (if we stop getting these malformed requests).
+  # @return [void] Performs redirect if malformed criteria_level query found
+  def redirect_malformed_criteria_level_query
+    return unless request.query_string.start_with?('criteria_level,')
+
+    extracted_value = request.query_string.delete_prefix('criteria_level,')
+    normalized = normalize_criteria_level(extracted_value)
+    redirect_to "#{project_path(@project)}/#{normalized}",
+                status: :moved_permanently
   end
 
   # Generates a clean URL by removing invalid query parameters.

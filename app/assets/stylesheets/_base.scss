@@ -1,5 +1,7 @@
 // frozen_string_literal: true
 
+@import "variables";
+
 // Base element styles (global HTML elements)
 // Moved from static_pages.scss during CSS reorganization
 
@@ -8,14 +10,13 @@
    The result is that the navigation bar overlaps the beginning of the
    body content below it.  This particular workaround is based on:
    http://stackoverflow.com/questions/10336194/
-   twitter-bootstrap-top-nav-bar-blocking-top-content-of-the-page
-   but note that for us the key breakpoint is width 767px, not 979px.  */
+   twitter-bootstrap-top-nav-bar-blocking-top-content-of-the-page */
 
 body {
   padding-top: 80px;
 }
 
-@media (max-width: 767px) {
+@media (max-width: $screen-xs-max) {
   body {
     padding-top: 100px;
   }

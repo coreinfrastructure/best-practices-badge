@@ -1,3 +1,5 @@
+@import "variables";
+
 // Place all the styles related to the Projects controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
@@ -75,7 +77,7 @@ td.project_name {
   }
 }
 
-@media only screen and (max-width: 767px) {
+@media only screen and (max-width: $screen-xs-max) {
   .main-badge-ques {
     position: relative;
     top: 20px;

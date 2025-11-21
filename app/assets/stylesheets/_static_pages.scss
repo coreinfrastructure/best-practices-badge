@@ -1,3 +1,5 @@
+@import "variables";
+
 // Place all the styles related to the StaticPages controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
@@ -57,14 +59,14 @@
   }
 }
 
-@media only screen and (min-width: 481px) and (max-width: 767px) {
+@media only screen and (min-width: $screen-xs-custom) and (max-width: $screen-xs-max) {
   .home-badge {
     margin: auto;
     background-size: 200px 200px;
   }
 }
 
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: $screen-sm-min) {
   .home-badge {
     background-size: 250px 250px;
   }

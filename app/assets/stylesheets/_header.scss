@@ -1,9 +1,6 @@
-// Header styles
+@import "variables";
 
-// Navbar collapse breakpoint - width at which hamburger menu appears
-// This is the maximum width where hamburger shows;
-// items are horizontal above this
-$navbar-collapse-breakpoint: 1200px;
+// Header styles
 
 // LAYOUT STRATEGY - IMPORTANT FOR MAINTAINERS:
 // This navbar uses TWO DIFFERENT layout systems at different breakpoints:
@@ -75,7 +72,7 @@ $navbar-collapse-breakpoint: 1200px;
   margin-bottom: 0;
 }
 
-@media only screen and (min-width: 767px) {
+@media only screen and (min-width: $screen-sm-min) {
   .progress-mobile {
     width: 110px;
   }
@@ -160,7 +157,7 @@ $navbar-collapse-breakpoint: 1200px;
 }
 
 // Collapse navbar at widths below breakpoint to avoid wrapping
-// This overrides Bootstrap's default 768px breakpoint
+// This overrides Bootstrap's default breakpoint
 @media (max-width: $navbar-collapse-breakpoint) {
   .navbar-toggle {
     display: block !important;
@@ -200,7 +197,7 @@ $navbar-collapse-breakpoint: 1200px;
 }
 
 // Medium screens: Keep items horizontal when hamburger menu is expanded
-@media (min-width: 768px) and (max-width: $navbar-collapse-breakpoint) {
+@media (min-width: $screen-sm-min) and (max-width: $navbar-collapse-breakpoint) {
   .navbar-collapse.collapse.in {
     .navbar-nav {
       float: right;
@@ -226,7 +223,7 @@ $navbar-collapse-breakpoint: 1200px;
 }
 
 // Small screens: Items vertical when hamburger menu is expanded
-@media (max-width: 767px) {
+@media (max-width: $screen-xs-max) {
   .navbar-nav {
     float: none;
   }
@@ -299,7 +296,7 @@ $navbar-collapse-breakpoint: 1200px;
 }
 
 // Small screen adjustments
-@media (max-width: 768px) {
+@media (max-width: $screen-sm-min) {
   .nav-color {
     padding-top: 10px;
     padding-left: 5px;

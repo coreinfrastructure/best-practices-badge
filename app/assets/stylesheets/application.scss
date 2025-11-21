@@ -6,6 +6,11 @@
  *= require font_awesome5_webfont
  */
 
+// IMPORTANT: Shared variables are in _variables.scss
+// Each SCSS file that uses variables must @import "variables" at the top.
+// This must be done in each such file for the variables to work
+// in Rails development mode, where files are compiled in isolation.
+
 // 1. Bootstrap framework (must load FIRST)
 // Note: bootstrap-sprockets provides Sass variables/mixins needed by bootstrap
 // so you must import "bootstrap-sprockets" before "bootstrap".

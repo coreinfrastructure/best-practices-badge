@@ -263,6 +263,7 @@ ja:
       last_lost_html: 最後に%{when}にバッジ合格できませんでした。
       last_achieved_html: 最後に%{when}にバッジ合格を達成しました。
       cdla_permissive_20_html:
+      section_selector:
     edit:
       submit_cc_by_3plus_html: >-
         プロジェクトに関するこのデータを送信することにより、少なくとも、<a href="https://creativecommons.org/licenses/by/3.0/us"

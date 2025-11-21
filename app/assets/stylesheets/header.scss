@@ -163,7 +163,7 @@ $navbar-collapse-breakpoint: 1200px;
 @media (min-width: 768px) and (max-width: $navbar-collapse-breakpoint) {
   .navbar-collapse.collapse.in {
     .navbar-nav {
-      float: right !important;
+      float: right;
     }
     .navbar-nav > li {
       float: left;
@@ -188,7 +188,7 @@ $navbar-collapse-breakpoint: 1200px;
 // Small screens: Items vertical when hamburger menu is expanded
 @media (max-width: 767px) {
   .navbar-nav {
-    float: none !important;
+    float: none;
   }
   .navbar-nav > li {
     float: none;

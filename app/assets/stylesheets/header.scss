@@ -95,9 +95,29 @@ $navbar-collapse-breakpoint: 1200px;
   background-color: #222;
   &>li>a{
     color: #fff;
+    // All items have checkmark content for alignment, but transparent by default
+    &::before {
+      content: "\2713\00a0";  // Checkmark + non-breaking space
+      color: transparent;  // Invisible but reserves space
+      font-weight: bold;
+    }
     &:hover{
     color: #4791FF;;
     background-color: #000;
+    }
+  }
+  // Style active/current menu item (Bootstrap 3 standard approach)
+  &>li.active>a {
+    background-color: #000;
+    color: #4791FF;
+    font-weight: bold;
+    &:hover {
+      background-color: #000;
+      color: #4791FF;
+    }
+    // Make checkmark visible for active item
+    &::before {
+      color: #4791FF;  // Show the checkmark
     }
   }
   &>.divider {

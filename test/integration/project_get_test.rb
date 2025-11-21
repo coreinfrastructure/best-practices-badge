@@ -6,6 +6,7 @@
 
 require 'test_helper'
 
+# rubocop:disable Metrics/ClassLength
 class ProjectGetTest < ActionDispatch::IntegrationTest
   setup do
     # @user = users(:test_user)
@@ -96,23 +97,69 @@ class ProjectGetTest < ActionDispatch::IntegrationTest
 
   test 'Redirect malformed query string criteria_level,2' do
     get project_path(id: @project_one.id, locale: 'en') + '?criteria_level,2'
-    # Should redirect
     assert_response :moved_permanently
     assert_redirected_to "/en/projects/#{@project_one.id}/gold"
   end
 
   test 'Redirect malformed query string criteria_level,1' do
     get project_path(id: @project_one.id, locale: 'de') + '?criteria_level,1'
-    # Should redirect
     assert_response :moved_permanently
     assert_redirected_to "/de/projects/#{@project_one.id}/silver"
   end
 
   test 'Redirect malformed query string criteria_level,0' do
     get project_path(id: @project_one.id, locale: 'fr') + '?criteria_level,0'
-    # Should redirect
     assert_response :moved_permanently
     assert_redirected_to "/fr/projects/#{@project_one.id}/passing"
+  end
+
+  test 'Redirect well-formed query string criteria_level=1 to silver' do
+    get project_path(id: @project_one.id, locale: 'en') + '?criteria_level=1'
+    assert_response :moved_permanently
+    assert_redirected_to "/en/projects/#{@project_one.id}/silver"
+  end
+
+  test 'Redirect no-locale malformed query string criteria_level,1' do
+    get project_path(id: @project_one.id, locale: nil) + '?criteria_level,1'
+    assert_response :found
+    # We do a 2-step redirect because the *locale* causes :found
+    assert_redirected_to "/en/projects/#{@project_one.id}?criteria_level,1"
+  end
+
+  test 'Redirect well-formed query string criteria_level=2 to gold' do
+    get project_path(id: @project_one.id, locale: 'de') + '?criteria_level=2'
+    assert_response :moved_permanently
+    assert_redirected_to "/de/projects/#{@project_one.id}/gold"
+  end
+
+  test 'Redirect well-formed query string criteria_level=0 to passing' do
+    get project_path(id: @project_one.id, locale: 'fr') + '?criteria_level=0'
+    assert_response :moved_permanently
+    assert_redirected_to "/fr/projects/#{@project_one.id}/passing"
+  end
+
+  test 'Redirect well-formed query string criteria_level=silver to silver' do
+    get project_path(id: @project_one.id, locale: 'en') + '?criteria_level=silver'
+    assert_response :moved_permanently
+    assert_redirected_to "/en/projects/#{@project_one.id}/silver"
+  end
+
+  test 'Redirect well-formed query string criteria_level=gold to gold' do
+    get project_path(id: @project_one.id, locale: 'de') + '?criteria_level=gold'
+    assert_response :moved_permanently
+    assert_redirected_to "/de/projects/#{@project_one.id}/gold"
+  end
+
+  test 'Redirect well-formed query string criteria_level=passing to passing' do
+    get project_path(id: @project_one.id, locale: 'fr') + '?criteria_level=passing'
+    assert_response :moved_permanently
+    assert_redirected_to "/fr/projects/#{@project_one.id}/passing"
+  end
+
+  test 'Redirect no-locale well-formed query criteria_level=1 to silver' do
+    get project_path(id: @project_one.id, locale: nil) + '?criteria_level=1'
+    assert_response :found
+    assert_redirected_to "/en/projects/#{@project_one.id}?criteria_level=1"
   end
 
   test 'Permissions show page has edit link to permissions edit page' do
@@ -149,3 +196,4 @@ class ProjectGetTest < ActionDispatch::IntegrationTest
     assert_select 'a[href=?]', "/en/projects/#{@project_one.id}/permissions"
   end
 end
+# rubocop:enable Metrics/ClassLength

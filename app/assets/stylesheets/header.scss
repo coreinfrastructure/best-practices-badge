@@ -88,23 +88,9 @@ $navbar-collapse-breakpoint: 1200px;
   }
 }
 
-// Use flexbox to vertically center logo and hamburger
+// Navbar header base styles (all widths)
 .navbar-header {
-  display: flex !important;
-  flex-direction: row;
-  align-items: stretch;
-  justify-content: space-between;
   min-height: 50px;
-  width: 100% !important;
-  max-width: none !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-
-  // Remove Bootstrap's clearfix pseudo-elements (they break flexbox)
-  &::before,
-  &::after {
-    display: none;
-  }
 }
 
 // Progress bar positioning - two instances for different layouts
@@ -147,8 +133,24 @@ $navbar-collapse-breakpoint: 1200px;
   .navbar-collapse.collapse.in {
     display: block !important;
   }
+
+  // Use flexbox to vertically center logo and hamburger
   .navbar-header {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: space-between;
+    width: 100%;
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
     float: none;
+
+    // Remove Bootstrap's clearfix pseudo-elements (they break flexbox)
+    &::before,
+    &::after {
+      display: none;
+    }
   }
 
   // When hamburger is displayed, always hide the expanded progress bar
@@ -211,14 +213,14 @@ $navbar-collapse-breakpoint: 1200px;
 @media (min-width: $navbar-collapse-breakpoint + 1px) {
   // At wide widths, use Bootstrap's float-based layout (NOT flexbox)
   .navbar-header {
-    display: block !important;  // Disable flexbox at wide widths
-    float: left !important;
-    width: auto !important;  // Auto width to fit content
+    display: block;
+    float: left;
+    width: auto;
 
-    // Remove flexbox pseudo-element hiding only at wide widths
+    // Restore Bootstrap's clearfix for float-based layout
     &::before,
     &::after {
-      display: table;  // Restore Bootstrap's clearfix
+      display: table;
       content: " ";
     }
   }

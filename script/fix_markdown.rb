@@ -93,7 +93,8 @@ def fix_markdown(input_file, output_file, dry_run: false, verbose: true)
     next_line = i < lines.length - 1 ? lines[i + 1] : nil
 
     # Check if current line is a code fence (before any other processing)
-    is_code_fence = line.strip.start_with?('```')
+    # Markdown supports both ``` (backticks) and ~~~ (tildes)
+    is_code_fence = line.strip.start_with?('```', '~~~')
 
     # Track if we're entering or exiting a code fence
     # This must be done BEFORE toggling the state
@@ -119,7 +120,8 @@ def fix_markdown(input_file, output_file, dry_run: false, verbose: true)
     is_header = !in_code_fence && line =~ /^#+\s+.+/
 
     # Check if current line starts a list
-    is_list_start = line =~ /^(\s*)[-*+]\s+/ || line =~ /^(\s*)\d+\.\s+/
+    # For ordered lists, require non-whitespace after the period (not just newline)
+    is_list_start = line =~ /^(\s*)[-*+]\s+/ || line =~ /^(\s*)\d+\.\s+\S/
 
     # Check if current line is a list continuation (indented text, not a list marker)
     is_list_continuation = line =~ /^\s+\S/ && !is_list_start && !is_header && !is_code_fence
@@ -131,18 +133,18 @@ def fix_markdown(input_file, output_file, dry_run: false, verbose: true)
     next_blank = next_line.nil? || next_line.strip.empty?
 
     # Check if previous line is part of a list (item or continuation)
-    prev_is_list = prev_line && (prev_line =~ /^(\s*)[-*+]\s+/ || prev_line =~ /^(\s*)\d+\.\s+/ ||
+    prev_is_list = prev_line && (prev_line =~ /^(\s*)[-*+]\s+/ || prev_line =~ /^(\s*)\d+\.\s+\S/ ||
                                  (prev_line =~ /^\s+\S/ && !prev_blank))
 
     # Check if next line is part of a list (item or continuation)
-    next_is_list = next_line && (next_line =~ /^(\s*)[-*+]\s+/ || next_line =~ /^(\s*)\d+\.\s+/ ||
+    next_is_list = next_line && (next_line =~ /^(\s*)[-*+]\s+/ || next_line =~ /^(\s*)\d+\.\s+\S/ ||
                                  (next_line =~ /^\s+\S/ && !next_blank))
 
     # MD031: Add blank line before code fence if missing
     # Only add before OPENING fence (entering a code block)
     if entering_code_fence && !prev_blank && prev_line
       # Don't add if previous line is also a code fence (closing then opening)
-      unless prev_line.strip.start_with?('```')
+      unless prev_line.strip.start_with?('```', '~~~')
         fixed_lines << "\n"
         fixes_made += 1
         warn "Fixed MD031 at line #{i + 1}: added blank before code fence" if verbose
@@ -160,8 +162,8 @@ def fix_markdown(input_file, output_file, dry_run: false, verbose: true)
     end
 
     # MD032: Add blank line before list if missing
-    # Only add if transitioning FROM non-list TO list
-    if is_list_start && !prev_blank && prev_line && !prev_is_list
+    # Only add if transitioning FROM non-list TO list (and not inside code block)
+    if is_list_start && !in_code_fence && !prev_blank && prev_line && !prev_is_list
       fixed_lines << "\n"
       fixes_made += 1
       warn "Fixed MD032 at line #{i + 1}: added blank before list" if verbose
@@ -174,7 +176,7 @@ def fix_markdown(input_file, output_file, dry_run: false, verbose: true)
     # Only add after CLOSING fence (exiting a code block)
     if exiting_code_fence && !next_blank && next_line
       # Don't add if next line is also a code fence
-      unless next_line.strip.start_with?('```')
+      unless next_line.strip.start_with?('```', '~~~')
         fixed_lines << "\n"
         fixes_made += 1
         warn "Fixed MD031 at line #{i + 2}: added blank after code fence" if verbose
@@ -184,7 +186,8 @@ def fix_markdown(input_file, output_file, dry_run: false, verbose: true)
     # MD022: Add blank line after header if missing
     if is_header && !next_blank && next_line
       # Don't add if next line is another header, horizontal rule, or code fence
-      unless next_line =~ /^#+\s+/ || next_line.strip == '---' || next_line.strip.start_with?('```')
+      unless next_line =~ /^#+\s+/ || next_line.strip == '---' ||
+             next_line.strip.start_with?('```') || next_line.strip.start_with?('~~~')
         fixed_lines << "\n"
         fixes_made += 1
         warn "Fixed MD022 at line #{i + 2}: added blank after header" if verbose
@@ -193,7 +196,8 @@ def fix_markdown(input_file, output_file, dry_run: false, verbose: true)
 
     # MD032: Add blank line after list if transitioning FROM list TO non-list
     # Current line is a list item/continuation AND next line is NOT part of the list
-    if (is_list_start || is_list_continuation) && next_line && !next_blank && !next_is_list
+    # (and not inside code block)
+    if (is_list_start || is_list_continuation) && !in_code_fence && next_line && !next_blank && !next_is_list
       fixed_lines << "\n"
       fixes_made += 1
       warn "Fixed MD032 at line #{i + 2}: added blank after list" if verbose

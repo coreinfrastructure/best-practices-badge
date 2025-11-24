@@ -107,6 +107,34 @@ The OpenSSF Baseline criteria are:
 
 **Manual synchronization would be error-prone and time-consuming**. An automated sync system ensures we stay current with baseline updates.
 
+### Hybrid Storage Architecture
+
+**We use a hybrid approach for storing baseline criteria to balance sync simplicity with translation infrastructure:**
+
+1. **Source of Truth**: `criteria/baseline_criteria.yml`
+   - Contains ALL baseline criteria fields including `description` and `details`
+   - Directly written by the sync process
+   - Single file to review when baseline criteria change
+   - Has a header comment explaining the hybrid approach
+
+2. **Translation Layer**: `config/locales/en.yml` (and other language files)
+   - Contains ONLY `description`, `details`, and placeholder fields for i18n
+   - Automatically extracted from `baseline_criteria.yml` via `rake baseline:extract_i18n`
+   - Allows baseline criteria to use the same translation workflow as existing criteria
+   - Special marker comments (`# BEGIN BASELINE CRITERIA AUTO-GENERATED` and `# END BASELINE CRITERIA AUTO-GENERATED`) delimit the auto-generated section
+   - Existing YAML comments outside markers are preserved
+
+3. **Runtime Behavior**:
+   - Application loads criteria metadata from `criteria/baseline_criteria.yml`
+   - Application loads translatable text from `config/locales/*.yml` (via Rails i18n)
+   - Consistent with existing criteria (levels 0, 1, 2)
+
+**Rationale**: This hybrid approach provides:
+- Simple sync (writes one file with all data)
+- Consistent translation workflow (extracts to locale files like existing criteria)
+- Clear separation of concerns (source data vs. localized data)
+- Build-time validation (ensures files stay in sync)
+
 ### Architecture Overview
 
 The baseline criteria sync system follows this flow:
@@ -121,15 +149,22 @@ The baseline criteria sync system follows this flow:
    - Parses content
    - Maps external format to our data model
    - **Intelligently merges** with existing criteria (preserves local customizations)
-   - Generates/updates local files
+   - Generates/updates `criteria/baseline_criteria.yml` with ALL fields
    - Only updates requirement/recommendation text from upstream
 
-3. **Generated Outputs**:
-   - **`criteria/baseline_criteria.yml`** - Baseline criteria in our YAML format
+3. **i18n Extraction**: Rake task `rake baseline:extract_i18n`
+   - Reads `description` and `details` from `criteria/baseline_criteria.yml`
+   - Updates `config/locales/en.yml` between marker comments
+   - Preserves all existing YAML comments and structure
+   - Prepares baseline criteria for translation workflow
+
+4. **Generated Outputs**:
+   - **`criteria/baseline_criteria.yml`** - Baseline criteria in our YAML format (includes description/details)
+   - **`config/locales/en.yml`** - English translations extracted (between markers)
    - **`config/baseline_field_mapping.json`** - Maps baseline IDs to database field names
    - **`.baseline_sync_metadata.json`** - Tracks sync version and timestamp (gitignored)
 
-4. **Optional: Migration Generation**:
+5. **Optional: Migration Generation**:
    - Rake task `rake baseline:generate_migration`
    - Compares mapping with existing database schema
    - Auto-generates migration for new fields
@@ -239,6 +274,11 @@ namespace :baseline do
   desc 'Download and sync baseline criteria from official source'
   task sync: :environment do
     BaselineCriteriaSync.new.sync
+  end
+
+  desc 'Extract i18n strings from baseline_criteria.yml to config/locales/en.yml'
+  task extract_i18n: :environment do
+    BaselineI18nExtractor.new.extract
   end
 
   desc 'Show current baseline criteria version'
@@ -662,9 +702,185 @@ The baseline sync system is designed to intelligently merge upstream updates whi
 - If a criterion is **renamed** upstream (different ID), it's treated as new and you'll need to re-apply customizations
 - Always review `git diff` after sync to see what changed
 
-#### 4. Migration Generator
+#### 4. Baseline i18n Extractor Class
+
+**New file**: `lib/baseline_i18n_extractor.rb`
+
+**Purpose**: Extracts `description`, `details`, and placeholder fields from `criteria/baseline_criteria.yml` and writes them to `config/locales/en.yml` for translation. This allows baseline criteria to use the same translation workflow as existing criteria.
+
+**Key Requirements**:
+
+- **Preserve existing YAML comments**: Must not destroy comments outside the baseline section
+- **Use marker comments**: Section between `# BEGIN BASELINE CRITERIA AUTO-GENERATED` and `# END BASELINE CRITERIA AUTO-GENERATED` is managed automatically
+- **Safe YAML parsing/writing**: Must maintain YAML structure and formatting
+
+```ruby
+
+# frozen_string_literal: true
+
+# Extracts i18n strings from baseline_criteria.yml to config/locales/en.yml
+
+class BaselineI18nExtractor
+  BEGIN_MARKER = '# BEGIN BASELINE CRITERIA AUTO-GENERATED'.freeze
+  END_MARKER = '# END BASELINE CRITERIA AUTO-GENERATED'.freeze
+  MARKER_WARNING = '# WARNING: This section is automatically generated from criteria/baseline_criteria.yml'.freeze
+  MARKER_DO_NOT_EDIT = '# Do not edit manually. Run: rake baseline:extract_i18n'.freeze
+
+  def initialize
+    @baseline_criteria_file = BASELINE_CONFIG[:criteria_file]
+    @en_locale_file = Rails.root.join('config', 'locales', 'en.yml')
+  end
+
+  def extract
+    puts "Extracting i18n strings from #{@baseline_criteria_file}..."
+
+    # Load baseline criteria
+    baseline_criteria = load_baseline_criteria
+
+    # Extract translatable fields
+    i18n_data = extract_i18n_data(baseline_criteria)
+
+    # Update en.yml preserving existing content
+    update_locale_file(i18n_data)
+
+    puts "✓ i18n extraction complete!"
+    puts "  Updated: #{@en_locale_file}"
+  end
+
+  private
+
+  def load_baseline_criteria
+    unless File.exist?(@baseline_criteria_file)
+      raise "Baseline criteria file not found: #{@baseline_criteria_file}"
+    end
+
+    YAML.safe_load_file(
+      @baseline_criteria_file,
+      permitted_classes: [Symbol],
+      aliases: true
+    )
+  end
+
+  # Extract description, details, placeholders from criteria
+  def extract_i18n_data(criteria)
+    i18n_hash = {}
+
+    criteria.each do |level, level_data|
+      next if level == '_metadata' # Skip metadata
+
+      i18n_hash[level] = {}
+
+      traverse_criteria(level_data) do |criterion_key, criterion_data|
+        fields = {}
+        fields['description'] = criterion_data['description'] if criterion_data['description']
+        fields['details'] = criterion_data['details'] if criterion_data['details']
+        fields['met_placeholder'] = criterion_data['met_placeholder'] if criterion_data['met_placeholder']
+        fields['unmet_placeholder'] = criterion_data['unmet_placeholder'] if criterion_data['unmet_placeholder']
+        fields['na_placeholder'] = criterion_data['na_placeholder'] if criterion_data['na_placeholder']
+
+        i18n_hash[level][criterion_key] = fields unless fields.empty?
+      end
+    end
+
+    i18n_hash
+  end
+
+  # Recursively traverse nested criteria structure
+  def traverse_criteria(data, &block)
+    return unless data.is_a?(Hash)
+
+    data.each do |key, value|
+      if value.is_a?(Hash)
+        # Check if this is a criterion (has 'category' field) or a category/subcategory
+        if value.key?('category')
+          yield(key, value)
+        else
+          # Recurse into category/subcategory
+          traverse_criteria(value, &block)
+        end
+      end
+    end
+  end
+
+  # Update en.yml preserving existing content and comments
+  def update_locale_file(i18n_data)
+    # Read the entire file
+    content = File.read(@en_locale_file)
+
+    # Find marker positions
+    begin_pos = content.index(BEGIN_MARKER)
+    end_pos = content.index(END_MARKER)
+
+    if begin_pos.nil? || end_pos.nil?
+      # Markers not found - add them at the end of criteria section
+      insert_markers_and_content(content, i18n_data)
+    else
+      # Replace content between markers
+      replace_between_markers(content, i18n_data, begin_pos, end_pos)
+    end
+  end
+
+  def insert_markers_and_content(content, i18n_data)
+    # Find the criteria: section and insert after existing criteria
+    # This is a simplified implementation - may need adjustment based on actual file structure
+    raise "Implementation needed: Insert markers into en.yml at appropriate location"
+  end
+
+  def replace_between_markers(content, i18n_data, begin_pos, end_pos)
+    # Extract content before and after markers
+    before_markers = content[0...begin_pos]
+    after_end_marker_line = content.index("\n", end_pos) || content.length
+    after_markers = content[after_end_marker_line..-1]
+
+    # Generate new content between markers
+    generated_content = generate_yaml_content(i18n_data)
+
+    # Combine
+    new_content = before_markers + generated_content + after_markers
+
+    # Write back
+    File.write(@en_locale_file, new_content)
+  end
+
+  def generate_yaml_content(i18n_data)
+    lines = []
+    lines << "  #{BEGIN_MARKER}"
+    lines << "  #{MARKER_WARNING}"
+    lines << "  #{MARKER_DO_NOT_EDIT}"
+
+    i18n_data.each do |level, criteria|
+      criteria.each do |criterion_key, fields|
+        lines << "    #{criterion_key}:"
+        fields.each do |field_name, field_value|
+          # Format as YAML with proper indentation and escaping
+          lines << "      #{field_name}: #{field_value.to_yaml.strip}"
+        end
+      end
+    end
+
+    lines << "  #{END_MARKER}"
+    lines.join("\n") + "\n"
+  end
+end
+
+```
+
+**Usage**:
+
+```bash
+
+# After running baseline:sync, extract i18n strings
+rake baseline:extract_i18n
+
+```
+
+**Important**: This task should be run after every `baseline:sync` to keep locale files in sync with baseline criteria.
+
+#### 5. Migration Generator
 
 **New file**: `lib/baseline_migration_generator.rb`
+
+(Note: Section numbers updated - this was previously section 4)
 
 ```ruby
 
@@ -806,7 +1022,7 @@ end
 
 ```
 
-#### 5. Validator
+#### 6. Validator
 
 **New file**: `lib/baseline_criteria_validator.rb`
 
@@ -2287,6 +2503,16 @@ Phase 1 is specifically designed to make adding baseline criteria easier in subs
 
 **Goal**: Set up baseline sync system and add database columns for baseline-1 criteria, ensuring incremental deployment.
 
+**Hybrid Storage Approach**: This phase implements the hybrid architecture where:
+- `criteria/baseline_criteria.yml` is the source of truth (includes description/details)
+- `config/locales/en.yml` contains extracted translations (between marker comments)
+- `rake baseline:extract_i18n` synchronizes between the two files
+- See "Hybrid Storage Architecture" section above for rationale
+
+Note that there's no need for a special *additional* prefix of
+baseline criteria. All baseline criteria *already* have a special prefix,
+and we can build on that.
+
 ### 2.1: Set Up Baseline Sync Infrastructure
 
 **Purpose**: Before adding any baseline criteria, set up the automated sync system.
@@ -2318,10 +2544,6 @@ baseline:
   criteria_file: 'criteria/baseline_criteria.yml'
   mapping_file: 'config/baseline_field_mapping.json'
 
-# Field naming rules
-
-  field_prefix: 'baseline_'
-
 # Metadata
 
   sync_metadata_file: '.baseline_sync_metadata.json'
@@ -2351,6 +2573,7 @@ EOF
 
 3. **Create lib classes** (see Baseline Criteria Sync System section for full code):
    - `lib/baseline_criteria_sync.rb`
+   - `lib/baseline_i18n_extractor.rb` (NEW: extracts i18n to locale files)
    - `lib/baseline_migration_generator.rb`
    - `lib/baseline_criteria_validator.rb`
 
@@ -2377,6 +2600,7 @@ echo ".baseline_sync_metadata.json" >> .gitignore
 rake -T baseline
 
 # Should show:
+# rake baseline:extract_i18n        # Extract i18n strings from baseline_criteria.yml to config/locales/en.yml
 # rake baseline:generate_migration  # Generate migration for new baseline criteria
 # rake baseline:sync                # Download and sync baseline criteria from official source
 # rake baseline:validate            # Validate baseline criteria mapping
@@ -2388,7 +2612,7 @@ rake -T baseline
 
 **Purpose**: Download baseline criteria, but initially limit to just 2 criteria for testing.
 
-**Option A: Use real baseline but filter** (recommended):
+We will use the real baseline but filter.
 
 ```ruby
 
@@ -2431,15 +2655,28 @@ BASELINE_TEST_MODE=true rake baseline:sync
 
 ```
 
-**Option B: Create manual stub** (if OpenSSF source not ready):
-
-**Manual stub file**: `criteria/baseline_criteria.yml`
-
-**New file**: `criteria/baseline_criteria.yml`
-
-**Initial content** (2 stub criteria for testing):
+Note that we expect `criteria/baseline_criteria.yml`
+to eventually look something like this:
 
 ```yaml
+
+# Baseline Criteria - Auto-generated from OpenSSF Baseline
+#
+# This file is the SOURCE OF TRUTH for baseline criteria metadata.
+# It contains ALL fields including description and details.
+#
+# TRANSLATION WORKFLOW:
+# - The 'description', 'details', and placeholder fields are automatically
+#   extracted to config/locales/en.yml by running: rake baseline:extract_i18n
+# - At runtime, the application loads metadata from this file and
+#   translatable text from config/locales/*.yml
+#
+# SYNC PROCESS:
+# - This file is generated by: rake baseline:sync
+# - After sync, run: rake baseline:extract_i18n
+# - Then run: rake baseline:generate_migration (if new criteria were added)
+#
+# See docs/baseline_details.md for full documentation.
 
 --- !!omap
 _metadata:
@@ -2488,7 +2725,99 @@ rake baseline:generate_migration
 
 This creates a migration with ~2-4 database fields (2 criteria × 2 fields each).
 
-### 2.3: Update Criteria Loading Logic
+### 2.3: Prepare config/locales/en.yml for Auto-Generated Content
+
+**Purpose**: Add marker comments to `config/locales/en.yml` to delimit where baseline criteria translations will be inserted.
+
+**File**: `config/locales/en.yml`
+
+**Add markers** at the end of the `criteria:` section (after existing criteria for levels '0', '1', '2'):
+
+Find the end of the criteria section (search for the line after the last criterion, typically before `headings:` or similar). Insert:
+
+```yaml
+
+  criteria:
+    '0':
+      # ... existing level 0 criteria ...
+    '1':
+      # ... existing level 1 criteria ...
+    '2':
+      # ... existing level 2 criteria ...
+    # BEGIN BASELINE CRITERIA AUTO-GENERATED
+    # WARNING: This section is automatically generated from criteria/baseline_criteria.yml
+    # Do not edit manually. Run: rake baseline:extract_i18n
+    # END BASELINE CRITERIA AUTO-GENERATED
+  headings:
+    # ... rest of file ...
+
+```
+
+**Important Notes**:
+
+- The markers MUST be at the correct indentation level (2 spaces for `#` at the `criteria:` level)
+- Content between markers will be completely replaced by `rake baseline:extract_i18n`
+- Comments and structure outside the markers are preserved
+- Initially the section between markers is empty
+
+**Verification**:
+
+```bash
+
+# Check that markers are present
+grep -n "BEGIN BASELINE CRITERIA" config/locales/en.yml
+grep -n "END BASELINE CRITERIA" config/locales/en.yml
+
+# Both should return line numbers
+
+```
+
+### 2.4: Extract i18n Strings from Baseline Criteria
+
+**Purpose**: Extract `description`, `details`, and placeholder fields from the baseline criteria stub into the locale file.
+
+**Command**:
+
+```bash
+
+rake baseline:extract_i18n
+
+```
+
+**What this does**:
+
+1. Reads `criteria/baseline_criteria.yml`
+2. Extracts translatable fields (description, details, placeholders)
+3. Updates content between markers in `config/locales/en.yml`
+4. Preserves all existing comments and structure outside markers
+
+**Verify the extraction**:
+
+```bash
+
+# View the extracted content
+sed -n '/BEGIN BASELINE CRITERIA/,/END BASELINE CRITERIA/p' config/locales/en.yml
+
+```
+
+Expected output should show the extracted criteria with proper YAML structure:
+
+```yaml
+
+  # BEGIN BASELINE CRITERIA AUTO-GENERATED
+  # WARNING: This section is automatically generated from criteria/baseline_criteria.yml
+  # Do not edit manually. Run: rake baseline:extract_i18n
+    baseline_osps_gv_03_01:
+      description: The project documentation MUST include an explanation of the contribution process.
+      details: Document how contributors can submit changes, what the review process is, and how decisions are made.
+    baseline_osps_do_01_01:
+      description: The project documentation MUST include basic information about the project's purpose, how to use it, and how to contribute.
+      details: This includes README files, contribution guidelines, and governance documentation.
+  # END BASELINE CRITERIA AUTO-GENERATED
+
+```
+
+### 2.5: Update Criteria Loading Logic
 
 **File**: `config/initializers/criteria_hash.rb`
 
@@ -2598,7 +2927,7 @@ exit
 
 **Rationale**: The initializer runs at Rails startup and loads criteria into memory. This approach allows both metal and baseline criteria to coexist.
 
-### 2.4: Generate and Run Migration for Baseline-1 Stub
+### 2.6: Generate and Run Migration for Baseline-1 Stub
 
 **Command**:
 
@@ -2696,7 +3025,7 @@ rails db:migrate
 - Field names from sync use official baseline IDs: `baseline_osps_gv_03_01`
 - All baseline fields have `baseline_` prefix for easy identification
 
-### 2.5: Update Project Model for Baseline Badge Percentage
+### 2.7: Update Project Model for Baseline Badge Percentage
 
 **File**: `app/models/project.rb`
 
@@ -2802,7 +3131,7 @@ end
 
 ```
 
-### 2.6: Update Schema Validations
+### 2.8: Update Schema Validations
 
 **File**: `app/models/project.rb`
 
@@ -2891,6 +3220,56 @@ VALID_CRITERIA_LEVEL ||= /passing|silver|gold|baseline-1|permissions|0|1|2/
 - [ ] `/projects/{id}/baseline-1` route works (even if showing stub data)
 - [ ] No errors when creating new projects
 - [ ] Existing tests still pass
+
+### Phase 2 Workflow Summary
+
+**Complete workflow for adding/updating baseline criteria**:
+
+1. **Sync from upstream**:
+   ```bash
+   rake baseline:sync
+   ```
+   - Downloads criteria from OpenSSF
+   - Updates `criteria/baseline_criteria.yml` with ALL fields
+   - Includes description, details, and metadata
+
+2. **Extract translations**:
+   ```bash
+   rake baseline:extract_i18n
+   ```
+   - Reads `criteria/baseline_criteria.yml`
+   - Extracts description/details/placeholders
+   - Updates `config/locales/en.yml` between markers
+   - Preserves existing YAML comments
+
+3. **Generate migration** (if new criteria added):
+   ```bash
+   rake baseline:generate_migration
+   ```
+   - Compares criteria with database schema
+   - Creates migration for new fields only
+   - Skips existing fields
+
+4. **Run migration**:
+   ```bash
+   rails db:migrate
+   ```
+
+5. **Restart server**:
+   ```bash
+   rails s
+   ```
+   - Required because initializers load criteria at startup
+
+**Key Files Modified**:
+- `criteria/baseline_criteria.yml` - Source of truth (by sync)
+- `config/locales/en.yml` - Translations (by extract_i18n)
+- `db/migrate/YYYYMMDDHHMMSS_add_baseline_*.rb` - Migration (by generate_migration)
+
+**Important Notes**:
+- Always run `extract_i18n` after `sync` to keep locale files updated
+- Review `git diff` after sync to see what changed
+- Marker comments in `en.yml` must not be edited manually
 
 ---
 

@@ -54,3 +54,7 @@ license_okay
 .byebug_history
 .rake_tasks~
 
+# Baseline criteria sync cache and metadata
+tmp/baseline_cache/
+.baseline_sync_metadata.json
+

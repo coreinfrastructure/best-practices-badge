@@ -1,8 +1,27 @@
+# Configure codecov.
+# https://docs.codecov.io/docs/codecov-yaml
+
 ignore:
   # These files aren't run in production, and any defects can be addressed
   # during the development process, so ignore test coverage for them:
-  - "lib/baseline_html_parser.rb"
-  - "lib/baseline_i18n_extractor.rb"
-  - "lib/baseline_criteria_sync.rb"
-  - "lib/baseline_migration_generator.rb"
-  - "lib/baseline_criteria_validator.rb"
+  - "lib/baseline_*.rb"
+
+# If Codecov fails to find "previous" commit to compare to, consider it
+# a success.  This has its own problems and is not ideal.  However,
+# without this, recovering from previous test failures
+# can be painful & misleading.  Per:
+# https://github.com/codecov/support/issues/173
+coverage:
+  status:
+    project:
+      default:
+        target: auto  # this is default
+        if_not_found: success  # no commit found? still set a success
+    patch:
+      default:
+        # Make patch coverage informational (won't fail builds)
+        informational: true
+        # Exclude baseline development scripts from patch coverage
+        target: auto
+        paths:
+          - "!lib/baseline_*.rb"

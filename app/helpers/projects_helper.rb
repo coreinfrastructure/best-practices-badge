@@ -7,16 +7,16 @@
 # Helper module providing projects view functionality.
 # rubocop:disable Metrics/ModuleLength
 module ProjectsHelper
-  MARKDOWN_RENDERER = Redcarpet::Render::HTML.new(
+  # Markdown renderer configuration
+  MARKDOWN_RENDERER_OPTIONS = {
     filter_html: true, no_images: true,
     no_styles: true, safe_links_only: true,
     link_attributes: { rel: 'nofollow ugc' }
-  )
-  MARKDOWN_PROCESSOR = Redcarpet::Markdown.new(
-    MARKDOWN_RENDERER,
+  }.freeze
+  MARKDOWN_PROCESSOR_OPTIONS = {
     no_intra_emphasis: true, autolink: true,
     space_after_headers: true, fenced_code_blocks: true
-  )
+  }.freeze
   NO_REPOS = [[], []].freeze # No forks and no originals
 
   # List original then forked Github projects, with headers
@@ -49,12 +49,23 @@ module ProjectsHelper
 
   # Render markdown.  This is safe because the markdown renderer in use is
   # configured with filter_html:true, but rubocop has no way to know that.
+  # Uses thread-local storage to reuse processor instances within a thread
+  # while ensuring thread safety, as Redcarpet's C code is not thread-safe
+  # with shared instances across threads.
   # @param content [String] The content to render as Markdown
   # rubocop:disable Rails/OutputSafety
   def markdown(content)
-    return '' if content.nil?
+    return '' if content.blank?
 
-    MARKDOWN_PROCESSOR.render(content).html_safe
+    # Get or create thread-local markdown processor
+    processor = Thread.current[:markdown_processor]
+    if processor.nil?
+      renderer = Redcarpet::Render::HTML.new(MARKDOWN_RENDERER_OPTIONS)
+      processor = Redcarpet::Markdown.new(renderer, MARKDOWN_PROCESSOR_OPTIONS)
+      Thread.current[:markdown_processor] = processor
+    end
+
+    processor.render(content).html_safe
   end
   # rubocop:enable Rails/OutputSafety
 

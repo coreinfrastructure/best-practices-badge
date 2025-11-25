@@ -130,6 +130,7 @@ The OpenSSF Baseline criteria are:
    - Consistent with existing criteria (levels 0, 1, 2)
 
 **Rationale**: This hybrid approach provides:
+
 - Simple sync (writes one file with all data)
 - Consistent translation workflow (extracts to locale files like existing criteria)
 - Clear separation of concerns (source data vs. localized data)
@@ -2504,6 +2505,7 @@ Phase 1 is specifically designed to make adding baseline criteria easier in subs
 **Goal**: Set up baseline sync system and add database columns for baseline-1 criteria, ensuring incremental deployment.
 
 **Hybrid Storage Approach**: This phase implements the hybrid architecture where:
+
 - `criteria/baseline_criteria.yml` is the source of truth (includes description/details)
 - `config/locales/en.yml` contains extracted translations (between marker comments)
 - `rake baseline:extract_i18n` synchronizes between the two files
@@ -3226,47 +3228,58 @@ VALID_CRITERIA_LEVEL ||= /passing|silver|gold|baseline-1|permissions|0|1|2/
 **Complete workflow for adding/updating baseline criteria**:
 
 1. **Sync from upstream**:
+
    ```bash
    rake baseline:sync
    ```
+
    - Downloads criteria from OpenSSF
    - Updates `criteria/baseline_criteria.yml` with ALL fields
    - Includes description, details, and metadata
 
 2. **Extract translations**:
+
    ```bash
    rake baseline:extract_i18n
    ```
+
    - Reads `criteria/baseline_criteria.yml`
    - Extracts description/details/placeholders
    - Updates `config/locales/en.yml` between markers
    - Preserves existing YAML comments
 
 3. **Generate migration** (if new criteria added):
+
    ```bash
    rake baseline:generate_migration
    ```
+
    - Compares criteria with database schema
    - Creates migration for new fields only
    - Skips existing fields
 
 4. **Run migration**:
+
    ```bash
    rails db:migrate
    ```
 
 5. **Restart server**:
+
    ```bash
    rails s
    ```
+
    - Required because initializers load criteria at startup
 
 **Key Files Modified**:
+
 - `criteria/baseline_criteria.yml` - Source of truth (by sync)
 - `config/locales/en.yml` - Translations (by extract_i18n)
 - `db/migrate/YYYYMMDDHHMMSS_add_baseline_*.rb` - Migration (by generate_migration)
 
 **Important Notes**:
+
 - Always run `extract_i18n` after `sync` to keep locale files updated
 - Review `git diff` after sync to see what changed
 - Marker comments in `en.yml` must not be edited manually

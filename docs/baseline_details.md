@@ -4552,7 +4552,7 @@ A new rake process will be created to do machine translation of
   we find a case where at least 1 value is untranslated or we run out of
   languages to translate.
 * Generate JSON file with those keys and values.
-* Ask an LLM (the current plan is copilot with its "-p" option) 
+* Ask an LLM (the current plan is copilot with its "-p" option)
   to read the generated JSON file, and to generate a new JSON file
   (with a given name) that translates the file's values. Instruct it
   to *never* translate keys, only values. Ask it to be careful to
@@ -4712,7 +4712,6 @@ Similar to how the metal series provides suggestions, add hints for baseline cri
 - [ ] No false positives in automated checks
 
 ---
-
 
 ## Phase 8: Project Search and Filtering
 

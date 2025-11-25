@@ -18,8 +18,8 @@ Like all plans, we will need to make adjustments as we go. The purpose of creati
 5. [Phase 3: Full Baseline-1 Support](#phase-3-full-baseline-1-support)
 6. [Phase 4: Baseline Badge Images](#phase-4-baseline-badge-images)
 7. [Phase 5: Baseline-2 and Baseline-3](#phase-5-baseline-2-and-baseline-3)
-8. [Phase 6: Automation](#phase-6-automation)
-9. [Phase 7: Translation Support](#phase-7-translation-support)
+9. [Phase 6: Translation Support](#phase-7-translation-support)
+8. [Phase 7: Automation](#phase-6-automation)
 10. [Phase 8: Project Search and Filtering](#phase-8-project-search-and-filtering)
 
 ### Supporting Information
@@ -4496,7 +4496,113 @@ end
 
 ---
 
-## Phase 6: Automation
+## Phase 6: Translation Support
+
+**Goal**: Add default natural language translations where they're not given.
+
+We currently use `rake translation:sync` to send updated English keys and
+text from `config/locales/en.yml` to the `translation.io` site and receive
+back translations that are stored in `config/locales/translation.*.yml`
+(one for each language). Humans provide the translations on translation.io.
+
+Adding baseline adds a *massive* number of translations.
+The plan is to add machine translations that will be used *only*
+if there is no human translation available.
+
+[Rails' I18n system](https://guides.rubyonrails.org/i18n.html)
+supports `load_path` that lets us add paths to find translations.
+When the same key has multiple definitions,
+[the last value set is used](https://stackoverflow.com/questions/1840027/rails-how-to-dynamically-add-override-wording-to-i18n-yaml).
+The plan is to create a new `config/machine_translation/` directory
+and modify the I18n configuration with something like this:
+
+~~~ruby
+config.i18n.load_path +=
+  Dir[Rails.root.join("config", "machine_translation", "*.yml")]
+~~~
+
+Every `config/locales/translation.*.yml` file *may* have a corresponding
+`config/machine_translation/translation.*.yml` file, where the machine
+translation of untranslated text will be placed. As a result, any
+machine translation *available* will be used.
+
+Every time translation:sync completes, the files in `machine_translation`
+will be consulted, and every key that is *defined* with a non-empty
+value in the updated `config/locales/*.yml` files will be *removed*
+from the corresponding file in `machine_translation` (by loading it,
+removing those keys, and storing the result). This means that human
+translations will always be given precedence. There should also be a
+rake task that lets you specify keys to delete from all the
+machine translations (so that if a value is changed, we can remove
+and later update the machine translations).
+
+A new rake process will be created to do machine translation of
+"N" keys not currently translated, as follows:
+
+* It will walk through language by language, starting with French
+  (because David A. Wheeler can read some French) and then German,
+  Japanese, Simplified Chinese, and then the other languages we support.
+  Do Swahili last (we don't have human backing any more, and LLMs are
+  likely to do Swahili translations relatively poorly).
+* It will identify up to N untranslated values, that is, the value is in
+  en.yml but it's not translated in its corresponding translation file
+  for that language.
+  A value isn't present if its key isn't present or its value is empty.
+  If there are 0 untranslated values, it will try the next language until
+  we find a case where at least 1 value is untranslated or we run out of
+  languages to translate.
+* Generate JSON file with those keys and values.
+* Ask an LLM (the current plan is copilot with its "-p" option) 
+  to read the generated JSON file, and to generate a new JSON file
+  (with a given name) that translates the file's values. Instruct it
+  to *never* translate keys, only values. Ask it to be careful to
+  not change template stubs, but that if there are references to a URL
+  path beginning with /en (English)
+  to change it to the corresponding locale name. Then instruct the
+  LLM to review the translated result to ensure it's correct
+  and fix any issues. In particular, ask the LLM to ensure that the
+  translated results aren't simply some error return from the translation
+  process, but instead are valid translations.
+* If the LLM appears to succeed,
+  read and validate the JSON.
+  At the least, verify that all keys that were supposed to be translated
+  are in the final result and that the values aren't empty
+  (unless the English value is empty).
+  If this succeeds, update the corresponding
+  YAML machine translation for that language
+  using the data from this JSON file.
+* These updated YAML files can then be checked in to the repository.
+
+We do *not* want to overwhelm the LLMs with too much translation work.
+The plan is to repeatedly ask an LLM to do a little over a period of time.
+
+Note that we do *not* want to use ActiveRecord to store translations.
+That's not usually how it's done in Rails, and doing that would create
+a lot of unnecessary overhead.
+
+Obviously an LLM can make mistakes in translation. We'll partly compensate by
+asking the LLM to review its work, and verifying that at least the
+JSON has proper format. More importantly, we'll always
+prefer the human translations, and use machine translations only
+when a human translation isn't available.
+
+This approach does mean that obsolete human translations (human
+translations of older versions of text) will have precedence over machine
+translations of current text. It's not clear what *should* be done in
+such cases, so this seems acceptable.
+
+### Phase 6 Testing Checklist
+
+- [ ] All baseline criteria have English translations
+- [ ] Machine translations available for all supported languages
+- [ ] Human translations override machine translations
+- [ ] Translation keys resolve correctly
+- [ ] No missing translation warnings
+- [ ] All languages display baseline criteria
+
+---
+
+## Phase 7: Automation
 
 **Goal**: Add automated checking for baseline criteria, leveraging existing automation where possible.
 
@@ -4597,7 +4703,7 @@ Similar to how the metal series provides suggestions, add hints for baseline cri
 - Success rate of automated checks
 - Common failure patterns
 
-### Phase 6 Testing Checklist
+### Phase 7 Testing Checklist
 
 - [ ] Autofill populates baseline criteria where possible
 - [ ] Automation doesn't incorrectly mark criteria as met
@@ -4607,137 +4713,6 @@ Similar to how the metal series provides suggestions, add hints for baseline cri
 
 ---
 
-## Phase 7: Translation Support
-
-**Goal**: Add translations for baseline criteria and UI text.
-
-### 7.1: Extract Translatable Strings
-
-**Files to update**:
-
-- `config/locales/en.yml` - Add English baseline translations
-- `config/locales/translation.*.yml` - Add for each supported language
-
-**Structure**:
-
-```yaml
-
-en:
-  criteria:
-    baseline-1:
-      baseline_contribution_process:
-        description: "While active, the project documentation MUST include..."
-        details: "Document project participants..."
-
-# ... all baseline-1 criteria
-
-    baseline-2:
-
-# ... all baseline-2 criteria
-
-    baseline-3:
-
-# ... all baseline-3 criteria
-
-  projects:
-    criteria_levels:
-      baseline-1: "Baseline Level 1"
-      baseline-2: "Baseline Level 2"
-      baseline-3: "Baseline Level 3"
-
-    form_early:
-      metal_series: "Metal Series Criteria"
-      baseline_series: "Baseline Series Criteria"
-
-```
-
-### 7.2: Plan Automated Translation Strategy
-
-**Decision point**: Use automated translation with human review override.
-
-**Implementation**:
-
-1. Generate machine translations for all baseline criteria
-2. Mark as "machine translated" in database
-3. Allow human translators to override
-4. Prioritize human translations in display
-
-**File**: Create `app/models/translation.rb` (if doesn't exist)
-
-```ruby
-
-# Model to track translation status
-
-class Translation < ApplicationRecord
-  belongs_to :project, optional: true
-
-  validates :locale, presence: true
-  validates :key, presence: true
-
-  scope :human, -> { where(machine_translated: false) }
-  scope :machine, -> { where(machine_translated: true) }
-end
-
-```
-
-### 7.3: Create Translation Migration
-
-**New file**: `db/migrate/YYYYMMDDHHMMSS_add_translations_table.rb`
-
-```ruby
-
-class AddTranslationsTable < ActiveRecord::Migration[8.0]
-  def change
-    create_table :translations do |t|
-      t.string :locale, null: false
-      t.string :key, null: false
-      t.text :value, null: false
-      t.boolean :machine_translated, default: false
-      t.datetime :reviewed_at
-      t.references :reviewer, foreign_key: { to_table: :users }
-
-      t.timestamps
-    end
-
-    add_index :translations, [:locale, :key], unique: true
-  end
-end
-
-```
-
-### 7.4: Update I18n Backend
-
-**File**: `config/initializers/i18n.rb` (create if doesn't exist)
-
-Configure to prefer human translations over machine translations.
-
-### 7.5: Coordinate with Translation Team
-
-**Actions**:
-
-1. Notify translation.io or translation team
-2. Provide context for baseline criteria
-3. Prioritize languages based on user base
-4. Set up review process
-
-### 7.6: Add Translation UI for Admins
-
-**Optional**: Create admin interface to:
-
-- View translation status
-- Mark translations as reviewed
-- Override machine translations
-
-### Phase 7 Testing Checklist
-
-- [ ] All baseline criteria have English translations
-- [ ] Machine translations available for all supported languages
-- [ ] Human translations override machine translations
-- [ ] Translation keys resolve correctly
-- [ ] No missing translation warnings
-- [ ] All languages display baseline criteria
-
----
 
 ## Phase 8: Project Search and Filtering
 
@@ -5436,17 +5411,17 @@ If critical issues arise:
 - Repeat process for remaining levels
 - Can be done in parallel by multiple developers
 
-**Week 12-14**: Phase 6 (Automation)
-
-- Autofill logic
-- Automated suggestions
-- Refinement based on user feedback
-
-**Week 15-18**: Phase 7 (Translations)
+**Week 15-18**: Phase 6 (Translations)
 
 - Machine translations
 - Human review
 - Ongoing process
+
+**Week 12-14**: Phase 7 (Automation)
+
+- Autofill logic
+- Automated suggestions
+- Refinement based on user feedback
 
 **Week 19-21**: Phase 8 (Search and Filtering)
 
@@ -5738,14 +5713,14 @@ The implementation will take approximately 19-21 weeks with proper testing and r
 2. **Phase 2 validates the architecture** - don't rush to Phase 3 until convinced it works
 3. **Complete testing at each phase** - catching issues early saves time later
 4. **Monitor performance** throughout - baseline adds significant database columns
-5. **Engage translators early** (Phase 7) - translation is time-consuming
+5. **Engage translators early** (Phase 6) - translation is time-consuming
 6. **Phase 8 is optional but recommended** - search is valuable but can wait if needed
 
 ### Next Steps
 
 1. Review this plan with the development team
 2. Verify access to OpenSSF Baseline criteria source and test sync system (Phase 2)
-3. Coordinate with translation team about workload (Phase 7)
+3. Coordinate with translation team about workload (Phase 6)
 4. Set up feature flags for safe deployment
 5. Create tracking issues for each phase
 6. Begin Phase 1 implementation

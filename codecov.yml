@@ -1,0 +1,8 @@
+ignore:
+  # These files aren't run in production, and any defects can be addressed
+  # during the development process, so ignore test coverage for them:
+  - "lib/baseline_html_parser.rb"
+  - "lib/baseline_i18n_extractor.rb"
+  - "lib/baseline_criteria_sync.rb"
+  - "lib/baseline_migration_generator.rb"
+  - "lib/baseline_criteria_validator.rb"

@@ -137,21 +137,22 @@ class BaselineI18nExtractor
     lines << MARKER_WARNING
     lines << MARKER_DO_NOT_EDIT
 
-    i18n_data.each_value do |criteria|
+    i18n_data.each do |level, criteria|
+      lines << "    #{level}:"
       criteria.each do |criterion_key, fields|
-        lines << "    #{criterion_key}:"
+        lines << "      #{criterion_key}:"
         fields.each do |field_name, field_value|
           # Format as YAML with proper indentation
           # Handle multi-line strings
           if field_value.include?("\n")
-            lines << "      #{field_name}: >-"
+            lines << "        #{field_name}: >-"
             field_value.split("\n").each do |line|
-              lines << "        #{line}"
+              lines << "          #{line}"
             end
           else
             # Escape quotes in the value
             escaped_value = field_value.gsub('"', '\"')
-            lines << "      #{field_name}: \"#{escaped_value}\""
+            lines << "        #{field_name}: \"#{escaped_value}\""
           end
         end
       end

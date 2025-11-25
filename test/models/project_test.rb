@@ -206,7 +206,13 @@ class ProjectTest < ActiveSupport::TestCase
   # The number of named badge levels must be equal to the number of
   # criteria levels + 1, because projects can be "in_progress"
   test 'test all possible badge "levels/statuses" are named' do
-    assert_equal Criteria.count + 1, Project::BADGE_LEVELS.size
+    # Metal series: in_progress + 3 levels (passing, silver, gold)
+    # Baseline series: 3 levels (baseline-1, baseline-2, baseline-3)
+    metal_count = Project::CRITERIA_SERIES[:metal].size
+    assert_equal metal_count + 1, Project::BADGE_LEVELS.size
+    # ALL_BADGE_LEVELS should equal all criteria levels (metal + baseline)
+    assert_equal metal_count + Project::CRITERIA_SERIES[:baseline].size,
+                 Project::ALL_BADGE_LEVELS.size
   end
 
   test 'Project counts from fixtures are as expected' do

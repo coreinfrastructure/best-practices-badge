@@ -580,6 +580,12 @@ fr:
         '0': Basique
         '1': Argent
         '2': Or
+        baseline-1: 'Baseline Niveau 1'
+        baseline-1_html: 'Ce sont les critères du Baseline Niveau 1.'
+        baseline-2: 'Baseline Niveau 2'
+        baseline-2_html: 'Ce sont les critères du Baseline Niveau 2.'
+        baseline-3: 'Baseline Niveau 3'
+        baseline-3_html: 'Ce sont les critères du Baseline Niveau 3.'
     misc:
       disabled_reminders: >-
         (Avancé) Désactiver le rappel d'inactivité (nous vous

@@ -585,6 +585,12 @@ de:
         '0': Passing
         '1': Silber
         '2': Gold
+        baseline-1: 'Baseline Level 1'
+        baseline-1_html: 'Dies sind die Baseline Level 1 Kriterien.'
+        baseline-2: 'Baseline Level 2'
+        baseline-2_html: 'Dies sind die Baseline Level 2 Kriterien.'
+        baseline-3: 'Baseline Level 3'
+        baseline-3_html: 'Dies sind die Baseline Level 3 Kriterien.'
     misc:
       disabled_reminders: >-
         (Fortgeschritten) Inaktivierungserinnerung deaktivieren

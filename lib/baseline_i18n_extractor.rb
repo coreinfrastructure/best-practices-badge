@@ -150,8 +150,8 @@ class BaselineI18nExtractor
               lines << "          #{line}"
             end
           else
-            # Escape quotes in the value
-            escaped_value = field_value.gsub('"', '\"')
+            # Escape backslashes first, then quotes (order matters!)
+            escaped_value = field_value.gsub('\\', '\\\\').gsub('"', '\\"')
             lines << "        #{field_name}: \"#{escaped_value}\""
           end
         end

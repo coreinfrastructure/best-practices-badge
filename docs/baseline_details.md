@@ -4500,14 +4500,21 @@ end
 
 **Goal**: Add default natural language translations where they're not given.
 
+Adding baseline adds a *massive* number of natural language text strings that
+need translations to other human languages.
+The plan is to add machine translations that will be used *only*
+if there is no human translation available.
+
 We currently use `rake translation:sync` to send updated English keys and
 text from `config/locales/en.yml` to the `translation.io` site and receive
 back translations that are stored in `config/locales/translation.*.yml`
 (one for each language). Humans provide the translations on translation.io.
-
-Adding baseline adds a *massive* number of translations.
-The plan is to add machine translations that will be used *only*
-if there is no human translation available.
+The translation.io system has an API documented at
+<https://translation.io/docs/api>.
+A `GET https://translation.io/api/v1/segments(.json)` will get all segments,
+and this can be filtered by parameters such as `target_language`
+or `tag` (including the tag `source changed`, indicating that the translation
+is for an older version of the original text).
 
 [Rails' I18n system](https://guides.rubyonrails.org/i18n.html)
 supports `load_path` that lets us add paths to find translations.
@@ -4531,7 +4538,11 @@ will be consulted, and every key that is *defined* with a non-empty
 value in the updated `config/locales/*.yml` files will be *removed*
 from the corresponding file in `machine_translation` (by loading it,
 removing those keys, and storing the result). This means that human
-translations will always be given precedence. There should also be a
+translations will always be given precedence.
+In the future we might choose to *not* remove segments if
+"source changed" (basically, de-prioritize a human translation if it
+was a translation of an older different string).
+There should also be a
 rake task that lets you specify keys to delete from all the
 machine translations (so that if a value is changed, we can remove
 and later update the machine translations).
@@ -4539,7 +4550,14 @@ and later update the machine translations).
 A new rake process will be created to do machine translation of
 "N" keys not currently translated, as follows:
 
-* It will walk through language by language, starting with French
+* First, ensure we have a reasonably current list of translation segments
+  tagged with "source change" (these are translations we shouldn't use
+  as examples). If we have a cached file less than a day old, just use it.
+  Otherwise, if we have a key allowing us to do it,
+  load the list of segments where their tag is
+  "source changed" into a cached file using the API documented in
+  <https://translation.io/docs/api>.
+* Walk through language by language, starting with French
   (because David A. Wheeler can read some French) and then German,
   Japanese, Simplified Chinese, and then the other languages we support.
   Do Swahili last (we don't have human backing any more, and LLMs are
@@ -4548,19 +4566,39 @@ A new rake process will be created to do machine translation of
   en.yml but it's not translated in its corresponding translation file
   for that language.
   A value isn't present if its key isn't present or its value is empty.
+  (In the future we could also consider a value isn't present if its
+  translation is tagged 'source changed'; make that easy to enable later.)
   If there are 0 untranslated values, it will try the next language until
   we find a case where at least 1 value is untranslated or we run out of
   languages to translate.
-* Generate JSON file with those keys and values.
+* Generate YAML file with those keys and values that need translating.
+  Use YAML's folded scalar
+  style (`>-`) for multiline text to keep the format compact and readable.
+* Identify keys and values that are *already* translated in that language
+  and are *not* marked as "source changed"
+  (that is, the translations are current).
+  Walk through the values selected for translating, find acronyms and unusual
+  words in what's to be translated, and select at least one example where
+  possible from the set of already used translations.
+  (I'm flexible on what is "unusual" but we at least
+  want to ignore common words like "the" and "an").
+  This increases the likelihood that we'll use the same translated terms
+  for the same words.
+  In short, this uses our existing translations like an automatically-created
+  glossary.
+  Generate a pair of "demo" YAML files in English and the language we're
+  translating to show what a translation looks like.
 * Ask an LLM (the current plan is copilot with its "-p" option)
-  to read the generated JSON file, and to generate a new JSON file
+  to read the generated YAML file of values to be translated,
+  and to generate a new YAML file
   (with a given name) that translates the file's values. Include in the
-  instructions an example of what this would look like. Instruct it
+  instructions pointers to the YAML examples. Instruct the LLM
   to *never* translate keys, only values. Ask it to be careful to
   not change template stubs, but that if there are references to a URL
   path beginning with /en (English)
   to change "en" to the corresponding locale name (e.g., "zh_CH" or
-  "de").
+  "de"). Emphasize preserving proper YAML indentation and using `>-`
+  for multiline values.
 * Once there's a result, instruct the
   LLM to review the translated result, compare it to the original,
   to ensure it's correct
@@ -4568,13 +4606,13 @@ A new rake process will be created to do machine translation of
   translated results aren't simply some error return from the translation
   process like "Translation process failed", but are instead valid translations.
 * If the LLM appears to succeed in both steps,
-  read and validate the JSON.
+  read and validate the YAML.
   At the least, verify that all keys that were supposed to be translated
   are in the final result and that the values aren't empty
   (unless the English value is empty).
   If this succeeds, update the corresponding
   YAML machine translation for that language
-  using the data from this JSON file.
+  using the data from this YAML file.
 * These updated YAML files can then be checked in to the repository.
 
 We do *not* want to overwhelm the LLMs with too much translation work.
@@ -4586,9 +4624,11 @@ a lot of unnecessary overhead.
 
 Obviously an LLM can make mistakes in translation. We'll partly compensate by
 asking the LLM to review its work, and verifying that at least the
-JSON has proper format. More importantly, we'll always
-prefer the human translations, and use machine translations only
-when a human translation isn't available.
+YAML has proper format (valid syntax, all keys present, no empty values).
+Using YAML directly is more token-efficient than JSON (20-30% fewer tokens)
+and is already our target format, avoiding conversion overhead.
+More importantly, we'll always prefer the human translations,
+and use machine translations only when a human translation isn't available.
 
 This approach does mean that obsolete human translations (human
 translations of older versions of text) will have precedence over machine

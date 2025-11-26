@@ -4554,16 +4554,20 @@ A new rake process will be created to do machine translation of
 * Generate JSON file with those keys and values.
 * Ask an LLM (the current plan is copilot with its "-p" option)
   to read the generated JSON file, and to generate a new JSON file
-  (with a given name) that translates the file's values. Instruct it
+  (with a given name) that translates the file's values. Include in the
+  instructions an example of what this would look like. Instruct it
   to *never* translate keys, only values. Ask it to be careful to
   not change template stubs, but that if there are references to a URL
   path beginning with /en (English)
-  to change it to the corresponding locale name. Then instruct the
-  LLM to review the translated result to ensure it's correct
-  and fix any issues. In particular, ask the LLM to ensure that the
+  to change "en" to the corresponding locale name (e.g., "zh_CH" or
+  "de").
+* Once there's a result, instruct the
+  LLM to review the translated result, compare it to the original,
+  to ensure it's correct
+  and fix any issues. In particular, ask the LLM to ensure that all
   translated results aren't simply some error return from the translation
-  process, but instead are valid translations.
-* If the LLM appears to succeed,
+  process like "Translation process failed", but are instead valid translations.
+* If the LLM appears to succeed in both steps,
   read and validate the JSON.
   At the least, verify that all keys that were supposed to be translated
   are in the final result and that the values aren't empty

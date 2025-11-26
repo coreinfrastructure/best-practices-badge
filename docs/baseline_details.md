@@ -4574,18 +4574,26 @@ A new rake process will be created to do machine translation of
 * Generate YAML file with those keys and values that need translating.
   Use YAML's folded scalar
   style (`>-`) for multiline text to keep the format compact and readable.
-* Identify keys and values that are *already* translated in that language
+* Increase the likelihood that we'll use the same translated terms
+  for the same words in our translation.
+  We'll do this by using our existing translations
+  like an automatically-created glossary.
+  Identify keys and values that are *already* translated in that language
   and are *not* marked as "source changed"
   (that is, the translations are current).
   Walk through the values selected for translating, find acronyms and unusual
   words in what's to be translated, and select at least one example where
   possible from the set of already used translations.
-  (I'm flexible on what is "unusual" but we at least
-  want to ignore common words like "the" and "an").
-  This increases the likelihood that we'll use the same translated terms
-  for the same words.
-  In short, this uses our existing translations like an automatically-created
-  glossary.
+  Identify unusual words using these patterns:
+  (1) acronyms: 2+ consecutive capitals like MFA, VCS, CI/CD;
+  (2) proper nouns: capitalized words like GitHub, OpenSSF, Passkeys;
+  (3) technical compounds: hyphenated terms like multi-factor, version-control;
+  (4) long technical words: words longer than 12 characters like
+  authentication, vulnerability.
+  We could also load Google's 10K most common English words in
+  <https://github.com/first20hours/google-10000-english>
+  and add other words not in this list.
+  Select only a limited number so we're not overwhelming the translator.
   Generate a pair of "demo" YAML files in English and the language we're
   translating to show what a translation looks like.
 * Ask an LLM (the current plan is copilot with its "-p" option)

@@ -3109,6 +3109,46 @@ and does *not* have direct access to the real-world data.
 Thus, if someone can see the data available on the test environment,
 that does *not* mean that they will have access to the protected data.
 
+### CI/CD pipeline input validation and sanitization
+
+Our CI/CD pipelines implement baseline security requirements to prevent
+injection attacks through pipeline parameters and branch names.
+Specifically, we implement:
+
+* **OSPS-BR-01.01** (Input parameter sanitization): Our CI/CD pipelines
+  do not accept explicit user-provided input parameters. All inputs come
+  from trusted sources (CI/CD system context variables, environment
+  variables from secure contexts, or hardcoded configuration values).
+  This is implemented in `.circleci/config.yml` (CircleCI) and
+  `.github/workflows/*.yml` (GitHub Actions).
+
+* **OSPS-BR-01.02** (Branch name sanitization and validation): Before using
+  branch names in any pipeline operations, we validate them using the
+  centralized script `script/validate_branch_name`, which uses
+  POSIX-compliant shell code to ensure they contain only safe characters
+  (alphanumeric, hyphens, underscores, dots, plus signs, and forward slashes)
+  and have an appropriate length (more than 0, no more than 200 characters).
+  We also reject branch names starting with `-` (hyphen) because they could
+  be confused as command-line option flags, and reject branch names containing
+  `..` to prevent directory traversal attempts.
+  This prevents command injection and cache poisoning attacks.
+  The validation script is called from:
+
+    * `.circleci/config.yml`: Validates branch names in both the build job
+      (which runs on all branches) and the deploy job (which also validates
+      against a staging/production allow-list)
+    * `.github/workflows/main.yml`: Validates branch names in the main CI workflow
+    * `.github/workflows/scorecard.yml`: Validates branch names in the
+      scorecard security workflow
+    * `.github/workflows/codespell.yml`: Validates branch names in the
+      codespell workflow
+
+These validations provide defense in depth by ensuring that even if
+workflow-level filters were bypassed or misconfigured, the pipeline
+would fail fast and refuse to execute with potentially malicious input.
+The use of POSIX-compliant code (avoiding bash-specific extensions)
+ensures maximum portability and standards compliance.
+
 ## Human resource management  (people)
 
 ISO/IEC/IEEE 12207 has a "human resource management" process;

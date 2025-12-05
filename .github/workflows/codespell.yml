@@ -15,6 +15,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v5
+      # OSPS-BR-01.02: Validate branch name before use in pipeline
+      # This protects against potential future use of branch names in commands
+      # GITHUB_REF_NAME is the short ref name (e.g., "main" not "refs/heads/main")
+      - name: Validate branch name
+        run: script/validate_branch_name "$GITHUB_REF_NAME"
       - name: Codespell
         uses: codespell-project/actions-codespell@v2
         with:

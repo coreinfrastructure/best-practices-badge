@@ -72,6 +72,12 @@ jobs:
     # https://github.com/CircleCI-Public/browser-tools-orb/issues/75
     # https://github.com/CircleCI-Public/browser-tools-orb/releases/tag/v1.4.2
     - browser-tools/install-chromedriver
+    # Implement OSPS-BR-01.02: Validate branch name before use in pipeline
+    # Protect against malicious branch names that could cause cache poisoning
+    # or command injection attacks. Branch names are used in cache keys below.
+    - run:
+        name: Validate branch name
+        command: script/validate_branch_name "$CIRCLE_BRANCH"
     - run: pwd
     - run: ls -l
     - run: |
@@ -165,6 +171,27 @@ jobs:
     executor: ruby-only
     steps:
       - checkout
+      # OSPS-BR-01.02: Validate branch name before use in deployment
+      # Defense in depth - even though workflow filters limit to staging/production,
+      # the code should validate explicitly to prevent accidents or misconfigurations
+      - run:
+          name: Validate branch name format
+          command: script/validate_branch_name "$CIRCLE_BRANCH"
+      - run:
+          name: Validate deployment branch allowlist
+          command: |
+            # Deploy job should ONLY run on staging or production branches
+            # Using POSIX-compliant case statement
+            case "$CIRCLE_BRANCH" in
+              staging|production)
+                echo "Deployment branch validated: $CIRCLE_BRANCH"
+                ;;
+              *)
+                echo "ERROR: Deploy job on invalid branch: $CIRCLE_BRANCH"
+                echo "Deploy is only allowed for: staging, production"
+                exit 1
+                ;;
+            esac
       - run:
           # We are downloading these tools from a trusted source, so we *do*
           # want to use the latest version, not a pinned version.

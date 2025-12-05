@@ -179,7 +179,10 @@ def fix_markdown(input_file, output_file, dry_run: false, verbose: true)
     if is_list_start && next_line && !next_blank
       # Check if next line continues the list or ends it
       next_is_list = next_line =~ /^(\s*)[-*+]\s+/ || next_line =~ /^(\s*)\d+\.\s+/
-      unless next_is_list
+      # Check if next line is continuation text (indented text after list item)
+      # Continuation text is indented more than or equal to list item content
+      next_is_continuation = next_line =~ /^\s+\S/ && !(next_line =~ /^(\s*)[-*+]\s+/ || next_line =~ /^(\s*)\d+\.\s+/)
+      unless next_is_list || next_is_continuation
         fixed_lines << "\n"
         fixes_made += 1
         warn "Fixed MD032 at line #{i + 2}: added blank after list" if verbose

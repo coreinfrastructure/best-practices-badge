@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6.0.1
       # OSPS-BR-01.02: Validate branch name before use in pipeline
       # This protects against potential future use of branch names in commands
       # GITHUB_REF_NAME is the short ref name (e.g., "main" not "refs/heads/main")

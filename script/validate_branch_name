@@ -42,6 +42,15 @@ case "$BRANCH_NAME" in
     ;;
 esac
 
+# Reject branch names starting with /
+# (these could be confused as being an absolute path)
+case "$BRANCH_NAME" in
+  /*)
+    echo "ERROR: Branch name must not start with '/': $BRANCH_NAME" >&2
+    exit 1
+    ;;
+esac
+
 # Reject branch names including ..
 # (these could escape up a directory)
 case "$BRANCH_NAME" in

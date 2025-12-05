@@ -195,5 +195,5 @@ OSPS-GV-01.02:
 
 ## Detailed plan
 
-See the file [baseline_details](./baseline_details) for more details
+See the file [baseline_details.md](./baseline_details.md) for more details
 on exactly how this is (currently) planned to be implemented.

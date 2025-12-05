@@ -91,6 +91,16 @@ class ProjectsHelperTest < ActionView::TestCase
     )
   end
 
+  test 'markdown - trivial text' do
+    # Test to make sure our optimization for simple text doesn't cause
+    # obvious weird problems.
+    assert_equal "<p>Simple text.</p>\n", markdown('Simple text.')
+  end
+
+  test 'markdown - nil' do
+    assert_equal '', markdown(nil)
+  end
+
   test 'Ensure tiered_percent_as_string works' do
     I18n.with_locale(:de) do
       assert_equal 'In Arbeit, 74% Fortschritt für Passing',

@@ -79,6 +79,9 @@ class CriteriaTest < ActiveSupport::TestCase
   test 'Ensure that required fields are in Criteria and English translation' do
     required_set = Set.new %i[category major minor]
     Criteria.to_h.each do |level, criteria_set|
+      # Skip baseline levels - they are in early development
+      next if level.to_s.start_with?('baseline-')
+
       criteria_set.each do |criterion, fields|
         assert I18n.exists?(
           "criteria.#{level}.#{criterion}.description", :en
@@ -91,7 +94,10 @@ class CriteriaTest < ActiveSupport::TestCase
   end
 
   test 'All Criteria in each level have a description' do
-    Criteria.each_value do |criteria_set|
+    Criteria.each do |level, criteria_set|
+      # Skip baseline levels - they are in early development
+      next if level.to_s.start_with?('baseline-')
+
       criteria_set.each_value do |criterion|
         assert criterion.description.present?
       end

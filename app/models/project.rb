@@ -40,6 +40,15 @@ class Project < ApplicationRecord
   # NOTE: If you add a new level, modify compute_tiered_percentage
   BADGE_LEVELS = %w[in_progress passing silver gold].freeze
 
+  # All criteria series (metal and baseline)
+  CRITERIA_SERIES = {
+    metal: %w[passing silver gold],
+    baseline: %w[baseline-1 baseline-2 baseline-3]
+  }.freeze
+
+  # All completed badge levels including baseline
+  ALL_BADGE_LEVELS = (CRITERIA_SERIES[:metal] + CRITERIA_SERIES[:baseline]).freeze
+
   # All badge level internal names that indicate *completion*,
   # so COMPLETED_BADGE_LEVELS[0] is 'passing'.
   # Note: This is the *internal* lowercase name, e.g., for field names.

@@ -7,16 +7,24 @@
 # Helper module providing projects view functionality.
 # rubocop:disable Metrics/ModuleLength
 module ProjectsHelper
-  MARKDOWN_RENDERER = Redcarpet::Render::HTML.new(
+  # Markdown renderer configuration
+  MARKDOWN_RENDERER_OPTIONS = {
     filter_html: true, no_images: true,
     no_styles: true, safe_links_only: true,
     link_attributes: { rel: 'nofollow ugc' }
-  )
-  MARKDOWN_PROCESSOR = Redcarpet::Markdown.new(
-    MARKDOWN_RENDERER,
+  }.freeze
+  MARKDOWN_PROCESSOR_OPTIONS = {
     no_intra_emphasis: true, autolink: true,
     space_after_headers: true, fenced_code_blocks: true
-  )
+  }.freeze
+
+  # Pattern of text that we are *certain* needs no markdown processing.
+  # This is an optimization so we can skip calling the markdown
+  # processor in trivial cases.
+  MARKDOWN_UNNECESSARY = /\A[A-Za-z0-9 ,;'"]+\.?\n?\z/
+  MARKDOWN_PREFIX = '<p>'.html_safe
+  MARKDOWN_SUFFIX = "</p>\n".html_safe
+
   NO_REPOS = [[], []].freeze # No forks and no originals
 
   # List original then forked Github projects, with headers
@@ -49,12 +57,34 @@ module ProjectsHelper
 
   # Render markdown.  This is safe because the markdown renderer in use is
   # configured with filter_html:true, but rubocop has no way to know that.
+  # Uses thread-local storage to reuse processor instances within a thread
+  # while ensuring thread safety, as Redcarpet's C code is not thread-safe
+  # with shared instances across threads.
   # @param content [String] The content to render as Markdown
   # rubocop:disable Rails/OutputSafety
   def markdown(content)
-    return '' if content.nil?
+    return '' if content.blank?
 
-    MARKDOWN_PROCESSOR.render(content).html_safe
+    # Skip markdown processing for simple text with no markdown syntax
+    # The call to html_escape is completely unnecessary, but it won't hurt,
+    # and it *ensures* that even a screwed-up change to MARKDOWN_UNNECESSARY
+    # won't lead to a vulnerability. We want good performance, but I felt
+    # it was better to two independent layers (correct regex + html_escape)
+    # to ensure that we stay secure from XSS attacks.
+    if content.match?(MARKDOWN_UNNECESSARY)
+      return MARKDOWN_PREFIX + ERB::Util.html_escape(content).html_safe +
+             MARKDOWN_SUFFIX
+    end
+
+    # Get or create thread-local markdown processor
+    processor = Thread.current[:markdown_processor]
+    if processor.nil?
+      renderer = Redcarpet::Render::HTML.new(MARKDOWN_RENDERER_OPTIONS)
+      processor = Redcarpet::Markdown.new(renderer, MARKDOWN_PROCESSOR_OPTIONS)
+      Thread.current[:markdown_processor] = processor
+    end
+
+    processor.render(content).html_safe
   end
   # rubocop:enable Rails/OutputSafety
 

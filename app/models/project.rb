@@ -489,7 +489,12 @@ class Project < ApplicationRecord
   def update_badge_percentages
     # Create a single datetime value so that they are consistent
     current_time = Time.now.utc
+    # Update metal series (passing, silver, gold)
     Project::LEVEL_IDS.each do |level|
+      update_badge_percentage(level, current_time)
+    end
+    # Update baseline series (baseline-1, baseline-2, baseline-3)
+    Project::CRITERIA_SERIES[:baseline].each do |level|
       update_badge_percentage(level, current_time)
     end
     update_tiered_percentage # Update the 'tiered_percentage' number 0..300
@@ -749,8 +754,14 @@ class Project < ApplicationRecord
   # rubocop:disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def update_passing_times(level, old_badge_percentage, current_time)
-    level_name = COMPLETED_BADGE_LEVELS[level.to_i] # E.g., 'passing'
-    current_percentage = self[:"badge_percentage_#{level}"]
+    # Determine level name for field names
+    level_name =
+      if level.to_s.start_with?('baseline-')
+        level.to_s.tr('-', '_') # E.g., 'baseline_1'
+      else
+        COMPLETED_BADGE_LEVELS[level.to_i] # E.g., 'passing'
+      end
+    current_percentage = badge_percentage_for(level)
     # If something is wrong, don't modify anything!
     return if current_percentage.blank? || old_badge_percentage.blank?
 

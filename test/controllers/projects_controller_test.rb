@@ -225,6 +225,15 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     only_correct_criteria_selectable('2')
   end
 
+  test 'should show project with criteria_level=baseline-1' do
+    # Test baseline-1 level view
+    get "/en/projects/#{@project.id}/baseline-1"
+    assert_response :success
+    assert_select(+'a[href=?]', 'https://www.nasa.gov')
+    assert_select(+'a[href=?]', 'https://www.nasa.gov/pathfinder')
+    only_correct_criteria_selectable('baseline-1')
+  end
+
   test 'should show project JSON data with locale' do
     get "/en/projects/#{@project.id}.json"
     assert_response :success
@@ -286,6 +295,13 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       'Logged in! Last login: (No previous time recorded.)', flash['success']
     )
     get "/en/projects/#{@project.id}/passing/edit"
+    assert_response :success
+    assert_includes @response.body, 'Edit Project Badge Status'
+  end
+
+  test 'should get edit for baseline-1' do
+    log_in_as(@project.user)
+    get "/en/projects/#{@project.id}/baseline-1/edit"
     assert_response :success
     assert_includes @response.body, 'Edit Project Badge Status'
   end
@@ -467,6 +483,24 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to project_path(assigns(:project))
     @project.reload
     assert_equal @project.name, new_name
+  end
+
+  test 'should update baseline-1 criteria' do
+    log_in_as(@project.user)
+    # Update a baseline-1 criterion (osps_ac_01_01)
+    patch "/en/projects/#{@project.id}", params: {
+      criteria_level: 'baseline-1',
+      project: {
+        osps_ac_01_01_status: 'Met',
+        osps_ac_01_01_justification: 'We use MFA for all contributors'
+      }
+    }
+    # Redirects with criteria_level parameter included
+    assert_response :redirect
+    @project.reload
+    assert_equal 'Met', @project.osps_ac_01_01_status
+    assert_equal 'We use MFA for all contributors',
+                 @project.osps_ac_01_01_justification
   end
 
   # Negative test

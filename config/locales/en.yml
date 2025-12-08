@@ -663,6 +663,8 @@ en:
           These are the %{gold} level criteria. You can also view
           the %{passing} or %{silver} level criteria.
         baseline-1: 'Baseline Level 1'
+        baseline-1_html: >-
+          These are the Baseline Level 1 criteria.
         baseline-1_details: >-
           These are the Baseline Level 1 criteria.
         baseline-2: 'Baseline Level 2'

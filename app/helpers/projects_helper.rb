@@ -213,5 +213,109 @@ module ProjectsHelper
       ''
     )
   end
+
+  # Module method: Computes display form for a baseline ID.
+  # This is private and only used during constant initialization.
+  # Internal: osps_ac_03_01 (lowercase, underscores)
+  # Display: OSPS-AC-03.01 (uppercase, dashes, dot before last segment)
+  # Also handles field names:
+  # Internal: osps_ac_03_01_status
+  # Display: OSPS-AC-03.01_status
+  # @param id_str [String] baseline ID or field name in internal form
+  # @return [String] baseline ID or field name in display form, or original
+  # rubocop:disable Metrics/AbcSize
+  def self.compute_baseline_display_name(id_str)
+    # Only convert if it looks like a baseline ID (starts with osps_)
+    return id_str unless id_str.start_with?('osps_')
+
+    # Split on underscores: osps_ac_03_01 -> [osps, ac, 03, 01]
+    # or osps_ac_03_01_status -> [osps, ac, 03, 01, status]
+    parts = id_str.split('_')
+
+    if parts.size == 4
+      # Criterion ID: OSPS-AC-03.01
+      "#{parts.first.upcase}-#{parts[1].upcase}-#{parts[2]}.#{parts[3]}"
+    elsif parts.size == 5 && %w[status justification].include?(parts[4])
+      # Field name: OSPS-AC-03.01_status
+      "#{parts.first.upcase}-#{parts[1].upcase}-#{parts[2]}.#{parts[3]}_#{parts[4]}"
+    else
+      id_str # Return original if not recognized format
+    end
+  end
+  # rubocop:enable Metrics/AbcSize
+  private_class_method :compute_baseline_display_name
+
+  # Module method: Computes internal form for a baseline ID in display form.
+  # This is private and only used during constant initialization.
+  # Display: OSPS-AC-03.01 (uppercase, dashes, dot)
+  # Internal: osps_ac_03_01 (lowercase, underscores)
+  # @param id_str [String] baseline ID in display form
+  # @return [String] baseline ID in internal form, or original if not baseline
+  def self.compute_baseline_internal_name(id_str)
+    # Only convert if it looks like a baseline ID (starts with OSPS-)
+    return id_str unless id_str.match?(/^OSPS-/i)
+
+    # Convert to lowercase and replace dashes/dots with underscores
+    # OSPS-AC-03.01 -> osps_ac_03_01
+    id_str.downcase.tr('-.', '__')
+  end
+  private_class_method :compute_baseline_internal_name
+
+  # Precomputed mapping: Project field names from internal to display form.
+  # Computed once at load time, eliminating repeated transformations and GC.
+  # Only includes fields that need transformation (baseline fields).
+  BASELINE_FIELD_DISPLAY_NAME_MAP =
+    Project.column_names.each_with_object({}) do |name, hash|
+      transformed = compute_baseline_display_name(name)
+      hash[name] = transformed if transformed != name
+    end
+  BASELINE_FIELD_DISPLAY_NAME_MAP.freeze
+
+  # Precomputed mapping: Baseline display names to internal field names.
+  # Computed once at load time, eliminating repeated transformations and GC.
+  BASELINE_DISPLAY_TO_INTERNAL_NAME_MAP =
+    BASELINE_FIELD_DISPLAY_NAME_MAP.each_with_object({}) do |(internal, display), hash|
+      hash[display] = internal
+    end
+  BASELINE_DISPLAY_TO_INTERNAL_NAME_MAP.freeze
+
+  # Instance method: Converts baseline ID from internal form to display form.
+  # Uses precomputed map for database fields (O(1), no allocations).
+  # Falls back to computation for non-field IDs (e.g., criterion IDs).
+  # @param id [String, Symbol] baseline ID or field name in internal form
+  # @return [String] baseline ID or field name in display form, or original
+  def baseline_id_to_display(id)
+    id_str = id.to_s
+    # Fast path: Use precomputed map for database fields
+    return BASELINE_FIELD_DISPLAY_NAME_MAP[id_str] if
+      BASELINE_FIELD_DISPLAY_NAME_MAP.key?(id_str)
+
+    # Fallback: Compute for criterion IDs not in database
+    return id_str unless id_str.start_with?('osps_')
+
+    parts = id_str.split('_')
+    if parts.size == 4
+      "#{parts.first.upcase}-#{parts[1].upcase}-#{parts[2]}.#{parts[3]}"
+    else
+      id_str
+    end
+  end
+
+  # Instance method: Converts baseline ID from display form to internal form.
+  # Uses precomputed map for database fields (O(1), no allocations).
+  # Falls back to computation for non-field IDs (e.g., criterion IDs).
+  # @param id [String] baseline ID in display form
+  # @return [String] baseline ID in internal form, or original if not baseline
+  def baseline_id_to_internal(id)
+    id_str = id.to_s
+    # Fast path: Use precomputed map for database fields
+    return BASELINE_DISPLAY_TO_INTERNAL_NAME_MAP[id_str] if
+      BASELINE_DISPLAY_TO_INTERNAL_NAME_MAP.key?(id_str)
+
+    # Fallback: Compute for criterion IDs not in database
+    return id_str unless id_str.match?(/^OSPS-/i)
+
+    id_str.downcase.tr('-.', '__')
+  end
 end
 # rubocop:enable Metrics/ModuleLength

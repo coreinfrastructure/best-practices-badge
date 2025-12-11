@@ -1473,5 +1473,46 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_includes @response.body, 'Passing'
   end
+
+  # Unit tests for private helper methods
+  test 'current_working_level returns criteria_level for baseline levels' do
+    controller = ProjectsController.new
+    project = projects(:perfect_passing)
+    result = controller.send(:current_working_level, 'baseline-1', project)
+    assert_equal 'baseline-1', result
+  end
+
+  test 'current_working_level returns project badge_level for non-baseline' do
+    controller = ProjectsController.new
+    project = projects(:perfect_passing)
+    result = controller.send(:current_working_level, 'silver', project)
+    assert_equal 'passing', result # project is at passing level
+  end
+
+  test 'badge_level_lost? returns false for baseline levels' do
+    # Test line 1025: baseline changes always return false
+    controller = ProjectsController.new
+    result = controller.send(:badge_level_lost?, 'in_progress', 'baseline-1')
+    assert_equal false, result
+  end
+
+  test 'badge_level_lost? detects loss for traditional levels' do
+    controller = ProjectsController.new
+    result = controller.send(:badge_level_lost?, 'passing', 'in_progress')
+    assert_equal true, result
+  end
+
+  test 'update with continue and criteria_level redirects correctly' do
+    # Test line 957: continue with criteria_level set
+    log_in_as(@project.user)
+    patch project_path(@project, criteria_level: 'baseline-1'),
+          params: {
+            project: { name: @project.name },
+            continue: 'Quality'
+          }
+    assert_response :redirect
+    # Should redirect to baseline-1/edit with anchor
+    assert_redirected_to "#{project_path(@project)}/baseline-1/edit#Quality"
+  end
 end
 # rubocop:enable Metrics/ClassLength

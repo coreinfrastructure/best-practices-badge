@@ -188,6 +188,35 @@ class ProjectsHelperTest < ActionView::TestCase
     assert_equal 'name', baseline_id_to_display('name')
   end
 
+  test 'compute_baseline_display_name handles 4-part baseline IDs' do
+    # Test line 237: parts.size == 4 case
+    result = ProjectsHelper.send(:compute_baseline_display_name,
+                                 'osps_ac_03_01')
+    assert_equal 'OSPS-AC-03.01', result
+  end
+
+  test 'compute_baseline_display_name returns original for malformed IDs' do
+    # Test line 242: else case for unrecognized format
+    # osps_ prefix but wrong number of parts
+    result = ProjectsHelper.send(:compute_baseline_display_name,
+                                 'osps_invalid')
+    assert_equal 'osps_invalid', result
+  end
+
+  test 'compute_baseline_internal_name returns original for non-baseline' do
+    # Test line 256: return early if not OSPS- format
+    result = ProjectsHelper.send(:compute_baseline_internal_name,
+                                 'version_semver')
+    assert_equal 'version_semver', result
+  end
+
+  test 'compute_baseline_internal_name converts baseline display to internal' do
+    # Test line 260: convert OSPS- format to internal
+    result = ProjectsHelper.send(:compute_baseline_internal_name,
+                                 'OSPS-AC-03.01')
+    assert_equal 'osps_ac_03_01', result
+  end
+
   # If we uncomment baseline_id_to_internal, here are tests for it.
   # test 'baseline_id_to_internal uses precomputed map' do
   #   # Verify it returns correct values for baseline display names

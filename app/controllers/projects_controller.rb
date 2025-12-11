@@ -1006,8 +1006,11 @@ class ProjectsController < ApplicationController
   # @param project [Project] The project whose badge level to check
   # @return [String] The current working level
   def current_working_level(criteria_level, project)
-    Project::CRITERIA_SERIES[:baseline].include?(criteria_level) ?
-      criteria_level : project.badge_level
+    if Project::CRITERIA_SERIES[:baseline].include?(criteria_level)
+      criteria_level
+    else
+      project.badge_level
+    end
   end
 
   # Determines if a badge level change represents a loss of status.

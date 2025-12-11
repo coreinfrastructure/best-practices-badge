@@ -271,13 +271,18 @@ module ProjectsHelper
     end
   BASELINE_FIELD_DISPLAY_NAME_MAP.freeze
 
+  # We currently don't use this mapping of external->internal names,
+  # we instead use internal names and occasionally translate them to
+  # external names for display. However, it's conceivable that we might
+  # want to do that (e.g., accept JSON files with external display keys),
+  # so here's how to compute that.
   # Precomputed mapping: Baseline display names to internal field names.
   # Computed once at load time, eliminating repeated transformations and GC.
-  BASELINE_DISPLAY_TO_INTERNAL_NAME_MAP =
-    BASELINE_FIELD_DISPLAY_NAME_MAP.each_with_object({}) do |(internal, display), hash|
-      hash[display] = internal
-    end
-  BASELINE_DISPLAY_TO_INTERNAL_NAME_MAP.freeze
+  # BASELINE_DISPLAY_TO_INTERNAL_NAME_MAP =
+  #   BASELINE_FIELD_DISPLAY_NAME_MAP.each_with_object({}) do |(internal, display), hash|
+  #     hash[display] = internal
+  #   end
+  # BASELINE_DISPLAY_TO_INTERNAL_NAME_MAP.freeze
 
   # Instance method: Converts baseline ID from internal form to display form.
   # Uses precomputed map for database fields (O(1), no allocations).
@@ -301,21 +306,21 @@ module ProjectsHelper
     end
   end
 
+  # We currently don't use this mapping of external->internal names, but
+  # here's a way to do that.
   # Instance method: Converts baseline ID from display form to internal form.
   # Uses precomputed map for database fields (O(1), no allocations).
   # Falls back to computation for non-field IDs (e.g., criterion IDs).
   # @param id [String] baseline ID in display form
   # @return [String] baseline ID in internal form, or original if not baseline
-  def baseline_id_to_internal(id)
-    id_str = id.to_s
-    # Fast path: Use precomputed map for database fields
-    return BASELINE_DISPLAY_TO_INTERNAL_NAME_MAP[id_str] if
-      BASELINE_DISPLAY_TO_INTERNAL_NAME_MAP.key?(id_str)
-
-    # Fallback: Compute for criterion IDs not in database
-    return id_str unless id_str.match?(/^OSPS-/i)
-
-    id_str.downcase.tr('-.', '__')
-  end
+  # def baseline_id_to_internal(id)
+  #   id_str = id.to_s
+  #   # Fast path: Use precomputed map for database fields
+  #   return BASELINE_DISPLAY_TO_INTERNAL_NAME_MAP[id_str] if
+  #     BASELINE_DISPLAY_TO_INTERNAL_NAME_MAP.key?(id_str)
+  #   # Fallback: Compute for criterion IDs not in database
+  #   return id_str unless id_str.match?(/^OSPS-/i)
+  #   id_str.downcase.tr('-.', '__')
+  # end
 end
 # rubocop:enable Metrics/ModuleLength

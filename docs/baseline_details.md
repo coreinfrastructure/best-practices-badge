@@ -3808,7 +3808,6 @@ It should have at most a few straightforward tests.
 The resulting test suite *must* implement 100% statement coverage of
 deployed code (not including rake tasks or scripts).
 
-
 ### 4.1: Design Baseline Badge Images
 
 **Directory**: `app/assets/images/`

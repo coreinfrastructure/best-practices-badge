@@ -166,17 +166,18 @@ class ProjectsHelperTest < ActionView::TestCase
     end
   end
 
-  test 'BASELINE_DISPLAY_TO_INTERNAL_NAME_MAP is frozen and contains reverse mappings' do
-    # Verify the constant is frozen for thread safety
-    assert ProjectsHelper::BASELINE_DISPLAY_TO_INTERNAL_NAME_MAP.frozen?
-    # Verify it contains at least some baseline field mappings
-    assert ProjectsHelper::BASELINE_DISPLAY_TO_INTERNAL_NAME_MAP.any?
-    # Verify sample reverse mappings are correct
-    if ProjectsHelper::BASELINE_DISPLAY_TO_INTERNAL_NAME_MAP.key?('OSPS-AC-01.01_status')
-      assert_equal 'osps_ac_01_01_status',
-                   ProjectsHelper::BASELINE_DISPLAY_TO_INTERNAL_NAME_MAP['OSPS-AC-01.01_status']
-    end
-  end
+  # We've commented out this mapping, so there's nothing to test.
+  # test 'BASELINE_DISPLAY_TO_INTERNAL_NAME_MAP is frozen and contains reverse mappings' do
+  #   # Verify the constant is frozen for thread safety
+  #   assert ProjectsHelper::BASELINE_DISPLAY_TO_INTERNAL_NAME_MAP.frozen?
+  #   # Verify it contains at least some baseline field mappings
+  #   assert ProjectsHelper::BASELINE_DISPLAY_TO_INTERNAL_NAME_MAP.any?
+  #   # Verify sample reverse mappings are correct
+  #   if ProjectsHelper::BASELINE_DISPLAY_TO_INTERNAL_NAME_MAP.key?('OSPS-AC-01.01_status')
+  #     assert_equal 'osps_ac_01_01_status',
+  #                  ProjectsHelper::BASELINE_DISPLAY_TO_INTERNAL_NAME_MAP['OSPS-AC-01.01_status']
+  #   end
+  # end
 
   test 'baseline_id_to_display uses precomputed map' do
     # Verify it returns correct values for baseline IDs
@@ -187,25 +188,26 @@ class ProjectsHelperTest < ActionView::TestCase
     assert_equal 'name', baseline_id_to_display('name')
   end
 
-  test 'baseline_id_to_internal uses precomputed map' do
-    # Verify it returns correct values for baseline display names
-    assert_equal 'osps_ac_03_01', baseline_id_to_internal('OSPS-AC-03.01')
-    assert_equal 'osps_br_01_02_status',
-                 baseline_id_to_internal('OSPS-BR-01.02_status')
-    # Verify it returns original for non-baseline IDs
-    assert_equal 'name', baseline_id_to_internal('name')
-  end
+  # If we uncomment baseline_id_to_internal, here are tests for it.
+  # test 'baseline_id_to_internal uses precomputed map' do
+  #   # Verify it returns correct values for baseline display names
+  #   assert_equal 'osps_ac_03_01', baseline_id_to_internal('OSPS-AC-03.01')
+  #   assert_equal 'osps_br_01_02_status',
+  #                baseline_id_to_internal('OSPS-BR-01.02_status')
+  #   # Verify it returns original for non-baseline IDs
+  #   assert_equal 'name', baseline_id_to_internal('name')
+  # end
 
-  test 'baseline_id_to_internal converts display to internal form' do
-    assert_equal 'osps_ac_03_01', baseline_id_to_internal('OSPS-AC-03.01')
-    assert_equal 'osps_br_01_02', baseline_id_to_internal('OSPS-BR-01.02')
-    assert_equal 'osps_qa_05_02', baseline_id_to_internal('osps-qa-05.02')
-  end
+  # test 'baseline_id_to_internal converts display to internal form' do
+  #   assert_equal 'osps_ac_03_01', baseline_id_to_internal('OSPS-AC-03.01')
+  #   assert_equal 'osps_br_01_02', baseline_id_to_internal('OSPS-BR-01.02')
+  #   assert_equal 'osps_qa_05_02', baseline_id_to_internal('osps-qa-05.02')
+  # end
 
-  test 'baseline_id_to_internal returns original for non-baseline IDs' do
-    assert_equal 'version_semver', baseline_id_to_internal('version_semver')
-    assert_equal 'crypto_password_storage',
-                 baseline_id_to_internal('crypto_password_storage')
-  end
+  # test 'baseline_id_to_internal returns original for non-baseline IDs' do
+  #   assert_equal 'version_semver', baseline_id_to_internal('version_semver')
+  #   assert_equal 'crypto_password_storage',
+  #                baseline_id_to_internal('crypto_password_storage')
+  # end
 end
 # rubocop:enable Metrics/ClassLength

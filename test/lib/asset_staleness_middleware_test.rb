@@ -70,8 +70,37 @@ class AssetStalenessMiddlewareTest < ActiveSupport::TestCase
     end
   end
 
+  test 'logs errors in test environment' do
+    # Test line 36: Rails.logger.error(...) in test environment
+    checker = Object.new
+    def checker.check_and_warn(env:)
+      raise StandardError, 'Test error in test env'
+    end
+
+    logger = Object.new
+    def logger.error(msg)
+      @logged = msg
+    end
+
+    def logger.logged
+      @logged
+    end
+
+    middleware = AssetStalenessMiddleware.new(@app)
+    AssetStalenessChecker.stub :from_rails_config, checker do
+      Rails.stub :env, ActiveSupport::EnvironmentInquirer.new('test') do
+        Rails.stub :logger, logger do
+          # Should not raise in test, just log
+          status, _headers, _body = middleware.call(@env)
+          assert_equal 200, status
+          assert_match(/Asset staleness check failed/, logger.logged)
+        end
+      end
+    end
+  end
+
   test 'logs errors in production environment' do
-    # Test line 36: Rails.logger.error(...)
+    # Test line 36: Rails.logger.error(...) in production
     checker = Object.new
     def checker.check_and_warn(env:)
       raise StandardError, 'Test error in production'

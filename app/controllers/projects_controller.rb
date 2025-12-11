@@ -1000,28 +1000,26 @@ class ProjectsController < ApplicationController
   end
 
   # Determines the current working level based on criteria level or badge level.
-  # For baseline levels (e.g., baseline-1), returns the criteria level.
-  # For traditional badge levels, returns the project's badge level.
+  # For baseline levels, returns the criteria level being edited.
+  # For traditional badge levels, returns the project's actual badge level.
   # @param criteria_level [String, nil] The criteria level being edited
   # @param project [Project] The project whose badge level to check
   # @return [String] The current working level
   def current_working_level(criteria_level, project)
-    if criteria_level&.start_with?('baseline-')
-      criteria_level
-    else
-      project.badge_level
-    end
+    Project::CRITERIA_SERIES[:baseline].include?(criteria_level) ?
+      criteria_level : project.badge_level
   end
 
   # Determines if a badge level change represents a loss of status.
-  # For baseline levels, always returns false (baseline changes are gains).
   # For traditional levels, compares positions in BADGE_LEVELS array.
   # @param old_level [String] Previous badge level
   # @param new_level [String] New badge level
   # @return [Boolean] True if the change represents a loss of badge status
   def badge_level_lost?(old_level, new_level)
-    if new_level&.start_with?('baseline-')
-      false # Baseline changes are always gains
+    if Project::CRITERIA_SERIES[:baseline].include?(new_level)
+      # For now, baseline changes are always gains. This won't be true
+      # once we implement baseline-2.
+      false
     else
       Project::BADGE_LEVELS.index(new_level) <
         Project::BADGE_LEVELS.index(old_level)

@@ -4311,6 +4311,9 @@ _metadata:
 
 ### 5.4: Create Views for Baseline-2 and Baseline-3
 
+In file `app/controllers/projects_controller.rb` ensure that
+`badge_level_lost?` handles multiple baseline levels.
+
 **New file**: `app/views/projects/_form_baseline-2.html.erb`
 
 ```erb

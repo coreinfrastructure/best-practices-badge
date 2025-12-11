@@ -74,7 +74,7 @@ class JavascriptTest < ApplicationSystemTestCase
 
     # Get initial panel count (should start with 0/)
     initial_panel_text = find('#controls .satisfaction-text').text
-    assert_match(/^0\/\d+$/, initial_panel_text,
+    assert_match(%r{^0/\d+$}, initial_panel_text,
                  'Panel should start with 0/ count')
 
     # Get initial progress bar percentage
@@ -98,15 +98,15 @@ class JavascriptTest < ApplicationSystemTestCase
 
     # Verify panel count increased from 0/
     new_panel_text = find('#controls .satisfaction-text').text
-    refute_match(/^0\//, new_panel_text,
-                 'Panel count should have increased from 0/')
-    assert_match(/^\d+\/\d+$/, new_panel_text,
+    assert_no_match(%r{^0/}, new_panel_text,
+                    'Panel count should have increased from 0/')
+    assert_match(%r{^\d+/\d+$}, new_panel_text,
                  'Panel count should be in N/M format')
 
     # Verify progress bar increased from 0%
     new_progress = find('.badge-progress').text
-    refute_equal '0%', new_progress,
-                 'Progress bar should have increased from 0%'
+    assert_not_equal '0%', new_progress,
+                     'Progress bar should have increased from 0%'
     assert_match(/^\d+%$/, new_progress,
                  'Progress bar should be a percentage')
   end

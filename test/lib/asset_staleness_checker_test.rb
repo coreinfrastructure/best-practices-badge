@@ -162,12 +162,16 @@ class AssetStalenessCheckerTest < ActiveSupport::TestCase
 
   test 'from_rails_config creates checker when compiled assets exist' do
     # Test line 125: new() call when compiled path exists
+    # Ensure public/assets exists for this test
+    public_assets = Rails.root.join('public', 'assets')
+    FileUtils.mkdir_p(public_assets)
+
     output = StringIO.new
     checker = AssetStalenessChecker.from_rails_config(
       Rails.application,
       output: output
     )
-    # Should create a checker since public/assets exists in test env
+    # Should create a checker since public/assets exists
     assert_instance_of AssetStalenessChecker, checker
   end
 end

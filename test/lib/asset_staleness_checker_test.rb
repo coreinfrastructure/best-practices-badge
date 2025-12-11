@@ -159,5 +159,16 @@ class AssetStalenessCheckerTest < ActiveSupport::TestCase
 
     assert_equal true, checker.assets_stale?
   end
+
+  test 'from_rails_config creates checker when compiled assets exist' do
+    # Test line 125: new() call when compiled path exists
+    output = StringIO.new
+    checker = AssetStalenessChecker.from_rails_config(
+      Rails.application,
+      output: output
+    )
+    # Should create a checker since public/assets exists in test env
+    assert_instance_of AssetStalenessChecker, checker
+  end
 end
 # rubocop:enable Metrics/ClassLength, Rails/TimeZone

@@ -3762,9 +3762,30 @@ PROJECT_PERMITTED_FIELDS = (PROJECT_OTHER_FIELDS + ALL_CRITERIA_STATUS +
 
 **No changes needed** - this dynamically includes all criteria from Criteria class, so baseline criteria will be automatically included.
 
-### 3.11: Add detection of stale assets
+### Phase 3 Testing Checklist
 
-In the process of implementing this phase, we once again made an
+- [ ] All baseline-1 criteria load from YAML
+- [ ] All database fields exist for baseline-1
+- [ ] Baseline-1 form renders with all criteria
+- [ ] Can view baseline-1 page for existing projects
+- [ ] Can edit baseline-1 criteria
+- [ ] Badge percentage calculates correctly
+- [ ] Achievement timestamps update correctly
+- [ ] Can save changes to baseline-1 criteria
+- [ ] Navigation between levels works
+- [ ] No JavaScript errors in browser console
+- [ ] Validations work for baseline-1 fields
+- [ ] All linters pass (rubocop, rails_best_practices, markdownlint)
+
+---
+
+## Phase 4: Baseline Badge Images
+
+**Goal**: Add `/projects/{id}/baseline` route for baseline series badge images.
+
+### 4.0: Add detection of stale assets
+
+In the process of implementing phase 3, we once again made an
 easy mistake: forgetting to precompile assets when their sources change.
 If not noticed, this can lead to long unnecessary debugging sessions.
 
@@ -3787,26 +3808,6 @@ It should have at most a few straightforward tests.
 The resulting test suite *must* implement 100% statement coverage of
 deployed code (not including rake tasks or scripts).
 
-### Phase 3 Testing Checklist
-
-- [ ] All baseline-1 criteria load from YAML
-- [ ] All database fields exist for baseline-1
-- [ ] Baseline-1 form renders with all criteria
-- [ ] Can view baseline-1 page for existing projects
-- [ ] Can edit baseline-1 criteria
-- [ ] Badge percentage calculates correctly
-- [ ] Achievement timestamps update correctly
-- [ ] Can save changes to baseline-1 criteria
-- [ ] Navigation between levels works
-- [ ] No JavaScript errors in browser console
-- [ ] Validations work for baseline-1 fields
-- [ ] All linters pass (rubocop, rails_best_practices, markdownlint)
-
----
-
-## Phase 4: Baseline Badge Images
-
-**Goal**: Add `/projects/{id}/baseline` route for baseline series badge images.
 
 ### 4.1: Design Baseline Badge Images
 

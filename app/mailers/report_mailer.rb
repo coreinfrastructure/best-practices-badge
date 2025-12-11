@@ -78,8 +78,11 @@ class ReportMailer < ApplicationMailer
     @project = project
     user = User.find(project.user_id)
     return if user.nil?
+
+    email = user.email_if_decryptable
+    return if email == 'CANNOT_DECRYPT'
     return unless user.email?
-    return if user.email.exclude?('@')
+    return if email.exclude?('@')
 
     @project_info_url =
       project_url(@project, locale: user.preferred_locale.to_sym)

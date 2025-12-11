@@ -58,8 +58,9 @@ function getLocale() {
 
 // Return current level based upon parameters in location.search
 function getLevel() {
-  // Match named levels (passing, silver, gold) or numeric (0, 1, 2)
-  var levelPattern = 'projects/[0-9]*/(passing|silver|gold|[0-2])';
+  // Match named levels (passing/silver/gold/baseline) or numeric (0/1/2)
+  var levelPattern =
+    'projects/[0-9]*/(passing|silver|gold|baseline-[123]|[0-2])';
   var levelFromUrl = location.pathname.match(levelPattern);
   if (levelFromUrl) {
     return levelFromUrl[1];
@@ -100,11 +101,12 @@ function containsURL(justification) {
 
 // Return if criterion's value for key is true in CRITERIA_HASH (default false)
 function criterionHashTrue(criterion, key) {
-  return CRITERIA_HASH[criterion][key] === true;
+  return CRITERIA_HASH[criterion] && CRITERIA_HASH[criterion][key] === true;
 }
 
 function criterionStatus(criterion) {
-  return globalCriteriaResultHash[criterion]['status'];
+  return globalCriteriaResultHash[criterion] ?
+    globalCriteriaResultHash[criterion]['status'] : '?';
 }
 
 // Return true if the justification is good enough for a SHOULD criterion.
@@ -225,7 +227,7 @@ function resetProgressBar() {
   });
   percentage = enough / total;
   percentAsString = Math.round(percentage * 100).toString() + '%';
-  $('#badge-progress').attr('aria-valuenow', percentage)
+  $('.badge-progress').attr('aria-valuenow', percentage)
                       .text(percentAsString).css('width', percentAsString);
 }
 
@@ -295,12 +297,19 @@ function hasFieldTextInside(e) {
 }
 
 function fillCriteriaResultHash() {
+  var level = getLevel();
   $.each(CRITERIA_HASH, function(key, value) {
     globalCriteriaResultHash[key] = {};
-    globalCriteriaResultHash[key]['status'] = $('input[name="project[' + key +
-                                                '_status]"]:checked')[0].value;
+    var inputSelector = 'input[name="project[' + key + '_status]"]:checked';
+    var checkedInput = $(inputSelector)[0];
+    globalCriteriaResultHash[key]['status'] =
+      checkedInput ? checkedInput.value : '?';
     globalCriteriaResultHash[key]['result'] = getCriterionResult(key);
-    globalCriteriaResultHash[key]['panelID'] = value['major']
+
+    // Baseline levels use minor category for panel ID, others use major
+    var panelCategory = (level && level.startsWith('baseline-')) ?
+      value['minor'] : value['major'];
+    globalCriteriaResultHash[key]['panelID'] = panelCategory
                                               .toLowerCase()
                                               .replace(/\s+/g, '');
   });
@@ -726,7 +735,9 @@ function setupProjectForm() {
     if (level === 'gold') {
       level = '2';
     }
+
     CRITERIA_HASH = CRITERIA_HASH_FULL[level];
+
     $('#project_entry_form').on('criteriaResultHashComplete', function(e) {
       setupProjectFields();
       resetProgressBar();

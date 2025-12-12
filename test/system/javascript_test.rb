@@ -7,8 +7,18 @@
 require 'application_system_test_case'
 
 class JavascriptTest < ApplicationSystemTestCase
+  CHECK = /result_symbol_check/
+  QUESTION = /result_symbol_question/
+
   setup do
     @project_passing = projects(:perfect_passing)
+    @user = users(:test_user)
+    @project = projects(:one)
+  end
+
+  def ensure_choice(radio_button_id)
+    # Necessary because Capybara click doesn't always take the first time
+    choose radio_button_id until find("##{radio_button_id}")['checked']
   end
 
   test 'Check show/hide Met on show for passing' do
@@ -43,5 +53,61 @@ class JavascriptTest < ApplicationSystemTestCase
     refute_selector(:css, '#contribution_requirements')
     refute_selector(:css, '#report_tracker')
     refute_selector(:css, '#warnings')
+  end
+
+  test 'Can edit baseline-1 form with JavaScript updates' do
+    # Log in as test_user who owns the project
+    visit projects_path(locale: :en)
+    click_on 'Login'
+    fill_in 'Email', with: @user.email
+    fill_in 'Password', with: 'password'
+    click_button 'Log in using custom account'
+    assert has_content? 'Logged in!'
+
+    # Visit the baseline-1 edit page directly
+    visit "/en/projects/#{@project.id}/baseline-1/edit"
+    wait_for_jquery
+
+    # Expand all panels to ensure proper initialization
+    find('#toggle-expand-all-panels').click
+    wait_for_jquery
+
+    # Get initial panel count (should start with 0/)
+    initial_panel_text = find('#controls .satisfaction-text').text
+    assert_match(%r{^0/\d+$}, initial_panel_text,
+                 'Panel should start with 0/ count')
+
+    # Get initial progress bar percentage
+    initial_progress = find('.badge-progress').text
+    assert_equal '0%', initial_progress, 'Progress should start at 0%'
+
+    # Find the first baseline criterion (osps_ac_01_01) and verify it starts
+    # with question mark icon
+    first_criterion_icon = find('#osps_ac_01_01_enough')
+    assert_match QUESTION, first_criterion_icon['src'],
+                 'Criterion should start with question mark icon'
+
+    # Click the "Met" radio button for the first baseline criterion
+    ensure_choice 'project_osps_ac_01_01_status_met'
+    wait_for_jquery
+
+    # Verify the criterion result icon changed to check mark
+    first_criterion_icon = find('#osps_ac_01_01_enough')
+    assert_match CHECK, first_criterion_icon['src'],
+                 'Criterion icon should change to check mark'
+
+    # Verify panel count increased from 0/
+    new_panel_text = find('#controls .satisfaction-text').text
+    assert_no_match(%r{^0/}, new_panel_text,
+                    'Panel count should have increased from 0/')
+    assert_match(%r{^\d+/\d+$}, new_panel_text,
+                 'Panel count should be in N/M format')
+
+    # Verify progress bar increased from 0%
+    new_progress = find('.badge-progress').text
+    assert_not_equal '0%', new_progress,
+                     'Progress bar should have increased from 0%'
+    assert_match(/^\d+%$/, new_progress,
+                 'Progress bar should be a percentage')
   end
 end

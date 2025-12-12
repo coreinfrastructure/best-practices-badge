@@ -3783,6 +3783,31 @@ PROJECT_PERMITTED_FIELDS = (PROJECT_OTHER_FIELDS + ALL_CRITERIA_STATUS +
 
 **Goal**: Add `/projects/{id}/baseline` route for baseline series badge images.
 
+### 4.0: Add detection of stale assets
+
+In the process of implementing phase 3, we once again made an
+easy mistake: forgetting to precompile assets when their sources change.
+If not noticed, this can lead to long unnecessary debugging sessions.
+
+So we've created some draft files to detect stale assets.
+These must eventually be added as a *separate* pull request, not
+in the phase 3 pull requests, since this is a separate functionality.
+At the time of writing these are:
+
+1. `lib/asset_staleness_checker.rb` - Core logic for detecting stale assets
+2. `lib/asset_staleness_middleware.rb` - Rack middleware that runs the check
+   on first web request (the result is memorized, so it's only done once)
+3. `test/lib/asset_staleness_checker_test.rb` - Comprehensive test suite
+  (100% statement coverage)
+4. `config/initializers/check_asset_staleness.rb` - Adds the middleware to
+   the Rails stack
+
+Before committing, significantly simplify the test suite.
+It was devised when there was an overly complex approach to the problem.
+It should have at most a few straightforward tests.
+The resulting test suite *must* implement 100% statement coverage of
+deployed code (not including rake tasks or scripts).
+
 ### 4.1: Design Baseline Badge Images
 
 **Directory**: `app/assets/images/`
@@ -4284,6 +4309,9 @@ _metadata:
 **To update criteria**: Run `rake baseline:sync` - do not manually edit this file.
 
 ### 5.4: Create Views for Baseline-2 and Baseline-3
+
+In file `app/controllers/projects_controller.rb` ensure that
+`badge_level_lost?` handles multiple baseline levels.
 
 **New file**: `app/views/projects/_form_baseline-2.html.erb`
 

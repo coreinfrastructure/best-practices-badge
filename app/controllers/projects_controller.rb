@@ -285,7 +285,8 @@ class ProjectsController < ApplicationController
     if repo_url_unchanged_or_change_allowed?
       # Send CDN purge early, to give it time to distribute purge request
       @project.purge_cdn_project
-      old_badge_level = @project.badge_level
+      # Capture the level being worked on (baseline or traditional badge)
+      old_badge_level = current_working_level(@criteria_level, @project)
       final_project_params = project_params
       # Determine if we're trying to change ownership.
       # Only admins and owner (can_control?) can change ownership
@@ -942,6 +943,7 @@ class ProjectsController < ApplicationController
   # @param criteria_level [String] Current criteria level for navigation
   # @return [void] Renders response and sends emails as needed
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   # TODO: Break this into smaller pieces
   def successful_update(format, old_badge_level, criteria_level)
     criteria_level = nil if criteria_level == 'passing'
@@ -949,38 +951,44 @@ class ProjectsController < ApplicationController
     format.html do
       if params[:continue]
         flash[:info] = t('projects.edit.successfully_updated')
-        redirect_to edit_project_path(
-          @project, criteria_level: criteria_level
-        ) + url_anchor
+        # Build edit URL with criteria_level in path, not query string
+        edit_url =
+          if criteria_level
+            "#{project_path(@project)}/#{criteria_level}/edit"
+          else
+            edit_project_path(@project)
+          end
+        redirect_to edit_url + url_anchor
       else
         redirect_to project_path(@project, criteria_level: criteria_level),
                     success: t('projects.edit.successfully_updated')
       end
     end
     format.json { render :show, status: :ok, location: @project }
-    new_badge_level = @project.badge_level
+    # Check if the level being worked on has changed
+    new_badge_level = current_working_level(criteria_level, @project)
     return if new_badge_level == old_badge_level
 
     # TODO: Eventually deliver_later
     ReportMailer.project_status_change(
       @project, old_badge_level, new_badge_level
     ).deliver_now
-    if Project::BADGE_LEVELS.index(new_badge_level) >
-       Project::BADGE_LEVELS.index(old_badge_level)
+    # Determine if this represents a gain or loss of badge status
+    lost_level = badge_level_lost?(old_badge_level, new_badge_level)
+    if lost_level
+      flash[:danger] = t('projects.edit.lost_badge')
+    else
       flash[:success] = t(
         'projects.edit.congrats_new',
         new_badge_level: new_badge_level
       )
-      lost_level = false
-    else
-      flash[:danger] = t('projects.edit.lost_badge')
-      lost_level = true
     end
     ReportMailer.email_owner(
       @project, old_badge_level, new_badge_level, lost_level
     ).deliver_now
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   # Generates URL anchor fragment for form navigation.
   # Creates anchor tag for specific form sections, excluding the generic "Save".
@@ -989,6 +997,36 @@ class ProjectsController < ApplicationController
     return '#' + params[:continue] unless params[:continue] == 'Save'
 
     ''
+  end
+
+  # Determines the current working level based on criteria level or badge level.
+  # For baseline levels, returns the criteria level being edited.
+  # For traditional badge levels, returns the project's actual badge level.
+  # @param criteria_level [String, nil] The criteria level being edited
+  # @param project [Project] The project whose badge level to check
+  # @return [String] The current working level
+  def current_working_level(criteria_level, project)
+    if Project::CRITERIA_SERIES[:baseline].include?(criteria_level)
+      criteria_level
+    else
+      project.badge_level
+    end
+  end
+
+  # Determines if a badge level change represents a loss of status.
+  # For traditional levels, compares positions in BADGE_LEVELS array.
+  # @param old_level [String] Previous badge level
+  # @param new_level [String] New badge level
+  # @return [Boolean] True if the change represents a loss of badge status
+  def badge_level_lost?(old_level, new_level)
+    if Project::CRITERIA_SERIES[:baseline].include?(new_level)
+      # For now, baseline changes are always gains. This won't be true
+      # once we implement baseline-2.
+      false
+    else
+      Project::BADGE_LEVELS.index(new_level) <
+        Project::BADGE_LEVELS.index(old_level)
+    end
   end
 
   # Normalizes URLs by removing trailing slashes.

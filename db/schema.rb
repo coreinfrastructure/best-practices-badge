@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_24_184516) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_05_215107) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -220,6 +220,9 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_24_184516) do
     t.string "enhancement_responses_status", default: "?", null: false
     t.text "external_dependencies_justification"
     t.string "external_dependencies_status", default: "?", null: false
+    t.datetime "first_achieved_baseline_1_at"
+    t.datetime "first_achieved_baseline_2_at"
+    t.datetime "first_achieved_baseline_3_at"
     t.datetime "first_achieved_gold_at", precision: nil
     t.datetime "first_achieved_passing_at", precision: nil
     t.datetime "first_achieved_silver_at", precision: nil

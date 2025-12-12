@@ -57,7 +57,7 @@
         </div>
         <div class="col-xs-4 col-xs-offset-2 col-sm-offset-1 text-left block-left">
           <fieldset>
-          <legend class="hidden"><%= "Criterion [#{criterion}]" %></legend>
+          <legend class="hidden"><%= "Criterion [#{baseline_id_to_display(criterion)}]" %></legend>
           <%= f.radio_button status_symbol, 'Met', label: t('criterion_status.Met'),
                                                    disabled: view_only %>
           <%= f.radio_button status_symbol, 'Unmet', label: t('criterion_status.Unmet'),
@@ -94,7 +94,7 @@
           else
             ''
          end %>
-      <sup>[<%= criterion %>]</sup>
+      <sup>[<%= baseline_id_to_display(criterion) %>]</sup>
       <%= if criterion.details
             render(partial: "details",
               locals: {f: f, criterion: criterion,

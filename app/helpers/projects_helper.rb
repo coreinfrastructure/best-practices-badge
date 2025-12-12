@@ -61,7 +61,7 @@ module ProjectsHelper
   # while ensuring thread safety, as Redcarpet's C code is not thread-safe
   # with shared instances across threads.
   # @param content [String] The content to render as Markdown
-  # rubocop:disable Rails/OutputSafety
+  # rubocop:disable Rails/OutputSafety, Metrics/MethodLength
   def markdown(content)
     return '' if content.blank?
 
@@ -84,9 +84,11 @@ module ProjectsHelper
       Thread.current[:markdown_processor] = processor
     end
 
-    processor.render(content).html_safe
+    # Defensive measure: add useless ".to_s" to ensure content is a string.
+    # Strings return themselves, so it should have no performance impact.
+    processor.render(content.to_s).html_safe
   end
-  # rubocop:enable Rails/OutputSafety
+  # rubocop:enable Rails/OutputSafety, Metrics/MethodLength
 
   # Use the status_chooser to render the given criterion.
   # rubocop:disable Metrics/ParameterLists

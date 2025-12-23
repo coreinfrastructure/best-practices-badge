@@ -10,9 +10,9 @@
       <%= link_to user.name, user %>
     | <%= user.provider %>
       <% if current_user&.admin? %>
-        <% if user.email? %>
-    |     <a href="mailto:<%= CGI::escape(user.email).html_safe %>">email
-            <%= user.email %></a>
+        <% if user.encrypted_email? %>
+    |     <a href="mailto:<%= CGI::escape(user.email_if_decryptable).html_safe %>">email
+            <%= user.email_if_decryptable %></a>
         <% end %>
     |   <%= link_to "delete", user, method: :delete,
                                     data: { confirm: "Are you sure?" } %>

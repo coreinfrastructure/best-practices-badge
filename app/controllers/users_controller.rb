@@ -128,8 +128,8 @@ class UsersController < ApplicationController
       end
     end
 
-    # Process emails
-    if search_emails_list.present?
+    # Process emails - only works with production blind index key
+    if search_emails_list.present? && User.email_search_available?
       # Split by \n; .strip will remove any \r from CRLF line endings
       search_emails_list.split("\n").each do |email|
         next if email.strip.empty?

@@ -167,14 +167,15 @@ class UsersController < ApplicationController
   # rubocop: disable Metrics/AbcSize
   def search_users
     result = User.all
-    if current_user.admin?
-      search_result = search_users_by_lists(params[:search_names], params[:search_emails])
+    search_names = params[:search_names]
+    search_emails = params[:search_emails]
+    search = search_names.present? || search_emails.present?
+    if current_user.admin? && search
+      search_result = search_users_by_lists(search_names, search_emails)
       return User.none.tap { flash[:danger] = search_result[:error] } if search_result[:error]
 
-      # Apply search filter if search parameters were provided (even if no matches)
-      if params[:search_names].present? || params[:search_emails].present?
-        result = User.where(id: search_result[:user_ids])
-      end
+      # If no match, result will be empty
+      result = User.where(id: search_result[:user_ids])
     end
     result
   end

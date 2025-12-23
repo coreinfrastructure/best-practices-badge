@@ -25,11 +25,12 @@
 <% if current_user&.admin? %>
 <h2 class>New Search</h2>
 <p><strong>Name search is case-insensitive and supports wildcards:</strong> Use % for zero or more characters and _ for exactly one character.</p>
+<p><strong>Multiple entries:</strong> Enter one name or email per line to search for multiple users.</p>
  <%= form_for users_path, method: 'get', enforce_utf8: true do %>
-  <label for="name"><%= 'Name' %></label>
-  <%= text_field_tag :name, params[:name], size: 40, placeholder: 'User name (case-insensitive, % and _)' %>
-  <label for="email"><%= 'Email' %></label>
-  <%= text_field_tag :email, params[:email], size: 60, placeholder: 'User email (case-insensitive exact match)' %>
+  <label for="search_names"><%= 'Names (one per line)' %></label>
+  <%= text_area_tag :search_names, params[:search_names], rows: 3, cols: 40, placeholder: 'User names (case-insensitive, % and _)' %>
+  <label for="search_emails"><%= 'Emails (one per line)' %></label>
+  <%= text_area_tag :search_emails, params[:search_emails], rows: 3, cols: 60, placeholder: 'User emails (case-insensitive exact match)' %>
   <%= submit_tag 'User Search', name: nil %>
  <% end %>
 <% end %>

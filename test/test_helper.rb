@@ -4,6 +4,10 @@
 # OpenSSF Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
+# NOTE: If you change SimpleCov configuration (used locally), you may also
+# need to change codecov configuration (used on the website) as managed
+# via codecov.yml.
+
 # *MUST* load 'simplecov' FIRST, before any other code is run.
 # See: https://github.com/colszowka/simplecov/issues/296
 require 'simplecov'
@@ -23,12 +27,17 @@ else
 end
 
 # Start SimpleCov to track coverage
+# NOTE: If you change SimpleCov configuration (used locally), you may also
+# need to change codecov configuration (used on the website) as managed
+# via codecov.yml.
 SimpleCov.start 'rails' do
   add_group 'Validators', 'app/validators'
   add_filter '/config/'
   add_filter '/lib/tasks'
   add_filter '/test/'
   add_filter '/vendor/'
+  # Exclude baseline development scripts (not run in production)
+  add_filter %r{^/lib/baseline_.*\.rb$}
 end
 
 # Some tests flap, producing false failures, so enable auto-retry

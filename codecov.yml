@@ -1,6 +1,10 @@
 # Configure codecov.
 # https://docs.codecov.io/docs/codecov-yaml
 
+# NOTE: If you change the codecov configuration here (used on the website),
+# you may also need to change the SimpleCov configuration as managed via
+# test/test_helper.rb.
+
 ignore:
   # These files aren't run in production, and any defects can be addressed
   # during the development process, so ignore test coverage for them:

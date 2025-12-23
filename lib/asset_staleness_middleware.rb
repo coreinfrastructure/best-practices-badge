@@ -30,9 +30,10 @@ class AssetStalenessMiddleware
     checker = AssetStalenessChecker.from_rails_config(Rails.application)
     checker&.check_and_warn(env: Rails.env)
   rescue StandardError => e
-    # Re-raise in development, log in test/production
-    raise if Rails.env.development?
+    # Re-raise in development and test to fail fast
+    raise if Rails.env.local?
 
+    # In production, just log the error
     Rails.logger.error("Asset staleness check failed: #{e.message}")
   end
 end

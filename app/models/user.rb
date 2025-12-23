@@ -251,9 +251,11 @@ class User < ApplicationRecord
   # Email search requires the production blind index key to work correctly.
   # In development without EMAIL_BLIND_INDEX_KEY, searches will fail to match
   # production data, so we disable email search in that case.
+  # In test environment, uses TEST_EMAIL_BLIND_INDEX_KEY which works fine.
   # @return [Boolean] true if email search will work
   def self.email_search_available?
-    ENV['EMAIL_BLIND_INDEX_KEY'].present?
+    # Email search unavailable only in development without production keys
+    !Rails.env.development? || ENV['EMAIL_BLIND_INDEX_KEY'].present?
   end
 
   # Checks if the user has admin role.

@@ -57,7 +57,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
   test 'Admin can search by name, case-insensitive' do
     log_in_as(@admin)
-    get '/en/users?name=test'
+    get '/en/users?search_names=test'
     assert_response :success
     assert_includes @response.body, 'French Test'
     assert_not_includes @response.body, 'Mark Watney'
@@ -66,7 +66,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   test 'Admin can search by email, case-insensitive' do
     log_in_as(@admin)
     # Stored email address is 'CaseSensitive@example.org'
-    get '/en/users?email=casesensitive@example.org'
+    get '/en/users?search_emails=casesensitive@example.org'
     assert_response :success
     assert_includes @response.body, 'Case Sensitive'
     assert_not_includes @response.body, 'French Test'
@@ -76,16 +76,36 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   test 'Admin can search by name ORed with email, case-insensitive' do
     log_in_as(@admin)
     # Stored email address is 'CaseSensitive@example.org'
-    get '/en/users?name=Test&email=github-user@example.com'
+    get '/en/users?search_names=Test&search_emails=github-user@example.com'
     assert_response :success
     assert_includes @response.body, 'French Test'
     assert_includes @response.body, 'GitHub The User'
     assert_not_includes @response.body, 'Mark Watney'
   end
 
+  test 'Admin can search with multiple names and emails' do
+    log_in_as(@admin)
+    # Test with multiple names and emails (one per line)
+    # This should return: French Test (name match), Mark Watney (name match),
+    # GitHub The User (email match), and test_user_melissa (email match)
+    # We use CGI.escape to properly encode newlines in the URL
+    search_names = "Test\nMark\nNonexistent"
+    search_emails = "github-user@example.com\nmelissa@example.com\nnonexistent@example.com"
+    get "/en/users?search_names=#{CGI.escape(search_names)}&" \
+        "search_emails=#{CGI.escape(search_emails)}"
+    assert_response :success
+    # Verify all matching users are returned
+    assert_includes @response.body, 'French Test'
+    assert_includes @response.body, 'Mark Watney'
+    assert_includes @response.body, 'GitHub The User'
+    assert_includes @response.body, @user.name # Melissa via email match
+    # Verify at least one user is NOT matched (prevents bug returning all users)
+    assert_not_includes @response.body, 'Case Sensitive'
+  end
+
   test 'Non-admin will be UNABLE to search by name' do
     log_in_as(@other_user)
-    get '/en/users?name=test'
+    get '/en/users?search_names=test'
     assert_response :success
     # The search is ignored, so we'll just see unrelated entries
     assert_includes @response.body, 'Mark Watney'
@@ -94,7 +114,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   test 'Non-admin will be UNABLE search by email, case-insensitive' do
     log_in_as(@other_user)
     # Stored email address is 'CaseSensitive@example.org'
-    get '/en/users?email=casesensitive@example.org'
+    get '/en/users?search_emails=casesensitive@example.org'
     assert_response :success
     # The search is ignored, so we'll just see unrelated entries
     assert_includes @response.body, 'Mark Watney'
@@ -442,6 +462,138 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to user_path(@user)
     @user.reload
     assert_equal new_value, @user.notification_emails
+  end
+
+  # Unit tests for search_users_by_lists
+  test 'search_users_by_lists returns user IDs for valid names' do
+    controller = UsersController.new
+    result = controller.send(:search_users_by_lists, 'Test', nil)
+    assert_nil result[:error]
+    assert_not_empty result[:user_ids]
+  end
+
+  test 'search_users_by_lists returns user IDs for valid emails' do
+    controller = UsersController.new
+    result = controller.send(:search_users_by_lists, nil, 'melissa@example.com')
+    assert_nil result[:error]
+    assert_equal 1, result[:user_ids].size
+  end
+
+  test 'search_users_by_lists handles blank lines' do
+    controller = UsersController.new
+    result = controller.send(:search_users_by_lists, "Test\n\n  \nMark", nil)
+    assert_nil result[:error]
+    assert_not_empty result[:user_ids]
+  end
+
+  test 'search_users_by_lists returns error for invalid UTF-8 in names' do
+    controller = UsersController.new
+    invalid_utf8 = "\xFF\xFE"
+    result = controller.send(:search_users_by_lists, invalid_utf8, nil)
+    assert_equal 'Invalid UTF-8 in name search', result[:error]
+    assert_empty result[:user_ids]
+  end
+
+  test 'search_users_by_lists returns error for invalid UTF-8 in emails' do
+    controller = UsersController.new
+    invalid_utf8 = "\xFF\xFE"
+    result = controller.send(:search_users_by_lists, nil, invalid_utf8)
+    assert_equal 'Invalid UTF-8 in email search', result[:error]
+    assert_empty result[:user_ids]
+  end
+
+  test 'search_users_by_lists returns error for invalid email format' do
+    controller = UsersController.new
+    result = controller.send(:search_users_by_lists, nil, 'not-an-email')
+    assert_includes result[:error], 'Invalid email format'
+    assert_empty result[:user_ids]
+  end
+
+  test 'search_users_by_lists returns error when too many results from names' do
+    controller = UsersController.new
+    # Use a low limit to trigger too many results
+    # "%" wildcard matches multiple users in our fixtures
+    result = controller.send(:search_users_by_lists, '%', nil, 2)
+    assert_includes result[:error], 'Too many results'
+    assert_empty result[:user_ids]
+  end
+
+  test 'search_users_by_lists returns error when too many results from emails' do
+    controller = UsersController.new
+    # Use multiple emails and a low limit to trigger too many results
+    emails = "melissa@example.com\nmark@example.com\ngithub-user@example.com"
+    result = controller.send(:search_users_by_lists, nil, emails, 2)
+    assert_includes result[:error], 'Too many results'
+    assert_empty result[:user_ids]
+  end
+
+  test 'search_users_by_lists deduplicates results' do
+    controller = UsersController.new
+    # Search for the same user by name and email
+    result = controller.send(:search_users_by_lists,
+                             @user.name,
+                             @user.email)
+    assert_nil result[:error]
+    # Should only return one ID even though user matches both criteria
+    assert_equal 1, result[:user_ids].size
+  end
+
+  test 'search_users_by_lists returns empty array when no matches' do
+    controller = UsersController.new
+    result = controller.send(:search_users_by_lists,
+                             'NonexistentUser12345',
+                             'nonexistent@example.com')
+    assert_nil result[:error]
+    assert_empty result[:user_ids]
+  end
+
+  test 'search_users_by_lists handles nil inputs' do
+    controller = UsersController.new
+    result = controller.send(:search_users_by_lists, nil, nil)
+    assert_nil result[:error]
+    assert_empty result[:user_ids]
+  end
+
+  test 'search_email extracts email from Fullname <email> format' do
+    controller = UsersController.new
+    # Test with "Fullname <email@domain>" format
+    result = controller.send(:search_users_by_lists,
+                             nil,
+                             'Melissa User <melissa@example.com>')
+    assert_nil result[:error]
+    assert_equal 1, result[:user_ids].size
+  end
+
+  test 'search_email handles malformed > without <' do
+    controller = UsersController.new
+    # Test with ">" but no "<" - should just remove the ">"
+    result = controller.send(:search_users_by_lists,
+                             nil,
+                             'melissa@example.com>')
+    assert_nil result[:error]
+    assert_equal 1, result[:user_ids].size
+  end
+
+  test 'search_users_by_lists handles CRLF line endings' do
+    controller = UsersController.new
+    # Test with Windows-style CRLF (\r\n) line endings
+    # The \r should be stripped by .strip
+    result = controller.send(:search_users_by_lists,
+                             "Test\r\nMark\r\n",
+                             "melissa@example.com\r\ngithub-user@example.com\r\n")
+    assert_nil result[:error]
+    assert_not_empty result[:user_ids]
+    # Should find users despite the \r characters
+  end
+
+  test 'Admin search with no matches returns empty list, not all users' do
+    log_in_as(@admin)
+    get '/en/users?search_names=NonexistentUserXYZ123'
+    assert_response :success
+    # Should not include any actual users
+    assert_not_includes @response.body, 'French Test'
+    assert_not_includes @response.body, 'Mark Watney'
+    assert_not_includes @response.body, @user.name
   end
 end
 # rubocop:enable Metrics/ClassLength

@@ -247,6 +247,15 @@ class User < ApplicationRecord
     'CANNOT_DECRYPT'
   end
 
+  # Returns true if email search functionality is available.
+  # Email search requires the production blind index key to work correctly.
+  # In development without EMAIL_BLIND_INDEX_KEY, searches will fail to match
+  # production data, so we disable email search in that case.
+  # @return [Boolean] true if email search will work
+  def self.email_search_available?
+    ENV['EMAIL_BLIND_INDEX_KEY'].present?
+  end
+
   # Checks if the user has admin role.
   # @return [Boolean] true if user role is 'admin'
   def admin?

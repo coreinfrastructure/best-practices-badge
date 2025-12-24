@@ -31,6 +31,14 @@ VALID_ID ||= /[1-9][0-9]*/
 # Valid values for static badge display
 VALID_STATIC_VALUE ||= /0|[1-9]{1,2}|passing|silver|gold/
 
+# Pre-compiled regexes for lambda constraint checks (memory optimization)
+# These avoid creating new regex objects on every request
+VALID_ID_FULL ||= /\A#{VALID_ID.source}\z/
+LEGAL_LOCALE_FULL ||= /\A#{LEGAL_LOCALE.source}\z/
+
+# Frozen array for excluded formats (memory optimization)
+EXCLUDED_FORMATS = %i[json md].freeze
+
 # Map of old (deprecated) criteria levels to new (canonical) levels
 # Used to generate redirect routes automatically (DRY)
 LEVEL_REDIRECTS = {
@@ -199,11 +207,11 @@ Rails.application.routes.draw do
         to: redirect_to_level('passing', status: 302),
         constraints: lambda { |req|
           # Check ID is numeric
-          id_ok = req.params[:id]&.match?(/\A#{VALID_ID.source}\z/)
+          id_ok = req.params[:id]&.match?(VALID_ID_FULL)
           # Check locale is valid
-          locale_ok = req.params[:locale]&.match?(/\A#{LEGAL_LOCALE.source}\z/)
+          locale_ok = req.params[:locale]&.match?(LEGAL_LOCALE_FULL)
           # Exclude json and md formats
-          format_ok = !%i[json md].include?(req.format.to_sym)
+          format_ok = !EXCLUDED_FORMATS.include?(req.format.to_sym)
           # Don't match any criteria_level queries - let controller handle those
           no_criteria_level = !req.query_string.include?('criteria_level')
           id_ok && locale_ok && format_ok && no_criteria_level
@@ -213,9 +221,9 @@ Rails.application.routes.draw do
         to: redirect_to_level('passing', status: 302),
         constraints: lambda { |req|
           # Check ID is numeric
-          id_ok = req.params[:id]&.match?(/\A#{VALID_ID.source}\z/)
+          id_ok = req.params[:id]&.match?(VALID_ID_FULL)
           # Exclude json and md formats
-          format_ok = !%i[json md].include?(req.format.to_sym)
+          format_ok = !EXCLUDED_FORMATS.include?(req.format.to_sym)
           # Don't match any criteria_level queries - let controller handle those
           no_criteria_level = !req.query_string.include?('criteria_level')
           id_ok && format_ok && no_criteria_level

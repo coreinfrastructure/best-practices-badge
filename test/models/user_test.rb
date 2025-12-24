@@ -138,6 +138,12 @@ class UserTest < ActiveSupport::TestCase
                  users(:github_user).avatar_url
   end
 
+  test 'lookup_gravatar_url returns bogus hash when decryption unavailable' do
+    bogus_url = "https://secure.gravatar.com/avatar/#{'0' * 32}"
+    assert_equal bogus_url,
+                 users(:admin_user).lookup_gravatar_url(decryption_available: false)
+  end
+
   test 'Bcrypt of text with full rounds' do
     ActiveModel::SecurePassword.min_cost = false
     assert_match(/\$2a\$/, User.digest('foobar'))

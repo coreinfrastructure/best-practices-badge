@@ -258,6 +258,17 @@ class User < ApplicationRecord
     !Rails.env.development? || ENV['EMAIL_BLIND_INDEX_KEY'].present?
   end
 
+  # Returns true if email decryption functionality is available.
+  # Email decryption requires the production encryption key to work correctly.
+  # In development without EMAIL_ENCRYPTION_KEY, decryption will fail on
+  # production data, so we disable email decryption in that case.
+  # In test environment, uses TEST_EMAIL_ENCRYPTION_KEY which works fine.
+  # @return [Boolean] true if email decryption will work
+  def self.email_decryption_available?
+    # Email decryption unavailable only in development without production keys
+    !Rails.env.development? || ENV['EMAIL_ENCRYPTION_KEY'].present?
+  end
+
   # Checks if the user has admin role.
   # @return [Boolean] true if user role is 'admin'
   def admin?
@@ -342,9 +353,18 @@ class User < ApplicationRecord
 
   # Returns URL for Gravatar lookup based on email MD5 hash.
   # This is the real Gravatar URL used for local users.
+  # Returns bogus URL if email cannot be decrypted.
+  # @param decryption_available [Boolean, nil] Override for decryption check
+  #   (mainly for testing)
   # @return [String] the Gravatar URL for lookup
-  def lookup_gravatar_url
-    GRAVATAR_PREFIX + Digest::MD5.hexdigest(email.downcase)
+  def lookup_gravatar_url(decryption_available: nil)
+    decryption_available = self.class.email_decryption_available? if decryption_available.nil?
+
+    if decryption_available && encrypted_email?
+      GRAVATAR_PREFIX + Digest::MD5.hexdigest(email.downcase)
+    else
+      GRAVATAR_PREFIX + BOGUS_GRAVATAR_MD5
+    end
   end
 
   BOGUS_GRAVATAR_MD5 = '0' * 32

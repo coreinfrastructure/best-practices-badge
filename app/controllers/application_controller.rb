@@ -292,6 +292,9 @@ class ApplicationController < ActionController::Base
   # @return [Hash] URL options with locale included
   # rubocop: disable Style/OptionHash
   def default_url_options(options = {})
+    # Memory optimization: avoid merge allocation when options is empty (common case)
+    return { locale: I18n.locale } if options.empty?
+
     { locale: I18n.locale }.merge options
   end
   # rubocop: enable Style/OptionHash

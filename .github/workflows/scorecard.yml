@@ -36,11 +36,12 @@ jobs:
         with:
           persist-credentials: false
 
-      # OSPS-BR-01.02: Validate branch name before use in pipeline
-      # This protects against potential future use of branch names in commands
-      # GITHUB_REF_NAME is the short ref name (e.g., "main" not "refs/heads/main")
-      - name: "Validate branch name"
-        run: script/validate_branch_name "$GITHUB_REF_NAME"
+      # Note: Branch name validation (OSPS-BR-01.02) cannot be included here
+      # because scorecard jobs with publish_results=true can only use approved
+      # actions (no 'run:' steps allowed). See:
+      # https://github.com/ossf/scorecard-action#workflow-restrictions
+      # This is acceptable because the scorecard analysis doesn't use branch
+      # names in any commands.
 
       - name: "Run analysis"
         uses: ossf/scorecard-action@4eaacf0543bb3f2c246792bd56e8cdeffafb205a # v2.4.3

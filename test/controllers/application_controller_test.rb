@@ -72,4 +72,20 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
     # Default
     assert_equal '0', a.criteria_level_to_internal('unknown_level')
   end
+
+  test 'default_url_options returns locale with empty options' do
+    a = ApplicationController.new
+    I18n.with_locale(:en) do
+      result = a.send(:default_url_options, {})
+      assert_equal({ locale: :en }, result)
+    end
+  end
+
+  test 'default_url_options merges locale with additional options' do
+    a = ApplicationController.new
+    I18n.with_locale(:fr) do
+      result = a.send(:default_url_options, { foo: 'bar', baz: 123 })
+      assert_equal({ locale: :fr, foo: 'bar', baz: 123 }, result)
+    end
+  end
 end

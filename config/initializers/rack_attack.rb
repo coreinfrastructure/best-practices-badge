@@ -18,15 +18,10 @@ class Rack::Attack
   # Create a set of possible login paths
   # "i18n" comes before "rack_attack" alphabetically, so
   # I18n.available_locales is configured by this point.
-  LOGIN_PATHS = I18n.available_locales.map do |loc|
-    "/#{loc}/login"
-  end.append('/login').to_set
+  LOGIN_PATHS = (I18n.available_locales.map { |loc| "/#{loc}/login" } + ['/login']).to_set.freeze
 
   # Configuration constant for signup paths.
-
-  SIGNUP_PATHS = I18n.available_locales.map do |loc|
-    "/#{loc}/users"
-  end.append('/users').to_set
+  SIGNUP_PATHS = (I18n.available_locales.map { |loc| "/#{loc}/users" } + ['/users']).to_set.freeze
 
   ### Configure Cache ###
 
@@ -174,9 +169,7 @@ class Rack::Attack
   end
 
   # Create a set of possible password reset paths
-  PASSWORD_RESET_PATHS = I18n.available_locales.map do |loc|
-    "/#{loc}/password_resets"
-  end.append('/password_resets').to_set
+  PASSWORD_RESET_PATHS = (I18n.available_locales.map { |loc| "/#{loc}/password_resets" } + ['/password_resets']).to_set.freeze
 
   # RATE LIMITING FOR PASSWORD RESET REQUESTS BY IP ADDRESS
   # Throttle POST requests to /password_resets by IP address

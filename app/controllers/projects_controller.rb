@@ -47,6 +47,11 @@ class ProjectsController < ApplicationController
 
   ALLOWED_STATUS = %w[in_progress passing].freeze
 
+  # Frozen constants for sort directions (memory optimization)
+  ALLOWED_SORT_DIRECTIONS = %w[desc asc].freeze
+  SORT_DIRECTION_ASC = ' asc'
+  SORT_DIRECTION_DESC = ' desc'
+
   INTEGER_QUERIES = %i[gteq lteq page].freeze
 
   TEXT_QUERIES = %i[pq q].freeze
@@ -525,7 +530,7 @@ class ProjectsController < ApplicationController
   # rubocop:disable Metrics/CyclomaticComplexity
   def allowed_other_query?(key, value)
     return ALLOWED_SORT.include?(value) if key == 'sort'
-    return %w[desc asc].include?(value) if key == 'sort_direction'
+    return ALLOWED_SORT_DIRECTIONS.include?(value) if key == 'sort_direction'
     return ALLOWED_STATUS.include?(value) if key == 'status'
     return integer_list?(value) if key == 'ids'
     return ALLOWED_AS.include?(value) if key == 'as'
@@ -927,7 +932,7 @@ class ProjectsController < ApplicationController
     # Sort, if there is a requested order (otherwise use default created_at)
     return if params[:sort].blank? || ALLOWED_SORT.exclude?(params[:sort])
 
-    sort_direction = params[:sort_direction] == 'desc' ? ' desc' : ' asc'
+    sort_direction = params[:sort_direction] == 'desc' ? SORT_DIRECTION_DESC : SORT_DIRECTION_ASC
     sort_index = ALLOWED_SORT.index(params[:sort])
     @projects = @projects
                 .reorder(ALLOWED_SORT[sort_index] + sort_direction)

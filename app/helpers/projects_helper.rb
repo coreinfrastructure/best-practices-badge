@@ -26,6 +26,7 @@ module ProjectsHelper
   MARKDOWN_SUFFIX = "</p>\n".html_safe
 
   NO_REPOS = [[], []].freeze # No forks and no originals
+  EMPTY_ARRAY = [].freeze # Memory optimization for empty header returns
 
   # List original then forked Github projects, with headers
   def github_select
@@ -47,12 +48,12 @@ module ProjectsHelper
 
   # @param original_repos [Array] Array of original (non-fork) repositories
   def original_header(original_repos)
-    original_repos.blank? ? [] : [[t('.original_repos'), '', 'none']]
+    original_repos.blank? ? EMPTY_ARRAY : [[t('.original_repos'), '', 'none']]
   end
 
   # @param fork_repos [Array] Array of forked repositories
   def fork_header(fork_repos)
-    fork_repos.blank? ? [] : [[t('.fork_repos'), '', 'none']]
+    fork_repos.blank? ? EMPTY_ARRAY : [[t('.fork_repos'), '', 'none']]
   end
 
   # Render markdown.  This is safe because the markdown renderer in use is

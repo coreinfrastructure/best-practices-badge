@@ -15,6 +15,17 @@ require 'ipaddr'
 class ApplicationController < ActionController::Base
   include Pagy::Backend
 
+  # Frozen HTTP header values (memory optimization - avoid creating on every request)
+  PERMISSIONS_POLICY_VALUE = 'fullscreen=(), geolocation=(), midi=(), ' \
+                             'notifications=(), push=(), sync-xhr=(), microphone=(), ' \
+                             'camera=(), magnetometer=(), gyroscope=(), speaker=(), ' \
+                             'vibrate=(), payment=()'
+
+  FEATURE_POLICY_VALUE = "fullscreen 'none'; geolocation 'none'; midi 'none';" \
+                         "notifications 'none'; push 'none'; sync-xhr 'none'; microphone 'none';" \
+                         "camera 'none'; magnetometer 'none'; gyroscope 'none'; speaker 'none';" \
+                         "vibrate 'none'; payment 'none'"
+
   # Make criteria_level conversion methods available to views
   helper_method :criteria_level_to_internal, :normalize_criteria_level
 
@@ -281,6 +292,9 @@ class ApplicationController < ActionController::Base
   # @return [Hash] URL options with locale included
   # rubocop: disable Style/OptionHash
   def default_url_options(options = {})
+    # Memory optimization: avoid merge allocation when options is empty (common case)
+    return { locale: I18n.locale } if options.empty?
+
     { locale: I18n.locale }.merge options
   end
   # rubocop: enable Style/OptionHash
@@ -399,26 +413,12 @@ class ApplicationController < ActionController::Base
   # https://scotthelme.co.uk/a-new-security-header-feature-policy/
   # Note that this *gives up* fullscreen & sync-xhr; if we need it later,
   # change the policy.
-  # rubocop: disable Metrics/MethodLength
   def add_http_permissions_policy
-    response.set_header(
-      'Permissions-Policy',
-      'fullscreen=(), geolocation=(), midi=(), ' \
-      'notifications=(), push=(), sync-xhr=(), microphone=(), ' \
-      'camera=(), magnetometer=(), gyroscope=(), speaker=(), ' \
-      'vibrate=(), payment=()'
-    )
+    response.set_header('Permissions-Policy', PERMISSIONS_POLICY_VALUE)
     # Include the older Feature-Policy header, for older browser versions.
     # We can eventually drop this, but it doesn't hurt to include it for now.
-    response.set_header(
-      'Feature-Policy',
-      "fullscreen 'none'; geolocation 'none'; midi 'none';" \
-      "notifications 'none'; push 'none'; sync-xhr 'none'; microphone 'none';" \
-      "camera 'none'; magnetometer 'none'; gyroscope 'none'; speaker 'none';" \
-      "vibrate 'none'; payment 'none'"
-    )
+    response.set_header('Feature-Policy', FEATURE_POLICY_VALUE)
   end
-  # rubocop: enable Metrics/MethodLength
 
   include SessionsHelper
 end

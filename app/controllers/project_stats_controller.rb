@@ -157,8 +157,8 @@ class ProjectStatsController < ApplicationController
     cache_until_next_stat
 
     dataset =
-      ProjectStat.select(:created_at, :percent_ge_0).reduce({}) do |h, e|
-        h.merge(e.created_at => e.percent_ge_0)
+      ProjectStat.select(:created_at, :percent_ge_0).each_with_object({}) do |e, h|
+        h[e.created_at] = e.percent_ge_0
       end
     render_json_fast dataset
   end
@@ -188,8 +188,8 @@ class ProjectStatsController < ApplicationController
       ProjectStat::STAT_VALUES_GT0.map do |minimum|
         desired_field = 'percent_ge_' + minimum.to_s
         series_dataset =
-          stat_data.reduce({}) do |h, e|
-            h.merge(e.created_at => e[desired_field])
+          stat_data.each_with_object({}) do |e, h|
+            h[e.created_at] = e[desired_field]
           end
         { name: '>=' + minimum.to_s + '%', data: series_dataset }
       end
@@ -216,8 +216,8 @@ class ProjectStatsController < ApplicationController
 
     # Active projects
     active_dataset =
-      stat_data.reduce({}) do |h, e|
-        h.merge(e.created_at => e.active_projects)
+      stat_data.each_with_object({}) do |e, h|
+        h[e.created_at] = e.active_projects
       end
     dataset << {
       name: I18n.t('project_stats.index.active_projects'),
@@ -226,8 +226,8 @@ class ProjectStatsController < ApplicationController
 
     # Active in-progress projects
     active_in_progress_dataset =
-      stat_data.reduce({}) do |h, e|
-        h.merge(e.created_at => e.active_in_progress)
+      stat_data.each_with_object({}) do |e, h|
+        h[e.created_at] = e.active_in_progress
       end
     dataset << {
       name: I18n.t('project_stats.index.active_in_progress'),
@@ -236,8 +236,8 @@ class ProjectStatsController < ApplicationController
 
     # Active edited projects
     active_edited_dataset =
-      stat_data.reduce({}) do |h, e|
-        h.merge(e.created_at => e.active_edited_projects)
+      stat_data.each_with_object({}) do |e, h|
+        h[e.created_at] = e.active_edited_projects
       end
     dataset << {
       name: I18n.t('project_stats.index.active_edited'),
@@ -246,8 +246,8 @@ class ProjectStatsController < ApplicationController
 
     # Active edited in-progress projects
     active_edited_in_progress_dataset =
-      stat_data.reduce({}) do |h, e|
-        h.merge(e.created_at => e.active_edited_in_progress)
+      stat_data.each_with_object({}) do |e, h|
+        h[e.created_at] = e.active_edited_in_progress
       end
     dataset << {
       name: I18n.t('project_stats.index.active_edited_in_progress'),
@@ -328,8 +328,8 @@ class ProjectStatsController < ApplicationController
 
     # Reminders sent
     reminders_dataset =
-      stat_data.reduce({}) do |h, e|
-        h.merge(e.created_at => e.reminders_sent)
+      stat_data.each_with_object({}) do |e, h|
+        h[e.created_at] = e.reminders_sent
       end
     dataset << {
       name: I18n.t('project_stats.index.reminders_sent_since_yesterday'),
@@ -337,8 +337,8 @@ class ProjectStatsController < ApplicationController
     }
     # Reactivated after reminders
     reactivated_dataset =
-      stat_data.reduce({}) do |h, e|
-        h.merge(e.created_at => e.reactivated_after_reminder)
+      stat_data.each_with_object({}) do |e, h|
+        h[e.created_at] = e.reactivated_after_reminder
       end
     dataset << {
       name: I18n.t('project_stats.index.reactivated_projects'),
@@ -373,8 +373,8 @@ class ProjectStatsController < ApplicationController
       ProjectStat::STAT_VALUES_GT25.map do |minimum|
         desired_field = "percent_1_ge_#{minimum}"
         series_dataset =
-          stat_data.reduce({}) do |h, e|
-            h.merge(e.created_at => e[desired_field])
+          stat_data.each_with_object({}) do |e, h|
+            h[e.created_at] = e[desired_field]
           end
         { name: ">=#{minimum}%", data: series_dataset }
       end
@@ -407,8 +407,8 @@ class ProjectStatsController < ApplicationController
       ProjectStat::STAT_VALUES_GT25.map do |minimum|
         desired_field = "percent_2_ge_#{minimum}"
         series_dataset =
-          stat_data.reduce({}) do |h, e|
-            h.merge(e.created_at => e[desired_field])
+          stat_data.each_with_object({}) do |e, h|
+            h[e.created_at] = e[desired_field]
           end
         { name: ">=#{minimum}%", data: series_dataset }
       end
@@ -431,8 +431,8 @@ class ProjectStatsController < ApplicationController
       %w[1 2].map do |level|
         desired_field = "percent_#{level}_ge_100"
         series_dataset =
-          stat_data.reduce({}) do |h, e|
-            h.merge(e.created_at => e[desired_field])
+          stat_data.each_with_object({}) do |e, h|
+            h[e.created_at] = e[desired_field]
           end
         {
           name: I18n.t("projects.form_early.level.#{level}"),
@@ -460,9 +460,9 @@ class ProjectStatsController < ApplicationController
         desired_field =
           "percent#{'_' + level.to_s if level.positive?}_ge_100"
         series_dataset =
-          stat_data.reduce({}) do |h, e|
-            h.merge(e.created_at =>
-              e[desired_field].to_i * 100.0 / e['percent_ge_0'].to_i)
+          stat_data.each_with_object({}) do |e, h|
+            h[e.created_at] =
+              e[desired_field].to_i * 100.0 / e['percent_ge_0'].to_i
           end
         {
           name: I18n.t("projects.form_early.level.#{level}"),
@@ -485,8 +485,8 @@ class ProjectStatsController < ApplicationController
     fields.each do |field|
       # Add "field" to dataset
       active_dataset =
-        stat_data.reduce({}) do |h, e|
-          h.merge(e.created_at => e[field])
+        stat_data.each_with_object({}) do |e, h|
+          h[e.created_at] = e[field]
         end
       dataset << {
         name: I18n.t("project_stats.index.#{field}"),

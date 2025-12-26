@@ -105,6 +105,9 @@ class ProjectsController < ApplicationController
   # Used to validate deletion rationale.
   AT_LEAST_15_NON_WHITESPACE = /\A\s*(\S\s*){15}.*/
 
+  # Pattern matching SQL field characters requiring quoting (not a-z, 0-9, or _)
+  NONTRIVIAL_SQL_FIELD_CHARACTER = /[^a-z0-9_]/
+
   # Memory optimization: Pre-computed field lists for selective Project loading
   # Base fields always needed regardless of which section is being viewed
   PROJECT_BASE_FIELDS = %i[
@@ -115,9 +118,10 @@ class ProjectsController < ApplicationController
     lock_version disabled_reminders last_reminder_at
   ].freeze
 
-  # Complete field lists for each section (base fields + section-specific fields)
+  # Complete field lists for each section as SQL strings
+  # Pre-computed as comma-separated strings to avoid runtime symbol-to-string
+  # conversion and array splatting (saves ~130 objects per request)
   # Dynamically computed from Criteria data - updates automatically when criteria change
-  # Pre-calculated to avoid runtime array concatenation on every request
   # rubocop:disable Metrics/BlockLength
   PROJECT_FIELDS_FOR_SECTION =
     {}.tap do |hash|
@@ -141,11 +145,31 @@ class ProjectsController < ApplicationController
           fields << :"#{criterion.name}_justification"
         end
 
-        hash[level_name] = fields.freeze
+        # Convert to SQL string, quoting only non-trivial column names
+        # Quote if column name contains characters other than a-z, 0-9, or _
+        quoted_fields =
+          fields.map do |f|
+            field_str = f.to_s
+            if field_str.match?(NONTRIVIAL_SQL_FIELD_CHARACTER)
+              Project.connection.quote_column_name(field_str)
+            else
+              field_str
+            end
+          end
+        hash[level_name] = quoted_fields.join(',').freeze
       end
 
       # Add fields for permissions section (only uses base fields)
-      hash['permissions'] = PROJECT_BASE_FIELDS
+      quoted_base =
+        PROJECT_BASE_FIELDS.map do |f|
+          field_str = f.to_s
+          if field_str.match?(NONTRIVIAL_SQL_FIELD_CHARACTER)
+            Project.connection.quote_column_name(field_str)
+          else
+            field_str
+          end
+        end
+      hash['permissions'] = quoted_base.join(',').freeze
     end.freeze # rubocop:disable Style/MethodCalledOnDoEndBlock
   # rubocop:enable Metrics/BlockLength
 
@@ -941,19 +965,23 @@ class ProjectsController < ApplicationController
   end
 
   # Optimized project loading for show action - loads only needed fields.
-  # Memory optimization: Loads only base fields + fields for the current section
-  # Saves ~308 objects (24.3%) per request when showing a specific section.
+  # Memory optimization: Loads only base fields + fields of the current section
+  # Saves ~438 objects (34.5%) per request when showing a specific section,
+  # when we only had passing/silver/gold/baseline-1, and that savings is
+  # expected to increase over time.
+  # We receive a brutally large number of "show" requests, so optimizing
+  # "show" (e.g., reducing objects created each time) is worth doing.
   # Falls back to loading all fields if section is unknown.
   # @return [void] Sets @project instance variable
   def set_project_for_show
-    # Look up pre-calculated field list for this section
+    # Look up pre-calculated SQL field list for this section
     section = @criteria_level # NOTE: @criteria_level actually contains the section name
     fields_to_load = PROJECT_FIELDS_FOR_SECTION[section]
 
     # Load project with selected fields, or all fields if section unknown
     @project =
       if fields_to_load
-        Project.select(*fields_to_load).find(params[:id])
+        Project.select(fields_to_load).find(params[:id])
       else
         # Unknown section - load all fields as fallback
         Project.find(params[:id])

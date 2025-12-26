@@ -18,7 +18,17 @@ class JavascriptTest < ApplicationSystemTestCase
 
   def ensure_choice(radio_button_id)
     # Necessary because Capybara click doesn't always take the first time
-    choose radio_button_id until find("##{radio_button_id}")['checked']
+    # Add timeout to prevent infinite loop
+    Timeout.timeout(Capybara.default_max_wait_time) do
+      loop do
+        choose radio_button_id
+        break if find("##{radio_button_id}")['checked']
+
+        sleep 0.1 # Brief delay before retry
+      end
+    end
+  rescue Timeout::Error
+    raise Timeout::Error, "Timeout trying to ensure radio button '#{radio_button_id}' is checked"
   end
 
   test 'Check show/hide Met on show for passing' do

@@ -204,17 +204,48 @@ module ActiveSupport
       !session[:user_id].nil?
     end
 
+    # rubocop:disable Metrics/MethodLength
     def wait_for_jquery
       Timeout.timeout(Capybara.default_max_wait_time) do
-        loop until finished_all_jquery_requests?
+        # First, wait for jQuery to be loaded
+        loop do
+          break if evaluate_script('typeof jQuery !== "undefined"')
+
+          sleep 0.05
+        end
+
+        # Then wait for all jQuery AJAX requests to complete
+        loop do
+          break if finished_all_jquery_requests?
+
+          sleep 0.05 # Avoid busy-wait CPU burning
+        end
       end
+    rescue Timeout::Error
+      jquery_defined =
+        begin
+          evaluate_script('typeof jQuery !== "undefined"')
+        rescue StandardError
+          false
+        end
+      jquery_active =
+        begin
+          evaluate_script('jQuery.active')
+        rescue StandardError
+          'N/A'
+        end
+      raise Timeout::Error, "Timeout waiting for jQuery. jQuery defined: #{jquery_defined}, " \
+                            "jQuery.active: #{jquery_active}"
     end
+    # rubocop:enable Metrics/MethodLength
 
     def wait_for_url(url)
       Timeout.timeout(Capybara.default_max_wait_time) do
         loop do
           uri = URI.parse(current_url)
           break if url == "#{uri.path}?#{uri.query}"
+
+          sleep 0.05 # Avoid busy-wait CPU burning
         end
       end
     end
@@ -222,7 +253,9 @@ module ActiveSupport
     private
 
     def finished_all_jquery_requests?
-      evaluate_script('jQuery.active').zero?
+      # jQuery must be loaded for this check to work
+      # Use == 0 instead of .zero? to handle potential type coercion issues
+      evaluate_script('jQuery.active') == 0 # rubocop:disable Style/NumericPredicate
     end
 
     def integration_test?

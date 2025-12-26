@@ -143,7 +143,9 @@
              }) %>
       <div class="panel-collapse collapse in remove-in">
         <ul class="list-group">
-          <li class="list-group-item"><h3 id="section_use_basic_good_cryptographic_practices"><%=
+          <li class="list-group-item">
+            <% cache ['crypto_section_header', '2', locale, view_only] do %>
+            <h3 id="section_use_basic_good_cryptographic_practices"><%=
             t('Use basic good cryptographic practices',
               scope: :headings) %></h3>
 
@@ -158,6 +160,7 @@
               </button>
               <br>
             <% end %>
+            <% end # cache crypto_section_header %>
             <%= render_minor_status(
                   '2', 'Security', 'Use basic good cryptographic practices',
                   f, project, view_only, false

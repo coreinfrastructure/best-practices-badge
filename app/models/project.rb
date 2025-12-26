@@ -120,6 +120,23 @@ class Project < ApplicationRecord
     end.freeze
   # rubocop:enable Style/MethodCalledOnDoEndBlock
 
+  # Pre-computed grouping of criteria by normalized panel names (memory optimization)
+  # Nested hash: level => normalized_panel_name => array of criteria
+  # Normalized panel names are lowercase with spaces removed (e.g., 'changecontrol')
+  # This eliminates repeated string operations and array allocations in get_satisfaction_data
+  # rubocop:disable Style/MethodCalledOnDoEndBlock
+  CRITERIA_BY_PANEL =
+    {}.tap do |hash|
+      LEVEL_IDS.each do |level|
+        # Group criteria by normalized panel name for this level
+        hash[level] =
+          Criteria[level].values.group_by do |criterion|
+            criterion.major.downcase.delete(' ')
+          end.transform_values(&:freeze).freeze
+      end
+    end.freeze
+  # rubocop:enable Style/MethodCalledOnDoEndBlock
+
   # Returns the database field name for a level's badge percentage
   # Handles mapping from level names (with hyphens) to valid field names
   # Uses pre-computed hash for O(1) lookup with fallback for unknown levels
@@ -370,10 +387,8 @@ class Project < ApplicationRecord
   # @param panel [String] the panel name to filter criteria
   # @return [Hash] hash with :text and :color keys for satisfaction display
   def get_satisfaction_data(level, panel)
-    total =
-      Criteria[level].values.select do |criterion|
-        criterion.major.downcase.delete(' ') == panel
-      end
+    # Use precomputed nested hash to avoid string operations and array allocations
+    total = CRITERIA_BY_PANEL.dig(level, panel) || []
     passing = total.count { |criterion| enough?(criterion) }
     {
       text: "#{passing}/#{total.size}",

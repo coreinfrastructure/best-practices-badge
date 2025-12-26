@@ -44,11 +44,16 @@
   silver_path = view_only ? level_project_path(project, 'silver') : level_edit_project_path(project, 'silver')
   gold_path = view_only ? level_project_path(project, 'gold') : level_edit_project_path(project, 'gold')
   baseline_1_path = view_only ? level_project_path(project, 'baseline-1') : level_edit_project_path(project, 'baseline-1')
+
+  # Cache level name translations to avoid duplicate I18n lookups
+  passing_level_name = t('projects.form_early.level.0')
+  silver_level_name = t('projects.form_early.level.1')
+  gold_level_name = t('projects.form_early.level.2')
 %>
 <%= t("#{criteria_level}_html", scope: 'projects.form_early.level',
-      passing: %{<a href='#{passing_path}' title='#{t('projects.form_early.level.0')}'>#{image_tag('passing.svg', size: '53x20', alt: t('projects.form_early.level.0'))}</a>}.html_safe,
-      silver: %{<a href='#{silver_path}' title='#{t('projects.form_early.level.1')}'>#{image_tag('silver.svg', size: '41x20', alt: t('projects.form_early.level.1'))}</a>}.html_safe,
-      gold: %{<a href='#{gold_path}' title='#{t('projects.form_early.level.2')}'>#{image_tag('gold.svg', size: '35x20', alt: t('projects.form_early.level.2'))}</a>}.html_safe,
+      passing: %{<a href='#{passing_path}' title='#{passing_level_name}'>#{image_tag('passing.svg', size: '53x20', alt: passing_level_name)}</a>}.html_safe,
+      silver: %{<a href='#{silver_path}' title='#{silver_level_name}'>#{image_tag('silver.svg', size: '41x20', alt: silver_level_name)}</a>}.html_safe,
+      gold: %{<a href='#{gold_path}' title='#{gold_level_name}'>#{image_tag('gold.svg', size: '35x20', alt: gold_level_name)}</a>}.html_safe,
       ) %>
 <br><br>
 <!--

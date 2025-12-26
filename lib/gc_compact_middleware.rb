@@ -23,10 +23,15 @@ class GcCompactMiddleware
 
   def call(env)
     # Log first call only, to verify middleware is actually being invoked
-    @mutex.synchronize do
-      if @first_call
-        Rails.logger.warn 'GcCompactMiddleware: First request received, middleware is active'
-        @first_call = false
+    # Use double-checked locking: check without lock first (fast path),
+    # then synchronize only if needed. Only first thread to acquire mutex
+    # will see @first_call == true and log; others see it already false.
+    if @first_call
+      @mutex.synchronize do
+        if @first_call
+          Rails.logger.warn 'GcCompactMiddleware: First request received, middleware is active'
+          @first_call = false
+        end
       end
     end
 
@@ -52,7 +57,7 @@ class GcCompactMiddleware
   def schedule_compact(env)
     scheduled = false
     @mutex.synchronize do
-      if Time.zone.now - @last_compact_time >= @interval
+      if time_to_compact?
         @last_compact_time = Time.zone.now
         scheduled = true
       end

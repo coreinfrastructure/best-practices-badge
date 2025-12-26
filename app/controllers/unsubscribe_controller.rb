@@ -39,7 +39,8 @@ class UnsubscribeController < ApplicationController
     # This gives specific error responses
     unless verify_unsubscribe_token?(email, issued, token)
       # Security: Log potential security incident (without PII)
-      email_domain = email.split('@').last
+      # Use rpartition for efficiency (fixed 3-element array vs variable-size split)
+      email_domain = email.rpartition('@').last
       Rails.logger.info "Invalid unsubscribe token attempt for email domain: #{email_domain}"
       flash.now[:error] = t('unsubscribe.invalid_token')
       render :edit, status: :unprocessable_content
@@ -63,7 +64,8 @@ class UnsubscribeController < ApplicationController
     end
 
     # Security: Log the unsubscribe action (without PII)
-    email_domain = email.split('@').last
+    # Use rpartition for efficiency (fixed 3-element array vs variable-size split)
+    email_domain = email.rpartition('@').last
     Rails.logger.info "Unsubscribe success: #{updated_count} accounts updated for domain: #{email_domain}"
     flash[:notice] = t('unsubscribe.success', count: updated_count)
 

@@ -100,32 +100,38 @@ class Project < ApplicationRecord
                               ALL_CRITERIA_JUSTIFICATION +
                               PROJECT_USER_ID_REPEAT).freeze
 
+  # Pre-computed hash for badge percentage field name lookups (memory optimization)
+  # Maps level names/numbers to their corresponding database field symbols
+  # Computed from existing constants to avoid duplication and stay in sync
+  # Disable cop for do...end with chained .freeze (required for frozen constant)
+  # rubocop:disable Style/MethodCalledOnDoEndBlock
+  BADGE_PERCENTAGE_FIELD_NAMES =
+    {}.tap do |hash|
+      # Add metal level mappings (both name and number forms)
+      LEVEL_NAME_TO_NUMBER.each do |name, number|
+        field_name = :"badge_percentage_#{number}"
+        hash[name] = field_name
+        hash[number] = field_name
+      end
+      # Add baseline level mappings - explicit to match actual field names
+      CRITERIA_SERIES[:baseline].each_with_index do |level, index|
+        hash[level] = :"badge_percentage_baseline_#{index + 1}"
+      end
+    end.freeze
+  # rubocop:enable Style/MethodCalledOnDoEndBlock
+
   # Returns the database field name for a level's badge percentage
   # Handles mapping from level names (with hyphens) to valid field names
+  # Uses pre-computed hash for O(1) lookup with fallback for unknown levels
   # @param level [String] 'passing', 'silver', 'gold', 'baseline-1', etc.
   # @return [Symbol] field name like :badge_percentage_0 or :badge_percentage_baseline_1
-  # rubocop:disable Metrics/MethodLength
   def badge_percentage_field_name(level)
-    case level.to_s
-    when '0', 'passing'
-      :badge_percentage_0
-    when '1', 'silver'
-      :badge_percentage_1
-    when '2', 'gold'
-      :badge_percentage_2
-    when 'baseline-1'
-      :badge_percentage_baseline_1
-    when 'baseline-2'
-      :badge_percentage_baseline_2
-    when 'baseline-3'
-      :badge_percentage_baseline_3
-    else
-      # Fallback: convert hyphen to underscore for baseline levels
-      level_normalized = level.to_s.tr('-', '_')
-      :"badge_percentage_#{level_normalized}"
-    end
+    level_str = level.to_s
+    # Use pre-computed hash for known levels (O(1) lookup)
+    BADGE_PERCENTAGE_FIELD_NAMES[level_str] ||
+      # Fallback: convert hyphen to underscore for unknown baseline levels
+      :"badge_percentage_#{level_str.tr('-', '_')}"
   end
-  # rubocop:enable Metrics/MethodLength
 
   # Convenience method to get badge percentage for a level
   # @param level [String] criteria level name

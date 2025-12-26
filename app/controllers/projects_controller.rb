@@ -52,6 +52,40 @@ class ProjectsController < ApplicationController
   SORT_DIRECTION_ASC = ' asc'
   SORT_DIRECTION_DESC = ' desc'
 
+  # Pre-computed sort strings to avoid string concatenation on every request
+  # Maps: sort_field => { 'asc' => 'field asc', 'desc' => 'field desc' }
+  # Disable cop for do...end with chained .freeze (required for frozen constant)
+  # rubocop:disable Style/MethodCalledOnDoEndBlock
+  SORT_STRINGS =
+    ALLOWED_SORT.index_with do |field|
+      {
+        'asc' => "#{field} asc".freeze,
+        'desc' => "#{field} desc".freeze
+      }.freeze
+    end.freeze
+  # rubocop:enable Style/MethodCalledOnDoEndBlock
+
+  # Pre-computed created_at sort strings for fallback ordering
+  CREATED_AT_ASC = 'created_at asc'
+  CREATED_AT_DESC = 'created_at desc'
+
+  # Pre-computed badge level ranks to avoid repeated .index() lookups
+  # Lower rank = lower achievement level
+  BADGE_LEVEL_RANK = {
+    'in_progress' => 0,
+    'passing' => 1,
+    'silver' => 2,
+    'gold' => 3
+  }.freeze
+
+  # Frozen regex for URL scheme extraction (memory optimization)
+  URL_SCHEME_REGEX = %r{\A[^:]*://}
+
+  # Frozen regexes for query parameter validation (memory optimization)
+  # Used in positive_integer?() and integer_list?() methods
+  POSITIVE_INTEGER_REGEX = /\A[1-9][0-9]{0,15}\z/
+  INTEGER_LIST_REGEX = /\A[1-9][0-9]{0,15}( *, *[1-9][0-9]{0,15}){0,20}\z/
+
   INTEGER_QUERIES = %i[gteq lteq page].freeze
 
   TEXT_QUERIES = %i[pq q].freeze
@@ -661,7 +695,9 @@ class ProjectsController < ApplicationController
   # @param url [String] The URL to extract and normalize
   # @return [String] Normalized URL without scheme and trailing slash
   def extracted_url(url)
-    url.split('://', 2)[1].chomp('/')
+    # Extract everything after scheme (http:// or https://) without array allocation
+    # Use frozen regex constant to avoid regex recompilation
+    url.sub(URL_SCHEME_REGEX, '').chomp('/')
   end
 
   # Compares two URLs to determine if they are essentially the same.
@@ -710,7 +746,8 @@ class ProjectsController < ApplicationController
   # @param value [String] The string value to validate
   # @return [Boolean] True if string is a valid positive integer
   def positive_integer?(value)
-    !(value =~ /\A[1-9][0-9]{0,15}\z/).nil?
+    # Use frozen regex constant to avoid regex recompilation
+    value.match?(POSITIVE_INTEGER_REGEX)
   end
 
   # Validates if a string represents a comma-separated list of integers.
@@ -718,7 +755,8 @@ class ProjectsController < ApplicationController
   # @param value [String] The string value to validate as integer list
   # @return [Boolean] True if string is a valid integer list
   def integer_list?(value)
-    !(value =~ /\A[1-9][0-9]{0,15}( *, *[1-9][0-9]{0,15}){0,20}\z/).nil?
+    # Use frozen regex constant to avoid regex recompilation
+    value.match?(INTEGER_LIST_REGEX)
   end
 
   # Maximum number of GitHub repos to retrieve when retrieving a list of
@@ -932,11 +970,11 @@ class ProjectsController < ApplicationController
     # Sort, if there is a requested order (otherwise use default created_at)
     return if params[:sort].blank? || ALLOWED_SORT.exclude?(params[:sort])
 
-    sort_direction = params[:sort_direction] == 'desc' ? SORT_DIRECTION_DESC : SORT_DIRECTION_ASC
-    sort_index = ALLOWED_SORT.index(params[:sort])
+    # Use pre-computed frozen strings to avoid allocations
+    direction = params[:sort_direction] == 'desc' ? 'desc' : 'asc'
     @projects = @projects
-                .reorder(ALLOWED_SORT[sort_index] + sort_direction)
-                .order('created_at' + sort_direction)
+                .reorder(SORT_STRINGS[params[:sort]][direction])
+                .order(direction == 'desc' ? CREATED_AT_DESC : CREATED_AT_ASC)
   end
   # rubocop:enable Metrics/AbcSize
 
@@ -1029,8 +1067,8 @@ class ProjectsController < ApplicationController
       # once we implement baseline-2.
       false
     else
-      Project::BADGE_LEVELS.index(new_level) <
-        Project::BADGE_LEVELS.index(old_level)
+      # Use pre-computed ranks to avoid repeated linear searches
+      BADGE_LEVEL_RANK[new_level] < BADGE_LEVEL_RANK[old_level]
     end
   end
 

@@ -452,7 +452,9 @@
                 '0', 'Security', 'Secure development knowledge',
                 f, project, view_only
               ) %>
-          <li class="list-group-item"><h3 id="section_use_basic_good_cryptographic_practices"><%=
+          <li class="list-group-item">
+            <% cache ['crypto_section_header', '0', locale, view_only] do %>
+            <h3 id="section_use_basic_good_cryptographic_practices"><%=
             t('Use basic good cryptographic practices',
               scope: :headings) %></h3>
 
@@ -466,6 +468,7 @@
               </button>
               <br>
             <% end %>
+            <% end # cache crypto_section_header %>
             <%# Do *NOT* wrap this with <li>...</li>, we did that already. %>
             <%= render_minor_status(
                   '0', 'Security', 'Use basic good cryptographic practices',

@@ -239,7 +239,7 @@ class ApplicationController < ActionController::Base
   DO_NOT_REDIRECT_LOCALE = %w[json csv].freeze
 
   # Normalize criteria level to canonical URL-friendly form
-  # Handles synonyms like 'passing'/'bronze', 'silver', 'gold'
+  # Handles 'passing', 'silver', 'gold', and common mistake 'bronze' (treated as 'passing')
   # Converts numeric forms (0, 1, 2) to human-readable names for URL generation
   # Returns: 'passing', 'silver', 'gold', 'permissions', or baseline levels
   # Note: Most routes have constraints, but some don't, so we validate here

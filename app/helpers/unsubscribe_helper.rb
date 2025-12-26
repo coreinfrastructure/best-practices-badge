@@ -9,6 +9,10 @@ module UnsubscribeHelper
   # Maximum unsubscribe token age in days from environment (computed once at startup)
   MAX_TOKEN_AGE_DAYS = (ENV['BADGEAPP_UNSUBSCRIBE_DAYS'] || '30').to_i
 
+  # Frozen regexes for token/date validation (memory optimization)
+  TOKEN_FORMAT_REGEX = /\A[a-f0-9]{64}\z/
+  ISSUED_DATE_FORMAT_REGEX = /\A\d{4}-\d{2}-\d{2}\z/
+
   # Compute key array from comma-separated string
   # @param keys_string [String] Comma-separated string of keys
   # @return [Array<String>] Array of keys with empty ones removed and frozen
@@ -200,7 +204,8 @@ module UnsubscribeHelper
     return false if token.length != 64
 
     # Security: Ensure token contains only hex characters
-    token.match?(/\A[a-f0-9]{64}\z/)
+    # Use frozen regex constant to avoid regex recompilation
+    token.match?(TOKEN_FORMAT_REGEX)
   end
 
   # Security: Validate issued date format
@@ -211,6 +216,7 @@ module UnsubscribeHelper
     return false if issued.length < 10 || issued.length > 12
 
     # Strict YYYY-MM-DD format
-    issued.match?(/\A\d{4}-\d{2}-\d{2}\z/)
+    # Use frozen regex constant to avoid regex recompilation
+    issued.match?(ISSUED_DATE_FORMAT_REGEX)
   end
 end

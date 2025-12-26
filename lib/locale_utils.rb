@@ -11,6 +11,9 @@ require 'uri'
 # Provides shared methods for locale detection and URL manipulation
 # Used by controllers and routing layer to avoid object instantiation overhead
 module LocaleUtils
+  # Frozen regexes for URL manipulation (memory optimization)
+  LOCALE_QUERY_REGEX = /\Alocale=[^&]*&?|&locale=[^&]*/
+  LOCALE_PATH_REGEX = %r{\A\/[a-z]{2}(-[A-Za-z0-9-]+)?(\/|\z)}
   # Find the best-matching locale for a given request,
   # when the user did not specify a locale in the URL.
   # Uses the following rules:
@@ -41,7 +44,8 @@ module LocaleUtils
   # @param url_query [String, nil] The query string to process
   # @return [String, nil] The query string with locale parameter removed
   def self.remove_locale_query(url_query)
-    (url_query || '').gsub(/\Alocale=[^&]*&?|&locale=[^&]*/, '').presence
+    # Use frozen regex constant to avoid regex recompilation
+    (url_query || '').gsub(LOCALE_QUERY_REGEX, '').presence
   end
 
   # Reply with original_url modified so it has locale "locale".
@@ -62,11 +66,13 @@ module LocaleUtils
     # substitution will sometimes remove too much, so we prepend a '/'
     # if that happens.
     url.query = remove_locale_query(url.query)
-    new_path = url.path.gsub(%r{\A\/[a-z]{2}(-[A-Za-z0-9-]+)?(\/|\z)}, '')
+    # Use frozen regex constant to avoid regex recompilation
+    new_path = url.path.gsub(LOCALE_PATH_REGEX, '')
     new_path.prepend('/') if new_path.empty? || new_path.first != '/'
     new_path.chomp!('/') if locale || new_path != '/'
     # Recreate path, but now forcibly include the locale.
-    url.path = (locale.present? ? '/' + locale.to_s : '') + new_path
+    # Use string interpolation to avoid intermediate string allocations
+    url.path = locale.present? ? "/#{locale}#{new_path}" : new_path
     url.to_s
   end
   # rubocop: enable Metrics/AbcSize

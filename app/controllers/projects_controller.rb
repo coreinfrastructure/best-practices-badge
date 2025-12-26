@@ -108,6 +108,17 @@ class ProjectsController < ApplicationController
   # Pattern matching SQL field characters requiring quoting (not a-z, 0-9, or _)
   NONTRIVIAL_SQL_FIELD_CHARACTER = /[^a-z0-9_]/
 
+  # Given a SQL field name (as a string), return the fieldname
+  # but quoted if necessary. This can only be called once there's a
+  # Project.connection (quoting SQL fieldnames depends on the SQL engine)
+  def self.quoted_sql_fieldname(f)
+    if f.match?(NONTRIVIAL_SQL_FIELD_CHARACTER)
+      Project.connection.quote_column_name(f)
+    else
+      f
+    end
+  end
+
   # Memory optimization: Pre-computed field lists for selective Project loading
   # Base fields always needed regardless of which section is being viewed
   PROJECT_BASE_FIELDS = %i[
@@ -145,16 +156,10 @@ class ProjectsController < ApplicationController
           fields << :"#{criterion.name}_justification"
         end
 
-        # Convert to SQL string, quoting only non-trivial column names
-        # Quote if column name contains characters other than a-z, 0-9, or _
+        # Convert to string, quoting only non-trivial column names
         quoted_fields =
           fields.map do |f|
-            field_str = f.to_s
-            if field_str.match?(NONTRIVIAL_SQL_FIELD_CHARACTER)
-              Project.connection.quote_column_name(field_str)
-            else
-              field_str
-            end
+            ProjectsController.quoted_sql_fieldname(f.to_s)
           end
         hash[level_name] = quoted_fields.join(',').freeze
       end
@@ -162,12 +167,7 @@ class ProjectsController < ApplicationController
       # Add fields for permissions section (only uses base fields)
       quoted_base =
         PROJECT_BASE_FIELDS.map do |f|
-          field_str = f.to_s
-          if field_str.match?(NONTRIVIAL_SQL_FIELD_CHARACTER)
-            Project.connection.quote_column_name(field_str)
-          else
-            field_str
-          end
+          ProjectsController.quoted_sql_fieldname(f.to_s)
         end
       hash['permissions'] = quoted_base.join(',').freeze
     end.freeze # rubocop:disable Style/MethodCalledOnDoEndBlock

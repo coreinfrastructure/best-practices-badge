@@ -1514,5 +1514,44 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     # Should redirect to baseline-1/edit with anchor
     assert_redirected_to "#{project_path(@project)}/baseline-1/edit#Quality"
   end
+
+  # Test SQL fieldname quoting functionality
+  test 'quoted_sql_fieldname quotes field names with non-simple letters' do
+    # Field names with mixed case (like 2FA) should be quoted
+    result = ProjectsController.quoted_sql_fieldname('require_2FA_status')
+    assert_equal '"require_2FA_status"', result,
+                 'Field with 2FA should be quoted'
+
+    result = ProjectsController.quoted_sql_fieldname('secure_2FA_justification')
+    assert_equal '"secure_2FA_justification"', result,
+                 'Field with 2FA should be quoted'
+
+    result = ProjectsController.quoted_sql_fieldname('Field-Name')
+    assert_match(/^".*"$/, result,
+                 'Field with hyphen should be quoted')
+
+    result = ProjectsController.quoted_sql_fieldname('field name')
+    assert_match(/^".*"$/, result,
+                 'Field with space should be quoted')
+  end
+
+  test 'quoted_sql_fieldname does not quote simple field names' do
+    # Simple lowercase field names should not be quoted
+    result = ProjectsController.quoted_sql_fieldname('id')
+    assert_equal 'id', result,
+                 'Simple field id should not be quoted'
+
+    result = ProjectsController.quoted_sql_fieldname('user_id')
+    assert_equal 'user_id', result,
+                 'Simple field user_id should not be quoted'
+
+    result = ProjectsController.quoted_sql_fieldname('created_at')
+    assert_equal 'created_at', result,
+                 'Simple field created_at should not be quoted'
+
+    result = ProjectsController.quoted_sql_fieldname('description_good_status')
+    assert_equal 'description_good_status', result,
+                 'Simple field with multiple underscores should not be quoted'
+  end
 end
 # rubocop:enable Metrics/ClassLength

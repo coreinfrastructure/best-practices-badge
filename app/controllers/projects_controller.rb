@@ -7,6 +7,11 @@
 require 'addressable/uri'
 require 'net/http'
 
+# Ensure Project and Criteria classes are loaded before defining constants
+# This prevents class loading order issues in test environment
+Project if Rails.env.test? # rubocop:disable Lint/Void
+Criteria if Rails.env.test? # rubocop:disable Lint/Void
+
 # rubocop:disable Metrics/ClassLength
 class ProjectsController < ApplicationController
   include ProjectsHelper
@@ -16,13 +21,14 @@ class ProjectsController < ApplicationController
 
   before_action :set_project,
                 only: %i[
-                  edit update delete_form destroy show show_json show_markdown
+                  edit update delete_form destroy show_json show_markdown
                 ]
+  before_action :set_criteria_level, only: %i[show edit update]
+  before_action :set_project_for_show, only: :show
   before_action :require_logged_in, only: :create
   before_action :can_edit_else_redirect, only: %i[edit update]
   before_action :can_control_else_redirect, only: %i[destroy delete_form]
   before_action :require_adequate_deletion_rationale, only: :destroy
-  before_action :set_criteria_level, only: %i[show edit update]
   before_action :set_optional_criteria_level, only: %i[show_markdown]
 
   # Cache with CDN. We can only do this when we don't display the
@@ -98,6 +104,74 @@ class ProjectsController < ApplicationController
 
   # Used to validate deletion rationale.
   AT_LEAST_15_NON_WHITESPACE = /\A\s*(\S\s*){15}.*/
+
+  # Pattern matching SQL field characters requiring quoting (not a-z, 0-9, or _)
+  NONTRIVIAL_SQL_FIELD_CHARACTER = /[^a-z0-9_]/
+
+  # Given a SQL field name (as a string), return the fieldname
+  # but quoted if necessary. This can only be called once there's a
+  # Project.connection (quoting SQL fieldnames depends on the SQL engine)
+  def self.quoted_sql_fieldname(f)
+    if f.match?(NONTRIVIAL_SQL_FIELD_CHARACTER)
+      Project.connection.quote_column_name(f)
+    else
+      f
+    end
+  end
+
+  # Memory optimization: Pre-computed field lists for selective Project loading
+  # Base fields always needed regardless of which section is being viewed
+  PROJECT_BASE_FIELDS = %i[
+    id user_id name description homepage_url repo_url license
+    created_at updated_at tiered_percentage
+    achieved_passing_at achieved_silver_at achieved_gold_at
+    lost_passing_at lost_silver_at lost_gold_at
+    lock_version disabled_reminders last_reminder_at
+  ].freeze
+
+  # Complete field lists for each section as SQL strings
+  # Pre-computed as comma-separated strings to avoid runtime symbol-to-string
+  # conversion and array splatting (saves ~130 objects per request)
+  # Dynamically computed from Criteria data - updates automatically when criteria change
+  # rubocop:disable Metrics/BlockLength
+  PROJECT_FIELDS_FOR_SECTION =
+    {}.tap do |hash|
+      # Add fields for each criteria level section (passing, silver, gold, baseline-N)
+      Project::LEVEL_IDS.each do |level_id|
+        level_number = level_id
+        level_name = Project::LEVEL_NUMBER_TO_NAME[level_number] || level_number
+
+        fields = PROJECT_BASE_FIELDS.dup
+        # Add badge percentage field for this criteria level
+        fields << :"badge_percentage_#{level_number}"
+
+        # Add project metadata fields (only used in level 0 / passing form)
+        if level_number == '0'
+          fields << :implementation_languages << :general_comments << :cpe
+        end
+
+        # Add all criteria status and justification fields for this criteria level
+        Criteria.active(level_number).each do |criterion|
+          fields << :"#{criterion.name}_status"
+          fields << :"#{criterion.name}_justification"
+        end
+
+        # Convert to string, quoting only non-trivial column names
+        quoted_fields =
+          fields.map do |f|
+            ProjectsController.quoted_sql_fieldname(f.to_s)
+          end
+        hash[level_name] = quoted_fields.join(',').freeze
+      end
+
+      # Add fields for permissions section (only uses base fields)
+      quoted_base =
+        PROJECT_BASE_FIELDS.map do |f|
+          ProjectsController.quoted_sql_fieldname(f.to_s)
+        end
+      hash['permissions'] = quoted_base.join(',').freeze
+    end.freeze # rubocop:disable Style/MethodCalledOnDoEndBlock
+  # rubocop:enable Metrics/BlockLength
 
   # as= values, which redirect to alternative views
   ALLOWED_AS = %w[badge entry].freeze
@@ -888,6 +962,30 @@ class ProjectsController < ApplicationController
   # @return [void] Sets @project instance variable
   def set_project
     @project = Project.find(params[:id])
+  end
+
+  # Optimized project loading for show action - loads only needed fields.
+  # Memory optimization: Loads only base fields + fields of the current section
+  # Saves ~438 objects (34.5%) per request when showing a specific section,
+  # when we only had passing/silver/gold/baseline-1, and that savings is
+  # expected to increase over time.
+  # We receive a brutally large number of "show" requests, so optimizing
+  # "show" (e.g., reducing objects created each time) is worth doing.
+  # Falls back to loading all fields if section is unknown.
+  # @return [void] Sets @project instance variable
+  def set_project_for_show
+    # Look up pre-calculated SQL field list for this section
+    section = @criteria_level # NOTE: @criteria_level actually contains the section name
+    fields_to_load = PROJECT_FIELDS_FOR_SECTION[section]
+
+    # Load project with selected fields, or all fields if section unknown
+    @project =
+      if fields_to_load
+        Project.select(fields_to_load).find(params[:id])
+      else
+        # Unknown section - load all fields as fallback
+        Project.find(params[:id])
+      end
   end
 
   # Sets and validates criteria level from parameters.

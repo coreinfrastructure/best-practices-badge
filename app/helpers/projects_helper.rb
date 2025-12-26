@@ -28,6 +28,10 @@ module ProjectsHelper
   NO_REPOS = [[], []].freeze # No forks and no originals
   EMPTY_ARRAY = [].freeze # Memory optimization for empty header returns
 
+  # Regex for stripping invalid characters from section IDs
+  # Only allow lowercase letters, digits, underscore, and hyphen
+  SECTION_ID_INVALID_CHARS = /[^a-z0-9_-]/
+
   # List original then forked Github projects, with headers
   def github_select
     retrieved_repo_data = repo_data # Get external data
@@ -113,7 +117,8 @@ module ProjectsHelper
     # rubocop:disable Rails/OutputSafety
     # Section ids are section_ followed by lowercased letters, digits, _ for space
     # We strip out everything else.
-    section_id = 'section_' + minor.downcase.tr(' ', '_').gsub(/[^a-z0-9_-]/, '')
+    # Use string interpolation to avoid intermediate string allocation
+    section_id = "section_#{minor.downcase.tr(' ', '_').gsub(SECTION_ID_INVALID_CHARS, '')}"
 
     safe_join(
       [

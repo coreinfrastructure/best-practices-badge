@@ -295,7 +295,8 @@ class ApplicationController < ActionController::Base
     # Memory optimization: avoid merge allocation when options is empty (common case)
     return { locale: I18n.locale } if options.empty?
 
-    { locale: I18n.locale }.merge options
+    # Merge locale into options copy to avoid creating intermediate hash
+    options.merge(locale: I18n.locale)
   end
   # rubocop: enable Style/OptionHash
 

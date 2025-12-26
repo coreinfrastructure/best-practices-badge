@@ -154,6 +154,9 @@ class Criteria
   # @param parameters [Array] initialization parameters
   def initialize(*parameters)
     super
+    # Precompute symbol names before freezing (performance optimization)
+    @status_symbol = :"#{name}_status"
+    @justification_symbol = :"#{name}_justification"
     freeze
   end
 
@@ -194,6 +197,16 @@ class Criteria
   end
 
   delegate :to_s, to: :name
+
+  # Returns the database field symbol for this criterion's status
+  # Precomputed during initialization to avoid string concatenation on every render
+  # @return [Symbol] e.g., :description_good_status
+  attr_reader :status_symbol
+
+  # Returns the database field symbol for this criterion's justification
+  # Precomputed during initialization to avoid string concatenation on every render
+  # @return [Symbol] e.g., :description_good_justification
+  attr_reader :justification_symbol
 
   private
 

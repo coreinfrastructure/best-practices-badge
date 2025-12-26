@@ -1,5 +1,6 @@
 <%
- status_symbol = (criterion.to_s + '_status').to_sym
+ # Use precomputed symbols to avoid string concatenation
+ status_symbol = criterion.status_symbol
  project_criterion_status = project[status_symbol]
  criterion_result = project.get_criterion_result(criterion)
 
@@ -105,7 +106,8 @@
     </div><%# end of existing column %>
     <div class="col-xs-12"><%# new section for justification and rule %>
 
-    <% justification_symbol = (criterion.to_s + '_justification').to_sym
+    <% # Use precomputed symbol to avoid string concatenation
+       justification_symbol = criterion.justification_symbol
        if (view_only)
          project_criterion_justification = project[justification_symbol]
          if project_criterion_justification&.presence

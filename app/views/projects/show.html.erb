@@ -11,17 +11,8 @@
         <%= Icon[:'fa-bookmark'] %><%= t('.section_selector') %><b class="caret"></b>
       </a>
       <ul class="dropdown-menu reverse-dropdown">
-        <%
-          # Define available sections
-          sections = [
-            { name: t('projects.form_early.level.0'), level: 'passing' },
-            { name: t('projects.form_early.level.1'), level: 'silver' },
-            { name: t('projects.form_early.level.2'), level: 'gold' },
-            { name: t('projects.edit.permissions_panel_title', default: 'Permissions'), level: 'permissions' }
-          ]
-          # Future: Add baseline levels here when implemented
-        %>
-        <% sections.each do |section| %>
+        <%# Use precomputed constant hash (reduces object allocations) %>
+        <% ApplicationHelper::PROJECT_NAV_SECTIONS[I18n.locale].each do |section| %>
           <li class="<%= 'active' if @criteria_level == section[:level] %>">
             <%= link_to section[:name], level_project_path(@project, section[:level]) %>
           </li>
@@ -42,7 +33,7 @@
     <div class="main-badge-ques"></div>
   </div>
   <div class="col-md-7 col-sm-6">
-    <h1 class="m-t-0 h2"><%=@project.try(:name).presence || '(Name Unknown)' %></h2>
+    <h1 class="m-t-0 h2"><%=@project.try(:name).presence || NAME_UNKNOWN %></h2>
     <%= render "form_#{criteria_level_to_internal(@criteria_level)}", project: @project, view_only: true %>
 
 <div class="row">

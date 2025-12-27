@@ -39,14 +39,9 @@ LEGAL_LOCALE_FULL ||= /\A#{LEGAL_LOCALE.source}\z/
 # Frozen array for excluded formats (memory optimization)
 EXCLUDED_FORMATS = %i[json md].freeze
 
-# Map of old (deprecated) criteria levels to new (canonical) levels
-# Used to generate redirect routes automatically (DRY)
-LEVEL_REDIRECTS = {
-  '0' => 'passing',
-  '1' => 'silver',
-  '2' => 'gold',
-  'bronze' => 'passing'
-}.freeze
+# LEVEL_REDIRECTS is defined in config/initializers/00_section_names.rb
+# and exported for backward compatibility. It maps obsolete level names
+# to their canonical equivalents (e.g., '0' => 'passing').
 
 # Simplified redirect helper for project routes
 # Detects locale from params or request, builds redirect path

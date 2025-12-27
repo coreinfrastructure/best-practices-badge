@@ -1,11 +1,12 @@
 # Route Consolidation Plan
 
 This document outlines a plan to consolidate and simplify the routing
-structure for `/projects` routes in the Best Practices Badge application.
+structure for `/projects` GET routes in the Best Practices Badge application.
 
 ## Problem Statement
 
-The current routing configuration for `/projects` has significant issues:
+The current routing configuration for GET ... `/projects`
+has significant issues:
 
 1. **Route Proliferation**: Multiple overlapping patterns cause the router
    to repeatedly attempt pattern matching for the same request
@@ -18,6 +19,8 @@ The current routing configuration for `/projects` has significant issues:
 
 The current routes were generated and stored in `,projects-routes` for
 analysis, revealing these inefficiencies.
+
+Note: the PUT, PATCH, etc., routes are simpler and not what we're focusing on.
 
 ## Goals
 
@@ -107,6 +110,10 @@ GET (/:locale)/projects/:id/:section(.:format)
     → Controller uses respond_to to handle format
 ```
 
+I suspect the controller will call some sort of method like
+`show_handler` that takes the section and format, then handles it
+(e.g., redirects, calls `show`, or calls `show_json`)
+
 ### View Project (Default Section)
 
 ```
@@ -122,12 +129,15 @@ GET (/:locale)/projects/:id(.:format)
 ### JSON API (Locale-Independent)
 
 ```
-GET /projects/:id.json
-  → Calls projects#show_json
+GET /(:locale/)projects/:id.json
+  → Eventually calls projects#show_json (though the implementation
+    might call another method first, like "show", and then call show_json).
   → Returns complete project data as JSON
-  → NO locale in URL (JSON is locale-independent)
+  → If locale in URL, always 301 redirect to non-locale version
+    (JSON is locale-independent)
   → NO per-section JSON (doesn't make semantic sense)
-  → Note: Different from HTML/Markdown which ARE locale-specific
+  → Note: Different from HTML/Markdown which ARE locale-specific and
+    depend on sections.
 ```
 
 ### Markdown Without Locale (Redirect Chain)
@@ -159,7 +169,8 @@ GET /projects/:id.md
 
 ### JSON
 
-- URL: `/projects/:id.json` (NO locale)
+- URL: `/(:locale/)projects/:id.json`
+- If locale provided, redirects (permanently) to non-locale version.
 - Returns complete project data as JSON
 - Not locale-specific (client handles localization if needed)
 - No per-section JSON endpoint
@@ -214,7 +225,7 @@ user preferences or future features.
 ## Routes Being Removed
 
 We don't need to support `/:locale/:locale/projects/...` routes;
-doubled locales make not sense. Just don't include them.
+doubled locales make no sense. Don't support them.
 
 These current routes will be removed (functionality replaced):
 
@@ -224,9 +235,6 @@ GET (/:locale)/projects/:id(.:format) → projects#show_markdown
 
 # Old project-level edit (replaced by section-level edit)
 GET (/:locale)/projects/:id/edit(.:format) → projects#edit
-
-# Old JSON with locale (replaced by locale-independent JSON)
-GET (/:locale)/projects/:id.json → projects#show_json
 ```
 
 ## URL Migration Examples
@@ -241,7 +249,7 @@ GET (/:locale)/projects/:id.json → projects#show_json
 | `/en/projects/123/2` | `/en/projects/123/gold` | 301 | Obsolete numeric section |
 | `/projects/123.md` | `/:locale/projects/123/passing.md` | 302 (maybe chain) | Locale added, then section. It'd be okay to do this in a chain or all at once. |
 | `/en/projects/123.md` | `/en/projects/123/passing.md` | 302 | Section added |
-| `/en/projects/123.json` | No Support required | | JSON has no locale
+| `/en/projects/123.json` | `/projects/123.json` | 301 | JSON has no locale
 | `/en/projects/123/edit` | `/en/projects/123/passing/edit` | 302 | Section added |
 | `/en/projects/123/bronze/edit` | N/A | Error | Obsolete sections not accepted in edit URLs |
 

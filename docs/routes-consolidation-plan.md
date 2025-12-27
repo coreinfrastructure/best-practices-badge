@@ -152,23 +152,247 @@ GET /projects/:id.md
 
 ## Opportunities for Additional Consolidation
 
-The current plan keeps several routes separate.
-Here are opportunities to consolidate - they might simplify the
-router (speeding it up) and make it clear where there is overlap in format.
+The current plan keeps several routes separate. Two specific patterns suggest
+opportunities for further consolidation that might simplify the router
+(speeding it up) and clarify format overlap.
 
-### Similarity pattern 1: id slash text
+### Opportunity 1: Consolidate `delete_form` as a Section
 
-```
-GET (/:locale)/projects/:id/delete_form
-GET (/:locale)/projects/:id/SECTION(.:format)
-```
-
-### Similarity pattern 2: id with no slash and optionally with format
+**Current Separate Routes:**
 
 ```
-GET (/:locale)/projects/:id.json
-GET (/:locale)/projects/:id
+GET (/:locale)/projects/:id/delete_form(.:format) → projects#delete_form
+GET (/:locale)/projects/:id/:section(.:format)    → projects#show
 ```
+
+**Proposed Consolidation:**
+
+```
+GET (/:locale)/projects/:id/:section(.:format) → projects#show_or_action
+  where :section can be:
+  - A criteria level: passing, silver, gold, baseline-1, baseline-2, baseline-3
+  - A special view: permissions, delete_form
+```
+
+#### Implications
+
+This would treat `delete_form` as just another "section" of the project view,
+similar to how "permissions" is already handled as a section. The controller
+would need to distinguish between criteria sections and special action sections.
+
+#### Pros
+
+1. **Single Route Pattern**: Eliminates one route definition, making the
+   route table simpler
+2. **Consistent URL Structure**: All project "views" follow the same pattern
+   `/:locale/projects/:id/:view_name`
+3. **Format Flexibility**: If we ever need `delete_form.json` or
+   `delete_form.md`, it would work automatically without new routes
+4. **Easier Extension**: Adding new special views (like "audit_log",
+   "contributors") wouldn't require new route definitions
+5. **Clear Conceptual Model**: Everything under `/:id/:something` is a
+   "view of the project"
+
+#### Cons
+
+1. **Semantic Confusion**: `delete_form` is not really a "section" of
+   criteria - it's a confirmation page for deletion
+   - Mixing data views (sections) with action confirmations (delete) is
+     conceptually unclear
+   - Future developers might not realize `delete_form` is special
+
+2. **Security Concerns**: Delete confirmation requires special authorization
+   - Currently isolated in separate route and controller action
+   - Consolidation means authorization logic must be added to generic `show`
+   - Higher risk of accidentally exposing delete_form to unauthorized users
+
+3. **Different Behavior Requirements**:
+   - Sections: cacheable, can be public, support multiple formats
+   - delete_form: not cacheable, requires authentication, only HTML makes sense
+   - Consolidation forces generic code to handle very different requirements
+
+4. **RESTful Convention Violation**: Rails convention is:
+   - GET `/projects/:id/edit` - edit form
+   - DELETE `/projects/:id` - destroy action
+   - GET `/projects/:id/delete_form` fits the "confirmation form" pattern
+   - Treating it as a "section" breaks this convention
+
+5. **Format Handling Complexity**:
+   - `delete_form.json` - what would this return? The JSON representation
+     of a delete button?
+   - `delete_form.md` - markdown of a delete confirmation form is nonsensical
+   - Would need format constraints or validation specific to this "section"
+
+6. **Testing Complexity**: Tests for sections and tests for delete_form
+   have different concerns
+   - Section tests: verify correct criteria display, test caching, check
+     all formats
+   - delete_form tests: verify authorization, ensure CSRF token, check
+     deletion flow
+   - Consolidating makes test suite organization less clear
+
+#### Recommendation
+
+**Do NOT consolidate delete_form with sections.**
+
+Rationale:
+
+- `delete_form` is fundamentally different: it's an action confirmation,
+  not a data view
+- Security implications of consolidation are significant
+- The single-route benefit is outweighed by increased conceptual complexity
+- Rails conventions favor keeping destructive action confirmations separate
+- Only one route is saved, but multiple concerns are mixed
+
+**Alternative:** If route consolidation is critical, consider a different
+pattern:
+
+- Keep sections separate from special actions
+- Create a pattern for special actions: `/:id/_action/:action_name`
+- Example: `/projects/123/_action/delete_form`
+- This makes it clear these are different from data sections
+
+### Opportunity 2: Consolidate JSON Format into Main Show Route
+
+**Current Separate Routes:**
+
+```
+GET /projects/:id.json                            → projects#show_json
+GET (/:locale)/projects/:id(/:section)(.:format)  → projects#show
+```
+
+**Proposed Consolidation:**
+
+```
+GET /(:locale/)projects/:id(/:section)(.:format) → projects#show
+  where format can be html, md, or json
+  - If format is json: ignore locale and section parameters
+  - If format is html/md: use locale and section normally
+```
+
+#### Implications
+
+This would unify all project viewing into a single controller action that
+handles format-specific rendering. The controller would need to handle
+JSON as a special case that bypasses locale and section logic.
+
+#### Pros
+
+1. **True Route Unification**: Single route handles all project viewing
+   regardless of format
+2. **Consistent respond_to Block**: All formats in one place makes it
+   obvious what formats are supported
+3. **Reduced Route Complexity**: Eliminates the special-case route for JSON
+4. **Potential Code Sharing**: If JSON and HTML need similar data loading,
+   it's already in the same action
+5. **Future Format Support**: Adding new formats (e.g., XML, CSV) would
+   naturally fit the existing pattern
+
+#### Cons
+
+1. **Locale Handling Complexity**: Route becomes `/(:locale/)projects/...`
+   - Optional locale makes routing more complex
+   - Need to handle locale-in-URL for HTML/MD but reject for JSON
+   - Redirect logic becomes more complex: if JSON requested with locale,
+     must redirect to remove it
+
+2. **Section Parameter Confusion**: JSON ignores section parameter
+   - URL `/fr/projects/123/passing.json` - what does this mean?
+   - Should it error? Redirect to `/projects/123.json`? Silently ignore
+     "passing"?
+   - Creates "valid" URLs that don't make semantic sense
+
+3. **Conceptual Mismatch**: JSON represents fundamentally different data
+   - HTML/MD: Shows one section at a time, localized text
+   - JSON: Shows entire project, no localization, structure-focused
+   - Forcing them into one route obscures this difference
+
+4. **Controller Logic Branching**: The `show` action becomes:
+
+   ```ruby
+   def show
+     if request.format.json?
+       # Completely different code path
+       render json: @project.to_json
+     else
+       # Section-based rendering
+       @section = params[:section] || 'passing'
+       # ... rest of section logic
+     end
+   end
+   ```
+
+   This is effectively two actions in one, making the code harder to understand
+
+5. **Testing Becomes Complex**:
+   - Tests for JSON have completely different setup and assertions
+   - Tests for HTML/MD need locale and section fixtures
+   - Consolidated action means tests are harder to organize and maintain
+
+6. **Route Constraints Complexity**: To make this work properly:
+
+   ```ruby
+   # Need complex constraints:
+   get '(:locale/)projects/:id(/:section)',
+       to: 'projects#show',
+       constraints: {
+         locale: /en|fr|.../,
+         section: /passing|silver|.../,
+         format: /html|md|json/
+       }
+
+   # Plus redirect logic for invalid combinations:
+   # - /en/projects/123.json → /projects/123.json
+   # - /projects/123/passing.json → /projects/123.json
+   ```
+
+   This constraint complexity is harder to maintain than two simple routes
+
+7. **Breaking Existing API Contracts**: If external clients use
+   `/projects/:id.json`, they might accidentally request
+   `/en/projects/:id.json` and get unexpected redirects
+
+8. **Performance Consideration**: Every HTML/MD request would need to check
+   "is this JSON?" before proceeding with section logic, adding tiny overhead
+
+#### Recommendation
+
+**Do NOT consolidate JSON into the main show route.**
+
+Rationale:
+
+- JSON is conceptually different enough to warrant separate handling
+- The route parameters (locale, section) that make sense for HTML/MD don't
+  apply to JSON
+- Controller logic would become significantly more complex with branching
+- Creating "valid but nonsensical" URLs like `/en/projects/123/passing.json`
+  is worse than having two routes
+- Separate routes make the API clearer: one route for human viewing
+  (HTML/MD with sections), another for machine consumption (JSON)
+
+The current plan of separate routes is the right choice. The routes are:
+
+- Self-documenting: clear which URLs are valid
+- Simple: each route has one purpose
+- Maintainable: changing JSON behavior doesn't affect HTML rendering
+
+**Alternative Considered:** Could use route constraints to make JSON-only
+route match first, then fallback to section-based route. However, this
+creates route ordering dependencies and is harder to understand than
+explicit separate routes.
+
+### Summary of Recommendations
+
+Both consolidation opportunities should be **rejected**:
+
+1. **delete_form**: Keep separate due to different purpose (action
+   confirmation vs. data view), security concerns, and semantic clarity
+2. **JSON format**: Keep separate due to different parameters (no locale,
+   no section), different data structure, and API clarity
+
+The current plan strikes the right balance between consolidation and
+clarity. Further consolidation would trade minor route table simplification
+for significant increases in controller complexity and conceptual confusion.
 
 ## Format Handling Details
 

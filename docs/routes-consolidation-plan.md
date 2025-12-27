@@ -150,6 +150,26 @@ GET /projects/:id.md
   → Default section is "passing" until per-project defaults implemented
 ```
 
+## Opportunities for Additional Consolidation
+
+The current plan keeps several routes separate.
+Here are opportunities to consolidate - they might simplify the
+router (speeding it up) and make it clear where there is overlap in format.
+
+### Similarity pattern 1: id slash text
+
+```
+GET (/:locale)/projects/:id/delete_form
+GET (/:locale)/projects/:id/SECTION(.:format)
+```
+
+### Similarity pattern 2: id with no slash and optionally with format
+
+```
+GET (/:locale)/projects/:id.json
+GET (/:locale)/projects/:id
+```
+
 ## Format Handling Details
 
 ### HTML (Default)
@@ -204,6 +224,8 @@ Used when URLs should **never** be used again:
 
 - **Obsolete section names**: `bronze` → `passing`, `0` → `passing`,
   `1` → `silver`, `2` → `gold`
+- **Localized JSON URLs**: `/en/projects/123.json` → `/projects/123.json`
+  (JSON is locale-independent)
 
 Rationale: Search engines and browsers will cache these redirects,
 reducing server load for old bookmarks.
@@ -235,6 +257,9 @@ GET (/:locale)/projects/:id(.:format) → projects#show_markdown
 
 # Old project-level edit (replaced by section-level edit)
 GET (/:locale)/projects/:id/edit(.:format) → projects#edit
+
+# Note: Localized JSON routes will redirect (301) to non-localized version,
+# not removed. See URL Migration Examples table for details.
 ```
 
 ## URL Migration Examples
@@ -249,7 +274,7 @@ GET (/:locale)/projects/:id/edit(.:format) → projects#edit
 | `/en/projects/123/2` | `/en/projects/123/gold` | 301 | Obsolete numeric section |
 | `/projects/123.md` | `/:locale/projects/123/passing.md` | 302 (maybe chain) | Locale added, then section. It'd be okay to do this in a chain or all at once. |
 | `/en/projects/123.md` | `/en/projects/123/passing.md` | 302 | Section added |
-| `/en/projects/123.json` | `/projects/123.json` | 301 | JSON has no locale
+| `/en/projects/123.json` | `/projects/123.json` | 301 | JSON has no locale |
 | `/en/projects/123/edit` | `/en/projects/123/passing/edit` | 302 | Section added |
 | `/en/projects/123/bronze/edit` | N/A | Error | Obsolete sections not accepted in edit URLs |
 
@@ -333,6 +358,9 @@ GET (/:locale)/projects/:id/edit(.:format) → projects#edit
 - [ ] Test locale handling in views
 - [ ] Verify proper rendering for each section
 - [ ] Test error handling for invalid sections
+- [ ] Test that /en/projects/123.json redirects 301 to /projects/123.json
+- [ ] Verify show_json method works correctly
+- [ ] Test JSON response contains all expected fields
 
 ### Integration Tests
 
@@ -431,6 +459,18 @@ Some sections may become restricted based on project visibility or user permissi
 - Public projects: All sections visible
 - Private projects: Restrict access to certain sections
 - Implement in controller, not routes
+
+## Key Decisions
+
+1. **JSON is locale-independent**: Returns same data regardless of user's language;
+   client responsible for localization
+2. **Markdown is per-section**: Changed from per-project to align with HTML
+   view structure
+3. **Obsolete edit URLs not supported**: Bronze/0/1/2 section edit URLs will error
+   rather than redirect (not expected to be widely linked)
+4. **Doubled locale routes removed**: `/:locale/:locale/...` patterns are
+   malformed and won't be supported
+5. **Default section is "passing"**: Until per-project defaults implemented
 
 ## Appendix: Current Routes
 

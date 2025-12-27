@@ -44,14 +44,17 @@ module Sections
   # This avoids loading YAML twice - single source of truth
 
   # Metal badge levels - map numeric YAML keys to canonical names
-  # The YAML uses '0', '1', '2' but we want canonical 'passing', 'silver', 'gold'
+  # The YAML uses '0', '1', '2' but we want canonical
+  # E.g., ['passing', 'silver', 'gold']
   METAL_LEVEL_NAMES = YAML_METAL_LEVEL_KEYS.map { |k| REDIRECTS[k] || k }
                                            .freeze
 
   # Metal level numbers (obsolete keys still used in YAML)
+  # E.g., ['0', '1', '2']
   METAL_LEVEL_NUMBERS = YAML_METAL_LEVEL_KEYS
 
   # Baseline badge levels (already use canonical names in YAML)
+  # E.g., ['baseline-1', 'baseline-2', 'baseline-3']
   BASELINE_LEVEL_NAMES = YAML_BASELINE_LEVEL_KEYS
 
   # Synonyms for existing levels (obsolete names beyond numeric keys)
@@ -64,25 +67,26 @@ module Sections
   # Built up from canonical level names derived from YAML
   ALL_CRITERIA_LEVEL_NAMES = (METAL_LEVEL_NAMES + BASELINE_LEVEL_NAMES).freeze
 
-  # All valid section names (criteria levels + special sections)
-  # Built up from canonical names - no obsolete names included
-  ALL_NAMES = (ALL_CRITERIA_LEVEL_NAMES + SPECIAL_FORMS).freeze
+  # All canonical section names (criteria levels + special sections)
+  # These are the preferred names that we redirect to - no obsolete names
+  ALL_CANONICAL_NAMES = (ALL_CRITERIA_LEVEL_NAMES + SPECIAL_FORMS).freeze
 
   # Obsolete section names (deprecated, should redirect to canonical names)
   # Built up from obsolete numeric keys and synonym names
   OBSOLETE_NAMES = (METAL_LEVEL_NUMBERS + SYNONYMS).freeze
 
-  # Valid sections (same as ALL_NAMES since we built it from canonical names only)
-  # No subtraction needed - explicitly built from valid components
-  VALID_NAMES = ALL_NAMES
+  # Valid section names (all names we accept - canonical + obsolete)
+  # Used for validation where we accept obsolete names (then redirect to canonical)
+  VALID_NAMES = (ALL_CANONICAL_NAMES + OBSOLETE_NAMES).freeze
 
   # Regex matching only primary/canonical section names
   # Used in controller validation and routes that reject obsolete names
-  PRIMARY_SECTION_REGEX = Regexp.union(VALID_NAMES)
+  PRIMARY_SECTION_REGEX = Regexp.union(ALL_CANONICAL_NAMES)
 
-  # Regex matching primary section names AND obsolete synonyms
-  # Used in routes.rb for :section parameter validation (accepts obsolete for redirect)
-  PRIMARY_AND_SYNONYM_SECTION_REGEX = Regexp.union(ALL_NAMES + OBSOLETE_NAMES)
+  # Regex matching all valid section names (canonical + obsolete synonyms)
+  # Used in routes.rb for :section parameter validation
+  # (accepts obsolete for redirect)
+  PRIMARY_AND_SYNONYM_SECTION_REGEX = Regexp.union(VALID_NAMES)
 
   # Default section to use when none specified
   DEFAULT_SECTION = 'passing'
@@ -98,8 +102,6 @@ LEVEL_SYNONYMS = Sections::SYNONYMS
 SPECIAL_FORMS = Sections::SPECIAL_FORMS
 LEVEL_REDIRECTS = Sections::REDIRECTS
 
-# This top-level constant includes obsolete names for backward compatibility
-ALL_CRITERIA_LEVEL_NAMES = (
-  METAL_LEVEL_NAMES + METAL_LEVEL_NUMBERS + BASELINE_LEVEL_NAMES +
-  LEVEL_SYNONYMS + SPECIAL_FORMS
-).freeze
+# This top-level constant includes all valid names (canonical + obsolete)
+# for backward compatibility with existing code
+ALL_CRITERIA_LEVEL_NAMES = Sections::VALID_NAMES

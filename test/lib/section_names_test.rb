@@ -48,13 +48,13 @@ class SectionNamesTest < ActiveSupport::TestCase
     assert_equal expected, Sections::ALL_CRITERIA_LEVEL_NAMES
   end
 
-  test 'Sections::ALL_NAMES includes criteria levels and special forms' do
+  test 'Sections::ALL_CANONICAL_NAMES includes criteria levels and special forms' do
     expected = %w[
       passing silver gold
       baseline-1 baseline-2 baseline-3
       permissions
     ]
-    assert_equal expected, Sections::ALL_NAMES
+    assert_equal expected, Sections::ALL_CANONICAL_NAMES
   end
 
   test 'Sections::OBSOLETE_NAMES includes numeric keys and synonyms' do
@@ -62,8 +62,14 @@ class SectionNamesTest < ActiveSupport::TestCase
     assert_equal expected, Sections::OBSOLETE_NAMES
   end
 
-  test 'Sections::VALID_NAMES equals ALL_NAMES (built from valid components)' do
-    assert_equal Sections::ALL_NAMES, Sections::VALID_NAMES
+  test 'Sections::VALID_NAMES includes both canonical and obsolete names' do
+    expected = %w[
+      passing silver gold
+      baseline-1 baseline-2 baseline-3
+      permissions
+      0 1 2 bronze
+    ]
+    assert_equal expected, Sections::VALID_NAMES
   end
 
   test 'Sections::DEFAULT_SECTION is passing' do
@@ -118,23 +124,17 @@ class SectionNamesTest < ActiveSupport::TestCase
     assert_equal Sections::REDIRECTS, LEVEL_REDIRECTS
   end
 
-  test 'Top-level ALL_CRITERIA_LEVEL_NAMES includes all level names' do
-    # Top-level constant includes obsolete names for backward compatibility
-    expected = %w[
-      passing silver gold
-      0 1 2
-      baseline-1 baseline-2 baseline-3
-      bronze
-      permissions
-    ]
-    assert_equal expected, ALL_CRITERIA_LEVEL_NAMES
+  test 'Top-level ALL_CRITERIA_LEVEL_NAMES equals Sections::VALID_NAMES' do
+    # Top-level constant is an alias for Sections::VALID_NAMES for backward compatibility
+    assert_equal Sections::VALID_NAMES, ALL_CRITERIA_LEVEL_NAMES
   end
 
   test 'Section names are frozen' do
     assert Sections::METAL_LEVEL_NAMES.frozen?
     assert Sections::BASELINE_LEVEL_NAMES.frozen?
-    assert Sections::ALL_NAMES.frozen?
+    assert Sections::ALL_CANONICAL_NAMES.frozen?
     assert Sections::OBSOLETE_NAMES.frozen?
+    assert Sections::VALID_NAMES.frozen?
     assert Sections::REDIRECTS.frozen?
     assert Sections::DEFAULT_SECTION.frozen?
   end
@@ -143,8 +143,14 @@ class SectionNamesTest < ActiveSupport::TestCase
     # METAL_LEVEL_NAMES and METAL_LEVEL_NUMBERS should not overlap
     assert_empty(Sections::METAL_LEVEL_NAMES & Sections::METAL_LEVEL_NUMBERS)
 
-    # VALID_NAMES and OBSOLETE_NAMES should not overlap
-    assert_empty(Sections::VALID_NAMES & Sections::OBSOLETE_NAMES)
+    # ALL_CANONICAL_NAMES and OBSOLETE_NAMES should not overlap
+    assert_empty(Sections::ALL_CANONICAL_NAMES & Sections::OBSOLETE_NAMES)
+
+    # VALID_NAMES should be exactly ALL_CANONICAL_NAMES + OBSOLETE_NAMES
+    assert_equal(
+      (Sections::ALL_CANONICAL_NAMES + Sections::OBSOLETE_NAMES).sort,
+      Sections::VALID_NAMES.sort
+    )
   end
 end
 # rubocop:enable Metrics/ClassLength

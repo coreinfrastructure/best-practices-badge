@@ -529,15 +529,13 @@ class ProjectsController < ApplicationController
   # This constant is defined at top of config/routes.rb
   OBSOLETE_SECTION_REDIRECTS = LEVEL_REDIRECTS
 
-  VALID_SECTIONS = %w[
-    passing
-    silver
-    gold
-    baseline-1
-    baseline-2
-    baseline-3
-    permissions
-  ].freeze
+  # Calculate valid sections from ALL_CRITERIA_LEVEL_NAMES, excluding obsolete ones
+  # NOTE: ALL_CRITERIA_LEVEL_NAMES should be renamed to ALL_SECTION_NAMES in a
+  # future change, since "permissions" is a section but not a criteria level.
+  # This is defined in config/initializers/00_criteria_levels.rb and includes
+  # both criteria levels and special sections (like "permissions").
+  # By subtracting LEVEL_REDIRECTS.keys (the obsolete ones), we get only valid sections
+  VALID_SECTIONS = (ALL_CRITERIA_LEVEL_NAMES - LEVEL_REDIRECTS.keys).freeze
 
   DEFAULT_SECTION = 'passing'
 
@@ -591,7 +589,9 @@ class ProjectsController < ApplicationController
 
   # MODIFIED METHOD: Replaces old show/show_markdown with section-aware version
   def show
-    @section = params[:section] || DEFAULT_SECTION
+    # Section is always present (route constraint ensures it)
+    # No default needed - this action is ONLY called when :section is in URL
+    @section = params[:section]
 
     # Handle obsolete section names with permanent redirect
     if OBSOLETE_SECTION_REDIRECTS.key?(@section)
@@ -602,12 +602,14 @@ class ProjectsController < ApplicationController
       return
     end
 
-    # Validate section is known
+    # Validate section is known (should always pass due to route constraints,
+    # but provides safety and better error messages)
     unless VALID_SECTIONS.include?(@section)
       raise ActionController::RoutingError, "Invalid section: #{@section}"
     end
 
-    # Load section-specific data
+    # Load ONLY section-specific data (optimization: don't load irrelevant criteria)
+    # This is more efficient than loading all project data since we know the exact section
     @criteria = @project.criteria_for_section(@section)
     @section_status = @project.section_status(@section)
 
@@ -620,15 +622,19 @@ class ProjectsController < ApplicationController
 
   # MODIFIED METHOD: Replaces old edit with section-aware version
   def edit
-    @section = params[:section] || DEFAULT_SECTION
+    # Section is always present (route constraint ensures it)
+    # No default needed - this action is ONLY called when :section is in URL
+    @section = params[:section]
 
-    # Validate section is known
+    # Validate section is known (should always pass due to route constraints,
+    # but provides safety and better error messages)
     unless VALID_SECTIONS.include?(@section)
       raise ActionController::RoutingError, "Invalid section: #{@section}"
     end
 
     authorize_edit!
 
+    # Load ONLY section-specific data (optimization: don't load irrelevant criteria)
     @criteria = @project.criteria_for_section(@section)
     render "projects/edit_#{@section}"
   end
@@ -717,13 +723,13 @@ end
 | `destroy` | Unchanged | DELETE, not part of GET consolidation |
 | `delete_form` | Unchanged | Kept separate (see Opportunity 1 analysis) |
 | `badge` | Unchanged | Already simple and locale-independent |
-| `show` | **Modified** | Now section-aware; handles HTML and MD formats; includes obsolete section redirects |
-| `edit` | **Modified** | Now section-aware; validates section parameter |
+| `show` | **Modified** | Now section-aware; section always present in params (no default); loads only section-specific data; handles HTML and MD formats; includes obsolete section redirects |
+| `edit` | **Modified** | Now section-aware; section always present in params (no default); loads only section-specific data; validates section parameter |
 | `show_json` | **New explicit** | Separated from show; handles locale redirect; returns full project JSON |
 | `show_markdown` | **Removed** | Functionality merged into `show` with format.md |
 | `redirect_to_default_section` | **New** | Handles `/:locale/projects/:id` → `/:locale/projects/:id/passing` |
-| `redirect_markdown_to_locale` | **New** | Handles `/projects/:id.md` → `/:locale/projects/:id/passing.md` |
-| `redirect_markdown_to_section` | **New** | Handles `/:locale/projects/:id.md` → `/:locale/projects/:id/passing.md` |
+| `redirect_markdown_to_locale` | **Removed** | Consolidated into `redirect_to_default_section` |
+| `redirect_markdown_to_section` | **Removed** | Consolidated into `redirect_to_default_section` |
 
 ### Memory Requirement Analysis
 
@@ -1003,22 +1009,40 @@ get ':id', to: redirect { |params, request|
 - **Recommendation**: Keep controller method if per-project defaults planned
   within 6-12 months; otherwise use route redirect
 
-#### 5. Reuse Existing Section Constants
+#### 5. Derive VALID_SECTIONS from Existing Constants
 
-**Current routes.rb already defines (line 25):**
+**Current routes.rb already defines (lines 25-26, 44-49):**
 
 ```ruby
 # Built from ALL_CRITERIA_LEVEL_NAMES - automatically updated
 VALID_CRITERIA_LEVEL ||= /#{Regexp.union(ALL_CRITERIA_LEVEL_NAMES)}/
+
+# Map of obsolete to canonical level names
+LEVEL_REDIRECTS = {
+  '0' => 'passing',
+  '1' => 'silver',
+  '2' => 'gold',
+  'bronze' => 'passing'
+}.freeze
 ```
 
 **Where ALL_CRITERIA_LEVEL_NAMES comes from config/initializers/00_criteria_levels.rb**
 
-This already includes:
+This includes both valid and obsolete section names:
 
-- Valid levels: passing, silver, gold, baseline-1, baseline-2, baseline-3
-- Obsolete levels: 0, 1, 2, bronze
-- Special forms: permissions
+- Valid levels: passing, silver, gold, baseline-1, baseline-2, baseline-3, permissions
+- Obsolete levels: 0, 1, 2, bronze (keys in LEVEL_REDIRECTS)
+
+**Note**: `ALL_CRITERIA_LEVEL_NAMES` should ideally be renamed to `ALL_SECTION_NAMES`
+since "permissions" is a section but not a criteria level. See "Future Enhancements"
+section for details.
+
+**Calculate VALID_SECTIONS in controller:**
+
+```ruby
+# Derive valid sections by excluding obsolete ones
+VALID_SECTIONS = (ALL_CRITERIA_LEVEL_NAMES - LEVEL_REDIRECTS.keys).freeze
+```
 
 **Use in routes:**
 
@@ -1027,16 +1051,17 @@ This already includes:
 constraints: { section: VALID_CRITERIA_LEVEL }
 
 # For edit routes (rejects obsolete levels):
-# Use controller validation instead of route constraint
-# This is simpler and provides better error messages
+# Use controller validation with VALID_SECTIONS
+# This provides better error messages than route constraints
 ```
 
 **Benefits:**
 
-- **Already defined** - no new regex needed
+- **Calculated from existing constants** - no hardcoded arrays
+- **Single source of truth** - config/initializers/00_criteria_levels.rb defines ALL_CRITERIA_LEVEL_NAMES
 - **Automatically updated** when new criteria levels added to initializer
-- **Single source of truth** - config/initializers/00_criteria_levels.rb
-- **Includes all valid combinations** - maintained in one place
+- **DRY principle** - obsolete sections defined once in LEVEL_REDIRECTS
+- **Reused in both routes and controller** - same constants everywhere
 
 #### 6. Avoid `resources` Block for Custom Routes
 
@@ -1497,6 +1522,29 @@ If critical issues arise during deployment:
 - **Impact**: Minimal to none; redirects properly signal intent to search engines
 
 ## Future Enhancements
+
+### Rename ALL_CRITERIA_LEVEL_NAMES to ALL_SECTION_NAMES
+
+**Current issue**: The constant `ALL_CRITERIA_LEVEL_NAMES` includes "permissions",
+which is a section/view but not actually a criteria level. This is semantically
+incorrect.
+
+**Recommended change**:
+
+1. Rename `ALL_CRITERIA_LEVEL_NAMES` to `ALL_SECTION_NAMES` in
+   `config/initializers/00_criteria_levels.rb`
+2. Update `VALID_CRITERIA_LEVEL` regex to be named `VALID_SECTION` in
+   `config/routes.rb`
+3. Update all references throughout the codebase
+
+**Benefits**:
+
+- More accurate naming (sections vs. criteria levels)
+- Clearer intent (includes both criteria levels and special sections)
+- Better maintainability (name matches actual content)
+
+**Note**: This should be done before or alongside the route consolidation to
+avoid confusion about what the constants represent.
 
 ### Per-Project Default Section
 

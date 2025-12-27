@@ -399,6 +399,178 @@ for significant increases in controller complexity and conceptual confusion.
 This section provides the exact implementation details including route
 definitions, controller methods, and memory impact analysis.
 
+### Phase 0: Rename and Consolidate Constants (DO THIS FIRST)
+
+**Goal**: Rename constants to accurately reflect their meaning, compute them once
+in a single location, freeze them, and make them available to both routes and
+controllers. This provides clear, consistent naming for all subsequent changes.
+
+#### Current State Problems
+
+1. **Misleading names**: `ALL_CRITERIA_LEVEL_NAMES` includes "permissions" which
+   is a section/view, not a criteria level
+2. **Scattered definitions**: Constants defined in multiple places (initializers,
+   routes.rb, controller)
+3. **Recomputation**: Same values calculated multiple times
+4. **Unclear dependencies**: Routes depend on initializers, controller depends on
+   routes
+
+#### Proposed Constants (All Frozen)
+
+Define these in `config/initializers/00_section_names.rb` (renamed from or
+alongside `00_criteria_levels.rb`):
+
+```ruby
+# frozen_string_literal: true
+
+# Section names and routing constants for the Best Practices Badge application
+# Loaded early so both routes.rb and controllers can use them
+# Namespaced under Sections:: to avoid polluting global namespace
+
+module Sections
+  # Metal badge levels (original three levels)
+  METAL_LEVEL_NAMES = %w[passing silver gold].freeze
+  METAL_LEVEL_NUMBERS = %w[0 1 2].freeze
+
+  # Baseline badge levels (new framework)
+  BASELINE_LEVEL_NAMES = %w[baseline-1 baseline-2 baseline-3].freeze
+
+  # All criteria levels (levels that have criteria to evaluate)
+  ALL_CRITERIA_LEVEL_NAMES = (METAL_LEVEL_NAMES + BASELINE_LEVEL_NAMES).freeze
+
+  # Special sections (not criteria levels, but valid sections)
+  SPECIAL_SECTION_NAMES = %w[permissions].freeze
+
+  # All valid section names (criteria levels + special sections)
+  ALL_NAMES = (ALL_CRITERIA_LEVEL_NAMES + SPECIAL_SECTION_NAMES).freeze
+
+  # Obsolete section names (deprecated, should redirect)
+  OBSOLETE_NAMES = (METAL_LEVEL_NUMBERS + %w[bronze]).freeze
+
+  # Map obsolete names to their canonical equivalents
+  # Used for redirects in routes and controller
+  REDIRECTS = {
+    '0' => 'passing',
+    '1' => 'silver',
+    '2' => 'gold',
+    'bronze' => 'passing'
+  }.freeze
+
+  # Valid sections (excludes obsolete names)
+  VALID_NAMES = (ALL_NAMES - OBSOLETE_NAMES).freeze
+
+  # Regex for route constraints - matches any valid or obsolete section
+  # Used in routes.rb for :section parameter validation
+  REGEX = /#{Regexp.union(ALL_NAMES + OBSOLETE_NAMES)}/.freeze
+
+  # Regex for valid sections only (excludes obsolete)
+  # Used in controller validation
+  VALID_REGEX = /#{Regexp.union(VALID_NAMES)}/.freeze
+
+  # Default section to use when none specified
+  DEFAULT_SECTION = 'passing'.freeze
+end
+```
+
+#### Benefits of This Approach
+
+1. **Single source of truth**: All section-related constants in one file
+2. **Namespaced**: Under `Sections::` module to avoid polluting global namespace
+3. **Clear naming**:
+   - `Sections::ALL_CRITERIA_LEVEL_NAMES` - only actual criteria levels
+   - `Sections::ALL_NAMES` - includes special sections like permissions
+   - `Sections::VALID_NAMES` - excludes obsolete names
+   - `Sections::REDIRECTS` - obsolete to canonical mapping
+   - `Sections::REGEX` - route constraint for all sections
+   - `Sections::VALID_REGEX` - route constraint for valid sections only
+   - `Sections::DEFAULT_SECTION` - default section ('passing')
+4. **Computed once**: Regexes and arrays frozen, not recomputed
+5. **Available everywhere**: Initializers load before routes and controllers
+6. **Easy maintenance**: Adding new levels only requires updating one place
+7. **Type clarity**: Frozen arrays, hashes, and regexes (not strings or symbols)
+
+#### Usage in Routes
+
+```ruby
+# config/routes.rb
+
+Rails.application.routes.draw do
+  scope '(:locale)', locale: LEGAL_LOCALE do
+    # Use Sections::REGEX for routes that accept obsolete names (will redirect)
+    get 'projects/:id/:section', to: 'projects#show',
+        constraints: { id: VALID_ID, section: Sections::REGEX }
+
+    # Use Sections::VALID_REGEX for routes that reject obsolete names
+    get 'projects/:id/:section/edit', to: 'projects#edit',
+        constraints: { id: VALID_ID, section: Sections::VALID_REGEX }
+  end
+end
+```
+
+#### Usage in Controller
+
+```ruby
+# app/controllers/projects_controller.rb
+
+class ProjectsController < ApplicationController
+  # Reference the frozen constants from Sections module directly
+  # No need to redefine - use Sections:: prefix throughout
+
+  def show
+    @section = params[:section]
+
+    # Check obsolete names using Sections::REDIRECTS frozen hash
+    if Sections::REDIRECTS.key?(@section)
+      redirect_to project_section_path(@project,
+                                       Sections::REDIRECTS[@section],
+                                       locale: params[:locale]),
+                  status: :moved_permanently
+      return
+    end
+
+    # Validate using Sections::VALID_NAMES frozen array
+    unless Sections::VALID_NAMES.include?(@section)
+      raise ActionController::RoutingError, "Invalid section: #{@section}"
+    end
+    # ...
+  end
+end
+```
+
+#### Migration Steps for Phase 0
+
+1. **Create/update initializer**:
+   - File: `config/initializers/00_section_names.rb`
+   - Define all constants as shown above
+   - Ensure file loads before routes (00_ prefix ensures early loading)
+
+2. **Update routes.rb**:
+   - Remove `LEVEL_REDIRECTS` constant (use `SECTION_REDIRECTS` instead)
+   - Remove `VALID_CRITERIA_LEVEL` regex (use `SECTION_REGEX` instead)
+   - Replace all references with new constant names
+
+3. **Update controllers**:
+   - Remove any local constant definitions
+   - Use frozen constants from initializer directly
+
+4. **Test**:
+   - Run `rake routes` to verify routes still work
+   - Run controller tests to verify validation still works
+   - Verify no performance regression (constants frozen/memoized)
+
+5. **Commit separately**:
+   - This is a pure refactoring (no behavior change)
+   - Makes subsequent route consolidation changes clearer
+
+#### Why This Must Be Done First
+
+- **Clearer subsequent changes**: Route consolidation will use accurate names
+  like `SECTION_REGEX` instead of misleading `VALID_CRITERIA_LEVEL`
+- **Single point of failure**: If constant names are wrong, fix once, not
+  scattered across files
+- **Easier review**: Rename commit separate from behavior change commits
+- **Lower risk**: Pure refactoring can be tested independently
+
 ### Migration from Current Routes
 
 This section shows exactly how the current routes will be transformed.
@@ -549,19 +721,18 @@ Rails.application.routes.draw do
         constraints: { id: VALID_ID },
         as: :project_redirect
 
-    # ROUTE 8: Update project (PUT/PATCH) with section parameter
-    # Pattern: PUT/PATCH /projects/:id/:section(/edit)
-    # - Preferred: PUT/PATCH /projects/:id/:section (standard REST)
-    # - Allowed: PUT/PATCH /projects/:id/:section/edit (deprecated, backward compatibility)
-    # The /edit suffix is optional to support external clients during transition
-    # After internal forms are updated, /edit remains supported but deprecated
-    # IMPORTANT: Section in URL is for routing only - ANY project field can be
-    # updated regardless of section. This makes it easier for programs to update
-    # projects without needing to know which fields belong to which section.
-    match 'projects/:id/:section(/edit)', to: 'projects#update',
+    # ROUTE 8: Update project (PUT/PATCH) - section optional
+    # Pattern: PUT/PATCH /projects/:id(/:section)(/edit)
+    # Accepts all these patterns:
+    # - PUT/PATCH /projects/:id (section inferred from referrer or defaults to passing)
+    # - PUT/PATCH /projects/:id/:section (preferred - explicit redirect target)
+    # - PUT/PATCH /projects/:id/:section/edit (backward compat - deprecated /edit suffix)
+    # Section in URL indicates where to redirect after successful update
+    # IMPORTANT: ANY project field can be updated regardless of section in URL
+    match 'projects/:id(/:section)(/edit)', to: 'projects#update',
           via: %i[put patch],
           constraints: { id: VALID_ID, section: VALID_CRITERIA_LEVEL },
-          as: :update_project_section
+          as: :update_project
   end
 end
 
@@ -659,13 +830,15 @@ match 'projects/:id/(:criteria_level/)edit' => 'projects#update',
 # Accepts: PUT/PATCH /projects/:id/passing/edit (non-standard)
 #       or PUT/PATCH /projects/:id/edit (if criteria_level omitted)
 
-# AFTER: Inside scope, required section, optional /edit suffix (Route 8)
+# AFTER: Inside scope, optional section, optional /edit suffix (Route 8)
 # Follows REST conventions while maintaining backward compatibility
-match 'projects/:id/:section(/edit)', to: 'projects#update',
+match 'projects/:id(/:section)(/edit)', to: 'projects#update',
       via: [:put, :patch],
       constraints: { id: VALID_ID, section: VALID_CRITERIA_LEVEL }
-# Accepts: PUT/PATCH /projects/:id/passing (preferred, standard REST)
-#       or PUT/PATCH /projects/:id/passing/edit (deprecated, backward compat)
+# Accepts all these patterns:
+# - PUT/PATCH /projects/:id (section inferred from referrer or defaults to passing)
+# - PUT/PATCH /projects/:id/:section (preferred - explicit redirect target, standard REST)
+# - PUT/PATCH /projects/:id/:section/edit (deprecated - backward compat)
 ```
 
 **Forms should be updated to use the new pattern:**
@@ -682,10 +855,13 @@ match 'projects/:id/:section(/edit)', to: 'projects#update',
 # Route order is critical - Rails matches top to bottom
 # More specific routes must come before more generic routes
 
-# Note: Reusing these constants already defined at top of routes.rb:
-# LEGAL_LOCALE - derived from I18n.available_locales
-# VALID_CRITERIA_LEVEL - built from ALL_CRITERIA_LEVEL_NAMES
-# VALID_ID - matches [1-9][0-9]*
+# Note: Using these constants:
+# From config/routes.rb:
+#   LEGAL_LOCALE - derived from I18n.available_locales
+#   VALID_ID - matches [1-9][0-9]*
+# From config/initializers/00_section_names.rb (Sections module):
+#   Sections::REGEX - matches all valid and obsolete section names
+#   Sections::VALID_REGEX - matches only valid sections (excludes obsolete)
 
 Rails.application.routes.draw do
   # ROUTE 1: Badge image (no locale needed, must be outside locale scope)
@@ -729,19 +905,21 @@ Rails.application.routes.draw do
 
     # ROUTE 5: Edit with section (before show to avoid conflicts)
     # GET (/:locale)/projects/:id/:section/edit
+    # Use Sections::VALID_REGEX to reject obsolete sections in edit URLs
     get 'projects/:id/:section/edit', to: 'projects#edit',
         constraints: {
           id: VALID_ID,
-          section: VALID_CRITERIA_LEVEL
+          section: Sections::VALID_REGEX
         },
         as: :edit_project_section
 
     # ROUTE 6: Show section with format (HTML or Markdown)
     # GET (/:locale)/projects/:id/:section(.:format)
+    # Use Sections::REGEX to accept obsolete sections (controller will redirect)
     get 'projects/:id/:section', to: 'projects#show',
         constraints: {
           id: VALID_ID,
-          section: VALID_CRITERIA_LEVEL
+          section: Sections::REGEX
         },
         as: :project_section,
         defaults: { format: 'html' }
@@ -752,18 +930,21 @@ Rails.application.routes.draw do
         constraints: { id: VALID_ID },
         as: :project_redirect
 
-    # ROUTE 8: Update project (PUT/PATCH)
-    # PUT/PATCH (/:locale)/projects/:id/:section(/edit) → projects#update
-    # - Preferred: PUT/PATCH /:locale/projects/:id/:section (standard REST)
-    # - Allowed: PUT/PATCH /:locale/projects/:id/:section/edit (deprecated, backward compat)
+    # ROUTE 8: Update project (PUT/PATCH) - section optional
+    # PUT/PATCH (/:locale)/projects/:id(/:section)(/edit) → projects#update
+    # Accepts all these patterns:
+    # - PUT/PATCH /:locale/projects/:id (section inferred from referrer or defaults)
+    # - PUT/PATCH /:locale/projects/:id/:section (preferred - explicit redirect target)
+    # - PUT/PATCH /:locale/projects/:id/:section/edit (deprecated - backward compat)
     # The /edit suffix is optional to support external clients during transition
     # IMPORTANT: Section in URL is for routing only - ANY project field can be
     # updated regardless of section. Programs can update any field without knowing
     # which section it belongs to.
-    match 'projects/:id/:section(/edit)', to: 'projects#update',
+    # Use Sections::VALID_REGEX to reject obsolete sections in update URLs
+    match 'projects/:id(/:section)(/edit)', to: 'projects#update',
           via: %i[put patch],
-          constraints: { id: VALID_ID, section: VALID_CRITERIA_LEVEL },
-          as: :update_project_section
+          constraints: { id: VALID_ID, section: Sections::VALID_REGEX },
+          as: :update_project
   end
 end
 ```
@@ -822,19 +1003,9 @@ get 'projects/:id', to: 'projects#show_json',
 
 ```ruby
 class ProjectsController < ApplicationController
-  # Reuse LEVEL_REDIRECTS from routes.rb (already frozen)
-  # This constant is defined at top of config/routes.rb
-  OBSOLETE_SECTION_REDIRECTS = LEVEL_REDIRECTS
-
-  # Calculate valid sections from ALL_CRITERIA_LEVEL_NAMES, excluding obsolete ones
-  # NOTE: ALL_CRITERIA_LEVEL_NAMES should be renamed to ALL_SECTION_NAMES in a
-  # future change, since "permissions" is a section but not a criteria level.
-  # This is defined in config/initializers/00_criteria_levels.rb and includes
-  # both criteria levels and special sections (like "permissions").
-  # By subtracting LEVEL_REDIRECTS.keys (the obsolete ones), we get only valid sections
-  VALID_SECTIONS = (ALL_CRITERIA_LEVEL_NAMES - LEVEL_REDIRECTS.keys).freeze
-
-  DEFAULT_SECTION = 'passing'
+  # Use frozen constants from Sections module (config/initializers/00_section_names.rb)
+  # All constants computed once at boot time and available via Sections:: prefix
+  # No need to redefine them - just reference Sections::CONSTANT_NAME directly
 
   # Existing before_action filters
   before_action :set_project, only: [:show, :edit, :update, :destroy,
@@ -857,9 +1028,65 @@ class ProjectsController < ApplicationController
     # Unchanged - creates new project
   end
 
-  # EXISTING METHOD (minimal changes)
+  # MODIFIED METHOD: Handle optional section parameter
   def update
-    # Unchanged - updates project
+    # Section is now OPTIONAL in the URL
+    @section = params[:section]
+
+    # Authorize user can edit this project
+    authorize_edit!
+
+    # Update the project with submitted parameters
+    if @project.update(project_params)
+      # Determine where to redirect after successful update
+      redirect_section = determine_redirect_section(@section)
+
+      redirect_to project_section_path(@project, redirect_section,
+                                       locale: params[:locale]),
+                  notice: t('projects.update.success')
+    else
+      # Failed - re-render edit form
+      # Load section-specific data for the form
+      load_section_data_for_edit(@section || DEFAULT_SECTION)
+      render "projects/edit_#{@section || DEFAULT_SECTION}"
+    end
+  end
+
+  private
+
+  # Determine where to redirect after successful project update
+  # @param section [String, nil] section from URL (may be nil)
+  # @return [String] section name to redirect to
+  def determine_redirect_section(section)
+    # If section provided in UPDATE request URL, use it (explicit redirect target)
+    # Example: PUT /projects/123/silver → section='silver' from params[:section]
+    # Use Sections::VALID_NAMES from initializer (frozen array)
+    return section if section.present? && Sections::VALID_NAMES.include?(section)
+
+    # Otherwise, try to infer from referrer (the page they came from)
+    # This handles unusual cases where update URL lacks section but referrer has it
+    # Example: PUT /projects/123 (no section) but came from /en/projects/123/silver/edit
+    # Note: Most edit links will include section, so this is primarily a fallback
+    if request.referer.present?
+      # Extract section from REFERRER URL (different from update URL)
+      # Example referrer: /en/projects/123/silver/edit → extract "silver"
+      match = request.referer.match(%r{/projects/\d+/([^/]+)(/edit)?$})
+      return match[1] if match && Sections::VALID_NAMES.include?(match[1])
+    end
+
+    # Fallback: redirect to default section
+    # Use Sections::DEFAULT_SECTION from initializer (frozen string)
+    Sections::DEFAULT_SECTION
+  end
+
+  # Load section-specific data needed for edit forms
+  # @param section [String] section name
+  def load_section_data_for_edit(section)
+    if section == 'permissions'
+      @additional_rights_str = @project.additional_rights_to_s
+    else
+      @criteria = @project.criteria_for_section(section)
+    end
   end
 
   # EXISTING METHOD (minimal changes)
@@ -891,9 +1118,10 @@ class ProjectsController < ApplicationController
     @section = params[:section]
 
     # Handle obsolete section names with permanent redirect
-    if OBSOLETE_SECTION_REDIRECTS.key?(@section)
+    # Use Sections::REDIRECTS from initializer (frozen hash)
+    if Sections::REDIRECTS.key?(@section)
       redirect_to project_section_path(@project,
-                                       OBSOLETE_SECTION_REDIRECTS[@section],
+                                       Sections::REDIRECTS[@section],
                                        locale: params[:locale]),
                   status: :moved_permanently
       return
@@ -901,7 +1129,8 @@ class ProjectsController < ApplicationController
 
     # Validate section is known (should always pass due to route constraints,
     # but provides safety and better error messages)
-    unless VALID_SECTIONS.include?(@section)
+    # Use Sections::VALID_NAMES from initializer (frozen array)
+    unless Sections::VALID_NAMES.include?(@section)
       raise ActionController::RoutingError, "Invalid section: #{@section}"
     end
 
@@ -911,22 +1140,32 @@ class ProjectsController < ApplicationController
       # Permissions section: load additional rights data
       # Call model method in controller, not view (Rails best practice)
       @additional_rights_str = @project.additional_rights_to_s
+
+      # SAFEGUARD: Permissions section doesn't support markdown format
+      # Markdown is for criteria only, not permissions
+      if request.format.md?
+        raise ActionController::RoutingError,
+              'Markdown format not supported for permissions section'
+      end
     else
       # Criteria sections: load criteria and status for this section
       @criteria = @project.criteria_for_section(@section)
       @section_status = @project.section_status(@section)
-    end
 
-    # For markdown format, set @criteria_level for the view
-    # The existing show_markdown.erb checks @criteria_level:
-    # - If blank: generates markdown for ALL levels (old behavior)
-    # - If set: generates markdown for ONLY that level (new per-section behavior)
-    @criteria_level = @section if request.format.md?
+      # For markdown format, set @criteria_level for the view
+      # The existing show_markdown.erb checks @criteria_level:
+      # - If blank: generates markdown for ALL levels (old behavior)
+      # - If set: generates markdown for ONLY that level (new per-section behavior)
+      @criteria_level = @section if request.format.md?
+    end
 
     respond_to do |format|
       format.html { render "projects/show_#{@section}", layout: 'application' }
-      format.md   { render 'projects/show_markdown', layout: false,
-                          content_type: 'text/markdown' }
+      format.md do
+        # Only reach here if @section is a criteria level (not permissions)
+        render 'projects/show_markdown', layout: false,
+               content_type: 'text/markdown'
+      end
     end
   end
 
@@ -938,14 +1177,16 @@ class ProjectsController < ApplicationController
 
     # Validate section is known (should always pass due to route constraints,
     # but provides safety and better error messages)
-    unless VALID_SECTIONS.include?(@section)
+    # Use Sections::VALID_NAMES from initializer (frozen array)
+    unless Sections::VALID_NAMES.include?(@section)
       raise ActionController::RoutingError, "Invalid section: #{@section}"
     end
 
     authorize_edit!
 
     # Load ONLY section-specific data (optimization: don't load irrelevant criteria)
-    @criteria = @project.criteria_for_section(@section)
+    # Use same helper method as update method for consistency
+    load_section_data_for_edit(@section)
     render "projects/edit_#{@section}"
   end
 
@@ -970,7 +1211,8 @@ class ProjectsController < ApplicationController
   # NEW METHOD: Redirects bare project URL to default section
   def redirect_to_default_section
     # Future: could read @project.default_section from database
-    default_section = DEFAULT_SECTION
+    # Use Sections::DEFAULT_SECTION from initializer (frozen string)
+    default_section = Sections::DEFAULT_SECTION
 
     # Preserve format if specified
     format = request.format.symbol == :html ? nil : request.format.symbol
@@ -1183,24 +1425,28 @@ Generates: `PUT /projects/123/permissions/edit` (deprecated, but backward compat
 #### Preferred Form Pattern (standard REST)
 
 ```erb
-<%# Updated form - preferred %>
-<%= bootstrap_form_for project, url: update_project_section_path(project, 'permissions') do |f| %>
+<%# Updated form - preferred, section explicit in URL %>
+<%= bootstrap_form_for project, url: update_project_path(project, section: @section) do |f| %>
   <%# Form fields... %>
 <% end %>
 ```
 
-Generates: `PUT /projects/123/permissions` (standard REST, preferred)
+Generates: `PUT /projects/123/permissions` (standard REST, section explicit)
 
-**OR use default Rails behavior:**
+**Why include section in URL:**
+
+- Makes redirect target explicit (no need to infer from referrer)
+- Form handler knows which section to return to after successful update
+- Cleaner than relying on fallback logic
+
+**Alternative using route helper with explicit section:**
 
 ```erb
-<%# Even simpler - Rails infers the URL from the object and current route %>
-<%= bootstrap_form_for project do |f| %>
+<%# Also acceptable - uses named section directly %>
+<%= bootstrap_form_for project, url: update_project_path(project, section: 'permissions') do |f| %>
   <%# Form fields... %>
 <% end %>
 ```
-
-Rails will automatically generate the correct URL based on the edit route.
 
 #### Important Note About Section Parameter
 
@@ -1270,17 +1516,157 @@ This logging helps identify external clients that need to update their code.
 | `index` | Unchanged | No routing changes affect this |
 | `new` | Unchanged | No routing changes affect this |
 | `create` | Unchanged | POST, not part of GET consolidation |
-| `update` | Unchanged | PATCH/PUT, not part of GET consolidation |
+| `update` | **Modified** | Now handles optional section parameter; infers redirect target from section, referrer, or default; uses shared helper for data loading |
 | `destroy` | Unchanged | DELETE, not part of GET consolidation |
 | `delete_form` | Unchanged | Kept separate (see Opportunity 1 analysis) |
 | `badge` | Unchanged | Already simple and locale-independent |
-| `show` | **Modified** | Now section-aware; section always present in params (no default); loads only section-specific data; handles HTML and MD formats; includes obsolete section redirects |
-| `edit` | **Modified** | Now section-aware; section always present in params (no default); loads only section-specific data; validates section parameter |
+| `show` | **Modified** | Now section-aware; section always present in params (no default); loads only section-specific data; handles HTML and MD formats; includes obsolete section redirects; safeguards against markdown for permissions |
+| `edit` | **Modified** | Now section-aware; section always present in params (no default); loads only section-specific data using shared helper; validates section parameter |
 | `show_json` | **New explicit** | Separated from show; handles locale redirect; returns full project JSON |
 | `show_markdown` | **Removed** | Functionality merged into `show` with format.md |
 | `redirect_to_default_section` | **New** | Handles `/:locale/projects/:id` → `/:locale/projects/:id/passing` |
 | `redirect_markdown_to_locale` | **Removed** | Consolidated into `redirect_to_default_section` |
 | `redirect_markdown_to_section` | **Removed** | Consolidated into `redirect_to_default_section` |
+| `determine_redirect_section` | **New (private)** | Helper to determine redirect target after update (from section param, referrer, or default) |
+| `load_section_data_for_edit` | **New (private)** | Shared helper for loading section-specific data (permissions vs criteria) |
+
+### Critical Implementation Details
+
+This section addresses the critical issues identified during comprehensive review
+to ensure low risk and high likelihood of immediate success.
+
+#### Issue 1: Section Parameter Must Be Optional (RESOLVED)
+
+**Problem**: Initial proposal required `:section` parameter in update route,
+which would break `_form_0.html.erb` that uses `project_path(project)` to
+generate `PATCH /projects/123` without section.
+
+**Solution**: Made section optional using parentheses: `'projects/:id(/:section)(/edit)'`
+
+**Route now accepts**:
+
+- `PUT/PATCH /projects/:id` - section inferred from referrer or defaults to passing
+- `PUT/PATCH /projects/:id/:section` - explicit section (preferred)
+- `PUT/PATCH /projects/:id/:section/edit` - backward compatibility
+
+**Controller implementation**: `determine_redirect_section` method (lines 889-910)
+handles all three cases:
+
+1. If section in URL → use it
+2. Else if section in referrer → extract it
+3. Else → default to 'passing'
+
+**Recommended form updates**: When generating edit URLs and form submission URLs,
+include the section parameter so the recipient (form handler) knows which section
+to redirect to after successful update. This makes the redirect target explicit
+rather than relying on the referrer fallback.
+
+Example:
+
+```ruby
+# In edit action or view that generates form URL:
+url: update_project_path(project, section: @section)
+# Generates: PUT /projects/123/passing (section explicit in URL)
+```
+
+#### Issue 2: Permissions Section Markdown Generation (RESOLVED)
+
+**Problem**: Permissions section doesn't have criteria, so generating markdown
+would fail or produce nonsensical output.
+
+**Solution**: Added safeguard in `show` method (lines 964-969) to raise error
+if markdown format requested for permissions section.
+
+**Error message**: "Markdown format not supported for permissions section"
+
+**Why this works**: Permissions section only makes sense as HTML (form for
+editing user permissions). Markdown is only for criteria documentation.
+
+#### Issue 3: Edit Method Data Loading (RESOLVED)
+
+**Problem**: Edit method needs same permissions data loading logic as show method.
+
+**Solution**: Created shared helper method `load_section_data_for_edit` (lines
+904-912) that:
+
+- Loads `@additional_rights_str` for permissions section
+- Loads `@criteria` for criteria sections
+- Used by both `edit` and `update` methods (DRY)
+
+#### Issue 4: VALID_SECTIONS Calculation (RESOLVED via Phase 0)
+
+**Solution**: All section-related constants computed once in
+`config/initializers/00_section_names.rb` (see Phase 0).
+
+**Constants available**:
+
+```ruby
+# From config/initializers/00_section_names.rb (all frozen, in Sections module)
+Sections::VALID_NAMES    # Array of valid sections (excludes obsolete)
+Sections::REDIRECTS      # Hash mapping obsolete → canonical names
+Sections::REGEX          # Regex for route constraints (all sections)
+Sections::VALID_REGEX    # Regex for route constraints (valid only)
+Sections::DEFAULT_SECTION        # String 'passing'
+```
+
+**Benefits**:
+
+- Single source of truth in one initializer file
+- Namespaced under `Sections::` to avoid global namespace pollution
+- Computed once at boot time, frozen, reused everywhere
+- No dependencies between routes.rb and controller
+- Clear, accurate naming (e.g., `Sections::VALID_NAMES` not `VALID_SECTION_NAMES`)
+- Updates automatically when new sections added to initializer
+
+#### Issue 5: Redirect Logic After Update (RESOLVED)
+
+**Implementation**: `determine_redirect_section` method provides clear fallback chain:
+
+1. **Explicit section in URL** (preferred):
+   - `PUT /projects/123/silver` → redirects to `/projects/123/silver`
+   - Clear, unambiguous
+
+2. **Inferred from referrer**:
+   - User submitted form from `/projects/123/gold/edit`
+   - Extract "gold" from referrer URL
+   - Redirect to `/projects/123/gold`
+
+3. **Default fallback**:
+   - No section in URL, no valid section in referrer
+   - Redirect to `/projects/123/passing`
+   - Consistent behavior
+
+**Why this is safe**:
+
+- Validates section against VALID_SECTIONS before using
+- Regex extraction from referrer is simple and robust
+- Always has valid fallback
+- No edge cases that result in invalid redirects
+
+#### Testing Requirements for Critical Issues
+
+**Must test**:
+
+1. Update without section parameter (from `_form_0.html.erb`)
+   - Verifies optional section works
+   - Verifies redirect to default section
+
+2. Update with section parameter (from other forms)
+   - Verifies explicit section preserved in redirect
+
+3. Markdown request for permissions section
+   - Verifies error raised (not silent failure)
+
+4. Edit method with permissions section
+   - Verifies `@additional_rights_str` loaded correctly
+
+5. Redirect inference from referrer
+   - Verifies section extracted from referrer URL
+   - Verifies fallback to default if extraction fails
+
+6. VALID_SECTIONS calculation
+   - Verifies obsolete sections excluded
+   - Verifies all valid sections included
 
 ### Memory Requirement Analysis
 
@@ -1398,46 +1784,29 @@ Each route in Rails requires memory for:
 After reviewing the implementation plan, several opportunities exist to reduce
 complexity and work:
 
-#### 1. Reuse Existing Route Constants
+#### 1. Reuse Existing Route Constants (ADDRESSED IN PHASE 0)
 
-**Current routes.rb already defines (lines 14-48):**
+**Status**: ✅ This is now handled by Phase 0 constant consolidation.
 
-```ruby
-# Derived from I18n.available_locales - automatically updated
-LEGAL_LOCALE ||= /(?:#{I18n.available_locales.join('|')})/
+**Previous issue**: Constants were scattered across routes.rb and initializers
+with inconsistent naming.
 
-# Built from ALL_CRITERIA_LEVEL_NAMES in config/initializers/00_criteria_levels.rb
-VALID_CRITERIA_LEVEL ||= /#{Regexp.union(ALL_CRITERIA_LEVEL_NAMES)}/
+**Solution**: All section-related constants now defined in
+`config/initializers/00_section_names.rb` under `Sections::` module:
 
-# Positive integer ID constraint
-VALID_ID ||= /[1-9][0-9]*/
+- `Sections::REGEX` - replaces `VALID_CRITERIA_LEVEL`
+- `Sections::VALID_REGEX` - for routes requiring valid sections only
+- `Sections::REDIRECTS` - replaces `LEVEL_REDIRECTS`
+- `Sections::VALID_NAMES` - array of valid sections
+- `Sections::DEFAULT_SECTION` - default section string
 
-# Map of obsolete to canonical level names
-LEVEL_REDIRECTS = {
-  '0' => 'passing',
-  '1' => 'silver',
-  '2' => 'gold',
-  'bronze' => 'passing'
-}.freeze
-```
+**Benefits achieved:**
 
-**Use these existing constants throughout:**
-
-```ruby
-# Instead of hardcoding:
-constraints: { id: /[1-9][0-9]*/, locale: /en|zh-CN|.../ }
-
-# Reuse existing:
-constraints: { id: VALID_ID, locale: LEGAL_LOCALE }
-```
-
-**Benefits:**
-
-- **No new constants needed** - reuse what exists
-- **Locale derived from I18n.available_locales** - automatically stays in sync
-- **Criteria levels derived from initializer** - single source of truth
-- **LEVEL_REDIRECTS already maps obsolete names** - matches controller constant
-- Maintains existing memory optimizations
+- **Single source of truth** - all constants in one initializer
+- **Namespaced** - `Sections::` module avoids global namespace pollution
+- **Clear naming** - SECTION_NAMES vs CRITERIA_LEVEL_NAMES distinction
+- **Computed once** - frozen at boot time, reused everywhere
+- **No dependencies** - routes and controllers both use initializer constants
 
 #### 2. Simplify JSON Route Handling
 
@@ -1560,59 +1929,42 @@ get ':id', to: redirect { |params, request|
 - **Recommendation**: Keep controller method if per-project defaults planned
   within 6-12 months; otherwise use route redirect
 
-#### 5. Derive VALID_SECTIONS from Existing Constants
+#### 5. Derive VALID_SECTIONS from Existing Constants (ADDRESSED IN PHASE 0)
 
-**Current routes.rb already defines (lines 25-26, 44-49):**
+**Status**: ✅ This is now handled by Phase 0 constant consolidation.
 
-```ruby
-# Built from ALL_CRITERIA_LEVEL_NAMES - automatically updated
-VALID_CRITERIA_LEVEL ||= /#{Regexp.union(ALL_CRITERIA_LEVEL_NAMES)}/
-
-# Map of obsolete to canonical level names
-LEVEL_REDIRECTS = {
-  '0' => 'passing',
-  '1' => 'silver',
-  '2' => 'gold',
-  'bronze' => 'passing'
-}.freeze
-```
-
-**Where ALL_CRITERIA_LEVEL_NAMES comes from config/initializers/00_criteria_levels.rb**
-
-This includes both valid and obsolete section names:
-
-- Valid levels: passing, silver, gold, baseline-1, baseline-2, baseline-3, permissions
-- Obsolete levels: 0, 1, 2, bronze (keys in LEVEL_REDIRECTS)
-
-**Note**: `ALL_CRITERIA_LEVEL_NAMES` should ideally be renamed to `ALL_SECTION_NAMES`
-since "permissions" is a section but not a criteria level. See "Future Enhancements"
-section for details.
-
-**Calculate VALID_SECTIONS in controller:**
+**Solution**: All section-related constants computed once in
+`config/initializers/00_section_names.rb` under `Sections::` module:
 
 ```ruby
-# Derive valid sections by excluding obsolete ones
-VALID_SECTIONS = (ALL_CRITERIA_LEVEL_NAMES - LEVEL_REDIRECTS.keys).freeze
+# All computed at boot time, frozen, available everywhere via Sections:: prefix
+module Sections
+  VALID_NAMES = (ALL_NAMES - OBSOLETE_NAMES).freeze
+  REGEX = /#{Regexp.union(ALL_NAMES + OBSOLETE_NAMES)}/.freeze
+  VALID_REGEX = /#{Regexp.union(VALID_NAMES)}/.freeze
+end
 ```
 
-**Use in routes:**
+**Usage:**
 
 ```ruby
-# For show routes (accepts all levels including obsolete):
-constraints: { section: VALID_CRITERIA_LEVEL }
+# Routes - use Sections::REGEX to accept obsolete (controller redirects)
+constraints: { section: Sections::REGEX }
 
-# For edit routes (rejects obsolete levels):
-# Use controller validation with VALID_SECTIONS
-# This provides better error messages than route constraints
+# Routes - use Sections::VALID_REGEX to reject obsolete
+constraints: { section: Sections::VALID_REGEX }
+
+# Controller - use Sections::VALID_NAMES array for validation
+unless Sections::VALID_NAMES.include?(@section)
 ```
 
-**Benefits:**
+**Benefits achieved:**
 
-- **Calculated from existing constants** - no hardcoded arrays
-- **Single source of truth** - config/initializers/00_criteria_levels.rb defines ALL_CRITERIA_LEVEL_NAMES
-- **Automatically updated** when new criteria levels added to initializer
-- **DRY principle** - obsolete sections defined once in LEVEL_REDIRECTS
-- **Reused in both routes and controller** - same constants everywhere
+- Single source of truth in one initializer file
+- Namespaced under `Sections::` to avoid global namespace pollution
+- Clear naming: ALL_NAMES (includes permissions) vs ALL_CRITERIA_LEVEL_NAMES (only levels)
+- Computed once at boot, not recalculated
+- No dependencies between routes and controller
 
 #### 6. Avoid `resources` Block for Custom Routes
 
@@ -2076,26 +2428,11 @@ If critical issues arise during deployment:
 
 ### Rename ALL_CRITERIA_LEVEL_NAMES to ALL_SECTION_NAMES
 
-**Current issue**: The constant `ALL_CRITERIA_LEVEL_NAMES` includes "permissions",
-which is a section/view but not actually a criteria level. This is semantically
-incorrect.
+**Status**: ✅ MOVED TO PHASE 0 - This is now part of the initial constant
+renaming and consolidation that must be done FIRST.
 
-**Recommended change**:
-
-1. Rename `ALL_CRITERIA_LEVEL_NAMES` to `ALL_SECTION_NAMES` in
-   `config/initializers/00_criteria_levels.rb`
-2. Update `VALID_CRITERIA_LEVEL` regex to be named `VALID_SECTION` in
-   `config/routes.rb`
-3. Update all references throughout the codebase
-
-**Benefits**:
-
-- More accurate naming (sections vs. criteria levels)
-- Clearer intent (includes both criteria levels and special sections)
-- Better maintainability (name matches actual content)
-
-**Note**: This should be done before or alongside the route consolidation to
-avoid confusion about what the constants represent.
+See "Phase 0: Rename and Consolidate Constants" section above for complete
+implementation details.
 
 ### Per-Project Default Section
 

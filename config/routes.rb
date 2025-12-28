@@ -12,36 +12,26 @@ require_relative '../lib/locale_utils'
 # first created -> highest priority.
 # See how all your routes lay out with "rake routes".
 
-# This regex defines all legal locale values:
+# Note that:
+# - Sections::VALID_SECTION_REGEX has a regex of all valid
+# section names (e.g., 'passing', 'baseline-1', 'permissions', and
+# even obsolete ones that get redirected like '0' or 'bronze').
+# - Sections::REDIRECTS maps obsolete level names to their
+# canonical equivalents (e.g., '0' => 'passing').
+
+# Define regexes for legal locale values
 LEGAL_LOCALE ||= /(?:#{I18n.available_locales.join('|')})/
-
-# Canonical lists of valid criteria level names are defined in:
-# config/initializers/00_criteria_levels.rb
-# This includes: METAL_LEVEL_NAMES, METAL_LEVEL_NUMBERS, BASELINE_LEVEL_NAMES,
-# LEVEL_SYNONYMS, SPECIAL_FORMS, and ALL_CRITERIA_LEVEL_NAMES
-
-# This regex is used to verify criteria levels in routes:
-# Built from ALL_CRITERIA_LEVEL_NAMES - DO NOT edit this directly
-# To add new levels, update config/initializers/00_criteria_levels.rb
-VALID_CRITERIA_LEVEL ||= /#{Regexp.union(ALL_CRITERIA_LEVEL_NAMES)}/
+LEGAL_LOCALE_FULL ||= /\A#{LEGAL_LOCALE.source}\z/
 
 # Confirm that number-only id is provided
 VALID_ID ||= /[1-9][0-9]*/
+VALID_ID_FULL ||= /\A#{VALID_ID.source}\z/
 
 # Valid values for static badge display
 VALID_STATIC_VALUE ||= /0|[1-9]{1,2}|passing|silver|gold/
 
-# Pre-compiled regexes for lambda constraint checks (memory optimization)
-# These avoid creating new regex objects on every request
-VALID_ID_FULL ||= /\A#{VALID_ID.source}\z/
-LEGAL_LOCALE_FULL ||= /\A#{LEGAL_LOCALE.source}\z/
-
 # Frozen array for excluded formats (memory optimization)
-EXCLUDED_FORMATS = %i[json md].freeze
-
-# LEVEL_REDIRECTS is defined in config/initializers/00_section_names.rb
-# and exported for backward compatibility. It maps obsolete level names
-# to their canonical equivalents (e.g., '0' => 'passing').
+EXCLUDED_FORMATS ||= %i[json md].freeze
 
 # Simplified redirect helper for project routes
 # Detects locale from params or request, builds redirect path
@@ -166,7 +156,7 @@ Rails.application.routes.draw do
     # Single-hop redirects: 0 → passing (not 0 → bronze → passing)
     # With locale: 301 permanent (cacheable), without locale: 302 temporary (varies by user)
 
-    LEVEL_REDIRECTS.each do |old_level, new_level|
+    Sections::REDIRECTS.each do |old_level, new_level|
       # Show routes: /projects/:id/:old_level -> /projects/:id/:new_level
       get "/:locale/projects/:id/#{old_level}(.:format)",
           to: redirect(301) { |p, _|
@@ -241,17 +231,17 @@ Rails.application.routes.draw do
         get '' => 'projects#show_markdown',
             constraints: ->(req) { req.format == :md }
         get ':criteria_level(.:format)' => 'projects#show',
-            constraints: { criteria_level: VALID_CRITERIA_LEVEL },
+            constraints: { criteria_level: Sections::VALID_SECTION_REGEX },
             as: :level
         get ':criteria_level/edit(.:format)' => 'projects#edit',
-            constraints: { criteria_level: VALID_CRITERIA_LEVEL },
+            constraints: { criteria_level: Sections::VALID_SECTION_REGEX },
             as: :level_edit
       end
     end
     match(
       'projects/:id/(:criteria_level/)edit' => 'projects#update',
       via: %i[put patch], as: :put_project,
-      constraints: { criteria_level: VALID_CRITERIA_LEVEL }
+      constraints: { criteria_level: Sections::VALID_SECTION_REGEX }
     )
 
     resources :users

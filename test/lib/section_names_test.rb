@@ -95,38 +95,21 @@ class SectionNamesTest < ActiveSupport::TestCase
     assert_not 'foo'.match?(Sections::PRIMARY_SECTION_REGEX)
   end
 
-  test 'Sections::PRIMARY_AND_SYNONYM_SECTION_REGEX matches all section names' do
+  test 'Sections::VALID_SECTION_REGEX matches all section names' do
     # Should match canonical names
-    assert 'passing'.match?(Sections::PRIMARY_AND_SYNONYM_SECTION_REGEX)
-    assert 'silver'.match?(Sections::PRIMARY_AND_SYNONYM_SECTION_REGEX)
-    assert 'baseline-1'.match?(Sections::PRIMARY_AND_SYNONYM_SECTION_REGEX)
+    assert 'passing'.match?(Sections::VALID_SECTION_REGEX)
+    assert 'silver'.match?(Sections::VALID_SECTION_REGEX)
+    assert 'baseline-1'.match?(Sections::VALID_SECTION_REGEX)
 
     # Should also match obsolete names
-    assert '0'.match?(Sections::PRIMARY_AND_SYNONYM_SECTION_REGEX)
-    assert '1'.match?(Sections::PRIMARY_AND_SYNONYM_SECTION_REGEX)
-    assert '2'.match?(Sections::PRIMARY_AND_SYNONYM_SECTION_REGEX)
-    assert 'bronze'.match?(Sections::PRIMARY_AND_SYNONYM_SECTION_REGEX)
+    assert '0'.match?(Sections::VALID_SECTION_REGEX)
+    assert '1'.match?(Sections::VALID_SECTION_REGEX)
+    assert '2'.match?(Sections::VALID_SECTION_REGEX)
+    assert 'bronze'.match?(Sections::VALID_SECTION_REGEX)
 
     # Should NOT match invalid names
-    assert_not 'invalid'.match?(Sections::PRIMARY_AND_SYNONYM_SECTION_REGEX)
-    assert_not 'foo'.match?(Sections::PRIMARY_AND_SYNONYM_SECTION_REGEX)
-  end
-
-  test 'Top-level METAL_LEVEL_NAMES aliases Sections::METAL_LEVEL_NAMES' do
-    assert_equal Sections::METAL_LEVEL_NAMES, METAL_LEVEL_NAMES
-  end
-
-  test 'Top-level BASELINE_LEVEL_NAMES aliases Sections::BASELINE_LEVEL_NAMES' do
-    assert_equal Sections::BASELINE_LEVEL_NAMES, BASELINE_LEVEL_NAMES
-  end
-
-  test 'Top-level LEVEL_REDIRECTS aliases Sections::REDIRECTS' do
-    assert_equal Sections::REDIRECTS, LEVEL_REDIRECTS
-  end
-
-  test 'Top-level ALL_CRITERIA_LEVEL_NAMES equals Sections::VALID_NAMES' do
-    # Top-level constant is an alias for Sections::VALID_NAMES for backward compatibility
-    assert_equal Sections::VALID_NAMES, ALL_CRITERIA_LEVEL_NAMES
+    assert_not 'invalid'.match?(Sections::VALID_SECTION_REGEX)
+    assert_not 'foo'.match?(Sections::VALID_SECTION_REGEX)
   end
 
   test 'Section names are frozen' do

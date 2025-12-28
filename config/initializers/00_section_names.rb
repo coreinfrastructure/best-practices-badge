@@ -86,22 +86,8 @@ module Sections
   # Regex matching all valid section names (canonical + obsolete synonyms)
   # Used in routes.rb for :section parameter validation
   # (accepts obsolete for redirect)
-  PRIMARY_AND_SYNONYM_SECTION_REGEX = Regexp.union(VALID_NAMES)
+  VALID_SECTION_REGEX = Regexp.union(VALID_NAMES)
 
   # Default section to use when none specified
   DEFAULT_SECTION = 'passing'
 end
-
-# Export top-level constants for backward compatibility with existing code
-# These reference the Sections:: constants - single source of truth
-# TODO: Update all code to use Sections:: directly, then remove these aliases
-METAL_LEVEL_NAMES = Sections::METAL_LEVEL_NAMES
-METAL_LEVEL_NUMBERS = Sections::METAL_LEVEL_NUMBERS
-BASELINE_LEVEL_NAMES = Sections::BASELINE_LEVEL_NAMES
-LEVEL_SYNONYMS = Sections::SYNONYMS
-SPECIAL_FORMS = Sections::SPECIAL_FORMS
-LEVEL_REDIRECTS = Sections::REDIRECTS
-
-# This top-level constant includes all valid names (canonical + obsolete)
-# for backward compatibility with existing code
-ALL_CRITERIA_LEVEL_NAMES = Sections::VALID_NAMES

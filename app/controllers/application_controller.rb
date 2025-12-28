@@ -238,42 +238,24 @@ class ApplicationController < ActionController::Base
   # JSON and CSV are locale-independent, so don't redirect to add locale.
   DO_NOT_REDIRECT_LOCALE = %w[json csv].freeze
 
-  # Normalize criteria level to canonical URL-friendly form
+  # Normalize criteria level/section to canonical URL-friendly form
   # Handles 'passing', 'silver', 'gold', and common mistake 'bronze' (treated as 'passing')
   # Converts numeric forms (0, 1, 2) to human-readable names for URL generation
   # Returns: 'passing', 'silver', 'gold', 'permissions', or baseline levels
   # Note: Most routes have constraints, but some don't, so we validate here
-  # rubocop:disable Lint/DuplicateBranch
   def normalize_criteria_level(level)
-    case level
-    when '0', 'bronze' then 'passing'
-    when '1' then 'silver'
-    when '2' then 'gold'
-    when 'passing', 'silver', 'gold', 'permissions',
-         'baseline-1', 'baseline-2', 'baseline-3'
-      level
-    else 'passing' # Invalid input defaults to passing
-    end
+    # Single hash lookup with default - O(1) performance
+    Sections::INPUT_TO_CANONICAL[level] || Sections::DEFAULT_SECTION
   end
-  # rubocop:enable Lint/DuplicateBranch
 
   # Convert URL-friendly criteria level to internal numeric form
   # Used for rendering partials (e.g., _form_0, _form_1, _form_2)
   # Returns: '0', '1', '2', 'permissions', or baseline levels
   # Note: Most routes have constraints, but some don't, so we validate here
-  # rubocop:disable Lint/DuplicateBranch
   def criteria_level_to_internal(level)
-    case level
-    when 'passing', 'bronze' then '0'
-    when 'silver' then '1'
-    when 'gold' then '2'
-    when '0', '1', '2', 'permissions',
-         'baseline-1', 'baseline-2', 'baseline-3'
-      level
-    else '0' # Invalid input defaults to '0' (passing)
-    end
+    # Single hash lookup with default - O(1) performance
+    Sections::INPUT_TO_INTERNAL[level] || '0'
   end
-  # rubocop:enable Lint/DuplicateBranch
 
   private
 

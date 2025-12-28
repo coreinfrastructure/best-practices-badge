@@ -30,21 +30,6 @@ VALID_ID_FULL ||= /\A#{VALID_ID.source}\z/
 # Valid values for static badge display
 VALID_STATIC_VALUE ||= /0|[1-9]{1,2}|passing|silver|gold/
 
-# Frozen array for excluded formats (memory optimization)
-EXCLUDED_FORMATS ||= %i[json md].freeze
-
-# Simplified redirect helper for project routes
-# Detects locale from params or request, builds redirect path
-# When locale is in params: returns 301 permanent redirect (cacheable)
-# When locale is not in params: returns 302 temporary (varies by Accept-Language)
-def redirect_to_level(new_level, suffix: '', status: 302)
-  redirect(status: status) do |params, req|
-    locale = params[:locale] || LocaleUtils.find_best_locale(req).to_s
-    format_suffix = params[:format] ? ".#{params[:format]}" : ''
-    "/#{locale}/projects/#{params[:id]}/#{new_level}#{suffix}#{format_suffix}"
-  end
-end
-
 Rails.application.routes.draw do
   # First, handle routing of special cases.
   # Warning: Routes that don't take a :locale value must include a
@@ -74,6 +59,20 @@ Rails.application.routes.draw do
   get '/badge_static/:value' => 'badge_static#show',
       constraints: { value: VALID_STATIC_VALUE },
       defaults: { format: 'svg' }
+
+  # JSON API route (locale-independent, outside scope for performance)
+  # GET /projects/:id.json
+  # This is the expected common case, so it's matched first
+  get '/projects/:id' => 'projects#show_json',
+      constraints: { id: VALID_ID, format: 'json' },
+      defaults: { format: 'json' },
+      as: :project_json
+
+  # Redirect localized JSON to non-localized version (301 permanent)
+  # GET /:locale/projects/:id.json → /projects/:id.json
+  # Handle common mistake of adding locale to JSON URLs
+  get '/:locale/projects/:id' => redirect('/projects/%{id}.json', status: 301),
+      constraints: { id: VALID_ID, format: 'json', locale: LEGAL_LOCALE }
 
   # These routes never use locales, so that the cache is shared across locales.
   get '/project_stats/total_projects', to: 'project_stats#total_projects',
@@ -148,101 +147,60 @@ Rails.application.routes.draw do
     get 'feed' => 'projects#feed', defaults: { format: 'atom' }
     get 'reminders' => 'projects#reminders_summary'
 
-    # PERFORMANCE NOTE: These route-level redirects are processed early in the request
-    # cycle, before controllers/models are loaded, using minimal memory. They return
-    # redirect responses directly from the routing layer.
+    # Standard RESTful routes for projects
+    # Excludes :show and :edit (custom routes below handle sections)
+    # Excludes :update (custom route below with section parameter)
+    resources :projects, only: %i[index new create destroy],
+              constraints: { id: VALID_ID }
 
-    # Redirects for deprecated level names/numbers to canonical names
-    # Single-hop redirects: 0 → passing (not 0 → bronze → passing)
-    # With locale: 301 permanent (cacheable), without locale: 302 temporary (varies by user)
+    # Delete confirmation form (specific route before generic :section)
+    # GET (/:locale)/projects/:id/delete_form
+    get 'projects/:id/delete_form' => 'projects#delete_form',
+        constraints: { id: VALID_ID },
+        as: :delete_form_project
 
-    Sections::REDIRECTS.each do |old_level, new_level|
-      # Show routes: /projects/:id/:old_level -> /projects/:id/:new_level
-      get "/:locale/projects/:id/#{old_level}(.:format)",
-          to: redirect(301) { |p, _|
-            fmt = p[:format] ? ".#{p[:format]}" : ''
-            "/#{p[:locale]}/projects/#{p[:id]}/#{new_level}#{fmt}"
+    # Edit with section (before show to avoid conflicts)
+    # GET (/:locale)/projects/:id/:section/edit
+    # Use PRIMARY_SECTION_REGEX to reject obsolete sections in edit URLs
+    get 'projects/:id/:section/edit' => 'projects#edit',
+        constraints: {
+          id: VALID_ID,
+          section: Sections::PRIMARY_SECTION_REGEX
+        },
+        as: :edit_project_section
+
+    # Show section with format (HTML or Markdown)
+    # GET (/:locale)/projects/:id/:section(.:format)
+    # Use VALID_SECTION_REGEX to accept obsolete sections (controller will redirect)
+    # Controller also handles query parameter format: ?criteria_level=LEVEL
+    get 'projects/:id/:section' => 'projects#show',
+        constraints: {
+          id: VALID_ID,
+          section: Sections::VALID_SECTION_REGEX
+        },
+        as: :project_section,
+        defaults: { format: 'html' }
+
+    # Redirect to default section (handles all formats, with/without locale)
+    # GET (/:locale)/projects/:id(.:format) → redirects to default section
+    # Also handles legacy query parameter: ?criteria_level=LEVEL
+    get 'projects/:id' => 'projects#redirect_to_default_section',
+        constraints: { id: VALID_ID },
+        as: :project_redirect
+
+    # Update project (PUT/PATCH) - section optional
+    # PUT/PATCH (/:locale)/projects/:id(/:section)
+    # Accepts patterns with or without section in URL
+    # Section in URL indicates where to redirect after successful update
+    # IMPORTANT: ANY project field can be updated regardless of section
+    # Use PRIMARY_SECTION_REGEX to reject obsolete sections in update URLs
+    match 'projects/:id(/:section)' => 'projects#update',
+          via: %i[put patch],
+          constraints: {
+            id: VALID_ID,
+            section: Sections::PRIMARY_SECTION_REGEX
           },
-          constraints: { id: VALID_ID, locale: LEGAL_LOCALE }
-
-      get "/projects/:id/#{old_level}(.:format)",
-          to: redirect_to_level(new_level, status: 302),
-          constraints: { id: VALID_ID }
-
-      # Edit routes: /projects/:id/:old_level/edit -> /projects/:id/:new_level/edit
-      get "/:locale/projects/:id/#{old_level}/edit(.:format)",
-          to: redirect(301) { |p, _|
-            fmt = p[:format] ? ".#{p[:format]}" : ''
-            "/#{p[:locale]}/projects/#{p[:id]}/#{new_level}/edit#{fmt}"
-          },
-          constraints: { id: VALID_ID, locale: LEGAL_LOCALE }
-
-      get "/projects/:id/#{old_level}/edit(.:format)",
-          to: redirect_to_level(new_level, suffix: '/edit', status: 302),
-          constraints: { id: VALID_ID }
-    end
-
-    # Redirect routes without criteria_level to /passing (default)
-    # Always use temporary redirect (302) since default may change per-project in future
-    # Must come BEFORE resources :projects to take precedence over default routes
-    # All criteria_level queries (well-formed and malformed) handled by controller
-
-    # Show routes: Exclude JSON and MD formats (handled specially in resources)
-    get '/:locale/projects/:id(.:format)',
-        to: redirect_to_level('passing', status: 302),
-        constraints: lambda { |req|
-          # Check ID is numeric
-          id_ok = req.params[:id]&.match?(VALID_ID_FULL)
-          # Check locale is valid
-          locale_ok = req.params[:locale]&.match?(LEGAL_LOCALE_FULL)
-          # Exclude json and md formats
-          format_ok = !EXCLUDED_FORMATS.include?(req.format.to_sym)
-          # Don't match any criteria_level queries - let controller handle those
-          no_criteria_level = !req.query_string.include?('criteria_level')
-          id_ok && locale_ok && format_ok && no_criteria_level
-        }
-
-    get '/projects/:id(.:format)',
-        to: redirect_to_level('passing', status: 302),
-        constraints: lambda { |req|
-          # Check ID is numeric
-          id_ok = req.params[:id]&.match?(VALID_ID_FULL)
-          # Exclude json and md formats
-          format_ok = !EXCLUDED_FORMATS.include?(req.format.to_sym)
-          # Don't match any criteria_level queries - let controller handle those
-          no_criteria_level = !req.query_string.include?('criteria_level')
-          id_ok && format_ok && no_criteria_level
-        }
-
-    # Edit routes: All formats allowed (no malformed edit queries expected)
-    get '/:locale/projects/:id/edit(.:format)',
-        to: redirect_to_level('passing', suffix: '/edit', status: 302),
-        constraints: { id: VALID_ID, locale: LEGAL_LOCALE }
-
-    get '/projects/:id/edit(.:format)',
-        to: redirect_to_level('passing', suffix: '/edit', status: 302),
-        constraints: { id: VALID_ID }
-
-    resources :projects, constraints: { id: VALID_ID } do
-      member do
-        get 'delete_form' => 'projects#delete_form'
-        get '' => 'projects#show_json',
-            constraints: ->(req) { req.format == :json }
-        get '' => 'projects#show_markdown',
-            constraints: ->(req) { req.format == :md }
-        get ':criteria_level(.:format)' => 'projects#show',
-            constraints: { criteria_level: Sections::VALID_SECTION_REGEX },
-            as: :level
-        get ':criteria_level/edit(.:format)' => 'projects#edit',
-            constraints: { criteria_level: Sections::VALID_SECTION_REGEX },
-            as: :level_edit
-      end
-    end
-    match(
-      'projects/:id/(:criteria_level/)edit' => 'projects#update',
-      via: %i[put patch], as: :put_project,
-      constraints: { criteria_level: Sections::VALID_SECTION_REGEX }
-    )
+          as: :update_project
 
     resources :users
     resources :account_activations, only: [:edit]

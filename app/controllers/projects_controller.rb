@@ -16,12 +16,13 @@ Criteria if Rails.env.test? # rubocop:disable Lint/Void
 class ProjectsController < ApplicationController
   include ProjectsHelper
 
-  # The 'badge' action is special and does NOT take a locale.
-  skip_before_action :redir_missing_locale, only: :badge
+  # The 'badge' and 'show_json' actions are special and do NOT take a locale.
+  skip_before_action :redir_missing_locale, only: %i[badge show_json]
 
   before_action :set_project,
                 only: %i[
                   edit update delete_form destroy show_json show_markdown
+                  redirect_to_default_section
                 ]
   before_action :set_criteria_level, only: %i[show edit update]
   before_action :set_project_for_show, only: :show
@@ -35,8 +36,8 @@ class ProjectsController < ApplicationController
   # header (which changes for logged-in users), use a flash, or
   # have a form to fill in (these use session values).
   skip_before_action :set_default_cache_control, only:
-                     %i[badge show_json show_markdown]
-  before_action :cache_on_cdn, only: %i[badge show_json show_markdown]
+                     %i[badge show_json show_markdown show]
+  before_action :cache_on_cdn, only: %i[badge show_json show_markdown show]
 
   helper_method :repo_data
 
@@ -257,28 +258,111 @@ class ProjectsController < ApplicationController
   # Display individual project details with criteria_level query fixes.
   # Redirects criteria_level queries (well-formed and malformed).
   # Note: Redirect for missing criteria_level is now handled in routes.rb
-  # Supports `GET /projects/1`.
+  # Display project section (passing, silver, gold, baseline-*, permissions).
+  # Supports both HTML and Markdown formats.
+  # Supports `GET /projects/:id/:section(.:format)`.
+  # Also handles legacy query parameter format: `GET /projects/:id?criteria_level=X`
   # @return [void]
   def show
+    # Handle legacy query parameter format (redirect to path parameter)
     redirect_well_formed_criteria_level_query
     redirect_malformed_criteria_level_query
+
+    # Get section from path parameter (before normalization)
+    raw_section = params[:section]
+
+    # Handle obsolete section names with permanent redirect to canonical names
+    if raw_section && Sections::REDIRECTS.key?(raw_section)
+      canonical = Sections::REDIRECTS[raw_section]
+      redirect_to project_section_path(@project, canonical, locale: params[:locale]),
+                  status: :moved_permanently
+      return
+    end
+
+    # Use normalized section for rendering (set by before_action :set_criteria_level)
+    @section = @criteria_level
+
+    # Validate section is valid (should always pass due to route constraints)
+    if Sections::ALL_CANONICAL_NAMES.exclude?(@section)
+      raise ActionController::RoutingError, "Invalid section: #{@section}"
+    end
+
+    # Tell CDN the surrogate key so we can quickly erase cache later
+    set_surrogate_key_header @project.record_key
+
+    # Load section-specific data for rendering
+    load_section_data_for_show(@section)
+
+    # Respond to different formats
+    respond_to do |format|
+      format.html # Renders projects/show.html.erb (single template for all sections)
+      format.md do
+        # Only criteria sections support markdown (not permissions)
+        if @section == 'permissions'
+          raise ActionController::RoutingError,
+                'Markdown format not supported for permissions section'
+        end
+        # @criteria_level already set to @section, view uses it to determine scope
+        render 'projects/show_markdown', layout: false,
+               content_type: 'text/markdown'
+      end
+    end
   end
 
   # Return project data in JSON format with CDN cache headers.
-  # Supports `GET /projects/1.json`.
+  # Supports `GET /projects/:id.json` (locale-independent).
+  # Redirects if locale is mistakenly included in URL.
   # @return [void]
   def show_json
+    # If locale in URL, redirect to remove it (JSON is locale-independent)
+    if params[:locale].present?
+      redirect_to project_json_path(@project), status: :moved_permanently
+      return
+    end
+
     # Tell CDN the surrogate key so we can quickly erase it later
     set_surrogate_key_header @project.record_key
   end
 
   # Return project data in Markdown format with CDN cache headers.
-  # Supports `GET /projects/1.md`.
+  # DEPRECATED: This method is kept for backwards compatibility but is no longer
+  # used by the routing. Markdown rendering is now handled by the show action.
+  # Supports legacy `GET /projects/1.md` (now handled by show action).
   # @return [void]
   def show_markdown
     # Tell CDN the surrogate key so we can quickly erase it later
     set_surrogate_key_header @project.record_key
   end
+
+  # Redirect bare project URL to default section.
+  # Handles `GET (/:locale)/projects/:id(.:format)`.
+  # Also handles legacy query parameter format: `GET /projects/:id?criteria_level=X`
+  # @return [void]
+  # rubocop:disable Metrics/AbcSize
+  def redirect_to_default_section
+    # Handle legacy query parameter format (redirect to path parameter)
+    if request.query_parameters[:criteria_level].present?
+      normalized = normalize_criteria_level(
+        request.query_parameters[:criteria_level]
+      )
+      redirect_to project_section_path(@project, normalized,
+                                       locale: params[:locale]),
+                  status: :moved_permanently
+      return
+    end
+
+    # Future: could read @project.default_section from database
+    default_section = Sections::DEFAULT_SECTION
+
+    # Preserve format if specified
+    format_param = request.format.symbol == :html ? nil : request.format.symbol
+
+    redirect_to project_section_path(@project, default_section,
+                                     locale: params[:locale],
+                                     format: format_param),
+                status: :found # 302 temporary (may become configurable)
+  end
+  # rubocop:enable Metrics/AbcSize
 
   # Display project deletion confirmation form.
   # Supports `GET /projects/:id/delete_form(.:format)`.
@@ -988,14 +1072,30 @@ class ProjectsController < ApplicationController
       end
   end
 
-  # Sets and validates criteria level from parameters.
+  # Load section-specific data for show action
+  # Only loads data needed for the requested section (performance optimization)
+  # @param section [String] section name (e.g., 'passing', 'permissions')
+  # @return [void] Sets instance variables for view rendering
+  def load_section_data_for_show(section)
+    # Different sections need different data
+    # For now, all data loading is handled by set_project_for_show
+    # which optimizes field selection based on section
+    # Permissions section: no criteria needed, just render the view
+    # Criteria sections: @project already loaded with optimized fields
+    # This method is a placeholder for future section-specific loading
+  end
+
+  # Sets and validates criteria level/section from parameters.
+  # Checks for :section path parameter first (new routing),
+  # then falls back to criteria_level query parameter (legacy URLs).
   # Ensures criteria_level is a valid level, defaulting to 'passing'.
-  # Normalizes numeric forms (0,1,2) and deprecated names to
-  # canonical text forms.
+  # Normalizes numeric forms (0,1,2) and deprecated names to canonical text forms.
   # @return [void] Sets @criteria_level instance variable
   def set_criteria_level
-    # Accept both URL-friendly names and numeric IDs
-    level_param = criteria_level_params[:criteria_level] || 'passing'
+    # Prefer :section path parameter (new routing), fall back to query parameter (legacy)
+    level_param = params[:section] ||
+                  criteria_level_params[:criteria_level] ||
+                  Sections::DEFAULT_SECTION
     @criteria_level = normalize_criteria_level(level_param)
   end
 
@@ -1087,21 +1187,20 @@ class ProjectsController < ApplicationController
   # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   # TODO: Break this into smaller pieces
   def successful_update(format, old_badge_level, criteria_level)
-    criteria_level = nil if criteria_level == 'passing'
+    # Use Sections::DEFAULT_SECTION instead of hardcoded 'passing'
+    section = criteria_level || Sections::DEFAULT_SECTION
     # @project.purge
     format.html do
       if params[:continue]
         flash[:info] = t('projects.edit.successfully_updated')
-        # Build edit URL with criteria_level in path, not query string
-        edit_url =
-          if criteria_level
-            "#{project_path(@project)}/#{criteria_level}/edit"
-          else
-            edit_project_path(@project)
-          end
+        # Build edit URL with section in path (new routing)
+        edit_url = edit_project_section_path(@project, section,
+                                             locale: params[:locale])
         redirect_to edit_url + url_anchor
       else
-        redirect_to project_path(@project, criteria_level: criteria_level),
+        # Redirect to show page for the section (new path-based routing)
+        redirect_to project_section_path(@project, section,
+                                         locale: params[:locale]),
                     success: t('projects.edit.successfully_updated')
       end
     end

@@ -80,7 +80,7 @@ CORS_ALLOWED_METHODS = %i[get options].freeze
 # With regular expressions we can express the patterns unambiguously.
 
 # Build criteria level pattern from canonical lists defined in
-# config/initializers/00_section_names.rb
+# config/initializers/01_section_names.rb
 # This ensures CORS patterns stay in sync with routing constraints
 # Sections::VALID_NAMES includes all canonical and obsolete section names
 CRITERIA_LEVEL_PATTERN = Sections::VALID_NAMES.join('|')

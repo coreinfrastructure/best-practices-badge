@@ -31,8 +31,11 @@
 module Sections
   # Map of obsolete names to their canonical equivalents
   # This mapping is the authoritative source for canonical names
-  # NOTE: The YAML files use obsolete numeric keys ('0', '1', '2')
-  # but we route using canonical names ('passing', 'silver', 'gold')
+  # NOTE: The YAML files use numeric keys ('0', '1', '2')
+  # but we route using canonical names ('passing', 'silver', 'gold').
+  # We don't change the YAML file keys because that's entirely internal
+  # and changing them would severely impact our long-suffering human
+  # translators.
   REDIRECTS = {
     '0' => 'passing',
     '1' => 'silver',
@@ -40,8 +43,11 @@ module Sections
     'bronze' => 'passing'
   }.freeze
 
+  # Mapping of synonyms to internal ids.
+  SYNONYMS_TO_INTERNAL = { 'bronze' => '0' }.freeze
+
   # Synonyms for existing levels (obsolete names beyond numeric keys)
-  SYNONYMS = %w[bronze].freeze # bronze = passing
+  SYNONYMS = SYNONYMS_TO_INTERNAL.keys.freeze
 
   # Special forms (non-criteria sections not tied to a criteria level)
   SPECIAL_FORMS = %w[permissions].freeze
@@ -95,9 +101,7 @@ module Sections
   # E.g., 'passing' -> '0', 'silver' -> '1', 'gold' -> '2'
   # Pre-computed once to avoid recalculation on every request
   # Filter out synonyms (like 'bronze') before inverting to avoid ambiguity
-  CANONICAL_TO_INTERNAL = REDIRECTS.except(*SYNONYMS)
-                                   .invert
-                                   .freeze
+  CANONICAL_TO_INTERNAL = REDIRECTS.except(*SYNONYMS).invert.freeze
 
   # Complete mapping: any valid input -> canonical name
   # Pre-computed for O(1) lookup in normalize_criteria_level
@@ -106,16 +110,17 @@ module Sections
     ALL_CANONICAL_NAMES.to_h { |name| [name, name] }
   ).freeze
 
+  # All forms that are already in internal representation (identity mappings)
+  # E.g., ['0', '1', '2', 'baseline-1', 'baseline-2', 'baseline-3',
+  # 'permissions']
+  INTERNAL_FORMS = (METAL_LEVEL_NUMBERS + BASELINE_LEVEL_NAMES + SPECIAL_FORMS).freeze
+
   # Complete mapping: any valid input -> internal form
   # Pre-computed for O(1) lookup in criteria_level_to_internal
   # Maps canonical, internal, and obsolete names to their internal form
   INPUT_TO_INTERNAL = CANONICAL_TO_INTERNAL.merge(
-    METAL_LEVEL_NUMBERS.to_h { |num| [num, num] }
+    INTERNAL_FORMS.to_h { |name| [name, name] }
   ).merge(
-    SPECIAL_FORMS.to_h { |name| [name, name] }
-  ).merge(
-    BASELINE_LEVEL_NAMES.to_h { |name| [name, name] }
-  ).merge(
-    { 'bronze' => '0' }
+    SYNONYMS_TO_INTERNAL
   ).freeze
 end

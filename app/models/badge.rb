@@ -7,7 +7,9 @@
 # rubocop: disable Metrics/ClassLength
 class Badge
   ACCEPTABLE_PERCENTAGES = (0..99).to_a.freeze
-  ACCEPTABLE_LEVELS = %w[passing silver gold].freeze
+
+  # Currently we only support levels %w[passing silver gold]
+  ACCEPTABLE_LEVELS = Sections::METAL_LEVEL_NAMES
 
   # Make this a set so we can quickly determine if an input is "valid?"
   ACCEPTABLE_INPUTS = (

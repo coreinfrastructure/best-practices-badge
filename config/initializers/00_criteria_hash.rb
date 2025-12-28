@@ -70,3 +70,17 @@ FullCriteriaHash.each do |level, level_value|
 end
 
 CriteriaHash = criteria_hash.freeze
+
+# Export level names derived from YAML for use by other initializers
+# These are used by routing and validation logic
+
+# Metal criteria uses numeric keys: '0', '1', '2'
+YAML_METAL_LEVEL_KEYS = metal_criteria.keys.sort.freeze
+
+# Baseline criteria uses canonical names: 'baseline-1', 'baseline-2', etc.
+YAML_BASELINE_LEVEL_KEYS =
+  if baseline_criteria.present?
+    baseline_criteria.keys.sort.freeze
+  else
+    [].freeze
+  end

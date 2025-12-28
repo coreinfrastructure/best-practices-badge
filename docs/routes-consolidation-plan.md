@@ -459,13 +459,13 @@ module Sections
   # Valid sections (excludes obsolete names)
   VALID_NAMES = (ALL_NAMES - OBSOLETE_NAMES).freeze
 
-  # Regex for route constraints - matches any valid or obsolete section
-  # Used in routes.rb for :section parameter validation
-  REGEX = /#{Regexp.union(ALL_NAMES + OBSOLETE_NAMES)}/.freeze
+  # Regex matching only primary/canonical section names
+  # Used in controller validation and routes that reject obsolete names
+  PRIMARY_SECTION_REGEX = /#{Regexp.union(VALID_NAMES)}/.freeze
 
-  # Regex for valid sections only (excludes obsolete)
-  # Used in controller validation
-  VALID_REGEX = /#{Regexp.union(VALID_NAMES)}/.freeze
+  # Regex matching primary section names AND obsolete synonyms
+  # Used in routes.rb for :section parameter validation (accepts obsolete for redirect)
+  VALID_SECTION_REGEX = /#{Regexp.union(ALL_NAMES + OBSOLETE_NAMES)}/.freeze
 
   # Default section to use when none specified
   DEFAULT_SECTION = 'passing'.freeze
@@ -481,8 +481,8 @@ end
    - `Sections::ALL_NAMES` - includes special sections like permissions
    - `Sections::VALID_NAMES` - excludes obsolete names
    - `Sections::REDIRECTS` - obsolete to canonical mapping
-   - `Sections::REGEX` - route constraint for all sections
-   - `Sections::VALID_REGEX` - route constraint for valid sections only
+   - `Sections::PRIMARY_SECTION_REGEX` - route constraint for primary sections only
+   - `Sections::VALID_SECTION_REGEX` - route constraint including obsolete
    - `Sections::DEFAULT_SECTION` - default section ('passing')
 4. **Computed once**: Regexes and arrays frozen, not recomputed
 5. **Available everywhere**: Initializers load before routes and controllers
@@ -496,13 +496,13 @@ end
 
 Rails.application.routes.draw do
   scope '(:locale)', locale: LEGAL_LOCALE do
-    # Use Sections::REGEX for routes that accept obsolete names (will redirect)
+    # Use VALID_SECTION_REGEX for routes that accept obsolete names (will redirect)
     get 'projects/:id/:section', to: 'projects#show',
-        constraints: { id: VALID_ID, section: Sections::REGEX }
+        constraints: { id: VALID_ID, section: Sections::VALID_SECTION_REGEX }
 
-    # Use Sections::VALID_REGEX for routes that reject obsolete names
+    # Use PRIMARY_SECTION_REGEX for routes that reject obsolete names
     get 'projects/:id/:section/edit', to: 'projects#edit',
-        constraints: { id: VALID_ID, section: Sections::VALID_REGEX }
+        constraints: { id: VALID_ID, section: Sections::PRIMARY_SECTION_REGEX }
   end
 end
 ```
@@ -860,8 +860,8 @@ match 'projects/:id(/:section)(/edit)', to: 'projects#update',
 #   LEGAL_LOCALE - derived from I18n.available_locales
 #   VALID_ID - matches [1-9][0-9]*
 # From config/initializers/00_section_names.rb (Sections module):
-#   Sections::REGEX - matches all valid and obsolete section names
-#   Sections::VALID_REGEX - matches only valid sections (excludes obsolete)
+#   Sections::VALID_SECTION_REGEX - matches primary and obsolete section names
+#   Sections::PRIMARY_SECTION_REGEX - matches only primary sections (excludes obsolete)
 
 Rails.application.routes.draw do
   # ROUTE 1: Badge image (no locale needed, must be outside locale scope)
@@ -905,21 +905,21 @@ Rails.application.routes.draw do
 
     # ROUTE 5: Edit with section (before show to avoid conflicts)
     # GET (/:locale)/projects/:id/:section/edit
-    # Use Sections::VALID_REGEX to reject obsolete sections in edit URLs
+    # Use PRIMARY_SECTION_REGEX to reject obsolete sections in edit URLs
     get 'projects/:id/:section/edit', to: 'projects#edit',
         constraints: {
           id: VALID_ID,
-          section: Sections::VALID_REGEX
+          section: Sections::PRIMARY_SECTION_REGEX
         },
         as: :edit_project_section
 
     # ROUTE 6: Show section with format (HTML or Markdown)
     # GET (/:locale)/projects/:id/:section(.:format)
-    # Use Sections::REGEX to accept obsolete sections (controller will redirect)
+    # Use VALID_SECTION_REGEX to accept obsolete sections (controller will redirect)
     get 'projects/:id/:section', to: 'projects#show',
         constraints: {
           id: VALID_ID,
-          section: Sections::REGEX
+          section: Sections::VALID_SECTION_REGEX
         },
         as: :project_section,
         defaults: { format: 'html' }
@@ -940,10 +940,10 @@ Rails.application.routes.draw do
     # IMPORTANT: Section in URL is for routing only - ANY project field can be
     # updated regardless of section. Programs can update any field without knowing
     # which section it belongs to.
-    # Use Sections::VALID_REGEX to reject obsolete sections in update URLs
+    # Use PRIMARY_SECTION_REGEX to reject obsolete sections in update URLs
     match 'projects/:id(/:section)(/edit)', to: 'projects#update',
           via: %i[put patch],
-          constraints: { id: VALID_ID, section: Sections::VALID_REGEX },
+          constraints: { id: VALID_ID, section: Sections::PRIMARY_SECTION_REGEX },
           as: :update_project
   end
 end
@@ -1602,11 +1602,11 @@ editing user permissions). Markdown is only for criteria documentation.
 
 ```ruby
 # From config/initializers/00_section_names.rb (all frozen, in Sections module)
-Sections::VALID_NAMES    # Array of valid sections (excludes obsolete)
-Sections::REDIRECTS      # Hash mapping obsolete → canonical names
-Sections::REGEX          # Regex for route constraints (all sections)
-Sections::VALID_REGEX    # Regex for route constraints (valid only)
-Sections::DEFAULT_SECTION        # String 'passing'
+Sections::VALID_NAMES                        # Array of valid sections (excludes obsolete)
+Sections::REDIRECTS                          # Hash mapping obsolete → canonical names
+Sections::PRIMARY_SECTION_REGEX              # Regex for route constraints (primary only)
+Sections::VALID_SECTION_REGEX  # Regex for route constraints (all sections)
+Sections::DEFAULT_SECTION                    # String 'passing'
 ```
 
 **Benefits**:
@@ -1794,8 +1794,8 @@ with inconsistent naming.
 **Solution**: All section-related constants now defined in
 `config/initializers/00_section_names.rb` under `Sections::` module:
 
-- `Sections::REGEX` - replaces `VALID_CRITERIA_LEVEL`
-- `Sections::VALID_REGEX` - for routes requiring valid sections only
+- `Sections::VALID_SECTION_REGEX` - replaces `VALID_CRITERIA_LEVEL`
+- `Sections::PRIMARY_SECTION_REGEX` - for routes requiring valid sections only
 - `Sections::REDIRECTS` - replaces `LEVEL_REDIRECTS`
 - `Sections::VALID_NAMES` - array of valid sections
 - `Sections::DEFAULT_SECTION` - default section string
@@ -1940,19 +1940,19 @@ get ':id', to: redirect { |params, request|
 # All computed at boot time, frozen, available everywhere via Sections:: prefix
 module Sections
   VALID_NAMES = (ALL_NAMES - OBSOLETE_NAMES).freeze
-  REGEX = /#{Regexp.union(ALL_NAMES + OBSOLETE_NAMES)}/.freeze
-  VALID_REGEX = /#{Regexp.union(VALID_NAMES)}/.freeze
+  PRIMARY_SECTION_REGEX = /#{Regexp.union(VALID_NAMES)}/.freeze
+  VALID_SECTION_REGEX = /#{Regexp.union(ALL_NAMES + OBSOLETE_NAMES)}/.freeze
 end
 ```
 
 **Usage:**
 
 ```ruby
-# Routes - use Sections::REGEX to accept obsolete (controller redirects)
-constraints: { section: Sections::REGEX }
+# Routes - use VALID_SECTION_REGEX to accept obsolete (controller redirects)
+constraints: { section: Sections::VALID_SECTION_REGEX }
 
-# Routes - use Sections::VALID_REGEX to reject obsolete
-constraints: { section: Sections::VALID_REGEX }
+# Routes - use PRIMARY_SECTION_REGEX to reject obsolete
+constraints: { section: Sections::PRIMARY_SECTION_REGEX }
 
 # Controller - use Sections::VALID_NAMES array for validation
 unless Sections::VALID_NAMES.include?(@section)

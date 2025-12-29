@@ -15,7 +15,8 @@ class ProjectsController < ApplicationController
   skip_before_action :redir_missing_locale, only: %i[badge show_json]
   # The "project" table has many columns, and we often don't need them all.
   # So we'll take steps to only load a subset of the columns we need,
-  # when we only need a subset.
+  # when we only need a subset. We need to load project data *before* using
+  # that data (e.g., to check on who owns the project)
   before_action :set_project_all_values, only: %i[update show_json]
   before_action :set_criteria_level, only: %i[show edit update]
   before_action :set_project_for_section, only: %i[show edit]
@@ -121,11 +122,14 @@ class ProjectsController < ApplicationController
   # add them, so let's avoid silent problems. Similarly, not having the
   # lock_version when you need it can be a big problem, so let's get it.
   # Include badge percentages for deletion email template.
+  # Pre-computed as comma-separated SQL string to avoid array-to-string
+  # conversion on every request (same optimization as PROJECT_FIELDS_FOR_SECTION).
   PROJECT_LIMITED_FIELDS = %i[
     id user_id name description homepage_url repo_url
     created_at updated_at lock_version
     tiered_percentage badge_percentage_0 badge_percentage_1 badge_percentage_2
-  ].freeze
+  ].map { |f| quoted_sql_fieldname(f.to_s) }
+                           .join(',').freeze
 
   # Memory optimization: Pre-computed field lists for selective Project loading
   # Base fields always needed regardless of which section is being viewed

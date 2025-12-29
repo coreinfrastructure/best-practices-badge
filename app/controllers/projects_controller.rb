@@ -173,6 +173,14 @@ class ProjectsController < ApplicationController
           fields << :"#{criterion.name}_justification"
         end
 
+        # The edit action checks notify_for_static_analysis?('0') for all levels,
+        # so we need to ensure static_analysis fields (from passing level) are
+        # loaded for silver and gold edit pages
+        if level_number != '0' && level_number != 'baseline-1'
+          fields << :static_analysis_status
+          fields << :static_analysis_justification
+        end
+
         # Convert to string, quoting only non-trivial column names
         quoted_fields =
           fields.map do |f|

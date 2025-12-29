@@ -361,6 +361,20 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, 'Edit Project Badge Status'
   end
 
+  test 'should get edit for silver' do
+    log_in_as(@project.user)
+    get "/en/projects/#{@project.id}/silver/edit"
+    assert_response :success
+    assert_includes @response.body, 'Edit Project Badge Status'
+  end
+
+  test 'should get edit for gold' do
+    log_in_as(@project.user)
+    get "/en/projects/#{@project.id}/gold/edit"
+    assert_response :success
+    assert_includes @response.body, 'Edit Project Badge Status'
+  end
+
   test 'should get edit as additional rights user' do
     test_user = users(:test_user_mark)
     # Create additional rights during test, not as a fixure.

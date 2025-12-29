@@ -18,12 +18,12 @@ class ProjectsController < ApplicationController
   before_action :set_project,
                 only: %i[
                   edit update delete_form destroy show_json
-                  redirect_to_default_section
                 ]
   before_action :set_project_for_show, only: :show
   before_action :require_logged_in, only: :create
   before_action :can_edit_else_redirect, only: %i[edit update]
   before_action :can_control_else_redirect, only: %i[destroy delete_form]
+  before_action :require_adequate_deletion_rationale, only: :destroy
 
   # Cache with CDN. We can only do this when we don't display the
   # header (which changes for logged-in users), use a flash, or
@@ -127,6 +127,9 @@ class ProjectsController < ApplicationController
     lock_version disabled_reminders last_reminder_at
   ].freeze
 
+  # Levels that need project metadata fields (implementation_languages, etc.)
+  LEVELS_WITH_METADATA = %w[0 baseline-1].freeze
+
   # Complete field lists for each section as SQL strings
   # Pre-computed as comma-separated strings to avoid runtime symbol-to-string
   # conversion and array splatting (saves ~130 objects per request)
@@ -144,7 +147,7 @@ class ProjectsController < ApplicationController
         fields << :"badge_percentage_#{level_number}"
 
         # Add project metadata fields (only used in level 0 / passing form)
-        if level_number == '0' || level_number == 'baseline-1'
+        if LEVELS_WITH_METADATA.include?(level_number)
           fields << :implementation_languages << :general_comments << :cpe
         end
 
@@ -297,9 +300,14 @@ class ProjectsController < ApplicationController
   # Redirect bare project URL to default section.
   # Handles `GET (/:locale)/projects/:id(.:format)`.
   # Also handles legacy query parameter format: `GET /projects/:id?criteria_level=X`
+  # Performance: Uses project ID directly without loading from database.
+  # If project doesn't exist, the redirected URL will return 404.
   # @return [void]
   # rubocop:disable Metrics/AbcSize
   def redirect_to_default_section
+    # Use project ID directly - no need to load project from database
+    project_id = params[:id]
+
     # Preserve format if specified
     format_param = request.format.symbol == :html ? nil : request.format.symbol
 
@@ -307,7 +315,7 @@ class ProjectsController < ApplicationController
     if request.query_string.start_with?('criteria_level,')
       extracted_value = request.query_string.delete_prefix('criteria_level,')
       normalized = normalize_criteria_level(extracted_value)
-      redirect_to project_section_path(@project, normalized,
+      redirect_to project_section_path(project_id, normalized,
                                        locale: params[:locale],
                                        format: format_param),
                   status: :moved_permanently
@@ -319,17 +327,17 @@ class ProjectsController < ApplicationController
       normalized = normalize_criteria_level(
         request.query_parameters[:criteria_level]
       )
-      redirect_to project_section_path(@project, normalized,
+      redirect_to project_section_path(project_id, normalized,
                                        locale: params[:locale],
                                        format: format_param),
                   status: :moved_permanently
       return
     end
 
-    # Future: could read @project.default_section from database
+    # Future: could read project.default_section from database
     default_section = Sections::DEFAULT_SECTION
 
-    redirect_to project_section_path(@project, default_section,
+    redirect_to project_section_path(project_id, default_section,
                                      locale: params[:locale],
                                      format: format_param),
                 status: :found # 302 temporary (may become configurable)
@@ -541,7 +549,6 @@ class ProjectsController < ApplicationController
   # @return [void]
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def destroy
-    require_adequate_deletion_rationale
     @project.destroy!
     ReportMailer.report_project_deleted(
       @project, current_user, params[:deletion_rationale]

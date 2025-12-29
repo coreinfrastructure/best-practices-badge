@@ -14,17 +14,16 @@ class ProjectsController < ApplicationController
   # The 'badge' and 'show_json' actions are special and do NOT take a locale.
   skip_before_action :redir_missing_locale, only: %i[badge show_json]
 
+  before_action :set_criteria_level, only: %i[show edit update]
   before_action :set_project,
                 only: %i[
                   edit update delete_form destroy show_json
                   redirect_to_default_section
                 ]
-  before_action :set_criteria_level, only: %i[show edit update]
   before_action :set_project_for_show, only: :show
   before_action :require_logged_in, only: :create
   before_action :can_edit_else_redirect, only: %i[edit update]
   before_action :can_control_else_redirect, only: %i[destroy delete_form]
-  before_action :require_adequate_deletion_rationale, only: :destroy
 
   # Cache with CDN. We can only do this when we don't display the
   # header (which changes for logged-in users), use a flash, or
@@ -118,6 +117,8 @@ class ProjectsController < ApplicationController
 
   # Memory optimization: Pre-computed field lists for selective Project loading
   # Base fields always needed regardless of which section is being viewed
+  # lock_version isn't needed for mere viewing, but it's a *big* problem
+  # if we forget to include it where needed, so let's include it.
   PROJECT_BASE_FIELDS = %i[
     id user_id name description homepage_url repo_url license
     created_at updated_at tiered_percentage
@@ -143,7 +144,7 @@ class ProjectsController < ApplicationController
         fields << :"badge_percentage_#{level_number}"
 
         # Add project metadata fields (only used in level 0 / passing form)
-        if level_number == '0'
+        if level_number == '0' || level_number == 'baseline-1'
           fields << :implementation_languages << :general_comments << :cpe
         end
 
@@ -540,6 +541,7 @@ class ProjectsController < ApplicationController
   # @return [void]
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def destroy
+    require_adequate_deletion_rationale
     @project.destroy!
     ReportMailer.report_project_deleted(
       @project, current_user, params[:deletion_rationale]

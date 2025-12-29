@@ -1,8 +1,29 @@
-# Converting `NAME_status` Fields to Enums for Memory Optimization
+# Converting `NAME_status` Fields to Raw Integers for Memory Optimization
 
 ## Goal
 
-Reduce memory object creation in the Ruby application by converting hundreds of `NAME_status` fields in the projects table to use enums.
+Reduce memory object creation in the Ruby application by converting hundreds of `NAME_status` fields in the projects table from VARCHAR strings to PostgreSQL `smallint` integers (0-3).
+
+## Decision: Raw Integer Approach (Not Rails Enums)
+
+**We are implementing the raw integer approach**, not Rails ActiveRecord enums.
+
+### Rationale
+
+1. **Maximum Memory Efficiency**: Raw integers are immediate values (Fixnum) with zero object allocation, while Rails enum symbols are heap-allocated objects
+2. **True Type Sharing**: Single `CriterionStatus` module serves all 193 status fields with no duplication
+3. **No Method Namespace Pollution**: Avoids generating hundreds of predicate methods (`.met?`, `.unmet?`, etc.)
+4. **Simpler Implementation**: ~26 targeted code changes vs complex enum declarations for 193 fields
+5. **100% Backward Compatible**: External API remains unchanged (strings in/out)
+6. **Optimal Storage**: PostgreSQL `smallint` (2 bytes) for maximum database efficiency
+
+### Trade-offs Accepted
+
+- No Rails enum conveniences (predicate methods, string setters)
+- Manual conversion at controller/view boundaries
+- Integer comparisons in code (`== 3` instead of `.met?`)
+
+These trade-offs are acceptable given the significant memory and storage benefits.
 
 ## Analysis
 
@@ -29,12 +50,18 @@ All status values should map to a *single* enumerated type, since they
 all have the same possibilities. It would much more confusing if there
 was a different mapping.
 
+**Database Type**: PostgreSQL `smallint` (2 bytes) is ideal for these values:
+- Range: -32,768 to 32,767 (more than sufficient for 0-3)
+- Storage: 2 bytes per field vs 4 bytes for `integer`
+- With 193 status fields: **386 bytes vs 772 bytes per project**
+- 50% storage reduction compared to `integer`, ~80% compared to VARCHAR
+
 ### Proposed Solution: Rails Enums with Integer Storage
 
 **Use Rails `enum` feature with integer database storage**
 
 #### Benefits
-1. ✅ **Database Storage**: 4-byte integers instead of VARCHAR/TEXT
+1. ✅ **Database Storage**: 2-byte smallints instead of VARCHAR/TEXT (50% smaller than integers)
 2. ✅ **Ruby Memory**: Automatic symbol interning - only one Symbol object per unique value across all records
 3. ✅ **Memory Savings**: Hundreds of status fields sharing a few symbol objects instead of creating hundreds of String objects per record
 4. ✅ **API Improvements**: Clean Ruby API with predicate methods (`warnings.met?`, `warnings.unmet!`)
@@ -100,8 +127,9 @@ end
 3. ✅ **Fastest Access**: Direct integer comparison in Ruby (`status == 3` vs symbol comparison)
 4. ✅ **No Method Pollution**: No hundreds of generated predicate methods cluttering the namespace
 5. ✅ **Simpler Code**: `project.warnings_status == 3` is clear and direct
-6. ✅ **Database Efficient**: Same 4-byte integer storage as Rails enum approach
+6. ✅ **Optimal Database Storage**: Use PostgreSQL `smallint` (2 bytes) for maximum efficiency
 7. ✅ **Clean Serialization**: Convert to strings only at API/view boundaries where needed
+8. ✅ **100% Backward Compatible**: External API interface unchanged - clients continue using strings
 
 #### Drawbacks
 
@@ -202,46 +230,78 @@ Based on analysis of the codebase, here's how the raw integer approach would han
    - Uses `project.attributes` to get all fields
    - Currently returns strings directly to JSON
 
+### External Interface Compatibility
+
+**IMPORTANT**: The raw integer approach maintains **100% backward compatibility** with external interfaces.
+
+**For external API consumers and programmatic updates:**
+
+1. **Sending data** (POST/PATCH to projects controller):
+   - Send: `{ "warnings_status": "Met" }` (string)
+   - Controller receives: `"Met"` string in params
+   - `before_action` converts: `"Met"` → `3` (integer)
+   - Database stores: `3` (smallint)
+   - **No API change required!**
+
+2. **Receiving data** (GET /projects/:id.json):
+   - Database has: `3` (smallint)
+   - ActiveRecord loads: `3` (integer)
+   - Jbuilder converts: `3` → `"Met"` (string)
+   - JSON returns: `{ "warnings_status": "Met" }`
+   - **No API change required!**
+
+**Result**: External clients see no difference - strings in, strings out!
+
 ### Required Changes for Raw Integer Approach
 
 #### 1. No Changes Needed
 
 - **HTML forms**: Continue using string values in radio buttons
 - **JavaScript**: Continue using string comparisons and DOM reads
-- **External API**: JSON continues to expose strings for backward compatibility
+- **External API**: JSON continues to expose strings (conversion at boundaries)
+- **API consumers**: No changes needed - send/receive strings as before
 
 #### 2. Changes Required
 
-**A. Project Model** (app/models/project.rb)
+**A. Create Shared Constants Module** (lib/criterion_status.rb)
 
-Add constants and conversion methods:
+Create a new module to hold status constants, available across the entire application:
 
 ```ruby
-class Project < ApplicationRecord
+# frozen_string_literal: true
+
+# Copyright 2015-2017, the Linux Foundation, IDA, and the
+# OpenSSF Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+
+# Shared constants for criterion status values
+# Used across models, controllers, views, and helpers to represent
+# the four possible states of a criterion (unknown, unmet, N/A, met)
+module CriterionStatus
   # Single source of truth for all criterion status values
-  CRITERION_STATUS = ['?', 'Unmet', 'N/A', 'Met'].freeze
+  # Array index corresponds to database integer value
+  STATUS_VALUES = ['?', 'Unmet', 'N/A', 'Met'].freeze
 
   # Derived hash for fast reverse lookups (name to integer)
-  CRITERION_STATUS_BY_NAME = CRITERION_STATUS.each_with_index.to_h { |name, idx| [name, idx] }.freeze
+  # Used for converting user input strings to database integers
+  STATUS_BY_NAME = STATUS_VALUES.each_with_index.to_h { |name, idx| [name, idx] }.freeze
 
-  # Optional: Readable constants for common comparisons
-  CRITERION_UNKNOWN = 0
-  CRITERION_UNMET = 1
-  CRITERION_NA = 2
-  CRITERION_MET = 3
-
-  # Convert status integer to string for display
-  def status_to_s(status_value)
-    CRITERION_STATUS[status_value]
-  end
-
-  # Convert string status to integer (for params processing)
-  # Returns nil for invalid values (let validation handle it)
-  def self.status_from_s(status_string)
-    CRITERION_STATUS_BY_NAME[status_string]
-  end
+  # Named constants for readable code comparisons
+  # Derived from STATUS_BY_NAME to ensure consistency
+  UNKNOWN = STATUS_BY_NAME['?']
+  UNMET = STATUS_BY_NAME['Unmet']
+  NA = STATUS_BY_NAME['N/A']
+  MET = STATUS_BY_NAME['Met']
 end
 ```
+
+**Why `lib/` directory?**
+
+- No circular dependencies (loads before models)
+- Available everywhere (models, controllers, views, helpers)
+- Clear namespace (`CriterionStatus::MET`)
+- Follows existing pattern (similar to `lib/locale_utils.rb`)
+- Framework-independent (pure Ruby constants)
 
 **B. Controller Params Processing** (app/controllers/projects_controller.rb)
 
@@ -261,7 +321,7 @@ class ProjectsController < ApplicationController
       next unless params[:project][status_field]
 
       string_value = params[:project][status_field]
-      integer_value = Project.status_from_s(string_value)
+      integer_value = CriterionStatus::STATUS_BY_NAME[string_value]
       params[:project][status_field] = integer_value if integer_value
     end
   end
@@ -270,35 +330,29 @@ end
 
 **C. JSON Serialization** (app/views/projects/_project.json.jbuilder)
 
-Convert integer values back to strings for API output:
+Convert integer values back to strings for API output.
+
+**Recommended approach**: Transform only status fields explicitly:
 
 ```ruby
-# Convert status fields from integers back to strings for API compatibility
-transformed_attrs =
-  project.attributes.transform_keys do |key|
-    ProjectsHelper::BASELINE_FIELD_DISPLAY_NAME_MAP.fetch(key, key)
-  end.transform_values do |value|
-    # If this is an integer in the status range, convert to string
-    if value.is_a?(Integer) && value >= 0 && value <= 3
-      Project::CRITERION_STATUS[value]
-    else
-      value
-    end
-  end
-```
-
-**Alternative (more explicit)**: Transform only status fields:
-
-```ruby
+# Start with project attributes
 transformed_attrs = project.attributes.dup
+
+# Convert status fields from integers to strings for API compatibility
 Project::ALL_CRITERIA_STATUS.each do |status_field|
   status_value = transformed_attrs[status_field.to_s]
-  transformed_attrs[status_field.to_s] = Project::CRITERION_STATUS[status_value] if status_value
+  if status_value.is_a?(Integer)
+    transformed_attrs[status_field.to_s] = CriterionStatus::STATUS_VALUES[status_value]
+  end
 end
-# Then apply key transformation
+
+# Then apply key transformation for baseline fields
 transformed_attrs = transformed_attrs.transform_keys do |key|
   ProjectsHelper::BASELINE_FIELD_DISPLAY_NAME_MAP.fetch(key, key)
 end
+
+json.merge! transformed_attrs
+# ... rest of jbuilder code
 ```
 
 **D. View Helpers** (if status values displayed in ERB views)
@@ -308,7 +362,7 @@ Add helper method for displaying status in views:
 ```ruby
 module ProjectsHelper
   def display_status(status_integer)
-    Project::CRITERION_STATUS[status_integer]
+    CriterionStatus::STATUS_VALUES[status_integer]
   end
 end
 ```
@@ -333,10 +387,808 @@ end
 
 **Potential Issues**:
 
-- Need to update any direct comparisons in Ruby code (e.g., `if project.status == 'Met'` → `if project.status == 3`)
-- Need to audit code for string assumptions
+- Need to update any direct comparisons in Ruby code (e.g., `if project.status == 'Met'` → `if project.status == CriterionStatus::MET`)
+- Need to audit code for string assumptions (see audit below)
 - Migration needs careful handling for existing data
+
+## Code Audit: String Status Value Assumptions
+
+A comprehensive audit of the codebase identified all locations that assume status values are strings. These locations must be updated to work with integers when implementing the raw integer approach.
+
+### Critical Files Requiring Updates
+
+#### 1. **app/lib/chief.rb** - Chief class
+
+**Line 70**: Comparison with '?' string
+```ruby
+# CURRENT:
+elsif !project.attribute_present?(key) || project[key].blank? || project[key] == '?'
+
+# NEEDS TO BECOME:
+elsif !project.attribute_present?(key) || project[key].blank? || project[key] == CriterionStatus::UNKNOWN
+```
+
+**Impact**: HIGH - Chief is the main autofill orchestrator, runs on project creation/update
+
+---
+
+#### 2. **app/models/project.rb** - Project model
+
+**Lines 817, 819, 821, 823**: Achievement status comparisons and assignments
+```ruby
+# CURRENT:
+if self[:"badge_percentage_#{level - 1}"] >= 100
+  return if self[achieved_previous_level] == 'Met'
+  self[achieved_previous_level] = 'Met'
+else
+  return if self[achieved_previous_level] == 'Unmet'
+  self[achieved_previous_level] = 'Unmet'
+end
+
+# NEEDS TO BECOME:
+if self[:"badge_percentage_#{level - 1}"] >= 100
+  return if self[achieved_previous_level] == CriterionStatus::MET
+  self[achieved_previous_level] = CriterionStatus::MET
+else
+  return if self[achieved_previous_level] == CriterionStatus::UNMET
+  self[achieved_previous_level] = CriterionStatus::UNMET
+end
+```
+
+**Impact**: HIGH - Controls badge level achievement status
+
+---
+
+#### 3. **Detective Files** - All detectives return status string values
+
+All detective classes return changeset hashes with string values that Chief applies to the project.
+
+**Files affected** (20+ instances across):
+- `app/lib/build_detective.rb`
+- `app/lib/floss_license_detective.rb`
+- `app/lib/hardened_sites_detective.rb`
+- `app/lib/project_sites_https_detective.rb`
+- `app/lib/repo_files_examine_detective.rb`
+- `app/lib/subdir_file_contents_detective.rb`
+
+**Pattern examples**:
+```ruby
+# CURRENT:
+{ value: 'Met', confidence: 5, explanation: '...' }
+{ value: 'Unmet', confidence: 3, explanation: '...' }
+
+# NEEDS TO BECOME:
+{ value: CriterionStatus::MET, confidence: 5, explanation: '...' }
+{ value: CriterionStatus::UNMET, confidence: 3, explanation: '...' }
+```
+
+**Counts**:
+- 13 instances of `value: 'Met'`
+- 7 instances of `value: 'Unmet'`
+
+**Impact**: HIGH - Detectives provide autofill values for criteria
+
+---
+
+#### 4. **app/views/projects/show_markdown.erb** - Markdown export view
+
+**Line 12**: Case statement for checkbox rendering
+```ruby
+# CURRENT:
+def criterion_to_checkbox(value)
+  case value
+  when 'Met', 'N/A'
+    '[x]'
+  else
+    '[ ]'
+  end
+end
+
+# NEEDS TO BECOME:
+def criterion_to_checkbox(value)
+  case value
+  when CriterionStatus::MET, CriterionStatus::NA
+    '[x]'
+  else
+    '[ ]'
+  end
+end
+```
+
+**Impact**: MEDIUM - Affects markdown export feature
+
+---
+
+### Files NOT Requiring Updates
+
+These files contain status value strings but don't need changes:
+
+1. **app/views/projects/_status_chooser.html.erb** - Radio button values remain as strings (form inputs)
+2. **app/assets/javascripts/project-form.js** - JavaScript continues using strings
+3. **app/controllers/projects_controller.rb** - Only URL-related '?' comment, not status
+
+---
+
+### Summary of Required Changes
+
+| File | Lines | Changes | Priority |
+|------|-------|---------|----------|
+| `app/lib/chief.rb` | 1 | Replace `== '?'` with `== CriterionStatus::UNKNOWN` | HIGH |
+| `app/models/project.rb` | 4 | Replace string comparisons/assignments with constants | HIGH |
+| Detective files (6 files) | 20 | Replace string values with CriterionStatus constants | HIGH |
+| `app/views/projects/show_markdown.erb` | 1 | Update case statement | MEDIUM |
+| **Total** | **~26 lines** | **Straightforward find/replace patterns** | |
+
+---
+
+### Migration Strategy for Code Updates
+
+1. **Create CriterionStatus module first** (`lib/criterion_status.rb`)
+2. **Update all detectives** - Change return values to use constants
+3. **Update Chief** - Change comparison logic
+4. **Update Project model** - Change achievement status logic
+5. **Update views** - Change markdown export helper
+6. **Update controller** - Add `before_action :convert_status_params`
+7. **Update jbuilder** - Add integer-to-string conversion for JSON output
+8. **Run tests** - Ensure all detective tests pass with new values
+9. **Only then migrate database** - After code is ready for integers
+
+### Database Migration Notes
+
+**Column type**: Use PostgreSQL `smallint` (not `integer`)
+
+```ruby
+# Migration example (one of 193 status fields)
+change_column :projects, :warnings_status, :smallint, using: 'warnings_status::smallint'
+```
+
+**Data conversion during migration**:
+- '?' → 0
+- 'Unmet' → 1
+- 'N/A' → 2
+- 'Met' → 3
+
+**Migration considerations**:
+- Large table with many columns - may need batching or careful timing
+- Use `USING` clause to convert existing string data
+- Consider adding check constraint: `CHECK (warnings_status BETWEEN 0 AND 3)`
+- Default values should be `0` (for '?')
 
 ## Conclusion
 
-Using Rails enums with integer storage provides substantial memory savings by leveraging Ruby's automatic symbol interning, while also improving the API and maintaining database portability. This is the recommended approach for optimizing memory usage in the Rails application.
+The raw integer approach with PostgreSQL `smallint` storage provides maximum memory and storage efficiency for the 193 status fields per project. By storing integers internally and converting to/from strings only at API boundaries, we achieve:
+
+- **~75-85% database storage reduction** (VARCHAR → smallint)
+- **Zero Ruby object allocation** for status values (immediate Fixnum values)
+- **100% backward compatible external API** (strings in, strings out)
+- **Simple, maintainable implementation** (~26 code changes)
+
+This approach is superior to Rails enums for this specific use case due to the large number of fields (193) and the need for maximum memory efficiency under high query load.
+
+---
+
+# Implementation Migration Plan
+
+## Overview
+
+This plan outlines the step-by-step process to migrate from VARCHAR status fields to smallint storage with the raw integer approach.
+
+**Total Estimated Effort**: ~4-6 hours of development + testing
+**Risk Level**: MEDIUM (many changes, but straightforward patterns)
+**Backward Compatibility**: 100% (external API unchanged)
+
+## Prerequisites
+
+- [ ] All tests passing on current codebase
+- [ ] Database backup available
+- [ ] Staging environment available for testing
+- [ ] Understanding of rollback procedures
+
+## Phase 1: Create Infrastructure (No Database Changes)
+
+**Goal**: Add constants and conversion infrastructure without changing database
+
+### Step 1.1: Create CriterionStatus Module
+
+**File**: `lib/criterion_status.rb` (new file)
+
+**Actions**:
+1. Create new file with frozen string literal header
+2. Add copyright and license headers
+3. Define module with constants and mappings
+4. Add inline documentation
+
+**Testing**:
+- Rails console: `CriterionStatus::STATUS_VALUES` should return array
+- Rails console: `CriterionStatus::MET` should return `3`
+- Rails console: `CriterionStatus::STATUS_BY_NAME['Met']` should return `3`
+
+**Success Criteria**: Module loads without errors, constants accessible
+
+### Step 1.2: Add Helper Methods to ProjectsHelper
+
+**File**: `app/helpers/projects_helper.rb`
+
+**Actions**:
+1. Add `status_to_string(value)` method using `CriterionStatus::STATUS_VALUES[value]`
+2. Add inline documentation
+
+**Testing**:
+- Helper test: verify `status_to_string(3)` returns `'Met'`
+- Helper test: verify `status_to_string(0)` returns `'?'`
+
+**Success Criteria**: Helper methods work correctly
+
+### Step 1.3: Verify Phase 1
+
+**Commands**:
+```bash
+rails test
+rake rubocop
+rake rails_best_practices
+```
+
+**Success Criteria**: All tests pass, no linting errors, no functionality changes
+
+---
+
+## Phase 2: Update Application Code (Still No Database Changes)
+
+**Goal**: Update all Ruby code to use CriterionStatus constants
+
+**Important**: Database still has strings at this point. Code will work with BOTH strings and integers during transition.
+
+### Step 2.1: Update Detective Files
+
+**Files** (6 files, 20 changes):
+- `app/lib/build_detective.rb`
+- `app/lib/floss_license_detective.rb`
+- `app/lib/hardened_sites_detective.rb`
+- `app/lib/project_sites_https_detective.rb`
+- `app/lib/repo_files_examine_detective.rb`
+- `app/lib/subdir_file_contents_detective.rb`
+
+**Actions**:
+1. Find all `value: 'Met'` → replace with `value: CriterionStatus::MET`
+2. Find all `value: 'Unmet'` → replace with `value: CriterionStatus::UNMET`
+3. Find all `value: 'N/A'` → replace with `value: CriterionStatus::NA`
+
+**Pattern**:
+```ruby
+# BEFORE:
+{ value: 'Met', confidence: 5, explanation: '...' }
+
+# AFTER:
+{ value: CriterionStatus::MET, confidence: 5, explanation: '...' }
+```
+
+**Testing**:
+- Run detective unit tests: `rails test test/unit/lib/*detective_test.rb`
+- Verify detectives return integer values
+
+**Success Criteria**: All detective tests pass
+
+### Step 2.2: Update Chief
+
+**File**: `app/lib/chief.rb`
+
+**Actions**:
+1. Line 70: Replace `project[key] == '?'` with `project[key] == CriterionStatus::UNKNOWN || project[key] == '?'`
+   - **Note**: During transition, accept BOTH string and integer until migration complete
+
+**Pattern**:
+```ruby
+# BEFORE:
+elsif !project.attribute_present?(key) || project[key].blank? || project[key] == '?'
+
+# AFTER (transition-safe):
+elsif !project.attribute_present?(key) || project[key].blank? ||
+      project[key] == CriterionStatus::UNKNOWN || project[key] == '?'
+```
+
+**Testing**:
+- Run chief unit tests: `rails test test/unit/lib/chief_test.rb`
+- Test autofill functionality manually in development
+
+**Success Criteria**: Chief tests pass, autofill works
+
+### Step 2.3: Update Project Model
+
+**File**: `app/models/project.rb`
+
+**Actions**:
+1. Lines 817-823: Update achievement status comparisons/assignments
+
+**Pattern**:
+```ruby
+# BEFORE:
+if self[:"badge_percentage_#{level - 1}"] >= 100
+  return if self[achieved_previous_level] == 'Met'
+  self[achieved_previous_level] = 'Met'
+else
+  return if self[achieved_previous_level] == 'Unmet'
+  self[achieved_previous_level] = 'Unmet'
+end
+
+# AFTER (transition-safe):
+if self[:"badge_percentage_#{level - 1}"] >= 100
+  return if self[achieved_previous_level] == CriterionStatus::MET ||
+            self[achieved_previous_level] == 'Met'
+  self[achieved_previous_level] = CriterionStatus::MET
+else
+  return if self[achieved_previous_level] == CriterionStatus::UNMET ||
+            self[achieved_previous_level] == 'Unmet'
+  self[achieved_previous_level] = CriterionStatus::UNMET
+end
+```
+
+**Testing**:
+- Run project model tests: `rails test test/models/project_test.rb`
+- Test badge achievement logic
+
+**Success Criteria**: Project tests pass
+
+### Step 2.4: Update Markdown View
+
+**File**: `app/views/projects/show_markdown.erb`
+
+**Actions**:
+1. Line 12: Update case statement to handle integers
+
+**Pattern**:
+```ruby
+# BEFORE:
+def criterion_to_checkbox(value)
+  case value
+  when 'Met', 'N/A'
+    '[x]'
+  else
+    '[ ]'
+  end
+end
+
+# AFTER (transition-safe):
+def criterion_to_checkbox(value)
+  case value
+  when CriterionStatus::MET, CriterionStatus::NA, 'Met', 'N/A'
+    '[x]'
+  else
+    '[ ]'
+  end
+end
+```
+
+**Testing**:
+- Test markdown export manually
+- Verify checkboxes render correctly
+
+**Success Criteria**: Markdown export works
+
+### Step 2.5: Update Projects Controller
+
+**File**: `app/controllers/projects_controller.rb`
+
+**Actions**:
+1. Add `before_action :convert_status_params` to the action filters
+2. Add private method `convert_status_params` (see below)
+
+**Code to add**:
+```ruby
+class ProjectsController < ApplicationController
+  before_action :convert_status_params, only: [:create, :update]
+
+  # ... existing code ...
+
+  private
+
+  # Convert incoming string status params to integers for database storage
+  # Maintains backward compatibility with external API (accepts strings)
+  # @return [void]
+  def convert_status_params
+    return unless params[:project]
+
+    # Convert all status fields from strings to integers
+    Project::ALL_CRITERIA_STATUS.each do |status_field|
+      next unless params[:project][status_field]
+
+      string_value = params[:project][status_field]
+
+      # Skip if already an integer (shouldn't happen, but be safe)
+      next if string_value.is_a?(Integer)
+
+      integer_value = CriterionStatus::STATUS_BY_NAME[string_value]
+      params[:project][status_field] = integer_value if integer_value
+    end
+  end
+end
+```
+
+**Testing**:
+- Test project creation with form
+- Test project updates with form
+- Test API updates with curl/Postman
+
+**Success Criteria**: Create/update works with string inputs
+
+### Step 2.6: Update JSON Serialization
+
+**File**: `app/views/projects/_project.json.jbuilder`
+
+**Actions**:
+1. Replace the `transformed_attrs` logic to convert integers to strings
+
+**Code**:
+```ruby
+# BEFORE:
+transformed_attrs =
+  project.attributes.transform_keys do |key|
+    ProjectsHelper::BASELINE_FIELD_DISPLAY_NAME_MAP.fetch(key, key)
+  end
+json.merge! transformed_attrs
+
+# AFTER:
+# Start with project attributes
+transformed_attrs = project.attributes.dup
+
+# Convert status fields from integers to strings for API compatibility
+Project::ALL_CRITERIA_STATUS.each do |status_field|
+  status_value = transformed_attrs[status_field.to_s]
+  if status_value.is_a?(Integer)
+    transformed_attrs[status_field.to_s] = CriterionStatus::STATUS_VALUES[status_value]
+  end
+  # If it's still a string (during migration), leave it as-is
+end
+
+# Then apply key transformation for baseline fields
+transformed_attrs = transformed_attrs.transform_keys do |key|
+  ProjectsHelper::BASELINE_FIELD_DISPLAY_NAME_MAP.fetch(key, key)
+end
+
+json.merge! transformed_attrs
+```
+
+**Testing**:
+- Test JSON API: `curl http://localhost:3000/en/projects/1.json`
+- Verify status fields are strings in JSON output
+- Verify API backward compatibility
+
+**Success Criteria**: JSON returns strings for status fields
+
+### Step 2.7: Verify Phase 2
+
+**Commands**:
+```bash
+rake default          # Run full CI/CD pipeline
+rails test:all        # Run all tests including system tests
+```
+
+**Manual Testing Checklist**:
+- [ ] Create new project via web form
+- [ ] Update project status fields via web form
+- [ ] Verify JSON API returns strings
+- [ ] Test autofill functionality
+- [ ] Test markdown export
+- [ ] Test badge achievement status updates
+
+**Success Criteria**:
+- All tests pass
+- All manual tests work
+- Code still works with VARCHAR strings in database
+- No regression in functionality
+
+---
+
+## Phase 3: Database Migration
+
+**Goal**: Convert database columns from VARCHAR to smallint
+
+**WARNING**: This phase changes the database schema. Ensure Phase 2 is 100% complete and tested.
+
+### Step 3.1: Create Migration File
+
+**Commands**:
+```bash
+rails generate migration ConvertStatusFieldsToSmallint
+```
+
+**File**: `db/migrate/YYYYMMDDHHMMSS_convert_status_fields_to_smallint.rb`
+
+**Migration Code**:
+```ruby
+# frozen_string_literal: true
+
+# Copyright 2015-2017, the Linux Foundation, IDA, and the
+# OpenSSF Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+
+class ConvertStatusFieldsToSmallint < ActiveRecord::Migration[8.1]
+  # Map string values to integers
+  STATUS_MAPPING = {
+    '?' => 0,
+    'Unmet' => 1,
+    'N/A' => 2,
+    'Met' => 3
+  }.freeze
+
+  def up
+    # Get all status field names from Criteria
+    status_fields = Criteria.all.map(&:status)
+
+    # Also include achievement status fields
+    achievement_fields = %i[achieve_passing_status achieve_silver_status]
+
+    all_fields = (status_fields + achievement_fields).uniq
+
+    say_with_time "Converting #{all_fields.size} status fields to smallint" do
+      all_fields.each_with_index do |field, index|
+        say "Converting #{field} (#{index + 1}/#{all_fields.size})", :subitem
+
+        # Create CASE statement for conversion
+        case_stmt = STATUS_MAPPING.map { |str, int| "WHEN '#{str}' THEN #{int}" }.join(' ')
+
+        # Convert column with data transformation
+        execute <<-SQL
+          ALTER TABLE projects
+          ALTER COLUMN #{field}
+          TYPE smallint
+          USING (
+            CASE #{field}
+              #{case_stmt}
+              ELSE 0
+            END
+          )
+        SQL
+
+        # Set default value
+        change_column_default :projects, field, from: '?', to: 0
+
+        # Add check constraint
+        execute <<-SQL
+          ALTER TABLE projects
+          ADD CONSTRAINT check_#{field}_range
+          CHECK (#{field} >= 0 AND #{field} <= 3)
+        SQL
+      end
+    end
+  end
+
+  def down
+    status_fields = Criteria.all.map(&:status)
+    achievement_fields = %i[achieve_passing_status achieve_silver_status]
+    all_fields = (status_fields + achievement_fields).uniq
+
+    # Reverse mapping
+    reverse_mapping = STATUS_MAPPING.invert
+
+    say_with_time "Converting #{all_fields.size} status fields back to varchar" do
+      all_fields.each_with_index do |field, index|
+        say "Converting #{field} (#{index + 1}/#{all_fields.size})", :subitem
+
+        # Drop check constraint
+        execute <<-SQL
+          ALTER TABLE projects
+          DROP CONSTRAINT IF EXISTS check_#{field}_range
+        SQL
+
+        # Create CASE statement for reverse conversion
+        case_stmt = reverse_mapping.map { |int, str| "WHEN #{int} THEN '#{str}'" }.join(' ')
+
+        # Convert back to varchar
+        execute <<-SQL
+          ALTER TABLE projects
+          ALTER COLUMN #{field}
+          TYPE varchar
+          USING (
+            CASE #{field}
+              #{case_stmt}
+              ELSE '?'
+            END
+          )
+        SQL
+
+        # Set default value back
+        change_column_default :projects, field, from: 0, to: '?'
+      end
+    end
+  end
+end
+```
+
+### Step 3.2: Test Migration on Development Database
+
+**Commands**:
+```bash
+# Backup development database first
+pg_dump badgeapp_development > backup_before_migration.sql
+
+# Run migration
+rails db:migrate
+
+# Verify schema
+rails db:schema:dump
+```
+
+**Verification**:
+1. Check schema.rb shows `t.integer` with `limit: 2` (smallint)
+2. Check data in database: `rails console` then check status values
+3. Verify application still works
+
+### Step 3.3: Test Rollback
+
+**Commands**:
+```bash
+# Test rollback
+rails db:rollback
+
+# Verify data is back to strings
+# Then re-migrate
+rails db:migrate
+```
+
+**Success Criteria**: Rollback and re-migration work without data loss
+
+### Step 3.4: Run Full Test Suite After Migration
+
+**Commands**:
+```bash
+RAILS_ENV=test rails db:migrate
+rails test:all
+rake default
+```
+
+**Success Criteria**: All tests pass with new schema
+
+---
+
+## Phase 4: Cleanup (Remove Transition Code)
+
+**Goal**: Remove dual string/integer support code
+
+### Step 4.1: Update Chief (Remove String Support)
+
+**File**: `app/lib/chief.rb`
+
+**Actions**:
+```ruby
+# BEFORE (transition code):
+elsif !project.attribute_present?(key) || project[key].blank? ||
+      project[key] == CriterionStatus::UNKNOWN || project[key] == '?'
+
+# AFTER (final):
+elsif !project.attribute_present?(key) || project[key].blank? ||
+      project[key] == CriterionStatus::UNKNOWN
+```
+
+### Step 4.2: Update Project Model (Remove String Support)
+
+**File**: `app/models/project.rb`
+
+**Actions**: Remove `|| == 'Met'` / `|| == 'Unmet'` dual checks
+
+### Step 4.3: Update Markdown View (Remove String Support)
+
+**File**: `app/views/projects/show_markdown.erb`
+
+**Actions**: Remove `'Met', 'N/A'` from case statement, keep only integer constants
+
+### Step 4.4: Verify Cleanup
+
+**Commands**:
+```bash
+rake default
+rails test:all
+```
+
+**Success Criteria**: All tests pass, no string status values in code
+
+---
+
+## Phase 5: Deployment and Monitoring
+
+### Step 5.1: Deploy to Staging
+
+**Actions**:
+1. Deploy all code changes to staging
+2. Run migration on staging database
+3. Run full test suite on staging
+4. Manual QA testing on staging
+5. Monitor staging for 24-48 hours
+
+**Success Criteria**: Staging stable with no errors
+
+### Step 5.2: Deploy to Production
+
+**Pre-deployment Checklist**:
+- [ ] Staging deployment successful
+- [ ] All tests passing
+- [ ] Database backup completed
+- [ ] Rollback procedure documented
+- [ ] Monitoring alerts configured
+
+**Deployment Steps**:
+1. Enable maintenance mode (optional)
+2. Backup production database
+3. Deploy code changes
+4. Run migration (will take time - 193 columns)
+5. Verify migration completed successfully
+6. Disable maintenance mode
+7. Monitor application logs
+8. Monitor error rates
+9. Monitor API requests/responses
+
+**Success Criteria**:
+- Migration completes without errors
+- No increase in error rates
+- API responses remain unchanged
+- Application performance stable or improved
+
+### Step 5.3: Post-Deployment Validation
+
+**Within 1 hour**:
+- [ ] Verify JSON API returns strings
+- [ ] Test project creation
+- [ ] Test project updates
+- [ ] Check error logs for status-related errors
+
+**Within 24 hours**:
+- [ ] Monitor memory usage (should decrease)
+- [ ] Monitor database size (should decrease)
+- [ ] Verify no user-reported issues
+
+**Success Criteria**: No issues detected, memory/storage improvements visible
+
+---
+
+## Rollback Plan
+
+### If Issues Found Before Database Migration
+
+**Action**: Simply revert code changes via git
+**Impact**: None - database unchanged
+
+### If Issues Found After Database Migration
+
+**Option 1: Rollback Migration**
+```bash
+rails db:rollback
+```
+Then revert code changes.
+
+**Option 2: Fix Forward**
+If migration succeeded but code has bugs, fix code bugs without rolling back migration.
+
+**Option 3: Emergency Database Restore**
+Only if catastrophic failure:
+```bash
+pg_restore backup_file.sql
+```
+
+---
+
+## Risk Assessment
+
+| Risk | Likelihood | Impact | Mitigation |
+|------|-----------|--------|------------|
+| Migration fails mid-way | LOW | HIGH | Test on staging first, have database backup |
+| Data loss during conversion | LOW | CRITICAL | Use CASE statement in migration, test rollback |
+| Performance degradation | LOW | MEDIUM | smallint is faster than VARCHAR |
+| External API breaks | VERY LOW | HIGH | Conversion at boundaries maintains compatibility |
+| Code bugs with integer handling | MEDIUM | MEDIUM | Comprehensive testing, dual string/integer support during transition |
+| Chief autofill issues | MEDIUM | LOW | Extensive detective tests, manual testing |
+
+---
+
+## Success Metrics
+
+**After full deployment, measure**:
+
+1. **Memory Usage**: Ruby process memory should decrease
+2. **Database Size**: Projects table size should decrease by ~75-85% for status columns
+3. **API Compatibility**: External API tests should all pass
+4. **Error Rates**: No increase in application errors
+5. **Test Coverage**: All tests passing
+
+**Target Improvements**:
+- Database storage: -75% to -85% for status fields
+- Ruby memory per project: Reduction in String object allocations
+- Application performance: Same or better (integer comparisons faster)

@@ -320,17 +320,23 @@ class ProjectsController < ApplicationController
 
   private
 
+  # Convert all status fields from strings to integers in h.
+  # This modifies the hash IN PLACE
+  def convert_status_params_of_hash!(h)
+    Project::ALL_CRITERIA_STATUS.each do |status_field|
+      next unless h[status_field]
+
+      string_value = h[status_field]
+      integer_value = CriterionStatus::STATUS_BY_NAME[string_value]
+      h[status_field] = integer_value if integer_value
+    end
+  end
+
+  # Convert all status fields in params[:project] from strings to integers
   def convert_status_params
     return unless params[:project]
 
-    # Convert all status fields from strings to integers
-    Project::ALL_CRITERIA_STATUS.each do |status_field|
-      next unless params[:project][status_field]
-
-      string_value = params[:project][status_field]
-      integer_value = CriterionStatus::STATUS_BY_NAME[string_value]
-      params[:project][status_field] = integer_value if integer_value
-    end
+    convert_status_params_of_hash!(params[:project])
   end
 end
 ```

@@ -15,11 +15,11 @@ class ProjectsController < ApplicationController
   skip_before_action :redir_missing_locale, only: %i[badge show_json]
 
   before_action :set_criteria_level, only: %i[show edit update]
-  before_action :set_project,
+  before_action :set_project_all_values,
                 only: %i[
-                  edit update delete_form destroy show_json
+                  update delete_form destroy show_json
                 ]
-  before_action :set_project_for_show, only: :show
+  before_action :set_project_for_section, only: %i[show edit]
   before_action :require_logged_in, only: :create
   before_action :can_edit_else_redirect, only: %i[edit update]
   before_action :can_control_else_redirect, only: %i[destroy delete_form]
@@ -399,6 +399,9 @@ class ProjectsController < ApplicationController
   # Supports `GET /projects/:id/edit(.:format)`.
   # @return [void]
   def edit
+    # Only check static analysis notification for criteria sections (not permissions)
+    # Permissions section doesn't load criteria fields
+    return if @criteria_level == 'permissions'
     return unless @project.notify_for_static_analysis?('0')
 
     message = t('.static_analysis_updated_html')
@@ -1026,22 +1029,24 @@ class ProjectsController < ApplicationController
   end
 
   # Callback to load project instance from params[:id].
+  # This loads *ALL* values of a project (we don't use select first).
   # Used as before_action to set @project for actions that need it.
   # @return [void] Sets @project instance variable
-  def set_project
+  def set_project_all_values
     @project = Project.find(params[:id])
   end
 
-  # Optimized project loading for show action - loads only needed fields.
+  # Optimized project loading for section-based actions - loads only needed fields.
+  # Used by show and edit actions which are section-specific.
   # Memory optimization: Loads only base fields + fields of the current section
-  # Saves ~438 objects (34.5%) per request when showing a specific section,
+  # Saves ~438 objects (34.5%) per request when displaying a specific section,
   # when we only had passing/silver/gold/baseline-1, and that savings is
   # expected to increase over time.
-  # We receive a brutally large number of "show" requests, so optimizing
-  # "show" (e.g., reducing objects created each time) is worth doing.
+  # We receive a brutally large number of "show" and "edit" requests, so
+  # optimizing these (e.g., reducing objects created each time) is worth doing.
   # Falls back to loading all fields if section is unknown.
   # @return [void] Sets @project instance variable
-  def set_project_for_show
+  def set_project_for_section
     # Look up pre-calculated SQL field list for this section
     section = @criteria_level # NOTE: @criteria_level actually contains the section name
     fields_to_load = PROJECT_FIELDS_FOR_SECTION[section]
@@ -1062,7 +1067,7 @@ class ProjectsController < ApplicationController
   # @return [void] Sets instance variables for view rendering
   def load_section_data_for_show(section)
     # Different sections need different data
-    # For now, all data loading is handled by set_project_for_show
+    # For now, all data loading is handled by set_project_for_section
     # which optimizes field selection based on section
     # Permissions section: no criteria needed, just render the view
     # Criteria sections: @project already loaded with optimized fields

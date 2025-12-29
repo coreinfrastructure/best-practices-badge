@@ -13,13 +13,13 @@ class ProjectsController < ApplicationController
 
   # The 'badge' and 'show_json' actions are special and do NOT take a locale.
   skip_before_action :redir_missing_locale, only: %i[badge show_json]
-
+  # The "project" table has many columns, and we often don't need them all.
+  # So we'll take steps to only load a subset of the columns we need,
+  # when we only need a subset.
+  before_action :set_project_all_values, only: %i[update show_json]
   before_action :set_criteria_level, only: %i[show edit update]
-  before_action :set_project_all_values,
-                only: %i[
-                  update delete_form destroy show_json
-                ]
   before_action :set_project_for_section, only: %i[show edit]
+  before_action :set_project_for_limited_fields, only: %i[delete_form destroy]
   before_action :require_logged_in, only: :create
   before_action :can_edit_else_redirect, only: %i[edit update]
   before_action :can_control_else_redirect, only: %i[destroy delete_form]
@@ -114,6 +114,16 @@ class ProjectsController < ApplicationController
       f
     end
   end
+
+  # Memory optimization: Pre-computed field lists when you only need
+  # a limited number of fields. In many cases we don't even need them,
+  # but a separate edit in (for example) the delete form might easily
+  # add them, so let's avoid silent problems. Similarly, not having the
+  # lock_version when you need it can be a big problem, so let's get it.
+  PROJECT_LIMITED_FIELDS = %i[
+    id user_id name description homepage_url repo_url
+    created_at updated_at lock_version
+  ].freeze
 
   # Memory optimization: Pre-computed field lists for selective Project loading
   # Base fields always needed regardless of which section is being viewed
@@ -1034,6 +1044,11 @@ class ProjectsController < ApplicationController
   # @return [void] Sets @project instance variable
   def set_project_all_values
     @project = Project.find(params[:id])
+  end
+
+  # Load project data for limited fields.
+  def set_project_for_limited_fields
+    @project = Project.select(PROJECT_LIMITED_FIELDS).find(params[:id])
   end
 
   # Optimized project loading for section-based actions - loads only needed fields.

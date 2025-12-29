@@ -120,9 +120,11 @@ class ProjectsController < ApplicationController
   # but a separate edit in (for example) the delete form might easily
   # add them, so let's avoid silent problems. Similarly, not having the
   # lock_version when you need it can be a big problem, so let's get it.
+  # Include badge percentages for deletion email template.
   PROJECT_LIMITED_FIELDS = %i[
     id user_id name description homepage_url repo_url
     created_at updated_at lock_version
+    tiered_percentage badge_percentage_0 badge_percentage_1 badge_percentage_2
   ].freeze
 
   # Memory optimization: Pre-computed field lists for selective Project loading

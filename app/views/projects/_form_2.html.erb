@@ -16,13 +16,13 @@
            locals:
              {
                project: project, view_only: view_only,
-               criteria_level: '2', badge_hostname: badge_hostname
+               criteria_level: criteria_level, badge_hostname: badge_hostname
              }) %>
 
 <div class="row">
   <div class="col-md-12">
  <div>
-  <%= bootstrap_form_for project, url: project_path(project, criteria_level: '2') do |f| %>
+  <%= bootstrap_form_for project, url: update_project_path(project, section: criteria_level) do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
     <%= f.hidden_field :lock_version %>
 
@@ -46,7 +46,7 @@
                    {
                      project: project, view_only: view_only,
                      badge_hostname: badge_hostname, f: f,
-                     criteria_level: '2'
+                     criteria_level: criteria_level
                    }) %>
           </li>
           <%# Prerequisites is always disabled %>

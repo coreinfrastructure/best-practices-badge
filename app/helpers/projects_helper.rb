@@ -83,7 +83,9 @@ module ProjectsHelper
 
     # Get or create thread-local markdown processor
     processor = Thread.current[:markdown_processor]
-    if processor.nil?
+    # Verify processor is valid (not nil and correct type)
+    # In tests, class reloading can cause type mismatches
+    unless processor.is_a?(Redcarpet::Markdown)
       renderer = Redcarpet::Render::HTML.new(MARKDOWN_RENDERER_OPTIONS)
       processor = Redcarpet::Markdown.new(renderer, MARKDOWN_PROCESSOR_OPTIONS)
       Thread.current[:markdown_processor] = processor

@@ -61,10 +61,10 @@ Rails.application.routes.draw do
       defaults: { format: 'svg' }
 
   # JSON API route (locale-independent, outside scope for performance)
-  # GET /projects/:id.json
+  # GET /projects/:id.json (extension required)
   # This is the expected common case, so it's matched first
-  get '/projects/:id' => 'projects#show_json',
-      constraints: { id: VALID_ID, format: 'json' },
+  get '/projects/:id.json' => 'projects#show_json',
+      constraints: { id: VALID_ID },
       defaults: { format: 'json' },
       as: :project_json
 
@@ -72,7 +72,11 @@ Rails.application.routes.draw do
   # GET /:locale/projects/:id.json → /projects/:id.json
   # Handle common mistake of adding locale to JSON URLs
   get '/:locale/projects/:id' => redirect('/projects/%{id}.json', status: 301),
-      constraints: { id: VALID_ID, format: 'json', locale: LEGAL_LOCALE }
+      constraints: lambda { |req|
+        req.params[:id] =~ VALID_ID_FULL &&
+          req.params[:locale] =~ LEGAL_LOCALE_FULL &&
+          req.format == :json
+      }
 
   # These routes never use locales, so that the cache is shared across locales.
   get '/project_stats/total_projects', to: 'project_stats#total_projects',
@@ -181,9 +185,10 @@ Rails.application.routes.draw do
         as: :project_section,
         defaults: { format: 'html' }
 
-    # Redirect to default section (handles all formats, with/without locale)
+    # Redirect to default section (handles all formats except JSON)
     # GET (/:locale)/projects/:id(.:format) → redirects to default section
     # Also handles legacy query parameter: ?criteria_level=LEVEL
+    # JSON format handled by non-localized routes above
     get 'projects/:id' => 'projects#redirect_to_default_section',
         constraints: { id: VALID_ID },
         as: :project_redirect

@@ -15,14 +15,14 @@
            locals:
              {
                project: project, view_only: view_only,
-               criteria_level: '0', badge_hostname: badge_hostname
+               criteria_level: criteria_level, badge_hostname: badge_hostname
              }) %>
 
 <div class="row">
   <div class="col-md-12">
  <div>
   <%# Don't provide criteria_level, as '0' is the default. %>
-  <%= bootstrap_form_for project, url: project_path(project) do |f| %>
+  <%= bootstrap_form_for project, url: update_project_path(project, section: criteria_level) do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
     <%= f.hidden_field :lock_version %>
 
@@ -47,7 +47,7 @@
                          {
                            project: project, view_only: view_only,
                            badge_hostname: badge_hostname, f: f,
-                           criteria_level: '0'
+                           criteria_level: criteria_level
                          }) %>
 
             <div class="hidable-text-entry">

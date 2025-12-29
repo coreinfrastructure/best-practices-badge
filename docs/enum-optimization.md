@@ -320,19 +320,31 @@ class ProjectsController < ApplicationController
 
   private
 
-  # Convert all status fields from strings to integers in h.
-  # This modifies the hash IN PLACE
+  # Convert all status fields from strings to integers in hash h.
+  # This modifies the hash IN PLACE.
+  # Invalid values are left as-is and will be caught by model validations.
+  # @param h [Hash] The hash to modify (typically params[:project])
+  # @return [void]
   def convert_status_params_of_hash!(h)
     Project::ALL_CRITERIA_STATUS.each do |status_field|
       next unless h[status_field]
 
       string_value = h[status_field]
+      next if string_value.is_a?(Integer)
+
       integer_value = CriterionStatus::STATUS_BY_NAME[string_value]
-      h[status_field] = integer_value if integer_value
+
+      if integer_value
+        h[status_field] = integer_value
+      else
+        # Invalid value - leave as-is so model validation can reject it
+        Rails.logger.warn "Invalid status value for #{status_field}: #{string_value.inspect}"
+      end
     end
   end
 
   # Convert all status fields in params[:project] from strings to integers
+  # @return [void]
   def convert_status_params
     return unless params[:project]
 
@@ -340,6 +352,8 @@ class ProjectsController < ApplicationController
   end
 end
 ```
+
+**Important**: Invalid values are NOT removed from the hash. They remain as strings so that model validations can catch them and provide proper error messages to users. This follows the Rails pattern: "controller converts valid input, model validates all input."
 
 **C. JSON Serialization** (app/views/projects/_project.json.jbuilder)
 
@@ -731,9 +745,27 @@ elsif !project.attribute_present?(key) || project[key].blank? ||
 
 **Actions**:
 
-1. Lines 817-823: Update achievement status comparisons/assignments
+1. Lines 33-34: Update and rename STATUS_CHOICE constants
+2. Lines 817-823: Update achievement status comparisons/assignments
 
-**Pattern**:
+**Pattern for constants**:
+
+```ruby
+# BEFORE:
+STATUS_CHOICE = %w[? Met Unmet].freeze
+STATUS_CHOICE_NA = (STATUS_CHOICE + %w[N/A]).freeze
+
+# AFTER (transition-safe - accepts both integers and strings):
+STATUS_CHOICE_WITHOUT_NA = [
+  CriterionStatus::UNKNOWN, CriterionStatus::MET, CriterionStatus::UNMET,
+  '?', 'Met', 'Unmet'
+].freeze
+STATUS_CHOICE_NA = (STATUS_CHOICE_WITHOUT_NA + [CriterionStatus::NA, 'N/A']).freeze
+
+# Note: Renamed STATUS_CHOICE to STATUS_CHOICE_WITHOUT_NA for clarity
+```
+
+**Pattern for achievement status**:
 
 ```ruby
 # BEFORE:
@@ -757,12 +789,16 @@ else
 end
 ```
 
+**Important**: The STATUS_CHOICE constants are used in model validations (lines 298-301). During transition, they must accept BOTH integers and strings. After Phase 4 cleanup, remove string values.
+
 **Testing**:
 
 - Run project model tests: `rails test test/models/project_test.rb`
 - Test badge achievement logic
+- Test that validations accept integers
+- Test that validations still accept strings (during transition)
 
-**Success Criteria**: Project tests pass
+**Success Criteria**: Project tests pass, validations work with both integers and strings
 
 #### Step 2.4: Update Markdown View
 
@@ -822,35 +858,145 @@ class ProjectsController < ApplicationController
 
   private
 
-  # Convert incoming string status params to integers for database storage
-  # Maintains backward compatibility with external API (accepts strings)
+  # Convert all status fields from strings to integers in hash h.
+  # This modifies the hash IN PLACE.
+  # Invalid values are left as-is and will be caught by model validations,
+  # which provide proper error messages to users.
+  # @param h [Hash] The hash to modify (typically params[:project])
   # @return [void]
-  def convert_status_params
-    return unless params[:project]
-
-    # Convert all status fields from strings to integers
+  def convert_status_params_of_hash!(h)
     Project::ALL_CRITERIA_STATUS.each do |status_field|
-      next unless params[:project][status_field]
+      next unless h[status_field]
 
-      string_value = params[:project][status_field]
+      string_value = h[status_field]
 
       # Skip if already an integer (shouldn't happen, but be safe)
       next if string_value.is_a?(Integer)
 
       integer_value = CriterionStatus::STATUS_BY_NAME[string_value]
-      params[:project][status_field] = integer_value if integer_value
+
+      if integer_value
+        # Valid value - convert to integer
+        h[status_field] = integer_value
+      else
+        # Invalid value - leave as-is (don't convert)
+        # Model validations (project.rb:298-301) will catch it and provide error message
+        # Log for security monitoring
+        Rails.logger.warn "Invalid status value for #{status_field}: #{string_value.inspect}"
+        # IMPORTANT: Do NOT remove the value from hash!
+        # Removing it would bypass validation and silently ignore user error.
+        # Leave it as a string so model validation can reject it properly.
+      end
     end
+  end
+
+  # Convert incoming string status params to integers for database storage.
+  # Maintains backward compatibility with external API (accepts strings).
+  # @return [void]
+  def convert_status_params
+    return unless params[:project]
+
+    convert_status_params_of_hash!(params[:project])
   end
 end
 ```
 
+**Rationale for leaving invalid values unchanged**:
+
+- Model validations exist in `project.rb` (lines 298-301) using `STATUS_CHOICE_WITHOUT_NA` and `STATUS_CHOICE_NA`
+- **During transition**: Invalid strings fail validation (not in list of valid strings/integers)
+- **After migration**: Invalid strings fail validation (not in list of valid integers)
+- Users receive proper Rails validation error messages (e.g., "is not included in the list")
+- **If we removed invalid values**: User errors would be silently ignored (no feedback!)
+- Logging provides security monitoring for suspicious input
+- Separate `convert_status_params_of_hash!` method makes unit testing easier
+
+**How validation works**:
+
+1. Valid string (e.g., "Met") → converted to integer (3) → validation passes
+2. Invalid string (e.g., "BadValue") → left as-is → validation fails → user sees error
+3. This works both during transition and after migration to integers
+
 **Testing**:
 
-- Test project creation with form
-- Test project updates with form
+- Test project creation with form (valid status values)
+- Test project updates with form (valid status values)
+- **Test with invalid status values** - should return validation error, not 500 error
 - Test API updates with curl/Postman
+- Verify error messages are user-friendly (Rails validation errors)
 
-**Success Criteria**: Create/update works with string inputs
+**Test cases for invalid values**:
+
+```bash
+# Should fail with validation error, not crash
+curl -X PATCH http://localhost:3000/en/projects/1 \
+  -d 'project[warnings_status]=InvalidValue'
+# Expected: 422 Unprocessable Entity with validation error
+# NOT: 500 Internal Server Error
+```
+
+**Unit tests for convert_status_params_of_hash!**:
+
+Create a test file `test/controllers/projects_controller_convert_test.rb`:
+
+```ruby
+# Test the convert_status_params_of_hash! helper method
+class ProjectsControllerConvertTest < ActionController::TestCase
+  setup do
+    @controller = ProjectsController.new
+  end
+
+  test 'converts valid status string to integer' do
+    h = { warnings_status: 'Met' }
+    @controller.send(:convert_status_params_of_hash!, h)
+    assert_equal CriterionStatus::MET, h[:warnings_status]
+  end
+
+  test 'converts all valid status values' do
+    h = {
+      warnings_status: '?',
+      build_status: 'Unmet',
+      test_status: 'N/A',
+      floss_license_status: 'Met'
+    }
+    @controller.send(:convert_status_params_of_hash!, h)
+    assert_equal CriterionStatus::UNKNOWN, h[:warnings_status]
+    assert_equal CriterionStatus::UNMET, h[:build_status]
+    assert_equal CriterionStatus::NA, h[:test_status]
+    assert_equal CriterionStatus::MET, h[:floss_license_status]
+  end
+
+  test 'leaves invalid status value as string' do
+    h = { warnings_status: 'InvalidValue' }
+    @controller.send(:convert_status_params_of_hash!, h)
+    assert_equal 'InvalidValue', h[:warnings_status]  # Left as-is
+  end
+
+  test 'leaves already-integer values unchanged' do
+    h = { warnings_status: 3 }
+    @controller.send(:convert_status_params_of_hash!, h)
+    assert_equal 3, h[:warnings_status]
+  end
+
+  test 'handles mixed valid and invalid values' do
+    h = {
+      warnings_status: 'Met',      # Valid - should convert
+      build_status: 'InvalidValue' # Invalid - should stay as-is
+    }
+    @controller.send(:convert_status_params_of_hash!, h)
+    assert_equal CriterionStatus::MET, h[:warnings_status]
+    assert_equal 'InvalidValue', h[:build_status]
+  end
+end
+```
+
+**Success Criteria**:
+
+- Create/update works with valid string inputs
+- Invalid inputs return proper validation errors (422 status)
+- Log shows warnings for invalid values
+- All unit tests for `convert_status_params_of_hash!` pass
+- Integration tests verify end-to-end validation behavior
 
 #### Step 2.6: Update JSON Serialization
 
@@ -1118,7 +1264,53 @@ elsif !project.attribute_present?(key) || project[key].blank? ||
 
 **File**: `app/models/project.rb`
 
-**Actions**: Remove `|| == 'Met'` / `|| == 'Unmet'` dual checks
+**Actions**:
+
+1. Update STATUS_CHOICE constants to remove string values
+2. Remove `|| == 'Met'` / `|| == 'Unmet'` dual checks from achievement status logic
+
+**Pattern for constants**:
+
+```ruby
+# BEFORE (transition code with both integers and strings):
+STATUS_CHOICE_WITHOUT_NA = [
+  CriterionStatus::UNKNOWN, CriterionStatus::MET, CriterionStatus::UNMET,
+  '?', 'Met', 'Unmet'
+].freeze
+STATUS_CHOICE_NA = (STATUS_CHOICE_WITHOUT_NA + [CriterionStatus::NA, 'N/A']).freeze
+
+# AFTER (final - integers only):
+STATUS_CHOICE_WITHOUT_NA = [
+  CriterionStatus::UNKNOWN,
+  CriterionStatus::MET,
+  CriterionStatus::UNMET
+].freeze
+STATUS_CHOICE_NA = (STATUS_CHOICE_WITHOUT_NA + [CriterionStatus::NA]).freeze
+```
+
+**Pattern for achievement status**:
+
+```ruby
+# BEFORE (transition code):
+if self[:"badge_percentage_#{level - 1}"] >= 100
+  return if self[achieved_previous_level] == CriterionStatus::MET ||
+            self[achieved_previous_level] == 'Met'
+  self[achieved_previous_level] = CriterionStatus::MET
+else
+  return if self[achieved_previous_level] == CriterionStatus::UNMET ||
+            self[achieved_previous_level] == 'Unmet'
+  self[achieved_previous_level] = CriterionStatus::UNMET
+end
+
+# AFTER (final):
+if self[:"badge_percentage_#{level - 1}"] >= 100
+  return if self[achieved_previous_level] == CriterionStatus::MET
+  self[achieved_previous_level] = CriterionStatus::MET
+else
+  return if self[achieved_previous_level] == CriterionStatus::UNMET
+  self[achieved_previous_level] = CriterionStatus::UNMET
+end
+```
 
 #### Step 4.3: Update Markdown View (Remove String Support)
 

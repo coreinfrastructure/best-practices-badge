@@ -36,6 +36,24 @@ FORMAT_TEXT ||= { format: 'text' }.freeze
 FORMAT_HTML ||= { format: 'html' }.freeze
 FORMAT_ATOM ||= { format: 'atom' }.freeze
 
+# Constraint hashes (frozen to reduce memory allocations per worker)
+CONSTRAINTS_ID ||= { id: VALID_ID }.freeze
+CONSTRAINTS_ID_PRIMARY_SECTION ||= {
+  id: VALID_ID,
+  section: Sections::PRIMARY_SECTION_REGEX
+}.freeze
+CONSTRAINTS_ID_VALID_SECTION ||= {
+  id: VALID_ID,
+  section: Sections::VALID_SECTION_REGEX
+}.freeze
+
+# Lambda constraints (frozen to reduce memory allocations per worker)
+# Used for redirect from localized JSON URLs to non-localized versions
+LOCALIZED_JSON_REDIRECT_CONSTRAINT ||= lambda { |req|
+  req.params[:id] =~ VALID_ID_FULL &&
+    req.params[:locale] =~ LEGAL_LOCALE_FULL
+}.freeze
+
 Rails.application.routes.draw do
   # First, handle routing of special cases.
   # Warning: Routes that don't take a :locale value must include a
@@ -51,14 +69,14 @@ Rails.application.routes.draw do
   # Therefore, instead of redirecting the badge image to a locale if
   # one is not listed, we do *NOT* support locale URLs in this case.
   get '/projects/:id/badge' => 'projects#badge',
-      constraints: { id: VALID_ID },
+      constraints: CONSTRAINTS_ID,
       defaults: FORMAT_SVG
 
   # JSON API route (locale-independent, outside scope for performance)
   # GET /projects/:id.json (extension required)
   # This is the expected common case, so it's matched early
   get '/projects/:id.json' => 'projects#show_json',
-      constraints: { id: VALID_ID },
+      constraints: CONSTRAINTS_ID,
       defaults: FORMAT_JSON,
       as: :project_json
 
@@ -100,10 +118,7 @@ Rails.application.routes.draw do
   # GET /:locale/projects/:id.json → /projects/:id.json
   # Handle common mistake of adding locale to JSON URLs
   get '/:locale/projects/:id.json' => redirect('/projects/%{id}.json', status: 301),
-      constraints: lambda { |req|
-        req.params[:id] =~ VALID_ID_FULL &&
-          req.params[:locale] =~ LEGAL_LOCALE_FULL
-      }
+      constraints: LOCALIZED_JSON_REDIRECT_CONSTRAINT
 
   # Now handle the normal case: routes with an optional locale prefix.
   # We include almost all routes inside a :locale header,
@@ -128,22 +143,19 @@ Rails.application.routes.draw do
     # Excludes :show and :edit (custom routes below handle sections)
     # Excludes :update (custom route below with section parameter)
     resources :projects, only: %i[index new create destroy],
-              constraints: { id: VALID_ID }
+              constraints: CONSTRAINTS_ID
 
     # Delete confirmation form (specific route before generic :section)
     # GET (/:locale)/projects/:id/delete_form
     get 'projects/:id/delete_form' => 'projects#delete_form',
-        constraints: { id: VALID_ID },
+        constraints: CONSTRAINTS_ID,
         as: :delete_form_project
 
     # Edit with section (before show to avoid conflicts)
     # GET (/:locale)/projects/:id/:section/edit
     # Use PRIMARY_SECTION_REGEX to reject obsolete sections in edit URLs
     get 'projects/:id/:section/edit' => 'projects#edit',
-        constraints: {
-          id: VALID_ID,
-          section: Sections::PRIMARY_SECTION_REGEX
-        },
+        constraints: CONSTRAINTS_ID_PRIMARY_SECTION,
         as: :edit_project_section
 
     # Show section with format (HTML or Markdown)
@@ -151,10 +163,7 @@ Rails.application.routes.draw do
     # Use VALID_SECTION_REGEX to accept obsolete sections (controller will redirect)
     # Controller also handles query parameter format: ?criteria_level=LEVEL
     get 'projects/:id/:section' => 'projects#show',
-        constraints: {
-          id: VALID_ID,
-          section: Sections::VALID_SECTION_REGEX
-        },
+        constraints: CONSTRAINTS_ID_VALID_SECTION,
         as: :project_section,
         defaults: FORMAT_HTML
 
@@ -163,7 +172,7 @@ Rails.application.routes.draw do
     # Also handles legacy query parameter: ?criteria_level=LEVEL
     # JSON format handled by non-localized routes above
     get 'projects/:id' => 'projects#redirect_to_default_section',
-        constraints: { id: VALID_ID },
+        constraints: CONSTRAINTS_ID,
         as: :project_redirect
 
     # Update project (PUT/PATCH) - section optional
@@ -174,10 +183,7 @@ Rails.application.routes.draw do
     # Use PRIMARY_SECTION_REGEX to reject obsolete sections in update URLs
     match 'projects/:id(/:section)' => 'projects#update',
           via: %i[put patch],
-          constraints: {
-            id: VALID_ID,
-            section: Sections::PRIMARY_SECTION_REGEX
-          },
+          constraints: CONSTRAINTS_ID_PRIMARY_SECTION,
           as: :update_project
 
     get 'project_stats', to: 'project_stats#index', as: 'project_stats'
@@ -203,7 +209,7 @@ Rails.application.routes.draw do
         defaults: FORMAT_JSON
     # The following route isn't very useful; we may remove it in the future:
     get 'project_stats/:id', to: 'project_stats#show',
-        constraints: { id: VALID_ID }
+        constraints: CONSTRAINTS_ID
 
     get 'sessions/new'
 

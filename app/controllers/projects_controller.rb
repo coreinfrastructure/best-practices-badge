@@ -7,11 +7,6 @@
 require 'addressable/uri'
 require 'net/http'
 
-# Ensure Project and Criteria classes are loaded before defining constants
-# This prevents class loading order issues in test environment
-Project if Rails.env.test? # rubocop:disable Lint/Void
-Criteria if Rails.env.test? # rubocop:disable Lint/Void
-
 # rubocop:disable Metrics/ClassLength
 class ProjectsController < ApplicationController
   include ProjectsHelper

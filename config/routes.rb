@@ -30,30 +30,34 @@ VALID_ID_FULL ||= /\A#{VALID_ID.source}\z/
 # Valid values for static badge display
 VALID_STATIC_VALUE ||= /0|[1-9]{1,2}|passing|silver|gold/
 
-# Frozen array for excluded formats (memory optimization)
-EXCLUDED_FORMATS ||= %i[json md].freeze
+FORMAT_SVG ||= { format: 'svg' }.freeze
+FORMAT_JSON ||= { format: 'json' }.freeze
+FORMAT_TEXT ||= { format: 'text' }.freeze
+FORMAT_HTML ||= { format: 'html' }.freeze
+FORMAT_ATOM ||= { format: 'atom' }.freeze
 
-# Simplified redirect helper for project routes
-# Detects locale from params or request, builds redirect path
-# When locale is in params: returns 301 permanent redirect (cacheable)
-# When locale is not in params: returns 302 temporary (varies by Accept-Language)
-def redirect_to_level(new_level, suffix: '', status: 302)
-  redirect(status: status) do |params, req|
-    locale = params[:locale] || LocaleUtils.find_best_locale(req).to_s
-    format_suffix = params[:format] ? ".#{params[:format]}" : ''
-    "/#{locale}/projects/#{params[:id]}/#{new_level}#{suffix}#{format_suffix}"
-  end
-end
+# Constraint hashes (frozen to reduce memory allocations per worker)
+CONSTRAINTS_ID ||= { id: VALID_ID }.freeze
+CONSTRAINTS_ID_PRIMARY_SECTION ||= {
+  id: VALID_ID,
+  section: Sections::PRIMARY_SECTION_REGEX
+}.freeze
+CONSTRAINTS_ID_VALID_SECTION ||= {
+  id: VALID_ID,
+  section: Sections::VALID_SECTION_REGEX
+}.freeze
+
+# Lambda constraints (frozen to reduce memory allocations per worker)
+# Used for redirect from localized JSON URLs to non-localized versions
+LOCALIZED_JSON_REDIRECT_CONSTRAINT ||= lambda { |req|
+  req.params[:id] =~ VALID_ID_FULL &&
+    req.params[:locale] =~ LEGAL_LOCALE_FULL
+}.freeze
 
 Rails.application.routes.draw do
   # First, handle routing of special cases.
   # Warning: Routes that don't take a :locale value must include a
   # "skip_before_action :redir_missing_locale ..." in their controller.
-
-  # The "robots.txt" file is always at the root of the
-  # document tree and has no locale. Handle it specially.
-  get '/robots.txt' => 'static_pages#robots',
-      defaults: { format: 'text' }, as: :robots
 
   # The /projects/NUMBER/badge image route needs speed and never uses a
   # locale. Perhaps most importantly, badge images need to have
@@ -65,37 +69,56 @@ Rails.application.routes.draw do
   # Therefore, instead of redirecting the badge image to a locale if
   # one is not listed, we do *NOT* support locale URLs in this case.
   get '/projects/:id/badge' => 'projects#badge',
-      constraints: { id: VALID_ID },
-      defaults: { format: 'svg' }
+      constraints: CONSTRAINTS_ID,
+      defaults: FORMAT_SVG
+
+  # JSON API route (locale-independent, outside scope for performance)
+  # GET /projects/:id.json (extension required)
+  # This is the expected common case, so it's matched early
+  get '/projects/:id.json' => 'projects#show_json',
+      constraints: CONSTRAINTS_ID,
+      defaults: FORMAT_JSON,
+      as: :project_json
 
   # The /badge_static/:value route needs speed and never uses a locale.
   # Beware: This route produces a result unconnected to a project's status.
   # Do NOT use this route on a project's README.md page!
   get '/badge_static/:value' => 'badge_static#show',
       constraints: { value: VALID_STATIC_VALUE },
-      defaults: { format: 'svg' }
+      defaults: FORMAT_SVG
+
+  # The "robots.txt" file is always at the root of the
+  # document tree and has no locale. Handle it specially.
+  get '/robots.txt' => 'static_pages#robots',
+      defaults: FORMAT_TEXT, as: :robots
 
   # These routes never use locales, so that the cache is shared across locales.
-  get '/project_stats/total_projects', to: 'project_stats#total_projects',
-    as: 'total_projects_project_stats',
-    constraints: ->(req) { req.format == :json }
-  get '/project_stats/nontrivial_projects',
+  get '/project_stats/total_projects.json', to: 'project_stats#total_projects',
+      as: 'total_projects_project_stats',
+      defaults: FORMAT_JSON
+  get '/project_stats/nontrivial_projects.json',
       to: 'project_stats#nontrivial_projects',
       as: 'nontrivial_projects_project_stats',
-      constraints: ->(req) { req.format == :json }
-  get '/project_stats/silver', to: 'project_stats#silver',
-    as: 'silver_project_stats',
-    constraints: ->(req) { req.format == :json }
-  get '/project_stats/gold', to: 'project_stats#gold',
-    as: 'gold_project_stats',
-    constraints: ->(req) { req.format == :json }
+      defaults: FORMAT_JSON
+  get '/project_stats/silver.json', to: 'project_stats#silver',
+      as: 'silver_project_stats',
+      defaults: FORMAT_JSON
+  get '/project_stats/gold.json', to: 'project_stats#gold',
+      as: 'gold_project_stats',
+      defaults: FORMAT_JSON
 
   # Weird special case: for David A. Wheeler to get log issues from Google,
   # we have to let Google verify this.  Locale is irrelevant.
   # It isn't really HTML, even though the filename extension is .html. See:
   # https://github.com/coreinfrastructure/best-practices-badge/issues/1223
   get '/google75f94b1182a77eb8.html' => 'static_pages#google_verifier',
-      defaults: { format: 'text' }
+      defaults: FORMAT_TEXT
+
+  # Redirect localized JSON to non-localized version (301 permanent)
+  # GET /:locale/projects/:id.json → /projects/:id.json
+  # Handle common mistake of adding locale to JSON URLs
+  get '/:locale/projects/:id.json' => redirect('/projects/%{id}.json', status: 301),
+      constraints: LOCALIZED_JSON_REDIRECT_CONSTRAINT
 
   # Now handle the normal case: routes with an optional locale prefix.
   # We include almost all routes inside a :locale header,
@@ -112,32 +135,87 @@ Rails.application.routes.draw do
     # The system itself always generates root URLs *without* a trailing slash.
     root to: 'static_pages#home'
 
-    get '/project_stats', to: 'project_stats#index', as: 'project_stats'
-    get '/project_stats/activity_30', to: 'project_stats#activity_30',
-      as: 'activity_30_project_stats',
-      constraints: ->(req) { req.format == :json }
-    get '/project_stats/daily_activity', to: 'project_stats#daily_activity',
-      as: 'daily_activity_project_stats',
-      constraints: ->(req) { req.format == :json }
-    get '/project_stats/reminders', to: 'project_stats#reminders',
-      as: 'reminders_project_stats',
-      constraints: ->(req) { req.format == :json }
-    get '/project_stats/silver_and_gold', to: 'project_stats#silver_and_gold',
-      as: 'silver_and_gold_project_stats',
-      constraints: ->(req) { req.format == :json }
-    get '/project_stats/percent_earning', to: 'project_stats#percent_earning',
-      as: 'percent_earning_project_stats',
-      constraints: ->(req) { req.format == :json }
-    get '/project_stats/user_statistics', to: 'project_stats#user_statistics',
-      as: 'user_statistics_project_stats',
-      constraints: ->(req) { req.format == :json }
+    # Handle /projects. There are a lot of pages in /projects, so crawlers
+    # constantly pound these resources. List them early, so that that
+    # we'll find these most-requested resources more quickly.
+
+    # Standard RESTful routes for projects
+    # Excludes :show and :edit (custom routes below handle sections)
+    # Excludes :update (custom route below with section parameter)
+    resources :projects, only: %i[index new create destroy],
+              constraints: CONSTRAINTS_ID
+
+    # Delete confirmation form (specific route before generic :section)
+    # GET (/:locale)/projects/:id/delete_form
+    get 'projects/:id/delete_form' => 'projects#delete_form',
+        constraints: CONSTRAINTS_ID,
+        as: :delete_form_project
+
+    # Edit with section (before show to avoid conflicts)
+    # GET (/:locale)/projects/:id/:section/edit
+    # Use PRIMARY_SECTION_REGEX to reject obsolete sections in edit URLs
+    get 'projects/:id/:section/edit' => 'projects#edit',
+        constraints: CONSTRAINTS_ID_PRIMARY_SECTION,
+        as: :edit_project_section
+
+    # Show section with format (HTML or Markdown)
+    # GET (/:locale)/projects/:id/:section(.:format)
+    # Use VALID_SECTION_REGEX to accept obsolete sections (controller will redirect)
+    # Controller also handles query parameter format: ?criteria_level=LEVEL
+    get 'projects/:id/:section' => 'projects#show',
+        constraints: CONSTRAINTS_ID_VALID_SECTION,
+        as: :project_section,
+        defaults: FORMAT_HTML
+
+    # Redirect to default section (handles all formats except JSON)
+    # GET (/:locale)/projects/:id(.:format) → redirects to default section
+    # Also handles legacy query parameter: ?criteria_level=LEVEL
+    # JSON format handled by non-localized routes above
+    get 'projects/:id' => 'projects#redirect_to_default_section',
+        constraints: CONSTRAINTS_ID,
+        as: :project_redirect
+
+    # Update project (PUT/PATCH) - section optional
+    # PUT/PATCH (/:locale)/projects/:id(/:section)
+    # Accepts patterns with or without section in URL
+    # Section in URL indicates where to redirect after successful update
+    # IMPORTANT: ANY project field can be updated regardless of section
+    # Use PRIMARY_SECTION_REGEX to reject obsolete sections in update URLs
+    match 'projects/:id(/:section)' => 'projects#update',
+          via: %i[put patch],
+          constraints: CONSTRAINTS_ID_PRIMARY_SECTION,
+          as: :update_project
+
+    get 'project_stats', to: 'project_stats#index', as: 'project_stats'
+
+    # These JSON routes use locales (they include locale-specific data)
+    get 'project_stats/activity_30.json', to: 'project_stats#activity_30',
+        as: 'activity_30_project_stats',
+        defaults: FORMAT_JSON
+    get 'project_stats/daily_activity.json', to: 'project_stats#daily_activity',
+        as: 'daily_activity_project_stats',
+        defaults: FORMAT_JSON
+    get 'project_stats/reminders.json', to: 'project_stats#reminders',
+        as: 'reminders_project_stats',
+        defaults: FORMAT_JSON
+    get 'project_stats/silver_and_gold.json', to: 'project_stats#silver_and_gold',
+        as: 'silver_and_gold_project_stats',
+        defaults: FORMAT_JSON
+    get 'project_stats/percent_earning.json', to: 'project_stats#percent_earning',
+        as: 'percent_earning_project_stats',
+        defaults: FORMAT_JSON
+    get 'project_stats/user_statistics.json', to: 'project_stats#user_statistics',
+        as: 'user_statistics_project_stats',
+        defaults: FORMAT_JSON
     # The following route isn't very useful; we may remove it in the future:
-    get '/project_stats/:id', to: 'project_stats#show',
-        constraints: { id: VALID_ID }
+    get 'project_stats/:id', to: 'project_stats#show',
+        constraints: CONSTRAINTS_ID
 
     get 'sessions/new'
 
     get 'signup' => 'users#new'
+
+    resources :users
 
     # Handle "static" pages (get-only pages)
     get 'home' => 'static_pages#home'
@@ -145,111 +223,11 @@ Rails.application.routes.draw do
     get 'criteria_discussion' => 'static_pages#criteria_discussion'
     get 'cookies' => 'static_pages#cookies'
 
-    get 'feed' => 'projects#feed', defaults: { format: 'atom' }
+    get 'feed' => 'projects#feed', defaults: FORMAT_ATOM
     get 'reminders' => 'projects#reminders_summary'
 
-    # PERFORMANCE NOTE: These route-level redirects are processed early in the request
-    # cycle, before controllers/models are loaded, using minimal memory. They return
-    # redirect responses directly from the routing layer.
-
-    # Redirects for deprecated level names/numbers to canonical names
-    # Single-hop redirects: 0 → passing (not 0 → bronze → passing)
-    # With locale: 301 permanent (cacheable), without locale: 302 temporary (varies by user)
-
-    Sections::REDIRECTS.each do |old_level, new_level|
-      # Show routes: /projects/:id/:old_level -> /projects/:id/:new_level
-      get "/:locale/projects/:id/#{old_level}(.:format)",
-          to: redirect(301) { |p, _|
-            fmt = p[:format] ? ".#{p[:format]}" : ''
-            "/#{p[:locale]}/projects/#{p[:id]}/#{new_level}#{fmt}"
-          },
-          constraints: { id: VALID_ID, locale: LEGAL_LOCALE }
-
-      get "/projects/:id/#{old_level}(.:format)",
-          to: redirect_to_level(new_level, status: 302),
-          constraints: { id: VALID_ID }
-
-      # Edit routes: /projects/:id/:old_level/edit -> /projects/:id/:new_level/edit
-      get "/:locale/projects/:id/#{old_level}/edit(.:format)",
-          to: redirect(301) { |p, _|
-            fmt = p[:format] ? ".#{p[:format]}" : ''
-            "/#{p[:locale]}/projects/#{p[:id]}/#{new_level}/edit#{fmt}"
-          },
-          constraints: { id: VALID_ID, locale: LEGAL_LOCALE }
-
-      get "/projects/:id/#{old_level}/edit(.:format)",
-          to: redirect_to_level(new_level, suffix: '/edit', status: 302),
-          constraints: { id: VALID_ID }
-    end
-
-    # Redirect routes without criteria_level to /passing (default)
-    # Always use temporary redirect (302) since default may change per-project in future
-    # Must come BEFORE resources :projects to take precedence over default routes
-    # All criteria_level queries (well-formed and malformed) handled by controller
-
-    # Show routes: Exclude JSON and MD formats (handled specially in resources)
-    get '/:locale/projects/:id(.:format)',
-        to: redirect_to_level('passing', status: 302),
-        constraints: lambda { |req|
-          # Check ID is numeric
-          id_ok = req.params[:id]&.match?(VALID_ID_FULL)
-          # Check locale is valid
-          locale_ok = req.params[:locale]&.match?(LEGAL_LOCALE_FULL)
-          # Exclude json and md formats
-          format_ok = !EXCLUDED_FORMATS.include?(req.format.to_sym)
-          # Don't match any criteria_level queries - let controller handle those
-          no_criteria_level = !req.query_string.include?('criteria_level')
-          id_ok && locale_ok && format_ok && no_criteria_level
-        }
-
-    get '/projects/:id(.:format)',
-        to: redirect_to_level('passing', status: 302),
-        constraints: lambda { |req|
-          # Check ID is numeric
-          id_ok = req.params[:id]&.match?(VALID_ID_FULL)
-          # Exclude json and md formats
-          format_ok = !EXCLUDED_FORMATS.include?(req.format.to_sym)
-          # Don't match any criteria_level queries - let controller handle those
-          no_criteria_level = !req.query_string.include?('criteria_level')
-          id_ok && format_ok && no_criteria_level
-        }
-
-    # Edit routes: All formats allowed (no malformed edit queries expected)
-    get '/:locale/projects/:id/edit(.:format)',
-        to: redirect_to_level('passing', suffix: '/edit', status: 302),
-        constraints: { id: VALID_ID, locale: LEGAL_LOCALE }
-
-    get '/projects/:id/edit(.:format)',
-        to: redirect_to_level('passing', suffix: '/edit', status: 302),
-        constraints: { id: VALID_ID }
-
-    resources :projects, constraints: { id: VALID_ID } do
-      member do
-        get 'delete_form' => 'projects#delete_form'
-        get '' => 'projects#show_json',
-            constraints: ->(req) { req.format == :json }
-        get '' => 'projects#show_markdown',
-            constraints: ->(req) { req.format == :md }
-        get ':criteria_level(.:format)' => 'projects#show',
-            constraints: { criteria_level: Sections::VALID_SECTION_REGEX },
-            as: :level
-        get ':criteria_level/edit(.:format)' => 'projects#edit',
-            constraints: { criteria_level: Sections::VALID_SECTION_REGEX },
-            as: :level_edit
-      end
-    end
-    match(
-      'projects/:id/(:criteria_level/)edit' => 'projects#update',
-      via: %i[put patch], as: :put_project,
-      constraints: { criteria_level: Sections::VALID_SECTION_REGEX }
-    )
-
-    resources :users
     resources :account_activations, only: [:edit]
     resources :password_resets,     only: %i[new create edit update]
-
-    get 'criteria/:criteria_level', to: 'criteria#show'
-    get 'criteria', to: 'criteria#index'
 
     get 'login' => 'sessions#new'
     post 'login' => 'sessions#create'
@@ -259,6 +237,9 @@ Rails.application.routes.draw do
 
     get 'unsubscribe' => 'unsubscribe#edit'
     post 'unsubscribe' => 'unsubscribe#create'
+
+    get 'criteria/:criteria_level', to: 'criteria#show'
+    get 'criteria', to: 'criteria#index'
 
     # No other route, send a 404 ("not found").
     match '*path', via: :all, to: 'static_pages#error_404'

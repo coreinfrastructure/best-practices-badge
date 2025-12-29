@@ -26,7 +26,7 @@ class ProjectGetTest < ActionDispatch::IntegrationTest
     # because the secure_headers gem integrates at the Rack level
     # (thus a controller test does not invoke it).
 
-    get project_path(id: @project_one.id, locale: 'en') + '/passing'
+    get project_section_path(@project_one, 'passing', locale: 'en')
     assert_response :success
 
     # Check some normal headers
@@ -70,7 +70,7 @@ class ProjectGetTest < ActionDispatch::IntegrationTest
   # rubocop:enable Metrics/BlockLength
 
   test 'ensure CORS set when origin set' do
-    get project_path(@project_one, locale: :en) + '/passing',
+    get project_section_path(@project_one, 'passing', locale: :en),
         headers: { 'Origin' => 'https://en/example.com' }
     assert_response :success
 
@@ -96,68 +96,68 @@ class ProjectGetTest < ActionDispatch::IntegrationTest
   end
 
   test 'Redirect malformed query string criteria_level,2' do
-    get project_path(id: @project_one.id, locale: 'en') + '?criteria_level,2'
+    get "/en/projects/#{@project_one.id}?criteria_level,2"
     assert_response :moved_permanently
     assert_redirected_to "/en/projects/#{@project_one.id}/gold"
   end
 
   test 'Redirect malformed query string criteria_level,1' do
-    get project_path(id: @project_one.id, locale: 'de') + '?criteria_level,1'
+    get "/de/projects/#{@project_one.id}?criteria_level,1"
     assert_response :moved_permanently
     assert_redirected_to "/de/projects/#{@project_one.id}/silver"
   end
 
   test 'Redirect malformed query string criteria_level,0' do
-    get project_path(id: @project_one.id, locale: 'fr') + '?criteria_level,0'
+    get "/fr/projects/#{@project_one.id}?criteria_level,0"
     assert_response :moved_permanently
     assert_redirected_to "/fr/projects/#{@project_one.id}/passing"
   end
 
   test 'Redirect well-formed query string criteria_level=1 to silver' do
-    get project_path(id: @project_one.id, locale: 'en') + '?criteria_level=1'
+    get "/en/projects/#{@project_one.id}?criteria_level=1"
     assert_response :moved_permanently
     assert_redirected_to "/en/projects/#{@project_one.id}/silver"
   end
 
   test 'Redirect no-locale malformed query string criteria_level,1' do
-    get project_path(id: @project_one.id, locale: nil) + '?criteria_level,1'
+    get "/projects/#{@project_one.id}?criteria_level,1"
     assert_response :found
     # We do a 2-step redirect because the *locale* causes :found
     assert_redirected_to "/en/projects/#{@project_one.id}?criteria_level,1"
   end
 
   test 'Redirect well-formed query string criteria_level=2 to gold' do
-    get project_path(id: @project_one.id, locale: 'de') + '?criteria_level=2'
+    get "/de/projects/#{@project_one.id}?criteria_level=2"
     assert_response :moved_permanently
     assert_redirected_to "/de/projects/#{@project_one.id}/gold"
   end
 
   test 'Redirect well-formed query string criteria_level=0 to passing' do
-    get project_path(id: @project_one.id, locale: 'fr') + '?criteria_level=0'
+    get "/fr/projects/#{@project_one.id}?criteria_level=0"
     assert_response :moved_permanently
     assert_redirected_to "/fr/projects/#{@project_one.id}/passing"
   end
 
   test 'Redirect well-formed query string criteria_level=silver to silver' do
-    get project_path(id: @project_one.id, locale: 'en') + '?criteria_level=silver'
+    get "/en/projects/#{@project_one.id}?criteria_level=silver"
     assert_response :moved_permanently
     assert_redirected_to "/en/projects/#{@project_one.id}/silver"
   end
 
   test 'Redirect well-formed query string criteria_level=gold to gold' do
-    get project_path(id: @project_one.id, locale: 'de') + '?criteria_level=gold'
+    get "/de/projects/#{@project_one.id}?criteria_level=gold"
     assert_response :moved_permanently
     assert_redirected_to "/de/projects/#{@project_one.id}/gold"
   end
 
   test 'Redirect well-formed query string criteria_level=passing to passing' do
-    get project_path(id: @project_one.id, locale: 'fr') + '?criteria_level=passing'
+    get "/fr/projects/#{@project_one.id}?criteria_level=passing"
     assert_response :moved_permanently
     assert_redirected_to "/fr/projects/#{@project_one.id}/passing"
   end
 
   test 'Redirect no-locale well-formed query criteria_level=1 to silver' do
-    get project_path(id: @project_one.id, locale: nil) + '?criteria_level=1'
+    get "/projects/#{@project_one.id}?criteria_level=1"
     assert_response :found
     assert_redirected_to "/en/projects/#{@project_one.id}?criteria_level=1"
   end
@@ -166,7 +166,7 @@ class ProjectGetTest < ActionDispatch::IntegrationTest
     # Log in as project owner to see edit links
     log_in_as(users(:test_user))
     # View the permissions show page
-    get level_project_path(@project_one, 'permissions', locale: 'en')
+    get project_section_path(@project_one, 'permissions', locale: 'en')
     assert_response :success
     # Verify edit link points to permissions edit page, not passing (0) edit page
     # 'permissions' stays as 'permissions' (not normalized to a number)
@@ -177,7 +177,7 @@ class ProjectGetTest < ActionDispatch::IntegrationTest
     # Log in as project owner to see edit links
     log_in_as(users(:test_user))
     # View the silver show page
-    get level_project_path(@project_one, 'silver', locale: 'en')
+    get project_section_path(@project_one, 'silver', locale: 'en')
     assert_response :success
     # Verify edit link uses human-readable 'silver', not numeric '1'
     # URLs should always use human-readable forms (passing, silver, gold)
@@ -186,7 +186,7 @@ class ProjectGetTest < ActionDispatch::IntegrationTest
 
   test 'Section dropdown includes links to other levels' do
     # View the passing show page
-    get level_project_path(@project_one, 'passing', locale: 'en')
+    get project_section_path(@project_one, 'passing', locale: 'en')
     assert_response :success
     # Verify section dropdown contains link to silver level
     assert_select 'a[href=?]', "/en/projects/#{@project_one.id}/silver"

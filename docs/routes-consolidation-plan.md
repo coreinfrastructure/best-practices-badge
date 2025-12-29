@@ -399,7 +399,11 @@ for significant increases in controller complexity and conceptual confusion.
 This section provides the exact implementation details including route
 definitions, controller methods, and memory impact analysis.
 
-### Phase 0: Rename and Consolidate Constants (DO THIS FIRST)
+### Phase 0: Rename and Consolidate Constants (COMPLETED)
+
+**Status**: This phase has been completed. The constants have been defined in
+`config/initializers/01_section_names.rb` (not `00_section_names.rb` as originally
+planned, because it needs to load after `00_criteria_hash.rb`).
 
 **Goal**: Rename constants to accurately reflect their meaning, compute them once
 in a single location, freeze them, and make them available to both routes and
@@ -417,38 +421,33 @@ controllers. This provides clear, consistent naming for all subsequent changes.
 
 #### Proposed Constants (All Frozen)
 
-Define these in `config/initializers/00_section_names.rb` (renamed from or
-alongside `00_criteria_levels.rb`):
+Define these in `config/initializers/01_section_names.rb` (named with "01_"
+prefix because it must load AFTER `00_criteria_hash.rb` which loads the YAML
+and exports level keys):
 
 ```ruby
 # frozen_string_literal: true
 
-# Section names and routing constants for the Best Practices Badge application
-# Loaded early so both routes.rb and controllers can use them
-# Namespaced under Sections:: to avoid polluting global namespace
+# **CANONICAL LISTS** of valid criteria level names and routing constants
+#
+# This file defines the authoritative list of criteria levels and sections
+# used throughout the application. These constants are used by:
+# - config/routes.rb - to build routing constraints
+# - app/controllers - for validation and redirects
+# - config/initializers/cors.rb - to build CORS resource patterns
+#
+# This file is named with "01_" prefix to ensure it loads AFTER
+# 00_criteria_hash.rb which loads the YAML and exports level keys.
+#
+# IMPORTANT: Level names are DERIVED from the YAML criteria files via
+# constants exported from 00_criteria_hash.rb (YAML_METAL_LEVEL_KEYS and
+# YAML_BASELINE_LEVEL_KEYS). This ensures YAML is loaded only once.
 
 module Sections
-  # Metal badge levels (original three levels)
-  METAL_LEVEL_NAMES = %w[passing silver gold].freeze
-  METAL_LEVEL_NUMBERS = %w[0 1 2].freeze
-
-  # Baseline badge levels (new framework)
-  BASELINE_LEVEL_NAMES = %w[baseline-1 baseline-2 baseline-3].freeze
-
-  # All criteria levels (levels that have criteria to evaluate)
-  ALL_CRITERIA_LEVEL_NAMES = (METAL_LEVEL_NAMES + BASELINE_LEVEL_NAMES).freeze
-
-  # Special sections (not criteria levels, but valid sections)
-  SPECIAL_SECTION_NAMES = %w[permissions].freeze
-
-  # All valid section names (criteria levels + special sections)
-  ALL_NAMES = (ALL_CRITERIA_LEVEL_NAMES + SPECIAL_SECTION_NAMES).freeze
-
-  # Obsolete section names (deprecated, should redirect)
-  OBSOLETE_NAMES = (METAL_LEVEL_NUMBERS + %w[bronze]).freeze
-
-  # Map obsolete names to their canonical equivalents
-  # Used for redirects in routes and controller
+  # Map of obsolete names to their canonical equivalents
+  # This mapping is the authoritative source for canonical names
+  # NOTE: The YAML files use obsolete numeric keys ('0', '1', '2')
+  # but we route using canonical names ('passing', 'silver', 'gold')
   REDIRECTS = {
     '0' => 'passing',
     '1' => 'silver',
@@ -456,19 +455,56 @@ module Sections
     'bronze' => 'passing'
   }.freeze
 
-  # Valid sections (excludes obsolete names)
-  VALID_NAMES = (ALL_NAMES - OBSOLETE_NAMES).freeze
+  # Use level keys exported from 00_criteria_hash.rb (which loaded the YAML)
+  # This avoids loading YAML twice - single source of truth
+
+  # Metal badge levels - map numeric YAML keys to canonical names
+  # The YAML uses '0', '1', '2' but we want canonical names
+  # E.g., ['passing', 'silver', 'gold']
+  METAL_LEVEL_NAMES = YAML_METAL_LEVEL_KEYS.map { |k| REDIRECTS[k] || k }
+                                           .freeze
+
+  # Metal level numbers (obsolete keys still used in YAML)
+  # E.g., ['0', '1', '2']
+  METAL_LEVEL_NUMBERS = YAML_METAL_LEVEL_KEYS
+
+  # Baseline badge levels (already use canonical names in YAML)
+  # E.g., ['baseline-1', 'baseline-2', 'baseline-3']
+  BASELINE_LEVEL_NAMES = YAML_BASELINE_LEVEL_KEYS
+
+  # Synonyms for existing levels (obsolete names beyond numeric keys)
+  SYNONYMS = %w[bronze].freeze # bronze = passing
+
+  # Special forms (non-criteria sections - views/forms not tied to a criteria level)
+  SPECIAL_FORMS = %w[permissions].freeze
+
+  # All criteria levels (canonical names only - no obsolete numbers)
+  # Built up from canonical level names derived from YAML
+  ALL_CRITERIA_LEVEL_NAMES = (METAL_LEVEL_NAMES + BASELINE_LEVEL_NAMES).freeze
+
+  # All canonical section names (criteria levels + special sections)
+  # These are the preferred names that we redirect to - no obsolete names
+  ALL_CANONICAL_NAMES = (ALL_CRITERIA_LEVEL_NAMES + SPECIAL_FORMS).freeze
+
+  # Obsolete section names (deprecated, should redirect to canonical names)
+  # Built up from obsolete numeric keys and synonym names
+  OBSOLETE_NAMES = (METAL_LEVEL_NUMBERS + SYNONYMS).freeze
+
+  # Valid section names (all names we accept - canonical + obsolete)
+  # Used for validation where we accept obsolete names (then redirect to canonical)
+  VALID_NAMES = (ALL_CANONICAL_NAMES + OBSOLETE_NAMES).freeze
 
   # Regex matching only primary/canonical section names
   # Used in controller validation and routes that reject obsolete names
-  PRIMARY_SECTION_REGEX = /#{Regexp.union(VALID_NAMES)}/.freeze
+  PRIMARY_SECTION_REGEX = Regexp.union(ALL_CANONICAL_NAMES)
 
-  # Regex matching primary section names AND obsolete synonyms
-  # Used in routes.rb for :section parameter validation (accepts obsolete for redirect)
-  VALID_SECTION_REGEX = /#{Regexp.union(ALL_NAMES + OBSOLETE_NAMES)}/.freeze
+  # Regex matching all valid section names (canonical + obsolete synonyms)
+  # Used in routes.rb for :section parameter validation
+  # (accepts obsolete for redirect)
+  VALID_SECTION_REGEX = Regexp.union(VALID_NAMES)
 
   # Default section to use when none specified
-  DEFAULT_SECTION = 'passing'.freeze
+  DEFAULT_SECTION = 'passing'
 end
 ```
 
@@ -478,12 +514,13 @@ end
 2. **Namespaced**: Under `Sections::` module to avoid polluting global namespace
 3. **Clear naming**:
    - `Sections::ALL_CRITERIA_LEVEL_NAMES` - only actual criteria levels
-   - `Sections::ALL_NAMES` - includes special sections like permissions
-   - `Sections::VALID_NAMES` - excludes obsolete names
+   - `Sections::ALL_CANONICAL_NAMES` - includes special sections like permissions (canonical only)
+   - `Sections::VALID_NAMES` - all names we accept (canonical + obsolete)
    - `Sections::REDIRECTS` - obsolete to canonical mapping
    - `Sections::PRIMARY_SECTION_REGEX` - route constraint for primary sections only
    - `Sections::VALID_SECTION_REGEX` - route constraint including obsolete
    - `Sections::DEFAULT_SECTION` - default section ('passing')
+   - `Sections::SPECIAL_FORMS` - non-criteria sections (e.g., permissions)
 4. **Computed once**: Regexes and arrays frozen, not recomputed
 5. **Available everywhere**: Initializers load before routes and controllers
 6. **Easy maintenance**: Adding new levels only requires updating one place
@@ -540,9 +577,9 @@ end
 #### Migration Steps for Phase 0
 
 1. **Create/update initializer**:
-   - File: `config/initializers/00_section_names.rb`
+   - File: `config/initializers/01_section_names.rb`
    - Define all constants as shown above
-   - Ensure file loads before routes (00_ prefix ensures early loading)
+   - Ensure file loads after 00_criteria_hash.rb (01_ prefix ensures correct order)
 
 2. **Update routes.rb**:
    - Remove `LEVEL_REDIRECTS` constant (use `SECTION_REDIRECTS` instead)
@@ -859,7 +896,7 @@ match 'projects/:id(/:section)(/edit)', to: 'projects#update',
 # From config/routes.rb:
 #   LEGAL_LOCALE - derived from I18n.available_locales
 #   VALID_ID - matches [1-9][0-9]*
-# From config/initializers/00_section_names.rb (Sections module):
+# From config/initializers/01_section_names.rb (Sections module):
 #   Sections::VALID_SECTION_REGEX - matches primary and obsolete section names
 #   Sections::PRIMARY_SECTION_REGEX - matches only primary sections (excludes obsolete)
 
@@ -1003,7 +1040,7 @@ get 'projects/:id', to: 'projects#show_json',
 
 ```ruby
 class ProjectsController < ApplicationController
-  # Use frozen constants from Sections module (config/initializers/00_section_names.rb)
+  # Use frozen constants from Sections module (config/initializers/01_section_names.rb)
   # All constants computed once at boot time and available via Sections:: prefix
   # No need to redefine them - just reference Sections::CONSTANT_NAME directly
 

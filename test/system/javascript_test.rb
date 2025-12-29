@@ -51,18 +51,18 @@ class JavascriptTest < ApplicationSystemTestCase
   end
 
   test 'Check show/hide Met works for silver' do
-    visit project_path(@project_passing, locale: :en, criterion_level: '1')
+    visit project_section_path(@project_passing, 'silver', locale: :en)
     wait_for_jquery
     find('#toggle-expand-all-panels').click
     wait_for_jquery
     assert_selector(:css, '#contribution_requirements')
     assert_selector(:css, '#report_tracker')
-    assert_selector(:css, '#warnings')
+    assert_selector(:css, '#warnings_strict')
     find('#toggle-hide-metna-criteria').click
     wait_for_jquery
     refute_selector(:css, '#contribution_requirements')
     refute_selector(:css, '#report_tracker')
-    refute_selector(:css, '#warnings')
+    refute_selector(:css, '#warnings_strict')
   end
 
   test 'Can edit baseline-1 form with JavaScript updates' do

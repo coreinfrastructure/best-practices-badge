@@ -14,10 +14,10 @@
 <%# Badge level navigation - permissions is not a badge level %>
 <%
   # Generate path-based URLs for badge levels (not query parameters)
-  # Rails auto-generates level_project_path and level_edit_project_path from routes
-  passing_path = view_only ? level_project_path(project, 'passing') : level_edit_project_path(project, 'passing')
-  silver_path = view_only ? level_project_path(project, 'silver') : level_edit_project_path(project, 'silver')
-  gold_path = view_only ? level_project_path(project, 'gold') : level_edit_project_path(project, 'gold')
+  # Rails auto-generates project_section_path and edit_project_section_path from routes
+  passing_path = view_only ? project_section_path(project, 'passing') : edit_project_section_path(project, 'passing')
+  silver_path = view_only ? project_section_path(project, 'silver') : edit_project_section_path(project, 'silver')
+  gold_path = view_only ? project_section_path(project, 'gold') : edit_project_section_path(project, 'gold')
 %>
 <br>
 <p>
@@ -61,7 +61,7 @@
         </div>
       <% else %>
         <%# Editable form %>
-        <%= bootstrap_form_for project, url: put_project_path(project, criteria_level: 'permissions') do |f| %>
+        <%= bootstrap_form_for project, url: update_project_path(project, section: 'permissions') do |f| %>
         <%= render 'shared/error_messages', object: f.object %>
         <%= f.hidden_field :lock_version %>
 

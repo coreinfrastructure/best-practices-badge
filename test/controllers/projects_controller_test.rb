@@ -234,8 +234,11 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     only_correct_criteria_selectable('baseline-1')
   end
 
-  test 'should show project JSON data with locale' do
+  test 'should redirect project JSON with locale to non-locale JSON' do
     get "/en/projects/#{@project.id}.json"
+    assert_response :moved_permanently
+    assert_redirected_to "/projects/#{@project.id}.json"
+    follow_redirect!
     assert_response :success
     body = response.parsed_body
     assert_equal 'Pathfinder OS', body['name']
@@ -255,17 +258,39 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal [], body['additional_rights']
   end
 
+  test 'should redirect well-formed criteria_level query param to path' do
+    # Legacy URL format: /projects/1?criteria_level=1
+    # Handled by redirect_to_default_section action
+    # Should redirect to: /projects/1/silver
+    get "/en/projects/#{@project.id}?criteria_level=1"
+    assert_response :moved_permanently
+    assert_redirected_to "/en/projects/#{@project.id}/silver"
+  end
+
+  test 'should redirect malformed criteria_level query param to path' do
+    # Malformed URL format: /projects/1?criteria_level,2
+    # Handled by redirect_to_default_section action
+    # Should redirect to: /projects/1/gold
+    get "/en/projects/#{@project.id}?criteria_level,2"
+    assert_response :moved_permanently
+    assert_redirected_to "/en/projects/#{@project.id}/gold"
+  end
+
   test 'should show markdown for all levels when level not said' do
+    # Redirects to default section, then follow to get markdown
     get "/en/projects/#{@project.id}.md"
+    assert_response :redirect
+    follow_redirect!
     assert_response :success
     assert_includes @response.body, 'The project website MUST provide information on how'
     assert_includes @response.body, 'Passing'
-    assert_includes @response.body, 'Silver'
-    assert_includes @response.body, 'Gold'
+    # When following redirect, we only get the default section (passing)
+    # not all levels, so don't assert for Silver/Gold
   end
 
   test 'should show markdown for one given level' do
-    get "/en/projects/#{@project.id}.md?criteria_level=0"
+    # Use new path-based format instead of query parameter
+    get "/en/projects/#{@project.id}/passing.md"
     assert_response :success
     assert_includes @response.body, 'The project website MUST provide information on how'
     assert_includes @response.body, 'Passing'
@@ -274,7 +299,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'Markdown generates correctly for French' do
-    get "/fr/projects/#{@project.id}.md?criteria_level=1"
+    # Use new path-based format instead of query parameter
+    get "/fr/projects/#{@project.id}/silver.md"
     assert_response :success
     # Split up text to fool spellchecker. "Project" is easily misspelled
     # and there's no mechanism to disable spellchecking for a specific line.
@@ -287,6 +313,35 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes @response.body, 'Passing'
     assert_not_includes @response.body, 'Silver'
     assert_not_includes @response.body, 'Gold'
+  end
+
+  test 'should raise error for permissions section in markdown format' do
+    # Permissions section doesn't support markdown format
+    assert_raises(ActionController::RoutingError) do
+      get "/en/projects/#{@project.id}/permissions.md"
+    end
+  end
+
+  test 'validate_section accepts canonical section names' do
+    # Test the defensive validation accepts canonical sections
+    controller = ProjectsController.new
+    # Should not raise for canonical sections
+    Sections::ALL_CANONICAL_NAMES.each do |section|
+      assert_nothing_raised do
+        controller.send(:validate_section, section)
+      end
+    end
+  end
+
+  test 'validate_section rejects invalid section names' do
+    # Test the defensive validation rejects invalid sections
+    controller = ProjectsController.new
+    # Should raise for invalid sections
+    error =
+      assert_raises(ActionController::RoutingError) do
+        controller.send(:validate_section, 'invalid_section_name')
+      end
+    assert_match(/Invalid section/, error.message)
   end
 
   test 'should get edit' do
@@ -345,7 +400,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
         "+ #{users(:test_user_mark).id}, #{users(:test_user_melissa).id}"
     }
     # Check that results are what was expected
-    assert_redirected_to project_path(assigns(:project))
+    assert_redirected_to project_section_path(assigns(:project), 'passing')
     assert AdditionalRight.exists?(
       project_id: @project.id,
       user_id: users(:test_user_mark).id
@@ -378,7 +433,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
         "- #{users(:test_user_melissa).id}, #{users(:test_user_mark).id}"
     }
     # TODO: Weird http/https discrepancy in test
-    # assert_redirected_to project_path(@project, locale: :en)
+    # assert_redirected_to project_section_path(@project, 'passing', locale: :en)
     assert_equal 0, AdditionalRight.for_project(@project.id).count
   end
 
@@ -455,10 +510,9 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
         homepage_url: @project.homepage_url
       }
     }
-    assert_redirected_to project_path(assigns(:project))
-    follow_redirect! # Follow first redirect to /projects/:id
-    assert_response :redirect # Should redirect again to /projects/:id/passing
-    follow_redirect! # Follow second redirect to /projects/:id/passing
+    assert_redirected_to project_section_path(assigns(:project), 'passing')
+    follow_redirect! # Follow redirect to /en/projects/:id/passing
+    assert_response :success # Should render the show page
     @project.reload
     assert_equal @project.name, new_name
     # Ensure that replied page uses a /badge_static badge image.
@@ -480,7 +534,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
         homepage_url: @project.homepage_url
       }
     }
-    assert_redirected_to project_path(assigns(:project))
+    assert_redirected_to project_section_path(assigns(:project), 'passing')
     @project.reload
     assert_equal @project.name, new_name
   end
@@ -559,7 +613,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     }
     log_in_as(@project.user)
     patch "/en/projects/#{@project.id}", params: { project: new_project_data1 }
-    assert_redirected_to project_path(@project, locale: :en)
+    assert_redirected_to project_section_path(@project, 'passing', locale: :en)
     get "/en/projects/#{@project.id}/passing/edit"
     assert_includes @response.body, 'Edit Project Badge Status'
     assert_includes @response.body, new_name1
@@ -622,7 +676,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     patch "/en/projects/#{@project.id}", params: {
       project: { name: new_name }
     }
-    assert_redirected_to project_path(assigns(:project))
+    assert_redirected_to project_section_path(assigns(:project), 'passing')
     @project.reload
     assert_equal new_name, @project.name
   end
@@ -640,7 +694,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     patch "/en/projects/#{@project.id}", params: {
       project: { user_id: @admin.id }
     }
-    assert_redirected_to project_path(assigns(:project))
+    assert_redirected_to project_section_path(assigns(:project), 'passing')
     @project.reload
     assert_not_equal @admin.id, @project.user_id
     assert_equal old_user.id, @project.user_id
@@ -649,7 +703,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     patch "/en/projects/#{@project.id}", params: {
       project: { user_id: @admin.id, repeat_user_id: @admin.id + 1 }
     }
-    assert_redirected_to project_path(assigns(:project))
+    assert_redirected_to project_section_path(assigns(:project), 'passing')
     @project.reload
     assert_equal old_user.id, @project.user_id
 
@@ -660,7 +714,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     patch "/en/projects/#{@project.id}", params: {
       project: { user_id: no_such_uid, user_id_repeat: no_such_uid }
     }
-    assert_redirected_to project_path(assigns(:project))
+    assert_redirected_to project_section_path(assigns(:project), 'passing')
     @project.reload
     assert_not_equal no_such_uid, @project.user_id
     assert_equal old_user.id, @project.user_id
@@ -670,7 +724,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     patch "/en/projects/#{@project.id}", params: {
       project: { user_id: @admin.id, user_id_repeat: @admin.id }
     }
-    assert_redirected_to project_path(assigns(:project))
+    assert_redirected_to project_section_path(assigns(:project), 'passing')
     @project.reload
     assert_equal @admin.id, @project.user_id
   end
@@ -692,7 +746,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     patch "/en/projects/#{@project.id}", params: {
       project: { user_id: @admin.id, user_id_repeat: @admin.id }
     }
-    assert_redirected_to project_path(assigns(:project))
+    assert_redirected_to project_section_path(assigns(:project), 'passing')
     @project.reload
     # Notice that ownership has changed.
     assert_equal @project.user_id, @admin.id
@@ -719,7 +773,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     patch "/en/projects/#{@project.id}", params: {
       project: { user_id: @admin.id, user_id_repeat: @admin.id }
     }
-    assert_redirected_to project_path(assigns(:project))
+    assert_redirected_to project_section_path(assigns(:project), 'passing')
     @project.reload
     # Notice that nothing has changed.
     assert_not_equal @project.user_id, @admin.id
@@ -932,7 +986,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
         project: { repo_url: @project.repo_url }
       }
     end
-    assert_redirected_to project_path(@project, locale: :en)
+    assert_redirected_to project_section_path(@project, 'passing', locale: :en)
   end
 
   test 'should succeed and then fail to change non-blank repo_url' do
@@ -1261,11 +1315,12 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     existing_repo_url = 'https://github.com/user/existingrepo'
 
     # Create a project with existing repo URL
+    # Use fixture directly to avoid class reloading issues
     Project.create!(
       name: 'Existing Project',
       repo_url: existing_repo_url,
       homepage_url: 'https://example.com',
-      user: @user
+      user: users(:test_user)
     )
 
     # Mock github client that returns repos including the existing one
@@ -1431,7 +1486,12 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test 'project show without locale redirects with locale detection' do
     get "/projects/#{@project.id}",
         headers: { HTTP_ACCEPT_LANGUAGE: 'fr,en-US;q=0.7,en;q=0.3' }
-    assert_response :found # 302 temporary
+    assert_response :found # 302 temporary (locale redirect)
+    # First redirect adds locale
+    assert_redirected_to "/fr/projects/#{@project.id}"
+    follow_redirect!
+    # Second redirect adds default section
+    assert_response :found # 302 temporary (section redirect)
     assert_redirected_to "/fr/projects/#{@project.id}/passing"
   end
 
@@ -1439,37 +1499,46 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     log_in_as(@project.user)
     get "/projects/#{@project.id}/edit",
         headers: { HTTP_ACCEPT_LANGUAGE: 'de,en-US;q=0.7,en;q=0.3' }
-    assert_response :found # 302 temporary
-    assert_redirected_to "/de/projects/#{@project.id}/passing/edit"
+    # Route doesn't exist - edit requires section parameter
+    assert_response :not_found
   end
 
   # Test redirects for edit paths without criteria_level
-  test 'project edit with locale but no criteria_level redirects to passing' do
+  test 'project edit with locale but no criteria_level returns 404' do
     log_in_as(@project.user)
     get "/en/projects/#{@project.id}/edit"
-    assert_response :found # 302 temporary
-    assert_redirected_to "/en/projects/#{@project.id}/passing/edit"
+    # Route doesn't exist - edit requires section parameter
+    assert_response :not_found
   end
 
-  # Test that JSON and Markdown formats are NOT redirected to /passing
-  # Note: paths without locale still get locale detection redirect
-  test 'project markdown without locale redirects for locale but not criteria' do
-    get "/projects/#{@project.id}.md"
-    assert_response :redirect
-    # Should redirect to add locale, but not to add /passing
-    assert_match %r{/[a-z]{2}/projects/#{@project.id}\.md\z}, @response.location
-    assert_not_includes @response.location, '/passing'
+  # Test that markdown redirects to default section with format preserved
+  test 'project markdown without locale redirects to default section' do
+    get "/projects/#{@project.id}.md",
+        headers: { HTTP_ACCEPT_LANGUAGE: 'fr,en-US;q=0.7,en;q=0.3' }
+    # First redirect for locale detection
+    assert_response :found
+    assert_redirected_to "/fr/projects/#{@project.id}.md"
+    follow_redirect!
+    # Second redirect to default section
+    assert_response :found
+    assert_redirected_to "/fr/projects/#{@project.id}/passing.md"
   end
 
-  test 'project JSON with locale is not redirected to passing' do
+  test 'project JSON with locale redirects to non-locale JSON' do
     get "/en/projects/#{@project.id}.json"
+    assert_response :moved_permanently
+    assert_redirected_to "/projects/#{@project.id}.json"
+    follow_redirect!
     assert_response :success
     body = response.parsed_body
     assert_equal 'Pathfinder OS', body['name']
   end
 
-  test 'project markdown with locale is not redirected to passing' do
+  test 'project markdown with locale redirects to default section markdown' do
     get "/en/projects/#{@project.id}.md"
+    assert_response :found
+    assert_redirected_to "/en/projects/#{@project.id}/passing.md"
+    follow_redirect!
     assert_response :success
     assert_includes @response.body, 'Passing'
   end
@@ -1505,14 +1574,14 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test 'update with continue and criteria_level redirects correctly' do
     # Test line 957: continue with criteria_level set
     log_in_as(@project.user)
-    patch project_path(@project, criteria_level: 'baseline-1'),
+    patch update_project_path(@project, 'baseline-1'),
           params: {
             project: { name: @project.name },
             continue: 'Quality'
           }
     assert_response :redirect
     # Should redirect to baseline-1/edit with anchor
-    assert_redirected_to "#{project_path(@project)}/baseline-1/edit#Quality"
+    assert_redirected_to edit_project_section_path(@project, 'baseline-1') + '#Quality'
   end
 
   # Test SQL fieldname quoting functionality

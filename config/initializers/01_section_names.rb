@@ -31,14 +31,26 @@
 module Sections
   # Map of obsolete names to their canonical equivalents
   # This mapping is the authoritative source for canonical names
-  # NOTE: The YAML files use obsolete numeric keys ('0', '1', '2')
-  # but we route using canonical names ('passing', 'silver', 'gold')
+  # NOTE: The YAML files use numeric keys ('0', '1', '2')
+  # but we route using canonical names ('passing', 'silver', 'gold').
+  # We don't change the YAML file keys because that's entirely internal
+  # and changing them would severely impact our long-suffering human
+  # translators.
   REDIRECTS = {
     '0' => 'passing',
     '1' => 'silver',
     '2' => 'gold',
     'bronze' => 'passing'
   }.freeze
+
+  # Mapping of synonyms to internal ids.
+  SYNONYMS_TO_INTERNAL = { 'bronze' => '0' }.freeze
+
+  # Synonyms for existing levels (obsolete names beyond numeric keys)
+  SYNONYMS = SYNONYMS_TO_INTERNAL.keys.freeze
+
+  # Special forms (non-criteria sections not tied to a criteria level)
+  SPECIAL_FORMS = %w[permissions].freeze
 
   # Use level keys exported from 00_criteria_hash.rb (which loaded the YAML)
   # This avoids loading YAML twice - single source of truth
@@ -56,12 +68,6 @@ module Sections
   # Baseline badge levels (already use canonical names in YAML)
   # E.g., ['baseline-1', 'baseline-2', 'baseline-3']
   BASELINE_LEVEL_NAMES = YAML_BASELINE_LEVEL_KEYS
-
-  # Synonyms for existing levels (obsolete names beyond numeric keys)
-  SYNONYMS = %w[bronze].freeze # bronze = passing
-
-  # Special forms (non-criteria sections - views/forms not tied to a criteria level)
-  SPECIAL_FORMS = %w[permissions].freeze
 
   # All criteria levels (canonical names only - no obsolete numbers)
   # Built up from canonical level names derived from YAML
@@ -90,4 +96,31 @@ module Sections
 
   # Default section to use when none specified
   DEFAULT_SECTION = 'passing'
+
+  # Reverse mapping: canonical name -> internal numeric key
+  # E.g., 'passing' -> '0', 'silver' -> '1', 'gold' -> '2'
+  # Pre-computed once to avoid recalculation on every request
+  # Filter out synonyms (like 'bronze') before inverting to avoid ambiguity
+  CANONICAL_TO_INTERNAL = REDIRECTS.except(*SYNONYMS).invert.freeze
+
+  # Complete mapping: any valid input -> canonical name
+  # Pre-computed for O(1) lookup in normalize_criteria_level
+  # Maps obsolete names and canonical names to their canonical form
+  INPUT_TO_CANONICAL = REDIRECTS.merge(
+    ALL_CANONICAL_NAMES.to_h { |name| [name, name] }
+  ).freeze
+
+  # All forms that are already in internal representation (identity mappings)
+  # E.g., ['0', '1', '2', 'baseline-1', 'baseline-2', 'baseline-3',
+  # 'permissions']
+  INTERNAL_FORMS = (METAL_LEVEL_NUMBERS + BASELINE_LEVEL_NAMES + SPECIAL_FORMS).freeze
+
+  # Complete mapping: any valid input -> internal form
+  # Pre-computed for O(1) lookup in criteria_level_to_internal
+  # Maps canonical, internal, and obsolete names to their internal form
+  INPUT_TO_INTERNAL = CANONICAL_TO_INTERNAL.merge(
+    INTERNAL_FORMS.to_h { |name| [name, name] }
+  ).merge(
+    SYNONYMS_TO_INTERNAL
+  ).freeze
 end

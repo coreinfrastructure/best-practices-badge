@@ -199,7 +199,7 @@ class ProjectStatsController < ApplicationController
   # rubocop:enable Style/MethodCalledOnDoEndBlock
   # rubocop:enable Metrics/MethodLength
 
-  # GET /:locale/project_stats/activity.json
+  # GET /:locale/project_stats/activity_30.json
   # Dataset of activity
   # Note: The names of the datasets are translated
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
@@ -498,7 +498,7 @@ class ProjectStatsController < ApplicationController
   # rubocop:enable Metrics/MethodLength
 
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
-  # GET /:locale/project_stats/percent_earning.json
+  # GET /:locale/project_stats/user_statistics.json
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def user_statistics
     cache_until_next_stat

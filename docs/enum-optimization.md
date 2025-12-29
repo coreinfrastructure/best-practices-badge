@@ -107,17 +107,18 @@ This is the most memory-efficient approach and deserves serious consideration.
 
 ```ruby
 class Project < ApplicationRecord
-  # Single source of truth for all criterion status values
+  # Single source of truth for all criterion status values, for quick lookup.
+  # E.g., "CRITERION_STATUS[3]" is 'Met'.
   CRITERION_STATUS = ['?', 'Unmet', 'N/A', 'Met'].freeze
 
-  # Derived hash for fast reverse lookups (name to integer)
+  # Derived hash for fast reverse lookups (name to integer).
   CRITERION_STATUS_BY_NAME = CRITERION_STATUS.each_with_index.to_h { |name, idx| [name, idx] }.freeze
 
   # Constant integers
-  CRITERION_UNKNOWN = CRITERION_STATUS_BY_NAME['?']
-  CRITERION_UNMET = CRITERION_STATUS_BY_NAME['Unmet']
-  CRITERION_NA = CRITERION_STATUS_BY_NAME['N/A']
-  CRITERION_MET = CRITERION_STATUS_BY_NAME['Met']
+  CRITERION_UNKNOWN = CRITERION_STATUS_BY_NAME['?'] # 0
+  CRITERION_UNMET = CRITERION_STATUS_BY_NAME['Unmet'] # 1
+  CRITERION_NA = CRITERION_STATUS_BY_NAME['N/A'] # 2
+  CRITERION_MET = CRITERION_STATUS_BY_NAME['Met'] # 3
 
   # Status fields stored as integers (0-3) in database and Ruby
   # No enum declarations needed - use integers directly
@@ -276,7 +277,7 @@ Create a new module to hold status constants, available across the entire applic
 ```ruby
 # frozen_string_literal: true
 
-# Copyright 2015-2017, the Linux Foundation, IDA, and the
+# Copyright the Linux Foundation and the
 # OpenSSF Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
@@ -294,10 +295,10 @@ module CriterionStatus
 
   # Named constants for readable code comparisons
   # Derived from STATUS_BY_NAME to ensure consistency
-  UNKNOWN = STATUS_BY_NAME['?']
-  UNMET = STATUS_BY_NAME['Unmet']
-  NA = STATUS_BY_NAME['N/A']
-  MET = STATUS_BY_NAME['Met']
+  UNKNOWN = STATUS_BY_NAME['?'] # 0
+  UNMET = STATUS_BY_NAME['Unmet'] # 1
+  NA = STATUS_BY_NAME['N/A'] # 2
+  MET = STATUS_BY_NAME['Met'] # 3
 end
 ```
 

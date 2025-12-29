@@ -31,7 +31,7 @@ These trade-offs are acceptable given the significant memory and storage benefit
 
 We are receiving a massive number of queries that are causing increasing memory use. Every load of a project record causes many string objects to be created.
 
-When examing the memory use, one thing is striking:
+When examining the memory use, one thing is striking:
 
 - There are hundreds of `NAME_status` fields stored as VARCHAR/TEXT in PostgreSQL
 - Each field value creates a new String object in Ruby when loaded

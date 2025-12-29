@@ -35,11 +35,6 @@ Rails.application.routes.draw do
   # Warning: Routes that don't take a :locale value must include a
   # "skip_before_action :redir_missing_locale ..." in their controller.
 
-  # The "robots.txt" file is always at the root of the
-  # document tree and has no locale. Handle it specially.
-  get '/robots.txt' => 'static_pages#robots',
-      defaults: { format: 'text' }, as: :robots
-
   # The /projects/NUMBER/badge image route needs speed and never uses a
   # locale. Perhaps most importantly, badge images need to have
   # a single canonical name so that the CDN caches will work correctly.
@@ -53,6 +48,14 @@ Rails.application.routes.draw do
       constraints: { id: VALID_ID },
       defaults: { format: 'svg' }
 
+  # JSON API route (locale-independent, outside scope for performance)
+  # GET /projects/:id.json (extension required)
+  # This is the expected common case, so it's matched early
+  get '/projects/:id.json' => 'projects#show_json',
+      constraints: { id: VALID_ID },
+      defaults: { format: 'json' },
+      as: :project_json
+
   # The /badge_static/:value route needs speed and never uses a locale.
   # Beware: This route produces a result unconnected to a project's status.
   # Do NOT use this route on a project's README.md page!
@@ -60,23 +63,10 @@ Rails.application.routes.draw do
       constraints: { value: VALID_STATIC_VALUE },
       defaults: { format: 'svg' }
 
-  # JSON API route (locale-independent, outside scope for performance)
-  # GET /projects/:id.json (extension required)
-  # This is the expected common case, so it's matched first
-  get '/projects/:id.json' => 'projects#show_json',
-      constraints: { id: VALID_ID },
-      defaults: { format: 'json' },
-      as: :project_json
-
-  # Redirect localized JSON to non-localized version (301 permanent)
-  # GET /:locale/projects/:id.json → /projects/:id.json
-  # Handle common mistake of adding locale to JSON URLs
-  get '/:locale/projects/:id' => redirect('/projects/%{id}.json', status: 301),
-      constraints: lambda { |req|
-        req.params[:id] =~ VALID_ID_FULL &&
-          req.params[:locale] =~ LEGAL_LOCALE_FULL &&
-          req.format == :json
-      }
+  # The "robots.txt" file is always at the root of the
+  # document tree and has no locale. Handle it specially.
+  get '/robots.txt' => 'static_pages#robots',
+      defaults: { format: 'text' }, as: :robots
 
   # These routes never use locales, so that the cache is shared across locales.
   get '/project_stats/total_projects', to: 'project_stats#total_projects',
@@ -100,6 +90,15 @@ Rails.application.routes.draw do
   get '/google75f94b1182a77eb8.html' => 'static_pages#google_verifier',
       defaults: { format: 'text' }
 
+  # Redirect localized JSON to non-localized version (301 permanent)
+  # GET /:locale/projects/:id.json → /projects/:id.json
+  # Handle common mistake of adding locale to JSON URLs
+  get '/:locale/projects/:id.json' => redirect('/projects/%{id}.json', status: 301),
+      constraints: lambda { |req|
+        req.params[:id] =~ VALID_ID_FULL &&
+          req.params[:locale] =~ LEGAL_LOCALE_FULL
+      }
+
   # Now handle the normal case: routes with an optional locale prefix.
   # We include almost all routes inside a :locale header,
   # where the locale is optional.  This approach (using an optional value)
@@ -115,41 +114,9 @@ Rails.application.routes.draw do
     # The system itself always generates root URLs *without* a trailing slash.
     root to: 'static_pages#home'
 
-    get '/project_stats', to: 'project_stats#index', as: 'project_stats'
-    get '/project_stats/activity_30', to: 'project_stats#activity_30',
-      as: 'activity_30_project_stats',
-      constraints: ->(req) { req.format == :json }
-    get '/project_stats/daily_activity', to: 'project_stats#daily_activity',
-      as: 'daily_activity_project_stats',
-      constraints: ->(req) { req.format == :json }
-    get '/project_stats/reminders', to: 'project_stats#reminders',
-      as: 'reminders_project_stats',
-      constraints: ->(req) { req.format == :json }
-    get '/project_stats/silver_and_gold', to: 'project_stats#silver_and_gold',
-      as: 'silver_and_gold_project_stats',
-      constraints: ->(req) { req.format == :json }
-    get '/project_stats/percent_earning', to: 'project_stats#percent_earning',
-      as: 'percent_earning_project_stats',
-      constraints: ->(req) { req.format == :json }
-    get '/project_stats/user_statistics', to: 'project_stats#user_statistics',
-      as: 'user_statistics_project_stats',
-      constraints: ->(req) { req.format == :json }
-    # The following route isn't very useful; we may remove it in the future:
-    get '/project_stats/:id', to: 'project_stats#show',
-        constraints: { id: VALID_ID }
-
-    get 'sessions/new'
-
-    get 'signup' => 'users#new'
-
-    # Handle "static" pages (get-only pages)
-    get 'home' => 'static_pages#home'
-    get 'criteria_stats' => 'static_pages#criteria_stats'
-    get 'criteria_discussion' => 'static_pages#criteria_discussion'
-    get 'cookies' => 'static_pages#cookies'
-
-    get 'feed' => 'projects#feed', defaults: { format: 'atom' }
-    get 'reminders' => 'projects#reminders_summary'
+    # Handle /projects. There are a lot of pages in /projects, so crawlers
+    # constantly pound these resources. List them early, so that that
+    # we'll find these most-requested resources more quickly.
 
     # Standard RESTful routes for projects
     # Excludes :show and :edit (custom routes below handle sections)
@@ -207,12 +174,46 @@ Rails.application.routes.draw do
           },
           as: :update_project
 
+    get '/project_stats', to: 'project_stats#index', as: 'project_stats'
+    get '/project_stats/activity_30', to: 'project_stats#activity_30',
+      as: 'activity_30_project_stats',
+      constraints: ->(req) { req.format == :json }
+    get '/project_stats/daily_activity', to: 'project_stats#daily_activity',
+      as: 'daily_activity_project_stats',
+      constraints: ->(req) { req.format == :json }
+    get '/project_stats/reminders', to: 'project_stats#reminders',
+      as: 'reminders_project_stats',
+      constraints: ->(req) { req.format == :json }
+    get '/project_stats/silver_and_gold', to: 'project_stats#silver_and_gold',
+      as: 'silver_and_gold_project_stats',
+      constraints: ->(req) { req.format == :json }
+    get '/project_stats/percent_earning', to: 'project_stats#percent_earning',
+      as: 'percent_earning_project_stats',
+      constraints: ->(req) { req.format == :json }
+    get '/project_stats/user_statistics', to: 'project_stats#user_statistics',
+      as: 'user_statistics_project_stats',
+      constraints: ->(req) { req.format == :json }
+    # The following route isn't very useful; we may remove it in the future:
+    get '/project_stats/:id', to: 'project_stats#show',
+        constraints: { id: VALID_ID }
+
+    get 'sessions/new'
+
+    get 'signup' => 'users#new'
+
     resources :users
+
+    # Handle "static" pages (get-only pages)
+    get 'home' => 'static_pages#home'
+    get 'criteria_stats' => 'static_pages#criteria_stats'
+    get 'criteria_discussion' => 'static_pages#criteria_discussion'
+    get 'cookies' => 'static_pages#cookies'
+
+    get 'feed' => 'projects#feed', defaults: { format: 'atom' }
+    get 'reminders' => 'projects#reminders_summary'
+
     resources :account_activations, only: [:edit]
     resources :password_resets,     only: %i[new create edit update]
-
-    get 'criteria/:criteria_level', to: 'criteria#show'
-    get 'criteria', to: 'criteria#index'
 
     get 'login' => 'sessions#new'
     post 'login' => 'sessions#create'
@@ -222,6 +223,9 @@ Rails.application.routes.draw do
 
     get 'unsubscribe' => 'unsubscribe#edit'
     post 'unsubscribe' => 'unsubscribe#create'
+
+    get 'criteria/:criteria_level', to: 'criteria#show'
+    get 'criteria', to: 'criteria#index'
 
     # No other route, send a 404 ("not found").
     match '*path', via: :all, to: 'static_pages#error_404'

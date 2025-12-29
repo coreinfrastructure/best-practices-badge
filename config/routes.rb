@@ -30,6 +30,12 @@ VALID_ID_FULL ||= /\A#{VALID_ID.source}\z/
 # Valid values for static badge display
 VALID_STATIC_VALUE ||= /0|[1-9]{1,2}|passing|silver|gold/
 
+FORMAT_SVG ||= { format: 'svg' }.freeze
+FORMAT_JSON ||= { format: 'json' }.freeze
+FORMAT_TEXT ||= { format: 'text' }.freeze
+FORMAT_HTML ||= { format: 'html' }.freeze
+FORMAT_ATOM ||= { format: 'atom' }.freeze
+
 Rails.application.routes.draw do
   # First, handle routing of special cases.
   # Warning: Routes that don't take a :locale value must include a
@@ -46,14 +52,14 @@ Rails.application.routes.draw do
   # one is not listed, we do *NOT* support locale URLs in this case.
   get '/projects/:id/badge' => 'projects#badge',
       constraints: { id: VALID_ID },
-      defaults: { format: 'svg' }
+      defaults: FORMAT_SVG
 
   # JSON API route (locale-independent, outside scope for performance)
   # GET /projects/:id.json (extension required)
   # This is the expected common case, so it's matched early
   get '/projects/:id.json' => 'projects#show_json',
       constraints: { id: VALID_ID },
-      defaults: { format: 'json' },
+      defaults: FORMAT_JSON,
       as: :project_json
 
   # The /badge_static/:value route needs speed and never uses a locale.
@@ -61,34 +67,34 @@ Rails.application.routes.draw do
   # Do NOT use this route on a project's README.md page!
   get '/badge_static/:value' => 'badge_static#show',
       constraints: { value: VALID_STATIC_VALUE },
-      defaults: { format: 'svg' }
+      defaults: FORMAT_SVG
 
   # The "robots.txt" file is always at the root of the
   # document tree and has no locale. Handle it specially.
   get '/robots.txt' => 'static_pages#robots',
-      defaults: { format: 'text' }, as: :robots
+      defaults: FORMAT_TEXT, as: :robots
 
   # These routes never use locales, so that the cache is shared across locales.
-  get '/project_stats/total_projects', to: 'project_stats#total_projects',
-    as: 'total_projects_project_stats',
-    constraints: ->(req) { req.format == :json }
-  get '/project_stats/nontrivial_projects',
+  get '/project_stats/total_projects.json', to: 'project_stats#total_projects',
+      as: 'total_projects_project_stats',
+      defaults: FORMAT_JSON
+  get '/project_stats/nontrivial_projects.json',
       to: 'project_stats#nontrivial_projects',
       as: 'nontrivial_projects_project_stats',
-      constraints: ->(req) { req.format == :json }
-  get '/project_stats/silver', to: 'project_stats#silver',
-    as: 'silver_project_stats',
-    constraints: ->(req) { req.format == :json }
-  get '/project_stats/gold', to: 'project_stats#gold',
-    as: 'gold_project_stats',
-    constraints: ->(req) { req.format == :json }
+      defaults: FORMAT_JSON
+  get '/project_stats/silver.json', to: 'project_stats#silver',
+      as: 'silver_project_stats',
+      defaults: FORMAT_JSON
+  get '/project_stats/gold.json', to: 'project_stats#gold',
+      as: 'gold_project_stats',
+      defaults: FORMAT_JSON
 
   # Weird special case: for David A. Wheeler to get log issues from Google,
   # we have to let Google verify this.  Locale is irrelevant.
   # It isn't really HTML, even though the filename extension is .html. See:
   # https://github.com/coreinfrastructure/best-practices-badge/issues/1223
   get '/google75f94b1182a77eb8.html' => 'static_pages#google_verifier',
-      defaults: { format: 'text' }
+      defaults: FORMAT_TEXT
 
   # Redirect localized JSON to non-localized version (301 permanent)
   # GET /:locale/projects/:id.json → /projects/:id.json
@@ -150,7 +156,7 @@ Rails.application.routes.draw do
           section: Sections::VALID_SECTION_REGEX
         },
         as: :project_section,
-        defaults: { format: 'html' }
+        defaults: FORMAT_HTML
 
     # Redirect to default section (handles all formats except JSON)
     # GET (/:locale)/projects/:id(.:format) → redirects to default section
@@ -174,27 +180,29 @@ Rails.application.routes.draw do
           },
           as: :update_project
 
-    get '/project_stats', to: 'project_stats#index', as: 'project_stats'
-    get '/project_stats/activity_30', to: 'project_stats#activity_30',
-      as: 'activity_30_project_stats',
-      constraints: ->(req) { req.format == :json }
-    get '/project_stats/daily_activity', to: 'project_stats#daily_activity',
-      as: 'daily_activity_project_stats',
-      constraints: ->(req) { req.format == :json }
-    get '/project_stats/reminders', to: 'project_stats#reminders',
-      as: 'reminders_project_stats',
-      constraints: ->(req) { req.format == :json }
-    get '/project_stats/silver_and_gold', to: 'project_stats#silver_and_gold',
-      as: 'silver_and_gold_project_stats',
-      constraints: ->(req) { req.format == :json }
-    get '/project_stats/percent_earning', to: 'project_stats#percent_earning',
-      as: 'percent_earning_project_stats',
-      constraints: ->(req) { req.format == :json }
-    get '/project_stats/user_statistics', to: 'project_stats#user_statistics',
-      as: 'user_statistics_project_stats',
-      constraints: ->(req) { req.format == :json }
+    get 'project_stats', to: 'project_stats#index', as: 'project_stats'
+
+    # These JSON routes use locales (they include locale-specific data)
+    get 'project_stats/activity_30.json', to: 'project_stats#activity_30',
+        as: 'activity_30_project_stats',
+        defaults: FORMAT_JSON
+    get 'project_stats/daily_activity.json', to: 'project_stats#daily_activity',
+        as: 'daily_activity_project_stats',
+        defaults: FORMAT_JSON
+    get 'project_stats/reminders.json', to: 'project_stats#reminders',
+        as: 'reminders_project_stats',
+        defaults: FORMAT_JSON
+    get 'project_stats/silver_and_gold.json', to: 'project_stats#silver_and_gold',
+        as: 'silver_and_gold_project_stats',
+        defaults: FORMAT_JSON
+    get 'project_stats/percent_earning.json', to: 'project_stats#percent_earning',
+        as: 'percent_earning_project_stats',
+        defaults: FORMAT_JSON
+    get 'project_stats/user_statistics.json', to: 'project_stats#user_statistics',
+        as: 'user_statistics_project_stats',
+        defaults: FORMAT_JSON
     # The following route isn't very useful; we may remove it in the future:
-    get '/project_stats/:id', to: 'project_stats#show',
+    get 'project_stats/:id', to: 'project_stats#show',
         constraints: { id: VALID_ID }
 
     get 'sessions/new'
@@ -209,7 +217,7 @@ Rails.application.routes.draw do
     get 'criteria_discussion' => 'static_pages#criteria_discussion'
     get 'cookies' => 'static_pages#cookies'
 
-    get 'feed' => 'projects#feed', defaults: { format: 'atom' }
+    get 'feed' => 'projects#feed', defaults: FORMAT_ATOM
     get 'reminders' => 'projects#reminders_summary'
 
     resources :account_activations, only: [:edit]

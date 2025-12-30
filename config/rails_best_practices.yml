@@ -32,12 +32,15 @@ ProtectMassAssignmentCheck: { }
 # RemoveEmptyHelpersCheck: { }
 RemoveTabCheck: { }
 RemoveTrailingWhitespaceCheck: { }
-RemoveUnusedMethodsInControllersCheck: { except_methods: [
-  'ApplicationController#append_info_to_payload' # hook called by Rails
-  ] }
-RemoveUnusedMethodsInHelpersCheck: { except_methods: [
-  'UnsubscribeHelper#generate_unsubscribe_url' # Used in app/mailers/report_mailer.rb
-  ] }
+# Disabled: rails_best_practices uses static analysis and cannot detect:
+# - Methods called via Rails callbacks (before_action, after_action, etc.)
+# - Methods made available via helper_method declarations
+# - Private methods called by other methods in the same class
+# This results in 70+ false positives for legitimate callback and helper methods.
+# Controllers use extensive callback chains for authentication, authorization,
+# locale handling, and security checks - all flagged incorrectly as "unused".
+# RemoveUnusedMethodsInControllersCheck: { }
+# RemoveUnusedMethodsInHelpersCheck: { }
 RemoveUnusedMethodsInModelsCheck: { except_methods: [
   'Criteria#to_h', # Used by tests
   'Criteria#must?', # Used in ERB template; doesn't notice.

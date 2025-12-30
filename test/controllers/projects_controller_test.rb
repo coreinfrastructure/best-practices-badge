@@ -566,7 +566,9 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     # Redirects with criteria_level parameter included
     assert_response :redirect
     @project.reload
-    assert_equal 'Met', @project.osps_ac_01_01_status
+    # When it's *stored* it's converted into an integer, so we must
+    # check against the integer stored.
+    assert_equal CriterionStatus::MET, @project.osps_ac_01_01_status
     assert_equal 'We use MFA for all contributors',
                  @project.osps_ac_01_01_justification
   end
@@ -1635,6 +1637,33 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     result = ProjectsController.quoted_sql_fieldname('description_good_status')
     assert_equal 'description_good_status', result,
                  'Simple field with multiple underscores should not be quoted'
+  end
+
+  # Test defense-in-depth measure in convert_status_params_of_hash!
+  # When an invalid status value is provided, it should not be converted
+  # so model validation can catch it and provide a proper error message.
+  test 'convert_status_params_of_hash! does not convert invalid status values' do
+    controller = ProjectsController.new
+    test_hash = { description_good_status: 'invalid_value' }
+
+    # Call the private method using send
+    controller.send(:convert_status_params_of_hash!, test_hash)
+
+    # Verify the invalid value was NOT converted (left as-is for validation)
+    assert_equal 'invalid_value', test_hash[:description_good_status],
+                 'Invalid status value should not be converted'
+  end
+
+  # Test that valid status values ARE converted
+  test 'convert_status_params_of_hash! converts valid status values' do
+    controller = ProjectsController.new
+    test_hash = { description_good_status: 'Met' }
+
+    controller.send(:convert_status_params_of_hash!, test_hash)
+
+    # Verify the valid value was converted to integer
+    assert_equal CriterionStatus::MET, test_hash[:description_good_status],
+                 'Valid status value "Met" should be converted to integer 3'
   end
 end
 # rubocop:enable Metrics/ClassLength

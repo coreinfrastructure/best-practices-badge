@@ -53,7 +53,7 @@ class Project < ApplicationRecord
   IN_STATUS_CHOICE_WITH_NA = { in: STATUS_CHOICE_WITH_NA }.freeze
   IN_STATUS_CHOICE_WITHOUT_NA = { in: STATUS_CHOICE_WITHOUT_NA }.freeze
   MAXIMUM_IS_MAX_TEXT_LENGTH = { maximum: MAX_TEXT_LENGTH }.freeze
-  MAXIMIM_IS_MAX_SHORT_STRING_LENGTH = { maximum: MAX_SHORT_STRING_LENGTH }.freeze
+  MAXIMUM_IS_MAX_SHORT_STRING_LENGTH = { maximum: MAX_SHORT_STRING_LENGTH }.freeze
 
   # All badge level internal names *including* in_progress
   # NOTE: If you add a new level, modify compute_tiered_percentage

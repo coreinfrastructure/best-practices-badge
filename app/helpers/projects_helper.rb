@@ -37,17 +37,24 @@ module ProjectsHelper
   # @return [String] String representation ('?', 'Unmet', 'N/A', 'Met')
   # @return [nil] if value is nil or out of range
   #
-  # This method converts database integer status values to their
+  # This method converts database status values to their
   # external API string representations for backward compatibility.
+  #
+  # Handles both pre-migration strings and post-migration integers
+  # for graceful deployment during the enum optimization rollout.
+  # This defensive approach prevents crashes if any cached/serialized
+  # string values exist.
   #
   # Examples:
   #   status_to_string(0) # => '?'
   #   status_to_string(1) # => 'Unmet'
   #   status_to_string(2) # => 'N/A'
   #   status_to_string(3) # => 'Met'
+  #   status_to_string('Met') # => 'Met' (pre-migration compatibility)
   #   status_to_string(nil) # => nil
   def status_to_string(value)
     return if value.nil?
+    return value if value.is_a?(String) # Pre-migration: already a string
 
     CriterionStatus::STATUS_VALUES[value]
   end

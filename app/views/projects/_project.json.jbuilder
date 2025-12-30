@@ -7,9 +7,11 @@ transformed_attrs = project.attributes.dup
 
 # Convert status fields from integers to strings for API compatibility
 # Database stores integers (0=?, 1=Unmet, 2=N/A, 3=Met), API returns strings
+# Also handles pre-migration strings gracefully (defensive programming)
 Project::ALL_CRITERIA_STATUS.each do |status_field|
   status_value = transformed_attrs[status_field.to_s]
   next if status_value.nil?
+  next if status_value.is_a?(String) # Already a string (pre-migration data)
 
   transformed_attrs[status_field.to_s] = CriterionStatus::STATUS_VALUES[status_value]
 end

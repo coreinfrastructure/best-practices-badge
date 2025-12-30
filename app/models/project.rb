@@ -13,7 +13,6 @@ class Project < ApplicationRecord
   # but we don't, because we don't use the other information about those users.
   # We only need the user_ids and the additional_rights table has that.
 
-  using StringRefinements
   using SymbolRefinements
 
   include PgSearch::Model # PostgreSQL-specific text search
@@ -30,15 +29,15 @@ class Project < ApplicationRecord
   # When did we switch to CDLA-Permissive-2.0?
   ENTRY_LICENSE_CDLA_PERMISSIVE_20_DATE = Time.iso8601('2024-08-23T12:00:00Z')
 
-  # During Phase 2 transition: accept integers, old strings, and stringified integers
-  # After Phase 3 (database migration): remove all string values
+  # Phase 4: Accept both integers (database) and strings (from custom readers)
+  # Custom attribute readers convert integers to strings, so validation must
+  # accept both until we load from database and save without modification.
   STATUS_CHOICE_WITHOUT_NA = [
     CriterionStatus::UNKNOWN, CriterionStatus::MET, CriterionStatus::UNMET,
-    '?', 'Met', 'Unmet',
-    '0', '1', '3' # Stringified integers from VARCHAR storage
+    '?', 'Met', 'Unmet' # Strings returned by custom attribute readers
   ].freeze
-  STATUS_CHOICE_NA = (STATUS_CHOICE_WITHOUT_NA + [CriterionStatus::NA, 'N/A', '2']).freeze
-  # Legacy constant for backward compatibility during transition
+  STATUS_CHOICE_NA = (STATUS_CHOICE_WITHOUT_NA + [CriterionStatus::NA, 'N/A']).freeze
+  # Legacy constant for backward compatibility
   STATUS_CHOICE = STATUS_CHOICE_WITHOUT_NA
   MIN_SHOULD_LENGTH = 5
   MAX_TEXT_LENGTH = 8192 # Arbitrary maximum to reduce abuse
@@ -384,9 +383,9 @@ class Project < ApplicationRecord
   def get_criterion_result(criterion)
     status = self[criterion.name.status]
     justification = self[criterion.name.justification]
-    return :criterion_unknown if status.unknown?
-    return get_met_result(criterion, justification) if status.met?
-    return get_unmet_result(criterion, justification) if status.unmet?
+    return :criterion_unknown if status == CriterionStatus::UNKNOWN
+    return get_met_result(criterion, justification) if status == CriterionStatus::MET
+    return get_unmet_result(criterion, justification) if status == CriterionStatus::UNMET
 
     get_na_result(criterion, justification)
   end
@@ -441,7 +440,7 @@ class Project < ApplicationRecord
     status = self[Criteria[level][:static_analysis].name.status]
     result = get_criterion_result(Criteria[level][:static_analysis])
     updated_at < STATIC_ANALYSIS_JUSTIFICATION_REQUIRED_DATE &&
-      status.met? && result == :criterion_justification_required
+      status == CriterionStatus::MET && result == :criterion_justification_required
   end
 
   # Sends owner an email when they add a new project.
@@ -827,17 +826,13 @@ class Project < ApplicationRecord
     # The following works because BADGE_LEVELS[1] is 'passing', etc:
     achieved_previous_level = :"achieve_#{BADGE_LEVELS[level]}_status"
 
-    # During Phase 2 transition: handle integers, old strings, and stringified integers
-    # After Phase 3 (database migration): remove string comparisons
-    met_values = [CriterionStatus::MET, 'Met', '3']
-    unmet_values = [CriterionStatus::UNMET, 'Unmet', '1']
-
+    # Phase 4: Only use integer comparisons (database stores smallint)
     if self[:"badge_percentage_#{level - 1}"] >= 100
-      return if met_values.include?(self[achieved_previous_level])
+      return if self[achieved_previous_level] == CriterionStatus::MET
 
       self[achieved_previous_level] = CriterionStatus::MET
     else
-      return if unmet_values.include?(self[achieved_previous_level])
+      return if self[achieved_previous_level] == CriterionStatus::UNMET
 
       self[achieved_previous_level] = CriterionStatus::UNMET
     end
@@ -851,19 +846,16 @@ class Project < ApplicationRecord
   # Exclude achievement status fields - they're internal and should keep raw values
   # rubocop:disable Style/AccessModifierDeclarations
   (ALL_CRITERIA_STATUS - ACHIEVEMENT_STATUS_FIELDS).each do |status_field|
-    # Custom reader: convert database integers to strings
+    # Custom reader: convert database integers to strings for external API
     define_method(status_field) do
       value = self[status_field]
       return value if value.nil?
 
-      # Convert integer or stringified integer to string name
+      # Phase 4: Database stores integers (smallint), convert to strings
       if value.is_a?(Integer)
         CriterionStatus::STATUS_VALUES[value]
-      elsif value.is_a?(String) && value.match?(/\A[0-3]\z/)
-        # Stringified integer from VARCHAR storage (Phase 2 transition)
-        CriterionStatus::STATUS_VALUES[value.to_i]
       else
-        # Already a string name ('Met', 'Unmet', etc.) or invalid value
+        # String or invalid value - return as-is for validation to catch
         value
       end
     end

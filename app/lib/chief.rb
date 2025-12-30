@@ -68,8 +68,7 @@ class Chief
     if changeset_data.blank?
       false
     elsif !project.attribute_present?(key) || project[key].blank? ||
-          project[key] == CriterionStatus::UNKNOWN || project[key] == '?' ||
-          project[key] == '0'
+          project[key] == CriterionStatus::UNKNOWN
       true
     else
       changeset_data[:confidence].present? &&

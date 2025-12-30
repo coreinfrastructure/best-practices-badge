@@ -8,7 +8,6 @@ require 'test_helper'
 
 # rubocop:disable Metrics/ClassLength
 class ProjectTest < ActiveSupport::TestCase
-  using StringRefinements
   setup do
     @user = users(:test_user)
     @project_built = @user.projects.build(
@@ -157,11 +156,6 @@ class ProjectTest < ActiveSupport::TestCase
     )
   end
   # rubocop:enable Metrics/BlockLength
-
-  # We had to add this test for coverage.
-  test 'unit test string_refinements na?' do
-    assert @unjustified_project.release_notes_status.na?
-  end
 
   test 'check correct badge levels are returned' do
     assert_equal 'in_progress', @unjustified_project.badge_level

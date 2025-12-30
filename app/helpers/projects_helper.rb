@@ -352,5 +352,31 @@ module ProjectsHelper
   #   return id_str unless id_str.match?(/^OSPS-/i)
   #   id_str.downcase.tr('-.', '__')
   # end
+
+  # Generate a radio button for a status field, handling integer↔string conversion.
+  # Status values are stored as integers in the database but displayed as strings
+  # in forms. This helper reads the integer value, converts it to a string for
+  # comparison with the radio button value, and generates the appropriate HTML.
+  #
+  # @param form [ActionView::Helpers::FormBuilder] The form builder (f)
+  # @param project [Project] The project instance
+  # @param status_field [Symbol] The status field name (e.g., :description_good_status)
+  # @param string_value [String] The radio button value ('Met', 'Unmet', 'N/A', '?')
+  # @param options [Hash] Additional options passed to radio_button (label:, disabled:, etc.)
+  # @return [String] HTML for the radio button
+  def status_radio_button(form, project, status_field, string_value, options = {})
+    # Read the raw integer value from the database
+    integer_value = project[status_field]
+
+    # Convert integer to string for comparison
+    current_string = integer_value.nil? ? nil : CriterionStatus::STATUS_VALUES[integer_value]
+
+    # Determine if this radio button should be checked
+    checked = (current_string == string_value)
+
+    # Generate the radio button using bootstrap_form's radio_button helper
+    # We pass the string value so the form submits strings (which the controller converts)
+    form.radio_button(status_field, string_value, options.merge(checked: checked))
+  end
 end
 # rubocop:enable Metrics/ModuleLength

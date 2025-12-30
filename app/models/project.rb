@@ -29,15 +29,23 @@ class Project < ApplicationRecord
   # When did we switch to CDLA-Permissive-2.0?
   ENTRY_LICENSE_CDLA_PERMISSIVE_20_DATE = Time.iso8601('2024-08-23T12:00:00Z')
 
-  # Phase 4: Accept both integers (database) and strings (from custom readers)
-  # Custom attribute readers convert integers to strings, so validation must
-  # accept both until we load from database and save without modification.
+  # Validation accepts ONLY integers - status values are stored as smallint (0-3).
+  # Conversion between integers and strings happens at system boundaries:
+  #
+  # Data flow:
+  # 1. Form submit: User sees 'Met' → submits 'Met' → controller converts to 3 → model stores 3
+  # 2. Form display: Model has 3 → view helper converts to 'Met' → user sees 'Met'
+  # 3. Internal code: Always uses integers (0=?, 1=Unmet, 2=N/A, 3=Met)
+  #
+  # Benefits:
+  # - Simplicity: Validation, business logic, and tests use one type (integers)
+  # - Security: Invalid values fail validation; database constraints provide defense-in-depth
+  # - Performance: Smaller storage (2 bytes vs ~8 bytes), faster comparisons
+  # - Clarity: Internal code matches database schema
   STATUS_CHOICE_WITHOUT_NA = [
-    CriterionStatus::UNKNOWN, CriterionStatus::MET, CriterionStatus::UNMET,
-    '?', 'Met', 'Unmet' # Strings returned by custom attribute readers
+    CriterionStatus::UNKNOWN, CriterionStatus::MET, CriterionStatus::UNMET
   ].freeze
-  STATUS_CHOICE_NA = (STATUS_CHOICE_WITHOUT_NA + [CriterionStatus::NA, 'N/A']).freeze
-  # Legacy constant for backward compatibility
+  STATUS_CHOICE_NA = (STATUS_CHOICE_WITHOUT_NA + [CriterionStatus::NA]).freeze
   STATUS_CHOICE = STATUS_CHOICE_WITHOUT_NA
   MIN_SHOULD_LENGTH = 5
   MAX_TEXT_LENGTH = 8192 # Arbitrary maximum to reduce abuse
@@ -100,7 +108,8 @@ class Project < ApplicationRecord
   PROJECT_USER_ID_REPEAT = %i[user_id_repeat].freeze # Repeat to change owner
   ALL_CRITERIA_STATUS = Criteria.all.map(&:status).freeze
   ALL_CRITERIA_JUSTIFICATION = Criteria.all.map(&:justification).freeze
-  # Phase 2: Achievement status fields are internal and shouldn't be converted
+  # Achievement status fields are internal tracking fields that keep raw integer values
+  # (not converted to/from strings like criteria status fields)
   ACHIEVEMENT_STATUS_FIELDS = %i[
     achieve_passing_status achieve_silver_status
   ].freeze
@@ -840,42 +849,9 @@ class Project < ApplicationRecord
   # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
   # rubocop:enable Metrics/MethodLength
 
-  # Phase 2/3: Override attribute readers and writers for status fields
-  # Readers convert integers to strings for forms/external API
-  # Writers convert strings to integers for database storage
-  # Exclude achievement status fields - they're internal and should keep raw values
-  # rubocop:disable Style/AccessModifierDeclarations
-  (ALL_CRITERIA_STATUS - ACHIEVEMENT_STATUS_FIELDS).each do |status_field|
-    # Custom reader: convert database integers to strings for external API
-    define_method(status_field) do
-      value = self[status_field]
-      return value if value.nil?
-
-      # Phase 4: Database stores integers (smallint), convert to strings
-      if value.is_a?(Integer)
-        CriterionStatus::STATUS_VALUES[value]
-      else
-        # String or invalid value - return as-is for validation to catch
-        value
-      end
-    end
-
-    # Custom writer: convert string names to integers for database
-    define_method("#{status_field}=") do |value|
-      # Convert string names to integers for database storage
-      converted_value =
-        if value.is_a?(String) && CriterionStatus::STATUS_BY_NAME.key?(value)
-          CriterionStatus::STATUS_BY_NAME[value]
-        else
-          value # Keep as-is (integer, nil, or invalid string)
-        end
-      self[status_field] = converted_value
-    end
-
-    # Make each accessor public immediately after definition
-    public status_field
-    public "#{status_field}="
-  end
-  # rubocop:enable Style/AccessModifierDeclarations
+  # Status field conversion happens at the boundaries:
+  # - Input: Controller's convert_status_params converts strings → integers
+  # - Output: View helper status_radio_button converts integers → strings for display
+  # - Internal: Model works exclusively with integers (0,1,2,3)
 end
 # rubocop:enable Metrics/ClassLength

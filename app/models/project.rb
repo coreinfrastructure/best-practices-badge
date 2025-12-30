@@ -30,8 +30,16 @@ class Project < ApplicationRecord
   # When did we switch to CDLA-Permissive-2.0?
   ENTRY_LICENSE_CDLA_PERMISSIVE_20_DATE = Time.iso8601('2024-08-23T12:00:00Z')
 
-  STATUS_CHOICE = %w[? Met Unmet].freeze
-  STATUS_CHOICE_NA = (STATUS_CHOICE + %w[N/A]).freeze
+  # During Phase 2 transition: accept integers, old strings, and stringified integers
+  # After Phase 3 (database migration): remove all string values
+  STATUS_CHOICE_WITHOUT_NA = [
+    CriterionStatus::UNKNOWN, CriterionStatus::MET, CriterionStatus::UNMET,
+    '?', 'Met', 'Unmet',
+    '0', '1', '3'  # Stringified integers from VARCHAR storage
+  ].freeze
+  STATUS_CHOICE_NA = (STATUS_CHOICE_WITHOUT_NA + [CriterionStatus::NA, 'N/A', '2']).freeze
+  # Legacy constant for backward compatibility during transition
+  STATUS_CHOICE = STATUS_CHOICE_WITHOUT_NA
   MIN_SHOULD_LENGTH = 5
   MAX_TEXT_LENGTH = 8192 # Arbitrary maximum to reduce abuse
   MAX_SHORT_STRING_LENGTH = 254 # Arbitrary maximum to reduce abuse
@@ -813,14 +821,20 @@ class Project < ApplicationRecord
     # The following works because BADGE_LEVELS[1] is 'passing', etc:
     achieved_previous_level = :"achieve_#{BADGE_LEVELS[level]}_status"
 
+    # During Phase 2 transition: handle integers, old strings, and stringified integers
+    # After Phase 3 (database migration): remove string comparisons
     if self[:"badge_percentage_#{level - 1}"] >= 100
-      return if self[achieved_previous_level] == 'Met'
+      return if self[achieved_previous_level] == CriterionStatus::MET ||
+                self[achieved_previous_level] == 'Met' ||
+                self[achieved_previous_level] == '3'
 
-      self[achieved_previous_level] = 'Met'
+      self[achieved_previous_level] = CriterionStatus::MET
     else
-      return if self[achieved_previous_level] == 'Unmet'
+      return if self[achieved_previous_level] == CriterionStatus::UNMET ||
+                self[achieved_previous_level] == 'Unmet' ||
+                self[achieved_previous_level] == '1'
 
-      self[achieved_previous_level] = 'Unmet'
+      self[achieved_previous_level] = CriterionStatus::UNMET
     end
   end
 end

@@ -173,33 +173,34 @@ class ProjectTest < ActiveSupport::TestCase
   # This test works because we don't set the higher level prereqs in the
   # fixture files.  Make sure not to change this.
   test 'check update_prereqs works correctly for level upgrades' do
-    assert_equal 'Unmet', @unjustified_project.achieve_passing_status
-    assert_equal 'Unmet', @project_passing.achieve_passing_status
-    assert_equal 'Unmet', @project_passing.achieve_silver_status
-    assert_equal 'Met', @project_silver.achieve_passing_status
-    assert_equal 'Unmet', @project_silver.achieve_silver_status
+    # Phase 2: Fixtures have integers but VARCHAR columns store as strings
+    assert_equal CriterionStatus::UNMET.to_s, @unjustified_project.achieve_passing_status
+    assert_equal CriterionStatus::UNMET.to_s, @project_passing.achieve_passing_status
+    assert_equal CriterionStatus::UNMET.to_s, @project_passing.achieve_silver_status
+    assert_equal CriterionStatus::MET.to_s, @project_silver.achieve_passing_status
+    assert_equal CriterionStatus::UNMET.to_s, @project_silver.achieve_silver_status
     assert @project_silver.achieved_silver_at.blank?
     assert @project_silver.first_achieved_silver_at.blank?
     Project.update_all_badge_percentages(Criteria.keys)
     assert_equal(
-      'Unmet', Project.find(@unjustified_project.id).achieve_passing_status
+      CriterionStatus::UNMET.to_s, Project.find(@unjustified_project.id).achieve_passing_status
     )
     assert_equal(
-      'Met', Project.find(@project_passing.id).achieve_passing_status
+      CriterionStatus::MET.to_s, Project.find(@project_passing.id).achieve_passing_status
     )
     assert_equal(
-      'Unmet', Project.find(@project_passing.id).achieve_silver_status
+      CriterionStatus::UNMET.to_s, Project.find(@project_passing.id).achieve_silver_status
     )
     updated_project = Project.find(@project_silver.id)
-    assert_equal 'Met', updated_project.achieve_passing_status
-    assert_equal 'Met', updated_project.achieve_silver_status
+    assert_equal CriterionStatus::MET.to_s, updated_project.achieve_passing_status
+    assert_equal CriterionStatus::MET.to_s, updated_project.achieve_silver_status
   end
 
   test 'update_prereqs works correctly for level downgrades' do
-    assert_equal 'Met', @project_silver.achieve_passing_status
+    assert_equal CriterionStatus::MET.to_s, @project_silver.achieve_passing_status
     @project_silver.update!(description_good_status: 'Unmet')
     assert_equal(
-      'Unmet', Project.find(@project_silver.id).achieve_passing_status
+      CriterionStatus::UNMET.to_s, Project.find(@project_silver.id).achieve_passing_status
     )
   end
 

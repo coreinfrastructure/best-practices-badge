@@ -23,7 +23,7 @@ class ProjectSitesHttpsDetective < Detective
     if homepage_url =~ http_pattern || repo_url =~ http_pattern
       @results[:sites_https_status] =
         {
-          value: 'Unmet', confidence: 5,
+          value: CriterionStatus::UNMET, confidence: 5,
           explanation: '// Given an http: URL.'
         }
     elsif homepage_url.blank? && repo_url.blank?
@@ -31,7 +31,7 @@ class ProjectSitesHttpsDetective < Detective
     elsif homepage_url =~ https_pattern || repo_url =~ https_pattern
       @results[:sites_https_status] =
         {
-          value: 'Met', confidence: 3,
+          value: CriterionStatus::MET, confidence: 3,
           explanation: 'Given only https: URLs.'
         }
     end

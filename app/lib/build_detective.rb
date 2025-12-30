@@ -23,7 +23,7 @@ class BuildDetective < Detective
 
   def met_result(result_description, html_url)
     {
-      value: 'Met', confidence: 3,
+      value: CriterionStatus::MET, confidence: 3,
       explanation:
         "Non-trivial #{result_description} file in repository: " \
         "<#{html_url}>."

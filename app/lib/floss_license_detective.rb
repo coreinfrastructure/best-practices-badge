@@ -137,13 +137,13 @@ class FlossLicenseDetective < Detective
       {
         floss_license_osi_status:
                   {
-                    value: 'Met', confidence: 5,
+                    value: CriterionStatus::MET, confidence: 5,
                     explanation: "The #{license} license is approved by the " \
                                  'Open Source Initiative (OSI).'
                   },
         floss_license_status:
           {
-            value: 'Met', confidence: 5,
+            value: CriterionStatus::MET, confidence: 5,
             explanation: "The #{license} license is approved by the " \
                          'Open Source Initiative (OSI).'
           }
@@ -152,7 +152,7 @@ class FlossLicenseDetective < Detective
       {
         floss_license_osi_status:
                   {
-                    value: 'Unmet', confidence: 1,
+                    value: CriterionStatus::UNMET, confidence: 1,
                     explanation: '// Did not find license in the OSI list.'
                   }
       }

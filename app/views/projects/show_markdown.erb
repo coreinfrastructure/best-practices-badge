@@ -8,8 +8,9 @@
   end
 
   def criterion_to_checkbox(value)
+    # Phase 2: handle integers, old strings, and stringified integers
     case value
-    when 'Met', 'N/A'
+    when CriterionStatus::MET, CriterionStatus::NA, 'Met', 'N/A', '3', '2'
       '[x]'
     else
       '[ ]'

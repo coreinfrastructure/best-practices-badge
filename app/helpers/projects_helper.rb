@@ -32,6 +32,26 @@ module ProjectsHelper
   # Only allow lowercase letters, digits, underscore, and hyphen
   SECTION_ID_INVALID_CHARS = /[^a-z0-9_-]/
 
+  # Convert a status integer value to its string representation.
+  # @param value [Integer] Status value (0-3)
+  # @return [String] String representation ('?', 'Unmet', 'N/A', 'Met')
+  # @return [nil] if value is nil or out of range
+  #
+  # This method converts database integer status values to their
+  # external API string representations for backward compatibility.
+  #
+  # Examples:
+  #   status_to_string(0) # => '?'
+  #   status_to_string(1) # => 'Unmet'
+  #   status_to_string(2) # => 'N/A'
+  #   status_to_string(3) # => 'Met'
+  #   status_to_string(nil) # => nil
+  def status_to_string(value)
+    return if value.nil?
+
+    CriterionStatus::STATUS_VALUES[value]
+  end
+
   # List original then forked Github projects, with headers
   def github_select
     retrieved_repo_data = repo_data # Get external data

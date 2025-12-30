@@ -39,14 +39,14 @@ class RepoFilesExamineDetective < Detective
 
   def unmet_result(result_description)
     {
-      value: 'Unmet', confidence: 1,
+      value: CriterionStatus::UNMET, confidence: 1,
       explanation: "// No #{result_description} file found."
     }
   end
 
   def met_result(result_description, html_url)
     {
-      value: 'Met', confidence: 3,
+      value: CriterionStatus::MET, confidence: 3,
       explanation:
         "Non-trivial #{result_description} file in repository: " \
         "<#{html_url}>."

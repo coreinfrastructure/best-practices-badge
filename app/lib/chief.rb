@@ -67,7 +67,9 @@ class Chief
   def update_value?(project, key, changeset_data)
     if changeset_data.blank?
       false
-    elsif !project.attribute_present?(key) || project[key].blank? || project[key] == '?'
+    elsif !project.attribute_present?(key) || project[key].blank? ||
+          project[key] == CriterionStatus::UNKNOWN || project[key] == '?' ||
+          project[key] == '0'
       true
     else
       changeset_data[:confidence].present? &&

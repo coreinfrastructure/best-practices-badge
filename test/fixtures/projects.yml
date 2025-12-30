@@ -25,10 +25,10 @@ one:
   badge_percentage_2: 0
   tiered_percentage: 0
   # Criterion 'static_analysis' is 'met_justification_required'.
-  # Thus, even though it's claimed to be "Met", that will NOT count
+  # Thus, even though it's claimed to be "Met" (3), that will NOT count
   # when we calculate the passing percentage.
-  static_analysis_status: Met
-  maintained_status: Met
+  static_analysis_status: 3  # Met
+  maintained_status: 3  # Met
 
 two:
   user: test_user_melissa
@@ -44,7 +44,7 @@ two:
   badge_percentage_1: 0
   badge_percentage_2: 0
   tiered_percentage: 0
-  maintained_status: Met
+  maintained_status: 3  # Met
 
 no_repo:
   user: test_user
@@ -58,7 +58,7 @@ no_repo:
   badge_percentage_1: 0
   badge_percentage_2: 0
   tiered_percentage: 0
-  maintained_status: Met
+  maintained_status: 3  # Met
 
 # TODO: Generate list of status fields from central location.
 # No justifications means failing status.
@@ -78,13 +78,13 @@ perfect_unjustified:
 <% Criteria['0'].keys.each do |criterion| %>
   <%= criterion.to_s + '_status' %>: Met
 <% end %>
-  release_notes_status: N/A
-  vulnerability_report_private_status: N/A
-  test_invocation_status: Unmet
-  test_most_status: Unmet
-  crypto_certificate_verification_status: Unmet
-  build_reproducible_status: '?'
-  bus_factor_status: 'Met'
+  release_notes_status: 2  # N/A
+  vulnerability_report_private_status: 2  # N/A
+  test_invocation_status: 1  # Unmet
+  test_most_status: 1  # Unmet
+  crypto_certificate_verification_status: 1  # Unmet
+  build_reproducible_status: 0  # ?
+  bus_factor_status: 3  # Met
   bus_factor_justification: 'See https://github.com/ciitest2/test-repo'
 
 # TODO: Generate list of status fields from central location.

@@ -35,9 +35,11 @@ module CriterionStatus
 
   # Hash mapping string names to their integer values
   # Derived from STATUS_VALUES - used for converting incoming string parameters
+  # rubocop:disable Style/MethodCalledOnDoEndBlock
   STATUS_BY_NAME = STATUS_VALUES.each_with_index.to_h do |name, index|
     [name, index]
   end.freeze
+  # rubocop:enable Style/MethodCalledOnDoEndBlock
 
   # Integer constants for status values (derived from STATUS_BY_NAME)
   # These are the canonical values stored in the database

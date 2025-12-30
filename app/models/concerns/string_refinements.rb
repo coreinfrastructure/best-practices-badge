@@ -7,19 +7,19 @@
 module StringRefinements
   refine String do
     def met?
-      self == 'Met'
+      self == 'Met' || self == '3' # Phase 2: handle stringified integer
     end
 
     def na?
-      self == 'N/A'
+      self == 'N/A' || self == '2' # Phase 2: handle stringified integer
     end
 
     def unknown?
-      self == '?'
+      self == '?' || self == '0' # Phase 2: handle stringified integer
     end
 
     def unmet?
-      self == 'Unmet'
+      self == 'Unmet' || self == '1' # Phase 2: handle stringified integer
     end
   end
 end

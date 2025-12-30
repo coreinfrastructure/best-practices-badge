@@ -25,6 +25,7 @@ class ProjectsController < ApplicationController
   before_action :can_edit_else_redirect, only: %i[edit update]
   before_action :can_control_else_redirect, only: %i[destroy delete_form]
   before_action :require_adequate_deletion_rationale, only: :destroy
+  before_action :convert_status_params, only: %i[create update]
 
   # Cache with CDN. We can only do this when we don't display the
   # header (which changes for logged-in users), use a flash, or
@@ -742,6 +743,44 @@ class ProjectsController < ApplicationController
     false
   end
   # rubocop:enable Metrics/CyclomaticComplexity
+
+  # Convert all status fields from strings to integers in hash h.
+  # This modifies the hash IN PLACE.
+  # Invalid values are left as-is and will be caught by model validations,
+  # which provide proper error messages to users.
+  # @param h [Hash] The hash to modify (typically params[:project])
+  # @return [void]
+  def convert_status_params_of_hash!(h)
+    Project::ALL_CRITERIA_STATUS.each do |status_field|
+      next unless h[status_field]
+
+      string_value = h[status_field]
+
+      # Skip if already an integer (shouldn't happen, but be safe)
+      next if string_value.is_a?(Integer)
+
+      integer_value = CriterionStatus::STATUS_BY_NAME[string_value]
+
+      if integer_value
+        # Valid value - convert to integer
+        h[status_field] = integer_value
+      else
+        # Invalid value - leave as-is (don't convert)
+        # Model validations will catch it and provide error message
+        # Log for security monitoring
+        Rails.logger.warn "Invalid status value for #{status_field}: #{string_value.inspect}"
+      end
+    end
+  end
+
+  # Convert incoming string status params to integers for database storage.
+  # Maintains backward compatibility with external API (accepts strings).
+  # @return [void]
+  def convert_status_params
+    return unless params[:project]
+
+    convert_status_params_of_hash!(params[:project])
+  end
 
   # Verifies that the current user can edit the project, or redirects to root.
   # Used as a before_action filter to enforce edit permissions.

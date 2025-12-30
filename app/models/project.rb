@@ -35,7 +35,7 @@ class Project < ApplicationRecord
   STATUS_CHOICE_WITHOUT_NA = [
     CriterionStatus::UNKNOWN, CriterionStatus::MET, CriterionStatus::UNMET,
     '?', 'Met', 'Unmet',
-    '0', '1', '3'  # Stringified integers from VARCHAR storage
+    '0', '1', '3' # Stringified integers from VARCHAR storage
   ].freeze
   STATUS_CHOICE_NA = (STATUS_CHOICE_WITHOUT_NA + [CriterionStatus::NA, 'N/A', '2']).freeze
   # Legacy constant for backward compatibility during transition
@@ -101,6 +101,10 @@ class Project < ApplicationRecord
   PROJECT_USER_ID_REPEAT = %i[user_id_repeat].freeze # Repeat to change owner
   ALL_CRITERIA_STATUS = Criteria.all.map(&:status).freeze
   ALL_CRITERIA_JUSTIFICATION = Criteria.all.map(&:justification).freeze
+  # Phase 2: Achievement status fields are internal and shouldn't be converted
+  ACHIEVEMENT_STATUS_FIELDS = %i[
+    achieve_passing_status achieve_silver_status
+  ].freeze
   PROJECT_PERMITTED_FIELDS = (PROJECT_OTHER_FIELDS + ALL_CRITERIA_STATUS +
                               ALL_CRITERIA_JUSTIFICATION +
                               PROJECT_USER_ID_REPEAT).freeze
@@ -814,6 +818,8 @@ class Project < ApplicationRecord
   # When filling in the prerequisites, we do not fill in the justification
   # for them. The justification is only there as it makes implementing this
   # portion of the code simpler.
+  # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/MethodLength
   def update_prereqs(level)
     level = level.to_i
     return if level <= 0
@@ -823,19 +829,48 @@ class Project < ApplicationRecord
 
     # During Phase 2 transition: handle integers, old strings, and stringified integers
     # After Phase 3 (database migration): remove string comparisons
+    met_values = [CriterionStatus::MET, 'Met', '3']
+    unmet_values = [CriterionStatus::UNMET, 'Unmet', '1']
+
     if self[:"badge_percentage_#{level - 1}"] >= 100
-      return if self[achieved_previous_level] == CriterionStatus::MET ||
-                self[achieved_previous_level] == 'Met' ||
-                self[achieved_previous_level] == '3'
+      return if met_values.include?(self[achieved_previous_level])
 
       self[achieved_previous_level] = CriterionStatus::MET
     else
-      return if self[achieved_previous_level] == CriterionStatus::UNMET ||
-                self[achieved_previous_level] == 'Unmet' ||
-                self[achieved_previous_level] == '1'
+      return if unmet_values.include?(self[achieved_previous_level])
 
       self[achieved_previous_level] = CriterionStatus::UNMET
     end
   end
+  # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/MethodLength
+
+  # Phase 2: Override attribute readers to convert integers to strings for forms
+  # During Phase 2, database stores integers as stringified integers in VARCHAR
+  # but forms/radio buttons expect string values like 'Met', 'Unmet', etc.
+  # After Phase 3 migration to smallint, these will handle true integers.
+  # Exclude achievement status fields - they're internal and should keep raw values
+  # rubocop:disable Style/AccessModifierDeclarations
+  (ALL_CRITERIA_STATUS - ACHIEVEMENT_STATUS_FIELDS).each do |status_field|
+    define_method(status_field) do
+      value = self[status_field]
+      return value if value.nil?
+
+      # Convert integer or stringified integer to string name
+      if value.is_a?(Integer)
+        CriterionStatus::STATUS_VALUES[value]
+      elsif value.is_a?(String) && value.match?(/\A[0-3]\z/)
+        # Stringified integer from VARCHAR storage
+        CriterionStatus::STATUS_VALUES[value.to_i]
+      else
+        # Already a string name ('Met', 'Unmet', etc.) or invalid value
+        value
+      end
+    end
+
+    # Make each accessor public immediately after definition
+    public status_field
+  end
+  # rubocop:enable Style/AccessModifierDeclarations
 end
 # rubocop:enable Metrics/ClassLength

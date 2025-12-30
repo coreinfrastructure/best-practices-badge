@@ -1318,7 +1318,30 @@ end
 
 **Actions**: Remove `'Met', 'N/A'` from case statement, keep only integer constants
 
-#### Step 4.4: Verify Cleanup
+#### Step 4.4: Remove rails_best_practices Exception
+
+**File**: `config/rails_best_practices.yml`
+
+**Actions**:
+
+Remove the exception for `ProjectsHelper#status_to_string` that was added during Phase 2.
+
+```yaml
+# BEFORE (with Phase 2 exception):
+RemoveUnusedMethodsInHelpersCheck: { except_methods: [
+  'UnsubscribeHelper#generate_unsubscribe_url', # Used in app/mailers/report_mailer.rb
+  'ProjectsHelper#status_to_string' # Will be used post-Phase 3 migration; tool doesn't detect it
+  ] }
+
+# AFTER (exception removed):
+RemoveUnusedMethodsInHelpersCheck: { except_methods: [
+  'UnsubscribeHelper#generate_unsubscribe_url' # Used in app/mailers/report_mailer.rb
+  ] }
+```
+
+**Rationale**: The exception was needed during Phase 2 because the method wasn't being used yet. After Phase 3 (database migration), if the method is still not being actively called in the codebase, it should either be used or removed entirely.
+
+#### Step 4.5: Verify Cleanup
 
 **Commands**:
 

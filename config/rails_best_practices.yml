@@ -36,7 +36,8 @@ RemoveUnusedMethodsInControllersCheck: { except_methods: [
   'ApplicationController#append_info_to_payload' # hook called by Rails
   ] }
 RemoveUnusedMethodsInHelpersCheck: { except_methods: [
-  'UnsubscribeHelper#generate_unsubscribe_url' # Used in app/mailers/report_mailer.rb
+  'UnsubscribeHelper#generate_unsubscribe_url', # Used in app/mailers/report_mailer.rb
+  'ProjectsHelper#status_to_string' # Will be used post-Phase 3 migration; tool doesn't detect it
   ] }
 RemoveUnusedMethodsInModelsCheck: { except_methods: [
   'Criteria#to_h', # Used by tests

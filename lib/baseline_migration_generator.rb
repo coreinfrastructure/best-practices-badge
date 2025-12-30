@@ -169,7 +169,7 @@ class BaselineMigrationGenerator
       lines << "    # #{level} criteria (#{fields.size} criteria)"
       fields.each do |field|
         field_name = field['database_field']
-        lines << "    add_column :projects, :#{field_name}_status, :string, default: '?'"
+        lines << "    add_column :projects, :#{field_name}_status, :smallint, default: 0, null: false"
         lines << "    add_column :projects, :#{field_name}_justification, :text"
       end
     end

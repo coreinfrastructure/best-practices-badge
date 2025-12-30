@@ -19,21 +19,21 @@ class SubdirFileContentsDetective < Detective
 
   def unmet_result(result_description)
     {
-      value: 'Unmet', confidence: 1,
+      value: CriterionStatus::UNMET, confidence: 1,
       explanation: "// No #{result_description} file(s) found."
     }
   end
 
   def unmet_result_folder(result_description)
     {
-      value: 'Unmet', confidence: 3,
+      value: CriterionStatus::UNMET, confidence: 3,
       explanation: "// No appropriate folder found for #{result_description}."
     }
   end
 
   def met_result(result_description)
     {
-      value: 'Met', confidence: 3,
+      value: CriterionStatus::MET, confidence: 3,
       explanation:
         "Some #{result_description} file contents found."
     }

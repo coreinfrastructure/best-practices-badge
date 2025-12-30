@@ -35,7 +35,7 @@ class SubdirFileContentsDetectiveTest < ActiveSupport::TestCase
         dbs[:explanation]
       )
       assert dbs.key?(:value)
-      assert_equal 'Met', dbs[:value]
+      assert_equal CriterionStatus::MET, dbs[:value]
     end
   end
 
@@ -56,7 +56,7 @@ class SubdirFileContentsDetectiveTest < ActiveSupport::TestCase
         dbs[:explanation]
       )
       assert dbs.key?(:value)
-      assert_equal 'Unmet', dbs[:value]
+      assert_equal CriterionStatus::UNMET, dbs[:value]
     end
   end
 end

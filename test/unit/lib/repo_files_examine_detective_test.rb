@@ -26,7 +26,7 @@ class RepoFilesExamineDetectiveTest < ActiveSupport::TestCase
 
     assert results.key?(:license_location_status)
     assert results[:license_location_status].key?(:value)
-    assert results[:license_location_status][:value] == 'Met'
+    assert results[:license_location_status][:value] == CriterionStatus::MET
     assert results[:license_location_status][:confidence] == 3
   end
 end

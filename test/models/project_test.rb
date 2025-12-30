@@ -8,7 +8,6 @@ require 'test_helper'
 
 # rubocop:disable Metrics/ClassLength
 class ProjectTest < ActiveSupport::TestCase
-  using StringRefinements
   setup do
     @user = users(:test_user)
     @project_built = @user.projects.build(
@@ -158,11 +157,6 @@ class ProjectTest < ActiveSupport::TestCase
   end
   # rubocop:enable Metrics/BlockLength
 
-  # We had to add this test for coverage.
-  test 'unit test string_refinements na?' do
-    assert @unjustified_project.release_notes_status.na?
-  end
-
   test 'check correct badge levels are returned' do
     assert_equal 'in_progress', @unjustified_project.badge_level
     assert_equal 'passing', @project_passing.badge_level
@@ -173,33 +167,34 @@ class ProjectTest < ActiveSupport::TestCase
   # This test works because we don't set the higher level prereqs in the
   # fixture files.  Make sure not to change this.
   test 'check update_prereqs works correctly for level upgrades' do
-    assert_equal 'Unmet', @unjustified_project.achieve_passing_status
-    assert_equal 'Unmet', @project_passing.achieve_passing_status
-    assert_equal 'Unmet', @project_passing.achieve_silver_status
-    assert_equal 'Met', @project_silver.achieve_passing_status
-    assert_equal 'Unmet', @project_silver.achieve_silver_status
+    # Phase 3: Achievement status fields return raw integers (no custom readers)
+    assert_equal CriterionStatus::UNMET, @unjustified_project.achieve_passing_status
+    assert_equal CriterionStatus::UNMET, @project_passing.achieve_passing_status
+    assert_equal CriterionStatus::UNMET, @project_passing.achieve_silver_status
+    assert_equal CriterionStatus::MET, @project_silver.achieve_passing_status
+    assert_equal CriterionStatus::UNMET, @project_silver.achieve_silver_status
     assert @project_silver.achieved_silver_at.blank?
     assert @project_silver.first_achieved_silver_at.blank?
     Project.update_all_badge_percentages(Criteria.keys)
     assert_equal(
-      'Unmet', Project.find(@unjustified_project.id).achieve_passing_status
+      CriterionStatus::UNMET, Project.find(@unjustified_project.id).achieve_passing_status
     )
     assert_equal(
-      'Met', Project.find(@project_passing.id).achieve_passing_status
+      CriterionStatus::MET, Project.find(@project_passing.id).achieve_passing_status
     )
     assert_equal(
-      'Unmet', Project.find(@project_passing.id).achieve_silver_status
+      CriterionStatus::UNMET, Project.find(@project_passing.id).achieve_silver_status
     )
     updated_project = Project.find(@project_silver.id)
-    assert_equal 'Met', updated_project.achieve_passing_status
-    assert_equal 'Met', updated_project.achieve_silver_status
+    assert_equal CriterionStatus::MET, updated_project.achieve_passing_status
+    assert_equal CriterionStatus::MET, updated_project.achieve_silver_status
   end
 
   test 'update_prereqs works correctly for level downgrades' do
-    assert_equal 'Met', @project_silver.achieve_passing_status
-    @project_silver.update!(description_good_status: 'Unmet')
+    assert_equal CriterionStatus::MET, @project_silver.achieve_passing_status
+    @project_silver.update!(description_good_status: CriterionStatus::UNMET)
     assert_equal(
-      'Unmet', Project.find(@project_silver.id).achieve_passing_status
+      CriterionStatus::UNMET, Project.find(@project_silver.id).achieve_passing_status
     )
   end
 
@@ -258,7 +253,7 @@ class ProjectTest < ActiveSupport::TestCase
       'Project.find(projects(:one).id).badge_percentage_1'
     ] do
       project_one.update!(
-        crypto_weaknesses_status: 'Met',
+        crypto_weaknesses_status: CriterionStatus::MET,
         crypto_weaknesses_justification: 'It is good'
       )
     end
@@ -266,7 +261,7 @@ class ProjectTest < ActiveSupport::TestCase
     old_percentage0 = Project.find(projects(:one).id).badge_percentage_0
     old_percentage1 = Project.find(projects(:one).id).badge_percentage_1
     project_one.update!(
-      warnings_strict_status: 'Met',
+      warnings_strict_status: CriterionStatus::MET,
       warnings_strict_justification: 'It is good'
     )
     # Check the badge percentage changed

@@ -59,17 +59,17 @@
         <div class="col-xs-4 col-xs-offset-2 col-sm-offset-1 text-left block-left">
           <fieldset>
           <legend class="hidden"><%= "Criterion [#{baseline_id_to_display(criterion)}]" %></legend>
-          <%= f.radio_button status_symbol, 'Met', label: t('criterion_status.Met'),
-                                                   disabled: view_only %>
-          <%= f.radio_button status_symbol, 'Unmet', label: t('criterion_status.Unmet'),
-                                                     disabled: view_only  %>
+          <%= status_radio_button f, project, status_symbol, 'Met',
+                                  label: t('criterion_status.Met'), disabled: view_only %>
+          <%= status_radio_button f, project, status_symbol, 'Unmet',
+                                  label: t('criterion_status.Unmet'), disabled: view_only %>
           <% if criterion.na_allowed? %>
-            <%= f.radio_button status_symbol, 'N/A', label: t('criterion_status.NA'),
-                                                     disabled: view_only  %>
+            <%= status_radio_button f, project, status_symbol, 'N/A',
+                                    label: t('criterion_status.NA'), disabled: view_only %>
           <% end %>
           <% unless criterion.minor == 'Prerequisites' %>
-            <%= f.radio_button status_symbol, '?', label: '?',
-                                                   disabled: view_only  %>
+            <%= status_radio_button f, project, status_symbol, '?',
+                                    label: '?', disabled: view_only %>
           <% end %>
           </fieldset>
         </div>

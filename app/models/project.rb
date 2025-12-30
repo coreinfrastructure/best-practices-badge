@@ -13,7 +13,6 @@ class Project < ApplicationRecord
   # but we don't, because we don't use the other information about those users.
   # We only need the user_ids and the additional_rights table has that.
 
-  using StringRefinements
   using SymbolRefinements
 
   include PgSearch::Model # PostgreSQL-specific text search
@@ -30,11 +29,31 @@ class Project < ApplicationRecord
   # When did we switch to CDLA-Permissive-2.0?
   ENTRY_LICENSE_CDLA_PERMISSIVE_20_DATE = Time.iso8601('2024-08-23T12:00:00Z')
 
-  STATUS_CHOICE = %w[? Met Unmet].freeze
-  STATUS_CHOICE_NA = (STATUS_CHOICE + %w[N/A]).freeze
+  # Validation accepts ONLY integers - status values are stored as smallint (0-3).
+  # Conversion between integers and strings happens at system boundaries:
+  #
+  # Data flow:
+  # 1. Form submit: User sees 'Met' → submits 'Met' → controller converts to 3 → model stores 3
+  # 2. Form display: Model has 3 → view helper converts to 'Met' → user sees 'Met'
+  # 3. Internal code: Always uses integers (0=?, 1=Unmet, 2=N/A, 3=Met)
+  #
+  # Benefits:
+  # - Simplicity: Validation, business logic, and tests use one type (integers)
+  # - Security: Invalid values fail validation; database constraints provide defense-in-depth
+  # - Performance: Smaller storage (2 bytes vs ~8 bytes), faster comparisons
+  # - Clarity: Internal code matches database schema
+  STATUS_CHOICE_WITHOUT_NA = [
+    CriterionStatus::UNKNOWN, CriterionStatus::MET, CriterionStatus::UNMET
+  ].freeze
+  STATUS_CHOICE_WITH_NA = (STATUS_CHOICE_WITHOUT_NA + [CriterionStatus::NA]).freeze
   MIN_SHOULD_LENGTH = 5
   MAX_TEXT_LENGTH = 8192 # Arbitrary maximum to reduce abuse
   MAX_SHORT_STRING_LENGTH = 254 # Arbitrary maximum to reduce abuse
+
+  IN_STATUS_CHOICE_WITH_NA = { in: STATUS_CHOICE_WITH_NA }.freeze
+  IN_STATUS_CHOICE_WITHOUT_NA = { in: STATUS_CHOICE_WITHOUT_NA }.freeze
+  MAXIMUM_IS_MAX_TEXT_LENGTH = { maximum: MAX_TEXT_LENGTH }.freeze
+  MAXIMUM_IS_MAX_SHORT_STRING_LENGTH = { maximum: MAX_SHORT_STRING_LENGTH }.freeze
 
   # All badge level internal names *including* in_progress
   # NOTE: If you add a new level, modify compute_tiered_percentage
@@ -93,6 +112,11 @@ class Project < ApplicationRecord
   PROJECT_USER_ID_REPEAT = %i[user_id_repeat].freeze # Repeat to change owner
   ALL_CRITERIA_STATUS = Criteria.all.map(&:status).freeze
   ALL_CRITERIA_JUSTIFICATION = Criteria.all.map(&:justification).freeze
+  # Achievement status fields are internal tracking fields that keep raw integer values
+  # (not converted to/from strings like criteria status fields)
+  ACHIEVEMENT_STATUS_FIELDS = %i[
+    achieve_passing_status achieve_silver_status
+  ].freeze
   PROJECT_PERMITTED_FIELDS = (PROJECT_OTHER_FIELDS + ALL_CRITERIA_STATUS +
                               ALL_CRITERIA_JUSTIFICATION +
                               PROJECT_USER_ID_REPEAT).freeze
@@ -246,9 +270,9 @@ class Project < ApplicationRecord
 
   # For these fields we'll have just simple validation rules.
   # We'll rely on Rails' HTML escaping system to counter XSS.
-  validates :name, length: { maximum: MAX_SHORT_STRING_LENGTH }, text: true
-  validates :description, length: { maximum: MAX_TEXT_LENGTH }, text: true
-  validates :license, length: { maximum: MAX_SHORT_STRING_LENGTH }, text: true
+  validates :name, length: MAXIMUM_IS_MAX_SHORT_STRING_LENGTH, text: true
+  validates :description, length: MAXIMUM_IS_MAX_TEXT_LENGTH, text: true
+  validates :license, length: MAXIMUM_IS_MAX_SHORT_STRING_LENGTH, text: true
   validates :general_comments, text: true
 
   # We'll do automated analysis on these URLs, which means we will *download*
@@ -256,11 +280,11 @@ class Project < ApplicationRecord
   # URL restrictions to counter tricks like http://ACCOUNT:PASSWORD@host...
   # and http://something/?arbitrary_parameters
 
-  validates :repo_url, url: true, length: { maximum: MAX_SHORT_STRING_LENGTH },
+  validates :repo_url, url: true, length: MAXIMUM_IS_MAX_SHORT_STRING_LENGTH,
                        uniqueness: { allow_blank: true }
   validates :homepage_url,
             url: true,
-            length: { maximum: MAX_SHORT_STRING_LENGTH }
+            length: MAXIMUM_IS_MAX_SHORT_STRING_LENGTH
   validate :need_a_base_url
 
   # Comma-separated list.  This is very generous in what characters it
@@ -273,14 +297,14 @@ class Project < ApplicationRecord
     %r{\A(|-| ([A-Za-z0-9!\#$%'()*+.\/\:;=?@\[\]^~ -]+
         (,\ ?[A-Za-z0-9!\#$%'()*+.\/\:;=?@\[\]^~ -]+)*))\Z}x
   validates :implementation_languages,
-            length: { maximum: MAX_SHORT_STRING_LENGTH },
+            length: MAXIMUM_IS_MAX_SHORT_STRING_LENGTH,
             format: {
               with: VALID_LANGUAGE_LIST,
               message: :comma_separated_list
             }
 
   validates :cpe,
-            length: { maximum: MAX_SHORT_STRING_LENGTH },
+            length: MAXIMUM_IS_MAX_SHORT_STRING_LENGTH,
             format: {
               with: /\A(cpe:.*)?\Z/,
               message: :begin_with_cpe
@@ -295,12 +319,12 @@ class Project < ApplicationRecord
   Criteria.each_value do |criteria|
     criteria.each_value do |criterion|
       if criterion.na_allowed?
-        validates criterion.name.status, inclusion: { in: STATUS_CHOICE_NA }
+        validates criterion.name.status, inclusion: IN_STATUS_CHOICE_WITH_NA
       else
-        validates criterion.name.status, inclusion: { in: STATUS_CHOICE }
+        validates criterion.name.status, inclusion: IN_STATUS_CHOICE_WITHOUT_NA
       end
       validates criterion.name.justification,
-                length: { maximum: MAX_TEXT_LENGTH },
+                length: MAXIMUM_IS_MAX_TEXT_LENGTH,
                 text: true
     end
   end
@@ -372,9 +396,9 @@ class Project < ApplicationRecord
   def get_criterion_result(criterion)
     status = self[criterion.name.status]
     justification = self[criterion.name.justification]
-    return :criterion_unknown if status.unknown?
-    return get_met_result(criterion, justification) if status.met?
-    return get_unmet_result(criterion, justification) if status.unmet?
+    return :criterion_unknown if status == CriterionStatus::UNKNOWN
+    return get_met_result(criterion, justification) if status == CriterionStatus::MET
+    return get_unmet_result(criterion, justification) if status == CriterionStatus::UNMET
 
     get_na_result(criterion, justification)
   end
@@ -429,7 +453,7 @@ class Project < ApplicationRecord
     status = self[Criteria[level][:static_analysis].name.status]
     result = get_criterion_result(Criteria[level][:static_analysis])
     updated_at < STATIC_ANALYSIS_JUSTIFICATION_REQUIRED_DATE &&
-      status.met? && result == :criterion_justification_required
+      status == CriterionStatus::MET && result == :criterion_justification_required
   end
 
   # Sends owner an email when they add a new project.
@@ -806,6 +830,8 @@ class Project < ApplicationRecord
   # When filling in the prerequisites, we do not fill in the justification
   # for them. The justification is only there as it makes implementing this
   # portion of the code simpler.
+  # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/MethodLength
   def update_prereqs(level)
     level = level.to_i
     return if level <= 0
@@ -813,15 +839,23 @@ class Project < ApplicationRecord
     # The following works because BADGE_LEVELS[1] is 'passing', etc:
     achieved_previous_level = :"achieve_#{BADGE_LEVELS[level]}_status"
 
+    # Update achievement status based on percentage (uses integer comparisons)
     if self[:"badge_percentage_#{level - 1}"] >= 100
-      return if self[achieved_previous_level] == 'Met'
+      return if self[achieved_previous_level] == CriterionStatus::MET
 
-      self[achieved_previous_level] = 'Met'
+      self[achieved_previous_level] = CriterionStatus::MET
     else
-      return if self[achieved_previous_level] == 'Unmet'
+      return if self[achieved_previous_level] == CriterionStatus::UNMET
 
-      self[achieved_previous_level] = 'Unmet'
+      self[achieved_previous_level] = CriterionStatus::UNMET
     end
   end
+  # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/MethodLength
+
+  # Status field conversion happens at the boundaries:
+  # - Input: Controller's convert_status_params converts strings → integers
+  # - Output: View helper status_radio_button converts integers → strings for display
+  # - Internal: Model works exclusively with integers (0,1,2,3)
 end
 # rubocop:enable Metrics/ClassLength

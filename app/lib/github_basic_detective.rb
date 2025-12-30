@@ -91,30 +91,30 @@ class GithubBasicDetective < Detective
     ) do |m|
       # We have a github repo.
       results[:repo_public_status] = {
-        value: 'Met', confidence: 3,
+        value: CriterionStatus::MET, confidence: 3,
         explanation: 'Repository on GitHub, which provides ' \
                      'public git repositories with URLs.'
       }
       results[:repo_track_status] = {
-        value: 'Met', confidence: 4,
+        value: CriterionStatus::MET, confidence: 4,
         explanation: 'Repository on GitHub, which uses git. ' \
                      'git can track the changes, ' \
                      'who made them, and when they were made.'
       }
       results[:repo_distributed_status] = {
-        value: 'Met', confidence: 4,
+        value: CriterionStatus::MET, confidence: 4,
         explanation: 'Repository on GitHub, which uses git. ' \
                      'git is distributed.'
       }
       results[:contribution_status] = {
-        value: 'Met', confidence: 2,
+        value: CriterionStatus::MET, confidence: 2,
         explanation: 'Projects on GitHub by default use issues and ' \
                      'pull requests, as encouraged by documentation such as ' \
                      '<https://guides.github.com/activities/' \
                      'contributing-to-open-source/>.'
       }
       results[:discussion_status] = {
-        value: 'Met', confidence: 3,
+        value: CriterionStatus::MET, confidence: 3,
         explanation: 'GitHub supports discussions on issues and pull requests.'
       }
 

@@ -19,17 +19,17 @@ class HardenedSitesDetective < Detective
   ].freeze
   MET =
     {
-      value: 'Met', confidence: 3,
+      value: CriterionStatus::MET, confidence: 3,
       explanation: 'Found all required security hardening headers.'
     }.freeze
   UNMET_MISSING =
     {
-      value: 'Unmet', confidence: 5,
+      value: CriterionStatus::UNMET, confidence: 5,
       explanation: 'Required security hardening headers missing: '
     }.freeze
   UNMET_NOSNIFF =
     {
-      value: 'Unmet', confidence: 5,
+      value: CriterionStatus::UNMET, confidence: 5,
       explanation: '// X-Content-Type-Options was not set to "nosniff".'
     }.freeze
 

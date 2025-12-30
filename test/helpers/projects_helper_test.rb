@@ -238,5 +238,25 @@ class ProjectsHelperTest < ActionView::TestCase
   #   assert_equal 'crypto_password_storage',
   #                baseline_id_to_internal('crypto_password_storage')
   # end
+
+  test 'status_to_string converts integer 0 to ?' do
+    assert_equal '?', status_to_string(0)
+  end
+
+  test 'status_to_string converts integer 1 to Unmet' do
+    assert_equal 'Unmet', status_to_string(1)
+  end
+
+  test 'status_to_string converts integer 2 to N/A' do
+    assert_equal 'N/A', status_to_string(2)
+  end
+
+  test 'status_to_string converts integer 3 to Met' do
+    assert_equal 'Met', status_to_string(3)
+  end
+
+  test 'status_to_string returns nil for nil input' do
+    assert_nil status_to_string(nil)
+  end
 end
 # rubocop:enable Metrics/ClassLength

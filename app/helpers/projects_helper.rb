@@ -32,6 +32,26 @@ module ProjectsHelper
   # Only allow lowercase letters, digits, underscore, and hyphen
   SECTION_ID_INVALID_CHARS = /[^a-z0-9_-]/
 
+  # Convert a status integer value to its string representation.
+  # @param value [Integer] Status value (0-3)
+  # @return [String] String representation ('?', 'Unmet', 'N/A', 'Met')
+  # @return [nil] if value is nil or out of range
+  #
+  # This method converts database integer status values to their
+  # external API string representations for backward compatibility.
+  #
+  # Examples:
+  #   status_to_string(0) # => '?'
+  #   status_to_string(1) # => 'Unmet'
+  #   status_to_string(2) # => 'N/A'
+  #   status_to_string(3) # => 'Met'
+  #   status_to_string(nil) # => nil
+  def status_to_string(value)
+    return if value.nil?
+
+    CriterionStatus::STATUS_VALUES[value]
+  end
+
   # List original then forked Github projects, with headers
   def github_select
     retrieved_repo_data = repo_data # Get external data
@@ -332,5 +352,28 @@ module ProjectsHelper
   #   return id_str unless id_str.match?(/^OSPS-/i)
   #   id_str.downcase.tr('-.', '__')
   # end
+
+  # Generate a radio button for a status field, handling integer↔string conversion.
+  # Status values are stored as integers in the database but displayed as strings
+  # in forms. This helper reads the integer value, converts it to a string for
+  # comparison with the radio button value, and generates the appropriate HTML.
+  #
+  # @param form [ActionView::Helpers::FormBuilder] The form builder (f)
+  # @param project [Project] The project instance
+  # @param status_field [Symbol] The status field name (e.g., :description_good_status)
+  # @param string_value [String] The radio button value ('Met', 'Unmet', 'N/A', '?')
+  # @param ** [Hash] Additional keyword arguments passed to radio_button (label:, disabled:, etc.)
+  # @return [String] HTML for the radio button
+  def status_radio_button(form, project, status_field, string_value, **)
+    # Read the raw integer value from the database and convert to string
+    current_string = status_to_string(project[status_field])
+
+    # Determine if this radio button should be checked
+    checked = (current_string == string_value)
+
+    # Generate the radio button using bootstrap_form's radio_button helper
+    # We pass the string value so the form submits strings (which the controller converts)
+    form.radio_button(status_field, string_value, checked: checked, **)
+  end
 end
 # rubocop:enable Metrics/ModuleLength

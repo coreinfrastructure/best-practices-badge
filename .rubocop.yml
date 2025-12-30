@@ -123,6 +123,10 @@ Style/Send:
 #
 Style/AsciiComments:
   Enabled: false
+# Using `== 0` is clearer than `.zero?` in refinements, especially for
+# comparing status values where the comparison is semantic, not numeric.
+Style/NumericPredicate:
+  Enabled: false
 #
 # The following are newer cops which have disabled because
 # we aren't ready for them right now. It's difficult to do things "all at once".

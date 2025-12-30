@@ -17,12 +17,12 @@ class FlossLicenseDetectiveTest < ActiveSupport::TestCase
 
     assert results.key?(:floss_license_osi_status)
     assert results[:floss_license_osi_status].key?(:value)
-    assert results[:floss_license_osi_status][:value] == 'Met'
+    assert results[:floss_license_osi_status][:value] == CriterionStatus::MET
     assert results[:floss_license_osi_status][:confidence] == 5
 
     assert results.key?(:floss_license_status)
     assert results[:floss_license_status].key?(:value)
-    assert results[:floss_license_status][:value] == 'Met'
+    assert results[:floss_license_status][:value] == CriterionStatus::MET
     assert results[:floss_license_status][:confidence] == 5
   end
 
@@ -31,12 +31,12 @@ class FlossLicenseDetectiveTest < ActiveSupport::TestCase
 
     assert results.key?(:floss_license_osi_status)
     assert results[:floss_license_osi_status].key?(:value)
-    assert results[:floss_license_osi_status][:value] == 'Met'
+    assert results[:floss_license_osi_status][:value] == CriterionStatus::MET
     assert results[:floss_license_osi_status][:confidence] == 5
 
     assert results.key?(:floss_license_status)
     assert results[:floss_license_status].key?(:value)
-    assert results[:floss_license_status][:value] == 'Met'
+    assert results[:floss_license_status][:value] == CriterionStatus::MET
     assert results[:floss_license_status][:confidence] == 5
   end
 
@@ -45,12 +45,12 @@ class FlossLicenseDetectiveTest < ActiveSupport::TestCase
 
     assert results.key?(:floss_license_osi_status)
     assert results[:floss_license_osi_status].key?(:value)
-    assert results[:floss_license_osi_status][:value] == 'Met'
+    assert results[:floss_license_osi_status][:value] == CriterionStatus::MET
     assert results[:floss_license_osi_status][:confidence] == 5
 
     assert results.key?(:floss_license_status)
     assert results[:floss_license_status].key?(:value)
-    assert results[:floss_license_status][:value] == 'Met'
+    assert results[:floss_license_status][:value] == CriterionStatus::MET
     assert results[:floss_license_status][:confidence] == 5
   end
 
@@ -59,7 +59,7 @@ class FlossLicenseDetectiveTest < ActiveSupport::TestCase
 
     assert results.key?(:floss_license_osi_status)
     assert results[:floss_license_osi_status].key?(:value)
-    assert results[:floss_license_osi_status][:value] == 'Unmet'
+    assert results[:floss_license_osi_status][:value] == CriterionStatus::UNMET
   end
 
   test 'Assume nothing for complicated situations' do

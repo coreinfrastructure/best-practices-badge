@@ -19,9 +19,9 @@ class RecalcTest < ActionDispatch::IntegrationTest
       'Project.find(projects(:one).id).badge_percentage_2',
       'Project.find(projects(:one).id).updated_at'
     ] do
-      project.update_column(:crypto_weaknesses_status, 'Met')
+      project.update_column(:crypto_weaknesses_status, 3) # Met
       project.update_column(:crypto_weaknesses_justification, 'It is good')
-      project.update_column(:warnings_strict_status, 'Met')
+      project.update_column(:warnings_strict_status, 3) # Met
       project.update_column(:warnings_strict_justification, 'It is good')
     end
     # Run the update task, make sure updated_at and others don't change
@@ -54,9 +54,9 @@ class RecalcTest < ActionDispatch::IntegrationTest
       'Project.find(projects(:one).id).badge_percentage_2',
       'Project.find(projects(:one).id).updated_at'
     ] do
-      project.update_column(:crypto_weaknesses_status, 'Met')
+      project.update_column(:crypto_weaknesses_status, 3) # Met
       project.update_column(:crypto_weaknesses_justification, 'It is good')
-      project.update_column(:warnings_strict_status, 'Met')
+      project.update_column(:warnings_strict_status, 3) # Met
       project.update_column(:warnings_strict_justification, 'It is good')
     end
     # Run the update task, make sure updated_at and others don't change

@@ -30,20 +30,20 @@ class ChiefTest < ActiveSupport::TestCase
     assert_equal 'MIT', results[:license]
     assert_equal @repo_name, results[:name]
     assert_equal @description, results[:description]
-    # Phase 2: Detectives return integers but VARCHAR columns store as strings
-    assert_equal CriterionStatus::MET.to_s, results[:floss_license_status]
+    # Phase 3: Detectives return integers, and columns now store integers
+    assert_equal CriterionStatus::MET, results[:floss_license_status]
     assert_equal mit_ok, results[:floss_license_justification]
-    assert_equal CriterionStatus::MET.to_s, results[:floss_license_osi_status]
+    assert_equal CriterionStatus::MET, results[:floss_license_osi_status]
     assert_equal mit_ok, results[:floss_license_osi_justification]
-    assert_equal CriterionStatus::MET.to_s, results[:contribution_status]
+    assert_equal CriterionStatus::MET, results[:contribution_status]
     assert_equal 'Non-trivial contribution file in repository: <https://github.com/coreinfrastructure/best-practices-badge/blob/main/CONTRIBUTING.md>.',
                  results[:contribution_justification]
-    assert_equal CriterionStatus::MET.to_s, results[:release_notes_status]
+    assert_equal CriterionStatus::MET, results[:release_notes_status]
     assert_equal 'Non-trivial release notes file in repository: ' \
                  '<https://github.com/coreinfrastructure/' \
                  'best-practices-badge/blob/main/CHANGELOG.md>.',
                  results[:release_notes_justification]
-    assert_equal CriterionStatus::MET.to_s, results[:build_status]
+    assert_equal CriterionStatus::MET, results[:build_status]
     assert_equal 'Non-trivial build file in repository: ' \
                  '<https://github.com/coreinfrastructure/' \
                  'best-practices-badge/blob/main/Rakefile>.',

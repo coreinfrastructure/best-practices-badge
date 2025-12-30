@@ -845,13 +845,13 @@ class Project < ApplicationRecord
   # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
   # rubocop:enable Metrics/MethodLength
 
-  # Phase 2: Override attribute readers to convert integers to strings for forms
-  # During Phase 2, database stores integers as stringified integers in VARCHAR
-  # but forms/radio buttons expect string values like 'Met', 'Unmet', etc.
-  # After Phase 3 migration to smallint, these will handle true integers.
+  # Phase 2/3: Override attribute readers and writers for status fields
+  # Readers convert integers to strings for forms/external API
+  # Writers convert strings to integers for database storage
   # Exclude achievement status fields - they're internal and should keep raw values
   # rubocop:disable Style/AccessModifierDeclarations
   (ALL_CRITERIA_STATUS - ACHIEVEMENT_STATUS_FIELDS).each do |status_field|
+    # Custom reader: convert database integers to strings
     define_method(status_field) do
       value = self[status_field]
       return value if value.nil?
@@ -860,7 +860,7 @@ class Project < ApplicationRecord
       if value.is_a?(Integer)
         CriterionStatus::STATUS_VALUES[value]
       elsif value.is_a?(String) && value.match?(/\A[0-3]\z/)
-        # Stringified integer from VARCHAR storage
+        # Stringified integer from VARCHAR storage (Phase 2 transition)
         CriterionStatus::STATUS_VALUES[value.to_i]
       else
         # Already a string name ('Met', 'Unmet', etc.) or invalid value
@@ -868,8 +868,21 @@ class Project < ApplicationRecord
       end
     end
 
+    # Custom writer: convert string names to integers for database
+    define_method("#{status_field}=") do |value|
+      # Convert string names to integers for database storage
+      converted_value =
+        if value.is_a?(String) && CriterionStatus::STATUS_BY_NAME.key?(value)
+          CriterionStatus::STATUS_BY_NAME[value]
+        else
+          value # Keep as-is (integer, nil, or invalid string)
+        end
+      self[status_field] = converted_value
+    end
+
     # Make each accessor public immediately after definition
     public status_field
+    public "#{status_field}="
   end
   # rubocop:enable Style/AccessModifierDeclarations
 end

@@ -22,4 +22,23 @@ module StringRefinements
       self == 'Unmet' || self == '1' # Phase 2: handle stringified integer
     end
   end
+
+  # Phase 3: Add Integer refinements for database values (smallint)
+  refine Integer do
+    def met?
+      self == 3
+    end
+
+    def na?
+      self == 2
+    end
+
+    def unknown?
+      self == 0
+    end
+
+    def unmet?
+      self == 1
+    end
+  end
 end

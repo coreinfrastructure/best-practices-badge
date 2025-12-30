@@ -8,7 +8,8 @@
   end
 
   def criterion_to_checkbox(value)
-    # Phase 4: Only handle integer values (database stores smallint)
+    # Convert integer status value to markdown checkbox
+    # Database stores: 0=?, 1=Unmet, 2=N/A, 3=Met
     case value
     when CriterionStatus::MET, CriterionStatus::NA
       '[x]'

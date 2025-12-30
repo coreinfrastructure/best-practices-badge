@@ -45,11 +45,15 @@ class Project < ApplicationRecord
   STATUS_CHOICE_WITHOUT_NA = [
     CriterionStatus::UNKNOWN, CriterionStatus::MET, CriterionStatus::UNMET
   ].freeze
-  STATUS_CHOICE_NA = (STATUS_CHOICE_WITHOUT_NA + [CriterionStatus::NA]).freeze
-  STATUS_CHOICE = STATUS_CHOICE_WITHOUT_NA
+  STATUS_CHOICE_WITH_NA = (STATUS_CHOICE_WITHOUT_NA + [CriterionStatus::NA]).freeze
   MIN_SHOULD_LENGTH = 5
   MAX_TEXT_LENGTH = 8192 # Arbitrary maximum to reduce abuse
   MAX_SHORT_STRING_LENGTH = 254 # Arbitrary maximum to reduce abuse
+
+  IN_STATUS_CHOICE_WITH_NA = { in: STATUS_CHOICE_WITH_NA }.freeze
+  IN_STATUS_CHOICE_WITHOUT_NA = { in: STATUS_CHOICE_WITHOUT_NA }.freeze
+  MAXIMUM_IS_MAX_TEXT_LENGTH = { maximum: MAX_TEXT_LENGTH }.freeze
+  MAXIMIM_IS_MAX_SHORT_STRING_LENGTH = { maximum: MAX_SHORT_STRING_LENGTH }.freeze
 
   # All badge level internal names *including* in_progress
   # NOTE: If you add a new level, modify compute_tiered_percentage
@@ -266,9 +270,9 @@ class Project < ApplicationRecord
 
   # For these fields we'll have just simple validation rules.
   # We'll rely on Rails' HTML escaping system to counter XSS.
-  validates :name, length: { maximum: MAX_SHORT_STRING_LENGTH }, text: true
-  validates :description, length: { maximum: MAX_TEXT_LENGTH }, text: true
-  validates :license, length: { maximum: MAX_SHORT_STRING_LENGTH }, text: true
+  validates :name, length: MAXIMUM_IS_MAX_SHORT_STRING_LENGTH, text: true
+  validates :description, length: MAXIMUM_IS_MAX_TEXT_LENGTH, text: true
+  validates :license, length: MAXIMUM_IS_MAX_SHORT_STRING_LENGTH, text: true
   validates :general_comments, text: true
 
   # We'll do automated analysis on these URLs, which means we will *download*
@@ -276,11 +280,11 @@ class Project < ApplicationRecord
   # URL restrictions to counter tricks like http://ACCOUNT:PASSWORD@host...
   # and http://something/?arbitrary_parameters
 
-  validates :repo_url, url: true, length: { maximum: MAX_SHORT_STRING_LENGTH },
+  validates :repo_url, url: true, length: MAXIMUM_IS_MAX_SHORT_STRING_LENGTH,
                        uniqueness: { allow_blank: true }
   validates :homepage_url,
             url: true,
-            length: { maximum: MAX_SHORT_STRING_LENGTH }
+            length: MAXIMUM_IS_MAX_SHORT_STRING_LENGTH
   validate :need_a_base_url
 
   # Comma-separated list.  This is very generous in what characters it
@@ -293,14 +297,14 @@ class Project < ApplicationRecord
     %r{\A(|-| ([A-Za-z0-9!\#$%'()*+.\/\:;=?@\[\]^~ -]+
         (,\ ?[A-Za-z0-9!\#$%'()*+.\/\:;=?@\[\]^~ -]+)*))\Z}x
   validates :implementation_languages,
-            length: { maximum: MAX_SHORT_STRING_LENGTH },
+            length: MAXIMUM_IS_MAX_SHORT_STRING_LENGTH,
             format: {
               with: VALID_LANGUAGE_LIST,
               message: :comma_separated_list
             }
 
   validates :cpe,
-            length: { maximum: MAX_SHORT_STRING_LENGTH },
+            length: MAXIMUM_IS_MAX_SHORT_STRING_LENGTH,
             format: {
               with: /\A(cpe:.*)?\Z/,
               message: :begin_with_cpe
@@ -315,12 +319,12 @@ class Project < ApplicationRecord
   Criteria.each_value do |criteria|
     criteria.each_value do |criterion|
       if criterion.na_allowed?
-        validates criterion.name.status, inclusion: { in: STATUS_CHOICE_NA }
+        validates criterion.name.status, inclusion: IN_STATUS_CHOICE_WITH_NA
       else
-        validates criterion.name.status, inclusion: { in: STATUS_CHOICE }
+        validates criterion.name.status, inclusion: IN_STATUS_CHOICE_WITHOUT_NA
       end
       validates criterion.name.justification,
-                length: { maximum: MAX_TEXT_LENGTH },
+                length: MAXIMUM_IS_MAX_TEXT_LENGTH,
                 text: true
     end
   end
@@ -835,7 +839,7 @@ class Project < ApplicationRecord
     # The following works because BADGE_LEVELS[1] is 'passing', etc:
     achieved_previous_level = :"achieve_#{BADGE_LEVELS[level]}_status"
 
-    # Phase 4: Only use integer comparisons (database stores smallint)
+    # Update achievement status based on percentage (uses integer comparisons)
     if self[:"badge_percentage_#{level - 1}"] >= 100
       return if self[achieved_previous_level] == CriterionStatus::MET
 

@@ -5,17 +5,13 @@
 # Start with project attributes
 transformed_attrs = project.attributes.dup
 
-# Phase 2: Convert status fields from integers to strings for API compatibility
-# During migration, some values may be integers, some may be stringified integers
+# Convert status fields from integers to strings for API compatibility
+# Database stores integers (0=?, 1=Unmet, 2=N/A, 3=Met), API returns strings
 Project::ALL_CRITERIA_STATUS.each do |status_field|
   status_value = transformed_attrs[status_field.to_s]
-  if status_value.is_a?(Integer)
-    transformed_attrs[status_field.to_s] = CriterionStatus::STATUS_VALUES[status_value]
-  elsif status_value.is_a?(String) && status_value.match?(/\A[0-3]\z/)
-    # Stringified integer from VARCHAR storage
-    transformed_attrs[status_field.to_s] = CriterionStatus::STATUS_VALUES[status_value.to_i]
-  end
-  # If it's already a string name ('Met', etc.), leave it as-is
+  next if status_value.nil?
+
+  transformed_attrs[status_field.to_s] = CriterionStatus::STATUS_VALUES[status_value]
 end
 
 # Convert baseline field names to display form (uppercase with dashes)

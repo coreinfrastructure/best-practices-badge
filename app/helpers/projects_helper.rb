@@ -362,21 +362,18 @@ module ProjectsHelper
   # @param project [Project] The project instance
   # @param status_field [Symbol] The status field name (e.g., :description_good_status)
   # @param string_value [String] The radio button value ('Met', 'Unmet', 'N/A', '?')
-  # @param options [Hash] Additional options passed to radio_button (label:, disabled:, etc.)
+  # @param ** [Hash] Additional keyword arguments passed to radio_button (label:, disabled:, etc.)
   # @return [String] HTML for the radio button
-  def status_radio_button(form, project, status_field, string_value, options = {})
-    # Read the raw integer value from the database
-    integer_value = project[status_field]
-
-    # Convert integer to string for comparison
-    current_string = integer_value.nil? ? nil : CriterionStatus::STATUS_VALUES[integer_value]
+  def status_radio_button(form, project, status_field, string_value, **)
+    # Read the raw integer value from the database and convert to string
+    current_string = status_to_string(project[status_field])
 
     # Determine if this radio button should be checked
     checked = (current_string == string_value)
 
     # Generate the radio button using bootstrap_form's radio_button helper
     # We pass the string value so the form submits strings (which the controller converts)
-    form.radio_button(status_field, string_value, options.merge(checked: checked))
+    form.radio_button(status_field, string_value, checked: checked, **)
   end
 end
 # rubocop:enable Metrics/ModuleLength

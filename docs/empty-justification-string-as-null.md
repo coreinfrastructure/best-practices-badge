@@ -175,6 +175,12 @@ end
 Modify `app/controllers/projects_controller.rb` to normalize incoming
 justification parameters.
 
+Note that the text below creates two new `before_actions`; a plausible
+alternative would be to have a single `before_action` to
+`regularize_input`, which might then call conversions for both
+status values *and* empty justification strings.
+Don't implement before considering this alternative.
+
 **Location:** Add new method after the existing `convert_status_params`
 method (around line 783)
 

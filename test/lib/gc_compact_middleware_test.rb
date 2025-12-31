@@ -23,14 +23,13 @@ class GcCompactMiddlewareTest < ActiveSupport::TestCase
     assert_not_nil middleware.instance_variable_get(:@last_compact_time)
   end
 
-  test 'initializes with custom interval from env' do
-    original_value = ENV.fetch('BADGEAPP_GC_COMPACT_MINUTES', nil)
-    ENV['BADGEAPP_GC_COMPACT_MINUTES'] = '60'
+  test 'initializes with custom interval from parameter' do
+    middleware = GcCompactMiddleware.new(@app, interval_seconds: 3600)
 
-    middleware = GcCompactMiddleware.new(@app)
     assert_equal 3600, middleware.instance_variable_get(:@interval) # 60 minutes
-  ensure
-    ENV['BADGEAPP_GC_COMPACT_MINUTES'] = original_value
+    assert_instance_of Mutex, middleware.instance_variable_get(:@mutex)
+    assert middleware.instance_variable_get(:@first_call)
+    assert_not_nil middleware.instance_variable_get(:@last_compact_time)
   end
 
   test 'logs first request only' do

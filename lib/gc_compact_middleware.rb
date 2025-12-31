@@ -12,10 +12,15 @@
 # Frequency controlled by BADGEAPP_GC_COMPACT_MINUTES (default: 120 minutes).
 # Note that this class has a singleton instance
 class GcCompactMiddleware
-  def initialize(app)
+  # Initialize the middleware.
+  # @param app [Object] The Rack application to wrap
+  # @param interval_seconds [Integer] Interval in seconds between compactions.
+  #   Defaults to ENV['BADGEAPP_GC_COMPACT_MINUTES'] converted to seconds,
+  #   or 7200 seconds (120 minutes) if ENV not set.
+  def initialize(app, interval_seconds: (ENV['BADGEAPP_GC_COMPACT_MINUTES'] || 120).to_i * 60)
     @app = app
     @mutex = Mutex.new
-    @interval = (ENV['BADGEAPP_GC_COMPACT_MINUTES'] || 120).to_i * 60
+    @interval = interval_seconds
     @last_compact_time = Time.zone.now # Last time it was *scheduled*
     @first_call = true
     # Log initialization at WARN level so it appears even with WARN log level
@@ -46,6 +51,8 @@ class GcCompactMiddleware
         @last_compact_time = Time.zone.now
         Rails.logger.warn 'GcCompactMiddleware: Scheduling compaction'
         # Schedule compaction to happen later.
+        # We presume doing this scheduling won't recurse back to this routine
+        # (it would cause a deadlock); we think that assumption is reasonable.
         (env['rack.after_reply'] ||= []) << -> { compact }
       end
     end

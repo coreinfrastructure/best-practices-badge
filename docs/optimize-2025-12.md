@@ -155,8 +155,8 @@ To handle this new world of massive number of requests, we did the following:
 9. We improved garbage collection compaction.
    We earlier added periodic garbage collection compaction, to more quickly
    collect garbage. In December 2025 we changed the run-time configuration
-   to do a garbage collection compaction every hour,
-   instead of every two hours. This meant that there
+   to do a garbage collection compaction from two hours, to every hour,
+   and then to every 30 minutes. This meant that there
    was less time for unused objects to accumulate in memory, leading to
    less maximum memory use. We also changed the code to deal with a subtle
    threading issue that sometimes meant we skipped compaction.

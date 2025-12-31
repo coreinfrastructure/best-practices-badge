@@ -4,72 +4,62 @@
 # OpenSSF Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
-# Middleware to periodically run GC.compact to reduce memory fragmentation.
-# Compaction runs after response is sent to client (no user-facing latency).
+# Middleware to periodically run the garbage collector's compactor
+# using GC.compact to reduce memory fragmentation.
+# Compaction is scheduled, not run directly, so that it
+# runs after this response is sent to client. This may reduce
+# user-facing latency.
 # Frequency controlled by BADGEAPP_GC_COMPACT_MINUTES (default: 120 minutes).
 # Note that this class has a singleton instance
 class GcCompactMiddleware
-  def initialize(app)
+  # Initialize the middleware.
+  # @param app [Object] The Rack application to wrap
+  # @param interval_seconds [Integer] Interval in seconds between compactions.
+  #   Defaults to ENV['BADGEAPP_GC_COMPACT_MINUTES'] converted to seconds,
+  #   or 7200 seconds (120 minutes) if ENV not set.
+  def initialize(app, interval_seconds: (ENV['BADGEAPP_GC_COMPACT_MINUTES'] || 120).to_i * 60)
     @app = app
-    @last_compact_time = Time.zone.now
-    @interval = (ENV['BADGEAPP_GC_COMPACT_MINUTES'] || 120).to_i * 60
     @mutex = Mutex.new
+    @interval = interval_seconds
+    @last_compact_time = Time.zone.now # Last time it was *scheduled*
     @first_call = true
     # Log initialization at WARN level so it appears even with WARN log level
-    next_compact = @last_compact_time + @interval
-    Rails.logger.warn "GcCompactMiddleware initialized: interval=#{@interval}s " \
-                      "(#{@interval / 60}min), next_compact_at=#{next_compact}"
+    Rails.logger.warn "GcCompactMiddleware initialized: interval=#{@interval}s"
   end
 
   def call(env)
-    # Log first call only, to verify middleware is actually being invoked
-    # Use double-checked locking: check without lock first (fast path),
-    # then synchronize only if needed. Only first thread to acquire mutex
-    # will see @first_call == true and log; others see it already false.
-    if @first_call
-      @mutex.synchronize do
-        if @first_call
-          Rails.logger.warn 'GcCompactMiddleware: First request received, middleware is active'
-          @first_call = false
-        end
-      end
-    end
-
     response = @app.call(env)
-    schedule_compact(env) if time_to_compact?
+    schedule_compact_if_it_is_time(env)
     response
   end
 
   private
 
-  def time_to_compact?
-    Time.zone.now - @last_compact_time >= @interval
-  end
-
-  # This method handles multiple threads. Here's how:
-  # 1. Multiple threads see time_to_compact? returns true
-  # 2. They all call schedule_compact(env)
-  # 3. First thread acquires mutex, updates @last_compact_time, and
-  #    sets scheduled = true
-  # 4. Other threads wait, then see the time is already updated, and skip
-  #    scheduling
-  # 5. Only one compaction gets scheduled
-  def schedule_compact(env)
-    scheduled = false
+  # Thread-safe check to schedule a gc compact if it's time to do it.
+  # The mutex ensures thread-safe read of @last_compact_time and @first_call.
+  def schedule_compact_if_it_is_time(env)
     @mutex.synchronize do
-      if time_to_compact?
+      # Log first call only, to make it easy to verify that the
+      # gc middleware is actually being invoked.
+      if @first_call
+        Rails.logger.warn 'GcCompactMiddleware: First request received'
+        @first_call = false
+      end
+      # Is it time to schedule compaction?
+      if Time.zone.now - @last_compact_time >= @interval
+        # It's time to schedule compaction. Record compaction time.
         @last_compact_time = Time.zone.now
-        scheduled = true
+        Rails.logger.warn 'GcCompactMiddleware: Scheduling compaction'
+        # Schedule compaction to happen later.
+        # We presume doing this scheduling won't recurse back to this routine
+        # (it would cause a deadlock); we think that assumption is reasonable.
+        (env['rack.after_reply'] ||= []) << -> { compact }
       end
     end
-    return unless scheduled
-
-    next_compact = @last_compact_time + @interval
-    Rails.logger.warn 'GcCompactMiddleware: Scheduling compaction, ' \
-                      "next_compact_at=#{next_compact}"
-    (env['rack.after_reply'] ||= []) << -> { compact }
   end
 
+  # Actually perform garbage collection compaction.
+  # This is the method that is scheduled to run later.
   def compact
     Rails.logger.warn 'GC.compact started'
     GC.compact

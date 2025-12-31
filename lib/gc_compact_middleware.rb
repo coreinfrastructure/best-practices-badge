@@ -4,72 +4,61 @@
 # OpenSSF Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
-# Middleware to periodically run GC.compact to reduce memory fragmentation.
-# Compaction runs after response is sent to client (no user-facing latency).
+# Middleware to periodically run the garbage collector's compactor
+# using GC.compact to reduce memory fragmentation.
+# Compaction is scheduled, not run directly, so that it
+# runs after this response is sent to client. This may reduce
+# user-facing latency.
 # Frequency controlled by BADGEAPP_GC_COMPACT_MINUTES (default: 120 minutes).
 # Note that this class has a singleton instance
 class GcCompactMiddleware
   def initialize(app)
     @app = app
-    @last_compact_time = Time.zone.now
-    @interval = (ENV['BADGEAPP_GC_COMPACT_MINUTES'] || 120).to_i * 60
     @mutex = Mutex.new
+    @interval = (ENV['BADGEAPP_GC_COMPACT_MINUTES'] || 120).to_i * 60
+    @last_compact_time = Time.zone.now # Last time it was *scheduled*
     @first_call = true
     # Log initialization at WARN level so it appears even with WARN log level
-    next_compact = @last_compact_time + @interval
-    Rails.logger.warn "GcCompactMiddleware initialized: interval=#{@interval}s " \
-                      "(#{@interval / 60}min), next_compact_at=#{next_compact}"
+    Rails.logger.warn "GcCompactMiddleware initialized: interval=#{@interval}s"
   end
 
   def call(env)
-    # Log first call only, to verify middleware is actually being invoked
-    # Use double-checked locking: check without lock first (fast path),
-    # then synchronize only if needed. Only first thread to acquire mutex
-    # will see @first_call == true and log; others see it already false.
-    if @first_call
-      @mutex.synchronize do
-        if @first_call
-          Rails.logger.warn 'GcCompactMiddleware: First request received, middleware is active'
-          @first_call = false
-        end
-      end
-    end
-
     response = @app.call(env)
-    schedule_compact(env) if time_to_compact?
+    schedule_compact_if_time(env)
     response
   end
 
   private
 
-  def time_to_compact?
-    Time.zone.now - @last_compact_time >= @interval
-  end
-
-  # This method handles multiple threads. Here's how:
-  # 1. Multiple threads see time_to_compact? returns true
-  # 2. They all call schedule_compact(env)
-  # 3. First thread acquires mutex, updates @last_compact_time, and
-  #    sets scheduled = true
-  # 4. Other threads wait, then see the time is already updated, and skip
-  #    scheduling
-  # 5. Only one compaction gets scheduled
-  def schedule_compact(env)
-    scheduled = false
+  # Thread-safe check to see if it's time to schedule a gc compact, and
+  # schedule it if that's true.
+  # Uses mutex to ensure consistent read of @last_compact_time.
+  def schedule_compact_if_time(env)
     @mutex.synchronize do
-      if time_to_compact?
+      # Log first call only, to verify middleware is actually being invoked
+      # We do this check here, where we are *already* synchronizing the mutex,
+      # so we don't grab the mutex twice.
+      if @first_call
+        Rails.logger.warn 'GcCompactMiddleware: First request received, middleware is active'
+        @first_call = false
+      end
+      # Is it time to schedule compaction?
+      if Time.zone.now - @last_compact_time >= @interval
         @last_compact_time = Time.zone.now
-        scheduled = true
+        schedule_compact(env)
       end
     end
-    return unless scheduled
+  end
 
-    next_compact = @last_compact_time + @interval
-    Rails.logger.warn 'GcCompactMiddleware: Scheduling compaction, ' \
-                      "next_compact_at=#{next_compact}"
+  # Schedule compaction to happen later. No need to grab the mutex;
+  # we presume the caller has done so.
+  def schedule_compact(env)
+    Rails.logger.warn 'GcCompactMiddleware: Scheduling compaction'
     (env['rack.after_reply'] ||= []) << -> { compact }
   end
 
+  # Actually perform garbage collection compaction.
+  # This is the method that schedule_compact schedules to run.
   def compact
     Rails.logger.warn 'GC.compact started'
     GC.compact

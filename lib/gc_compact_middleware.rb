@@ -24,41 +24,35 @@ class GcCompactMiddleware
 
   def call(env)
     response = @app.call(env)
-    schedule_compact_if_time(env)
+    schedule_compact_if_it_is_time(env)
     response
   end
 
   private
 
-  # Thread-safe check to see if it's time to schedule a gc compact, and
-  # schedule it if that's true.
-  # Uses mutex to ensure consistent read of @last_compact_time.
-  def schedule_compact_if_time(env)
+  # Thread-safe check to schedule a gc compact if it's time to do it.
+  # The mutex ensures thread-safe read of @last_compact_time and @first_call.
+  def schedule_compact_if_it_is_time(env)
     @mutex.synchronize do
-      # Log first call only, to verify middleware is actually being invoked
-      # We do this check here, where we are *already* synchronizing the mutex,
-      # so we don't grab the mutex twice.
+      # Log first call only, to make it easy to verify that the
+      # gc middleware is actually being invoked.
       if @first_call
-        Rails.logger.warn 'GcCompactMiddleware: First request received, middleware is active'
+        Rails.logger.warn 'GcCompactMiddleware: First request received'
         @first_call = false
       end
       # Is it time to schedule compaction?
       if Time.zone.now - @last_compact_time >= @interval
+        # It's time to schedule compaction. Record compaction time.
         @last_compact_time = Time.zone.now
-        schedule_compact(env)
+        Rails.logger.warn 'GcCompactMiddleware: Scheduling compaction'
+        # Schedule compaction to happen later.
+        (env['rack.after_reply'] ||= []) << -> { compact }
       end
     end
   end
 
-  # Schedule compaction to happen later. No need to grab the mutex;
-  # we presume the caller has done so.
-  def schedule_compact(env)
-    Rails.logger.warn 'GcCompactMiddleware: Scheduling compaction'
-    (env['rack.after_reply'] ||= []) << -> { compact }
-  end
-
   # Actually perform garbage collection compaction.
-  # This is the method that schedule_compact schedules to run.
+  # This is the method that is scheduled to run later.
   def compact
     Rails.logger.warn 'GC.compact started'
     GC.compact

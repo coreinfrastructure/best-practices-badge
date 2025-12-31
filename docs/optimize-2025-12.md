@@ -69,7 +69,13 @@ Some technical details are important here:
 * Like many systems, we use an Object-Relational Mapping (ORM) library.
   The one we use is called ActiveRecord and is part of Rails.
   An ORM converts data from a relational database into an object that's
-  easy to use in an OO language. By default, ORMs usually copy all fields into
+  easy to use in an OO language. In most languages (including Ruby, Python,
+  and JavaScript), creating that ORM object will also create many
+  more *other* objects to represent the
+  various data fields that were loaded into it
+  (e.g., it will create a string object for every string value loaded into
+  the ORM object to represent some field's value).
+  By default, ORMs usually copy all fields into
   an object, but if those fields aren't used, this can do a lot of unnecessary
   work and create a lot of useless objects.
 * Every creation of a new empty string creates extra work, as it has to

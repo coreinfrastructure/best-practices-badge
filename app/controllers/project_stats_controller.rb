@@ -46,6 +46,8 @@ class ProjectStatsController < ApplicationController
 
   SECONDS_IN_A_DAY = 24 * 60 * 60 # 24 hours, 60 minutes, 60 seconds
 
+  ACTIONS_CREATED_UPDATED = %w[created updated].freeze
+
   USER_STATS_LINE_CHART_FIELDS = %w[
     users
     github_users
@@ -173,10 +175,11 @@ class ProjectStatsController < ApplicationController
   def total_projects
     cache_until_next_stat
 
+    stat_data = ProjectStat.select(:created_at, :percent_ge_0)
     dataset =
-      ProjectStat.select(:created_at, :percent_ge_0).each_with_object({}) do |e, h|
+      stat_data.each_with_object(Hash.new(capacity: stat_data.length)) do |e, h|
         h[e.created_at] = e.percent_ge_0
-      end
+      end.freeze
     render_json_fast dataset
   end
 
@@ -189,27 +192,28 @@ class ProjectStatsController < ApplicationController
   # GET /project_stats/nontrivial_projects.json
   # Dataset of nontrivial project entries
   # Note that this does NOT take a locale.
-  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def nontrivial_projects
     cache_until_next_stat
 
     # Ask the database *once* for the data we need, then reorganize it
     stat_data = ProjectStat.select(:created_at, *LEVEL0_GT0_FIELDS)
+    stat_data_len = stat_data.length
 
     # Show project counts; skip 0% because that makes chart scale unusable
     dataset =
       ProjectStat::STAT_VALUES_GT0.map do |minimum|
         desired_field = 'percent_ge_' + minimum.to_s
         series_dataset =
-          stat_data.each_with_object({}) do |e, h|
+          stat_data.each_with_object(Hash.new(capacity: stat_data_len)) do |e, h|
             h[e.created_at] = e[desired_field]
-          end
-        { name: '>=' + minimum.to_s + '%', data: series_dataset }
-      end
+          end.freeze
+        { name: '>=' + minimum.to_s + '%', data: series_dataset }.freeze
+      end.freeze
 
     render_json_fast dataset
   end
-  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   # GET /:locale/project_stats/activity_30.json
   # Dataset of activity
@@ -290,25 +294,26 @@ class ProjectStatsController < ApplicationController
       :created_at,
       :created_since_yesterday, :updated_since_yesterday
     )
+    stat_data_len = stat_data.length
 
-    actions = %w[created updated].freeze
-    actions.each do |action|
+    ACTIONS_CREATED_UPDATED.each do |action|
       desired_field = action + '_since_yesterday'
       series_dataset =
-        stat_data.reduce({}) do |h, e|
-          h.merge(e.created_at => e[desired_field])
+        stat_data.each_with_object(Hash.new(capacity: stat_data_len)) do |e, h|
+          h[e.created_at] = e[desired_field]
         end.freeze
       dataset << {
         name: I18n.t("project_stats.index.projects_#{action}_since_yesterday"),
         data: series_dataset
-      }
+      }.freeze
       # Calculate moving average over ndays
       series_counts = stat_data.pluck(desired_field)
       series_moving_average =
         series_counts.each_cons(ndays).map do |e|
           e.sum.to_f / ndays
         end
-      moving_average_dataset = {}
+      # Preallocate capacity for moving average dataset
+      moving_average_dataset = Hash.new(capacity: stat_data_len - ndays)
       stat_data.each_with_index do |e, index|
         if index >= ndays
           moving_average_dataset[e.created_at] =
@@ -322,7 +327,7 @@ class ProjectStatsController < ApplicationController
       }
     end
 
-    render_json_fast dataset
+    render_json_fast dataset.freeze
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize, Metrics/BlockLength
 
@@ -348,7 +353,7 @@ class ProjectStatsController < ApplicationController
     dataset << {
       name: I18n.t('project_stats.index.reminders_sent_since_yesterday'),
       data: reminders_dataset
-    }
+    }.freeze
     # Reactivated after reminders
     reactivated_dataset =
       stat_data.each_with_object(Hash.new(capacity: stat_data_len)) do |e, h|
@@ -389,7 +394,7 @@ class ProjectStatsController < ApplicationController
           stat_data.each_with_object(Hash.new(capacity: stat_data_len)) do |e, h|
             h[e.created_at] = e[desired_field]
           end.freeze
-        { name: ">=#{minimum}%", data: series_dataset }
+        { name: ">=#{minimum}%", data: series_dataset }.freeze
       end
 
     render_json_fast dataset

@@ -253,16 +253,17 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     # NOTE: This test is NOT thread-safe, it manipulates a global variable
     deny_login_old = Rails.application.config.deny_login
     Rails.application.config.deny_login = true
-
-    VCR.use_cassette('cannot_create_local_user_if_login_disabled') do
-      # This will produce a "create" call on the controller
-      post '/en/users', params: {
-        user: { name: 'Not here', email: 'nonsense@example.org' }, locale: :en
-      }
+    begin
+      VCR.use_cassette('cannot_create_local_user_if_login_disabled') do
+        # This will produce a "create" call on the controller
+        post '/en/users', params: {
+          user: { name: 'Not here', email: 'nonsense@example.org' }, locale: :en
+        }
+      end
+      assert '403', response.code
+    ensure
+      Rails.application.config.deny_login = deny_login_old
     end
-    assert '403', response.code
-
-    Rails.application.config.deny_login = deny_login_old
   end
 
   test 'should redirect update when not logged in' do

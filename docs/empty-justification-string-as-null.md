@@ -181,23 +181,36 @@ alternative would be to have a single `before_action` to
 status values *and* empty justification strings.
 Don't implement before considering this alternative.
 
-**Location:** Add new method after the existing `convert_status_params`
-method (around line 783)
+**Location:** Modify existing method `convert_status_params`
+method (around line 783) from:
+
+```ruby
+  def convert_status_params
+    return unless params[:project]
+
+    convert_status_params_of_hash!(params[:project])
+  end
+```
+
+into:
+
+```ruby
+  # Clean up input project data.
+  # Turn status values into integers, and convert
+  # empty justification values into nil.
+  # @return [void]
+  def cleanup_input_params
+    p = params[:project]
+    return unless p
+
+    convert_status_params_of_hash!(p)
+    convert_justification_params_of_hash!(p)
+  end
+```
 
 **New method:**
 
 ```ruby
-# Convert empty justification strings to nil for database storage.
-# This prevents allocating empty string objects when nil (singleton) would suffice.
-# Empty strings and nil are semantically equivalent for justifications and
-# both render as empty strings in forms via nil.to_s.
-# @return [void]
-def convert_justification_params
-  return unless params[:project]
-
-  convert_justification_params_of_hash!(params[:project])
-end
-
 # Convert all empty justification strings to nil in hash h.
 # This modifies the hash IN PLACE.
 # @param h [Hash] The hash to modify (typically params[:project])
@@ -222,26 +235,8 @@ end
 before_action :convert_status_params, only: %i[create update]
 
 # To:
-before_action :convert_status_params, only: %i[create update]
-before_action :convert_justification_params, only: %i[create update]
+before_action :cleanup_input_params, only: %i[create update]
 ```
-
-**What it does:**
-
-- Intercepts incoming project parameters before they're saved
-- Converts any empty string justification values to `nil`
-- Follows the same pattern as the existing `convert_status_params` method
-- Runs on both `create` and `update` actions
-- Prevents new empty strings from being saved to the database
-
-**Why this location:**
-
-- The `convert_status_params` before_action already exists here for
-  converting status strings to integers
-- This is the single point where all project updates flow through
-- Handles both web form submissions and any API-style updates
-- No other controllers modify projects (verified via grep)
-
 ### 3. Testing Considerations
 
 **Tests to add/verify:**

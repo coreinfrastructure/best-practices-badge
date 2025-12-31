@@ -152,12 +152,16 @@ To handle this new world of massive number of requests, we did the following:
 8. Don't call the markdown processor for trivial cases where it makes
    no difference. In many cases only trivial strings are provided, and this
    avoids unnecessary work to process them.
-9. We changed the run-time configuration to do a garbage collection
-   compaction every hour, instead of every two hours. This meant that there
+9. We improved garbage collection compaction.
+   We earlier added periodic garbage collection compaction, to more quickly
+   collect garbage. In December 2025 we changed the run-time configuration
+   to do a garbage collection compaction from two hours, to every hour,
+   and then to every 30 minutes. This meant that there
    was less time for unused objects to accumulate in memory, leading to
-   less maximum memory use. By *itself* we still had memory use exceeded,
-   and we want to limit the number of collections, so we still needed to
-   take other steps.
+   less maximum memory use. We also changed the code to deal with a subtle
+   threading issue that sometimes meant we skipped compaction.
+   By *itself* we still had memory use exceeded, and we want to limit
+   the number of collections, so we still needed to take other steps.
 
 ## Impact
 
@@ -167,7 +171,8 @@ best practices badge application.
 We were hitting restarts a few times a day from massively exceeding
 our memory limits ("memory quota vastly exceeded").
 We think we won't be hitting them any more with our optimized system.
-Because each request does less work, each request will complete more quickly.
+Because each request does less work, each requests complete more quickly,
+so single-request performance is faster.
 We may even be able to increase the number of threads, which will
 increase the number of simultaneous requests a single worker
-processor can handle, improving overall performance even further.
+processor can handle, improving overall throughput even further.

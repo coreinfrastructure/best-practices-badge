@@ -1665,5 +1665,51 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal CriterionStatus::MET, test_hash[:description_good_status],
                  'Valid status value "Met" should be converted to integer 3'
   end
+
+  # Test that empty justification strings are converted to nil
+  test 'convert_justification_params_of_hash! converts empty strings to nil' do
+    controller = ProjectsController.new
+    test_hash = {
+      description_good_justification: '',
+      know_common_errors_justification: 'Some text'
+    }
+
+    controller.send(:convert_justification_params_of_hash!, test_hash)
+
+    # Verify empty string was converted to nil
+    assert_nil test_hash[:description_good_justification],
+               'Empty justification string should be converted to nil'
+    # Verify non-empty string was preserved
+    assert_equal 'Some text', test_hash[:know_common_errors_justification],
+                 'Non-empty justification should be preserved'
+  end
+
+  # Test that nil justifications remain nil
+  test 'convert_justification_params_of_hash! preserves nil values' do
+    controller = ProjectsController.new
+    test_hash = { description_good_justification: nil }
+
+    controller.send(:convert_justification_params_of_hash!, test_hash)
+
+    # Verify nil was preserved
+    assert_nil test_hash[:description_good_justification],
+               'Nil justification should remain nil'
+  end
+
+  # Integration test: verify empty justification strings are converted on update
+  test 'empty justification strings converted to nil on update' do
+    log_in_as(@admin)
+
+    patch "/en/projects/#{@project.id}", params: {
+      project: {
+        description_good_justification: '', # Empty string
+        name: 'Test Project'
+      }
+    }
+
+    @project.reload
+    assert_nil @project.description_good_justification,
+               'Empty justification should be stored as nil in database'
+  end
 end
 # rubocop:enable Metrics/ClassLength

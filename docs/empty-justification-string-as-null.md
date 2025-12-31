@@ -237,6 +237,7 @@ before_action :convert_status_params, only: %i[create update]
 # To:
 before_action :cleanup_input_params, only: %i[create update]
 ```
+
 ### 3. Testing Considerations
 
 **Tests to add/verify:**

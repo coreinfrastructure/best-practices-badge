@@ -25,7 +25,7 @@ class ProjectsController < ApplicationController
   before_action :can_edit_else_redirect, only: %i[edit update]
   before_action :can_control_else_redirect, only: %i[destroy delete_form]
   before_action :require_adequate_deletion_rationale, only: :destroy
-  before_action :convert_status_params, only: %i[create update]
+  before_action :cleanup_input_params, only: %i[create update]
 
   # Cache with CDN. We can only do this when we don't display the
   # header (which changes for logged-in users), use a flash, or
@@ -752,9 +752,9 @@ class ProjectsController < ApplicationController
   # @return [void]
   def convert_status_params_of_hash!(h)
     Project::ALL_CRITERIA_STATUS.each do |status_field|
-      next unless h[status_field]
-
       string_value = h[status_field]
+      # NOTE: In Ruby, empty string is truthy (not falsy)
+      next unless string_value # Skip if nil, false, or key doesn't exist
 
       # Skip if already an integer (shouldn't happen, but be safe)
       next if string_value.is_a?(Integer)
@@ -773,13 +773,39 @@ class ProjectsController < ApplicationController
     end
   end
 
-  # Convert incoming string status params to integers for database storage.
-  # Maintains backward compatibility with external API (accepts strings).
+  # Convert all empty justification strings to nil in hash h.
+  # This modifies the hash IN PLACE.
+  # @param h [Hash] The hash to modify (typically params[:project])
   # @return [void]
-  def convert_status_params
-    return unless params[:project]
+  def convert_justification_params_of_hash!(h)
+    Project::ALL_CRITERIA_JUSTIFICATION.each do |justification_field|
+      value = h[justification_field]
 
-    convert_status_params_of_hash!(params[:project])
+      # NOTE: In Ruby, empty string is truthy (not falsy)
+      next unless value # Skip if nil, false, or key doesn't exist
+
+      # Only process if it's a String (skip if already nil or other type)
+      next unless value.is_a?(String)
+
+      # Convert empty strings to nil
+      # Leave non-empty strings as-is
+      h[justification_field] = nil if value == ''
+    end
+  end
+
+  # Clean up input project data.
+  # Turn status values into integers, and convert
+  # empty justification values into nil.
+  # @return [void]
+  def cleanup_input_params
+    p = params[:project]
+    return unless p
+
+    # We have project parameters. Clean them up. This way, external
+    # systems can use string status (e.g., 'Met') and empty strings,
+    # but internally we use integer and nil for efficiency.
+    convert_status_params_of_hash!(p)
+    convert_justification_params_of_hash!(p)
   end
 
   # Verifies that the current user can edit the project, or redirects to root.

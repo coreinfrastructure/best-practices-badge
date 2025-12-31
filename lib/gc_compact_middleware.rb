@@ -51,8 +51,6 @@ class GcCompactMiddleware
         @last_compact_time = Time.zone.now
         Rails.logger.warn 'GcCompactMiddleware: Scheduling compaction'
         # Schedule compaction to happen later.
-        # We presume doing this scheduling won't recurse back to this routine
-        # (it would cause a deadlock); we think that assumption is reasonable.
         (env['rack.after_reply'] ||= []) << -> { compact }
       end
     end

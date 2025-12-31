@@ -113,7 +113,7 @@ To handle this new world of massive number of requests, we did the following:
    Small integers don't require separate allocation nor deallocation,
    and since they're stored in the database as a smallint (the smallest
    portable SQL value) they take less space in the database too.
-   NULL is not allowed; 0 represents `?` (Unknown). A 3 represts `Met`.
+   NULL is not allowed; 0 represents `?` (Unknown). A 3 represents `Met`.
    These are converted when they enter and leave the external application,
    so this change is invisible to clients.
    We want that; integers don't have any obvious meaning, while the strings

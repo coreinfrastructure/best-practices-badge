@@ -202,6 +202,9 @@ class ProjectsController < ApplicationController
   # as= values, which redirect to alternative views
   ALLOWED_AS = %w[badge entry].freeze
 
+  # Permitted criteria_level parameter (frozen array for memory optimization)
+  CRITERIA_LEVEL_PERMITTED = [:criteria_level].freeze
+
   # "Normal case" index after projects are retrieved
   # @return [void]
   def show_normal_index
@@ -921,7 +924,7 @@ class ProjectsController < ApplicationController
   # Used for filtering projects by criteria level.
   # @return [ActionController::Parameters] Permitted criteria_level parameter
   def criteria_level_params
-    params.permit([:criteria_level])
+    params.permit(CRITERIA_LEVEL_PERMITTED)
   end
 
   # Extracts URL without scheme and trailing slash for comparison.

@@ -5,6 +5,9 @@
 # SPDX-License-Identifier: MIT
 
 # rubocop:disable Metrics/ClassLength
+# We ".freeze" a lot of results here, in part to optimize and in part
+# to prevent potential threading issues, so this isn't worth it:
+# rubocop: disable Style/MethodCalledOnDoEndBlock
 class ProjectStatsController < ApplicationController
   # Our graphing component (chartkick) requires exceptions in our
   # content security policy (CSP), so poke holes in the policy.
@@ -42,6 +45,22 @@ class ProjectStatsController < ApplicationController
   CACHE_TIME_WITHIN_SLOP = 120
 
   SECONDS_IN_A_DAY = 24 * 60 * 60 # 24 hours, 60 minutes, 60 seconds
+
+  ACTIONS_CREATED_UPDATED = %w[created updated].freeze
+
+  USER_STATS_LINE_CHART_FIELDS = %w[
+    users
+    github_users
+    local_users
+    users_created_since_yesterday
+    users_updated_since_yesterday
+    users_with_projects
+    users_without_projects
+    users_with_multiple_projects
+    users_with_passing_projects
+    users_with_silver_projects
+    users_with_gold_projects
+  ].freeze
 
   # Report the time we should cache, given seconds since midnight and
   # the fact that a log event will occur at "log_time". If the current
@@ -156,48 +175,45 @@ class ProjectStatsController < ApplicationController
   def total_projects
     cache_until_next_stat
 
+    stat_data = ProjectStat.select(:created_at, :percent_ge_0)
     dataset =
-      ProjectStat.select(:created_at, :percent_ge_0).each_with_object({}) do |e, h|
+      stat_data.each_with_object(Hash.new(capacity: stat_data.length)) do |e, h|
         h[e.created_at] = e.percent_ge_0
-      end
+      end.freeze
     render_json_fast dataset
   end
 
   # Database fieldnames >0% for level 0 (passing)
-  # rubocop: disable Style/MethodCalledOnDoEndBlock
   LEVEL0_GT0_FIELDS =
     ProjectStat::STAT_VALUES_GT0.map do |e|
       :"percent_ge_#{e}"
     end.freeze
-  # rubocop: enable Style/MethodCalledOnDoEndBlock
 
   # GET /project_stats/nontrivial_projects.json
   # Dataset of nontrivial project entries
   # Note that this does NOT take a locale.
-  # rubocop:disable Metrics/MethodLength
-  # I "freeze" when I can to prevent some errors - allow that:
-  # rubocop:disable Style/MethodCalledOnDoEndBlock
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def nontrivial_projects
     cache_until_next_stat
 
     # Ask the database *once* for the data we need, then reorganize it
     stat_data = ProjectStat.select(:created_at, *LEVEL0_GT0_FIELDS)
+    stat_data_len = stat_data.length
 
     # Show project counts; skip 0% because that makes chart scale unusable
     dataset =
       ProjectStat::STAT_VALUES_GT0.map do |minimum|
         desired_field = 'percent_ge_' + minimum.to_s
         series_dataset =
-          stat_data.each_with_object({}) do |e, h|
+          stat_data.each_with_object(Hash.new(capacity: stat_data_len)) do |e, h|
             h[e.created_at] = e[desired_field]
-          end
-        { name: '>=' + minimum.to_s + '%', data: series_dataset }
-      end
+          end.freeze
+        { name: '>=' + minimum.to_s + '%', data: series_dataset }.freeze
+      end.freeze
 
     render_json_fast dataset
   end
-  # rubocop:enable Style/MethodCalledOnDoEndBlock
-  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   # GET /:locale/project_stats/activity_30.json
   # Dataset of activity
@@ -213,12 +229,13 @@ class ProjectStatsController < ApplicationController
       :active_projects, :active_in_progress,
       :active_edited_projects, :active_edited_in_progress
     )
+    stat_data_len = stat_data.length
 
     # Active projects
     active_dataset =
-      stat_data.each_with_object({}) do |e, h|
+      stat_data.each_with_object(Hash.new(capacity: stat_data_len)) do |e, h|
         h[e.created_at] = e.active_projects
-      end
+      end.freeze
     dataset << {
       name: I18n.t('project_stats.index.active_projects'),
                 data: active_dataset
@@ -226,9 +243,9 @@ class ProjectStatsController < ApplicationController
 
     # Active in-progress projects
     active_in_progress_dataset =
-      stat_data.each_with_object({}) do |e, h|
+      stat_data.each_with_object(Hash.new(capacity: stat_data_len)) do |e, h|
         h[e.created_at] = e.active_in_progress
-      end
+      end.freeze
     dataset << {
       name: I18n.t('project_stats.index.active_in_progress'),
                 data: active_in_progress_dataset
@@ -236,9 +253,9 @@ class ProjectStatsController < ApplicationController
 
     # Active edited projects
     active_edited_dataset =
-      stat_data.each_with_object({}) do |e, h|
+      stat_data.each_with_object(Hash.new(capacity: stat_data_len)) do |e, h|
         h[e.created_at] = e.active_edited_projects
-      end
+      end.freeze
     dataset << {
       name: I18n.t('project_stats.index.active_edited'),
                 data: active_edited_dataset
@@ -246,9 +263,9 @@ class ProjectStatsController < ApplicationController
 
     # Active edited in-progress projects
     active_edited_in_progress_dataset =
-      stat_data.each_with_object({}) do |e, h|
+      stat_data.each_with_object(Hash.new(capacity: stat_data_len)) do |e, h|
         h[e.created_at] = e.active_edited_in_progress
-      end
+      end.freeze
     dataset << {
       name: I18n.t('project_stats.index.active_edited_in_progress'),
                 data: active_edited_in_progress_dataset
@@ -277,25 +294,26 @@ class ProjectStatsController < ApplicationController
       :created_at,
       :created_since_yesterday, :updated_since_yesterday
     )
+    stat_data_len = stat_data.length
 
-    actions = %w[created updated].freeze
-    actions.each do |action|
+    ACTIONS_CREATED_UPDATED.each do |action|
       desired_field = action + '_since_yesterday'
       series_dataset =
-        stat_data.reduce({}) do |h, e|
-          h.merge(e.created_at => e[desired_field])
-        end
+        stat_data.each_with_object(Hash.new(capacity: stat_data_len)) do |e, h|
+          h[e.created_at] = e[desired_field]
+        end.freeze
       dataset << {
         name: I18n.t("project_stats.index.projects_#{action}_since_yesterday"),
         data: series_dataset
-      }
+      }.freeze
       # Calculate moving average over ndays
       series_counts = stat_data.pluck(desired_field)
       series_moving_average =
         series_counts.each_cons(ndays).map do |e|
           e.sum.to_f / ndays
         end
-      moving_average_dataset = {}
+      # Preallocate capacity for moving average dataset
+      moving_average_dataset = Hash.new(capacity: stat_data_len - ndays)
       stat_data.each_with_index do |e, index|
         if index >= ndays
           moving_average_dataset[e.created_at] =
@@ -309,7 +327,7 @@ class ProjectStatsController < ApplicationController
       }
     end
 
-    render_json_fast dataset
+    render_json_fast dataset.freeze
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize, Metrics/BlockLength
 
@@ -325,21 +343,22 @@ class ProjectStatsController < ApplicationController
     stat_data = ProjectStat.select(
       :created_at, :reminders_sent, :reactivated_after_reminder
     )
+    stat_data_len = stat_data.length
 
     # Reminders sent
     reminders_dataset =
-      stat_data.each_with_object({}) do |e, h|
+      stat_data.each_with_object(Hash.new(capacity: stat_data_len)) do |e, h|
         h[e.created_at] = e.reminders_sent
-      end
+      end.freeze
     dataset << {
       name: I18n.t('project_stats.index.reminders_sent_since_yesterday'),
       data: reminders_dataset
-    }
+    }.freeze
     # Reactivated after reminders
     reactivated_dataset =
-      stat_data.each_with_object({}) do |e, h|
+      stat_data.each_with_object(Hash.new(capacity: stat_data_len)) do |e, h|
         h[e.created_at] = e.reactivated_after_reminder
-      end
+      end.freeze
     dataset << {
       name: I18n.t('project_stats.index.reactivated_projects'),
       data: reactivated_dataset
@@ -350,12 +369,10 @@ class ProjectStatsController < ApplicationController
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   # Level 1 (silver) database fields that are more than 25%
-  # rubocop: disable Style/MethodCalledOnDoEndBlock
   LEVEL1_GT25_FIELDS =
     ProjectStat::STAT_VALUES_GT25.map do |e|
       :"percent_1_ge_#{e}"
     end.freeze
-  # rubocop: enable Style/MethodCalledOnDoEndBlock
 
   # GET /project_stats/silver.json
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
@@ -368,15 +385,16 @@ class ProjectStatsController < ApplicationController
 
     # Retrieve just the data we need
     stat_data = ProjectStat.select(:created_at, *LEVEL1_GT25_FIELDS)
+    stat_data_len = stat_data.length
 
     dataset =
       ProjectStat::STAT_VALUES_GT25.map do |minimum|
         desired_field = "percent_1_ge_#{minimum}"
         series_dataset =
-          stat_data.each_with_object({}) do |e, h|
+          stat_data.each_with_object(Hash.new(capacity: stat_data_len)) do |e, h|
             h[e.created_at] = e[desired_field]
-          end
-        { name: ">=#{minimum}%", data: series_dataset }
+          end.freeze
+        { name: ">=#{minimum}%", data: series_dataset }.freeze
       end
 
     render_json_fast dataset
@@ -384,12 +402,10 @@ class ProjectStatsController < ApplicationController
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   # Level 2 (gold) database fields that are more than 25%
-  # rubocop: disable Style/MethodCalledOnDoEndBlock
   LEVEL2_GT25_FIELDS =
     ProjectStat::STAT_VALUES_GT25.map do |e|
       :"percent_2_ge_#{e}"
     end.freeze
-  # rubocop: enable Style/MethodCalledOnDoEndBlock
 
   # GET /project_stats/gold.json
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
@@ -402,14 +418,15 @@ class ProjectStatsController < ApplicationController
 
     # Retrieve just the data we need
     stat_data = ProjectStat.select(:created_at, *LEVEL2_GT25_FIELDS)
+    stat_data_len = stat_data.length
 
     dataset =
       ProjectStat::STAT_VALUES_GT25.map do |minimum|
         desired_field = "percent_2_ge_#{minimum}"
         series_dataset =
-          stat_data.each_with_object({}) do |e, h|
+          stat_data.each_with_object(Hash.new(capacity: stat_data_len)) do |e, h|
             h[e.created_at] = e[desired_field]
-          end
+          end.freeze
         { name: ">=#{minimum}%", data: series_dataset }
       end
 
@@ -426,19 +443,20 @@ class ProjectStatsController < ApplicationController
     stat_data = ProjectStat.select(
       :created_at, :percent_1_ge_100, :percent_2_ge_100
     )
+    stat_data_len = stat_data.length
 
     dataset =
       %w[1 2].map do |level|
         desired_field = "percent_#{level}_ge_100"
         series_dataset =
-          stat_data.each_with_object({}) do |e, h|
+          stat_data.each_with_object(Hash.new(capacity: stat_data_len)) do |e, h|
             h[e.created_at] = e[desired_field]
-          end
+          end.freeze
         {
           name: I18n.t("projects.form_early.level.#{level}"),
           data: series_dataset
         }
-      end
+      end.freeze
 
     render_json_fast dataset
   end
@@ -454,21 +472,22 @@ class ProjectStatsController < ApplicationController
       :created_at, :percent_ge_0,
       :percent_ge_100, :percent_1_ge_100, :percent_2_ge_100
     )
+    stat_data_len = stat_data.length
 
     dataset =
       [0, 1, 2].map do |level|
         desired_field =
           "percent#{'_' + level.to_s if level.positive?}_ge_100"
         series_dataset =
-          stat_data.each_with_object({}) do |e, h|
+          stat_data.each_with_object(Hash.new(capacity: stat_data_len)) do |e, h|
             h[e.created_at] =
               e[desired_field].to_i * 100.0 / e['percent_ge_0'].to_i
-          end
+          end.freeze
         {
           name: I18n.t("projects.form_early.level.#{level}"),
            data: series_dataset
         }
-      end
+      end.freeze
 
     render_json_fast dataset
   end
@@ -480,20 +499,21 @@ class ProjectStatsController < ApplicationController
     # Retrieve just the data we need
     database_fields = [:created_at] + fields.map(&:to_sym)
     stat_data = ProjectStat.select(*database_fields)
+    stat_data_len = stat_data.length
 
     dataset = []
     fields.each do |field|
       # Add "field" to dataset
       active_dataset =
-        stat_data.each_with_object({}) do |e, h|
+        stat_data.each_with_object(Hash.new(capacity: stat_data_len)) do |e, h|
           h[e.created_at] = e[field]
-        end
+        end.freeze
       dataset << {
         name: I18n.t("project_stats.index.#{field}"),
         data: active_dataset
       }
     end
-    dataset
+    dataset.freeze
   end
   # rubocop:enable Metrics/MethodLength
 
@@ -503,22 +523,7 @@ class ProjectStatsController < ApplicationController
   def user_statistics
     cache_until_next_stat
 
-    dataset =
-      create_line_chart(
-        %w[
-          users
-          github_users
-          local_users
-          users_created_since_yesterday
-          users_updated_since_yesterday
-          users_with_projects
-          users_without_projects
-          users_with_multiple_projects
-          users_with_passing_projects
-          users_with_silver_projects
-          users_with_gold_projects
-        ]
-      )
+    dataset = create_line_chart(USER_STATS_LINE_CHART_FIELDS)
 
     render_json_fast dataset
   end
@@ -561,4 +566,5 @@ class ProjectStatsController < ApplicationController
   #     :percent_ge_50, :percent_ge_75, :percent_ge_90, :percent_ge_100)
   # end
 end
+# rubocop: enable Style/MethodCalledOnDoEndBlock
 # rubocop:enable Metrics/ClassLength

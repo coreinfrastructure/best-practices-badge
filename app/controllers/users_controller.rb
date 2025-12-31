@@ -132,13 +132,15 @@ class UsersController < ApplicationController
     if search_emails_list.present? && User.email_search_available?
       # Split by \n; .strip will remove any \r from CRLF line endings
       search_emails_list.split("\n").each do |email|
-        next if email.strip.empty?
+        # Store stripped email once to avoid multiple .strip calls
+        email_stripped = email.strip
+        next if email_stripped.empty?
 
         # Validate email format
-        unless valid_email_format?(email.strip)
+        unless valid_email_format?(email_stripped)
           return {
             user_ids: [],
-            error: "Invalid email format: #{email.strip}"
+            error: "Invalid email format: #{email_stripped}"
           }
         end
 
@@ -301,8 +303,10 @@ class UsersController < ApplicationController
     if @user.save
       # If user changed his own locale, switch to it.  It's possible for an
       # *admin* to change someone else's locale, in that case leave it alone.
-      if current_user == @user && user_parameter_values[:preferred_locale]
-        I18n.locale = user_parameter_values[:preferred_locale].to_sym
+      # Store preferred_locale once to avoid duplicate hash lookup
+      preferred_locale = user_parameter_values[:preferred_locale]
+      if current_user == @user && preferred_locale
+        I18n.locale = preferred_locale.to_sym
       end
       # Email user on every change.  That way, if the user did *not* initiate
       # the change (e.g., because it's by an admin or by someone who broke

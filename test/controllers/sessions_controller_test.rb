@@ -70,14 +70,17 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     # is fine, parallel testing with *threads* will not work.
     old_deny = Rails.application.config.deny_login
     Rails.application.config.deny_login = true # Not thread-safe
-    post '/en/login', params: {
-      session: {
-        provider: 'local', email: 'test@example.org', password: 'password'
+    begin
+      post '/en/login', params: {
+        session: {
+          provider: 'local', email: 'test@example.org', password: 'password'
+        }
       }
-    }
-    assert flash && flash[:danger]
-    assert flash[:danger].include?('logins temporarily disabled')
-    assert '403', response.code
-    Rails.application.config.deny_login = old_deny
+      assert flash && flash[:danger]
+      assert flash[:danger].include?('logins temporarily disabled')
+      assert '403', response.code
+    ensure
+      Rails.application.config.deny_login = old_deny
+    end
   end
 end

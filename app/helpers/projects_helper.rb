@@ -87,40 +87,79 @@ module ProjectsHelper
     fork_repos.blank? ? EMPTY_ARRAY : [[t('.fork_repos'), '', 'none']]
   end
 
-  # Render markdown.  This is safe because the markdown renderer in use is
-  # configured with filter_html:true, but rubocop has no way to know that.
-  # Uses thread-local storage to reuse processor instances within a thread
-  # while ensuring thread safety, as Redcarpet's C code is not thread-safe
-  # with shared instances across threads.
+  # REDCARPET THREAD-SAFETY WORKAROUND
+  #
+  # Redcarpet (v3.6.1) claims to be thread-safe but has subtle bugs in its C
+  # extension. Its C code has global state (work buffers in md->work_bufs[])
+  # that gets corrupted when multiple threads call render() simultaneously,
+  # even when each thread uses a separate Redcarpet::Markdown instance.
+  # This causes segmentation faults with the error:
+  #   Assertion failed: (md->work_bufs[BUFFER_BLOCK].size == 0),
+  #   function sd_markdown_render, file markdown.c, line 2544
+  #
+  # We experienced crashes with 56 concurrent threads in CI/CD. GitLab hit the
+  # same issue and documented their workaround in MR #14604:
+  # https://gitlab.com/gitlab-org/gitlab-ce/merge_requests/14604
+  #
+  # Redcarpet issue tracker confirms the problem:
+  # - https://github.com/vmg/redcarpet/issues/184 (no built-in thread safety)
+  # - https://github.com/vmg/redcarpet/issues/569 (segfaults with :quote)
+  #
+  # Our workaround uses BOTH thread-local storage AND a mutex (defense in depth):
+  # - Thread-local storage: Each thread gets its own instance (avoids most issues)
+  # - Mutex: Serializes all render() calls to protect Redcarpet's global C state
+  #
+  # Both protections are necessary because Redcarpet has bugs at two levels:
+  # 1. Instance level (need separate instances per thread)
+  # 2. Global state level (need serialized access even with separate instances)
+  MARKDOWN_MUTEX = Mutex.new
+
+  # Render markdown content to HTML.
+  #
+  # This method works around Redcarpet's thread-safety bugs by using both
+  # thread-local storage and mutex serialization. See MARKDOWN_MUTEX comments
+  # above for details on why both protections are necessary.
+  #
+  # For simple text with no markdown syntax, we bypass Redcarpet entirely for
+  # performance. The markdown renderer is configured with filter_html:true for
+  # security, but rubocop can't detect this, hence the OutputSafety disable.
+  #
   # @param content [String] The content to render as Markdown
+  # @return [ActiveSupport::SafeBuffer] HTML-safe rendered output
   # rubocop:disable Rails/OutputSafety, Metrics/MethodLength
   def markdown(content)
     return '' if content.blank?
 
-    # Skip markdown processing for simple text with no markdown syntax
+    # Skip markdown processing for simple text with no markdown syntax.
     # The call to html_escape is completely unnecessary, but it won't hurt,
     # and it *ensures* that even a screwed-up change to MARKDOWN_UNNECESSARY
     # won't lead to a vulnerability. We want good performance, but I felt
-    # it was better to two independent layers (correct regex + html_escape)
+    # it was better to protect ourselves with
+    # two independent layers (correct regex + html_escape)
     # to ensure that we stay secure from XSS attacks.
     if content.match?(MARKDOWN_UNNECESSARY)
       return MARKDOWN_PREFIX + ERB::Util.html_escape(content).html_safe +
              MARKDOWN_SUFFIX
     end
 
-    # Get or create thread-local markdown processor
-    processor = Thread.current[:markdown_processor]
-    # Verify processor is valid (not nil and correct type)
-    # In tests, class reloading can cause type mismatches
-    unless processor.is_a?(Redcarpet::Markdown)
-      renderer = Redcarpet::Render::HTML.new(MARKDOWN_RENDERER_OPTIONS)
-      processor = Redcarpet::Markdown.new(renderer, MARKDOWN_PROCESSOR_OPTIONS)
-      Thread.current[:markdown_processor] = processor
-    end
+    # WORKAROUND: Protect against Redcarpet's thread-safety bugs.
+    # The mutex prevents concurrent access to Redcarpet's global C state,
+    # while thread-local storage ensures each thread has its own instance.
+    # Both protections are necessary - see MARKDOWN_MUTEX comments above.
+    MARKDOWN_MUTEX.synchronize do
+      # Get or create this thread's Redcarpet processor instance
+      processor = Thread.current[:markdown_processor]
+      # Create new instance if needed. This can happen on first use or
+      # if Rails class reloading invalidates the cached instance.
+      unless processor.is_a?(Redcarpet::Markdown)
+        renderer = Redcarpet::Render::HTML.new(MARKDOWN_RENDERER_OPTIONS)
+        processor = Redcarpet::Markdown.new(renderer, MARKDOWN_PROCESSOR_OPTIONS)
+        Thread.current[:markdown_processor] = processor
+      end
 
-    # Defensive measure: add useless ".to_s" to ensure content is a string.
-    # Strings return themselves, so it should have no performance impact.
-    processor.render(content.to_s).html_safe
+      # Defensive .to_s ensures content is a string (no performance impact).
+      processor.render(content.to_s).html_safe
+    end
   end
   # rubocop:enable Rails/OutputSafety, Metrics/MethodLength
 

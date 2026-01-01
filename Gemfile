@@ -165,6 +165,12 @@ end
 group :test do
   gem 'capybara-slow_finder_errors', require: false # ID slow Capybara finders
   gem 'codecov', require: false # Report test code coverage
+  # Pin minitest < 6.0 until minitest-reporters supports it.
+  # Minitest 6.0 introduced breaking changes that cause minitest-reporters 1.7.1
+  # to fail silently (tests don't run). Remove this constraint when
+  # minitest-reporters releases a version compatible with minitest >= 6.0.
+  # See: https://github.com/minitest-reporters/minitest-reporters/issues/336
+  gem 'minitest', '< 6.0'
   gem 'minitest-reporters', require: false # Improve minitest output format
   gem 'minitest-retry', require: false # Retry- avoid Capybara false failures
   gem 'ostruct' # OpenStruct; future-proof for Ruby 3.5+

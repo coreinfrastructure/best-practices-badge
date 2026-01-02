@@ -33,15 +33,16 @@ module ProjectsHelper
   #   We avoid matching possible domain names and URLs
   #   by only allowing a period or colon if it's followed by a space.
   #
-  # Matches ~88% of truly safe justifications (verified by comparing
-  # markdown output vs HTML escape output).
-  MARKDOWN_UNNECESSARY = /\A
+  # Matches 80.6% of truly safe justifications (determined by comparing
+  # markdown output vs HTML escape output). That's a pretty good
+  # optimization that is still not *too* hard to read and verify.
+  MARKDOWN_UNNECESSARY = %r{\A
     (?!(\d+\.|\-|\*|\+|\#+)\s) # numbered lists, un-numbered lists, headings
     (?!\-\-\-) # Horizontal lines
-    (\/\/\040)? # Allow our comment marker at the start
+    (//\040)? # Allow our comment marker at the start
     ([A-Za-z0-9\040\,\;\'\"\!\(\)\-\?\%\+\@]|\.\040|\:\040|\&\040)+
-    \.? # Optional final period
-    \n?\z/x
+    \.?\n? # Optional final period. The \n can't happen due to strip.
+    \z}x
 
   MARKDOWN_PREFIX = '<p>'.html_safe
   MARKDOWN_SUFFIX = "</p>\n".html_safe
@@ -150,6 +151,11 @@ module ProjectsHelper
   # rubocop:disable Rails/OutputSafety, Metrics/MethodLength
   def markdown(content)
     return '' if content.blank?
+
+    # Strip away leading/trailing whitespace. This makes it easier for
+    # us to detect numbered lists, etc. Leading and trailing space
+    # doesn't really make any sense in this context.
+    content = content.strip
 
     # Skip markdown processing for simple text with no markdown syntax.
     # The call to html_escape is completely unnecessary, but it won't hurt,

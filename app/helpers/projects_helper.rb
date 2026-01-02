@@ -140,8 +140,6 @@ module ProjectsHelper
   # 2. Global state level (need serialized access even with separate instances)
   MARKDOWN_MUTEX = Mutex.new
 
-  MARKDOWN_EMPTY_RESULT = ''
-
   # Render markdown content to HTML.
   #
   # This method works around Redcarpet's thread-safety bugs by using both
@@ -160,7 +158,13 @@ module ProjectsHelper
   # The markdown processor is configured to output safe strings.
   # rubocop:disable Rails/OutputSafety, Metrics/MethodLength
   def markdown(content)
-    return MARKDOWN_EMPTY_RESULT if content.blank?
+    # Return empty string if content is blank.
+    # Ruby always returns the exact same empty string object (per object_id)
+    # if it's asked to return a literal empty string from a source file
+    # with `frozen_string_literal: true`.
+    # So this next line *never* allocates a new object, even though it
+    # *appears* that it might.
+    return '' if content.blank?
 
     # Strip away leading/trailing whitespace. This makes it easier for
     # us to detect numbered lists, etc. Leading and trailing space

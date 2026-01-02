@@ -157,6 +157,8 @@ class Criteria
     # Precompute symbol names before freezing (performance optimization)
     @status_symbol = :"#{name}_status"
     @justification_symbol = :"#{name}_justification"
+    # Precompute string representation to avoid repeated allocations
+    @to_s = name.to_s.freeze
     freeze
   end
 
@@ -196,8 +198,6 @@ class Criteria
     category == 'SUGGESTED'
   end
 
-  delegate :to_s, to: :name
-
   # Returns the database field symbol for this criterion's status
   # Precomputed during initialization to avoid string concatenation on every render
   # @return [Symbol] e.g., :description_good_status
@@ -207,6 +207,11 @@ class Criteria
   # Precomputed during initialization to avoid string concatenation on every render
   # @return [Symbol] e.g., :description_good_justification
   attr_reader :justification_symbol
+
+  # Returns the string representation of this criterion's name
+  # Precomputed during initialization to avoid repeated allocations
+  # @return [String] frozen string representation
+  attr_reader :to_s
 
   private
 

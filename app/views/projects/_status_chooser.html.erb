@@ -1,10 +1,11 @@
 <%
- # Use precomputed symbols to avoid string concatenation
+ # Use precomputed symbols and strings to avoid allocations
+ criterion_str = criterion.to_s
  status_symbol = criterion.status_symbol
  project_criterion_status = project[status_symbol]
  criterion_result = project.get_criterion_result(criterion)
 
- cache ['buttons', criterion.to_s, criteria_level, criterion_result,
+ cache ['buttons', criterion_str, criteria_level, criterion_result,
         view_only, locale, project_criterion_status ] do
    passing_class = if (criterion_result == :criterion_passing && view_only)
                      ' criterion-passing'
@@ -12,8 +13,8 @@
                      ''
                    end
 %>
-  <div id="<%= criterion.to_s %>" class="row criterion-data<%= passing_class %>">
-    <% is_crypto = criterion.to_s.match(/^crypto_/)
+  <div id="<%= criterion_str %>" class="row criterion-data<%= passing_class %>">
+    <% is_crypto = criterion_str.match(/^crypto_/)
        crypto_class = is_crypto ? ' criterion-is-crypto' : '' %>
 
     <div class="col-md-3 col-sm-4 col-xs-4 criteria-radio<%= crypto_class %>">
@@ -31,25 +32,25 @@
           <% if criterion_result == :criterion_passing %>
             <%= image_tag(
                   'result_symbol_check.png', size: '40x40',
-                    id: criterion.to_s + '_enough',
+                    id: "#{criterion_str}_enough",
                     alt: t('projects.misc.in_javascript.passing_alt')
                 ) %>
           <% elsif criterion_result == :criterion_barely %>
             <%= image_tag(
                   'result_symbol_dash.png', size: '40x40',
-                    id: criterion.to_s + '_enough',
+                    id: "#{criterion_str}_enough",
                     alt: t('projects.misc.in_javascript.barely_alt')
                 ) %>
           <% elsif criterion_result == :criterion_failing %>
             <%= image_tag(
                   'result_symbol_x.png', size: '40x40',
-                    id: criterion.to_s + '_enough',
+                    id: "#{criterion_str}_enough",
                     alt: t('projects.misc.in_javascript.failing_alt')
                 ) %>
           <% else %>
             <%= image_tag(
                   'result_symbol_question.png', size: '40x40',
-                    id: criterion.to_s + '_enough',
+                    id: "#{criterion_str}_enough",
                     alt: t('projects.misc.in_javascript.unknown_alt')
                 ) %>
           <% end %>
@@ -78,20 +79,20 @@
   </div>
 <% end # cache 'buttons' %>
   <div class='col-md-9 col-sm-8 col-xs-12 criteria-desc'>
-    <% cache ['desc', criterion.to_s, criteria_level, locale ] do
+    <% cache ['desc', criterion_str, criteria_level, locale ] do
        # Here we provide the description, details, and markings like
        # "met_url_required?".  We cache this separately.
        # Its cache needs fewer keys, so by caching this separately it
        # can be shared across more projects. %>
       <br>
       <%= if criterion.future?
-           '(' + t('projects.misc.future_criterion') + ')'
+           "(#{t('projects.misc.future_criterion')})"
          else
             ''
          end %>
       <%= criterion.description %>
       <%= if criterion.met_url_required?
-            '(' + t('projects.misc.url_required') + ')'
+            "(#{t('projects.misc.url_required')})"
           else
             ''
          end %>
@@ -111,7 +112,7 @@
        if (view_only)
          project_criterion_justification = project[justification_symbol]
          if project_criterion_justification&.presence
-           cache ['markdown', project.id, criterion.to_s,
+           cache ['markdown', project.id, criterion_str,
                   project.lock_version] do %>
           <div class="justification-markdown" lang="en">
             <%= markdown(project_criterion_justification) %>

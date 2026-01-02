@@ -48,6 +48,7 @@ AllCops:
     - '**/Rakefile'
   Exclude:
     - 'tmp/**/*'
+    - '**/,*'
     - 'lib/.git/**/*'
     - 'db/**/*'
     - 'db/migrate/**'

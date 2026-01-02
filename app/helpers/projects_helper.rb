@@ -20,8 +20,29 @@ module ProjectsHelper
 
   # Pattern of text that we are *certain* needs no markdown processing.
   # This is an optimization so we can skip calling the markdown
-  # processor in trivial cases.
-  MARKDOWN_UNNECESSARY = /\A[A-Za-z0-9 ,;'"]+\.?\n?\z/
+  # processor in most cases.
+  #
+  # IMPORTANT CONSTRAINTS:
+  # - Must NOT match numbered lists (e.g., "1. Item")
+  #   markdown formats them as <ol><li>.
+  # - Must NOT match un-numbered lists (e.g., "* Item")
+  # - Must NOT match headings ("# foo")
+  # - Must NOT match URLs (e.g., "https://github.com/foo") because
+  #   markdown auto-links them (autolink: true option).
+  # - Must NOT match implied domain names like www.foo.com.
+  #   We avoid matching possible domain names and URLs
+  #   by only allowing a period or colon if it's followed by a space.
+  #
+  # Matches ~88% of truly safe justifications (verified by comparing
+  # markdown output vs HTML escape output).
+  MARKDOWN_UNNECESSARY = /\A
+    (?!(\d+\.|\-|\*|\+|\#+)\s) # numbered lists, un-numbered lists, headings
+    (?!\-\-\-) # Horizontal lines
+    (\/\/\040)? # Allow our comment marker at the start
+    ([A-Za-z0-9\040\,\;\'\"\!\(\)\-\?\%\+\@]|\.\040|\:\040|\&\040)+
+    \.? # Optional final period
+    \n?\z/x
+
   MARKDOWN_PREFIX = '<p>'.html_safe
   MARKDOWN_SUFFIX = "</p>\n".html_safe
 

@@ -48,8 +48,8 @@ module ProjectsHelper
     \.?\n? # Optional final period. The \n can't happen due to strip.
     \z}x
 
-  MARKDOWN_PREFIX = '<p>'.html_safe
-  MARKDOWN_SUFFIX = "</p>\n".html_safe
+  MARKDOWN_PREFIX = '<p>'
+  MARKDOWN_SUFFIX = "</p>\n"
 
   NO_REPOS = [[], []].freeze # No forks and no originals
   EMPTY_ARRAY = [].freeze # Memory optimization for empty header returns
@@ -168,17 +168,22 @@ module ProjectsHelper
 
     # Strip away leading/trailing whitespace. This makes it easier for
     # us to detect numbered lists, etc. Leading and trailing space
-    # doesn't really make any sense in this context.
-    content = content.strip
+    # doesn't really make any sense in this context. The .to_s is
+    # defensive; normally it won't do anything other
+    # than return what was passed.
+    content = content.to_s.strip
 
-    # Skip markdown processing for simple text with no markdown syntax.
-    # At one time we called html_escape but that is completely unnecessary
+    # Skip markdown processing for simple text with no markdown syntax
+    # and no way to generate dangerous code (e.g., no < or >).
+    # At one time we called html_escape, but that is completely unnecessary
     # because MARKDOWN_UNNECESSARY won't let those sequences in, and
     # removing the unnecessary call helps us avoid unnecessary work and
     # unnecessary string allocation. We concatenate all at once to
     # avoid creating unnecessary temporary strings as intermediaries.
+    # We declare the result as html_safe so that views can more efficiently
+    # use the result.
     if content.match?(MARKDOWN_UNNECESSARY)
-      return "#{MARKDOWN_PREFIX}#{content}#{MARKDOWN_SUFFIX}"
+      return "#{MARKDOWN_PREFIX}#{content}#{MARKDOWN_SUFFIX}".html_safe
     end
 
     # WORKAROUND: Protect against Redcarpet's thread-safety bugs.
@@ -196,8 +201,7 @@ module ProjectsHelper
         Thread.current[:markdown_processor] = processor
       end
 
-      # Defensive .to_s ensures content is a string (no performance impact).
-      processor.render(content.to_s).html_safe
+      processor.render(content).html_safe
     end
   end
   # rubocop:enable Rails/OutputSafety, Metrics/MethodLength

@@ -32,6 +32,10 @@ module ProjectsHelper
   # - Must NOT match implied domain names like www.foo.com.
   #   We avoid matching possible domain names and URLs
   #   by only allowing a period or colon if it's followed by a space.
+  # - Must NOT require HTML escaping, e.g., no "<" or ">".
+  #   We can allow "&" followed by a space, as modern HTML knows that can't
+  #   be an entity. We can allow single-quotes and double-quotes since
+  #   this is not in an attribute and we aren't implementing smarty quotes.
   #
   # Matches 80.6% of truly safe justifications (determined by comparing
   # markdown output vs HTML escape output). That's a pretty good
@@ -136,6 +140,8 @@ module ProjectsHelper
   # 2. Global state level (need serialized access even with separate instances)
   MARKDOWN_MUTEX = Mutex.new
 
+  MARKDOWN_EMPTY_RESULT = ''
+
   # Render markdown content to HTML.
   #
   # This method works around Redcarpet's thread-safety bugs by using both
@@ -148,9 +154,13 @@ module ProjectsHelper
   #
   # @param content [String] The content to render as Markdown
   # @return [ActiveSupport::SafeBuffer] HTML-safe rendered output
+  # We have to disable Rails/OutputSafety because Rubocop can't do the
+  # advanced reasoning needed to determine this isn't vulnerable to CSS.
+  # The MARKDOWN_UNNECESSARY pattern doesn't match "<" etc.
+  # The markdown processor is configured to output safe strings.
   # rubocop:disable Rails/OutputSafety, Metrics/MethodLength
   def markdown(content)
-    return '' if content.blank?
+    return MARKDOWN_EMPTY_RESULT if content.blank?
 
     # Strip away leading/trailing whitespace. This makes it easier for
     # us to detect numbered lists, etc. Leading and trailing space
@@ -158,15 +168,13 @@ module ProjectsHelper
     content = content.strip
 
     # Skip markdown processing for simple text with no markdown syntax.
-    # The call to html_escape is completely unnecessary, but it won't hurt,
-    # and it *ensures* that even a screwed-up change to MARKDOWN_UNNECESSARY
-    # won't lead to a vulnerability. We want good performance, but I felt
-    # it was better to protect ourselves with
-    # two independent layers (correct regex + html_escape)
-    # to ensure that we stay secure from XSS attacks.
+    # At one time we called html_escape but that is completely unnecessary
+    # because MARKDOWN_UNNECESSARY won't let those sequences in, and
+    # removing the unnecessary call helps us avoid unnecessary work and
+    # unnecessary string allocation. We concatenate all at once to
+    # avoid creating unnecessary temporary strings as intermediaries.
     if content.match?(MARKDOWN_UNNECESSARY)
-      return MARKDOWN_PREFIX + ERB::Util.html_escape(content).html_safe +
-             MARKDOWN_SUFFIX
+      return "#{MARKDOWN_PREFIX}#{content}#{MARKDOWN_SUFFIX}"
     end
 
     # WORKAROUND: Protect against Redcarpet's thread-safety bugs.

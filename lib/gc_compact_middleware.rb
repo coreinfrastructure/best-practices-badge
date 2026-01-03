@@ -19,7 +19,6 @@ class GcCompactMiddleware
   #   or 7200 seconds (120 minutes) if ENV not set.
   def initialize(app, interval_seconds: (ENV['BADGEAPP_GC_COMPACT_MINUTES'] || 120).to_i * 60)
     @app = app
-    @mutex = Mutex.new
     @interval = interval_seconds
     @last_compact_time = Time.zone.now # Last time it was *scheduled*
     @first_call = true
@@ -40,9 +39,10 @@ class GcCompactMiddleware
   private
 
   # Thread-safe check to schedule a gc compact if it's time to do it.
-  # The mutex ensures thread-safe read of @last_compact_time and @first_call.
+  # The global mutex (from config/initializers/gc_compact_mutex.rb) ensures
+  # thread-safe read of @last_compact_time and @first_call.
   def schedule_compact_if_it_is_time(env)
-    @mutex.synchronize do
+    $gc_compact_mutex.synchronize do # rubocop:disable Style/GlobalVars
       # Log first call only, to make it easy to verify that the
       # gc middleware is actually being invoked.
       if @first_call

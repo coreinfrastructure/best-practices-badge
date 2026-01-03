@@ -23,6 +23,10 @@ class GcCompactMiddleware
     @interval = interval_seconds
     @last_compact_time = Time.zone.now # Last time it was *scheduled*
     @first_call = true
+    # Pre-allocate the method object once during initialization.
+    # This creates a "callable" that points to the compact_memory method
+    # without needing a new allocation per request.
+    @compact_memory_callback = method(:compact_memory)
     # Log initialization at WARN level so it appears even with WARN log level
     Rails.logger.warn "GcCompactMiddleware initialized: interval=#{@interval}s"
   end
@@ -49,16 +53,30 @@ class GcCompactMiddleware
       if Time.zone.now - @last_compact_time >= @interval
         # It's time to schedule compaction. Record compaction time.
         @last_compact_time = Time.zone.now
-        Rails.logger.warn 'GcCompactMiddleware: Scheduling compaction'
-        # Schedule compaction to happen later.
-        (env['rack.after_reply'] ||= []) << -> { compact }
+        schedule_compact_memory(env)
       end
+    end
+  end
+
+  # Schedule the memory compaction.
+  # The "scheduling" is adding information to rack's env
+  # requesting that rack later call the routine to compact memory.
+  def schedule_compact_memory(env)
+    Rails.logger.warn 'GcCompactMiddleware: Scheduling compaction'
+    # Schedule compaction to happen later, using rack.after_reply.
+    # We do it this way to minimize new memory allocations.
+    if (after_reply = env['rack.after_reply'])
+      after_reply << @compact_memory_callback
+    else
+      # We create a new array here each time, because
+      # other middleware might manipulate this array further.
+      env['rack.after_reply'] = [@compact_memory_callback]
     end
   end
 
   # Actually perform garbage collection compaction.
   # This is the method that is scheduled to run later.
-  def compact
+  def compact_memory
     Rails.logger.warn 'GC.compact started'
     GC.compact
     Rails.logger.warn 'GC.compact completed'

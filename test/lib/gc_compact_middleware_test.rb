@@ -67,7 +67,7 @@ class GcCompactMiddlewareTest < ActiveSupport::TestCase
 
     # Should have scheduled compaction
     assert_equal 1, env['rack.after_reply'].length
-    assert_instance_of Proc, env['rack.after_reply'].first
+    assert_instance_of Method, env['rack.after_reply'].first
   end
 
   test 'updates last_compact_time when scheduling' do
@@ -111,12 +111,12 @@ class GcCompactMiddlewareTest < ActiveSupport::TestCase
     end
   end
 
-  test 'compact method runs GC.compact without error' do
+  test 'compact_memory method runs GC.compact without error' do
     middleware = GcCompactMiddleware.new(@app)
 
-    # Call the private compact method
+    # Call the private compact_memory method
     assert_nothing_raised do
-      middleware.send(:compact)
+      middleware.send(:compact_memory)
     end
   end
 

@@ -24,8 +24,8 @@ class GcCompactMiddleware
     @last_compact_time = Time.zone.now # Last time it was *scheduled*
     @first_call = true
     # Pre-allocate the method object once during initialization.
-    # This creates a "callable" that points to the compact method
-    # without needing a new lambda per request.
+    # This creates a "callable" that points to the compact_memory method
+    # without needing a new allocation per request.
     @compact_memory_callback = method(:compact_memory)
     # Log initialization at WARN level so it appears even with WARN log level
     Rails.logger.warn "GcCompactMiddleware initialized: interval=#{@interval}s"

@@ -18,7 +18,7 @@ class GcCompactMiddlewareTest < ActiveSupport::TestCase
     middleware = GcCompactMiddleware.new(@app)
 
     assert_equal 7200, middleware.instance_variable_get(:@interval) # 120 min default
-    assert_instance_of Mutex, middleware.instance_variable_get(:@mutex)
+    assert_instance_of Mutex, $gc_compact_mutex # rubocop:disable Style/GlobalVars
     assert middleware.instance_variable_get(:@first_call)
     assert_not_nil middleware.instance_variable_get(:@last_compact_time)
   end
@@ -27,7 +27,7 @@ class GcCompactMiddlewareTest < ActiveSupport::TestCase
     middleware = GcCompactMiddleware.new(@app, interval_seconds: 3600)
 
     assert_equal 3600, middleware.instance_variable_get(:@interval) # 60 minutes
-    assert_instance_of Mutex, middleware.instance_variable_get(:@mutex)
+    assert_instance_of Mutex, $gc_compact_mutex # rubocop:disable Style/GlobalVars
     assert middleware.instance_variable_get(:@first_call)
     assert_not_nil middleware.instance_variable_get(:@last_compact_time)
   end

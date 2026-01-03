@@ -138,12 +138,14 @@ module ProjectsHelper
   # Both protections are necessary because Redcarpet has bugs at two levels:
   # 1. Instance level (need separate instances per thread)
   # 2. Global state level (need serialized access even with separate instances)
-  MARKDOWN_MUTEX = Mutex.new
+  #
+  # The mutex is initialized in config/initializers/markdown.rb as a global
+  # variable to survive Rails class reloading in development/test environments.
 
   # Render markdown content to HTML.
   #
   # This method works around Redcarpet's thread-safety bugs by using both
-  # thread-local storage and mutex serialization. See MARKDOWN_MUTEX comments
+  # thread-local storage and mutex serialization. See $markdown_mutex comments
   # above for details on why both protections are necessary.
   #
   # For simple text with no markdown syntax, we bypass Redcarpet entirely for
@@ -189,8 +191,8 @@ module ProjectsHelper
     # WORKAROUND: Protect against Redcarpet's thread-safety bugs.
     # The mutex prevents concurrent access to Redcarpet's global C state,
     # while thread-local storage ensures each thread has its own instance.
-    # Both protections are necessary - see MARKDOWN_MUTEX comments above.
-    MARKDOWN_MUTEX.synchronize do
+    # Both protections are necessary - see $markdown_mutex comments above.
+    $markdown_mutex.synchronize do # rubocop:disable Style/GlobalVars
       # Get or create this thread's Redcarpet processor instance
       processor = Thread.current[:markdown_processor]
       # Create new instance if needed. This can happen on first use or

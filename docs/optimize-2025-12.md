@@ -143,25 +143,27 @@ To handle this new world of massive number of requests, we did the following:
    commit 21af8d819205aa6dfc8f953c032a69335beede44 or
    commit e87826e9d51645be3f5c981cdebb33bdd7a2477f or
    commit bd43ca53e9987a3481ca56edaa5c56b8d6fcefcc.
-7. Optimize common cases. E.g. we log when we do our first gc compacting,
-   so most requests don't need to check it.
-   Commit affb46cbe82af6b9ec7a033038da45f66a5b5f82
-   makes it so that we can do a cheap check that doesn't involve
-   thread safety for the common case, and then, if we're not sure,
-   use more expensive thread-safe checks.
+7. Optimize common cases. I especially focused on optimizing the /projects
+   resources since that's where most pages are.
 8. Don't call the markdown processor for trivial cases where it makes
    no difference. In many cases only trivial strings are provided, and this
-   avoids unnecessary work to process them.
+   avoids unnecessary work to process them. Now 80.6% of the
+   non-empty justification texts can be processed quickly without the
+   markdown processor. That process now generates fewer objects, so
+   as a result processing most justification is faster than before.
 9. We improved garbage collection compaction.
    We earlier added periodic garbage collection compaction, to more quickly
-   collect garbage. In December 2025 we changed the run-time configuration
-   to do a garbage collection compaction from two hours, to every hour,
-   and then to every 30 minutes. This meant that there
+   collect garbage. In December 2025 I adjusted the run-time configuration
+   to be shorter than 2 hours. This meant that there
    was less time for unused objects to accumulate in memory, leading to
-   less maximum memory use. We also changed the code to deal with a subtle
-   threading issue that sometimes meant we skipped compaction.
-   By *itself* we still had memory use exceeded, and we want to limit
-   the number of collections, so we still needed to take other steps.
+   less maximum memory use.
+   By *itself* we would still have had memory use exceeded,
+   and we want to limit compaction events (since they cause pauses),
+   so we still needed to take other steps.
+10. Provided capacity (size) information when creating some hashes when we
+   know their final size. Ruby will automatically resize when needed, but
+   provide final size information ahead-of-time,
+   Ruby doesn't need to keep resizing them, improving performance.
 
 ## Impact
 

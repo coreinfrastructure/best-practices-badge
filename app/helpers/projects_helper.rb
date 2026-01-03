@@ -18,10 +18,21 @@ module ProjectsHelper
     space_after_headers: true, fenced_code_blocks: true
   }.freeze
 
-  # Pattern of text that we are *certain* needs no markdown processing.
-  # This is an optimization so we can skip calling the markdown
-  # processor in most cases.
-  #
+  # The following pattern is designed to *only* match
+  # a line that we KNOW cannot require markdown processing.
+  # MODIFY THIS PATTERN TO TEST!
+
+  # This pattern matches text that we KNOW does not require markdown processing.
+  # We do this check as an optimization to skip calling the markdown
+  # processor in most cases when it's clearly unnecessary.
+  # In particular, note that we have to handle period and colon specially,
+  # because www.foo.com and http://foo.com *do* need to be procesed as markdown.
+
+  # In our measures this matches 83.87% of the justification text in our system.
+  # That's a pretty good optimization that is not *too* hard to read and verify.
+  # It's *okay* to pass something to the markdown processor, we just try
+  # to ensure that most such requests are needed.
+
   # IMPORTANT CONSTRAINTS:
   # - Must NOT match numbered lists (e.g., "1. Item")
   #   markdown formats them as <ol><li>.
@@ -29,23 +40,23 @@ module ProjectsHelper
   # - Must NOT match headings ("# foo")
   # - Must NOT match URLs (e.g., "https://github.com/foo") because
   #   markdown auto-links them (autolink: true option).
-  # - Must NOT match implied domain names like www.foo.com.
-  #   We avoid matching possible domain names and URLs
-  #   by only allowing a period or colon if it's followed by a space.
+  # - Must NOT match implied domain names like www.foo.com or email addresses.
+  #   (autolink: true option).
+  #   We avoid matching possible domain names and URLs and email addresses
+  #   by only allowing a period or colon if it's followed by a space, and
+  #   only allowing "/" if it's followed by an alphanumeric or a "slash space".
+  #   We also don't accept "@".
   # - Must NOT require HTML escaping, e.g., no "<" or ">".
   #   We can allow "&" followed by a space, as modern HTML knows that can't
   #   be an entity. We can allow single-quotes and double-quotes since
   #   this is not in an attribute and we aren't implementing smarty quotes.
-  #
-  # Matches 80.6% of truly safe justifications (determined by comparing
-  # markdown output vs HTML escape output). That's a pretty good
-  # optimization that is still not *too* hard to read and verify.
+
   MARKDOWN_UNNECESSARY = %r{\A
     (?!(\d+\.|\-|\*|\+|\#+)\s) # numbered lists, un-numbered lists, headings
     (?!\-\-\-) # Horizontal lines
-    (//\040)? # Allow our comment marker at the start
-    ([A-Za-z0-9\040\,\;\'\"\!\(\)\-\?\%\+\@]|\.\040|\:\040|\&\040)+
-    \.?\n? # Optional final period. The \n can't happen due to strip.
+    ([A-Za-z0-9\040\,\;\'\"\!\(\)\-\?\%\+]|
+     \.\040|\:\040|\&\040|/(/\040|[A-Za-z0-9]))+
+    \.? # Optional final period
     \z}x
 
   MARKDOWN_PREFIX = '<p>'

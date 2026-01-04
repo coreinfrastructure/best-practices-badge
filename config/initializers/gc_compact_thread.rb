@@ -19,27 +19,39 @@
 module GcCompactThread
   module_function
 
+  def calculate_compaction_stats(stats_before, stats_after, compact_info)
+    {
+      pages_freed: stats_before[:heap_allocated_pages] - stats_after[:heap_allocated_pages],
+      objects_moved: compact_info[:moved],
+      fragmentation_ratio_before: (stats_before[:heap_live_slots].to_f / stats_before[:heap_available_slots]).round(4),
+      fragmentation_ratio_after: (stats_after[:heap_live_slots].to_f / stats_after[:heap_available_slots]).round(4),
+      read_barrier_faults_delta: stats_after[:read_barrier_faults] - stats_before[:read_barrier_faults]
+    }
+  end
+
+  def compact_with_logging
+    Rails.logger.warn 'GC.compact started'
+    stats_before = GC.stat
+    compact_info = GC.compact
+    stats_after = GC.stat
+    Rails.logger.warn 'GC.compact completed'
+    stats = calculate_compaction_stats(stats_before, stats_after, compact_info)
+    Rails.logger.warn("GC.compact statistics: #{stats}")
+  end
+
+  # Run gc periodically.
+  # This isn't really a predicate.
+  # rubocop:disable Naming/PredicateMethod
   def periodically_run_gc_compact(interval, one_time = false)
     Rails.logger.warn 'Function periodically_run_gc_compact started'
     loop do
       sleep interval.seconds
-
-      def compact_with_logging
-        Rails.logger.warn 'GC.compact started'
-        stats_before = GC.stat
-        compact_info = GC.compact
-        stats_after = GC.stat
-        Rails.logger.warn 'GC.compact completed'
-        Rails.logger.warn("GC compaction statistics: #{ {
-          pages_freed: stats_before[:heap_allocated_pages] - stats_after[:heap_allocated_pages],
-          objects_moved: compact_info[:moved],
-          fragmentation_ratio_before: (stats_before[:heap_live_slots].to_f / stats_before[:heap_available_slots]).round(4),
-          fragmentation_ratio_after: (stats_after[:heap_live_slots].to_f / stats_after[:heap_available_slots]).round(4),
-          read_barrier_faults_delta: stats_after[:read_barrier_faults] - stats_before[:read_barrier_faults]
-        } }")
+      compact_with_logging
       break if one_time
     end
+    true
   end
+  # rubocop:enable Naming/PredicateMethod
 end
 
 # Create thread to run GC.compact periodically

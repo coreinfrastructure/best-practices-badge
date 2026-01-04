@@ -10,7 +10,7 @@
 # Use: rails runner compare_markdown_output.rb
 # - Generates ,justifications.truly-ok which don't need Markdown processing
 # - Generates ,justifications.not-ok which DOES need Markdown processing
-# Run this script to determine if `pattern` 
+# Run this script to determine if `pattern`
 
 # MARKDOWN_UNNECESSARY = %r{\A
 #   (?!(\d+\.|\-|\*|\+|\#+)\s) # numbered lists, un-numbered lists, headings

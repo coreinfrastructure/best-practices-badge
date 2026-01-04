@@ -29,7 +29,8 @@
 # We do this check as an optimization to skip calling the markdown
 # processor in most cases when it's clearly unnecessary.
 # In particular, note that we have to handle period and colon specially,
-# because www.foo.com and http://foo.com *do* need to be procesed as markdown.
+# because www.foo.com and http://foo.com *do* need to be processed
+# as markdown.
 
 # In our measures this matches 83.87% of the justification text in our system.
 # That's a pretty good optimization that is not *too* hard to read and verify.

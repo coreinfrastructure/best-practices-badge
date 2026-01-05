@@ -246,9 +246,5 @@ Rails.application.configure do
   # This greatly simplifies backup, maintenance, etc. If you wanted the
   # jobs to go into their own database, you'd need to do something like:
   # config.solid_queue.connects_to = { database: { writing: :queue } }
-
-  # Periodically run GC.compact to reduce memory fragmentation
-  require_relative '../../lib/gc_compact_middleware'
-  config.middleware.use GcCompactMiddleware
 end
 # rubocop:enable Metrics/BlockLength

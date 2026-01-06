@@ -155,7 +155,7 @@ To handle this new world of massive number of requests, we did the following:
    as a result processing most justification is faster than before.
    This is even more important because the markdown processor can't
    handle multi-threading, even though its documentation says it works.
-   We compensate by ensuring only one thread can use it at a time, but 
+   We compensate by ensuring only one thread can use it at a time, but
    if we *always* called the processor that would slow things down.
 9. We improved garbage collection compaction.
    We earlier added periodic garbage collection compaction, to more quickly

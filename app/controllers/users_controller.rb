@@ -189,6 +189,7 @@ class UsersController < ApplicationController
     respond_to :html, :json
     # Paginate the list of user-owned projects.
     # Use "select_needed" to minimize the fields we extract
+    # Note: No need to eager-load user - all projects belong to @user
     @pagy, @projects = pagy(select_needed(@user.projects))
     @pagy_locale = I18n.locale.to_s # Pagy requires a string version
 

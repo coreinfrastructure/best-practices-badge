@@ -110,8 +110,15 @@ class Project < ApplicationRecord
     level additional_rights_changes
   ].freeze
   PROJECT_USER_ID_REPEAT = %i[user_id_repeat].freeze # Repeat to change owner
+
   ALL_CRITERIA_STATUS = Criteria.all.map(&:status).freeze
+  # Pre-computed status field names as frozen strings for JSON serialization
+  # Avoids repeated .to_s allocations in hot path (_project.json.jbuilder)
+  ALL_CRITERIA_STATUS_STRINGS = ALL_CRITERIA_STATUS.map(&:to_s).freeze
+
   ALL_CRITERIA_JUSTIFICATION = Criteria.all.map(&:justification).freeze
+  ALL_CRITERIA_JUSTIFICATION_STRINGS =
+    ALL_CRITERIA_JUSTIFICATION.map(&:to_s).freeze
   # Achievement status fields are internal tracking fields that keep raw integer values
   # (not converted to/from strings like criteria status fields)
   ACHIEVEMENT_STATUS_FIELDS = %i[

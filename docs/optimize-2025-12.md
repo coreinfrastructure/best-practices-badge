@@ -146,17 +146,26 @@ To handle this new world of massive number of requests, we did the following:
 7. Optimize common cases. I especially focused on optimizing the /projects
    resources since that's where most pages are.
 8. Don't call the markdown processor for trivial cases where it makes
-   no difference. In many cases only trivial strings are provided, and this
-   avoids unnecessary work to process them. Now 80.6% of the
-   non-empty justification texts can be processed quickly without the
-   markdown processor. That process now generates fewer objects, so
+   no difference. In many cases only trivial strings are provided, and
+   this change avoids unnecessary work to process the strings. Now 80.6% of the
+   non-empty justification texts can be processed quickly without using the
+   markdown processor. (Note: In January 2026 this was improved further,
+   so 83.87% of non-empty justification texts can be processed without
+   the markdown processor). That process now generates fewer objects, so
    as a result processing most justification is faster than before.
+   This is even more important because the markdown processor can't
+   handle multi-threading, even though its documentation says it works.
+   We compensate by ensuring only one thread can use it at a time, but 
+   if we *always* called the processor that would slow things down.
 9. We improved garbage collection compaction.
    We earlier added periodic garbage collection compaction, to more quickly
    collect garbage. In December 2025 I adjusted the run-time configuration
    to be shorter than 2 hours. This meant that there
    was less time for unused objects to accumulate in memory, leading to
    less maximum memory use.
+   In January 2026 I modified the garbage collection compaction code further,
+   to ensure it was always called; we originally intercepted the rake
+   middleware to enable scheduling later, but this turned out to be unreliable.
    By *itself* we would still have had memory use exceeded,
    and we want to limit compaction events (since they cause pauses),
    so we still needed to take other steps.

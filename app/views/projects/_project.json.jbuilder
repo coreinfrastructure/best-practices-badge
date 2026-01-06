@@ -15,14 +15,18 @@ project.attributes.each do |key, value|
   # Uses precomputed mapping for O(1) lookup with no allocations
   transformed_key = ProjectsHelper::BASELINE_FIELD_DISPLAY_NAME_MAP.fetch(key, key)
 
-  # Convert status field values from integers to strings for API compatibility
-  # Database stores integers (0=?, 1=Unmet, 2=N/A, 3=Met), API returns strings
-  # Check using pre-computed frozen string set
+  # Check if it's a status using pre-computed frozen string set
   # (avoids repeated .to_s allocations)
   if Project::ALL_CRITERIA_STATUS_STRINGS.include?(key)
+    # Convert status field values from integer->string for API compatibility
+    # Database stores integers (0=?, 1=Unmet, 2=N/A, 3=Met), API returns strings
     json.set! transformed_key, CriterionStatus::STATUS_VALUES[value]
   else
-    json.set! transformed_key, value
+    # Include data EXCEPT empty/null/nil justification fields
+    if !(Project::ALL_CRITERIA_JUSTIFICATION_STRINGS.include?(key) &&
+         value.blank?)
+      json.set! transformed_key, value
+    end
   end
 end
 json.badge_level project.badge_level

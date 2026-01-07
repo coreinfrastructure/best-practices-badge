@@ -1037,11 +1037,14 @@ was to *not* use libraries like Devise, because they were not mature at
 the time. Such libraries have become much more mature, but as of yet
 there hasn't been a good reason to change.
 
-The key code for authentication is the "sessions" controller file
-`app/controllers/sessions_controller.rb`.
+The key code for initial authentication is the "sessions" controller file
+`app/controllers/sessions_controller.rb`, and ongoing management is
+performed by the application controller and the session helper.
 In this section we only consider the login mechanism
 built into the BadgeApp.  Heroku has its own login mechanisms, which must
 be carefully controlled but are out of scope here.
+
+##### Initial login
 
 A user who views "/login" will be routed to GET sessions#new, which returns
 the login page.  From there:
@@ -1103,8 +1106,90 @@ the user exits the entire browser, because the cookie for login
 is only a session cookie).
 The "remember me" box was originally implemented
 in commit e79decec67.
+Note that GitHub users cannot use "remember me" tokens - they can only
+authenticate using OAuth. This is enforced both in the user interface
+(the "remember me" checkbox only appears in the local login form)
+and in the code (the `User#remember` method raises an `ArgumentError`
+if called on a GitHub user, and `try_remember_token_login` explicitly
+rejects GitHub users even if they somehow have a remember cookie).
+This separation is important because GitHub authentication requires
+a fresh OAuth token, which cannot be stored in the database for
+security reasons (OAuth tokens are session-scoped).
+
+##### Managing sessions after login
 
 A session is created for each user who successfully logs in.
+Session data is stored in encrypted cookies managed by Rails.
+
+Session state is managed through a two-tier architecture that
+optimizes performance while maintaining security:
+
+**Session Extraction and Validation** (`setup_authentication_state`):
+On every request, before any controller action that uses data runs, the
+`ApplicationController#setup_authentication_state` `before_action`
+extracts and validates authentication state from the encrypted session cookie.
+This is the *only* place where session authentication data is extracted.
+It performs these critical security checks:
+
+1. Extracts `session[:user_id]` and `session[:time_last_used]` from the
+   encrypted session cookie (decrypting the cookie only once per request)
+2. Validates the session timestamp - if missing or older than 48 hours
+   (`SESSION_TTL`), the session is rejected and reset to prevent session
+   tampering and enforce timeout
+3. If no valid session exists, attempts to restore login using a
+   remember token cookie (only for local users, as explained above)
+4. Stores the validated authentication state in instance variables:
+   `@session_user_id`, `@session_timestamp`, `@session_user_token`
+   (GitHub OAuth token, if applicable), and `@session_github_name`
+
+The `setup_authentication_state` method does
+*not* query the database in the normal case,
+making authentication checks extremely fast.
+This is adequate for showing the GUI for logged-in users, as merely
+showing the GUI doesn't give the user any special abilities if the
+user account has since been deleted.
+
+The `SessionsHelper#current_user` method lazily loads the full User record
+from the database only when needed (e.g., to check admin status or
+verify the user still exists).
+It uses `@session_user_id` previoulsy set by `setup_authentication_state` as
+input and memoizes the result in `@current_user`.
+This lazy-loading approach means:
+
+- Simple authentication checks like `logged_in?` (which just checks
+  `@session_user_id.present?`) require no database access
+- Authorization checks that need user details automatically trigger
+  only one database query, cached for the request duration
+- Recently-deleted users are properly handled:
+  their session claims they're logged in,
+  but `current_user` returns nil, and authorization checks fail safely
+
+**Session Timeout and Refresh**:
+After each controller action, the `update_session_timestamp` after_action
+checks if the session timestamp is older than 1 hour (`RESET_SESSION_TIMER`).
+If so, it updates both `session[:time_last_used]` and `@session_timestamp`
+to the current time. This dual update ensures:
+
+1. The session cookie gets a fresh timestamp (preventing timeout)
+2. The cached instance variable stays synchronized (preventing stale data
+   from being used later in the same request)
+
+The 1-hour threshold balances security (regular timestamp updates) with
+performance (avoiding constant session cookie encryption on every request).
+
+This architecture provides:
+
+- **Session tampering prevention**: Sessions without timestamps or with
+  expired timestamps are rejected.
+- **Automatic timeout**: Inactive sessions expire after 48 hours, limiting
+  the window for session hijacking
+- **Minimal database load**: Authentication state is cached in instance
+  variables, and database queries only occur when authorization checks
+  require current user data
+- **Defense in depth**: Multiple layers (session validation, timestamp checks,
+  user existence verification) must all succeed for authorization to proceed
+- **Clear separation**: Session validation in the controller is separated from
+  user lookup in the helper, making the code easier to audit and test
 
 #### Authorization
 

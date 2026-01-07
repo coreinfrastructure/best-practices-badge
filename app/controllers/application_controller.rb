@@ -388,7 +388,6 @@ class ApplicationController < ActionController::Base
   end
 
   # Extracts and validates authentication state from session and cookies.
-  # Sets instance variables that are guaranteed valid after this completes.
   # This is the ONLY place session authentication data is extracted.
   # The instance variables are set in the controller instance; Rails copies
   # such variables to the corresponding view instance if one is created.
@@ -400,9 +399,27 @@ class ApplicationController < ActionController::Base
   # - @session_github_name: GitHub username if GitHub user, nil otherwise
   # - @session_make_old: Testing flag, false in production
   #
-  # Normally this doesn't set @current_user (that requires a database lookup),
-  # but if we have to use a remember_me token, we have to do a database lookup,
-  # so we record @current_user if we *do* have to do a database lookup.
+  # This typically does *not* check the database, so after this returns it's
+  # possible that this user account was deleted after the session data was set.
+  # However, this is enough information to allow the logged-in displays
+  # supported by `logged_in?`, for example, the navigation header bar
+  # shown in HTML or the list of users in /users.
+  #
+  # Some checks (e.g., `can_edit?` or `can_control?`) are pickier and want
+  # to ensure that the user is *currently* valid, or want current information
+  # about the user (e.g., whether or not the user is an admin).
+  # These checks end up calling method `current_user`,
+  # which uses as *input* the instance values that were set here,
+  # retrieves this user's data from the database, and
+  # memoizes *that* information in `@current_user`.
+  # This way, we never query the database unless (1) a user's session claims
+  # that the user is logged in, and (2) there's a need for addiitonal info
+  # or verification.
+  #
+  # Normally this doesn't set @current_user (that requires a database lookup).
+  # However, if we use a remember_me token, we have to do a
+  # database lookup, so in that case we record @current_user since
+  # we *did* have to do a database lookup (so we will avoid doing it twice).
   #
   # @return [void]
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
@@ -426,7 +443,7 @@ class ApplicationController < ActionController::Base
       user_id, timestamp = try_remember_token_login
     end
 
-    # Set instance variables - guaranteed valid at this point
+    # Set instance variables from the encrypted session cookie.
     @session_user_id = user_id
     @session_timestamp = timestamp
     @session_user_token = session[:user_token]

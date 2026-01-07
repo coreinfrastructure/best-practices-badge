@@ -173,10 +173,15 @@ module SessionsHelper
   def can_control?
     # If not logged in, clearly there's no control. Fast check, no DB query
     return false if @session_user_id.nil?
-    # Fast check, no DB query on user
-    return true if @session_user_id == @project.user_id
-    # Check if user is admin - that DOES require a DB check
-    return true if current_user.admin?
+
+    # Fast check - ID matches project owner, but verify user exists in DB
+    # This prevents deleted users from retaining control via stale sessions
+    if @session_user_id == @project.user_id
+      return current_user.present? # DB lookup to verify user exists
+    end
+
+    # Check if user is admin - requires DB check
+    return true if current_user&.admin?
 
     false
   end

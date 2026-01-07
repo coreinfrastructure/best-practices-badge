@@ -30,6 +30,7 @@ module SessionsHelper
   # rubocop:disable Metrics/AbcSize
   def log_in(user)
     session[:user_id] = user.id
+    session[:time_last_used] = Time.now.utc
     # Switch to user's preferred locale
     I18n.locale = user.preferred_locale.to_sym
     return unless session[:forwarding_url]

@@ -432,8 +432,9 @@ class ApplicationController < ActionController::Base
 
     # Check timeout BEFORE setting instance variables
     # This ensures instance variables always contain VALID auth state
-    if user_id && timestamp && timestamp < SessionsHelper::SESSION_TTL.ago.utc
-      reset_session # Session expired
+    # Reject sessions with missing or expired timestamps
+    if user_id && (!timestamp || timestamp < SessionsHelper::SESSION_TTL.ago.utc)
+      reset_session # Session expired or missing timestamp
       user_id = nil
       timestamp = nil
     end
@@ -473,6 +474,7 @@ class ApplicationController < ActionController::Base
   # Returns [user_id, timestamp] if successful, [nil, nil] otherwise.
   #
   # @return [Array<Integer, Time>, Array<nil, nil>]
+  # rubocop:disable Metrics/AbcSize
   def try_remember_token_login
     cookie_user_id = cookies.signed[:user_id]
     return [nil, nil] unless cookie_user_id
@@ -484,7 +486,10 @@ class ApplicationController < ActionController::Base
     now = Time.now.utc
     session[:user_id] = user.id
     session[:time_last_used] = now
-    # session[:user_token] and session[:github_name] set separately if GitHub user
+    # Restore GitHub username if this is a GitHub user
+    # Note: We do NOT restore session[:user_token] (OAuth token) as that
+    # should only exist for the duration of an OAuth session for security
+    session[:github_name] = user.nickname if user.provider == 'github'
 
     I18n.locale = user.preferred_locale.to_sym
     # We found the user DB data, record it in case we need it later.
@@ -492,6 +497,7 @@ class ApplicationController < ActionController::Base
 
     [user.id, now]
   end
+  # rubocop:enable Metrics/AbcSize
 
   include SessionsHelper
 end

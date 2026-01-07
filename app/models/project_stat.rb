@@ -25,6 +25,10 @@ class ProjectStat < ApplicationRecord
   end.freeze
   # rubocop:enable Style/MethodCalledOnDoEndBlock
 
+  # Badge level identifiers as integers (0=passing, 1=silver, 2=gold)
+  # Used for statistics calculations and field name generation
+  BADGE_LEVELS = [0, 1, 2].freeze
+
   # NOTE: The constants below are for clarity.  Don't just change them,
   # or trend lines will be recording different cutoffs.
   # See below for their meaning.

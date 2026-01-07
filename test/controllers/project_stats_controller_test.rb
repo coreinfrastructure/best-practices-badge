@@ -117,9 +117,16 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
     assert_response :not_found # 404
   end
 
-  test 'should show project_stat' do
+  # At one time we supported this route, but it's pretty useless to
+  # get a single data point in isolation. Yes, it's odd a REST-style
+  # interface to only support acquiring a collection and not support retrieving
+  # a single value, but in practice we don't want people to repeatedly
+  # query us to get every item. If you need data, you need the whole thing,
+  # so just request that and we can provide it (with a cache), which we have
+  # to support anyway.
+  test 'should NOT show project_stat' do
     get "/de/project_stats/#{@project_stat.id}"
-    assert_response :success
+    assert_response :not_found
   end
 
   test 'should NOT get edit' do
@@ -263,6 +270,11 @@ class ProjectStatsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 120, controller.cache_time(log_time + 70)
     assert_equal log_time, controller.cache_time(0)
     assert_equal log_time - 300, controller.cache_time(300)
+    # Test case where time has passed log_time (negative time_left)
+    # and we're outside the slop window. In this case, we should respond
+    # with a cache for tomorrow's log_time.
+    seconds_in_day = 24 * 60 * 60
+    assert_equal seconds_in_day - 400, controller.cache_time(log_time + 400)
   end
 end
 # rubocop:enable Metrics/ClassLength

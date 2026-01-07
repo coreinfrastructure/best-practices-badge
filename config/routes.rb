@@ -207,9 +207,6 @@ Rails.application.routes.draw do
     get 'project_stats/user_statistics.json', to: 'project_stats#user_statistics',
         as: 'user_statistics_project_stats',
         defaults: FORMAT_JSON
-    # The following route isn't very useful; we may remove it in the future:
-    get 'project_stats/:id', to: 'project_stats#show',
-        constraints: CONSTRAINTS_ID
 
     get 'sessions/new'
 

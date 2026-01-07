@@ -40,37 +40,41 @@ module SessionsHelper
   end
   # rubocop:enable Metrics/AbcSize
 
-  # Returns the user corresponding to the remember token cookie
-  # rubocop:disable Metrics/MethodLength
+  # Returns the current User instance (db record) of the logged-in user,
+  # or nil if the user is not logged in.
+  # Lazy-loads from the database only when it's not already loaded.
+  # To determine the id of the current user it uses
+  # @session_user_id set by ApplicationController#setup_authentication_state.
+  # Note that we check if the instance variable is *defined* - that way,
+  # if we can't find a user, we don't keep searching for it on each request.
+  #
+  # @return [User, nil] Current user or nil
   def current_user
-    return if Rails.application.config.deny_login
+    return unless @session_user_id # Return nil if no user logged in
+    return @current_user if defined?(@current_user)
 
-    # Extra parens used here to indicate safe assignment in condition
-    if (user_id = session[:user_id])
-      @current_user ||= User.find_by(id: user_id)
-    elsif (user_id = cookies.signed[:user_id])
-      user = User.find_by(id: user_id)
-      if user&.authenticated?(:remember, cookies[:remember_token])
-        # Automatically re-log back in, and set timestamp
-        log_in user
-        persist_session_timestamp
-        @current_user = user
-      end
-    end
+    @current_user = User.find_by(id: @session_user_id)
+    @current_user
   end
-  # rubocop:enable Metrics/MethodLength
 
-  # Returns true if the user is logged in, false otherwise.
+  # Returns true if a user is logged in, false otherwise.
+  # Just checks instance variable - no database query needed.
+  #
+  # @return [Boolean] true if logged in
   def logged_in?
-    !current_user.nil?
+    @session_user_id.present?
   end
 
   def require_logged_in
     throw(:abort) unless logged_in?
   end
 
+  # Returns true if current user is an admin.
+  # Checks instance var first to avoid DB query if not logged in.
+  #
+  # @return [Boolean] true if admin
   def current_user_is_admin?
-    logged_in? && current_user.admin?
+    @session_user_id.present? && current_user&.admin?
   end
 
   # Remembers a user in a persistent session in a permanent cookie.
@@ -112,10 +116,12 @@ module SessionsHelper
   # a field `permissions`.  We consider a user with `push` permissions an
   # editor and check for that.
   def github_user_can_push?(url, client = Octokit::Client)
+    return false unless @session_user_token
+
     github_path = get_github_path(url)
     return false if github_path.nil?
 
-    github = client.new access_token: session[:user_token]
+    github = client.new access_token: @session_user_token
     begin
       github.repo(github_path).permissions.presence && github.repo(github_path).permissions[:push]
     # If you suddenly get a lot of 503's most likely github has changed
@@ -127,8 +133,8 @@ module SessionsHelper
   end
 
   def current_user_is_github_owner?(url)
-    current_user.present? && current_user.provider == 'github' &&
-      session[:github_name] == get_github_owner(url)
+    logged_in? && current_user.present? && current_user.provider == 'github' &&
+      @session_github_name == get_github_owner(url)
   end
 
   # Retrieve list of public GitHub projects for a user, used when displaying
@@ -139,7 +145,9 @@ module SessionsHelper
   # produce an overwhelming number.
   # Returns empty array on error to prevent 500 errors.
   def github_user_projects(client = Octokit::Client)
-    github = client.new access_token: session[:user_token]
+    return [] unless @session_user_token
+
+    github = client.new access_token: @session_user_token
     github.repos(type: 'public', sort: 'updated', per_page: 100)
           .map(&:html_url).compact_blank
   rescue Octokit::Error => e
@@ -159,10 +167,16 @@ module SessionsHelper
   # Returns true iff the current_user can *control* the @project.
   # This includes the right to delete the entry & to remove users who can edit.
   # Only the project badge entry owner and admins *control* the project entry.
+  # Checks instance var first to avoid DB query if not logged in.
+  #
+  # @return [Boolean] true if can control
   def can_control?
-    return false if current_user.nil?
+    # If not logged in, clearly there's no control. Fast check, no DB query
+    return false if @session_user_id.nil?
+    # Fast check, no DB query on user
+    return true if @session_user_id == @project.user_id
+    # Check if user is admin - that DOES require a DB check
     return true if current_user.admin?
-    return true if current_user.id == @project.user_id
 
     false
   end
@@ -170,8 +184,11 @@ module SessionsHelper
   # Returns true iff the current_user can *edit* the @project data.
   # This is a session helper because we use the session to ask GitHub
   # for the list of projects the user can edit.
+  # Checks instance var first to avoid DB query if not logged in.
+  #
+  # @return [Boolean] true if can edit
   def can_edit?
-    return false if current_user.nil?
+    return false if @session_user_id.nil? # Fast check, no DB query
     return true if can_control?
     return true if AdditionalRight.exists?(
       project_id: @project.id, user_id: current_user.id
@@ -200,9 +217,9 @@ module SessionsHelper
 
   # Redirects to stored location (or to the default)
   def redirect_back_or(default)
-    redirect_to(session[:forwarding_url] ||
-                force_locale_url(default, I18n.locale))
+    forwarding_url = session[:forwarding_url]
     session.delete(:forwarding_url)
+    redirect_to(forwarding_url || force_locale_url(default, I18n.locale))
   end
 
   # Stores the URL trying to be accessed (if its a new project) or a referer
@@ -217,40 +234,6 @@ module SessionsHelper
     else
       store_internal_referer
     end
-  end
-
-  def session_expired?
-    return true unless session.key?(:time_last_used)
-
-    last_used = session[:time_last_used]
-    last_used < SESSION_TTL.ago.utc
-  end
-
-  def validate_session_timestamp
-    return unless logged_in? && session_expired?
-
-    # Clear the session but NOT the remember token - let remember token
-    # auto-login work on this request if present
-    reset_session
-    # Set "current_user" to invalid value (session hash is not empty)
-    session[:current_user] = nil
-    # Clear @current_user cache so current_user will be re-evaluated
-    # (allowing remember token auto-login to work on this request)
-    @current_user = nil
-    # No redirect here - let individual controller actions handle authorization
-  end
-
-  # Set session timestamp. For efficiency, we only do this if the last
-  # session timestamp is more than RESET_SESSION_TIMER ago.
-  # This efficiency measure avoids constantly updating the session cookie
-  # for many closely-related interactions (as is typical).
-  def persist_session_timestamp
-    return unless logged_in? && !session.key?(:make_old)
-
-    old = !session.key?(:time_last_used) ||
-          (session[:time_last_used] < RESET_SESSION_TIMER.ago.utc)
-
-    session[:time_last_used] = Time.now.utc if old
   end
 
   private

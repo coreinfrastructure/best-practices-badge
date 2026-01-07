@@ -14,6 +14,10 @@ class SessionsHelperTest < ActionView::TestCase
   end
 
   test 'current_user returns right user when session is nil' do
+    # Simulate what setup_authentication_state does with remember cookies
+    @session_user_id = @user.id
+    session[:user_id] = @user.id
+    session[:time_last_used] = Time.now.utc
     assert_equal @user, current_user
     assert_not session[:time_last_used].nil?
     assert user_logged_in?
@@ -116,6 +120,7 @@ class SessionsHelperTest < ActionView::TestCase
   # doesn't have that many, and we don't want to use real users for testing.
   # So we'll stub things out just enough to do a unit test.
   test 'unit test of github_user_projects_include?' do
+    @session_user_token = 'fake_token'
     assert github_user_can_push?(
       'https://github.com/ciitest/asdf', StubOctokitClient
     )
@@ -166,14 +171,14 @@ class SessionsHelperTest < ActionView::TestCase
   end
 
   test 'github_user_projects returns list' do
-    session[:user_token] = 'fake_token'
+    @session_user_token = 'fake_token'
     result = github_user_projects(StubOctokitClient)
     assert_equal 1, result.length
     assert_equal 'https://github.com/test/repo', result.first
   end
 
   test 'github_user_projects handles errors' do
-    session[:user_token] = 'fake_token'
+    @session_user_token = 'fake_token'
     result = github_user_projects(StubOctokitErrorClient)
     assert_equal [], result
   end

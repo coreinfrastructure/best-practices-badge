@@ -229,10 +229,15 @@ module SessionsHelper
   def validate_session_timestamp
     return unless logged_in? && session_expired?
 
+    # Clear the session but NOT the remember token - let remember token
+    # auto-login work on this request if present
     reset_session
     # Set "current_user" to invalid value (session hash is not empty)
     session[:current_user] = nil
-    redirect_to login_path
+    # Clear @current_user cache so current_user will be re-evaluated
+    # (allowing remember token auto-login to work on this request)
+    @current_user = nil
+    # No redirect here - let individual controller actions handle authorization
   end
 
   # Set session timestamp. For efficiency, we only do this if the last

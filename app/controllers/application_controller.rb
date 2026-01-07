@@ -397,7 +397,6 @@ class ApplicationController < ActionController::Base
   # - @session_timestamp: Last activity time if logged in, nil otherwise
   # - @session_user_token: GitHub OAuth token if GitHub user, nil otherwise
   # - @session_github_name: GitHub username if GitHub user, nil otherwise
-  # - @session_make_old: Testing flag, false in production
   #
   # This typically does *not* check the database, so after this returns it's
   # possible that this user account was deleted after the session data was set.
@@ -449,7 +448,6 @@ class ApplicationController < ActionController::Base
     @session_timestamp = timestamp
     @session_user_token = session[:user_token]
     @session_github_name = session[:github_name]
-    @session_make_old = session.key?(:make_old)
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
@@ -459,7 +457,7 @@ class ApplicationController < ActionController::Base
   #
   # @return [void]
   def update_session_timestamp
-    return unless @session_user_id && !@session_make_old
+    return unless @session_user_id
 
     old = !@session_timestamp ||
           @session_timestamp < SessionsHelper::RESET_SESSION_TIMER.ago.utc
@@ -471,6 +469,7 @@ class ApplicationController < ActionController::Base
   end
 
   # Attempts to login using remember token cookies.
+  # ONLY works for local users - GitHub users must re-authenticate via OAuth.
   # Returns [user_id, timestamp] if successful, [nil, nil] otherwise.
   #
   # @return [Array<Integer, Time>, Array<nil, nil>]
@@ -482,14 +481,13 @@ class ApplicationController < ActionController::Base
     user = User.find_by(id: cookie_user_id)
     return [nil, nil] unless user&.authenticated?(:remember, cookies[:remember_token])
 
-    # Valid remember token - create new session
+    # GitHub users should not use remember tokens - they must use OAuth
+    return [nil, nil] if user.provider == 'github'
+
+    # Valid remember token for local user - create new session
     now = Time.now.utc
     session[:user_id] = user.id
     session[:time_last_used] = now
-    # Restore GitHub username if this is a GitHub user
-    # Note: We do NOT restore session[:user_token] (OAuth token) as that
-    # should only exist for the duration of an OAuth session for security
-    session[:github_name] = user.nickname if user.provider == 'github'
 
     I18n.locale = user.preferred_locale.to_sym
     # We found the user DB data, record it in case we need it later.

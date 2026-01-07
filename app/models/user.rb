@@ -292,10 +292,17 @@ class User < ApplicationRecord
     SecureRandom.urlsafe_base64
   end
 
-  # Remembers a user in the database for use in persistent sessions.
-  # Generates and stores a remember token and its digest.
+  # Creates a remember token for persistent login sessions.
+  # ONLY for local users - GitHub users must re-authenticate via OAuth.
+  # Generates and stores a remember token and its digest in the database.
+  #
+  # @raise [ArgumentError] if called on a GitHub user
   # @return [Boolean] true if save was successful
   def remember
+    if provider == 'github'
+      raise ArgumentError, 'GitHub users cannot use remember tokens'
+    end
+
     self.remember_token = User.new_token
     self.remember_digest = User.digest(remember_token)
     save!(touch: false)

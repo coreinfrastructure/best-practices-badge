@@ -41,13 +41,6 @@ class ApplicationController < ActionController::Base
   # For the PaperTrail gem
   before_action :set_paper_trail_whodunnit
 
-  # Limit time before must log in again.
-  # The `validate_session_timestamp` will log out users once their
-  # login session time has expired, and it's checked before any main
-  # action unless specifically exempted.
-  before_action :validate_session_timestamp
-  after_action :persist_session_timestamp
-
   # If locale is not provided in the URL, redirect to best option.
   # Special URLs which do not have locales, such as "/robots.txt",
   # must "skip_before_action :redir_missing_locale".
@@ -56,6 +49,15 @@ class ApplicationController < ActionController::Base
   # Set the locale, based on best available information.
   # The locale in the URL always takes precedent.
   before_action :set_locale_to_best_available
+
+  # Limit time before must log in again.
+  # The `validate_session_timestamp` will log out users once their
+  # login session time has expired, and it's checked before any main
+  # action unless specifically exempted.
+  # IMPORTANT: This must come AFTER locale setup so that redirects
+  # to login_path use the correct locale from the user's browser.
+  before_action :validate_session_timestamp
+  after_action :persist_session_timestamp
 
   # Force http -> https
   before_action :redirect_https?

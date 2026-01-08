@@ -412,7 +412,7 @@ class ApplicationController < ActionController::Base
   # retrieves this user's data from the database, and
   # memoizes *that* information in `@current_user`.
   # This way, we never query the database unless (1) a user's session claims
-  # that the user is logged in, and (2) there's a need for addiitonal info
+  # that the user is logged in, and (2) there's a need for additional info
   # or verification.
   #
   # Normally this doesn't set @current_user (that requires a database lookup).

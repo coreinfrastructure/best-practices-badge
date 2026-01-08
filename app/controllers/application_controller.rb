@@ -52,11 +52,19 @@ class ApplicationController < ActionController::Base
 
   # Extract and validate authentication state from session.
   # Sets instance variables (@session_user_id, etc.) that are guaranteed
-  # valid after this completes. Handles session timeout and remember token.
+  # valid after this completes from the point-of-view of a signed session.
+  # The @session_user_id will be nil if the user isn't logged into a session.
+  # The user account might have been deleted after the user logged in;
+  # request method `current_user` to get the current user data.
+  # This before_action handles session timeout and the remember token.
   before_action :setup_authentication_state
   after_action :update_session_timestamp
 
-  # For the PaperTrail gem
+  # For the PaperTrail gem. We must call this *after* the action
+  # `setup_authentication_state`; this action calls
+  # our method `user_for_paper_trail` which reads from @session_user_id.
+  # We do things this way so we can easily record the user id without
+  # always requiring a database lookup about the user.
   before_action :set_paper_trail_whodunnit
 
   # Use the new HTTP security header, "permissions policy", to disable things
@@ -81,6 +89,22 @@ class ApplicationController < ActionController::Base
   def append_info_to_payload(payload)
     super
     payload[:uid] = current_user&.id if logged_in?
+  end
+
+  # Override PaperTrail's default user extraction.
+  # Returns the user ID directly from @session_user_id (set by
+  # setup_authentication_state), avoiding an unnecessary database query.
+  # PaperTrail only needs the integer user ID to log who made changes.
+  # This is called by the set_paper_trail_whodunnit before_action callback.
+  # There is a weird case: it's possible that the user logged in and the
+  # user account has since been deleted. In this case, papertrail will
+  # correctly log the user id, even though the user record is no longer
+  # available in the database. We don't reuse user ids, so this will simply
+  # record correct information even in this odd circumstance.
+  #
+  # @return [Integer, nil] The current user's ID, or nil if not logged in
+  def user_for_paper_trail
+    @session_user_id
   end
 
   # How long (in seconds) will the badge be stored on the CDN before being

@@ -1083,7 +1083,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_not_equal @admin, @project.user
     new_repo_url = @project.repo_url + '_new'
     patch "/en/projects/#{@project_two.id}", params: { # Invokes "update"
-      project: { repo_url:  new_repo_url }
+      project: { repo_url: new_repo_url }
     }
     @project_two.reload
     assert_equal @project_two.repo_url, new_repo_url

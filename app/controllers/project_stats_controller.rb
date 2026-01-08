@@ -100,24 +100,24 @@ class ProjectStatsController < ApplicationController
   # improve the built-in Ruby json library to perform well. See
   # https://byroot.github.io/ruby/json/2024/12/15/optimizing-ruby-json-part-1.html
 
-  # *Rapidly* render a JSON dataset which must *NOT* have cycles.
-  # The default JSON renderer implements cycle-checking for safety.
+  # *Rapidly* render a JSON dataset which we know does *NOT* have cycles.
   # We *know* that there are no cycles in the JSON datasets we create,
-  # so we can use "fast_generate" instead of the default JSON generator.
-  # This improves performance by skipping an unnecessary complicated check.
-  # We justify doing this via benchmarks. We used:
-  # require 'benchmark' ...
-  # time = Benchmark.measure do {render} end ; puts "Time = #{time.real}"
-  # Benchmark of nontrivial_projects of `render json: dataset` had averages:
-  # - render time: 226ms (200,252)
-  # - total service allocations: 171986 (171988,171983)
-  # Benchmark of this `render body: JSON.fast_generate(dataset)` approach:
-  # - render time: 53ms (39,33)
-  # - total service allocations: 129562 (129561,129562)
-  # So these samples average 173ms less time with 42K fewer allocations
-  # on a development environment.
-  # Technically this method is a view, not a controller, but this method is
-  # so small that for simplicity we include this method in this controller.
+  # so historically we used "fast_generate" instead of the default
+  # JSON "generate" method here. At the time this improved performance by
+  # skipping an unnecessary complicated check.
+  # We justified this via benchmarks done in 2021.
+  # However, the Ruby JSON library has been heavily optimized since then
+  # (esp. in 2024), and the fast_generate method is now deprecated.
+  # The "generate" method we use has a "max_nesting" parameter that provides
+  # safety similar to the cycle-checker, but it has very low overhead.
+  # We could disable it (with max_nesting=false), but since it has low
+  # overhead it really isn't worth disabling. We don't *mind* having a
+  # belt-and-suspenders approach to protect ourselves from errors, we
+  # simply don't want to use *costly* extra defensive measures when they
+  # aren't necessary.
+  # Technically this method includes a view, not only a controller,
+  # but this method is so small that for simplicity we include
+  # this method in this controller.
   # @param dataset [Object] The data collection to process
   def render_json_fast(dataset)
     headers['Content-Type'] = 'application/json'

@@ -7,68 +7,17 @@
 # Helper module providing projects view functionality.
 # rubocop:disable Metrics/ModuleLength
 module ProjectsHelper
-  # Markdown renderer configuration
-  MARKDOWN_RENDERER_OPTIONS = {
-    filter_html: true, no_images: true,
-    no_styles: true, safe_links_only: true,
-    link_attributes: { rel: 'nofollow ugc' }
-  }.freeze
-  MARKDOWN_PROCESSOR_OPTIONS = {
-    no_intra_emphasis: true, autolink: true,
-    space_after_headers: true, fenced_code_blocks: true
-  }.freeze
-
-  # The following pattern is designed to *only* match
-  # a line that we KNOW cannot require markdown processing.
-  # MODIFY THIS PATTERN TO TEST!
-
-  # This pattern matches text that we KNOW does not require markdown processing.
-  # We do this check as an optimization to skip calling the markdown
-  # processor in most cases when it's clearly unnecessary.
-  # In particular, note that we have to handle period and colon specially,
-  # because www.foo.com and http://foo.com *do* need to be processed
-  # as markdown.
-
-  # In our measures this matches 83.87% of the justification text in our system.
-  # That's a pretty good optimization that is not *too* hard to read and verify.
-  # It's *okay* to pass something to the markdown processor, we just try
-  # to ensure that most such requests are needed.
-
-  # IMPORTANT CONSTRAINTS:
-  # - Must NOT match numbered lists (e.g., "1. Item")
-  #   markdown formats them as <ol><li>.
-  # - Must NOT match un-numbered lists (e.g., "* Item")
-  # - Must NOT match headings ("# foo")
-  # - Must NOT match URLs (e.g., "https://github.com/foo") because
-  #   markdown auto-links them (autolink: true option).
-  # - Must NOT match implied domain names like www.foo.com or email addresses.
-  #   (autolink: true option).
-  #   We avoid matching possible domain names and URLs and email addresses
-  #   by only allowing a period or colon if it's followed by a space, and
-  #   only allowing "/" if it's followed by an alphanumeric or a "slash space".
-  #   We also don't accept "@".
-  # - Must NOT require HTML escaping, e.g., no "<" or ">".
-  #   We can allow "&" followed by a space, as modern HTML knows that can't
-  #   be an entity. We can allow single-quotes and double-quotes since
-  #   this is not in an attribute and we aren't implementing smarty quotes.
-
-  MARKDOWN_UNNECESSARY = %r{\A
-    (?!(\d+\.|\-|\*|\+|\#+)\s) # numbered lists, un-numbered lists, headings
-    (?!\-\-\-) # Horizontal lines
-    ([A-Za-z0-9\040\,\;\'\"\!\(\)\-\?\%\+]|
-     \.\040|\:\040|\&\040|/(/\040|[A-Za-z0-9]))+
-    \.? # Optional final period
-    \z}x
-
-  MARKDOWN_PREFIX = '<p>'
-  MARKDOWN_SUFFIX = "</p>\n"
-
   NO_REPOS = [[], []].freeze # No forks and no originals
   EMPTY_ARRAY = [].freeze # Memory optimization for empty header returns
 
   # Regex for stripping invalid characters from section IDs
   # Only allow lowercase letters, digits, underscore, and hyphen
   SECTION_ID_INVALID_CHARS = /[^a-z0-9_-]/
+
+  # Invoke markdown processor, which is in its own module.
+  def markdown(content)
+    MarkdownProcessor.render(content)
+  end
 
   # Convert a status integer value to its string representation.
   # @param value [Integer] Status value (0-3)
@@ -124,101 +73,6 @@ module ProjectsHelper
   def fork_header(fork_repos)
     fork_repos.blank? ? EMPTY_ARRAY : [[t('.fork_repos'), '', 'none']]
   end
-
-  # REDCARPET THREAD-SAFETY WORKAROUND
-  #
-  # Redcarpet (v3.6.1) claims to be thread-safe but has subtle bugs in its C
-  # extension. Its C code has global state (work buffers in md->work_bufs[])
-  # that gets corrupted when multiple threads call render() simultaneously,
-  # even when each thread uses a separate Redcarpet::Markdown instance.
-  # This causes segmentation faults with the error:
-  #   Assertion failed: (md->work_bufs[BUFFER_BLOCK].size == 0),
-  #   function sd_markdown_render, file markdown.c, line 2544
-  #
-  # We experienced crashes with 56 concurrent threads in CI/CD. GitLab hit the
-  # same issue and documented their workaround in MR #14604:
-  # https://gitlab.com/gitlab-org/gitlab-ce/merge_requests/14604
-  #
-  # Redcarpet issue tracker confirms the problem:
-  # - https://github.com/vmg/redcarpet/issues/184 (no built-in thread safety)
-  # - https://github.com/vmg/redcarpet/issues/569 (segfaults with :quote)
-  #
-  # Our workaround uses BOTH thread-local storage AND a mutex (defense in depth):
-  # - Thread-local storage: Each thread gets its own instance (avoids most issues)
-  # - Mutex: Serializes all render() calls to protect Redcarpet's global C state
-  #
-  # Both protections are necessary because Redcarpet has bugs at two levels:
-  # 1. Instance level (need separate instances per thread)
-  # 2. Global state level (need serialized access even with separate instances)
-  #
-  # The mutex is initialized in config/initializers/markdown.rb as a global
-  # variable to survive Rails class reloading in development/test environments.
-
-  # Render markdown content to HTML.
-  #
-  # This method works around Redcarpet's thread-safety bugs by using both
-  # thread-local storage and mutex serialization. See $markdown_mutex comments
-  # above for details on why both protections are necessary.
-  #
-  # For simple text with no markdown syntax, we bypass Redcarpet entirely for
-  # performance. The markdown renderer is configured with filter_html:true for
-  # security, but rubocop can't detect this, hence the OutputSafety disable.
-  #
-  # @param content [String] The content to render as Markdown
-  # @return [ActiveSupport::SafeBuffer] HTML-safe rendered output
-  # We have to disable Rails/OutputSafety because Rubocop can't do the
-  # advanced reasoning needed to determine this isn't vulnerable to CSS.
-  # The MARKDOWN_UNNECESSARY pattern doesn't match "<" etc.
-  # The markdown processor is configured to output safe strings.
-  # rubocop:disable Rails/OutputSafety, Metrics/MethodLength
-  def markdown(content)
-    # Return empty string if content is blank.
-    # Ruby always returns the exact same empty string object (per object_id)
-    # if it's asked to return a literal empty string from a source file
-    # with `frozen_string_literal: true`.
-    # So this next line *never* allocates a new object, even though it
-    # *appears* that it might.
-    return '' if content.blank?
-
-    # Strip away leading/trailing whitespace. This makes it easier for
-    # us to detect numbered lists, etc. Leading and trailing space
-    # doesn't really make any sense in this context. The .to_s is
-    # defensive; normally it won't do anything other
-    # than return what was passed.
-    content = content.to_s.strip
-
-    # Skip markdown processing for simple text with no markdown syntax
-    # and no way to generate dangerous code (e.g., no < or >).
-    # At one time we called html_escape, but that is completely unnecessary
-    # because MARKDOWN_UNNECESSARY won't let those sequences in, and
-    # removing the unnecessary call helps us avoid unnecessary work and
-    # unnecessary string allocation. We concatenate all at once to
-    # avoid creating unnecessary temporary strings as intermediaries.
-    # We declare the result as html_safe so that views can more efficiently
-    # use the result.
-    if content.match?(MARKDOWN_UNNECESSARY)
-      return "#{MARKDOWN_PREFIX}#{content}#{MARKDOWN_SUFFIX}".html_safe
-    end
-
-    # WORKAROUND: Protect against Redcarpet's thread-safety bugs.
-    # The mutex prevents concurrent access to Redcarpet's global C state,
-    # while thread-local storage ensures each thread has its own instance.
-    # Both protections are necessary - see $markdown_mutex comments above.
-    $markdown_mutex.synchronize do # rubocop:disable Style/GlobalVars
-      # Get or create this thread's Redcarpet processor instance
-      processor = Thread.current[:markdown_processor]
-      # Create new instance if needed. This can happen on first use or
-      # if Rails class reloading invalidates the cached instance.
-      unless processor.is_a?(Redcarpet::Markdown)
-        renderer = Redcarpet::Render::HTML.new(MARKDOWN_RENDERER_OPTIONS)
-        processor = Redcarpet::Markdown.new(renderer, MARKDOWN_PROCESSOR_OPTIONS)
-        Thread.current[:markdown_processor] = processor
-      end
-
-      processor.render(content).html_safe
-    end
-  end
-  # rubocop:enable Rails/OutputSafety, Metrics/MethodLength
 
   # Use the status_chooser to render the given criterion.
   # rubocop:disable Metrics/ParameterLists

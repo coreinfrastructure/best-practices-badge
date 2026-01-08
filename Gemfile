@@ -48,6 +48,7 @@ gem 'bootstrap_form', '~> 2.7' # DO NOT update unless updating bootstrap
 gem 'bundler' # Ensure it's available
 # Note: if webpacker is used, see chartkick website for added instructions
 gem 'chartkick', '~> 5.2' # Chart project_stats
+gem 'commonmarker', '~> 2.6.1' # Process markdown in textareas
 gem 'faraday-retry', '~> 2.1' # Force retry of faraday requests for reliability
 # We no longer use "fastly-rails"; it doesn't support Rails 6+.
 # They recommend switching to the "fastly" gem (aka "fastly-ruby"),
@@ -104,7 +105,7 @@ gem 'rack-headers_filter', '~> 0.0.1' # Filter out "dangerous" headers
 # Note: Update the gem versions of action* and railties in sync.
 gem 'railties', '~> 8.1.1' # Rails. Rails core, loads rest of Rails
 gem 'rails-i18n', '~> 8.0.1' # Localizations for Rails built-ins
-gem 'redcarpet', '~> 3.5' # Process markdown in form textareas (justifications)
+# Redcarpet had reliability issues, so we switched to commonmarker
 gem 'sassc-rails' # compiles .scss (css replacement), replaces sass-rails
 gem 'scout_apm' # Monitor for memory leaks
 gem 'secure_headers', '~> 7' # Add hardening measures to HTTP headers

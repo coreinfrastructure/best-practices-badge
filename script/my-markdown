@@ -1,54 +1,43 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-# Processor for Github flavored markdown, using redcarpet version 2.
+# Processor for Github flavored markdown, using commonmarker.
 #
-# Inspired by:
-# https://github.com/alampros/Docter/blob/master/bin/github-flavored-markdown.rb
-# https://gist.github.com/1300939
-# Adapted for Redcarpet version 2 by Ralph von der Heyden
-# http://github.com/ralph
-# http://twitter.com/ralph
-# http://www.rvdh.de
-# However, this is small and different, and its structure is partially
-# forced by the redcarpet API, so this is really its own thing now.
+# Originally used Redcarpet, but Redcarpet became unreliable,
+# so we switched to Commonmarker which processes GitHub Flavored Markdown
+# per the CommonMark specification.
 #
 # This doesn't do syntax highlighting - we don't need it.
-# If we did, there are various options.  One is to use albino,
-# which then requires installing the Python "pygments" library
-# (and making sure its in the PATH).
-# We could also use https://github.com/jneen/rouge
+# If we did, there are various options such as https://github.com/jneen/rouge
 # GitHub's full rendering system is here:
 #   https://github.com/github/markup
 
 require 'rubygems'
-require 'redcarpet'
+require 'commonmarker'
 
-class RenderResult < Redcarpet::Render::HTML
-  def block_code(code, _language)
-    "<pre><code>#{code}</code></pre>"
-  end
-end
-
-# rubocop:disable Metrics/MethodLength
 def markdown(text)
-  renderer = RenderResult.new xhtml: true # Set render options
-  markdown = Redcarpet::Markdown.new( # Set parser options
-    renderer,
-    fenced_code_blocks: true,
-    no_intra_emphasis: true,
-    tables: true,
-    autolink: true,
-    strikethrough: true,
-    space_after_headers: true
-  )
-  markdown.render(text)
+  # Configure Commonmarker with GitHub Flavored Markdown extensions
+  # For documentation generation, we allow HTML passthrough
+  options = {
+    render: {
+      unsafe: true # Allow HTML in markdown for documentation
+    },
+    extension: {
+      autolink: true,       # Auto-link URLs
+      strikethrough: true,  # Support ~~strikethrough~~
+      table: true,          # Support tables
+      tagfilter: false      # Don't filter tags (this is for docs generation)
+    }
+  }
+  Commonmarker.to_html(text, options: options)
 end
-# rubocop:enable Metrics/MethodLength
 
 # Generate results.
 
-title = ARGV.first
+# The first argument is used as both the page title and source filename
+# (or just title if reading from stdin)
+# ARGF will read from ARGV files, or from stdin if ARGV is empty
+title = ARGV.first || 'Untitled'
 
 puts <<-GENERATED_HTML_HEADER
   <!DOCTYPE html>

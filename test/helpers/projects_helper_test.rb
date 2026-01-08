@@ -19,15 +19,15 @@ class ProjectsHelperTest < ActionView::TestCase
   end
 
   test 'markdown - Embedded HTML i filtered out' do
-    # In the future we might permit this, but if we do, we need to make
-    # sure only safe attributes are allowed.  Since users can just use
-    # markdown, there's no rush to support embedded HTML.
-    assert_equal "<p>hi</p>\n", markdown('<i>hi</i>')
+    # We now permit safe HTML tags like <i> for formatting, but dangerous
+    # attributes are stripped by the HardenedScrubber.
+    assert_equal "<p><i>hi</i></p>\n", markdown('<i>hi</i>')
   end
 
   test 'markdown - bare URL' do
     assert_equal(
-      '<p><a href="http://www.dwheeler.com" rel="nofollow ugc">' \
+      '<p><a href="http://www.dwheeler.com" ' \
+      'rel="nofollow ugc noopener noreferrer">' \
       "http://www.dwheeler.com</a></p>\n",
       markdown('http://www.dwheeler.com')
     )
@@ -35,7 +35,8 @@ class ProjectsHelperTest < ActionView::TestCase
 
   test 'markdown - angles around URL' do
     assert_equal(
-      '<p><a href="http://www.dwheeler.com" rel="nofollow ugc">' \
+      '<p><a href="http://www.dwheeler.com" ' \
+      'rel="nofollow ugc noopener noreferrer">' \
       "http://www.dwheeler.com</a></p>\n",
       markdown('<http://www.dwheeler.com>')
     )
@@ -43,53 +44,133 @@ class ProjectsHelperTest < ActionView::TestCase
 
   test 'markdown - hyperlinks are generated with nofollow' do
     assert_equal(
-      '<p><a href="http://www.dwheeler.com" rel="nofollow ugc">' \
+      '<p><a href="http://www.dwheeler.com" ' \
+      'rel="nofollow ugc noopener noreferrer">' \
       "Hello</a></p>\n",
       markdown('[Hello](http://www.dwheeler.com)')
     )
   end
 
   test 'markdown - raw HTML a stripped out (enforcing nofollow)' do
-    # Allowing <a href="..."> would let people insert a link without nofollow,
-    # so we don't allow the use of <a ...>.  People can insert a hyperlink,
-    # but they have to use the markdown format [test](URL), and that format
-    # gives us an opportunity to forcibly insert rel="nofollow ugc".
-    # Negative test (security)
+    # We now allow <a href="..."> BUT the HardenedScrubber forcibly injects
+    # rel="nofollow ugc noopener noreferrer" on ALL anchor tags, so users
+    # cannot bypass the nofollow requirement. This is actually safer than
+    # the old approach.
+    # Negative test (security) - verifies nofollow is forced
     assert_equal(
-      "<p>Junk</p>\n",
+      '<p><a href="https://www.dwheeler.com" ' \
+      'rel="nofollow ugc noopener noreferrer">Junk</a></p>' \
+      "\n",
       markdown('<a href="https://www.dwheeler.com">Junk</a>')
     )
   end
 
   test 'markdown - no script HTML' do
     # Allowing <script> would be a big security vulnerability.
-    # This is a negative test to make sure we're filtering it out.
+    # Commonmarker's tagfilter escapes it to &lt;script&gt; which is safe
+    # (not executable). The escaped text is visible but harmless.
     # Negative test (security)
     assert_equal(
-      "<p>Hello</p>\n",
+      "&lt;script src=\"hi\"&gt;&lt;/script&gt;Hello\n",
       markdown('<script src="hi"></script>Hello')
     )
   end
 
   test 'markdown - Embedded onclick rejected' do
-    # In the future we might allow "i", but we must continue to
-    # reject attributes unless we are sure they are safe.
+    # We now allow safe tags like "i", but the HardenedScrubber strips
+    # dangerous attributes like onclick. The tag remains but is safe.
     # Negative test (security)
-    assert_equal "<p>hi</p>\n", markdown('<i onclick="alert();">hi</i>')
+    assert_equal "<p><i>hi</i></p>\n", markdown('<i onclick="alert();">hi</i>')
   end
 
   test 'markdown - _target not included' do
-    # In the future we might permit <a href=...>, but we must NOT allow
-    # target="..." in it because that's a security vulnerability.
-    # This is a negative test to ensure that target="..." isn't allowed. See:
+    # We now permit <a href=...>, but the HardenedScrubber strips the
+    # dangerous target="..." attribute AND forcibly injects
+    # rel="nofollow ugc noopener noreferrer" for protection.
+    # This is a negative test to ensure that target="..." is stripped. See:
     # "Target="_blank" - the most underestimated vulnerability ever"
     # by Alexander "Alex" Yumashev, May 4 2016
     # https://www.jitbit.com/alexblog/
     # 256-targetblank---the-most-underestimated-vulnerability-ever/
     assert_equal(
-      "<p>Hello</p>\n",
+      '<p><a href="https://www.dwheeler.com" ' \
+      'rel="nofollow ugc noopener noreferrer">Hello</a></p>' \
+      "\n",
       markdown('<a href="https://www.dwheeler.com" target="_blank">Hello</a>')
     )
+  end
+
+  test 'markdown - javascript: URL scheme rejected' do
+    # javascript: URLs are a major XSS attack vector. We only allow
+    # http, https, and mailto schemes (ALLOWED_PROTOCOLS).
+    # The HardenedScrubber strips the dangerous href but leaves the
+    # harmless <a> tag (an anchor without href is just text styling).
+    # Negative test (security)
+    result = markdown('[Click me](javascript:alert("XSS"))')
+    # At the least this should be true:
+    assert_not result.include?('javascript:'),
+               'javascript: URL scheme should not appear in output'
+    # Other secure results are *possible*, but we'll check for the
+    # specific known-safe results.
+    assert_not result.include?('href'),
+               'href attribute should be stripped from javascript: URL'
+    assert_equal(
+      '<p><a rel="nofollow ugc noopener noreferrer">Click me</a></p>' \
+      "\n",
+      result
+    )
+  end
+
+  test 'markdown - javascript: URL scheme in raw HTML rejected' do
+    # Test that javascript: URLs in raw HTML anchor tags are also blocked.
+    # The HardenedScrubber strips the dangerous href attribute.
+    # Negative test (security)
+    result = markdown('<a href="javascript:alert(\'XSS\')">Click</a>')
+    assert_not result.include?('javascript:'),
+               'javascript: URL should not appear in output'
+    # More specific expected results; other secure results are possible
+    assert_not result.include?('href'),
+               'href attribute should be stripped'
+    result = markdown('<a href="javascript:alert(\'XSS\')">Click</a>')
+    assert_equal(
+      '<p><a rel="nofollow ugc noopener noreferrer">Click</a></p>' \
+      "\n",
+      result
+    )
+  end
+
+  test 'markdown - invalid URI has href stripped' do
+    # URIs that cause URI::InvalidURIError should have their href removed.
+    # This tests line 96 in markdown_processor.rb (rescue clause).
+    # The HardenedScrubber catches the exception and strips the href.
+    # Negative test (security)
+    # Using a malformed URI with invalid characters
+    result = markdown('<a href="ht!tp://bad[url]">Link</a>')
+    # The link text should remain in a harmless <a> tag without href
+    assert_not result.include?('href'),
+               'Invalid URI should have href attribute stripped'
+    assert_equal(
+      '<p><a rel="nofollow ugc noopener noreferrer">Link</a></p>' \
+      "\n",
+      result
+    )
+  end
+
+  test 'markdown - imbalanced HTML tags are automatically balanced' do
+    # The HTML parser/sanitizer automatically balances tags to prevent
+    # layout breakage or context escaping. This is important for security
+    # to *not* allow unbalanced tags. For us, unclosed tags get closed.
+    assert_equal "<p><i>hello</i></p>\n", markdown('<i>hello')
+    assert_equal "<p><strong>world</strong></p>\n", markdown('<strong>world')
+    # Orphaned closing tags get removed
+    assert_equal "<p>hello</p>\n", markdown('hello</i>')
+    # Multiple unclosed tags are properly nested and closed
+    result = markdown('<i>hello <strong>world')
+    # Verify tags are balanced (same number of opening and closing)
+    assert_equal result.scan('<i>').length, result.scan('</i>').length
+    assert_equal result.scan('<strong>').length, result.scan('</strong>').length
+    # Specific result - other results could also be okay
+    assert_equal "<p><i>hello <strong>world</strong></i></p>\n", result
   end
 
   test 'markdown - trivial text' do
@@ -100,6 +181,34 @@ class ProjectsHelperTest < ActionView::TestCase
 
   test 'markdown - nil' do
     assert_equal '', markdown(nil)
+  end
+
+  test 'MarkdownProcessor HARDENED_TAGS and HARDENED_ATTRS values' do
+    # This test documents the exact allowed tags and attributes in our
+    # markdown processor. If this test fails after a Rails upgrade, it means
+    # Rails::Html::SafeListSanitizer defaults have changed, and we need to
+    # manually review whether the new values are acceptable for our
+    # security requirements.
+    #
+    # HARDENED_TAGS = Rails safe list MINUS img, video, audio, details, summary
+    # We remove media tags to discourage spam/SEO abuse, and details/summary
+    # because they can hide important information.
+    expected_tags = %w[
+      a abbr acronym address b big blockquote br cite code dd del dfn div dl
+      dt em h1 h2 h3 h4 h5 h6 hr i ins kbd li mark ol p pre samp small span
+      strong sub sup time tt ul var
+    ]
+    assert_equal expected_tags, MarkdownProcessor::HARDENED_TAGS.sort,
+                 'HARDENED_TAGS changed - review security implications'
+
+    # HARDENED_ATTRS = Rails safe list MINUS class, id, target PLUS rel
+    # We remove class/id (display manipulation), target (security vuln).
+    # We add rel (needed for nofollow injection).
+    expected_attrs = %w[
+      abbr alt cite datetime height href lang name rel src title width xml:lang
+    ]
+    assert_equal expected_attrs, MarkdownProcessor::HARDENED_ATTRS.sort,
+                 'HARDENED_ATTRS changed - review security implications'
   end
 
   test 'Ensure tiered_percent_as_string works' do

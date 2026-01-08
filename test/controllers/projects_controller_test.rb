@@ -1033,29 +1033,49 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should change https to http in non-blank repo_url' do
-    assert @project_two.user.id, @user2.id # Check test fixtures
+    assert_equal @project_two.user.id, @user2.id # Check test fixtures match
     log_in_as(@user2, password: 'password1')
     # Verify that we are actually logged in
     assert_equal @user2.id, session[:user_id]
     old_repo_url = @project_two.repo_url
     new_repo_url = 'http://www.nasa.gov/mav'
+    old_description = @project_two.description
+    new_description = 'Mars Ascent Vehicle project'
+
+    # Get version count before update
+    version_count_before = @project_two.versions.count
+
     patch "/en/projects/#{@project_two.id}", params: { # Invokes "update"
-      project: { repo_url:  new_repo_url }
+      project: { repo_url: new_repo_url, description: new_description }
     }
     @project_two.reload
+
+    # Verify fields were updated
     assert_not_equal @project_two.repo_url, old_repo_url
     assert_equal @project_two.repo_url, new_repo_url
-    # Check that PaperTrail properly recorded the old version
-    assert_equal 'update', @project_two.versions.last.event
-    assert_equal @project_two.user.id,
-                 @project_two.versions.last.whodunnit.to_i
-    # Use PaperTrail to retrieve old version.
+    assert_equal @project_two.description, new_description
+
+    # Verify PaperTrail created exactly one new version
+    assert_equal version_count_before + 1, @project_two.versions.count
+
+    # Check that PaperTrail properly recorded the version
+    last_version = @project_two.versions.last
+    assert_equal 'update', last_version.event
+
+    # CRITICAL: Verify whodunnit contains the logged-in user's ID
+    # This validates that our user_for_paper_trail override correctly
+    # returns @session_user_id set by setup_authentication_state
+    assert_equal @user2.id, last_version.whodunnit.to_i
+
+    # Use PaperTrail to retrieve old version and verify old field values
     # This assumes we're storing this using JSON (probably jsonb),
     # *not* the default YAML. YAML stores very specific data types, including
     # a specialized timezone type, that we don't want. By storing with
     # JSON we reduce storage use, increase query speed, and avoid
     # various deserialization problems.
-    assert_equal old_repo_url, @project_two.versions.last.reify.repo_url
+    old_version = last_version.reify
+    assert_equal old_repo_url, old_version.repo_url
+    assert_equal old_description, old_version.description
   end
 
   test 'admin can change other users non-blank repo_url' do

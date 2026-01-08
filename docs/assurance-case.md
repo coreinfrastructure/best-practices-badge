@@ -1861,6 +1861,10 @@ list the additional items added since 2013.
    [SafeBuffers and Rails 3.0](http://yehudakatz.com/2010/02/01/safebuffers-and-rails-3-0/)
    discusses this in more detail.
    This greatly reduces the risk of mistakes leading to XSS vulnerabilities.
+   We do process markdown, but markdown processing always checks to ensure
+   that only specific safe balanced tags are allowed and only specific
+   safe attributes are allowed, and it marks all external hrefs with
+   "nofollow ugc noopener noreferrer" to clearly identify such links.
    In addition, we use a restrictive Content Security Policy (CSP).
    Our CSP, for example, tells web browsers to not execute any JavaScript
    included in HTML (JavaScript must be in separate JavaScript files).
@@ -2125,7 +2129,8 @@ as of 2015-12-14:
    (and also counter SQL injection).
    XSS, CSS injection, and Ajax injection are
    countered using Rails' HTML sanitization
-   (by default strings are escaped when generating HTML).
+   (by default strings are escaped when generating HTML)
+   and our markdown generator.
    The program doesn't call out to the command line or use a routine
    that directly does so, e.g., there's no call
    to system()... so command injection won't work either.

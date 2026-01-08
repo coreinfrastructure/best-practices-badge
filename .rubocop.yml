@@ -80,6 +80,13 @@ Style/RescueStandardError:
     # many possible problems, and we don't care - if there's
     # an error getting evidence, we treat it as no evidence.
     - 'app/lib/evidence.rb'
+Style/TrailingCommaInHashLiteral:
+  # Disable an unwise check.
+  # We want to *encourage* having a comma after the last item of a hash.
+  # Having those extra comma reduces the likelihood of error if something
+  # is added later, and makes the resulting "diffs" cleaner since we don't
+  # have to change the previous line merely to add a following line.
+  Enabled: false
 Metrics/AbcSize:
   Max: 20
   Exclude:

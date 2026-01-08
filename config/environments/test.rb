@@ -55,6 +55,9 @@ Rails.application.configure do
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
 
+  # Don't force SSL in test environment - causes 301 redirects that break tests
+  config.force_ssl = false
+
   # Enable Rack's built-in compression mechanism; this is important for people
   # with slow network connections.  Enable during tests to make test
   # more like production

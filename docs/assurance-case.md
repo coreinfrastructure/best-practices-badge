@@ -1152,7 +1152,7 @@ user account has since been deleted.
 The `SessionsHelper#current_user` method lazily loads the full User record
 from the database only when needed (e.g., to check admin status or
 verify the user still exists).
-It uses `@session_user_id` previoulsy set by `setup_authentication_state` as
+It uses `@session_user_id` previously set by `setup_authentication_state` as
 input and memoizes the result in `@current_user`.
 This lazy-loading approach means:
 

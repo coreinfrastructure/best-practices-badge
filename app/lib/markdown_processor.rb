@@ -4,7 +4,7 @@
 # OpenSSF Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
-# Perform markdown processing in a performant way
+# Perform markdown processing in a secure and performant way
 
 # rubocop:disable Metrics/ModuleLength
 module MarkdownProcessor
@@ -14,8 +14,9 @@ module MarkdownProcessor
   # Pre-frozen to minimize per-call allocations.
 
   # We once used Redcarpet to process markdown, but it became
-  # unreliable, so we switched to Commonmarker, which support a similar
-  # but not identical set of options.
+  # unreliable as we began using it a lot.
+  # So we switched to Commonmarker, a different markdown processor that
+  # supports a somewhat similar but not identical set of options.
   #
   # Here are the old Redcarpet Markdown renderer configuration:
   # REDCARPET_MARKDOWN_RENDERER_OPTIONS = {
@@ -29,8 +30,10 @@ module MarkdownProcessor
   # }.freeze
   #
   # Note in particular that adding rel='nofollow ugc' isn't directly
-  # supported, and that's important, because if we don't add that,
-  # attackers will want to add garbage to improve SEO.
+  # supported by Commonmarker, and that's important,
+  # because if we don't add that, attackers will want to add garbage
+  # to improve some site's SEO. So we must supplement Commonmarker
+  # with a sanitizer to use it in our context.
 
   # It may appear odd that we're using render.unsafe = true, but that's because
   # Commonmarker doesn't allow us to directly control exactly what is and
@@ -55,10 +58,10 @@ module MarkdownProcessor
   # Pre-computed lists for the scrubber
 
   # FORBIDDEN TAGS: Start with a "safe" list & remove even more.
-  # Strip media, because if strip direct media references,
-  # some attackers will be less interested in messing with us.
-  # We strip "details" because that
-  # can hide important info. We *do* allow tables.
+  # Strip media, because if we strip direct media references,
+  # some attackers will be less interested in messing with this system.
+  # We strip the summary and details tags because they
+  # can hide important information. We *do* allow tables.
   HARDENED_TAGS = (Rails::Html::SafeListSanitizer.allowed_tags -
                   %w[img video audio details summary]).freeze
 
@@ -103,7 +106,7 @@ module MarkdownProcessor
     # rubocop:enable Metrics/MethodLength
   end
 
-  # 5. PRE-INSTANTIATED SINGLETONS
+  # PRE-INSTANTIATED SINGLETONS
   # These are created ONCE and reused for every single request.
   SANITIZER = Rails::Html::SafeListSanitizer.new
   SCRUBBER  = HardenedScrubber.new

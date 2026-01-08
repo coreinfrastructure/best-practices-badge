@@ -17,17 +17,13 @@
         <%= yield :nav_extras %>
         <li><%= link_to Icon[:'fa-list'] + t(:projects, scope: :layouts), projects_path, id: 'projects_page' %></li>
 
-        <% if logged_in? %>
+        <% if @session_user_id %>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%=
               Icon[:'fa-user']
             %><%= t(:account, scope: :layouts) %><b class="caret"></b></a>
             <ul class="dropdown-menu reverse-dropdown">
-              <li><%= link_to Icon[:'fa-address-card'] + t(:profile, scope: :layouts), current_user %></li>
-              <% if current_user.provider == 'local' %>
-                <li><%= link_to t(:settings, scope: :layouts), edit_user_path(current_user) %></li>
-              <% end %>
-              <li class="divider"></li>
+              <li><%= link_to Icon[:'fa-address-card'] + t(:profile, scope: :layouts), user_path(@session_user_id) %></li>
               <li>
                 <%= link_to Icon[:'fa-sign-out-alt'] + t(:logout_html, scope: :layouts), logout_path, method: "delete" %>
               </li>

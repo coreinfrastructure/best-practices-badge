@@ -257,5 +257,28 @@ class UserTest < ActiveSupport::TestCase
            "Existing avg: #{existing_avg.round(6)}s, " \
            "Nonexistent avg: #{nonexistent_avg.round(6)}s"
   end
+
+  test 'local users can create remember tokens' do
+    user = users(:test_user) # Local user
+    assert_equal 'local', user.provider
+    assert_nil user.remember_digest
+
+    user.remember
+    assert_not_nil user.remember_digest
+    assert_not_nil user.remember_token
+  end
+
+  test 'GitHub users cannot create remember tokens' do
+    github_user = users(:github_user)
+    assert_equal 'github', github_user.provider
+    assert_nil github_user.remember_digest
+
+    error =
+      assert_raises(ArgumentError) do
+        github_user.remember
+      end
+    assert_equal 'GitHub users cannot use remember tokens', error.message
+    assert_nil github_user.reload.remember_digest
+  end
 end
 # rubocop:enable Metrics/ClassLength

@@ -88,4 +88,62 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
       assert_equal({ locale: :fr, foo: 'bar', baz: 123 }, result)
     end
   end
+
+  test 'update_session_timestamp updates both session and cache when old' do
+    controller = ApplicationController.new
+
+    # Mock the session
+    mock_session = {}
+    controller.define_singleton_method(:session) { mock_session }
+
+    # Setup: user logged in with old timestamp
+    old_time = 2.hours.ago.utc
+    controller.instance_variable_set(:@session_user_id, 123)
+    controller.instance_variable_set(:@session_timestamp, old_time)
+
+    # Call the method
+    controller.send(:update_session_timestamp)
+
+    # Verify both session[:time_last_used] and @session_timestamp were updated
+    assert_not_nil mock_session[:time_last_used]
+    assert mock_session[:time_last_used] > old_time
+    new_timestamp = controller.instance_variable_get(:@session_timestamp)
+    assert_equal mock_session[:time_last_used], new_timestamp
+  end
+
+  test 'update_session_timestamp skips update when timestamp is recent' do
+    controller = ApplicationController.new
+
+    # Mock the session
+    mock_session = {}
+    controller.define_singleton_method(:session) { mock_session }
+
+    # Setup: user logged in with recent timestamp (30 minutes ago)
+    recent_time = 30.minutes.ago.utc
+    controller.instance_variable_set(:@session_user_id, 123)
+    controller.instance_variable_set(:@session_timestamp, recent_time)
+
+    # Call the method
+    controller.send(:update_session_timestamp)
+
+    # Verify session was NOT updated
+    assert_nil mock_session[:time_last_used]
+  end
+
+  test 'update_session_timestamp skips when no user logged in' do
+    controller = ApplicationController.new
+
+    # Mock the session
+    mock_session = {}
+    controller.define_singleton_method(:session) { mock_session }
+
+    # Setup: no user logged in
+    controller.instance_variable_set(:@session_user_id, nil)
+
+    # Call the method
+    controller.send(:update_session_timestamp)
+
+    # Verify session was NOT updated
+    assert_nil mock_session[:time_last_used]
+  end
 end

@@ -31,8 +31,10 @@ class ProjectsController < ApplicationController
   # header (which changes for logged-in users), use a flash, or
   # have a form to fill in (these use session values).
   # Note: 'show' is excluded because it displays user-specific content in HTML
-  # but handles CDN caching itself for markdown format
+  # and handles CDN caching itself for markdown format
   skip_before_action :set_default_cache_control,
+                     only: %i[badge show_json]
+  skip_before_action :setup_authentication_state,
                      only: %i[badge show_json]
   before_action :cache_on_cdn, only: %i[badge show_json]
 

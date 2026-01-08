@@ -36,11 +36,6 @@ class ApplicationController < ActionController::Base
   # Force http -> https
   before_action :redirect_https?
 
-  # Record the original session value in "original_session".
-  # That way can we tell if the session value has changed, and potentially
-  # omit it if it has not changed.
-  before_action :record_original_session
-
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
@@ -51,19 +46,25 @@ class ApplicationController < ActionController::Base
   before_action :redir_missing_locale
 
   # Set the locale, based on best available information.
-  # The locale in the URL always takes precedent.
+  # The locale in the URL always takes precedent, so normally that's
+  # what is set here.
   before_action :set_locale_to_best_available
 
-  # Limit time before must log in again.
-  # The `validate_session_timestamp` will log out users once their
-  # login session time has expired, and it's checked before any main
-  # action unless specifically exempted.
-  # IMPORTANT: This must come AFTER locale setup so that redirects
-  # to login_path use the correct locale from the user's browser.
-  before_action :validate_session_timestamp
-  after_action :persist_session_timestamp
+  # Extract and validate authentication state from session.
+  # Sets instance variables (@session_user_id, etc.) that are guaranteed
+  # valid after this completes from the point-of-view of a signed session.
+  # The @session_user_id will be nil if the user isn't logged into a session.
+  # The user account might have been deleted after the user logged in;
+  # request method `current_user` to get the current user data.
+  # This before_action handles session timeout and the remember token.
+  before_action :setup_authentication_state
+  after_action :update_session_timestamp
 
-  # For the PaperTrail gem
+  # For the PaperTrail gem. We must call this *after* the action
+  # `setup_authentication_state`; this action calls
+  # our method `user_for_paper_trail` which reads from @session_user_id.
+  # We do things this way so we can easily record the user id without
+  # always requiring a database lookup about the user.
   before_action :set_paper_trail_whodunnit
 
   # Use the new HTTP security header, "permissions policy", to disable things
@@ -73,15 +74,11 @@ class ApplicationController < ActionController::Base
   # Set the default cache control, which inhibits external caching.
   # If you *want* caching, you must apply:
   # skip_before_action :set_default_cache_control
+  # Also, if you're disabling cache control, it's likely there's no user
+  # authentication (and thus no authorization), so you might also want to:
+  # skip_before_action :setup_authentication_state
   # We use before_action and override CSRF cache control
   before_action :set_default_cache_control
-
-  # Records the current session state for comparison later.
-  # Used to detect session changes and optimize session cookie transmission.
-  # @return [void]
-  def record_original_session
-    @original_session = session.to_h
-  end
 
   # Append user information to the log payload for request tracking.
   # Records the current user's ID in logs when user is logged in.
@@ -91,7 +88,23 @@ class ApplicationController < ActionController::Base
   # https://github.com/roidrage/lograge/issues/23
   def append_info_to_payload(payload)
     super
-    payload[:uid] = current_user.id if logged_in?
+    payload[:uid] = current_user&.id if logged_in?
+  end
+
+  # Override PaperTrail's default user extraction.
+  # Returns the user ID directly from @session_user_id (set by
+  # setup_authentication_state), avoiding an unnecessary database query.
+  # PaperTrail only needs the integer user ID to log who made changes.
+  # This is called by the set_paper_trail_whodunnit before_action callback.
+  # There is a weird case: it's possible that the user logged in and the
+  # user account has since been deleted. In this case, papertrail will
+  # correctly log the user id, even though the user record is no longer
+  # available in the database. We don't reuse user ids, so this will simply
+  # record correct information even in this odd circumstance.
+  #
+  # @return [Integer, nil] The current user's ID, or nil if not logged in
+  def user_for_paper_trail
+    @session_user_id
   end
 
   # How long (in seconds) will the badge be stored on the CDN before being
@@ -119,8 +132,6 @@ class ApplicationController < ActionController::Base
   BADGE_CACHE_SURROGATE_CONTROL =
     "max-age=#{BADGE_CACHE_MAX_AGE}, stale-if-error=#{BADGE_CACHE_STALE_AGE}".freeze
 
-  # Set default cache control - don't externally cache.
-  # This is the safe behavior, so we make it the default.
   # Fewer pages are cacheable than you might initially expect.
   # Most of the pages on this site vary depending on whether or not
   # you're logged in (because the header varies), so we can't cache most
@@ -129,7 +140,10 @@ class ApplicationController < ActionController::Base
   # If we ever change the system so that the pages are mostly
   # the *same* regardless of the logged-in situation and whether or not
   # flashes were present, we could be more aggressive about caching.
-  # This does NOT impact static images which are handled separately.
+
+  # Set default cache control - don't externally cache.
+  # This is the safe behavior, so we make it the default.
+  # This is NOT called for static images which are handled separately.
   def set_default_cache_control
     # Override Rails default behavior by setting stricter cache control
     # This will be our baseline, and if CSRF protection overrides it,
@@ -227,14 +241,6 @@ class ApplicationController < ActionController::Base
   def omit_session_cookie
     request.session_options[:skip] = true
   end
-
-  # Omit unchanged session cookie.
-  # This has limited utility, see the comments on omit_session_cookie.
-  # Only take this action if not-logged-in and session cookie is unchanged
-  # def omit_unchanged_session_cookie
-  #   return unless !logged_in? && session.to_h == @original_session
-  #   omit_session_cookie
-  # end
 
   # Response formats that should not trigger locale redirects.
   # JSON and CSV are locale-independent, so don't redirect to add locale.
@@ -359,8 +365,8 @@ class ApplicationController < ActionController::Base
     # (which is certainly true), by doing this:
     # redirect_to preferred_url, status: :multiple_choices # 300
     # It worked on staging, but causes problems in production when trying
-    # to redirect the root path, so as emergency we're
-    # switching to "found" (302) which is supported by everyone.
+    # to redirect the root path, so we're using
+    # "found" (302) which is supported by everyone.
     redirect_to preferred_url, status: :found
   end
 
@@ -404,6 +410,116 @@ class ApplicationController < ActionController::Base
     # We can eventually drop this, but it doesn't hurt to include it for now.
     response.set_header('Feature-Policy', FEATURE_POLICY_VALUE)
   end
+
+  # Extracts and validates authentication state from session and cookies.
+  # This is the ONLY place session authentication data is extracted.
+  # The instance variables are set in the controller instance; Rails copies
+  # such variables to the corresponding view instance if one is created.
+  #
+  # Instance variables set:
+  # - @session_user_id: User ID if logged in, nil otherwise
+  # - @session_timestamp: Last activity time if logged in, nil otherwise
+  # - @session_user_token: GitHub OAuth token if GitHub user, nil otherwise
+  # - @session_github_name: GitHub username if GitHub user, nil otherwise
+  #
+  # This typically does *not* check the database, so after this returns it's
+  # possible that this user account was deleted after the session data was set.
+  # However, this is enough information to allow the logged-in displays
+  # supported by `logged_in?`, for example, the navigation header bar
+  # shown in HTML or the list of users in /users.
+  #
+  # Some checks (e.g., `can_edit?` or `can_control?`) are pickier and want
+  # to ensure that the user is *currently* valid, or want current information
+  # about the user (e.g., whether or not the user is an admin).
+  # These checks end up calling method `current_user`,
+  # which uses as *input* the instance values that were set here,
+  # retrieves this user's data from the database, and
+  # memoizes *that* information in `@current_user`.
+  # This way, we never query the database unless (1) a user's session claims
+  # that the user is logged in, and (2) there's a need for additional info
+  # or verification.
+  #
+  # Normally this doesn't set @current_user (that requires a database lookup).
+  # However, if we use a remember_me token, we have to do a
+  # database lookup, so in that case we record @current_user since
+  # we *did* have to do a database lookup (so we will avoid doing it twice).
+  #
+  # @return [void]
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def setup_authentication_state
+    return if Rails.application.config.deny_login
+
+    # Extract session data - decrypt cookie once
+    user_id = session[:user_id]
+    timestamp = session[:time_last_used]
+
+    # Check timeout BEFORE setting instance variables
+    # This ensures instance variables always contain VALID auth state
+    # Reject sessions with missing or expired timestamps
+    if user_id && (!timestamp || timestamp < SessionsHelper::SESSION_TTL.ago.utc)
+      reset_session # Session expired or missing timestamp
+      user_id = nil
+      timestamp = nil
+    end
+
+    # Handle remember token if no valid session
+    if user_id.nil?
+      user_id, timestamp = try_remember_token_login
+    end
+
+    # Set instance variables from the encrypted session cookie.
+    @session_user_id = user_id
+    @session_timestamp = timestamp
+    @session_user_token = session[:user_token]
+    @session_github_name = session[:github_name]
+  end
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+
+  # Updates session timestamp if user is logged in and timestamp is old.
+  # This is called as after_action, so it runs after the controller action.
+  # Only updates if timestamp is older than RESET_SESSION_TIMER (1 hour).
+  #
+  # @return [void]
+  def update_session_timestamp
+    return unless @session_user_id
+
+    old = !@session_timestamp ||
+          @session_timestamp < SessionsHelper::RESET_SESSION_TIMER.ago.utc
+
+    return unless old
+
+    session[:time_last_used] = Time.now.utc
+    @session_timestamp = session[:time_last_used] # Update cache
+  end
+
+  # Attempts to login using remember token cookies.
+  # ONLY works for local users - GitHub users must re-authenticate via OAuth.
+  # Returns [user_id, timestamp] if successful, [nil, nil] otherwise.
+  #
+  # @return [Array<Integer, Time>, Array<nil, nil>]
+  # rubocop:disable Metrics/AbcSize
+  def try_remember_token_login
+    cookie_user_id = cookies.signed[:user_id]
+    return [nil, nil] unless cookie_user_id
+
+    user = User.find_by(id: cookie_user_id)
+    return [nil, nil] unless user&.authenticated?(:remember, cookies[:remember_token])
+
+    # GitHub users should not use remember tokens - they must use OAuth
+    return [nil, nil] if user.provider == 'github'
+
+    # Valid remember token for local user - create new session
+    now = Time.now.utc
+    session[:user_id] = user.id
+    session[:time_last_used] = now
+
+    I18n.locale = user.preferred_locale.to_sym
+    # We found the user DB data, record it in case we need it later.
+    @current_user = user
+
+    [user.id, now]
+  end
+  # rubocop:enable Metrics/AbcSize
 
   include SessionsHelper
 end

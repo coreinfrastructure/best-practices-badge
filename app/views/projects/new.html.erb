@@ -10,7 +10,7 @@
    url_pattern = 'https?:\/\/' + domain_pattern + \
      '(\/([-A-Za-z0-9_.:\/\+!,#@~]|%(20|[89A-Ea-e][0-9A-Fa-f]|[Ff][0-7]))*)?'
 %>
-<% if logged_in? %>
+<% if current_user %>
   <div class='row'>
   <div class="col-md-12">
   <br>

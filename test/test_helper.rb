@@ -178,13 +178,12 @@ module ActiveSupport
       user,
       password: 'password',
       provider: 'local',
-      remember_me: '1',
-      make_old: false
+      remember_me: '1'
     )
       # This is based on "Ruby on Rails Tutorial" by Michael Hargle, chapter 8,
       # https://www.railstutorial.org/book
       time_last_used = Time.now.utc
-      post "#{login_path}#{'?make_old=true' if make_old}", params: {
+      post login_path, params: {
         session: {
           email:  user.email, password: password,
           provider: provider, remember_me: remember_me,

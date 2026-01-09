@@ -77,7 +77,7 @@ module MarkdownProcessor
   ALLOWED_MARKDOWN_URL_PATTERN = %r{\A(?:https?:|mailto:|/|\.\.?/|#)}i
 
   # The following pattern is designed to *only* match
-  # a line that we KNOW cannot require markdown processing.
+  # a single line that we KNOW cannot require markdown processing.
   #
   # This pattern matches text that we KNOW
   # does not require markdown processing.
@@ -86,6 +86,12 @@ module MarkdownProcessor
   # In particular, note that we have to handle period and colon specially,
   # because www.foo.com and http://foo.com *do* need to be processed
   # differently and can't just be passed through.
+  #
+  # We use \p{L} to match Unicode letters (not just ASCII A-Za-z), which
+  # allows international characters like é, ñ, ü, 中, etc. This is safe
+  # because no Unicode letter is a markdown special character or HTML
+  # metacharacter. We keep digits as 0-9 (not \p{N}) for consistency with
+  # the numbered list detection in the negative lookahead.
   #
   # In our measures this matches 83.87% of the justification text
   # in our system. That's a pretty good optimization that
@@ -112,13 +118,15 @@ module MarkdownProcessor
   #   We can allow "&" followed by a space, as modern HTML knows that *can't*
   #   be an entity. We can allow single-quotes and double-quotes since
   #   this is not in an attribute and we aren't implementing smarty quotes.
+  # - Must NOT backtrack (performance requirement). The mutually exclusive
+  #   alternatives ensure this pattern never backtracks.
 
   MARKDOWN_UNNECESSARY = %r{\A
     (?!(\d+\.|\-|\*|\+|\#+)\s) # numbered lists, un-numbered lists, headings
     (?!\-\-\-) # Horizontal lines
-    ([A-Za-z0-9\040\,\;\'\"\!\(\)\-\?\%\+]|
-     \.\040|\:\040|\&\040|/(/\040|[A-Za-z0-9]))+
-    \.? # Optional final period
+    ([\p{L}0-9\040\,\;\'\"\!\(\)\-\?\%\+]| # \p{L} = international letters
+     \.\040|\:\040|\&\040|/(/\040|[\p{L}0-9]))+ # Be cautious on some chars
+    \.? # Optional final period. We use strip which removes any final LF
     \z}x
 
   # The following pattern *only* matches simple bare URLs, so that

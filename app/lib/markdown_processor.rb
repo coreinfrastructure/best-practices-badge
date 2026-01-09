@@ -214,7 +214,7 @@ module MarkdownProcessor
   # ', ", <, or >. Thus, there's no way to turn accepting these directly
   # into an attack (in particular this counters an XSS attack).
   # This pattern also does NOT match a space character (use %20 in a URL);
-  # an interal space would indicate we need more sophisticated processing.
+  # an internal space would indicate we need more sophisticated processing.
   # This pattern *only* matches simple bare URLs, so if it matches,
   # we know there's no need for more complex markdown parsing.
   #

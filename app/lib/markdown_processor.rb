@@ -34,15 +34,32 @@ module MarkdownProcessor
   # because if we don't add that, attackers will want to add garbage
   # to improve some site's SEO. So we must supplement Commonmarker
   # with a sanitizer to use it in our context.
+  #
 
-  # It may appear odd that we're using render.unsafe = true, but that's because
-  # Commonmarker doesn't allow us to directly control exactly what is and
-  # is not allowed to be rendered. We'll instead do a
-  # separate safety pass afterwards to permit and forbid specific items.
-  # This is the "normal way" to do such processing.
+  # We do NOT use render.unsafe = true. We use the default (safe mode)
+  # which blocks all raw HTML. This is the same behavior as Redcarpet had.
+  # We then use fast regex operations to add security attributes to links
+  # and strip disallowed URL protocols.
+  #
+  # When we first switched to Commonmarker we used unsafe: true and
+  # a scrubber building on Rails::Html::PermitScrubber.
+  # This provided a lot of *great* functionality, because then users
+  # could use markdown *and* embed a lot of safe HTML.
+  # However, this approach caused a *massive* number of Ruby objects to be
+  # created (nodes to represent parts of the HTML), that then needed to
+  # be walked with Ruby code. We optimized this, and if the site was
+  # rarely visited, it'd be fine. However, even when we optimized
+  # this approach, it caused a dramatic
+  # spike in 95th percentile average response times (~100ms->~160ms)
+  # and caused RSS memory use to go out-of-control. Even aggressive
+  # compaction couldn't prevent the system's memory use from
+  # growing, running out of memory, and crashing.
+  # So we switched to forbidding HTML and using simple regexes when
+  # we must handle full markdown.
+  #
   COMMONMARKER_OPTIONS = {
     render: {
-      unsafe: true # Sanitizer handles the safety; this just provides the HTML
+      escape: true # Escape raw HTML so users can see what they entered (safely)
     },
     extension: {
       autolink: true, # Autolink URLs to simplify references
@@ -52,120 +69,27 @@ module MarkdownProcessor
     }
   }.freeze
 
-  # Allowed protocols; Set tends to be faster than Array for .include? checks
-  ALLOWED_PROTOCOLS = Set.new(%w[http https mailto]).freeze
-
-  # Regex to extract URL scheme without URI.parse allocation overhead
-  # Matches scheme per RFC 3986: starts with letter, followed by letter/digit/+/-/.
-  SCHEME_REGEX = /\A([a-z][a-z0-9+.-]*?):/i
-
-  # Pre-computed lists for the scrubber
-
-  # FORBIDDEN TAGS: Start with a "safe" list & remove even more.
-  # Strip media, because if we strip direct media references,
-  # some attackers will be less interested in messing with this system.
-  # We strip the summary and details tags because they
-  # can hide important information. We *do* allow tables.
-  HARDENED_TAGS = (Rails::Html::SafeListSanitizer.allowed_tags -
-                  %w[img video audio details summary]).freeze
-
-  # FORBIDDEN ATTRIBUTES: Start with "safe" list but strip more:
-  # - target (there's an HTML attack).
-  # - class and id (these can manipulate the display)
-  HARDENED_ATTRS = (Rails::Html::SafeListSanitizer.allowed_attributes -
-                   %w[class id target] + %w[rel]).freeze
-
-  class HardenedScrubber < Rails::Html::PermitScrubber
-    def initialize
-      super
-      self.tags = HARDENED_TAGS
-      self.attributes = HARDENED_ATTRS
-    end
-
-    # rubocop:disable Metrics/MethodLength
-    def scrub(node)
-      # Scrub the HTML. This is iterated inside the generated string,
-      # so we need to make this efficient.
-
-      # OPTIMIZATION: Short-circuit for non-anchor tags.
-      # The only thing we specially manipulate are <a> tags.
-      # If what we've received is not a link,
-      # execute C-logic (super) and return immediately.
-      # This saves 50-60% of Ruby execution for formatting tags
-      # like <p>, <b>, etc.
-      return super if node.name != 'a'
-
-      # At this point we have an <a> tag
-
-      # Return STOP if super == STOP. This is trivial code, but it's
-      # important, and the *reason* it's important requires some explanation.
-      # When you call super inside the scrub method of a class inheriting
-      # from PermitScrubber, you are asking the parent class to run its
-      # own validation logic first.
-      # The PermitScrubber parent class checks two things:
-      # - Is the tag name (e.g., <a>) in the self.tags allow-list?
-      # - Are the attributes on that tag (e.g., href, onclick)
-      #   in the self.attributes allow-list?
-      # If either of these checks fails, super returns the constant STOP.
-      # By including the statement below, we are saying:
-      # "If the standard Rails security check already decided this node
-      # is illegal, stop immediately and do not process my custom
-      # link-hardening logic."
-      # Without this line, the code would contain a subtle but dangerous
-      # logic flaw, because it could override the STOP we already received.
-      # Basically, if an <a> tag with a forbidden attribute
-      # submits a link with a forbidden attribute that
-      # rails-html-sanitizer usually strips
-      # for security (like a style attribute or an event handler
-      # like onmouseover), without the return STOP line, then
-      # node.name != 'a' is false (it is an anchor), so
-      # super runs. It sees the forbidden attribute and marks the node
-      # for deletion/scrubbing by returning STOP.
-      # But without the following line, the code we have added would
-      # ignore that result. It would instead continue to the next lines
-      # to perform other protocol checks and processing and ends, implicitly
-      # returning the result of the last line evaluated (or CONTINUE).
-      # As result, the code would have accidentally overridden the
-      # STOP signal from the parent class. The "Illegal" tag would
-      # now be treated as safe because the custom logic finished
-      # without respecting the parent's STOP objection.
-      return STOP if super == STOP
-
-      # At this point we have an <a> tag with no other objections
-
-      # Inject security and SEO attributes
-      node['rel'] = 'nofollow ugc noopener noreferrer'
-
-      # Fast protocol check: avoid URI.parse for relative links (no ':')
-      if (href = node['href']).present? && href.include?(':')
-        # Extract scheme without URI.parse allocation
-        scheme = href[SCHEME_REGEX, 1]&.downcase
-        # Remove href if scheme is invalid or not in whitelist
-        node.remove_attribute('href') unless scheme && ALLOWED_PROTOCOLS.include?(scheme)
-      end
-
-      CONTINUE
-    end
-    # rubocop:enable Metrics/MethodLength
-  end
-
-  # PRE-INSTANTIATED SINGLETONS
-  # These are created ONCE and reused for every single request.
-  SANITIZER = Rails::Html::SafeListSanitizer.new
-  SCRUBBER  = HardenedScrubber.new
+  # Regex to match allowed URL protocols and relative URLs.
+  # This allows http:, https:, mailto:, relative paths (/, ./, ../),
+  # and anchors (#).
+  # This prevents anything else such as javascript:, data:,
+  # and other dangerous protocols.
+  ALLOWED_MARKDOWN_URL_PATTERN = %r{\A(?:https?:|mailto:|/|\.\.?/|#)}i
 
   # The following pattern is designed to *only* match
   # a line that we KNOW cannot require markdown processing.
   #
-  # This pattern matches text that we KNOW does not require markdown processing.
+  # This pattern matches text that we KNOW
+  # does not require markdown processing.
   # We do this check as an optimization to skip calling the markdown
   # processor in most cases when it's clearly unnecessary.
   # In particular, note that we have to handle period and colon specially,
   # because www.foo.com and http://foo.com *do* need to be processed
   # differently and can't just be passed through.
   #
-  # In our measures this matches 83.87% of the justification text in our system.
-  # That's a pretty good optimization that is not *too* hard to read and verify.
+  # In our measures this matches 83.87% of the justification text
+  # in our system. That's a pretty good optimization that
+  # is not *too* hard to read and verify.
   # It's *okay* to pass something to the markdown processor, we just try
   # to ensure that most such requests are needed.
   #
@@ -199,16 +123,25 @@ module MarkdownProcessor
 
   # The following pattern *only* matches simple bare URLs, so that
   # we can handle them specially instead of invoking the markdown processor.
-  # To craft this pattern we used a dataset of all justifications. Of htem,
-  # 66353 didn't match an older version of the "unnecessary" match.
-  # Of that didn't match set, 28684/66353 (43%) were simple bare URLs.
+  #
+  # This is *primarily* an optimization, so that we can avoid calling
+  # the markdown processor unnecessarily. However, it *also* quietly
+  # provides "expected functionality". Users often put a single URL into
+  # a justification, and they typically don't represent "&" as "amp;"
+  # like they're supposed to do in HTML or Markdown. This happens often when
+  # users provide a query string in the URL. So by this code, if they
+  # *only* provide a URL, any "&" will "do the right thing".
+  #
+  # To craft this pattern we used a dataset of all justifications. Of them,
+  # 66353 didn't match an older version of the "unnecessary" match above.
+  # In that "didn't match" set, 28684/66353 (43%) were simple bare URLs.
   # So we've crafted a simple bare URL matcher that matches 26697 of them.
   # That means that 28536/66353 (43%) of the strings not matched by the
-  # simple "markdown unnecessary" strings get caught here.
+  # simple "markdown unnecessary" strings are processed here.
   # That means this catches about (100%-83.87%)*43% = 6.94% more strings, so
   # by adding this measure, we can skip markdown processing about 90.81%
   # (83.87+6.94%) of the time.
-  # Basically, by doing a simple check, we can skip the more complex markdown
+  # Basically, by doing a simple check, we can skip more complex markdown
   # processing in the vast majority of cases.
   #
   # Note that this pattern does NOT match dangerous HTML characters like
@@ -222,8 +155,6 @@ module MarkdownProcessor
   # In the name of performance and maintainability we've made simplifications.
   # Some URLs won't match this regex, and that's okay, they'll be handled
   # by the full markdown processor.
-  # For example, it doesn't match on port numbers,
-  # which are exceeding rare in our data set.
   # It doesn't accept domain "localhost", which make no sense for us.
   # We *will* match a few strings that strictly speaking aren't valid URLs,
   # but those won't hurt us security-wise:
@@ -249,6 +180,7 @@ module MarkdownProcessor
     https?://                                   # Protocol
     [a-z0-9-]+                                  # First DNS label (simplified)
     (?:\.[a-z0-9-]+)+                           # Subsequent labels (simplified)
+    (?:\:[0-9]+)?                               # Optional port#
     (?:/                                        # Optional path w/dirs and %xx
       (?:[a-z0-9\-._~:@!$&()*+,;=/]|%[0-9a-f]{2})*
     )?
@@ -296,19 +228,6 @@ module MarkdownProcessor
     # than return what was passed.
     content = content.to_s.strip
 
-    # Skip markdown processing for simple text with no markdown syntax
-    # and no way to generate dangerous code (e.g., no < or >).
-    # At one time we called html_escape, but that is completely unnecessary
-    # because MARKDOWN_UNNECESSARY won't let those sequences in, and
-    # removing the unnecessary call helps us avoid unnecessary work and
-    # unnecessary string allocation. We concatenate all at once to
-    # avoid creating unnecessary temporary strings as intermediaries.
-    # We declare the result as html_safe so that views can more efficiently
-    # use the result.
-    if content.match?(MARKDOWN_UNNECESSARY)
-      return "#{MARKDOWN_PREFIX}#{content}#{MARKDOWN_SUFFIX}".html_safe
-    end
-
     # Skip markdown processing for simple bare URLs, and instead generate
     # their markdown directly. We are escaping the HTML because "&" must
     # be escaped anywhere in HTML when not followed by space, even in an href,
@@ -329,13 +248,45 @@ module MarkdownProcessor
              "#{escaped_url}</a>#{MARKDOWN_SUFFIX}".html_safe
     end
 
-    # Apply more sophisticated markdown processing.
-    # Commonmarker releases the GVL here for thread-safe parallel execution
-    raw_html = Commonmarker.to_html(content, options: COMMONMARKER_OPTIONS)
+    # Skip markdown processing for simple text with no markdown syntax
+    # and no way to generate dangerous code (e.g., no < or >).
+    # At one time we called html_escape, but that is completely unnecessary
+    # because MARKDOWN_UNNECESSARY won't let those sequences in, and
+    # removing the unnecessary call helps us avoid unnecessary work and
+    # unnecessary string allocation. We concatenate all at once to
+    # avoid creating unnecessary temporary strings as intermediaries.
+    # We declare the result as html_safe so that views can more efficiently
+    # use the result.
+    if content.match?(MARKDOWN_UNNECESSARY)
+      return "#{MARKDOWN_PREFIX}#{content}#{MARKDOWN_SUFFIX}".html_safe
+    end
 
-    # Sanitize and scrub in a single pass
-    # Thanks to this process we can mark it as html_safe.
-    SANITIZER.sanitize(raw_html, scrubber: SCRUBBER).html_safe
+    # Apply more sophisticated markdown processing.
+
+    # Commonmarker releases the GVL here for thread-safe parallel execution
+    # Using unsafe: false (default), so raw HTML is blocked.
+    html = Commonmarker.to_html(content, options: COMMONMARKER_OPTIONS)
+
+    # Strip hrefs with disallowed protocols. Commonmarker always generates
+    # double quotes, and users can't use HTML, so we only handle the case
+    # that can happen (no need for single-quote code).
+    html.gsub!(/<a([^>]*?)href="([^"]*?)"([^>]*)>/m) do
+      before = ::Regexp.last_match(1)
+      url = ::Regexp.last_match(2)
+      after = ::Regexp.last_match(3)
+
+      if url.match?(ALLOWED_MARKDOWN_URL_PATTERN)
+        # Valid URL - keep it and add security attributes
+        # href comes before rel to match previous behavior
+        "<a#{before}href=\"#{url}\" rel=\"nofollow ugc noopener noreferrer\"#{after}>"
+      else
+        # Strip href attribute - link becomes plain text
+        "<a#{before}#{after}>"
+      end
+    end
+
+    # Mark as html_safe since Commonmarker escapes HTML and we've validated URLs
+    html.html_safe
   end
   # rubocop:enable Rails/OutputSafety, Metrics/MethodLength
 end

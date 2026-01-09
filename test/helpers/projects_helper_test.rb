@@ -372,27 +372,44 @@ class ProjectsHelperTest < ActionView::TestCase
   test 'markdown - bare basic URL generates correct result' do
     url = 'https://github.com/Apetree100122/w3id.org'
     result = markdown(url)
-    assert_equal '<p><a href="https://github.com/Apetree100122/w3id.org" rel="nofollow ugc noopener noreferrer">https://github.com/Apetree100122/w3id.org</a></p>' + "\n", result
+    assert_equal '<p><a href="https://github.com/Apetree100122/w3id.org" ' \
+                 'rel="nofollow ugc noopener noreferrer">' \
+                 'https://github.com/Apetree100122/w3id.org</a></p>' + "\n", result
   end
 
   test 'markdown - bare URL with simple query string' do
     url = 'https://wiki.onap.org/pages/viewpage.action?pageId=8226539'
     result = markdown(url)
-    assert_equal '<p><a href="https://wiki.onap.org/pages/viewpage.action?pageId=8226539" rel="nofollow ugc noopener noreferrer">https://wiki.onap.org/pages/viewpage.action?pageId=8226539</a></p>' + "\n", result
+    assert_equal '<p><a href="' \
+                 'https://wiki.onap.org/pages/viewpage.action?pageId=8226539" ' \
+                 'rel="nofollow ugc noopener noreferrer">' \
+                 'https://wiki.onap.org/pages/viewpage.action?pageId=8226539' \
+                 '</a></p>' + "\n", result
   end
 
   test 'markdown - bare URL with multiple query parameters' do
-    url = 'https://node-data.atlassian.net/secure/RapidBoard.jspa?rapidView=2&view=detail'
+    url = 'https://node-data.atlassian.net/secure/' \
+          'RapidBoard.jspa?rapidView=2&view=detail'
     result = markdown(url)
-    # Note: & is HTML-escaped to &amp; in the output (correct behavior)
-    assert_equal '<p><a href="https://node-data.atlassian.net/secure/RapidBoard.jspa?rapidView=2&amp;view=detail" rel="nofollow ugc noopener noreferrer">https://node-data.atlassian.net/secure/RapidBoard.jspa?rapidView=2&amp;view=detail</a></p>' + "\n", result
+    # NOTE: & is HTML-escaped to &amp; in the output (correct behavior)
+    assert_equal '<p><a href="https://node-data.atlassian.net/' \
+                 'secure/RapidBoard.jspa?rapidView=2&amp;view=detail" ' \
+                 'rel="nofollow ugc noopener noreferrer">' \
+                 'https://node-data.atlassian.net/secure/' \
+                 'RapidBoard.jspa?rapidView=2&amp;view=detail</a></p>' + "\n", result
   end
 
   test 'markdown - ampersand escaping with complex query string' do
     # Real-world example with multiple parameters
-    url = 'https://gitlab.com/project/issues?assignee_id=5&milestone_id=10&state=opened'
+    url = 'https://gitlab.com/project/issues?' \
+          'assignee_id=5&milestone_id=10&state=opened'
     result = markdown(url)
-    assert_equal '<p><a href="https://gitlab.com/project/issues?assignee_id=5&amp;milestone_id=10&amp;state=opened" rel="nofollow ugc noopener noreferrer">https://gitlab.com/project/issues?assignee_id=5&amp;milestone_id=10&amp;state=opened</a></p>' + "\n", result
+    assert_equal '<p><a href="https://gitlab.com/project/issues?' \
+                 'assignee_id=5&amp;milestone_id=10&amp;state=opened" ' \
+                 'rel="nofollow ugc noopener noreferrer">' \
+                 'https://gitlab.com/project/issues?' \
+                 'assignee_id=5&amp;milestone_id=10&amp;state=opened</a></p>' + "\n",
+                 result
   end
 
   test 'markdown - ampersand not confused with HTML entities' do
@@ -468,17 +485,17 @@ class ProjectsHelperTest < ActionView::TestCase
     non_urls = [
       'just plain text',
       'not a url at all',
-      'example.com',  # Missing protocol
-      'ftp://example.com',  # Wrong protocol
-      'http://localhost',  # Single-label domain
-      'http://',  # Incomplete
-      'https:/example.com',  # Malformed protocol
-      'http://example',  # Single-label domain
-      'See http://example.com for details',  # Extra text before
-      'http://example.com is great',  # Extra text after
-      '',  # Empty string
-      'http://example.com with spaces',  # Unencoded spaces after URL
-      'Click here: http://example.com'  # Text before URL
+      'example.com', # Missing protocol
+      'ftp://example.com', # Wrong protocol
+      'http://localhost', # Single-label domain
+      'http://', # Incomplete
+      'https:/example.com', # Malformed protocol
+      'http://example', # Single-label domain
+      'See http://example.com for details', # Extra text before
+      'http://example.com is great', # Extra text after
+      '', # Empty string
+      'http://example.com with spaces', # Unencoded spaces after URL
+      'Click here: http://example.com', # Text before URL
     ]
 
     non_urls.each do |text|
@@ -504,7 +521,7 @@ class ProjectsHelperTest < ActionView::TestCase
       'https://example.com/path,comma',
       'https://example.com/path;semicolon',
       'https://example.com/path=equals',
-      'https://example.com/%2F%2F'  # Encoded slashes
+      'https://example.com/%2F%2F', # Encoded slashes
     ]
 
     urls_with_special_paths.each do |url|
@@ -522,7 +539,7 @@ class ProjectsHelperTest < ActionView::TestCase
       'https://example.com#section.name',
       'https://example.com#123',
       'https://example.com/path?query=value#anchor',
-      'https://example.com#'  # Empty anchor
+      'https://example.com#', # Empty anchor
     ]
 
     urls_with_anchors.each do |url|

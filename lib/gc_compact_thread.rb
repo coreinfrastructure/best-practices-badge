@@ -39,27 +39,29 @@ module GcCompactThread
   end
 
   # Return current RSS memory in bytes (Linux/macOS)
-  def current_rss_memory
+  # The statm_path parameter is primarily for testing the fallback path
+  def current_rss_memory(statm_path = '/proc/self/statm')
     # /proc/self/statm is faster than `ps` if on Linux, so try it first
-    File.read('/proc/self/statm').split[1].to_i * 4096
+    File.read(statm_path).split[1].to_i * 4096
   rescue StandardError
     `ps -o rss= -p #{Process.pid}`.to_i * 1024
   end
 
   # We originally compacted on a fixed period. However, that compacted
   # when we didn't need to, and it didn't compact soon enough if we did.
-  # So instead, we periodically check, and compact again if it's too much.
-  # Compacting takes a while. Once we've done it, even if we're using
-  # too much memory, it's unlikely to help for a while.
-  # As a result, we have 2 separate times.
-  SLEEP_AFTER_CHECK = 1 * 60 # seconds after memory-ok before recheck
-  SLEEP_AFTER_COMPACT = 10 * 60 # seconds after memory exceeded before recheck
+  # So instead, we now periodically check memory use, and we compact
+  # if the memory use is too much.
+  # Compacting takes a while, so once we've done it, we delay much longer
+  # before checking again. After all, it's unlikely to help for a while.
+  # As a result, we have 2 separate delay times.
+  SLEEP_AFTER_CHECK = 1.minute # seconds post memory-ok before recheck
+  SLEEP_AFTER_COMPACT = 20.minutes # seconds post memory-not-ok before recheck
 
   # Repeated check if memory used is more than memsize, and if so, compact.
   # The one_time and delay parameters makes testing easier.
   # This isn't really a predicate.
   # rubocop:disable Naming/PredicateMethod
-  def check_gc_compact(memsize, one_time = false, delay = nil)
+  def gc_compact_as_needed(memsize, one_time = false, delay = nil)
     loop do
       rss = current_rss_memory
       if rss <= memsize
@@ -84,7 +86,7 @@ module GcCompactThread
       # By default, compact once we exceed 1GiB
       memsize = (ENV['BADGEAPP_MEMORY_COMPACTOR_MB'] || 1024).to_i * (2**20)
       Rails.logger.warn "Compacting thread if > #{memsize} bytes"
-      check_gc_compact(memsize)
+      gc_compact_as_needed(memsize)
     end
   end
 end

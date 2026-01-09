@@ -30,7 +30,6 @@ module GcCompactThread
   end
 
   def compact_with_logging
-    Rails.logger.warn 'GC.compact started'
     stats_before = GC.stat
     compact_info = GC.compact
     stats_after = GC.stat
@@ -39,13 +38,39 @@ module GcCompactThread
     Rails.logger.warn("GC.compact statistics: #{stats}")
   end
 
-  # Run gc periodically.
+  # Return current RSS memory in bytes (Linux/macOS)
+  # The statm_path parameter is primarily for testing the fallback path
+  def current_rss_memory(statm_path = '/proc/self/statm')
+    # /proc/self/statm is faster than `ps` if on Linux, so try it first
+    File.read(statm_path).split[1].to_i * 4096
+  rescue StandardError
+    `ps -o rss= -p #{Process.pid}`.to_i * 1024
+  end
+
+  # We originally compacted on a fixed period. However, that compacted
+  # when we didn't need to, and it didn't compact soon enough if we did.
+  # So instead, we now periodically check memory use, and we compact
+  # if the memory use is too much.
+  # Compacting takes a while, so once we've done it, we delay much longer
+  # before checking again. After all, it's unlikely to help for a while.
+  # As a result, we have 2 separate delay times.
+  SLEEP_AFTER_CHECK = 1.minute # seconds post memory-ok before recheck
+  SLEEP_AFTER_COMPACT = 20.minutes # seconds post memory-not-ok before recheck
+
+  # Repeated check if memory used is more than memsize, and if so, compact.
+  # The one_time and delay parameters makes testing easier.
   # This isn't really a predicate.
   # rubocop:disable Naming/PredicateMethod
-  def periodically_run_gc_compact(interval, one_time = false)
+  def gc_compact_as_needed(memsize, one_time = false, delay = nil)
     loop do
-      sleep interval.seconds
-      compact_with_logging
+      rss = current_rss_memory
+      if rss <= memsize
+        sleep(delay || SLEEP_AFTER_CHECK)
+      else
+        Rails.logger.warn "GC.compact starting; (#{rss * 1.0 / (2**20)}MiB)"
+        compact_with_logging
+        sleep(delay || SLEEP_AFTER_COMPACT)
+      end
       break if one_time
     end
     true
@@ -58,9 +83,10 @@ module GcCompactThread
   # @return [Thread] The background thread that was created
   def start_background_thread
     Thread.new do
-      interval = (ENV['BADGEAPP_GC_COMPACT_MINUTES'] || 120).to_i * 60
-      Rails.logger.warn "Compacting thread interval=#{interval}sec"
-      periodically_run_gc_compact(interval)
+      # By default, compact once we exceed 1GiB
+      memsize = (ENV['BADGEAPP_MEMORY_COMPACTOR_MB'] || 1024).to_i * (2**20)
+      Rails.logger.warn "Compacting thread if > #{memsize} bytes"
+      gc_compact_as_needed(memsize)
     end
   end
 end

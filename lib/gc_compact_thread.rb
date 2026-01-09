@@ -19,6 +19,9 @@
 module GcCompactThread
   module_function
 
+  # Calculate compaction statistics.
+  # We use .to_f on numerators before dividing, so that if the denominator
+  # is 0 we get a NaN instead of an exception.
   def calculate_compaction_stats(stats_before, stats_after, compact_info)
     {
       pages_freed: stats_before[:heap_allocated_pages] - stats_after[:heap_allocated_pages],
@@ -29,7 +32,10 @@ module GcCompactThread
     }
   end
 
-  def compact_with_logging
+  def compact_with_logging(rss = nil)
+    return unless GC.respond_to?(:compact)
+
+    Rails.logger.warn "GC.compact starting; (#{rss * 1.0 / (2**20)}MiB)" if rss
     stats_before = GC.stat
     compact_info = GC.compact
     stats_after = GC.stat
@@ -54,27 +60,43 @@ module GcCompactThread
   # Compacting takes a while, so once we've done it, we delay much longer
   # before checking again. After all, it's unlikely to help for a while.
   # As a result, we have 2 separate delay times.
-  SLEEP_AFTER_CHECK = 1.minute # seconds post memory-ok before recheck
-  SLEEP_AFTER_COMPACT = 20.minutes # seconds post memory-not-ok before recheck
+  # Instead of `20 * 60` we could use `20.minutes`, but the latter
+  # generate special types. Garbage collection is low-level;
+  # we want to minimize the objects we create, and what's happening in
+  # general here, to maximize the memory we recover.
+  SLEEP_AFTER_CHECK = 1 * 60 # seconds post memory-ok before recheck
+  SLEEP_AFTER_COMPACT = 20 * 60 # seconds post memory-not-ok before recheck
 
   # Repeated check if memory used is more than memsize, and if so, compact.
-  # The one_time and delay parameters makes testing easier.
+  # The parameters make testing easier.
   # This isn't really a predicate.
   # rubocop:disable Naming/PredicateMethod
-  def gc_compact_as_needed(memsize, one_time = false, delay = nil)
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def gc_compact_as_needed(memsize, one_time = false, delay = nil, raise_exception: false)
     loop do
-      rss = current_rss_memory
-      if rss <= memsize
-        sleep(delay || SLEEP_AFTER_CHECK)
-      else
-        Rails.logger.warn "GC.compact starting; (#{rss * 1.0 / (2**20)}MiB)"
-        compact_with_logging
+      begin
+        raise StandardError, 'Test exception' if raise_exception
+
+        rss = current_rss_memory
+        if rss <= memsize
+          sleep(delay || SLEEP_AFTER_CHECK)
+        else
+          compact_with_logging(rss)
+          sleep(delay || SLEEP_AFTER_COMPACT)
+        end
+      rescue StandardError => e
+        Rails.logger.error "GC compact error: #{e.class}: #{e.message}"
+        Rails.logger.error e.backtrace.join("\n") if e.backtrace
+        # Exceptions suggest a serious problem. Let's not make things
+        # worse by repeatedly doing them aggressively, and hope that the
+        # system will manage to right itself over time.
         sleep(delay || SLEEP_AFTER_COMPACT)
       end
       break if one_time
     end
     true
   end
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
   # rubocop:enable Naming/PredicateMethod
 
   # Start the background thread that runs GC compaction periodically.

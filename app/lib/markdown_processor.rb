@@ -55,6 +55,10 @@ module MarkdownProcessor
   # Allowed protocols; Set tends to be faster than Array for .include? checks
   ALLOWED_PROTOCOLS = Set.new(%w[http https mailto]).freeze
 
+  # Regex to extract URL scheme without URI.parse allocation overhead
+  # Matches scheme per RFC 3986: starts with letter, followed by letter/digit/+/-/.
+  SCHEME_REGEX = /\A([a-z][a-z0-9+.-]*?):/i
+
   # Pre-computed lists for the scrubber
 
   # FORBIDDEN TAGS: Start with a "safe" list & remove even more.
@@ -134,13 +138,10 @@ module MarkdownProcessor
 
       # Fast protocol check: avoid URI.parse for relative links (no ':')
       if (href = node['href']).present? && href.include?(':')
-        begin
-          scheme = URI.parse(href).scheme
-          # Remove href if the protocol is not in our whitelist
-          node.remove_attribute('href') if ALLOWED_PROTOCOLS.exclude?(scheme&.downcase)
-        rescue URI::InvalidURIError # We can't parse the href; remove it
-          node.remove_attribute('href')
-        end
+        # Extract scheme without URI.parse allocation
+        scheme = href[SCHEME_REGEX, 1]&.downcase
+        # Remove href if scheme is invalid or not in whitelist
+        node.remove_attribute('href') unless scheme && ALLOWED_PROTOCOLS.include?(scheme)
       end
 
       CONTINUE

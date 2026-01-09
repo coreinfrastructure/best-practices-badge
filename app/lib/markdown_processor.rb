@@ -76,8 +76,32 @@ module MarkdownProcessor
   # and other dangerous protocols.
   ALLOWED_MARKDOWN_URL_PATTERN = %r{\A(?:https?:|mailto:|/|\.\.?/|#)}i
 
+  # Pattern for a single line that doesn't need markdown processing.
+  # We use \p{L} to match Unicode letters (é, ñ, ü, 中, etc.) which is safe
+  # because no Unicode letter is a markdown special character or HTML
+  # metacharacter. We keep digits as 0-9 (not \p{N}) for consistency with
+  # the numbered list detection in the negative lookahead.
+  #
+  # This pattern:
+  # - Rejects numbered lists, un-numbered lists, headings via negative lookahead
+  # - Rejects horizontal lines (---)
+  # - Allows safe characters and \p{L} (Unicode letters)
+  # - Allows period, colon, ampersand, slash only in safe contexts (followed by space)
+  # - Does NOT match URLs, email addresses, or HTML metacharacters
+  # - Does NOT backtrack (mutually exclusive alternatives)
+  # - REQUIRES at least one character - so it doesn't match a blank line
+  # (a blank line in text is a paragraph break and requires real markdown).
+  MARKDOWN_UNNECESSARY_LINE = %r{
+    (?!(\d+\.|\-|\*|\+|\#+)\s) # Reject numbered/un-numbered lists and headings
+    (?!\-\-\-)                 # Reject horizontal lines
+    ([\p{L}0-9\040\,\;\'\"\!\(\)\-\?\%\+]| # \p{L}=international letters
+     \.\040|\:\040|\&\040|/(/\040|[\p{L}0-9]))+ # Be cautious on some chars
+    \.?                        # Optional final period
+  }x
+
   # The following pattern is designed to *only* match
-  # a single line that we KNOW cannot require markdown processing.
+  # text (potentially multiple lines) that we KNOW cannot require markdown
+  # processing.
   #
   # This pattern matches text that we KNOW
   # does not require markdown processing.
@@ -87,14 +111,14 @@ module MarkdownProcessor
   # because www.foo.com and http://foo.com *do* need to be processed
   # differently and can't just be passed through.
   #
-  # We use \p{L} to match Unicode letters (not just ASCII A-Za-z), which
-  # allows international characters like é, ñ, ü, 中, etc. This is safe
-  # because no Unicode letter is a markdown special character or HTML
-  # metacharacter. We keep digits as 0-9 (not \p{N}) for consistency with
-  # the numbered list detection in the negative lookahead.
+  # This pattern handles multiple lines separated by single newlines.
+  # In markdown, consecutive lines without blank lines form one paragraph.
+  # We compose this from MARKDOWN_UNNECESSARY_LINE to avoid duplication
+  # for the specification of a single line.
   #
   # In our measures this matches 83.87% of the justification text
-  # in our system. That's a pretty good optimization that
+  # in our system, and that was before we matched on multiple lines.
+  # That's a pretty good optimization that
   # is not *too* hard to read and verify.
   # It's *okay* to pass something to the markdown processor, we just try
   # to ensure that most such requests are needed.
@@ -104,6 +128,8 @@ module MarkdownProcessor
   #   markdown formats them as <ol><li>.
   # - Must NOT match un-numbered lists (e.g., "* Item")
   # - Must NOT match headings ("# foo")
+  # - Must NOT match blank lines (two consecutive newlines) which create
+  #   paragraph breaks in markdown.
   # - Must NOT match URLs (e.g., "https://github.com/foo") because
   #   markdown auto-links them (autolink: true option).
   # - Must NOT match implied domain names like www.foo.com or email addresses.
@@ -112,22 +138,20 @@ module MarkdownProcessor
   #   by only allowing a period or colon if it's followed by a space, and
   #   only allowing "/" if it's followed by an alphanumeric or a "slash space".
   #   We also don't accept "@".
+  #   We do allow a period at the line of a line, because that will work.
   # - Must NOT require HTML escaping, e.g., no "<" or ">".
   #   If we allowed '<i>' then we would allow imbalanced inputs like
-  #   `<i>hello`; the full markdown processor can handle such cases.
+  #   `<i>hello`.
   #   We can allow "&" followed by a space, as modern HTML knows that *can't*
   #   be an entity. We can allow single-quotes and double-quotes since
   #   this is not in an attribute and we aren't implementing smarty quotes.
   # - Must NOT backtrack (performance requirement). The mutually exclusive
   #   alternatives ensure this pattern never backtracks.
 
-  MARKDOWN_UNNECESSARY = %r{\A
-    (?!(\d+\.|\-|\*|\+|\#+)\s) # numbered lists, un-numbered lists, headings
-    (?!\-\-\-) # Horizontal lines
-    ([\p{L}0-9\040\,\;\'\"\!\(\)\-\?\%\+]| # \p{L} = international letters
-     \.\040|\:\040|\&\040|/(/\040|[\p{L}0-9]))+ # Be cautious on some chars
-    \.? # Optional final period. We use strip which removes any final LF
-    \z}x
+  MARKDOWN_UNNECESSARY = /\A
+    #{MARKDOWN_UNNECESSARY_LINE.source}
+    (?:\n#{MARKDOWN_UNNECESSARY_LINE.source})*
+    \z/x
 
   # The following pattern *only* matches simple bare URLs, so that
   # we can handle them specially instead of invoking the markdown processor.

@@ -87,6 +87,9 @@ Style/TrailingCommaInHashLiteral:
   # is added later, and makes the resulting "diffs" cleaner since we don't
   # have to change the previous line merely to add a following line.
   Enabled: false
+Style/TrailingCommaInArrayLiteral:
+  # Disable an unwise check.
+  Enabled: false
 Metrics/AbcSize:
   Max: 20
   Exclude:

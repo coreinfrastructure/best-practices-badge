@@ -367,5 +367,185 @@ class ProjectsHelperTest < ActionView::TestCase
   test 'status_to_string returns nil for nil input' do
     assert_nil status_to_string(nil)
   end
+
+  # Tests for bare URL optimization in markdown processing
+  test 'markdown - bare basic URL generates correct result' do
+    url = 'https://github.com/Apetree100122/w3id.org'
+    result = markdown(url)
+    assert_equal '<p><a href="https://github.com/Apetree100122/w3id.org" ' \
+                 'rel="nofollow ugc noopener noreferrer">' \
+                 'https://github.com/Apetree100122/w3id.org</a></p>' + "\n", result
+  end
+
+  test 'markdown - bare URL with simple query string' do
+    url = 'https://wiki.onap.org/pages/viewpage.action?pageId=8226539'
+    result = markdown(url)
+    assert_equal '<p><a href="' \
+                 'https://wiki.onap.org/pages/viewpage.action?pageId=8226539" ' \
+                 'rel="nofollow ugc noopener noreferrer">' \
+                 'https://wiki.onap.org/pages/viewpage.action?pageId=8226539' \
+                 '</a></p>' + "\n", result
+  end
+
+  test 'markdown - bare URL with multiple query parameters' do
+    url = 'https://node-data.atlassian.net/secure/' \
+          'RapidBoard.jspa?rapidView=2&view=detail'
+    result = markdown(url)
+    # NOTE: & is HTML-escaped to &amp; in the output (correct behavior)
+    assert_equal '<p><a href="https://node-data.atlassian.net/' \
+                 'secure/RapidBoard.jspa?rapidView=2&amp;view=detail" ' \
+                 'rel="nofollow ugc noopener noreferrer">' \
+                 'https://node-data.atlassian.net/secure/' \
+                 'RapidBoard.jspa?rapidView=2&amp;view=detail</a></p>' + "\n", result
+  end
+
+  test 'markdown - ampersand escaping with complex query string' do
+    # Real-world example with multiple parameters
+    url = 'https://gitlab.com/project/issues?' \
+          'assignee_id=5&milestone_id=10&state=opened'
+    result = markdown(url)
+    assert_equal '<p><a href="https://gitlab.com/project/issues?' \
+                 'assignee_id=5&amp;milestone_id=10&amp;state=opened" ' \
+                 'rel="nofollow ugc noopener noreferrer">' \
+                 'https://gitlab.com/project/issues?' \
+                 'assignee_id=5&amp;milestone_id=10&amp;state=opened</a></p>' + "\n",
+                 result
+  end
+
+  test 'markdown - ampersand not confused with HTML entities' do
+    # Test that we don't double-escape or confuse & with HTML entities
+    # The URL contains &amp; as parameter name (weird but valid)
+    url = 'https://example.com?param=test&amp=value'
+    result = markdown(url)
+
+    # The &amp (as a parameter name) should be in the href
+    # This tests we're not doing double-escaping
+    assert result.include?('href="https://example.com?param=test&amp;amp=value"'),
+           'Parameter name "amp" should be preserved with proper & escaping'
+  end
+
+  # Detailed unit tests for SIMPLE_URL_REGEX
+  test 'SIMPLE_URL_REGEX matches valid simple URLs' do
+    valid_urls = [
+      'http://example.com',
+      'https://example.com',
+      'HTTP://EXAMPLE.COM',
+      'https://example.com/path',
+      'https://example.com/path/to/file',
+      'https://example.com/path/to/file.html',
+      'https://sub.example.com',
+      'https://deep.sub.example.com',
+      'https://example.com#anchor',
+      'https://example.com/path#anchor',
+      'https://example.com/%22',
+      'https://example.com/%27',
+      'https://example.com/path%20with%20spaces',
+      'https://github.com/user/repo',
+      'https://github.com/Apetree100122/w3id.org',
+      'https://wiki.onap.org/pages/viewpage.action',
+      'https://node-data.atlassian.net/secure/RapidBoard.jspa',
+      'https://example.com?query=value',
+      'https://example.com?q=test&page=2',
+      'https://example.com/path?query=value',
+      'https://example.com?query=workflow%3ACodeQL',
+      'https://example.com?a=1&b=2&c=3',
+      'https://gitlab.com/group/project/issues/new?issue%5Bassignee_id%5D=',
+      'https://github.com/devfile/alizer/tree/main?tab=readme-ov-file',
+      'https://savannah.gnu.org/bugs/?func=additem&group=make',
+      'https://drive.google.com/drive/folders/0B?tid=0Bxrr',
+      'https://example.com/path?key=value#anchor'
+    ]
+
+    valid_urls.each do |url|
+      assert url.match?(MarkdownProcessor::SIMPLE_URL_REGEX),
+             "Expected #{url.inspect} to match SIMPLE_URL_REGEX"
+    end
+  end
+
+  test 'SIMPLE_URL_REGEX rejects URLs with dangerous characters' do
+    dangerous_urls = [
+      'http://example.com/<script>',
+      'http://example.com/"onclick="alert()"',
+      "http://example.com/'test'",
+      'http://example.com/<img src=x>',
+      'http://example.com/path">attack',
+      "http://example.com/path'>attack",
+      'http://example.com/path<script>alert(1)</script>',
+      'javascript:alert(1)',
+      'data:text/html,<script>alert(1)</script>'
+    ]
+
+    dangerous_urls.each do |url|
+      assert_not url.match?(MarkdownProcessor::SIMPLE_URL_REGEX),
+                 "Expected #{url.inspect} to NOT match SIMPLE_URL_REGEX (security)"
+    end
+  end
+
+  test 'SIMPLE_URL_REGEX rejects non-URL strings' do
+    non_urls = [
+      'just plain text',
+      'not a url at all',
+      'example.com', # Missing protocol
+      'ftp://example.com', # Wrong protocol
+      'http://localhost', # Single-label domain
+      'http://', # Incomplete
+      'https:/example.com', # Malformed protocol
+      'http://example', # Single-label domain
+      'See http://example.com for details', # Extra text before
+      'http://example.com is great', # Extra text after
+      '', # Empty string
+      'http://example.com with spaces', # Unencoded spaces after URL
+      'Click here: http://example.com', # Text before URL
+    ]
+
+    non_urls.each do |text|
+      assert_not text.match?(MarkdownProcessor::SIMPLE_URL_REGEX),
+                 "Expected #{text.inspect} to NOT match SIMPLE_URL_REGEX"
+    end
+  end
+
+  test 'SIMPLE_URL_REGEX accepts various path characters' do
+    urls_with_special_paths = [
+      'https://example.com/path-with-dashes',
+      'https://example.com/path_with_underscores',
+      'https://example.com/path.with.dots',
+      'https://example.com/path~tilde',
+      'https://example.com/path:colon',
+      'https://example.com/path@at',
+      'https://example.com/path!bang',
+      'https://example.com/path$dollar',
+      'https://example.com/path&amp',
+      'https://example.com/path(parens)',
+      'https://example.com/path*star',
+      'https://example.com/path+plus',
+      'https://example.com/path,comma',
+      'https://example.com/path;semicolon',
+      'https://example.com/path=equals',
+      'https://example.com/%2F%2F', # Encoded slashes
+    ]
+
+    urls_with_special_paths.each do |url|
+      assert url.match?(MarkdownProcessor::SIMPLE_URL_REGEX),
+             "Expected #{url.inspect} to match SIMPLE_URL_REGEX"
+    end
+  end
+
+  test 'SIMPLE_URL_REGEX handles anchors correctly' do
+    urls_with_anchors = [
+      'https://example.com#top',
+      'https://example.com/page#section',
+      'https://example.com#section-name',
+      'https://example.com#section_name',
+      'https://example.com#section.name',
+      'https://example.com#123',
+      'https://example.com/path?query=value#anchor',
+      'https://example.com#', # Empty anchor
+    ]
+
+    urls_with_anchors.each do |url|
+      assert url.match?(MarkdownProcessor::SIMPLE_URL_REGEX),
+             "Expected #{url.inspect} to match SIMPLE_URL_REGEX"
+    end
+  end
 end
 # rubocop:enable Metrics/ClassLength

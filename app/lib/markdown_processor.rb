@@ -202,35 +202,43 @@ module MarkdownProcessor
   # 66353 didn't match an older version of the "unnecessary" match.
   # Of that didn't match set, 28684/66353 (43%) were simple bare URLs.
   # So we've crafted a simple bare URL matcher that matches 26697 of them.
-  # That means that 26697/66353 (40.2%) of the strings not matched by the
+  # That means that 28536/66353 (43%) of the strings not matched by the
   # simple "markdown unnecessary" strings get caught here.
-  # That means this catches about (100%-83.87%)*40.2% = 6.48% more strings, so
-  # by adding this, we can skip markdown processing about 90.4% of the time.
+  # That means this catches about (100%-83.87%)*43% = 6.94% more strings, so
+  # by adding this measure, we can skip markdown processing about 90.81%
+  # (83.87+6.94%) of the time.
   # Basically, by doing a simple check, we can skip the more complex markdown
   # processing in the vast majority of cases.
   #
   # Note that this pattern does NOT match dangerous HTML characters like
   # ', ", <, or >. Thus, there's no way to turn accepting these directly
   # into an attack (in particular this counters an XSS attack).
-  # This pattern doesn't match a space character (you'd use %20 in a URL);
+  # This pattern also does NOT match a space character (use %20 in a URL);
   # an interal space would indicate we need more sophisticated processing.
   # This pattern *only* matches simple bare URLs, so if it matches,
   # we know there's no need for more complex markdown parsing.
   #
   # In the name of performance and maintainability we've made simplifications.
   # Some URLs won't match this regex, and that's okay, they'll be handled
-  # by the full markdown processor. For example, we don't handle URLs
-  # with "?", but such URLs are rare in our circumstance.
-  # It also doesn't accept domain "localhost", which make no sense for us,
-  # nor port numbers, which are exceeding rare in our data set.
+  # by the full markdown processor.
+  # For example, it doesn't match on port numbers,
+  # which are exceeding rare in our data set.
+  # It doesn't accept domain "localhost", which make no sense for us.
   # We *will* match a few strings that strictly speaking aren't valid URLs,
-  # but those won't hurt us security-wise. This regex permits domains that
+  # but those won't hurt us security-wise:
+  # 1. This regex permits domains that
   # aren't legal DNS names because they have domain labels that are
-  # (1) too long or (2) begin/end in "-".
+  # (a) too long or (b) begin/end in "-".
   # We *could* address that, but doing that would create a regex that's
-  # more complex and do non-trivial backtracking. Our goal is to
-  # quickly match on common cases and always prevent attacks.
-  # The regex given here never backtracks.
+  # more complex and would do some backtracking.
+  # 2. The query string is a little too generous. However, we really
+  # don't need to parse the query string to break into components;
+  # we just want to know if it generally meets the format of a URL
+  # and can't be turned into an attack. More than that is a waste.
+  #
+  # Our goal is to quickly match on common cases and always prevent attacks.
+  # The regex given here never backtracks, so it's fast.
+  # The regex never permits injection attacks like XSS.
   # If a user puts a garbage URL in, it'll create a garbage link.
   # Garbage in, garbage out, but it won't be a *security* problem because
   # there's no attack that such a malformed string would lead to.
@@ -241,6 +249,9 @@ module MarkdownProcessor
     [a-z0-9-]+                                  # First DNS label (simplified)
     (?:\.[a-z0-9-]+)+                           # Subsequent labels (simplified)
     (?:/                                        # Optional path w/dirs and %xx
+      (?:[a-z0-9\-._~:@!$&()*+,;=/]|%[0-9a-f]{2})*
+    )?
+    (?:\?                                       # Query String
       (?:[a-z0-9\-._~:@!$&()*+,;=/]|%[0-9a-f]{2})*
     )?
     (?:\#[a-z0-9\-._~:@!$&()*+,;=%]*)?          # Optional anchor
@@ -298,13 +309,13 @@ module MarkdownProcessor
     end
 
     # Skip markdown processing for simple bare URLs, and instead generate
-    # their markdown directly. We are escaping the HTML even though we
-    # technically don't need to, since we don't allow the characters
-    # that need such escaping. However, it's possible we made a
-    # mistake in the regex, and matching this case is less common,
-    # so we'll escape the content when there's a match simply to be extra safe.
+    # their markdown directly. We are escaping the HTML because "&" must
+    # be escaped anywhere in HTML when not followed by space, even in an href,
+    # yet "&" is the form separator character in
+    # query strings for multiple fields so we need to support that character.
+    # It's safer to use escapeHTML anyway, even if we didn't allow "&".
     if content.match?(SIMPLE_URL_REGEX)
-      escaped_url = CGI.escapeHTML(content) # Escape just in case.
+      escaped_url = CGI.escapeHTML(content) # Escape URL for use in HTML
       # Note that C Ruby turns the following into one single final string
       # allocation, and *not* the multiple intermediate allocations you
       # might expect. The VM sees this as one sequence of:

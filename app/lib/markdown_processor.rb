@@ -94,7 +94,7 @@ module MarkdownProcessor
   MARKDOWN_UNNECESSARY_LINE = %r{
     (?!(\d+\.|\-|\*|\+|\#+)\s) # Reject numbered/un-numbered lists and headings
     (?!\-\-\-)                 # Reject horizontal lines
-    ([\p{L}0-9\040\,\;\'\"\!\(\)\-\?\%\+]| # \p{L}=international letters
+    ([\p{L}0-9\040\,\;\'\"\!\(\)\-\?\%\+\u{2018}-\u{2019}\u{201C}-\u{201D}]| # \p{L}=international letters, includes curly quotes
      \.\040|\:\040|\&\040|/(/\040|[\p{L}0-9]))+ # Be cautious on some chars
     \.?                        # Optional final period
   }x

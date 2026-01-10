@@ -139,10 +139,10 @@ module MarkdownProcessor
     # GUARD: Reject lines that are ONLY blank lines.
     # We could use "$" to mean \n or \z, but that's such a common
     # mistake that it's better to be clear here.
-    (?! [\040\t]+(\r?\n|$) )
+    (?! [\040\t]++(\r?\n|$) )
     # GUARD: Reject possibly-indented table lines beginning with "|",
     # numbered and un-numbered lists, headers, and blockquotes.
-    (?! [\040]{0,3} (?: \| | (?:\d+[.\)]|[*+-]|\#+|>)[\040\t] ) )
+    (?! \040{0,3} (?: \| | (?:\d+[.\)]|[*+-]|\#+|>)[\040\t] ) )
     # GUARD: Reject Code Blocks (4+ spaces), HRules (3+ hyphens), and
     # GitHub Flavored Markdown (GFM) No-Outer-Pipe/lazy/simple tables (these
     # must have a second line of the form "--- |" which this will reject).
@@ -181,7 +181,7 @@ module MarkdownProcessor
       # This allows "Sentence 1. Sentence 2" or "This & that" or "// comment",
       # but not www.example.com or https://example.com.
       # Periods are especially tricky because they can form domain names.
-      (?://|[\.\:\&\@]) (?:\040|"|' )
+      (?://|[\.\:\&\@]) (?:\040|"|')
       |
       # CONTEXTUAL SINGLE SLASH: Prevent :// and // (unless followed by space)
       # Allowed if followed by letter/digit and NOT preceded by colon.

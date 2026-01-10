@@ -528,6 +528,7 @@ class ProjectsHelperTest < ActionView::TestCase
   # Tests for MARKDOWN_UNNECESSARY pattern to ensure it detects
   # texts that don't need markdown processing.
   # We presume we don't use smartyquotes, so ' and " are passed through.
+  # rubocop:disable Metrics/BlockLength
   test 'MARKDOWN_UNNECESSARY matches simple text that needs no processing' do
     simple_texts = [
       'Simple text',
@@ -545,6 +546,17 @@ class ProjectsHelperTest < ActionView::TestCase
       'Question?',
       'Multiple sentences. Like this one.',
       'Comma, semicolon; and more!',
+      # HTML entities (passed through - visually equivalent)
+      '&quot;',
+      '&#8217;',
+      '&#8220;',
+      '&#8221;',
+      'Text with &quot; entity',
+      'Text with &#8217; entity',
+      '&ldquo;',
+      '&rdquo;',
+      '&lsquo;',
+      '&rsquo;',
       # International characters (Unicode letters)
       'Café',
       'Das ist schön!',
@@ -562,7 +574,9 @@ class ProjectsHelperTest < ActionView::TestCase
       "Text line 1\nText line 2\nText line 3\nText line 4",
       # Multi-line with international characters
       "First line\n你好\nThird line",
-      "English\nEspañol\nFrançais"
+      "English\nEspañol\nFrançais",
+      # Multi-line with optional \r
+      "English\r\nEspañol\r\nFrançais",
     ]
 
     simple_texts.each do |text|
@@ -570,15 +584,23 @@ class ProjectsHelperTest < ActionView::TestCase
              "Expected #{text.inspect} to match MARKDOWN_UNNECESSARY"
     end
   end
+  # rubocop:enable Metrics/BlockLength
 
   # rubocop:disable Metrics/BlockLength
   test 'MARKDOWN_UNNECESSARY rejects text requiring markdown processing' do
     markdown_texts = [
+      # Anything with "<" *must* not be passed through.
+      # Forbidding some uses of "<" is the key requirement for security, so
+      # we simply don't accept "<" here.
+      '<',
       # Numbered lists
       '1. First item',
       '2. Second item',
       '10. Tenth item',
       "Text\n1. Item", # List on second line
+      "Text\n 1. Item", # List on second line, indented
+      "Text\n  1. Item",
+      "Text\n   1. Item",
       # Un-numbered lists
       '* Item',
       '- Item',
@@ -611,26 +633,21 @@ class ProjectsHelperTest < ActionView::TestCase
       'Contact test@example.com',
       # Blank lines (paragraph breaks)
       "Line 1\n\nLine 2",
-      "First paragraph\n\nSecond paragraph",
+      "Line 1\n \nLine 2",
+      "Line 1\n\t\nLine 2",
+      "Line 1\n  \nLine 2",
+      "Line 1\n   \nLine 2",
+      "Line 1\n    \nLine 2",
+      "Line 1\n     \nLine 2",
+      "Line 1\n      \nLine 2",
+      "Line 1\r\n\r\nLine 2",
       "Text\n\nMore text",
       "Multiple\n\nblank\n\nlines",
-      "\n\n", # Just blank lines. Shouldn't happen anyway due to .strip()
       # HTML metacharacters (need escaping)
       '<script>alert(1)</script>',
       '<i>italic</i>',
       'Text with <tags>',
       'Text with > and < symbols',
-      # HTML entities (markdown processes numeric entities)
-      '&quot;',
-      '&#8217;',
-      '&#8220;',
-      '&#8221;',
-      'Text with &quot; entity',
-      'Text with &#8217; entity',
-      '&ldquo;',
-      '&rdquo;',
-      '&lsquo;',
-      '&rsquo;',
       # Markdown emphasis
       '*emphasis*',
       '_emphasis_',
@@ -644,6 +661,15 @@ class ProjectsHelperTest < ActionView::TestCase
       '```code block```',
       # Blockquotes
       '> Quote',
+      # Tables
+      "|ID|Status|\n|--|---|\n|1|OK|\n|2|FAIL|",
+      "For example:\n  |ID|Status|\n  |--|---|\n  |1|OK|\n  |2|FAIL|",
+      "| Name | Type | Description |\n| :--- | :--- | :--- |\n" \
+        "| Alpha | User | Primary Admin |\n| Beta | Guest | Limited View |",
+      # GFM table, without edge pipes. This is trickier. It's always caught
+      # because these require "--- |" lines that our guard rejects.
+      "Name | Type | Description\n--- | --- | ---\n" \
+        "Alpha | User | Primary Admin\nBeta | Guest | Limited View",
     ]
 
     markdown_texts.each do |text|

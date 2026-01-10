@@ -76,60 +76,36 @@ module MarkdownProcessor
   # and other dangerous protocols.
   ALLOWED_MARKDOWN_URL_PATTERN = %r{\A(?:https?:|mailto:|/|\.\.?/|#)}i
 
-  # Pattern for a single line that doesn't need markdown processing.
-  # We use \p{L} to match Unicode letters (é, ñ, ü, 中, etc.) which is safe
-  # because no Unicode letter is a markdown special character or HTML
-  # metacharacter. We keep digits as 0-9 (not \p{N}) for consistency with
-  # the numbered list detection in the negative lookahead.
+  # The following pair of regex patterns are designed to *only* match
+  # text (potentially multiple lines) that we KNOW does not require markdown
+  # processing, and can instead be directly copied to the user.
+  # Critically, for security, these NEVER accept "<" in the input.
   #
-  # This pattern:
-  # - Rejects numbered lists, un-numbered lists, headings via negative lookahead
-  # - Rejects horizontal lines (---)
-  # - Allows safe characters and \p{L} (Unicode letters)
-  # - Allows period, colon, ampersand, slash only in safe contexts (followed by space)
-  # - Does NOT match URLs, email addresses, or HTML metacharacters
-  # - Does NOT backtrack (mutually exclusive alternatives)
-  # - REQUIRES at least one character - so it doesn't match a blank line
-  # (a blank line in text is a paragraph break and requires real markdown).
-  MARKDOWN_UNNECESSARY_LINE = %r{
-    (?!(\d+\.|\-|\*|\+|\#+)\s) # Reject numbered/un-numbered lists and headings
-    (?!\-\-\-)                 # Reject horizontal lines
-    ([\p{L}0-9\040\,\;\'\"\!\(\)\-\?\%\+\u{2018}-\u{2019}\u{201C}-\u{201D}]| # \p{L}=international letters, includes curly quotes
-     \.\040|\:\040|\&\040|/(/\040|[\p{L}0-9]))+ # Be cautious on some chars
-    \.?                        # Optional final period
-  }x
-
-  # The following pattern is designed to *only* match
-  # text (potentially multiple lines) that we KNOW cannot require markdown
-  # processing.
-  #
-  # This pattern matches text that we KNOW
-  # does not require markdown processing.
-  # We do this check as an optimization to skip calling the markdown
-  # processor in most cases when it's clearly unnecessary.
-  # In particular, note that we have to handle period and colon specially,
+  # We do this check as an optimization to ONLY call the markdown
+  # processor when it's necessary (as much as we can).
+  # Note that we have to check on period and colon specially,
   # because www.foo.com and http://foo.com *do* need to be processed
-  # differently and can't just be passed through.
+  # by the markdown processor and they can't just be passed through.
   #
-  # This pattern handles multiple lines separated by single newlines.
-  # In markdown, consecutive lines without blank lines form one paragraph.
-  # We compose this from MARKDOWN_UNNECESSARY_LINE to avoid duplication
-  # for the specification of a single line.
+  # It's okay if the text we accept is slightly
+  # different from what a markdown generator would generate, as
+  # long as it's *visually* the same to end users. E.g., if the processor
+  # normalizes some HTML entity to a normal character, but the user can't
+  # see the difference, it doesn't matter if we accept it as-is.
   #
-  # In our measures this matches 83.87% of the justification text
-  # in our system, and that was before we matched on multiple lines.
-  # That's a pretty good optimization that
+  # In our measures of older versions of this pattern (for only 1 line),
+  # we matched 83.87% of the justification text.
+  # That justifies this as a pretty good optimization that
   # is not *too* hard to read and verify.
   # It's *okay* to pass something to the markdown processor, we just try
-  # to ensure that most such requests are needed.
+  # to ensure that most such requests are actually needed.
+  # We save lots of CPU by only working hard when we must do so.
   #
-  # IMPORTANT CONSTRAINTS:
+  # EXAMPLES OF IMPORTANT CONSTRAINTS:
   # - Must NOT match numbered lists (e.g., "1. Item")
   #   markdown formats them as <ol><li>.
   # - Must NOT match un-numbered lists (e.g., "* Item")
   # - Must NOT match headings ("# foo")
-  # - Must NOT match blank lines (two consecutive newlines) which create
-  #   paragraph breaks in markdown.
   # - Must NOT match URLs (e.g., "https://github.com/foo") because
   #   markdown auto-links them (autolink: true option).
   # - Must NOT match implied domain names like www.foo.com or email addresses.
@@ -140,18 +116,101 @@ module MarkdownProcessor
   #   We also don't accept "@".
   #   We do allow a period at the line of a line, because that will work.
   # - Must NOT require HTML escaping, e.g., no "<" or ">".
-  #   If we allowed '<i>' then we would allow imbalanced inputs like
-  #   `<i>hello`.
-  #   We can allow "&" followed by a space, as modern HTML knows that *can't*
-  #   be an entity. We can allow single-quotes and double-quotes since
-  #   this is not in an attribute and we aren't implementing smarty quotes.
-  # - Must NOT backtrack (performance requirement). The mutually exclusive
-  #   alternatives ensure this pattern never backtracks.
+  #   If we allowed only some cases, like '<i>',
+  #   then we would allow imbalanced inputs like `<i>hello`.
+  #   We could add special cases, but then users would be confused when the
+  #   special cases stopped working because we had to switch to the full
+  #   markdown processor.
+  # - Must have LIMTED backtracking, as a performance requirement.
+  # We define a match for 1 line, then how to match 1+ lines.
 
-  MARKDOWN_UNNECESSARY = /\A
+  # Match a single line requiring NO markdown processing and that
+  # can instead simply be passed through to the user.
+  # It rejects numbered lists, un-numbered lists, headings, etc.
+  # It *requires* at least one nonspace character (it doesn't match
+  # a blank line, which is a paragraph break in markdown).
+  # It does NOT match URLs, email addresses, or domain names, and that
+  # that means that these characters are special: [./@].
+  # For speed, it has almost no backtracking (in rare cases 1-2 chars).
+  # We never use this regex directly, we only use MARKDOWN_UNNECESSARY
+  # which references it. However, we format it as a regex so
+  # that are our tools will know that's how we will use it.
+  MARKDOWN_UNNECESSARY_LINE = %r{
+    # GUARD: Reject lines that are ONLY blank lines.
+    # We could use "$" to mean \n or \z, but that's such a common
+    # mistake that it's better to be clear here.
+    (?! [\040\t]+(\r?\n|$) )
+    # GUARD: Reject possibly-indented table lines beginning with "|",
+    # numbered and un-numbered lists, headers, and blockquotes.
+    (?! [\040]{0,3} (?: \| | (?:\d+[.\)]|[*+-]|\#+|>)[\040\t] ) )
+    # GUARD: Reject Code Blocks (4+ spaces), HRules (3+ hyphens), and
+    # GitHub Flavored Markdown (GFM) No-Outer-Pipe/lazy/simple tables (these
+    # must have a second line of the form "--- |" which this will reject).
+    (?! \040{4,}|-{3,} )
+    # We don't need to guard fenced code blocks like ~~~sh or ```ruby,
+    # because we will later exclude backticks (tt) and tildes (strikethrough)
+    # from the content characters' safe character set anyway.
+
+    # CONTENT CHARACTERS
+    (?:
+      # SAFE CHARACTER SET
+      # This is the safe character set, which is all but a few characters.
+      # For security, the *key* is that "<" is NOT in the safe character set.
+      # We omit characters that may have meaning to markdown, e.g.:
+      # *italics*, _italics_, ~strikethrough~, `teletype`, [URL link],
+      # < > of HTML.
+      # Less obvious are &entities-maybe, email@somewhere.com,
+      # https://link, www.example.org, https://link again, \-disable
+      # Some characters are actually safe unless a guard prevents it, e.g.,
+      # hyphen and vertical bar are normally safe and so are allowed here
+      # unless a guard forbids it.
+      # Note that space and tab are normally safe, and thus allowed.
+      # We allow " and ' because we don't use smarty-quotes; if you want
+      # curling quotes, use their UTF-8 characters.
+      # We exclude \r and \n so this pattern doesn't match across lines.
+      # We also exclude \f (form feed), \v (vertical tab), and \0 (null)
+      # as these control characters are unusual and could cause issues.
+      [^*_~`\[\]<>\&@:\.\/\\\r\n\f\v\0]
+      |
+      # HTML ENTITIES: Note we allow arbitrary case.
+      # &name; OR &#123; (decimal) OR &#xabc; (hexadecimal)
+      \&(?: [a-z0-9]++|\#x[0-9a-f]{1,6}|\#[0-9]{1,7} );
+      |
+      # CONTEXTUAL PUNCTUATION & DOUBLE SLASH:
+      # Allows // or certain punctuation ONLY if followed by space, ", or '
+      # This allows "Sentence 1. Sentence 2" or "This & that" or "// comment",
+      # but not www.example.com or https://example.com.
+      # Periods are especially tricky because they can form domain names.
+      (?://|[\.\:\&\@]) (?:\040|"|' )
+      |
+      # CONTEXTUAL SINGLE SLASH: Prevent :// and // (unless followed by space)
+      # Allowed if followed by letter/digit and NOT preceded by colon.
+      # This allows text like "N/A" but not https://example.com
+      (?<!\:)\/(?=[\p{L}0-9])
+    )++ # Possessive quantifier to ensure maximum performance - no rollback
+    # Optional final period. It's at line end, so it can't be a domain name.
+    \.?
+  }xiu
+
+  # This is the final pattern to determine if markdown is unnecessary.
+  # It can match 1+ non-empty lines separated by single newlines.
+  # We presume its leading and trailing whitespace have been stripped.
+  # In markdown, consecutive lines without blank lines form one paragraph
+  # by default (and we're using the default), so multiple lines often
+  # don't need markdown processing.
+  # We compose this regex from MARKDOWN_UNNECESSARY_LINE to avoid
+  # duplication of the specification of a single line.
+  #
+  # We must NOT match blank lines (two consecutive newlines) as that is
+  # a paragraph break in markdown.
+  # rubocop:disable Style/RegexpLiteral
+  MARKDOWN_UNNECESSARY = %r{
+    \A
     #{MARKDOWN_UNNECESSARY_LINE.source}
-    (?:\n#{MARKDOWN_UNNECESSARY_LINE.source})*
-    \z/x
+    (?:\r?\n#{MARKDOWN_UNNECESSARY_LINE.source})*
+    \z
+  }xiu
+  # rubocop:enable Style/RegexpLiteral
 
   # The following pattern *only* matches simple bare URLs, so that
   # we can handle them specially instead of invoking the markdown processor.

@@ -535,6 +535,7 @@ class ProjectsHelperTest < ActionView::TestCase
       'Hello world',
       'Hello, world!',
       'This is a test.',
+      'This is a test with h, m, w, and x in it.',
       'Text with (parentheses)',
       'Text with "quotes"',
       "Text with 'single quotes'",
@@ -632,7 +633,9 @@ class ProjectsHelperTest < ActionView::TestCase
       # Email addresses (need autolinking)
       'test@example.com',
       'user.name@example.com',
-      'Contact test@example.com',
+      'Contact test@example.com', # Can be handled, not this way
+      # \ escaping
+      'The backquote (\`) is a fine character',
       # Blank lines (paragraph breaks)
       "Line 1\n\nLine 2",
       "Line 1\n \nLine 2",
@@ -667,11 +670,11 @@ class ProjectsHelperTest < ActionView::TestCase
       "|ID|Status|\n|--|---|\n|1|OK|\n|2|FAIL|",
       "For example:\n  |ID|Status|\n  |--|---|\n  |1|OK|\n  |2|FAIL|",
       "| Name | Type | Description |\n| :--- | :--- | :--- |\n" \
-        "| Alpha | User | Primary Admin |\n| Beta | Guest | Limited View |",
+      "| Alpha | User | Primary Admin |\n| Beta | Guest | Limited View |",
       # GFM table, without edge pipes. This is trickier. It's always caught
       # because these require "--- |" lines that our guard rejects.
       "Name | Type | Description\n--- | --- | ---\n" \
-        "Alpha | User | Primary Admin\nBeta | Guest | Limited View",
+      "Alpha | User | Primary Admin\nBeta | Guest | Limited View",
     ]
 
     markdown_texts.each do |text|

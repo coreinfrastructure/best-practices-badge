@@ -153,19 +153,6 @@ module MarkdownProcessor
 
     # CONTENT CHARACTERS - identify what we accept within a line
     (?:
-      # NOT ACCEPTABLE: GitHub Flavored Markdown (GFM) Autolinks. See:
-      # https://github.github.com/gfm/#autolinks-extension-
-      # We'll simply decide if it *might* get processed specially by
-      # markdown; once enough characters match it almost certainly will
-      # require markdown processing.
-      # We aren't going to try to match on email addresses, but instead
-      # simply treat "@" as character *requiring* markdown processing.
-      # In our uses that's almost always true.
-      (?! (?<= \A | [\040\t\n\*\_\~\(] )
-          (?i:(?:
-           www\.[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]|
-           https?:\/\/[a-zA-Z0-9_-]+\.|mailto:[^\s]|xmpp:[^\s])))
-
       # SAFE CHARACTER SET
       # This is the safe character set, which is all but a few characters.
       # For security, the *key* is that "<" is NOT in the safe character set.
@@ -175,27 +162,48 @@ module MarkdownProcessor
       # Less obvious are &entities-maybe, "@" for email@somewhere.com, and
       # \-disable
       # At one time we struggled with ., /, and :, but now that we reject
-      # GFM anchors, we can directly accept them and detect cases like:
-      # https://link, www.example.org, https://link again.
-      # We don't arbitrarily accept "&", but an HTML entity or space is fine.
+      # GFM anchors, we can directly accept them and detect cases like
+      # https://link and www.example.org.
       # This means that "README.md" and "1.2.3" are correctly accepted.
-      # Some characters are actually safe unless a guard prevents it, e.g.,
-      # hyphen and vertical bar are normally safe and so are allowed here
-      # unless a guard forbids it.
-      # Note that space and tab are normally safe, and thus allowed.
+      # Some characters are safe unless another guard prevents it, e.g.,
+      # hyphen and vertical bar are normally safe and so are allowed here;
+      # they aren't safe at the beginning , but another guard handles that.
+      # Similarly, space and tab are normally safe, and thus allowed.
       # We allow " and ' because we don't use smarty-quotes; if you want
-      # curling quotes, use their UTF-8 characters.
+      # curling quotes, use their UTF-8 characters instead.
       # We exclude \r and \n so this pattern doesn't match across lines.
       # We also exclude \f (form feed), \v (vertical tab), and \0 (null)
-      # as these control characters are unusual and could cause issues.
-      [^*_~`\[\]<>\&@\r\n\f\v\0]
+      # as these control characters are unusual.
+      # We skip 1+ of these characters all at once, for speed.
+      # We don't always accept hmwx because they might
+      # indicate the start of GFM autolinking (see below).
+      [^hmwx*_~`\[\]<>\&@\\\r\n\f\v\0]++
+      |
+      # Handle hmwx carefully.
+      # NOT ACCEPTABLE: GitHub Flavored Markdown (GFM) Autolinks. See:
+      # https://github.github.com/gfm/#autolinks-extension-
+      # We'll simply decide if it *might* get processed specially by
+      # markdown; once enough characters match it almost certainly will
+      # require markdown processing (e.g., one character after \.).
+      # We aren't going to try to match on email addresses, but instead
+      # we simply treat "@" as character *requiring* markdown processing.
+      # In our use case that's almost always true.
+      (?! (?<= \A | [\040\t\n\*\_\~\(] )
+          (?:
+           www\.[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]| # one char is enough at end
+           https?:\/\/[a-zA-Z0-9_-]+\.|mailto:[^\s]|xmpp:[^\s]))
+      # These are the only letters can begin non-email GFM autolinks,
+      # so we can always accept them if they don't start autolinking.
+      # Email addresses will be later rejected because
+      # "@" isn't in the safe character set.
+      [hmwx]
       |
       # &+SPACE and HTML ENTITIES: Note we allow arbitrary case.
       # Modern HTML accepts & followed by space as not needing an escape.
       # Accept &name; OR &#123; (decimal) OR &#xabc; (hexadecimal)
-      \&(?: \040 | (?: [a-z0-9]++|\#x[0-9a-f]{1,6}|\#[0-9]{1,7} );)
+      \&(?: \040 | (?: [a-zA-Z0-9]++|\#x[0-9A-Za-f]{1,6}|\#[0-9]{1,7} );)
     )++ # Possessive quantifier to ensure maximum performance - no rollback
-  }xiu
+  }xu
 
   # This is the final pattern to determine if markdown is unnecessary.
   # It can match 1+ non-empty lines separated by single newlines.
@@ -214,7 +222,7 @@ module MarkdownProcessor
     #{MARKDOWN_UNNECESSARY_LINE.source}
     (?:\r?\n#{MARKDOWN_UNNECESSARY_LINE.source})*
     \z
-  }xiu
+  }xu
   # rubocop:enable Style/RegexpLiteral
 
   # The following pattern *only* matches simple bare URLs, so that
@@ -330,6 +338,10 @@ module MarkdownProcessor
     # yet "&" is the form separator character in
     # query strings for multiple fields so we need to support that character.
     # It's safer to use escapeHTML anyway, even if we didn't allow "&".
+    # In the future we might allow a simple textual prefix like
+    # "View more at: " by allowing an optional prefix pattern like
+    # (([A-Za-gi-z0-9:,]++|h[a-su-zA-Z0-9]|\040)+\.?\040)?
+    # but that's for another day.
     if content.match?(SIMPLE_URL_REGEX)
       escaped_url = CGI.escapeHTML(content) # Escape URL for use in HTML
       # Note that C Ruby turns the following into one single final string

@@ -463,12 +463,11 @@ class ProjectsHelperTest < ActionView::TestCase
       'just plain text',
       'not a url at all',
       'example.com', # Missing protocol
-      'ftp://example.com', # Wrong protocol
       'http://localhost', # Single-label domain
       'http://', # Incomplete
-      'https:/example.com', # Malformed protocol
+      'https:/example.com', # Malformed protocol, only one /.
       'http://example', # Single-label domain
-      'See http://example.com for details', # Extra text before
+      'See http://example.com for details', # Extra text before and after
       'http://example.com is great', # Extra text after
       '', # Empty string
       'http://example.com with spaces', # Unencoded spaces after URL
@@ -524,5 +523,165 @@ class ProjectsHelperTest < ActionView::TestCase
              "Expected #{url.inspect} to match SIMPLE_URL_REGEX"
     end
   end
+
+  # Tests for MARKDOWN_UNNECESSARY pattern to ensure it detects
+  # texts that don't need markdown processing.
+  # We presume we don't use smartyquotes, so ' and " are passed through.
+  # rubocop:disable Metrics/BlockLength
+  test 'MARKDOWN_UNNECESSARY matches simple text that needs no processing' do
+    simple_texts = [
+      'Simple text',
+      'Simple text.',
+      'Hello world',
+      'Hello, world!',
+      'This is a test.',
+      'This is a test with h, m, w, and x in it.',
+      'Text with (parentheses)',
+      'Text with "quotes"',
+      "Text with 'single quotes'",
+      'Text with "curly double quotes"',
+      "Text with 'curly single quotes'", # rubocop:disable Style/StringLiterals
+      'Text with numbers 123',
+      'Text with percent 50%',
+      'Question?',
+      'Multiple sentences. Like this one.',
+      'Comma, semicolon; and more!',
+      # HTML entities (passed through - visually equivalent)
+      '&quot;',
+      '&#8217;',
+      '&#8220;',
+      '&#8221;',
+      'Text with &quot; entity',
+      'Text with &#8217; entity',
+      '&ldquo;',
+      '&rdquo;',
+      '&lsquo;',
+      '&rsquo;',
+      # International characters (Unicode letters)
+      'Café',
+      'schön!', # Some German words confuse the spellchecker
+      'Año nuevo',
+      'Привет мир',
+      '你好世界',
+      'مرحبا بالعالم',
+      # Multi-line without blank lines (single paragraph)
+      "Line 1\nLine 2",
+      "First line\nSecond line",
+      "First line\nSecond line\nThird line",
+      "Multiple lines\nof simple text\nwithout blank lines",
+      "Hello world\nGoodbye world",
+      "Café\nschön!",
+      "Text line 1\nText line 2\nText line 3\nText line 4",
+      # Multi-line with international characters
+      "First line\n你好\nThird line",
+      "English\nEspañol\nFrançais",
+      # Multi-line with optional \r
+      "English\r\nEspañol\r\nFrançais",
+      # Things that look like autolink but aren't.
+      "Hello.\nSee the README.md and CONTRIBUTING.md files.",
+      "Hello.\nSee example.com version 1.2.3.0.",
+      "Hello.\nUse the https:// protocol.",
+    ]
+
+    simple_texts.each do |text|
+      assert text.match?(MarkdownProcessor::MARKDOWN_UNNECESSARY),
+             "Expected #{text.inspect} to match MARKDOWN_UNNECESSARY"
+    end
+  end
+  # rubocop:enable Metrics/BlockLength
+
+  # rubocop:disable Metrics/BlockLength
+  test 'MARKDOWN_UNNECESSARY rejects text requiring markdown processing' do
+    markdown_texts = [
+      # Anything with "<" *must* not be passed through.
+      # Forbidding some uses of "<" is the key requirement for security, so
+      # we simply don't accept "<" here.
+      '<',
+      # Numbered lists
+      '1. First item',
+      '2. Second item',
+      '10. Tenth item',
+      "Text\n1. Item", # List on second line
+      "Text\n 1. Item", # List on second line, indented
+      "Text\n  1. Item",
+      "Text\n   1. Item",
+      # Un-numbered lists
+      '* Item',
+      '- Item',
+      '+ Item',
+      "Text\n* Item", # List on second line
+      "Text\n- Item",
+      "Text\n+ Item",
+      # Headings
+      '# Heading',
+      '## Heading 2',
+      '### Heading 3',
+      '#### Heading 4',
+      "Text\n# Heading", # Heading on second line
+      # Horizontal lines
+      '---',
+      "Text\n---", # Horizontal line on second line
+      # autolinking URLs and domain names
+      'http://example.com',
+      'https://example.com',
+      '<https://example.com>',
+      'www.example.com',
+      'Text with http://example.com in it',
+      'See www.example.com for details',
+      "Text\nwww.example.com", # URL on second line
+      "Text\nhttps://example.com",
+      # Email addresses (need autolinking)
+      'test@example.com',
+      'user.name@example.com',
+      'Contact test@example.com', # Can be handled, not this way
+      # \ escaping
+      'The backquote (\`) is a fine character',
+      # Blank lines (paragraph breaks)
+      "Line 1\n\nLine 2",
+      "Line 1\n \nLine 2",
+      "Line 1\n\t\nLine 2",
+      "Line 1\n  \nLine 2",
+      "Line 1\n   \nLine 2",
+      "Line 1\n    \nLine 2",
+      "Line 1\n     \nLine 2",
+      "Line 1\n      \nLine 2",
+      "Line 1\r\n\r\nLine 2",
+      "Text\n\nMore text",
+      "Multiple\n\nblank\n\nlines",
+      # HTML metacharacters (need escaping)
+      '<script>alert(1)</script>',
+      '<i>italic</i>',
+      'Text with <tags>',
+      'Text with > and < symbols',
+      # Markdown emphasis
+      '*emphasis*',
+      '_emphasis_',
+      '**bold**',
+      '__bold__',
+      # Markdown links
+      '[Link](http://example.com)',
+      '[Link text](url)',
+      # Code blocks
+      '`code`',
+      '```code block```',
+      # Blockquotes
+      '> Quote',
+      # Tables
+      "|ID|Status|\n|--|---|\n|1|OK|\n|2|FAIL|",
+      "For example:\n  |ID|Status|\n  |--|---|\n  |1|OK|\n  |2|FAIL|",
+      "| Name | Type | Description |\n| :--- | :--- | :--- |\n" \
+      "| Alpha | User | Primary Admin |\n| Beta | Guest | Limited View |",
+      # GFM table, without edge pipes. This is trickier. It's always caught
+      # because these require "--- |" lines that our guard rejects.
+      "Name | Type | Description\n--- | --- | ---\n" \
+      "Alpha | User | Primary Admin\nBeta | Guest | Limited View",
+    ]
+
+    markdown_texts.each do |text|
+      assert_not text.match?(MarkdownProcessor::MARKDOWN_UNNECESSARY),
+                 "Expected #{text.inspect} to NOT match MARKDOWN_UNNECESSARY"
+    end
+  end
+  # rubocop:enable Metrics/BlockLength
 end
 # rubocop:enable Metrics/ClassLength

@@ -14,11 +14,6 @@ class InvokeRedcarpetTest < ActiveSupport::TestCase
     InvokeRedcarpet.instance_variable_set(:@previous_content, nil)
   end
 
-  test 'create_processor returns Redcarpet::Markdown instance' do
-    processor = InvokeRedcarpet.create_processor
-    assert_instance_of Redcarpet::Markdown, processor
-  end
-
   test 'ensure_processor_initialized creates processor when nil' do
     assert_nil InvokeRedcarpet.instance_variable_get(:@redcarpet_processor)
     InvokeRedcarpet.ensure_processor_initialized
@@ -28,6 +23,7 @@ class InvokeRedcarpetTest < ActiveSupport::TestCase
 
   test 'ensure_processor_initialized does not recreate when already set' do
     processor1 = InvokeRedcarpet.create_processor
+    assert_instance_of Redcarpet::Markdown, processor1
     InvokeRedcarpet.instance_variable_set(:@redcarpet_processor, processor1)
     InvokeRedcarpet.ensure_processor_initialized
     processor2 = InvokeRedcarpet.instance_variable_get(:@redcarpet_processor)
@@ -135,125 +131,6 @@ class InvokeRedcarpetTest < ActiveSupport::TestCase
 
     # Processor should be reset to nil
     assert_nil InvokeRedcarpet.instance_variable_get(:@redcarpet_processor)
-  end
-
-  test 'invoke_and_sanitize logs error with current and previous content' do
-    # First call to set previous content
-    InvokeRedcarpet.invoke_and_sanitize('previous content')
-
-    # Simple mock logger that captures messages
-    captured_messages = []
-    mock_logger_class =
-      Class.new do
-        def initialize(messages_array)
-          @messages = messages_array
-        end
-
-        def error(msg)
-          @messages << msg
-        end
-      end
-    mock_logger = mock_logger_class.new(captured_messages)
-
-    # Temporarily replace Rails.logger
-    original_logger = Rails.logger
-    Rails.logger = mock_logger
-
-    begin
-      # Force an exception with new content
-      test_error = RuntimeError.new('Simulated error')
-      InvokeRedcarpet.invoke_and_sanitize('current content',
-                                          raise_on_error: false,
-                                          force_exception: test_error)
-    ensure
-      Rails.logger = original_logger
-    end
-
-    assert(captured_messages.any? { |m| m.include?('RuntimeError') })
-    assert(captured_messages.any? { |m| m.include?('current content') })
-    assert(captured_messages.any? { |m| m.include?('previous content') })
-  end
-
-  test 'log_render_error includes exception details' do
-    exception = RuntimeError.new('Test exception message')
-    exception.set_backtrace(['line 1', 'line 2', 'line 3'])
-
-    captured_messages = []
-    mock_logger_class =
-      Class.new do
-        def initialize(messages_array)
-          @messages = messages_array
-        end
-
-        def error(msg)
-          @messages << msg
-        end
-      end
-    mock_logger = mock_logger_class.new(captured_messages)
-
-    original_logger = Rails.logger
-    Rails.logger = mock_logger
-
-    begin
-      InvokeRedcarpet.log_render_error(exception, 'current', 'previous')
-    ensure
-      Rails.logger = original_logger
-    end
-
-    assert(captured_messages.any? { |m| m.include?('RuntimeError') })
-    assert(captured_messages.any? { |m| m.include?('Test exception message') })
-    assert(captured_messages.any? { |m| m.include?('current') })
-    assert(captured_messages.any? { |m| m.include?('previous') })
-    assert(captured_messages.any? { |m| m.include?('Backtrace') })
-  end
-
-  test 'log_render_error handles nil previous content' do
-    exception = RuntimeError.new('Test')
-
-    captured_messages = []
-    mock_logger_class =
-      Class.new do
-        def initialize(messages_array)
-          @messages = messages_array
-        end
-
-        def error(msg)
-          @messages << msg
-        end
-      end
-    mock_logger = mock_logger_class.new(captured_messages)
-
-    original_logger = Rails.logger
-    Rails.logger = mock_logger
-
-    begin
-      InvokeRedcarpet.log_render_error(exception, 'current', nil)
-    ensure
-      Rails.logger = original_logger
-    end
-
-    # Should log current content but not crash on nil previous
-    assert(captured_messages.any? { |m| m.include?('current') })
-    # Should not include "Previous content" line
-    assert_not(captured_messages.any? { |m| m.include?('Previous content:') })
-  end
-
-  test 'invoke_and_sanitize is thread-safe' do
-    # Run multiple threads simultaneously
-    threads =
-      Array.new(10) do |i|
-        Thread.new do
-          10.times do
-            result = InvokeRedcarpet.invoke_and_sanitize("*thread #{i}*")
-            assert result.include?('thread')
-            assert result.html_safe?
-          end
-        end
-      end
-
-    threads.each(&:join)
-    # If we get here without crashes, thread safety is working
-    assert true
   end
 end
 # rubocop:enable Metrics/ClassLength

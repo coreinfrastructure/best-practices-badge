@@ -132,5 +132,50 @@ class InvokeRedcarpetTest < ActiveSupport::TestCase
     # Processor should be reset to nil
     assert_nil InvokeRedcarpet.instance_variable_get(:@redcarpet_processor)
   end
+
+  test 'invoke_and_sanitize logs previous content when error occurs after successful render' do
+    # First, do a successful render to set @previous_content
+    InvokeRedcarpet.invoke_and_sanitize('previous successful content')
+
+    # Verify previous content was stored
+    assert_equal 'previous successful content',
+                 InvokeRedcarpet.instance_variable_get(:@previous_content)
+
+    # Create mock logger to capture messages
+    captured_messages = []
+    mock_logger_class =
+      Class.new do
+        def initialize(messages_array)
+          @messages = messages_array
+        end
+
+        def error(msg)
+          @messages << msg
+        end
+      end
+    mock_logger = mock_logger_class.new(captured_messages)
+
+    # Replace Rails.logger temporarily
+    original_logger = Rails.logger
+    Rails.logger = mock_logger
+
+    begin
+      # Now force an exception with new content
+      test_error = RuntimeError.new('Simulated error')
+      InvokeRedcarpet.invoke_and_sanitize('current failing content',
+                                          raise_on_error: false,
+                                          force_exception: test_error)
+    ensure
+      Rails.logger = original_logger
+    end
+
+    # Verify both current and previous content were logged
+    assert(captured_messages.any? { |m| m.include?('current failing content') },
+           'Should log current content')
+    assert(captured_messages.any? { |m| m.include?('previous successful content') },
+           'Should log previous content')
+    assert(captured_messages.any? { |m| m.include?('Previous content') },
+           'Should include "Previous content" label')
+  end
 end
 # rubocop:enable Metrics/ClassLength

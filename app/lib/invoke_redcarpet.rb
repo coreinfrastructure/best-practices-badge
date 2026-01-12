@@ -99,18 +99,18 @@ module InvokeRedcarpet
       "Redcarpet render failed: #{exception.class} - #{exception.message}"
     )
     Rails.logger.error(
-      "Current content (#{current_content.to_s.length} chars): " \
-      "#{current_content.to_s[0..200].inspect}"
+      "Redcarpet current content (#{current_content.to_s.length} chars): " \
+      "#{current_content.to_s[0..1000].inspect}"
     )
     if previous_content
       Rails.logger.error(
-        "Previous content (#{previous_content.to_s.length} chars): " \
-        "#{previous_content.to_s[0..200].inspect}"
+        "Redcarpet previous content (#{previous_content.to_s.length} chars): " \
+        "#{previous_content.to_s[0..1000].inspect}"
       )
     end
     return unless exception.backtrace
 
-    Rails.logger.error("Backtrace: #{exception.backtrace.first(5).join("\n  ")}")
+    Rails.logger.error("Redcarpet backtrace: #{exception.backtrace.first(5).join("\n  ")}")
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 

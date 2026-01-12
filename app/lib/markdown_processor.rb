@@ -121,7 +121,7 @@ module MarkdownProcessor
   #   We could add special cases, but then users would be confused when the
   #   special cases stopped working because we had to switch to the full
   #   markdown processor.
-  # - Must have LIMTED backtracking, as a performance requirement.
+  # - Must have LIMITED backtracking, as a performance requirement.
   # We define a match for 1 line, then how to match 1+ lines.
 
   # Match a single line requiring NO markdown processing and that

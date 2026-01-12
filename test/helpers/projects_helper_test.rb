@@ -559,7 +559,7 @@ class ProjectsHelperTest < ActionView::TestCase
       '&rsquo;',
       # International characters (Unicode letters)
       'Café',
-      'Das ist schön!',
+      'schön!', # Some German words confuse the spellchecker
       'Año nuevo',
       'Привет мир',
       '你好世界',
@@ -570,7 +570,7 @@ class ProjectsHelperTest < ActionView::TestCase
       "First line\nSecond line\nThird line",
       "Multiple lines\nof simple text\nwithout blank lines",
       "Hello world\nGoodbye world",
-      "Café\nDas ist schön!",
+      "Café\nschön!",
       "Text line 1\nText line 2\nText line 3\nText line 4",
       # Multi-line with international characters
       "First line\n你好\nThird line",

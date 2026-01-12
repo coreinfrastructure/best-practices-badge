@@ -171,7 +171,7 @@ class ProjectsHelperTest < ActionView::TestCase
     # We use regex to validate URLs and inject security attributes.
 
     # Verify ALLOWED_MARKDOWN_URL_PATTERN exists and permits safe protocols
-    pattern = MarkdownProcessor::ALLOWED_MARKDOWN_URL_PATTERN
+    pattern = InvokeCommonmarker::ALLOWED_MARKDOWN_URL_PATTERN
     assert pattern.match?('http://example.com')
     assert pattern.match?('https://example.com')
     assert pattern.match?('mailto:test@example.com')
@@ -681,6 +681,18 @@ class ProjectsHelperTest < ActionView::TestCase
       assert_not text.match?(MarkdownProcessor::MARKDOWN_UNNECESSARY),
                  "Expected #{text.inspect} to NOT match MARKDOWN_UNNECESSARY"
     end
+  end
+
+  test 'Markdown renders with Commonmarker when use_redcarpet is false' do
+    result = markdown('*emphasis*', use_redcarpet: false)
+    assert_equal "<p><em>emphasis</em></p>\n", result
+    assert result.html_safe?
+  end
+
+  test 'Markdown renders with Redcarpet when use_redcarpet is true' do
+    result = markdown('*emphasis*', use_redcarpet: true)
+    assert_equal "<p><em>emphasis</em></p>\n", result
+    assert result.html_safe?
   end
   # rubocop:enable Metrics/BlockLength
 end

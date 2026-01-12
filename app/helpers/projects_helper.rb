@@ -15,8 +15,11 @@ module ProjectsHelper
   SECTION_ID_INVALID_CHARS = /[^a-z0-9_-]/
 
   # Invoke markdown processor, which is in its own module.
-  def markdown(content)
-    MarkdownProcessor.render(content)
+  # @param content [String] The content to render as Markdown
+  # @param use_redcarpet [Boolean, nil] Whether to use Redcarpet (true) or
+  #   Commonmarker (false). If nil (default), uses the default processor.
+  def markdown(content, use_redcarpet: nil)
+    MarkdownProcessor.render(content, use_redcarpet: use_redcarpet)
   end
 
   # Convert a status integer value to its string representation.

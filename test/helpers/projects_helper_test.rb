@@ -463,12 +463,11 @@ class ProjectsHelperTest < ActionView::TestCase
       'just plain text',
       'not a url at all',
       'example.com', # Missing protocol
-      'ftp://example.com', # Wrong protocol
       'http://localhost', # Single-label domain
       'http://', # Incomplete
-      'https:/example.com', # Malformed protocol
+      'https:/example.com', # Malformed protocol, only one /.
       'http://example', # Single-label domain
-      'See http://example.com for details', # Extra text before
+      'See http://example.com for details', # Extra text before and after
       'http://example.com is great', # Extra text after
       '', # Empty string
       'http://example.com with spaces', # Unencoded spaces after URL
@@ -577,6 +576,10 @@ class ProjectsHelperTest < ActionView::TestCase
       "English\nEspañol\nFrançais",
       # Multi-line with optional \r
       "English\r\nEspañol\r\nFrançais",
+      # Things that look like autolink but aren't.
+      "Hello.\nSee the README.md and CONTRIBUTING.md files.",
+      "Hello.\nSee example.com version 1.2.3.0.",
+      "Hello.\nUse the https:// protocol.",
     ]
 
     simple_texts.each do |text|
@@ -617,12 +620,11 @@ class ProjectsHelperTest < ActionView::TestCase
       # Horizontal lines
       '---',
       "Text\n---", # Horizontal line on second line
-      # URLs and domain names (need autolinking)
+      # autolinking URLs and domain names
       'http://example.com',
       'https://example.com',
+      '<https://example.com>',
       'www.example.com',
-      'example.com',
-      'ftp://example.com',
       'Text with http://example.com in it',
       'See www.example.com for details',
       "Text\nwww.example.com", # URL on second line

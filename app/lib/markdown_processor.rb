@@ -151,16 +151,34 @@ module MarkdownProcessor
     # because we will later exclude backticks (tt) and tildes (strikethrough)
     # from the content characters' safe character set anyway.
 
-    # CONTENT CHARACTERS
+    # CONTENT CHARACTERS - identify what we accept within a line
     (?:
+      # NOT ACCEPTABLE: GitHub Flavored Markdown (GFM) Autolinks. See:
+      # https://github.github.com/gfm/#autolinks-extension-
+      # We'll simply decide if it *might* get processed specially by
+      # markdown; once enough characters match it almost certainly will
+      # require markdown processing.
+      # We aren't going to try to match on email addresses, but instead
+      # simply treat "@" as character *requiring* markdown processing.
+      # In our uses that's almost always true.
+      (?! (?<= \A | [\040\t\n\*\_\~\(] )
+          (?i:(?:
+           www\.[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]|
+           https?:\/\/[a-zA-Z0-9_-]+\.|mailto:[^\s]|xmpp:[^\s])))
+
       # SAFE CHARACTER SET
       # This is the safe character set, which is all but a few characters.
       # For security, the *key* is that "<" is NOT in the safe character set.
       # We omit characters that may have meaning to markdown, e.g.:
       # *italics*, _italics_, ~strikethrough~, `teletype`, [URL link],
       # < > of HTML.
-      # Less obvious are &entities-maybe, email@somewhere.com,
-      # https://link, www.example.org, https://link again, \-disable
+      # Less obvious are &entities-maybe, "@" for email@somewhere.com, and
+      # \-disable
+      # At one time we struggled with ., /, and :, but now that we reject
+      # GFM anchors, we can directly accept them and detect cases like:
+      # https://link, www.example.org, https://link again.
+      # We don't arbitrarily accept "&", but an HTML entity or space is fine.
+      # This means that "README.md" and "1.2.3" are correctly accepted.
       # Some characters are actually safe unless a guard prevents it, e.g.,
       # hyphen and vertical bar are normally safe and so are allowed here
       # unless a guard forbids it.
@@ -170,26 +188,13 @@ module MarkdownProcessor
       # We exclude \r and \n so this pattern doesn't match across lines.
       # We also exclude \f (form feed), \v (vertical tab), and \0 (null)
       # as these control characters are unusual and could cause issues.
-      [^*_~`\[\]<>\&@:\.\/\\\r\n\f\v\0]
+      [^*_~`\[\]<>\&@\r\n\f\v\0]
       |
-      # HTML ENTITIES: Note we allow arbitrary case.
-      # &name; OR &#123; (decimal) OR &#xabc; (hexadecimal)
-      \&(?: [a-z0-9]++|\#x[0-9a-f]{1,6}|\#[0-9]{1,7} );
-      |
-      # CONTEXTUAL PUNCTUATION & DOUBLE SLASH:
-      # Allows // or certain punctuation ONLY if followed by space, ", or '
-      # This allows "Sentence 1. Sentence 2" or "This & that" or "// comment",
-      # but not www.example.com or https://example.com.
-      # Periods are especially tricky because they can form domain names.
-      (?://|[\.\:\&\@]) (?:\040|"|')
-      |
-      # CONTEXTUAL SINGLE SLASH: Prevent :// and // (unless followed by space)
-      # Allowed if followed by letter/digit and NOT preceded by colon.
-      # This allows text like "N/A" but not https://example.com
-      (?<!\:)\/(?=[\p{L}0-9])
+      # &+SPACE and HTML ENTITIES: Note we allow arbitrary case.
+      # Modern HTML accepts & followed by space as not needing an escape.
+      # Accept &name; OR &#123; (decimal) OR &#xabc; (hexadecimal)
+      \&(?: \040 | (?: [a-z0-9]++|\#x[0-9a-f]{1,6}|\#[0-9]{1,7} );)
     )++ # Possessive quantifier to ensure maximum performance - no rollback
-    # Optional final period. It's at line end, so it can't be a domain name.
-    \.?
   }xiu
 
   # This is the final pattern to determine if markdown is unnecessary.

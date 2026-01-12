@@ -10,9 +10,9 @@
 # fragment memory. However, we've recently seen it crash with report,
 # which may simply be because we're stressing it more:
 # md->work_bufs[BUFFER_SPAN].size == 0
-# We throught it thread-related at first, but using a mutex to ensure
+# We thought it was thread-related at first, but using a mutex to ensure
 # there was only one, and even having separate instances for a current thread,
-# did not make the problem go away.
+# did not make the problem completely go away.
 # This issue may be related, it has the error report:
 # https://github.com/vmg/redcarpet/issues/570
 

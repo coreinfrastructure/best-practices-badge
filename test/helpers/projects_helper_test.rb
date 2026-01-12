@@ -682,6 +682,18 @@ class ProjectsHelperTest < ActionView::TestCase
                  "Expected #{text.inspect} to NOT match MARKDOWN_UNNECESSARY"
     end
   end
+
+  test 'Markdown renders with Commonmarker when use_redcarpet is false' do
+    result = markdown('*emphasis*', use_redcarpet: false)
+    assert_equal "<p><em>emphasis</em></p>\n", result
+    assert result.html_safe?
+  end
+
+  test 'Markdown renders with Redcarpet when use_redcarpet is true' do
+    result = markdown('*emphasis*', use_redcarpet: true)
+    assert_equal "<p><em>emphasis</em></p>\n", result
+    assert result.html_safe?
+  end
   # rubocop:enable Metrics/BlockLength
 end
 # rubocop:enable Metrics/ClassLength

@@ -14,15 +14,11 @@ orbs:
   codecov: codecov/codecov@3.2.4
   dscar-brakeman: naokikimura/dscar-brakeman@0.9.0
 
-# WARNING: In some cases you MUST update the cache version control value.
-# WHEN TO BUMP: Increment the version number (e.g., v8 -> v9) when:
-#   - Upgrading Ruby major/minor version (e.g., 3.4 -> 3.5)
-#   - Upgrading Bundler major version (e.g., 2.7 -> 2.8)
-#   - Gems cached with old versions cause issues
-# DON'T BUMP for: Gemfile.lock changes or patch updates
-# TO UPDATE: Search for "v.*-dep-" and update the number (2 occurrences below)
-# We don't do this with YAML anchors because they don't work with
-# CircleCI's template syntax.
+# Cache version is AUTOMATICALLY managed via checksums:
+# - {{ checksum ".ruby-version" }} invalidates cache when Ruby version changes
+# - {{ checksum "Gemfile.lock" }} invalidates cache when gems change
+# - This eliminates the need for manual cache version bumping
+# - No manual intervention needed when upgrading Ruby or Bundler
 
 # Reusable executors - define Docker images once, use them multiple times
 executors:
@@ -94,10 +90,9 @@ jobs:
     # Restore the dependency cache
     - restore_cache:
         keys:
-        # Cache version control.
-        # Find a cache corresponding to this particular Gemfile.lock checksum.
-        # When updating, change BOTH this line and save_cache below
-        - v9-dep-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+        # Automatic cache versioning - no manual updates needed!
+        # Ruby version change = new cache, Gemfile.lock change = new cache
+        - dep-{{ checksum ".ruby-version" }}-{{ checksum "Gemfile.lock" }}-{{ arch }}-{{ .Branch }}
     # This would show what we restored
     # - run: find ~/.rubygems || true
     - run:
@@ -120,10 +115,8 @@ jobs:
     # - run: find ~ -name "*rack-timeout*" || true
     # Save dependency cache
     - save_cache:
-        # Cache version control.
-        # Find a cache corresponding to this particular Gemfile.lock checksum.
-        # When updating, change BOTH this line and save_cache below
-        key: v9-dep-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+        # Automatic cache versioning - matches restore_cache above
+        key: dep-{{ checksum ".ruby-version" }}-{{ checksum "Gemfile.lock" }}-{{ arch }}-{{ .Branch }}
         paths:
           - ~/.rubygems
           - ~/.bundle

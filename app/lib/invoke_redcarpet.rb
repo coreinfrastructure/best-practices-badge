@@ -34,8 +34,12 @@ module InvokeRedcarpet
   # Mutex to ensure thread safety.
   # Redcarpet's C code is not thread-safe, so we use a mutex to ensure
   # only one thread can use the processor at a time.
-  # We use ||= to ensure the mutex is not replaced if the module is reloaded.
-  REDCARPET_MUTEX = (defined?(REDCARPET_MUTEX) ? REDCARPET_MUTEX : Mutex.new)
+  # We use a global variable because module constants are cleared on reload
+  # in dev/test environments, but this mutex MUST persist across reloads
+  # to maintain thread safety.
+  # rubocop:disable Style/GlobalVars
+  $redcarpet_mutex ||= Mutex.new
+  # rubocop:enable Style/GlobalVars
 
   # The shared Redcarpet processor instance.
   # We create one instance and protect it with a mutex rather than using
@@ -59,14 +63,14 @@ module InvokeRedcarpet
   # @param content [String] The content to render as Markdown
   # @return [ActiveSupport::SafeBuffer] HTML-safe rendered output
   #
-  # rubocop:disable Rails/OutputSafety
+  # rubocop:disable Rails/OutputSafety, Style/GlobalVars
   def self.invoke_and_sanitize(content)
     # Use mutex to ensure only one thread uses Redcarpet at a time
-    REDCARPET_MUTEX.synchronize do
+    $redcarpet_mutex.synchronize do
       # Defensive measure: ensure content is a string.
       # Strings return themselves, so it should have no performance impact.
       redcarpet_processor.render(content.to_s).html_safe
     end
   end
-  # rubocop:enable Rails/OutputSafety
+  # rubocop:enable Rails/OutputSafety, Style/GlobalVars
 end

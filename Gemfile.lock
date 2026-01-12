@@ -452,6 +452,7 @@ GEM
       erb
       psych (>= 4.0.0)
       tsort
+    redcarpet (3.6.1)
     regexp_parser (2.11.3)
     reline (0.6.3)
       io-console (~> 0.5)
@@ -661,6 +662,7 @@ DEPENDENCIES
   rails_12factor (~> 0.0.3)
   rails_best_practices (~> 1.23)
   railties (~> 8.1.1)
+  redcarpet (~> 3.5)
   rubocop (~> 1.80)
   rubocop-performance (~> 1.20)
   rubocop-rails (~> 2.28)

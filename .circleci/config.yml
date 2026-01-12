@@ -97,7 +97,7 @@ jobs:
         # Cache version control.
         # Find a cache corresponding to this particular Gemfile.lock checksum.
         # When updating, change BOTH this line and save_cache below
-        - v8-dep-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+        - v9-dep-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
     # This would show what we restored
     # - run: find ~/.rubygems || true
     - run:
@@ -123,7 +123,7 @@ jobs:
         # Cache version control.
         # Find a cache corresponding to this particular Gemfile.lock checksum.
         # When updating, change BOTH this line and save_cache below
-        key: v8-dep-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+        key: v9-dep-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
         paths:
           - ~/.rubygems
           - ~/.bundle

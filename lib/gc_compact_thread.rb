@@ -64,8 +64,11 @@ module GcCompactThread
   # generate special types. Garbage collection is low-level;
   # we want to minimize the objects we create, and what's happening in
   # general here, to maximize the memory we recover.
-  SLEEP_AFTER_CHECK = 1 * 60 # seconds post memory-ok before recheck
-  SLEEP_AFTER_COMPACT = 20 * 60 # seconds post memory-not-ok before recheck
+
+  # Seconds post memory-ok before recheck
+  SLEEP_AFTER_CHECK = (ENV['BADGEAPP_SLEEP_AFTER_CHECK'] || (1 * 60)).to_i
+  # Seconds post memory-not-ok before recheck
+  SLEEP_AFTER_COMPACT = (ENV['BADGEAPP_SLEEP_AFTER_COMPACT'] || (20 * 60)).to_i
 
   # Repeated check if memory used is more than memsize, and if so, compact.
   # The parameters make testing easier.

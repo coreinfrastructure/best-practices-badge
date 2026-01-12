@@ -6,6 +6,7 @@
 
 require 'test_helper'
 
+# rubocop:disable Metrics/ClassLength
 class InvokeRedcarpetTest < ActiveSupport::TestCase
   # Reset the processor between tests to ensure clean state
   def setup
@@ -142,15 +143,17 @@ class InvokeRedcarpetTest < ActiveSupport::TestCase
 
     # Simple mock logger that captures messages
     captured_messages = []
-    mock_logger = Class.new do
-      def initialize(messages_array)
-        @messages = messages_array
-      end
+    mock_logger_class =
+      Class.new do
+        def initialize(messages_array)
+          @messages = messages_array
+        end
 
-      def error(msg)
-        @messages << msg
+        def error(msg)
+          @messages << msg
+        end
       end
-    end.new(captured_messages)
+    mock_logger = mock_logger_class.new(captured_messages)
 
     # Temporarily replace Rails.logger
     original_logger = Rails.logger
@@ -176,15 +179,17 @@ class InvokeRedcarpetTest < ActiveSupport::TestCase
     exception.set_backtrace(['line 1', 'line 2', 'line 3'])
 
     captured_messages = []
-    mock_logger = Class.new do
-      def initialize(messages_array)
-        @messages = messages_array
-      end
+    mock_logger_class =
+      Class.new do
+        def initialize(messages_array)
+          @messages = messages_array
+        end
 
-      def error(msg)
-        @messages << msg
+        def error(msg)
+          @messages << msg
+        end
       end
-    end.new(captured_messages)
+    mock_logger = mock_logger_class.new(captured_messages)
 
     original_logger = Rails.logger
     Rails.logger = mock_logger
@@ -206,15 +211,17 @@ class InvokeRedcarpetTest < ActiveSupport::TestCase
     exception = RuntimeError.new('Test')
 
     captured_messages = []
-    mock_logger = Class.new do
-      def initialize(messages_array)
-        @messages = messages_array
-      end
+    mock_logger_class =
+      Class.new do
+        def initialize(messages_array)
+          @messages = messages_array
+        end
 
-      def error(msg)
-        @messages << msg
+        def error(msg)
+          @messages << msg
+        end
       end
-    end.new(captured_messages)
+    mock_logger = mock_logger_class.new(captured_messages)
 
     original_logger = Rails.logger
     Rails.logger = mock_logger
@@ -234,7 +241,7 @@ class InvokeRedcarpetTest < ActiveSupport::TestCase
   test 'invoke_and_sanitize is thread-safe' do
     # Run multiple threads simultaneously
     threads =
-      10.times.map do |i|
+      Array.new(10) do |i|
         Thread.new do
           10.times do
             result = InvokeRedcarpet.invoke_and_sanitize("*thread #{i}*")
@@ -249,3 +256,4 @@ class InvokeRedcarpetTest < ActiveSupport::TestCase
     assert true
   end
 end
+# rubocop:enable Metrics/ClassLength

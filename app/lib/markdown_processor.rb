@@ -22,9 +22,6 @@ module MarkdownProcessor
   USE_REDCARPET_BY_DEFAULT =
     ENV.fetch('BADGEAPP_MARKDOWN_PROCESSOR', '').include?('redcarpet')
 
-  # Re-export constants from InvokeCommonmarker for backward compatibility
-  ALLOWED_MARKDOWN_URL_PATTERN = InvokeCommonmarker::ALLOWED_MARKDOWN_URL_PATTERN
-
   # Configuration Constants
   # Pre-frozen to minimize per-call allocations.
 

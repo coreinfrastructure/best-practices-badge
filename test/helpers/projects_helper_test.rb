@@ -171,7 +171,7 @@ class ProjectsHelperTest < ActionView::TestCase
     # We use regex to validate URLs and inject security attributes.
 
     # Verify ALLOWED_MARKDOWN_URL_PATTERN exists and permits safe protocols
-    pattern = MarkdownProcessor::ALLOWED_MARKDOWN_URL_PATTERN
+    pattern = InvokeCommonmarker::ALLOWED_MARKDOWN_URL_PATTERN
     assert pattern.match?('http://example.com')
     assert pattern.match?('https://example.com')
     assert pattern.match?('mailto:test@example.com')

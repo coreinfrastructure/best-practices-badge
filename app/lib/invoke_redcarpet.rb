@@ -6,6 +6,16 @@
 
 # Invoke the Redcarpet markdown processor with thread safety
 
+# We've used redcarpet for years; it's capable, fast, and doesn't
+# fragment memory. However, we've recently seen it crash with report,
+# which may simply be because we're stressing it more:
+# md->work_bufs[BUFFER_SPAN].size == 0
+# We throught it thread-related at first, but using a mutex to ensure
+# there was only one, and even having separate instances for a current thread,
+# did not make the problem go away.
+# This issue may be related, it has the error report:
+# https://github.com/vmg/redcarpet/issues/570
+
 module InvokeRedcarpet
   require 'redcarpet'
 
@@ -13,7 +23,7 @@ module InvokeRedcarpet
   REDCARPET_MARKDOWN_RENDERER_OPTIONS = {
     filter_html: true, no_images: true,
     no_styles: true, safe_links_only: true,
-    link_attributes: { rel: 'nofollow ugc' }
+    link_attributes: { rel: 'nofollow ugc noopener noreferrer' }
   }.freeze
 
   REDCARPET_MARKDOWN_PROCESSOR_OPTIONS = {

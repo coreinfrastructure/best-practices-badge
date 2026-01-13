@@ -78,10 +78,17 @@ Some technical details are important here:
   By default, ORMs usually copy all fields into
   an object, but if those fields aren't used, this can do a lot of unnecessary
   work and create a lot of useless objects.
-* Every creation of a new empty string creates extra work, as it has to
-  allocated and later garbage collected. In Ruby (and many other languages),
+* Every creation of a new empty string creates extra work, as the string
+  object has to allocated and later garbage collected.
+  If the usual CRuby implementation, if a
+  string is "large enough" there are actually two memory regions in
+  use for a string: one for the string object hi,
+  and a separate one for its content).
+  In some cases string objects can be shared, but in other cases they aren't
+  (strings in Ruby can be mutable aka unfrozen, and these can't be shared).
+  In Ruby and *many* other languages,
   it's far more efficient to use small integers or nil, because these
-  don't trigger allocations that use up memory, and since they don't
+  don't trigger new allocations that use up memory. Since they don't
   trigger allocations they also don't require garbage collection.
 
 ## Solutions
@@ -173,6 +180,32 @@ To handle this new world of massive number of requests, we did the following:
    know their final size. Ruby will automatically resize when needed, but
    provide final size information ahead-of-time,
    Ruby doesn't need to keep resizing them, improving performance.
+
+Note that this optimization work continued in January 2026.
+Again, it was all focused on avoiding unnecessary work.
+Examples included:
+
+1. Modifying the garbage collector to trigger compaction only when
+   excessive space used, instead of a particular time, so we only run
+   compaction when we must.
+2. Optimize the `project_stats` controller so that showing statistics
+   didn't need to create as many memory allocations. This dramatically sped
+   up showing our charts. See commit
+   298a4a217c3ac9bdb05c650090d44dadda1ea1be.
+3. Optimize showing users (e.g., reduce memory allocations and skip
+   unnecessary computations). See commit
+   31b6972b9dd55458da78651b3b26520d572c89f4 and commit
+   790eaf66fa1c7e8590f1e014d509106cce3ae77c.
+4. Optimize memory use when generating JSON. See commit
+   0417227f30b680eb57ae335f333740d7ddf77a2b.
+5. Avoid calling the markdown processor when it's unnecessary, again,
+   to reduce computation time and unnecessary memory allocations.
+6. Refactor session authentation and logged-in-user management so we
+   avoided unnecessary database queries. E.g., see commit
+   2ba0a2cc03216efc0a353b2bf2ef82d814c09d66 and commit
+   d4844baf435f7d398040a811cc596979dc0d84a4.
+7. Skip authentication for badge and project JSON data, since it's
+   not needed.
 
 ## Impact
 

@@ -72,8 +72,9 @@ class LoginTest < ApplicationSystemTestCase
                         'this criterion.'
 
     fill_in 'project_name', with: 'It does not matter'
-    # Below we are clicking the final save button, it has a value of ''
-    click_button('Save', exact: true)
+    # Click the "Save (and continue)" button to stay on edit page
+    # Use match: :first because there are multiple save buttons (one per section)
+    click_button('Save (and continue)', match: :first)
     # After routing changes, edit paths now include criteria_level
     assert_equal "/en/projects/#{@project.id}/passing/edit", current_path
     wait_for_jquery # Wait for page to fully load before checking flash message

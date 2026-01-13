@@ -200,7 +200,7 @@ Examples included:
    0417227f30b680eb57ae335f333740d7ddf77a2b.
 5. Avoid calling the markdown processor when it's unnecessary, again,
    to reduce computation time and unnecessary memory allocations.
-6. Refactor session authentation and logged-in-user management so we
+6. Refactor session authentication and logged-in-user management so we
    avoided unnecessary database queries. E.g., see commit
    2ba0a2cc03216efc0a353b2bf2ef82d814c09d66 and commit
    d4844baf435f7d398040a811cc596979dc0d84a4.

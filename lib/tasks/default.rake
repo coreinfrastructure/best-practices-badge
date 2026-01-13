@@ -27,6 +27,7 @@ require 'json'
 task(:default).clear.enhance %w[
   rbenv_rvm_setup
   whitespace_check
+  ruby_syntax
   bundle
   bundle_audit
   generate_criteria_doc
@@ -54,6 +55,7 @@ task(:default).clear.enhance %w[
 # Temporarily removed fasterer
 task(:ci).clear.enhance %w[
   rbenv_rvm_setup
+  ruby_syntax
   bundle_audit
   markdownlint
   license_okay
@@ -74,6 +76,17 @@ task :rbenv_rvm_setup do
   if !path.include?('.rbenv') && !path.include?('.rvm') && !path.include?('.asdf')
     raise StandardError, 'Must have rbenv or rvm in PATH'
   end
+end
+
+# Do a quick check of Ruby syntax, takes only ~2 sec in most cases
+desc 'Check for ruby syntax problems on **.rb files modified last 7 days'
+task :ruby_syntax do
+  # Exclude temporary files beginning with comma.
+  # The `ruby -c` command only checks one file, so re-invoke for each file.
+  # Do checks in parallel to speed results.
+  puts 'Checking ruby syntax in files modified in the last 7 days...'
+  sh 'find . -name "*.rb" ! -name ",*" -mtime -7 -print0 | ' \
+     'xargs -0 -L 1 -P $(nproc) ruby -c > /dev/null'
 end
 
 desc 'Run Rubocop'

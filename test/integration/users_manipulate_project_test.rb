@@ -6,6 +6,7 @@
 
 require 'test_helper'
 
+# rubocop:disable Metrics/ClassLength
 class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
   setup do
     @user = users(:test_user)
@@ -169,4 +170,29 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
       assert_select(+'#project_name[value=?]', 'sendmail')
     end
   end
+
+  test 'user updates project with final Save button' do
+    # This test ensures that the final "Save (and continue)" button
+    # (with value='Save') works correctly and covers url_anchor line 1328
+    # which returns '' when params[:continue] == 'Save'
+    get login_path(locale: :en)
+    log_in_as @user
+
+    project = projects(:one)
+    get "/en/projects/#{project.id}/passing/edit"
+    assert_response :success
+
+    # Update project with final save button (continue='Save')
+    patch "/en/projects/#{project.id}", params: {
+      project: { name: 'Updated Project Name' },
+      continue: 'Save'
+    }
+
+    # Should redirect to edit page without anchor (url_anchor returns '')
+    assert_redirected_to "/en/projects/#{project.id}/passing/edit"
+    follow_redirect!
+    assert_response :success
+    assert_match 'Project was successfully updated', flash[:info]
+  end
 end
+# rubocop:enable Metrics/ClassLength

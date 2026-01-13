@@ -18,8 +18,8 @@ module ProjectsHelper
   # @param content [String] The content to render as Markdown
   # @param use_redcarpet [Boolean, nil] Whether to use Redcarpet (true) or
   #   Commonmarker (false). If nil (default), uses the default processor.
-  def markdown(content, use_redcarpet: nil)
-    MarkdownProcessor.render(content, use_redcarpet: use_redcarpet)
+  def markdown(content)
+    MarkdownProcessor.render(content)
   end
 
   # Convert a status integer value to its string representation.

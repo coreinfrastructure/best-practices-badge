@@ -16,12 +16,6 @@ module MarkdownProcessor
   # require_relative 'invoke_commonmarker'
   # require_relative 'invoke_redcarpet'
 
-  # Determine which markdown processor to use by default based on
-  # environment variable BADGEAPP_MARKDOWN_PROCESSOR.
-  # If it contains "redcarpet", use Redcarpet; otherwise use Commonmarker.
-  USE_REDCARPET_BY_DEFAULT =
-    ENV.fetch('BADGEAPP_MARKDOWN_PROCESSOR', '').include?('redcarpet')
-
   # Configuration Constants
   # Pre-frozen to minimize per-call allocations.
 
@@ -258,9 +252,6 @@ module MarkdownProcessor
   # processing entirely for performance.
   #
   # @param content [String] The content to render as Markdown
-  # @param use_redcarpet [Boolean, nil] Whether to use Redcarpet (true) or
-  #   Commonmarker (false). If nil (default), uses the value determined by
-  #   the BADGEAPP_MARKDOWN_PROCESSOR environment variable at startup.
   # @return [ActiveSupport::SafeBuffer] HTML-safe rendered output
   #
   # We have to disable Rails/OutputSafety because Rubocop can't do the
@@ -268,7 +259,7 @@ module MarkdownProcessor
   # The MARKDOWN_UNNECESSARY pattern doesn't match "<" etc.
   # The markdown + sanitizer process is configured to output safe strings.
   # rubocop:disable Rails/OutputSafety, Metrics/MethodLength
-  def self.render(content, use_redcarpet: nil)
+  def self.render(content)
     # Return empty string if content is blank.
     # Ruby always returns the exact same empty string object (per object_id)
     # if it's asked to return a literal empty string from a source file
@@ -323,14 +314,7 @@ module MarkdownProcessor
 
     # Apply more sophisticated markdown processing.
     # Delegate to the markdown processor module.
-    # Use Redcarpet if use_redcarpet is true, or if use_redcarpet is nil
-    # and USE_REDCARPET_BY_DEFAULT is true. Otherwise use Commonmarker.
-    use_redcarpet = USE_REDCARPET_BY_DEFAULT if use_redcarpet.nil?
-    if use_redcarpet
-      InvokeRedcarpet.invoke_and_sanitize(content)
-    else
-      InvokeCommonmarker.invoke_and_sanitize(content)
-    end
+    InvokeRedcarpet.invoke_and_sanitize(content)
   end
   # rubocop:enable Rails/OutputSafety, Metrics/MethodLength
 end

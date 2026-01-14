@@ -1,7 +1,7 @@
 # Optimizations of 2025-12
 
 This document briefly explains optimizations done in December 2025
-(and extended through January 2026) for the best practices badge project. 
+(and extended through January 2026) for the best practices badge project.
 These were done to handle the changes in the web environment
 as well as prepare for baseline criteria support.
 

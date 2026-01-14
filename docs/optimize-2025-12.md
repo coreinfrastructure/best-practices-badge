@@ -1,41 +1,48 @@
 # Optimizations of 2025-12
 
 This document briefly explains optimizations done in December 2025
-for the best practices badge project, to handle the changes on the web
+(and extended through January 2026) for the best practices badge project. 
+These were done to handle the changes in the web environment
 as well as prepare for baseline criteria support.
 
 ## Background
 
 When this application was originally developed, web
-crawlers tended to be more gentle. Occasionally a crawler
-would be unreasonably demanding, but it would only happen sporatically,
-and most crawlers would respect robots.txt.
+crawlers tended to be gentler. Occasionally a web crawler
+would be unreasonably demanding, but this would only happen sporatically,
+and most crawlers had limited rates and would respect robots.txt.
 We implemented rate limiters to automatically limit the worst
 offenders, primarily to automatically counter temporary DDoS attacks.
-We assumed that crawlers would only show up occasionally, and
+We assumed that crawlers would only show up occasionally, as relatively
+few organizations would run them, and
 that they would go away once they were done.
 
 However, that is not true any more.
 Modern AI systems are built on machine learning (ML),
-which in turn require lots of data, so many organizations are now
+which in turn require lots of data.
+Organizations want to gather that data themselves or buy it from others.
+As a result, many organizations are now
 maximally and repeatedly downloading the internet to get training data:
 
 * ["AI web crawlers are destroying websites in their never-ending hunger for any and all content: But the cure may ruin the web..." by Steven J. Vaughan-Nichols, Fri 29 Aug 2025, *The Register*](https://www.theregister.com/2025/08/29/ai_web_crawlers_are_destroying/), [discussed on Hacker News](https://news.ycombinator.com/item?id=45105230)
 * ["The Internet Is Being Overrun by AI Bots — And Websites Are Paying the Price" by Sharon Fisher, October 31, 2025, VKTR](https://www.vktr.com/ai-technology/the-internet-is-being-overrun-by-ai-bots-and-websites-are-paying-the-price/)
 
-As with many websites, this site gradually increases in the memory it uses
-as requests are made.
+As with many websites, historically
+this site gradually increases in the memory it uses as requests are made,
+with a brief restart (typically daily) for some housekeeping.
 The site was also written to be simple and easy-to-maintain, instead of
 focusing on performance.
 The only area we focused on was delivering badges at scale, which we
 implement through a CDN.
 Historically this approach wasn't a problem, but now it is.
 
-The website is now being downloaded so often
-that it occasionally automatically fails and restarts as it
+The website's data is now being downloaded so often
+that it occasionally automatically failed and restarted as it
 exceeded its memory allocations.
 The fail-over is a last-ditch effort to recover, and we want that to be
 an exceedingly rare event.
+It was also at long-term risk of not keeping up with the massive demands
+now being placed on it.
 
 The most popular pages, by far, are the `/(:locale/)projects/*` pages, as
 almost all pages are in this hierarchy. The data for every project, in
@@ -80,12 +87,15 @@ Some technical details are important here:
   work and create a lot of useless objects.
 * Every creation of a new empty string creates extra work, as the string
   object has to allocated and later garbage collected.
-  If the usual CRuby implementation, if a
+  In the usual CRuby implementation, if a
   string is "large enough" there are actually two memory regions in
-  use for a string: one for the string object hi,
-  and a separate one for its content).
-  In some cases string objects can be shared, but in other cases they aren't
-  (strings in Ruby can be mutable aka unfrozen, and these can't be shared).
+  use for a string: one memory region for the string object representing itself,
+  and a separate memory region for the string content.
+  In some cases string objects can be shared, but in other cases they aren't.
+  Strings in Ruby can be mutable aka unfrozen, and these can't be shared
+  (if they were, modifying one would modify the others).
+  Many libraries return unfrozen strings, and since they can't be shared,
+  this can cause a lot of memory allocations.
   In Ruby and *many* other languages,
   it's far more efficient to use small integers or nil, because these
   don't trigger new allocations that use up memory. Since they don't

@@ -85,7 +85,11 @@ module GcCompactThread
 
   # Repeated check if memory used is more than max_mem, and if so, compact.
   # The parameters make testing easier.
-  # This isn't really a predicate.
+  # For tests we typically want one_time = true and
+  # delay = 0 (in Ruby only false and nil are falsey; 0 is truthy).
+  # The raise_exception parameter lets us test the process of
+  # handling an exception within the main loop.
+  # This isn't a predicate; Rubocop is misled by the name.
   # rubocop:disable Naming/PredicateMethod
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def gc_compact_as_needed(max_mem, one_time = false, delay = nil, raise_exception: false)
@@ -112,8 +116,8 @@ module GcCompactThread
     end
     true
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
   # rubocop:enable Naming/PredicateMethod
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
   # Start the background thread that runs GC compaction periodically.
   # Called from config/initializers/gc_compact_thread.rb during app initialization.
@@ -123,7 +127,8 @@ module GcCompactThread
     Thread.new do
       # By default, compact once we exceed 1GiB
       max_mem = (ENV['BADGEAPP_MEMORY_COMPACTOR_MB'] || 1024).to_i * (2**20)
-      Rails.logger.warn "Compacting thread if > #{max_mem} bytes"
+      current_mem = memory_use_in_bytes
+      Rails.logger.warn "GC Compacting thread if > #{max_mem} bytes, currently #{current_mem} bytes"
       gc_compact_as_needed(max_mem)
     end
   end

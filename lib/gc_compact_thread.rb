@@ -20,8 +20,8 @@ module GcCompactThread
   module_function
 
   # Regexes to retrieve memory information from /proc/self/status
-  VM_RSS_RE  = /VmRSS:\s+(\d+)/.freeze
-  VM_SWAP_RE = /VmSwap:\s+(\d+)/.freeze
+  VM_RSS_RE  = /VmRSS:\s+(\d+)/
+  VM_SWAP_RE = /VmSwap:\s+(\d+)/
 
   # Calculate compaction statistics.
   # We use .to_f on numerators before dividing, so that if the denominator

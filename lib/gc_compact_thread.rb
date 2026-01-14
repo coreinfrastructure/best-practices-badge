@@ -19,6 +19,10 @@
 module GcCompactThread
   module_function
 
+  # Regexes to retrieve memory information from /proc/self/status
+  VM_RSS_RE  = /VmRSS:\s+(\d+)/.freeze
+  VM_SWAP_RE = /VmSwap:\s+(\d+)/.freeze
+
   # Calculate compaction statistics.
   # We use .to_f on numerators before dividing, so that if the denominator
   # is 0 we get a NaN instead of an exception.
@@ -47,17 +51,18 @@ module GcCompactThread
   # Return current memory use in bytes
   # The status_path parameter is primarily for testing the fallback path
   def memory_use_in_bytes(status_path = '/proc/self/status')
-    # /proc/self/statm gives us rss easily, but not swap space.
+    # Slurp file status_path into temp string; it's expected to be smallish.
     # We need to know our total memory use, which is
     # rss (physical memory in use) + swap (memory swapped to storage)
+    # File /proc/self/statm would give us rss easily, but not swap space.
     status = File.read(status_path)
     # Pull kB values out via regex
-    rss  = status[/VmRSS:\s+(\d+)/, 1].to_i
-    swap = status[/VmSwap:\s+(\d+)/, 1].to_i
+    rss  = status[VM_RSS_RE, 1].to_i
+    swap = status[VM_SWAP_RE, 1].to_i
     # Return total in bytes
     (rss + swap) * 1024
   rescue StandardError
-    # Guesstimate from rss alone. Useful on Macs.
+    # Guesstimate memory from rss alone. This is useful on Macs, etc.
     `ps -o rss= -p #{Process.pid}`.to_i * 1024
   end
 

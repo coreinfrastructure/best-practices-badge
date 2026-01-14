@@ -8,48 +8,9 @@ require 'test_helper'
 
 # rubocop:disable Metrics/ClassLength
 class InvokeRedcarpetTest < ActiveSupport::TestCase
-  # Reset the processor between tests to ensure clean state
+  # Reset between tests to ensure clean state
   def setup
-    InvokeRedcarpet.instance_variable_set(:@redcarpet_processor, nil)
     InvokeRedcarpet.instance_variable_set(:@previous_content, nil)
-  end
-
-  test 'ensure_processor_initialized creates processor when nil' do
-    assert_nil InvokeRedcarpet.instance_variable_get(:@redcarpet_processor)
-    InvokeRedcarpet.ensure_processor_initialized
-    assert_instance_of Redcarpet::Markdown,
-                       InvokeRedcarpet.instance_variable_get(:@redcarpet_processor)
-  end
-
-  test 'ensure_processor_initialized does not recreate when already set' do
-    processor1 = InvokeRedcarpet.create_processor
-    assert_instance_of Redcarpet::Markdown, processor1
-    InvokeRedcarpet.instance_variable_set(:@redcarpet_processor, processor1)
-    InvokeRedcarpet.ensure_processor_initialized
-    processor2 = InvokeRedcarpet.instance_variable_get(:@redcarpet_processor)
-    assert_same processor1, processor2
-  end
-
-  test 'check_processor_type succeeds with valid processor' do
-    InvokeRedcarpet.ensure_processor_initialized
-    # Should not raise
-    assert_nothing_raised do
-      InvokeRedcarpet.check_processor_type
-    end
-  end
-
-  test 'check_processor_type raises TypeError for wrong type' do
-    # Set processor to wrong type (Array)
-    InvokeRedcarpet.instance_variable_set(:@redcarpet_processor, [])
-
-    error =
-      assert_raises(TypeError) do
-        InvokeRedcarpet.check_processor_type
-      end
-
-    assert_match(/wrong type.*Array/i, error.message)
-    # Should reset processor to nil
-    assert_nil InvokeRedcarpet.instance_variable_get(:@redcarpet_processor)
   end
 
   test 'invoke_and_sanitize renders simple markdown' do
@@ -119,18 +80,12 @@ class InvokeRedcarpetTest < ActiveSupport::TestCase
   end
 
   test 'invoke_and_sanitize resets processor on exception' do
-    # Set a valid processor first
-    InvokeRedcarpet.ensure_processor_initialized
-    assert_not_nil InvokeRedcarpet.instance_variable_get(:@redcarpet_processor)
-
     # Force an exception
     test_error = StandardError.new('Test error')
-    InvokeRedcarpet.invoke_and_sanitize('test',
-                                        raise_on_error: false,
-                                        force_exception: test_error)
-
-    # Processor should be reset to nil
-    assert_nil InvokeRedcarpet.instance_variable_get(:@redcarpet_processor)
+    result = InvokeRedcarpet.invoke_and_sanitize('*test*',
+                                                 raise_on_error: false,
+                                                 force_exception: test_error)
+    assert_equal '*test*', result # Lightly escaped
   end
 
   test 'invoke_and_sanitize handles error when previous content exists' do
@@ -144,12 +99,12 @@ class InvokeRedcarpetTest < ActiveSupport::TestCase
     # Now force an exception - this exercises the log_render_error path
     # with previous_content set.
     test_error = RuntimeError.new('Simulated error')
-    result = InvokeRedcarpet.invoke_and_sanitize('current failing content',
+    result = InvokeRedcarpet.invoke_and_sanitize('current *failing* <script> content',
                                                  raise_on_error: false,
                                                  force_exception: test_error)
 
     # Verify it returned escaped content as fallback
-    assert_equal 'current failing content', result
+    assert_equal 'current *failing* &lt;script&gt; content', result
     assert result.html_safe?
   end
 end

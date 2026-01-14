@@ -22,23 +22,61 @@
 # So instead, this module implements the following countermeasures
 # to prevent problems:
 #
-# 1. Always re-instantiate the markdown processor instance before using it.
+# 1. Always re-instantiate the markdown renderer AND processor instances
+# before using them, and thus, each is used only once.
 # The *most* likely cause of the occasional crash, by far,
 # is "junk" data that was left over from a
 # previous execution of the redcarpet markdown processor.
 # This assertion requires a size be 0, and its failure indicates it isn't.
-# Recreating the markdown processor for each use is aggressive, but
-# doing this has a surprisingly small overhead. My script
-# script/benchmark-restart-redcarpet.rb indicates that if a project section
+# Recreating the markdown renderer and processor for each use is aggressive,
+# but doing this has a surprisingly small overhead, as measured
+# by the script/benchmark-restart-redcarpet.rb.
+# Originally I only re-created the markdown processor instance, since
+# that's where the original error reports came from, namely
+# `md->work_bufs[BUFFER_SPAN].size == 0`.
+# The benchmark indicates that if a project section
 # needs 50 markdown renders (an unlikely high number for a project),
 # instantiating a processor each time adds 50*(0.104432-0.010429)/10000
 # = 0.47 milliseconds (0.00047 seconds) in real time for showing a project.
-# It also creates a few objects. This is overhead, but this is an absurdly
-# small fraction of overall per-request effort. If this is what
+# However, during testing, we rarely got this non-reproducible message
+# on the line that called the `render` method on the processor instance
+# even though had been created *solely* for this use:
+# NotImplementedError: method 'to_s' called on unexpected
+# T_IMEMO object (0x00007fd5c82c83c8 flags=0x8703a)
+# app/lib/invoke_redcarpet.rb:245:in 'Redcarpet::Markdown#render'
+# The reference to T_IMEMO is surprising; that's a low-level detail that
+# simply should never be visible to the test.
+# Gemini suggested the following:
+# Class variables in Ruby are shared across the inheritance hierarchy
+# and persist for the lifetime of the process. In a test environment:
+# C-Extension State: The Redcarpet::Markdown object holds a pointer to
+# a C-struct representing your RENDERER.
+# Memory Reuse: If a test modifies the global state or if the test runner
+# (like RSpec or Minitest) interacts with the class in a way that causes
+# the Ruby VM to move objects in memory (Compacting GC), a class variable
+# pointing to a C-backed object can become "stale."
+# The T_IMEMO Connection: The fact that you are seeing a T_IMEMO object
+# means that the memory address where the Renderer used to live has been
+# reclaimed by the Ruby VM for internal bookkeeping. Because the class
+# variable didn't "release" that address, the processor.render call tries
+# to execute C-code against an internal VM structure.
+#
+# It's important that this process reliably work across testing.
+# I modified the benchmark to see the overhead of *also* re-creating
+# the renderer for each markdown process. If again some project display
+# *also* needs 50 markdown renders (an unlikely high number for a project),
+# instantiating a markdown processor *and* renderer
+# each time adds 50*(0.442712-0.012445)/10000
+# = 2.15 milliseconds in real time for showing a project.
+# Notice that I'm always using "real" time as the conservative answer.
+# Our current "project shows" take around 22msec, so that is a ~10%
+# increase in execution time of our most common request type.
+# I'm not happy about that. However, this is a worst-case scenario,
+# we only call the markdown processor for harder cases, so this isn't
+# called very often in practice (and when it is, we usually need it).
+#
+# It creates a few objects, too. However, if this is what
 # we must do to make our application reliable, then that's what we'll do.
-# There's no obvious reason to re-create the renderer, as that merely has
-# static information that doesn't depend on the data. So we only
-# re-instantiate the markdown processor each time.
 #
 # 2. Use a mutex to force redcarpet markdown processing into single-thread use.
 # This is probably unnecessary given point 1. However, since threading is
@@ -131,18 +169,16 @@ module InvokeRedcarpet
   require 'redcarpet'
 
   # Markdown renderer configuration for Redcarpet
-  REDCARPET_MARKDOWN_RENDERER_OPTIONS = {
+  REDCARPET_MARKDOWN_RENDERER_OPTS = {
     filter_html: true, no_images: true,
     no_styles: true, safe_links_only: true,
     link_attributes: { rel: 'nofollow ugc noopener noreferrer' }
   }.freeze
 
-  REDCARPET_MARKDOWN_PROCESSOR_OPTIONS = {
+  REDCARPET_MARKDOWN_PROCESSOR_OPTS = {
     no_intra_emphasis: true, autolink: true,
     space_after_headers: true, fenced_code_blocks: true
   }.freeze
-
-  RENDERER = Redcarpet::Render::HTML.new(REDCARPET_MARKDOWN_RENDERER_OPTIONS)
 
   # Mutex to ensure thread safety.
   # Redcarpet's C code is not thread-safe, so we use a mutex to ensure
@@ -157,15 +193,11 @@ module InvokeRedcarpet
   # Store the previous content for diagnostic logging
   @previous_content = nil
 
-  # Check that the processor has the expected type
-  # Rails class reloading can invalidate cached instances, causing "wrong argument type"
-  # errors even though is_a? checks pass against stale class definitions
+  # Complain because the processor does not have the expected type
   #
-  # @raise [TypeError] if processor has unexpected type
+  # @raise [TypeError]
   # @return [void]
-  def self.check_processor_type(p)
-    return if p.is_a?(Redcarpet::Markdown) # Expected type
-
+  def self.processor_bad_type(p)
     # Unexpected type - log error and reset
     actual_type = p.class
     Rails.logger.error(
@@ -224,16 +256,20 @@ module InvokeRedcarpet
   )
     # Use mutex to ensure only one thread uses Redcarpet at a time
     $redcarpet_mutex.synchronize do
-      # Recreate markdown processor on *each* use, so *know* it
-      # has pristine state.
-      processor = Redcarpet::Markdown.new(RENDERER,
-                                          REDCARPET_MARKDOWN_PROCESSOR_OPTIONS)
+      # Recreate markdown renderer and processor on *each* use,
+      # so we *know* it has pristine state.
+      renderer = Redcarpet::Render::HTML.new(REDCARPET_MARKDOWN_RENDERER_OPTS)
+      processor = Redcarpet::Markdown.new(renderer,
+                                          REDCARPET_MARKDOWN_PROCESSOR_OPTS)
 
       # For testing: inject a bad type to test type checking
       processor = [] if force_bad_type
 
-      # Check processor type (catches Rails class reloading issues)
-      check_processor_type(processor)
+      # Check processor type (catches some Rails class reloading issues)
+      # Warning: Rails class reloading can invalidate cached instances,
+      # causing "wrong argument type"
+      # errors even though is_a? checks pass against stale class definitions
+      processor_bad_type(processor) unless processor.is_a?(Redcarpet::Markdown)
 
       # Defensive measure: ensure content is a string
       content_str = content.to_s

@@ -28,8 +28,8 @@ REDCARPET_MARKDOWN_PROCESSOR_OPTIONS = {
 text = "# Hello World\nThis is a **test**."
 # The warning we see is processing; creating the renderer is a one-time
 # event that doesn't care about inputs
-RENDERER = Redcarpet::Render::HTML.new(REDCARPET_MARKDOWN_RENDERER_OPTIONS)
-markdown = Redcarpet::Markdown.new(RENDERER, REDCARPET_MARKDOWN_PROCESSOR_OPTIONS)
+renderer = Redcarpet::Render::HTML.new(REDCARPET_MARKDOWN_RENDERER_OPTIONS)
+markdown = Redcarpet::Markdown.new(renderer, REDCARPET_MARKDOWN_PROCESSOR_OPTIONS)
 
 puts "First markdown = #{markdown}\n"
 
@@ -37,5 +37,11 @@ n = 10_000
 Benchmark.bm do |x|
   x.report('Reused: ') { n.times { markdown.render(text) } }
   # Re-create the markdown processor (but not the renderer) on each request
-  x.report('New Instance: ') { n.times { Redcarpet::Markdown.new(RENDERER, REDCARPET_MARKDOWN_PROCESSOR_OPTIONS).render(text) } }
+  x.report('New Instance: ') do
+    n.times do
+      renderer = Redcarpet::Render::HTML.new(REDCARPET_MARKDOWN_RENDERER_OPTIONS)
+      processor = Redcarpet::Markdown.new(renderer, REDCARPET_MARKDOWN_PROCESSOR_OPTIONS)
+      processor.render(text)
+    end
+  end
 end

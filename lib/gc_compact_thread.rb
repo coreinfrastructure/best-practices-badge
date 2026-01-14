@@ -44,12 +44,20 @@ module GcCompactThread
     Rails.logger.warn("GC.compact statistics: #{stats}")
   end
 
-  # Return current RSS memory in bytes (Linux/macOS)
-  # The statm_path parameter is primarily for testing the fallback path
-  def current_rss_memory(statm_path = '/proc/self/statm')
-    # /proc/self/statm is faster than `ps` if on Linux, so try it first
-    File.read(statm_path).split[1].to_i * 4096
+  # Return current memory use in bytes
+  # The status_path parameter is primarily for testing the fallback path
+  def memory_use_in_bytes(status_path = '/proc/self/status')
+    # /proc/self/statm gives us rss easily, but not swap space.
+    # We need to know our total memory use, which is
+    # rss (physical memory in use) + swap (memory swapped to storage)
+    status = File.read(status_path)
+    # Pull kB values out via regex
+    rss  = status[/VmRSS:\s+(\d+)/, 1].to_i
+    swap = status[/VmSwap:\s+(\d+)/, 1].to_i
+    # Return total in bytes
+    (rss + swap) * 1024
   rescue StandardError
+    # Guesstimate from rss alone. Useful on Macs.
     `ps -o rss= -p #{Process.pid}`.to_i * 1024
   end
 
@@ -80,8 +88,8 @@ module GcCompactThread
       begin
         raise StandardError, 'Test exception' if raise_exception
 
-        rss = current_rss_memory
-        if rss <= memsize
+        current_mem = memory_use_in_bytes
+        if current_mem <= memsize
           sleep(delay || SLEEP_AFTER_CHECK)
         else
           compact_with_logging(rss)

@@ -32,10 +32,10 @@ module GcCompactThread
     }
   end
 
-  def compact_with_logging(rss = nil)
+  def compact_with_logging(mem = nil)
     return unless GC.respond_to?(:compact)
 
-    Rails.logger.warn "GC.compact starting; (#{rss * 1.0 / (2**20)}MiB)" if rss
+    Rails.logger.warn "GC.compact starting; (#{mem * 1.0 / (2**20)}MiB)" if mem
     stats_before = GC.stat
     compact_info = GC.compact
     stats_after = GC.stat
@@ -44,12 +44,20 @@ module GcCompactThread
     Rails.logger.warn("GC.compact statistics: #{stats}")
   end
 
-  # Return current RSS memory in bytes (Linux/macOS)
-  # The statm_path parameter is primarily for testing the fallback path
-  def current_rss_memory(statm_path = '/proc/self/statm')
-    # /proc/self/statm is faster than `ps` if on Linux, so try it first
-    File.read(statm_path).split[1].to_i * 4096
+  # Return current memory use in bytes
+  # The status_path parameter is primarily for testing the fallback path
+  def memory_use_in_bytes(status_path = '/proc/self/status')
+    # /proc/self/statm gives us rss easily, but not swap space.
+    # We need to know our total memory use, which is
+    # rss (physical memory in use) + swap (memory swapped to storage)
+    status = File.read(status_path)
+    # Pull kB values out via regex
+    rss  = status[/VmRSS:\s+(\d+)/, 1].to_i
+    swap = status[/VmSwap:\s+(\d+)/, 1].to_i
+    # Return total in bytes
+    (rss + swap) * 1024
   rescue StandardError
+    # Guesstimate from rss alone. Useful on Macs.
     `ps -o rss= -p #{Process.pid}`.to_i * 1024
   end
 
@@ -70,21 +78,21 @@ module GcCompactThread
   # Seconds post memory-not-ok before recheck
   SLEEP_AFTER_COMPACT = (ENV['BADGEAPP_SLEEP_AFTER_COMPACT'] || (20 * 60)).to_i
 
-  # Repeated check if memory used is more than memsize, and if so, compact.
+  # Repeated check if memory used is more than max_mem, and if so, compact.
   # The parameters make testing easier.
   # This isn't really a predicate.
   # rubocop:disable Naming/PredicateMethod
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-  def gc_compact_as_needed(memsize, one_time = false, delay = nil, raise_exception: false)
+  def gc_compact_as_needed(max_mem, one_time = false, delay = nil, raise_exception: false)
     loop do
       begin
         raise StandardError, 'Test exception' if raise_exception
 
-        rss = current_rss_memory
-        if rss <= memsize
+        current_mem = memory_use_in_bytes
+        if current_mem <= max_mem
           sleep(delay || SLEEP_AFTER_CHECK)
         else
-          compact_with_logging(rss)
+          compact_with_logging(current_mem)
           sleep(delay || SLEEP_AFTER_COMPACT)
         end
       rescue StandardError => e
@@ -109,9 +117,9 @@ module GcCompactThread
   def start_background_thread
     Thread.new do
       # By default, compact once we exceed 1GiB
-      memsize = (ENV['BADGEAPP_MEMORY_COMPACTOR_MB'] || 1024).to_i * (2**20)
-      Rails.logger.warn "Compacting thread if > #{memsize} bytes"
-      gc_compact_as_needed(memsize)
+      max_mem = (ENV['BADGEAPP_MEMORY_COMPACTOR_MB'] || 1024).to_i * (2**20)
+      Rails.logger.warn "Compacting thread if > #{max_mem} bytes"
+      gc_compact_as_needed(max_mem)
     end
   end
 end

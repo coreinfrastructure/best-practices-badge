@@ -134,9 +134,9 @@ group :development, :test do
   # Removed pronto gems - comprehensive linting now handled by rake default
   gem 'rails_best_practices', '~> 1.23' # Rails code quality analyzer
   # gem 'railroader', '4.3.8' # Security static analyzer. OSS fork of Brakeman
-  gem 'rubocop', '~> 1.80', require: false # Style checker
+  gem 'rubocop', '1.81.7' # '~> 1.80', require: false # Style checker
   gem 'rubocop-performance', '~> 1.20', require: false # Performance cops
-  gem 'rubocop-rails', '~> 2.28', require: false # Rails-specific cops
+  gem 'rubocop-rails', '2.33.4' # '~> 2.28', require: false # Rails-specific cops
   gem 'ruby-graphviz', '1.2.5' # This is used for bundle viz
   gem 'spring', '~> 4.1' # Preloader to speed development+test
   # Do NOT upgrade to vcr 6.*, as that is not OSS:

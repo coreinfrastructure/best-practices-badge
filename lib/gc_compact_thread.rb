@@ -59,6 +59,10 @@ module GcCompactThread
     # Pull kB values out via regex
     rss  = status[VM_RSS_RE, 1].to_i
     swap = status[VM_SWAP_RE, 1].to_i
+
+    # Log every memory use check if configured to do so
+    # We log from within this method so we can provide the details
+    Rails.logger.warn "GC Compacting: rss=#{rss}, swap=#{swap} bytes" if ANNOUNCE_GC_CHECK
     # Return total in bytes
     (rss + swap) * 1024
   rescue StandardError
@@ -82,6 +86,8 @@ module GcCompactThread
   SLEEP_AFTER_CHECK = (ENV['BADGEAPP_SLEEP_AFTER_CHECK'] || (1 * 60)).to_i
   # Seconds post memory-not-ok before recheck
   SLEEP_AFTER_COMPACT = (ENV['BADGEAPP_SLEEP_AFTER_COMPACT'] || (20 * 60)).to_i
+
+  ANNOUNCE_GC_CHECK = ENV['BADGEAPP_ANNOUNCE_GC_CHECK'].present?
 
   # Repeated check if memory used is more than max_mem, and if so, compact.
   # The parameters make testing easier.

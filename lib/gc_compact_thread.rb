@@ -26,7 +26,7 @@ module GcCompactThread
   # Calculate compaction statistics.
   # We use .to_f on numerators before dividing, so that if the denominator
   # is 0 we get a NaN instead of an exception.
-  def calculate_compaction_stats(stats_before, stats_after, compact_info)
+  def calculate_stats_diff(stats_before, stats_after, compact_info)
     {
       pages_freed: stats_before[:heap_allocated_pages] - stats_after[:heap_allocated_pages],
       objects_moved: compact_info[:moved],
@@ -34,6 +34,44 @@ module GcCompactThread
       fragmentation_ratio_after: (stats_after[:heap_live_slots].to_f / stats_after[:heap_available_slots]).round(4),
       read_barrier_faults_delta: stats_after[:read_barrier_faults] - stats_before[:read_barrier_faults]
     }
+  end
+
+  require 'objspace'
+
+  def report_class_info
+    # Extract Redcarpet specific stats
+    # This extracts only specific class info, so it's faster.
+    [Redcarpet::Markdown, Redcarpet::Render::HTML].each do |klass|
+      count = 0
+      total_mem = 0
+      ObjectSpace.each_object(klass) do |o|
+        count += 1
+        total_mem += ObjectSpace.memsize_of(o)
+      end
+      Rails.logger.warn "GC.compact - #{klass.name}: Count #{count}, " \
+                        "Ruby-Mem: #{total_mem} bytes"
+    end
+    # # sleep before another long-running task
+    # sleep 10
+    # # Get counts and memory sizes of all instances
+    # counts = Hash.new(0) # count# instances. The '0' is the default value 0
+    # mem_size = Hash.new(0)
+    # ObjectSpace.each_object do |o|
+    #   # We use the class object directly to avoid the overhead of
+    #   # .name strings for every single object in the heap.
+    #   cls = o.class
+    #   counts[cls] += 1
+    #   mem_size[cls] += ObjectSpace.memsize_of(o)
+    # rescue StandardError
+    #   # Some objects might not respond
+    # end
+
+    # # Sort and take top X to avoid massive log lines
+    # top_mem = mem_size.sort_by { |_, v| -v }.first(50).map { |k, v| [k.to_s, v] }.to_h
+    # top_count = counts.sort_by { |_, v| -v }.first(50).map { |k, v| [k.to_s, v] }.to_h
+
+    # Rails.logger.warn "GC.compact - Top Memory: #{top_mem}"
+    # Rails.logger.warn "GC.compact - Top Counts: #{top_count}"
   end
 
   def compact_with_logging(mem = nil)
@@ -44,8 +82,12 @@ module GcCompactThread
     compact_info = GC.compact
     stats_after = GC.stat
     Rails.logger.warn 'GC.compact completed'
-    stats = calculate_compaction_stats(stats_before, stats_after, compact_info)
-    Rails.logger.warn("GC.compact statistics: #{stats}")
+    stats_diff = calculate_stats_diff(stats_before, stats_after, compact_info)
+    Rails.logger.warn("GC.compact - statistics before: #{stats_before}")
+    Rails.logger.warn("GC.compact - statistics afterwards: #{stats_after}")
+    Rails.logger.warn("GC.compact - statistics changes: #{stats_diff}")
+
+    report_class_info
   end
 
   # Return current memory use in bytes

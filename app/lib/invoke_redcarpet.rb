@@ -258,9 +258,7 @@ module InvokeRedcarpet
   def self.report_markdown_info
     # Extract specific stats
     # This extracts only specific class info, so it's faster.
-    # We ask about "Hash" to ensure we execute the loop body *and*
-    # it's interesting.
-    [Redcarpet::Markdown, Redcarpet::Render::HTML, Hash].each do |klass|
+    [Redcarpet::Markdown, Redcarpet::Render::HTML].each do |klass|
       count = 0
       total_mem = 0
       ObjectSpace.each_object(klass) do |o|
@@ -273,10 +271,17 @@ module InvokeRedcarpet
   end
 
   # Refill queue of markdown renderer & processor
+  # rubocop:disable Metrics/MethodLength
   def self.refill_queue
-    # Clear the deck (this doesn't *compact*)
-    Rails.logger.warn('Redcarpet - running GC.start to fill a queue batch')
+    # First, clear the deck (this doesn't *compact*)
+    Rails.logger.warn("Redcarpet - running GC.start to fill a queue batch size #{MARKDOWN_QUEUE_BATCH_SIZE}")
+    start_time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+    # The "Stop the World" pause happens here
     GC.start(full_mark: true, immediate_sweep: true)
+    # Calculate elapsed time
+    end_time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+    duration_ms = ((end_time - start_time) * 1000).round(2)
+    Rails.logger.warn("Redcarpet - running GC.start took #{duration_ms}ms ")
 
     # Use a simple loop to minimize creating intermediate Enumerator objects
     i = 0
@@ -292,6 +297,7 @@ module InvokeRedcarpet
     end
     report_markdown_info
   end
+  # rubocop:enable Metrics/MethodLength
 
   # Invoke Redcarpet to render markdown content with comprehensive error handling
   #

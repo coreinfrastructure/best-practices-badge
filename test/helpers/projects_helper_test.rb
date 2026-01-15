@@ -119,7 +119,7 @@ class ProjectsHelperTest < ActionView::TestCase
     result = markdown('<a href="javascript:alert(\'XSS\')">Click</a>')
     # The escaped HTML should be visible but not contain executable javascript:
     # The literal string "javascript:" will appear, but it's escaped and harmless
-    assert_not result.include?('javascript:'), 'HTML should be escaped'
+    assert_not result.include?('<a href="javascript:'), 'HTML should be escaped'
   end
 
   test 'markdown - invalid URI has href stripped' do
@@ -127,8 +127,9 @@ class ProjectsHelperTest < ActionView::TestCase
     # but not executable. Users can see the malformed URL.
     # Negative test (security)
     result = markdown('<a href="ht!tp://bad[url]">Link</a>')
-    # Raw HTML is escaped
-    assert_not result.include?('ht!tp://'), 'Bad link should be escaped'
+    # Either the <a isn't allowed, or it is normally
+    # but the link isn't allowed. What we do *not* want is this:
+    assert_not result.include?('<a href="ht!tp://'), 'No bad link'
   end
 
   test 'markdown - imbalanced HTML tags are escaped' do

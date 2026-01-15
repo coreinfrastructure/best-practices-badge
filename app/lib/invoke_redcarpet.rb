@@ -164,6 +164,11 @@
 #    assert(md->work_bufs[BUFFER_DIFF].size == 0);
 #    // ... parsing begins after these checks ...
 # }
+#
+# All of that counters *crashes* but also leads to endless memory growth.
+# If we create *one* new markdown processor and renderer *per* transaction,
+# they end up scattered across Ruby's memory space and being un-reclaimable.
+# So we use heap grooming: we create them in batches.
 
 module InvokeRedcarpet
   require 'redcarpet'
@@ -179,6 +184,19 @@ module InvokeRedcarpet
     no_intra_emphasis: true, autolink: true,
     space_after_headers: true, fenced_code_blocks: true
   }.freeze
+
+  # To counter memory fragmentation, we allocate markdown objects
+  # in batches. We're trying concentrate markdown objects' slots in a
+  # few pages, instead of letting them scatter. Each batch will allocate
+  # (2 markdown objects + 1 array object)* batch size, plus the queue object,
+  # and a slot page can hold 400 objects. We clean up first with GC.start,
+  # so a batch will typically fill 1-2 such pages
+  # instead of letting them scatter.
+  # By concentrating these objects in a few pages,
+  # other pages will be able to move.
+  MARKDOWN_QUEUE_BATCH_SIZE = 100
+
+  @markdown_queue = Queue.new
 
   # Mutex to ensure thread safety.
   # Redcarpet's C code is not thread-safe, so we use a mutex to ensure
@@ -234,6 +252,47 @@ module InvokeRedcarpet
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
+  # Report markdown stats. GC has a similar function.
+  # We'll probably remove this once we're satisfied we've solved
+  # memory fragmentation problems.
+  def self.report_markdown_info
+    # Extract specific stats
+    # This extracts only specific class info, so it's faster.
+    # We ask about "Hash" to ensure we execute the loop body *and*
+    # it's interesting.
+    [Redcarpet::Markdown, Redcarpet::Render::HTML, Hash].each do |klass|
+      count = 0
+      total_mem = 0
+      ObjectSpace.each_object(klass) do |o|
+        count += 1
+        total_mem += ObjectSpace.memsize_of(o)
+      end
+      Rails.logger.warn "Redcarpet Markdown queue refilled: #{klass.name}: " \
+                        "Count #{count}, Ruby-Mem: #{total_mem} bytes"
+    end
+  end
+
+  # Refill queue of markdown renderer & processor
+  def self.refill_queue
+    # Clear the deck (this doesn't *compact*)
+    Rails.logger.warn('Redcarpet - running GC.start to fill a queue batch')
+    GC.start(full_mark: true, immediate_sweep: true)
+
+    # Use a simple loop to minimize creating intermediate Enumerator objects
+    i = 0
+    while i < MARKDOWN_QUEUE_BATCH_SIZE
+      renderer = Redcarpet::Render::HTML.new(REDCARPET_MARKDOWN_RENDERER_OPTS)
+      processor = Redcarpet::Markdown.new(renderer,
+                                          REDCARPET_MARKDOWN_PROCESSOR_OPTS)
+      # We queue the processor and renderer together, to ensure they're
+      # used together. If we discard the renderer without discarding the
+      # processor, the internal link from the processor could cause a crash
+      @markdown_queue << [processor, renderer]
+      i += 1
+    end
+    report_markdown_info
+  end
+
   # Invoke Redcarpet to render markdown content with comprehensive error handling
   #
   # This method wraps the Redcarpet call in defensive measures.
@@ -255,12 +314,26 @@ module InvokeRedcarpet
     force_bad_type: false
   )
     # Use mutex to ensure only one thread uses Redcarpet at a time
+    # This is probably over-protective; we'll probably reduce this once
+    # we're confident other problems are solved, but until everything works
+    # well, we want to eliminate threading as a potential issue.
     $redcarpet_mutex.synchronize do
-      # Recreate markdown renderer and processor on *each* use,
-      # so we *know* it has pristine state.
-      renderer = Redcarpet::Render::HTML.new(REDCARPET_MARKDOWN_RENDERER_OPTS)
-      processor = Redcarpet::Markdown.new(renderer,
-                                          REDCARPET_MARKDOWN_PROCESSOR_OPTS)
+      # If we're out of pre-created processors and renderers, get a new batch
+      refill_queue if @markdown_queue.empty?
+
+      # Use a new markdown renderer and processor on *each* use,
+      # so we *know* it has pristine state. We'll presume that there's
+      # one available since we just refilled it.
+      # Rubocop is *correctly* pointing out that we never use the
+      # "renderer" value. What rubocop *cannot* know is that the processor's
+      # C implementation has an internal pointer to the renderer object.
+      # We *ensure* that the renderer never disappears, while the processor
+      # object is alive, by assigning the renderer to a Ruby variable.
+      # When this method ends, both will no longer be referenced and never
+      # be used again.
+      # rubocop:disable Lint/UselessAssignment
+      processor, renderer = @markdown_queue.pop
+      # rubocop:enable Lint/UselessAssignment
 
       # For testing: inject a bad type to test type checking
       processor = [] if force_bad_type

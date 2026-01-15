@@ -39,9 +39,9 @@ module GcCompactThread
   require 'objspace'
 
   def report_class_info
-    # Extract Redcarpet specific stats
+    # Extract specific stats
     # This extracts only specific class info, so it's faster.
-    [Redcarpet::Markdown, Redcarpet::Render::HTML].each do |klass|
+    [Redcarpet::Markdown, Redcarpet::Render::HTML, String, Array].each do |klass|
       count = 0
       total_mem = 0
       ObjectSpace.each_object(klass) do |o|

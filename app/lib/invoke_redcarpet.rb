@@ -194,7 +194,7 @@ module InvokeRedcarpet
   # instead of letting them scatter.
   # By concentrating these objects in a few pages,
   # other pages will be able to move.
-  MARKDOWN_QUEUE_BATCH_SIZE = 100
+  MARKDOWN_QUEUE_BATCH_SIZE = (ENV['BADGEAPP_MARKDOWN_Q_SIZE'] || 100).to_i
 
   @markdown_queue = Queue.new
 

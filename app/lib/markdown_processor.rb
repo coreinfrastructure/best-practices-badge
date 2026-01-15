@@ -168,8 +168,9 @@ module MarkdownProcessor
   }xu
   # rubocop:enable Style/RegexpLiteral
 
-  # The following pattern *only* matches simple bare URLs, so that
-  # we can handle them specially instead of invoking the markdown processor.
+  # The following pattern *only* matches simple bare URLs, optionally
+  # prefixed with "simple" text, so that
+  # we can handle them specially instead of invoking the markdown processor,
   #
   # This is *primarily* an optimization, so that we can avoid calling
   # the markdown processor unnecessarily. However, it *also* quietly
@@ -177,7 +178,8 @@ module MarkdownProcessor
   # a justification, and they typically don't represent "&" as "amp;"
   # like they're supposed to do in HTML or Markdown. This happens often when
   # users provide a query string in the URL. So by this code, if they
-  # *only* provide a URL, any "&" will "do the right thing".
+  # *only* provide a URL with a simple prefix,
+  # any "&" will "do the right thing".
   #
   # To craft this pattern we used a dataset of all justifications. Of them,
   # 66353 didn't match an older version of the "unnecessary" match above.
@@ -188,22 +190,39 @@ module MarkdownProcessor
   # That means this catches about (100%-83.87%)*43% = 6.94% more strings, so
   # by adding this measure, we can skip markdown processing about 90.81%
   # (83.87+6.94%) of the time.
+  #
+  # I later added the check for "Simple prefixed text followed by a URL",
+  # as that covers another 5% of our justifications (it's really common
+  # to say something like "Yes, for more information see: https://...").
+  # We have a separate regex that determines if multi-line can be simply
+  # passed through without processing.
+  # It would be possible to do all this in a single regex, but this is already
+  # complicated, and I wanted to make sure we could verify it for correctness.
+  # If there's a single URL, there's usually not a lot of text that
+  # precedes it and that text tends to be simple, this pattern optimizes
+  # for "text people actually provide".
+  #
   # Basically, by doing a simple check, we can skip more complex markdown
   # processing in the vast majority of cases.
+  # Sometimes there *isn't* a URL, and the text can simply be
+  # passed through; we have a separate regex to check on that.
   #
-  # Note that this pattern does NOT match dangerous HTML characters like
-  # ', ", <, or >. Thus, there's no way to turn accepting these directly
+  # Note that this pattern does NOT generally
+  # match dangerous HTML characters, especially <.
+  # We do accept <...>, but only if there's a valid URL beginning https?://,
+  # and we don't include them in the parameters we use, so they can't
+  # influence the output generated.
+  # Thus, there's no way to turn accepting these directly
   # into an attack (in particular this counters an XSS attack).
-  # This pattern also does NOT match a space character (use %20 in a URL);
-  # an internal space would indicate we need more sophisticated processing.
-  # This pattern *only* matches simple bare URLs, so if it matches,
-  # we know there's no need for more complex markdown parsing.
+  # This pattern also does NOT match a space character inside a URL
+  # (use %20); an internal space would indicate we need
+  # more sophisticated processing.
   #
   # In the name of performance and maintainability we've made simplifications.
   # Some URLs won't match this regex, and that's okay, they'll be handled
   # by the full markdown processor.
   # It doesn't accept domain "localhost", which make no sense for us.
-  # We *will* match a few strings that strictly speaking aren't valid URLs,
+  # We *will* match a few URL strings that strictly speaking aren't valid URLs,
   # but those won't hurt us security-wise:
   # 1. This regex permits domains that
   # aren't legal DNS names because they have domain labels that are
@@ -215,26 +234,45 @@ module MarkdownProcessor
   # we just want to know if it generally meets the format of a URL
   # and can't be turned into an attack. More than that is a waste.
   #
+  # This doesn't work on everything. In particular, as soon as you
+  # provide multiple URLs, or *italics* that require markdown processing,
+  # then this won't match.
+  #
   # Our goal is to quickly match on common cases and always prevent attacks.
   # The regex given here never backtracks, so it's fast.
-  # The regex never permits injection attacks like XSS.
+  # The regex never permits injection attacks like XSS, e.g., no "<".
   # If a user puts a garbage URL in, it'll create a garbage link.
   # Garbage in, garbage out, but it won't be a *security* problem because
   # there's no attack that such a malformed string would lead to.
 
-  SIMPLE_URL_REGEX = %r{
+  PREFIXED_URL_REGEX = %r{
     \A
-    https?://                                   # Protocol
-    [a-z0-9-]+                                  # First DNS label (simplified)
-    (?:\.[a-z0-9-]+)+                           # Subsequent labels (simplified)
-    (?:\:[0-9]+)?                               # Optional port#
-    (?:/                                        # Optional path w/dirs and %xx
-      (?:[a-z0-9\-._~:@!$&()*+,;=/]|%[0-9a-f]{2})*
-    )?
-    (?:\?                                       # Query String
-      (?:[a-z0-9\-._~:@!$&()*+,;=/]|%[0-9a-f]{2})*
-    )?
-    (?:\#[a-z0-9\-._~:@!$&()*+,;=%]*)?          # Optional anchor
+    (                                     # Group 1: Optional prefix text
+      (?:
+        [0-9a-gi-vx-z\040,\.\-\;\'\?\!\(\)] # many characters (not hw)
+        | h(?!ttps?://)                   # h unless starting https?://
+        | w(?!ww\.)                       # w unless starting www.
+        | :\040                           # colon only if followed by space
+                                          # (no https:, mailto:, etc.)
+      )*
+    )
+    (<)?                                  # Group 2: Optional < before URL
+                                          # (captured for conditional check)
+    (                                     # Group 3: URL
+      https?://                           # Protocol
+      [a-z0-9-]+                          # First DNS label (simplified)
+      (?:\.[a-z0-9-]+)+                   # Subsequent labels (simplified)
+      (?:\:[0-9]+)?                       # Optional port#
+      (?:/                                # Optional path w/dirs and %xx
+        (?:[a-z0-9\-._~:@!$&()*+,;=/]|%[0-9a-f]{2})*
+      )?
+      (?:\?                               # Query String
+        (?:[a-z0-9\-._~:@!$&()*+,;=/]|%[0-9a-f]{2})*
+      )?
+      (?:\#[a-z0-9\-._~:@!$&()*+,;=%]*)?  # Optional anchor
+    )
+    (?(2)>)                               # Conditional: if < (group 2) was
+                                          # present, require matching >
     \z
   }ix
 
@@ -281,12 +319,14 @@ module MarkdownProcessor
     # yet "&" is the form separator character in
     # query strings for multiple fields so we need to support that character.
     # It's safer to use escapeHTML anyway, even if we didn't allow "&".
-    # In the future we might allow a simple textual prefix like
-    # "View more at: " by allowing an optional prefix pattern like
-    # (([A-Za-gi-z0-9:,]++|h[a-su-zA-Z0-9]|\040)+\.?\040)?
-    # but that's for another day.
-    if content.match?(SIMPLE_URL_REGEX)
-      escaped_url = CGI.escapeHTML(content) # Escape URL for use in HTML
+    # We also allow a simple textual prefix like "View more at: " before
+    # the URL. The prefix pattern allows digits, spaces, most letters
+    # (excluding h and w to avoid matching http/https/www), plus h and w
+    # when they don't start a URL pattern, and colons followed by space.
+    match_data = content.match(PREFIXED_URL_REGEX)
+    if match_data
+      escaped_prefix = CGI.escapeHTML(match_data[1])
+      escaped_url = CGI.escapeHTML(match_data[3]) # Group 3; group 2 is optional <
       # Note that C Ruby turns the following into one single final string
       # allocation, and *not* the multiple intermediate allocations you
       # might expect. The VM sees this as one sequence of:
@@ -294,7 +334,7 @@ module MarkdownProcessor
       # putobject (literal fragment)
       # putself (get url)
       # topn ... concatstrings
-      return "#{MARKDOWN_PREFIX}<a href=\"#{escaped_url}\"" \
+      return "#{MARKDOWN_PREFIX}#{escaped_prefix}<a href=\"#{escaped_url}\"" \
              ' rel="nofollow ugc noopener noreferrer">' \
              "#{escaped_url}</a>#{MARKDOWN_SUFFIX}".html_safe
     end

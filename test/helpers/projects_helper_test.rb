@@ -368,8 +368,8 @@ class ProjectsHelperTest < ActionView::TestCase
            'Parameter name "amp" should be preserved with proper & escaping'
   end
 
-  # Detailed unit tests for SIMPLE_URL_REGEX
-  test 'SIMPLE_URL_REGEX matches valid simple URLs' do
+  # Detailed unit tests for PREFIXED_URL_REGEX
+  test 'PREFIXED_URL_REGEX matches valid simple URLs' do
     valid_urls = [
       'http://example.com',
       'https://example.com',
@@ -402,12 +402,12 @@ class ProjectsHelperTest < ActionView::TestCase
     ]
 
     valid_urls.each do |url|
-      assert url.match?(MarkdownProcessor::SIMPLE_URL_REGEX),
-             "Expected #{url.inspect} to match SIMPLE_URL_REGEX"
+      assert url.match?(MarkdownProcessor::PREFIXED_URL_REGEX),
+             "Expected #{url.inspect} to match PREFIXED_URL_REGEX"
     end
   end
 
-  test 'SIMPLE_URL_REGEX rejects URLs with dangerous characters' do
+  test 'PREFIXED_URL_REGEX rejects URLs with dangerous characters' do
     dangerous_urls = [
       'http://example.com/<script>',
       'http://example.com/"onclick="alert()"',
@@ -422,12 +422,12 @@ class ProjectsHelperTest < ActionView::TestCase
     ]
 
     dangerous_urls.each do |url|
-      assert_not url.match?(MarkdownProcessor::SIMPLE_URL_REGEX),
-                 "Expected #{url.inspect} to NOT match SIMPLE_URL_REGEX (security)"
+      assert_not url.match?(MarkdownProcessor::PREFIXED_URL_REGEX),
+                 "Expected #{url.inspect} to NOT match PREFIXED_URL_REGEX (security)"
     end
   end
 
-  test 'SIMPLE_URL_REGEX rejects non-URL strings' do
+  test 'PREFIXED_URL_REGEX rejects non-URL strings' do
     non_urls = [
       'just plain text',
       'not a url at all',
@@ -440,16 +440,55 @@ class ProjectsHelperTest < ActionView::TestCase
       'http://example.com is great', # Extra text after
       '', # Empty string
       'http://example.com with spaces', # Unencoded spaces after URL
-      'Click here: http://example.com', # Text before URL
     ]
 
     non_urls.each do |text|
-      assert_not text.match?(MarkdownProcessor::SIMPLE_URL_REGEX),
-                 "Expected #{text.inspect} to NOT match SIMPLE_URL_REGEX"
+      assert_not text.match?(MarkdownProcessor::PREFIXED_URL_REGEX),
+                 "Expected #{text.inspect} to NOT match PREFIXED_URL_REGEX"
     end
   end
 
-  test 'SIMPLE_URL_REGEX accepts various path characters' do
+  test 'PREFIXED_URL_REGEX captures prefix before URL' do
+    # Test cases: [input, expected_prefix, expected_url]
+    # Note: URL is in group 3 (group 2 is optional < for balanced bracket check)
+    test_cases = [
+      ['Click here: http://example.com', 'Click here: ', 'http://example.com'],
+      [
+        'View more at: https://test.org/path', 'View more at: ',
+        'https://test.org/path'
+      ],
+      ['Check this https://foo.bar', 'Check this ', 'https://foo.bar'],
+      ['http://example.com', '', 'http://example.com'], # No prefix
+      ['123 http://num.test', '123 ', 'http://num.test'], # Digits in prefix
+      # Angle brackets around URL (balanced)
+      ['<http://example.com>', '', 'http://example.com'],
+      ['See: <https://test.org>', 'See: ', 'https://test.org'],
+    ]
+
+    test_cases.each do |input, expected_prefix, expected_url|
+      match = input.match(MarkdownProcessor::PREFIXED_URL_REGEX)
+      assert match, "Expected #{input.inspect} to match PREFIXED_URL_REGEX"
+      assert_equal expected_prefix, match[1],
+                   "Expected prefix #{expected_prefix.inspect} for #{input.inspect}"
+      assert_equal expected_url, match[3],
+                   "Expected URL #{expected_url.inspect} for #{input.inspect}"
+    end
+  end
+
+  test 'PREFIXED_URL_REGEX rejects unbalanced angle brackets' do
+    unbalanced = [
+      '<http://example.com',   # Missing closing >
+      'http://example.com>',   # Missing opening <
+      'See: <http://test.org', # Prefix with missing >
+    ]
+
+    unbalanced.each do |text|
+      assert_not text.match?(MarkdownProcessor::PREFIXED_URL_REGEX),
+                 "Expected #{text.inspect} to NOT match (unbalanced brackets)"
+    end
+  end
+
+  test 'PREFIXED_URL_REGEX accepts various path characters' do
     urls_with_special_paths = [
       'https://example.com/path-with-dashes',
       'https://example.com/path_with_underscores',
@@ -470,12 +509,12 @@ class ProjectsHelperTest < ActionView::TestCase
     ]
 
     urls_with_special_paths.each do |url|
-      assert url.match?(MarkdownProcessor::SIMPLE_URL_REGEX),
-             "Expected #{url.inspect} to match SIMPLE_URL_REGEX"
+      assert url.match?(MarkdownProcessor::PREFIXED_URL_REGEX),
+             "Expected #{url.inspect} to match PREFIXED_URL_REGEX"
     end
   end
 
-  test 'SIMPLE_URL_REGEX handles anchors correctly' do
+  test 'PREFIXED_URL_REGEX handles anchors correctly' do
     urls_with_anchors = [
       'https://example.com#top',
       'https://example.com/page#section',
@@ -488,8 +527,8 @@ class ProjectsHelperTest < ActionView::TestCase
     ]
 
     urls_with_anchors.each do |url|
-      assert url.match?(MarkdownProcessor::SIMPLE_URL_REGEX),
-             "Expected #{url.inspect} to match SIMPLE_URL_REGEX"
+      assert url.match?(MarkdownProcessor::PREFIXED_URL_REGEX),
+             "Expected #{url.inspect} to match PREFIXED_URL_REGEX"
     end
   end
 

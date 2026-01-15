@@ -271,6 +271,7 @@ module InvokeRedcarpet
   end
 
   # Refill queue of markdown renderer & processor
+  # rubocop:disable Metrics/MethodLength
   def self.refill_queue
     # First, clear the deck (this doesn't *compact*)
     Rails.logger.warn("Redcarpet - running GC.start to fill a queue batch size #{MARKDOWN_QUEUE_BATCH_SIZE}")
@@ -296,6 +297,7 @@ module InvokeRedcarpet
     end
     report_markdown_info
   end
+  # rubocop:enable Metrics/MethodLength
 
   # Invoke Redcarpet to render markdown content with comprehensive error handling
   #

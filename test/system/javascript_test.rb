@@ -33,7 +33,7 @@ class JavascriptTest < ApplicationSystemTestCase
 
   test 'Check show/hide Met on show for passing' do
     visit project_path(@project_passing, locale: :en)
-    wait_for_jquery
+    wait_for_page_load
     find('#toggle-expand-all-panels').click
     wait_for_jquery
     assert_selector(:css, '#discussion')
@@ -52,7 +52,7 @@ class JavascriptTest < ApplicationSystemTestCase
 
   test 'Check show/hide Met works for silver' do
     visit project_section_path(@project_passing, 'silver', locale: :en)
-    wait_for_jquery
+    wait_for_page_load
     find('#toggle-expand-all-panels').click
     wait_for_jquery
     assert_selector(:css, '#contribution_requirements')
@@ -76,7 +76,7 @@ class JavascriptTest < ApplicationSystemTestCase
 
     # Visit the baseline-1 edit page directly
     visit "/en/projects/#{@project.id}/baseline-1/edit"
-    wait_for_jquery
+    wait_for_page_load
 
     # Expand all panels to ensure proper initialization
     find('#toggle-expand-all-panels').click

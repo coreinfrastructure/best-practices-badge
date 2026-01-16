@@ -77,7 +77,7 @@ class LoginTest < ApplicationSystemTestCase
     click_button('Save (and continue)', match: :first)
     # After routing changes, edit paths now include criteria_level
     assert_equal "/en/projects/#{@project.id}/passing/edit", current_path
-    wait_for_jquery # Wait for page to fully load before checking flash message
+    wait_for_page_load # Wait for page to fully load before checking flash message
     assert has_content? 'Project was successfully updated.'
     # TODO: Get the clicking working again with capybara.
     # Details: If we expand all panels first and dont click this test passes.

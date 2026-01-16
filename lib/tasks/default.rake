@@ -20,8 +20,9 @@
 require 'English'
 require 'json'
 
-# NOTE: Our default runs test:all, not just test.
+# NOTE: Our default runs test:optimized, not just test.
 # We want to make sure things work using *all* our tests.
+# test:optimized runs regular tests (parallelized) then system tests (serial).
 # We do the whitespace check early, so it will fail early.
 # AI assistants just can't help but add whitespace at the end of lines.
 task(:default).clear.enhance %w[
@@ -41,7 +42,7 @@ task(:default).clear.enhance %w[
   eslint
   report_code_statistics
   percent_gems_up_to_date
-  test:all
+  test:optimized
 ]
 # Temporarily removed fasterer
 # Waiting for Ruby 2.4 support: https://github.com/seattlerb/ruby_parser/issues/239
@@ -848,6 +849,28 @@ Rake::Task['test:run'].enhance ['test:features']
 # using that instead. This way, you can use 'rails test' to run the
 # subset of non-system tests, the usual Rails default.
 # task test: 'test:system'
+
+# Clear test coverage results to start fresh.
+# SimpleCov merges results from previous runs, which can be misleading.
+desc 'Clear all previous test coverage results'
+task 'test:clear' do
+  puts 'test:clear - Clearing all previous test coverage results.'
+  coverage_dir = Rails.root.join('coverage')
+  FileUtils.rm_f(coverage_dir.join('.resultset.json'))
+  FileUtils.rm_f(coverage_dir.join('.last_run.json'))
+end
+
+# Run all tests with parallelization for regular tests.
+# System tests run separately (serial) due to fixed Capybara port binding
+# and the heavy load imposed by system tests.
+# SimpleCov automatically merges coverage from all parallel workers.
+# Clears coverage first to avoid merging stale results from previous runs.
+desc 'Run ALL tests: regular tests parallelized, system tests serial'
+task 'test:optimized' => %w[test:clear test:prepare] do
+  puts 'To see test names, set env var SLOW=true' if ENV['SLOW'].to_s.empty?
+  sh 'rails test'
+  sh 'rails test:system'
+end
 
 # This is the task to run every day, e.g., to record statistics
 # Configure your system (e.g., Heroku) to run this daily.  If you're using

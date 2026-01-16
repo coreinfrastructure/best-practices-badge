@@ -204,6 +204,11 @@ module ActiveSupport
     end
 
     # rubocop:disable Metrics/MethodLength
+    # You should generally use this call after jquery interactions like
+    # find(...), ensure_choice, clicking radio buttons, and filling in forms.
+    # You should INSTEAD use wait_for_page_load after
+    # a page navigation ("visit").
+    # rubocop:disable Metrics/MethodLength
     def wait_for_jquery
       Timeout.timeout(Capybara.default_max_wait_time) do
         # First, wait for jQuery to be loaded
@@ -248,6 +253,50 @@ module ActiveSupport
         end
       end
     end
+
+    # Wait for page to be fully loaded (document.readyState === 'complete')
+    # and for any pending jQuery AJAX requests to finish.
+    # You should generally use this call after any page navigation ("visit").
+    # This is more reliable than wait_for_jquery for standard form submissions
+    # with redirects, as it waits for the entire page lifecycle to complete.
+    # rubocop:disable Metrics/MethodLength
+    def wait_for_page_load(timeout: Capybara.default_max_wait_time * 2)
+      Timeout.timeout(timeout) do
+        # Wait for document.readyState to be 'complete'
+        loop do
+          ready_state = evaluate_script('document.readyState')
+          break if ready_state == 'complete'
+
+          sleep 0.05
+        end
+
+        # If jQuery is present, also wait for AJAX requests to complete
+        jquery_present = evaluate_script('typeof jQuery !== "undefined"')
+        if jquery_present
+          loop do
+            break if evaluate_script('jQuery.active') == 0
+
+            sleep 0.05
+          end
+        end
+      end
+    rescue Timeout::Error
+      ready_state =
+        begin
+          evaluate_script('document.readyState')
+        rescue StandardError
+          'unknown'
+        end
+      jquery_active =
+        begin
+          evaluate_script('jQuery.active')
+        rescue StandardError
+          'N/A'
+        end
+      raise Timeout::Error, 'Timeout waiting for page load. ' \
+                            "readyState: #{ready_state}, jQuery.active: #{jquery_active}"
+    end
+    # rubocop:enable Metrics/MethodLength
 
     private
 

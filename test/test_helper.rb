@@ -140,6 +140,23 @@ module ActiveSupport
     self.use_transactional_tests = true
     fixtures :all
 
+    # Enable process-based parallelization for faster test execution.
+    # System tests are run separately (see rake test:optimized) due to
+    # fixed port binding in Capybara.
+    parallelize(workers: :number_of_processors, with: :processes)
+
+    # Configure SimpleCov to properly merge coverage from parallel workers.
+    # Each worker needs a unique command_name to avoid overwriting results.
+    parallelize_setup do |worker|
+      SimpleCov.command_name "#{SimpleCov.command_name}-#{worker}"
+    end
+
+    # Force SimpleCov to write results when each worker finishes.
+    # Without this, coverage data may be lost when workers exit.
+    parallelize_teardown do |_worker|
+      SimpleCov.result
+    end
+
     # Add more helper methods to be used by all tests here...
 
     def configure_omniauth_mock(cassette = 'github_login')

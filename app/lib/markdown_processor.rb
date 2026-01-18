@@ -10,7 +10,25 @@
 
 # rubocop:disable Metrics/ModuleLength
 module MarkdownProcessor
-  # We support multiple markdown processors. We won't require_relative them,
+  # Try to avoid calling markdown processor, then call if necessary.
+  #
+  # We analyzed a version of the full data set
+  # (descriptions and justifications) to see how well we avoided calling
+  # the markdown proccessor.
+  #
+  # Final results:
+  # Number of projects = 9427
+  # Number of texts = 1809984
+  # Number of nil texts = 1584999 (87.57%)
+  # Number of non-nil texts = 224985 (12.43%)
+  #
+  # Statistics among the non-nil texts:
+  # Category prefixed_url count=50635 (22.51%)
+  # Category call_markdown_processor count=42717 (18.99%)
+  # Category markdown_unnecessary count=131141 (58.29%)
+  # Category blank count=492 (0.22%)
+  #
+  # We don't use require_relative,
   # as this isn't necessary in Rails (which will auto-load from this
   # directory as needed), and this might force unnecessary startup overhead.
   # require_relative 'invoke_commonmarker'
@@ -35,14 +53,6 @@ module MarkdownProcessor
   # long as it's *visually* the same to end users. E.g., if the processor
   # normalizes some HTML entity to a normal character, but the user can't
   # see the difference, it doesn't matter if we accept it as-is.
-  #
-  # In our measures of older versions of this pattern (for only 1 line),
-  # we matched 83.87% of the justification text.
-  # That justifies this as a pretty good optimization that
-  # is not *too* hard to read and verify.
-  # It's *okay* to pass something to the markdown processor, we just try
-  # to ensure that most such requests are actually needed.
-  # We save lots of CPU by only working hard when we must do so.
   #
   # EXAMPLES OF IMPORTANT CONSTRAINTS:
   # - Must NOT match numbered lists (e.g., "1. Item")
@@ -194,13 +204,6 @@ module MarkdownProcessor
   # I later added the check for "Simple prefixed text followed by a URL",
   # as that covers another 5% of our justifications (it's really common
   # to say something like "Yes, for more information see: https://...").
-  # We have a separate regex that determines if multi-line can be simply
-  # passed through without processing.
-  # It would be possible to do all this in a single regex, but this is already
-  # complicated, and I wanted to make sure we could verify it for correctness.
-  # If there's a single URL, there's usually not a lot of text that
-  # precedes it and that text tends to be simple, this pattern optimizes
-  # for "text people actually provide".
   #
   # Basically, by doing a simple check, we can skip more complex markdown
   # processing in the vast majority of cases.

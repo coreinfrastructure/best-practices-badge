@@ -14,7 +14,7 @@ module MarkdownProcessor
   #
   # We analyzed a version of the full data set
   # (descriptions and justifications) to see how well we avoided calling
-  # the markdown proccessor.
+  # the markdown processor.
   #
   # Final results:
   # Number of projects = 9427

@@ -74,11 +74,15 @@ module GcCompactThread
     # Rails.logger.warn "GC.compact - Top Counts: #{top_count}"
   end
 
+  # rubocop:disable Metrics/AbcSize
   def compact_with_logging(mem = nil)
     return unless GC.respond_to?(:compact)
 
     Rails.logger.warn "GC.compact starting; (#{mem * 1.0 / (2**20)}MiB)" if mem
     stats_before = GC.stat
+    # Trigger a full, immediate collection
+    GC.start(full_mark: true, immediate_mark: true, immediate_sweep: true)
+    # Compact the now-clean heap
     compact_info = GC.compact
     stats_after = GC.stat
     Rails.logger.warn 'GC.compact completed'
@@ -89,6 +93,7 @@ module GcCompactThread
 
     report_class_info
   end
+  # rubocop:enable Metrics/AbcSize
 
   # Return current memory use in bytes
   # The status_path parameter is primarily for testing the fallback path

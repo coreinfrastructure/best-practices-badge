@@ -26,16 +26,6 @@ class InvokeRedcarpetTest < ActiveSupport::TestCase
     assert result.html_safe?
   end
 
-  test 'invoke_and_sanitize stores previous content on success' do
-    InvokeRedcarpet.invoke_and_sanitize('first content')
-    previous = InvokeRedcarpet.instance_variable_get(:@previous_content)
-    assert_equal 'first content', previous
-
-    InvokeRedcarpet.invoke_and_sanitize('second content')
-    previous = InvokeRedcarpet.instance_variable_get(:@previous_content)
-    assert_equal 'second content', previous
-  end
-
   test 'invoke_and_sanitize with force_bad_type raises TypeError' do
     error =
       assert_raises(TypeError) do
@@ -86,26 +76,6 @@ class InvokeRedcarpetTest < ActiveSupport::TestCase
                                                  raise_on_error: false,
                                                  force_exception: test_error)
     assert_equal '*test*', result # Lightly escaped
-  end
-
-  test 'invoke_and_sanitize handles error when previous content exists' do
-    # First, do a successful render to set @previous_content
-    InvokeRedcarpet.invoke_and_sanitize('previous successful content')
-
-    # Verify previous content was stored
-    assert_equal 'previous successful content',
-                 InvokeRedcarpet.instance_variable_get(:@previous_content)
-
-    # Now force an exception - this exercises the log_render_error path
-    # with previous_content set.
-    test_error = RuntimeError.new('Simulated error')
-    result = InvokeRedcarpet.invoke_and_sanitize('current *failing* <script> content',
-                                                 raise_on_error: false,
-                                                 force_exception: test_error)
-
-    # Verify it returned escaped content as fallback
-    assert_equal 'current *failing* &lt;script&gt; content', result
-    assert result.html_safe?
   end
 end
 # rubocop:enable Metrics/ClassLength

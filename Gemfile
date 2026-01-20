@@ -106,8 +106,11 @@ gem 'rack-headers_filter', '~> 0.0.1' # Filter out "dangerous" headers
 gem 'railties', '~> 8.1.1' # Rails. Rails core, loads rest of Rails
 gem 'rails-i18n', '~> 8.0.1' # Localizations for Rails built-ins
 # Redcarpet had reliability issues, but commonmarker has memory issues
-# For the moment we'll support runtime selection.
-gem 'redcarpet', '~> 3.5' # Process markdown in form textareas (justifications)
+# We've created a local fork, while providing pull requests upstream,
+# to fix problems.
+# gem 'redcarpet', '~> 3.5' # Process markdown in form textareas (justifications)
+# If building gets stuck partway, unstick with: bundle update redcarpet
+gem 'redcarpet', git: 'https://github.com/david-a-wheeler/redcarpet', branch: 'local_main'
 gem 'sassc-rails' # compiles .scss (css replacement), replaces sass-rails
 gem 'scout_apm' # Monitor for memory leaks
 gem 'secure_headers', '~> 7' # Add hardening measures to HTTP headers

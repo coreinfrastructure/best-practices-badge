@@ -117,8 +117,13 @@ jobs:
     - save_cache:
         # Automatic cache versioning - matches restore_cache above
         key: dep-{{ checksum ".ruby-version" }}-{{ checksum "Gemfile.lock" }}-{{ arch }}-{{ .Branch }}
+        # Bundler's git cache is often stored in ~/.bundle or vendor/bundle;
+        # we need to cache them for git-based downloads so we don't need
+        # recompile every time
         paths:
           - ~/.rubygems
+          - ~/.bundle
+          - vendor/bundle
           - ~/.bundle
     - run:
         name: Configure database

@@ -1219,6 +1219,95 @@ task :generate_unsubscribe_url, [:email] => :environment do |_t, args|
   puts url
 end
 
+# Fields to check for markdown optimization analysis.
+# Defined as a method to allow lazy loading (Project may not be available
+# at rake file load time).
+def md_optimization_fields
+  @md_optimization_fields ||= [
+    *Project::ALL_CRITERIA_JUSTIFICATION_STRINGS, 'description'
+  ].freeze
+end
+
+# Categorize a field's content for markdown optimization analysis.
+# @param content [String, nil] The field content to categorize
+# @return [Symbol] The category (:is_nil, :blank, :prefixed_url,
+#                  :markdown_unnecessary, or :call_markdown_processor)
+def categorize_markdown_content(content)
+  return :is_nil if content.nil?
+  return :blank if content.blank?
+
+  stripped = content.to_s.strip
+  if stripped.match(MarkdownProcessor::PREFIXED_URL_REGEX)
+    :prefixed_url
+  elsif stripped.match?(MarkdownProcessor::MARKDOWN_UNNECESSARY)
+    :markdown_unnecessary
+  else
+    :call_markdown_processor
+  end
+end
+
+# Process a single project's markdown fields for optimization analysis.
+# @param project [Project] The project to analyze
+# @param processor [Redcarpet::Markdown] The markdown processor
+# @param counts [Hash] Hash to accumulate category counts
+def analyze_project_markdown(project, processor, counts)
+  puts "Project #{project.id} (#{project.name}):"
+  md_optimization_fields.each do |field|
+    content = project[field]
+    category = categorize_markdown_content(content)
+    counts[category] += 1
+    # Check that we *can* render this as markdown.
+    # This will help us detect errors in the markdown processor.
+    if category != :is_nil && category != :blank
+      processor.render(content.to_s.strip)
+    end
+  end
+  # Project description is also shown truncated, so make sure we
+  # can also render *that* as markdown.
+  # See app/views/projects/_table.html.erb:31-33:
+  short_description = project.description.to_s.truncate(160, separator: ' ')
+  processor.render(short_description)
+end
+
+desc 'Print markdown optimization information and verify processability.'
+# Use :environment to bring in Rails
+task markdown_optimizations: :environment do
+  projects = Project.order(:id) # rubocop:disable Rails/OrderById
+
+  # Guard clause: Exit early if there is nothing to process
+  if projects.none?
+    puts 'No projects found. Exiting.'
+    next # Use 'next' to exit the task block early
+  end
+
+  renderer = Redcarpet::Render::HTML.new(
+    InvokeRedcarpet::REDCARPET_MARKDOWN_RENDERER_OPTS
+  )
+  processor = Redcarpet::Markdown.new(
+    renderer, InvokeRedcarpet::REDCARPET_MARKDOWN_PROCESSOR_OPTS
+  )
+
+  counts = Hash.new(0) # default count is 0
+
+  projects.each do |project|
+    analyze_project_markdown(project, processor, counts)
+  end
+  puts counts
+  puts "\nFinal results:"
+  puts "Number of projects = #{Project.count}"
+  texts = counts.values.sum
+  puts "Number of texts = #{texts}"
+  nil_texts = counts[:is_nil]
+  counts.delete(:is_nil)
+  non_nil_texts = counts.values.sum
+  puts "Number of nil texts = #{nil_texts} (#{(100 * nil_texts.to_f / texts).round(2)}%)"
+  puts "Number of non-nil texts = #{non_nil_texts} (#{(100 * non_nil_texts.to_f / texts).round(2)}%)"
+  puts "\nStatistics among the non-nil texts:"
+  counts.each do |key, value|
+    puts "Category #{key} count=#{value} (#{(100 * value.to_f / non_nil_texts).round(2)}%)"
+  end
+end
+
 desc 'Print hello as simple smoke test.'
 task :hello do
   puts 'Hello'

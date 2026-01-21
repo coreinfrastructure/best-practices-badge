@@ -148,11 +148,10 @@ class ApplicationController < ActionController::Base
     # Override Rails default behavior by setting stricter cache control
     # This will be our baseline, and if CSRF protection overrides it,
     # we'll handle that in the after_action
-    response.headers['Cache-Control'] = 'private, no-cache'
+    response.headers['Cache-Control'] = 'private, no-store'
   end
 
-  # Externally *CACHE* this result: ask the CDN to cache it, and for browsers
-  # to optionally cache it but validate its contents before display.
+  # *CACHE* this on the CDN, but do *NOT* cache it elsewhere.
   # Calls which use this must ALSO apply:
   # skip_before_action :set_default_cache_control
   # and should set:
@@ -173,18 +172,18 @@ class ApplicationController < ActionController::Base
     response.headers['Surrogate-Control'] = BADGE_CACHE_SURROGATE_CONTROL
 
     # Set the cache values control values.
+    # We originally used the value 'public, no-cache'.
     # The value 'no-cache' is a standard but misleading name, it permits
     # the web browser to have a *local* cache but it requires the web
     # browser to revalidate the data before each use, and this direction
-    # is ignored by the CDN (Fastly).
+    # is ignored by the CDN (Fastly). The
     # 'public' simply means "anyone can store a copy".
-    # Thus, this result *is* cached! This setting means that:
-    # - the CDN *DOES* cache it, and doesn't keep verifying its value with
-    #   the backing server. Instead, this data will be served directly
-    #   from the CDN until it times out or is expressly purged.
-    # - the web browser can cache it, but it must verify with the CDN
-    #   if the value is current each time before displaying it.
-    response.headers['Cache-Control'] = 'public, no-cache'
+    # However, this doesn't work because GitHub ignores this directive
+    # when caching, and many users use GitHub:
+    # https://docs.github.com/en/authentication/
+    # keeping-your-account-and-data-secure/about-anonymized-urls
+    # Their recommended solution is to use 'no-store', disabling their caching.
+    response.headers['Cache-Control'] = 'no-store'
     omit_session_cookie
   end
 
@@ -206,6 +205,10 @@ class ApplicationController < ActionController::Base
   # @return [void]
   def disable_cache
     # Misleadingly, "no-cache" *allows* caching. We must use 'no-store'
+    # Technically the 'private' is redundant, but it doesn't hurt, and it
+    # helps avoid problems if there is a system that isn't quite compliant
+    # with the specs. 'private, no-store' is a common though technically
+    # unnecessary way to mark "these are really sensitive, don't record it".
     # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control
     response.headers['Cache-Control'] = 'private, no-store'
     # We could remove header 'Surrogate-Control' but I found no need to do so.

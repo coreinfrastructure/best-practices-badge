@@ -125,6 +125,8 @@ class ProjectsHelperTest < ActionView::TestCase
     input = '[Click me](javascript:alert("XSS"))'
     valid_results = [
       "<p>Click me</p>\n", "<p><a >Click me</a></p>\n",
+      "<p><a>Click me</a></p>\n",
+      # This is safe because [..] has no meaning in raw HTML:
       "<p>[Click me](javascript:alert(&quot;XSS&quot;))</p>\n"
     ]
     assert_includes valid_results, markdown(input)
@@ -139,6 +141,9 @@ class ProjectsHelperTest < ActionView::TestCase
     input = '<a href="javascript:alert(\'XSS\')">Click</a>'
     valid_results = [
       "<p>Click</p>\n",
+      # This is safe, because [..](...) has no meaning in raw HTML:
+      "<p>[Click me](javascript:alert(&quot;XSS&quot;))</p>\n",
+      # This is safe, &lt; disables any interpretation by HTML:
       "<p>&lt;a href=&quot;javascript:alert('XSS')&quot;&gt;Click&lt;/a&gt;</p>\n"
     ]
     assert_includes valid_results, markdown(input)

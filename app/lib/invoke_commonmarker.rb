@@ -83,21 +83,35 @@ module InvokeCommonmarker
     # Using unsafe: false (default), so raw HTML is blocked.
     html = Commonmarker.to_html(content, options: COMMONMARKER_OPTIONS)
 
-    # Strip hrefs with disallowed protocols. Commonmarker always generates
-    # double quotes, and users can't use HTML, so we only handle the case
-    # that can happen (no need for single-quote code).
-    html.gsub!(/<a([^>]*?)href="([^"]*?)"([^>]*)>/m) do
-      before = ::Regexp.last_match(1)
-      url = ::Regexp.last_match(2)
-      after = ::Regexp.last_match(3)
+    # For <a href add the required rel="..." values and
+    # strip hrefs with disallowed protocols. Commonmarker always generates
+    # href as the *first* argument (if there is an href) and always uses
+    # double quotes for the href parameter, and users can't use HTML directly,
+    # so we only handle this case (there's no need for single-quote code
+    # or for handling parameters before href).
+    #
+    # In the longer term we could consider instead using html-pipeline
+    # <https://github.com/gjtorikian/html-pipeline> as discussed in
+    # https://github.com/gjtorikian/commonmarker/issues/432
+    # The gem html-pipeline supports tag selectors, so you don't have
+    # to process every HTML node.
+    # At one time I used Rails::Html::PermitScrubber with Commonmarker,
+    # and tried to optimize it. However, that approach invokes Ruby on
+    # every HTML node, and that is a killer for performance.
+    # We *must* use html-pipeline, or something like it, as well as
+    # various scrubbing measures, if we ever allow a subset of straight HTML.
+    # This regex isn't adequate if users can create their own <a ...> entries.
+    html.gsub!(/<a href="([^"]*?)"([^>]*)>/m) do
+      url = ::Regexp.last_match(1)
+      after = ::Regexp.last_match(2)
 
       if url.match?(ALLOWED_MARKDOWN_URL_PATTERN)
         # Valid URL - keep it and add security attributes
         # href comes before rel to match previous behavior
-        "<a#{before}href=\"#{url}\" rel=\"nofollow ugc noopener noreferrer\"#{after}>"
+        "<a href=\"#{url}\" rel=\"nofollow ugc noopener noreferrer\"#{after}>"
       else
         # Strip href attribute - link becomes plain text
-        "<a#{before}#{after}>"
+        '<a>'
       end
     end
 

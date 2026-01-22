@@ -629,7 +629,7 @@ DEPENDENCIES
   capybara-slow_finder_errors
   chartkick (~> 5.2)
   codecov
-  commonmarker (~> 2.6.1)
+  commonmarker (~> 2.6.2)
   dotenv (~> 3.0)
   eslintrb
   faraday-retry (~> 2.1)

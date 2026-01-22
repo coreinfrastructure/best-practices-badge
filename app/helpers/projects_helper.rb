@@ -16,8 +16,6 @@ module ProjectsHelper
 
   # Invoke markdown processor, which is in its own module.
   # @param content [String] The content to render as Markdown
-  # @param use_redcarpet [Boolean, nil] Whether to use Redcarpet (true) or
-  #   Commonmarker (false). If nil (default), uses the default processor.
   def markdown(content)
     MarkdownProcessor.render(content)
   end

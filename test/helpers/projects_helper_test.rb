@@ -11,18 +11,28 @@ class ProjectsHelperTest < ActionView::TestCase
   include ProjectsHelper
 
   test 'markdown - simple' do
-    assert_equal "<p>hi</p>\n", markdown('hi')
+    input = 'hi'
+    valid_result = "<p>hi</p>\n"
+    assert_equal valid_result, markdown(input)
+    assert_equal valid_result, MarkdownProcessor.render(input, true)
+    assert_equal valid_result, MarkdownProcessor.render(input, false)
   end
 
   test 'markdown - emphasis' do
-    assert_equal "<p><em>hi</em></p>\n", markdown('*hi*')
+    input = '*hi*'
+    valid_result = "<p><em>hi</em></p>\n"
+    assert_equal valid_result, markdown(input)
+    assert_equal valid_result, MarkdownProcessor.render(input, true)
+    assert_equal valid_result, MarkdownProcessor.render(input, false)
   end
 
-  test 'markdown - Embedded HTML i filtered out' do
-    # Raw HTML is escaped (escape: true), so users can see what they entered.
-    # This is safer than executing it and more useful than hiding it.
-    assert_equal "<p>hi</p>\n",
-                 markdown('<i>hi</i>')
+  test 'markdown - Embedded HTML i filtered out or escaped' do
+    # It's okay to filter out or escape HTML.
+    input = '<i>hi</i>'
+    valid_results = ["<p>hi</p>\n", "<p>&lt;i&gt;hi&lt;/i&gt;</p>\n"]
+    assert_includes valid_results, markdown(input)
+    assert_includes valid_results, MarkdownProcessor.render(input, true)
+    assert_includes valid_results, MarkdownProcessor.render(input, false)
   end
 
   test 'markdown - bare URL' do
@@ -44,40 +54,50 @@ class ProjectsHelperTest < ActionView::TestCase
   end
 
   test 'markdown - hyperlinks are generated with nofollow' do
-    assert_equal(
-      '<p><a href="http://www.dwheeler.com" ' \
-      'rel="nofollow ugc noopener noreferrer">' \
-      "Hello</a></p>\n",
-      markdown('[Hello](http://www.dwheeler.com)')
-    )
+    input = '[Hello](http://www.dwheeler.com)'
+    valid_result = '<p><a href="http://www.dwheeler.com" ' \
+                   'rel="nofollow ugc noopener noreferrer">' \
+                   "Hello</a></p>\n"
+    assert_equal valid_result, markdown(input)
+    assert_equal valid_result, MarkdownProcessor.render(input, true)
+    assert_equal valid_result, MarkdownProcessor.render(input, false)
   end
 
   test 'markdown - raw HTML a stripped out (enforcing nofollow)' do
-    # Raw HTML is escaped (escape: true). This ensures users cannot
+    # Ensure users cannot
     # bypass nofollow by using raw HTML. Use markdown syntax instead.
-    # Negative test (security) - verifies raw HTML is escaped
-    assert_equal(
+    # Negative test (for security) - verifies raw HTML is escaped
+    input = '<a href="https://www.dwheeler.com">Junk</a>'
+    valid_results = [
       "<p>Junk</p>\n",
-      markdown('<a href="https://www.dwheeler.com">Junk</a>')
-    )
+      '<p>&lt;a href=&quot;https://www.dwheeler.com' \
+      "&quot;&gt;Junk&lt;/a&gt;</p>\n"
+    ]
+    assert_includes valid_results, markdown(input)
+    assert_includes valid_results, MarkdownProcessor.render(input, true)
+    assert_includes valid_results, MarkdownProcessor.render(input, false)
   end
 
   test 'markdown - no script HTML' do
     # Allowing <script> would be a big security vulnerability.
-    # With escape: true, <script> is escaped and displayed but not executable.
+    # We need to either strip it out or escape it (both are fine).
     # Negative test (security)
-    assert_equal(
-      "<p>Hello</p>\n",
-      markdown('<script src="hi"></script>Hello')
-    )
+    input = '<script src="hi"></script>Hello'
+    valid_results = ["<p>Hello</p>\n", "&lt;script src=&quot;hi&quot;&gt;&lt;/script&gt;Hello\n"]
+    assert_includes valid_results, markdown(input)
+    assert_includes valid_results, MarkdownProcessor.render(input, true)
+    assert_includes valid_results, MarkdownProcessor.render(input, false)
   end
 
   test 'markdown - Embedded onclick rejected' do
-    # Raw HTML is escaped (escape: true), including tags with onclick.
+    # Raw HTML is removed or escaped, including tags with onclick.
     # This prevents XSS attacks via event handlers.
     # Negative test (security)
-    assert_equal "<p>hi</p>\n",
-                 markdown('<i onclick="alert();">hi</i>')
+    input = '<i onclick="alert();">hi</i>'
+    valid_results = ["<p>hi</p>\n", "<p>&lt;i onclick=&quot;alert();&quot;&gt;hi&lt;/i&gt;</p>\n"]
+    assert_includes valid_results, markdown(input)
+    assert_includes valid_results, MarkdownProcessor.render(input, true)
+    assert_includes valid_results, MarkdownProcessor.render(input, false)
   end
 
   test 'markdown - _target not included' do
@@ -88,61 +108,86 @@ class ProjectsHelperTest < ActionView::TestCase
     # https://www.jitbit.com/alexblog/
     # 256-targetblank---the-most-underestimated-vulnerability-ever/
     # Negative test (security)
-    assert_equal(
+    input = '<a href="https://www.dwheeler.com" target="_blank">Hello</a>'
+    valid_results = [
       "<p>Hello</p>\n",
-      markdown('<a href="https://www.dwheeler.com" target="_blank">Hello</a>')
-    )
+      "<p>&lt;a href=&quot;https://www.dwheeler.com&quot; target=&quot;_blank&quot;&gt;Hello&lt;/a&gt;</p>\n"
+    ]
+    assert_includes valid_results, markdown(input)
+    assert_includes valid_results, MarkdownProcessor.render(input, true)
+    assert_includes valid_results, MarkdownProcessor.render(input, false)
   end
 
-  # test 'markdown - javascript: URL scheme rejected' do
-  # javascript: URLs are a major XSS attack vector. We only allow
-  # http(s), mailto, relative URLs, and anchors.
-  # Our regex strips the dangerous href but leaves the harmless <a> tag.
-  # Negative test (security)
-  # result = markdown('[Click me](javascript:alert("XSS"))')
-  # assert_not result.include?('javascript:'),
-  #            'javascript: URL scheme should not appear in output'
-  # Other secure results are *possible*, but we'll check for the
-  # specific known-safe results.
-  # assert_not result.include?('href'),
-  #            'href attribute should be stripped from javascript: URL'
-  # assert_equal(
-  #   "<p><a >Click me</a></p>\n",
-  #   result
-  # )
-  # end
+  test 'markdown - javascript: URL scheme rejected' do
+    # javascript: URLs are a major XSS attack vector. We only allow
+    # http(s), mailto, relative URLs, and anchors.
+    # Negative test (security)
+    input = '[Click me](javascript:alert("XSS"))'
+    valid_results = [
+      "<p>Click me</p>\n", "<p><a >Click me</a></p>\n",
+      "<p>[Click me](javascript:alert(&quot;XSS&quot;))</p>\n"
+    ]
+    assert_includes valid_results, markdown(input)
+    assert_includes valid_results, MarkdownProcessor.render(input, true)
+    assert_includes valid_results, MarkdownProcessor.render(input, false)
+  end
 
   test 'markdown - javascript: URL scheme in raw HTML rejected' do
     # Raw HTML is escaped (escape: true), so javascript: URLs are visible
     # but not executable. This is safe and shows users what they entered.
     # Negative test (security)
-    result = markdown('<a href="javascript:alert(\'XSS\')">Click</a>')
-    # The escaped HTML should be visible but not contain executable javascript:
-    # The literal string "javascript:" will appear, but it's escaped and harmless
-    assert_not result.include?('<a href="javascript:'), 'HTML should be escaped'
+    input = '<a href="javascript:alert(\'XSS\')">Click</a>'
+    valid_results = [
+      "<p>Click</p>\n",
+      "<p>&lt;a href=&quot;javascript:alert('XSS')&quot;&gt;Click&lt;/a&gt;</p>\n"
+    ]
+    assert_includes valid_results, markdown(input)
+    assert_includes valid_results, MarkdownProcessor.render(input, true)
+    assert_includes valid_results, MarkdownProcessor.render(input, false)
   end
 
   test 'markdown - invalid URI has href stripped' do
     # Raw HTML is escaped (escape: true), so malformed URIs are visible
     # but not executable. Users can see the malformed URL.
     # Negative test (security)
-    result = markdown('<a href="ht!tp://bad[url]">Link</a>')
     # Either the <a isn't allowed, or it is normally
-    # but the link isn't allowed. What we do *not* want is this:
-    assert_not result.include?('<a href="ht!tp://'), 'No bad link'
+    # but the link isn't allowed. What we do *not* want is '<a href="ht!tp://'
+    input = '<a href="ht!tp://bad[url]">Link</a>'
+    valid_results = [
+      "<p>Link</p>\n",
+      "<p>&lt;a href=&quot;ht!tp://bad[url]&quot;&gt;Link&lt;/a&gt;</p>\n"
+    ]
+    assert_includes valid_results, markdown(input)
+    assert_includes valid_results, MarkdownProcessor.render(input, true)
+    assert_includes valid_results, MarkdownProcessor.render(input, false)
   end
 
-  test 'markdown - imbalanced HTML tags are escaped' do
-    # Raw HTML is escaped (escape: true), including imbalanced tags.
+  test 'markdown - imbalanced HTML tags are handled' do
+    # Imbalanced HTML tags are handled (removed, escaped, or balanced)
     # This prevents layout breakage and shows users what they entered.
     # Negative test (security)
-    assert_equal "<p>hello</p>\n", markdown('<i>hello')
-    assert_equal "<p>world</p>\n", markdown('<strong>world')
+    input = '<i>hello'
+    valid_results = ["<p>hello</p>\n", "<p>&lt;i&gt;hello</p>\n", "<p><i>hello</i></p>\n"]
+    assert_includes valid_results, markdown(input)
+    assert_includes valid_results, MarkdownProcessor.render(input, true)
+    assert_includes valid_results, MarkdownProcessor.render(input, false)
+
     # Orphaned closing tags are also escaped
-    assert_equal "<p>hello</p>\n", markdown('hello</i>')
+    input = 'hello</i>'
+    valid_results = ["<p>hello</p>\n", "<p>hello&lt;/i&gt;</p>\n"]
+    assert_includes valid_results, markdown(input)
+    assert_includes valid_results, MarkdownProcessor.render(input, true)
+    assert_includes valid_results, MarkdownProcessor.render(input, false)
+
     # Multiple tags are escaped
-    assert_equal "<p>hello world</p>\n",
-                 markdown('<i>hello <strong>world')
+    input = '<i>hello <strong>world'
+    valid_results = [
+      "<p>hello world</p>\n", "<p>&lt;i&gt;hello &lt;strong&gt;world</p>\n",
+      "<p><i>hello <strong>world</strong></i>\n"
+    ]
+    assert_includes valid_results, markdown(input)
+    assert_includes valid_results, MarkdownProcessor.render(input, true)
+    assert_includes valid_results, MarkdownProcessor.render(input, false)
   end
 
   test 'markdown - trivial text' do
@@ -153,6 +198,27 @@ class ProjectsHelperTest < ActionView::TestCase
 
   test 'markdown - nil' do
     assert_equal '', markdown(nil)
+  end
+
+  test 'Commonmarker security configuration' do
+    # This test documents our security approach: raw HTML is escaped
+    # (escape: true), and only markdown-generated HTML is allowed to execute.
+    # We use regex to validate URLs and inject security attributes.
+
+    # Verify ALLOWED_MARKDOWN_URL_PATTERN exists and permits safe protocols
+    pattern = InvokeCommonmarker::ALLOWED_MARKDOWN_URL_PATTERN
+    assert pattern.match?('http://example.com')
+    assert pattern.match?('https://example.com')
+    assert pattern.match?('mailto:test@example.com')
+    assert pattern.match?('/path/to/page')
+    assert pattern.match?('../relative')
+    assert pattern.match?('./relative')
+    assert pattern.match?('#anchor')
+
+    # Verify dangerous protocols are blocked
+    assert_not pattern.match?('javascript:alert()')
+    assert_not pattern.match?('data:text/html')
+    assert_not pattern.match?('vbscript:')
   end
 
   test 'Ensure tiered_percent_as_string works' do

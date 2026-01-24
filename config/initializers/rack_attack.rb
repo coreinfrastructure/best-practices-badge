@@ -54,7 +54,7 @@ class Rack::Attack
   # in production, as they are served separately.
   #
   # Key: "rack::attack:#{Time.now.to_i/:period}:req/ip:#{req.ip}"
-  unless Rails.env.test?
+  if Rails.env.production?
     throttle(
       'req/ip',
       limit: (ENV['RATE_REQ_IP_LIMIT'] || 600).to_i,
@@ -79,7 +79,7 @@ class Rack::Attack
   # in production, as they are served separately.
   # The default is chosen to allow someone to query a single /projects page
   # of 30 projects along with JSON requests for data about every project.
-  unless Rails.env.test?
+  if Rails.env.production?
     throttle(
       'nonbadge_req/ip',
       limit: (ENV['NONBADGE_RATE_REQ_IP_LIMIT'] || '31').to_i,
@@ -107,7 +107,7 @@ class Rack::Attack
   # Limit: 20 login attempts per 20 seconds per IP address
   #
   # Key: "rack::attack:#{Time.now.to_i/:period}:logins/ip:#{req.ip}"
-  unless Rails.env.test?
+  if Rails.env.production?
     throttle(
       'logins/ip',
       limit: (ENV['RATE_LOGINS_IP_LIMIT'] || 20).to_i,
@@ -130,7 +130,7 @@ class Rack::Attack
   # throttle logins for another user and force their login requests to be
   # denied, but that's not very common and shouldn't happen to you. (Knock
   # on wood!)
-  unless Rails.env.test?
+  if Rails.env.production?
     throttle(
       'logins/email',
       limit: (ENV['RATE_LOGINS_EMAIL_LIMIT'] || 5).to_i,
@@ -156,7 +156,7 @@ class Rack::Attack
   # by email address; once an email address has been signed up, it
   # stays that way.
   #
-  unless Rails.env.test?
+  if Rails.env.production?
     throttle(
       'signup/ip',
       limit: (ENV['RATE_SIGNUP_IP_LIMIT'] || 20).to_i,
@@ -177,7 +177,7 @@ class Rack::Attack
   # Limit: 10 password reset attempts per 60 seconds per IP address
   #
   # Key: "rack::attack:#{Time.now.to_i/:period}:password_resets/ip:#{req.ip}"
-  unless Rails.env.test?
+  if Rails.env.production?
     throttle(
       'password_resets/ip',
       limit: (ENV['RATE_PASSWORD_RESET_IP_LIMIT'] || 10).to_i,

@@ -265,6 +265,7 @@ GEM
       mixlib-cli (~> 2.1, >= 2.1.1)
       mixlib-config (>= 2.2.1, < 4)
       mixlib-shellout
+    memory_profiler (1.1.0)
     method_source (1.1.0)
     mini_mime (1.1.5)
     mini_portile2 (2.8.9)
@@ -644,6 +645,7 @@ DEPENDENCIES
   lograge (~> 0.12)
   mail (~> 2.7)
   mdl (= 0.13.0)
+  memory_profiler (~> 1.1.0)
   minitest (< 6.0)
   minitest-reporters
   minitest-retry

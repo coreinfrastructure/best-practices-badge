@@ -155,6 +155,7 @@ end
 
 group :development do
   gem 'bootsnap' # Speed up boot via caches
+  gem 'memory_profiler', '~> 1.1.0' # Memory profiling to debug memory leaks
   # gem 'fasterer', '0.3.2' # Provide speed recommendations - run 'fasterer'
   # Waiting for Ruby 2.4 support:
   # https://github.com/seattlerb/ruby_parser/issues/239

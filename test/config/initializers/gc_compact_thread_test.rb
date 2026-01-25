@@ -64,4 +64,35 @@ class GcCompactThreadTest < ActiveSupport::TestCase
     # Call with mem value to test logging path - should not raise
     assert_nothing_raised { GcCompactThread.compact_with_logging(100_000_000) }
   end
+
+  test 'size_to_bucket' do
+    assert_equal '0...100', GcCompactThread.size_to_bucket(50)
+    assert_equal '100...1K', GcCompactThread.size_to_bucket(100)
+    assert_equal '100...1K', GcCompactThread.size_to_bucket(999)
+    assert_equal '1K...10K', GcCompactThread.size_to_bucket(1000)
+    assert_equal '1K...10K', GcCompactThread.size_to_bucket(9999)
+    assert_equal '10K...100K', GcCompactThread.size_to_bucket(10_000)
+    assert_equal '10K...100K', GcCompactThread.size_to_bucket(99_999)
+    assert_equal '100K+', GcCompactThread.size_to_bucket(100_000)
+    assert_equal '100K+', GcCompactThread.size_to_bucket(500_000)
+    assert_equal '100K+', GcCompactThread.size_to_bucket(10_000_000)
+  end
+
+  # Test report_string_analysis with large strings to ensure coverage of
+  # the large string preview code path (lines that collect strings > 50KB)
+  test 'report_string_analysis covers large string detection' do
+    # Create a large unfrozen string (> 50KB) that will be detected
+    # Use a distinctive prefix so we can verify it was found
+    large_string = 'LARGE_STRING_TEST_MARKER_' + ('x' * 60_000)
+
+    # Keep a reference to prevent GC from collecting it during the test
+    # The string must exist in ObjectSpace when report_string_analysis runs
+    assert large_string.bytesize > 50_000, 'Test string must be > 50KB'
+
+    # Call report_string_analysis - should not raise and should log the large string
+    assert_nothing_raised { GcCompactThread.report_string_analysis }
+
+    # The large_string variable keeps the string alive until here
+    assert large_string.present?
+  end
 end

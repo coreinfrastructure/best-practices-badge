@@ -16,8 +16,17 @@
 # but I've made a number of changes.
 
 # Module to handle periodic GC compaction in a background thread
+# rubocop:disable Metrics/ModuleLength
 module GcCompactThread
   module_function
+
+  # Track string counts between compactions for delta reporting
+  @previous_string_count = 0
+  @previous_string_bytes = 0
+
+  class << self
+    attr_accessor :previous_string_count, :previous_string_bytes
+  end
 
   # Regexes to retrieve memory information from /proc/self/status
   VM_RSS_RE  = /VmRSS:\s+(\d+)/
@@ -74,7 +83,105 @@ module GcCompactThread
     # Rails.logger.warn "GC.compact - Top Counts: #{top_count}"
   end
 
-  # rubocop:disable Metrics/AbcSize
+  # Convert a non-negative integer size into a bucket.
+  # This simplifies tracking size categories.
+  # In Ruby, X...Y includes X but does NOT include Y.
+  def self.size_to_bucket(size)
+    case size
+    when 0...100 then '0...100'
+    when 100...1000 then '100...1K'
+    when 1000...10_000 then '1K...10K'
+    when 10_000...100_000 then '10K...100K'
+    else '100K+'
+    end
+  end
+
+  # Analyze string memory to identify sources of growth
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def report_string_analysis
+    # Group strings by size ranges
+    size_buckets = Hash.new(0)
+    frozen_count = 0
+    unfrozen_count = 0
+    total_frozen_bytes = 0
+    total_unfrozen_bytes = 0
+
+    # Sample large strings for inspection
+    large_strings = []
+
+    ObjectSpace.each_object(String) do |s|
+      size = s.bytesize
+
+      # Bucket by size
+      bucket = size_to_bucket(size)
+      size_buckets[bucket] += 1
+
+      # Track frozen vs unfrozen
+      if s.frozen?
+        frozen_count += 1
+        total_frozen_bytes += size
+      else
+        unfrozen_count += 1
+        total_unfrozen_bytes += size
+      end
+
+      # Collect large strings for inspection (limit to 20)
+      next if size <= 50_000 || large_strings.length >= 20
+
+      # Get a safe preview (avoid binary garbage in logs)
+      preview = s[0..80].encode('UTF-8', invalid: :replace, undef: :replace, replace: '?')
+      large_strings << {
+        size: size,
+        preview: preview.inspect,
+        frozen: s.frozen?
+      }
+    end
+
+    Rails.logger.warn "GC.compact - String size distribution: #{size_buckets}"
+    Rails.logger.warn "GC.compact - Frozen strings: #{frozen_count} " \
+                      "(#{total_frozen_bytes / 1_000_000}MB)"
+    Rails.logger.warn "GC.compact - Unfrozen strings: #{unfrozen_count} " \
+                      "(#{total_unfrozen_bytes / 1_000_000}MB)"
+
+    large_strings.sort_by! { |h| -h[:size] }
+    Rails.logger.warn "GC.compact - Large strings (>50KB): #{large_strings}"
+  end
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+
+  # Track memory growth between compactions
+  # rubocop:disable Metrics/MethodLength
+  def report_growth_delta
+    current_count = 0
+    current_bytes = 0
+
+    ObjectSpace.each_object(String) do |s|
+      current_count += 1
+      current_bytes += s.bytesize
+    end
+
+    count_delta = current_count - GcCompactThread.previous_string_count
+    bytes_delta = current_bytes - GcCompactThread.previous_string_bytes
+    Rails.logger.warn 'GC.compact - String delta since last: ' \
+                      "count #{'+' if count_delta.positive?}#{count_delta}, " \
+                      "bytes #{'+' if bytes_delta.positive?}#{bytes_delta}"
+
+    GcCompactThread.previous_string_count = current_count
+    GcCompactThread.previous_string_bytes = current_bytes
+  end
+  # rubocop:enable Metrics/MethodLength
+
+  # Report Rails cache statistics
+  def report_cache_stats
+    cache = Rails.cache
+    data = cache.instance_variable_get(:@data)
+    cache_size = cache.instance_variable_get(:@cache_size)
+    max_size = cache.instance_variable_get(:@max_size)
+
+    Rails.logger.warn "GC.compact - Cache entries: #{data&.size || 'N/A'}, " \
+                      "size: #{cache_size || 'N/A'}, max: #{max_size || 'N/A'}"
+  end
+
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def compact_with_logging(mem = nil)
     return unless GC.respond_to?(:compact)
 
@@ -92,8 +199,11 @@ module GcCompactThread
     Rails.logger.warn("GC.compact - statistics changes: #{stats_diff}")
 
     report_class_info
+    report_string_analysis
+    report_growth_delta
+    report_cache_stats
   end
-  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
   # Return current memory use in bytes
   # The status_path parameter is primarily for testing the fallback path
@@ -186,3 +296,4 @@ module GcCompactThread
     end
   end
 end
+# rubocop:enable Metrics/ModuleLength

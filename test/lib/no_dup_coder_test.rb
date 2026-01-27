@@ -15,11 +15,10 @@ class NoDupCoderTest < ActiveSupport::TestCase
     assert dumped.value.frozen?, 'dumped string value should be frozen'
   end
 
-  test 'dump uses Marshal for non-string values' do
+  test 'dump wraps non-string values in MarshaledValue' do
     entry = ActiveSupport::Cache::Entry.new([1, 2, 3])
     dumped = NoDupCoder.dump(entry)
-    assert dumped.value.is_a?(String)
-    assert dumped.value.start_with?("\x04\x08".b)
+    assert_instance_of NoDupCoder::MarshaledValue, dumped.value
   end
 
   test 'dump passes through nil, true, and numeric values unchanged' do
@@ -33,22 +32,29 @@ class NoDupCoderTest < ActiveSupport::TestCase
     end
   end
 
-  test 'load returns frozen strings directly without duplication' do
+  test 'load returns string entry as-is' do
     original = 'cached content'.dup.freeze
     entry = ActiveSupport::Cache::Entry.new(original)
     loaded = NoDupCoder.load(entry)
+    assert_same entry, loaded
     assert_equal 'cached content', loaded.value
     assert loaded.value.frozen?
-    # The key optimization: same object, no dup
-    assert_same original, loaded.value
   end
 
-  test 'load deserializes Marshal-encoded values' do
+  test 'load deserializes MarshaledValue entries' do
     array = [1, 2, 3]
-    marshaled = Marshal.dump(array)
-    entry = ActiveSupport::Cache::Entry.new(marshaled)
+    wrapped = NoDupCoder::MarshaledValue.new(Marshal.dump(array))
+    entry = ActiveSupport::Cache::Entry.new(wrapped)
     loaded = NoDupCoder.load(entry)
     assert_equal array, loaded.value
+  end
+
+  test 'dump/load round-trips non-string values correctly' do
+    original = { key: 'value', nested: [1, 2] }
+    entry = ActiveSupport::Cache::Entry.new(original)
+    dumped = NoDupCoder.dump(entry)
+    loaded = NoDupCoder.load(dumped)
+    assert_equal original, loaded.value
   end
 
   test 'dump preserves expires_at and version metadata' do
@@ -66,13 +72,13 @@ class NoDupCoderTest < ActiveSupport::TestCase
     entry = ActiveSupport::Cache::Entry.new(large_value)
     result = NoDupCoder.dump_compressed(entry, 1024)
     # Either compressed or dumped, both are valid
-    assert result.is_a?(ActiveSupport::Cache::Entry)
+    assert_instance_of ActiveSupport::Cache::Entry, result
   end
 
   test 'dump_compressed falls back to dump for small entries' do
     entry = ActiveSupport::Cache::Entry.new('small')
     result = NoDupCoder.dump_compressed(entry, 1024)
-    assert result.is_a?(ActiveSupport::Cache::Entry)
+    assert_instance_of ActiveSupport::Cache::Entry, result
     assert result.value.frozen?
   end
 
@@ -85,11 +91,30 @@ class NoDupCoderTest < ActiveSupport::TestCase
     assert_equal '<p>hello</p>', loaded.value
   end
 
+  test 'load returns non-string entries unchanged' do
+    entry = ActiveSupport::Cache::Entry.new(42)
+    loaded = NoDupCoder.load(entry)
+    assert_same entry, loaded
+    assert_equal 42, loaded.value
+  end
+
   test 'already frozen strings are not re-duped on dump' do
     frozen_str = 'already frozen'
     entry = ActiveSupport::Cache::Entry.new(frozen_str)
     dumped = NoDupCoder.dump(entry)
     assert_same frozen_str, dumped.value
+  end
+
+  test 'strings starting with Marshal signature are never deserialized' do
+    # This is the key security test: user-supplied strings that happen
+    # to start with Marshal's magic bytes must be treated as plain strings,
+    # never passed to Marshal.load.
+    evil = "\x04\x08o:dangerous"
+    entry = ActiveSupport::Cache::Entry.new(evil)
+    dumped = NoDupCoder.dump(entry)
+    loaded = NoDupCoder.load(dumped)
+    assert_equal evil, loaded.value
+    assert_instance_of String, loaded.value
   end
 
   test 'Rails.cache uses NoDupCoder and returns frozen values' do

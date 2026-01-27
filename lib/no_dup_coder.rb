@@ -11,20 +11,37 @@
 #
 # Safety: frozen strings cannot be mutated, so there is no risk of cache
 # corruption. Frozen SafeBuffers preserve their html_safe? status.
-module NoDupCoder
-  extend self
+#
+# Unlike DupCoder, this module never inspects string contents to guess
+# whether they are marshaled data. Instead, marshaled non-string values
+# are wrapped in a MarshaledValue struct, so the type alone determines
+# handling on load. This avoids the risk of a potential deserialization
+# vulnerability where user-supplied strings starting with
+# Marshal's signature bytes could trigger Marshal.load.
 
-  MARSHAL_SIGNATURE = "\x04\x08".b.freeze
-  private_constant :MARSHAL_SIGNATURE
+module NoDupCoder
+  # Wrapper that distinguishes marshaled non-string values from plain
+  # strings stored in the cache. Using a distinct type eliminates any
+  # need to inspect string contents on load.
+  MarshaledValue = Struct.new(:data)
+
+  extend self # rubocop:disable Style/ModuleFunction
 
   def dump(entry)
-    if entry.value && entry.value != true && !entry.value.is_a?(Numeric)
-      ActiveSupport::Cache::Entry.new(
-        dump_value(entry.value),
-        expires_at: entry.expires_at, version: entry.version
-      )
-    else
+    value = entry.value
+    if value.is_a?(String)
+      # Hot path: fragment cache produces strings/SafeBuffers.
+      # Already-frozen strings need no new Entry at all.
+      return entry if value.frozen?
+
+      new_entry(value.dup.freeze, entry)
+    elsif value.frozen?
+      # All Ruby immediates (nil, true, false, Integer, Float, Symbol)
+      # are frozen. This also covers any future Ruby immediates and any
+      # value the caller has explicitly frozen.
       entry
+    else
+      new_entry(MarshaledValue.new(Marshal.dump(value)), entry)
     end
   end
 
@@ -34,10 +51,10 @@ module NoDupCoder
   end
 
   def load(entry)
-    if !entry.compressed? && entry.value.is_a?(String)
-      ActiveSupport::Cache::Entry.new(
-        load_value(entry.value),
-        expires_at: entry.expires_at, version: entry.version
+    if entry.value.is_a?(MarshaledValue)
+      new_entry(
+        Marshal.load(entry.value.data), # rubocop:disable Security/MarshalLoad
+        entry
       )
     else
       entry
@@ -46,19 +63,9 @@ module NoDupCoder
 
   private
 
-  def dump_value(value)
-    if value.is_a?(String) && !value.start_with?(MARSHAL_SIGNATURE)
-      value.frozen? ? value : value.dup.freeze
-    else
-      Marshal.dump(value)
-    end
-  end
-
-  def load_value(string)
-    if string.start_with?(MARSHAL_SIGNATURE)
-      Marshal.load(string) # rubocop:disable Security/MarshalLoad
-    else
-      string
-    end
+  def new_entry(value, source)
+    ActiveSupport::Cache::Entry.new(
+      value, expires_at: source.expires_at, version: source.version
+    )
   end
 end

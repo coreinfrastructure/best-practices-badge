@@ -31,6 +31,21 @@ end
 # need to change codecov configuration (used on the website) as managed
 # via codecov.yml.
 SimpleCov.start 'rails' do
+  # Ensure this is NOT set to false - we'll use its test merging capabilities
+  use_merging true
+  # Set a long merge_timeout (default is 10 mins) to ensure
+  # system tests don't take so long that the regular test results "expire"
+  merge_timeout 3600
+
+  # Give each process a unique name so they don't overwrite each other
+  # if running in parallel.
+  command_name "job-#{ENV['TEST_ENV_NUMBER'] || 'manual'}"
+
+  # If we are deferring, don't generate the HTML/Text formatter output yet
+  if ENV['DEFER_COVERAGE']
+    formatter SimpleCov::Formatter::SimpleFormatter # Minimal overhead
+  end
+
   add_group 'Validators', 'app/validators'
   add_filter '/config/'
   add_filter '/lib/tasks'

@@ -47,11 +47,16 @@ require 'optparse'
 # Default configuration
 DEFAULT_ITERATIONS = 500
 DEFAULT_BASE_URL = 'http://localhost:3000'
-LOCALE = 'en'
+# Use multiple locales like production traffic
+LOCALES = %w[en fr de zh-CN ja ru].freeze
 SECTIONS = %w[passing silver gold].freeze
 
 # Percentage of generated requests that should be JSON
 JSON_REQUEST_PERCENT = 10
+
+# Percentage of generated requests that should be edit pages (requires login)
+# Set to 0 if not logged in
+EDIT_PAGE_PERCENT = 0
 
 # Pattern for path files
 PATH_FILE_PATTERN = 'requested-paths-*.txt'
@@ -149,7 +154,7 @@ end
 # Fetch project IDs from the server for generating additional paths
 # rubocop:disable Metrics/MethodLength
 def fetch_project_ids(base_url)
-  uri = URI("#{base_url}/#{LOCALE}/projects.json")
+  uri = URI("#{base_url}/#{LOCALES.first}/projects.json")
   response = Net::HTTP.get_response(uri)
   unless response.is_a?(Net::HTTPSuccess)
     warn "Failed to fetch projects: #{response.code}"
@@ -167,15 +172,23 @@ end
 # rubocop:enable Metrics/MethodLength
 
 # Generate a random path for iteration i
+# Uses multiple locales to simulate real production traffic
 def generate_path(i, project_ids)
   project_id = project_ids[i % project_ids.length]
   section = SECTIONS[i % SECTIONS.length]
+  locale = LOCALES[i % LOCALES.length]
 
-  # Occasionally generate JSON request
-  if rand(100) < JSON_REQUEST_PERCENT
+  roll = rand(100)
+
+  if roll < JSON_REQUEST_PERCENT
+    # JSON request (no locale prefix)
     "/projects/#{project_id}.json"
+  elsif roll < JSON_REQUEST_PERCENT + EDIT_PAGE_PERCENT
+    # Edit page (requires login to actually work, but tests cache behavior)
+    "/#{locale}/projects/#{project_id}/#{section}/edit"
   else
-    "/#{LOCALE}/projects/#{project_id}/#{section}"
+    # Normal show page with varying locales
+    "/#{locale}/projects/#{project_id}/#{section}"
   end
 end
 
@@ -318,6 +331,7 @@ else
 end
 puts "Base URL:     #{base_url}"
 puts "Path order:   #{shuffle_paths ? 'Shuffled' : 'Sequential'}"
+puts "Locales:      #{LOCALES.join(', ')}"
 puts "Report every: #{report_interval} requests"
 puts
 

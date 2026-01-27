@@ -842,22 +842,17 @@ end
 
 Rake::Task['test:run'].enhance ['test:features']
 
-# This would modify system so 'rake test' forces running of system tests.
-# NB: it's best to run 'rake test:all' or 'rails test:all' to run all tests,
-# as that is clearer.
-# We *used* to do this, but now that Rails has a 'test:all' we prefer
-# using that instead. This way, you can use 'rails test' to run the
-# subset of non-system tests, the usual Rails default.
-# task test: 'test:system'
-
 # Clear test coverage results to start fresh.
-# SimpleCov merges results from previous runs, which can be misleading.
+# SimpleCov merges results from previous runs, which can be misleading
+# if there's "old" information present.
 desc 'Clear all previous test coverage results'
 task 'test:clear' do
   puts 'test:clear - Clearing all previous test coverage results.'
+
+  # Remove the entire directory to ensure a 100% fresh start
+  # with no previous results. It will be recreated later.
   coverage_dir = Rails.root.join('coverage')
-  FileUtils.rm_f(coverage_dir.join('.resultset.json'))
-  FileUtils.rm_f(coverage_dir.join('.last_run.json'))
+  FileUtils.rm_rf(coverage_dir)
 end
 
 # Run all tests with parallelization for regular tests.
@@ -866,71 +861,50 @@ end
 # SimpleCov automatically merges coverage from all parallel workers.
 # Clears coverage first to avoid merging stale results from previous runs.
 desc 'Run ALL tests: regular tests parallelized, system tests serial'
-task 'test:optimized' => %w[test:clear test:prepare] do
+task 'test:optimized' do
   puts 'To see test names, set env var SLOW=true' if ENV['SLOW'].to_s.empty?
+
+  require 'simplecov'
+  # Clear all previous test results FIRST so we have clean results
+  Rake::Task['test:clear'].invoke
+  # Set an ENV var so SimpleCov knows not to format the report yet
+  ENV['DEFER_COVERAGE'] = 'true'
+  # Prepare the test database
+  Rake::Task['test:prepare'].invoke
+
+  # Run "normal" tests and report their intermediate results
   sh 'rails test'
+  # result.covered_percent calculates based on what's in the
+  # .resultset.json right now, WITHOUT indicating that we're done testing
+  intermediate_total = SimpleCov.result.covered_percent.round(2)
+  puts "\nIntermediate Coverage (Regular Tests): #{intermediate_total}%\n"
+
   sh 'rails test:system'
   # Report any coverage gaps
   Rake::Task['test:coverage_gaps'].invoke
 end
 
-# Merge a single file's coverage lines into the merged result.
-# A line is covered if ANY run covered it, so take the max count per line.
-def merge_file_coverage(merged, filepath, lines)
-  merged[filepath] ||= Array.new(lines.size)
-  lines.each_with_index do |count, idx|
-    existing = merged[filepath][idx]
-    merged[filepath][idx] = merge_line_count(existing, count)
-  end
-end
-
-def merge_line_count(existing, count)
-  return existing if count.nil?
-  return count if existing.nil?
-
-  [existing, count].max
-end
-
-# Merge coverage from all test runs (Minitest, Minitest-0, Minitest-1, etc.)
-# SimpleCov stores results from parallel workers under different keys.
-def merge_coverage_results(coverage_data)
-  merged = {}
-  coverage_data.each_value do |run_data|
-    files = run_data['coverage']
-    next unless files
-
-    files.each do |filepath, data|
-      lines = data['lines']
-      merge_file_coverage(merged, filepath, lines) if lines
-    end
-  end
-  merged
-end
-
 desc 'Report coverage gaps from SimpleCov results'
 task 'test:coverage_gaps' do
-  require 'json'
-  resultset_path = Rails.root.join('coverage/.resultset.json')
-  unless File.exist?(resultset_path)
-    puts 'No coverage data found.'
-    next
-  end
+  require 'simplecov'
 
-  coverage_data = JSON.parse(File.read(resultset_path))
-  merged_coverage = merge_coverage_results(coverage_data)
+  puts 'Merging results from all runs...'
+  # It returns a SimpleCov::Result object.
+  result = SimpleCov::ResultMerger.merged_result
 
+  puts "Combined Coverage: #{result.covered_percent.round(2)}%"
+
+  # Iterate through files using SimpleCov's own 'missed_lines' logic
+  # to report what we missed.
   gaps_found = false
-  merged_coverage.each do |filepath, lines|
-    # Find uncovered lines (value == 0, not nil which means non-executable)
-    uncovered = []
-    lines.each_with_index do |count, idx|
-      uncovered << (idx + 1) if count == 0
-    end
-    next if uncovered.empty?
+  result.files.each do |source_file|
+    missed_lines = source_file.missed_lines.map(&:line_number)
 
-    # Group consecutive lines into ranges
+    next if missed_lines.empty?
+
+    # We have missed lines. Group consecutive lines into ranges.
     ranges = []
-    uncovered.each do |line|
+    missed_lines.sort.each do |line|
       if ranges.empty? || ranges.last.last != line - 1
         ranges << [line, line]
       else
@@ -938,11 +912,9 @@ task 'test:coverage_gaps' do
       end
     end
 
-    # Format as "first-last" or just "line" for single lines
     range_strs = ranges.map { |f, l| f == l ? f.to_s : "#{f}-#{l}" }
-
-    # Use relative path for cleaner output
-    relative_path = filepath.sub("#{Rails.root}/", '')
+    relative_path = source_file.filename.sub("#{Rails.root}/", '')
+    puts 'Untested lines (FILENAME: LINE NUMBERS) are:' unless gaps_found
     puts "#{relative_path}: #{range_strs.join(', ')}"
     gaps_found = true
   end

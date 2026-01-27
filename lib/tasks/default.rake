@@ -870,6 +870,84 @@ task 'test:optimized' => %w[test:clear test:prepare] do
   puts 'To see test names, set env var SLOW=true' if ENV['SLOW'].to_s.empty?
   sh 'rails test'
   sh 'rails test:system'
+  # Report any coverage gaps
+  Rake::Task['test:coverage_gaps'].invoke
+end
+
+# Merge a single file's coverage lines into the merged result.
+# A line is covered if ANY run covered it, so take the max count per line.
+def merge_file_coverage(merged, filepath, lines)
+  merged[filepath] ||= Array.new(lines.size)
+  lines.each_with_index do |count, idx|
+    existing = merged[filepath][idx]
+    merged[filepath][idx] = merge_line_count(existing, count)
+  end
+end
+
+def merge_line_count(existing, count)
+  return existing if count.nil?
+  return count if existing.nil?
+
+  [existing, count].max
+end
+
+# Merge coverage from all test runs (Minitest, Minitest-0, Minitest-1, etc.)
+# SimpleCov stores results from parallel workers under different keys.
+def merge_coverage_results(coverage_data)
+  merged = {}
+  coverage_data.each_value do |run_data|
+    files = run_data['coverage']
+    next unless files
+
+    files.each do |filepath, data|
+      lines = data['lines']
+      merge_file_coverage(merged, filepath, lines) if lines
+    end
+  end
+  merged
+end
+
+desc 'Report coverage gaps from SimpleCov results'
+task 'test:coverage_gaps' do
+  require 'json'
+  resultset_path = Rails.root.join('coverage/.resultset.json')
+  unless File.exist?(resultset_path)
+    puts 'No coverage data found.'
+    next
+  end
+
+  coverage_data = JSON.parse(File.read(resultset_path))
+  merged_coverage = merge_coverage_results(coverage_data)
+
+  gaps_found = false
+  merged_coverage.each do |filepath, lines|
+    # Find uncovered lines (value == 0, not nil which means non-executable)
+    uncovered = []
+    lines.each_with_index do |count, idx|
+      uncovered << (idx + 1) if count == 0
+    end
+    next if uncovered.empty?
+
+    # Group consecutive lines into ranges
+    ranges = []
+    uncovered.each do |line|
+      if ranges.empty? || ranges.last.last != line - 1
+        ranges << [line, line]
+      else
+        ranges.last[1] = line
+      end
+    end
+
+    # Format as "first-last" or just "line" for single lines
+    range_strs = ranges.map { |f, l| f == l ? f.to_s : "#{f}-#{l}" }
+
+    # Use relative path for cleaner output
+    relative_path = filepath.sub("#{Rails.root}/", '')
+    puts "#{relative_path}: #{range_strs.join(', ')}"
+    gaps_found = true
+  end
+
+  puts 'All files have 100% statement coverage.' unless gaps_found
 end
 
 # This is the task to run every day, e.g., to record statistics

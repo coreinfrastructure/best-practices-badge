@@ -18,7 +18,7 @@ INTERVAL = (ARGV[1] || 5).to_i
 # Find Rails server PID
 def find_rails_pid
   pid_arg = ARGV.first
-  return pid_arg.to_i if pid_arg.present?
+  return pid_arg.to_i unless pid_arg.nil?
 
   # Try to find puma (default Rails server)
   pids = `pgrep -f 'puma.*3000' 2>/dev/null`.strip.split

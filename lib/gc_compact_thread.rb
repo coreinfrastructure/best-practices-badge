@@ -23,9 +23,24 @@ module GcCompactThread
   # Track string counts between compactions for delta reporting
   @previous_string_count = 0
   @previous_string_bytes = 0
+  @allocation_tracing_enabled = false
 
   class << self
-    attr_accessor :previous_string_count, :previous_string_bytes
+    attr_accessor :previous_string_count, :previous_string_bytes,
+                  :allocation_tracing_enabled
+  end
+
+  # Enable allocation tracing if configured (has performance overhead)
+  TRACE_ALLOCATIONS = ENV['BADGEAPP_TRACE_ALLOCATIONS'].present?
+
+  # Enable allocation tracing. The already_enabled parameter allows testing
+  # the enabling logic without checking/modifying global state.
+  def enable_allocation_tracing(already_enabled: GcCompactThread.allocation_tracing_enabled)
+    return if already_enabled
+
+    ObjectSpace.trace_object_allocations_start
+    GcCompactThread.allocation_tracing_enabled = true
+    Rails.logger.warn 'GC.compact - Allocation tracing ENABLED'
   end
 
   # Regexes to retrieve memory information from /proc/self/status
@@ -96,9 +111,30 @@ module GcCompactThread
     end
   end
 
+  # Add allocation source info to an entry if available.
+  # Returns the source string if found, nil otherwise.
+  def add_allocation_source(entry, str, allocation_sources)
+    file = ObjectSpace.allocation_sourcefile(str)
+    line = ObjectSpace.allocation_sourceline(str)
+    return unless file
+
+    source = "#{file}:#{line}"
+    entry[:source] = source
+    allocation_sources[source] += str.bytesize
+    source
+  end
+
+  # Log top allocation sources.
+  def log_allocation_sources(allocation_sources)
+    top_sources = allocation_sources.sort_by { |_, bytes| -bytes }
+                                    .first(10)
+    Rails.logger.warn "GC.compact - Top allocation sources for large unfrozen strings: #{top_sources.to_h}"
+  end
+
   # Analyze string memory to identify sources of growth
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-  def report_string_analysis
+  # The tracing_enabled parameter allows testing without global state.
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def report_string_analysis(tracing_enabled: GcCompactThread.allocation_tracing_enabled)
     # Group strings by size ranges
     size_buckets = Hash.new(0)
     frozen_count = 0
@@ -108,6 +144,9 @@ module GcCompactThread
 
     # Sample large strings for inspection
     large_strings = []
+
+    # Track allocation sources for large unfrozen strings
+    allocation_sources = Hash.new(0)
 
     ObjectSpace.each_object(String) do |s|
       size = s.bytesize
@@ -130,11 +169,16 @@ module GcCompactThread
 
       # Get a safe preview (avoid binary garbage in logs)
       preview = s[0..80].encode('UTF-8', invalid: :replace, undef: :replace, replace: '?')
-      large_strings << {
+      entry = {
         size: size,
         preview: preview.inspect,
         frozen: s.frozen?
       }
+
+      # Add allocation source if tracing is enabled and string is unfrozen
+      add_allocation_source(entry, s, allocation_sources) if tracing_enabled && !s.frozen?
+
+      large_strings << entry
     end
 
     Rails.logger.warn "GC.compact - String size distribution: #{size_buckets}"
@@ -145,8 +189,13 @@ module GcCompactThread
 
     large_strings.sort_by! { |h| -h[:size] }
     Rails.logger.warn "GC.compact - Large strings (>50KB): #{large_strings}"
+
+    # Report top allocation sources if tracing is enabled
+    return unless tracing_enabled && allocation_sources.any?
+
+    log_allocation_sources(allocation_sources)
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   # Track memory growth between compactions
   # rubocop:disable Metrics/MethodLength
@@ -181,6 +230,77 @@ module GcCompactThread
                       "size: #{cache_size || 'N/A'}, max: #{max_size || 'N/A'}"
   end
 
+  # Detect duplicate large strings (same content as both frozen and unfrozen)
+  # This helps identify cache-related duplication issues
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
+  def report_duplicate_analysis
+    # Collect large strings (>50KB) grouped by content hash
+    large_by_hash = Hash.new { |h, k| h[k] = { frozen: [], unfrozen: [] } }
+    content_patterns = Hash.new(0)
+
+    ObjectSpace.each_object(String) do |s|
+      size = s.bytesize
+      next if size < 50_000
+
+      # Use first 1000 chars as key to group similar strings
+      key = s[0, 1000].hash
+
+      if s.frozen?
+        large_by_hash[key][:frozen] << size
+      else
+        large_by_hash[key][:unfrozen] << size
+      end
+
+      # Categorize by content pattern
+      pattern = categorize_string_content(s)
+      content_patterns[pattern] += size
+    end
+
+    # Find duplicates (content appearing as both frozen and unfrozen)
+    duplicates =
+      large_by_hash.select do |_, v|
+        v[:frozen].any? && v[:unfrozen].any?
+      end
+
+    # Always report duplicate stats (shows 0 if none found)
+    dup_count = duplicates.size
+    dup_frozen_bytes = duplicates.values.sum { |v| v[:frozen].sum }
+    dup_unfrozen_bytes = duplicates.values.sum { |v| v[:unfrozen].sum }
+    Rails.logger.warn "GC.compact - DUPLICATE large strings: #{dup_count} unique contents, " \
+                      "frozen: #{dup_frozen_bytes / 1_000_000}MB, " \
+                      "unfrozen: #{dup_unfrozen_bytes / 1_000_000}MB"
+
+    # Report content patterns
+    top_patterns = content_patterns.sort_by { |_, bytes| -bytes }
+                                   .first(5)
+    Rails.logger.warn "GC.compact - Large string patterns: #{top_patterns.to_h}"
+  end
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
+
+  # Categorize a string by its content pattern
+  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength
+  def categorize_string_content(str)
+    preview = str[0, 200]
+    case preview
+    when /\A<!DOCTYPE html>/i
+      lang = preview[/lang="([^"]+)"/, 1] || 'unknown'
+      "HTML_DOC_#{lang}"
+    when /\A<div>\s*<span id="project_entry_form"/
+      'PROJECT_FORM'
+    when /<div class="row">.*main-badge/m
+      'PROJECT_SHOW'
+    when /\A\s*<div class="row">/
+      'DIV_ROW'
+    when /\A\s*<link rel=/
+      'LINK_TAGS'
+    when /\A\{/
+      'JSON'
+    else
+      'OTHER'
+    end
+  end
+  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/MethodLength
+
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def compact_with_logging(mem = nil)
     return unless GC.respond_to?(:compact)
@@ -202,6 +322,7 @@ module GcCompactThread
     report_string_analysis
     report_growth_delta
     report_cache_stats
+    report_duplicate_analysis
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
@@ -254,7 +375,7 @@ module GcCompactThread
   # handling an exception within the main loop.
   # This isn't a predicate; Rubocop is misled by the name.
   # rubocop:disable Naming/PredicateMethod
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
   def gc_compact_as_needed(max_mem, one_time = false, delay = nil, raise_exception: false)
     loop do
       begin
@@ -280,18 +401,22 @@ module GcCompactThread
     true
   end
   # rubocop:enable Naming/PredicateMethod
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
 
   # Start the background thread that runs GC compaction periodically.
   # Called from config/initializers/gc_compact_thread.rb during app initialization.
   #
   # @return [Thread] The background thread that was created
   def start_background_thread
+    # Enable allocation tracing if configured (must be done before allocations)
+    enable_allocation_tracing if TRACE_ALLOCATIONS
+
     Thread.new do
       # By default, compact once we exceed 1GiB
       max_mem = (ENV['BADGEAPP_MEMORY_COMPACTOR_MB'] || 1024).to_i * (2**20)
       current_mem = memory_use_in_bytes
       Rails.logger.warn "GC Compacting thread if > #{max_mem} bytes, currently #{current_mem} bytes"
+      Rails.logger.warn 'GC Compacting with allocation tracing enabled' if TRACE_ALLOCATIONS
       gc_compact_as_needed(max_mem)
     end
   end

@@ -28,9 +28,13 @@ Rails.application.configure do
   # Show full error reports and disable caching.
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = true
+  require_relative '../../lib/no_dup_coder'
   config.cache_store =
     :memory_store,
-    { size: (ENV['RAILS_CACHE_SIZE'] || '128').to_i.megabytes }
+    {
+      size: (ENV['RAILS_CACHE_SIZE'] || '128').to_i.megabytes,
+      coder: NoDupCoder
+    }
 
   # Raise exceptions instead of rendering exception templates.
   # This makes it easier to detect uncaught exceptions during testing.

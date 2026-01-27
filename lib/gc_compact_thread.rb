@@ -133,8 +133,12 @@ module GcCompactThread
 
   # Analyze string memory to identify sources of growth
   # The tracing_enabled parameter allows testing without global state.
+  # The test_allocation_sources parameter allows injecting sources for testing.
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-  def report_string_analysis(tracing_enabled: GcCompactThread.allocation_tracing_enabled)
+  def report_string_analysis(
+    tracing_enabled: GcCompactThread.allocation_tracing_enabled,
+    test_allocation_sources: nil
+  )
     # Group strings by size ranges
     size_buckets = Hash.new(0)
     frozen_count = 0
@@ -191,9 +195,11 @@ module GcCompactThread
     Rails.logger.warn "GC.compact - Large strings (>50KB): #{large_strings}"
 
     # Report top allocation sources if tracing is enabled
-    return unless tracing_enabled && allocation_sources.any?
+    # Use test_allocation_sources if provided (for deterministic testing)
+    sources_to_report = test_allocation_sources || allocation_sources
+    return unless tracing_enabled && sources_to_report.any?
 
-    log_allocation_sources(allocation_sources)
+    log_allocation_sources(sources_to_report)
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 

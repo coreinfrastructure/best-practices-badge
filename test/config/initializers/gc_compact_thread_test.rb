@@ -141,19 +141,18 @@ class GcCompactThreadTest < ActiveSupport::TestCase
   end
 
   # Test report_string_analysis with tracing_enabled parameter (thread-safe)
+  # Uses test_allocation_sources for deterministic coverage of log_allocation_sources call
   test 'report_string_analysis with tracing_enabled parameter covers source tracking' do
-    # Enable allocation tracing at ObjectSpace level
-    ObjectSpace.trace_object_allocations_start
+    # Inject test allocation sources to guarantee the log_allocation_sources path is hit
+    test_sources = { 'test_file.rb:42' => 100_000, 'other_file.rb:99' => 50_000 }
 
-    # Create a large unfrozen string that will have allocation source info
-    large_string = 'ALLOC_SOURCE_TEST_' + ('y' * 60_000)
-    assert large_string.bytesize > 50_000
-
-    # Call report_string_analysis with tracing_enabled: true (thread-safe)
-    assert_nothing_raised { GcCompactThread.report_string_analysis(tracing_enabled: true) }
-
-    # Keep string alive
-    assert large_string.present?
+    # Call report_string_analysis with tracing_enabled: true and injected sources
+    assert_nothing_raised do
+      GcCompactThread.report_string_analysis(
+        tracing_enabled: true,
+        test_allocation_sources: test_sources
+      )
+    end
   end
 
   # Test report_duplicate_analysis with large strings

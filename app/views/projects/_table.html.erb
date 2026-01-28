@@ -20,7 +20,7 @@
     <%# The badge URL has one value for some time after the project entry
        is edited, and then changes. To handle that gracefully, we
        expire the cache after a period of time. %>
-    <% cache [project, locale], expires_in: 12.hours do %>
+    <% cache_frozen [project, locale], expires_in: 12.hours do %>
       <tr>
         <td><%= link_to project.id, project %></td>
         <td class="project_name"><%=

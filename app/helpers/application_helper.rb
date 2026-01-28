@@ -38,4 +38,63 @@ module ApplicationHelper
       end
     end.freeze
   # rubocop:enable Style/MutableConstant, Style/MethodCalledOnDoEndBlock
+
+  # This is like the ActionView view helper `cache`
+  # (specifically ActionView::Helpers::CacheHelper)
+  # where cache, cache_if, cache_unless, cache_fragment_name, and the private
+  # fragment_for/write_fragment_for methods live.
+  #
+  # However, our version freezes the fragment as a SafeBuffer before writing
+  # it to the cache, and returns the frozen SafeBuffer directly on read.
+  # This pairs with NoDupCoder: frozen strings skip Entry allocation on
+  # both write and every subsequent read, eliminating per-request copying
+  # of large cached fragments.
+  #
+  # Unlike +cache+, this bypasses +read_fragment+ and +write_fragment+
+  # to avoid the .to_str/.html_safe round-trip that would strip the
+  # SafeBuffer class on write and allocate a new one on every read.
+  #
+  # Usage in views is identical to +cache+:
+  #   <% cache_frozen [locale, 'sidebar'] do %>
+  #     ...expensive rendering...
+  #   <% end %>
+  # rubocop:disable Rails/OutputSafety
+  def cache_frozen(name = {}, options = {}, &)
+    if controller.respond_to?(:perform_caching) && controller.perform_caching
+      cache_frozen_perform(name, options, &)
+    else
+      yield
+    end
+    nil
+  end
+
+  # Like +cache_if+: caches only when +condition+ is true.
+  def cache_frozen_if(condition, name = {}, options = {}, &)
+    if condition
+      cache_frozen(name, options, &)
+    else
+      yield
+      nil
+    end
+  end
+
+  # Like +cache_unless+: caches only when +condition+ is false.
+  def cache_frozen_unless(condition, name = {}, options = {}, &)
+    cache_frozen_if(!condition, name, options, &)
+  end
+
+  private
+
+  def cache_frozen_perform(name, options, &)
+    cache_key = controller.combined_fragment_cache_key(
+      cache_fragment_name(name, **options.slice(:skip_digest))
+    )
+    fragment = controller.cache_store.read(cache_key, options)
+    unless fragment
+      fragment = output_buffer.capture(&).freeze
+      controller.cache_store.write(cache_key, fragment, options)
+    end
+    safe_concat(fragment)
+  end
+  # rubocop:enable Rails/OutputSafety
 end

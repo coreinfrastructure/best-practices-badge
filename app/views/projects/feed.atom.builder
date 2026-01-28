@@ -12,14 +12,14 @@
 #
 # Disable cache for Rails.env.test?. There is a bug in the
 # test framework that doesn't handle caching correctly in tests.
-cache_if (!Rails.env.test? && !@projects.empty?),
+cache_frozen_if (!Rails.env.test? && !@projects.empty?),
          ['feed-index', I18n.locale, @projects[0].updated_at] do
   atom_feed(language: I18n.locale) do |feed|
     feed.title(t('feed_title'))
     feed.updated(@projects[0].updated_at) unless @projects.empty?
 
     @projects.each do |project|
-      cache_if !Rails.env.test?, [project, I18n.locale] do
+      cache_frozen_if !Rails.env.test?, [project, I18n.locale] do
         feed.entry(project) do |entry|
           entry.title project.name.presence || t('project_name_unknown')
           status = "<p><strong>#{project.badge_level.titleize}"

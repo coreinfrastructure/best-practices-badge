@@ -33,6 +33,20 @@ to all memory. However, there's good reason to believe mimalloc
   for systems that use reference counting (like Lean, Python, and Ruby).
 - Drop-in replacement via `LD_PRELOAD`
 
+## Running mimalloc on Ubuntu
+
+In development environments running Ubuntu, simply install mimalloc with:
+
+~~~~sh
+sudo apt install libmimalloc2.0
+~~~~
+
+To use mimalloc when running `some_command` (like `rails s`), use:
+
+~~~~sh
+LD_LIBRARY=/usr/lib/x86_64-linux-gnu/libmimalloc.so.2.1 some_command
+~~~~
+
 ## mimalloc buildpack for Heroku
 
 We deploy on Heroku. We *could* create our own container image and run it,

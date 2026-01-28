@@ -79,7 +79,7 @@
   </div>
 <% end # cache 'buttons' %>
   <div class='col-md-9 col-sm-8 col-xs-12 criteria-desc'>
-    <% cache ['desc', criterion_str, criteria_level, locale ] do
+    <% cache_frozen ['desc', criterion_str, criteria_level, locale ] do
        # Here we provide the description, details, and markings like
        # "met_url_required?".  We cache this separately.
        # Its cache needs fewer keys, so by caching this separately it

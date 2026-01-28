@@ -72,10 +72,10 @@ compaction. It now logs detailed diagnostics including:
 | `BADGEAPP_SLEEP_AFTER_COMPACT` | 1200 | Seconds to wait after compaction |
 | `BADGEAPP_ANNOUNCE_GC_CHECK` | unset | If set, log every memory check |
 
-**Example - frequent compaction for testing:**
+**Example - frequent compaction for testing with allocation tracing:**
 
 ```bash
-BADGEAPP_MEMORY_COMPACTOR_MB=200 BADGEAPP_SLEEP_AFTER_COMPACT=180 rails s -p 3000
+BADGEAPP_MEMORY_COMPACTOR_MB=200 BADGEAPP_SLEEP_AFTER_COMPACT=180 BADGEAPP_TRACE_ALLOCATIONS=true rails s -p 3000
 ```
 
 **Diagnostic output in logs:**

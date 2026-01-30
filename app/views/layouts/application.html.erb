@@ -36,15 +36,12 @@
 <%# https://searchengineland.com/ -%>
 <%# the-ultimate-guide-to-multilingual-and-multiregional-seo-157838 -%>
 <%# We use original_fullpath so that query strings are included. -%>
-<%# Fullpaths and locales are always distinct, so don't need cache name -%>
-<% cache_frozen request.original_fullpath do -%>
 <%   I18n.available_locales.each do |loc| -%>
        <link rel="alternate" hreflang="<%= loc %>" href="<%=
              force_locale_url(request.original_url, loc) %>" />
 <%   end # each locale -%>
        <link rel="alternate" hreflang="x-default" href="<%=
              force_locale_url(request.original_url, nil) %>" />
-<% end # cache of links to "alternates" for each locale -%>
 </head>
 <body>
 <%= render 'layouts/header' -%>

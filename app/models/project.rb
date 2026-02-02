@@ -578,6 +578,32 @@ class Project < ApplicationRecord
     self.tiered_percentage = compute_tiered_percentage
   end
 
+  # Computes the baseline 'tiered percentage' value 0..300.
+  # Gives partial credit, but only if you've completed a previous level.
+  # - 0-99: working on baseline-1
+  # - 100-199: passed baseline-1, working on baseline-2
+  # - 200-299: passed baseline-1 & 2, working on baseline-3
+  # - 300: completed all three baseline levels
+  # @return [Integer] baseline tiered percentage (0-300)
+  def compute_baseline_tiered_percentage
+    pct1 = badge_percentage_baseline_1 || 0
+    pct2 = badge_percentage_baseline_2 || 0
+    pct3 = badge_percentage_baseline_3 || 0
+    if pct1 < 100
+      pct1
+    elsif pct2 < 100
+      pct2 + 100
+    else
+      pct3 + 200
+    end
+  end
+
+  # Updates the baseline_tiered_percentage field with computed value.
+  # @return [Integer] the updated baseline tiered percentage
+  def update_baseline_tiered_percentage
+    self.baseline_tiered_percentage = compute_baseline_tiered_percentage
+  end
+
   # Updates the badge percentages for all levels.
   # Creates a single datetime value for consistency across all level updates.
   # @return [void]
@@ -592,7 +618,8 @@ class Project < ApplicationRecord
     Project::CRITERIA_SERIES[:baseline].each do |level|
       update_badge_percentage(level, current_time)
     end
-    update_tiered_percentage # Update the 'tiered_percentage' number 0..300
+    update_tiered_percentage # Update metal 'tiered_percentage' (0..300)
+    update_baseline_tiered_percentage # Update baseline 'baseline_tiered_percentage' (0..300)
   end
 
   # Returns owning user's name for display purposes.
@@ -626,6 +653,7 @@ class Project < ApplicationRecord
           project.update_badge_percentage(level, current_time)
         end
         project.update_tiered_percentage
+        project.update_baseline_tiered_percentage
         project.save!(touch: false)
       end
     end

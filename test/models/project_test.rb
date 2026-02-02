@@ -644,5 +644,54 @@ class ProjectTest < ActiveSupport::TestCase
     project.updated_at = 2.days.ago
     assert_equal "/projects/#{project.id}/baseline", project.baseline_badge_src_url
   end
+
+  test 'compute_baseline_tiered_percentage returns 0-99 when working on baseline-1' do
+    project = projects(:perfect_passing)
+    project.badge_percentage_baseline_1 = 42
+    project.badge_percentage_baseline_2 = 0
+    project.badge_percentage_baseline_3 = 0
+    assert_equal 42, project.compute_baseline_tiered_percentage
+  end
+
+  test 'compute_baseline_tiered_percentage returns 100-199 when baseline-1 complete' do
+    project = projects(:perfect_passing)
+    project.badge_percentage_baseline_1 = 100
+    project.badge_percentage_baseline_2 = 50
+    project.badge_percentage_baseline_3 = 0
+    assert_equal 150, project.compute_baseline_tiered_percentage
+  end
+
+  test 'compute_baseline_tiered_percentage returns 200-299 when baseline-2 complete' do
+    project = projects(:perfect_passing)
+    project.badge_percentage_baseline_1 = 100
+    project.badge_percentage_baseline_2 = 100
+    project.badge_percentage_baseline_3 = 75
+    assert_equal 275, project.compute_baseline_tiered_percentage
+  end
+
+  test 'compute_baseline_tiered_percentage returns 300 when all baseline levels complete' do
+    project = projects(:perfect_passing)
+    project.badge_percentage_baseline_1 = 100
+    project.badge_percentage_baseline_2 = 100
+    project.badge_percentage_baseline_3 = 100
+    assert_equal 300, project.compute_baseline_tiered_percentage
+  end
+
+  test 'compute_baseline_tiered_percentage handles nil values' do
+    project = projects(:perfect_passing)
+    project.badge_percentage_baseline_1 = nil
+    project.badge_percentage_baseline_2 = nil
+    project.badge_percentage_baseline_3 = nil
+    assert_equal 0, project.compute_baseline_tiered_percentage
+  end
+
+  test 'update_baseline_tiered_percentage sets the field correctly' do
+    project = projects(:perfect_passing)
+    project.badge_percentage_baseline_1 = 100
+    project.badge_percentage_baseline_2 = 40
+    project.badge_percentage_baseline_3 = 0
+    project.update_baseline_tiered_percentage
+    assert_equal 140, project.baseline_tiered_percentage
+  end
 end
 # rubocop:enable Metrics/ClassLength

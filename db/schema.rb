@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_31_002323) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_02_163707) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -110,6 +110,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_31_002323) do
     t.integer "badge_percentage_baseline_1"
     t.integer "badge_percentage_baseline_2"
     t.integer "badge_percentage_baseline_3"
+    t.integer "baseline_tiered_percentage", comment: "Tiered percentage for baseline series (0-300)"
     t.text "build_common_tools_justification"
     t.integer "build_common_tools_status", limit: 2, default: 0, null: false
     t.text "build_floss_tools_justification"
@@ -518,6 +519,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_31_002323) do
     t.index ["badge_percentage_0"], name: "index_projects_on_badge_percentage_0"
     t.index ["badge_percentage_1"], name: "index_projects_on_badge_percentage_1"
     t.index ["badge_percentage_2"], name: "index_projects_on_badge_percentage_2"
+    t.index ["baseline_tiered_percentage"], name: "index_projects_on_baseline_tiered_percentage"
     t.index ["created_at"], name: "index_projects_on_created_at"
     t.index ["homepage_url"], name: "index_projects_on_homepage_url"
     t.index ["last_reminder_at"], name: "index_projects_on_last_reminder_at"

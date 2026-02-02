@@ -438,16 +438,37 @@ class Project < ApplicationRecord
     end
   end
 
+  # Returns the highest currently achieved baseline badge level.
+  # Checks all three baseline levels (3, 2, 1) and returns the highest
+  # with 100% completion, or 'in_progress' if none are complete.
+  # Note: Only current percentage matters; past achievements (achieved_at
+  # timestamps) don't count since badges can be lost if criteria change.
+  # @return [String] 'baseline-3', 'baseline-2', 'baseline-1', or 'in_progress'
+  def baseline_badge_level
+    if badge_percentage_baseline_3 == 100
+      'baseline-3'
+    elsif badge_percentage_baseline_2 == 100
+      'baseline-2'
+    elsif badge_percentage_baseline_1 == 100
+      'baseline-1'
+    else
+      'in_progress'
+    end
+  end
+
   # Returns the badge value for baseline series.
   # Similar to badge_value but for the baseline badge.
-  # For now, this only supports baseline-1. When baseline-2/3 are fully
-  # implemented, this method can be extended to check tiered percentage
-  # across all baseline levels (similar to how badge_value uses
-  # tiered_percentage for metal series).
-  # @return [String] badge level name ('baseline-1') or 'baseline-pct-XX'
+  # Returns the highest achieved level, or a percentage badge for in_progress.
+  # @return [String] badge level name ('baseline-1', 'baseline-2', 'baseline-3')
+  #   or 'baseline-pct-XX' for in_progress
   def baseline_badge_value
-    pct = badge_percentage_for('baseline-1')
-    pct < 100 ? "baseline-pct-#{pct}" : 'baseline-1'
+    level = baseline_badge_level
+    if level == 'in_progress'
+      pct = badge_percentage_for('baseline-1')
+      "baseline-pct-#{pct}"
+    else
+      level
+    end
   end
 
   # Returns this project's image src URL for its badge image (SVG).
@@ -460,6 +481,19 @@ class Project < ApplicationRecord
       "/badge_static/#{badge_value}"
     else
       "/projects/#{id}/badge"
+    end
+  end
+
+  # Returns this project's image src URL for its baseline badge image (SVG).
+  # - If project entry changed recently: returns /badge_static value for immediate accuracy
+  # - If project entry NOT changed recently: returns /projects/:id/baseline for correct README usage
+  # This ensures users see correct results while encouraging proper URL usage.
+  # @return [String] URL path for the baseline badge image
+  def baseline_badge_src_url
+    if updated_at > 24.hours.ago
+      "/badge_static/#{baseline_badge_value}"
+    else
+      "/projects/#{id}/baseline"
     end
   end
 
@@ -544,6 +578,32 @@ class Project < ApplicationRecord
     self.tiered_percentage = compute_tiered_percentage
   end
 
+  # Computes the baseline 'tiered percentage' value 0..300.
+  # Gives partial credit, but only if you've completed a previous level.
+  # - 0-99: working on baseline-1
+  # - 100-199: passed baseline-1, working on baseline-2
+  # - 200-299: passed baseline-1 & 2, working on baseline-3
+  # - 300: completed all three baseline levels
+  # @return [Integer] baseline tiered percentage (0-300)
+  def compute_baseline_tiered_percentage
+    pct1 = badge_percentage_baseline_1 || 0
+    pct2 = badge_percentage_baseline_2 || 0
+    pct3 = badge_percentage_baseline_3 || 0
+    if pct1 < 100
+      pct1
+    elsif pct2 < 100
+      pct2 + 100
+    else
+      pct3 + 200
+    end
+  end
+
+  # Updates the baseline_tiered_percentage field with computed value.
+  # @return [Integer] the updated baseline tiered percentage
+  def update_baseline_tiered_percentage
+    self.baseline_tiered_percentage = compute_baseline_tiered_percentage
+  end
+
   # Updates the badge percentages for all levels.
   # Creates a single datetime value for consistency across all level updates.
   # @return [void]
@@ -558,7 +618,8 @@ class Project < ApplicationRecord
     Project::CRITERIA_SERIES[:baseline].each do |level|
       update_badge_percentage(level, current_time)
     end
-    update_tiered_percentage # Update the 'tiered_percentage' number 0..300
+    update_tiered_percentage # Update metal 'tiered_percentage' (0..300)
+    update_baseline_tiered_percentage # Update baseline 'baseline_tiered_percentage' (0..300)
   end
 
   # Returns owning user's name for display purposes.
@@ -592,6 +653,7 @@ class Project < ApplicationRecord
           project.update_badge_percentage(level, current_time)
         end
         project.update_tiered_percentage
+        project.update_baseline_tiered_percentage
         project.save!(touch: false)
       end
     end
@@ -817,7 +879,7 @@ class Project < ApplicationRecord
   def update_passing_times(level, old_badge_percentage, current_time)
     # Determine level name for field names
     level_name =
-      if level.to_s.start_with?('baseline-')
+      if Sections.section_type(level) == :baseline
         level.to_s.tr('-', '_') # E.g., 'baseline_1'
       else
         COMPLETED_BADGE_LEVELS[level.to_i] # E.g., 'passing'

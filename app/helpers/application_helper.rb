@@ -30,6 +30,18 @@ module ApplicationHelper
             level: 'gold'
           },
           {
+            name: I18n.t('projects.form_early.level.baseline-1', locale: locale),
+            level: 'baseline-1'
+          },
+          {
+            name: I18n.t('projects.form_early.level.baseline-2', locale: locale),
+            level: 'baseline-2'
+          },
+          {
+            name: I18n.t('projects.form_early.level.baseline-3', locale: locale),
+            level: 'baseline-3'
+          },
+          {
             name: I18n.t('projects.edit.permissions_panel_title',
                          locale: locale, default: 'Permissions'),
             level: 'permissions'

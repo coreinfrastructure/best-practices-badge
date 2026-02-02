@@ -816,6 +816,22 @@ task update_all_higher_level_badge_percentages: :environment do
   Project.update_all_badge_percentages(Criteria.keys - ['0'])
 end
 
+desc 'Backfill baseline_tiered_percentage for all projects'
+task backfill_baseline_tiered_percentage: :environment do
+  puts 'Backfilling baseline_tiered_percentage for all projects...'
+  count = 0
+  Project.find_each do |project|
+    # rubocop:disable Rails/SkipsModelValidations
+    # Intentionally skip validations for performance; we're computing from existing data
+    project.update_column(:baseline_tiered_percentage,
+                          project.compute_baseline_tiered_percentage)
+    # rubocop:enable Rails/SkipsModelValidations
+    count += 1
+    puts "Processed #{count} projects..." if (count % 1000).zero?
+  end
+  puts "Done. Updated #{count} projects."
+end
+
 # To change the email encryption keys:
 # Set EMAIL_ENCRYPTION_KEY_OLD to old key,
 # set EMAIL_ENCRYPTION_KEY and EMAIL_BLIND_INDEX_KEY to new key, and run this.

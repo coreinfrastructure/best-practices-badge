@@ -1594,11 +1594,30 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'passing', result # project is at passing level
   end
 
-  test 'badge_level_lost? returns false for baseline levels' do
-    # Test line 1025: baseline changes always return false
+  test 'badge_level_lost? returns false for baseline gain' do
     controller = ProjectsController.new
     result = controller.send(:badge_level_lost?, 'in_progress', 'baseline-1')
     assert_equal false, result
+  end
+
+  test 'badge_level_lost? detects loss for baseline level downgrade' do
+    controller = ProjectsController.new
+    # Going from baseline-2 to baseline-1 is a loss
+    result = controller.send(:badge_level_lost?, 'baseline-2', 'baseline-1')
+    assert_equal true, result
+  end
+
+  test 'badge_level_lost? returns false for baseline level upgrade' do
+    controller = ProjectsController.new
+    # Going from baseline-1 to baseline-2 is not a loss
+    result = controller.send(:badge_level_lost?, 'baseline-1', 'baseline-2')
+    assert_equal false, result
+  end
+
+  test 'badge_level_lost? detects loss from baseline to in_progress' do
+    controller = ProjectsController.new
+    result = controller.send(:badge_level_lost?, 'baseline-1', 'in_progress')
+    assert_equal true, result
   end
 
   test 'badge_level_lost? detects loss for traditional levels' do

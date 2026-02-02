@@ -667,13 +667,11 @@ en:
         baseline-1: 'Baseline Level 1'
         baseline-1_html: >-
           These are the Baseline Level 1 criteria.
-        baseline-1_details: >-
-          These are the Baseline Level 1 criteria.
         baseline-2: 'Baseline Level 2'
-        baseline-2_details: >-
+        baseline-2_html: >-
           These are the Baseline Level 2 criteria.
         baseline-3: 'Baseline Level 3'
-        baseline-3_details: >-
+        baseline-3_html: >-
           These are the Baseline Level 3 criteria.
       got_badge:
         description_1: >-
@@ -692,6 +690,17 @@ en:
           If you need help, have a question, or see a problem,
           please <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
           target="_blank" rel="noopener">file an issue</a></em>.
+      got_baseline_badge:
+        description_1: >-
+          If this is your project, please show your baseline badge status
+          on your project page! The baseline badge status looks like this:
+        badge_alt: Baseline badge level for project %{id} is %{level}
+        description_2: 'Here is how to embed the baseline badge:'
+        details_html: >-
+          You can show your baseline badge status by embedding this in
+          your markdown file:<br /> %{markdown_embedding}<br />
+          or by embedding this in your HTML:<br /> %{html_embedding}<br
+          />
     form_basics:
       project_name:
         description: What is the human-readable name of the project?

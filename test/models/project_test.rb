@@ -565,5 +565,133 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal :badge_percentage_unknown,
                  project.badge_percentage_field_name('unknown')
   end
+
+  test 'baseline_badge_level returns in_progress when no baseline achieved' do
+    project = projects(:perfect_passing)
+    project.badge_percentage_baseline_1 = 50
+    project.badge_percentage_baseline_2 = 0
+    project.badge_percentage_baseline_3 = 0
+    assert_equal 'in_progress', project.baseline_badge_level
+  end
+
+  test 'baseline_badge_level returns baseline-1 when only level 1 achieved' do
+    project = projects(:perfect_passing)
+    project.badge_percentage_baseline_1 = 100
+    project.badge_percentage_baseline_2 = 50
+    project.badge_percentage_baseline_3 = 0
+    assert_equal 'baseline-1', project.baseline_badge_level
+  end
+
+  test 'baseline_badge_level returns baseline-2 when level 2 achieved' do
+    project = projects(:perfect_passing)
+    project.badge_percentage_baseline_1 = 100
+    project.badge_percentage_baseline_2 = 100
+    project.badge_percentage_baseline_3 = 50
+    assert_equal 'baseline-2', project.baseline_badge_level
+  end
+
+  test 'baseline_badge_level returns baseline-3 when level 3 achieved' do
+    project = projects(:perfect_passing)
+    project.badge_percentage_baseline_1 = 100
+    project.badge_percentage_baseline_2 = 100
+    project.badge_percentage_baseline_3 = 100
+    assert_equal 'baseline-3', project.baseline_badge_level
+  end
+
+  test 'baseline_badge_level ignores past achievements if percentage dropped' do
+    project = projects(:perfect_passing)
+    project.badge_percentage_baseline_1 = 50
+    project.badge_percentage_baseline_2 = 0
+    project.badge_percentage_baseline_3 = 0
+    # Past achievement doesn't count - only current percentage matters
+    project.achieved_baseline_1_at = 1.day.ago
+    assert_equal 'in_progress', project.baseline_badge_level
+  end
+
+  test 'baseline_badge_value returns percentage badge when in_progress' do
+    project = projects(:perfect_passing)
+    project.badge_percentage_baseline_1 = 42
+    project.badge_percentage_baseline_2 = 0
+    project.badge_percentage_baseline_3 = 0
+    assert_equal 'baseline-pct-42', project.baseline_badge_value
+  end
+
+  test 'baseline_badge_value returns level name when achieved' do
+    project = projects(:perfect_passing)
+    project.badge_percentage_baseline_1 = 100
+    project.badge_percentage_baseline_2 = 100
+    project.badge_percentage_baseline_3 = 0
+    assert_equal 'baseline-2', project.baseline_badge_value
+  end
+
+  test 'baseline_badge_value returns highest achieved level' do
+    project = projects(:perfect_passing)
+    project.badge_percentage_baseline_1 = 100
+    project.badge_percentage_baseline_2 = 100
+    project.badge_percentage_baseline_3 = 100
+    assert_equal 'baseline-3', project.baseline_badge_value
+  end
+
+  test 'baseline_badge_src_url returns static URL when recently updated' do
+    project = projects(:perfect_passing)
+    project.updated_at = 1.hour.ago
+    project.badge_percentage_baseline_1 = 42
+    assert_equal '/badge_static/baseline-pct-42', project.baseline_badge_src_url
+  end
+
+  test 'baseline_badge_src_url returns project URL when not recently updated' do
+    project = projects(:perfect_passing)
+    project.updated_at = 2.days.ago
+    assert_equal "/projects/#{project.id}/baseline", project.baseline_badge_src_url
+  end
+
+  test 'compute_baseline_tiered_percentage returns 0-99 when working on baseline-1' do
+    project = projects(:perfect_passing)
+    project.badge_percentage_baseline_1 = 42
+    project.badge_percentage_baseline_2 = 0
+    project.badge_percentage_baseline_3 = 0
+    assert_equal 42, project.compute_baseline_tiered_percentage
+  end
+
+  test 'compute_baseline_tiered_percentage returns 100-199 when baseline-1 complete' do
+    project = projects(:perfect_passing)
+    project.badge_percentage_baseline_1 = 100
+    project.badge_percentage_baseline_2 = 50
+    project.badge_percentage_baseline_3 = 0
+    assert_equal 150, project.compute_baseline_tiered_percentage
+  end
+
+  test 'compute_baseline_tiered_percentage returns 200-299 when baseline-2 complete' do
+    project = projects(:perfect_passing)
+    project.badge_percentage_baseline_1 = 100
+    project.badge_percentage_baseline_2 = 100
+    project.badge_percentage_baseline_3 = 75
+    assert_equal 275, project.compute_baseline_tiered_percentage
+  end
+
+  test 'compute_baseline_tiered_percentage returns 300 when all baseline levels complete' do
+    project = projects(:perfect_passing)
+    project.badge_percentage_baseline_1 = 100
+    project.badge_percentage_baseline_2 = 100
+    project.badge_percentage_baseline_3 = 100
+    assert_equal 300, project.compute_baseline_tiered_percentage
+  end
+
+  test 'compute_baseline_tiered_percentage handles nil values' do
+    project = projects(:perfect_passing)
+    project.badge_percentage_baseline_1 = nil
+    project.badge_percentage_baseline_2 = nil
+    project.badge_percentage_baseline_3 = nil
+    assert_equal 0, project.compute_baseline_tiered_percentage
+  end
+
+  test 'update_baseline_tiered_percentage sets the field correctly' do
+    project = projects(:perfect_passing)
+    project.badge_percentage_baseline_1 = 100
+    project.badge_percentage_baseline_2 = 40
+    project.badge_percentage_baseline_3 = 0
+    project.update_baseline_tiered_percentage
+    assert_equal 140, project.baseline_tiered_percentage
+  end
 end
 # rubocop:enable Metrics/ClassLength

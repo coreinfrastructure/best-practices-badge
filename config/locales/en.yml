@@ -548,6 +548,8 @@ en:
       lost_badge: Project has lost a badge.
       new_owner: Owner id (a positive integer), change to change ownership
       new_owner_repeat: Repeated new owner id (to confirm an ownership change)
+      current_owner: "Current owner ID:"
+      ownership_edit_hint: (Ownership can be transferred when editing this section.)
       static_analysis_updated_html: >-
         We have updated our requirements for the criterion
         static_analysis. Please add

@@ -1731,5 +1731,30 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_nil @project.description_good_justification,
                'Empty justification should be stored as nil in database'
   end
+
+  # Baseline badge tests
+  test 'baseline_badge returns SVG for project' do
+    get "/projects/#{@project.id}/baseline", params: { format: 'svg' }
+    assert_response :success
+    assert_includes @response.body, '<svg'
+    assert_equal 'image/svg+xml', @response.media_type
+  end
+
+  test 'baseline_badge returns JSON for project' do
+    get "/projects/#{@project.id}/baseline.json"
+    assert_response :success
+    json_data = JSON.parse(@response.body)
+    assert_equal @project.id, json_data['id']
+    assert_equal @project.name, json_data['name']
+    # Badge level should be a percentage (0-99) when not achieved
+    assert json_data.key?('badge_level')
+    assert json_data.key?('badge_percentage')
+  end
+
+  test 'baseline_badge has CDN caching headers' do
+    get "/projects/#{@project.id}/baseline"
+    assert_response :success
+    assert_equal 'Accept-Encoding', @response.headers['Vary']
+  end
 end
 # rubocop:enable Metrics/ClassLength

@@ -438,6 +438,18 @@ class Project < ApplicationRecord
     end
   end
 
+  # Returns the badge value for baseline series.
+  # Similar to badge_value but for the baseline badge.
+  # For now, this only supports baseline-1. When baseline-2/3 are fully
+  # implemented, this method can be extended to check tiered percentage
+  # across all baseline levels (similar to how badge_value uses
+  # tiered_percentage for metal series).
+  # @return [String] badge level name ('baseline-1') or 'baseline-pct-XX'
+  def baseline_badge_value
+    pct = badge_percentage_for('baseline-1')
+    pct < 100 ? "baseline-pct-#{pct}" : 'baseline-1'
+  end
+
   # Returns this project's image src URL for its badge image (SVG).
   # - If project entry changed recently: returns /badge_static value for immediate accuracy
   # - If project entry NOT changed recently: returns /projects/:id/badge for correct README usage

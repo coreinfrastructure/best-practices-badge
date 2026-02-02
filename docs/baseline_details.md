@@ -3783,30 +3783,22 @@ PROJECT_PERMITTED_FIELDS = (PROJECT_OTHER_FIELDS + ALL_CRITERIA_STATUS +
 
 **Goal**: Add `/projects/{id}/baseline` route for baseline series badge images.
 
-### 4.0: Add detection of stale assets
+### 4.0: Review previous effort
 
-In the process of implementing phase 3, we once again made an
-easy mistake: forgetting to precompile assets when their sources change.
-If not noticed, this can lead to long unnecessary debugging sessions.
+The git branch `baseline_phase4` has the start of a previous effort
+to implement phase 4. It started to look unnecessarily complex and
+include unrelated changes. Nevertheless, pieces of it may be useful to
+bring in, and it will help to identify what needs changing.
 
-So we've created some draft files to detect stale assets.
-These must eventually be added as a *separate* pull request, not
-in the phase 3 pull requests, since this is a separate functionality.
-At the time of writing these are:
+You can see what changes were proposed in the branch by running:
 
-1. `lib/asset_staleness_checker.rb` - Core logic for detecting stale assets
-2. `lib/asset_staleness_middleware.rb` - Rack middleware that runs the check
-   on first web request (the result is memorized, so it's only done once)
-3. `test/lib/asset_staleness_checker_test.rb` - Comprehensive test suite
-  (100% statement coverage)
-4. `config/initializers/check_asset_staleness.rb` - Adds the middleware to
-   the Rails stack
+~~~~sh
+git diff 4f55e826ac37194754e496e4f8b858365a274382 baseline_phase4
+~~~~
 
-Before committing, significantly simplify the test suite.
-It was devised when there was an overly complex approach to the problem.
-It should have at most a few straightforward tests.
-The resulting test suite *must* implement 100% statement coverage of
-deployed code (not including rake tasks or scripts).
+Then review the rest of the plan for phase 4, and propose updates.
+
+Remember, we want the final code to be as short, simple, and clear as possible.
 
 ### 4.1: Design Baseline Badge Images
 
@@ -3843,7 +3835,7 @@ ACCEPTABLE_LEVELS = %w[passing silver gold].freeze
 
 ```
 
-**Add**:
+**Add** something link:
 
 ```ruby
 

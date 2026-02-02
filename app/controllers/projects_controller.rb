@@ -11,8 +11,9 @@ require 'net/http'
 class ProjectsController < ApplicationController
   include ProjectsHelper
 
-  # The 'badge' and 'show_json' actions are special and do NOT take a locale.
-  skip_before_action :redir_missing_locale, only: %i[badge show_json]
+  # The 'badge', 'baseline_badge', and 'show_json' actions are special and
+  # do NOT take a locale.
+  skip_before_action :redir_missing_locale, only: %i[badge baseline_badge show_json]
   # The "project" table has many columns, and we often don't need them all.
   # So we'll take steps to only load a subset of the columns we need,
   # when we only need a subset. We need to load project data *before* using
@@ -33,10 +34,10 @@ class ProjectsController < ApplicationController
   # Note: 'show' is excluded because it displays user-specific content in HTML
   # and handles CDN caching itself for markdown format
   skip_before_action :set_default_cache_control,
-                     only: %i[badge show_json]
+                     only: %i[badge baseline_badge show_json]
   skip_before_action :setup_authentication_state,
-                     only: %i[badge show_json]
-  before_action :cache_on_cdn, only: %i[badge show_json]
+                     only: %i[badge baseline_badge show_json]
+  before_action :cache_on_cdn, only: %i[badge baseline_badge show_json]
 
   helper_method :repo_data
 
@@ -384,6 +385,10 @@ class ProjectsController < ApplicationController
     'id, name, updated_at, tiered_percentage, ' \
     'badge_percentage_0, badge_percentage_1, badge_percentage_2'
 
+  # Database fields needed for baseline badge display (performance optimization)
+  BASELINE_BADGE_PROJECT_FIELDS =
+    'id, name, updated_at, badge_percentage_baseline_1'
+
   # Generate and serve project badge in SVG or JSON format.
   # Optimized to select only necessary fields for performance.
   # @return [void]
@@ -415,6 +420,29 @@ class ProjectsController < ApplicationController
     end
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+
+  # Generate and serve baseline badge in SVG or JSON format.
+  # Optimized to select only necessary fields for performance.
+  # @return [void]
+  # rubocop:disable Metrics/MethodLength
+  def baseline_badge
+    # Select only the fields we need for performance
+    @project = Project.select(BASELINE_BADGE_PROJECT_FIELDS).find(params[:id])
+
+    # Tell CDN the surrogate key so we can quickly erase it later
+    set_surrogate_key_header @project.record_key
+
+    respond_to do |format|
+      format.svg do
+        send_data Badge[@project.baseline_badge_value],
+                  type: 'image/svg+xml', disposition: 'inline'
+      end
+      format.json do
+        render :baseline_badge, status: :ok, location: @project
+      end
+    end
+  end
+  # rubocop:enable Metrics/MethodLength
 
   # Display new project form with GitHub integration support.
   # Supports `GET /projects/new`.

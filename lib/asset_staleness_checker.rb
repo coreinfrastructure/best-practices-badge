@@ -45,50 +45,65 @@ class AssetStalenessChecker
   # Check if assets are stale
   # @return [Boolean] true if any source file is newer than newest compiled
   def assets_stale?
-    newest_source = find_newest_file(@source_paths)
-    newest_compiled = find_newest_file([@compiled_assets_path])
+    _newest_source_path, newest_source_time = find_newest_file(@source_paths)
+    _newest_compiled_path, newest_compiled_time = find_newest_file([@compiled_assets_path])
 
     # If no source files or no compiled files, not stale
-    return false unless newest_source && newest_compiled
+    return false unless newest_source_time && newest_compiled_time
 
-    # Stale if any source file is newer than the newest compiled file
-    newest_source > newest_compiled
+    # Stale if any source file is newer than (after) the newest compiled file
+    newest_source_time > newest_compiled_time
   end
 
   private
 
   # Find the newest file (by mtime) in the given paths
   # @param paths [Array<Pathname>] Paths to search recursively
-  # @return [Time, nil] Newest modification time, or nil if no files found
+  # @return [String, Time] Path to newest and its modification time
+  # rubocop:disable Metrics/MethodLength
   def find_newest_file(paths)
     newest = nil
+    found_path = nil
 
     paths.each do |path|
       next unless path.exist?
 
-      # Find all files recursively
-      Dir.glob(path.join('**', '*')).each do |file|
+      # Find *all* files recursively
+      # We need to include "DOTMATCH" so we truly include all files.
+      # For example, the en.yml source text file is considered a "source"
+      # file so editing it by itself suggests we should regenerate things.
+      # That's okay, because after regenerating we'll regenerate a
+      # .sprockets-manifest-*.json file, so after asset precompilation the
+      # manifest file will be updates. HOWEVER, to *see* that manifest file,
+      # we need to do a dotmatch. This check is conservative - sometimes
+      # we don't need to do a precompile - but it's better to make sure
+      # we do it when needed.
+      Dir.glob(path.join('**', '*'), File::FNM_DOTMATCH).each do |file|
         next unless File.file?(file)
 
         mtime = File.mtime(file)
-        newest = mtime if newest.nil? || mtime > newest
+        if newest.nil? || mtime > newest
+          newest = mtime
+          found_path = path
+        end
       end
     end
 
-    newest
+    [found_path, newest]
   end
+  # rubocop:enable Metrics/MethodLength
 
   # Build error message for development/test environments
   # @return [String] Error message
   def build_error_message
-    newest_source = find_newest_file(@source_paths)
-    newest_compiled = find_newest_file([@compiled_assets_path])
+    newest_source_path, _newest_source_time = find_newest_file(@source_paths)
+    newest_compiled_path, _newest_compiled_time = find_newest_file([@compiled_assets_path])
 
     <<~MSG
       Stale precompiled assets detected! Run: rake assets:precompile
 
-      Newest source file modified: #{newest_source}
-      Newest compiled file: #{newest_compiled}
+      Newest source file modified: #{newest_source_path}
+      Newest compiled file: #{newest_compiled_path}
 
       Source files have been modified since the last precompilation.
     MSG

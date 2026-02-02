@@ -123,4 +123,20 @@ module Sections
   ).merge(
     SYNONYMS_TO_INTERNAL
   ).freeze
+
+  # Pre-computed mapping: section name -> type (:metal, :baseline, :special)
+  # Used for O(1) lookup in section_type method
+  SECTION_TYPE_MAP = METAL_LEVEL_NAMES.index_with(:metal)
+                                      .merge(METAL_LEVEL_NUMBERS.index_with(:metal))
+                                      .merge(SYNONYMS.index_with(:metal))
+                                      .merge(BASELINE_LEVEL_NAMES.index_with(:baseline))
+                                      .merge(SPECIAL_FORMS.index_with(:special))
+                                      .freeze
+
+  # Returns the type of a section: :metal, :baseline, :special, or nil
+  # @param section [String] the section name (canonical, obsolete, or internal)
+  # @return [Symbol, nil] :metal, :baseline, :special, or nil if invalid
+  def self.section_type(section)
+    SECTION_TYPE_MAP[section.to_s]
+  end
 end

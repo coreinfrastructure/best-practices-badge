@@ -27,8 +27,8 @@ LEGAL_LOCALE_FULL ||= /\A#{LEGAL_LOCALE.source}\z/
 VALID_ID ||= /[1-9][0-9]*/
 VALID_ID_FULL ||= /\A#{VALID_ID.source}\z/
 
-# Valid values for static badge display
-VALID_STATIC_VALUE ||= /0|[1-9]{1,2}|passing|silver|gold/
+# Valid values for static badge display (metal and baseline series)
+VALID_STATIC_VALUE ||= /0|[1-9]{1,2}|passing|silver|gold|baseline-[1-3]|baseline-pct-(?:0|[1-9][0-9]?)/
 
 FORMAT_SVG ||= { format: 'svg' }.freeze
 FORMAT_JSON ||= { format: 'json' }.freeze

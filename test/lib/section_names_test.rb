@@ -135,5 +135,33 @@ class SectionNamesTest < ActiveSupport::TestCase
       Sections::VALID_NAMES.sort
     )
   end
+
+  test 'Sections.section_type returns :metal for metal levels' do
+    assert_equal :metal, Sections.section_type('passing')
+    assert_equal :metal, Sections.section_type('silver')
+    assert_equal :metal, Sections.section_type('gold')
+    # Also works with obsolete numeric keys
+    assert_equal :metal, Sections.section_type('0')
+    assert_equal :metal, Sections.section_type('1')
+    assert_equal :metal, Sections.section_type('2')
+    # Also works with synonyms
+    assert_equal :metal, Sections.section_type('bronze')
+  end
+
+  test 'Sections.section_type returns :baseline for baseline levels' do
+    assert_equal :baseline, Sections.section_type('baseline-1')
+    assert_equal :baseline, Sections.section_type('baseline-2')
+    assert_equal :baseline, Sections.section_type('baseline-3')
+  end
+
+  test 'Sections.section_type returns :special for special sections' do
+    assert_equal :special, Sections.section_type('permissions')
+  end
+
+  test 'Sections.section_type returns nil for invalid sections' do
+    assert_nil Sections.section_type('invalid')
+    assert_nil Sections.section_type('foo')
+    assert_nil Sections.section_type('')
+  end
 end
 # rubocop:enable Metrics/ClassLength

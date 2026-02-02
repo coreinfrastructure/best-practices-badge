@@ -76,13 +76,21 @@ class ProjectsController < ApplicationController
   CREATED_AT_ASC = 'created_at asc'
   CREATED_AT_DESC = 'created_at desc'
 
-  # Pre-computed badge level ranks to avoid repeated .index() lookups
-  # Lower rank = lower achievement level
+  # Badge level ranks.
+  # Higher rank = higher achievement. Used by badge_level_lost? to detect
+  # when a project drops from a higher level to a lower one.
+  # Metal and baseline are separate series; cross-series comparison returns
+  # no loss (rank 0 for unknown levels).
   BADGE_LEVEL_RANK = {
     'in_progress' => 0,
+    # Metal series
     'passing' => 1,
     'silver' => 2,
-    'gold' => 3
+    'gold' => 3,
+    # Baseline series
+    'baseline-1' => 1,
+    'baseline-2' => 2,
+    'baseline-3' => 3
   }.freeze
 
   # Frozen regex for URL scheme extraction (memory optimization)
@@ -387,7 +395,9 @@ class ProjectsController < ApplicationController
 
   # Database fields needed for baseline badge display (performance optimization)
   BASELINE_BADGE_PROJECT_FIELDS =
-    'id, name, updated_at, badge_percentage_baseline_1'
+    'id, name, updated_at, ' \
+    'badge_percentage_baseline_1, badge_percentage_baseline_2, badge_percentage_baseline_3, ' \
+    'achieved_baseline_1_at, achieved_baseline_2_at, achieved_baseline_3_at'
 
   # Generate and serve project badge in SVG or JSON format.
   # Optimized to select only necessary fields for performance.
@@ -1371,19 +1381,14 @@ class ProjectsController < ApplicationController
   end
 
   # Determines if a badge level change represents a loss of status.
-  # For traditional levels, compares positions in BADGE_LEVELS array.
+  # Compares ranks within BADGE_LEVEL_RANK; unknown levels default to 0.
+  # Cross-series comparisons (e.g., metal to baseline) return false since
+  # they represent different badge types, not a downgrade.
   # @param old_level [String] Previous badge level
   # @param new_level [String] New badge level
   # @return [Boolean] True if the change represents a loss of badge status
   def badge_level_lost?(old_level, new_level)
-    if Project::CRITERIA_SERIES[:baseline].include?(new_level)
-      # For now, baseline changes are always gains. This won't be true
-      # once we implement baseline-2.
-      false
-    else
-      # Use pre-computed ranks to avoid repeated linear searches
-      BADGE_LEVEL_RANK[new_level] < BADGE_LEVEL_RANK[old_level]
-    end
+    (BADGE_LEVEL_RANK[new_level] || 0) < (BADGE_LEVEL_RANK[old_level] || 0)
   end
 
   # Normalizes URLs by removing trailing slashes.

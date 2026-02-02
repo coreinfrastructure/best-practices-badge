@@ -4103,6 +4103,13 @@ end
 
 **Goal**: Add full support for baseline-2 and baseline-3 levels.
 
+Remember, it's important that the final code be simple, clear, and minimal.
+All code must have 100% statement coverage. We expect baseline to
+change over time, so the system must be able to adjust as baseline
+criteria change. The image displayed by /projects/:id/baseline must
+show the correct level (e.g,. baseline level 2 if the level 1 and level 2
+criteria were met but level 3 was not).
+
 ### 5.1: Sync Baseline-2 and Baseline-3 Criteria
 
 The sync system automatically includes all three baseline levels. Verify baseline-2 and baseline-3 were synced:

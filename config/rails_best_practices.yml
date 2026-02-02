@@ -55,7 +55,8 @@ RemoveUnusedMethodsInModelsCheck: { except_methods: [
   'Criterion#must?', # Used in ERB template; doesn't notice.
   'User#digest',
   'User#created_since', # Used by daily stamp (rake); doesn't notice
-  'User#updated_since' # Used by daily stamp (rake); doesn't notice
+  'User#updated_since', # Used by daily stamp (rake); doesn't notice
+  'Badge#reset_widths!' # Used in tests and after regenerating badge images
   ] }
 ReplaceComplexCreationWithFactoryMethodCheck: { attribute_assignment_count: 3 }
 #

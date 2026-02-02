@@ -20,7 +20,7 @@
   <%= t('projects.form_early.got_badge.description_1') %>
   <!-- DO NOT USE /badge_static in README files! --><img src='<%=
   project.badge_src_url %>' width='<%=
-  Badge::BADGE_WIDTHS[project.badge_level]
+  Badge.width(project.badge_level)
   %>' height='20' alt="<%=
   t('projects.form_early.got_badge.badge_alt',
     id: project.id, level: project.badge_level) %>">

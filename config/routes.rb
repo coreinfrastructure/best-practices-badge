@@ -72,6 +72,11 @@ Rails.application.routes.draw do
       constraints: CONSTRAINTS_ID,
       defaults: FORMAT_SVG
 
+  # Baseline badge image route (no locale, for CDN caching)
+  get '/projects/:id/baseline' => 'projects#baseline_badge',
+      constraints: CONSTRAINTS_ID,
+      defaults: FORMAT_SVG
+
   # JSON API route (locale-independent, outside scope for performance)
   # GET /projects/:id.json (extension required)
   # This is the expected common case, so it's matched early

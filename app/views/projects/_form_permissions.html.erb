@@ -51,6 +51,17 @@
             <div class="panel-collapse collapse in">
               <ul class="list-group">
                 <li class="list-group-item">
+                  <h3><%= t('projects.edit.ownership_transfer', default: 'Ownership Transfer') %></h3>
+                  <p>
+                    <strong><%= t('projects.edit.current_owner', default: 'Current owner ID:') %></strong>
+                    <%= project.user_id %>
+                  </p>
+                  <p class="text-muted">
+                    <%= t('projects.edit.ownership_edit_hint',
+                          default: '(Ownership can be transferred when editing this section.)') %>
+                  </p>
+                </li>
+                <li class="list-group-item">
                   <h3><%= t('projects.edit.collaborator_management', default: 'Collaborator Management') %></h3>
                   <p><strong><%= t('projects.form_basics.additional_rights_changes.description',
                         current_rights: project.additional_rights_to_s) %></strong></p>

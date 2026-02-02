@@ -35,19 +35,19 @@ class BadgeTest < ActiveSupport::TestCase
 
   test 'baseline-1 badge is valid and contains expected text' do
     badge = Badge['baseline-1']
-    assert badge.to_s.include?('level 1')
+    assert badge.to_s.include?('>1<')
     assert badge.to_s.include?('openssf baseline')
   end
 
   test 'baseline-2 badge is valid and contains expected text' do
     badge = Badge['baseline-2']
-    assert badge.to_s.include?('level 2')
+    assert badge.to_s.include?('>2<')
     assert badge.to_s.include?('openssf baseline')
   end
 
   test 'baseline-3 badge is valid and contains expected text' do
     badge = Badge['baseline-3']
-    assert badge.to_s.include?('level 3')
+    assert badge.to_s.include?('>3<')
     assert badge.to_s.include?('openssf baseline')
   end
 
@@ -73,11 +73,11 @@ class BadgeTest < ActiveSupport::TestCase
   end
 
   test 'Badge.width returns correct width for baseline-1 badge' do
-    assert_equal 200, Badge.width('baseline-1')
+    assert_equal 135, Badge.width('baseline-1')
   end
 
   test 'Badge.width returns correct width for baseline percentage badge' do
-    assert_equal 166, Badge.width('baseline-pct-42')
+    assert_equal 167, Badge.width('baseline-pct-42')
   end
 
   test 'Badge.badge_widths returns widths for all badges' do

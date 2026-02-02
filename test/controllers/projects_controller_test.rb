@@ -1773,7 +1773,18 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test 'baseline_badge has CDN caching headers' do
     get "/projects/#{@project.id}/baseline"
     assert_response :success
+    # Verify Vary header for proper CDN caching
     assert_equal 'Accept-Encoding', @response.headers['Vary']
+    # Verify Surrogate-Key header for Fastly CDN purging
+    # This key is used to purge all cached versions when project data changes
+    assert_equal @project.record_key, @response.headers['Surrogate-Key']
+  end
+
+  test 'baseline_badge JSON has CDN caching headers' do
+    get "/projects/#{@project.id}/baseline.json"
+    assert_response :success
+    assert_equal 'Accept-Encoding', @response.headers['Vary']
+    assert_equal @project.record_key, @response.headers['Surrogate-Key']
   end
 end
 # rubocop:enable Metrics/ClassLength

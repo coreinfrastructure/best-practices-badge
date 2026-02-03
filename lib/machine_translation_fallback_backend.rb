@@ -79,7 +79,6 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
     @human_translations
   end
 
-
   private
 
   # Look up a key directly in a translations hash.

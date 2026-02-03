@@ -710,9 +710,7 @@ module MachineTranslationHelpers
     def build_filtered_translations(expected_keys, translated_flat)
       english = load_flat_translations('en')
       filtered = {}
-      invalid_placeholders = []
-      invalid_html = []
-      invalid_urls = []
+      validation_failures = []
 
       expected_keys.each do |key|
         next unless translated_flat.key?(key)
@@ -726,35 +724,80 @@ module MachineTranslationHelpers
 
         # Validate placeholders
         unless valid_placeholders?(english_value, value)
-          invalid_placeholders << key
+          validation_failures << {
+            key: key,
+            english: english_value,
+            translated: value,
+            reason: placeholder_failure_reason(english_value, value)
+          }
           next
         end
 
         # Validate HTML tags
         unless valid_html_tags?(english_value, value)
-          invalid_html << key
+          validation_failures << {
+            key: key,
+            english: english_value,
+            translated: value,
+            reason: html_failure_reason(english_value, value)
+          }
           next
         end
 
         # Validate URL count
         unless valid_url_count?(english_value, value)
-          invalid_urls << key
+          validation_failures << {
+            key: key,
+            english: english_value,
+            translated: value,
+            reason: url_failure_reason(english_value, value)
+          }
           next
         end
 
         set_nested_key(filtered, key, value)
       end
 
-      report_invalid('placeholders', invalid_placeholders) if invalid_placeholders.any?
-      report_invalid('HTML tags', invalid_html) if invalid_html.any?
-      report_invalid('URL count', invalid_urls) if invalid_urls.any?
+      report_validation_failures(validation_failures) if validation_failures.any?
       filtered
     end
 
-    def report_invalid(type, keys)
-      puts "Warning: #{keys.length} translations have invalid #{type}"
-      keys.first(5).each { |key| puts "  - #{key}" }
-      puts "  ... (#{keys.length - 5} more)" if keys.length > 5
+    def report_validation_failures(failures)
+      puts ''
+      puts '=' * 80
+      puts "VALIDATION FAILURES: #{failures.length} translation(s) rejected"
+      puts '=' * 80
+
+      failures.each_with_index do |failure, i|
+        puts ''
+        puts "#{i + 1}. Key: #{failure[:key]}"
+        puts "   Reason: #{failure[:reason]}"
+        puts "   English:    #{failure[:english].to_s[0, 100]}#{'...' if failure[:english].to_s.length > 100}"
+        puts "   Translated: #{failure[:translated].to_s[0, 100]}#{'...' if failure[:translated].to_s.length > 100}"
+      end
+
+      puts ''
+      puts '=' * 80
+    end
+
+    def placeholder_failure_reason(english, translated)
+      english_ph = extract_placeholders(english.to_s)
+      translated_ph = extract_placeholders(translated.to_s)
+      missing = english_ph - translated_ph
+      "Missing placeholders: #{missing.join(', ')}"
+    end
+
+    def html_failure_reason(english, translated)
+      english_tags = extract_html_tags(english.to_s)
+      translated_tags = extract_html_tags(translated.to_s)
+      missing = english_tags - translated_tags
+      "Missing HTML tags: #{missing.map { |t| "<#{t}>" }.join(', ')}"
+    end
+
+    def url_failure_reason(english, translated)
+      english_count = count_urls(english.to_s)
+      translated_count = count_urls(translated.to_s)
+      "URL count mismatch: English has #{english_count}, translation has #{translated_count}"
     end
 
     # Check if translation preserves all placeholders from source

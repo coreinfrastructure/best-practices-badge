@@ -959,8 +959,9 @@ module MachineTranslationHelpers
             # Check if value contains an unescaped apostrophe
             # In YAML single quotes, apostrophes should be doubled ('')
             if value.include?("'") && !value.include?("''")
-              # Convert to double quotes and escape any existing double quotes
-              escaped_value = value.gsub('"', '\"')
+              # Convert to double quotes and escape backslashes and quotes properly
+              # Must escape backslashes first to avoid double-escaping
+              escaped_value = value.gsub('\\', '\\\\').gsub('"', '\"')
               "#{indent}#{key}: \"#{escaped_value}\""
             else
               # Single quotes are fine if no apostrophes

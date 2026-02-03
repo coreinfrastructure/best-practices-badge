@@ -286,16 +286,21 @@ module MachineTranslationHelpers
       puts 'Translation Status:'
       puts '-' * 60
 
-      english_keys = load_flat_translations('en').keys
+      english = load_flat_translations('en')
+      # Only count English keys that have non-blank values (actually need translation)
+      translatable_keys = english.keys.select do |key|
+        value = english[key]
+        !value.nil? && !value.to_s.strip.empty?
+      end
 
       TRANSLATION_PRIORITY.each do |locale|
         human = load_flat_translations(locale, human_only: true)
         machine = load_flat_translations(locale, machine_only: true)
 
         # Only count non-empty values as translated
-        human_count = count_non_empty_translations(human, english_keys)
-        machine_count = count_non_empty_translations(machine, english_keys)
-        missing = english_keys.length - human_count - machine_count
+        human_count = count_non_empty_translations(human, translatable_keys)
+        machine_count = count_non_empty_translations(machine, translatable_keys)
+        missing = translatable_keys.length - human_count - machine_count
 
         puts format('%-8<loc>s Human: %4<human>d  Machine: %4<machine>d  Missing: %4<miss>d',
                     loc: locale, human: human_count, machine: machine_count, miss: missing)

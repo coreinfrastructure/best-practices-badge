@@ -29,6 +29,10 @@ module MachineTranslationHelpers
   # Default batch size for Copilot translations (balance speed vs accuracy)
   COPILOT_BATCH_SIZE = 20
 
+  # Translation example counts for consistency and quality
+  MIN_TRANSLATION_EXAMPLES = 20 # Minimum examples to provide (if available)
+  MAX_TRANSLATION_EXAMPLES = 30 # Maximum examples to avoid overwhelming
+
   class << self
     def validate_locale!(locale)
       return if I18n.available_locales.map(&:to_s).include?(locale)
@@ -113,16 +117,18 @@ module MachineTranslationHelpers
       example_keys = []
       example_keys = find_example_translations(locale, technical_terms, english) if technical_terms.any?
 
-      # Add general style examples if we don't have enough (min 20, max 30)
-      if example_keys.length < 20
+      # Try to add general style examples (target MIN-MAX, but use what we have)
+      if example_keys.length < MIN_TRANSLATION_EXAMPLES
         general_examples = find_general_style_examples(locale, english, exclude: example_keys)
-        example_keys += general_examples.take(20 - example_keys.length)
+        needed = MIN_TRANSLATION_EXAMPLES - example_keys.length
+        example_keys += general_examples.take(needed)
       end
 
+      # Return nil if we have no examples at all
       return if example_keys.empty?
 
-      # Limit to avoid overwhelming (max 30 examples)
-      example_keys = example_keys.take(30)
+      # Limit to maximum to avoid overwhelming
+      example_keys = example_keys.take(MAX_TRANSLATION_EXAMPLES)
 
       tmp_dir = Rails.root.join('tmp')
 

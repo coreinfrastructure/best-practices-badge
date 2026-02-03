@@ -101,5 +101,50 @@ namespace :translation do
       MachineTranslationHelpers.release_copilot_lock
     end
   end
+
+  desc 'Translate all remaining strings across all locales (runs until complete)'
+  task :all, [:batch_size] => :environment do |_t, args|
+    batch_size = (args[:batch_size] || MachineTranslationHelpers::COPILOT_BATCH_SIZE).to_i
+    wait_time = 300 # 5 minutes between batches
+
+    puts 'Starting automated translation for all locales...'
+    puts "Batch size: #{batch_size}, Wait time: #{wait_time} seconds (#{wait_time / 60} minutes)"
+    puts
+
+    iteration = 0
+    loop do
+      iteration += 1
+      puts "=== Iteration #{iteration} at #{Time.zone.now.strftime('%Y-%m-%d %H:%M:%S')} ==="
+
+      # Find next locale that needs translation
+      locale = MachineTranslationHelpers.next_locale_needing_translation
+      missing_keys = MachineTranslationHelpers.find_untranslated_keys(locale)
+
+      if missing_keys.empty?
+        puts 'All strings have been translated across all locales!'
+        puts 'Final status:'
+        MachineTranslationHelpers.print_status
+        break
+      end
+
+      puts "Found #{missing_keys.length} untranslated keys for #{MachineTranslationHelpers.language_name(locale)}"
+
+      # Run translation for this locale
+      puts "Translating batch of #{[batch_size, missing_keys.length].min} keys..."
+      Rake::Task['translation:copilot'].reenable # Allow task to be called again
+      Rake::Task['translation:copilot'].invoke(locale, batch_size)
+
+      # Wait before next iteration (unless we're done)
+      remaining = MachineTranslationHelpers.find_untranslated_keys(locale)
+      next if remaining.empty?
+
+      puts
+      puts "Waiting #{wait_time} seconds before next batch..."
+      sleep wait_time
+    end
+
+    puts
+    puts "Completed #{iteration} iterations."
+  end
 end
 # rubocop:enable Metrics/BlockLength

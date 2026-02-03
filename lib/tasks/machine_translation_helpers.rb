@@ -52,6 +52,11 @@ module MachineTranslationHelpers
       source_tracking = load_source_tracking(locale)
 
       english.keys.select do |key|
+        english_value = english[key]
+        
+        # Skip keys where English value is blank - nothing to translate
+        next false if english_value.nil? || english_value.to_s.strip.empty?
+        
         value = translated[key]
         # Key is untranslated if:
         # 1. No translation exists or is empty, OR
@@ -60,7 +65,7 @@ module MachineTranslationHelpers
         next false if human_translated.key?(key) # Has human translation - ignore source changes
 
         # Check if English source has changed since machine translation
-        source_tracking.key?(key) && source_tracking[key] != english[key]
+        source_tracking.key?(key) && source_tracking[key] != english_value
       end
     end
 
@@ -488,13 +493,21 @@ module MachineTranslationHelpers
       File.write(prompt_file, prompt)
 
       copilot_success = execute_copilot(prompt, files[:target])
-      imported_count = copilot_success && File.exist?(files[:target]) &&
-                       import_translations(locale, files[:target], expected_keys: keys_to_translate)
+      
+      # Try to import translations even if copilot had issues - use what we can
+      imported_count = false
+      if copilot_success && File.exist?(files[:target])
+        imported_count = import_translations(locale, files[:target], expected_keys: keys_to_translate)
+      end
 
-      if imported_count
+      # Accept partial success - if we imported any translations, count it as success
+      if imported_count && imported_count > 0
+        if imported_count < keys_to_translate.length
+          puts "Partial success: imported #{imported_count}/#{keys_to_translate.length} translations"
+        end
         { success: true, translated: imported_count, locale: locale }
       else
-        puts 'Translation failed. Files preserved for debugging:'
+        puts 'Translation failed completely. Files preserved for debugging:'
         puts "  Source: #{files[:source]}"
         puts "  Target: #{files[:target]}"
         puts "  Prompt: #{prompt_file}"

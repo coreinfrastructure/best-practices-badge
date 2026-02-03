@@ -37,11 +37,23 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
   def translate(locale, key, options = {})
     # Try human translations first (check raw hash to avoid fallback behavior)
     human_value = lookup_in_translations(@human_translations, locale, key)
-    return human_value if human_value.present?
+    if human_value.present?
+      # Process the translation: resolve pluralization/defaults, then interpolate
+      entry = resolve(locale, key, human_value, options.except(:default))
+      return entry if entry.is_a?(::I18n::MissingTranslation)
+
+      options.key?(:count) ? pluralize(locale, entry, options[:count]) : interpolate(locale, entry, options)
+    end
 
     # Human translation missing/empty - try machine translations
     machine_value = lookup_in_translations(@machine_translations, locale, key)
-    return machine_value if machine_value.present?
+    if machine_value.present?
+      # Process the translation: resolve pluralization/defaults, then interpolate
+      entry = resolve(locale, key, machine_value, options.except(:default))
+      return entry if entry.is_a?(::I18n::MissingTranslation)
+
+      options.key?(:count) ? pluralize(locale, entry, options[:count]) : interpolate(locale, entry, options)
+    end
 
     # Neither has it - use default fallback behavior (English)
     @human_backend.translate(locale, key, options)

@@ -54,6 +54,24 @@ overridden when humans provide translations.
 **Files:**
 
 - `config/machine_translations/*.yml` - Machine-translated text
+- `config/machine_translations/src_en_*.yml` - Source tracking files
+
+**Source Tracking:**
+
+The `src_en_*.yml` files track the English text that was used to create
+each machine translation. When English source text changes, the system
+automatically detects this and marks those translations for re-translation.
+These files must be committed to the repository.
+
+Example:
+
+- `config/machine_translations/fr.yml` - French translations
+- `config/machine_translations/src_en_fr.yml` - English source used for French
+
+If a key in `en.yml` changes but the tracked source in `src_en_fr.yml`
+is different, the system knows the French translation is stale and needs
+updating. Human translations always take precedence and are never
+automatically invalidated.
 
 ### How Precedence Works
 
@@ -100,6 +118,11 @@ rake translation:import[LOCALE,FILE]
 ```
 
 Imports a translated YAML file into machine translations.
+
+**Key Validation:** The import process validates that all keys in the
+translated file exist in the English source. Any unexpected keys
+(e.g., hallucinated keys from AI translation) are automatically removed
+and logged. Missing keys are acceptable (translator may skip some).
 
 Example:
 

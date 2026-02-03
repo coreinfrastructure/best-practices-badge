@@ -1,0 +1,10 @@
+---
+en:
+  criteria:
+    baseline-1:
+      osps_br_01_01:
+        details: ''
+  hello: Hello world
+  submit: Submit
+  projects_count:
+    zero: Zero Projects

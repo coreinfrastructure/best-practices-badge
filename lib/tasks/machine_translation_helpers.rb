@@ -39,13 +39,26 @@ module MachineTranslationHelpers
       Rails.root.join('config', 'machine_translations', "#{locale}.yml")
     end
 
+    def source_tracking_path(locale)
+      Rails.root.join('config', 'machine_translations', "src_en_#{locale}.yml")
+    end
+
     def find_untranslated_keys(locale)
       english = load_flat_translations('en')
       translated = load_flat_translations(locale)
+      human_translated = load_flat_translations(locale, human_only: true)
+      source_tracking = load_source_tracking(locale)
 
       english.keys.select do |key|
         value = translated[key]
-        value.nil? || value.to_s.strip.empty?
+        # Key is untranslated if:
+        # 1. No translation exists or is empty, OR
+        # 2. English source has changed since machine translation (and no human translation)
+        next true if value.nil? || value.to_s.strip.empty?
+        next false if human_translated.key?(key) # Has human translation - ignore source changes
+
+        # Check if English source has changed since machine translation
+        source_tracking.key?(key) && source_tracking[key] != english[key]
       end
     end
 
@@ -84,9 +97,12 @@ module MachineTranslationHelpers
       puts "- Change /en/ paths to /#{locale}/ in URLs"
       puts '- The result MUST use the same keys'
       puts '- The result MUST be syntactically valid YAML'
+      puts ''
+      puts 'Note: For manual imports, source tracking is optional.'
+      puts 'For machine translations via Copilot, source tracking is automatic.'
     end
 
-    def import_translations(locale, file)
+    def import_translations(locale, file, track_source: false)
       filepath = file.start_with?('/') ? file : Rails.root.join(file)
 
       unless File.exist?(filepath)
@@ -100,12 +116,26 @@ module MachineTranslationHelpers
         return
       end
 
+      # Validate against current English keys
+      english = load_flat_translations('en')
+      translated[locale] = validate_and_filter_keys(
+        translated[locale], english.keys, locale
+      )
+
+      if translated[locale].empty?
+        puts 'No valid keys to import after validation'
+        return
+      end
+
       existing = load_existing_machine_translations(locale)
       deep_merge!(existing[locale], translated[locale])
 
       machine_file = machine_translation_path(locale)
       File.write(machine_file, yaml_dump(existing))
       puts "Imported #{count_keys(translated[locale])} keys to #{machine_file}"
+
+      # Update source tracking if requested (for machine translations)
+      update_source_tracking(locale, translated[locale]) if track_source
     end
 
     def cleanup_machine_translations
@@ -209,20 +239,39 @@ module MachineTranslationHelpers
 
         CRITICAL RULES:
         1. Only translate the VALUES, never the YAML keys (keys must stay in English)
-        2. Keep template variables like %{name}, %{count} EXACTLY as-is
+        2. Keep template variables like %{name}, %{count} EXACTLY as-is (do NOT translate them)
         3. Keep HTML tags like <a href="...">, <strong>, <em> unchanged
         4. Change /en/ paths in URLs to /#{locale}/ (e.g., /en/projects -> /#{locale}/projects)
         5. Preserve YAML structure exactly - same nesting, same keys
         6. For pluralization keys (zero, one, few, many, other), translate each form appropriately for #{lang}
         7. Proper names like "GitHub" and "OpenSSF" should NOT be translated
 
+        TEMPLATE VARIABLES (CRITICAL - WILL BE VALIDATED):
+        - Variables like %{name}, %{url}, %{count} are placeholders
+        - These MUST appear in translation EXACTLY as they appear in English
+        - Do NOT translate these variable names
+        - Do NOT change the format
+        - Example English: "Hello %{name}, you have %{count} messages"
+        - Example #{lang}: Translate text but keep %{name} and %{count} exactly
+        - Invalid: Translating %{name} to %{nom} or %{{name}} WILL FAIL validation
+
+        YAML FORMATTING REQUIREMENTS (CRITICAL):
+        - Use DOUBLE QUOTES (") for all string values, NOT single quotes (')
+        - Single quotes in YAML require escaping apostrophes as '', which if not done causes errors
+        - Double quotes handle apostrophes, colons, and special characters correctly
+        - To include double quotes inside double quotes, add backslash before each such character
+        - Example: description: "We're sorry you can't continue"  (CORRECT)
+        - Example: description: 'We're sorry'  (WRONG - breaks YAML parsing)
+
         WORKFLOW:
         1. Read the source file: #{source_name}
         2. Translate each value to #{lang}
         3. Write the translated YAML to: #{target_name}
         4. The output file MUST have '#{locale}:' as the root key (not 'en:')
-        5. Review your translations for accuracy and natural #{lang} phrasing
-        6. Fix any issues you find
+        5. Use DOUBLE QUOTES for all translated string values
+        6. Review your translations for accuracy and natural #{lang} phrasing
+        7. Validate the YAML is syntactically correct
+        8. Fix any issues you find
 
         After completing the translation, output ONLY the text "TRANSLATION_COMPLETE" on a line by itself.
       PROMPT
@@ -248,7 +297,7 @@ module MachineTranslationHelpers
 
       copilot_success = execute_copilot(prompt, files[:target])
       import_success = copilot_success && File.exist?(files[:target]) &&
-                       import_copilot_result(locale, files[:target])
+                       import_copilot_result(locale, files[:target], expected_keys: keys_to_translate)
 
       if import_success
         { success: true, translated: keys_to_translate.length, locale: locale }
@@ -308,8 +357,10 @@ module MachineTranslationHelpers
       existing
     end
 
+    # rubocop:disable Metrics/CyclomaticComplexity
     def cleanup_locale(locale)
       machine_file = machine_translation_path(locale)
+      source_file = source_tracking_path(locale)
       return 0 unless File.exist?(machine_file)
 
       machine = YAML.load_file(machine_file)
@@ -323,12 +374,23 @@ module MachineTranslationHelpers
       new_count = count_keys(machine[locale])
       cleaned = original_count - new_count
 
-      return 0 unless cleaned.positive?
+      if cleaned.positive?
+        File.write(machine_file, yaml_dump(machine))
+        puts "#{locale}: Removed #{cleaned} keys (now #{new_count} machine translations)"
 
-      File.write(machine_file, yaml_dump(machine))
-      puts "#{locale}: Removed #{cleaned} keys (now #{new_count} machine translations)"
+        # Also clean up source tracking
+        if File.exist?(source_file)
+          source = YAML.load_file(source_file)
+          if source&.dig('en')
+            remove_keys_present_in!(source['en'], human)
+            File.write(source_file, yaml_dump(source))
+          end
+        end
+      end
+
       cleaned
     end
+    # rubocop:enable Metrics/CyclomaticComplexity
 
     def merge_flat!(target, source, prefix = '')
       source.each do |key, value|
@@ -386,6 +448,125 @@ module MachineTranslationHelpers
       data.to_yaml(line_width: -1)
     end
 
+    # Load the source tracking file (English text that was translated)
+    def load_source_tracking(locale)
+      source_file = source_tracking_path(locale)
+      return {} unless File.exist?(source_file)
+
+      data = YAML.load_file(source_file)
+      return {} unless data.is_a?(Hash) && data['en'].is_a?(Hash)
+
+      result = {}
+      merge_flat!(result, data['en'])
+      result
+    end
+
+    # Update source tracking with current English text for translated keys
+    def update_source_tracking(locale, translated_nested)
+      english = load_flat_translations('en')
+      translated_flat = {}
+      merge_flat!(translated_flat, translated_nested)
+
+      # Load existing source tracking
+      source_file = source_tracking_path(locale)
+      existing =
+        if File.exist?(source_file)
+          YAML.load_file(source_file) || {}
+        else
+          {}
+        end
+      existing['en'] ||= {}
+
+      # For each translated key, store the current English text
+      translated_flat.each_key do |key|
+        next unless english.key?(key)
+
+        set_nested_key(existing['en'], key, english[key])
+      end
+
+      File.write(source_file, yaml_dump(existing))
+      puts "Updated source tracking: #{source_file}"
+    end
+
+    # Validate that translated keys match expected keys, filtering out extras
+    # Returns filtered nested hash with only expected keys
+    def validate_and_filter_keys(translated_nested, expected_keys, _locale)
+      translated_flat = {}
+      merge_flat!(translated_flat, translated_nested)
+
+      report_unexpected_keys(translated_flat.keys, expected_keys)
+      report_missing_keys(expected_keys, translated_flat.keys)
+
+      build_filtered_translations(expected_keys, translated_flat)
+    end
+
+    def report_unexpected_keys(translated_keys, expected_keys)
+      unexpected_keys = translated_keys - expected_keys
+      return if unexpected_keys.none?
+
+      puts "Warning: Found #{unexpected_keys.length} unexpected keys in translation:"
+      unexpected_keys.first(10).each { |key| puts "  - #{key}" }
+      puts "  ... and #{unexpected_keys.length - 10} more" if unexpected_keys.length > 10
+      puts 'These keys were not in the original export and will be removed.'
+    end
+
+    def report_missing_keys(expected_keys, translated_keys)
+      missing_keys = expected_keys - translated_keys
+      return if missing_keys.none?
+
+      puts "Note: #{missing_keys.length} keys were not translated (skipped)"
+    end
+
+    def build_filtered_translations(expected_keys, translated_flat)
+      english = load_flat_translations('en')
+      filtered = {}
+      invalid_placeholders = []
+
+      expected_keys.each do |key|
+        next unless translated_flat.key?(key)
+
+        value = translated_flat[key]
+        next if value.nil? || value.to_s.strip.empty?
+
+        unless valid_placeholders?(english[key], value)
+          invalid_placeholders << key
+          next
+        end
+
+        set_nested_key(filtered, key, value)
+      end
+
+      report_invalid_placeholders(invalid_placeholders)
+      filtered
+    end
+
+    def report_invalid_placeholders(invalid_placeholders)
+      return if invalid_placeholders.none?
+
+      puts "Warning: #{invalid_placeholders.length} translations have invalid placeholders:"
+      invalid_placeholders.first(10).each { |key| puts "  - #{key}" }
+      puts "  ... and #{invalid_placeholders.length - 10} more" if invalid_placeholders.length > 10
+      puts 'Placeholders like %<name>s must appear exactly as in source.'
+    end
+
+    # Check if translation preserves all placeholders from source
+    # Placeholders are in format %{variable_name}
+    def valid_placeholders?(source_text, translated_text)
+      return true if source_text.nil? || translated_text.nil?
+
+      source_placeholders = extract_placeholders(source_text.to_s)
+      translated_placeholders = extract_placeholders(translated_text.to_s)
+
+      # All source placeholders must appear in translation
+      source_placeholders.all? { |ph| translated_placeholders.include?(ph) }
+    end
+
+    # Extract all placeholder variables from text
+    # Returns array of placeholder strings like ["%{name}", "%{count}"]
+    def extract_placeholders(text)
+      text.scan(/%\{[A-Za-z0-9_]+\}/)
+    end
+
     # Copilot execution helpers
 
     # rubocop:disable Naming/PredicateMethod
@@ -416,14 +597,25 @@ module MachineTranslationHelpers
     end
     # rubocop:enable Naming/PredicateMethod
 
+    # rubocop:disable Naming/PredicateMethod
     # Returns true on success, false on failure
-    def import_copilot_result(locale, target_file)
+    def import_copilot_result(locale, target_file, expected_keys: nil)
       return false unless File.exist?(target_file)
 
-      translated = YAML.load_file(target_file)
+      # Try to load YAML normally first
+      translated = load_yaml_with_fallback(target_file, locale)
+      return false unless translated
+
       unless translated.is_a?(Hash) && translated[locale].is_a?(Hash)
         puts 'Invalid YAML structure in Copilot output'
         return false
+      end
+
+      # Validate keys if we know what was expected
+      if expected_keys
+        translated[locale] = validate_and_filter_keys(
+          translated[locale], expected_keys, locale
+        )
       end
 
       existing = load_existing_machine_translations(locale)
@@ -432,10 +624,67 @@ module MachineTranslationHelpers
       machine_file = machine_translation_path(locale)
       File.write(machine_file, yaml_dump(existing))
       puts "Imported #{count_keys(translated[locale])} keys to #{machine_file}"
+
+      # Update source tracking to record the English text that was translated
+      update_source_tracking(locale, translated[locale])
+
       true
-    rescue Psych::SyntaxError => e
-      puts "YAML parse error in Copilot output: #{e.message}"
-      false
+    end
+    # rubocop:enable Naming/PredicateMethod
+
+    # Load YAML file, attempting to fix common issues if normal parsing fails
+    def load_yaml_with_fallback(file, locale)
+      # First try: load normally
+      begin
+        return YAML.load_file(file)
+      rescue Psych::SyntaxError => e
+        puts "Initial YAML parse failed: #{e.message}"
+        puts 'Attempting to repair YAML formatting...'
+      end
+
+      # Second try: fix common quoting issues
+      content = File.read(file)
+      fixed_content = fix_yaml_quoting(content, locale)
+
+      begin
+        translated = YAML.load(fixed_content)
+        puts 'Successfully repaired YAML formatting'
+        # Write the fixed version back
+        File.write(file, fixed_content)
+        return translated
+      rescue Psych::SyntaxError => e
+        puts "YAML parse error after repair attempt: #{e.message}"
+        return
+      end
+    end
+
+    # Fix common YAML quoting issues in Copilot output
+    def fix_yaml_quoting(content, _locale)
+      lines = content.split("\n")
+      fixed_lines =
+        lines.map do |line|
+          # Match lines with single-quoted values
+          # Pattern: key: 'value...'
+          if line =~ /^(\s+)(\w+):\s+'(.+)'$/
+            indent = ::Regexp.last_match(1)
+            key = ::Regexp.last_match(2)
+            value = ::Regexp.last_match(3)
+
+            # Check if value contains an unescaped apostrophe
+            # In YAML single quotes, apostrophes should be doubled ('')
+            if value.include?("'") && !value.include?("''")
+              # Convert to double quotes and escape any existing double quotes
+              escaped_value = value.gsub('"', '\"')
+              "#{indent}#{key}: \"#{escaped_value}\""
+            else
+              # Single quotes are fine if no apostrophes
+              line
+            end
+          else
+            line
+          end
+        end
+      fixed_lines.join("\n")
     end
   end
 end

@@ -1,0 +1,90 @@
+---
+fr:
+  unsubscribe:
+    header: Se désabonner
+    description: Nous sommes désolés que vous ne souhaitiez plus recevoir de notifications. Si vous êtes certain, veuillez confirmer votre demande de désabonnement aux notifications.
+    email_label: Adresse email
+    issued_label: Date d'émission
+    token_label: Jeton de désabonnement
+    submit: Se désabonner
+    confirm_message: Êtes-vous sûr de vouloir vous désabonner de toutes les notifications ?
+    processing: Traitement en cours...
+    success: Vous avez été désabonné avec succès de nos notifications.
+    invalid_token: Jeton de désabonnement invalide. Veuillez vérifier le jeton dans votre email.
+    no_matching_accounts: Aucun compte correspondant trouvé avec les notifications par email activées.
+    missing_parameters: 'Paramètres requis manquants : adresse email, jeton de désabonnement et date d''émission.'
+    invalid_parameters: Paramètres fournis invalides.
+    error: Une erreur s'est produite lors du traitement de votre demande. Veuillez réessayer plus tard.
+  users:
+    edit:
+      notification_emails: Notifications par email
+      notification_emails_help: Recevoir des notifications par email concernant vos projets
+  projects:
+    edit:
+      new_owner: ID du propriétaire (un entier positif), à modifier pour changer la propriété
+      new_owner_repeat: ID du nouveau propriétaire répété (pour confirmer un changement de propriété)
+      current_owner: 'ID du propriétaire actuel :'
+      ownership_edit_hint: "(La propriété peut être transférée lors de la modification de cette section.)"
+      submit_cdla_permissive_20_html: En soumettant ces données sur le projet, vous acceptez de les publier sous au moins la <a href="https://cdla.dev/permissive-2-0/">Community Data License Agreement – Permissive, Version 2.0</a>. Cela signifie qu'un destinataire de données peut partager les données, avec ou sans modifications, à condition que le destinataire de données rende disponible le texte de cet accord avec les données partagées. Cet accord n'impose <i>aucune</i> restriction ou obligation concernant l'utilisation, la modification ou le partage des résultats. Vous conservez les droits d'auteur (le cas échéant), et la licence du projet n'est pas affectée.<br><br>
+    show:
+      section_selector: Section
+      cdla_permissive_20_html: Ces données sont disponibles sous la <a href="https://cdla.dev/permissive-2-0/">Community Data License Agreement – Permissive, Version 2.0 (CDLA-Permissive-2.0)</a>. Cela signifie qu'un destinataire de données peut partager les données, avec ou sans modifications, à condition que le destinataire de données rende disponible le texte de cet accord avec les données partagées. Veuillez créditer %{user} et les contributeurs du badge des meilleures pratiques OpenSSF.<br><br>
+    form_early:
+      got_baseline_badge:
+        description_1: 'Si c''est votre projet, veuillez afficher le statut de votre badge de référence sur la page de votre projet ! Le statut du badge de référence ressemble à ceci :'
+        badge_alt: Le niveau du badge de référence pour le projet %{id} est %{level}
+        description_2: 'Voici comment intégrer le badge de référence :'
+        details_html: Vous pouvez afficher le statut de votre badge de référence en intégrant ceci dans votre fichier markdown :<br /> %{markdown_embedding}<br /> ou en intégrant ceci dans votre HTML :<br /> %{html_embedding}<br />
+    misc:
+      reminder_notification_note:
+        title: Paramètres de notification par courriel
+        description_html: Si vous êtes le propriétaire de cette entrée de badge et souhaitez désactiver les courriels de rappel d'inactivité, veuillez modifier les <a href="/users/%{user_id}/edit">paramètres de votre profil utilisateur</a>. Ce paramètre s'applique à tous vos projets.
+  report_mailer:
+    unsubscribe_notice_html: 'Pour vous désabonner de ces notifications par courriel, veuillez visiter : <a href="%{unsubscribe_url}">%{unsubscribe_url}</a>'
+    unsubscribe_notice_text: 'Pour vous désabonner de ces notifications par courriel, veuillez visiter : %{unsubscribe_url}'
+  criteria:
+    baseline-1:
+      osps_ac_01_01:
+        description: Lorsqu'un utilisateur tente de lire ou de modifier une ressource sensible dans le dépôt officiel du projet, le système DOIT exiger que l'utilisateur complète un processus d'authentification multifacteur.
+        details: Appliquer l'authentification multifacteur pour le système de contrôle de version du projet, exigeant que les collaborateurs fournissent une deuxième forme d'authentification lors de l'accès à des données sensibles ou de la modification des paramètres du dépôt. Les clés d'accès sont acceptables pour ce contrôle.
+      osps_ac_02_01:
+        description: Lorsqu'un nouveau collaborateur est ajouté, le système de contrôle de version DOIT exiger une attribution manuelle des permissions, ou restreindre les permissions du collaborateur aux privilèges les plus bas disponibles par défaut.
+        details: La plupart des systèmes de contrôle de version publics sont configurés de cette manière. Assurez-vous que le système de contrôle de version du projet attribue toujours les permissions les plus basses disponibles aux collaborateurs par défaut lors de leur ajout, en accordant des permissions supplémentaires uniquement lorsque cela est nécessaire.
+      osps_ac_03_01:
+        description: Lorsqu'un commit direct est tenté sur la branche principale du projet, un mécanisme d'application DOIT empêcher l'application de la modification.
+        details: Si le système de contrôle de version est centralisé, définissez la protection de branche sur la branche principale dans le système de contrôle de version du projet. Alternativement, utilisez une approche décentralisée, comme celle du noyau Linux, où les modifications sont d'abord proposées dans un autre dépôt, et la fusion des modifications dans le dépôt principal nécessite un acte distinct spécifique.
+      osps_ac_03_02:
+        description: Lorsqu'une tentative de suppression de la branche principale du projet est effectuée, le système de contrôle de version DOIT traiter cela comme une activité sensible et exiger une confirmation explicite de l'intention.
+        details: Définissez la protection de branche sur la branche principale dans le système de contrôle de version du projet pour empêcher la suppression.
+      osps_br_01_01:
+        description: Lorsqu'un pipeline CI/CD accepte un paramètre d'entrée, ce paramètre DOIT être nettoyé et validé avant d'être utilisé dans le pipeline.
+        details: 'FR: '
+      osps_br_01_02:
+        description: Lorsqu'un pipeline CI/CD utilise un nom de branche dans sa fonctionnalité, cette valeur de nom DOIT être nettoyée et validée avant utilisation dans le pipeline.
+        details: ''
+      osps_br_03_01:
+        description: Lorsque le projet répertorie un URI comme canal officiel du projet, cet URI DOIT être exclusivement fourni via des canaux chiffrés.
+        details: Configurez les sites web et les systèmes de contrôle de version du projet pour utiliser des canaux chiffrés tels que SSH ou HTTPS pour la transmission de données. Assurez-vous que tous les outils et domaines référencés dans la documentation du projet ne peuvent être accessibles que via des canaux chiffrés.
+      osps_br_03_02:
+        description: Lorsque le projet répertorie un URI comme canal de distribution officiel, cet URI DOIT être exclusivement fourni via des canaux chiffrés.
+        details: Configurez le pipeline de publication du projet pour récupérer uniquement les données provenant de sites web, de réponses d'API et d'autres services qui utilisent des canaux chiffrés tels que SSH ou HTTPS pour la transmission de données.
+      osps_br_07_01:
+        description: Le projet DOIT empêcher le stockage involontaire de données sensibles non chiffrées, telles que les secrets et les identifiants, dans le système de contrôle de version.
+        details: Configurez .gitignore ou équivalent pour exclure les fichiers pouvant contenir des informations sensibles. Utilisez des hooks de pré-commit et des outils d'analyse automatisée pour détecter et empêcher l'inclusion de données sensibles dans les commits.
+      osps_do_01_01:
+        description: Lorsque le projet a effectué une publication, la documentation du projet DOIT inclure des guides d'utilisation pour toutes les fonctionnalités de base.
+        details: Créez des guides d'utilisation ou une documentation pour toutes les fonctionnalités de base du projet, expliquant comment installer, configurer et utiliser les fonctionnalités du projet. S'il existe des actions dangereuses ou destructrices connues disponibles, incluez des avertissements très visibles.
+      osps_do_02_01:
+        description: Lorsque le projet a effectué une publication, la documentation du projet DOIT inclure un guide pour signaler les défauts.
+        details: Il est recommandé que les projets utilisent le suivi des problèmes par défaut de leur système de contrôle de version. Si une source externe est utilisée, assurez-vous que la documentation du projet et le guide de contribution expliquent clairement et visiblement comment utiliser le système de signalement. Il est recommandé que la documentation du projet définisse également les attentes concernant la façon dont les défauts seront triés et résolus.
+      osps_gv_02_01:
+        description: Tant qu'il est actif, le projet DOIT disposer d'un ou plusieurs mécanismes pour des discussions publiques sur les changements proposés et les obstacles d'utilisation.
+        details: Établissez un ou plusieurs mécanismes pour les discussions publiques au sein du projet, tels que les listes de diffusion, la messagerie instantanée ou les suivi des problèmes, afin de faciliter une communication ouverte et les retours d'information.
+      osps_gv_03_01:
+        description: Tant qu'il est actif, la documentation du projet DOIT inclure une explication du processus de contribution.
+        details: Créez un fichier CONTRIBUTING.md ou un répertoire CONTRIBUTING/ pour décrire le processus de contribution, y compris les étapes pour soumettre des modifications et interagir avec les mainteneurs du projet.
+      osps_le_02_01:
+        description: Tant qu'il est actif, la licence du code source DOIT respecter la définition de l'Open Source de l'OSI ou la définition du logiciel libre de la FSF.
+        details: Ajoutez un fichier LICENSE au dépôt du projet avec une licence qui est une licence approuvée par l'Open Source Initiative (OSI), ou une licence libre approuvée par la Free Software Foundation (FSF). Des exemples de telles licences incluent MIT, BSD 2-clause, BSD 3-clause révisée, Apache 2.0, Lesser GNU General Public License (LGPL), et la GNU General Public License (GPL). La publication dans le domaine public répond à ce contrôle s'il n'y a pas d'autres restrictions telles que des brevets.
+      osps_le_02_02:
+        description: Tant qu'il est actif, la licence des actifs logiciels publiés DOIT respecter la définition de l'Open Source de l'OSI ou la définition du logiciel libre de la FSF.

@@ -20,16 +20,20 @@
 # PERFORMANCE NOTE:
 # This class is called on every translation lookup in the application.
 # All methods are optimized to minimize object allocation.
+#
+# rubocop:disable Style/Send, Style/OptionHash
 class MachineTranslationFallbackBackend < I18n::Backend::Simple
   def initialize(human_backend, machine_backend)
     super()
     @human_backend = human_backend
     @machine_backend = machine_backend
     # Cache backend translation hashes to avoid repeated method calls
+    # Must use send() to access private translations method
     @human_translations = @human_backend.send(:translations)
     @machine_translations = @machine_backend.send(:translations)
   end
 
+  # options parameter follows Rails I18n::Backend::Base signature
   def translate(locale, key, options = {})
     # Try human translations first (check raw hash to avoid fallback behavior)
     human_value = lookup_in_translations(@human_translations, locale, key)
@@ -66,11 +70,12 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
   # Look up a key directly in a translations hash.
   # Returns the value if found and non-nil, otherwise nil.
   # Optimized to minimize object allocation - critical for memory-constrained production.
+  # rubocop:disable Metrics/MethodLength
   def lookup_in_translations(translations, locale, key)
-    return nil unless translations
+    return unless translations
 
     current = translations[locale]
-    return nil if current.nil?
+    return if current.nil?
 
     # Convert key to string if it's a symbol (needed for split)
     key_str = key.is_a?(Symbol) ? key.to_s : key
@@ -80,17 +85,20 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
     key_str.split('.').each do |part|
       # Try symbol first (more common), then string
       # Use has_key? to distinguish between "key doesn't exist" and "key exists with false value"
-      current = if current.key?(part.to_sym)
-                  current[part.to_sym]
-                elsif current.key?(part)
-                  current[part]
-                else
-                  return nil
-                end
+      current =
+        if current.key?(part.to_sym)
+          current[part.to_sym]
+        elsif current.key?(part)
+          current[part]
+        else
+          return nil
+        end
       # Only return nil if the value is actually nil, not if it's false or empty string
       return nil if current.nil?
     end
 
     current
   end
+  # rubocop:enable Metrics/MethodLength
 end
+# rubocop:enable Style/Send, Style/OptionHash

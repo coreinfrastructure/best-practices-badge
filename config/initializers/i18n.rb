@@ -86,18 +86,20 @@ Rails.application.config.after_initialize do
   # translation.io syncs all files in I18n.load_path, so machine translations MUST NOT be there
   machine_translations_dir = Rails.root.join('config', 'machine_translations').to_s
   contaminated_paths = I18n.load_path.select { |path| path.to_s.start_with?(machine_translations_dir) }
-  
+
   if contaminated_paths.any?
-    raise <<~ERROR
+    paths_list = contaminated_paths.map { |p| "  - #{p}" }
+                                   .join("\n")
+    raise StandardError, <<~ERROR
       CRITICAL CONFIGURATION ERROR: Machine translations detected in I18n.load_path!
-      
+
       The following machine translation files are in I18n.load_path:
-      #{contaminated_paths.map { |p| "  - #{p}" }.join("\n")}
-      
+      #{paths_list}
+
       This would cause translation.io to sync machine translations, contaminating
       the human translation database and making it impossible to distinguish between
       human and machine translations.
-      
+
       Machine translations MUST be loaded through the custom backend only, not via
       I18n.load_path. Check config/initializers/i18n.rb and ensure machine_translations/
       directory is NOT added to I18n.load_path.
@@ -116,7 +118,7 @@ Rails.application.config.after_initialize do
   machine_backend = I18n::Backend::Simple.new
   machine_translation_path = Rails.root.join('config', 'machine_translations', '*.yml')
 
-  Dir[machine_translation_path].sort.each do |filepath|
+  Dir[machine_translation_path].each do |filepath|
     # Skip source tracking files (src_en_*.yml) - they're metadata, not translations
     next if File.basename(filepath).start_with?('src_en_')
 

@@ -53,10 +53,10 @@ module MachineTranslationHelpers
 
       english.keys.select do |key|
         english_value = english[key]
-        
+
         # Skip keys where English value is blank - nothing to translate
         next false if english_value.nil? || english_value.to_s.strip.empty?
-        
+
         value = translated[key]
         # Key is untranslated if:
         # 1. No translation exists or is empty, OR
@@ -493,7 +493,7 @@ module MachineTranslationHelpers
       File.write(prompt_file, prompt)
 
       copilot_success = execute_copilot(prompt, files[:target])
-      
+
       # Try to import translations even if copilot had issues - use what we can
       imported_count = false
       if copilot_success && File.exist?(files[:target])
@@ -719,6 +719,7 @@ module MachineTranslationHelpers
       puts "Note: #{missing.length} keys not translated" if missing.any?
     end
 
+    # rubocop:disable Metrics/CyclomaticComplexity, Metrics/BlockLength
     def build_filtered_translations(expected_keys, translated_flat)
       english = load_flat_translations('en')
       filtered = {}
@@ -781,6 +782,7 @@ module MachineTranslationHelpers
       report_validation_failures(validation_failures) if validation_failures.any?
       filtered
     end
+    # rubocop:enable Metrics/CyclomaticComplexity, Metrics/BlockLength
 
     def report_validation_failures(failures)
       puts ''
@@ -811,7 +813,8 @@ module MachineTranslationHelpers
       english_tags = extract_html_tags(english.to_s)
       translated_tags = extract_html_tags(translated.to_s)
       missing = english_tags - translated_tags
-      "Missing HTML tags: #{missing.map { |t| "<#{t}>" }.join(', ')}"
+      "Missing HTML tags: #{missing.map { |t| "<#{t}>" }
+.join(', ')}"
     end
 
     def url_failure_reason(english, translated)

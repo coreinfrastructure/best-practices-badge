@@ -154,3 +154,64 @@ fr:
       osps_sa_01_01:
         description: Lorsque le projet a publié une version, la documentation du projet DOIT inclure une documentation de conception démontrant toutes les actions et acteurs au sein du système.
         details: Incluez des conceptions dans la documentation du projet qui expliquent les actions et les acteurs. Les acteurs incluent tout sous-système ou entité qui peut influencer un autre segment du système. Assurez-vous que cela est mis à jour pour les nouvelles fonctionnalités ou les modifications importantes.
+      osps_sa_02_01:
+        description: Lorsque le projet a fait une version, la documentation du projet DOIT inclure les descriptions de toutes les interfaces logicielles externes des actifs logiciels publiés.
+        details: Documentez toutes les interfaces logicielles (APIs) des actifs logiciels publiés, en expliquant comment les utilisateurs peuvent interagir avec le logiciel et quelles données sont attendues ou produites. Assurez-vous que ceci est mis à jour pour les nouvelles fonctionnalités ou les changements majeurs.
+      osps_sa_03_01:
+        description: Lorsque le projet a fait une version, le projet DOIT effectuer une évaluation de sécurité pour comprendre les problèmes de sécurité potentiels les plus probables et les plus impactants qui pourraient se produire dans le logiciel.
+        details: Effectuer une évaluation de sécurité informe à la fois les membres du projet ainsi que les consommateurs en aval que le projet comprend quels problèmes pourraient survenir dans le logiciel. Comprendre quelles menaces pourraient se réaliser aide le projet à gérer et traiter le risque. Cette information est utile aux consommateurs en aval pour démontrer la compétence et les pratiques de sécurité du projet. Assurez-vous que ceci est mis à jour pour les nouvelles fonctionnalités ou les changements majeurs.
+      osps_vm_01_01:
+        description: Lorsqu'il est actif, la documentation du projet DOIT inclure une politique pour la divulgation coordonnée de vulnérabilités (CVD), avec un délai clair pour la réponse.
+        details: Créez un fichier SECURITY.md à la racine du répertoire, décrivant la politique du projet pour la divulgation coordonnée de vulnérabilités. Incluez une méthode pour signaler les vulnérabilités. Définissez les attentes sur la façon dont le projet répondra et traitera les problèmes signalés.
+      osps_vm_03_01:
+        description: Lorsqu'il est actif, la documentation du projet DOIT fournir un moyen de signaler les vulnérabilités de façon privée directement aux contacts de sécurité du projet.
+        details: Fournissez un moyen pour les chercheurs de sécurité de signaler les vulnérabilités de manière privée au projet. Cela peut être une adresse email dédiée, un formulaire web, des outils spécialisés du système de gestion de version, des adresses email pour les contacts de sécurité, ou d'autres méthodes.
+      osps_vm_04_01:
+        description: Lorsqu'il est actif, la documentation du projet DOIT publier publiquement les données sur les vulnérabilités découvertes.
+        details: Fournissez des informations sur les vulnérabilités connues dans un canal public prévisible, tel qu'une entrée CVE, un article de blog ou un autre moyen. Dans la mesure du possible, ces informations doivent inclure la ou les version(s) affectée(s), comment un consommateur peut déterminer s'il est vulnérable, et des instructions pour l'atténuation ou la correction.
+    baseline-3:
+      osps_ac_04_02:
+        description: Lorsqu'une tâche se voit attribuer des permissions dans un pipeline CI/CD, le code source ou la configuration DOIT attribuer uniquement les privilèges minimaux nécessaires pour l'activité correspondante.
+        details: Configurez les pipelines CI/CD du projet pour attribuer les permissions les plus basses disponibles aux utilisateurs et services par défaut, en élevant les permissions seulement lorsque nécessaire pour des tâches spécifiques. Dans certains systèmes de gestion de version, cela peut être possible au niveau de l'organisation ou du dépôt. Sinon, définissez les permissions au niveau supérieur du pipeline.
+      osps_br_02_02:
+        description: Lorsqu'une version officielle est créée, tous les actifs de cette version DOIVENT être clairement associés à l'identifiant de version ou un autre identifiant unique pour l'actif.
+        details: Attribuez un identifiant de version unique à chaque actif logiciel produit par le projet, en suivant une convention de nommage ou un schéma de numérotation cohérent. Les exemples incluent SemVer, CalVer, ou l'id de commit git.
+      osps_br_07_02:
+        description: Le projet DOIT définir une politique pour gérer les secrets et informations d'identification utilisés par le projet. La politique devrait inclure des directives pour stocker, accéder et faire tourner les secrets et informations d'identification.
+        details: Documentez comment les secrets et informations d'identification sont gérés et utilisés dans le projet. Cela devrait inclure des détails sur la façon dont les secrets sont stockés (par exemple, en utilisant un outil de gestion de secrets), comment l'accès est contrôlé, et comment les secrets sont renouvelés ou mis à jour. Assurez-vous que les informations sensibles ne sont pas codées en dur dans le code source ou stockées dans les systèmes de gestion de version.
+      osps_do_03_01:
+        description: Lorsque le projet a fait une version, la documentation du projet DOIT contenir des instructions pour vérifier l'intégrité et l'authenticité des actifs de la version.
+        details: Les instructions dans le projet devraient contenir des informations sur la technologie utilisée, les commandes à exécuter et la sortie attendue. Lorsque cela est possible, évitez de stocker cette documentation au même endroit que le pipeline de construction et de publication pour éviter qu'une seule violation ne compromette à la fois le logiciel et la documentation pour vérifier l'intégrité du logiciel.
+      osps_do_03_02:
+        description: Lorsque le projet a fait une version, la documentation du projet DOIT contenir des instructions pour vérifier l'identité attendue de la personne ou du processus créant la version logicielle.
+        details: L'identité attendue peut être sous la forme d'identifiants de clés utilisés pour signer, d'émetteur et d'identité d'un certificat sigstore, ou d'autres formes similaires. Lorsque cela est possible, évitez de stocker cette documentation au même endroit que le pipeline de construction et de publication pour éviter qu'une seule violation ne compromette à la fois le logiciel et la documentation pour vérifier l'intégrité du logiciel.
+      osps_do_04_01:
+        description: Quand le projet a publié une version, la documentation du projet DOIT inclure une déclaration descriptive sur la portée et la durée du support pour chaque version.
+        details: Afin de communiquer la portée et la durée du support pour les actifs logiciels publiés par le projet, le projet devrait avoir un fichier SUPPORT.md, une section « Support » dans SECURITY.md, ou toute autre documentation expliquant le cycle de vie du support, y compris la durée prévue du support pour chaque version, les types de support fournis (par exemple, corrections de bugs, mises à jour de sécurité), et toutes politiques ou procédures pertinentes pour obtenir du support.
+      osps_do_05_01:
+        description: Quand le projet a publié une version, la documentation du projet DOIT fournir une déclaration descriptive sur le moment où les versions ne recevront plus de mises à jour de sécurité.
+        details: Afin de communiquer la portée et la durée du support pour les corrections de sécurité, le projet devrait avoir un fichier SUPPORT.md ou autre documentation expliquant la politique du projet pour les mises à jour de sécurité.
+      osps_gv_04_01:
+        description: Pendant que le projet est actif, la documentation du projet DOIT avoir une politique selon laquelle les collaborateurs de code sont examinés avant d'accorder des permissions élevées aux ressources sensibles.
+        details: Publiez une politique applicable dans la documentation du projet qui exige que les collaborateurs de code soient examinés et approuvés avant de se voir accorder des permissions élevées aux ressources sensibles, telles que l'approbation de fusion ou l'accès aux secrets. Il est recommandé que l'examen comprenne l'établissement d'une lignée d'identité justifiable, comme la confirmation de l'association du contributeur avec une organisation de confiance connue.
+      osps_qa_02_02:
+        description: Quand le projet a publié une version, tous les actifs logiciels compilés publiés DOIVENT être livrés avec une nomenclature logicielle.
+        details: Il est recommandé de générer automatiquement les SBOM au moment de la compilation en utilisant un outil dont la précision a été vérifiée. Cela permet aux utilisateurs d'ingérer ces données de manière standardisée aux côtés d'autres projets dans leur environnement.
+      osps_qa_04_02:
+        description: Quand le projet a publié une version comprenant plusieurs dépôts de code source, tous les sous-projets DOIVENT appliquer des exigences de sécurité aussi strictes ou plus strictes que la base de code principale.
+        details: Tous les dépôts de code de sous-projets supplémentaires produits par le projet et compilés dans une version doivent appliquer des exigences de sécurité selon le statut et l'objectif de la base de code respective. En plus de suivre les exigences Baseline OSPS correspondantes, cela peut inclure l'exigence d'un examen de sécurité, garantir qu'il est exempt de vulnérabilités et garantir qu'il est exempt de problèmes de sécurité connus.
+      osps_qa_06_02:
+        description: Pendant que le projet est actif, la documentation du projet DOIT clairement documenter quand et comment les tests sont exécutés.
+        details: Ajoutez une section à la documentation de contribution qui explique comment exécuter les tests localement et comment exécuter les tests dans le pipeline CI/CD. La documentation devrait expliquer ce que les tests testent et comment interpréter les résultats.
+      osps_qa_06_03:
+        description: Pendant que le projet est actif, la documentation du projet DOIT inclure une politique selon laquelle tous les changements majeurs au logiciel produit par le projet doivent ajouter ou mettre à jour les tests de la fonctionnalité dans une suite de tests automatisée.
+        details: Ajoutez une section à la documentation de contribution qui explique la politique d'ajout ou de mise à jour des tests. La politique devrait expliquer ce qui constitue un changement majeur et quels tests doivent être ajoutés ou mis à jour.
+      osps_qa_07_01:
+        description: Quand un commit est effectué vers la branche principale, le système de contrôle de version du projet DOIT exiger au moins une approbation humaine non auteur des changements avant la fusion.
+        details: Configurez le système de contrôle de version du projet pour exiger au moins une approbation humaine non auteur des changements avant la fusion dans la branche de publication ou principale. Cela peut être réalisé en exigeant qu'une pull request soit examinée et approuvée par au moins un autre collaborateur avant qu'elle puisse être fusionnée.
+      osps_sa_03_02:
+        description: Quand le projet a publié une version, le projet DOIT effectuer une modélisation des menaces et une analyse de la surface d'attaque pour comprendre et se protéger contre les attaques sur les chemins de code critiques, les fonctions et les interactions au sein du système.
+        details: La modélisation des menaces est une activité où le projet examine la base de code, les processus et l'infrastructure associés, les interfaces, les composants clés et « pense comme un pirate » et réfléchit à la manière dont le système pourrait être cassé ou compromis. Chaque menace identifiée est répertoriée afin que le projet puisse ensuite réfléchir à la manière d'éviter ou de combler de manière proactive toute lacune ou vulnérabilité qui pourrait survenir. Assurez-vous que cela est mis à jour pour les nouvelles fonctionnalités ou les changements majeurs.
+      osps_vm_04_02:
+        description: Pendant que le projet est actif, toutes les vulnérabilités dans les composants logiciels n'affectant pas le projet DOIVENT être comptabilisées dans un document VEX, complétant le rapport de vulnérabilité avec des détails de non-exploitabilité.
+        details: Établissez un flux VEX communiquant le statut d'exploitabilité des vulnérabilités connues, y compris les détails d'évaluation ou toute mesure d'atténuation en place empêchant l'exécution du code vulnérable.

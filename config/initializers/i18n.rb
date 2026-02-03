@@ -54,3 +54,11 @@ raise InvalidLocale unless
 # > 'config.i18n.fallbacks = [I18n.default_locale]'.
 # > If not, fallbacks will be broken in your app by I18n 1.1.x.
 Rails.application.config.i18n.fallbacks = [:en]
+
+# Load machine translations BEFORE human translations.
+# Rails I18n uses the last value loaded for duplicate keys, so human
+# translations in config/locales/ will override machine translations.
+# This allows machine translations to fill gaps where humans haven't
+# translated yet, while always preferring human translations when available.
+machine_translation_path = Rails.root.join('config', 'machine_translations', '*.yml')
+Rails.application.config.i18n.load_path.unshift(*Dir[machine_translation_path])

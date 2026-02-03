@@ -168,14 +168,14 @@ module MachineTranslationHelpers
     def print_export_instructions(locale, filepath, examples = nil, instructions = nil)
       lang = language_name(locale)
 
-      puts "=" * 80
+      puts '=' * 80
       puts "TRANSLATION TASK: English → #{lang} (#{locale})"
-      puts "=" * 80
+      puts '=' * 80
       puts ''
       puts 'WHAT TO DO:'
       puts "  1. Translate English values to #{lang} in: #{filepath}"
-      puts "  2. Keep all keys exactly as-is (in English)"
-      puts "  3. Preserve ALL placeholders like %{variable} EXACTLY"
+      puts '  2. Keep all keys exactly as-is (in English)'
+      puts '  3. Preserve ALL placeholders like %<variable>s EXACTLY'
       puts "  4. Import result: rake translation:import[#{locale},#{filepath}]"
       puts ''
 
@@ -196,11 +196,11 @@ module MachineTranslationHelpers
 
       puts 'IMPORTANT RULES:'
       puts "  • Translate ONLY the values (right side of ':'), NOT the keys"
-      puts "  • If a value contains %{name} or %{count}, keep those EXACTLY"
-      puts "  • Maintain YAML structure (indentation, quotes, etc.)"
-      puts "  • Use examples for consistent technical terminology"
+      puts '  • If a value contains %<name>s or %<count>s, keep those EXACTLY'
+      puts '  • Maintain YAML structure (indentation, quotes, etc.)'
+      puts '  • Use examples for consistent technical terminology'
       puts ''
-      puts "=" * 80
+      puts '=' * 80
     end
 
     # Import translated YAML file with validation and source tracking
@@ -252,7 +252,6 @@ module MachineTranslationHelpers
 
       true
     end
-    # rubocop:enable Naming/PredicateMethod
 
     def cleanup_machine_translations
       cleaned_total = 0
@@ -399,9 +398,10 @@ module MachineTranslationHelpers
       existing_translations = load_flat_translations(locale)
 
       # Get all available human translation keys
-      available_keys = human_translations.keys.reject do |key|
-        exclude.include?(key) || existing_translations[key].to_s.strip.empty?
-      end
+      available_keys =
+        human_translations.keys.reject do |key|
+          exclude.include?(key) || existing_translations[key].to_s.strip.empty?
+        end
 
       # Sort by text length (prefer shorter, clearer examples)
       # but prioritize those with common patterns (buttons, labels, messages)
@@ -688,7 +688,9 @@ module MachineTranslationHelpers
     def build_filtered_translations(expected_keys, translated_flat)
       english = load_flat_translations('en')
       filtered = {}
-      invalid = []
+      invalid_placeholders = []
+      invalid_html = []
+      invalid_urls = []
 
       expected_keys.each do |key|
         next unless translated_flat.key?(key)
@@ -698,14 +700,32 @@ module MachineTranslationHelpers
         # This rejects translations that failed or returned blank
         next if value.nil? || value.to_s.strip.empty?
 
-        if valid_placeholders?(english[key], value)
-          set_nested_key(filtered, key, value)
-        else
-          invalid << key
+        english_value = english[key]
+
+        # Validate placeholders
+        unless valid_placeholders?(english_value, value)
+          invalid_placeholders << key
+          next
         end
+
+        # Validate HTML tags
+        unless valid_html_tags?(english_value, value)
+          invalid_html << key
+          next
+        end
+
+        # Validate URL count
+        unless valid_url_count?(english_value, value)
+          invalid_urls << key
+          next
+        end
+
+        set_nested_key(filtered, key, value)
       end
 
-      report_invalid('placeholders', invalid) if invalid.any?
+      report_invalid('placeholders', invalid_placeholders) if invalid_placeholders.any?
+      report_invalid('HTML tags', invalid_html) if invalid_html.any?
+      report_invalid('URL count', invalid_urls) if invalid_urls.any?
       filtered
     end
 
@@ -731,6 +751,41 @@ module MachineTranslationHelpers
     # Returns array of placeholder strings like ["%{name}", "%{count}"]
     def extract_placeholders(text)
       text.scan(/%\{[A-Za-z0-9_]+\}/)
+    end
+
+    # Check if translation preserves critical HTML tags from source
+    # Tags like <a href=, <em>, <strong>, etc. must be preserved
+    def valid_html_tags?(source_text, translated_text)
+      return true if source_text.nil? || translated_text.nil?
+
+      source_tags = extract_html_tags(source_text.to_s)
+      translated_tags = extract_html_tags(translated_text.to_s)
+
+      # All source tags must appear in translation
+      source_tags.all? { |tag| translated_tags.include?(tag) }
+    end
+
+    # Extract critical HTML tags from text
+    # Returns array of tag names like ["a", "em", "strong"]
+    def extract_html_tags(text)
+      # Match opening tags: <tag> or <tag attr="...">
+      # Extract just the tag name
+      text.scan(/<([a-z]+)[\s>]/).flatten.uniq.sort
+    end
+
+    # Check if translation has same number of URLs as source
+    def valid_url_count?(source_text, translated_text)
+      return true if source_text.nil? || translated_text.nil?
+
+      source_urls = count_urls(source_text.to_s)
+      translated_urls = count_urls(translated_text.to_s)
+
+      source_urls == translated_urls
+    end
+
+    # Count URLs in text (http://, https://, www.)
+    def count_urls(text)
+      text.scan(%r{https?://|www\.}).length
     end
 
     # Copilot execution helpers

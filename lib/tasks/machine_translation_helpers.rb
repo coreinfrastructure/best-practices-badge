@@ -159,31 +159,41 @@ module MachineTranslationHelpers
     end
 
     def print_export_instructions(locale, filepath, examples = nil, instructions = nil)
-      puts "YAML file to be translated has been exported to: #{filepath}"
+      lang = language_name(locale)
 
-      if instructions
-        puts "Translation instructions: #{instructions}"
+      puts "=" * 80
+      puts "TRANSLATION TASK: English → #{lang} (#{locale})"
+      puts "=" * 80
+      puts ''
+      puts 'WHAT TO DO:'
+      puts "  1. Translate English values to #{lang} in: #{filepath}"
+      puts "  2. Keep all keys exactly as-is (in English)"
+      puts "  3. Preserve ALL placeholders like %{variable} EXACTLY"
+      puts "  4. Import result: rake translation:import[#{locale},#{filepath}]"
+      puts ''
+
+      if examples
+        puts 'EXAMPLES PROVIDED FOR CONSISTENCY:'
+        puts "  English technical terms:  #{examples[:en_filepath]}"
+        puts "  #{lang} translations: #{examples[:locale_filepath]}"
+        puts "  (#{examples[:term_count]} technical terms showing preferred translations)"
         puts ''
       end
 
-      if examples
-        puts 'Translation examples:'
-        puts "  English: #{examples[:en_filepath]}"
-        puts "  #{language_name(locale)}: #{examples[:locale_filepath]}"
-        puts "  (#{examples[:term_count]} technical terms with existing translations)"
+      if instructions
+        puts 'DETAILED INSTRUCTIONS:'
+        puts "  See: #{instructions}"
+        puts '  (Complete guidance on placeholders, formatting, validation, etc.)'
+        puts ''
       end
 
+      puts 'IMPORTANT RULES:'
+      puts "  • Translate ONLY the values (right side of ':'), NOT the keys"
+      puts "  • If a value contains %{name} or %{count}, keep those EXACTLY"
+      puts "  • Maintain YAML structure (indentation, quotes, etc.)"
+      puts "  • Use examples for consistent technical terminology"
       puts ''
-      puts 'Next steps:'
-      puts ''
-      if instructions
-        puts '* Read the translation instructions file for detailed guidance'
-      end
-      if examples
-        puts '* Review the example files for consistent terminology'
-      end
-      puts '* Translate the values in the YAML file to be translated (keys stay exactly the same and in English)'
-      puts '* Import with: rake translation:import[LOCALE,PATH_TO_TRANSLATED_FILE]'
+      puts "=" * 80
     end
 
     # Import translated YAML file with validation and source tracking

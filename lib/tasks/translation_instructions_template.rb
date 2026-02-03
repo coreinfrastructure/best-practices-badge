@@ -27,14 +27,21 @@ module TranslationInstructionsTemplate
       Project: OpenSSF Best Practices Badge
       Target: #{lang} (#{locale})
       #{examples_text}
+      FILE FORMAT:
+      - Source file has 'en:' as root key with English values
+      - You MUST change 'en:' to '#{locale}:' at the top
+      - Then translate all VALUES to #{lang}
+      - Keep all keys unchanged (in English)
+
       CRITICAL RULES:
-      1. Only translate VALUES, never YAML keys
-      2. Keep %<variables>s EXACTLY as-is (placeholders)
-      3. Keep HTML tags unchanged
-      4. Change /en/ paths to /#{locale}/ in URLs
-      5. Preserve YAML structure (same nesting, keys, indentation)
-      6. Translate pluralization (zero/one/few/many/other) appropriately
-      7. Don't translate proper names (GitHub, OpenSSF, etc.)
+      1. Change root YAML key from 'en:' to '#{locale}:'
+      2. Only translate VALUES, never YAML keys
+      3. Keep %<variables>s EXACTLY as-is (placeholders)
+      4. Keep HTML tags unchanged
+      5. Change /en/ paths to /#{locale}/ in URLs
+      6. Preserve YAML structure (same nesting, keys, indentation)
+      7. Translate pluralization (zero/one/few/many/other) appropriately
+      8. Don't translate proper names (GitHub, OpenSSF, etc.)
 
       YAML FORMATTING:
       - Use DOUBLE QUOTES for strings (not single quotes)
@@ -44,11 +51,13 @@ module TranslationInstructionsTemplate
       VALIDATION:
       Your translation will be validated for:
       - Correct keys, preserved placeholders, valid YAML
+      - HTML tags preserved, URL count matches
 
       WORKFLOW:
-      1. Review examples (if provided)
-      2. Translate values accurately and naturally for #{lang}
-      3. Import: rake translation:import[#{locale},PATH]
+      1. Review examples (if provided) to understand style
+      2. Change 'en:' to '#{locale}:' in the file
+      3. Translate values accurately and naturally for #{lang}
+      4. Import: rake translation:import[#{locale},PATH]
     INSTRUCTIONS
   end
   # rubocop:enable Metrics/MethodLength

@@ -72,10 +72,12 @@ module MachineTranslationHelpers
 
     def export_keys_for_translation(locale, keys)
       english = load_flat_translations('en')
-      output = { locale => {} }
+      # Export English text under 'en' key (source language)
+      # Translator will change 'en' to target locale and translate values
+      output = { 'en' => {} }
 
       keys.each do |key|
-        set_nested_key(output[locale], key, english[key])
+        set_nested_key(output['en'], key, english[key])
       end
 
       timestamp = Time.zone.now.strftime('%Y%m%d_%H%M%S')
@@ -172,33 +174,43 @@ module MachineTranslationHelpers
       puts "TRANSLATION TASK: English → #{lang} (#{locale})"
       puts '=' * 80
       puts ''
-      puts 'WHAT TO DO:'
-      puts "  1. Translate English values to #{lang} in: #{filepath}"
-      puts '  2. Keep all keys exactly as-is (in English)'
-      puts '  3. Preserve ALL placeholders like %<variable>s EXACTLY'
-      puts "  4. Import result: rake translation:import[#{locale},#{filepath}]"
+      puts 'FILE TO TRANSLATE:'
+      puts "  #{filepath}"
+      puts ''
+      puts 'REQUIRED FORMAT:'
+      puts "  Root key must be: #{locale}:"
+      puts "  (The file currently has 'en:' - change it to '#{locale}:')"
+      puts ''
+      puts 'STEPS:'
+      puts "  1. Change root key from 'en:' to '#{locale}:'"
+      puts "  2. Translate all English VALUES to #{lang}"
+      puts '  3. Keep all KEYS unchanged (in English)'
+      puts '  4. Preserve ALL placeholders like %<variable>s EXACTLY'
+      puts "  5. Import: rake translation:import[#{locale},#{filepath}]"
       puts ''
 
       if examples
-        puts 'EXAMPLES PROVIDED FOR CONSISTENCY:'
+        puts 'TRANSLATION EXAMPLES PROVIDED:'
         puts "  English:  #{examples[:en_filepath]}"
+        puts "            ↑ Has 'en:' root key with English values"
         puts "  #{lang}: #{examples[:locale_filepath]}"
-        puts "  (#{examples[:example_count]} example translations showing style and terminology)"
+        puts "            ↑ Has '#{locale}:' root key with #{lang} values"
+        puts "  (#{examples[:example_count]} examples showing correct format, style, and terminology)"
         puts ''
       end
 
       if instructions
         puts 'DETAILED INSTRUCTIONS:'
-        puts "  See: #{instructions}"
-        puts '  (Complete guidance on placeholders, formatting, validation, etc.)'
+        puts "  #{instructions}"
         puts ''
       end
 
-      puts 'IMPORTANT RULES:'
-      puts "  • Translate ONLY the values (right side of ':'), NOT the keys"
-      puts '  • If a value contains %<name>s or %<count>s, keep those EXACTLY'
-      puts '  • Maintain YAML structure (indentation, quotes, etc.)'
-      puts '  • Use examples for consistent technical terminology'
+      puts 'CRITICAL RULES:'
+      puts "  • Root key MUST be '#{locale}:' (not 'en:')"
+      puts '  • Translate ONLY values, NEVER keys'
+      puts '  • Keep %<name>s, %<count>s placeholders EXACTLY'
+      puts '  • Keep HTML tags like <a>, <em>, <strong> unchanged'
+      puts '  • Same YAML structure (indentation, nesting)'
       puts ''
       puts '=' * 80
     end

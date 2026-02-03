@@ -66,3 +66,30 @@ en:
       osps_br_03_02:
         description: When the project lists a URI as an official distribution channel, that URI MUST be exclusively delivered using encrypted channels.
         details: Configure the project's release pipeline to only fetch data from websites, API responses, and other services which use encrypted channels such as SSH or HTTPS for data transmission.
+      osps_br_07_01:
+        description: The project MUST prevent the unintentional storage of unencrypted sensitive data, such as secrets and credentials, in the version control system.
+        details: Configure .gitignore or equivalent to exclude files that may contain sensitive information. Use pre-commit hooks and automated scanning tools to detect and prevent the inclusion of sensitive data in commits.
+      osps_do_01_01:
+        description: When the project has made a release, the project documentation MUST include user guides for all basic functionality.
+        details: Create user guides or documentation for all basic functionality of the project, explaining how to install, configure, and use the project's features. If there are any known dangerous or destructive actions available, include highly-visible warnings.
+      osps_do_02_01:
+        description: When the project has made a release, the project documentation MUST include a guide for reporting defects.
+        details: It is recommended that projects use their VCS default issue tracker. If an external source is used, ensure that the project documentation and contributing guide clearly and visibly explain how to use the reporting system. It is recommended that project documentation also sets expectations for how defects will be triaged and resolved.
+      osps_gv_02_01:
+        description: While active, the project MUST have one or more mechanisms for public discussions about proposed changes and usage obstacles.
+        details: Establish one or more mechanisms for public discussions within the project, such as mailing lists, instant messaging, or issue trackers, to facilitate open communication and feedback.
+      osps_gv_03_01:
+        description: While active, the project documentation MUST include an explanation of the contribution process.
+        details: Create a CONTRIBUTING.md or CONTRIBUTING/ directory to outline the contribution process including the steps for submitting changes, and engaging with the project maintainers.
+      osps_le_02_01:
+        description: While active, the license for the source code MUST meet the OSI Open Source Definition or the FSF Free Software Definition.
+        details: Add a LICENSE file to the project's repo with a license that is an approved license by the Open Source Initiative (OSI), or a free license as approved by the Free Software Foundation (FSF). Examples of such licenses include the MIT, BSD 2-clause, BSD 3-clause revised, Apache 2.0, Lesser GNU General Public License (LGPL), and the GNU General Public License (GPL). Releasing to the public domain meets this control if there are no other encumbrances such as patents.
+      osps_le_02_02:
+        description: While active, the license for the released software assets MUST meet the OSI Open Source Definition or the FSF Free Software Definition.
+        details: If a different license is included with released software assets, ensure it is an approved license by the Open Source Initiative (OSI), or a free license as approved by the Free Software Foundation (FSF). Examples of such licenses include the MIT, BSD 2-clause, BSD 3-clause revised, Apache 2.0, Lesser GNU General Public License (LGPL), and the GNU General Public License (GPL). Note that the license for the released software assets may be different than the source code.
+      osps_le_03_01:
+        description: While active, the license for the source code MUST be maintained in the corresponding repository's LICENSE file, COPYING file, or LICENSE/ directory.
+        details: Include the project's source code license in the project's LICENSE file, COPYING file, or LICENSE/ directory to provide visibility and clarity on the licensing terms. The filename MAY have an extension. If the project has multiple repositories, ensure that each repository includes the license file.
+      osps_le_03_02:
+        description: While active, the license for the released software assets MUST be included in the released source code, or in a LICENSE file, COPYING file, or LICENSE/ directory alongside the corresponding release assets.
+        details: Include the project's released software assets license in the released source code, or in a LICENSE file, COPYING file, or LICENSE/ directory alongside the corresponding release assets to provide visibility and clarity on the licensing terms. The filename MAY have an extension. If the project has multiple repositories, ensure that each repository includes the license file.

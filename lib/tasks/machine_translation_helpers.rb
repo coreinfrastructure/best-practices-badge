@@ -715,11 +715,19 @@ module MachineTranslationHelpers
         next unless translated_flat.key?(key)
 
         value = translated_flat[key]
+        english_value = english[key]
+
         # Skip blank translations (nil, empty, or whitespace-only)
         # This rejects translations that failed or returned blank
-        next if value.nil? || value.to_s.strip.empty?
-
-        english_value = english[key]
+        if value.nil? || value.to_s.strip.empty?
+          validation_failures << {
+            key: key,
+            english: english_value,
+            translated: value,
+            reason: 'Translation is blank or empty'
+          }
+          next
+        end
 
         # Validate placeholders
         unless valid_placeholders?(english_value, value)

@@ -66,3 +66,30 @@ fr:
       osps_br_03_02:
         description: Lorsque le projet liste un URI comme canal de distribution officiel, cet URI DOIT être exclusivement fourni en utilisant des canaux chiffrés.
         details: Configurez le pipeline de publication du projet pour récupérer uniquement les données des sites Web, réponses API et autres services qui utilisent des canaux chiffrés tels que SSH ou HTTPS pour la transmission de données.
+      osps_br_07_01:
+        description: Le projet DOIT empêcher le stockage involontaire de données sensibles non chiffrées, telles que des secrets et des informations d'identification, dans le système de contrôle de version.
+        details: Configurez .gitignore ou équivalent pour exclure les fichiers susceptibles de contenir des informations sensibles. Utilisez des hooks de pré-commit et des outils d'analyse automatisés pour détecter et empêcher l'inclusion de données sensibles dans les commits.
+      osps_do_01_01:
+        description: Lorsque le projet a effectué une publication, la documentation du projet DOIT inclure des guides utilisateur pour toutes les fonctionnalités de base.
+        details: Créez des guides utilisateur ou de la documentation pour toutes les fonctionnalités de base du projet, en expliquant comment installer, configurer et utiliser les fonctionnalités du projet. S'il existe des actions dangereuses ou destructrices connues disponibles, incluez des avertissements très visibles.
+      osps_do_02_01:
+        description: Lorsque le projet a effectué une publication, la documentation du projet DOIT inclure un guide pour signaler les défauts.
+        details: Il est recommandé que les projets utilisent le suivi de problèmes par défaut de leur VCS. Si une source externe est utilisée, assurez-vous que la documentation du projet et le guide de contribution expliquent clairement et visiblement comment utiliser le système de signalement. Il est recommandé que la documentation du projet établisse également des attentes quant à la manière dont les défauts seront triés et résolus.
+      osps_gv_02_01:
+        description: Tant qu'il est actif, le projet DOIT avoir un ou plusieurs mécanismes pour des discussions publiques sur les modifications proposées et les obstacles d'utilisation.
+        details: Établissez un ou plusieurs mécanismes pour des discussions publiques au sein du projet, tels que des listes de diffusion, de la messagerie instantanée ou des systèmes de suivi de problèmes, pour faciliter une communication et des retours ouverts.
+      osps_gv_03_01:
+        description: Tant qu'il est actif, la documentation du projet DOIT inclure une explication du processus de contribution.
+        details: Créez un fichier CONTRIBUTING.md ou un répertoire CONTRIBUTING/ pour décrire le processus de contribution, y compris les étapes pour soumettre des modifications et interagir avec les mainteneurs du projet.
+      osps_le_02_01:
+        description: Tant qu'il est actif, la licence du code source DOIT répondre à la définition de l'Open Source de l'OSI ou à la définition du logiciel libre de la FSF.
+        details: Ajoutez un fichier LICENSE au dépôt du projet avec une licence qui est une licence approuvée par l'Open Source Initiative (OSI), ou une licence libre approuvée par la Free Software Foundation (FSF). Des exemples de telles licences incluent MIT, BSD 2-clause, BSD 3-clause révisée, Apache 2.0, Lesser GNU General Public License (LGPL) et GNU General Public License (GPL). Publier dans le domaine public répond à ce contrôle s'il n'y a pas d'autres restrictions telles que des brevets.
+      osps_le_02_02:
+        description: Tant qu'il est actif, la licence des ressources logicielles publiées DOIT répondre à la définition de l'Open Source de l'OSI ou à la définition du logiciel libre de la FSF.
+        details: Si une licence différente est incluse avec les ressources logicielles publiées, assurez-vous qu'il s'agit d'une licence approuvée par l'Open Source Initiative (OSI), ou d'une licence libre approuvée par la Free Software Foundation (FSF). Des exemples de telles licenses incluent MIT, BSD 2-clause, BSD 3-clause révisée, Apache 2.0, Lesser GNU General Public License (LGPL) et GNU General Public License (GPL). Notez que la licence des ressources logicielles publiées peut être différente de celle du code source.
+      osps_le_03_01:
+        description: Tant qu'il est actif, la licence du code source DOIT être maintenue dans le fichier LICENSE, le fichier COPYING ou le répertoire LICENSE/ du dépôt correspondant.
+        details: Incluez la licence du code source du projet dans le fichier LICENSE, le fichier COPYING ou le répertoire LICENSE/ du projet pour fournir visibilité et clarté sur les termes de la licence. Le nom de fichier PEUT avoir une extension. Si le projet a plusieurs dépôts, assurez-vous que chaque dépôt inclut le fichier de licence.
+      osps_le_03_02:
+        description: Tant qu'il est actif, la licence des ressources logicielles publiées DOIT être incluse dans le code source publié, ou dans un fichier LICENSE, un fichier COPYING ou un répertoire LICENSE/ aux côtés des ressources de publication correspondantes.
+        details: Incluez la licence des ressources logicielles publiées du projet dans le code source publié, ou dans un fichier LICENSE, un fichier COPYING ou un répertoire LICENSE/ aux côtés des ressources de publication correspondantes pour fournir visibilité et clarté sur les termes de la licence. Le nom de fichier PEUT avoir une extension. Si le projet a plusieurs dépôts, assurez-vous que chaque dépôt inclut le fichier de licence.

@@ -124,3 +124,33 @@ fr:
       osps_br_04_01:
         description: Lorsqu'une version officielle est créée, cette version DOIT contenir un journal descriptif des modifications fonctionnelles et de sécurité.
         details: 'Assurez-vous que toutes les versions incluent un journal des modifications descriptif. Il est recommandé de s''assurer que le journal des modifications est lisible par l''homme et inclut des détails au-delà des messages de commit, tels que des descriptions de l''impact sur la sécurité ou la pertinence pour différents cas d''utilisation. Pour garantir la lisibilité par la machine, placez le contenu sous un en-tête markdown tel que « ## Changelog ».'
+      osps_br_05_01:
+        description: Lorsqu'un pipeline de construction et de publication ingère des dépendances, il DOIT utiliser des outils standardisés lorsqu'ils sont disponibles.
+        details: Utilisez un outil commun pour votre écosystème, tel que des gestionnaires de paquets ou des outils de gestion des dépendances pour ingérer les dépendances au moment de la construction. Cela peut inclure l'utilisation d'un fichier de dépendances, d'un fichier de verrouillage ou d'un manifeste pour spécifier les dépendances requises, qui sont ensuite intégrées par le système de construction.
+      osps_br_06_01:
+        description: Lorsqu'une version officielle est créée, cette version DOIT être signée ou comptabilisée dans un manifeste signé incluant les hachages cryptographiques de chaque ressource.
+        details: Signez toutes les ressources logicielles publiées au moment de la construction avec une signature cryptographique ou des attestations, telles qu'une signature GPG ou PGP, des signatures Sigstore, une provenance SLSA ou des VSA SLSA. Incluez les hachages cryptographiques de chaque ressource dans un manifeste signé ou un fichier de métadonnées.
+      osps_do_06_01:
+        description: Lorsque le projet a publié une version, la documentation du projet DOIT inclure une description de la façon dont le projet sélectionne, obtient et suit ses dépendances.
+        details: Il est recommandé de publier ces informations aux côtés de la documentation technique et de conception du projet sur une ressource publiquement accessible telle que le dépôt de code source, le site Web du projet ou un autre canal.
+      osps_gv_01_01:
+        description: Lorsqu'il est actif, la documentation du projet DOIT inclure une liste des membres du projet ayant accès aux ressources sensibles.
+        details: Documentez les participants au projet et leurs rôles à travers des artefacts tels que members.md, governance.md, maintainers.md ou un fichier similaire dans le dépôt de code source du projet. Cela peut être aussi simple que d'inclure des noms ou des identifiants de compte dans une liste de mainteneurs, ou plus complexe selon la gouvernance du projet.
+      osps_gv_01_02:
+        description: Lorsqu'il est actif, la documentation du projet DOIT inclure des descriptions des rôles et des responsabilités pour les membres du projet.
+        details: Documentez les participants au projet et leurs rôles à travers des artefacts tels que members.md, governance.md, maintainers.md ou un fichier similaire dans le dépôt de code source du projet.
+      osps_gv_03_02:
+        description: Lorsqu'il est actif, la documentation du projet DOIT inclure un guide pour les contributeurs de code qui inclut les exigences pour les contributions acceptables.
+        details: Étendez le contenu de CONTRIBUTING.md ou CONTRIBUTING/ dans la documentation du projet pour décrire les exigences pour les contributions acceptables, y compris les normes de codage, les exigences de test et les directives de soumission pour les contributeurs de code. Il est recommandé que ce guide soit la source de vérité pour les contributeurs et les approbateurs.
+      osps_le_01_01:
+        description: Lorsqu'il est actif, le système de contrôle de version DOIT exiger que tous les contributeurs de code affirment qu'ils sont légalement autorisés à effectuer les contributions associées sur chaque commit.
+        details: Incluez un DCO dans le dépôt du projet, exigeant que les contributeurs de code affirment qu'ils sont légalement autorisés à valider les contributions associées sur chaque commit. Utilisez un contrôle de statut pour assurer que l'affirmation est faite. Un CLA satisfait également cette exigence. Certains systèmes de contrôle de version, tels que GitHub, peuvent inclure cela dans les conditions d'utilisation de la plateforme.
+      osps_qa_03_01:
+        description: Lorsqu'un commit est effectué sur la branche principale, tous les contrôles de statut automatisés pour les commits DOIVENT réussir ou être contournés manuellement.
+        details: Configurez le système de contrôle de version du projet pour exiger que tous les contrôles de statut automatisés réussissent ou nécessitent une reconnaissance manuelle avant qu'un commit puisse être fusionné dans la branche principale. Il est recommandé que tous les contrôles de statut facultatifs ne soient PAS configurés comme une exigence de réussite ou d'échec que les approbateurs pourraient être tentés de contourner.
+      osps_qa_06_01:
+        description: Avant qu'un commit ne soit accepté, les pipelines CI/CD du projet DOIVENT exécuter au moins une suite de tests automatisée pour s'assurer que les modifications répondent aux attentes.
+        details: Les tests automatisés devraient être exécutés avant chaque fusion dans la branche principale. La suite de tests devrait être exécutée dans un pipeline CI/CD et les résultats devraient être visibles pour tous les contributeurs. La suite de tests devrait être exécutée dans un environnement cohérent et devrait être exécutée de manière à permettre aux contributeurs d'exécuter les tests localement. Des exemples de suites de tests incluent les tests unitaires, les tests d'intégration et les tests de bout en bout.
+      osps_sa_01_01:
+        description: Lorsque le projet a publié une version, la documentation du projet DOIT inclure une documentation de conception démontrant toutes les actions et acteurs au sein du système.
+        details: Incluez des conceptions dans la documentation du projet qui expliquent les actions et les acteurs. Les acteurs incluent tout sous-système ou entité qui peut influencer un autre segment du système. Assurez-vous que cela est mis à jour pour les nouvelles fonctionnalités ou les modifications importantes.

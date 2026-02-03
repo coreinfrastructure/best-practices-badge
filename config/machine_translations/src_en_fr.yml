@@ -124,3 +124,33 @@ en:
       osps_br_04_01:
         description: When an official release is created, that release MUST contain a descriptive log of functional and security modifications.
         details: Ensure that all releases include a descriptive change log. It is recommended to ensure that the change log is human-readable and includes details beyond commit messages, such as descriptions of the security impact or relevance to different use cases. To ensure machine readability, place the content under a markdown header such as "## Changelog".
+      osps_br_05_01:
+        description: When a build and release pipeline ingests dependencies, it MUST use standardized tooling where available.
+        details: Use a common tooling for your ecosystem, such as package managers or dependency management tools to ingest dependencies at build time. This may include using a dependency file, lock file, or manifest to specify the required dependencies, which are then pulled in by the build system.
+      osps_br_06_01:
+        description: When an official release is created, that release MUST be signed or accounted for in a signed manifest including each asset's cryptographic hashes.
+        details: Sign all released software assets at build time with a cryptographic signature or attestations, such as GPG or PGP signature, Sigstore signatures, SLSA provenance, or SLSA VSAs. Include the cryptographic hashes of each asset in a signed manifest or metadata file.
+      osps_do_06_01:
+        description: When the project has made a release, the project documentation MUST include a description of how the project selects, obtains, and tracks its dependencies.
+        details: It is recommended to publish this information alongside the project's technical & design documentation on a publicly viewable resource such as the source code repository, project website, or other channel.
+      osps_gv_01_01:
+        description: While active, the project documentation MUST include a list of project members with access to sensitive resources.
+        details: Document project participants and their roles through such artifacts as members.md, governance.md, maintainers.md, or similar file within the source code repository of the project. This may be as simple as including names or account handles in a list of maintainers, or more complex depending on the project's governance.
+      osps_gv_01_02:
+        description: While active, the project documentation MUST include descriptions of the roles and responsibilities for members of the project.
+        details: Document project participants and their roles through such artifacts as members.md, governance.md, maintainers.md, or similar file within the source code repository of the project.
+      osps_gv_03_02:
+        description: While active, the project documentation MUST include a guide for code contributors that includes requirements for acceptable contributions.
+        details: Extend the CONTRIBUTING.md or CONTRIBUTING/ contents in the project documentation to outline the requirements for acceptable contributions, including coding standards, testing requirements, and submission guidelines for code contributors. It is recommended that this guide is the source of truth for both contributors and approvers.
+      osps_le_01_01:
+        description: While active, the version control system MUST require all code contributors to assert that they are legally authorized to make the associated contributions on every commit.
+        details: Include a DCO in the project's repository, requiring code contributors to assert that they are legally authorized to commit the associated contributions on every commit. Use a status check to ensure the assertion is made. A CLA also satisfies this requirement. Some version control systems, such as GitHub, may include this in the platform terms of service.
+      osps_qa_03_01:
+        description: When a commit is made to the primary branch, any automated status checks for commits MUST pass or be manually bypassed.
+        details: Configure the project's version control system to require that all automated status checks pass or require manual acknowledgement before a commit can be merged into the primary branch. It is recommended that any optional status checks are NOT configured as a pass or fail requirement that approvers may be tempted to bypass.
+      osps_qa_06_01:
+        description: Prior to a commit being accepted, the project's CI/CD pipelines MUST run at least one automated test suite to ensure the changes meet expectations.
+        details: Automated tests should be run prior to every merge into the primary branch. The test suite should be run in a CI/CD pipeline and the results should be visible to all contributors. The test suite should be run in a consistent environment and should be run in a way that allows contributors to run the tests locally. Examples of test suites include unit tests, integration tests, and end-to-end tests.
+      osps_sa_01_01:
+        description: When the project has made a release, the project documentation MUST include design documentation demonstrating all actions and actors within the system.
+        details: Include designs in the project documentation that explains the actions and actors. Actors include any subsystem or entity that can influence another segment in the system. Ensure this is updated for new features or breaking changes.

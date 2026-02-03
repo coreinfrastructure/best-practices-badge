@@ -113,16 +113,16 @@ module MachineTranslationHelpers
       example_keys = []
       example_keys = find_example_translations(locale, technical_terms, english) if technical_terms.any?
 
-      # Add general style examples if we don't have enough (min 10, max 20)
-      if example_keys.length < 10
+      # Add general style examples if we don't have enough (min 20, max 30)
+      if example_keys.length < 20
         general_examples = find_general_style_examples(locale, english, exclude: example_keys)
-        example_keys += general_examples.take(10 - example_keys.length)
+        example_keys += general_examples.take(20 - example_keys.length)
       end
 
       return if example_keys.empty?
 
-      # Limit to avoid overwhelming (max 20 examples)
-      example_keys = example_keys.take(20)
+      # Limit to avoid overwhelming (max 30 examples)
+      example_keys = example_keys.take(30)
 
       tmp_dir = Rails.root.join('tmp')
 

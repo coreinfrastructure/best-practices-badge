@@ -57,7 +57,7 @@ Rails.application.config.i18n.fallbacks = [:en]
 
 # Load machine translations using a custom I18n backend with smart fallback.
 #
-# CRITICAL SECURITY REQUIREMENT:
+# CRITICAL REQUIREMENT:
 # Machine translations MUST NOT be added to I18n.load_path because
 # translation.io's sync mechanism reads ALL files from I18n.load_path
 # and would upload our machine translations to translation.io, making it

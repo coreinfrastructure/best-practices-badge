@@ -199,9 +199,10 @@ module MachineTranslationHelpers
     # Import translated YAML file with validation and source tracking
     # Returns true on success, false on failure
     # Automatically repairs common YAML formatting issues (helps both AI and humans)
-    # rubocop:disable Naming/PredicateMethod
+    # rubocop:disable Naming/PredicateName
     def import_translations(locale, file, expected_keys: nil)
-      filepath = file.start_with?('/') ? file : Rails.root.join(file)
+      # Handle both string paths and Pathname objects
+      filepath = Pathname.new(file).absolute? ? Pathname.new(file) : Rails.root.join(file)
 
       unless File.exist?(filepath)
         puts "File not found: #{filepath}"

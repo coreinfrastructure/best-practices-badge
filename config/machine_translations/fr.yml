@@ -215,3 +215,26 @@ fr:
       osps_vm_04_02:
         description: Pendant que le projet est actif, toutes les vulnérabilités dans les composants logiciels n'affectant pas le projet DOIVENT être comptabilisées dans un document VEX, complétant le rapport de vulnérabilité avec des détails de non-exploitabilité.
         details: Établissez un flux VEX communiquant le statut d'exploitabilité des vulnérabilités connues, y compris les détails d'évaluation ou toute mesure d'atténuation en place empêchant l'exécution du code vulnérable.
+      osps_vm_05_01:
+        description: Pendant qu'il est actif, la documentation du projet DOIT inclure une politique qui définit un seuil pour la résolution des résultats SCA liés aux vulnérabilités et aux licences.
+        details: Documentez une politique dans le projet qui définit un seuil pour la résolution des résultats SCA liés aux vulnérabilités et aux licences. Incluez le processus pour identifier, prioriser et résoudre ces résultats.
+      osps_vm_05_02:
+        description: Pendant qu'il est actif, la documentation du projet DOIT inclure une politique pour traiter les violations SCA avant toute publication.
+        details: Documentez une politique dans le projet pour traiter les résultats applicables de l'analyse de composition du logiciel avant toute publication, et ajoutez des vérifications de statut qui vérifient la conformité avec cette politique avant la publication.
+      osps_vm_05_03:
+        description: Pendant qu'il est actif, toutes les modifications apportées à la base de code du projet DOIVENT être automatiquement évaluées par rapport à une politique documentée pour les dépendances malveillantes et les vulnérabilités connues dans les dépendances, puis bloquées en cas de violations, sauf lorsqu'elles sont déclarées et supprimées comme non exploitables.
+        details: Créez une vérification de statut dans le système de contrôle de version du projet qui exécute un outil d'analyse de composition du logiciel sur toutes les modifications apportées à la base de code. Exigez que la vérification de statut réussisse avant que les modifications puissent être fusionnées.
+      osps_vm_06_01:
+        description: Pendant qu'il est actif, la documentation du projet DOIT inclure une politique qui définit un seuil pour la résolution des résultats SAST.
+        details: Documentez une politique dans le projet qui définit un seuil pour la résolution des résultats des tests de sécurité des applications statiques (SAST). Incluez le processus pour identifier, prioriser et résoudre ces résultats.
+      osps_vm_06_02:
+        description: Pendant qu'il est actif, toutes les modifications apportées à la base de code du projet DOIVENT être automatiquement évaluées par rapport à une politique documentée pour les faiblesses de sécurité et bloquées en cas de violations, sauf lorsqu'elles sont déclarées et supprimées comme non exploitables.
+        details: Créez une vérification de statut dans le système de contrôle de version du projet qui exécute un outil de test de sécurité des applications statiques (SAST) sur toutes les modifications apportées à la base de code. Exigez que la vérification de statut réussisse avant que les modifications puissent être fusionnées.
+  headings:
+    Controls: Contrôles
+    General: Général
+  activerecord:
+    errors:
+      messages:
+        comma_separated_list: " doit être une liste séparée par des virgules de noms utilisant uniquement des caractères ASCII"
+        begin_with_cpe: " doit commencer par « cpe: »"

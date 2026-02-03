@@ -215,3 +215,26 @@ en:
       osps_vm_04_02:
         description: While active, any vulnerabilities in the software components not affecting the project MUST be accounted for in a VEX document, augmenting the vulnerability report with non-exploitability details.
         details: Establish a VEX feed communicating the exploitability status of known vulnerabilities, including assessment details or any mitigations in place preventing vulnerable code from being executed.
+      osps_vm_05_01:
+        description: While active, the project documentation MUST include a policy that defines a threshold for remediation of SCA findings related to vulnerabilities and licenses.
+        details: Document a policy in the project that defines a threshold for remediation of SCA findings related to vulnerabilities and licenses. Include the process for identifying, prioritizing, and remediating these findings.
+      osps_vm_05_02:
+        description: While active, the project documentation MUST include a policy to address SCA violations prior to any release.
+        details: Document a policy in the project to address applicable Software Composition Analysis results before any release, and add status checks that verify compliance with that policy prior to release.
+      osps_vm_05_03:
+        description: While active, all changes to the project's codebase MUST be automatically evaluated against a documented policy for malicious dependencies and known vulnerabilities in dependencies, then blocked in the event of violations, except when declared and suppressed as non-exploitable.
+        details: Create a status check in the project's version control system that runs a Software Composition Analysis tool on all changes to the codebase. Require that the status check passes before changes can be merged.
+      osps_vm_06_01:
+        description: While active, the project documentation MUST include a policy that defines a threshold for remediation of SAST findings.
+        details: Document a policy in the project that defines a threshold for remediation of Static Application Security Testing (SAST) findings. Include the process for identifying, prioritizing, and remediating these findings.
+      osps_vm_06_02:
+        description: While active, all changes to the project's codebase MUST be automatically evaluated against a documented policy for security weaknesses and blocked in the event of violations except when declared and suppressed as non-exploitable.
+        details: Create a status check in the project's version control system that runs a Static Application Security Testing (SAST) tool on all changes to the codebase. Require that the status check passes before changes can be merged.
+  headings:
+    Controls: Controls
+    General: General
+  activerecord:
+    errors:
+      messages:
+        comma_separated_list: " must be a comma-separated list of names using only ASCII characters"
+        begin_with_cpe: ' must begin with "cpe:"'

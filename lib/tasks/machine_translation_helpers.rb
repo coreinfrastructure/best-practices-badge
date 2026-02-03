@@ -265,7 +265,6 @@ module MachineTranslationHelpers
 
       imported_count
     end
-    end
 
     def cleanup_machine_translations
       cleaned_total = 0
@@ -937,6 +936,7 @@ module MachineTranslationHelpers
         end
       fixed_lines.join("\n")
     end
+  end
 end
 # rubocop:enable Rails/Output, Metrics/ModuleLength, Metrics/ClassLength
 # rubocop:enable Metrics/AbcSize, Metrics/MethodLength

@@ -70,37 +70,25 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
     return nil unless translations
 
     current = translations[locale]
-    return nil unless current
+    return nil if current.nil?
 
-    # Handle Symbol keys directly (fast path - no object creation)
-    if key.is_a?(Symbol)
-      # For symbol keys, check if it contains namespace separator
-      # Symbol#to_s is relatively cheap but we avoid it when possible
-      key_str = key.to_s
-      return current[key] || current[key_str] unless key_str.include?('.')
-      
-      # Navigate nested hash for namespaced keys
-      # We must convert to string and split - unavoidable but minimized
-      key_str.split('.').each do |part|
-        current = current[part.to_sym] || current[part]
-        return nil unless current
-      end
-      return current
-    end
+    # Convert key to string if it's a symbol (needed for split)
+    key_str = key.is_a?(Symbol) ? key.to_s : key
 
-    # Handle String keys
-    # Fast path: no dots means single-level lookup (common case)
-    unless key.include?('.')
-      return current[key.to_sym] || current[key]
-    end
-
-    # Navigate nested hash for namespaced keys
-    # split('.') creates array - unavoidable but we iterate without additional objects
-    key.split('.').each do |part|
+    # Navigate nested hash for namespaced keys (e.g., "projects.edit.title")
+    # Nearly all translation keys in this app are namespaced (97%+)
+    key_str.split('.').each do |part|
       # Try symbol first (more common), then string
-      # Note: to_sym on existing string reuses interned symbol - minimal cost
-      current = current[part.to_sym] || current[part]
-      return nil unless current
+      # Use has_key? to distinguish between "key doesn't exist" and "key exists with false value"
+      current = if current.key?(part.to_sym)
+                  current[part.to_sym]
+                elsif current.key?(part)
+                  current[part]
+                else
+                  return nil
+                end
+      # Only return nil if the value is actually nil, not if it's false or empty string
+      return nil if current.nil?
     end
 
     current

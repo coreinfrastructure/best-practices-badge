@@ -1,10 +1,10 @@
 ---
 en:
-  criteria:
-    baseline-1:
-      osps_br_01_01:
-        details: ''
-  hello: Hello world
-  submit: Submit
-  projects_count:
-    zero: Zero Projects
+  unsubscribe:
+    header: Unsubscribe
+    description: We're sorry you no longer want to receive notifications. If you are certain, please confirm your notification unsubscribe request.
+    email_label: Email Address
+    issued_label: Issued Date
+    token_label: Unsubscribe Token
+    submit: Unsubscribe
+    confirm_message: Are you sure you want to unsubscribe from all notifications?

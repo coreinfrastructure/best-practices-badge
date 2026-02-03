@@ -42,6 +42,7 @@ module TranslationInstructionsTemplate
       6. Preserve YAML structure (same nesting, keys, indentation)
       7. Translate pluralization (zero/one/few/many/other) appropriately
       8. Don't translate proper names (GitHub, OpenSSF, etc.)
+      9. The translation must not be blank unlesss the source is blank
 
       YAML FORMATTING:
       - Use DOUBLE QUOTES for strings (not single quotes)
@@ -55,9 +56,10 @@ module TranslationInstructionsTemplate
 
       WORKFLOW:
       1. Review examples (if provided) to understand style
-      2. Change 'en:' to '#{locale}:' in the file
+      2. Change 'en:' to '#{locale}:' in the resulting file
       3. Translate values accurately and naturally for #{lang}
-      4. Import: rake translation:import[#{locale},PATH]
+
+      We can later import them with rake translation:import[#{locale},PATH]
     INSTRUCTIONS
   end
   # rubocop:enable Metrics/MethodLength

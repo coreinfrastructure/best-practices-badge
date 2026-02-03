@@ -69,6 +69,7 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
 
   # Look up a key directly in a translations hash.
   # Returns the value if found and non-nil, otherwise nil.
+  # Returns nil if the value is a Hash (not a leaf translation).
   # Optimized to minimize object allocation - critical for memory-constrained production.
   # rubocop:disable Metrics/MethodLength
   def lookup_in_translations(translations, locale, key)
@@ -97,7 +98,9 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
       return nil if current.nil?
     end
 
-    current
+    # Return nil if current is a Hash (intermediate node, not a leaf translation)
+    # Rails expects String, Symbol, or nil - returning a Hash causes "undefined method `to_str'" errors
+    current.is_a?(Hash) ? nil : current
   end
   # rubocop:enable Metrics/MethodLength
 end

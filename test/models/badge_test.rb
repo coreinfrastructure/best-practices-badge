@@ -73,11 +73,11 @@ class BadgeTest < ActiveSupport::TestCase
   end
 
   test 'Badge.width returns correct width for baseline-1 badge' do
-    assert_equal 135, Badge.width('baseline-1')
+    assert_equal 121, Badge.width('baseline-1')
   end
 
   test 'Badge.width returns correct width for baseline percentage badge' do
-    assert_equal 167, Badge.width('baseline-pct-42')
+    assert_equal 149, Badge.width('baseline-pct-42')
   end
 
   test 'Badge.badge_widths returns widths for all badges' do

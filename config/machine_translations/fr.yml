@@ -93,3 +93,34 @@ fr:
       osps_le_03_02:
         description: Tant qu'il est actif, la licence des ressources logicielles publiées DOIT être incluse dans le code source publié, ou dans un fichier LICENSE, un fichier COPYING ou un répertoire LICENSE/ aux côtés des ressources de publication correspondantes.
         details: Incluez la licence des ressources logicielles publiées du projet dans le code source publié, ou dans un fichier LICENSE, un fichier COPYING ou un répertoire LICENSE/ aux côtés des ressources de publication correspondantes pour fournir visibilité et clarté sur les termes de la licence. Le nom de fichier PEUT avoir une extension. Si le projet a plusieurs dépôts, assurez-vous que chaque dépôt inclut le fichier de licence.
+      osps_qa_01_01:
+        description: Pendant son activité, le référentiel de code source du projet DOIT être publiquement lisible à une URL statique.
+        details: Utilisez un VCS commun tel que GitHub, GitLab ou Bitbucket. Assurez-vous que le référentiel est publiquement lisible. Évitez la duplication ou la mise en miroir de référentiels à moins qu'une documentation très visible ne clarifie la source principale. Évitez les changements fréquents du référentiel qui affecteraient l'URL du référentiel. Assurez-vous que le référentiel est public.
+      osps_qa_01_02:
+        description: Le système de contrôle de version DOIT contenir un enregistrement publiquement lisible de toutes les modifications apportées, qui les a apportées et quand elles ont été apportées.
+        details: Utilisez un VCS commun tel que GitHub, GitLab ou Bitbucket pour maintenir un historique de commits publiquement lisible. Évitez de fusionner ou de réécrire les commits d'une manière qui obscurcirait l'auteur de tout commit.
+      osps_qa_02_01:
+        description: Lorsque le système de gestion de paquets le prend en charge, le référentiel de code source DOIT contenir une liste de dépendances qui tient compte des dépendances directes du langage.
+        details: Cela peut prendre la forme d'un fichier de gestionnaire de paquets ou de dépendances de langage qui énumère toutes les dépendances directes telles que package.json, Gemfile ou go.mod.
+      osps_qa_04_01:
+        description: Pendant son activité, la documentation du projet DOIT contenir une liste de tous les codes sources qui sont considérés comme des sous-projets.
+        details: Documentez tous les référentiels de code de sous-projets supplémentaires produits par le projet et compilés dans une version. Cette documentation doit inclure l'état et l'intention du code source respectif.
+      osps_qa_05_01:
+        description: Pendant son activité, le système de contrôle de version NE DOIT PAS contenir d'artefacts exécutables générés.
+        details: Supprimez les artefacts exécutables générés dans le système de contrôle de version du projet. Il est recommandé que tout scénario où un artefact exécutable généré apparaît critique pour un processus tel que les tests, il devrait plutôt être généré au moment de la compilation ou stocké séparément et récupéré lors d'une étape de pipeline spécifique bien documentée.
+      osps_qa_05_02:
+        description: Pendant son activité, le système de contrôle de version NE DOIT PAS contenir d'artefacts binaires non révisables.
+        details: N'ajoutez aucun artefact binaire non révisable au système de contrôle de version du projet. Cela inclut les binaires d'applications exécutables, les fichiers de bibliothèque et les artefacts similaires. Cela n'inclut pas les ressources telles que les images graphiques, les fichiers sonores ou musicaux et le contenu similaire généralement stocké dans un format binaire.
+      osps_vm_02_01:
+        description: Pendant son activité, la documentation du projet DOIT contenir des contacts de sécurité.
+        details: Créez un fichier security.md (ou portant un nom similaire) qui contient les contacts de sécurité pour le projet.
+    baseline-2:
+      osps_ac_04_01:
+        description: Lorsqu'une tâche CI/CD est exécutée sans permissions spécifiées, le système CI/CD DOIT par défaut définir les permissions de la tâche aux permissions les plus faibles accordées dans le pipeline.
+        details: Configurez les paramètres du projet pour attribuer les permissions les plus faibles disponibles aux nouveaux pipelines par défaut, en accordant des permissions supplémentaires uniquement lorsque cela est nécessaire pour des tâches spécifiques.
+      osps_br_02_01:
+        description: Lorsqu'une version officielle est créée, cette version DOIT se voir attribuer un identifiant de version unique.
+        details: Attribuez un identifiant de version unique à chaque version produite par le projet, en suivant une convention de nommage ou un schéma de numérotation cohérent. Les exemples incluent SemVer, CalVer ou l'ID de commit git.
+      osps_br_04_01:
+        description: Lorsqu'une version officielle est créée, cette version DOIT contenir un journal descriptif des modifications fonctionnelles et de sécurité.
+        details: 'Assurez-vous que toutes les versions incluent un journal des modifications descriptif. Il est recommandé de s''assurer que le journal des modifications est lisible par l''homme et inclut des détails au-delà des messages de commit, tels que des descriptions de l''impact sur la sécurité ou la pertinence pour différents cas d''utilisation. Pour garantir la lisibilité par la machine, placez le contenu sous un en-tête markdown tel que « ## Changelog ».'

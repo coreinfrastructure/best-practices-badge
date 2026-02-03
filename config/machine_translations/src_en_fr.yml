@@ -93,3 +93,34 @@ en:
       osps_le_03_02:
         description: While active, the license for the released software assets MUST be included in the released source code, or in a LICENSE file, COPYING file, or LICENSE/ directory alongside the corresponding release assets.
         details: Include the project's released software assets license in the released source code, or in a LICENSE file, COPYING file, or LICENSE/ directory alongside the corresponding release assets to provide visibility and clarity on the licensing terms. The filename MAY have an extension. If the project has multiple repositories, ensure that each repository includes the license file.
+      osps_qa_01_01:
+        description: While active, the project's source code repository MUST be publicly readable at a static URL.
+        details: Use a common VCS such as GitHub, GitLab, or Bitbucket. Ensure the repository is publicly readable. Avoid duplication or mirroring of repositories unless highly visible documentation clarifies the primary source. Avoid frequent changes to the repository that would impact the repository URL. Ensure the repository is public.
+      osps_qa_01_02:
+        description: The version control system MUST contain a publicly readable record of all changes made, who made the changes, and when the changes were made.
+        details: Use a common VCS such as GitHub, GitLab, or Bitbucket to maintain a publicly readable commit history. Avoid squashing or rewriting commits in a way that would obscure the author of any commits.
+      osps_qa_02_01:
+        description: When the package management system supports it, the source code repository MUST contain a dependency list that accounts for the direct language dependencies.
+        details: This may take the form of a package manager or language dependency file that enumerates all direct dependencies such as package.json, Gemfile, or go.mod.
+      osps_qa_04_01:
+        description: While active, the project documentation MUST contain a list of any codebases that are considered subprojects.
+        details: Document any additional subproject code repositories produced by the project and compiled into a release. This documentation should include the status and intent of the respective codebase.
+      osps_qa_05_01:
+        description: While active, the version control system MUST NOT contain generated executable artifacts.
+        details: Remove generated executable artifacts in the project's version control system. It is recommended that any scenario where a generated executable artifact appears critical to a process such as testing, it should be instead be generated at build time or stored separately and fetched during a specific well-documented pipeline step.
+      osps_qa_05_02:
+        description: While active, the version control system MUST NOT contain unreviewable binary artifacts.
+        details: Do not add any unreviewable binary artifacts to the project's version control system. This includes executable application binaries, library files, and similar artifacts. It does not include assets such as graphical images, sound or music files, and similar content typically stored in a binary format.
+      osps_vm_02_01:
+        description: While active, the project documentation MUST contain security contacts.
+        details: Create a security.md (or similarly-named) file that contains security contacts for the project.
+    baseline-2:
+      osps_ac_04_01:
+        description: When a CI/CD task is executed with no permissions specified, the CI/CD system MUST default the task's permissions to the lowest permissions granted in the pipeline.
+        details: Configure the project's settings to assign the lowest available permissions to new pipelines by default, granting additional permissions only when necessary for specific tasks.
+      osps_br_02_01:
+        description: When an official release is created, that release MUST be assigned a unique version identifier.
+        details: Assign a unique version identifier to each release produced by the project, following a consistent naming convention or numbering scheme. Examples include SemVer, CalVer, or git commit id.
+      osps_br_04_01:
+        description: When an official release is created, that release MUST contain a descriptive log of functional and security modifications.
+        details: Ensure that all releases include a descriptive change log. It is recommended to ensure that the change log is human-readable and includes details beyond commit messages, such as descriptions of the security impact or relevance to different use cases. To ensure machine readability, place the content under a markdown header such as "## Changelog".

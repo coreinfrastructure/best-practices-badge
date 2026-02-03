@@ -4,6 +4,8 @@
 # OpenSSF Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
+require_relative 'translation_instructions_template'
+
 # Helper methods for machine translation rake tasks.
 # Extracted to a module to keep rake tasks clean and testable.
 #
@@ -138,103 +140,21 @@ module MachineTranslationHelpers
       }
     end
 
-    # Generate comprehensive translation instructions file
-    # Returns filepath to instructions
-    def generate_translation_instructions(locale, timestamp, examples)
-      lang = language_name(locale)
-      tmp_dir = Rails.root.join('tmp')
-      instructions_file = tmp_dir.join("TRANSLATION_INSTRUCTIONS_#{locale}_#{timestamp}.txt")
+    # Generate translation instructions file (uses template)
+    # Only writes if file doesn't exist or content changed (preserves mtime for caching)
+    def generate_translation_instructions(locale, _timestamp, examples)
+      instructions_file = Rails.root.join('tmp', "TRANSLATION_INSTRUCTIONS_#{locale}.txt")
+      instructions = TranslationInstructionsTemplate.generate(
+        locale: locale,
+        lang: language_name(locale),
+        examples: examples
+      )
 
-      examples_section =
-        if examples
-          <<~EXAMPLES
+      # Only write if file doesn't exist or content differs
+      if !File.exist?(instructions_file) || File.read(instructions_file) != instructions
+        File.write(instructions_file, instructions)
+      end
 
-            TRANSLATION EXAMPLES:
-            Review these example translations for consistent terminology:
-            - English examples: #{File.basename(examples[:en_filepath])}
-            - #{lang} translations: #{File.basename(examples[:locale_filepath])}
-
-            These show how #{examples[:term_count]} technical terms have been
-            translated previously. Use the same translations for the same terms
-            to maintain consistency across the application.
-          EXAMPLES
-        else
-          ''
-        end
-
-      instructions = <<~INSTRUCTIONS
-        TRANSLATION INSTRUCTIONS FOR #{lang.upcase}
-        ========================================
-
-        Project: OpenSSF Best Practices Badge web application
-        Target Language: #{lang}
-        Locale Code: #{locale}
-        #{examples_section}
-        CRITICAL RULES:
-        ---------------
-
-        1. Only translate the VALUES, never the YAML keys (keys stay exactly the same and in English)
-
-        2. Keep template variables in form %{some_name} EXACTLY as-is
-           - These are placeholders that will be filled in at runtime
-           - Do NOT translate the variable names
-           - Do NOT change the format
-           - Example: "The URL is %{project_info_url}"
-           - Correct: Translate text but keep %{project_info_url} unchanged
-           - WRONG: Changing %{project_info_url} will fail validation
-
-        3. Keep HTML tags unchanged
-           - Tags like <a href="...">, <strong>, <em> must stay as-is
-           - Only translate the text between tags
-
-        4. Change /en/ paths to /#{locale}/ in URLs
-           - Example: /en/projects becomes /#{locale}/projects
-
-        5. Preserve YAML structure exactly
-           - Same nesting level, same keys, same indentation
-           - One exception: At the top level, the locale will #{locale}
-
-        6. For pluralization keys (zero, one, few, many, other)
-           - Translate each form appropriately for #{lang}
-
-        7. Proper names should NOT be translated in general
-           - GitHub, OpenSSF, Scorecard, etc. stay as-is
-
-        YAML FORMATTING:
-        ----------------
-
-        - Use DOUBLE QUOTES (") for string values, NOT single quotes (')
-        - Single quotes require escaping apostrophes as '', causing errors
-        - Double quotes handle apostrophes, colons, and special characters
-        - To include double quotes inside strings, use backslash: \\"
-        - Example CORRECT: description: "We're sorry you can't continue"
-        - Example WRONG: description: 'We're sorry' (breaks YAML)
-
-        VALIDATION:
-        -----------
-
-        Your translation will be automatically validated for:
-        - Correct keys (must match source exactly)
-        - Preserved placeholders (%{name} must appear exactly as in source)
-        - Non-empty values (unless source is empty)
-        - Valid YAML syntax
-
-        Translations that fail validation will be rejected.
-
-        WORKFLOW:
-        ---------
-
-        1. Review the example files (if provided) for terminology consistency
-        2. Translate the values in the YAML file to be translated
-        3. Review each translated value to ensure they are accurate, clear,
-           conventional for the #{locale} (not a word-by-word translation).
-        4. The result MUST use the same keys
-        5. The result MUST be syntactically valid YAML
-
-        Import with: rake translation:import[#{locale},PATH_TO_TRANSLATED_FILE]
-      INSTRUCTIONS
-
-      File.write(instructions_file, instructions)
       instructions_file
     end
 
@@ -466,7 +386,7 @@ module MachineTranslationHelpers
 
         KEY POINTS:
         - Only translate VALUES, never keys
-        - Keep every %{variable} exactly as-is
+        - Keep every %<variable>s exactly as-is
         - Keep HTML tags unchanged
         - Use DOUBLE QUOTES for strings
         - Output to: #{target_name}
@@ -699,33 +619,30 @@ module MachineTranslationHelpers
       translated_flat = {}
       merge_flat!(translated_flat, translated_nested)
 
-      report_unexpected_keys(translated_flat.keys, expected_keys)
-      report_missing_keys(expected_keys, translated_flat.keys)
+      # Report key differences
+      report_key_differences(translated_flat.keys, expected_keys)
 
+      # Build filtered result with validation
       build_filtered_translations(expected_keys, translated_flat)
     end
 
-    def report_unexpected_keys(translated_keys, expected_keys)
-      unexpected_keys = translated_keys - expected_keys
-      return if unexpected_keys.none?
+    def report_key_differences(translated_keys, expected_keys)
+      unexpected = translated_keys - expected_keys
+      missing = expected_keys - translated_keys
 
-      puts "Warning: Found #{unexpected_keys.length} unexpected keys in translation:"
-      unexpected_keys.first(10).each { |key| puts "  - #{key}" }
-      puts "  ... and #{unexpected_keys.length - 10} more" if unexpected_keys.length > 10
-      puts 'These keys were not in the original export and will be removed.'
-    end
+      if unexpected.any?
+        puts "Warning: #{unexpected.length} unexpected keys (will be removed)"
+        unexpected.first(5).each { |key| puts "  - #{key}" }
+        puts "  ... (#{unexpected.length - 5} more)" if unexpected.length > 5
+      end
 
-    def report_missing_keys(expected_keys, translated_keys)
-      missing_keys = expected_keys - translated_keys
-      return if missing_keys.none?
-
-      puts "Note: #{missing_keys.length} keys were not translated (skipped)"
+      puts "Note: #{missing.length} keys not translated" if missing.any?
     end
 
     def build_filtered_translations(expected_keys, translated_flat)
       english = load_flat_translations('en')
       filtered = {}
-      invalid_placeholders = []
+      invalid = []
 
       expected_keys.each do |key|
         next unless translated_flat.key?(key)
@@ -733,25 +650,21 @@ module MachineTranslationHelpers
         value = translated_flat[key]
         next if value.nil? || value.to_s.strip.empty?
 
-        unless valid_placeholders?(english[key], value)
-          invalid_placeholders << key
-          next
+        if valid_placeholders?(english[key], value)
+          set_nested_key(filtered, key, value)
+        else
+          invalid << key
         end
-
-        set_nested_key(filtered, key, value)
       end
 
-      report_invalid_placeholders(invalid_placeholders)
+      report_invalid('placeholders', invalid) if invalid.any?
       filtered
     end
 
-    def report_invalid_placeholders(invalid_placeholders)
-      return if invalid_placeholders.none?
-
-      puts "Warning: #{invalid_placeholders.length} translations have invalid placeholders:"
-      invalid_placeholders.first(10).each { |key| puts "  - #{key}" }
-      puts "  ... and #{invalid_placeholders.length - 10} more" if invalid_placeholders.length > 10
-      puts 'Placeholders like %<name>s must appear exactly as in source.'
+    def report_invalid(type, keys)
+      puts "Warning: #{keys.length} translations have invalid #{type}"
+      keys.first(5).each { |key| puts "  - #{key}" }
+      puts "  ... (#{keys.length - 5} more)" if keys.length > 5
     end
 
     # Check if translation preserves all placeholders from source

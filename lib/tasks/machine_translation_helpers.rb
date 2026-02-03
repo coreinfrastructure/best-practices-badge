@@ -101,14 +101,21 @@ module MachineTranslationHelpers
     def generate_translation_examples_files(locale, keys_to_translate, english, timestamp)
       # Find technical terms in the text to be translated
       technical_terms = extract_technical_terms(keys_to_translate, english)
-      return if technical_terms.empty?
 
       # Find existing translations containing these terms
-      example_keys = find_example_translations(locale, technical_terms, english)
+      example_keys = []
+      example_keys = find_example_translations(locale, technical_terms, english) if technical_terms.any?
+
+      # Add general style examples if we don't have enough (min 10, max 20)
+      if example_keys.length < 10
+        general_examples = find_general_style_examples(locale, english, exclude: example_keys)
+        example_keys += general_examples.take(10 - example_keys.length)
+      end
+
       return if example_keys.empty?
 
-      # Limit examples to avoid overwhelming translators (max 15 examples)
-      example_keys = example_keys.take(15)
+      # Limit to avoid overwhelming (max 20 examples)
+      example_keys = example_keys.take(20)
 
       tmp_dir = Rails.root.join('tmp')
 
@@ -174,9 +181,9 @@ module MachineTranslationHelpers
 
       if examples
         puts 'EXAMPLES PROVIDED FOR CONSISTENCY:'
-        puts "  English technical terms:  #{examples[:en_filepath]}"
-        puts "  #{lang} translations: #{examples[:locale_filepath]}"
-        puts "  (#{examples[:term_count]} technical terms showing preferred translations)"
+        puts "  English:  #{examples[:en_filepath]}"
+        puts "  #{lang}: #{examples[:locale_filepath]}"
+        puts "  (#{examples[:example_count]} example translations showing style and terminology)"
         puts ''
       end
 
@@ -382,6 +389,34 @@ module MachineTranslationHelpers
       end
 
       example_keys.compact.uniq
+    end
+
+    # Find general style examples from existing human translations
+    # Prefers shorter, clearer examples that demonstrate style
+    # Excludes keys already in the exclude list
+    def find_general_style_examples(locale, english, exclude: [])
+      human_translations = load_flat_translations(locale, human_only: true)
+      existing_translations = load_flat_translations(locale)
+
+      # Get all available human translation keys
+      available_keys = human_translations.keys.reject do |key|
+        exclude.include?(key) || existing_translations[key].to_s.strip.empty?
+      end
+
+      # Sort by text length (prefer shorter, clearer examples)
+      # but prioritize those with common patterns (buttons, labels, messages)
+      available_keys.sort_by do |key|
+        text = english[key].to_s
+        length = text.length
+
+        # Boost priority for common UI patterns (lower score = higher priority)
+        priority_boost = 0
+        priority_boost -= 500 if key.match?(/\.(name|title|label|button|link|submit|header)$/)
+        priority_boost -= 300 if key.match?(/\.(description|help|message|notice)$/)
+        priority_boost -= 200 if text.include?('%{') # Has placeholders - good for learning
+
+        length + priority_boost
+      end
     end
 
     # Copilot-specific: Build prompt that references the instructions file

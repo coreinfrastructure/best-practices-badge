@@ -81,11 +81,15 @@ module MachineTranslationHelpers
       filepath = Rails.root.join('tmp', filename)
       File.write(filepath, yaml_dump(output))
 
-      result = { filepath: filepath, timestamp: timestamp, keys: keys }
+      result = { filepath: filepath, timestamp: timestamp, keys: keys, locale: locale }
 
       # Always generate translation examples for consistency (helps both AI and humans)
       examples = generate_translation_examples_files(locale, keys, english, timestamp)
       result[:examples] = examples if examples
+
+      # Generate comprehensive instructions file for translators
+      instructions_file = generate_translation_instructions(locale, timestamp, examples)
+      result[:instructions] = instructions_file
 
       result
     end
@@ -134,11 +138,116 @@ module MachineTranslationHelpers
       }
     end
 
-    def print_export_instructions(locale, filepath, examples = nil)
+    # Generate comprehensive translation instructions file
+    # Returns filepath to instructions
+    def generate_translation_instructions(locale, timestamp, examples)
+      lang = language_name(locale)
+      tmp_dir = Rails.root.join('tmp')
+      instructions_file = tmp_dir.join("TRANSLATION_INSTRUCTIONS_#{locale}_#{timestamp}.txt")
+
+      examples_section =
+        if examples
+          <<~EXAMPLES
+
+            TRANSLATION EXAMPLES:
+            Review these example translations for consistent terminology:
+            - English examples: #{File.basename(examples[:en_filepath])}
+            - #{lang} translations: #{File.basename(examples[:locale_filepath])}
+
+            These show how #{examples[:term_count]} technical terms have been
+            translated previously. Use the same translations for the same terms
+            to maintain consistency across the application.
+          EXAMPLES
+        else
+          ''
+        end
+
+      instructions = <<~INSTRUCTIONS
+        TRANSLATION INSTRUCTIONS FOR #{lang.upcase}
+        ========================================
+
+        Project: OpenSSF Best Practices Badge web application
+        Target Language: #{lang}
+        Locale Code: #{locale}
+        #{examples_section}
+        CRITICAL RULES:
+        ---------------
+
+        1. Only translate the VALUES, never the YAML keys (keys stay exactly the same and in English)
+
+        2. Keep template variables in form %{some_name} EXACTLY as-is
+           - These are placeholders that will be filled in at runtime
+           - Do NOT translate the variable names
+           - Do NOT change the format
+           - Example: "The URL is %{project_info_url}"
+           - Correct: Translate text but keep %{project_info_url} unchanged
+           - WRONG: Changing %{project_info_url} will fail validation
+
+        3. Keep HTML tags unchanged
+           - Tags like <a href="...">, <strong>, <em> must stay as-is
+           - Only translate the text between tags
+
+        4. Change /en/ paths to /#{locale}/ in URLs
+           - Example: /en/projects becomes /#{locale}/projects
+
+        5. Preserve YAML structure exactly
+           - Same nesting level, same keys, same indentation
+           - One exception: At the top level, the locale will #{locale}
+
+        6. For pluralization keys (zero, one, few, many, other)
+           - Translate each form appropriately for #{lang}
+
+        7. Proper names should NOT be translated in general
+           - GitHub, OpenSSF, Scorecard, etc. stay as-is
+
+        YAML FORMATTING:
+        ----------------
+
+        - Use DOUBLE QUOTES (") for string values, NOT single quotes (')
+        - Single quotes require escaping apostrophes as '', causing errors
+        - Double quotes handle apostrophes, colons, and special characters
+        - To include double quotes inside strings, use backslash: \\"
+        - Example CORRECT: description: "We're sorry you can't continue"
+        - Example WRONG: description: 'We're sorry' (breaks YAML)
+
+        VALIDATION:
+        -----------
+
+        Your translation will be automatically validated for:
+        - Correct keys (must match source exactly)
+        - Preserved placeholders (%{name} must appear exactly as in source)
+        - Non-empty values (unless source is empty)
+        - Valid YAML syntax
+
+        Translations that fail validation will be rejected.
+
+        WORKFLOW:
+        ---------
+
+        1. Review the example files (if provided) for terminology consistency
+        2. Translate the values in the YAML file to be translated
+        3. Review each translated value to ensure they are accurate, clear,
+           conventional for the #{locale} (not a word-by-word translation).
+        4. The result MUST use the same keys
+        5. The result MUST be syntactically valid YAML
+
+        Import with: rake translation:import[#{locale},PATH_TO_TRANSLATED_FILE]
+      INSTRUCTIONS
+
+      File.write(instructions_file, instructions)
+      instructions_file
+    end
+
+    def print_export_instructions(locale, filepath, examples = nil, instructions = nil)
       puts "YAML file to be translated has been exported to: #{filepath}"
 
+      if instructions
+        puts "Translation instructions: #{instructions}"
+        puts ''
+      end
+
       if examples
-        puts 'Examples exported to:'
+        puts 'Translation examples:'
         puts "  English: #{examples[:en_filepath]}"
         puts "  #{language_name(locale)}: #{examples[:locale_filepath]}"
         puts "  (#{examples[:term_count]} technical terms with existing translations)"
@@ -147,21 +256,14 @@ module MachineTranslationHelpers
       puts ''
       puts 'Next steps:'
       puts ''
+      if instructions
+        puts '* Read the translation instructions file for detailed guidance'
+      end
       if examples
         puts '* Review the example files for consistent terminology'
       end
       puts '* Translate the values in the YAML file to be translated (keys stay exactly the same and in English)'
-      puts ''
-      puts 'Translation tips:'
-      puts '- Only translate the VALUES, never the keys'
-      puts '- Keep template variables like %{name} unchanged' # rubocop:disable Style/FormatStringToken
-      puts '- Keep HTML tags like <a href=...> unchanged'
-      puts "- Change /en/ paths to /#{locale}/ in URLs"
-      puts '- The result MUST use the same keys'
-      puts '- The result MUST be syntactically valid YAML'
-      puts ''
-      puts 'Once done, the results can be imported with:'
-      puts 'rake translation:import[LOCALE,PATH_TO_TRANSLATED_FILE]'
+      puts '* Import with: rake translation:import[LOCALE,PATH_TO_TRANSLATED_FILE]'
     end
 
     # Import translated YAML file with validation and source tracking
@@ -297,7 +399,9 @@ module MachineTranslationHelpers
         target: target_file,                      # Empty target structure
         source_name: File.basename(export_result[:filepath]),
         target_name: target_name,
-        examples: export_result[:examples],       # May be nil
+        instructions: export_result[:instructions], # Instructions file
+        instructions_name: File.basename(export_result[:instructions]),
+        examples: export_result[:examples], # May be nil
         timestamp: timestamp,
         keys: keys
       }
@@ -349,74 +453,31 @@ module MachineTranslationHelpers
       example_keys.compact.uniq
     end
 
-    # rubocop:disable Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
-    # source_name and target_name are basenames (not full paths) for security
-    def build_copilot_prompt(locale, source_name, target_name, examples: nil)
+    # Copilot-specific: Build prompt that references the instructions file
+    def build_copilot_prompt(locale, source_name, target_name, instructions_name)
       lang = language_name(locale)
-      # rubocop:disable Style/FormatStringToken
-
-      examples_section =
-        if examples
-          <<~EXAMPLES
-
-            TRANSLATION EXAMPLES:
-            To help maintain consistent terminology, review these example translations:
-            - English examples: #{examples[:source_name]}
-            - #{lang} translations: #{examples[:target_name]}
-
-            These show how #{examples[:term_count]} technical terms from your task have been
-            translated previously. Use the same translations for the same terms
-            to maintain consistency across the application.
-          EXAMPLES
-        else
-          ''
-        end
 
       <<~PROMPT
         You are a professional translator for the OpenSSF Best Practices Badge web application.
-        Translate the English YAML file #{source_name} into #{lang}.
-        #{examples_section}
-        CRITICAL RULES:
-        1. Only translate the VALUES, never the YAML keys (keys must stay in English)
-        2. Keep template variables like %{name}, %{count} EXACTLY as-is (do NOT translate them)
-        3. Keep HTML tags like <a href="...">, <strong>, <em> unchanged
-        4. Change /en/ paths in URLs to /#{locale}/ (e.g., /en/projects -> /#{locale}/projects)
-        5. Preserve YAML structure exactly - same nesting, same keys
-        6. For pluralization keys (zero, one, few, many, other), translate each form appropriately for #{lang}
-        7. Proper names like "GitHub" and "OpenSSF" should NOT be translated
 
-        TEMPLATE VARIABLES (CRITICAL - WILL BE VALIDATED):
-        - Variables like %{name}, %{url}, %{count} are placeholders
-        - These MUST appear in translation EXACTLY as they appear in English
-        - Do NOT translate these variable names
-        - Do NOT change the format
-        - Example English: "Hello %{name}, you have %{count} messages"
-        - Example #{lang}: Translate text but keep %{name} and %{count} exactly
-        - Invalid: Translating %{name} to %{nom} or %{{name}} WILL FAIL validation
+        TASK: Translate the English YAML file #{source_name} into #{lang}.
 
-        YAML FORMATTING REQUIREMENTS (CRITICAL):
-        - Use DOUBLE QUOTES (") for all string values, NOT single quotes (')
-        - Single quotes in YAML require escaping apostrophes as '', which if not done causes errors
-        - Double quotes handle apostrophes, colons, and special characters correctly
-        - To include double quotes inside double quotes, add backslash before each such character
-        - Example: description: "We're sorry you can't continue"  (CORRECT)
-        - Example: description: 'We're sorry'  (WRONG - breaks YAML parsing)
+        INSTRUCTIONS: Read #{instructions_name} for complete translation guidelines.
 
-        WORKFLOW:
-        1. Read the source file: #{source_name}
-        2. Translate each value to #{lang}
-        3. Write the translated YAML to: #{target_name}
-        4. The output file MUST have '#{locale}:' as the root key (not 'en:')
-        5. Use DOUBLE QUOTES for all translated string values
-        6. Review your translations for accuracy and natural #{lang} phrasing
-        7. Validate the YAML is syntactically correct
-        8. Fix any issues you find
+        KEY POINTS:
+        - Only translate VALUES, never keys
+        - Keep every %{variable} exactly as-is
+        - Keep HTML tags unchanged
+        - Use DOUBLE QUOTES for strings
+        - Output to: #{target_name}
+        - Root key must be '#{locale}:' (not 'en:')
+
+        Your translation will be automatically validated for correct keys,
+        preserved placeholders, and valid YAML syntax.
 
         After completing the translation, output ONLY the text "TRANSLATION_COMPLETE" on a line by itself.
       PROMPT
-      # rubocop:enable Style/FormatStringToken
     end
-    # rubocop:enable Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
 
     def run_copilot_translation(locale, batch_size: COPILOT_BATCH_SIZE)
       missing_keys = find_untranslated_keys(locale)
@@ -434,7 +495,7 @@ module MachineTranslationHelpers
         locale,
         files[:source_name],
         files[:target_name],
-        examples: files[:examples]
+        files[:instructions_name]
       )
       prompt_file = Rails.root.join('tmp', "copilot_prompt_#{locale}_#{files[:timestamp]}.txt")
       File.write(prompt_file, prompt)

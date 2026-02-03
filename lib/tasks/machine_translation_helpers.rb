@@ -219,24 +219,129 @@ module MachineTranslationHelpers
       target_name = "copilot_target_#{locale}_#{timestamp}.yml"
       File.write(tmp_dir.join(target_name), yaml_dump(target_output))
 
+      # Create example files showing existing translations
+      examples = generate_translation_examples(locale, keys, english, timestamp, tmp_dir)
+
       {
         source: tmp_dir.join(source_name),      # Full path for file ops
         target: tmp_dir.join(target_name),      # Full path for file ops
         source_name: source_name,               # Basename for prompt
         target_name: target_name,               # Basename for prompt
+        examples: examples,                     # Example file info (may be nil)
         timestamp: timestamp
       }
     end
 
+    # Generate example translation files to show AI existing terminology usage
+    # Returns hash with example file info or nil if no good examples found
+    def generate_translation_examples(locale, keys_to_translate, english, timestamp, tmp_dir)
+      # Find technical terms in the text to be translated
+      technical_terms = extract_technical_terms(keys_to_translate, english)
+      return if technical_terms.empty?
+
+      # Find existing translations containing these terms
+      example_keys = find_example_translations(locale, technical_terms, english)
+      return if example_keys.empty?
+
+      # Limit examples to avoid overwhelming the AI (max 15 examples)
+      example_keys = example_keys.take(15)
+
+      # Create example source file (English)
+      example_source = { 'en' => {} }
+      example_keys.each { |key| set_nested_key(example_source['en'], key, english[key]) }
+      example_source_name = "copilot_examples_en_#{timestamp}.yml"
+      File.write(tmp_dir.join(example_source_name), yaml_dump(example_source))
+
+      # Create example target file (existing translations)
+      existing_translations = load_flat_translations(locale)
+      example_target = { locale => {} }
+      example_keys.each do |key|
+        set_nested_key(example_target[locale], key, existing_translations[key])
+      end
+      example_target_name = "copilot_examples_#{locale}_#{timestamp}.yml"
+      File.write(tmp_dir.join(example_target_name), yaml_dump(example_target))
+
+      puts "Generated #{example_keys.length} translation examples for #{locale}"
+      {
+        source_name: example_source_name,
+        target_name: example_target_name,
+        term_count: technical_terms.length
+      }
+    end
+
+    # Extract technical terms from English text that should use consistent translation
+    def extract_technical_terms(keys, english)
+      terms = Set.new
+      keys.each do |key|
+        text = english[key].to_s
+        next if text.empty?
+
+        # Pattern 1: Acronyms (2+ consecutive capitals, possibly with slashes)
+        text.scan(%r{\b[A-Z]{2,}(?:/[A-Z]+)*\b}) { |match| terms << match }
+
+        # Pattern 2: Proper nouns (capitalized words, excluding sentence starts)
+        text.scan(/(?<!^|\. )\b[A-Z][a-z]+(?:[A-Z][a-z]+)*\b/) { |match| terms << match }
+
+        # Pattern 3: Technical compounds (hyphenated terms)
+        text.scan(/\b[a-z]+-[a-z]+(?:-[a-z]+)*\b/i) { |match| terms << match }
+
+        # Pattern 4: Long technical words (12+ characters)
+        text.scan(/\b[a-z]{12,}\b/i) { |match| terms << match }
+      end
+      terms.to_a
+    end
+
+    # Find existing translations that contain the technical terms
+    def find_example_translations(locale, terms, english)
+      return [] if terms.empty?
+
+      existing_translations = load_flat_translations(locale)
+      human_translations = load_flat_translations(locale, human_only: true)
+
+      example_keys = []
+      terms.each do |term|
+        # Find keys where English contains this term
+        matching_keys =
+          english.keys.select do |key|
+            text = english[key].to_s
+            text.include?(term) && human_translations.key?(key) &&
+              !existing_translations[key].to_s.strip.empty?
+          end
+
+        # Add first match for this term (if any)
+        example_keys << matching_keys.first if matching_keys.any?
+      end
+
+      example_keys.compact.uniq
+    end
+
     # rubocop:disable Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
     # source_name and target_name are basenames (not full paths) for security
-    def build_copilot_prompt(locale, source_name, target_name)
+    def build_copilot_prompt(locale, source_name, target_name, examples: nil)
       lang = language_name(locale)
       # rubocop:disable Style/FormatStringToken
+
+      examples_section =
+        if examples
+          <<~EXAMPLES
+
+            TRANSLATION EXAMPLES:
+            To help maintain consistent terminology, review these example translations:
+            - English examples: #{examples[:source_name]}
+            - #{lang} translations: #{examples[:target_name]}
+
+            These show how #{examples[:term_count]} technical terms from your task have been
+            translated previously. Use the same translations for the same terms
+            to maintain consistency across the application.
+          EXAMPLES
+        else
+          ''
+        end
+
       <<~PROMPT
         You are a professional translator for the OpenSSF Best Practices Badge web application.
         Translate the English YAML file #{source_name} into #{lang}.
-
+        #{examples_section}
         CRITICAL RULES:
         1. Only translate the VALUES, never the YAML keys (keys must stay in English)
         2. Keep template variables like %{name}, %{count} EXACTLY as-is (do NOT translate them)
@@ -291,7 +396,12 @@ module MachineTranslationHelpers
 
       files = export_for_copilot(locale, keys_to_translate)
       # Use basenames in prompt (copilot runs from tmp/ directory)
-      prompt = build_copilot_prompt(locale, files[:source_name], files[:target_name])
+      prompt = build_copilot_prompt(
+        locale,
+        files[:source_name],
+        files[:target_name],
+        examples: files[:examples]
+      )
       prompt_file = Rails.root.join('tmp', "copilot_prompt_#{locale}_#{files[:timestamp]}.txt")
       File.write(prompt_file, prompt)
 

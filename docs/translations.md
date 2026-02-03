@@ -73,6 +73,35 @@ is different, the system knows the French translation is stale and needs
 updating. Human translations always take precedence and are never
 automatically invalidated.
 
+### Example-Based Translation
+
+When automated translation is performed using Copilot, the system
+automatically provides example translations to help maintain consistent
+terminology across the application.
+
+**How It Works:**
+
+1. **Term Extraction**: The system identifies technical terms in the text
+   to be translated:
+   - Acronyms (MFA, CI/CD, VCS)
+   - Proper nouns (GitHub, OpenSSF, Scorecard)
+   - Technical compounds (multi-factor, version-control)
+   - Long technical words (authentication, vulnerability)
+
+2. **Example Selection**: For each identified term, the system finds existing
+   human translations containing that term and includes them as examples
+   (limited to 15 examples to avoid overwhelming the AI).
+
+3. **Example Files**: Creates two example YAML files:
+   - `copilot_examples_en_*.yml` - English source with technical terms
+   - `copilot_examples_{locale}_*.yml` - How those terms were previously translated
+
+4. **Prompt Integration**: The translation prompt instructs the AI to review
+   these examples and use the same translations for the same terms.
+
+This ensures consistency in terminology across the application without
+requiring manual glossary maintenance.
+
 ### How Precedence Works
 
 Rails I18n loads translation files in order, with later files overriding

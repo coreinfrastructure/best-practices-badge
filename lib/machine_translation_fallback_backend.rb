@@ -37,26 +37,22 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
   def translate(locale, key, options = {})
     # Try human translations first (check raw hash to avoid fallback behavior)
     human_value = lookup_in_translations(@human_translations, locale, key)
-    if human_value.present?
-      # Process the translation: resolve pluralization/defaults, then interpolate
-      entry = resolve(locale, key, human_value, options.except(:default))
-      return entry if entry.is_a?(::I18n::MissingTranslation)
-
-      options.key?(:count) ? pluralize(locale, entry, options[:count]) : interpolate(locale, entry, options)
-    end
+    return process_translation(locale, key, human_value, options) if human_value.present?
 
     # Human translation missing/empty - try machine translations
     machine_value = lookup_in_translations(@machine_translations, locale, key)
-    if machine_value.present?
-      # Process the translation: resolve pluralization/defaults, then interpolate
-      entry = resolve(locale, key, machine_value, options.except(:default))
-      return entry if entry.is_a?(::I18n::MissingTranslation)
-
-      options.key?(:count) ? pluralize(locale, entry, options[:count]) : interpolate(locale, entry, options)
-    end
+    return process_translation(locale, key, machine_value, options) if machine_value.present?
 
     # Neither has it - use default fallback behavior (English)
     @human_backend.translate(locale, key, options)
+  end
+
+  # Process a translation value: resolve, then interpolate/pluralize
+  def process_translation(locale, key, value, options)
+    entry = resolve(locale, key, value, options.except(:default))
+    return entry if entry.is_a?(::I18n::MissingTranslation)
+
+    options.key?(:count) ? pluralize(locale, entry, options[:count]) : interpolate(locale, entry, options)
   end
 
   # Delegate other backend methods to human backend

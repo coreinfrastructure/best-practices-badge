@@ -35,3 +35,34 @@ fr:
         badge_alt: Le niveau du badge de référence pour le projet %{id} est %{level}
         description_2: 'Voici comment intégrer le badge de référence :'
         details_html: Vous pouvez afficher votre statut de badge de référence en incorporant ceci dans votre fichier markdown :<br /> %{markdown_embedding}<br /> ou en incorporant ceci dans votre HTML :<br /> %{html_embedding}<br />
+    misc:
+      reminder_notification_note:
+        title: Paramètres de notification par email
+        description_html: Si vous êtes le propriétaire de cette entrée de badge et souhaitez désactiver les emails de rappel d'inactivité, veuillez modifier vos <a href="/users/%{user_id}/edit">paramètres de profil utilisateur</a>. Ce paramètre s'applique à tous vos projets.
+  report_mailer:
+    unsubscribe_notice_html: 'Pour vous désabonner de ces notifications par email, veuillez visiter : <a href="%{unsubscribe_url}">%{unsubscribe_url}</a>'
+    unsubscribe_notice_text: 'Pour vous désabonner de ces notifications par email, veuillez visiter : %{unsubscribe_url}'
+  criteria:
+    baseline-1:
+      osps_ac_01_01:
+        description: Lorsqu'un utilisateur tente de lire ou de modifier une ressource sensible dans le dépôt faisant autorité du projet, le système DOIT exiger que l'utilisateur termine un processus d'authentification multi-facteurs.
+        details: Imposer l'authentification multi-facteurs pour le système de contrôle de version du projet, exigeant des collaborateurs qu'ils fournissent une seconde forme d'authentification lors de l'accès aux données sensibles ou de la modification des paramètres du dépôt. Les passkeys sont acceptables pour ce contrôle.
+      osps_ac_02_01:
+        description: Lorsqu'un nouveau collaborateur est ajouté, le système de contrôle de version DOIT exiger une attribution manuelle de permissions, ou restreindre les permissions du collaborateur aux privilèges disponibles les plus bas par défaut.
+        details: La plupart des systèmes de contrôle de version publics sont configurés de cette manière. Assurez-vous que le système de contrôle de version du projet attribue toujours les permissions les plus basses disponibles aux collaborateurs par défaut lorsqu'ils sont ajoutés, accordant des permissions supplémentaires uniquement lorsque cela est nécessaire.
+      osps_ac_03_01:
+        description: Lorsqu'un commit direct est tenté sur la branche principale du projet, un mécanisme d'application DOIT empêcher la modification d'être appliquée.
+        details: Si le VCS est centralisé, définissez une protection de branche sur la branche principale dans le VCS du projet. Alternativement, utilisez une approche décentralisée, comme celle du noyau Linux, où les modifications sont d'abord proposées dans un autre dépôt, et la fusion des modifications dans le dépôt principal nécessite un acte distinct spécifique.
+      osps_ac_03_02:
+        description: Lorsqu'une tentative est faite de supprimer la branche principale du projet, le système de contrôle de version DOIT traiter cela comme une activité sensible et exiger une confirmation explicite de l'intention.
+        details: Définissez une protection de branche sur la branche principale dans le système de contrôle de version du projet pour empêcher la suppression.
+      osps_br_01_01:
+        description: Lorsqu'un pipeline CI/CD accepte un paramètre d'entrée, ce paramètre DOIT être assaini et validé avant d'être utilisé dans le pipeline.
+      osps_br_01_02:
+        description: Lorsqu'un pipeline CI/CD utilise un nom de branche dans sa fonctionnalité, cette valeur de nom DOIT être assainie et validée avant d'être utilisée dans le pipeline.
+      osps_br_03_01:
+        description: Lorsque le projet liste un URI comme canal officiel du projet, cet URI DOIT être exclusivement fourni en utilisant des canaux chiffrés.
+        details: Configurez les sites Web et les systèmes de contrôle de version du projet pour utiliser des canaux chiffrés tels que SSH ou HTTPS pour la transmission de données. Assurez-vous que tous les outils et domaines référencés dans la documentation du projet ne peuvent être accessibles que via des canaux chiffrés.
+      osps_br_03_02:
+        description: Lorsque le projet liste un URI comme canal de distribution officiel, cet URI DOIT être exclusivement fourni en utilisant des canaux chiffrés.
+        details: Configurez le pipeline de publication du projet pour récupérer uniquement les données des sites Web, réponses API et autres services qui utilisent des canaux chiffrés tels que SSH ou HTTPS pour la transmission de données.

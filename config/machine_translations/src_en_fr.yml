@@ -35,3 +35,34 @@ en:
         badge_alt: Baseline badge level for project %{id} is %{level}
         description_2: 'Here is how to embed the baseline badge:'
         details_html: You can show your baseline badge status by embedding this in your markdown file:<br /> %{markdown_embedding}<br /> or by embedding this in your HTML:<br /> %{html_embedding}<br />
+    misc:
+      reminder_notification_note:
+        title: Email Notification Settings
+        description_html: If you are the owner of this badge entry and want to disable inactivity reminder emails, please edit your <a href="/users/%{user_id}/edit">user profile settings</a>. This setting applies to all your projects.
+  report_mailer:
+    unsubscribe_notice_html: 'To unsubscribe from these email notifications, please visit: <a href="%{unsubscribe_url}">%{unsubscribe_url}</a>'
+    unsubscribe_notice_text: 'To unsubscribe from these email notifications, please visit: %{unsubscribe_url}'
+  criteria:
+    baseline-1:
+      osps_ac_01_01:
+        description: When a user attempts to read or modify a sensitive resource in the project's authoritative repository, the system MUST require the user to complete a multi-factor authentication process.
+        details: Enforce multi-factor authentication for the project's version control system, requiring collaborators to provide a second form of authentication when accessing sensitive data or modifying repository settings. Passkeys are acceptable for this control.
+      osps_ac_02_01:
+        description: When a new collaborator is added, the version control system MUST require manual permission assignment, or restrict the collaborator permissions to the lowest available privileges by default.
+        details: Most public version control systems are configured in this manner. Ensure the project's version control system always assigns the lowest available permissions to collaborators by default when added, granting additional permissions only when necessary.
+      osps_ac_03_01:
+        description: When a direct commit is attempted on the project's primary branch, an enforcement mechanism MUST prevent the change from being applied.
+        details: If the VCS is centralized, set branch protection on the primary branch in the project's VCS. Alternatively, use a decentralized approach, like the Linux kernel's, where changes are first proposed in another repository, and merging changes into the primary repository requires a specific separate act.
+      osps_ac_03_02:
+        description: When an attempt is made to delete the project's primary branch, the version control system MUST treat this as a sensitive activity and require explicit confirmation of intent.
+        details: Set branch protection on the primary branch in the project's version control system to prevent deletion.
+      osps_br_01_01:
+        description: When a CI/CD pipeline accepts an input parameter, that parameter MUST be sanitized and validated prior to use in the pipeline.
+      osps_br_01_02:
+        description: When a CI/CD pipeline uses a branch name in its functionality, that name value MUST be sanitized and validated prior to use in the pipeline.
+      osps_br_03_01:
+        description: When the project lists a URI as an official project channel, that URI MUST be exclusively delivered using encrypted channels.
+        details: Configure the project's websites and version control systems to use encrypted channels such as SSH or HTTPS for data transmission. Ensure all tools and domains referenced in project documentation can only be accessed via encrypted channels.
+      osps_br_03_02:
+        description: When the project lists a URI as an official distribution channel, that URI MUST be exclusively delivered using encrypted channels.
+        details: Configure the project's release pipeline to only fetch data from websites, API responses, and other services which use encrypted channels such as SSH or HTTPS for data transmission.

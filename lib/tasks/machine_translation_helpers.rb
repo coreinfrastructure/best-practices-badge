@@ -216,7 +216,7 @@ module MachineTranslationHelpers
     end
 
     # Import translated YAML file with validation and source tracking
-    # Returns true on success, false on failure
+    # Returns count of imported keys on success, false on failure
     # Automatically repairs common YAML formatting issues (helps both AI and humans)
     # rubocop:disable Naming/PredicateName
     def import_translations(locale, file, expected_keys: nil)
@@ -257,12 +257,14 @@ module MachineTranslationHelpers
 
       machine_file = machine_translation_path(locale)
       File.write(machine_file, yaml_dump(existing))
-      puts "Imported #{count_keys(translated[locale])} keys to #{machine_file}"
+      imported_count = count_keys(translated[locale])
+      puts "Imported #{imported_count} keys to #{machine_file}"
 
       # Always track source English text for stale translation detection
       update_source_tracking(locale, translated[locale])
 
-      true
+      imported_count
+    end
     end
 
     def cleanup_machine_translations
@@ -487,11 +489,11 @@ module MachineTranslationHelpers
       File.write(prompt_file, prompt)
 
       copilot_success = execute_copilot(prompt, files[:target])
-      import_success = copilot_success && File.exist?(files[:target]) &&
+      imported_count = copilot_success && File.exist?(files[:target]) &&
                        import_translations(locale, files[:target], expected_keys: keys_to_translate)
 
-      if import_success
-        { success: true, translated: keys_to_translate.length, locale: locale }
+      if imported_count
+        { success: true, translated: imported_count, locale: locale }
       else
         puts 'Translation failed. Files preserved for debugging:'
         puts "  Source: #{files[:source]}"

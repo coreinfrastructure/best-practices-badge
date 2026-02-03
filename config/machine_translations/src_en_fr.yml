@@ -8,3 +8,30 @@ en:
     token_label: Unsubscribe Token
     submit: Unsubscribe
     confirm_message: Are you sure you want to unsubscribe from all notifications?
+    processing: Processing...
+    success: You have been successfully unsubscribed from our notifications.
+    invalid_token: Invalid unsubscribe token. Please check the token from your email.
+    no_matching_accounts: No matching accounts found with notification emails enabled.
+    missing_parameters: 'Missing required parameters: email address, unsubscribe token, and issued date.'
+    invalid_parameters: Invalid parameters provided.
+    error: An error occurred while processing your request. Please try again later.
+  users:
+    edit:
+      notification_emails: Email notifications
+      notification_emails_help: Receive email notifications about your projects
+  projects:
+    edit:
+      new_owner: Owner id (a positive integer), change to change ownership
+      new_owner_repeat: Repeated new owner id (to confirm an ownership change)
+      current_owner: 'Current owner ID:'
+      ownership_edit_hint: "(Ownership can be transferred when editing this section.)"
+      submit_cdla_permissive_20_html: By submitting this data about the project you agree to release it under at least the <a href="https://cdla.dev/permissive-2-0/" >Community Data License Agreement – Permissive, Version 2.0</a>. This means that a Data Recipient may share the Data, with or without modifications, so long as the Data Recipient makes available the text of this agreement with the shared Data. This agreement does <i>not</i> impose any restriction or obligations with respect to the use, modification, or sharing of Results. You retain copyright (if any), and the project license is unaffected.<br><br>
+    show:
+      section_selector: Section
+      cdla_permissive_20_html: This data is available under the <a href="https://cdla.dev/permissive-2-0/" >Community Data License Agreement – Permissive, Version 2.0 (CDLA-Permissive-2.0)</a>. This means that a Data Recipient may share the Data, with or without modifications, so long as the Data Recipient makes available the text of this agreement with the shared Data. Please credit %{user} and the OpenSSF Best Practices badge contributors.<br><br>
+    form_early:
+      got_baseline_badge:
+        description_1: 'If this is your project, please show your baseline badge status on your project page! The baseline badge status looks like this:'
+        badge_alt: Baseline badge level for project %{id} is %{level}
+        description_2: 'Here is how to embed the baseline badge:'
+        details_html: You can show your baseline badge status by embedding this in your markdown file:<br /> %{markdown_embedding}<br /> or by embedding this in your HTML:<br /> %{html_embedding}<br />

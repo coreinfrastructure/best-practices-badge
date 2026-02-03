@@ -8,3 +8,30 @@ fr:
     token_label: Jeton de désabonnement
     submit: Se désabonner
     confirm_message: Êtes-vous sûr de vouloir vous désabonner de toutes les notifications ?
+    processing: Traitement en cours...
+    success: Vous avez été désabonné avec succès de nos notifications.
+    invalid_token: Jeton de désabonnement invalide. Veuillez vérifier le jeton de votre courriel.
+    no_matching_accounts: Aucun compte correspondant trouvé avec les notifications par courriel activées.
+    missing_parameters: 'Paramètres requis manquants : adresse courriel, jeton de désabonnement et date d''émission.'
+    invalid_parameters: Paramètres invalides fournis.
+    error: Une erreur s'est produite lors du traitement de votre demande. Veuillez réessayer plus tard.
+  users:
+    edit:
+      notification_emails: Notifications par courriel
+      notification_emails_help: Recevoir des notifications par courriel concernant vos projets
+  projects:
+    edit:
+      new_owner: Identifiant du propriétaire (un entier positif), modifier pour changer la propriété
+      new_owner_repeat: Identifiant du nouveau propriétaire répété (pour confirmer un changement de propriétaire)
+      current_owner: 'Identifiant du propriétaire actuel :'
+      ownership_edit_hint: "(La propriété peut être transférée lors de la modification de cette section.)"
+      submit_cdla_permissive_20_html: En soumettant ces données concernant le projet, vous acceptez de les publier sous au moins la licence <a href="https://cdla.dev/permissive-2-0/" >Community Data License Agreement – Permissive, Version 2.0</a>. Cela signifie qu'un destinataire de données peut partager les données, avec ou sans modifications, à condition que le destinataire de données rende disponible le texte de cet accord avec les données partagées. Cet accord n'impose <i>aucune</i> restriction ou obligation concernant l'utilisation, la modification ou le partage des résultats. Vous conservez les droits d'auteur (le cas échéant), et la licence du projet n'est pas affectée.<br><br>
+    show:
+      section_selector: Section
+      cdla_permissive_20_html: Ces données sont disponibles sous la licence <a href="https://cdla.dev/permissive-2-0/" >Community Data License Agreement – Permissive, Version 2.0 (CDLA-Permissive-2.0)</a>. Cela signifie qu'un destinataire de données peut partager les données, avec ou sans modifications, à condition que le destinataire de données rende disponible le texte de cet accord avec les données partagées. Veuillez créditer %{user} et les contributeurs du badge des meilleures pratiques de la OpenSSF.<br><br>
+    form_early:
+      got_baseline_badge:
+        description_1: 'Si c''est votre projet, veuillez afficher votre statut de badge de référence sur la page de votre projet ! Le statut du badge de référence ressemble à ceci :'
+        badge_alt: Le niveau du badge de référence pour le projet %{id} est %{level}
+        description_2: 'Voici comment intégrer le badge de référence :'
+        details_html: Vous pouvez afficher votre statut de badge de référence en incorporant ceci dans votre fichier markdown :<br /> %{markdown_embedding}<br /> ou en incorporant ceci dans votre HTML :<br /> %{html_embedding}<br />

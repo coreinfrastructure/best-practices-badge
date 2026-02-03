@@ -286,12 +286,20 @@ module MachineTranslationHelpers
         human = load_flat_translations(locale, human_only: true)
         machine = load_flat_translations(locale, machine_only: true)
 
-        human_count = (human.keys & english_keys).length
-        machine_count = (machine.keys & english_keys).length
+        # Only count non-empty values as translated
+        human_count = count_non_empty_translations(human, english_keys)
+        machine_count = count_non_empty_translations(machine, english_keys)
         missing = english_keys.length - human_count - machine_count
 
         puts format('%-8<loc>s Human: %4<human>d  Machine: %4<machine>d  Missing: %4<miss>d',
                     loc: locale, human: human_count, machine: machine_count, miss: missing)
+      end
+    end
+
+    # Count translations that are non-empty and match English keys
+    def count_non_empty_translations(translations, english_keys)
+      translations.count do |key, value|
+        english_keys.include?(key) && !value.nil? && !value.to_s.strip.empty?
       end
     end
 

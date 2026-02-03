@@ -346,7 +346,7 @@ task :yaml_syntax_check do
   puts 'Checking YAML syntax...'
 
   find_cmd = "find . -name '*.yml' ! -name 'projects.yml' ! -name ',*' " \
-             "! -path './railroader/*' ! -path './vendor/*' " \
+             "! -path './railroader/*' ! -path './vendor/*' ! -path './tmp/*' " \
              '-exec bundle exec yaml-lint {} + 2>&1'
 
   output = `#{find_cmd}`

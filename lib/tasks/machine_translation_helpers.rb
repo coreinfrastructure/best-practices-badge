@@ -288,10 +288,11 @@ module MachineTranslationHelpers
 
       english = load_flat_translations('en')
       # Only count English keys that have non-blank values (actually need translation)
-      translatable_keys = english.keys.select do |key|
-        value = english[key]
-        !value.nil? && !value.to_s.strip.empty?
-      end
+      translatable_keys =
+        english.keys.select do |key|
+          value = english[key]
+          !value.nil? && !value.to_s.strip.empty?
+        end
 
       TRANSLATION_PRIORITY.each do |locale|
         human = load_flat_translations(locale, human_only: true)

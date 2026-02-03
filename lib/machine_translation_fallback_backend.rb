@@ -73,6 +73,13 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
     @machine_backend.eager_load! if @machine_backend.respond_to?(:eager_load!)
   end
 
+  # Delegate to human backend's translations method for compatibility
+  # Used by tests and introspection code
+  def translations
+    @human_translations
+  end
+
+
   private
 
   # Look up a key directly in a translations hash.
@@ -82,6 +89,7 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
   # rubocop:disable Metrics/MethodLength
   def lookup_in_translations(translations, locale, key)
     return unless translations
+    return if key.nil?
 
     current = translations[locale]
     return if current.nil?

@@ -43,10 +43,10 @@ namespace :translation do
       next
     end
 
-    filepath = MachineTranslationHelpers.export_keys_for_translation(
+    result = MachineTranslationHelpers.export_keys_for_translation(
       locale, missing_keys.first(count)
     )
-    MachineTranslationHelpers.print_export_instructions(locale, filepath)
+    MachineTranslationHelpers.print_export_instructions(locale, result[:filepath], result[:examples])
   end
 
   desc 'Import translated YAML into machine_translations'

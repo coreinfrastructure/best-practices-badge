@@ -80,15 +80,77 @@ module MachineTranslationHelpers
       filename = "translate_to_#{locale}_#{timestamp}.yml"
       filepath = Rails.root.join('tmp', filename)
       File.write(filepath, yaml_dump(output))
-      filepath
+
+      result = { filepath: filepath, timestamp: timestamp, keys: keys }
+
+      # Always generate translation examples for consistency (helps both AI and humans)
+      examples = generate_translation_examples_files(locale, keys, english, timestamp)
+      result[:examples] = examples if examples
+
+      result
     end
 
-    def print_export_instructions(locale, filepath)
-      puts "Exported to: #{filepath}"
+    # Generate example translation files showing how technical terms were translated
+    # Returns hash with file paths and metadata, or nil if no examples available
+    def generate_translation_examples_files(locale, keys_to_translate, english, timestamp)
+      # Find technical terms in the text to be translated
+      technical_terms = extract_technical_terms(keys_to_translate, english)
+      return if technical_terms.empty?
+
+      # Find existing translations containing these terms
+      example_keys = find_example_translations(locale, technical_terms, english)
+      return if example_keys.empty?
+
+      # Limit examples to avoid overwhelming translators (max 15 examples)
+      example_keys = example_keys.take(15)
+
+      tmp_dir = Rails.root.join('tmp')
+
+      # Create example source file (English)
+      example_source = { 'en' => {} }
+      example_keys.each { |key| set_nested_key(example_source['en'], key, english[key]) }
+      example_source_name = "examples_en_#{locale}_#{timestamp}.yml"
+      en_filepath = tmp_dir.join(example_source_name)
+      File.write(en_filepath, yaml_dump(example_source))
+
+      # Create example target file (existing translations)
+      existing_translations = load_flat_translations(locale)
+      example_target = { locale => {} }
+      example_keys.each do |key|
+        set_nested_key(example_target[locale], key, existing_translations[key])
+      end
+      example_target_name = "examples_#{locale}_#{timestamp}.yml"
+      locale_filepath = tmp_dir.join(example_target_name)
+      File.write(locale_filepath, yaml_dump(example_target))
+
+      puts "Generated #{example_keys.length} translation examples for #{language_name(locale)}"
+      {
+        en_filepath: en_filepath,
+        locale_filepath: locale_filepath,
+        source_name: example_source_name,
+        target_name: example_target_name,
+        term_count: technical_terms.length,
+        example_count: example_keys.length
+      }
+    end
+
+    def print_export_instructions(locale, filepath, examples = nil)
+      puts "YAML file to be translated has been exported to: #{filepath}"
+
+      if examples
+        puts 'Examples exported to:'
+        puts "  English: #{examples[:en_filepath]}"
+        puts "  #{language_name(locale)}: #{examples[:locale_filepath]}"
+        puts "  (#{examples[:term_count]} technical terms with existing translations)"
+      end
+
       puts ''
       puts 'Next steps:'
-      puts '1. Translate the values in this file (keys stay in English)'
-      puts '2. Run: rake translation:import[LOCALE,PATH_TO_TRANSLATED_FILE]'
+      puts ''
+      if examples
+        puts '* Review the example files for consistent terminology'
+      end
+      puts '* Translate the values in the YAML file to be translated (keys stay exactly the same and in English)'
       puts ''
       puts 'Translation tips:'
       puts '- Only translate the VALUES, never the keys'
@@ -98,33 +160,44 @@ module MachineTranslationHelpers
       puts '- The result MUST use the same keys'
       puts '- The result MUST be syntactically valid YAML'
       puts ''
-      puts 'Note: For manual imports, source tracking is optional.'
-      puts 'For machine translations via Copilot, source tracking is automatic.'
+      puts 'Once done, the results can be imported with:'
+      puts 'rake translation:import[LOCALE,PATH_TO_TRANSLATED_FILE]'
     end
 
-    def import_translations(locale, file, track_source: false)
+    # Import translated YAML file with validation and source tracking
+    # Returns true on success, false on failure
+    # Automatically repairs common YAML formatting issues (helps both AI and humans)
+    # rubocop:disable Naming/PredicateMethod
+    def import_translations(locale, file, expected_keys: nil)
       filepath = file.start_with?('/') ? file : Rails.root.join(file)
 
       unless File.exist?(filepath)
         puts "File not found: #{filepath}"
-        return
+        return false
       end
 
-      translated = YAML.load_file(filepath)
+      # Load YAML with automatic repair for common issues
+      translated = load_yaml_with_fallback(filepath, locale)
+      return false unless translated
+
       unless translated.is_a?(Hash) && translated[locale].is_a?(Hash)
         puts "Invalid YAML structure. Expected: { '#{locale}' => { ... } }"
-        return
+        return false
       end
 
-      # Validate against current English keys
+      # Write back repaired YAML if it was fixed
+      File.write(filepath, yaml_dump(translated))
+
+      # Always validate against English keys
       english = load_flat_translations('en')
+      validation_keys = expected_keys || english.keys
       translated[locale] = validate_and_filter_keys(
-        translated[locale], english.keys, locale
+        translated[locale], validation_keys, locale
       )
 
       if translated[locale].empty?
         puts 'No valid keys to import after validation'
-        return
+        return false
       end
 
       existing = load_existing_machine_translations(locale)
@@ -134,9 +207,12 @@ module MachineTranslationHelpers
       File.write(machine_file, yaml_dump(existing))
       puts "Imported #{count_keys(translated[locale])} keys to #{machine_file}"
 
-      # Update source tracking if requested (for machine translations)
-      update_source_tracking(locale, translated[locale]) if track_source
+      # Always track source English text for stale translation detection
+      update_source_tracking(locale, translated[locale])
+
+      true
     end
+    # rubocop:enable Naming/PredicateMethod
 
     def cleanup_machine_translations
       cleaned_total = 0
@@ -200,72 +276,30 @@ module MachineTranslationHelpers
       LANGUAGE_NAMES[locale] || locale
     end
 
-    # Export source English text paired with target locale structure
-    # Returns both full paths (for file operations) and basenames (for prompt)
+    # Copilot-specific: Create empty target file for Copilot to fill
+    # Copilot needs an empty structure showing what keys to translate
     def export_for_copilot(locale, keys)
-      english = load_flat_translations('en')
-      timestamp = Time.zone.now.strftime('%Y%m%d_%H%M%S')
+      # Use generic export which creates source file and examples
+      export_result = export_keys_for_translation(locale, keys)
+
+      # Create empty target file with just the key structure for Copilot
       tmp_dir = Rails.root.join('tmp')
-
-      # Create source file with English text
-      source_output = { 'en' => {} }
-      keys.each { |key| set_nested_key(source_output['en'], key, english[key]) }
-      source_name = "copilot_source_#{locale}_#{timestamp}.yml"
-      File.write(tmp_dir.join(source_name), yaml_dump(source_output))
-
-      # Create target file structure (same keys, empty values for guidance)
+      timestamp = export_result[:timestamp]
       target_output = { locale => {} }
       keys.each { |key| set_nested_key(target_output[locale], key, '') }
       target_name = "copilot_target_#{locale}_#{timestamp}.yml"
-      File.write(tmp_dir.join(target_name), yaml_dump(target_output))
+      target_file = tmp_dir.join(target_name)
+      File.write(target_file, yaml_dump(target_output))
 
-      # Create example files showing existing translations
-      examples = generate_translation_examples(locale, keys, english, timestamp, tmp_dir)
-
+      # Return combined result for Copilot
       {
-        source: tmp_dir.join(source_name),      # Full path for file ops
-        target: tmp_dir.join(target_name),      # Full path for file ops
-        source_name: source_name,               # Basename for prompt
-        target_name: target_name,               # Basename for prompt
-        examples: examples,                     # Example file info (may be nil)
-        timestamp: timestamp
-      }
-    end
-
-    # Generate example translation files to show AI existing terminology usage
-    # Returns hash with example file info or nil if no good examples found
-    def generate_translation_examples(locale, keys_to_translate, english, timestamp, tmp_dir)
-      # Find technical terms in the text to be translated
-      technical_terms = extract_technical_terms(keys_to_translate, english)
-      return if technical_terms.empty?
-
-      # Find existing translations containing these terms
-      example_keys = find_example_translations(locale, technical_terms, english)
-      return if example_keys.empty?
-
-      # Limit examples to avoid overwhelming the AI (max 15 examples)
-      example_keys = example_keys.take(15)
-
-      # Create example source file (English)
-      example_source = { 'en' => {} }
-      example_keys.each { |key| set_nested_key(example_source['en'], key, english[key]) }
-      example_source_name = "copilot_examples_en_#{timestamp}.yml"
-      File.write(tmp_dir.join(example_source_name), yaml_dump(example_source))
-
-      # Create example target file (existing translations)
-      existing_translations = load_flat_translations(locale)
-      example_target = { locale => {} }
-      example_keys.each do |key|
-        set_nested_key(example_target[locale], key, existing_translations[key])
-      end
-      example_target_name = "copilot_examples_#{locale}_#{timestamp}.yml"
-      File.write(tmp_dir.join(example_target_name), yaml_dump(example_target))
-
-      puts "Generated #{example_keys.length} translation examples for #{locale}"
-      {
-        source_name: example_source_name,
-        target_name: example_target_name,
-        term_count: technical_terms.length
+        source: export_result[:filepath],         # Source English text
+        target: target_file,                      # Empty target structure
+        source_name: File.basename(export_result[:filepath]),
+        target_name: target_name,
+        examples: export_result[:examples],       # May be nil
+        timestamp: timestamp,
+        keys: keys
       }
     end
 
@@ -407,7 +441,7 @@ module MachineTranslationHelpers
 
       copilot_success = execute_copilot(prompt, files[:target])
       import_success = copilot_success && File.exist?(files[:target]) &&
-                       import_copilot_result(locale, files[:target], expected_keys: keys_to_translate)
+                       import_translations(locale, files[:target], expected_keys: keys_to_translate)
 
       if import_success
         { success: true, translated: keys_to_translate.length, locale: locale }
@@ -704,41 +738,6 @@ module MachineTranslationHelpers
       end
 
       false
-    end
-    # rubocop:enable Naming/PredicateMethod
-
-    # rubocop:disable Naming/PredicateMethod
-    # Returns true on success, false on failure
-    def import_copilot_result(locale, target_file, expected_keys: nil)
-      return false unless File.exist?(target_file)
-
-      # Try to load YAML normally first
-      translated = load_yaml_with_fallback(target_file, locale)
-      return false unless translated
-
-      unless translated.is_a?(Hash) && translated[locale].is_a?(Hash)
-        puts 'Invalid YAML structure in Copilot output'
-        return false
-      end
-
-      # Validate keys if we know what was expected
-      if expected_keys
-        translated[locale] = validate_and_filter_keys(
-          translated[locale], expected_keys, locale
-        )
-      end
-
-      existing = load_existing_machine_translations(locale)
-      deep_merge!(existing[locale], translated[locale])
-
-      machine_file = machine_translation_path(locale)
-      File.write(machine_file, yaml_dump(existing))
-      puts "Imported #{count_keys(translated[locale])} keys to #{machine_file}"
-
-      # Update source tracking to record the English text that was translated
-      update_source_tracking(locale, translated[locale])
-
-      true
     end
     # rubocop:enable Naming/PredicateMethod
 

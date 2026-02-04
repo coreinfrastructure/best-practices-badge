@@ -54,3 +54,80 @@ raise InvalidLocale unless
 # > 'config.i18n.fallbacks = [I18n.default_locale]'.
 # > If not, fallbacks will be broken in your app by I18n 1.1.x.
 Rails.application.config.i18n.fallbacks = [:en]
+
+# Load machine translations using a custom I18n backend with smart fallback.
+#
+# CRITICAL REQUIREMENT:
+# Machine translations MUST NOT be added to I18n.load_path because
+# translation.io's sync mechanism reads ALL files from I18n.load_path
+# and would upload our machine translations to translation.io, making it
+# impossible to distinguish between human and machine translations.
+#
+# WHY NOT CONDITIONAL LOADING (Rails.env.local? check)?
+# That would mean test/development see different behavior than production.
+# We need consistent behavior across all environments.
+#
+# SOLUTION: Custom Backend with Smart Fallback
+# We load machine translations into a separate backend (not in I18n.load_path),
+# then use MachineTranslationFallbackBackend to check human translations first,
+# falling through to machine translations only when human is nil/empty.
+#
+# Result:
+# - Machine translations work in ALL environments (production, test, dev)
+# - Human translations (when present) always override machine translations
+# - Empty/nil values in human translations are treated as "not translated"
+# - translation.io never sees machine translations
+# - Consistent behavior everywhere
+
+require_relative '../../lib/machine_translation_fallback_backend'
+
+Rails.application.config.after_initialize do
+  # CRITICAL SAFETY CHECK: Ensure machine translations are isolated from translation.io
+  # translation.io syncs all files in I18n.load_path, so machine translations MUST NOT be there
+  machine_translations_dir = Rails.root.join('config', 'machine_translations').to_s
+  contaminated_paths = I18n.load_path.select { |path| path.to_s.start_with?(machine_translations_dir) }
+
+  if contaminated_paths.any?
+    paths_list = contaminated_paths.map { |p| "  - #{p}" }
+                                   .join("\n")
+    raise StandardError, <<~ERROR
+      CRITICAL CONFIGURATION ERROR: Machine translations detected in I18n.load_path!
+
+      The following machine translation files are in I18n.load_path:
+      #{paths_list}
+
+      This would cause translation.io to sync machine translations, contaminating
+      the human translation database and making it impossible to distinguish between
+      human and machine translations.
+
+      Machine translations MUST be loaded through the custom backend only, not via
+      I18n.load_path. Check config/initializers/i18n.rb and ensure machine_translations/
+      directory is NOT added to I18n.load_path.
+    ERROR
+  end
+
+  # Save reference to current backend (human translations from I18n.load_path)
+  human_backend = I18n.backend
+
+  # Force load all human translations (backends load lazily by default)
+  I18n.load_path.each do |file|
+    human_backend.load_translations(file) if File.exist?(file)
+  end
+
+  # Load machine translations into a separate backend
+  machine_backend = I18n::Backend::Simple.new
+  machine_translation_path = Rails.root.join('config', 'machine_translations', '*.yml')
+
+  Dir[machine_translation_path].each do |filepath|
+    # Skip source tracking files (src_en_*.yml) - they're metadata, not translations
+    next if File.basename(filepath).start_with?('src_en_')
+
+    yaml_data = YAML.load_file(filepath)
+    yaml_data.each do |locale, translations|
+      machine_backend.store_translations(locale.to_sym, translations)
+    end
+  end
+
+  # Replace backend with smart fallback: human first, then machine, then English
+  I18n.backend = MachineTranslationFallbackBackend.new(human_backend, machine_backend)
+end

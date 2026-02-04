@@ -11,8 +11,8 @@
         <%= Icon[:'fa-bookmark'] %><%= t('.section_selector') %><b class="caret"></b>
       </a>
       <ul class="dropdown-menu reverse-dropdown">
-        <%# Use precomputed constant hash (reduces object allocations) %>
-        <% ApplicationHelper::PROJECT_NAV_SECTIONS[I18n.locale].each do |section| %>
+        <%# Use precomputed memoized hash (reduces object allocations) %>
+        <% ApplicationHelper.project_nav_sections[I18n.locale].each do |section| %>
           <li class="<%= 'active' if @criteria_level == section[:level] %>">
             <%= link_to section[:name], project_section_path(@project, section[:level]) %>
           </li>

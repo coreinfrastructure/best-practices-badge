@@ -10,11 +10,14 @@ module ApplicationHelper
   # Frozen string constant for unknown project names (memory optimization)
   NAME_UNKNOWN = '(Name Unknown)'
 
-  # Pre-computed section dropdown data for project show navigation
-  # Frozen hash keyed by locale to avoid rebuilding on every render
-  # rubocop:disable Style/MutableConstant, Style/MethodCalledOnDoEndBlock
-  PROJECT_NAV_SECTIONS =
-    {}.tap do |hash|
+  # Pre-computed section dropdown data for project show navigation.
+  # Lazy-initialized (memoized) to avoid I18n initialization order issues.
+  # Eagerly triggered during app boot (see config/initializers/zz_eager_load_helpers.rb)
+  # to ensure single-threaded initialization before Puma starts its thread pool.
+  # Returns frozen hash keyed by locale to avoid rebuilding on every render.
+  # rubocop:disable Metrics/MethodLength, Style/MethodCalledOnDoEndBlock
+  def self.project_nav_sections
+    @project_nav_sections ||= {}.tap do |hash|
       I18n.available_locales.each do |locale|
         hash[locale] = [
           {
@@ -49,7 +52,8 @@ module ApplicationHelper
         ].freeze
       end
     end.freeze
-  # rubocop:enable Style/MutableConstant, Style/MethodCalledOnDoEndBlock
+  end
+  # rubocop:enable Metrics/MethodLength, Style/MethodCalledOnDoEndBlock
 
   # This is like the ActionView view helper `cache`
   # (specifically ActionView::Helpers::CacheHelper)

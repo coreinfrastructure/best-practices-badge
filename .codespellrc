@@ -1,4 +1,10 @@
 [codespell]
-skip = .git,*.pdf,*.svg,locales,vcr_cassettes,*.rake
+skip =
+  ./.git,./vendor,./node_modules,
+  ./config/machine_translations/*.yml,
+  ./config/locales/localization.*.yml,
+  ./config/locales/translation.*.yml,
+  ./test/vcr_cassettes,
+  *.rake,*.pdf,*.svg
 
 ignore-words: .codespellignore

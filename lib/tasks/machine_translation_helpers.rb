@@ -1015,13 +1015,9 @@ module MachineTranslationHelpers
       unescaped_quotes = inner.scan(/(?<!\\)"/).length
       return line if unescaped_quotes.zero?
 
-      # Escape any unescaped internal double quotes
-      # First, temporarily mark already-escaped quotes
-      fixed_inner = inner.gsub('\\"', "\x00ESCAPED_QUOTE\x00")
-      # Then escape remaining quotes
-      fixed_inner = fixed_inner.gsub('"', '\\"')
-      # Restore the originally-escaped quotes
-      fixed_inner = fixed_inner.gsub("\x00ESCAPED_QUOTE\x00", '\\"')
+      # Escape backslashes first, then quotes (like line 991)
+      # This prevents incomplete sanitization vulnerabilities
+      fixed_inner = inner.gsub('\\', '\\\\').gsub('"', '\"')
 
       "#{indent}#{key}: \"#{fixed_inner}\""
     end

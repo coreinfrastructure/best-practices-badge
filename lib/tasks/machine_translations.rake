@@ -112,6 +112,9 @@ namespace :translation do
     puts
 
     iteration = 0
+    consecutive_failures = 0
+    max_consecutive_failures = 3
+
     loop do
       iteration += 1
       puts "=== Iteration #{iteration} at #{Time.zone.now.strftime('%Y-%m-%d %H:%M:%S')} ==="
@@ -129,10 +132,35 @@ namespace :translation do
 
       puts "Found #{missing_keys.length} untranslated keys for #{MachineTranslationHelpers.language_name(locale)}"
 
-      # Run translation for this locale
+      # Store count before translation attempt
+      before_count = missing_keys.length
+
+      # Run translation for this locale, catching any exit/failure
       puts "Translating batch of #{[batch_size, missing_keys.length].min} keys..."
-      Rake::Task['translation:copilot'].reenable # Allow task to be called again
-      Rake::Task['translation:copilot'].invoke(locale, batch_size)
+      begin
+        Rake::Task['translation:copilot'].reenable # Allow task to be called again
+        Rake::Task['translation:copilot'].invoke(locale, batch_size)
+      rescue SystemExit => e
+        # Copilot task exited with error - log it but continue
+        puts "Copilot task exited with status #{e.status} - continuing anyway..."
+      end
+
+      # Check if we made progress (even partial success counts)
+      after_count = MachineTranslationHelpers.find_untranslated_keys(locale).length
+      if after_count < before_count
+        consecutive_failures = 0
+        puts "Progress: #{before_count - after_count} keys translated successfully"
+      else
+        consecutive_failures += 1
+        puts "No progress made (failure #{consecutive_failures}/#{max_consecutive_failures})"
+
+        if consecutive_failures >= max_consecutive_failures
+          puts ''
+          puts "ERROR: #{max_consecutive_failures} consecutive failures with no progress."
+          puts 'Stopping to prevent infinite loop. Manual intervention may be needed.'
+          break
+        end
+      end
 
       # Wait before next iteration (unless we're done)
       remaining = MachineTranslationHelpers.find_untranslated_keys(locale)

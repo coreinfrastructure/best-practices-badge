@@ -10,7 +10,9 @@ class MachineTranslationFallbackBackendTest < ActiveSupport::TestCase
     @backend = I18n.backend
   end
 
-  test 'available_locales includes both human and machine locales' do
+  # === Public Interface Tests ===
+
+  test 'available_locales includes all locales' do
     locales = @backend.available_locales
     assert_includes locales, :en
     assert_includes locales, :fr
@@ -29,6 +31,8 @@ class MachineTranslationFallbackBackendTest < ActiveSupport::TestCase
     translations = @backend.send(:translations)
     assert translations.is_a?(Hash) && translations.key?(:en)
   end
+
+  # === Translation Lookup Tests ===
 
   # rubocop:disable Rails/DotSeparatedKeys
   test 'translate handles scope parameter with human translations' do
@@ -49,14 +53,40 @@ class MachineTranslationFallbackBackendTest < ActiveSupport::TestCase
   end
   # rubocop:enable Rails/DotSeparatedKeys
 
-  test 'process_translation handles regular values' do
-    assert_equal 'value', @backend.send(:process_translation, :en, 'test', 'value', {})
+  test 'translate uses English fallback for missing translations' do
+    # feed_title exists in English, should fall back for locales without it
+    result = I18n.t('feed_title', locale: :en)
+    assert result.present?
+    assert_includes result, 'OpenSSF'
   end
 
-  test 'process_translation handles pluralization with count' do
+  test 'pluralization works with count' do
     assert_equal '1 Project', I18n.t('projects_count', count: 1, locale: :en)
     assert_equal '5 Projects', I18n.t('projects_count', count: 5, locale: :en)
   end
+
+  # === Merged Hash Structure Tests ===
+
+  test 'merged hash uses dotted string keys' do
+    translations = @backend.instance_variable_get(:@translations)
+    assert translations[:en].key?('feed_title')
+    assert translations[:en].key?('layouts.projects')
+  end
+
+  test 'merged hash preserves pluralization hashes' do
+    translations = @backend.instance_variable_get(:@translations)
+    projects_count = translations[:en]['projects_count']
+    assert projects_count.is_a?(Hash)
+    assert projects_count.key?(:one) && projects_count.key?(:other)
+  end
+
+  test 'merged hash freezes values' do
+    translations = @backend.instance_variable_get(:@translations)
+    assert translations[:en]['feed_title'].frozen?
+    assert translations[:en].frozen?
+  end
+
+  # === build_lookup_key Tests ===
 
   test 'build_lookup_key returns key as string when no scope' do
     assert_equal 'key', @backend.send(:build_lookup_key, 'key', nil)
@@ -68,33 +98,44 @@ class MachineTranslationFallbackBackendTest < ActiveSupport::TestCase
     assert_equal 'projects.edit.title', @backend.send(:build_lookup_key, 'title', %i[projects edit])
   end
 
-  test 'flat hash uses dotted string keys' do
-    human_flat = @backend.instance_variable_get(:@human_flat)
-    assert human_flat[:en].key?('feed_title')
-    assert human_flat[:en].key?('layouts.projects')
+  # === Merge Logic Tests ===
+
+  test 'merge_value prefers human over machine over english' do
+    assert_equal 'human', @backend.send(:merge_value, 'human', 'machine', 'english')
+    assert_equal 'machine', @backend.send(:merge_value, nil, 'machine', 'english')
+    assert_equal 'machine', @backend.send(:merge_value, '', 'machine', 'english')
+    assert_equal 'english', @backend.send(:merge_value, nil, nil, 'english')
   end
 
-  test 'flat hash preserves pluralization hashes' do
-    human_flat = @backend.instance_variable_get(:@human_flat)
-    projects_count = human_flat[:en]['projects_count']
-    assert projects_count.is_a?(Hash) && projects_count.key?(:one) && projects_count.key?(:other)
+  test 'merge_pluralization merges at key level' do
+    human = { one: 'human one' }
+    machine = { one: 'machine one', other: 'machine other' }
+    english = { zero: 'english zero', one: 'english one', other: 'english other' }
+
+    result = @backend.send(:merge_pluralization, human, machine, english)
+
+    assert_equal 'human one', result[:one]       # human wins
+    assert_equal 'machine other', result[:other] # machine fills in
+    assert_equal 'english zero', result[:zero]   # english fills in
   end
 
-  test 'flat hash freezes values and locale hashes' do
-    human_flat = @backend.instance_variable_get(:@human_flat)
-    assert human_flat[:en]['feed_title'].frozen?, 'String values should be frozen'
-    assert human_flat[:en].frozen?, 'Locale hash should be frozen'
-  end
-
-  test 'present_value? handles nil, empty, and valid values' do
-    assert_not @backend.send(:present_value?, nil)
-    assert_not @backend.send(:present_value?, '')
-    assert @backend.send(:present_value?, 'hello')
-    assert @backend.send(:present_value?, false) # false is valid
+  test 'present_string? handles various inputs' do
+    assert @backend.send(:present_string?, 'hello')
+    assert @backend.send(:present_string?, false) # false is valid
+    assert_not @backend.send(:present_string?, nil)
+    assert_not @backend.send(:present_string?, '')
   end
 
   test 'present_value? handles pluralization hashes' do
     assert @backend.send(:present_value?, { one: 'item', other: 'items' })
     assert_not @backend.send(:present_value?, { one: '', other: '' })
+    assert_not @backend.send(:present_value?, nil)
+  end
+
+  test 'pluralization_hash? detects plural keys' do
+    assert @backend.send(:pluralization_hash?, { one: 'x', other: 'y' })
+    assert @backend.send(:pluralization_hash?, { zero: 'none' })
+    assert_not @backend.send(:pluralization_hash?, { foo: 'bar' })
+    assert_not @backend.send(:pluralization_hash?, 'string')
   end
 end

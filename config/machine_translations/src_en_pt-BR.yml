@@ -47,6 +47,9 @@ en:
       other: 'As an anti-spam measure, you must wait %{count} hours after activation before you can log in.
 
         '
+      many: 'As an anti-spam measure, you must wait %{count} hours after activation before you can log in.
+
+        '
     failed_activation: Invalid activation link
   password_resets:
     forgot_password: Forgot password

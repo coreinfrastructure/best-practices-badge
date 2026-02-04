@@ -247,3 +247,6 @@ ja:
         begin_with_cpe: ' は "cpe:" で始まる必要があります'
   layouts:
     translation_disclaimer_html: この翻訳には誤りが含まれている可能性があります。矛盾がある場合は、英語の原文が優先されます。
+  account_activations:
+    delay:
+      many: スパム対策として、アクティベーション後 %{count} 時間待ってからログインする必要があります。

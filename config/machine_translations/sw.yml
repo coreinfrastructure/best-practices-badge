@@ -1164,3 +1164,6 @@ sw:
         comma_separated_list: " lazima iwe orodha ya majina yaliyotengwa kwa koma ikiwa hutumia herufi za ASCII tu"
         begin_with_cpe: ' lazima ianze na "cpe:"'
   last_entry: Ingizo la mwisho la tafsiri
+  account_activations:
+    delay:
+      many: Kama hatua ya kupambana na taka, lazima usubiri masaa %{count} baada ya uanzishaji kabla hujaingia.

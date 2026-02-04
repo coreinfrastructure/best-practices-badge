@@ -63,6 +63,9 @@ en:
       few: >
         As an anti-spam measure, you must wait %{count} hours after activation
         before you can log in.
+      many: >
+        As an anti-spam measure, you must wait %{count} hours after activation
+        before you can log in.
       other: >
         As an anti-spam measure, you must wait %{count} hours after activation
         before you can log in.

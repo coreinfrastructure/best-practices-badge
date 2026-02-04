@@ -311,3 +311,6 @@ de:
         begin_with_cpe: ' muss mit "cpe:" beginnen'
   layouts:
     translation_disclaimer_html: Diese Übersetzung kann Fehler enthalten. Im Konfliktfall ist die englische Originalversion maßgebend.
+  account_activations:
+    delay:
+      many: Als Anti-Spam-Maßnahme müssen Sie %{count} Stunden nach der Aktivierung warten, bevor Sie sich anmelden können.

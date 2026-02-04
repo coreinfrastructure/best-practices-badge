@@ -240,3 +240,8 @@ en:
         begin_with_cpe: ' must begin with "cpe:"'
   layouts:
     translation_disclaimer_html: This translation may contain errors. In case of conflict, the English original governs.
+  account_activations:
+    delay:
+      many: 'As an anti-spam measure, you must wait %{count} hours after activation before you can log in.
+
+        '

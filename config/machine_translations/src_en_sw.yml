@@ -1168,3 +1168,8 @@ en:
         comma_separated_list: " must be a comma-separated list of names using only ASCII characters"
         begin_with_cpe: ' must begin with "cpe:"'
   last_entry: Last translation entry
+  account_activations:
+    delay:
+      many: 'As an anti-spam measure, you must wait %{count} hours after activation before you can log in.
+
+        '

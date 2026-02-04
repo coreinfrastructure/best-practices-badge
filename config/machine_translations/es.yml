@@ -29,6 +29,7 @@ es:
       other: 'Como medida anti-spam, debe esperar %{count} horas después de la activación antes de poder iniciar sesión.
 
         '
+      many: Como medida anti-spam, debe esperar %{count} horas después de la activación antes de poder iniciar sesión.
   password_resets:
     forgot_password: Olvidé mi contraseña
     reset_password: Restablecer contraseña

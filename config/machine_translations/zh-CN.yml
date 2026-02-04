@@ -295,3 +295,6 @@ zh-CN:
         begin_with_cpe: ' 必须以"cpe:"开头'
   layouts:
     translation_disclaimer_html: 此翻译可能包含错误。如有冲突，以英文原文为准。
+  account_activations:
+    delay:
+      many: 作为反垃圾邮件措施，您必须在激活后等待 %{count} 小时才能登录。

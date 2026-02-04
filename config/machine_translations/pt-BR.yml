@@ -47,6 +47,7 @@ pt-BR:
       other: 'Como medida anti-spam, você deve esperar %{count} horas após a ativação antes de poder entrar.
 
         '
+      many: Como medida anti-spam, você deve aguardar %{count} horas após a ativação antes de poder entrar.
     failed_activation: Link de ativação inválido
   password_resets:
     forgot_password: Esqueceu a senha

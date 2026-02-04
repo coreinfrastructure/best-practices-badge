@@ -5,6 +5,7 @@ skip =
   ./config/locales/localization.*.yml,
   ./config/locales/translation.*.yml,
   ./test/vcr_cassettes,
+  ./lib/tasks/translation_instructions_template.rb,
   *.rake,*.pdf,*.svg
 
 ignore-words: .codespellignore

@@ -27,6 +27,7 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
     super()
     @human_backend = human_backend
     @machine_backend = machine_backend
+    @machine_translation_files = Rails.root.glob('config/machine_translations/*.yml')
     # Cache backend translation hashes to avoid repeated method calls
     # Must use send() to access private translations method
     @human_translations = @human_backend.send(:translations)
@@ -35,13 +36,17 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
 
   # options parameter follows Rails I18n::Backend::Base signature
   def translate(locale, key, options = {})
+    # Normalize the key: prepend scope if provided
+    # Rails I18n expects backends to handle the scope option by building a composite key
+    normalized_key = normalize(key, options[:scope])
+
     # Try human translations first (check raw hash to avoid fallback behavior)
-    human_value = lookup_in_translations(@human_translations, locale, key)
-    return process_translation(locale, key, human_value, options) if human_value.present?
+    human_value = lookup_in_translations(@human_translations, locale, normalized_key)
+    return process_translation(locale, normalized_key, human_value, options) if human_value.present?
 
     # Human translation missing/empty - try machine translations
-    machine_value = lookup_in_translations(@machine_translations, locale, key)
-    return process_translation(locale, key, machine_value, options) if machine_value.present?
+    machine_value = lookup_in_translations(@machine_translations, locale, normalized_key)
+    return process_translation(locale, normalized_key, machine_value, options) if machine_value.present?
 
     # Neither has it - use default fallback behavior (English)
     @human_backend.translate(locale, key, options)
@@ -63,6 +68,18 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
   def reload!
     @human_backend.reload!
     @machine_backend.reload!
+
+    # Re-load machine translations from files
+    @machine_translation_files.each do |filepath|
+      # Skip source tracking files (src_en_*.yml) - they're metadata, not translations
+      next if File.basename(filepath).start_with?('src_en_')
+
+      yaml_data = YAML.load_file(filepath)
+      yaml_data.each do |locale, translations|
+        @machine_backend.store_translations(locale.to_sym, translations)
+      end
+    end
+
     # Update cached references after reload
     @human_translations = @human_backend.send(:translations)
     @machine_translations = @machine_backend.send(:translations)
@@ -80,6 +97,14 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
   end
 
   private
+
+  # Normalize key with scope. Builds composite key like I18n does.
+  # e.g., normalize('Controls', :headings) => 'headings.Controls'
+  def normalize(key, scope)
+    return key if scope.blank?
+
+    [scope, key].flatten.compact.join('.')
+  end
 
   # Look up a key directly in a translations hash.
   # Returns the value if found and non-nil, otherwise nil.

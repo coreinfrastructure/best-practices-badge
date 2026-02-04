@@ -466,18 +466,26 @@ module MachineTranslationHelpers
 
         TASK: Translate the English YAML file #{source_name} into #{lang}.
 
+        INPUT FILE: #{source_name} (English text with 'en:' root key - DO NOT MODIFY)
+        OUTPUT FILE: #{target_name} (write #{lang} translations here with '#{locale}:' root key)
+
+        CRITICAL YAML RULES:
+        1. ALWAYS wrap ALL values in double quotes
+        2. ESCAPE internal double quotes as \\" (e.g., "The \\"term\\" means...")
+        - Correct:   key: "translated text here"
+        - WRONG:     key: translated text here
+        - Correct:   key: "The \\"term\\" means..."
+        - WRONG:     key: "The "term" means..."  (unescaped quotes BREAK YAML!)
+
         INSTRUCTIONS: Read #{instructions_name} for complete translation guidelines.
+        Your translation will be automatically validated. Any errors cause REJECTION.
 
-        KEY POINTS:
-        - Only translate VALUES, never keys
-        - Keep every %<variable>s exactly as-is
-        - Keep HTML tags unchanged
-        - Use DOUBLE QUOTES for strings
-        - Output to: #{target_name}
-        - Root key must be '#{locale}:' (not 'en:')
-
-        Your translation will be automatically validated for correct keys,
-        preserved placeholders, and valid YAML syntax.
+        WORKFLOW:
+        1. Read #{source_name} to get the English text
+        2. Read #{instructions_name} for formatting rules and examples
+        3. Write your #{lang} translations to #{target_name}
+        4. The output file must have '#{locale}:' as the root key (not 'en:')
+        5. ENSURE every value is wrapped in double quotes
 
         After completing the translation, output ONLY the text "TRANSLATION_COMPLETE" on a line by itself.
       PROMPT
@@ -945,11 +953,12 @@ module MachineTranslationHelpers
     end
 
     # Fix common YAML quoting issues in Copilot output
+    # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     def fix_yaml_quoting(content, _locale)
       lines = content.split("\n")
       fixed_lines =
         lines.map do |line|
-          # Match lines with single-quoted values
+          # Match lines with single-quoted values containing apostrophes
           # Pattern: key: 'value...'
           if line =~ /^(\s+)(\w+):\s+'(.+)'$/
             indent = ::Regexp.last_match(1)
@@ -967,11 +976,54 @@ module MachineTranslationHelpers
               # Single quotes are fine if no apostrophes
               line
             end
+          # Match lines with UNQUOTED values that contain URLs or HTML
+          # Pattern: key: <value or key: text://...
+          # These need to be quoted because colons break YAML
+          elsif line =~ %r{^(\s+)([\w_]+):\s+(<.+|.+://.*)$}
+            indent = ::Regexp.last_match(1)
+            key = ::Regexp.last_match(2)
+            value = ::Regexp.last_match(3)
+
+            # If already quoted, check for internal quote issues instead
+            if value.start_with?('"', "'")
+              fix_internal_quotes(line)
+            else
+              escaped_value = value.gsub('\\', '\\\\').gsub('"', '\"')
+              "#{indent}#{key}: \"#{escaped_value}\""
+            end
           else
-            line
+            # Try to fix unescaped internal double quotes in double-quoted values
+            fix_internal_quotes(line)
           end
         end
       fixed_lines.join("\n")
+    end
+    # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+
+    # Fix unescaped double quotes inside double-quoted YAML values
+    # e.g., key: "The "term" means..." -> key: "The \"term\" means..."
+    def fix_internal_quotes(line)
+      # Match: key: "value with potential internal quotes"
+      return line unless line =~ /^(\s+)([\w_]+):\s+"(.+)"$/
+
+      indent = ::Regexp.last_match(1)
+      key = ::Regexp.last_match(2)
+      inner = ::Regexp.last_match(3)
+
+      # Check if there are unescaped quotes (quotes not preceded by backslash)
+      # Count quotes that are NOT preceded by backslash
+      unescaped_quotes = inner.scan(/(?<!\\)"/).length
+      return line if unescaped_quotes.zero?
+
+      # Escape any unescaped internal double quotes
+      # First, temporarily mark already-escaped quotes
+      fixed_inner = inner.gsub('\\"', "\x00ESCAPED_QUOTE\x00")
+      # Then escape remaining quotes
+      fixed_inner = fixed_inner.gsub('"', '\\"')
+      # Restore the originally-escaped quotes
+      fixed_inner = fixed_inner.gsub("\x00ESCAPED_QUOTE\x00", '\\"')
+
+      "#{indent}#{key}: \"#{fixed_inner}\""
     end
   end
 end

@@ -105,7 +105,7 @@ namespace :translation do
   desc 'Translate all remaining strings across all locales (runs until complete)'
   task :all, [:batch_size] => :environment do |_t, args|
     batch_size = (args[:batch_size] || MachineTranslationHelpers::COPILOT_BATCH_SIZE).to_i
-    wait_time = 300 # 5 minutes between batches
+    wait_time = 10 # Seconds to wait between batches
 
     puts 'Starting automated translation for all locales...'
     puts "Batch size: #{batch_size}, Wait time: #{wait_time} seconds (#{wait_time / 60} minutes)"
@@ -113,7 +113,7 @@ namespace :translation do
 
     iteration = 0
     consecutive_failures = 0
-    max_consecutive_failures = 3
+    max_consecutive_failures = 10
 
     loop do
       iteration += 1

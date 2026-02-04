@@ -238,3 +238,5 @@ en:
       messages:
         comma_separated_list: " must be a comma-separated list of names using only ASCII characters"
         begin_with_cpe: ' must begin with "cpe:"'
+  layouts:
+    translation_disclaimer_html: This translation may contain errors. In case of conflict, the English original governs.

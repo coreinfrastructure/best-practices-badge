@@ -30,6 +30,13 @@ en:
       section_selector: Section
       cdla_permissive_20_html: This data is available under the <a href="https://cdla.dev/permissive-2-0/" >Community Data License Agreement – Permissive, Version 2.0 (CDLA-Permissive-2.0)</a>. This means that a Data Recipient may share the Data, with or without modifications, so long as the Data Recipient makes available the text of this agreement with the shared Data. Please credit %{user} and the OpenSSF Best Practices badge contributors.<br><br>
     form_early:
+      level:
+        baseline-1: Baseline Level 1
+        baseline-1_html: These are the Baseline Level 1 criteria.
+        baseline-2: Baseline Level 2
+        baseline-2_html: These are the Baseline Level 2 criteria.
+        baseline-3: Baseline Level 3
+        baseline-3_html: These are the Baseline Level 3 criteria.
       got_baseline_badge:
         description_1: 'If this is your project, please show your baseline badge status on your project page! The baseline badge status looks like this:'
         badge_alt: Baseline badge level for project %{id} is %{level}

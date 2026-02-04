@@ -238,3 +238,8 @@ fr:
       messages:
         comma_separated_list: " doit être une liste séparée par des virgules de noms utilisant uniquement des caractères ASCII"
         begin_with_cpe: " doit commencer par « cpe: »"
+  layouts:
+    translation_disclaimer_html: Cette traduction peut contenir des erreurs. En cas de conflit, la version anglaise originale fait foi.
+  account_activations:
+    delay:
+      many: En tant que mesure anti-spam, vous devez attendre %{count} heures après l'activation avant de pouvoir vous connecter.

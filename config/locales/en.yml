@@ -45,6 +45,9 @@ en:
       target="_blank" rel="noopener">The Linux Foundation</a>.
       All Rights Reserved. Please see our <a href="https://www.linuxfoundation.org/privacy"
       target="_blank" rel="noopener">privacy policy</a>.</small>
+    translation_disclaimer_html: >-
+      This translation may contain errors.
+      In case of conflict, the English original governs.
   admin_only: Admin only.
   account_activations:
     activated: >
@@ -58,6 +61,9 @@ en:
         As an anti-spam measure, you must wait one hour after activation
         before you can log in.
       few: >
+        As an anti-spam measure, you must wait %{count} hours after activation
+        before you can log in.
+      many: >
         As an anti-spam measure, you must wait %{count} hours after activation
         before you can log in.
       other: >
@@ -2138,7 +2144,7 @@ en:
           and/or activating an assertion in production may expose private
           data such as private keys.
           Beware that in many Linux distributions <tt>NDEBUG</tt>
-          is not defined, so C/C++ <t>assert()</tt> will by default be enabled
+          is not defined, so C/C++ <tt>assert()</tt> will by default be enabled
           for production in those environments.
           It may be important to use a different assertion mechanism
           or defining <tt>NDEBUG</tt> for production in those environments.

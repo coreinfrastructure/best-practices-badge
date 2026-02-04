@@ -52,12 +52,16 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
     @human_backend.translate(locale, key, options)
   end
 
-  # Process a translation value: resolve, then interpolate/pluralize
+  # Process a translation value: resolve, then pluralize (if needed), then interpolate
   def process_translation(locale, key, value, options)
     entry = resolve(locale, key, value, options.except(:default))
     return entry if entry.is_a?(::I18n::MissingTranslation)
 
-    options.key?(:count) ? pluralize(locale, entry, options[:count]) : interpolate(locale, entry, options)
+    # Pluralize first if count is provided (selects zero/one/few/many/other form)
+    entry = pluralize(locale, entry, options[:count]) if options.key?(:count)
+
+    # Then interpolate variables (e.g., %{count} -> actual number)
+    interpolate(locale, entry, options)
   end
 
   # Delegate other backend methods to human backend
@@ -138,9 +142,24 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
       return nil if current.nil?
     end
 
-    # Return nil if current is a Hash (intermediate node, not a leaf translation)
-    # Rails expects String, Symbol, or nil - returning a Hash causes "undefined method `to_str'" errors
-    current.is_a?(Hash) ? nil : current
+    # If current is a Hash, it could be:
+    # 1. An intermediate node (not a leaf translation) - return nil
+    # 2. A pluralization Hash (zero/one/few/many/other) - return it if it has non-empty values
+    #
+    # For pluralization, we need to check if any values are present.
+    # If all values are empty/nil, return nil to fall through to machine translations.
+    return current unless current.is_a?(Hash)
+
+    # Check if this looks like a pluralization hash with non-empty values
+    return unless pluralization_hash_with_values?(current)
+
+    current
+  end
+
+  # Check if hash is a pluralization hash (has zero/one/few/many/other keys) with non-empty values
+  def pluralization_hash_with_values?(hash)
+    pluralization_keys = %i[zero one two few many other].freeze
+    hash.keys.any? { |k| pluralization_keys.include?(k.to_sym) } && hash.values.any?(&:present?)
   end
   # rubocop:enable Metrics/MethodLength
 end

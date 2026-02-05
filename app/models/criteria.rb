@@ -137,18 +137,12 @@ class Criteria
       result = I18n.t(".#{path}", locale: locale, default: nil)
       return result.keys if result.is_a?(Hash)
 
-      # For flat backends, extract keys from the translations hash
+      # For flat backends, use the backend's nested_hash method
       backend = I18n.backend
-      return [] unless backend.respond_to?(:translations)
+      return [] unless backend.respond_to?(:nested_hash)
 
-      locale_data = backend.translations[locale]
-      return [] unless locale_data
-
-      prefix = "#{path}."
-      matching_keys = locale_data.keys.select { |k| k.start_with?(prefix) }
-      keys = matching_keys.map { |k| k.delete_prefix(prefix).split('.').first.to_sym }
-                          .uniq
-      keys.sort
+      nested = backend.nested_hash(locale, path)
+      nested ? nested.keys.sort : []
     end
   end
 

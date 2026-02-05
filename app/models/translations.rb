@@ -29,7 +29,16 @@ module Translations
   # Get list of keys under projects.misc.in_javascript.
   # Works with both nested backends (returns hash.keys) and flat backends.
   def js_translation_keys
-    get_translation_keys('projects.misc.in_javascript')
+    # Try traditional nested backend approach first
+    result = I18n.t('.projects.misc.in_javascript', locale: :en, default: nil)
+    return result.keys if result.is_a?(Hash)
+
+    # For flat backends, use the backend's nested_hash method
+    backend = I18n.backend
+    return [] unless backend.respond_to?(:nested_hash)
+
+    nested = backend.nested_hash(:en, 'projects.misc.in_javascript')
+    nested ? nested.keys.sort : []
   end
 
   # Get all translation keys under a given path.
@@ -42,17 +51,11 @@ module Translations
     result = I18n.t(".#{path}", locale: locale, default: nil)
     return result.keys if result.is_a?(Hash)
 
-    # For flat backends, extract keys from the translations hash
+    # For flat backends, use the backend's nested_hash method
     backend = I18n.backend
-    return [] unless backend.respond_to?(:translations)
+    return [] unless backend.respond_to?(:nested_hash)
 
-    locale_data = backend.translations[locale]
-    return [] unless locale_data
-
-    prefix = "#{path}."
-    matching_keys = locale_data.keys.select { |k| k.start_with?(prefix) }
-    keys = matching_keys.map { |k| k.delete_prefix(prefix).split('.').first.to_sym }
-                        .uniq
-    keys.sort
+    nested = backend.nested_hash(locale, path)
+    nested ? nested.keys.sort : []
   end
 end

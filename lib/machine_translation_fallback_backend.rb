@@ -123,6 +123,28 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
   # @return [Hash] flat translations hash keyed by locale
   attr_reader :translations
 
+  # Get a nested hash for a translation path, suitable for iteration.
+  # This is needed for asset precompilation where we export translations to JS.
+  # @param locale [Symbol] the locale
+  # @param path [String] the translation path (e.g., "criteria.0.description_good")
+  # @return [Hash, nil] nested hash with symbol keys, or nil if not found
+  def nested_hash(locale, path)
+    locale_data = @translations[locale]
+    return unless locale_data
+
+    prefix = path.empty? ? '' : "#{path}."
+    matching_keys = locale_data.keys.select { |k| prefix.empty? || k.start_with?(prefix) }
+    return if matching_keys.empty?
+
+    result = {}
+    matching_keys.each do |full_key|
+      relative_key = prefix.empty? ? full_key : full_key.delete_prefix(prefix)
+      value = locale_data[full_key]
+      set_nested_value(result, relative_key.split('.'), value)
+    end
+    result
+  end
+
   private
 
   # Load translations from YAML files into a nested hash.
@@ -322,7 +344,7 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
     key_str = key.to_s
     # Leading dot means "ignore scope, use absolute path from root"
     return key_str.delete_prefix('.') if key_str.start_with?('.')
-    return key_str if scope.nil?
+    return key_str if scope.nil? || (scope.is_a?(Array) && scope.empty?)
 
     scope_str = scope.is_a?(Array) ? scope.join('.') : scope.to_s
     "#{scope_str}.#{key_str}"
@@ -367,6 +389,21 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
   def default_plural_rule(_locale)
     # Default English-style rule: one for 1, other for everything else
     ->(n) { n == 1 ? :one : :other }
+  end
+
+  # Set a value in a nested hash given a path of keys.
+  # @param hash [Hash] the hash to modify
+  # @param keys [Array<String>] path of keys
+  # @param value [Object] the value to set
+  def set_nested_value(hash, keys, value)
+    if keys.length == 1
+      # Use symbols for hash keys to match I18n conventions
+      hash[keys.first.to_sym] = value
+    else
+      key = keys.first.to_sym
+      hash[key] ||= {}
+      set_nested_value(hash[key], keys[1..], value)
+    end
   end
 end
 # rubocop:enable Style/Send, Metrics/ClassLength

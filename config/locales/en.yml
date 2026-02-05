@@ -2,6 +2,9 @@
 en:
   hello: Hello world
   submit: Submit
+  do_not_translate_this: Don't translate this segment
+  test_pluralization_only_one:
+    one: "just one item"
   projects_count:
     zero: Zero Projects
     one: "%{count} Project"

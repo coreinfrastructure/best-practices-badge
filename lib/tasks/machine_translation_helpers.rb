@@ -19,6 +19,9 @@ module MachineTranslationHelpers
   # Portuguese, Spanish, Russian, and Swahili last (limited LLM support)
   TRANSLATION_PRIORITY = %w[fr de ja zh-CN pt-BR es ru sw].freeze
 
+  # Keys to exclude from translation (test keys, internal-only, etc.)
+  KEYS_TO_IGNORE = %w[do_not_translate_this].freeze
+
   # Human-readable language names for prompts
   LANGUAGE_NAMES = {
     'fr' => 'French', 'de' => 'German', 'ja' => 'Japanese',
@@ -56,6 +59,9 @@ module MachineTranslationHelpers
       source_tracking = load_source_tracking(locale)
 
       english.keys.select do |key|
+        # Skip test/internal keys that should never be translated
+        next false if KEYS_TO_IGNORE.include?(key)
+
         english_value = english[key]
 
         # Skip keys where English value is blank - nothing to translate

@@ -1,10 +1,12 @@
 # CLAUDE.md
 
-This file provides guidance to the Claude Code (claude.ai/code) AI assistant when working with code in this repository.
+This file provides guidance to an AI assistant when working with the code in this repository.
 
 ## Project Overview
 
-This is the **OpenSSF Best Practices Badge** project (formerly CII Best Practices Badge) - a Rails web application that helps FLOSS projects self-certify that they meet security and quality best practices. The application provides a badging system with three levels: passing, silver, and gold.
+This is the **OpenSSF Best Practices Badge** project (formerly CII Best Practices Badge) - a Rails web application that helps FLOSS projects self-certify that they meet security and quality best practices. The application provides a badging system with three "metal" levels (passing, silver, and gold) and three "baseline" levels (1, 2, and 3).
+
+This software is open source software. The production site running this code is extremely busy and always under attack. High performance and strong security are required.
 
 **Key URLs:**
 
@@ -15,12 +17,9 @@ This is the **OpenSSF Best Practices Badge** project (formerly CII Best Practice
 
 ### Testing
 
-- `rails test` - Run unit/integration tests (excludes system tests by default)
-- `rails test:system` - Run system tests (Capybara-based browser tests)
-- `rails test:all` - Run ALL tests including system tests
-- `rails test test/integration/project_list_test.rb` - Run the specified test file
+- `rake test:optimized` - Run all tests (unit and system). Takes a long time.
+- `rails test test/integration/project_list_test.rb` - Run specified test file
 - `rails test test/features/can_access_home_test.rb:4` - Run a test at line 4 of the specified test file.
-- `rails test rails test TESTFILE -n NAME_OR_PATTERN` - Run the specific test or pattern `NAME_OR_PATTERN` in file TESTFILE
 
 ### Code Quality & Linting
 
@@ -46,30 +45,18 @@ For specific files:
 
 **Markdown Helper Script**:
 
-After creating or editing markdown files, use the markdown fixer script to automatically fix common markdownlint errors:
+After creating or editing markdown files, youcan use the markdown fixer script to automatically fix common markdownlint errors:
 
 ```bash
-
 # Fix markdown file in-place (most common usage):
-script/fix_markdown.rb docs/myfile.md
+script/fix_markdown.rb docs/MYFILE.md
 
 # See what would be fixed without changing the file:
-script/fix_markdown.rb --dry-run docs/myfile.md
+script/fix_markdown.rb --dry-run docs/MYFILE.md
 
 # After fixing, verify with markdownlint:
-mdl docs/myfile.md
-
+mdl docs/MYFILE.md
 ```
-
-The script automatically fixes:
-
-- MD031: Fenced code blocks surrounded by blank lines
-- MD022: Headers surrounded by blank lines
-- MD032: Lists surrounded by blank lines
-- MD023: Headers at beginning of line (no leading spaces)
-- MD012: Multiple consecutive blank lines
-
-After running the script, manually fix any remaining errors that require human judgment (MD001, MD025, etc.).
 
 Don't run `rails_best_practices` to analyze individual files.
 The `rails_best_practices` program needs the full context of all files
@@ -80,39 +67,14 @@ for RuboCop corrections.
 
 **NEVER use `rubocop -A` (unsafe autocorrect)** -
 it frequently introduces subtle bugs by making assumptions
-about code context that are incorrect. Examples include:
-
-- Changing array methods to string methods (`.drop()` vs `[1..]`)
-- Changing hash syntax that breaks in complex ActiveRecord queries
-
-Always use `-a` (safe) and manually review any remaining suggestions from
-`rubocop` without flags to determine if they're actually appropriate
-for the specific context.
+about code context that are incorrect.
 
 ### Workflow
 
-After making significant changes to source code, ALWAYS run linters:
+After making significant changes to source code, ALWAYS run linters, e.g.,
+rubocop for Ruby files and mdl for markdown files.
 
-**For Ruby files**:
-
-1. Run `rubocop FILENAME.rb` on changed files
-2. Run `rake rails_best_practices` for Rails-specific checks
-3. Fix all reported problems
-
-**For Markdown files**:
-
-1. Run `script/fix_markdown.rb FILENAME.md` to auto-fix common issues
-2. Run `mdl FILENAME.md` to check for remaining errors
-3. Manually fix any errors that require human judgment (MD001, MD025, etc.)
-
-**For all changed files**:
-
-1. Run `rake whitespace_check` to catch trailing whitespace
-2. Fix any whitespace issues
-
-**Finally**:
-
-- Run `rails test:all` to ensure all tests pass
+Also run `rake whitespace_check` to catch trailing whitespace, and fix them.
 
 ### Development Environment Shortcut
 
@@ -292,7 +254,6 @@ This application mostly follows Rails 5+ baseline conventions with
 selective upgrades:
 
 * It most follows Rails 5 conventions in terms of
-
   directory structure, extensive use of `Rails.application.config.*`,
   an asset pipeline with a Rails 5+ Sprockets setup, and initializer structure.
 
@@ -300,7 +261,6 @@ selective upgrades:
   - No `config.load_defaults` in application.rb (would be Rails 5.1+)
   - Manual framework defaults instead of version-specific defaults
   - Some older asset organization (app/assets/javascripts vs modern
-
     app/javascript)
 
 * Some Rails 6+ features in use:

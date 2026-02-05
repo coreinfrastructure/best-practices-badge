@@ -174,6 +174,12 @@ module ActiveSupport
 
     # Add more helper methods to be used by all tests here...
 
+    # Reset locale to English before each test to prevent locale state leakage
+    # between tests (e.g., when a test logs in as a user with French preference)
+    def setup
+      I18n.locale = :en
+    end
+
     def configure_omniauth_mock(cassette = 'github_login')
       OmniAuth.config.test_mode = true
       OmniAuth.config.add_mock(:github, omniauth_hash(cassette))

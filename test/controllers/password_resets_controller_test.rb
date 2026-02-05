@@ -9,6 +9,7 @@ require 'test_helper'
 # rubocop: disable Metrics/ClassLength
 class PasswordResetsControllerTest < ActionDispatch::IntegrationTest
   def setup
+    super
     ActionMailer::Base.deliveries.clear
     @user = users(:test_user)
   end

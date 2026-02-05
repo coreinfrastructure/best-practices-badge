@@ -36,6 +36,11 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
   # Frozen empty array to avoid allocating new array objects on every call
   EMPTY_ARRAY = [].freeze
 
+  # Default pluralization rule for English and most Western languages.
+  # Returns :one for 1, :other for everything else.
+  # Defined as a constant to avoid allocating a new Proc on every call.
+  DEFAULT_PLURAL_RULE = ->(n) { n == 1 ? :one : :other }.freeze
+
   # Override parent's initialize to load and merge translations from files.
   # After building the merged hash, source data is discarded for GC.
   # @param human_files [Array<String>] paths to human translation YAML files
@@ -407,8 +412,7 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
   # @param locale [Symbol] the locale
   # @return [Proc] pluralization rule lambda
   def default_plural_rule(_locale)
-    # Default English-style rule: one for 1, other for everything else
-    ->(n) { n == 1 ? :one : :other }
+    DEFAULT_PLURAL_RULE
   end
 
   # Set a value in a nested hash given a path of keys.

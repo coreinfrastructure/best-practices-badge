@@ -65,8 +65,8 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
 
     return process_translation(locale, lookup_key, value, options) if value
 
-    # Key not found in our translations - handle default or return nil
-    return options[:default] if options.key?(:default)
+    # Key not found - use parent's default handling for fallback arrays
+    return default(locale, key, options[:default], options) if options.key?(:default)
 
     nil
   end
@@ -202,7 +202,7 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
       data.each do |locale, translations|
         store_translations(locale.to_sym, translations) if translations.is_a?(Hash)
       end
-    rescue StandardError => e
+    rescue StandardError, SyntaxError => e
       Rails.logger.debug { "Could not load locale data from #{path}: #{e.message}" }
     end
   end

@@ -85,6 +85,27 @@ class MachineTranslationFallbackBackendTest < ActiveSupport::TestCase
     assert_equal({}, @backend.send(:load_yaml_files, ['/nonexistent/file.yml']))
   end
 
+  test 'load_ruby_locale_files handles errors gracefully' do
+    # Create a temporary malformed .rb file that will cause an error when loaded
+    malformed_file = Rails.root.join('tmp', ',test_malformed_locale.rb')
+    File.write(malformed_file, 'this is not valid ruby { [ (')
+
+    original_load_path = I18n.load_path.dup
+    begin
+      # Add the malformed file to load_path
+      I18n.load_path << malformed_file.to_s
+
+      # Call the method - should handle the error gracefully without raising
+      assert_nothing_raised do
+        @backend.send(:load_ruby_locale_files)
+      end
+    ensure
+      # Restore original load_path and clean up
+      I18n.load_path.replace(original_load_path)
+      FileUtils.rm_f(malformed_file)
+    end
+  end
+
   test 'lookup method finds translations with scope' do
     # Test direct lookup without scope (or with empty array scope)
     result = @backend.lookup(:en, 'feed_title', [])
@@ -317,8 +338,11 @@ class MachineTranslationFallbackBackendTest < ActiveSupport::TestCase
       # Should have errors with English messages
       assert project.errors.any?
       error_messages = project.errors.full_messages.join(' ')
-      # English error messages use "can't be blank"
-      assert_match(/can't be blank|is too short|is not included/i, error_messages)
+      # Verify error messages are actual translated text, not arrays of translation keys
+      # Project validates user_id (not a number), repo_url/homepage_url (URL format)
+      assert_match(/is not a number|must begin with http/i, error_messages)
+      # Verify attribute names are humanized strings, not symbol arrays
+      assert_no_match(/\[:"/, error_messages, 'Error should not contain translation key arrays')
     end
 
     # Validate in French
@@ -327,8 +351,8 @@ class MachineTranslationFallbackBackendTest < ActiveSupport::TestCase
       assert project.errors.any?
       error_messages = project.errors.full_messages.join(' ')
       # French error messages should be in French
-      # (exact text depends on which validations fail first)
-      assert error_messages.present?
+      # "n'est pas un nombre" = "is not a number" in French
+      assert_match(/n'est pas un nombre|doit commencer par http/i, error_messages)
     end
   end
 

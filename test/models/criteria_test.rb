@@ -66,7 +66,7 @@ class CriteriaTest < ActiveSupport::TestCase
   end
 
   test 'Ensure that only allowed fields are in Criteria translations' do
-    allowed_set = Set.new %i[
+    allowed_set = Set.new %w[
       description details met_placeholder unmet_placeholder na_placeholder
     ]
     I18n.t('criteria').each_value do |criteria_set|

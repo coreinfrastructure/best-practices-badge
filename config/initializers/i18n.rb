@@ -106,28 +106,17 @@ Rails.application.config.after_initialize do
     ERROR
   end
 
-  # Save reference to current backend (human translations from I18n.load_path)
-  human_backend = I18n.backend
+  # Collect file paths for human and machine translations (YAML files only)
+  human_files = I18n.load_path.select { |f| File.exist?(f) && f.end_with?('.yml', '.yaml') }
 
-  # Force load all human translations (backends load lazily by default)
-  I18n.load_path.each do |file|
-    human_backend.load_translations(file) if File.exist?(file)
-  end
-
-  # Load machine translations into a separate backend
-  machine_backend = I18n::Backend::Simple.new
-  machine_translation_path = Rails.root.join('config', 'machine_translations', '*.yml')
-
-  Dir[machine_translation_path].each do |filepath|
-    # Skip source tracking files (src_en_*.yml) - they're metadata, not translations
-    next if File.basename(filepath).start_with?('src_en_')
-
-    yaml_data = YAML.load_file(filepath)
-    yaml_data.each do |locale, translations|
-      machine_backend.store_translations(locale.to_sym, translations)
+  machine_translation_pattern = Rails.root.join('config', 'machine_translations', '*.yml')
+  machine_files =
+    Dir[machine_translation_pattern].reject do |filepath|
+      # Skip source tracking files (src_en_*.yml) - they're metadata, not translations
+      File.basename(filepath).start_with?('src_en_')
     end
-  end
 
-  # Replace backend with smart fallback: human first, then machine, then English
-  I18n.backend = MachineTranslationFallbackBackend.new(human_backend, machine_backend)
+  # Replace backend with merged flat hash backend
+  # This loads all translations, builds merged hash, then discards source data
+  I18n.backend = MachineTranslationFallbackBackend.new(human_files, machine_files)
 end

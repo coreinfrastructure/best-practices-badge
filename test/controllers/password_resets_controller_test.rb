@@ -92,7 +92,7 @@ class PasswordResetsControllerTest < ActionDispatch::IntegrationTest
     put "/en/password_resets/#{@user.reset_token}", params: {
       email: @user.email
     }
-    assert @response.body.include?('Password Password can&#39;t be empty')
+    assert @response.body.include?('Password can&#39;t be empty')
 
     # A "user" value without a password - reject it.
     # This could cause a nil dereference,

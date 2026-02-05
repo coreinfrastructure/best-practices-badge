@@ -115,8 +115,9 @@ class TranslationsTest < ActiveSupport::TestCase
     # Do a sanity check of locale key values in the English translation and
     # that they match I18n.available_locales.
     _skip = I18n.t(:hello) # Force load of translations
-    en_hash = I18n.backend.send(:translations)[:en] # Load English text
-    en_locale_names = en_hash[:locale_name].keys
+    # Use public API to get locale names
+    locale_names_hash = I18n.t('locale_name', locale: :en)
+    en_locale_names = locale_names_hash.keys.map(&:to_sym)
     # Check if locale okay, e.g., "en" or "zh-CN".
     en_locale_names.each do |loc|
       assert_match(/\A[a-z]{2}(-[A-Z]{2})?\z/,

@@ -21,38 +21,69 @@
 # in by machine translations.
 #
 # PERFORMANCE: Single hash lookup per translation. All values frozen at init.
+# Memory: Only stores merged flat hash; source data is discarded after merge.
 
 # rubocop:disable Style/Send, Metrics/ClassLength
 class MachineTranslationFallbackBackend < I18n::Backend::Simple
   # Pluralization keys used by I18n to select singular/plural forms.
   PLURAL_KEYS = %i[zero one two few many other].freeze
 
-  # Initialize the backend and build the merged translation hash.
-  # @param human_backend [I18n::Backend::Simple] backend human translations
-  # @param machine_backend [I18n::Backend::Simple] backend machine translations
-  def initialize(human_backend, machine_backend)
+  # Initialize the backend by loading and merging translations from files.
+  # After building the merged hash, source data is discarded for GC.
+  # @param human_files [Array<String>] paths to human translation YAML files
+  # @param machine_files [Array<String>] paths to machine translation YAML files
+  def initialize(human_files, machine_files)
     super()
-    @human_backend = human_backend
-    @translations = build_merged_hash(
-      human_backend.send(:translations),
-      machine_backend.send(:translations)
-    )
+    human_nested = load_yaml_files(human_files)
+    machine_nested = load_yaml_files(machine_files)
+    @translations = build_merged_hash(human_nested, machine_nested)
+    # Tell parent class we're initialized (prevents lazy reload in lookup)
+    @initialized = true
+    # human_nested and machine_nested go out of scope and are GC'd
   end
 
   # Look up a translation with single hash lookup.
   # @param locale [Symbol] the locale (e.g., :fr, :de)
   # @param key [String, Symbol] the translation key
   # @param options [Hash] options including :scope, :count, :default
-  # @return [String, Hash, Object] the translated value
+  # @return [String, Hash, nil] the translated value or nil if not found
   # rubocop:disable Style/OptionHash
   def translate(locale, key, options = {})
     lookup_key = build_lookup_key(key, options[:scope])
+    
+    # Special case: empty key means root of all translations
+    return extract_subtree(locale, '') if lookup_key.empty?
+    
     value = @translations.dig(locale, lookup_key)
 
     return process_translation(locale, lookup_key, value, options) if value
 
-    # Key not found - let human backend handle missing translation
-    @human_backend.translate(locale, key, options)
+    # Check if this is a subtree lookup (partial key with children)
+    subtree = extract_subtree(locale, lookup_key)
+    return subtree if subtree
+
+    # Special case: i18n.plural.rule is needed for pluralization
+    # but not in our translation files. Use default English rule.
+    return default_plural_rule(locale) if lookup_key == 'i18n.plural.rule'
+
+    # Key not found - handle default using parent's method
+    # Don't pass :default to avoid infinite recursion
+    default(locale, key, options[:default], options.except(:default))
+  end
+  # rubocop:enable Style/OptionHash
+
+  # Check if a translation exists.
+  # @param locale [Symbol] the locale
+  # @param key [String, Symbol] the translation key
+  # @param options [Hash] options including :scope
+  # @return [Boolean] true if the translation exists
+  # rubocop:disable Style/OptionHash
+  def exists?(locale, key, options = {})
+    lookup_key = build_lookup_key(key, options[:scope])
+    return true if @translations.dig(locale, lookup_key)
+
+    # Check if subtree exists
+    extract_subtree(locale, lookup_key).present?
   end
   # rubocop:enable Style/OptionHash
 
@@ -65,23 +96,67 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
   # No-op: translations are loaded once at startup and remain constant.
   def reload!; end
 
-  # Eagerly load translations in the human backend.
-  def eager_load!
-    @human_backend.eager_load! if @human_backend.respond_to?(:eager_load!)
-  end
+  # No-op: all translations are loaded at initialization.
+  def eager_load!; end
 
-  # Return the nested translations hash from the human backend.
-  # @return [Hash] nested translations hash keyed by locale
-  def translations
-    @human_backend.send(:translations)
+  # Override store_translations to prevent data corruption.
+  # This backend uses flat dotted-key format, not nested hashes like Simple.
+  # All translations are loaded at initialization; dynamic additions are ignored.
+  # rubocop:disable Style/OptionHash
+  def store_translations(locale, data, _options = {})
+    caller_location = caller.find { |l| !l.include?('/gems/') } || caller(1..1).first
+    Rails.logger.warn(
+      'MachineTranslationFallbackBackend: ignoring store_translations ' \
+      "(locale: #{locale}, keys: #{data.is_a?(Hash) ? data.keys.first(3).inspect : data.class}) " \
+      "from #{caller_location}"
+    )
   end
+  # rubocop:enable Style/OptionHash
+
+  # Return the merged flat translations hash.
+  # Note: This returns flat format {"dotted.key" => value}, not nested.
+  # @return [Hash] flat translations hash keyed by locale
+  attr_reader :translations
 
   private
+
+  # Load translations from YAML files into a nested hash.
+  # @param files [Array<String>] paths to YAML files
+  # @return [Hash] nested translations {locale: {key: value}}
+  def load_yaml_files(files)
+    result = {}
+    files.each do |filepath|
+      next unless File.exist?(filepath)
+
+      yaml_data = YAML.load_file(filepath)
+      next unless yaml_data.is_a?(Hash)
+
+      yaml_data.each do |locale, translations|
+        locale_sym = locale.to_sym
+        result[locale_sym] ||= {}
+        deep_merge!(result[locale_sym], translations) if translations.is_a?(Hash)
+      end
+    end
+    result
+  end
+
+  # Deep merge source hash into target hash (mutates target).
+  # @param target [Hash] hash to merge into
+  # @param source [Hash] hash to merge from
+  def deep_merge!(target, source)
+    source.each do |key, value|
+      if value.is_a?(Hash) && target[key].is_a?(Hash)
+        deep_merge!(target[key], value)
+      else
+        target[key] = value
+      end
+    end
+  end
 
   # Build a single merged hash: machine base → human overlay → English fallback.
   # @param human [Hash] nested human translations {locale: {key: value}}
   # @param machine [Hash] nested machine translations
-  # @return [Hash] frozen flat hash {locale: {"dotted.key" => value}}
+  # @return [Hash] flat hash {locale: {"dotted.key" => value}} with frozen values
   def build_merged_hash(human, machine)
     human_flat = flatten_all(human)
     machine_flat = flatten_all(machine)
@@ -93,9 +168,9 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
         human_flat[locale] || {},
         machine_flat[locale] || {},
         locale == :en ? {} : english
-      ).freeze
+      )
     end
-    result.freeze
+    result
   end
 
   # Flatten all locales from nested to dotted-key format.
@@ -128,7 +203,7 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
   # @param english [Hash] flat English translations (fallback)
   # @return [Hash] merged translations
   def merge_locale(human, machine, english)
-    all_keys = (english.keys | machine.keys | human.keys)
+    all_keys = english.keys | machine.keys | human.keys
     result = {}
 
     all_keys.each do |key|
@@ -162,19 +237,29 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
   # @param human [Hash, nil] human pluralization hash
   # @param machine [Hash, nil] machine pluralization hash
   # @param english [Hash, nil] English pluralization hash
-  # @return [Hash, nil] merged pluralization hash
+  # @return [Hash, nil] merged pluralization hash with symbol keys
   def merge_pluralization(human, machine, english)
     result = {}
     PLURAL_KEYS.each do |pk|
-      h = human.is_a?(Hash) ? human[pk] : nil
-      m = machine.is_a?(Hash) ? machine[pk] : nil
-      e = english.is_a?(Hash) ? english[pk] : nil
+      h = plural_value(human, pk)
+      m = plural_value(machine, pk)
+      e = plural_value(english, pk)
 
       # Precedence: human > machine > english
       value = pick_present(h, m, e)
       result[pk] = value if present_string?(value)
     end
     result.empty? ? nil : result
+  end
+
+  # Get a value from a pluralization hash, checking both symbol and string keys.
+  # @param hash [Hash, nil] the pluralization hash
+  # @param key [Symbol] the plural key (:one, :other, etc.)
+  # @return [String, nil] the value or nil
+  def plural_value(hash, key)
+    return unless hash.is_a?(Hash)
+
+    hash[key] || hash[key.to_s]
   end
 
   # Return first present string value from arguments.
@@ -185,10 +270,13 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
   end
 
   # Check if a hash is a pluralization hash (contains :one, :other, etc.).
+  # Checks both symbol and string keys since YAML may load either.
   # @param value [Object] the value to check
   # @return [Boolean] true if hash contains pluralization keys
   def pluralization_hash?(value)
-    value.is_a?(Hash) && PLURAL_KEYS.any? { |k| value.key?(k) }
+    return false unless value.is_a?(Hash)
+
+    PLURAL_KEYS.any? { |k| value.key?(k) || value.key?(k.to_s) }
   end
 
   # Recursively freeze a value and all nested values.
@@ -208,10 +296,62 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
   # @param scope [Symbol, String, Array, nil] optional scope prefix
   # @return [String] the full dotted lookup key
   def build_lookup_key(key, scope)
-    return key.to_s if scope.nil?
+    key_str = key.to_s
+    # Leading dot means "ignore scope, use absolute path from root"
+    return key_str.delete_prefix('.') if key_str.start_with?('.')
+    return key_str if scope.nil?
 
     scope_str = scope.is_a?(Array) ? scope.join('.') : scope.to_s
-    "#{scope_str}.#{key}"
+    "#{scope_str}.#{key_str}"
+  end
+
+  # Extract a subtree of translations for a partial key.
+  # @param locale [Symbol] the locale
+  # @param prefix [String] the partial key prefix (empty string for root)
+  # @return [Hash, nil] nested hash of translations under prefix, or nil if none
+  def extract_subtree(locale, prefix)
+    locale_translations = @translations[locale]
+    return nil unless locale_translations
+
+    # Empty prefix means return all translations as nested hash
+    if prefix.empty?
+      result = ActiveSupport::HashWithIndifferentAccess.new
+      locale_translations.each do |full_key, value|
+        set_nested_value(result, full_key, value)
+      end
+      return result.empty? ? nil : deep_freeze(result)
+    end
+
+    prefix_with_dot = "#{prefix}."
+    matching_keys = locale_translations.keys.select { |k| k.start_with?(prefix_with_dot) }
+    return nil if matching_keys.empty?
+
+    # Build nested hash from flat keys with indifferent access
+    result = ActiveSupport::HashWithIndifferentAccess.new
+    matching_keys.each do |full_key|
+      relative_key = full_key.delete_prefix(prefix_with_dot)
+      set_nested_value(result, relative_key, locale_translations[full_key])
+    end
+    deep_freeze(result)
+  end
+
+  # Set a value in a nested hash using a dotted key path.
+  # @param hash [Hash] the hash to modify
+  # @param key_path [String] dotted key path (e.g., "misc.in_javascript.key1")
+  # @param value [Object] the value to set
+  def set_nested_value(hash, key_path, value)
+    keys = key_path.split('.')
+    last_key = keys.pop
+    target = keys.reduce(hash) { |h, k| h[k] ||= ActiveSupport::HashWithIndifferentAccess.new }
+    target[last_key] = value
+  end
+
+  # Deep freeze a hash and all nested hashes.
+  # @param hash [Hash] the hash to freeze
+  # @return [Hash] the frozen hash
+  def deep_freeze(hash)
+    hash.each_value { |v| deep_freeze(v) if v.is_a?(Hash) }
+    hash.freeze
   end
 
   # Check if a string value is present (non-nil, non-empty).
@@ -244,6 +384,15 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
 
     entry = pluralize(locale, entry, options[:count]) if options.key?(:count)
     interpolate(locale, entry, options)
+  end
+
+  # Return default pluralization rule for a locale.
+  # English and most Western languages use :one for 1, :other for everything else.
+  # @param locale [Symbol] the locale
+  # @return [Proc] pluralization rule lambda
+  def default_plural_rule(_locale)
+    # Default English-style rule: one for 1, other for everything else
+    ->(n) { n == 1 ? :one : :other }
   end
 end
 # rubocop:enable Style/Send, Metrics/ClassLength

@@ -30,6 +30,13 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
   # Pluralization keys used by I18n to select singular/plural forms.
   PLURAL_KEYS = %i[zero one two few many other].freeze
 
+  # Pre-computed string versions of plural keys to avoid repeated to_s calls.
+  PLURAL_KEYS_STRINGS = PLURAL_KEYS.map(&:to_s).freeze
+
+  # The i18n.plural.rule key is checked on every translate call.
+  # Define as constant to make comparison explicit and avoid any ambiguity.
+  PLURAL_RULE_KEY = 'i18n.plural.rule'
+
   # Frozen empty hash to avoid allocating new hash objects on every call
   EMPTY_HASH = {}.freeze
 
@@ -70,7 +77,7 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
 
     # Special case: i18n.plural.rule is needed for pluralization
     # but not in our translation files. Use default English rule.
-    return default_plural_rule(locale) if lookup_key == 'i18n.plural.rule'
+    return default_plural_rule(locale) if lookup_key == PLURAL_RULE_KEY
 
     # Key not found in our translations - handle default or return nil
     return options[:default] if options.key?(:default)
@@ -339,7 +346,9 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
   def pluralization_hash?(value)
     return false unless value.is_a?(Hash)
 
-    PLURAL_KEYS.any? { |k| value.key?(k) || value.key?(k.to_s) }
+    # Check both symbol keys (PLURAL_KEYS) and string keys (PLURAL_KEYS_STRINGS)
+    PLURAL_KEYS.any? { |k| value.key?(k) } ||
+      PLURAL_KEYS_STRINGS.any? { |k| value.key?(k) }
   end
 
   # Recursively freeze a value and all nested values.

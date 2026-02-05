@@ -291,3 +291,8 @@ Rails/WhereRange:
 # comment, to avoid the risk of later re-enabling it.
 Performance/ArraySemiInfiniteRangeSlice:
   Enabled: false # Do NOT enable this
+
+# Chaining .freeze to a single-line block like `->(n) { ... }.freeze` is
+# idiomatic Ruby. Forcing a line break makes the code harder to read.
+Layout/SingleLineBlockChain:
+  Enabled: false

@@ -50,25 +50,33 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
   # rubocop:disable Style/OptionHash
   def translate(locale, key, options = {})
     lookup_key = build_lookup_key(key, options[:scope])
-    
-    # Special case: empty key means root of all translations
-    return extract_subtree(locale, '') if lookup_key.empty?
-    
+
     value = @translations.dig(locale, lookup_key)
 
     return process_translation(locale, lookup_key, value, options) if value
-
-    # Check if this is a subtree lookup (partial key with children)
-    subtree = extract_subtree(locale, lookup_key)
-    return subtree if subtree
 
     # Special case: i18n.plural.rule is needed for pluralization
     # but not in our translation files. Use default English rule.
     return default_plural_rule(locale) if lookup_key == 'i18n.plural.rule'
 
-    # Key not found - handle default using parent's method
-    # Don't pass :default to avoid infinite recursion
-    default(locale, key, options[:default], options.except(:default))
+    # Key not found in our translations - handle default or return nil
+    return options[:default] if options.key?(:default)
+
+    nil
+  end
+  # rubocop:enable Style/OptionHash
+
+  # Override parent's lookup to use our flat hash structure.
+  # This is called by parent's translate() method.
+  # @param locale [Symbol] the locale
+  # @param key [String, Symbol] the translation key
+  # @param scope [Array, nil] the scope
+  # @param options [Hash] additional options (unused)
+  # @return [String, Hash, nil] the value or nil if not found
+  # rubocop:disable Style/OptionHash
+  def lookup(locale, key, scope = [], _options = {})
+    lookup_key = build_lookup_key(key, scope)
+    @translations.dig(locale, lookup_key)
   end
   # rubocop:enable Style/OptionHash
 
@@ -80,10 +88,7 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
   # rubocop:disable Style/OptionHash
   def exists?(locale, key, options = {})
     lookup_key = build_lookup_key(key, options[:scope])
-    return true if @translations.dig(locale, lookup_key)
-
-    # Check if subtree exists
-    extract_subtree(locale, lookup_key).present?
+    @translations.dig(locale, lookup_key).present?
   end
   # rubocop:enable Style/OptionHash
 
@@ -198,20 +203,38 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
   end
 
   # Merge translations for one locale: machine base → human overlay → English fallback.
+  # Also creates parent hashes for pluralization keys on the fly.
   # @param human [Hash] flat human translations for this locale
   # @param machine [Hash] flat machine translations for this locale
   # @param english [Hash] flat English translations (fallback)
   # @return [Hash] merged translations
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def merge_locale(human, machine, english)
     all_keys = english.keys | machine.keys | human.keys
     result = {}
 
     all_keys.each do |key|
       merged = merge_value(human[key], machine[key], english[key])
-      result[key] = freeze_value(merged) if present_value?(merged)
+      next unless present_value?(merged)
+
+      result[key] = freeze_value(merged)
+
+      # If this key ends with a plural key (one, other, etc.), also add it
+      # to a parent hash so pluralization lookups work directly
+      leaf_key = key.split('.').last
+      next if PLURAL_KEYS.exclude?(leaf_key.to_sym)
+
+      parent_key = key.rpartition('.').first
+      next if parent_key.empty?
+
+      # Create parent hash if it doesn't exist
+      result[parent_key] ||= ActiveSupport::HashWithIndifferentAccess.new
+      # Add this plural form to the parent hash
+      result[parent_key][leaf_key] = merged
     end
     result
   end
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
   # Merge a single value with precedence: human → machine → english.
   # For pluralization hashes, merges at the key level.
@@ -303,55 +326,6 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
 
     scope_str = scope.is_a?(Array) ? scope.join('.') : scope.to_s
     "#{scope_str}.#{key_str}"
-  end
-
-  # Extract a subtree of translations for a partial key.
-  # @param locale [Symbol] the locale
-  # @param prefix [String] the partial key prefix (empty string for root)
-  # @return [Hash, nil] nested hash of translations under prefix, or nil if none
-  def extract_subtree(locale, prefix)
-    locale_translations = @translations[locale]
-    return nil unless locale_translations
-
-    # Empty prefix means return all translations as nested hash
-    if prefix.empty?
-      result = ActiveSupport::HashWithIndifferentAccess.new
-      locale_translations.each do |full_key, value|
-        set_nested_value(result, full_key, value)
-      end
-      return result.empty? ? nil : deep_freeze(result)
-    end
-
-    prefix_with_dot = "#{prefix}."
-    matching_keys = locale_translations.keys.select { |k| k.start_with?(prefix_with_dot) }
-    return nil if matching_keys.empty?
-
-    # Build nested hash from flat keys with indifferent access
-    result = ActiveSupport::HashWithIndifferentAccess.new
-    matching_keys.each do |full_key|
-      relative_key = full_key.delete_prefix(prefix_with_dot)
-      set_nested_value(result, relative_key, locale_translations[full_key])
-    end
-    deep_freeze(result)
-  end
-
-  # Set a value in a nested hash using a dotted key path.
-  # @param hash [Hash] the hash to modify
-  # @param key_path [String] dotted key path (e.g., "misc.in_javascript.key1")
-  # @param value [Object] the value to set
-  def set_nested_value(hash, key_path, value)
-    keys = key_path.split('.')
-    last_key = keys.pop
-    target = keys.reduce(hash) { |h, k| h[k] ||= ActiveSupport::HashWithIndifferentAccess.new }
-    target[last_key] = value
-  end
-
-  # Deep freeze a hash and all nested hashes.
-  # @param hash [Hash] the hash to freeze
-  # @return [Hash] the frozen hash
-  def deep_freeze(hash)
-    hash.each_value { |v| deep_freeze(v) if v.is_a?(Hash) }
-    hash.freeze
   end
 
   # Check if a string value is present (non-nil, non-empty).

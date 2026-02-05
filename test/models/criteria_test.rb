@@ -69,9 +69,13 @@ class CriteriaTest < ActiveSupport::TestCase
     allowed_set = Set.new %w[
       description details met_placeholder unmet_placeholder na_placeholder
     ]
-    I18n.t('criteria').each_value do |criteria_set|
-      criteria_set.each_value do |fields|
-        fields.each_key { |k| assert_includes allowed_set, k }
+    # Get all criteria levels - works with both flat and nested backends
+    levels = Translations.get_translation_keys('criteria')
+    levels.each do |level|
+      criteria_names = Translations.get_translation_keys("criteria.#{level}")
+      criteria_names.each do |criterion|
+        fields = Criteria.get_criterion_keys(level.to_s, criterion.to_s)
+        fields.each { |k| assert_includes allowed_set, k.to_s }
       end
     end
   end

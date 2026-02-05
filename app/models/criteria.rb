@@ -109,7 +109,9 @@ class Criteria
           fields.delete_if { |k, _v| k.in? FIELDS_TO_OMIT }
           translations = {}
           I18n.available_locales.each do |locale|
-            I18n.t(".criteria.#{level}.#{criterion}").each_key do |k|
+            # Get keys for this criterion - works with both flat and nested backends
+            criterion_keys = get_criterion_keys(level, criterion, locale)
+            criterion_keys.each do |k|
               next if k.to_s.in? FIELDS_TO_OMIT
 
               translations[k.to_s] = {} unless translations.key?(k.to_s)
@@ -122,6 +124,32 @@ class Criteria
       end
     end
     # rubocop:enable Metrics/AbcSize,Metrics/MethodLength
+
+    # Get list of field keys for a criterion.
+    # Works with both nested and flat backends.
+    # @param level [String] the criteria level
+    # @param criterion [String] the criterion name
+    # @param locale [Symbol] the locale to query
+    # @return [Array<Symbol>] list of field keys
+    def get_criterion_keys(level, criterion, locale = :en)
+      path = "criteria.#{level}.#{criterion}"
+      # Try traditional nested backend approach first
+      result = I18n.t(".#{path}", locale: locale, default: nil)
+      return result.keys if result.is_a?(Hash)
+
+      # For flat backends, extract keys from the translations hash
+      backend = I18n.backend
+      return [] unless backend.respond_to?(:translations)
+
+      locale_data = backend.translations[locale]
+      return [] unless locale_data
+
+      prefix = "#{path}."
+      matching_keys = locale_data.keys.select { |k| k.start_with?(prefix) }
+      keys = matching_keys.map { |k| k.delete_prefix(prefix).split('.').first.to_sym }
+                          .uniq
+      keys.sort
+    end
   end
 
   # Returns the localized description for this criterion.

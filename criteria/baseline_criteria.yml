@@ -312,6 +312,8 @@ baseline-2:
           for specific tasks.
         met_url_required: false
         original_id: OSPS-AC-04.01
+        na_allowed: true
+        na_justification_required: true
       osps_br_02_01:
         category: MUST
         description: When an official release is created, that release MUST be assigned
@@ -321,6 +323,8 @@ baseline-2:
           include SemVer, CalVer, or git commit id.
         met_url_required: false
         original_id: OSPS-BR-02.01
+        na_allowed: true
+        na_justification_required: true
       osps_br_04_01:
         category: MUST
         description: When an official release is created, that release MUST contain
@@ -332,6 +336,8 @@ baseline-2:
           the content under a markdown header such as "## Changelog".
         met_url_required: false
         original_id: OSPS-BR-04.01
+        na_allowed: true
+        na_justification_required: true
       osps_br_05_01:
         category: MUST
         description: When a build and release pipeline ingests dependencies, it MUST
@@ -342,6 +348,8 @@ baseline-2:
           required dependencies, which are then pulled in by the build system.
         met_url_required: false
         original_id: OSPS-BR-05.01
+        na_allowed: true
+        na_justification_required: true
       osps_br_06_01:
         category: MUST
         description: When an official release is created, that release MUST be signed
@@ -353,6 +361,8 @@ baseline-2:
           asset in a signed manifest or metadata file.
         met_url_required: false
         original_id: OSPS-BR-06.01
+        na_allowed: true
+        na_justification_required: true
       osps_do_06_01:
         category: MUST
         description: When the project has made a release, the project documentation
@@ -363,6 +373,8 @@ baseline-2:
           the source code repository, project website, or other channel.
         met_url_required: false
         original_id: OSPS-DO-06.01
+        na_allowed: true
+        na_justification_required: true
       osps_gv_01_01:
         category: MUST
         description: While active, the project documentation MUST include a list of
@@ -374,6 +386,8 @@ baseline-2:
           on the project's governance.
         met_url_required: false
         original_id: OSPS-GV-01.01
+        na_allowed: true
+        na_justification_required: true
       osps_gv_01_02:
         category: MUST
         description: While active, the project documentation MUST include descriptions
@@ -383,6 +397,8 @@ baseline-2:
           source code repository of the project.
         met_url_required: false
         original_id: OSPS-GV-01.02
+        na_allowed: true
+        na_justification_required: true
       osps_gv_03_02:
         category: MUST
         description: While active, the project documentation MUST include a guide
@@ -394,6 +410,8 @@ baseline-2:
           truth for both contributors and approvers.
         met_url_required: false
         original_id: OSPS-GV-03.02
+        na_allowed: true
+        na_justification_required: true
       osps_le_01_01:
         category: MUST
         description: While active, the version control system MUST require all code
@@ -406,6 +424,8 @@ baseline-2:
           may include this in the platform terms of service.
         met_url_required: false
         original_id: OSPS-LE-01.01
+        na_allowed: true
+        na_justification_required: true
       osps_qa_03_01:
         category: MUST
         description: When a commit is made to the primary branch, any automated status
@@ -417,6 +437,8 @@ baseline-2:
           that approvers may be tempted to bypass.
         met_url_required: false
         original_id: OSPS-QA-03.01
+        na_allowed: true
+        na_justification_required: true
       osps_qa_06_01:
         category: MUST
         description: Prior to a commit being accepted, the project's CI/CD pipelines
@@ -429,6 +451,8 @@ baseline-2:
           tests, and end-to-end tests.
         met_url_required: false
         original_id: OSPS-QA-06.01
+        na_allowed: true
+        na_justification_required: true
       osps_sa_01_01:
         category: MUST
         description: When the project has made a release, the project documentation
@@ -440,6 +464,8 @@ baseline-2:
           changes.
         met_url_required: false
         original_id: OSPS-SA-01.01
+        na_allowed: true
+        na_justification_required: true
       osps_sa_02_01:
         category: MUST
         description: When the project has made a release, the project documentation
@@ -451,6 +477,8 @@ baseline-2:
           changes.
         met_url_required: false
         original_id: OSPS-SA-02.01
+        na_allowed: true
+        na_justification_required: true
       osps_sa_03_01:
         category: MUST
         description: When the project has made a release, the project MUST perform
@@ -464,6 +492,8 @@ baseline-2:
           the project. Ensure this is updated for new features or breaking changes.
         met_url_required: false
         original_id: OSPS-SA-03.01
+        na_allowed: true
+        na_justification_required: true
       osps_vm_01_01:
         category: MUST
         description: While active, the project documentation MUST include a policy
@@ -475,6 +505,8 @@ baseline-2:
           will respond and address reported issues.
         met_url_required: false
         original_id: OSPS-VM-01.01
+        na_allowed: true
+        na_justification_required: true
       osps_vm_03_01:
         category: MUST
         description: While active, the project documentation MUST provide a means
@@ -485,6 +517,8 @@ baseline-2:
           VCS specialized tools, email addresses for security contacts, or other methods.
         met_url_required: false
         original_id: OSPS-VM-03.01
+        na_allowed: true
+        na_justification_required: true
       osps_vm_04_01:
         category: MUST
         description: While active, the project documentation MUST publicly publish
@@ -496,6 +530,8 @@ baseline-2:
           or remediation.
         met_url_required: false
         original_id: OSPS-VM-04.01
+        na_allowed: true
+        na_justification_required: true
 baseline-3:
   General:
     Controls:
@@ -511,6 +547,8 @@ baseline-3:
           at the top level of the pipeline.
         met_url_required: false
         original_id: OSPS-AC-04.02
+        na_allowed: true
+        na_justification_required: true
       osps_br_02_02:
         category: MUST
         description: When an official release is created, all assets within that release
@@ -521,6 +559,8 @@ baseline-3:
           Examples include SemVer, CalVer, or git commit id.
         met_url_required: false
         original_id: OSPS-BR-02.02
+        na_allowed: true
+        na_justification_required: true
       osps_br_07_02:
         category: MUST
         description: The project MUST define a policy for managing secrets and credentials
@@ -533,6 +573,8 @@ baseline-3:
           in the source code or stored in version control systems.
         met_url_required: false
         original_id: OSPS-BR-07.02
+        na_allowed: true
+        na_justification_required: true
       osps_do_03_01:
         category: MUST
         description: When the project has made a release, the project documentation
@@ -545,6 +587,8 @@ baseline-3:
           documentation for verifying the integrity of the software.
         met_url_required: false
         original_id: OSPS-DO-03.01
+        na_allowed: true
+        na_justification_required: true
       osps_do_03_02:
         category: MUST
         description: When the project has made a release, the project documentation
@@ -557,6 +601,8 @@ baseline-3:
           the software and the documentation for verifying the integrity of the software.
         met_url_required: false
         original_id: OSPS-DO-03.02
+        na_allowed: true
+        na_justification_required: true
       osps_do_04_01:
         category: MUST
         description: When the project has made a release, the project documentation
@@ -570,6 +616,8 @@ baseline-3:
           and any relevant policies or procedures for obtaining support.
         met_url_required: false
         original_id: OSPS-DO-04.01
+        na_allowed: true
+        na_justification_required: true
       osps_do_05_01:
         category: MUST
         description: When the project has made a release, the project documentation
@@ -580,6 +628,8 @@ baseline-3:
           the project's policy for security updates.
         met_url_required: false
         original_id: OSPS-DO-05.01
+        na_allowed: true
+        na_justification_required: true
       osps_gv_04_01:
         category: MUST
         description: While active, the project documentation MUST have a policy that
@@ -593,6 +643,8 @@ baseline-3:
           a known trusted organization.
         met_url_required: false
         original_id: OSPS-GV-04.01
+        na_allowed: true
+        na_justification_required: true
       osps_qa_02_02:
         category: MUST
         description: When the project has made a release, all compiled released software
@@ -602,6 +654,8 @@ baseline-3:
           in a standardized approach alongside other projects in their environment.
         met_url_required: false
         original_id: OSPS-QA-02.02
+        na_allowed: true
+        na_justification_required: true
       osps_qa_04_02:
         category: MUST
         description: When the project has made a release comprising multiple source
@@ -615,6 +669,8 @@ baseline-3:
           that it is free of known security issues.
         met_url_required: false
         original_id: OSPS-QA-04.02
+        na_allowed: true
+        na_justification_required: true
       osps_qa_06_02:
         category: MUST
         description: While active, project's documentation MUST clearly document when
@@ -625,6 +681,8 @@ baseline-3:
           the results.
         met_url_required: false
         original_id: OSPS-QA-06.02
+        na_allowed: true
+        na_justification_required: true
       osps_qa_06_03:
         category: MUST
         description: While active, the project's documentation MUST include a policy
@@ -635,6 +693,8 @@ baseline-3:
           a major change and what tests should be added or updated.
         met_url_required: false
         original_id: OSPS-QA-06.03
+        na_allowed: true
+        na_justification_required: true
       osps_qa_07_01:
         category: MUST
         description: When a commit is made to the primary branch, the project's version
@@ -647,6 +707,8 @@ baseline-3:
           merged.
         met_url_required: false
         original_id: OSPS-QA-07.01
+        na_allowed: true
+        na_justification_required: true
       osps_sa_03_02:
         category: MUST
         description: When the project has made a release, the project MUST perform
@@ -661,6 +723,8 @@ baseline-3:
           arise. Ensure this is updated for new features or breaking changes.
         met_url_required: false
         original_id: OSPS-SA-03.02
+        na_allowed: true
+        na_justification_required: true
       osps_vm_04_02:
         category: MUST
         description: While active, any vulnerabilities in the software components
@@ -671,6 +735,8 @@ baseline-3:
           preventing vulnerable code from being executed.
         met_url_required: false
         original_id: OSPS-VM-04.02
+        na_allowed: true
+        na_justification_required: true
       osps_vm_05_01:
         category: MUST
         description: While active, the project documentation MUST include a policy
@@ -681,6 +747,8 @@ baseline-3:
           for identifying, prioritizing, and remediating these findings.
         met_url_required: false
         original_id: OSPS-VM-05.01
+        na_allowed: true
+        na_justification_required: true
       osps_vm_05_02:
         category: MUST
         description: While active, the project documentation MUST include a policy
@@ -690,6 +758,8 @@ baseline-3:
           with that policy prior to release.
         met_url_required: false
         original_id: OSPS-VM-05.02
+        na_allowed: true
+        na_justification_required: true
       osps_vm_05_03:
         category: MUST
         description: While active, all changes to the project's codebase MUST be automatically
@@ -701,6 +771,8 @@ baseline-3:
           Require that the status check passes before changes can be merged.
         met_url_required: false
         original_id: OSPS-VM-05.03
+        na_allowed: true
+        na_justification_required: true
       osps_vm_06_01:
         category: MUST
         description: While active, the project documentation MUST include a policy
@@ -710,6 +782,8 @@ baseline-3:
           for identifying, prioritizing, and remediating these findings.
         met_url_required: false
         original_id: OSPS-VM-06.01
+        na_allowed: true
+        na_justification_required: true
       osps_vm_06_02:
         category: MUST
         description: While active, all changes to the project's codebase MUST be automatically
@@ -721,3 +795,5 @@ baseline-3:
           merged.
         met_url_required: false
         original_id: OSPS-VM-06.02
+        na_allowed: true
+        na_justification_required: true

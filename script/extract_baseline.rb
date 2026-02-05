@@ -60,7 +60,9 @@ controls.group_by { |c| c[:maturity_level].first }
         'description' => control[:requirement],
         'details' => control[:recommendation],
         'met_url_required' => true,
-        'original_id' => control[:original_id]
+        'original_id' => control[:original_id],
+        'na_allowed' => true,
+        'na_justification_required' => true
       }
     end
   end

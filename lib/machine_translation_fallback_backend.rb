@@ -28,25 +28,14 @@
 # rubocop:disable Style/Send, Metrics/ClassLength
 class MachineTranslationFallbackBackend < I18n::Backend::Simple
   # Pluralization keys used by I18n to select singular/plural forms.
-  PLURAL_KEYS = %i[zero one two few many other].freeze
-
-  # Pre-computed string versions of plural keys to avoid repeated to_s calls.
-  PLURAL_KEYS_STRINGS = PLURAL_KEYS.map(&:to_s).freeze
-
-  # The i18n.plural.rule key is checked on every translate call.
-  # Define as constant to make comparison explicit and avoid any ambiguity.
-  PLURAL_RULE_KEY = 'i18n.plural.rule'
+  # Stored as a Set for O(1) membership testing.
+  PLURAL_KEYS = Set.new(%w[zero one two few many other]).freeze
 
   # Frozen empty hash to avoid allocating new hash objects on every call
   EMPTY_HASH = {}.freeze
 
   # Frozen empty array to avoid allocating new array objects on every call
   EMPTY_ARRAY = [].freeze
-
-  # Default pluralization rule for English and most Western languages.
-  # Returns :one for 1, :other for everything else.
-  # Defined as a constant to avoid allocating a new Proc on every call.
-  DEFAULT_PLURAL_RULE = ->(n) { n == 1 ? :one : :other }.freeze
 
   # Override parent's initialize to load and merge translations from files.
   # After building the merged hash, source data is discarded for GC.
@@ -57,6 +46,7 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
     human_nested = load_yaml_files(human_files)
     machine_nested = load_yaml_files(machine_files)
     @translations = build_merged_hash(human_nested, machine_nested)
+    load_pluralization_rules
     # Tell parent class we're initialized (prevents lazy reload in lookup)
     @initialized = true
     # human_nested and machine_nested go out of scope and are GC'd
@@ -75,10 +65,6 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
 
     return process_translation(locale, lookup_key, value, options) if value
 
-    # Special case: i18n.plural.rule is needed for pluralization
-    # but not in our translation files. Use default English rule.
-    return default_plural_rule(locale) if lookup_key == PLURAL_RULE_KEY
-
     # Key not found in our translations - handle default or return nil
     return options[:default] if options.key?(:default)
 
@@ -93,12 +79,12 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
   # @param scope [Array, nil] the scope
   # @param options [Hash] additional options (unused - parameter kept for API compatibility)
   # @return [String, Hash, nil] the value or nil if not found
-  # rubocop:disable Style/OptionHash, Lint/UnusedMethodArgument
-  def lookup(locale, key, scope = EMPTY_ARRAY, options = EMPTY_HASH)
+  # rubocop:disable Style/OptionHash
+  def lookup(locale, key, scope = EMPTY_ARRAY, _options = EMPTY_HASH)
     lookup_key = build_lookup_key(key, scope)
     @translations.dig(locale, lookup_key)
   end
-  # rubocop:enable Style/OptionHash, Lint/UnusedMethodArgument
+  # rubocop:enable Style/OptionHash
 
   # Override parent's exists? to check our flat hash structure.
   # @param locale [Symbol] the locale
@@ -118,20 +104,21 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
     @translations.keys
   end
 
-  # Override parent's reload! as a no-op: translations are loaded once at startup.
+  # Override parent's reload! as a no-op: translations loaded at startup.
   def reload!; end
 
-  # Override parent's eager_load! as a no-op: all translations loaded at initialization.
+  # Override parent's eager_load! as a no-op: translations loaded at startup.
   def eager_load!; end
 
   # Override store_translations to prevent data corruption.
   # This backend uses flat dotted-key format, not nested hashes like Simple.
-  # All translations are loaded at initialization; dynamic additions are ignored.
-  # @param locale [Symbol] the locale (unused - parameter kept for API compatibility)
+  # All translations are loaded at initialization;
+  # dynamic additions are ignored.
+  # @param locale [Symbol] the locale (unused - parameter for API compatibility)
   # @param data [Hash] the data (unused - parameter kept for API compatibility)
   # @param options [Hash] options (unused - parameter kept for API compatibility)
   # rubocop:disable Style/OptionHash, Lint/UnusedMethodArgument
-  def store_translations(locale, data, options = EMPTY_HASH)
+  def store_translations(locale, data, _options = EMPTY_HASH)
     caller_location = caller.find { |l| !l.include?('/gems/') } || caller(1..1).first
     Rails.logger.warn(
       'MachineTranslationFallbackBackend: ignoring store_translations ' \
@@ -146,10 +133,11 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
   # @return [Hash] flat translations hash keyed by locale
   attr_reader :translations
 
-  # Public API method (not an override): Get a nested hash for a translation path.
+  # Public API method (not an override): Get a nested hash
+  # for a translation path.
   # This is needed for asset precompilation where we export translations to JS.
-  # @param locale [Symbol] the locale
-  # @param path [String] the translation path (e.g., "criteria.0.description_good")
+  # @param locale [Symbol] locale
+  # @param path [String] translation path (e.g., "criteria.0.description_good")
   # @return [Hash, nil] nested hash with symbol keys, or nil if not found
   def nested_hash(locale, path)
     locale_data = @translations[locale]
@@ -203,6 +191,38 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
     end
   end
 
+  # Load pluralization rules from rails-i18n gem for each supported locale.
+  # rails-i18n provides locale-specific rules (e.g., Russian uses one/few/many).
+  # Without these, all locales fall back to English-style one/other pluralization.
+  def load_pluralization_rules
+    @translations.each_key do |locale|
+      rule = load_rails_i18n_plural_rule(locale)
+      @translations[locale]['i18n.plural.rule'] = rule if rule
+    end
+  end
+
+  # Load the pluralization rule from rails-i18n gem for a locale.
+  # rails-i18n pluralization files return a hash when eval'd; we extract the rule.
+  # @param locale [Symbol] the locale
+  # @return [Proc, nil] pluralization rule or nil if not found
+  def load_rails_i18n_plural_rule(locale)
+    # rails-i18n stores pluralization files at rails/pluralization/<locale>.rb
+    gem_path = Gem.loaded_specs['rails-i18n']&.full_gem_path
+    return unless gem_path
+
+    plural_file = File.join(gem_path, 'rails', 'pluralization', "#{locale}.rb")
+    return unless File.exist?(plural_file)
+
+    # The file returns a nested hash when eval'd: {locale => {i18n: {plural: {rule: lambda}}}}
+    # rubocop:disable Security/Eval
+    translations = eval(File.read(plural_file), binding, plural_file)
+    # rubocop:enable Security/Eval
+    translations&.dig(locale, :i18n, :plural, :rule)
+  rescue StandardError => e
+    Rails.logger.debug { "Could not load pluralization rule for #{locale}: #{e.message}" }
+    nil
+  end
+
   # Build a single merged hash: machine base → human overlay → English fallback.
   # Note: This method is only called during initialization, not in the hot path,
   # so creating new hash objects here is acceptable for clarity.
@@ -235,132 +255,89 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
   end
 
   # Recursively flatten a nested hash into dotted-key format.
+  # Flattens ALL nested hashes including pluralization hashes.
   # @param hash [Hash] the hash to flatten
   # @param prefix [String] the key prefix built up during recursion
+  # @param result [Hash] accumulator (modified in place for efficiency)
   # @return [Hash] flat hash with dotted string keys
-  def flatten_tree(hash, prefix)
-    hash.each_with_object({}) do |(key, value), result|
+  def flatten_tree(hash, prefix, result = {})
+    hash.each do |key, value|
       full_key = prefix.empty? ? key.to_s : "#{prefix}.#{key}"
-      if value.is_a?(Hash) && !pluralization_hash?(value)
-        result.merge!(flatten_tree(value, full_key))
+      if value.is_a?(Hash)
+        flatten_tree(value, full_key, result)
       else
         result[full_key] = value
       end
     end
+    result
   end
 
-  # Merge translations for one locale: machine base → human overlay → English fallback.
-  # Also creates parent hashes for pluralization keys on the fly.
+  # Merge translations for one locale: human > machine > english precedence.
+  # Builds parent pluralization hashes as we go for efficient I18n lookups.
   # @param human [Hash] flat human translations for this locale
   # @param machine [Hash] flat machine translations for this locale
   # @param english [Hash] flat English translations (fallback)
-  # @return [Hash] merged translations
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  # @return [Hash] merged translations with frozen values
   def merge_locale(human, machine, english)
     all_keys = english.keys | machine.keys | human.keys
     result = {}
 
     all_keys.each do |key|
-      merged = merge_value(human[key], machine[key], english[key])
-      next unless present_value?(merged)
+      merged = merge_with_precedence(human[key], machine[key], english[key])
+      next unless present_string?(merged)
 
-      result[key] = freeze_value(merged)
-
-      # If this key ends with a plural key (one, other, etc.), also add it
-      # to a parent hash so pluralization lookups work directly
-      leaf_key = key.split('.').last
-      next if PLURAL_KEYS.exclude?(leaf_key.to_sym)
-
-      parent_key = key.rpartition('.').first
-      next if parent_key.empty?
-
-      # Create parent hash if it doesn't exist
-      result[parent_key] ||= ActiveSupport::HashWithIndifferentAccess.new
-      # Add this plural form to the parent hash
-      result[parent_key][leaf_key] = merged
+      result[key] = merged.freeze
+      add_to_parent_if_plural(result, key, merged)
     end
+
+    # Freeze all parent pluralization hashes
+    result.each_value { |v| v.freeze if v.is_a?(Hash) }
     result
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
-  # Merge a single value with precedence: human → machine → english.
-  # For pluralization hashes, merges at the key level.
-  # @param human [String, Hash, nil] human translation
-  # @param machine [String, Hash, nil] machine translation
-  # @param english [String, Hash, nil] English fallback
-  # @return [String, Hash, nil] merged value
-  def merge_value(human, machine, english)
-    sources = [english, machine, human].compact
-    return if sources.empty?
-
-    # If any source is a pluralization hash, merge at key level
-    return merge_pluralization(human, machine, english) if sources.any? { |s| pluralization_hash?(s) }
-
-    # Simple values: return first present value (human > machine > english)
+  # Return first present value with precedence: human > machine > english.
+  # @param human [String, nil] human translation
+  # @param machine [String, nil] machine translation
+  # @param english [String, nil] English fallback
+  # @return [String, nil] first present value
+  def merge_with_precedence(human, machine, english)
     return human if present_string?(human)
     return machine if present_string?(machine)
 
     english
   end
 
-  # Merge pluralization hashes at the key level (:one, :other, etc.).
-  # @param human [Hash, nil] human pluralization hash
-  # @param machine [Hash, nil] machine pluralization hash
-  # @param english [Hash, nil] English pluralization hash
-  # @return [Hash, nil] merged pluralization hash with symbol keys
-  def merge_pluralization(human, machine, english)
-    result = {}
-    PLURAL_KEYS.each do |pk|
-      h = plural_value(human, pk)
-      m = plural_value(machine, pk)
-      e = plural_value(english, pk)
+  # If key ends with a plural key, add merged value to parent hash.
+  # @param result [Hash] the result hash to modify
+  # @param key [String] the full dotted key
+  # @param merged [String] the merged value
+  def add_to_parent_if_plural(result, key, merged)
+    parts = key.rpartition('.')
+    leaf_key = parts.last
+    return if PLURAL_KEYS.exclude?(leaf_key)
 
-      # Precedence: human > machine > english
-      value = pick_present(h, m, e)
-      result[pk] = value if present_string?(value)
-    end
-    result.empty? ? nil : result
+    parent_key = parts.first
+    return if parent_key.empty?
+
+    ensure_parent_hash(result, parent_key, key)
+    result[parent_key][leaf_key.to_sym] = merged
   end
 
-  # Get a value from a pluralization hash, checking both symbol and string keys.
-  # @param hash [Hash, nil] the pluralization hash
-  # @param key [Symbol] the plural key (:one, :other, etc.)
-  # @return [String, nil] the value or nil
-  def plural_value(hash, key)
-    return unless hash.is_a?(Hash)
+  # Ensure parent key is a hash, logging error if replacing a string value.
+  # @param result [Hash] the result hash to modify
+  # @param parent_key [String] the parent key
+  # @param child_key [String] the child key (for error message)
+  def ensure_parent_hash(result, parent_key, child_key)
+    existing = result[parent_key]
+    return result[parent_key] = ActiveSupport::HashWithIndifferentAccess.new if existing.nil?
+    return if existing.is_a?(Hash)
 
-    hash[key] || hash[key.to_s]
-  end
-
-  # Return first present string value from arguments.
-  # @param values [Array<String, nil>] values in precedence order
-  # @return [String, nil] first present value or nil
-  def pick_present(*values)
-    values.find { |v| present_string?(v) }
-  end
-
-  # Check if a hash is a pluralization hash (contains :one, :other, etc.).
-  # Checks both symbol and string keys since YAML may load either.
-  # @param value [Object] the value to check
-  # @return [Boolean] true if hash contains pluralization keys
-  def pluralization_hash?(value)
-    return false unless value.is_a?(Hash)
-
-    # Check both symbol keys (PLURAL_KEYS) and string keys (PLURAL_KEYS_STRINGS)
-    PLURAL_KEYS.any? { |k| value.key?(k) } ||
-      PLURAL_KEYS_STRINGS.any? { |k| value.key?(k) }
-  end
-
-  # Recursively freeze a value and all nested values.
-  # @param value [Object] the value to freeze
-  # @return [Object] the frozen value
-  def freeze_value(value)
-    if value.is_a?(Hash)
-      return value.transform_values { |v| freeze_value(v) }
-                  .freeze
-    end
-
-    value.freeze
+    # Inconsistent data: string value but child has plural key. Log and replace.
+    Rails.logger.error(
+      'MachineTranslationFallbackBackend: inconsistent translation data - ' \
+      "key '#{parent_key}' is string but '#{child_key}' is plural. Replacing with hash."
+    )
+    result[parent_key] = ActiveSupport::HashWithIndifferentAccess.new
   end
 
   # Build the lookup key by combining scope and key.
@@ -384,17 +361,6 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
     value.is_a?(String) ? value != '' : !value.nil?
   end
 
-  # Check if a value is present (non-nil, non-empty).
-  # For hashes, checks if any value is present.
-  # @param value [Object] the value to check
-  # @return [Boolean] true if value is present and usable
-  def present_value?(value)
-    return false if value.nil?
-    return value.each_value.any? { |v| present_string?(v) } if value.is_a?(Hash)
-
-    value != ''
-  end
-
   # Process a found translation: resolve, pluralize, and interpolate.
   # @param locale [Symbol] the locale for pluralization rules
   # @param key [String] the translation key
@@ -414,14 +380,6 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
 
     entry = pluralize(locale, entry, options[:count]) if options.key?(:count)
     interpolate(locale, entry, options)
-  end
-
-  # Return default pluralization rule for a locale.
-  # English and most Western languages use :one for 1, :other for everything else.
-  # @param locale [Symbol] the locale
-  # @return [Proc] pluralization rule lambda
-  def default_plural_rule(_locale)
-    DEFAULT_PLURAL_RULE
   end
 
   # Set a value in a nested hash given a path of keys.

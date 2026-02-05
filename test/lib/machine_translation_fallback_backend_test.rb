@@ -64,37 +64,18 @@ class MachineTranslationFallbackBackendTest < ActiveSupport::TestCase
     assert_equal 'projects.edit.title', @backend.send(:build_lookup_key, 'title', %i[projects edit])
   end
 
-  test 'merge_value prefers human over machine over english' do
-    assert_equal 'human', @backend.send(:merge_value, 'human', 'machine', 'english')
-    assert_equal 'machine', @backend.send(:merge_value, nil, 'machine', 'english')
-    assert_equal 'machine', @backend.send(:merge_value, '', 'machine', 'english')
-    assert_equal 'english', @backend.send(:merge_value, nil, nil, 'english')
+  test 'merge_with_precedence prefers human over machine over english' do
+    assert_equal 'human', @backend.send(:merge_with_precedence, 'human', 'machine', 'english')
+    assert_equal 'machine', @backend.send(:merge_with_precedence, nil, 'machine', 'english')
+    assert_equal 'machine', @backend.send(:merge_with_precedence, '', 'machine', 'english')
+    assert_equal 'english', @backend.send(:merge_with_precedence, nil, nil, 'english')
   end
 
-  test 'merge_pluralization merges at key level' do
-    human = { one: 'human one' }
-    machine = { one: 'machine one', other: 'machine other' }
-    english = { zero: 'english zero', one: 'english one', other: 'english other' }
-    result = @backend.send(:merge_pluralization, human, machine, english)
-    assert_equal 'human one', result[:one]
-    assert_equal 'machine other', result[:other]
-    assert_equal 'english zero', result[:zero]
-  end
-
-  test 'present_string? and present_value? handle various inputs' do
+  test 'present_string? handles various inputs' do
     assert @backend.send(:present_string?, 'hello')
     assert @backend.send(:present_string?, false)
     assert_not @backend.send(:present_string?, nil)
     assert_not @backend.send(:present_string?, '')
-    assert @backend.send(:present_value?, { one: 'item', other: 'items' })
-    assert_not @backend.send(:present_value?, { one: '', other: '' })
-  end
-
-  test 'pluralization_hash? detects plural keys' do
-    assert @backend.send(:pluralization_hash?, { one: 'x', other: 'y' })
-    assert @backend.send(:pluralization_hash?, { zero: 'none' })
-    assert_not @backend.send(:pluralization_hash?, { foo: 'bar' })
-    assert_not @backend.send(:pluralization_hash?, 'string')
   end
 
   test 'load_yaml_files loads files and handles missing gracefully' do
@@ -197,6 +178,49 @@ class MachineTranslationFallbackBackendTest < ActiveSupport::TestCase
     # Should have the flat keys but not try to create invalid parent
     assert_equal 'single', result['one']
     assert_equal 'multiple', result['other']
+  end
+
+  # Russian has complex pluralization rules:
+  # - one:  n % 10 == 1 && n % 100 != 11 (1, 21, 31, 41... but NOT 11, 111...)
+  # - few:  n % 10 in 2..4 && n % 100 not in 12..14 (2, 3, 4, 22, 23, 24...)
+  # - many: n % 10 == 0 || n % 10 in 5..9 || n % 100 in 11..14 (0, 5-20, 25-30...)
+  # - zero: specifically 0 (optional, falls back to many if not defined)
+  test 'Russian pluralization uses all plural forms correctly' do
+    # From config/locales/translation.ru.yml:
+    # zero: "Нет проектов"
+    # one: "%{count} проект"
+    # few: "%{count} проекта"
+    # many: "%{count} проектов"
+    # other: "%{count} проекта"
+
+    # Test 'zero' form (count = 0)
+    assert_equal 'Нет проектов', I18n.t('projects_count', count: 0, locale: :ru)
+
+    # Test 'one' form (1, 21, 31, 101, but NOT 11)
+    assert_equal '1 проект', I18n.t('projects_count', count: 1, locale: :ru)
+    assert_equal '21 проект', I18n.t('projects_count', count: 21, locale: :ru)
+    assert_equal '31 проект', I18n.t('projects_count', count: 31, locale: :ru)
+    assert_equal '101 проект', I18n.t('projects_count', count: 101, locale: :ru)
+
+    # Test 'few' form (2, 3, 4, 22, 23, 24, but NOT 12, 13, 14)
+    assert_equal '2 проекта', I18n.t('projects_count', count: 2, locale: :ru)
+    assert_equal '3 проекта', I18n.t('projects_count', count: 3, locale: :ru)
+    assert_equal '4 проекта', I18n.t('projects_count', count: 4, locale: :ru)
+    assert_equal '22 проекта', I18n.t('projects_count', count: 22, locale: :ru)
+    assert_equal '23 проекта', I18n.t('projects_count', count: 23, locale: :ru)
+    assert_equal '24 проекта', I18n.t('projects_count', count: 24, locale: :ru)
+
+    # Test 'many' form (5-20, 25-30, 11, 12, 13, 14, 111, 112...)
+    assert_equal '5 проектов', I18n.t('projects_count', count: 5, locale: :ru)
+    assert_equal '10 проектов', I18n.t('projects_count', count: 10, locale: :ru)
+    assert_equal '11 проектов', I18n.t('projects_count', count: 11, locale: :ru)
+    assert_equal '12 проектов', I18n.t('projects_count', count: 12, locale: :ru)
+    assert_equal '14 проектов', I18n.t('projects_count', count: 14, locale: :ru)
+    assert_equal '15 проектов', I18n.t('projects_count', count: 15, locale: :ru)
+    assert_equal '20 проектов', I18n.t('projects_count', count: 20, locale: :ru)
+    assert_equal '25 проектов', I18n.t('projects_count', count: 25, locale: :ru)
+    assert_equal '100 проектов', I18n.t('projects_count', count: 100, locale: :ru)
+    assert_equal '111 проектов', I18n.t('projects_count', count: 111, locale: :ru)
   end
 end
 # rubocop:enable Metrics/ClassLength

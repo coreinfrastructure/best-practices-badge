@@ -272,13 +272,13 @@ class MachineTranslationFallbackBackendTest < ActiveSupport::TestCase
   # Day and month names are locale-specific
   test 'day and month names are localized' do
     # Day names
-    assert_equal 'Friday', I18n.t('date.day_names')[5]
+    assert_equal 'Friday', I18n.t('date.day_names', locale: :en)[5]
     assert_equal 'vendredi', I18n.t('date.day_names', locale: :fr)[5]
     assert_equal 'Freitag', I18n.t('date.day_names', locale: :de)[5]
     assert_equal '金曜日', I18n.t('date.day_names', locale: :ja)[5]
 
     # Month names
-    assert_equal 'March', I18n.t('date.month_names')[3]
+    assert_equal 'March', I18n.t('date.month_names', locale: :en)[3]
     assert_equal 'mars', I18n.t('date.month_names', locale: :fr)[3]
     assert_equal 'März', I18n.t('date.month_names', locale: :de)[3]
   end

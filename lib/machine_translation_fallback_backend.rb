@@ -22,13 +22,21 @@
 #
 # PERFORMANCE: Single hash lookup per translation. All values frozen at init.
 # Memory: Only stores merged flat hash; source data is discarded after merge.
+# Hot path optimization: Uses frozen constants to avoid allocating new objects
+# on every method call.
 
 # rubocop:disable Style/Send, Metrics/ClassLength
 class MachineTranslationFallbackBackend < I18n::Backend::Simple
   # Pluralization keys used by I18n to select singular/plural forms.
   PLURAL_KEYS = %i[zero one two few many other].freeze
 
-  # Initialize the backend by loading and merging translations from files.
+  # Frozen empty hash to avoid allocating new hash objects on every call
+  EMPTY_HASH = {}.freeze
+
+  # Frozen empty array to avoid allocating new array objects on every call
+  EMPTY_ARRAY = [].freeze
+
+  # Override parent's initialize to load and merge translations from files.
   # After building the merged hash, source data is discarded for GC.
   # @param human_files [Array<String>] paths to human translation YAML files
   # @param machine_files [Array<String>] paths to machine translation YAML files
@@ -42,13 +50,13 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
     # human_nested and machine_nested go out of scope and are GC'd
   end
 
-  # Look up a translation with single hash lookup.
+  # Override parent's translate to use optimized single hash lookup.
   # @param locale [Symbol] the locale (e.g., :fr, :de)
   # @param key [String, Symbol] the translation key
   # @param options [Hash] options including :scope, :count, :default
   # @return [String, Hash, nil] the translated value or nil if not found
   # rubocop:disable Style/OptionHash
-  def translate(locale, key, options = {})
+  def translate(locale, key, options = EMPTY_HASH)
     lookup_key = build_lookup_key(key, options[:scope])
 
     value = @translations.dig(locale, lookup_key)
@@ -71,44 +79,47 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
   # @param locale [Symbol] the locale
   # @param key [String, Symbol] the translation key
   # @param scope [Array, nil] the scope
-  # @param options [Hash] additional options (unused)
+  # @param options [Hash] additional options (unused - parameter kept for API compatibility)
   # @return [String, Hash, nil] the value or nil if not found
-  # rubocop:disable Style/OptionHash
-  def lookup(locale, key, scope = [], _options = {})
+  # rubocop:disable Style/OptionHash, Lint/UnusedMethodArgument
+  def lookup(locale, key, scope = EMPTY_ARRAY, options = EMPTY_HASH)
     lookup_key = build_lookup_key(key, scope)
     @translations.dig(locale, lookup_key)
   end
-  # rubocop:enable Style/OptionHash
+  # rubocop:enable Style/OptionHash, Lint/UnusedMethodArgument
 
-  # Check if a translation exists.
+  # Override parent's exists? to check our flat hash structure.
   # @param locale [Symbol] the locale
   # @param key [String, Symbol] the translation key
   # @param options [Hash] options including :scope
   # @return [Boolean] true if the translation exists
   # rubocop:disable Style/OptionHash
-  def exists?(locale, key, options = {})
+  def exists?(locale, key, options = EMPTY_HASH)
     lookup_key = build_lookup_key(key, options[:scope])
     @translations.dig(locale, lookup_key).present?
   end
   # rubocop:enable Style/OptionHash
 
-  # Return all available locales.
+  # Override parent's available_locales to return keys from our merged hash.
   # @return [Array<Symbol>] available locales
   def available_locales
     @translations.keys
   end
 
-  # No-op: translations are loaded once at startup and remain constant.
+  # Override parent's reload! as a no-op: translations are loaded once at startup.
   def reload!; end
 
-  # No-op: all translations are loaded at initialization.
+  # Override parent's eager_load! as a no-op: all translations loaded at initialization.
   def eager_load!; end
 
   # Override store_translations to prevent data corruption.
   # This backend uses flat dotted-key format, not nested hashes like Simple.
   # All translations are loaded at initialization; dynamic additions are ignored.
-  # rubocop:disable Style/OptionHash
-  def store_translations(locale, data, _options = {})
+  # @param locale [Symbol] the locale (unused - parameter kept for API compatibility)
+  # @param data [Hash] the data (unused - parameter kept for API compatibility)
+  # @param options [Hash] options (unused - parameter kept for API compatibility)
+  # rubocop:disable Style/OptionHash, Lint/UnusedMethodArgument
+  def store_translations(locale, data, options = EMPTY_HASH)
     caller_location = caller.find { |l| !l.include?('/gems/') } || caller(1..1).first
     Rails.logger.warn(
       'MachineTranslationFallbackBackend: ignoring store_translations ' \
@@ -116,14 +127,14 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
       "from #{caller_location}"
     )
   end
-  # rubocop:enable Style/OptionHash
+  # rubocop:enable Style/OptionHash, Lint/UnusedMethodArgument
 
   # Return the merged flat translations hash.
   # Note: This returns flat format {"dotted.key" => value}, not nested.
   # @return [Hash] flat translations hash keyed by locale
   attr_reader :translations
 
-  # Get a nested hash for a translation path, suitable for iteration.
+  # Public API method (not an override): Get a nested hash for a translation path.
   # This is needed for asset precompilation where we export translations to JS.
   # @param locale [Symbol] the locale
   # @param path [String] the translation path (e.g., "criteria.0.description_good")
@@ -181,20 +192,22 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
   end
 
   # Build a single merged hash: machine base → human overlay → English fallback.
+  # Note: This method is only called during initialization, not in the hot path,
+  # so creating new hash objects here is acceptable for clarity.
   # @param human [Hash] nested human translations {locale: {key: value}}
   # @param machine [Hash] nested machine translations
   # @return [Hash] flat hash {locale: {"dotted.key" => value}} with frozen values
   def build_merged_hash(human, machine)
     human_flat = flatten_all(human)
     machine_flat = flatten_all(machine)
-    english = human_flat[:en] || {}
+    english = human_flat[:en] || EMPTY_HASH
 
     result = {}
     (human_flat.keys | machine_flat.keys).each do |locale|
       result[locale] = merge_locale(
-        human_flat[locale] || {},
-        machine_flat[locale] || {},
-        locale == :en ? {} : english
+        human_flat[locale] || EMPTY_HASH,
+        machine_flat[locale] || EMPTY_HASH,
+        locale == :en ? EMPTY_HASH : english
       )
     end
     result
@@ -375,7 +388,14 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
   # @param options [Hash] options including :count for pluralization
   # @return [String] the processed translation string
   def process_translation(locale, key, value, options)
-    entry = resolve(locale, key, value, options.except(:default))
+    # Only create new hash if we need to exclude :default (parent's resolve doesn't use it)
+    resolve_opts =
+      if options != EMPTY_HASH && options.key?(:default)
+        options.except(:default)
+      else
+        options
+      end
+    entry = resolve(locale, key, value, resolve_opts)
     return entry if entry.is_a?(::I18n::MissingTranslation)
 
     entry = pluralize(locale, entry, options[:count]) if options.key?(:count)

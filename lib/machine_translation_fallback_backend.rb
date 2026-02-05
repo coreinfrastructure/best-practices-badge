@@ -46,7 +46,7 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
     human_nested = load_yaml_files(human_files)
     machine_nested = load_yaml_files(machine_files)
     @translations = build_merged_hash(human_nested, machine_nested)
-    load_pluralization_rules
+    load_ruby_locale_files
     # Tell parent class we're initialized (prevents lazy reload in lookup)
     @initialized = true
     # human_nested and machine_nested go out of scope and are GC'd
@@ -110,23 +110,21 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
   # Override parent's eager_load! as a no-op: translations loaded at startup.
   def eager_load!; end
 
-  # Override store_translations to prevent data corruption.
-  # This backend uses flat dotted-key format, not nested hashes like Simple.
-  # All translations are loaded at initialization;
-  # dynamic additions are ignored.
-  # @param locale [Symbol] the locale (unused - parameter for API compatibility)
-  # @param data [Hash] the data (unused - parameter kept for API compatibility)
+  # Override store_translations to flatten and store data in our format.
+  # This allows rails-i18n pluralization rules, date formats, etc. to work.
+  # Note: This does NOT affect the translation.io concern - that reads from
+  # I18n.load_path (files), not from store_translations (runtime API).
+  # @param locale [Symbol] the locale
+  # @param data [Hash] the nested data to store
   # @param options [Hash] options (unused - parameter kept for API compatibility)
-  # rubocop:disable Style/OptionHash, Lint/UnusedMethodArgument
+  # rubocop:disable Style/OptionHash
   def store_translations(locale, data, _options = EMPTY_HASH)
-    caller_location = caller.find { |l| !l.include?('/gems/') } || caller(1..1).first
-    Rails.logger.warn(
-      'MachineTranslationFallbackBackend: ignoring store_translations ' \
-      "(locale: #{locale}, keys: #{data.is_a?(Hash) ? data.keys.first(3).inspect : data.class}) " \
-      "from #{caller_location}"
-    )
+    return unless data.is_a?(Hash)
+
+    @translations[locale] ||= {}
+    store_nested(locale, data, '')
   end
-  # rubocop:enable Style/OptionHash, Lint/UnusedMethodArgument
+  # rubocop:enable Style/OptionHash
 
   # Return the merged flat translations hash.
   # Note: This returns flat format {"dotted.key" => value}, not nested.
@@ -191,36 +189,57 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
     end
   end
 
-  # Load pluralization rules from rails-i18n gem for each supported locale.
-  # rails-i18n provides locale-specific rules (e.g., Russian uses one/few/many).
-  # Without these, all locales fall back to English-style one/other pluralization.
-  def load_pluralization_rules
-    @translations.each_key do |locale|
-      rule = load_rails_i18n_plural_rule(locale)
-      @translations[locale]['i18n.plural.rule'] = rule if rule
+  # Load Ruby locale files from I18n.load_path (pluralization, ordinals, etc.).
+  # YAML files are loaded via human_files; this handles the .rb files that
+  # rails-i18n uses for Procs (pluralization rules, ordinal rules, etc.).
+  def load_ruby_locale_files
+    I18n.load_path.each do |path|
+      next unless path.end_with?('.rb')
+
+      data, = load_rb(path)
+      next unless data.is_a?(Hash)
+
+      data.each do |locale, translations|
+        store_translations(locale.to_sym, translations) if translations.is_a?(Hash)
+      end
+    rescue StandardError => e
+      Rails.logger.debug { "Could not load locale data from #{path}: #{e.message}" }
     end
   end
 
-  # Load the pluralization rule from rails-i18n gem for a locale.
-  # rails-i18n pluralization files return a hash when eval'd; we extract the rule.
+  # Store nested hash data in BOTH flat and hierarchical formats.
+  # Flat: "a.b" => "x" (for our optimized lookup)
+  # Hierarchical: "a" => { "b" => "x" } (for compatibility with parent class methods)
+  # This ensures lookups work regardless of which format code expects.
   # @param locale [Symbol] the locale
-  # @return [Proc, nil] pluralization rule or nil if not found
-  def load_rails_i18n_plural_rule(locale)
-    # rails-i18n stores pluralization files at rails/pluralization/<locale>.rb
-    gem_path = Gem.loaded_specs['rails-i18n']&.full_gem_path
-    return unless gem_path
+  # @param hash [Hash] the nested hash to store
+  # @param prefix [String] the key prefix built up during recursion
+  def store_nested(locale, hash, prefix)
+    hash.each do |key, value|
+      full_key = prefix.empty? ? key.to_s : "#{prefix}.#{key}"
+      if value.is_a?(Hash)
+        store_nested(locale, value, full_key)
+      else
+        # Store flat format for our optimized lookup
+        @translations[locale][full_key] = value
+        # Also store hierarchical format for parent class compatibility
+        store_hierarchical(locale, full_key, value)
+      end
+    end
+  end
 
-    plural_file = File.join(gem_path, 'rails', 'pluralization', "#{locale}.rb")
-    return unless File.exist?(plural_file)
-
-    # The file returns a nested hash when eval'd: {locale => {i18n: {plural: {rule: lambda}}}}
-    # rubocop:disable Security/Eval
-    translations = eval(File.read(plural_file), binding, plural_file)
-    # rubocop:enable Security/Eval
-    translations&.dig(locale, :i18n, :plural, :rule)
-  rescue StandardError => e
-    Rails.logger.debug { "Could not load pluralization rule for #{locale}: #{e.message}" }
-    nil
+  # Store a value in hierarchical (nested hash) format.
+  # @param locale [Symbol] the locale
+  # @param dotted_key [String] the dotted key (e.g., "a.b.c")
+  # @param value [Object] the value to store
+  def store_hierarchical(locale, dotted_key, value)
+    keys = dotted_key.split('.')
+    current = @translations[locale]
+    keys[0..-2].each do |k|
+      current[k] ||= {}
+      current = current[k]
+    end
+    current[keys.last] = value
   end
 
   # Build a single merged hash: machine base → human overlay → English fallback.

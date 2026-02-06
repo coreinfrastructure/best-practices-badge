@@ -14,6 +14,7 @@ require_relative '../../lib/asset_staleness_checker'
 # rubocop:disable Metrics/ClassLength, Rails/TimeZone
 class AssetStalenessCheckerTest < ActiveSupport::TestCase
   def setup
+    super
     @temp_dir = Dir.mktmpdir('asset_staleness_test')
     @source_dir = File.join(@temp_dir, 'source')
     @compiled_dir = File.join(@temp_dir, 'compiled')

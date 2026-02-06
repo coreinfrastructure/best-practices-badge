@@ -10,6 +10,7 @@ require 'test_helper'
 class InvokeRedcarpetTest < ActiveSupport::TestCase
   # Reset between tests to ensure clean state
   def setup
+    super
     InvokeRedcarpet.instance_variable_set(:@previous_content, nil)
   end
 

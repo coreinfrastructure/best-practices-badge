@@ -8,6 +8,7 @@ require 'test_helper'
 # rubocop:disable Metrics/ClassLength
 class MachineTranslationFallbackBackendTest < ActiveSupport::TestCase
   def setup
+    super
     @backend = I18n.backend
   end
 

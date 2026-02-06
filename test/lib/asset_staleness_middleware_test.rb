@@ -15,6 +15,7 @@ require_relative '../../lib/asset_staleness_middleware'
 # rubocop:disable Style/TrivialAccessors
 class AssetStalenessMiddlewareTest < ActiveSupport::TestCase
   def setup
+    super
     @app = ->(_env) { [200, {}, ['OK']] }
     @env = {}
   end

@@ -65,11 +65,14 @@ class MachineTranslationFallbackBackendTest < ActiveSupport::TestCase
     assert_equal 'projects.edit.title', @backend.send(:build_lookup_key, 'title', %i[projects edit])
   end
 
-  test 'merge_with_precedence prefers human over machine over english' do
-    assert_equal 'human', @backend.send(:merge_with_precedence, 'human', 'machine', 'english')
-    assert_equal 'machine', @backend.send(:merge_with_precedence, nil, 'machine', 'english')
-    assert_equal 'machine', @backend.send(:merge_with_precedence, '', 'machine', 'english')
-    assert_equal 'english', @backend.send(:merge_with_precedence, nil, nil, 'english')
+  test 'apply_fallback uses fallback only for missing keys' do
+    flat_data = { 'a' => 'present', 'b' => '', 'c' => nil }
+    english = { 'a' => 'en_a', 'b' => 'en_b', 'c' => 'en_c', 'd' => 'en_d' }
+    result = @backend.send(:apply_fallback, flat_data, english)
+    assert_equal 'present', result['a']
+    assert_equal 'en_b', result['b']
+    assert_equal 'en_c', result['c']
+    assert_equal 'en_d', result['d']
   end
 
   test 'present_string? handles various inputs' do
@@ -79,11 +82,15 @@ class MachineTranslationFallbackBackendTest < ActiveSupport::TestCase
     assert_not @backend.send(:present_string?, '')
   end
 
-  test 'load_yaml_files loads files and handles missing gracefully' do
-    files = Rails.root.glob('config/locales/en.yml')
-    result = @backend.send(:load_yaml_files, files)
-    assert result.is_a?(Hash) && result.key?(:en)
-    assert_equal({}, @backend.send(:load_yaml_files, ['/nonexistent/file.yml']))
+  test 'flatten_yaml_file_into loads file and handles missing gracefully' do
+    accumulator = {}
+    en_file = Rails.root.join('config', 'locales', 'en.yml').to_s
+    @backend.send(:flatten_yaml_file_into, accumulator, en_file)
+    assert accumulator.is_a?(Hash) && accumulator.key?(:en)
+
+    empty = {}
+    @backend.send(:flatten_yaml_file_into, empty, '/nonexistent/file.yml')
+    assert_equal({}, empty)
   end
 
   test 'load_ruby_locale_files handles errors gracefully' do
@@ -177,12 +184,10 @@ class MachineTranslationFallbackBackendTest < ActiveSupport::TestCase
     assert_equal 'just one item', result[:one]
   end
 
-  test 'merge_locale creates pluralization parent hashes' do
-    # Test that parent keys are created for plural entries
-    human = { 'items.one' => 'one item', 'items.other' => 'other items' }
-    machine = {}
-    english = {}
-    result = @backend.send(:merge_locale, human, machine, english)
+  test 'flatten_tree creates pluralization parent hashes' do
+    # Test that parent keys are created for plural entries during flattening
+    nested = { 'items' => { 'one' => 'one item', 'other' => 'other items' } }
+    result = @backend.send(:flatten_tree, nested, '')
 
     # Should create 'items' parent hash
     assert result.key?('items')
@@ -191,12 +196,10 @@ class MachineTranslationFallbackBackendTest < ActiveSupport::TestCase
     assert_equal 'other items', result['items']['other']
   end
 
-  test 'merge_locale skips empty parent keys for top-level plurals' do
+  test 'flatten_tree skips empty parent keys for top-level plurals' do
     # Plurals without a parent (shouldn't happen but should handle gracefully)
-    human = { 'one' => 'single', 'other' => 'multiple' }
-    machine = {}
-    english = {}
-    result = @backend.send(:merge_locale, human, machine, english)
+    nested = { 'one' => 'single', 'other' => 'multiple' }
+    result = @backend.send(:flatten_tree, nested, '')
 
     # Should have the flat keys but not try to create invalid parent
     assert_equal 'single', result['one']

@@ -52,6 +52,7 @@ de:
       rel="noopener">Nutzungsbedingungen</a>.</small>
     choose_locale: Sprache auswählen
     toggle_navigation: Klappbare Navigation umschalten
+    translation_disclaimer_html:
   account_activations:
     activated: Konto aktiviert!
     failed_activation: Ungültiger Aktivierungslink
@@ -66,6 +67,9 @@ de:
         Als Anti-Spam-Maßnahme müssen Sie %{count} Stunden nach
         der Aktivierung warten, bevor Sie sich anmelden können.
       other: >-
+        Als Anti-Spam-Maßnahme müssen Sie %{count} Stunden nach
+        der Aktivierung warten, bevor Sie sich anmelden können.
+      many: >-
         Als Anti-Spam-Maßnahme müssen Sie %{count} Stunden nach
         der Aktivierung warten, bevor Sie sich anmelden können.
   password_resets:
@@ -414,6 +418,8 @@ de:
       submit_cdla_permissive_20_html:
       new_owner:
       new_owner_repeat:
+      current_owner:
+      ownership_edit_hint:
     form_basics:
       project_name:
         description: Was ist der von Menschen lesbare Name des
@@ -585,12 +591,17 @@ de:
         '0': Passing
         '1': Silber
         '2': Gold
-        baseline-1: 'Baseline Level 1'
-        baseline-1_html: 'Dies sind die Baseline Level 1 Kriterien.'
-        baseline-2: 'Baseline Level 2'
-        baseline-2_html: 'Dies sind die Baseline Level 2 Kriterien.'
-        baseline-3: 'Baseline Level 3'
-        baseline-3_html: 'Dies sind die Baseline Level 3 Kriterien.'
+        baseline-1:
+        baseline-1_html:
+        baseline-2:
+        baseline-2_html:
+        baseline-3:
+        baseline-3_html:
+      got_baseline_badge:
+        description_1:
+        badge_alt:
+        description_2:
+        details_html:
     misc:
       disabled_reminders: >-
         (Fortgeschritten) Inaktivierungserinnerung deaktivieren
@@ -2967,6 +2978,193 @@ de:
           der dynamischen Analyse überprüfen.
       achieve_silver:
         description: Das Projekt MUSS ein Silber-Siegel erreichen.
+    baseline-1:
+      osps_ac_01_01:
+        description:
+        details:
+      osps_ac_02_01:
+        description:
+        details:
+      osps_ac_03_01:
+        description:
+        details:
+      osps_ac_03_02:
+        description:
+        details:
+      osps_br_01_01:
+        description:
+      osps_br_01_02:
+        description:
+      osps_br_03_01:
+        description:
+        details:
+      osps_br_03_02:
+        description:
+        details:
+      osps_br_07_01:
+        description:
+        details:
+      osps_do_01_01:
+        description:
+        details:
+      osps_do_02_01:
+        description:
+        details:
+      osps_gv_02_01:
+        description:
+        details:
+      osps_gv_03_01:
+        description:
+        details:
+      osps_le_02_01:
+        description:
+        details:
+      osps_le_02_02:
+        description:
+        details:
+      osps_le_03_01:
+        description:
+        details:
+      osps_le_03_02:
+        description:
+        details:
+      osps_qa_01_01:
+        description:
+        details:
+      osps_qa_01_02:
+        description:
+        details:
+      osps_qa_02_01:
+        description:
+        details:
+      osps_qa_04_01:
+        description:
+        details:
+      osps_qa_05_01:
+        description:
+        details:
+      osps_qa_05_02:
+        description:
+        details:
+      osps_vm_02_01:
+        description:
+        details:
+    baseline-2:
+      osps_ac_04_01:
+        description:
+        details:
+      osps_br_02_01:
+        description:
+        details:
+      osps_br_04_01:
+        description:
+        details:
+      osps_br_05_01:
+        description:
+        details:
+      osps_br_06_01:
+        description:
+        details:
+      osps_do_06_01:
+        description:
+        details:
+      osps_gv_01_01:
+        description:
+        details:
+      osps_gv_01_02:
+        description:
+        details:
+      osps_gv_03_02:
+        description:
+        details:
+      osps_le_01_01:
+        description:
+        details:
+      osps_qa_03_01:
+        description:
+        details:
+      osps_qa_06_01:
+        description:
+        details:
+      osps_sa_01_01:
+        description:
+        details:
+      osps_sa_02_01:
+        description:
+        details:
+      osps_sa_03_01:
+        description:
+        details:
+      osps_vm_01_01:
+        description:
+        details:
+      osps_vm_03_01:
+        description:
+        details:
+      osps_vm_04_01:
+        description:
+        details:
+    baseline-3:
+      osps_ac_04_02:
+        description:
+        details:
+      osps_br_02_02:
+        description:
+        details:
+      osps_br_07_02:
+        description:
+        details:
+      osps_do_03_01:
+        description:
+        details:
+      osps_do_03_02:
+        description:
+        details:
+      osps_do_04_01:
+        description:
+        details:
+      osps_do_05_01:
+        description:
+        details:
+      osps_gv_04_01:
+        description:
+        details:
+      osps_qa_02_02:
+        description:
+        details:
+      osps_qa_04_02:
+        description:
+        details:
+      osps_qa_06_02:
+        description:
+        details:
+      osps_qa_06_03:
+        description:
+        details:
+      osps_qa_07_01:
+        description:
+        details:
+      osps_sa_03_02:
+        description:
+        details:
+      osps_vm_04_02:
+        description:
+        details:
+      osps_vm_05_01:
+        description:
+        details:
+      osps_vm_05_02:
+        description:
+        details:
+      osps_vm_05_03:
+        description:
+        details:
+      osps_vm_06_01:
+        description:
+        details:
+      osps_vm_06_02:
+        description:
+        details:
   static_pages:
     home:
       badge_program: OpenSSF Best Practices Badge Programm
@@ -3150,6 +3348,8 @@ de:
     Identification: Identifizierung
     Prerequisites: Voraussetzungen
     FLOSS license: FLOSS-Lizenz
+    Controls:
+    General:
   last_entry: Letzter Übersetzungseintrag
   admin_only: Nur Administratoren.
   criterion_status:
@@ -3301,3 +3501,6 @@ de:
     missing_parameters:
     invalid_parameters:
     error:
+  do_not_translate_this:
+  test_pluralization_only_one:
+    one:

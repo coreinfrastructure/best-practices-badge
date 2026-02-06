@@ -57,6 +57,7 @@ ru:
       rel="noopener">условия использования</a>.</small>
     choose_locale: Выберите язык
     toggle_navigation:
+    translation_disclaimer_html:
   admin_only: Только администратор.
   account_activations:
     activated: Учетная запись активирована!
@@ -72,6 +73,9 @@ ru:
         В связи с защитой от спама вам придется подождать %{count}
         часов после активации, прежде чем вы сможете войти в систему.
       other: >-
+        В связи с защитой от спама вам придется подождать %{count}
+        часов после активации, прежде чем вы сможете войти в систему.
+      many: >-
         В связи с защитой от спама вам придется подождать %{count}
         часов после активации, прежде чем вы сможете войти в систему.
   password_resets:
@@ -509,6 +513,8 @@ ru:
       submit_cdla_permissive_20_html:
       new_owner:
       new_owner_repeat:
+      current_owner:
+      ownership_edit_hint:
     show:
       edit: Изменить
       delete: Удалить
@@ -594,6 +600,12 @@ ru:
         '0': Passing
         '1': Silver
         '2': Gold
+        baseline-1:
+        baseline-1_html:
+        baseline-2:
+        baseline-2_html:
+        baseline-3:
+        baseline-3_html:
       got_badge:
         description_1: >-
           Если это ваш проект, пожалуйста, покажите свой значок
@@ -612,6 +624,11 @@ ru:
           вы видите проблему, пожалуйста, <em><a href="mailto:&#99;ii&#45;badges&#45;questions&#45;own&#101;r&#64;lists&#46;coreinfrastructure&#46;or&#103;">отправьте
           электронное письмо</a> </em> или <em><a href="https://github.com/coreinfrastructure/best-practices-badge/issues"
           target="_blank" rel="noopener">опишите проблему в трекере</a></em>.
+      got_baseline_badge:
+        description_1:
+        badge_alt:
+        description_2:
+        details_html:
     form_basics:
       project_name:
         description: Какое у проекта человекочитаемое название?
@@ -2958,6 +2975,193 @@ ru:
           и проверять эти утверждения во время динамического анализа.
       achieve_silver:
         description: Проект ОБЯЗАН получить серебряный значок.
+    baseline-1:
+      osps_ac_01_01:
+        description:
+        details:
+      osps_ac_02_01:
+        description:
+        details:
+      osps_ac_03_01:
+        description:
+        details:
+      osps_ac_03_02:
+        description:
+        details:
+      osps_br_01_01:
+        description:
+      osps_br_01_02:
+        description:
+      osps_br_03_01:
+        description:
+        details:
+      osps_br_03_02:
+        description:
+        details:
+      osps_br_07_01:
+        description:
+        details:
+      osps_do_01_01:
+        description:
+        details:
+      osps_do_02_01:
+        description:
+        details:
+      osps_gv_02_01:
+        description:
+        details:
+      osps_gv_03_01:
+        description:
+        details:
+      osps_le_02_01:
+        description:
+        details:
+      osps_le_02_02:
+        description:
+        details:
+      osps_le_03_01:
+        description:
+        details:
+      osps_le_03_02:
+        description:
+        details:
+      osps_qa_01_01:
+        description:
+        details:
+      osps_qa_01_02:
+        description:
+        details:
+      osps_qa_02_01:
+        description:
+        details:
+      osps_qa_04_01:
+        description:
+        details:
+      osps_qa_05_01:
+        description:
+        details:
+      osps_qa_05_02:
+        description:
+        details:
+      osps_vm_02_01:
+        description:
+        details:
+    baseline-2:
+      osps_ac_04_01:
+        description:
+        details:
+      osps_br_02_01:
+        description:
+        details:
+      osps_br_04_01:
+        description:
+        details:
+      osps_br_05_01:
+        description:
+        details:
+      osps_br_06_01:
+        description:
+        details:
+      osps_do_06_01:
+        description:
+        details:
+      osps_gv_01_01:
+        description:
+        details:
+      osps_gv_01_02:
+        description:
+        details:
+      osps_gv_03_02:
+        description:
+        details:
+      osps_le_01_01:
+        description:
+        details:
+      osps_qa_03_01:
+        description:
+        details:
+      osps_qa_06_01:
+        description:
+        details:
+      osps_sa_01_01:
+        description:
+        details:
+      osps_sa_02_01:
+        description:
+        details:
+      osps_sa_03_01:
+        description:
+        details:
+      osps_vm_01_01:
+        description:
+        details:
+      osps_vm_03_01:
+        description:
+        details:
+      osps_vm_04_01:
+        description:
+        details:
+    baseline-3:
+      osps_ac_04_02:
+        description:
+        details:
+      osps_br_02_02:
+        description:
+        details:
+      osps_br_07_02:
+        description:
+        details:
+      osps_do_03_01:
+        description:
+        details:
+      osps_do_03_02:
+        description:
+        details:
+      osps_do_04_01:
+        description:
+        details:
+      osps_do_05_01:
+        description:
+        details:
+      osps_gv_04_01:
+        description:
+        details:
+      osps_qa_02_02:
+        description:
+        details:
+      osps_qa_04_02:
+        description:
+        details:
+      osps_qa_06_02:
+        description:
+        details:
+      osps_qa_06_03:
+        description:
+        details:
+      osps_qa_07_01:
+        description:
+        details:
+      osps_sa_03_02:
+        description:
+        details:
+      osps_vm_04_02:
+        description:
+        details:
+      osps_vm_05_01:
+        description:
+        details:
+      osps_vm_05_02:
+        description:
+        details:
+      osps_vm_05_03:
+        description:
+        details:
+      osps_vm_06_01:
+        description:
+        details:
+      osps_vm_06_02:
+        description:
+        details:
   headings:
     Accessibility and internationalization: Общедоступность и
       интернационализация
@@ -3003,6 +3207,8 @@ ru:
     Working build system: Рабочая система сборки
     Prerequisites: Предварительные требования
     FLOSS license: Свободная лицензия
+    Controls:
+    General:
   criterion_status:
     Met: Соответствует
     Unmet: Не соответствует
@@ -3178,3 +3384,6 @@ ru:
     missing_parameters:
     invalid_parameters:
     error:
+  do_not_translate_this:
+  test_pluralization_only_one:
+    one:

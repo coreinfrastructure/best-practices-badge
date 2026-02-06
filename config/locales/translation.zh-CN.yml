@@ -37,6 +37,7 @@ zh-CN:
     account: 帐户
     choose_locale: 选择区域设置
     toggle_navigation: 切换可折叠导航
+    translation_disclaimer_html:
   sessions:
     login_header: 登录
     login_with_github_html: 使用GitHub账户登录
@@ -244,6 +245,8 @@ zh-CN:
       submit_cdla_permissive_20_html:
       new_owner:
       new_owner_repeat:
+      current_owner:
+      ownership_edit_hint:
     form_basics:
       project_name:
         description: 项目的人类可读的名称是什么？
@@ -311,6 +314,17 @@ zh-CN:
         '0': 通过
         '1': 白银
         '2': 黄金
+        baseline-1:
+        baseline-1_html:
+        baseline-2:
+        baseline-2_html:
+        baseline-3:
+        baseline-3_html:
+      got_baseline_badge:
+        description_1:
+        badge_alt:
+        description_2:
+        details_html:
     misc:
       disabled_reminders: "（高级）禁用不活动提醒（我们建议您取消选中此选项）"
       general_comments:
@@ -435,6 +449,7 @@ zh-CN:
       one: 作为一种反垃圾邮件措施，您必须在激活后等待一小时才能登录。
       few: 作为一种反垃圾邮件措施，您必须在激活后等待%{count}小时才能登录。
       other: 作为一种反垃圾邮件措施，您必须在激活后等待%{count}小时才能登录。
+      many: 作为一种反垃圾邮件措施，您必须在激活后等待%{count}小时才能登录。
   password_resets:
     forgot_password: 忘记密码
     reset_password: 重设密码
@@ -1258,6 +1273,193 @@ zh-CN:
         description: 项目应该在其生成的软件中包含许多运行时断言，并在动态分析期间检查这些断言。
       achieve_silver:
         description: 该项目必须拥有银级徽章。
+    baseline-1:
+      osps_ac_01_01:
+        description:
+        details:
+      osps_ac_02_01:
+        description:
+        details:
+      osps_ac_03_01:
+        description:
+        details:
+      osps_ac_03_02:
+        description:
+        details:
+      osps_br_01_01:
+        description:
+      osps_br_01_02:
+        description:
+      osps_br_03_01:
+        description:
+        details:
+      osps_br_03_02:
+        description:
+        details:
+      osps_br_07_01:
+        description:
+        details:
+      osps_do_01_01:
+        description:
+        details:
+      osps_do_02_01:
+        description:
+        details:
+      osps_gv_02_01:
+        description:
+        details:
+      osps_gv_03_01:
+        description:
+        details:
+      osps_le_02_01:
+        description:
+        details:
+      osps_le_02_02:
+        description:
+        details:
+      osps_le_03_01:
+        description:
+        details:
+      osps_le_03_02:
+        description:
+        details:
+      osps_qa_01_01:
+        description:
+        details:
+      osps_qa_01_02:
+        description:
+        details:
+      osps_qa_02_01:
+        description:
+        details:
+      osps_qa_04_01:
+        description:
+        details:
+      osps_qa_05_01:
+        description:
+        details:
+      osps_qa_05_02:
+        description:
+        details:
+      osps_vm_02_01:
+        description:
+        details:
+    baseline-2:
+      osps_ac_04_01:
+        description:
+        details:
+      osps_br_02_01:
+        description:
+        details:
+      osps_br_04_01:
+        description:
+        details:
+      osps_br_05_01:
+        description:
+        details:
+      osps_br_06_01:
+        description:
+        details:
+      osps_do_06_01:
+        description:
+        details:
+      osps_gv_01_01:
+        description:
+        details:
+      osps_gv_01_02:
+        description:
+        details:
+      osps_gv_03_02:
+        description:
+        details:
+      osps_le_01_01:
+        description:
+        details:
+      osps_qa_03_01:
+        description:
+        details:
+      osps_qa_06_01:
+        description:
+        details:
+      osps_sa_01_01:
+        description:
+        details:
+      osps_sa_02_01:
+        description:
+        details:
+      osps_sa_03_01:
+        description:
+        details:
+      osps_vm_01_01:
+        description:
+        details:
+      osps_vm_03_01:
+        description:
+        details:
+      osps_vm_04_01:
+        description:
+        details:
+    baseline-3:
+      osps_ac_04_02:
+        description:
+        details:
+      osps_br_02_02:
+        description:
+        details:
+      osps_br_07_02:
+        description:
+        details:
+      osps_do_03_01:
+        description:
+        details:
+      osps_do_03_02:
+        description:
+        details:
+      osps_do_04_01:
+        description:
+        details:
+      osps_do_05_01:
+        description:
+        details:
+      osps_gv_04_01:
+        description:
+        details:
+      osps_qa_02_02:
+        description:
+        details:
+      osps_qa_04_02:
+        description:
+        details:
+      osps_qa_06_02:
+        description:
+        details:
+      osps_qa_06_03:
+        description:
+        details:
+      osps_qa_07_01:
+        description:
+        details:
+      osps_sa_03_02:
+        description:
+        details:
+      osps_vm_04_02:
+        description:
+        details:
+      osps_vm_05_01:
+        description:
+        details:
+      osps_vm_05_02:
+        description:
+        details:
+      osps_vm_05_03:
+        description:
+        details:
+      osps_vm_06_01:
+        description:
+        details:
+      osps_vm_06_02:
+        description:
+        details:
   static_pages:
     home:
       badge_program: OpenSSF 最佳实践徽章计划
@@ -1378,6 +1580,8 @@ zh-CN:
     Identification: 识别
     Prerequisites: 先决条件
     FLOSS license: FLOSS许可证
+    Controls:
+    General:
   last_entry: 最后翻译条目
   admin_only: 仅限管理员。
   criterion_status:
@@ -1509,3 +1713,6 @@ zh-CN:
     missing_parameters:
     invalid_parameters:
     error:
+  do_not_translate_this:
+  test_pluralization_only_one:
+    one:

@@ -303,7 +303,7 @@ module MachineTranslationHelpers
       translatable_keys =
         english.keys.select do |key|
           value = english[key]
-          !value.nil? && !value.to_s.strip.empty?
+          !value.nil? && !value.to_s.strip.empty? && !KEYS_TO_IGNORE.include?(key)
         end
 
       TRANSLATION_PRIORITY.each do |locale|

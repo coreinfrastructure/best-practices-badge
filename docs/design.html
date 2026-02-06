@@ -1,0 +1,529 @@
+  <!DOCTYPE html>
+  <html>
+  <head>
+  <title>docs/design.md</title>
+  </head>
+  <body>
+<h1>Design</h1>
+
+<!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
+
+<p>This document describes the design of the BadgeApp.</p>
+
+<p>No single technology does everything well.
+Instead, design is all about making good choices between
+options that have different trade-offs, so that together
+those choices will efficiently meet requirements.
+As explained in <a href="https://blog.bradfieldcs.com/you-are-not-google-84912cf44afb">You Are Not Google</a>,
+&quot;if you&#39;re using a technology that originated at a large company,
+but your use case is very different, it&#39;s unlikely that you arrived
+there deliberately...
+what&#39;s important is that you actually use the right tool for the job.&quot;
+This document describes our key choices.</p>
+
+<p>Our design is generally standard and straightforward.
+If you&#39;re not familiar with how web applications are typically
+designed, see introductory material such as
+<a href="https://engineering.videoblocks.com/web-architecture-101-a3224e126947">&quot;Web Architecture 101&quot; by Jonathan Fulton</a>.</p>
+
+<h2>High-level architecture</h2>
+
+<p>The web application is itself OSS, and we intend for the
+web application to meet its own criteria.
+We have implemented it with Ruby on Rails; Rails is good for
+simple web applications like this one,
+particularly since it&#39;s easy to create, update, and maintain
+with a small team.
+The system stores the data in PostgreSQL (aka Postgres); the key
+is that we don&#39;t lose data, and our throughput needs are easily met
+by PostgreSQL, so selecting an RDBMS with a long track record of
+reliability made sense.</p>
+
+<h3>High-level design figure</h3>
+
+<p>The following figure shows a high-level design of the implementation:</p>
+
+<p><img src="./design.png" alt="Design"/></p>
+
+<h3>Traditional web app, not a single-page app (SPA)</h3>
+
+<p>There are at least two ways to develop a web application:</p>
+
+<ul>
+<li>a server-side (&quot;traditional&quot;) web application where most user interactions
+(such as form submission) involve loading an entirely new web page.</li>
+<li>a <a href="https://en.wikipedia.org/wiki/Single-page_application">single-page application (SPA)</a>
+interacts with the user by dynamically rewriting the current page
+(instead of loading new pages from a server).
+SPAs typically provide a more fluid user experience, but also
+incur a higher development and maintenance cost, and requires that the
+user have JavaScript enabled on the client.</li>
+</ul>
+
+<p>We intentionally developed this application as a server-side web application,
+not as an SPA, because minimizing
+development and maintenance cost are very important to us.
+We have limited resources to manage this site.
+Indeed, the article
+<a href="http://wgross.net/essays/spas-are-harder">SPAs Are Just Harder, and Always Will Be</a>
+argues that SPAs will <em>always</em> be harder to develop, even with
+frameworks to help.
+<a href="https://medium.com/@jmanrubia/escaping-the-spa-rabbit-hole-with-turbolinks-903f942bf52c">&quot;Escaping the SPA rabbit hole with modern Rails&quot; by Jorge Manrubia (2020-07-04)</a>
+also discusses the trade-offs between SPAs and traditional web applications
+built with Rails:
+&quot;Modern Rails lets you build apps that are fast enough and feel great [and]
+For a vast variety of apps, Rails enables you to implement the same
+functionality with a fraction of the code and complexity.&quot;
+In addition, some security-conscious people disable JavaScript, and
+one of our requirements is that the application work in those cases
+(with some graceful degradation)... so we would still need to support
+the server-side application anyway.</p>
+
+<p>When the project started, our primary concerns were to determine the
+criteria, and try to get broad buy-in that those criteria were sensible.</p>
+
+<p>This approach can be revisited in the future, if it is decided
+that the costs are worthwhile.</p>
+
+<h3>Key components</h3>
+
+<p>The key components we use are:</p>
+
+<ul>
+<li>Ruby on Rails.
+This is our the primary programming language and web application framework.
+Ruby on Rails is specifically designed to be easy to use and thus
+is a good choice for simple web applications like this one.
+Its ease-of-use enables us to avoid needing a large amount
+of effort to develop or maintain the software.
+Ruby is not a fast language, but standard Rails performance techniques
+(such as fragment caching) make it fast enough.
+Ruby doesn&#39;t have static typing, so it cannot detect errors a
+statically-typed language can automatically detect; we use static tools
+and strong test coverage to detect errors instead.
+We also have some custom software written in client-side JavaScript.</li>
+<li>PostgreSQL (aka Postgres).
+This is a widely-used relational database system (RDBMS).
+Our experience (and those of others) is that it is extremely
+reliable, a key requirement for a DBMS.
+It also doesn&#39;t require a lot of maintenance and tuning to be useful.</li>
+<li>Bootstrap.  This is an extremely popular front-end component library.
+One major advantage of using Bootstrap is that our site looks like many
+other websites; as a result, our website is familiar and easy to use.
+We want users to focus on getting their tasks done, instead
+of trying to figure out how to use the site.</li>
+<li>jQuery (jquery-rails).
+This is a widely-used small JavaScript library to ease certain tasks
+such as HTML document traversal in a portable way.</li>
+<li>jQuery UI (jquery-ui-rails).
+jQuery UI is a curated set of user interface interactions, effects,
+widgets, and themes built on top of the jQuery JavaScript Library.
+We use jQuery UI solely to use &quot;jquery-ui/autocomplete&quot;
+as a polyfill for Safari.
+<a href="https://caniuse.com/#feat=datalist">Most browsers support datalist</a>,
+when entering data in a field, but Safari fails to support it.
+We use a datalist in the projects form to help fill in the
+implementation language and license.</li>
+<li>Imagesloaded.
+This is from <a href="https://github.com/desandro/imagesloaded">https://github.com/desandro/imagesloaded</a> - it&#39;s a JavaScript
+library to ensure images are loaded before displaying them.</li>
+<li>Puma.
+This is our webserver.
+We don&#39;t use webrick, because Puma can handle multiple
+processes and multiple threads.  See:
+<a href="https://devcenter.heroku.com/articles/ruby-default-web-server">https://devcenter.heroku.com/articles/ruby-default-web-server</a></li>
+<li>Minitest.
+Minitest is our basic test framework.
+Minitest is the default testing framework of Rails, however,
+many people use RSpec instead.
+Both are good frameworks used by many, and the most important thing
+is to pick one, but we had to pick one.
+We decided to use minitest because it is easier to pick up and use.
+Minitest is fundamentally Ruby with a few extras, instead of being a
+completely different DSL.
+Minitest is also a simple and straightforward framework in general.
+Minitest comes with Rails, so it&#39;s easier to get it started too.
+Basically, we were able to quickly and efficiently build up our
+tests with minitest.
+We&#39;re well aware that many people happily use RSpec, and RSpec can
+clearly do the job - but we have to pick one, and that&#39;s what we chose.</li>
+</ul>
+
+<p>We use a number of supporting Ruby gems.
+See the file &quot;Gemfile&quot; to see all the gem direct dependencies;
+see the file &quot;Gemfile.lock&quot; to see all the gem dependencies (direct and not).</p>
+
+<p>We do <em>not</em> use an authentication library such as
+<a href="https://github.com/plataformatec/devise">Devise</a>.
+At the time we started the project, the general advice was to
+<em>not</em> reuse authentication libraries in Rails
+(e.g., because the libraries were perceived by many as being
+inflexible, immature, and/or hard to use).
+We would probably use an authentication library if we restarted today.
+That said, this hasn&#39;t been too bad, because the underlying Rails primitives
+support implementation of authentication in relatively few lines of code,
+and we use standard authentication approaches for Rails applications.
+The effort to switch to such a library now would probably exceed the benefits.</p>
+
+<h3>Key classes</h3>
+
+<p>The software is designed as a traditional model/view/controller (MVC)
+architecture.  As is standard for Rails, under directory &quot;app&quot;
+(application) are directories for &quot;models&quot;, &quot;views&quot;, and &quot;controllers&quot;.</p>
+
+<p>Central custom classes include:</p>
+
+<ul>
+<li>&quot;Project&quot; (defined in file &quot;app/models/project.rb&quot;)
+defines the model that captures data about a project.</li>
+<li>&quot;User&quot; (defined in file &quot;app/models/user.rb&quot;)
+defines the model that captures data about a user.</li>
+<li>&quot;AdditionalRight&quot; (defined in file &quot;app/models/additional_right.rb&quot;)
+defines the model that captures the set of additional rights of users.</li>
+</ul>
+
+<h2>Performance</h2>
+
+<p>The BadgeApp doesn&#39;t need to be the fastest in the world,
+just fast enough for users to be happy.</p>
+
+<h3>How we get good performance</h3>
+
+<p>Here is our approach to getting good performance:</p>
+
+<ul>
+<li>Badge images are cached and served primarily by our CDN, not our server.</li>
+<li>The Rails application uses fragment caching (including &quot;Russian dolls&quot;)
+to cache previous requests.  This is key to making any Rails application
+work quickly.</li>
+<li>Static assets are precomputed by the usual Rails asset pipeline
+into /assets and served directly
+by the web server (not the underlying slower Rails application).</li>
+<li>Static assets are aggressively compressed.</li>
+<li>Images are resized to their display size, and we provide width and height.</li>
+<li>The web application HTML includes preloading commands to help
+web browsers request what they need relatively early.</li>
+<li>The RDBMS has indexes for all built-in searches
+(as is standard good practice).</li>
+<li>We use the &quot;bullet&quot; gem to detect N+1 queries (a common yet subtle
+performance killer in web applications)</li>
+<li>We use various tools, such as <a href="https://www.webpagetest.org/">webpagetest</a>,
+to detect performance problems.</li>
+</ul>
+
+<h3>Turbolinks</h3>
+
+<p>At one time we used Turbolinks, and we&#39;ve tried to re-enable it,
+but we&#39;ve currently disabled it.
+Here&#39;s a discussion of why we would like to use Turbolinks but do not.</p>
+
+<p><a href="https://github.com/turbolinks/turbolinks">Turbolinks</a>
+is a performance enhancer designed to make
+&quot;navigating your web application faster&quot;.
+Turbolinks is often used in Rails applications, because it&#39;s intended to provide
+&quot;the performance benefits of a single-page application without the added
+complexity of a client-side JavaScript framework.&quot;
+While our website works reasonably well without Turbolinks,
+users <em>like</em> high-performing websites.
+In August 2019 we found that some of our bigger pages dropped from 1100msec
+without Turbolinks to 700msec with Turbolinks
+(from request to completed paint).
+Using Turbolinks supports security or privacy conscious users
+who disable client-side JavaScript, while also providing
+faster response for those users who have client-side JavaScript enabled.</p>
+
+<p>In theory, enabling Turbolinks is easy:</p>
+
+<ul>
+<li>In <code>Gemfile</code> add <code>turbolinks</code> as a library</li>
+<li>In <code>app/assets/javascripts/application.js</code> add
+<code>//= require turbolinks</code></li>
+<li>In <code>app/assets/javascripts/project-form.js</code> replace
+<code>$(document).ready(function() {</code> with
+<code>document.addEventListener(&#39;turbolinks:load&#39;, function() {</code>
+(our ready event resets everything and does
+not presume a clean pristine starting environment,
+so it works just fine with <code>turbolinks:load</code>).</li>
+</ul>
+
+<p>A key challenge with using Turbolinks is that
+you need to modify your application to work properly with turbolinks.
+<a href="http://guides.rubyonrails.org/working_with_javascript_in_rails.html#page-change-events">Turbolinks breaks $(document).ready</a>
+(an extremely common construct)
+and requires you to use a nonstandard on...&quot;page:change&quot; construct.
+To use turbolinks properly we&#39;ve determined that
+you really need to read its documentation
+carefully, and then modify your JavaScript to work with it.</p>
+
+<p>But in our case this is not enough.</p>
+
+<p>The biggest problem is
+<code>app/views/project_stats/index.html.erb</code> viewed as <code>/project_stats</code>
+Currently this uses Chartkick, which requires inline JavaScript
+(the inline JavaScript code is generated server-side and sent to the client),
+so we have to permit inline JavaScript on (just) this file.
+We once used the gem <code>jquery-turbolinks</code> to work around this, but
+in practice this setup was unreliable.
+We can make it <em>run</em> with Turbolinks by adding this to the ERB file:</p>
+<pre><code>    <% content_for :special_head_values do %>
+       <meta name="turbolinks-visit-control" content="reload">
+    <% end %>
+</code></pre>
+<p>But that is not enough. Turbolinks works by merging all headings,
+<em>including</em> CSP permissions.
+So once a user views this page, the user&#39;s protection against inline
+JavaScript is <em>disabled</em> - and that is unacceptable.
+While we hope we have no XSS vulnerabilities, it always possible that
+we have missed something; our CSP settings limit the damage that
+can be caused if we have XSS vulnerabilities.</p>
+
+<p>The best solution is to eliminate all inline JavaScript from <code>/project_stats</code>.
+We could separately generate SVG, or modify the page so that
+externally-defined JavaScript is used to generate the chart
+(perhaps by calling ChartKick).
+However, that is more effort and we have not done that.</p>
+
+<p>Turbolinks also causes another problem: some pages require
+form actions to be allowed to go to GitHub.
+See <code>config/initializers/secure_headers.rb</code> which defines
+<code>:allow_github_form_action</code>, which is used in a few pages.
+Again, with Turbolinks, once these pages are seen the additional permission
+is granted everywhere.
+This isn&#39;t so bad; we could probably just allow GitHub form actions
+everywhere.
+Exploiting GitHub form actions would require an attacker to find a
+vulnerability in our system
+<em>and</em> a vulnerability in GitHub&#39;s form handling system.
+That isn&#39;t impossible,
+but it is less likely and we could probably live with that.</p>
+
+<p>At the time of this writing Turbolinks does not support the performance
+improvement &quot;fetch on hover&quot; aka &quot;instantclick&quot;.
+This is a recommended enhancement as described in
+<a href="https://github.com/turbolinks/turbolinks/issues/313">Turbolinks issue #313</a>.
+Ideally we would have both turbolinks and instantclick,
+but there does not seem to be an easy way to have both.
+If we must pick only one, it appears that Turbolinks is the better choice.
+Turbolinks&#39; speed improvement works on all systems with client-side JavaScript,
+while fetch on hover does not work on normal touchscreens
+(there is no &quot;hover&quot; to detect) and touchscreens (including
+smartphones) are generally the systems that most need a speed boost.
+In addition, Turbolinks may eventually add instantclick as well.
+So we have chosen Turbolinks and hope that turbolinks will eventually add
+support for instantclick.</p>
+
+<h3>Not used: Rails Streaming</h3>
+
+<p>One trick for improving Rails performance is to invoke streaming.
+<a href="https://www.sitepoint.com/streaming-with-rails-4/">Streaming with Rails 4</a>
+and
+<a href="http://api.rubyonrails.org/classes/ActionController/Streaming.html">ActionController:Streaming</a>
+explains the basics for streaming HTML content.
+<a href="https://coderwall.com/p/kad56a/streaming-large-data-responses-with-rails">Streaming large data responses with Rails</a>
+discusses how to do this with other formats (e.g., JSON).
+The performance of this application is good enough
+that there hasn&#39;t been much reason to investigate this further.</p>
+
+<h2>Handling concurrency</h2>
+
+<p>The application is multi-user and multi-threaded.</p>
+
+<h3>Multi-user</h3>
+
+<p>We use optimistic locking to prevent unexpected data loss from
+multiple people editing the same project at the same time.</p>
+
+<p>We use RDBMS transactions,
+<a href="http://api.rubyonrails.org/classes/ActiveRecord/Transactions/ClassMethods.html">invoked via ActiveRecord</a>,
+to counter problems that could happen without transactions.</p>
+
+<h3>Multi-threaded</h3>
+
+<p>This is a multi-threaded application once it starts accepting web requests.
+Different requests may be started in different threads.
+Ruby supports multiple threads, but its default collection
+data structures are <em>not</em> thread-safe
+(this is true for many programming languages).
+The usual C implementation of Ruby does have a GIL, but that does
+not make code automatically thread-safe.</p>
+
+<p>Rails handles multi-threading by using
+a &quot;shared-nothing architecture&quot;, that is, different threads
+get different starting instances, which create their instances
+of everything else.
+For more information, see,
+<a href="https://bearmetal.eu/theden/how-do-i-know-whether-my-rails-app-is-thread-safe-or-not/">&quot;How Do I Know Whether My Rails App Is Thread-safe or Not?&quot; by Jakko</a>.</p>
+
+<p>For the most part this is invisible, but be extremely careful if you
+create situations where a possibly-modifiable
+resource is <em>shared</em> between threads.
+For example, don&#39;t memoize unless you do thread-safe memoization.
+An alternative is to pre-create all the instances you need during
+system initialization and then freeze them (sharing read-only data is fine).</p>
+
+<p>This is one reason we enable frozen string literals.
+Since frozen string literals cannot be mutated, a thread cannot
+accidentally mutate one and affect a different thread.</p>
+
+<p>The main mutable construct shared in Rails during execution is the
+Rails ActiveSupport::Cache that we rely on for server-side caching.
+We use MemoryStore as the cache back-end, and
+<a href="http://api.rubyonrails.org/v3.1.0/files/activesupport/CHANGELOG.html">Rails ActiveSupport::Cache MemoryStore has been memory-safe since Rails 3.1</a>
+as implemented by this
+<a href="https://github.com/rails/rails/commit/ee51b51b60f9e6cce9babed2c8a65a14d87790c8">commit</a>.
+This is explained as follows:
+&quot;Make thread safe so that the default cache implementation used by Rails
+is thread safe.&quot;</p>
+
+<h2>Deployment</h2>
+
+<p>We have two publicly accessible tiers:</p>
+
+<ul>
+<li>staging</li>
+<li>production</li>
+</ul>
+
+<p>These are currently executed on Heroku.</p>
+
+<p>Historically we also had a <code>main</code> aka <code>master</code> tier, an instance
+of the main branch. However, when Heroku removed their free tier pricing,
+we removed the <code>main</code> tier to save money.</p>
+
+<p>If you have write authorization to the GitHub repository,
+the commands <code>rake deploy_staging</code> and <code>rake deploy_production</code>
+will update the staging and production branches (respectively).
+Those updates will trigger tests by CircleCI as usual (via webhooks).
+If those tests pass, CirccleIC will then deploy that updated branch to
+its respective tier.</p>
+
+<p>Most administrative actions require logging into the relevant Heroku tier
+using the &quot;heroku&quot; command (this requires authorization).
+The one exception: the BadgeApp web application does support an &#39;admin&#39;
+role for logged in users; admin users
+are allowed to edit and delete any project entry.</p>
+
+<h2>Terminology</h2>
+
+<p>This section describes key application-specific terminology.</p>
+
+<p>The web application tracks data about many FLOSS <em>projects</em>,
+as identified and entered by <em>users</em>.</p>
+
+<p>We hope that projects will (eventually) <em>achieve</em> a <em>badge</em>.
+A project must <em>satisfy</em> (or &quot;pass&quot;) all <em>criteria</em>
+(singular: criterion) <em>enough</em> to achieve a badge.</p>
+
+<p>The <em>status</em> of each criterion, for a given project, can be one of:
+&#39;Met&#39;, &#39;Unmet&#39;, &#39;N/A&#39; (not applicable, a status that only some
+criteria can have), and &#39;?&#39; (unknown, the initial state of all
+criteria for a project).
+Every criterion can also have a <em>justification</em>.
+For each project the system tracks the criteria status,
+criteria justification, and a few other data fields such as
+project name, project description, project home page URL, and
+project repository (repo) URL.</p>
+
+<p>Each criterion is in one of four <em>categories</em>:
+&#39;MUST&#39;, &#39;SHOULD&#39;, &#39;SUGGESTED&#39;, and &#39;FUTURE&#39;.
+In some cases, a criterion may require some justification
+or a URL in the justification to be enough to satisfy the criterion for
+a badge.  See the <a href="./criteria.html">criteria</a> or
+application form for the current exact rules.
+A synonym for &#39;satisfying&#39; a criterion is &#39;passing&#39; a criterion.</p>
+
+<p>We have an &#39;autofill&#39; system that fills in some data automatically.</p>
+
+<p>In some cases the autofill data will <em>override</em> human-entered data
+(this happens where we&#39;re either confident in the data, and/or
+the data is not available using a common convention
+that are enforcing for purposes of the badge).
+The autofill system uses the metaphor of <em>Detectives</em> that need
+some inputs, analyze them,
+and produce outputs (including confidence levels).
+Detectives are managed by a <em>Chief</em> of detectives.</p>
+
+<h2>User interface design</h2>
+
+<p>Our visual design is based on Bootstrap.
+We try to make it obvious what things do,
+and avoid nonstandard visual elements if we can.</p>
+
+<h2>Security</h2>
+
+<p>See the separate
+<a href="security.html">security</a> document for more about security.</p>
+
+<h2>Application Programming Interface (API)</h2>
+
+<p>See <a href="api.html">api</a> for the application programming interface (API),
+including how to download data for analysis.</p>
+
+<p>Its interface supports the following interfaces, which is enough
+to programmatically create a new user, login and logout, create project
+data, edit it, and delete it (subject to the authorization rules).
+In particular, viewing with a web browser (which by default emits &#39;GET&#39;)
+a URL with the absolute path &quot;/projects/:id&quot; (where :id is an id number)
+will retrieve HTML that shows the status for project number id.
+A URL with absolute path &quot;/projects/:id.json&quot;
+will retrieve just the status data in JSON format (useful for further
+programmatic processing).</p>
+
+<h2>PostgreSQL Dependencies</h2>
+
+<p>As a policy, we minimize the number of dependencies on any particular
+database implementation where we can.  Where possible, please
+prefer portable constructs (such as ActiveRecord).</p>
+
+<p>However, our current implementation requires PostgreSQL,
+and we allow that (as discussed here).  Our internal
+project search engine uses PostgreSQL specific commands.  Additionally,
+we are using the PostgreSQL specific citext character string type to
+store email addresses.  This allows us, within PostgreSQL, to store
+case sensitive emails but have a case insensitive index on them.</p>
+
+<p>We do this as we can foresee a case where a user&#39;s email requires case
+sensitivity to be received (Microsoft Exchange allows this).  We do not,
+however, want to allow for emails that are not case insensitive unique
+since this could possibly allow for a number of duplicate users to be
+created and the possibility of two users from the same domain having
+emails which differ only in case is exceedingly rare.</p>
+
+<p>Using these PostgreSQL-specific capabilities makes the software much
+smaller.  Limiting these dependencies, and otherwise strongly preferring
+portable constructs, makes it easier to port to a different RDBMS
+in the future if necessary.
+Since PostgreSQL is itself OSS, this isn&#39;t as dangerous as becoming
+dependent on a single supplier whose product cannot be forked.</p>
+
+<h2>See also</h2>
+
+<p>Project participation and interface:</p>
+
+<ul>
+<li><a href="../CONTRIBUTING.html">CONTRIBUTING.md</a> - How to contribute to this project</li>
+<li><a href="INSTALL.html">INSTALL.md</a> - How to install/quick start</li>
+<li><a href="governance.html">governance.md</a> - How the project is governed</li>
+<li><a href="roadmap.html">roadmap.md</a> - Overall direction of the project</li>
+<li><a href="background.html">background.md</a> - Background research</li>
+<li><a href="api.html">api</a> - Application Programming Interface (API), inc. data downloads</li>
+</ul>
+
+<p>Criteria:</p>
+
+<ul>
+<li><a href="https://bestpractices.coreinfrastructure.org/criteria/0">Criteria for passing badge</a></li>
+<li><a href="https://bestpractices.coreinfrastructure.org/criteria">Criteria for all badge levels</a></li>
+</ul>
+
+<p>Development processes and security:</p>
+
+<ul>
+<li><a href="requirements.html">requirements.md</a> - Requirements (what&#39;s it supposed to do?)</li>
+<li><a href="design.html">design.md</a> - Architectural design information</li>
+<li><a href="implementation.html">implementation.md</a> - Implementation notes</li>
+<li><a href="testing.html">testing.md</a> - Information on testing</li>
+<li><a href="assurance-case.html">assurance-case.md</a> - Why it&#39;s adequately secure (assurance case)</li>
+</ul>
+  </body>
+  </html>

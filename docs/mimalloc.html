@@ -1,0 +1,179 @@
+  <!DOCTYPE html>
+  <html>
+  <head>
+  <title>docs/mimalloc.md</title>
+  </head>
+  <body>
+<h1>Mimalloc</h1>
+
+<p>This document analyzes and justifies how we use mimalloc.</p>
+
+<h2>The problem: Unbounded memory growth</h2>
+
+<p>We had a serious problem with unbounded memory growth,
+and mimalloc greatly solved it. See <a href="memory-growth.html">memory-growth</a>.</p>
+
+<h2>Solution: mimalloc</h2>
+
+<p>The jemalloc allocator is often recommended for Rails applications.
+However, the jemalloc allocator has been archived on GitHub, and it appears
+all jemalloc work has ceased. They mentioned mimalloc as an alternative.</p>
+
+<p>A malloc replacement is highly sensitive, since it has direct access
+to all memory. However, there&#39;s good reason to believe mimalloc
+(as released as a system package) is fine.
+<strong>mimalloc</strong> (Microsoft&#39;s memory allocator) is:</p>
+
+<ul>
+<li>Actively maintained on <a href="https://github.com/microsoft/mimalloc">https://github.com/microsoft/mimalloc</a> - there
+were many recent commits</li>
+<li>It&#39;s released by Microsoft, who will want it to be good and
+are highly unlikely to insert malicious code into it.</li>
+<li>Available on Debian and Ubuntu 24 as
+a standard system package as <code>libmimalloc2.0</code>.
+Its availability as a standard system package greatly reduces the
+likelihood of its being a malicious package even further.
+Note: On newer versions of Debian,
+<a href="https://packages.debian.org/search?keywords=mimalloc">newer versions of mimalloc (3.0)</a>
+are also available.</li>
+<li>Designed for better performance and reduced fragmentation, especially
+for systems that use reference counting (like Lean, Python, and Ruby).</li>
+<li>Drop-in replacement via <code>LD_PRELOAD</code></li>
+</ul>
+
+<h2>Running mimalloc on Ubuntu</h2>
+
+<p>In development environments running Ubuntu, simply install mimalloc with:</p>
+<pre><code>sudo apt install libmimalloc2.0
+</code></pre>
+<p>To use mimalloc when running <code>some_command</code> (like <code>rails s</code>), use:</p>
+<pre><code>LD_LIBRARY=/usr/lib/x86_64-linux-gnu/libmimalloc.so.2.1 some_command
+</code></pre>
+<h2>mimalloc buildpack for Heroku</h2>
+
+<p>We deploy on Heroku. We <em>could</em> create our own container image and run it,
+but currently we use the default container images (to try to reduce
+maintenance burden). That image doesn&#39;t include mimalloc.
+The standard Heroku solution is to add a &quot;buildpack&quot;.</p>
+
+<p>The <a href="https://deadmanssnitch.com/">company Dead Man&#39;s Snitch</a>
+has a GitHub repo for its
+<a href="https://github.com/deadmanssnitch/buildpack-mimalloc">mimalloc buildpack</a>.
+I reviewed
+its <a href="https://github.com/deadmanssnitch/buildpack-mimalloc/tree/main/bin">source code</a>; it downloads and recompiles the library, which isn&#39;t
+<em>necessary</em> strictly speaking but is a fine way to do it.</p>
+
+<p>Its
+<a href="https://github.com/deadmanssnitch/buildpack-mimalloc/commit/29cd337359c1b1296041b15940add8b8b442a741">commit 29cd337 on Jun 16, 2025</a>,
+&quot;Initial version of the buildpack for testing&quot;, makes it clear it&#39;s
+based on their previous jemalloc work. It says:
+&quot;This is based on the jemalloc buildpack but modified to install mimalloc
+instead. In the near term jemalloc should continue to work well but the
+long term future is uncertain[1]. Given that is seems worthwhile to
+consider other options and I&#39;ve read good things about mimalloc and it
+recently became an option for python.&quot;
+Their jemalloc work was the typical recommendation for using jemalloc
+on Heroku, so this is plausible.</p>
+
+<p>The primary developer of the source code is
+<a href="https://github.com/gaffneyc">Chris Gaffney (gaffneyc)</a>,
+who has also contributed to <code>rails/propshaft</code>
+and heroku-buildpack-jemalloc.
+He has contributed to projects by Dead Man&#39;s Switch and Collective Idea.
+He reports his location as Holland, MI.
+I see no indication of concerns, this developer seems to be a capable
+developer and there are no indications of malicious intent.</p>
+
+<p>To supplement this, I asked Google Gemini for analysis of the
+supply chain risk from this buildpack</p>
+
+<p>Collective Idea acquired Dead Man&#39;s Snitch in 2013 as confirmed both directions:
+<a href="https://collectiveidea.com/blog/archives/2013/07/30/collective-idea-acquires-dead-mans-snitch/">Collective Idea&#39;s statement</a> and
+<a href="https://deadmanssnitch.com/docs/faq">Dead Man&#39;s Switch FAQ</a>
+(&quot;Dead Man&#39;s Snitch is a product of Collective Idea, a software
+development &amp; consulting company based in Holland, Michigan.&quot;).
+When I looked at the <a href="https://collectiveidea.com/blog/">Collective Idea blog</a>,
+I discovered I&#39;d read some of their reports already!
+They have a good reputation for being knowledgeable.</p>
+
+<h2>Gemini analysis</h2>
+
+<p>I asked Google Gemini to also analyze the supply chain risk.</p>
+
+<blockquote>
+<p>To estimate the risk of a supply chain attack using the deadmanssnitch/buildpack-mimalloc Heroku buildpack, we need to look at three areas: the entity behind it, the technical implementation of the buildpack, and the verifiability of its binaries.</p>
+
+<ol>
+<li>The Entity: Who is &quot;Dead Man&#39;s Snitch&quot;?</li>
+</ol>
+
+<p>Ownership History:</p>
+
+<p>Original Creator: Dead Man&#39;s Snitch was originally a product created by Collective Idea, a reputable software consultancy based in Holland, Michigan, USA. They have a long history in the Ruby on Rails and Heroku communities.</p>
+
+<p>Current Owner: In March 2023, Dead Man&#39;s Snitch was acquired by AppSignal, a monitoring company based in Amsterdam, Netherlands.</p>
+
+<p>Reputation: Both Collective Idea and AppSignal are well-established &quot;known quantities&quot; in the developer ecosystem. AppSignal, in particular, handles sensitive monitoring data for thousands of companies and is subject to EU privacy and security regulations (GDPR).</p>
+
+<p>Risk Factor: Low. This is not a &quot;ghost&quot; project managed by an anonymous individual. It is an open-source tool maintained by a legitimate, revenue-generating SaaS company with a physical presence and a reputation to maintain.</p>
+
+<ol>
+<li>Technical Analysis: How the Buildpack Works</li>
+</ol>
+
+<p>A supply chain attack in a buildpack usually happens in the bin/compile script. I have analyzed the standard behavior of this specific repository:</p>
+
+<p>What it does: The buildpack installs mimalloc, a memory allocator developed by Microsoft that often performs better than the default malloc in containerized environments (like Heroku).</p>
+
+<p>The Binary Source: If you look at the bin/compile script in the repository, it identifies the Heroku &quot;Stack&quot; (e.g., cedar-24, heroku-22) and downloads a pre-compiled version of mimalloc.</p>
+
+<p>Download Location: It downloads the binaries directly from the GitHub Releases page of the same repository (<a href="https://github.com/deadmanssnitch/buildpack-mimalloc/releases">https://github.com/deadmanssnitch/buildpack-mimalloc/releases</a>).</p>
+
+<p>Risk Factor: Medium-Low. The risk here is that the GitHub account itself is compromised, or the CI/CD pipeline used to upload those releases is subverted. Because the binaries are hosted on GitHub, you are trusting the security of the AppSignal/Dead Man&#39;s Snitch GitHub organization.</p>
+
+<ol>
+<li>The &quot;Usual&quot; Binary and Verification
+The &quot;usual&quot; binary is a shared object file (libmimalloc.so) compiled for the specific version of Ubuntu that the Heroku stack is based on (e.g., Heroku-22 is based on Ubuntu 22.04).</li>
+</ol>
+
+<p>How to verify it:
+This is the most difficult part of supply chain security. To verify that the binary in the releases matches the source code:</p>
+
+<p>Check for Checksums: Currently, this specific buildpack does not appear to hardcode SHA-256 checksums in the bin/compile script. This is a weakness. A common security best practice is for the script to verify the hash of the download before installing it.</p>
+
+<p>Manual Comparison:</p>
+
+<p>Clone the official Microsoft mimalloc repository.</p>
+
+<p>Fire up a Docker container running the same image as your Heroku stack (e.g., heroku/heroku:22).</p>
+
+<p>Compile mimalloc manually inside that container.</p>
+
+<p>Download the binary from the Dead Man&#39;s Snitch GitHub release.</p>
+
+<p>Compare the two files. Note: They likely won&#39;t have identical hashes due to compilation timestamps (non-deterministic builds), but you can use tools like diffoscope to see if the actual logic differs.</p>
+</blockquote>
+
+<p>The statement from Gemini is misleading though the thrust is correct.
+The <a href="https://github.com/deadmanssnitch/buildpack-mimalloc/blob/main/bin/compile">compile script</a> downloads <em>source</em> code, and then <em>compiles</em> it - it
+doesn&#39;t just download compiled versions.
+However, it&#39;s true that <em>users</em> of the <em>resulting</em> buildpack download and
+run it.</p>
+
+<p>However, the organizations here are reputable, and the people involved
+appear knowledgeable and reputable, so this seems like a low risk.</p>
+
+<h2>mimalloc buildpack installation and configuration</h2>
+
+<p>To set this up Heroku you simply add a buildpack.
+Per their README:</p>
+<pre><code>heroku buildpacks:add --index 1 https://github.com/gaffneyc/buildpack-mimalloc.git
+</code></pre>
+<p>After that, you push it (e.g., <code>git push heroku master</code>).</p>
+
+<p>The recommended configuration simply runs all commands
+with mimalloc (which makes things simple) by running:</p>
+<pre><code>heroku config:set MIMALLOC_ENABLED=true
+</code></pre>
+  </body>
+  </html>

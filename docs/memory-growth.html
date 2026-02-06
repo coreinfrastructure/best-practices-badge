@@ -1,0 +1,438 @@
+  <!DOCTYPE html>
+  <html>
+  <head>
+  <title>docs/memory-growth.md</title>
+  </head>
+  <body>
+<h1>Memory Growth Investigation Tools</h1>
+
+<p>This document describes the tools available for investigating memory growth
+in the Best Practices Badge application, and documents the results of
+a memory investigation in January 2026.</p>
+
+<h2>Overview</h2>
+
+<p>The application includes several tools for diagnosing memory issues:</p>
+
+<ol>
+<li><strong>GC Compact Thread Diagnostics</strong> - Enhanced logging during garbage
+collection compaction (built in to <code>lib/gc_compact_thread.rb</code>)</li>
+<li><strong>Memory Stress Test Script</strong> - Simulates production traffic patterns
+(<code>script/memory_stress_test.rb</code>)</li>
+<li><strong>Memory Monitor Script</strong> - Real-time memory monitoring of rails server
+(<code>script/monitor_memory.rb</code>)</li>
+</ol>
+
+<h2>Prerequisites</h2>
+
+<h3>Disable Rate Limiting for Development</h3>
+
+<p>Rate limiting is now disabled in development mode by default (only enabled in
+production). This allows stress testing without hitting throttle limits.</p>
+
+<p>See <code>config/initializers/rack_attack.rb</code> - throttles use
+<code>if Rails.env.production?</code>.</p>
+
+<h3>Install Dependencies</h3>
+
+<p>The <code>memory_profiler</code> gem is included in the development group:</p>
+<pre><code>bundle install
+</code></pre>
+<h3>Path Files for Realistic Traffic</h3>
+
+<p>The stress test script uses <code>requested-paths-*.txt</code> files in the project
+root for realistic production request paths. Create these from production
+logs:</p>
+<pre><code># Extract GET request paths from logs
+grep 'GET ' production.log | awk '{print $PATH_COLUMN}' > requested-paths-001.txt
+</code></pre>
+<p>Verify path files exist before running tests:</p>
+<pre><code>ls requested-paths-*.txt
+</code></pre>
+<h2>Tools</h2>
+
+<h3>1. GC Compact Thread Diagnostics</h3>
+
+<p>The <code>lib/gc_compact_thread.rb</code> module runs periodic garbage collection and
+compaction. It now logs detailed diagnostics including:</p>
+
+<ul>
+<li>String size distribution (bucketed by size ranges)</li>
+<li>Frozen vs unfrozen string counts and memory</li>
+<li>Large string samples (&gt;50KB) with previews</li>
+<li>Growth delta between compaction cycles</li>
+<li>Rails cache statistics</li>
+</ul>
+
+<p><strong>Configuration via environment variables:</strong></p>
+
+<table><thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>BADGEAPP_MEMORY_COMPACTOR_MB</code></td>
+<td>1024</td>
+<td>Memory threshold (MB) to trigger compaction</td>
+</tr>
+<tr>
+<td><code>BADGEAPP_SLEEP_AFTER_CHECK</code></td>
+<td>60</td>
+<td>Seconds between memory checks</td>
+</tr>
+<tr>
+<td><code>BADGEAPP_SLEEP_AFTER_COMPACT</code></td>
+<td>1200</td>
+<td>Seconds to wait after compaction</td>
+</tr>
+<tr>
+<td><code>BADGEAPP_ANNOUNCE_GC_CHECK</code></td>
+<td>unset</td>
+<td>If set, log every memory check</td>
+</tr>
+</tbody></table>
+
+<p><strong>Example - frequent compaction for testing with allocation tracing:</strong></p>
+<pre><code>BADGEAPP_MEMORY_COMPACTOR_MB=200 BADGEAPP_SLEEP_AFTER_COMPACT=180 BADGEAPP_TRACE_ALLOCATIONS=true rails s -p 3000
+</code></pre>
+<p><strong>Diagnostic output in logs:</strong></p>
+<pre><code>GC.compact - String size distribution: {"0-100"=>500000, "101-1K"=>50000, ...}
+GC.compact - Frozen strings: 400000 (200MB)
+GC.compact - Unfrozen strings: 150000 (150MB)
+GC.compact - String delta since last: count +5000, bytes +2000000
+GC.compact - Cache entries: 500, size: 50000000, max: 134217728
+</code></pre>
+<h3>2. Memory Stress Test Script</h3>
+
+<p><code>script/memory_stress_test.rb</code> - Sends repeated GET requests to simulate
+production traffic. Supports both iteration-based and duration-based modes.</p>
+
+<p><strong>Usage:</strong></p>
+<pre><code>script/memory_stress_test.rb [options] [iterations] [base_url]
+</code></pre>
+<p><strong>Options:</strong></p>
+
+<table><thead>
+<tr>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>--duration DURATION</code></td>
+<td>Run for specified duration (e.g., <code>30s</code>, <code>10m</code>, <code>6h</code>, <code>1d</code>)</td>
+</tr>
+<tr>
+<td><code>--shuffle</code></td>
+<td>Randomize path order (recommended for realistic traffic)</td>
+</tr>
+<tr>
+<td><code>--no-shuffle</code></td>
+<td>Use sequential path order</td>
+</tr>
+<tr>
+<td><code>--report-interval N</code></td>
+<td>Report progress every N requests (default: 100)</td>
+</tr>
+</tbody></table>
+
+<p><strong>Path sources (in order):</strong></p>
+
+<ol>
+<li>Files matching <code>requested-paths-*.txt</code> in project root (real production
+paths, one per line)</li>
+<li>Generated paths cycling through projects and sections</li>
+</ol>
+
+<p><strong>Examples:</strong></p>
+<pre><code># Iteration-based (original behavior)
+script/memory_stress_test.rb 5000 http://localhost:3000
+
+# Duration-based with shuffling (most realistic)
+script/memory_stress_test.rb --duration 6h --shuffle
+
+# Quick 10-minute test
+script/memory_stress_test.rb --duration 10m
+
+# More frequent reporting
+script/memory_stress_test.rb --duration 6h --report-interval 50
+</code></pre>
+<p><strong>Output shows:</strong></p>
+
+<ul>
+<li>Progress with memory readings at report intervals</li>
+<li>Source indicator (FILE or GEN) for each path</li>
+<li>Hourly summaries for long-duration runs</li>
+<li>Final summary with memory growth statistics</li>
+<li>Press Ctrl+C for graceful shutdown with summary</li>
+</ul>
+
+<h3>3. Memory Monitor Script</h3>
+
+<p><code>script/monitor_memory.rb</code> - Monitors Rails server process memory in
+real-time.</p>
+
+<p><strong>Usage:</strong></p>
+<pre><code>script/monitor_memory.rb [pid] [interval_seconds]
+</code></pre>
+<p>If PID is not provided, attempts to auto-detect Rails/Puma process.</p>
+
+<p><strong>Example:</strong></p>
+<pre><code># Monitor with 5-second intervals (auto-detect PID)
+script/monitor_memory.rb
+
+# Monitor specific PID with 10-second intervals
+script/monitor_memory.rb 12345 10
+</code></pre>
+<p><strong>Output shows:</strong></p>
+
+<ul>
+<li>RSS and swap memory usage</li>
+<li>Delta from previous reading</li>
+<li>Growth rate summary on exit (Ctrl+C)</li>
+</ul>
+
+<h2>Running a Long-Duration Stress Test (6 Hours)</h2>
+
+<p>For thorough memory leak investigation, run a 6-hour stress test to
+capture long-term memory behavior and multiple GC compaction cycles.</p>
+
+<h3>Step 1: Prepare the Environment</h3>
+
+<p>Ensure path files exist for realistic traffic:</p>
+<pre><code>ls requested-paths-*.txt
+</code></pre>
+<p>Clear old logs:</p>
+<pre><code>rm -f log/development.log
+</code></pre>
+<h3>Step 2: Start the Rails Server</h3>
+
+<p>Use a lower memory threshold for more frequent diagnostic output:</p>
+<pre><code>BADGEAPP_MEMORY_COMPACTOR_MB=300 BADGEAPP_SLEEP_AFTER_COMPACT=600 rails s -p 3000
+</code></pre>
+<p>This triggers GC.compact diagnostics more frequently (every ~300MB growth
+instead of 1GB).</p>
+
+<h3>Step 3: Start Memory Monitoring (Terminal 2)</h3>
+
+<p>Optional but recommended for real-time visibility:</p>
+<pre><code>script/monitor_memory.rb
+</code></pre>
+<h3>Step 4: Run the 6-Hour Stress Test (Terminal 3)</h3>
+<pre><code>script/memory_stress_test.rb --duration 6h --shuffle http://localhost:3000
+</code></pre>
+<p>The script will:</p>
+
+<ul>
+<li>Cycle through production paths from <code>requested-paths-*.txt</code> files</li>
+<li>Reshuffle paths when all have been used</li>
+<li>Print progress every 100 requests</li>
+<li>Print hourly summaries with memory growth trends</li>
+<li>Handle Ctrl+C gracefully with a final summary</li>
+</ul>
+
+<h3>Step 5: Monitor Progress</h3>
+
+<p>During the test, you can check GC.compact diagnostics in another terminal:</p>
+<pre><code># View recent diagnostic output
+grep 'GC\.compact' log/development.log | tail -50
+
+# Watch diagnostics in real-time
+tail -f log/development.log | grep 'GC\.compact'
+</code></pre>
+<h3>Step 6: Analyze Results</h3>
+
+<p>After the test completes (or after Ctrl+C), analyze the output for:</p>
+
+<ol>
+<li><strong>Memory growth trends</strong> - Is memory stabilizing or continuously growing?</li>
+<li><strong>String count/bytes delta</strong> - Are strings accumulating between compactions?</li>
+<li><strong>pages_freed values</strong> - Should be &gt; 0; consistently 0 indicates fragmentation</li>
+<li><strong>Large string previews</strong> - What content is being retained?</li>
+<li><strong>Hourly summaries</strong> - Is the growth rate accelerating, stable, or declining?</li>
+</ol>
+
+<h2>Interpreting Results</h2>
+
+<h3>Normal Behavior</h3>
+
+<ul>
+<li>Memory grows during warmup, then stabilizes</li>
+<li>GC.compact reports <code>pages_freed &gt; 0</code></li>
+<li>String counts fluctuate but don&#39;t trend upward</li>
+</ul>
+
+<h3>Potential Leak Indicators</h3>
+
+<ul>
+<li>Memory grows continuously without stabilizing</li>
+<li><code>pages_freed: 0</code> consistently</li>
+<li>String counts or bytes trend upward between compactions</li>
+<li>Large unfrozen strings accumulating</li>
+<li>Cache size approaching or exceeding max</li>
+</ul>
+
+<h2>Related Files</h2>
+
+<ul>
+<li><code>lib/gc_compact_thread.rb</code> - GC compaction and diagnostics</li>
+<li><code>config/initializers/gc_compact_thread.rb</code> - Thread startup</li>
+<li><code>script/memory_stress_test.rb</code> - Load testing script</li>
+<li><code>script/monitor_memory.rb</code> - Memory monitoring script</li>
+</ul>
+
+<h2>Investigation Results (January 2026)</h2>
+
+<h3>Diagnosis: Ruby Heap Fragmentation (NOT a Memory Leak)</h3>
+
+<p>After running 6-hour stress tests while using the default memory allocator
+(glibc), the diagnosis is clear: the memory growth
+is <strong>Ruby heap fragmentation</strong>, not a memory leak.</p>
+
+<h3>Evidence</h3>
+
+<table><thead>
+<tr>
+<th>Metric</th>
+<th>Start</th>
+<th>End (under load)</th>
+<th>After load stopped</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>RSS Memory</td>
+<td>314 MB</td>
+<td>917.5 MB</td>
+<td>Stable at ~917 MB</td>
+</tr>
+<tr>
+<td>String Count</td>
+<td>~218K</td>
+<td>~565K</td>
+<td>Stable at ~565K</td>
+</tr>
+<tr>
+<td>String Bytes</td>
+<td>36 MB</td>
+<td>261 MB</td>
+<td>Stable at 261 MB</td>
+</tr>
+<tr>
+<td>pages_freed</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody></table>
+
+<p><strong>Key observations:</strong></p>
+
+<ol>
+<li><strong>Memory use triggered by requests</strong> - String counts stabilized
+when load stopped.</li>
+<li><strong>Memory pages are NOT freed</strong> - <code>pages_freed: 0</code> consistently means Ruby
+cannot return heap pages to the OS.</li>
+<li><strong>Not markdown processor-specific</strong> - Problem occurs with
+both commonmarker and redcarpet processors.</li>
+</ol>
+
+<h3>Root Cause</h3>
+
+<p>Ruby&#39;s memory management causes fragmentation in long-running processes:</p>
+
+<ol>
+<li>Short-lived strings (response bodies ~200KB) share heap pages with
+long-lived strings (I18n translations, cached fragments, compiled templates)</li>
+<li>When short-lived strings are collected, they leave &quot;holes&quot; on pages</li>
+<li>Pages cannot be returned to OS because surviving objects are scattered</li>
+<li>Under high load, allocation rate exceeds collection rate, forcing heap
+expansion</li>
+<li>Once expanded, heap pages stay allocated even when mostly empty</li>
+</ol>
+
+<p><strong>This is expected Ruby behavior, not a bug in this application.</strong></p>
+
+<h3>Solution: mimalloc Memory Allocator</h3>
+
+<p>We tested <strong>mimalloc</strong> as an alternative to glibc malloc.
+Mimalloc is an allocator specifically designed for language that use
+reference counted objects (like Lean, Python, and Ruby).</p>
+
+<p>Results show significant improvement:</p>
+
+<table><thead>
+<tr>
+<th>Metric</th>
+<th>glibc malloc</th>
+<th>mimalloc</th>
+<th>Improvement</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Final RSS</td>
+<td>917.5 MB</td>
+<td>714.6 MB</td>
+<td><strong>-203 MB (22% lower)</strong></td>
+</tr>
+<tr>
+<td>Memory Growth</td>
+<td>603 MB</td>
+<td>405 MB</td>
+<td><strong>-198 MB (33% less)</strong></td>
+</tr>
+<tr>
+<td>Final String Count</td>
+<td>~565K</td>
+<td>~534K</td>
+<td>-31K (5.5% fewer)</td>
+</tr>
+<tr>
+<td>Final String Bytes</td>
+<td>261 MB</td>
+<td>215 MB</td>
+<td>-46 MB (18% less)</td>
+</tr>
+</tbody></table>
+
+<p><strong>Why mimalloc instead of jemalloc?</strong></p>
+
+<p>The jemalloc allocator is often recommended for Rails applications.
+However, the jemalloc allocator has been archived on GitHub, and it appears
+all jemalloc work has ceased. They mentioned mimalloc as an alternative.</p>
+
+<p><strong>mimalloc</strong> (Microsoft&#39;s memory allocator) is:</p>
+
+<ul>
+<li>Actively maintained</li>
+<li>Available on Ubuntu 24 as a standard system package as <code>libmimalloc2.0</code></li>
+<li>Designed for better performance and reduced fragmentation, especially
+for systems that use reference counting (like Lean, Python, and Ruby).</li>
+<li>Drop-in replacement via <code>LD_PRELOAD</code></li>
+</ul>
+
+<h3>Testing mimalloc Locally</h3>
+
+<p>After <code>apt install libmimalloc2.0</code> we can test using mimalloc with:</p>
+<pre><code>sudo apt install libmimalloc2.0
+LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libmimalloc.so.2.1 rails s
+</code></pre>
+<h3>Other Optimizations Considered</h3>
+
+<p>The application already has significant optimizations:</p>
+
+<ul>
+<li><strong>Markdown processing</strong> - Regex shortcuts skip processor ~90% of the time</li>
+<li><strong>Fragment caching</strong> - 3 cache levels per criterion</li>
+<li><strong>Cache bounded</strong> - 128 MB limit prevents unbounded growth</li>
+<li><strong>Frozen string literals</strong> - Enabled project-wide</li>
+<li><strong>MALLOC_ARENA_MAX=2</strong> - Set in production per Heroku recommendation</li>
+</ul>
+
+<p>No other easy wins were identified. The remaining memory growth is inherent
+to Rails request processing (template rendering, response assembly,
+ActiveRecord operations).</p>
+  </body>
+  </html>

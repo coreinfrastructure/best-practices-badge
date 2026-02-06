@@ -1,0 +1,3 @@
+#!/bin/sh
+
+heroku addons:open papertrail --app production-bestpractices

@@ -1,0 +1,33 @@
+  <!DOCTYPE html>
+  <html>
+  <head>
+  <title>docs/badge-vs-scorecards.md</title>
+  </head>
+  <body>
+<h1>Best Practices Badge vs. Scorecards</h1>
+
+<p>The OpenSSF has several different systems for evaluating the
+security of open source software (OSS),
+including <a href="https://github.com/ossf/scorecard">OpenSSF Scorecards</a>
+and the OpenSSF Best Practices badge.
+Both have their value; Scorecards even includes
+the OpenSSF Best Practices Badge as one of its information sources.</p>
+
+<p>Here is a quick comparison between them, so you can understand their role:</p>
+
+<ul>
+<li>Scorecards - This is <em>entirely</em> automated.
+
+<ul>
+<li>Pros: You can evaluate <em>any</em> OSS project with it, immediately.</li>
+<li>Cons: It focuses on what can be automatically measured (not necessarily what&#39;s important, many of its automated measures don&#39;t detect many situations (e.g., its SAST tool detector won&#39;t notice many SAST tools), and it currently only works on projects primarily hosted on GitHub (many OSS projects aren&#39;t). Note that the best practices badge value is one of the scorecard values.</li>
+</ul></li>
+<li>Best practices badge - this requires projects to fill in a form.
+
+<ul>
+<li>Pros: It tries to focus on what&#39;s important (not what&#39;s easily automated); it can handle arbitrary situations &amp; hosting platforms.</li>
+<li>Cons: It requires projects to work with it (instead of just happening automatically) so you won&#39;t get results for many OSS projects.</li>
+</ul></li>
+</ul>
+  </body>
+  </html>

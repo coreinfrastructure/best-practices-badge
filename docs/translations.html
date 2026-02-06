@@ -1,0 +1,252 @@
+  <!DOCTYPE html>
+  <html>
+  <head>
+  <title>docs/translations.md</title>
+  </head>
+  <body>
+<h1>Translations</h1>
+
+<p>This document describes how translations are managed for the
+OpenSSF Best Practices Badge application.</p>
+
+<h2>Overview</h2>
+
+<p>The application supports multiple languages. English (<code>en</code>) is the source
+language, with translations available for (sorted in English alphabetic order):</p>
+
+<ul>
+<li>Chinese Simplified (<code>zh-CN</code>)</li>
+<li>French (<code>fr</code>)</li>
+<li>German (<code>de</code>)</li>
+<li>Japanese (<code>ja</code>)</li>
+<li>Portuguese Brazilian (<code>pt-BR</code>)</li>
+<li>Russian (<code>ru</code>)</li>
+<li>Spanish (<code>es</code>)</li>
+<li>Swahili (<code>sw</code>)</li>
+</ul>
+
+<p>Other natural languages can be added.</p>
+
+<p>Translations come from two sources:</p>
+
+<ol>
+<li><strong>Human translations</strong> - Primary source, provided via translation.io</li>
+<li><strong>Machine translations</strong> - Fill gaps where human translations don&#39;t exist</li>
+</ol>
+
+<p>Current human translations always take precedence over machine translations.</p>
+
+<h2>Human Translations</h2>
+
+<p>Human translations are managed through <a href="https://translation.io">translation.io</a>.
+Translators use the translation.io web interface to provide translations.</p>
+
+<p><strong>Files:</strong></p>
+
+<ul>
+<li><code>config/locales/en.yml</code> - English source text</li>
+<li><code>config/locales/translation.*.yml</code> - Human translations from translation.io</li>
+</ul>
+
+<p><strong>Syncing translations:</strong></p>
+<pre><code>rake translation:sync
+</code></pre>
+<p>This sends updated English text to translation.io and retrieves
+any new human translations.</p>
+
+<h2>Machine Translations</h2>
+
+<p>Machine translations provide fallback text when human translations
+aren&#39;t available. They&#39;re stored separately and automatically
+overridden when humans provide translations.</p>
+
+<p><strong>Files:</strong></p>
+
+<ul>
+<li><code>config/machine_translations/*.yml</code> - Machine-translated text</li>
+<li><code>config/machine_translations/src_en_*.yml</code> - Source tracking files</li>
+</ul>
+
+<p><strong>Source Tracking:</strong></p>
+
+<p>The <code>src_en_*.yml</code> files track the English text that was used to create
+each machine translation. When English source text changes, the system
+automatically detects this and marks those translations for re-translation.
+These files must be committed to the repository.</p>
+
+<p>Example:</p>
+
+<ul>
+<li><code>config/machine_translations/fr.yml</code> - French translations</li>
+<li><code>config/machine_translations/src_en_fr.yml</code> - English source used for French</li>
+</ul>
+
+<p>If a key in <code>en.yml</code> changes but the tracked source in <code>src_en_fr.yml</code>
+is different, the system knows the French translation is stale and needs
+updating. Human translations always take precedence and are never
+automatically invalidated.</p>
+
+<h3>Example-Based Translation</h3>
+
+<p>When automated translation is performed using Copilot, the system
+automatically provides example translations to help maintain consistent
+terminology across the application.</p>
+
+<p><strong>How It Works:</strong></p>
+
+<ol>
+<li><p><strong>Term Extraction</strong>: The system identifies technical terms in the text
+to be translated:</p>
+
+<ul>
+<li>Acronyms (MFA, CI/CD, VCS)</li>
+<li>Proper nouns (GitHub, OpenSSF, Scorecard)</li>
+<li>Technical compounds (multi-factor, version-control)</li>
+<li>Long technical words (authentication, vulnerability)</li>
+</ul></li>
+<li><p><strong>Example Selection</strong>: For each identified term, the system finds existing
+human translations containing that term and includes them as examples
+(limited to 15 examples to avoid overwhelming the AI).</p></li>
+<li><p><strong>Example Files</strong>: Creates two example YAML files:</p>
+
+<ul>
+<li><code>copilot_examples_en_*.yml</code> - English source with technical terms</li>
+<li><code>copilot_examples_{locale}_*.yml</code> - How those terms were previously translated</li>
+</ul></li>
+<li><p><strong>Prompt Integration</strong>: The translation prompt instructs the AI to review
+these examples and use the same translations for the same terms.</p></li>
+</ol>
+
+<p>This ensures consistency in terminology across the application without
+requiring manual glossary maintenance.</p>
+
+<h3>How Precedence Works</h3>
+
+<p>Rails I18n loads translation files in order, with later files overriding
+earlier ones. Machine translations are loaded first, then human translations,
+so human translations always win:</p>
+
+<ol>
+<li>Load <code>config/machine_translations/*.yml</code> (machine translations)</li>
+<li>Load <code>config/locales/*.yml</code> (human translations override)</li>
+</ol>
+
+<h3>Rake Tasks</h3>
+
+<h4>Show translation status</h4>
+<pre><code>rake translation:status
+</code></pre>
+<p>Shows how many keys have human translations, machine translations,
+or are missing for each locale.</p>
+
+<h4>Export keys for translation</h4>
+<pre><code>rake translation:export[LOCALE,COUNT]
+</code></pre>
+<p>Exports untranslated keys to a YAML file for translation.</p>
+
+<p>Examples:</p>
+<pre><code>rake translation:export[fr,50]      # Export 50 French keys
+rake translation:export[de,100]     # Export 100 German keys
+rake translation:export             # Export 50 keys for next priority locale
+</code></pre>
+<p>The exported file is saved to <code>tmp/translate_to_LOCALE_TIMESTAMP.yml</code>.</p>
+
+<h4>Import translated file</h4>
+<pre><code>rake translation:import[LOCALE,FILE]
+</code></pre>
+<p>Imports a translated YAML file into machine translations.</p>
+
+<p><strong>Key Validation:</strong> The import process validates that all keys in the
+translated file exist in the English source. Any unexpected keys
+(e.g., hallucinated keys from AI translation) are automatically removed
+and logged. Missing keys are acceptable (translator may skip some).</p>
+
+<p>Example:</p>
+<pre><code>rake translation:import[fr,tmp/translate_to_fr_20240101_120000.yml]
+</code></pre>
+<h4>Clean up machine translations</h4>
+<pre><code>rake translation:cleanup
+</code></pre>
+<p>Removes machine translations for keys that now have human translations.
+Run this periodically after <code>rake translation:sync</code>.</p>
+
+<h4>List untranslated keys</h4>
+<pre><code>rake translation:untranslated[LOCALE]
+</code></pre>
+<p>Lists keys that need translation for a specific locale.</p>
+
+<h3>Translation Workflow</h3>
+
+<ol>
+<li><strong>Export</strong> keys needing translation:</li>
+</ol>
+<pre><code>   rake translation:export[fr,50]
+</code></pre>
+<ol>
+<li><p><strong>Translate</strong> the exported YAML file using any tool:</p>
+
+<ul>
+<li>GitHub Copilot</li>
+<li>ChatGPT or other LLMs</li>
+<li>Human translator</li>
+<li>Any translation service</li>
+</ul></li>
+<li><p><strong>Review</strong> the translations for accuracy</p></li>
+<li><p><strong>Import</strong> the translated file:</p></li>
+</ol>
+<pre><code>   rake translation:import[fr,tmp/translate_to_fr_20240101_120000.yml]
+</code></pre>
+<ol>
+<li><strong>Commit</strong> the updated machine translation files</li>
+</ol>
+
+<h3>Translation Guidelines</h3>
+
+<p>When translating:</p>
+
+<ul>
+<li>Only translate VALUES, never the keys</li>
+<li>Keep template variables like <code>%{name}</code> unchanged</li>
+<li>Keep HTML tags like <code>&lt;a href=&quot;...&quot;&gt;</code> unchanged</li>
+<li>Change <code>/en/</code> paths to the target locale (e.g., <code>/fr/</code>)</li>
+<li>Preserve YAML formatting and indentation</li>
+</ul>
+
+<h3>Priority Order</h3>
+
+<p>Machine translations are processed in this priority order:</p>
+
+<ol>
+<li>French (fr) - reviewer can verify to a limited extent</li>
+<li>German (de) - reviewer can verify to a very limited extent</li>
+<li>Japanese (ja)</li>
+<li>Chinese Simplified (zh-CN)</li>
+<li>Portuguese Brazilian (pt-BR)</li>
+<li>Spanish (es)</li>
+<li>Russian (ru)</li>
+<li>Swahili (sw) - lowest priority, limited LLM support</li>
+</ol>
+
+<h2>Automatically translating</h2>
+
+<p>Run <code>translation:copilot</code> to automatically call GitHub pilot to
+perform translations of what needs translating and add them.
+When run, copilot only has read/write access to a <code>tmp</code> directory.</p>
+
+<p>The plan is to repeatedly run this as a cron job to slowly fill in
+translations <em>without</em> significantly burdening the AI system.</p>
+
+<h2>Adding a New Language</h2>
+
+<p>To add support for a new language:</p>
+
+<ol>
+<li>Add the locale to <code>config/initializers/i18n.rb</code></li>
+<li>Create <code>config/locales/localization.LOCALE.yml</code> with locale-specific
+settings (date formats, etc.)</li>
+<li>Add the locale to translation.io</li>
+<li>Run <code>rake translation:sync</code></li>
+<li>Optionally create machine translations to fill gaps</li>
+</ol>
+  </body>
+  </html>

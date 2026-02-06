@@ -1,0 +1,1492 @@
+  <!DOCTYPE html>
+  <html>
+  <head>
+  <title>docs/implementation.md</title>
+  </head>
+  <body>
+<h1>Implementation</h1>
+
+<!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
+
+<p>We have implemented a simple web application called &quot;BadgeApp&quot; that
+quickly captures self-assertion data, evaluates criteria automatically
+when it can, and provides badge information.
+Our emphasis is on keeping the program relatively <em>simple</em>.</p>
+
+<p>This file provides information on how it&#39;s implemented, in the hopes that
+it will help people make improvements.
+Many of these sections are notes on how to repeat some task in the future,
+or notes that may help future changes.
+This document is named &quot;implementation&quot;, but it also covers verification
+issues (including testing).</p>
+
+<p>See also <a href="../requirements.html">requirements.md</a> and <a href="../design.html">design.md</a>.
+See <a href="../CONTRIBUTING.html">CONTRIBUTING.md</a> for information on how to
+contribute to this project, and <a href="INSTALL.html">INSTALL.md</a> for information
+on both how to install this software (e.g., for development) and a
+&quot;quick start&quot; guide to getting something to happen.</p>
+
+<p>If you have the privilege to access the production database directly,
+or any copy of it, be especially careful about protecting it.
+We want to ensure we comply with various laws about user privacy,
+including the EU General Data Protection Regulation (GDPR).</p>
+
+<p>In this document we&#39;ll use the term &quot;open source software&quot; (OSS),
+and treat Free/Libre and Open Source Software (FLOSS) as a synonym.</p>
+
+<h2>Running locally</h2>
+
+<p>Once your development environment is ready, you can run the application with:</p>
+<pre><code>rails s
+</code></pre>
+<p>This will automatically set up what it needs to, and then run the
+web application.
+You can press control-C at any time to stop it.</p>
+
+<p>Then point your web browser at &quot;localhost:3000&quot;.</p>
+
+<h2>Environment variables</h2>
+
+<p>The application is configured by various environment variables:</p>
+
+<ul>
+<li>SYSTEM_ANNOUNCEMENT and SYSTEM_ANNOUNCEMENT_locale : Show these
+system-wide announcements (e.g., to announce a soon-to-occur shutdown)</li>
+<li>PUBLIC_HOSTNAME (default &#39;localhost&#39;)</li>
+<li>RACK_TIMEOUT_SERVICE_TIMEOUT : Seconds before timeout. Default 15,
+30 recommended. See gem &quot;rack-timeout&quot; documentation.</li>
+<li>BADGEAPP_MAX_REMINDERS (default 2): Number of email reminders to send
+to inactive projects when running &quot;rake reminders&quot;.
+This rate limit is best set low to start,
+and relatively low afterwards, to limit impact if there&#39;s an error.</li>
+<li>LOST_PASSING_REMINDER (default 30): Minimum number of days since
+last lost a badge before sending reminder</li>
+<li>LAST_UPDATED_REMINDER (default 30): Minimum number of days
+since project last updated before sending reminder</li>
+<li>LAST_SENT_REMINDER (default 60): Minimum number of days since
+project was last sent a reminder</li>
+<li>RAILS_ENV (default &#39;development&#39;): Rails environment, one of
+&#39;test&#39;, &#39;development&#39;, &#39;fake_production&#39;, and &#39;production&#39;.
+The main/master, staging, and production systems set this to &#39;production&#39;,
+because we want our final test systems to be as
+&quot;most like the real production system as practical&quot;.
+See the discussion below about fake_production.</li>
+<li>BADGEAPP_REAL_PRODUCTION: Has a non-empty value (conventionally &quot;true&quot;) if
+this is the <em>true</em> production system. If not present, we show the user a
+warning that this isn&#39;t the production system.</li>
+<li>BADGEAPP_DAY_FOR_MONTHLY: Day of the month to monthly activities, e.g.,
+send out monthly reminders.  Default 5.  Set to 0 to disable monthly acts.</li>
+<li>BADGEAPP_FROM: Email address to send email from.</li>
+<li>FASTLY_CLIENT_IP_REQUIRED: If present, download the Fastly list of
+client IPs, and only let those IPs make requests.  Enabling this
+counters cloud piercing.  This isn&#39;t on by default, but the environment
+variables are set on our tiers.</li>
+<li>DB_POOL: Set the number of connections the app can hold to the database.
+This is important for performance on Heroku; see:
+<a href="https://devcenter.heroku.com/articles/concurrency-and-database-connections">https://devcenter.heroku.com/articles/concurrency-and-database-connections</a>.
+If unset, defaults to RAILS_MAX_THREADS + 1 for this app,
+because in addition to every web thread we occasionally fire a task to
+process occasional requests (such as the daily task).
+If RAILS_MAX_THREADS is not set, presume it is 5.</li>
+<li>RAILS_LOG_LEVEL: Rails log level used when RAILS_ENV is either
+&quot;production&quot; or &quot;fake_production&quot;. Plausible values are
+&quot;debug&quot;, &quot;info&quot;, and &quot;warn&quot;. Default is &quot;info&quot;. See:
+<a href="http://guides.rubyonrails.org/debugging_rails_applications.html">http://guides.rubyonrails.org/debugging_rails_applications.html</a></li>
+<li>EMAIL_ENCRYPTION_KEY: Key to decrypt the stored user email addresses.
+Hexadecimal string, must be 64 hex digits (==32 bytes==256 bits).
+Used by aes-256-gcm (256-bit AES in GCM mode).</li>
+<li>EMAIL_BLIND_INDEX_KEY: Key for blind index created for user email addresses
+(used by PBKDF2-HMAC-SHA256).  Must be 64 hex digits (==32 bytes==256 bits).</li>
+<li>BADGEAPP_BADPWKEY: Key used for additional protection for passwords
+when checking the bad password database. The list of bad passwords
+is converted by HMAC (using SHA-512 and this key) before being stored in
+the database, and the same happens to passwords before the database is
+asked to compare them. We recommend setting this to a cryptographically
+random 512-bit value; you can get that with <code>openssl rand -hex 128</code> or
+similar. Then run <code>rake update_bad_password_db</code> to load the database
+with the bad password list (it will take a few minutes to load them all).</li>
+<li>BADGEAPP_DENY_LOGIN: If a non-blank value is set (&quot;true&quot; is recommended),
+then no on can log in, no one can create a new account (sign up),
+and no one can do anything that requires being logged (users are always
+treated as if they are not logged in).
+This essentially prevents ANY changes by users (daily statistics
+creates are unaffected).
+From a security POV this is enforced by SessionsController#create (login),
+UsersController#create (create new user/sign up), and
+SessionsHelper#current_user (determine who current logged-in user is).
+Some views disable the login and sign-in display, so that it&#39;s more
+obvious to user what is going on.
+This may be a useful mode to enable if there is a serious exploitable
+security vulnerability, that can only be exploited by users who are
+logged in or can appear to log in.  Unlike <em>completely</em> disabling the
+site, this mode allows people to see current information
+(such as badge status, project data, and public user data).
+Note that application admins cannot log in, or use their privileges,
+when this mode is enabled.  Only hosting site admins can turn this mode
+on or off (since they&#39;re the only ones who can set environment variables).</li>
+<li><p>RATE_details - a rate limit setting.  Rate limits provide an automated
+partial countermeasure against denial-of-service and
+password-guessing attacks.
+These are implemented by Rack::Attack and have two parts, a
+&quot;LIMIT&quot; (maximum count) and a &quot;PERIOD&quot; (length of period of time,
+in seconds, where that limit is not to be exceeded).
+If unspecified they have the default values specified in
+config/initializers/rack_attack.rb.  These settings are
+(where &quot;IP&quot; or &quot;ip&quot; means &quot;client IP address&quot;, and &quot;req&quot; means &quot;requests&quot;):</p>
+
+<ul>
+<li>req/ip: RATE_REQ_IP_LIMIT, RATE_REQ_IP_PERIOD</li>
+<li>logins/ip: RATE_LOGINS_IP_LIMIT, RATE_LOGINS_IP_PERIOD</li>
+<li>logins/email: RATE_LOGINS_EMAIL_LIMIT, RATE_LOGINS_EMAIL_PERIOD</li>
+<li>signup/ip: RATE_SIGNUP_IP_LIMIT, RATE_SIGNUP_IP_PERIOD</li>
+</ul></li>
+<li><p>FAIL2BAN_details - fail2ban settings (where repeated failures can lead
+to a temporary ban).  This blocks an IP address that is
+repeatedly making suspicious requests.
+After FAIL2BAN_MAXRETRY blocked requests in FAIL2BAN_FINDTIME seconds,
+we block all requests from that client IP for FAIL2BAN_BANTIME seconds.
+A request is blocked if req.path matches the regex FAIL2BAN_PATH.
+The source code includes some plausible defaults in
+&quot;config/initializers/rack_attack.rb&quot;; the production settings
+are not public.  This isn&#39;t the same thing as having a <em>real</em>
+web application firewall, but it&#39;s simple and counters some
+trivial attacks.  This should be coordinated with robots.txt so that
+robots won&#39;t be fooled into following a link to a banned page.</p></li>
+<li><p><code>LOCAL_LOGIN_COOLOFF_TIME</code> : Time (in seconds) after creating a local
+account before login is permitted. This is an anti-spam measure.</p></li>
+<li><p><code>BADGE_CACHE_MAX_AGE</code> : Time (in seconds) badges are cached by the CDN.
+Default 864000 (10 days). Browsers will check the CDN every time it
+wants to serve a badge image. We purge badges every time their
+corresponding project entries are changed.
+NOTE: If a user <em>directly</em> views the BadgeApp project entry on our website
+(instead of just requesting the badge image) AND the project entry has
+recently changed, we DO NOT display the &quot;normal&quot; badge image. Instead,
+when showing a project entry that&#39;s recently changed, we embed
+a static image that corresponds to the project&#39;s <em>current</em> status. That way
+we always show the current project status, even if it just changed.
+This eliminates the race conditions caused because it takes time for
+the CDN to distribute updated badge data to all its servers.</p></li>
+<li><p><code>BADGE_CACHE_STALE_AGE</code> : Time (in seconds) badges are served by the CDN
+if it can&#39;t get a new value from us.
+Default 8640000 (100 days), is forced to be at least 2x<code>BADGE_CACHE_MAX_AGE</code></p></li>
+<li><p><code>BADGEAPP_SEND_EMAIL_*</code>: Various environment variables that configure how the
+BadgeApp sends email to an email server (a kind of Mail Transfer Agent (MTA))
+that will then be sent on to others. See <code>config/environments/production.rb</code>.</p></li>
+<li><p><code>BADGEAPP_SEND_EMAIL_ADDRESS</code>: The domain of the MTA to send email to, e.g.,
+<code>smtp.sendgrid.net</code>. Note that this is NOT the email address of the
+<em>sender</em> but the domain of the remote mail server (the MTA) that will be
+<em>receiving</em> the email and then send it on.</p></li>
+<li><p><code>BADGEAPP_SEND_EMAIL_PORT</code>: Port of the MTA. Use one that forces TLS or
+or modify the config file.</p></li>
+<li><p><code>BADGEAPP_SEND_EMAIL_USERNAME</code>: Username for logging into the MTA</p></li>
+<li><p><code>BADGEAPP_SEND_EMAIL_PASSWORD</code>: Password for logging into the MTA</p></li>
+<li><p><code>BADGEAPP_SEND_EMAIL_DOMAIN</code>: Domain to report to the MTA (for HELO)</p></li>
+<li><p><code>SENDGRID_USERNAME</code> and <code>SENDGRID_PASSWORD</code>: These were once used for sending email,
+but these are <em>not</em> used any more.</p></li>
+<li><p><code>SOLID_QUEUE_IN_PUMA</code>: If set (recommended value is <code>true</code>), the ActiveJob
+backend <code>solid_queue</code> is used. Should be set in staging and in production.</p></li>
+</ul>
+
+<p>You can make cryptographically random values (such as keys)
+using &quot;rails secret&quot;.  E.g., to create 64 random hexadecimal digits, use:</p>
+
+<blockquote>
+<p>rails secret &#124; head -c64 ; echo</p>
+</blockquote>
+
+<p>This can be set on Heroku.  For example, to change the maximum number
+of email reminders to inactive projects on production-bestpractices:</p>
+<pre><code>heroku config:set --app production-bestpractices BADGEAPP_MAX_REMINDERS=5
+</code></pre>
+<p>On Heroku, using config:set to set a value will automatically restart the
+application (causing it to take effect).</p>
+
+<p>The TZ (timezone) environment variable is set to &quot;:/usr/share/zoneinfo/UTC&quot;
+on all tiers.  We want all logging to be done in UTC (because then moving
+the servers has no affect on logs).  Using leading-colon helps performance
+on many systems, especially many Rails systems (because it skips
+many system calls), and it&#39;s easy enough to do.  More information is at
+<a href="https://blog.packagecloud.io/eng/2017/02/21/set-environment-variable-save-thousands-of-system-calls/">How setting the TZ environment variable avoids thousands of system calls</a>.
+This was implemented with:</p>
+<pre><code>heroku config:set --app production-bestpractices TZ=:/usr/share/zoneinfo/UTC
+</code></pre>
+<h2>Searching user names and emails (for GDPR Requests)</h2>
+
+<p>We have a simple ability for system admins to search for user names
+and user emails, primarily to support GDPR Requests.
+Use as follows:</p>
+<pre><code>    heroku run --app production-bestpractices rake search_user -- 'NAME' 'EMAIL'
+    heroku run --app production-bestpractices rake search_name -- 'NAME'
+    heroku run --app production-bestpractices rake search_email -- 'EMAIL'
+</code></pre>
+<p>Note that <code>search_user</code> is a shorthand to search for <code>NAME</code> and then for
+<code>EMAIL</code>; this is a common case, so it makes sense to do it at once.
+Both the name and email searches are case-insensitive.</p>
+
+<p>The name search is LIKE search, so it will list all database names that
+contain the searched name. That is, a search for <code>David</code> will list all
+records that include <code>David</code> in the name field. Thus, a name match might
+<em>not</em> be the person being searched for. Our goal is to minimize the chance
+of not detecting someone, but double-check before deleting any matches.</p>
+
+<h2>Security</h2>
+
+<p>See the separate
+<a href="security.html">security</a> document for more about security.</p>
+
+<h2>Adding a logo on the home page</h2>
+
+<p>It&#39;s not hard to add a logo to the home page.
+Put the image in &quot;app/assets/images/project-logos-originals&quot;,
+copy it to &quot;app/assets/images/project-logos&quot; and rescale to 48 pixels high,
+and modify the home page text &quot;app/views/static_pages/home.html.erb&quot;.</p>
+
+<p>Here&#39;s an example of how we got the ZAP logo into the originals
+directory:</p>
+<pre><code>    cd app/assets/images/project-logos-originals
+    wget https://www.owasp.org/images/1/11/Zap128x128.png
+    mv Zap128x128.png ZAP.png
+    git add ZAP.png
+    cp ZAP.png ../project-logos
+</code></pre>
+<p>Here&#39;s how we resized it to the standard height:</p>
+<pre><code>    cd ../project-logos
+    mogrify -geometry x48 ZAP.png # Rescale to 48 pixel height
+    optipng ZAP.png # Minimize number of bytes in file
+    git add ZAP.png
+    identify ZAP.png # Report width x height
+</code></pre>
+<p>Modify the home page text &quot;app/views/static_pages/home.html.erb&quot;.
+Be sure to specify both the width and height (as reported by identify),
+otherwise the browser will delay page display until the image loads.</p>
+
+<h2>Changing criteria</h2>
+
+<p>Remember: Changing criteria is special, see
+<a href="governance.html">governance</a> for more.</p>
+
+<p>To modify the text of the criteria, edit these files:</p>
+
+<ul>
+<li>config/locales/en.yml - YAML file that includes criteria and details text</li>
+<li>criteria/criteria.yml - YAML file that includes other criteria information</li>
+</ul>
+
+<p>Note that the file &quot;docs/criteria.md&quot; (which reports the &quot;passing&quot; criteria)
+is a <em>generated</em> file, generated from those files, and is
+automatically regenerated when &quot;rake&quot; is run.
+This generated file is checked into git so that it&#39;s accessible via GitHub.
+The file &quot;docs/other.md&quot; is currently hand-edited; we intend for it to be
+automatically generated in the same way, but that isn&#39;t true at the
+time of this writing.</p>
+
+<p>If you&#39;re adding/removing fields (including criteria), be sure to also edit
+app/views/projects/_form.html.erb
+(to determine where to display it).
+You may also want to edit the README.md file, which includes a summary
+of the criteria.</p>
+
+<p>When adding or removing fields, or when renaming
+a criterion name, you may need to edit the test creator db/seeds.rb file,
+and you will certainly need to create a database migration.
+The &quot;status&quot; (met/unmet) is the criterion name + &quot;_status&quot; stored as a string;
+each criterion also has a name + &quot;_justification&quot; stored as text.
+So every add, remove, or rename of a criterion involves changing
+<em>two</em> fields in the database schema.
+Here are the commands, assuming your current directory is at the top level,
+EDIT is the name of your favorite text editor, and MIGRATION_NAME is the
+logical name you&#39;re giving to the migration (e.g., &quot;add_discussion&quot;).
+By convention, begin a migration name with &#39;add&#39; to add a column and
+&#39;rename&#39; to rename a column:</p>
+<pre><code>    rails generate migration MIGRATION_NAME
+    git add db/migrate/*MIGRATION_NAME.rb
+    $EDITOR db/migrate/*MIGRATION_NAME.rb
+</code></pre>
+<p>Your migration file should look something like this if it adds columns
+(where <code>add_column</code> takes the name of the table, the name of the column,
+the type of the column, and then various options):</p>
+<pre><code>    # frozen_string_literal: true
+    class MIGRATION_NAME < ActiveRecord::Migration
+      def change
+        add_column :projects, :crypto_alternatives_status, :string,
+                   null: false, default: '?'
+        add_column :projects, :crypto_alternatives_justification, :text
+      end
+    end
+</code></pre>
+<p>Similarly, your migration file should look something like this
+if it renames columns:</p>
+<pre><code>    # frozen_string_literal: true
+    class Rename < ActiveRecord::Migration
+      def change
+        rename_column :projects,
+                      :description_sufficient_status,
+                      :description_good_status
+        rename_column :projects,
+                      :description_sufficient_justification,
+                      :description_good_justification
+      end
+    end
+</code></pre>
+<p>In some cases it may be useful to insert SQL commands or do
+other special operations in a migration.
+See the migrations in the db/migrate/ directory for examples.</p>
+
+<p><strong>If your migration will change some percentage calculations</strong>,
+your <code>change</code> operation should <code>touch</code> the file <code>.recalculate</code>, like this:</p>
+<pre><code>    def change
+        # ....
+        touch('.recalculate')
+    end
+</code></pre>
+<p>This <code>touch</code> will cause the CI pipeline deployments to automatically run
+<code>rake update_all_badge_percentages</code> after the migration, and thus
+recalculate projects&#39; percentages.
+(We use <code>touch</code> to communicate these changes because it&#39;s the easiest
+way to implement the communication. It&#39;s more complicated to invoke
+the recalculation directly from the migration, and it&#39;s also more flexible
+to make sure that migrations by <em>themselves</em> don&#39;t directly execute
+the time-consuming process of recalculating all projects.)</p>
+
+<p><strong>If your migration will change some percentage calculations</strong>,
+make <em>sure</em> you run <code>rake production_to_main</code> before merging into <code>main</code>,
+to prevent spurious warnings to projects about them losing badges.</p>
+
+<p>Once you&#39;ve created the migration file, check it first by running
+&quot;rake rubocop&quot;.  This will warn you of some potential issues, and
+it&#39;s much better to fix them early.
+(You can&#39;t run just &quot;rake&quot;, because that invokes &quot;rake test&quot;, and
+the dynamic tests in &quot;rake test&quot; won&#39;t work until you execute
+the migration).</p>
+
+<p>You can migrate by running:</p>
+<pre><code>    rake db:migrate
+</code></pre>
+<p>If it fails, you <em>may</em> need to use &quot;rake db:rollback&quot; to roll it back.</p>
+
+<p>You may also need to modify tests in the tests/ subdirectory, or
+modify the autofill code in the app/lib/ directory.</p>
+
+<p>Be sure to &quot;git add&quot; all new files, including any migration files,
+and then use &quot;git commit&quot; and &quot;git push&quot;.</p>
+
+<p><em>Deploying</em> the update will take some extra steps.
+First of all, if your migration adds a new default value, the migration
+may take a few minutes, so you may want to warn users ahead-of-time.</p>
+
+<p>Once the migration has completed, if the percentage calculations
+may have changed and you forgot to touch <code>.recalculate</code> in the migration,
+you can manually force the recalculations by doing:</p>
+<pre><code>    heroku run --app APP -- rake update_all_badge_percentages
+</code></pre>
+<p>After the site is up and running, if percentagies have been recalculated,
+purge the CDN cache:</p>
+<pre><code>    heroku run --app APP -- rake fastly:purge_all
+</code></pre>
+<h2>Internationalization (i18n) and localization (l10n)</h2>
+
+<p>This application is &quot;internationalized&quot;, that is, it allows
+users to select their locale, and then presents information
+(such as human-readable text) in the selected locale.
+If no locale is indicated, &#39;en&#39; (English) is used.</p>
+
+<p>To learn more about Rails and internationalization, please read the
+<a href="http://guides.rubyonrails.org/i18n.html">Rails Internationalization guide</a>.</p>
+
+<p>We can <em>always</em> use help in localizing (that is, in providing translations
+of text to various locales) - please help!</p>
+
+<p>The directory config/locales/ contains the text for various locales
+in YAML format.
+The en.yml (English) file is the source file, the rest of the locales
+are translations.</p>
+
+<p>Don&#39;t store comments in the en.yml file. The YAML format supports comments,
+but the reformatter we sometimes use removes comments.</p>
+
+<p>Pluralization is tricky in some languages.
+Rails specially handles pluralization when the special field
+&quot;count&quot; is used.  It then looks for keys which
+in the general case can be {zero, one, two, few, many, other}.
+The key &quot;one&quot; isn&#39;t necessarily used for just 1 in a language.
+For more information, see the Unicode plural rules:
+<a href="http://cldr.unicode.org/index/cldr-spec/plural-rules">http://cldr.unicode.org/index/cldr-spec/plural-rules</a>
+<a href="http://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html">http://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html</a>
+We include keys for the forms we don&#39;t use in some languages so that
+translation.io will generate the keys in the translation files.
+If the required keys are missing, an exception may be raised depending
+on the count (this would lead to the inability to display a page).
+Sadly, translation.io ignores empty keys. Thus, we can&#39;t add empty keys
+and leave them untranslated, because then the locales that need the keys
+(like Russian) don&#39;t have the keys they need for translation.</p>
+
+<p>Here is an example, where &quot;few&quot; and &quot;many&quot; are needed for Russian:</p>
+<pre><code>  projects_count:
+    zero: Zero Projects
+    one: "%{count} Project"
+    few: "%{count} Projects"
+    many: "%{count} Projects"
+    other: "%{count} Projects"
+</code></pre>
+<p>The key &quot;misc.in_javascript.show_met_title&quot; includes &quot;&amp;&quot;.
+The &quot;&amp;&quot; is escaped by Rails since it&#39;s not marked as HTML safe.</p>
+
+<p>We include some entries for testing.
+The key &quot;hello&quot; is used in some tests to ensure that we get correct values
+for at least some specific keys.
+The last entry in en.yml is &quot;last_entry&quot;, there for
+test purposes so that we can detect
+some problems in YAML formatting of this file.
+The test suite includes tests that check the value of every string segment
+for every locale, including checking for common errors and ensuring that
+only acceptable HTML tags and attributes are used.
+See <a href="./security.html">security.md</a> for more information.</p>
+
+<h3>Requesting the locale at run-time</h3>
+
+<p>Users indicate the locale via the URL.
+The recommended form is at the beginning of that path, e.g.,
+<a href="https://bestpractices.coreinfrastructure.org/fr/projects/">https://bestpractices.coreinfrastructure.org/fr/projects/</a>
+selects the locale &quot;fr&quot; (French) when displaying &quot;/projects&quot;.
+This even works at the top page, e.g.,
+<a href="https://bestpractices.coreinfrastructure.org/fr/">https://bestpractices.coreinfrastructure.org/fr/</a>.
+It also supports the locale as a query parameter, e.g.,
+<a href="https://bestpractices.coreinfrastructure.org/projects?locale=fr">https://bestpractices.coreinfrastructure.org/projects?locale=fr</a></p>
+
+<h3>Fixing locale data</h3>
+
+<p>Almost all locale-specific data is stored in the &quot;config/locales&quot;
+directory (one file for each locale, named LOCALE.yml). This data is
+automatically loaded by Rails.  A few of the static files are served
+directly, with a separate file for each locale;
+see the &quot;app/views/static_pages&quot; directory.
+If you need to fix a translation, that&#39;s where the data is.</p>
+
+<h3>Adding a new locale</h3>
+
+<p>We use the translation.io to help us translate text; those results
+are later stored in our git repo (so if we stopped using translation.io
+we would not lose our completed translations).</p>
+
+<p>To add a new locale so translation can begin:</p>
+
+<ul>
+<li>Modify file <code>config/initializers/translation.rb</code>
+and edit the assignment of <code>config.target_locales</code> to add
+the new locale. Be sure to use <code>-</code> (dash) and not <code>_</code> (underscore)
+if there&#39;s a territory, e.g., <code>zh-CN</code> and <code>pr-BR</code>.</li>
+<li>Modify file &quot;config/locales/en.yml&quot; and look for <code>locale_name:</code>;
+add the new locale as a key. Its text should be
+&quot;English name of language / Language&#39;s name for itself (LOCALE)&quot;.</li>
+<li>Run &quot;rake translation:sync&quot;.
+The system will now permit translators to request it.
+You probably need to log into translation.io to add invite the
+translators.</li>
+</ul>
+
+<p>Run &quot;rake translation:sync&quot; occasionally to sync the keys
+and get the new translations.  Spotcheck the new translation work.</p>
+
+<p>It&#39;s best if translators prioritize the translations for the front
+page first.  On the left-hand side of the screen, to the right of
+the word &quot;Filters&quot;, is a text box.  Use that to search for the keys
+“static_pages.home.”, “layouts.” and &quot;locale_name.&quot; - and
+translate those.  Once those are done, the front page would be
+(essentially) translated.</p>
+
+<p>To make it possible to <em>select</em> a new language (after non-trivial
+translation has gone on):</p>
+
+<ul>
+<li>Modify the file <code>config/initializers/i18n.rb</code>
+and edit the assignment of <code>I18n.available_locales</code> to add
+the new locale.  The system will now permit users to request it.</li>
+<li>Update app/assets/javascripts/criteria.js.erb
+to depend on the new locale&#39;s yml file, this allows the precompiler to be
+to be notified if the contents of criteria.js should have changed.
+(note the hyphen vs. dash difference here).
+Simply add the following line to the top of criteria.js.erb:</li>
+</ul>
+<pre><code>    depend_on NEW_LOCALE.yml
+</code></pre>
+<p>Note that the robots.txt automatically prevents crawling of
+user accounts in every locale, per <code>app/views/static_pages/robots.text.erb</code>.</p>
+
+<h3>Old approaches for handling locales directly (not used)</h3>
+
+<p>Here are notes if you change the system to stop using
+current support mechanisms, and switch back to older approaches.
+The text in this section does not currently apply.</p>
+
+<p>We use the translation.io service.  You don&#39;t have to.
+You could instead create a stub locale file in the
+&quot;config/locales&quot; directory named LOCALE.yml.  A decent way to start is:</p>
+<pre><code>cd config/locales
+cp en.yml NEW_LOCALE.yml
+</code></pre>
+<p>Edit the top of the file to change &quot;en:&quot; to your locale name.</p>
+
+<p>Now the hard part: actually translating.
+Edit the &#39;.yml&#39; (YAML) file to create the translations.
+As always, you need to conform to YAML syntax.
+For example,
+strings that end in a colon (&quot;:&quot;) <em>must</em> be escaped (e.g., by
+surrounding them with double-quotes).
+Keys are <em>only</em> in lower case and never use dash (they use underscore).</p>
+
+<p>However, we find using a translation service to be easier.</p>
+
+<p>At one time we suggested going to this page to get locale information
+for Rails built-ins, and including that:
+<a href="https://github.com/svenfuchs/rails-i18n/blob/master/rails/locale/">https://github.com/svenfuchs/rails-i18n/blob/master/rails/locale/</a>
+However, we now include the gem &#39;rails-i18n&#39;, and that provides
+the same kind of functionality while being easier to maintain.</p>
+
+<p>At one time we had to create new static pages in
+&quot;app/views/static_pages/&quot; for new locales, but that is no longer needed.</p>
+
+<h3>Programmatically accessing a locale</h3>
+
+<p>To learn more about Rails and internationalization, please read the
+<a href="http://guides.rubyonrails.org/i18n.html">Rails Internationalization guide</a>.</p>
+
+<p>Inside views you can use the &#39;t&#39; helper, e.g.,</p>
+<pre><code>    <%= t('hello') %>
+    <%= t('.current_scope') %>
+</code></pre>
+<p>Inside other code (e.g., in a flash message), use <code>I18n.t</code>:</p>
+<pre><code>    I18n.t 'hello'
+</code></pre>
+<p>You can access &#39;I18n.locale&#39; to see the current locale&#39;s value
+(this is a thread-local query, so this works fine when multiple
+threads are active).</p>
+
+<h3>Canonical URLs</h3>
+
+<p>We try to always refer to canonical URL forms.
+In some cases that can help search engine rankings, and in any case
+it&#39;s easier to understand.
+Rails&#39; built-in &quot;path&quot; and &quot;url&quot; helpers add a trailing slash
+if it is at the root without locale (e.g., &quot;<a href="https://x.com/%22">https://x.com/&quot;</a>),
+but otherwise they do not add a trailing slash.
+We accept a locale setting in the query string, but we prefer to generate
+locales in the path (e.g., &quot;<a href="https://x.com/en">https://x.com/en</a>&quot;, not &quot;<a href="https://x.com?locale=en%22">https://x.com?locale=en&quot;</a>).</p>
+
+<h2>App authentication via GitHub</h2>
+
+<p>The BadgeApp needs to authenticate itself through OAuth2 on
+GitHub if users are logging in with their GitHub accounts.
+It also needs to authenticate itself to get repo details from GitHub if a
+project is being hosted there.
+The app needs to be registered with GitHub[1] and its OAuth2 credentials
+stored as environment variables.
+The variable names of Oauth2 credentials are &quot;GITHUB_KEY&quot; and &quot;GITHUB_SECRET&quot;.
+If running on heroku, set config variables by following instructions on [2].</p>
+
+<p>If you need to set this up for your own instance, go to
+<a href="https://github.com/settings/applications/new">https://github.com/settings/applications/new</a>
+to &quot;Register a new OAuth application&quot; and create a corresponding new token.
+Here&#39;s how we created the &quot;staging&quot; token for staging.bestpractices.dev:</p>
+
+<ul>
+<li>Application Name: Best Practices Badge (Staging)</li>
+<li>Homepage URL: <a href="https://staging.bestpractices.dev">https://staging.bestpractices.dev</a></li>
+<li>Authorization callback URL: <a href="https://staging.bestpractices.dev/auth/github/callback">https://staging.bestpractices.dev/auth/github/callback</a></li>
+<li>We enabled &quot;device flow&quot; because it might be useful someday.</li>
+</ul>
+
+<p>Similarly, here are the settings for the
+&quot;production&quot; token for <a href="http://www.bestpractices.dev:">www.bestpractices.dev:</a></p>
+
+<ul>
+<li>Application Name: Best Practices Badge</li>
+<li>Homepage URL: <a href="https://www.bestpractices.dev">https://www.bestpractices.dev</a></li>
+<li>Authorization callback URL: <a href="https://www.bestpractices.dev/auth/github/callback">https://www.bestpractices.dev/auth/github/callback</a></li>
+<li>We enabled &quot;device flow&quot; because it might be useful someday.</li>
+</ul>
+
+<p>You can see the status of these tokens on GitHub here:
+<a href="https://github.com/settings/developers">https://github.com/settings/developers</a>
+under &quot;OAuth applications&quot;.</p>
+
+<p>If running locally, these variables need to be set up.
+We have set up a file &#39;.env&#39; at the top level which has stub values,
+formatted like this, so that it automatically starts up
+(note that these keys are <em>not</em> what we used for the deployed systems,
+for obvious reasons):</p>
+<pre><code>export GITHUB_KEY = '..VALUE..'
+export GITHUB_SECRET = '..VALUE..'
+</code></pre>
+<p>You can instead provide the information this way if you want to
+temporarily override these:</p>
+<pre><code>GITHUB_KEY='client id' GITHUB_SECRET='client secret' rails s
+</code></pre>
+<p>where <em>client id</em> and <em>client secret</em> are registered OAuth2 credentials
+of the app.</p>
+
+<p>The authorization callback URL in GitHub for this dummy application is:
+<a href="http://localhost:3000/auth/github">http://localhost:3000/auth/github</a></p>
+
+<p>[1] <a href="https://github.com/settings/applications/new">https://github.com/settings/applications/new</a>
+[2] <a href="https://devcenter.heroku.com/articles/config-vars">https://devcenter.heroku.com/articles/config-vars</a></p>
+
+<h2>Changing the owner of a project entry</h2>
+
+<p>We have a rake task to simplify changing the owner of a project.
+Given project number PROJECT and new owner user id OWNER,
+you can do this remotely with:</p>
+<pre><code>heroku run --app production-bestpractices rake change_owner -- PROJECT OWNER
+</code></pre>
+<p>You can also do this with a SQL command but an error in the SQL command
+(such as forgetting the WHERE clause) can cause a big problem.
+The rake task <code>change_owner</code> is more convenient, e.g., it prints
+the project name, prints old and new owner names, prevent some errors,
+and so on. Neverthess it is fundamentally the same as this SQL command:</p>
+<pre><code>echo "UPDATE projects SET user_id = {OWNER_NUM} WHERE id = {PROJECT_NUM}" | \
+  heroku pg:psql DATABASE_URL --app production-bestpractices
+</code></pre>
+<h2>Database content viewing and editing</h2>
+
+<p>In some cases you may need to view or edit the database contents directly.
+For example, we don&#39;t currently have code to set a user to have the
+&#39;admin&#39; role,
+to backup the database, or restore the database.
+Instead, we simply interact with the database software, which
+already has the functions to do this.</p>
+
+<p>As always, this require special administrative privileges.
+Be careful with the databases, since the include information on users.
+We want to ensure we comply with various laws about users, including
+EU General Data Protection Regulation (GDPR).</p>
+
+<p>You can directly connect to the database engine and run commands.
+On the local development system, run &quot;rails db&quot; as always.
+To change the database contents of a production system,
+log into that system and use the SQL language to make changes.
+E.G., on Heroku, presuming that you have installed the heroku command,
+and configured it for the system you are controlling
+(including the necessary keys),
+you can pipe SQL commands to &#39;heroku pg:psql&#39;.
+This only works if you&#39;ve been given keys to control this.
+On Heroku we use PostgreSQL.
+Here are a few examples (replace the &quot;heroku pg:psql...&quot; with &quot;rails db&quot;
+to do it locally):</p>
+<pre><code># Who is user 1?
+echo "SELECT * FROM users WHERE users.id = 1" | \
+  heroku pg:psql DATABASE_URL --app production-bestpractices
+# Find user by name
+echo "SELECT * FROM users WHERE name = 'David A. Wheeler'" | \
+  heroku pg:psql DATABASE_URL --app production-bestpractices
+# List all current web application admins
+echo "SELECT id,name FROM users WHERE role = 'admin'" | \
+  heroku pg:psql DATABASE_URL -a production-bestpractices
+# Give the specified user admin privileges
+echo "UPDATE users SET role = 'admin' where id = 25" | \
+  heroku pg:psql DATABASE_URL --app production-bestpractices
+# Change owner of project, forcibly
+echo "UPDATE projects SET user_id = 25 WHERE id = 1" | \
+  heroku pg:psql DATABASE_URL --app production-bestpractices
+</code></pre>
+<p>You can force-create new users and make them admins
+(again, if you have the rights to do so).
+To create new github user, first get their github uid from their
+github username (nickname) by looking at
+<a href="https://api.github.com/users/USERNAME">https://api.github.com/users/USERNAME</a>
+and getting the &quot;id&quot; value.
+Then run this, replacing all-caps stubs with the values in single quotes
+(this will create a local id automatically):</p>
+<pre><code>echo "INSERT INTO users (provider,uid,name,nickname,email,role,activated,
+  created_at,updated_at)
+  VALUES ('github',GITHUB_UID,FULL_USER_NAME,
+  GITHUB_USERNAME,EMAIL,'admin',t,now(),now());" | \
+  heroku pg:psql DATABASE_URL --app production-bestpractices
+</code></pre>
+<p>You can
+<a href="https://devcenter.heroku.com/articles/heroku-postgres-import-export">import or export databases on Heroku</a>
+Those with enough authoritizations can run
+&quot;rake pull_production&quot; to copy the current production database
+into their development environment for testing;
+this will erase the current copy.</p>
+
+<p>For example, here&#39;s how to quickly back up the database
+(presuming that it&#39;s set up for the Heroku site and that you have
+the authorization keys to do this):</p>
+<pre><code>heroku pg:backups capture
+curl -o latest.dump $(heroku pg:backups public-url)
+</code></pre>
+<p>You can use this SQL command to see what projects have
+duplicate homepage_url values:</p>
+<pre><code>SELECT id,LEFT(name,20) as name, user_id, homepage_url
+FROM projects
+WHERE homepage_url <> '' AND homepage_url IN
+  (SELECT homepage_url FROM projects GROUP BY homepage_url
+   HAVING COUNT(homepage_url) > 1);
+</code></pre>
+<h2>Deleting fraudulent project entries</h2>
+
+<p>We try to work with people who are trying to do the right thing
+but misunderstand something.</p>
+
+<p>However, badge entries can be clearly fraudulent.
+For example, they can claim their code does many things without having code,
+that their documents cover things yet have no documentation, and so on.
+If we are confronted with clear fraud then we simply fix the database,
+typically by deleting all the user&#39;s project entries and blocking their
+user accounts. If it&#39;s clearly fraudulent then they&#39;re attackers and
+we don&#39;t give the attackers any warning, there&#39;s no need for that.</p>
+
+<p>To block an account we&#39;d do something like this (after backing up the database);
+in the <code>blocked_rationale</code> include the YYYY-MM-DD date when the block
+was created as part of the rationale.</p>
+<pre><code>echo "UPDATE users SET blocked=true, blocked_rationale='...' WHERE id = 13323;"|
+  heroku pg:psql DATABASE_URL --app production-bestpractices
+echo "DELETE FROM projects WHERE user_id = 13323;" | \
+  heroku pg:psql DATABASE_URL --app production-bestpractices
+</code></pre>
+<h2>Recovering a deleted or mangled project entry</h2>
+
+<p>If you want to restore a deleted project, or reset its values,
+we have some tools to help.</p>
+
+<p>Put the project data in JSON form in the file &quot;project.json&quot;
+(at the top of the tree, typically in &quot;~/best-practices-badge&quot;).
+If this was a recent deletion, then you can simply copy the JSON-formatted
+data from the email documenting the deletion.</p>
+
+<p>Then run:</p>
+<pre><code>    rake create_project_insertion_command
+</code></pre>
+<p>This will create a file &quot;project.sql&quot; that has SQL insertion command.</p>
+
+<p>You&#39;ll next need to delete the project if it already exists, because
+it&#39;s an insertion command.</p>
+
+<p>Now you need to execute the SQL command on the correct database.
+Locally you can do this (you may want to set RAILS_ENV to
+&quot;production&quot;):</p>
+<pre><code>    rails db < project.sql
+</code></pre>
+<p>If you want the data to be on the true production site, you&#39;ll need
+privileges to execute database commands, then run this:</p>
+<pre><code>    heroku pg:psql DATABASE_URL --app production-bestpractices < project.sql
+</code></pre>
+<h2>Server-side data cache store</h2>
+
+<p><a href="http://guides.rubyonrails.org/caching_with_rails.html">Caching with Rails</a>
+discusses the various options for the server-side data cache store.
+This can be configured by setting &quot;config.cache_store&quot;.</p>
+
+<p>The main options are:</p>
+
+<ul>
+<li>ActiveSupport::Cache::MemoryStore (:memory_store),</li>
+<li>ActiveSupport::Cache::FileStore (:file_store)</li>
+<li>ActiveSupport::Cache::MemCacheStore (:mem_cache_store)</li>
+<li>ActiveSupport::Cache::RedisCacheStore (:redis_cache_store)</li>
+</ul>
+
+<p>We intentionally use MemoryStore (:memory_store)
+with a larger-than-default memory size.
+This may seem to be a surprising choice; here&#39;s why we do that.</p>
+
+<p>As noted in the Rails documentation for MemoryStore,
+&quot;This cache store keeps entries in memory in the same Ruby process...
+If you&#39;re running multiple Ruby on Rails server processes (which is the
+case if you&#39;re using Phusion Passenger or puma clustered mode), then your
+Rails server process instances won&#39;t be able to share cache data with
+each other. This cache store is not appropriate for large application
+deployments. However, it can work well for small, low traffic sites
+with only a couple of server processes...&quot;</p>
+
+<p>The
+<a href="http://api.rubyonrails.org/classes/ActiveSupport/Cache/MemoryStore.html">MemoryStore documentation</a> further explains that it is
+&quot;A cache store implementation which stores everything into memory in the
+same process. If you&#39;re running multiple Ruby on Rails server processes
+(which is the case if you&#39;re using Phusion Passenger or puma clustered
+mode), then this means that Rails server process instances won&#39;t be
+able to share cache data with each other and this may not be the most
+appropriate cache in that scenario. ...
+MemoryStore is thread-safe.&quot;</p>
+
+<p>In practice, we run as a single process with multiple threads.
+MemoryStore is thread-safe, so the threads <em>can</em> share the cache store.
+MemoryStore is obviously fast, and we can easily configure it to 64MB
+with no problems.  This seems to be more than adequate for our
+current situation.</p>
+
+<p>We can use alternatives, but must consider how
+<a href="https://devcenter.heroku.com/articles/caching-strategies">Heroku impacts caching strategies</a>.</p>
+
+<p>Heroku has an
+<a href="https://devcenter.heroku.com/articles/dynos#ephemeral-filesystem">ephemeral filesystem</a>,
+so any files written are temporary.
+That said, it&#39;s no worse than a memory-only cache, and it would be a
+valid alternative.</p>
+
+<p>Heroku offers memcached, but the free tiers (when they existed) were
+only 25M-30M (smaller
+than easily available from memory), and they quickly get expensive
+(the next tier up is only 100M).
+Redis also gets expensive.</p>
+
+<p>We can always pay for different caching systems.
+However, up to this point we haven&#39;t needed more than we have
+currently configured for.
+If we need to increase our server-side cache store
+capability, it&#39;s a relatively quick purchase and reconfiguration,
+with no other code changes.</p>
+
+<h2>Scaling up</h2>
+
+<p>This software is designed to scale up as needed.</p>
+
+<p>Up to this point we&#39;ve only needed a single dyno to run the system.
+That may seem surprising, however:</p>
+
+<ul>
+<li>The main main stress on the system is badge requests,
+and we offload practically all of that work to our CDN.</li>
+<li>We run multiple threads (so we can handle a number of simultaneous requests).</li>
+<li>We aggressively use fragment caching stored in our
+server-side data cache store.</li>
+<li>We ensure that JavaScript and such are set to cache
+on the client side, so are normally sent only once to a given client.</li>
+</ul>
+
+<p>If more is needed, we can just pay for additional dynos, and they
+will just work.
+The system knows to work with the RDMBS database, PostgreSQL, and PostgreSQL
+already scales well.</p>
+
+<p>That said, if we switch to multiple dynos, the configuration of the
+ActiveSupport::Cache should probably be changed, e.g., to
+MemCached or Redis.
+Otherwise the caches won&#39;t be shared between the instances.</p>
+
+<h2>Purging Fastly CDN cache</h2>
+
+<p>If a change in the application causes any badge level(s) to change or
+changes the output of a projects json file,
+you need to purge the Fastly CDN cache after pushing.
+Otherwise, the Fastly CDN cache will continue to serve the old badge
+images as well as project json files (until they time out).</p>
+
+<p>You can purge the Fastly CDN cache this way (assuming you&#39;re
+allowed to log in to the relevant Heroku app):</p>
+<pre><code>heroku run --app HEROKU_APP_HERE rake fastly:purge
+</code></pre>
+<p>This command will use the value of the FASTLY_API_KEY
+configured for that Heroku application (Fastly requires authorization
+for purging the entire cache)... so you don&#39;t have to provide it yourself.</p>
+
+<p>It&#39;s safe to purge the cache if you&#39;re not sure if you need to do it.
+After a cache purge, the next request for each badge will go
+to the website, so for a brief time the site will
+be busy serving badge files.</p>
+
+<h2>Resetting Heroku plug-ins</h2>
+
+<p>Here&#39;s how to reset the heroku-local plugin:</p>
+<pre><code>heroku plugins:uninstall heroku-local --app production-bestpractices
+heroku plugins --app production-bestpractices
+</code></pre>
+<p>The latter automatically reinstalls heroku-local.
+This information is from: <a href="https://github.com/heroku/heroku/issues/1690">https://github.com/heroku/heroku/issues/1690</a>.</p>
+
+<p>Normally you should just push changes to &quot;master&quot; first, so that
+CircleCI will test it.  If you want to push directly to Heroku staging
+(and have the necessary rights):</p>
+<pre><code>git remote add heroku-staging https://git.heroku.com/staging-bestpractices.git
+</code></pre>
+<p>Now you can directly deploy to Heroku:</p>
+<pre><code>git checkout staging
+git push heroku-staging staging
+</code></pre>
+<h2>Auditing</h2>
+
+<p>The intent is to eventually have an &quot;audit&quot; function that
+runs auto-fill without actually editing the results, and then
+show the differences between the automatic results and the form values.
+This will let external users compare things.</p>
+
+<h2>Autofill</h2>
+
+<p>The process of automatically filling in the form is called
+&quot;autofill&quot;.</p>
+
+<p>Earlier discussions presumed that the human would always be right, and
+that the automation would only fill in unknowns (&quot;?&quot;).
+However, we&#39;ve since abandoned this; instead, in some cases we want
+to override (either because we&#39;re confident or because we want to require
+projects to provide data in a way that we can be confident in it).</p>
+
+<p>Autofill must use some sort of pluggable interface, so that people
+can add them.  We will focus on getting data from GitHub, e.g.,
+api.gihub.com/repos has a lot of information.
+The pluggable interface could be implemented using Service Objects;
+it&#39;s not clear that&#39;s the best way.
+We do want to create directories where people can just add new files to
+add new plug-ins.</p>
+
+<p>We name each separate module that detects something a &quot;Detective&quot;.
+A Detective needs to be called, be able to get data, and eventually
+return a set of findings.
+The findings are a hash with
+attributes and findings about them:
+(proposed new) value, confidence, and justification (string).</p>
+
+<p>The &quot;Chief&quot; module calls the Detectives in the right order and
+merges the results.
+Confidence values range from 0..5; confidence values of 4 or higher
+override the user input.</p>
+
+<h2>Authentication</h2>
+
+<p>Currently we allow people to log in using their GitHub account
+or a local account (so people who don&#39;t want to use GitHub don&#39;t need to).
+We trust GitHub&#39;s answers about whether or not a user is who they say they
+are, and about which GitHub projects they can edit.</p>
+
+<p>Note: In the user interface we use the term &quot;custom account&quot;
+instead of &quot;local account&quot; or &quot;local user account&quot; or &quot;local user&quot;;
+they are all the same thing.  These are accounts
+where the user directly logs into the system with a password.</p>
+
+<p>We currently can&#39;t be sure if a local user is actually allowed to
+edit a given project, but admins can override any claims if necessary.
+If this becomes a problem, we could make it possible for a
+a project URL page to include the
+token (typically in an HTML comment) to prove that a given user is
+allowed to represent that particular project.
+That would enable projects to identify users who can represent them
+without requiring a GitHub account.</p>
+
+<p>Future versions might support sites other than GitHub; the design should
+make it easy to add other sites in the future.</p>
+
+<p>We make public the <em>username</em> of who last
+entered data for each project (generally that would be the GitHub username),
+along with the edit time.</p>
+
+<h2>Plans: Who can edit project P?</h2>
+
+<p>(This is a summary of the previous section.)</p>
+
+<p>A user can edit project P if one of the following is true:</p>
+
+<ol>
+<li>If the user is an &quot;admin&quot; then the user can edit the
+badge information about any project.
+This will let the Linux Foundation fix problems.</li>
+<li>If project P is on GitHub AND the user is authorized via GitHub
+to edit project P, then that user can edit the badge information about
+project P.  In the future we might add repos other than GitHub, with
+the same kind of rule.</li>
+<li>If the user created this badge entry, the user can edit it.</li>
+</ol>
+
+<h2>GitHub-related badges</h2>
+
+<p>Pages related to GitHub-related badges include:</p>
+
+<ul>
+<li><a href="http://shields.io/">http://shields.io/</a> - serves files that display a badge
+(as good-looking scalable SVG files)</li>
+<li><a href="https://github.com/badges/shields">https://github.com/badges/shields</a> -  Shields badge specification,
+website and default API server (connected to shields.io)</li>
+<li><a href="http://nicbell.net/blog/github-flair">http://nicbell.net/blog/github-flair</a> - a blog post that identifies
+and discusses popular GitHub flair (badges)</li>
+</ul>
+
+<p>We want GitHub users to think of this
+as &#8220;just another badge to get.&#8221;</p>
+
+<p>We intend to sign up for a few badges so we can
+evaluate their onboarding process,
+e.g., Travis (CI automation), Code Climate (code quality checker including
+BrakeMan), Coveralls (code coverage), Hound (code style),
+Gymnasium (checks dependencies), HCI (looks at your documentation).
+For example, they provide the markdown necessary to embed the badge.
+See ActiveAdmin for an example, take a few screenshots.
+Many of these badges try to represent real-time status.
+We might not include these badges in our system, but they
+provide useful examples.</p>
+
+<h2>Other badging systems</h2>
+
+<p>Mozilla&#39;s Open Badges project at <a href="http://openbadges.org/">http://openbadges.org/</a>
+is interesting, however, it is focused on giving badges to
+individuals not projects.</p>
+
+<h2>CircleCI</h2>
+
+<p>The CircleCI build execution is configured to use Ubuntu 14.04 (Trusty);
+it was Ubuntu 12.04 (Precise).</p>
+
+<h2>License detection</h2>
+
+<p>Some information on how to detect licenses in projects
+(so we can perhaps autofill them) can be found in
+<a href="https://speakerdeck.com/benbalter/open-source-licensing-by-the-numbers">&#8220;Open Source Licensing by the Numbers&#8221; by Ben Balter</a>.</p>
+
+<p>For the moment, we just use GitHub&#39;s mechanism.
+It&#39;s easy to invoke and resolves it in a number of cases.</p>
+
+<h2>Implementation of Detectives.</h2>
+
+<p>The detective classes are located in the directory often located in the directory ./workspace/best-practices-badge/app/lib.  This directory contains all of the detectives and has a very specific naming convention.  All new detectives must be named name1_detective.rb.  This name is important as it will be called by the primary code chief.rb which calls and collects the results of all of the detective classes.</p>
+
+<p>To integrate a new class chief.rb must be edited in the following line.</p>
+
+<p>ALL_DETECTIVES =
+  [
+    NameFromUrlDetective, ProjectSitesHttpsDetective,
+    GithubBasicDetective, HowAccessRepoFilesDetective,
+    RepoFilesExamineDetective, FlossLicenseDetective,
+    HardenedSitesDetective (Name1Detective)
+  ].freeze</p>
+
+<p>where Name1Detective corresponds to the new class created in name1_detective.  Without following the naming convention chief will not run the new detective.</p>
+
+<p>A template detective called blank_detective.rb is supplied with the project with internal documentation as to how to use it.</p>
+
+<p>Remember, in addition to the detective you must right a test in order for it
+  to be accepted into the repository.  The tests are located at ./test/unit/lib/
+  with an example test of blank_detective included.</p>
+
+<h2>Analysis</h2>
+
+<p>We use the ZAP web application scanner to find potential
+vulnerabilities.
+This lets us fulfill the &quot;dynamic analysis&quot; criterion.</p>
+
+<h2>Setup for deployment</h2>
+
+<p>If you want to deploy this yourself, you need to set some things up.
+Here we&#39;ll presume Heroku.</p>
+
+<p>You need to have email set up.
+See the Action mailer basics guide at
+<a href="http://guides.rubyonrails.org/action_mailer_basics.html">http://guides.rubyonrails.org/action_mailer_basics.html</a>
+and Hartl&#39;s Rails tutorial, e.g.:
+<a href="https://www.railstutorial.org/book/account_activation_password_reset#sec-email_in_production">https://www.railstutorial.org/book/account_activation_password_reset#sec-email_in_production</a></p>
+
+<p>We used to use SendGrid. You <em>can</em> just use SendGrid directly.
+You can also install sendgrid on Heroku to provide some extra functions doing this:</p>
+<pre><code>heroku addons:create sendgrid:starter
+</code></pre>
+<p>If you plan to handle a lot of queries, you probably want to use a CDN.
+It&#39;s currently set up to use Fastly.</p>
+
+<h2>Badge SVG</h2>
+
+<p>The SVG files for badges are:</p>
+
+<ul>
+<li><a href="https://img.shields.io/badge/openssf_best_practices-passing-green.svg">https://img.shields.io/badge/openssf_best_practices-passing-green.svg</a></li>
+<li><a href="https://img.shields.io/badge/openssf_best_practices-in_progress-yellow.svg">https://img.shields.io/badge/openssf_best_practices-in_progress-yellow.svg</a></li>
+<li><a href="https://img.shields.io/badge/openssf_best_practices-failing-red.svg">https://img.shields.io/badge/openssf_best_practices-failing-red.svg</a></li>
+</ul>
+
+<h2>Licenses of the software used by BadgeApp</h2>
+
+<p>See CONTRIBUTING.md for the license rules;
+fundamentally we require software to be released as OSS
+before we can depend on it.</p>
+
+<p>The following components don&#39;t declare a license in their Gemfile,
+and were researched separately:</p>
+
+<ul>
+<li>gitlab: URL <a href="https://github.com/NARKOZ/gitlab/blob/master/LICENSE.txt">https://github.com/NARKOZ/gitlab/blob/master/LICENSE.txt</a> reveals this to be license BSD-2-Clause.</li>
+<li>colored: URL <a href="https://github.com/defunkt/colored/blob/master/LICENSE">https://github.com/defunkt/colored/blob/master/LICENSE</a> reveals this to be license MIT.</li>
+</ul>
+
+<p>For more on license decisions see docs/dependency_decisions.yml.
+You can also run &#39;rake&#39; and see the generated report
+license_finder_report.html.</p>
+
+<h2>HTML link checking</h2>
+
+<p>GitHub has relatively recently changed its robots.txt file so
+that only certain agents are allowed to retrieve files.
+This means that typical link-checking services don&#39;t work, since common
+services like the W3C&#39;s link checker are rejected.</p>
+
+<p>This can be worked around by downloading the W3C link checker,
+disabling robots.txt, and running it directly.  You need to be very
+careful when doing this.  We&#39;ll install the &quot;Linkchecker&quot; package from CPAN
+(command name is &#39;checklink&#39;) to do this.  Here&#39;s how.</p>
+<pre><code>cpan /W3C-LinkChecker-4.81/
+cpan LWP::Protocol::https # Needed for HTTPS
+su
+cd /usr/local/bin
+cp checklink checklink-norobots
+
+patch -p0 <<END
+--- checklink   2016-02-24 10:37:05.000000000 -0500
++++ checklink-norobots  2016-02-24 10:48:24.856983414 -0500
+@@ -48,7 +48,7 @@
+ use Net::HTTP::Methods 5.833 qw();    # >= 5.833 for 4kB cookies (#6678)
+
+ # if 0, ignore robots exclusion (useful for testing)
+-use constant USE_ROBOT_UA => 1;
++use constant USE_ROBOT_UA => 0;
+
+ if (USE_ROBOT_UA) {
+     @W3C::UserAgent::ISA = qw(LWP::RobotUA);
+END
+</code></pre>
+<p>You can then run, e.g.:</p>
+<pre><code>checklink-norobots -b -e \
+  https://github.com/coreinfrastructure/best-practices-badge | tee results
+</code></pre>
+<h2>Spam countering: Markdown, nofollow, and ogc</h2>
+
+<p>Spammers may be tempted to create project entries that link to their
+websites to subversively expand their incoming link counts.</p>
+
+<p>To counter this, all hypertext links based on user-created data are
+marked with
+<code>rel=&quot;nofollow ugc&quot;</code> (&quot;do not follow, user-generated content&quot;).
+In the markdown text this enforced by not allowing users
+to use <code>&lt;a ...&gt;</code> as text; they can insert hypertext links, but they
+must use Markdown format to do it (which inserts the nofollow relation).
+Spammers can still create try to create projects entries
+with spammy link references, but this eliminates the incentive to do so.</p>
+
+<p>The <code>ugc</code> marking was announced in 2019.
+See:
+<a href="https://webmasters.googleblog.com/2019/09/evolving-nofollow-new-ways-to-identify.html">Evolving “nofollow” - new ways to identify the nature of links (September 10, 2019</a>.</p>
+
+<h2>Accessing our analysis tools</h2>
+
+<p>We have various analyzers.  Here are some hints of how to access them.</p>
+
+<p>If you don’t install the software, then you can use our REST interface
+– create a project &amp; then query what we’ve learned.  That only
+provides <em>some</em> functionality.</p>
+
+<p>If you <em>install</em> software, then there are many more options.  The software
+was designed to be used as a website, so you can still use it that way,
+but then you can also directly invoke the functionality you want via
+Ruby and Rails.  It’s easy to integrate as a CLI that way.</p>
+
+<p>We’re big on testing, for example, we have 100% statement coverage.
+A side-effect of this is that a lot of functionality can be called
+separately (so it can be tested).  You can also look at our tests to see
+how to invoke something internally.  In particular, we have a number of
+tools that try to gather data about a project – each one is called a
+“Detective”, and they are managed by a “Chief” of Detectives.
+Here’s a quick example that may help:</p>
+<pre><code># Start up
+rails console
+p = Project.new
+# Set values for project to evaluate.  We'll examine our own project.
+p[:repo_url] = 'https://github.com/coreinfrastructure/best-practices-badge'
+p[:homepage_url] = 'https://github.com/coreinfrastructure/best-practices-badge'
+# Setup chief to analyze things:
+new_chief = Chief.new(p, proc { Octokit::Client.new })
+# Ask chief to find probable values:
+results = new_chief.autofill
+
+# Now "results" shows the fields found.
+# For each field it has a value, confidence, and explanation.
+# In addition, "p" is changed where we have high confidence.
+results.keys
+# => [:name, :sites_https_status, :repo_public_status, :repo_track_status,
+# :repo_distributed_status, :contribution_status, :discussion_status,
+# :license, :repo_files, :license_location_status, :release_notes_status,
+# :floss_license_osi_status, :floss_license_status, :hardened_site_status,
+# :build_status, :build_common_tools_status, :documentation_basics_status]
+results[:name]
+# => {:value=>"Core Infrastructure Initiative Best Practices Badge",
+# :confidence=>3, :explanation=>"GitHub name"}
+results[:license]
+# => {:value=>"MIT", :confidence=>3,
+# :explanation=>"GitHub API license analysis"}
+p[:name]
+# => "Core Infrastructure Initiative Best Practices Badge"
+</code></pre>
+<h2>Forbidden Passwords</h2>
+
+<p><a href="https://nakedsecurity.sophos.com/2016/08/18/nists-new-password-rules-what-you-need-to-know/">NIST has proposed draft password rules in 2016</a>.
+They recommend having a minimum of 8 characters in passwords and
+checking against a list of bad passwords.
+Here we&#39;ll call them forbidden passwords - they are forbidden because
+they&#39;re too easy to guess.</p>
+
+<p>Here&#39;s how to recreate the bad-passwords list.
+It&#39;s derived from the skyzyx &quot;bad-passwords&quot; list, which is dedicated
+to the public domain via the CC0 license.</p>
+
+<p>We create a modified version of the original source material.
+We don&#39;t need to store anything less than 8 characters
+(they will be forbidden anyway), and we only store lowercase versions
+(we check downcased versions).
+We compress it into a .gz file; it doesn&#39;t take long to read, and that greatly
+reduces the space we use when storing and and transmitting the program.
+Using the bad-passwords version dated &quot;May 27 11:03:00 2016 -0700&quot;,
+starting with the &quot;mutated&quot; list, we end up with 106,251 forbidden passwords.</p>
+<pre><code>(cd .. && git clone https://github.com/skyzyx/bad-passwords )
+cat ../bad-passwords/raw-mutated.txt | grep -E '^.{8}' | tr A-Z a-z | \
+  sort -u > raw-bad-passwords-lowercase.txt
+rm -f raw-bad-passwords-lowercase.txt.gz
+gzip --best raw-bad-passwords-lowercase.txt
+</code></pre>
+<p>At one time we loaded bad passwords into memory, but because of object
+overheads it consumed over 8MB of RAM <em>and</em> it fragments memory.
+The list is only consulted when a local password is being (re)set,
+so it made more sense to move the list to the database at runtime.
+Thus, after the updated bad-passwords file is sent, you need to have
+it update the database for use. Do this by running:</p>
+<pre><code>    heroku run --app APP rake update_bad_password_db
+</code></pre>
+<h2>Installing CircleCI / Heroku keys</h2>
+
+<p>We use CircleCI to push to Heroku once it passes all tests, but
+CircleCI must prove it&#39;s authorized to Heroku that this is authorized.
+Heroku <a href="https://help.heroku.com/PBGP6IDE/how-should-i-generate-an-api-key-that-allows-me-to-use-the-heroku-platform-api">uses API keys to do this</a>.
+To recreate such keys, use <code>heroku authorizations:create</code> for production apps, and use <code>heroku auth:token</code> for development. Each token has a secret value and an &quot;id&quot; that is used to identify it.
+If CircleCI is broken in to, you need to change the Heroku keys and GitHub
+keys stored on CircleCI. Heroku calls this key rotation.</p>
+
+<p>To replace an existing Heroku key on CircleCI, that is, the Heroku OAuth token, take the following steps.</p>
+
+<p>First, find the ID of &quot;Long-lived user authorization&quot; using:</p>
+
+<blockquote>
+<p>heroku authorizations</p>
+</blockquote>
+
+<p>Use the ID you find (a dash-separated sequence of hexadecimal numbers) and
+rotate the key:</p>
+
+<blockquote>
+<p>heroku authorizations:rotate ID-GOES-HERE</p>
+</blockquote>
+
+<p>After rotation it will show the secret Token value (another dash-separated
+sequence of hexadecimal numbers). Log in to CircleCI,
+select the best-practices-badge application, Project Settings,
+Environment Variables, and change the value of
+<code>HEROKU_API_KEY</code> to the secret token value (<em>not</em> the token ID).</p>
+
+<p>The CircleCI interface is a little confusing on this point because there&#39;s
+no obvious way to edit a value, but fear not - just select
+<em>Add Environment Variable</em> with the <em>current</em> name of the environment
+variable (e.g., <code>HEROKU_API_KEY</code>) and a new value, and the environment
+variable&#39;s value will be replaced.</p>
+
+<p>Note that <code>heroku authorizations --help</code> will provide more info on Heroku
+authorization commands.</p>
+
+<p>We also use RSA keys.
+See <a href="https://devcenter.heroku.com/articles/keys">keys</a> for details.
+At the time of this writing Heroku only supports RSA keys.</p>
+
+<p>Basically, create an OpenSSH keypair:</p>
+<pre><code>      ssh-keygen -t rsa -f "$HOME/.ssh/id_rsa_bp" \
+                 -C 'dwheeler@linuxfoundation.org'
+</code></pre>
+<p>Per the Heroku instructions, add the public key here:</p>
+<pre><code>    heroku keys:add "$HOME/.ssh/id_rsa_bp.pub"
+</code></pre>
+<p>CircleCI needs to prove it&#39;s authorized, so we need to give it the
+private key (sigh). Go to this page:
+<a href="https://app.circleci.com/settings/project/github/coreinfrastructure/best-practices-badge/ssh">https://app.circleci.com/settings/project/github/coreinfrastructure/best-practices-badge/ssh</a></p>
+
+<p>Under &quot;Additional SSH keys&quot; (for keys to the builid VMs that you need to
+deploy to your machines), remove any heroku.com keys, add a new key
+with hostname &quot;heroku.com&quot;, and provide the contents of the private key
+<code>$HOME/.ssh/id_rsa_bp</code>.</p>
+
+<p>Since these aren&#39;t used for any other purpose, it&#39;s safest to remove
+these keys from anywhere else:</p>
+<pre><code>    rm "$HOME/.ssh/id_rsa_bp*"
+</code></pre>
+<h2>Project stats omission on 2017-02-28</h2>
+
+<p>The production site maintains a number of daily statistics and can
+<a href="https://bestpractices.coreinfrastructure.org/project_stats">display the statistics graphically</a>, but it is
+missing a report for 2017-02-28.
+This was due to a multi-hour downtime in
+Amazon’s S3 web-based storage service, part of
+Amazon Web Services (AWS), which took a large number of sites
+(not just ours).
+For more information you can see the story in
+<a href="https://www.usatoday.com/story/tech/news/2017/02/28/amazons-cloud-service-goes-down-sites-scramble/98530914/">USA Today</a>,
+<a href="http://www.zerohedge.com/news/2017-02-28/amazon-cloud-reporting-increased-error-rates-secgov-possibly-impacted">Zero Hedge</a>,
+and
+<a href="https://techcrunch.com/2017/02/28/amazon-aws-s3-outage-is-breaking-things-for-a-lot-of-websites-and-apps/">Tech Crunch</a>.</p>
+
+<h2>fake_production</h2>
+
+<p>If you want to debug a problem that only appears in a production-like
+environment, try the &#39;fake_production&#39; environment.
+Here is how to enable it:</p>
+<pre><code>RAILS_ENV=fake_production rails s
+</code></pre>
+<p>This environment is almost exactly like production, with the
+following differences:</p>
+
+<ul>
+<li>does not force HTTPS (TLS), so you can interact with it locally</li>
+<li>enables byebug so that you can insert breakpoints</li>
+<li>disables timeouts, so that you aren&#39;t rushed trying
+to track down a problem before the timeout ends.</li>
+</ul>
+
+<p>Other environment variables might be usefully set in the command prefix,
+such as &quot;DATABASE_URL=development&quot;.</p>
+
+<h2>Natural Language Translation</h2>
+
+<p>The primary text for the application is in English, and the English text
+presented to users is stored in &quot;config/locales/en.yml&quot;.</p>
+
+<p>To send the English text to the translators for other languages, and
+copy those translations into the &quot;config/locales&quot; directory, run:</p>
+<pre><code>    rake translation:sync
+</code></pre>
+<h2>Cleaning up development environment storage space</h2>
+
+<p>If you develop for a period of time within an environment,
+you may start to run short of storage space.
+If so, here are some steps you can take:</p>
+
+<h3>Remove old logs</h3>
+
+<p>The file log/test.log, in particular, gets huge if you
+routinely run tests locally.</p>
+<pre><code>    rm log/*.log
+</code></pre>
+<h3>Remove cached packages (if Debian/Ubuntu based)</h3>
+
+<p>Debian/Ubuntu systems archive downloaded packages; you can see
+the space it takes by running:</p>
+<pre><code>    du -sh /var/cache/apt/archives
+</code></pre>
+<p>To clean the apt cache, run this:</p>
+<pre><code>    sudo apt-get clean
+</code></pre>
+<h3>Remove unused packages (if Debian/Ubuntu based)</h3>
+<pre><code>    sudo apt-get autoremove
+</code></pre>
+<h3>Remove Ruby packages for Ruby versions you don&#39;t use</h3>
+<pre><code>    rm -fr ~/.rbenv/versions/RUBY_VERSION_YOU_DONT_USE
+</code></pre>
+<h3>Reduce git repo size</h3>
+
+<p>Running git&#39;s garbage collector manually may
+give you a few K, but is unlikely to help much,
+because git occasionally runs it automatically.
+That said, there&#39;s no harm in running it, here&#39;s how:</p>
+<pre><code>    git gc
+</code></pre>
+<p>git gc&#39;s has an &quot;--aggressive&quot; option, but I suggest avoiding it,
+as that is almost never what you want.</p>
+
+<p>If you are desperate for space you can make the repo a shallow copy
+instead, but then you do not have the full git history.</p>
+
+<h2>API</h2>
+
+<p>See <a href="api.html">api</a> for the application programming interface (API),
+including how to download data for analysis.</p>
+
+<h2>Memory quota exceeded</h2>
+
+<p>You may see error messages in the executing tiers in the following form:</p>
+
+<blockquote>
+<p>heroku/web.1: Error R14 (Memory quota exceeded)</p>
+</blockquote>
+
+<p>This message is further explained in
+<a href="https://devcenter.heroku.com/articles/ruby-memory-use">R14 - Memory Quota Exceeded in Ruby (MRI)</a>.</p>
+
+<p>It simply means that normal memory has been exceeded, and
+that slower swap is being used instead.
+Services are still operating, just at a slightly lower performance
+than desired.
+So there is no reason to panic over these messages, but it is
+worth trying to fix.</p>
+
+<h2>Reducing Rails memory use (<code>MALLOC_ARENA_MAX</code> and <code>jemalloc</code>)</h2>
+
+<p>Rails is notorious for memory growth over time.
+Two ways to partly address this is to (1) set <code>MALLOC_ARENA_MAX</code> to 2
+or (2) use <code>jemalloc</code>.</p>
+
+<p>We partly compensate by setting <code>MALLOC_ARENA_MAX</code> to 2, as is
+recommended by Heroku.
+<a href="https://devcenter.heroku.com/changelog-items/1683">See this Heroku discussion</a>.
+Heroku doesn&#39;t directly support using <code>jemalloc</code>, so the <code>jemalloc</code>
+alternative would be more work.
+It&#39;s also somewhat dubious that <code>jemalloc</code> would be much better.</p>
+
+<p>Some discussions about this:</p>
+
+<ul>
+<li><a href="https://www.mikeperham.com/2018/04/25/taming-rails-memory-bloat/">Taming Rails Memory Bloat</a></li>
+<li><a href="https://www.joyfulbikeshedding.com/blog/2019-03-14-what-causes-ruby-memory-bloat.html">What causes Ruby Memory Bloat?</a></li>
+<li><a href="https://www.joyfulbikeshedding.com/blog/2019-03-29-the-status-of-ruby-memory-trimming-and-how-you-can-help-with-testing.html">The status of Ruby memory trimming</a></li>
+<li><a href="https://www.speedshop.co/2017/12/04/malloc-doubles-ruby-memory.html">Malloc doubles Ruby memory</a></li>
+<li><a href="https://medium.com/@andresakata/benchmark-of-memory-allocators-on-a-multi-threaded-ruby-program-354ec4dc2e7e">Benchmark of memory allocators</a></li>
+</ul>
+
+<h2>Known harmless warnings (Ruby 3.4 + Bundler 2.5.x)</h2>
+
+<p>When running Ruby 3.4+ with Bundler 2.5.x, you may see harmless warnings like:</p>
+<pre><code>warning: already initialized constant Gem::Platform::JAVA
+warning: previous definition of JAVA was here
+</code></pre>
+<p><strong>Cause</strong>: Bundler 2.5.23 was released before Ruby 3.4 and redefines platform
+constants that Ruby 3.4&#39;s RubyGems already defines. This is a known
+compatibility issue between Bundler 2.5.x and Ruby 3.4&#39;s RubyGems 3.7.2.</p>
+
+<p><strong>Impact</strong>: None. The warnings are cosmetic; the constants have identical
+values and functionality is unaffected.</p>
+
+<p><strong>Solution</strong>: Update to Bundler 2.7.x or later, which is designed for
+Ruby 3.4 compatibility:</p>
+<pre><code>gem install bundler --version '~> 2.7.0'
+bundle update --bundler
+# Update CircleCI Docker images to include Bundler 2.7.x
+</code></pre>
+<p><strong>Note</strong>: We intentionally deferred this Bundler update to separate concerns
+from the Ruby 3.4 upgrade. The warnings can be safely ignored until the
+Bundler update is performed.</p>
+
+<h2>See also</h2>
+
+<p>Project participation and interface:</p>
+
+<ul>
+<li><a href="../CONTRIBUTING.html">CONTRIBUTING.md</a> - How to contribute to this project</li>
+<li><a href="INSTALL.html">INSTALL.md</a> - How to install/quick start</li>
+<li><a href="governance.html">governance.md</a> - How the project is governed</li>
+<li><a href="roadmap.html">roadmap.md</a> - Overall direction of the project</li>
+<li><a href="background.html">background.md</a> - Background research</li>
+<li><a href="api.html">api</a> - Application Programming Interface (API), inc. data downloads</li>
+</ul>
+
+<p>Criteria:</p>
+
+<ul>
+<li><a href="https://bestpractices.coreinfrastructure.org/criteria/0">Criteria for passing badge</a></li>
+<li><a href="https://bestpractices.coreinfrastructure.org/criteria">Criteria for all badge levels</a></li>
+</ul>
+
+<p>Development processes and security:</p>
+
+<ul>
+<li><a href="requirements.html">requirements.md</a> - Requirements (what&#39;s it supposed to do?)</li>
+<li><a href="design.html">design.md</a> - Architectural design information</li>
+<li><a href="implementation.html">implementation.md</a> - Implementation notes</li>
+<li><a href="testing.html">testing.md</a> - Information on testing</li>
+<li><a href="assurance-case.html">assurance-case.md</a> - Why it&#39;s adequately secure (assurance case)</li>
+</ul>
+  </body>
+  </html>

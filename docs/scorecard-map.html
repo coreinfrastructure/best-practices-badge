@@ -1,0 +1,351 @@
+  <!DOCTYPE html>
+  <html>
+  <head>
+  <title>docs/scorecard-map.md</title>
+  </head>
+  <body>
+<h1>Scorecard Map to Best Practices Badge</h1>
+
+<p>This is a map from the
+<a href="https://github.com/ossf/scorecard/blob/main/docs/checks.md">OpenSSF Scorecard checks</a>
+to the
+<a href="https://bestpractices.coreinfrastructure.org/en/criteria?details=true">OpenSSF Best Practices badge criteria</a>.</p>
+
+<p>Scorecard has 19 checks.
+<a href="https://bestpractices.coreinfrastructure.org/en/criteria_stats">The OpenSSF best practices criteria statistics</a>
+has 67 criteria for passing, 48 new criteria for silver, and 14 new criteria
+for gold; adding 1 for the existence of the badge leaves 130 total criteria.
+Looking at the Scorecard checks, in sum:</p>
+
+<ul>
+<li>Starting from Scorecard, there are 14 direct maps, 5 partial maps, and 5 scorecard criteria with no mappings at all. (In some cases a single Scorecard criteria maps to more than one Best Practices Badge criteria.)</li>
+<li>Starting from the Best practices badge, there are 19 direct or partial mappings, so 111 criteria are not covered by Scorecard.</li>
+</ul>
+
+<h2>Binary-Artifacts</h2>
+
+<blockquote>
+<p>This check determines whether the project has generated executable (binary)
+artifacts in the source repository.</p>
+
+<p>Including generated executables in the source repository increases user risk.
+Many programming language systems can generate executables from source code
+(e.g., C/C++ generated machine code, Java <code>.class</code> files, Python <code>.pyc</code> files,
+and minified JavaScript). Users will often directly use executables if they are
+included in the source repository, leading to many dangerous behaviors.&quot;</p>
+</blockquote>
+
+<p>No obvious mapping to the OpenSSF Best Practices badge.</p>
+
+<h2>Branch-Protection</h2>
+
+<blockquote>
+<p>This check determines whether a project&#39;s default and release branches are
+protected with GitHub&#39;s <a href="https://docs.github.com/en/github/administering-a-repository/defining-the-mergeability-of-pull-requests/about-protected-branches">branch protection</a> settings.</p>
+
+<p>Branch protection allows maintainers to define rules that enforce
+certain workflows for branches, such as requiring review or passing certain
+status checks before acceptance into a main branch, or preventing rewriting of
+public history.</p>
+</blockquote>
+
+<p>This is a partial map to OpenSSF best practices badge <code>two_person_review</code>:</p>
+
+<blockquote>
+<p>&quot;The project MUST have at least 50% of all proposed modifications reviewed before release by a person other than the author, to determine if it is a worthwhile modification and free of known issues which would argue against its inclusion {Met justification.&quot;</p>
+</blockquote>
+
+<h2>CI-Tests</h2>
+
+<blockquote>
+<p>This check tries to determine if the project runs tests before pull requests are merged. It is currently limited to repositories hosted on GitHub, and does not support other source hosting repositories (i.e., Forges).</p>
+
+<p>Running tests helps developers catch mistakes early on, which can reduce the
+number of vulnerabilities that find their way into a project.</p>
+</blockquote>
+
+<p>This maps to the OpenSSF best practices badge <code>test_continuous_integration</code>:</p>
+
+<blockquote>
+<p>The project MUST implement continuous integration, where new or changed code is frequently integrated into a central code repository and automated tests are run on the result.</p>
+</blockquote>
+
+<h2>CII-Best-Practices</h2>
+
+<blockquote>
+<p>This check determines whether the project has earned an <a href="https://bestpractices.coreinfrastructure.org/">OpenSSF (formerly CII) Best Practices Badge</a> at the passing, silver, or gold level.</p>
+
+<p>The OpenSSF Best Practices badge indicates whether or not that the project uses a set of security-focused best development practices for open
+source software. The check uses the URL for the Git repo and the OpenSSF Best Practices badge API.</p>
+</blockquote>
+
+<p>This maps to the OpenSSF Best Practices badge as a whole.</p>
+
+<h2>Code-Review</h2>
+
+<blockquote>
+<p>This check determines whether the project requires human code review
+before pull requests (merge requests) are merged.</p>
+
+<p>Reviews detect various unintentional problems, including vulnerabilities that can be fixed immediately before they are merged, which improves the quality of the code. Reviews may also detect or deter an attacker trying to insert malicious code (either as a malicious contributor or as an attacker who has subverted a contributor&#39;s account), because a reviewer might detect the subversion.</p>
+</blockquote>
+
+<p>This is a partial map to OpenSSF best practices badge <code>two_person_review</code>:</p>
+
+<blockquote>
+<p>&quot;The project MUST have at least 50% of all proposed modifications reviewed before release by a person other than the author, to determine if it is a worthwhile modification and free of known issues which would argue against its inclusion {Met justification.&quot;</p>
+</blockquote>
+
+<p>Note that many OSS projects have only one maintainer, where this is
+not practical to implement. The best practices badge doesn&#39;t require
+review of every pull request/merge request.</p>
+
+<h2>Contributors</h2>
+
+<blockquote>
+<p>This check tries to determine if the project has recent contributors from multiple organizations (e.g., companies). It is currently limited to repositories hosted on GitHub, and does not support other source hosting repositories (i.e., Forges).</p>
+
+<p>The check looks at the <code>Company</code> field on the GitHub user profile for authors of recent commits. To receive the highest score, the project must have had contributors from at least 3 different companies in the last 30 commits; each of those contributors must have had at least 5 commits in the last 30 commits.</p>
+</blockquote>
+
+<p>This maps to OpenSSF Best Practices badge (gold) <code>contributors_unassociated</code>:</p>
+
+<blockquote>
+<p>The project MUST have at least two unassociated significant contributors.</p>
+</blockquote>
+
+<h2>Dangerous-Workflow</h2>
+
+<blockquote>
+<p>This check determines whether the project&#39;s GitHub Action workflows has dangerous code patterns. Some examples of these patterns are untrusted code checkouts, logging github context and secrets, or use of potentially untrusted inputs in scripts.  The following patterns are checked:</p>
+
+<ul>
+<li>Untrusted Code Checkout: This is the misuse of potentially dangerous triggers.  This checks if a <code>pull_request_target</code> or <code>workflow_run</code> workflow trigger was used in conjunction with an explicit pull request checkout...
+&gt;</li>
+<li>Script Injection with Untrusted Context Variables: This pattern detects whether a workflow&#39;s inline script may execute untrusted input from attackers....</li>
+</ul>
+</blockquote>
+
+<p>No obvious mapping to the OpenSSF Best Practices badge.</p>
+
+<h2>Dependency-Update-Tool</h2>
+
+<blockquote>
+<p>This check tries to determine if the project uses a dependency update tool [specifically dependabot and a few others].</p>
+
+<p>Out-of-date dependencies make a project vulnerable to known flaws and prone to attacks.  These tools automate the process of updating dependencies by scanning for outdated or insecure requirements, and opening a pull request to update them if found.
+This check can determine only whether the dependency update tool is enabled; it does not ensure that the tool is run or that the tool&#39;s pull requests are merged.</p>
+</blockquote>
+
+<p>This maps to OpenSSF Best Practices badge <code>dependency_monitoring</code>:</p>
+
+<blockquote>
+<p>Projects MUST monitor or periodically check their external dependencies (including convenience copies) to detect known vulnerabilities, and fix exploitable vulnerabilities or verify them as unexploitable.</p>
+</blockquote>
+
+<h2>Fuzzing</h2>
+
+<blockquote>
+<p>This check tries to determine if the project uses
+<a href="https://owasp.org/www-community/Fuzzing">fuzzing</a>...</p>
+
+<p>Note: A project that fulfills this criterion with other tools may still receive a low score on this test. There are many ways to implement fuzzing, and it is challenging for an automated tool like Scorecard to detect them all. A low score is therefore not a definitive indication that the project is at risk.</p>
+</blockquote>
+
+<p>This maps to OpenSSF Best Practices badge <code>dynamic_analysis</code>:</p>
+
+<blockquote>
+<p>(passing) It is SUGGESTED that at least one dynamic analysis tool be applied to any proposed major production release of the software before its release.</p>
+
+<p>(gold) The project MUST apply at least one dynamic analysis tool to any proposed major production release of the software produced by the project before its release.</p>
+</blockquote>
+
+<p>This is related to OpenSSF Best Practices badge <code>dynamic_analysis_unsafe</code> and <code>dynamic_analysis_enable_assertions</code> that increase its effectiveness, but these aren&#39;t really mappings in any sense.</p>
+
+<h2>License</h2>
+
+<blockquote>
+<p>This check tries to determine if the project has published a license. It works by using either hosting APIs or by checking standard locations for a file named according to common conventions for licenses.</p>
+
+<p>A license can give users information about how the source code may or may not be used. The lack of a license will impede any kind of security review or audit and creates a legal risk for potential users.</p>
+</blockquote>
+
+<p>This maps to OpenSSF Best Practices badge <code>license_location</code>:</p>
+
+<blockquote>
+<p>The project MUST post the license(s) of its results in a standard location in their source repository.</p>
+</blockquote>
+
+<p>There&#39;s some relation to the OpenSSF Best Practices badge criteria
+<code>floss_license</code> and <code>floss_license_osi</code> but they aren&#39;t the same thing.</p>
+
+<h2>Maintained</h2>
+
+<blockquote>
+<p>This check determines whether the project is actively maintained. If the project is archived, it receives the lowest score. If there is at least one commit per week during the previous 90 days, the project receives the highest score.  If there is activity on issues from users who are collaborators, members, or owners of the project, the project receives a partial score.</p>
+
+<p>A project which is not active might not be patched, have its dependencies patched, or be actively tested and used. However, a lack of active maintenance is not necessarily always a problem. Some software, especially smaller utility functions, does not normally need to be maintained.  For example, a library that determines if an integer is even would not normally need maintenance unless an underlying implementation language definition changed. A lack of active maintenance should signal that potential users should investigate further to judge the situation.</p>
+
+<p>This check will only succeed if a Github project is &gt;90 days old. Projects
+that are younger than this are too new to assess whether they are maintained
+or not, and users should inspect the contents of those projects to ensure they
+are as expected.</p>
+</blockquote>
+
+<p>This maps to OpenSSF Best Practices badge <code>maintained</code> (though without a numeric score):</p>
+
+<blockquote>
+<p>The project MUST be maintained.</p>
+</blockquote>
+
+<h2>Packaging</h2>
+
+<blockquote>
+<p>This check tries to determine if the project is published as a package. It is currently limited to repositories hosted on GitHub, and does not support other source hosting repositories (i.e., Forges).</p>
+
+<p>Packages give users of a project an easy way to download, install, update, and uninstall the software by a package manager. In particular, they make it easy for users to receive security patches as updates.</p>
+
+<p>The check currently looks for <a href="https://docs.github.com/en/packages/learn-github-packages/publishing-a-package">GitHub packaging workflows</a> and language-specific GitHub Actions that upload the package to a corresponding hub, e.g., <a href="https://www.npmjs.com/">Npm</a>. We plan to add better support to query package manager hubs directly in the future, e.g., for <a href="https://www.npmjs.com/">Npm</a>, <a href="https://pypi.org/">PyPi</a>.</p>
+</blockquote>
+
+<p>This is a partial map to OpenSSF Best Practices badge <code>installation_common</code> (it&#39;s only partial because the best practices badge allows alternatives to packaging):</p>
+
+<blockquote>
+<p>The project MUST provide a way to easily install and uninstall the software produced by the project using a commonly-used convention.</p>
+</blockquote>
+
+<h2>Pinned-Dependencies</h2>
+
+<blockquote>
+<p>This check tries to determine if the project pins dependencies used during its build and release process.  A &quot;pinned dependency&quot; is a dependency that is explicitly set to a specific hash instead of allowing a mutable version or range of versions. It is currently limited to repositories hosted on GitHub, and does not support other source hosting repositories (i.e., Forges).</p>
+
+<p>The check works by looking for unpinned dependencies in Dockerfiles, shell scripts, and GitHub workflows which are used during the build and release process of a project.  Special considerations for Go modules treat full semantic versions as pinned due to how the Go tool verifies downloaded content against the hashes when anyone first downloaded the module.</p>
+</blockquote>
+
+<p>No obvious mapping to the OpenSSF Best Practices badge.</p>
+
+<h2>SAST</h2>
+
+<blockquote>
+<p>This check tries to determine if the project uses Static Application Security Testing (SAST), also known as <a href="https://owasp.org/www-community/controls/Static_Code_Analysis">static code analysis</a>.  It is currently limited to repositories hosted on GitHub, and does not support other source hosting repositories (i.e., Forges).</p>
+
+<p>SAST is testing run on source code before the application is run. Using SAST tools can prevent known classes of bugs from being inadvertently introduced in the codebase.</p>
+
+<p>Note: A project that fulfills this criterion with other tools may still receive a low score on this test. There are many ways to implement SAST, and it is challenging for an automated tool like Scorecard to detect them all. A low score is therefore not a definitive indication that the project is at risk.</p>
+</blockquote>
+
+<p>This generally maps to OpenSSF Best Practices badge <code>static_analysis</code> (though this doesn&#39;t require security-specific analysis and only no major release):</p>
+
+<blockquote>
+<p>At least one static code analysis tool (beyond compiler warnings and &quot;safe&quot; language modes) MUST be applied to any proposed major production release of the software before its release, if there is at least one FLOSS tool that implements this criterion in the selected language.</p>
+</blockquote>
+
+<p>This also maps to OpenSSF Best Practices badge <code>static_analysis_common_vulnerabilities</code>:</p>
+
+<blockquote>
+<p>(passing) It is SUGGESTED that at least one of the static analysis tools used for the <code>static_analysis</code> criterion include rules or approaches to look for common vulnerabilities in the analyzed language or environment.</p>
+
+<p>(silver) The project MUST use at least one static analysis tool with rules or approaches to look for common vulnerabilities in the analyzed language or environment, if there is at least one FLOSS tool that can implement this criterion in the selected language.</p>
+</blockquote>
+
+<p>This also maps to OpenSSF Best Practices badge <code>static_analysis_often</code>:</p>
+
+<blockquote>
+<p>(passing) It is SUGGESTED that static source code analysis occur on every commit or at least daily.</p>
+</blockquote>
+
+<p>It might be a good idea to modify the best practices badge to
+require at least some SAST on every commit, as this has become more
+practical today.</p>
+
+<h2>Security-Policy</h2>
+
+<blockquote>
+<p>This check tries to determine if the project has published a security policy. It works by looking for a file named <code>SECURITY.md</code> (case-insensitive) in a few well-known directories.</p>
+
+<p>A security policy (typically a <code>SECURITY.md</code> file) can give users information about what constitutes a vulnerability and how to report one securely so that information about a bug is not publicly visible.</p>
+
+<p>This check examines the contents of the security policy file awarding points for those policies that express vulnerability process(es), disclosure timelines, and have links (e.g., URL(s) and email(s)) to support the users.</p>
+</blockquote>
+
+<p>This maps to OpenSSF Best Practices badge <code>vulnerability_report_process</code>:</p>
+
+<blockquote>
+<p>The project MUST publish the process for reporting vulnerabilities on the project site.</p>
+</blockquote>
+
+<p>Also maps to OpenSSF Best Practices badge <code>vulnerability_report_private</code>:</p>
+
+<blockquote>
+<p>If private vulnerability reports are supported, the project MUST include how to send the information in a way that is kept private.</p>
+</blockquote>
+
+<h2>Signed-Releases</h2>
+
+<blockquote>
+<p>This check tries to determine if the project cryptographically signs release
+artifacts. It is currently limited to repositories hosted on GitHub, and does
+not support other source hosting repositories (i.e., Forges).</p>
+
+<p>Signed releases attest to the provenance of the artifact.</p>
+
+<p>This check looks for the following filenames in the project&#39;s last five <a href="https://docs.github.com/en/repositories/releasing-projects-on-github/about-releases">release assets</a>: ...</p>
+</blockquote>
+
+<p>This maps to OpenSSF Best Practices badge <code>signed_releases</code>:</p>
+
+<blockquote>
+<p>(silver) The project MUST cryptographically sign releases of the project results intended for widespread use, and there MUST be a documented process explaining to users how they can obtain the public signing keys and verify the signature(s). The private key for these signature(s) MUST NOT be on site(s) used to directly distribute the software to the public.</p>
+</blockquote>
+
+<h2>Token-Permissions</h2>
+
+<blockquote>
+<p>This check determines whether the project&#39;s automated workflows tokens follow the principle of least privilege. This is important because attackers may use a compromised token with write access to, for example, push malicious code into the project.</p>
+
+<p>It is currently limited to repositories hosted on GitHub, and does not support other source hosting repositories (i.e., Forges).</p>
+</blockquote>
+
+<p>No obvious mapping to the OpenSSF Best Practices badge.</p>
+
+<h2>Vulnerabilities</h2>
+
+<blockquote>
+<p>This check determines whether the project has open, unfixed vulnerabilities in its own codebase or its dependencies using the <a href="https://osv.dev/">OSV (Open Source Vulnerabilities)</a> service.  An open vulnerability is readily exploited by attackers and should be fixed as soon as possible.</p>
+</blockquote>
+
+<p>This maps to OpenSSF Best Practices badge <code>vulnerabilities_fixed_60_days</code>:</p>
+
+<blockquote>
+<p>There MUST be no unpatched vulnerabilities of medium or higher severity that have been publicly known for more than 60 days.</p>
+</blockquote>
+
+<p>Note that the best practices badge text here could be interpreted as
+only applying to its own codebase, not necessarily its dependencies.</p>
+
+<p>This also partly maps to OpenSSF Best Practices badge <code>vulnerabilities_fixed_60_days</code>:</p>
+
+<blockquote>
+<p>There MUST be no unpatched vulnerabilities of medium or higher severity that have been publicly known for more than 60 days.</p>
+</blockquote>
+
+<p>This also partly maps to OpenSSF Best Practices badge <code>vulnerabilities_critical_fixed</code>:</p>
+
+<blockquote>
+<p>Projects SHOULD fix all critical vulnerabilities rapidly after they are reported.</p>
+</blockquote>
+
+<p>There are also OpenSSF Best Practices badge criteria that discuss
+fixing vulnerabilities found by the project itself using
+static or dynamic analysis, but since those are &quot;internal&quot; instead of
+&quot;external&quot; they don&#39;t seem to really be a mapping of any kind.</p>
+
+<h2>Webhooks</h2>
+
+<blockquote>
+<p>This check determines whether the webhook defined in the repository has a token configured to authenticate the origins of requests.</p>
+</blockquote>
+
+<p>No obvious mapping to the OpenSSF Best Practices badge.</p>
+  </body>
+  </html>

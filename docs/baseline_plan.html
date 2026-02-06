@@ -1,0 +1,253 @@
+  <!DOCTYPE html>
+  <html>
+  <head>
+  <title>docs/baseline_plan.md</title>
+  </head>
+  <body>
+<h1>Baseline plan</h1>
+
+<p>This document explains what the OpenSSF Baseline is, and how the
+OpenSSF Best Practices badge project plans to add support for it
+(without losing support for its existing set of criteria).</p>
+
+<h2>What is baseline?</h2>
+
+<p>The <a href="https://baseline.openssf.org/">OpenSSF Open Source Project Security Baseline (OSPS Baseline)</a>, aka &quot;baseline&quot;, is a set of requirements
+maintained by the OpenSSF Security Baseline SIG for improving security.
+Both the baseline criteria and the original &quot;metal series&quot;
+are intended to help open source software projects improve their security
+and both have 3 levels of criteria.</p>
+
+<p>The baseline criteria are different from the original &quot;metal series&quot; of
+criteria currently supported by the OpenSSF Best Practices badge as follows:</p>
+
+<ul>
+<li>The &quot;baseline&quot; criteria focus on only having MUST criteria
+(no SHOULD or SUGGESTED criteria), are primarily derived from
+regulations and standards, and focus on being a shorter list
+(e.g., baseline-1 has 20 criteria for baseline-1 while passing has 67).</li>
+<li>The original &quot;metal series&quot; of criteria in the Best Practices badge
+(passing, silver, gold) include criteria that are widely but not universally
+applicable (SHOULD and SUGGESTED), are primarily derived from
+successful secure OSS projects, and are willing to accept more criteria
+(including those for quality as long as they also aid security).</li>
+</ul>
+
+<p>To see the current baseline criteria, view the beginning of this document: <a href="https://baseline.openssf.org/versions/2025-10-10">https://baseline.openssf.org/versions/2025-10-10</a>.</p>
+
+<h2>Why support both sets of criteria?</h2>
+
+<p>Neither set of criteria is a clear superset of the other.
+Their overlaps are often complex
+&quot;partial&quot; mappings instead of clean &quot;X covers everything in Y&quot; mappings.</p>
+
+<p>We don&#39;t want projects to lose their investment of time in the &quot;metal series&quot;.
+As of November 2025
+over 9,000 projects have spent time to try to meet the metal series criteria,
+with nearly 2,000 projects achieving at least &quot;passing&quot;,
+and we don&#39;t want them to think their work is a waste.
+In addition, many may find the metal series&#39; more detailed criteria valuable,
+as the metal series include a lot of specifics that are
+lacking in the baseline.
+These include specifics on cryptography, build processes,
+and requiring that the developers know how to develop secure software.</p>
+
+<p>Others may prefer to use the baseline set of criteria.
+The baseline focuses on mappings to regulations,
+focuses solely on MUSTs, and is significantly shorter, and for some
+these are advantages.</p>
+
+<p>Some projects may want to use both sets of criteria.
+Each list has criteria the other doesn&#39;t.
+As a result, neither one obviously replaces the other.</p>
+
+<p>Therefore, we plan to make some changes to support <em>both</em> sets of criteria.
+A given project can use one set of criteria, or the other, or both, at
+their choosing. A given project is likely to start with one set, and later
+might work to also meet the other.</p>
+
+<p>No set of criteria can fully capture good practices for projects, so being
+able to use both sets of criteria has its advantages.
+In the longer term there may be more work to converge these criteria, but
+there&#39;s no obvious short-term way to do this, so doing this incrementally
+where appropriate is more likely to succeed.</p>
+
+<h2>Expected result</h2>
+
+<p>Currently each project has a page for each criterion set
+(e.g., one each for passing, silver, and gold). The plan would be to add
+more such pages (one each for baseline-1, baseline-2, and baseline-3).
+The plan would be to work incrementally.
+We would eventually add more automation, including automation to reuse
+any existing data.</p>
+
+<h2>Resource URLs</h2>
+
+<p>URLs for the production site always begin with
+<code>https://www.bestpractices.dev</code>.
+In &quot;normal&quot; URLs this is followed by <code>/{LOCALE}</code>, and if
+the locale is omitted, it&#39;s automatically redirected
+as set in the user&#39;s browser settings.
+There are a few locale-independent URLs; in those cases the locale must
+be omitted.</p>
+
+<p>A URL <code>criteria_level</code> will no longer be <code>0</code> (passing), <code>1</code> (silver), or <code>2</code>
+(gold), as that will be confusing. The value values will be
+<code>passing</code>, <code>silver</code>, <code>gold</code>, <code>baseline-1</code>, <code>baseline-2</code>, <code>baseline-3</code>,
+and <code>permissions</code>. The last one isn&#39;t really a criteria level, but a way
+for users to enter changes to permissions on the project
+(these are currently handled when editing passing, and we want baseline
+users to have the same access).</p>
+
+<p>Given that, we&#39;ll have support for:</p>
+
+<ul>
+<li><code>/projects/{id}</code>: Temporary redirect to the &quot;preferred&quot; criteria level.</li>
+<li><code>/projects/{id}/{criteria_level}</code>:
+Show the form for that criteria level (append <code>/edit</code> to edit them).</li>
+<li><code>/projects/{id}.{format}</code>: Show data for project in that format
+(.json, .md).</li>
+<li><code>/projects/{id}/badge</code>: Show the small badge image for the metal series.
+This is locale-independent, to maximize caching.</li>
+<li><code>/projects/{id}/baseline</code>: Show the small badge image for the baseline series
+This is locale-independent, to maximize caching.</li>
+</ul>
+
+<h2>High-level implementation plan</h2>
+
+<p>The plan is to do some reorganizing to make it easier to add support
+for baseline, then implement baseline.</p>
+
+<ol>
+<li>Change URL <code>criteria_level</code> so 0,1,2 get permanently redirected
+to passing, silver, gold, and support those new names.
+Ensure that there&#39;s only 1 canonical name for data, to reduce spider load.
+Move the permissions changes to a new form <code>permissions</code>, so that
+people don&#39;t need to view/edit &quot;passing&quot; to see/edit permissions.</li>
+<li>Add support for <code>baseline-1</code> criteria level and at least stub views
+for two baseline-1 criteria, along with their database support.</li>
+<li>Add full support for <code>baseline-1</code> criteria level
+so it can be manually viewed and edited.  Test.</li>
+<li>Add support for <code>/baseline</code> small badge image.</li>
+<li>Add full support data entry of <code>baseline-2</code> and <code>baseline-3</code>.</li>
+<li>Add basic automation, at least build on existing automation
+(in the longer term we want to use more tools and automation).</li>
+<li>Discuss with natural language translators. This is a lot of translation work.
+Currently the plan is to add mechanism so automated translations
+are used (using existing translations as templates)
+but <em>only</em> when there isn&#39;t a human translation. Human translation
+will always be better, but showing English isn&#39;t great for those
+who don&#39;t speak English.</li>
+</ol>
+
+<h2>Criteria mappings</h2>
+
+<p>For the most part the baseline and best practices badge are not the same. In some places they are similar but not identical (so meeting one doesn&#39;t always guarantee meeting the other). There are mappings available to help show their relationships.</p>
+
+<p>A form (in English) with the BP Badge criteria are here:
+<a href="https://www.bestpractices.dev/en/criteria">https://www.bestpractices.dev/en/criteria</a>.
+At the time of writing, the current baseline is here: <a href="https://baseline.openssf.org/versions/2025-10-10">https://baseline.openssf.org/versions/2025-10-10</a>.</p>
+
+<p>To understand their similarities, you can see the
+<a href="https://docs.google.com/spreadsheets/d/1an5mx3rayoz3JRFUepD56zgprpwXBXBG70fVZvIMCpA/edit?gid=468811656#gid=468811656">&quot;Compliance Crosswalk Matrix&quot; on the &quot;BP Badges&quot; tab</a>.
+This shows each of the best practices badge criteria, mapping each to the baseline criteria most related to them.
+It also shows a separate set of IDs that for the best practices badge criteria that aren&#39;t used anywhere else.</p>
+
+<p>Here&#39;s an example of a subset of its data, showing some criteria from the best practices badge. I&#39;ve intentionally chosen an area where baseline and BP badge criteria are more similar to each other:</p>
+
+<table><thead>
+<tr>
+<th>Special ID</th>
+<th>BP Badge ID</th>
+<th>Level</th>
+<th>Requirements text</th>
+<th>Mapping</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>B-P-4</td>
+<td><code>contribution</code></td>
+<td>Passing</td>
+<td>The information on how to contribute MUST explain the contribution process (e.g., are pull requests used?) (URL required for &quot;met&quot;.)</td>
+<td>OSPS-GV-03</td>
+</tr>
+<tr>
+<td>B-P-5</td>
+<td><code>contribution_requirements</code></td>
+<td>Passing</td>
+<td>The information on how to contribute SHOULD include the requirements for acceptable contributions (e.g., a reference to any required coding standard). (URL required for &quot;met&quot;.)</td>
+<td>OSPS-GV-03</td>
+</tr>
+<tr>
+<td>B-S-3</td>
+<td><code>governance</code></td>
+<td>Silver</td>
+<td>The project MUST clearly define and document its project governance model (the way it makes decisions, including key roles).</td>
+<td>OSPS-GV-03, OSPS-GV-01</td>
+</tr>
+<tr>
+<td>B-B-4+</td>
+<td><code>contribution_requirements</code></td>
+<td>Silver</td>
+<td>Upgrade contribution_requirements from SHOULD to MUST. &quot;The information on how to contribute MUST include the requirements for acceptable contributions (e.g., a reference to any required coding standard).&quot;</td>
+<td>OSPS-GV-03, OSPS-GV-03, OSPS-GV-01</td>
+</tr>
+</tbody></table>
+
+<p>Note that <code>contribution_requirements</code> becomes a &quot;MUST&quot; at Silver. Note also that the mapping only maps to categories here, not to specific baseline controls.</p>
+
+<p>You can see the
+<a href="https://baseline.openssf.org/versions/2025-10-10">current baseline criteria</a>.
+At its top is the short text of its criteria, followed by details. If you look at the details,
+you&#39;ll see &quot;BPB:&quot; entries (best practices badge) with criteria IDs. Use the &quot;Compliance Crosswalk Matrix&quot; to
+map those IDs back to the Best Practices badge criteria ids.</p>
+
+<p>For example, if you go to:
+<a href="https://baseline.openssf.org/versions/2025-10-10#osps-gv-03---the-project-documentation-must-include-an-explanation-of-the-contribution-process">https://baseline.openssf.org/versions/2025-10-10#osps-gv-03---the-project-documentation-must-include-an-explanation-of-the-contribution-process</a></p>
+
+<p>You&#39;ll see that under category &quot;Governance&quot; (OSPS-GV) we have several sub-categories.</p>
+
+<p>One sub-category is &quot;OSPS-GV-01 - The project documentation MUST include the roles and responsibilities for members of the project.&quot; This includes these controls:</p>
+
+<p>OSPS-GV-01.01:</p>
+
+<ul>
+<li>Requirement: While active, the project documentation MUST include a list of project members with access to sensitive resources.</li>
+<li>Recommendation: Document project participants and their roles through such artifacts as members.md, governance.md, maintainers.md, or similar file within the source code repository of the project. This may be as simple as including names or account handles in a list of maintainers, or more complex depending on the project&#39;s governance.</li>
+<li>Maturity Level 2-3</li>
+</ul>
+
+<p>OSPS-GV-01.02:</p>
+
+<ul>
+<li>Requirement: While active, the project documentation MUST include descriptions of the roles and responsibilities for members of the project.</li>
+<li>Recommendation: Document project participants and their roles through such artifacts as members.md, governance.md, maintainers.md, or similar file within the source code repository of the project.</li>
+<li>Maturity Level 2-3</li>
+<li>External Framework Mappings: BPB: B-S-3, B-S-4</li>
+</ul>
+
+<p>Another sub-category is &quot;OSPS-GV-03 - The project documentation MUST include an explanation of the contribution process.&quot; that includes 2 controls:</p>
+
+<p>OSPS-GV-03.01:</p>
+
+<ul>
+<li>Requirement: While active, the project documentation MUST include an explanation of the contribution process.</li>
+<li>Recommendation: Document project participants and their roles through such artifacts as members.md, governance.md, maintainers.md, or similar file within the source code repository of the project. This may be as simple as including names or account handles in a list of maintainers, or more complex depending on the project&#39;s governance.</li>
+<li>Baseline level 2,3</li>
+</ul>
+
+<p>OSPS-GV-01.02:</p>
+
+<ul>
+<li>Requirement: While active, the project documentation MUST include descriptions of the roles and responsibilities for members of the project.</li>
+<li>Recommendation: Document project participants and their roles through such artifacts as members.md, governance.md, maintainers.md, or similar file within the source code repository of the project.</li>
+<li>Baseline level 2,3</li>
+<li>External Framework ... BPB: {B-S-3 0 }, {B-S-4 0 }</li>
+</ul>
+
+<h2>Detailed plan</h2>
+
+<p>See the file <a href="./baseline_details.html">baseline_details.md</a> for more details
+on exactly how this is (currently) planned to be implemented.</p>
+  </body>
+  </html>

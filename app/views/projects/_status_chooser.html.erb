@@ -4,16 +4,21 @@
  status_symbol = criterion.status_symbol
  project_criterion_status = project[status_symbol]
  criterion_result = project.get_criterion_result(criterion)
+ # Get justification for data attribute
+ justification_symbol = criterion.justification_symbol
+ project_criterion_justification = project[justification_symbol] || ''
 
  cache ['buttons', criterion_str, criteria_level, criterion_result,
-        view_only, locale, project_criterion_status ] do
+        view_only, locale, project_criterion_status, project_criterion_justification ] do
    passing_class = if (criterion_result == :criterion_passing && view_only)
                      ' criterion-passing'
                    else
                      ''
                    end
 %>
-  <div id="<%= criterion_str %>" class="row criterion-data<%= passing_class %>">
+  <div id="<%= criterion_str %>" class="row criterion-data<%= passing_class %>"
+       data-status="<%= status_to_string(project_criterion_status) %>"
+       data-justification="<%= h(project_criterion_justification) %>">
     <% is_crypto = criterion_str.match(/^crypto_/)
        crypto_class = is_crypto ? ' criterion-is-crypto' : '' %>
 

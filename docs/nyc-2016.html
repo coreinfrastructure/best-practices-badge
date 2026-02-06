@@ -1,0 +1,266 @@
+  <!DOCTYPE html>
+  <html>
+  <head>
+  <title>docs/nyc-2016.md</title>
+  </head>
+  <body>
+<h1>NYC 2016 Brainstorming session</h1>
+
+<p>A 2016 brainstorming session was held in New York City to identify &quot;best
+practices&quot; (though perhaps the term &quot;recommended practices&quot; is better,
+since that&#39;s a more accurate description).  In particular, the idea was
+to help identify these practices.</p>
+
+<p>Below are notes from that session - this was reviewed
+to identify potential criteria (at any level).
+This was also recorded as GitHub issue #473.</p>
+
+<p>Practices of what? Not just code.</p>
+
+<p>The top-level categories were;</p>
+
+<ul>
+<li>Good documentation</li>
+<li>Community mgmt</li>
+<li>Make it easy for people to contribute</li>
+<li>Testing</li>
+<li>Discoverability</li>
+<li>Release control</li>
+<li>Security disclosure/response</li>
+<li>License your project (OSS)</li>
+<li>CLAs</li>
+<li>Governance</li>
+<li>Security development lifecycle</li>
+<li>Operational security of project (project IT)</li>
+<li>Dependency mgmt (Ecosystem)</li>
+</ul>
+
+<p>We Should packages &quot;measure&quot; best practice, e.g. for use at install time.</p>
+
+<p>Difficult to apply one universal evaluation. Subjective, different concerns,
+etc.</p>
+
+<p>One challenge is that lessons learned don&#39;t spread.</p>
+
+<p>Some practices are difficult to use because of signal-to-noise:</p>
+
+<ul>
+<li>make check generating thousands of legacy &quot;problems&quot;</li>
+<li>no power to assert &quot;zero warnings&quot; on other peoples&#39; projects</li>
+<li>AI: perhaps have Debian (say) turn &quot;make check&quot; on by default so
+  that it has to be disabled selectively (rather than enabled)</li>
+</ul>
+
+<p>AI: commonly-used build systems could be updated to do ASAN builds
+and checks</p>
+
+<p>Best practices can be trumped by business/commercial considerations</p>
+
+<p>AI: distributions/packaging mechanisms would convey &quot;best practice&quot;
+attributes to worthy packages. (TBD what counts as &quot;worthy&quot;)</p>
+
+<p>Below are more detailed recommended practices (these are raw notes from
+the brainstorming session).</p>
+
+<h2>Release control</h2>
+
+<ol>
+<li>Stable release branches - yes but in a different way.  Instead of
+&quot;branches&quot; (which is git-specific), we require the more general notion
+of tagging, which is in version_tags</li>
+<li>Version numbers for releases - yes, in version_unique</li>
+<li>Use semantic versioning - yes, in version_semver</li>
+<li>Version control - yes, in  repo_public, repo_track, and repo_distributed</li>
+<li>Release notes (major changes) for each release - yes, release_notes</li>
+<li>Intermediate versions are publicly released (no surprises in release) -
+yes, repo_interim</li>
+<li>Issue tracker (GitHub, Bugzilla, etc.) - yes, report_process and
+report_tracker.</li>
+</ol>
+
+<h2>Good documentation &amp; design</h2>
+
+<ol>
+<li>Documentation - yes, documentation_basics and documentation_interface</li>
+<li>README explaining whys &amp; hows - yes, documentation_basics, description_good</li>
+<li>Published roadmap for future improvements - proposed as documentation_roadmap</li>
+<li>A short intro about the project on the webpage &amp; README -
+yes, documentation_basics</li>
+<li>API guidelines / style guide - for the API, see documentation_interface.
+For code, proposed under coding_standards.</li>
+<li>Design documents - <strong>Added</strong>.  This is related to know_secure_design.
+Some is in proposed implement_secure_design and
+proposed documentation_security.</li>
+</ol>
+
+<h2>Dependency management</h2>
+
+<ol>
+<li>Accurate makefile dependencies - If a project uses makefiles (or
+something like them), and there are a few inaccurate dependencies,
+those are just a bugs - we don&#39;t want them, but projects can find and
+fix bugs.  To be a criterion, we need a general rule that people should
+follow that is widely agreed on as being an improvement &amp; has evidence
+to support it.  This is harder.  We could say, &quot;maximally automate
+dependencies&quot; - but it&#39;s hard to measure maximal.  We could say,
+&quot;avoid recursive make&quot;, citing
+<a href="https://web.archive.org/web/20200209034547/http://aegis.sourceforge.net/auug97.pdf">&quot;Recursive Make Considered Harmful&quot; by Peter Miller</a>.
+Note that
+<a href="http://research.microsoft.com/en-us/um/people/simonpj/papers/ghc-shake/ghc-shake.pdf">&quot;Non-recursive Make Considered Harmful&quot;</a>
+agrees that recursive make approaches are bad; its argument is that
+for large projects you should use a tool other than make (which is
+fine, we&#39;re agnostic about the build system - BadgeApp uses rake).
+Something like: &quot;The project MUST NOT use recursive-subdirectory build
+systems where there are cross-dependencies in the subdirectories.&quot; -
+draft criterion build_non_recursive</li>
+<li>External dependencies listed and traceable - Added as external_dependencies.  It doesn&#39;t specifically say &quot;traceable&quot;, but we think it gets the point across.</li>
+</ol>
+
+<h2>Code review</h2>
+
+<p>Code reviews - yes, see proposed two_person_review and security_review.</p>
+
+<p>Maybe more specific code review criteria could be added, suggestions
+welcome.</p>
+
+<h2>Community Management</h2>
+
+<ol>
+<li>Code of conduct (CoC) - code_of_conduct.</li>
+<li>Be nice - this is <em>not</em> universally agreed on.  Wheeler suggests you
+should be nice to people &amp; hard on code, but many people have trouble
+seeing the difference.  Also, there&#39;s a difference between &quot;I&#39;m offended&quot;
+and &quot;I&#39;m attacked&quot; - the latter is the issue.  Suggest that the key
+issue here is addressed by code_of_conduct.</li>
+<li>Discoverability - Presumably in this context this is &quot;can I find the
+project?&quot; and &quot;Can I find out how to interact with it?&quot;  The first part
+is primarily addressed by criterion description_good - since once that&#39;s
+done, search engines can help people find it. Getting a badge also helps
+with the first part. The second part is helped by criteria interact,
+contribution, and contribution_requirements.</li>
+<li>Have project &amp; repo URL - already in criteria.</li>
+</ol>
+
+<h2>Other</h2>
+
+<ol>
+<li>Feature roadmap - proposed in criterion documentation_roadmap.</li>
+<li>KISS (Keep it Simple) - worthy goal, but very difficult to measure
+and determine whether or not it&#39;s achieved.  We do require that people
+be aware of this, as part of criterion know_secure_design.</li>
+<li>Use code formatters - proposed in criterion coding_standards_enforced.
+We already had coding_standards, but based on this comment have split out
+coding_standards_enforced as a separate item to emphasize enforcement.
+We don&#39;t specifically require the use of a code formatter - many projects
+simply use a checker, instead of a reformatter, so we simply require
+enforcement and let the project decide how to enforce it.</li>
+</ol>
+
+<h2>Security disclosure/reporting</h2>
+
+<ol>
+<li>Bug reporting instructions - yes, already there in criterion report_process.</li>
+<li>Explain how to report vulnerabilities / A way to report security
+bugs / Security vulnerability reporting procedure - yes, already there
+in criterion vulnerability_report_process.</li>
+<li>Incident response SLA. Yes, report_response and
+vulnerability_report_response, vulnerabilities_fixed_60_days</li>
+</ol>
+
+<h2>Operational security of project</h2>
+
+<ol>
+<li>Two-factor authentication for developers - proposed as
+two_factor_authentication (passing+2)</li>
+<li>Email/issue tracker security - Just saying &quot;your project&#39;s development
+infrastructure secure&quot; is too nebulous - people will agree, but will say
+they&#39;re already doing it.  Email security is challenging; GnuPG is used,
+but many find it difficult to deploy in practice, especially to less
+technically savvy people.  Mandating a specific technique, like GnuPG,
+doesn&#39;t seem like a good approach.  We&#39;re not sure how to turn this into
+a specific criterion.</li>
+<li>HTTPS for project &amp; repo sites - yes, sites_https</li>
+<li>Signed releases - yes, proposed as signed_releases</li>
+</ol>
+
+<h2>Make it easy for people to contribute</h2>
+
+<ol>
+<li>Issues marked for new contributors - yes, proposed small_tasks</li>
+<li>Contributing guide/doc - yes, in criteria interact, contribution,
+and contribution_requirements</li>
+<li>Documented process for how patches get accepted - yes, in criteria
+interact, contribution, and contribution_requirements</li>
+<li>Low barrier to entry (tools, workflows, etc.) - added as new potential
+criterion installation_development_quick</li>
+<li>Acknowledge bug reports (don’t just sit there) - yes, criterion
+report_responses.  This only requires a majority, not every single report.</li>
+<li>Public comment channel (for support) - yes, report_archive,
+report_archive, report_tracker, report_tracker</li>
+<li>Acknowledge/credit contributions &amp; contributors - Added
+vulnerability_report_credit for giving credit for vulnerability reports.
+For just generic contributions trying to do this separately  can get very
+long, and many successful projects don&#39;t try to do this. In addition,
+version control systems already record this (e.g., &quot;git log&quot; and &quot;git
+blame&quot;).  In conclusion, it&#39;s not clear that adding this as a separate
+criterion is a universal good for general contributions.</li>
+<li>Assume good intention - give commit access soon, revoke &amp; revert if
+needed - No, because different successful projects disagree on this.
+Node.js prefers this approach, however, many other successful projects
+(such as the Linux kernel) expressly do <em>not</em> do this.  In addition,
+from a security point-of-view, assuming good intentions is not always
+realistic, especially since &quot;revoke and revert&quot; can be difficult if the
+committer is actively malicious.  Projects can choose whether or not to
+do this.</li>
+</ol>
+
+<h2>Testing!</h2>
+
+<ol>
+<li>Add tests when add major new functionality - yes, test_policy and
+tests_are_added</li>
+<li>Code coverage.  Yes, proposed as test_statement_coverage80 and
+test_statement_coverage90 and test_branch_coverage80</li>
+<li>Test coverage &gt;=N% (statement? Branch? other?) - Yes, proposed
+as test_statement_coverage80 and test_statement_coverage90 and
+test_branch_coverage80</li>
+<li>Automated test suite - yes, criterion test</li>
+<li>Make check with ASAN - yes, dynamic_analysis_unsafe</li>
+<li>Continuous integration (2x) - yes, proposed criteria
+continuous_integration and automated_integration_testing</li>
+<li>Can build it - criterion build and build_common_tools; see also
+build_repeatable and build_reproducible</li>
+<li>For parsers, etc: FUZZ - yes in general, though we don&#39;t require
+fuzzing specifically.  Criterion dynamic_analysis.</li>
+<li>Use dynamic analysis tools - Criterion dynamic_analysis.</li>
+<li>Use static analysis tools / static analysis coverage of code -
+yes for the first part - criterion static_analysis.  Unclear what the
+author meant about &quot;static coverage of code&quot; - if what was meant was
+coverage of tests, see proposed criteria test_statement_coverage80 and
+test_statement_coverage90 and test_branch_coverage80</li>
+<li>Use warning flags - yes, criterion warning_flags and
+proposed warnings_strict</li>
+</ol>
+
+<h2>How to get best practices applied</h2>
+
+<p>These are not changes to the criteria, but ideas on how to get the
+criteria more easily applied.</p>
+
+<ol>
+<li>Make things easier/automatic (distro/repo maintainers) - Proposed
+as <a href="https://github.com/coreinfrastructure/best-practices-badge/issues/621">https://github.com/coreinfrastructure/best-practices-badge/issues/621</a></li>
+<li>Debtags.debian.net</li>
+<li>Show intrinsic value to project</li>
+<li>Submit these changes to popular projects</li>
+<li>Contact Debian maintainer - put in tags to best practice badge</li>
+<li>At usual time- tell user/developer best practices status</li>
+<li>On GitHub/etc. Page, show some best practice status</li>
+<li>Language-specific package managers (npm, bundler, …)
+tell people if not meet best practices</li>
+<li>$ pay project to change</li>
+<li>Must uncomment (dependencies?) to get “ugly” packages</li>
+<li>Run lintian and for … (Debian)</li>
+</ol>
+  </body>
+  </html>

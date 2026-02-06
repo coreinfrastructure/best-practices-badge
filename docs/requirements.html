@@ -1,0 +1,168 @@
+  <!DOCTYPE html>
+  <html>
+  <head>
+  <title>docs/requirements.md</title>
+  </head>
+  <body>
+<h1>Requirements</h1>
+
+<!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
+
+<p>We have implemented a simple web application called &quot;BadgeApp&quot; that
+quickly captures self-assertion data, evaluates criteria automatically
+when it can, and provides badge information.
+Our emphasis is on keeping the program relatively <em>simple</em>.</p>
+
+<p>This file provides information on the basic high-level requirements
+of the BadgeApp.  Putting them here will hopefully make certain choices
+clear, and also perhaps eliminate useless repeat arguments.
+In a few cases we briefly note how we currently meet the requirements.</p>
+
+<p>In this document we&#39;ll use the term &quot;open source software&quot; (OSS),
+and treat Free/Libre and Open Source Software (FLOSS) as a synonym.
+A &quot;badge entry&quot; is the full set of badge data about a project; a
+&quot;badge&quot; is the small image showing the summarized status of a project.</p>
+
+<h2>High-level requirements</h2>
+
+<p>The BadgeApp web application MUST:</p>
+
+<ol>
+<li><strong>Support basic login and editing functionality.</strong>
+The application MUST
+allow users to sign in (login) using GitHub or an email account.
+The application MUST allow authenticated users (and only
+authenticated users) to create project badge entries, edit those
+badge entries (if authorized), and log out.
+The system MUST calculate and show a project&#39;s progress
+towards getting a badge, and MUST support multiple badge levels
+with their own criteria.
+When users edit a badge entry and have JavaScript enabled, the system MUST
+provide immediate feedback on how their changes are affecting progress
+towards getting a badge.
+The application MUST allow anyone (authenticated or not) to
+see current badge entries and badges.
+Admins MUST be able to edit or remove arbitrary projects
+(e.g., to deal with spam and false claims).</li>
+<li><strong>Meet its own criteria.</strong>
+This implies that it MUST be open source software
+(OSS).  We release the source code
+under the MIT license, which achieves this.</li>
+<li><strong>Be capable of being developed and run using <em>only</em> OSS.</strong>
+This means that all <em>required</em> dependencies MUST be OSS
+(and we <em>strongly</em> prefer dependencies with OSI-approved licenses).
+It may <em>run</em> on proprietary software; portability improvements are welcome.
+It&#39;s also fine if it can use proprietary services, as long as it can
+<em>run</em> without them.
+See <a href="../CONTRIBUTING.html">CONTRIBUTING.md</a> for more.</li>
+<li><strong>Support modern web browsers.</strong>
+Support users of relatively-modern widely used web browsers, including
+Chrome, Firefox, Safari, and Internet Explorer version 10 and up.
+We expect Internet Explorer pre-10 users will use a different browser.
+We expect to drop support for Internet Explorer in the future.</li>
+<li><strong>NOT require JavaScript to be enabled.</strong>
+JavaScript MUST NOT be required on the user web browser for basic
+functions, since some security-conscious people disable JavaScript.
+Instead, the system MUST support graceful degradation.
+Many features will work much better if JavaScript is enabled, but the
+basic functions MUST work without it (e.g., be able to see and
+edit project entries).  Requiring CSS is fine.</li>
+<li><strong>Support web browsers on laptops, desktops, and mobile.</strong>
+Users must be supported if they are running web browsers on
+Linux (Ubuntu, Debian, Fedora, Red Hat Enterprise Linux),
+Microsoft Windows, or Apple MacOS, Android, and iOS.
+This implies that it MUST have a responsive design.
+We expect users will <em>edit</em> information primarily on larger screens,
+but they need to be <em>able</em> to edit on small screens.</li>
+<li><strong>NOT require projects use a particular hosting environment or VCS.</strong>
+Here &quot;VCS&quot; means &quot;version control system&quot; (such as git).
+In particular, the system MUST NOT require that
+projects or users use either GitHub or git.
+We do use GitHub and git to <em>develop</em> BadgeApp (that&#39;s different).</li>
+<li><strong>Automatically fill in some criteria where it can on GitHub projects.</strong>
+Automating filling in data is a never-ending
+process of refinement.
+Thus, we intend to fill a few to start, and then
+add more automation over time.
+At a minimum we intend to automate projects hosted on GitHub, but
+we welcome automation for projects hosted elsewhere.</li>
+<li><strong>Be secure.</strong>  See the separate
+<a href="security.html">security</a> document for more about security, including
+its requirements.</li>
+<li><strong>Protect users and their privacy.</strong>  In particular, we MUST
+comply with the EU General Data Protection Regulation (GDPR).
+We don&#39;t expose user email addresses,
+and we don&#39;t expose user activities to unrelated sites
+(including social media sites) without that user&#39;s consent.
+In particular, we do not include &quot;like&quot; buttons that reveal that the
+user viewed that particular page.</li>
+<li><strong>Be accessible.</strong>
+We strive to comply with the
+<a href="https://www.w3.org/TR/WCAG20/">Web Content Accessibility
+Guidelines (WCAG 2.0)</a> (especially at the A and AA level).</li>
+<li><strong>Support internationalization/localization.</strong></li>
+<li><strong>Be reliable.</strong>
+As a matter of policy we require that our test suite
+have at least 90% statement coverage (in practice we exceed that),
+the development process MUST use a variety of tools
+to help detect problems early, and there MUST be a continuous
+integration platform (to immediately test check-ins).</li>
+<li><strong>Perform well.</strong>  Users avoid slow sites.
+Our primary pages (front page, login, project list, show or edit
+project) must perform reasonably well.
+The front page MUST get to &quot;first interactive&quot; use for a new user
+in less than 3 seconds on average on a high-speed link
+(e.g. as measured by <a href="https://www.webpagetest.org">https://www.webpagetest.org</a> given Dulles, Virginia
+as the test location).  In practice we achieve much better than this;
+see the design document discussion about performance.</li>
+<li><strong>NOT require a large amount of effort to develop or maintain.</strong>
+We choose systems that easy to develop and maintain in, such as
+Ruby on Rails, to do this.</li>
+<li><strong>Record aggregate statistics.</strong>
+We need these aggregate statistics to monitor the
+status of the badging project, and focus primarily on projects.
+These are aggregations, to help preserve user privacy.
+See <code>/project_stats</code> and <code>/criteria</code> for these statistics.</li>
+</ol>
+
+<p>We do <em>not</em> need to support offline editing of data.</p>
+
+<h2>Specific requirements</h2>
+
+<p>There are many specific requirements.
+Instead of having a huge unread requirements document,
+specific requirements are normally proposed and processed via the
+<a href="https://github.com/coreinfrastructure/best-practices-badge/issues">GitHub issue tracker</a>.
+See <a href="../CONTRIBUTING.html">CONTRIBUTING</a> for more about our process.</p>
+
+<h2>See also</h2>
+
+<p>Project participation and interface:</p>
+
+<ul>
+<li><a href="../CONTRIBUTING.html">CONTRIBUTING.md</a> - How to contribute to this project</li>
+<li><a href="INSTALL.html">INSTALL.md</a> - How to install/quick start</li>
+<li><a href="governance.html">governance.md</a> - How the project is governed</li>
+<li><a href="roadmap.html">roadmap.md</a> - Overall direction of the project</li>
+<li><a href="background.html">background.md</a> - Background research</li>
+<li><a href="api.html">api</a> - Application Programming Interface (API), inc. data downloads</li>
+</ul>
+
+<p>Criteria:</p>
+
+<ul>
+<li><a href="https://bestpractices.coreinfrastructure.org/criteria/0">Criteria for passing badge</a></li>
+<li><a href="https://bestpractices.coreinfrastructure.org/criteria">Criteria for all badge levels</a></li>
+</ul>
+
+<p>Development processes and security:</p>
+
+<ul>
+<li><a href="requirements.html">requirements.md</a> - Requirements (what&#39;s it supposed to do?)</li>
+<li><a href="design.html">design.md</a> - Architectural design information</li>
+<li><a href="implementation.html">implementation.md</a> - Implementation notes</li>
+<li><a href="testing.html">testing.md</a> - Information on testing</li>
+<li><a href="assurance-case.html">assurance-case.md</a> - Why it&#39;s adequately secure (assurance case)</li>
+</ul>
+  </body>
+  </html>

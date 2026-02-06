@@ -168,13 +168,21 @@ function getUnmetResult(criterion, justification) {
 // If you change this function change "get_criterion_result" accordingly.
 function getCriterionResult(criterion) {
   var status = criterionStatus(criterion);
-  var justification = $('#project_' + criterion + '_justification');
-  if (justification.length > 0) {
-    justification = $(justification)[0].value;
+  var justification = '';
+
+  // Try to get justification from data attribute first (view-only mode)
+  var criterionDiv = $('#' + criterion);
+  var dataJustification = criterionDiv.attr('data-justification');
+  if (dataJustification !== undefined && dataJustification !== null) {
+    justification = dataJustification;
+  } else {
+    // Fallback: read from textarea (edit mode)
+    var justificationInput = $('#project_' + criterion + '_justification');
+    if (justificationInput.length > 0) {
+      justification = justificationInput[0].value || '';
+    }
   }
-  if (!justification) {
-    justification = '';
-  }
+
   if (status === '?') {
     return 'criterion_unknown';
   } else if (status === 'Met') {
@@ -302,8 +310,8 @@ function fillCriteriaResultHash() {
     globalCriteriaResultHash[key] = {};
     var inputSelector = 'input[name="project[' + key + '_status]"]:checked';
     var checkedInput = $(inputSelector)[0];
-    globalCriteriaResultHash[key]['status'] =
-      checkedInput ? checkedInput.value : '?';
+    var status = checkedInput ? checkedInput.value : '?';
+    globalCriteriaResultHash[key]['status'] = status;
     globalCriteriaResultHash[key]['result'] = getCriterionResult(key);
 
     // Baseline levels use minor category for panel ID, others use major
@@ -548,10 +556,8 @@ function getAllPanelsReady() {
         .removeClass('glyphicon-chevron-up');
     }
   }
-  // Set the satisfaction level in each panel
-  $('.satisfaction-bullet').each(function(index) {
-    $(this).css({ 'color' : $(this).attr('data-color')});
-  });
+  // Note: satisfaction-bullet colors are now set by setPanelSatisfactionLevel()
+  // which is called after fillCriteriaResultHash() completes
 }
 
 // Implement "press this button to make all crypto N/A"
@@ -735,6 +741,8 @@ function setupProjectForm() {
   if (level === 'gold') {
     level = '2';
   }
+  // Note: baseline levels (baseline-1, baseline-2, baseline-3) are NOT
+  // normalized
 
   CRITERIA_HASH = CRITERIA_HASH_FULL[level];
 
@@ -742,6 +750,13 @@ function setupProjectForm() {
     $('#project_entry_form').on('criteriaResultHashComplete', function(e) {
       setupProjectFields();
       resetProgressBar();
+      // Set initial panel satisfaction levels in edit mode
+      $('.satisfaction-bullet').each(function() {
+        var panelID = $(this).closest('.panel-heading').attr('id');
+        if (panelID) {
+          setPanelSatisfactionLevel(panelID);
+        }
+      });
     });
     fillCriteriaResultHash();
   } else {

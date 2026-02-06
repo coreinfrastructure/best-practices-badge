@@ -1,0 +1,316 @@
+  <!DOCTYPE html>
+  <html>
+  <head>
+  <title>docs/testing.md</title>
+  </head>
+  <body>
+<h1>Testing</h1>
+
+<p>This document briefly discusses details involved in testing
+(dynamically executing the code with specific inputs to see if expected
+behaviors are produced).
+We also use other techniques to detect problems ahead-of-time; see
+<a href="../CONTRIBUTING.html">CONTRIBUTING.md</a> for more about the other
+analysis tools and processes we use.</p>
+
+<h2>Quickstart</h2>
+
+<p>Run <code>rake test</code> to run tests (<code>rake test:all</code> for all tests).
+You can also use <code>rails test</code> and &#39;rails test:all`.</p>
+
+<p>You can run <code>rails s</code> to start the server.
+Use your web browser to view <code>localhost:3000</code>.</p>
+
+<p>See the file <code>db/seed.rb</code> to see the starting dummy test data for development.
+For testing see the <code>test/fixtures/</code> directory.</p>
+
+<h2>Testing infrastructure summary</h2>
+
+<p>We use <strong>MiniTest</strong> as the core testing framework, which
+is Rails&#39; default testing library providing <code>ActiveSupport::TestCase</code>
+for unit tests and <code>ActionDispatch::IntegrationTest</code> for integration
+testing. Rails provides testing infrastructure
+including transactional test support (automatic database rollbacks),
+<strong>fixtures</strong> (YAML-based test data loaded from <code>test/fixtures/*.yml</code>
+files that populate the test database with known data sets), and
+specialized assertions for controllers and views.</p>
+
+<p><strong>SimpleCov</strong> provides code coverage analysis and formatted results.
+It integrates with <strong>Codecov</strong> for coverage
+reporting. The <strong>minitest-retry</strong> gem automatically
+retries flaky tests in CI environments for better test reliability,
+while <strong>minitest-reporters</strong> enhances output formatting.</p>
+
+<p>For system testing that involves browser automation, <strong>Capybara</strong> serves
+as the high-level DSL and testing framework that provides Ruby methods for
+interacting with web pages (clicking buttons, filling forms, asserting
+page content). Capybara calls on the <strong>Selenium WebDriver</strong>,
+which acts as the lower-level
+browser automation protocol that actually controls the web browser
+instance. The <code>ApplicationSystemTestCase</code> configures both headless and
+visible web browser drivers through Selenium.</p>
+
+<p><strong>WebMock</strong> handles HTTP request mocking during tests, preventing
+real network calls and providing predictable responses, with carefully
+configured allowlists for Chrome driver update URLs to prevent test
+interference. <strong>VCR</strong> (Video Cassette Recorder) works alongside WebMock
+to record real HTTP interactions into &quot;cassettes&quot; - YAML files stored in
+<code>test/vcr_cassettes/</code> that capture the complete request-response cycle
+including headers and body content. These cassettes can then be replayed
+in subsequent test runs, allowing tests to use real API responses without
+making actual network calls.</p>
+
+<h2>Workflow</h2>
+
+<p>Please review the Rails documentation on <a href="http://guides.rubyonrails.org/testing.html">testing</a>. Pull requests should endeavor to increase, not decrease test coverage, as monitored in <a href="https://codecov.io/gh/coreinfrastructure/best-practices-badge">Codecov</a>.</p>
+
+<p>Running <code>rails t test/features/can_access_home_test.rb:4</code> will execute just the test from line 4. Removing the <code>:4</code> will run all tests in that file.</p>
+
+<p>Write regression tests and ensure that they fail without your fix and pass with it. Include a comment in the test with the Github issue # for context.</p>
+
+<h2>Parallel testing</h2>
+
+<p>Our tests should be easily parallelizable <em>if</em> you use process
+parallelism. Tests will <em>not</em> work if you use threading to parallelize tests.</p>
+
+<p><a href="https://www.youtube.com/watch?v=8evXWvM4oXM">RailsConf 2018: Keynote: The Future of Rails 6: Scalable by Default by Eileen Uchitelle</a>
+discusses the parallel testing capabilities of Rails 6.
+Rails 6 is designed to support parallel testing with either processes
+or threads, with processes as the default.</p>
+
+<p>This <em>application</em> is thread-safe, but our <em>testing</em> is currently not.
+We use system tests, which are not thread safe (see the talk).
+In addition, during testing we sometimes mutate shared global values.
+For example, some tests modify Rails.application.config.deny_login
+so that they can test different configurations.
+That works fine if tests are executed in parallel using processes
+(because the mutations are not shared), but does not work if
+the tests are in threads.</p>
+
+<p>If you need the tests themselves to be thread-safe, then you&#39;ll need to
+modify something.  One way is to change some shared configuration values to be
+<a href="https://www.rubytapas.com/2016/11/20/ruby-thread-local-variables/">thread-local</a>.
+Another is to change some methods to take parameters, so that
+you can provide different parameters during testing.</p>
+
+<h2>System Tests</h2>
+
+<p>We are in the process of replacing all uses of the class
+CapybaraFeatureTest (subclass of Capybara::Rails::TestCase)
+with the standard Rails system tests, which use the
+class ApplicationSystemTestCase (subclass of ActionDispatch::SystemTestCase).</p>
+
+<p>Warning! By default &quot;rails test&quot; (and thus rake) do <em>NOT</em> run system tests.
+You must run system tests via &quot;rails test:system&quot;. To run <em>both</em>
+system and non-system tests, say &quot;rails test:system test&quot; (in that order).
+This commit modifies our CI pipeline so that it runs BOTH
+system and non-system tests. So for most people this detail will be quietly
+handled correctly. Rails 6.1 adds &quot;rails test:all&quot;, so when we get
+to Rails 6.1 it will be easier to ask for all (normal) tests.</p>
+
+<p>Rails system tests normally interact with an actual browser.
+In some cases they can be configured to use the <code>rack_test</code> backend and
+merely simulate a browser; that is faster, but it doesn&#39;t support
+JavaScript and the tests are not as realistic.
+So here we&#39;ll discuss the normal, interacting with an actual browser.</p>
+
+<p>For basic information on how to create syystem tests, see the
+<a href="https://guides.rubyonrails.org/testing.html#system-testing">Rails guide on testing (system testing section)</a>.</p>
+
+<p>Here&#39;s how a Rails system test normally works, as explained in
+<a href="https://avdi.codes/rails-6-system-tests-from-top-to-bottom/">Rails 6 System Tests, From Top to Bottom</a></p>
+
+<ul>
+<li>&quot;A MiniTest test case, augmented with...</li>
+<li>Capybara testing helpers, which start and stop an instance of your app,
+and provide an English-like DSL on top of...</li>
+<li>The selenium-webdriver gem, which provides a Ruby API for using the...</li>
+<li>... WebDriver protocol in order to interact with...</li>
+<li>A WebDriver tool such as chromedriver or geckodriver, which…</li>
+<li>Is automatically downloaded by the selenium gem.
+The WebDriver tool automates...</li>
+<li>A browser, such as Chrome.&quot;</li>
+</ul>
+
+<h2>Features</h2>
+
+<p>Features that don&#39;t need JavaScript should default to the headless rack-test driver, which is fastest. Features that need JavaScript should set <code>Capybara.current_driver = Capybara.javascript_driver</code> as described in this <a href="http://www.rubytutorial.io/how-to-test-an-autocomplete-with-rails/">blog post</a>. To debug features in a browser, preface the test with the driver in an environment variable, like:</p>
+<pre><code>DRIVER=firefox rails t
+DRIVER=chrome rails t test/features/can_access_home_test.rb:4
+DRIVER=poltergeist rails s test/features/can_access_home_test.rb
+</code></pre>
+<p>Note that adding chrome or firefox as a DRIVER will let you observe the test in real time. This slows down the test but can be very helpful in revealing the cause of test problems.</p>
+
+<p>Selenium tests for Safari require this <a href="http://selenium-release.storage.googleapis.com/2.48/SafariDriver.safariextz">file</a> but still do not seem to be working currently.</p>
+
+<p>Write Capybara features to test the happy path of new features. Test the feature both with the default rack-test (or poltergeist, for tests requiring Javascript) and with Selenium <code>DRIVER=chrome rails test</code>.</p>
+
+<h2>External API testing</h2>
+
+<p>We use Webmock and VCR to record external API responses and test against them without needing to make actual HTTP requests. If the external services (particularly Github) change their API, you need to delete the corresponding VCR cassette and rerun the test to re-record. This would involve (substituting the value of <code>GITHUB_PASSWORD</code> for the actual password for the Github account <code>bestpracticestest</code>):</p>
+<pre><code>rm test/vcr_cassettes/github_login.yml
+DRIVER=chrome GITHUB_PASSWORD=real_password rails t test/features/github_login_test.rb
+</code></pre>
+<p>When re-recording cassettes involving the GitHub login
+you must use DRIVER=chrome (or similar).
+Github has an anti-bot mechanism that requires real mouse movement
+to authorize an application.</p>
+
+<p>Note: the robots.txt testing won&#39;t pass while you&#39;re doing this, because
+some tests have to be run in different modes.  Just capture the data in
+a VCR cassette, and then re-run the tests with the captured data.</p>
+
+<p>After completing the VCR recording, <code>github_login_test.rb</code> revokes the
+authorization of the oauth app so that Github doesn&#39;t complain about
+committing a live token to the repo.  As an additional security step you
+should redact the token used in the vcr by opening <code>github_login.yml</code> and
+searching for <code>access_token</code>.  Once found you can redact it from all .yml
+files by running:</p>
+<pre><code>cd test/vcr_cassettes
+sed -i 's/<ACCESS_TOKEN>/REDACTED/' *.yml
+cd ../..
+</code></pre>
+<p>To manually walk through the login process with Github OAuth authentication,
+you can run the rails server with</p>
+<pre><code>RAILS_ENV=test rails s -p 31337 -b 0.0.0.0
+</code></pre>
+<p>and then go to <a href="http://127.0.0.1:31337">http://127.0.0.1:31337</a> in your web browser.</p>
+
+<p>If you re-record a cassette using DRIVER=, the cassette may correctly
+add the bestpracticestest privilege and record what happened,
+but then fail to revoke the <code>bestpracticestest</code> privilege.
+That&#39;s a problem, because future recording efforts will fail
+(the recording system presumes it doesn&#39;t already have the privileges,
+and will fail when it tries to add them).
+We&#39;d like to fix that, but have not managed to do so yet
+(it only matters when you record a new cassette, which is a rare event).
+You can manually force removal by logging in to GitHub as <code>bestpracticestest</code>,
+going to <a href="https://github.com/settings/applications">https://github.com/settings/applications</a>, select
+Applications / Authorized OAuth Apps, and revoke the privilege.</p>
+
+<h2>VCR files and whitespace</h2>
+
+<p>If you re-record the VCR files, the VCR gem may insert extra whitespace
+at the end of some YML lines.  That&#39;s not allowed by our rake task.</p>
+
+<p>You can remove the unacceptable trailing whitespace in the YML
+files created by VCR by running the following:</p>
+<pre><code>cd test/vcr_cassettes
+sed -e 's/ $//' -i.bak *.yml
+rm *.bak
+cd ../..
+</code></pre>
+<h2>Security issues</h2>
+
+<p>We believe that the test setup does not have a security issue.</p>
+
+<p>We want to test what happens when a user who logs into GitHub
+tries to use the system.  In those cases we use a special GitHub user
+<code>bestpracticestest</code>.  This user controls no real-world projects, just a test project,
+and we only grant privileges to user <code>bestpracticestest</code> to control the test data
+(which we already include in the public distribution).
+So even if an attacker can use data in the cassettes to take control of
+the <code>bestpracticestest</code> user, that user account has no privileges worth taking.</p>
+
+<p>In addition, we create special keys that are recorded in the cassettes,
+and those keys are revoked at the end of the test.
+Thus, any access key stored in the cassette won&#39;t work later anyway.</p>
+
+<h2>Troubleshooting</h2>
+
+<p>A flapping test is one that fails apparently randomly.
+Do your best to avoid creating flapping tests; they slow development and test,
+cause unnecessary work (because they typically warn of the wrong things),
+and reduce confidence in the entire test suite.</p>
+
+<p>Flapping tests are a challenge, especially with browser automation that requires JavaScript. Examine the <code>until</code> loop in the <code>ensure_choice</code> method of <a href="https://github.com/coreinfrastructure/best-practices-badge/blob/main/test/system/login_test.rb">login_test.rb</a> for one approach to make sure that actions are occurring before testing for their impact.</p>
+
+<p>It&#39;s quite helpful to debug a flapping test by running it multiple times. If you&#39;re using bash shell, you can run <code>repeat 10 rails t test/features/can_login_test.rb</code> by adding the following to your <code>~/.bash_profile</code>:</p>
+<pre><code># http://www.shellhacks.com/en/HowTo-Run-and-Repeat-a-Command-N-Times-in-Bash
+function repeat() {
+    number=$1
+    shift
+    for n in $(seq $number); do
+      $@
+    done
+}
+</code></pre>
+<p>Sometimes recording a cassette will fail; see the discussion above.</p>
+
+<h3>On Linux</h3>
+
+<p>You may also need to set your PATH to run npm binaries: <code>PATH=&quot;$PATH:node_modules/.bin/&quot; rake</code>.</p>
+
+<h3>Mac</h3>
+
+<p>Run <code>./install-badge-dev-env</code></p>
+
+<h3>Binding.pry</h3>
+
+<p>When debugging tests (or code!), it is very helpful to insert <code>binding.pry</code> where results are confusing. This will open the pry byebug debugger and allow you to access local variables in a REPL. <code>c</code> continues execution.</p>
+
+<h2>Fixing pushes to heroku</h2>
+
+<p>It&#39;s unfortunately possible for the git repo on heroku to get its
+state mildly corrupted. You&#39;ll see these errors in the deploy step
+while it fails:</p>
+<pre><code>    remote: Verifying deploy... done.
+    fatal: protocol error: bad line length character: fata
+    error: error in sideband demultiplexer
+</code></pre>
+<p>You can re-run the deploy step, but that&#39;s absurd.
+You can solve this by cleaning out its repo:</p>
+<pre><code>    heroku plugins:install heroku-repo
+    heroku repo:reset -a <app-name>
+</code></pre>
+<p>Then redeploy (e.g., by going to Heroku and forcibly rerunning a deploy step).</p>
+
+<h2>Updating gem <code>translation</code></h2>
+
+<p>Testing the <code>translation</code> gem is a little tricky, because it&#39;s primarily
+a small shim to an external service <em>and</em> we hook a shim around it.
+Our current process:</p>
+
+<ol>
+<li>In the local main branch run <code>rake translation:sync</code> to synchronize things
+to a known state. If that changes anything, create a branch and create
+a pull request for that current state.</li>
+<li>Still in the local branch, update the gem. Now re-run
+<code>rake translation:sync</code>. Check to see if anything has changes.
+Nothing should have changed (unless a translator managed to edit something
+at exactly the right time), and it should report no errors connecting
+to the translation system. If all is okay, then updating the translation
+process is fine.</li>
+</ol>
+
+<h2>See also</h2>
+
+<p>Project participation and interface:</p>
+
+<ul>
+<li><a href="../CONTRIBUTING.html">CONTRIBUTING.md</a> - How to contribute to this project</li>
+<li><a href="INSTALL.html">INSTALL.md</a> - How to install/quick start</li>
+<li><a href="governance.html">governance.md</a> - How the project is governed</li>
+<li><a href="roadmap.html">roadmap.md</a> - Overall direction of the project</li>
+<li><a href="background.html">background.md</a> - Background research</li>
+<li><a href="api.html">api</a> - Application Programming Interface (API), inc. data downloads</li>
+</ul>
+
+<p>Criteria:</p>
+
+<ul>
+<li><a href="https://bestpractices.coreinfrastructure.org/criteria/0">Criteria for passing badge</a></li>
+<li><a href="https://bestpractices.coreinfrastructure.org/criteria">Criteria for all badge levels</a></li>
+</ul>
+
+<p>Development processes and security:</p>
+
+<ul>
+<li><a href="requirements.html">requirements.md</a> - Requirements (what&#39;s it supposed to do?)</li>
+<li><a href="design.html">design.md</a> - Architectural design information</li>
+<li><a href="implementation.html">implementation.md</a> - Implementation notes</li>
+<li><a href="testing.html">testing.md</a> - Information on testing</li>
+<li><a href="assurance-case.html">assurance-case.md</a> - Why it&#39;s adequately secure (assurance case)</li>
+</ul>
+  </body>
+  </html>

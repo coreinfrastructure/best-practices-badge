@@ -1,0 +1,360 @@
+  <!DOCTYPE html>
+  <html>
+  <head>
+  <title>docs/empty-justification-string-as-null.md</title>
+  </head>
+  <body>
+<h1>Implementing &quot;NULL for blank string&quot; optimization for justifications</h1>
+
+<h2>Background</h2>
+
+<p>The badge application receives a very large number of requests,
+especially for &quot;project&quot; data. We believe this is because many organizations
+are trying to train AI systems based on machine learning, and are
+basically repeatedly downloading everything on the Internet to train them.</p>
+
+<p>This massive number of requests leads to
+a massive number of memory allocations. We need to reduce the
+memory allocations when retrieving project data, and have taken
+various steps to do this.</p>
+
+<p>The &quot;project&quot; table has a large number of <code>t.text</code> fields
+for criteria justification, e.g., <code>know_common_errors_justification</code>.
+Their current definition permits NULL values.
+In many cases the stored justification values are empty strings.</p>
+
+<h2>Data Analysis (from development database)</h2>
+
+<p>Analysis of the development database (9,372 projects) as of 2025-12-30
+revealed:</p>
+
+<ul>
+<li><strong>193 justification fields</strong> per project</li>
+<li><strong>1,808,796 total justification cells</strong> (193 fields × 9,372 projects)</li>
+</ul>
+
+<p><strong>Current distribution:</strong></p>
+
+<ul>
+<li><strong>Empty strings</strong>: 273,826 cells (15.14%)</li>
+<li><strong>NULL values</strong>: 1,319,823 cells (72.97%)</li>
+<li><strong>Non-empty strings</strong>: 215,147 cells (11.89%)</li>
+</ul>
+
+<p><strong>Key finding</strong>: The vast majority of justification cells (72.97%) are
+already NULL, demonstrating that the application already handles NULL
+values correctly throughout.</p>
+
+<h2>Hypothesis - CONFIRMED ✓</h2>
+
+<p><strong>Hypothesis</strong>: We can optimize memory usage by always storing <em>empty</em>
+justification strings as NULL values.</p>
+
+<p><strong>Confirmation</strong>: Testing confirms that:</p>
+
+<ol>
+<li><strong>Empty strings consume memory</strong>: Each empty string allocates 40 bytes
+with a unique object_id</li>
+<li><strong>nil is zero-cost</strong>: Ruby&#39;s <code>nil</code> is a singleton (object_id: 4) that
+takes 0 more bytes to allocate</li>
+<li><strong>Memory savings</strong>: Converting 273,826 empty strings to NULL would save
+~10.4 MB of direct allocations plus reduce garbage collection overhead
+if you simply loaded each project in once (as a thought experiment
+to estimate impact).</li>
+<li><strong>Rails compatibility</strong>: Rails often treats <code>nil</code> and <code>&#39;&#39;</code> equivalently:
+
+<ul>
+<li><code>nil.blank?</code> == <code>&#39;&#39;.blank?</code> (both true)</li>
+<li><code>nil.present?</code> == <code>&#39;&#39;.present?</code> (both false)</li>
+<li><code>nil.to_s</code> == <code>&#39;&#39;</code> (both empty string)</li>
+</ul></li>
+</ol>
+
+<h2>Implementation Approach</h2>
+
+<p>Since 72.97% of justifications are already NULL and the application handles
+them correctly, we can take a simple, focused approach:</p>
+
+<h3>Required Changes</h3>
+
+<ol>
+<li><p><strong>Migration</strong>: Convert all empty string justifications to NULL</p>
+
+<ul>
+<li>Update all 273,826 empty string cells to NULL</li>
+<li>This is a one-time data cleanup</li>
+</ul></li>
+<li><p><strong>Input normalization</strong>: Ensure incoming empty strings become NULL</p>
+
+<ul>
+<li>When receiving data updates (form submissions, API calls), convert
+empty justification strings to <code>nil</code> before saving</li>
+<li>This prevents new empty string allocations from being created</li>
+</ul></li>
+</ol>
+
+<h3>What Does NOT Need to Change</h3>
+
+<ul>
+<li><strong>JSON serialization</strong>: Can remain as-is. While <code>nil</code> will serialize as
+<code>null</code> instead of <code>&quot;&quot;</code>, this is semantically more correct and unlikely
+to cause issues for API consumers, since this already can occur,
+and there&#39;s no semantic difference for a user.</li>
+<li><strong>HTML rendering</strong>: Rails automatically converts <code>nil.to_s</code> to <code>&#39;&#39;</code>,
+so forms and views will display empty strings correctly</li>
+<li><strong>Validation logic</strong>: Already uses <code>.blank?</code> and <code>.present?</code> which
+treat <code>nil</code> and <code>&#39;&#39;</code> identically</li>
+<li><strong>Database schema</strong>: Already permits NULL values, no schema changes needed</li>
+</ul>
+
+<h3>Benefits</h3>
+
+<ul>
+<li>Reduced memory allocations. When a project is loaded, empty justifications
+will refer to nil instead of allocating a useless empty string.
+This reduces the memory use, and also reduces garbage collection pressure
+since the nil values don&#39;t need to be cleaned up later
+by the garbage collector.</li>
+<li>Minimal code changes required</li>
+</ul>
+
+<p>The actual impact depends on which projects are loaded. However,
+if you simply loaded each project once as they are currently, there would be
+273,826 fewer objects to track and ~10.4 MB saved.
+It&#39;s really the number of objects eliminated that matters.</p>
+
+<h2>Implementation Plan</h2>
+
+<h3>1. Database Migration</h3>
+
+<p>Create a new migration:
+<code>db/migrate/YYYYMMDDHHMMSS_convert_empty_justifications_to_null.rb</code></p>
+
+<p><strong>Structure:</strong></p>
+<pre><code># frozen_string_literal: true
+
+# Copyright the Linux Foundation and the
+# OpenSSF Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+
+class ConvertEmptyJustificationsToNull < ActiveRecord::Migration[8.1]
+  using SymbolRefinements
+
+  def up
+    # Get all justification field names from Criteria
+    justification_fields = Criteria.all.map(&:justification)
+
+    say_with_time "Converting #{justification_fields.size} justification fields: empty strings to NULL" do
+      justification_fields.each_with_index do |field, index|
+        say "Converting #{field} (#{index + 1}/#{justification_fields.size})", :subitem
+
+        # Convert empty strings to NULL
+        execute <<-SQL
+          UPDATE projects
+          SET "#{field}" = NULL
+          WHERE "#{field}" = ''
+        SQL
+      end
+    end
+  end
+
+  def down
+    # Get all justification field names from Criteria
+    justification_fields = Criteria.all.map(&:justification)
+
+    say_with_time "Converting #{justification_fields.size} justification fields: NULL to empty strings" do
+      justification_fields.each_with_index do |field, index|
+        say "Converting #{field} (#{index + 1}/#{justification_fields.size})", :subitem
+
+        # This would Convert NULL back to empty strings, but it would do it
+        # everywhere.
+        # execute <<-SQL
+        #   UPDATE projects
+        #   SET "#{field}" = ''
+        #   WHERE "#{field}" IS NULL
+        # SQL
+      end
+    end
+  end
+end
+</code></pre>
+<p><strong>What it does:</strong></p>
+
+<ul>
+<li><strong>up</strong>: Iterates through all 193 justification fields and converts
+empty strings (<code>&#39;&#39;</code>) to NULL</li>
+<li><strong>down</strong>: Reversible - Doesn&#39;t do anything, because NULL is already allowed.</li>
+<li>Uses <code>say_with_time</code> for progress reporting during migration</li>
+<li>Follows the same pattern as the recent status field migration
+(20251230044124_convert_status_fields_to_smallint.rb)</li>
+</ul>
+
+<p><strong>Expected impact:</strong></p>
+
+<ul>
+<li>Will update ~273,826 cells in the production database</li>
+<li>Migration should be relatively fast (simple UPDATE statements)</li>
+<li>No schema changes required (columns already permit NULL)</li>
+</ul>
+
+<h3>2. Controller Input Normalization</h3>
+
+<p>Modify <code>app/controllers/projects_controller.rb</code> to normalize incoming
+justification parameters.</p>
+
+<p>Note that the text below creates two new <code>before_actions</code>; a plausible
+alternative would be to have a single <code>before_action</code> to
+<code>regularize_input</code>, which might then call conversions for both
+status values <em>and</em> empty justification strings.
+Don&#39;t implement before considering this alternative.</p>
+
+<p><strong>Location:</strong> Modify existing method <code>convert_status_params</code>
+method (around line 783) from:</p>
+<pre><code>  def convert_status_params
+    return unless params[:project]
+
+    convert_status_params_of_hash!(params[:project])
+  end
+</code></pre>
+<p>into:</p>
+<pre><code>  # Clean up input project data.
+  # Turn status values into integers, and convert
+  # empty justification values into nil.
+  # @return [void]
+  def cleanup_input_params
+    p = params[:project]
+    return unless p
+
+    convert_status_params_of_hash!(p)
+    convert_justification_params_of_hash!(p)
+  end
+</code></pre>
+<p><strong>New method:</strong></p>
+<pre><code># Convert all empty justification strings to nil in hash h.
+# This modifies the hash IN PLACE.
+# @param h [Hash] The hash to modify (typically params[:project])
+# @return [void]
+def convert_justification_params_of_hash!(h)
+  Project::ALL_CRITERIA_JUSTIFICATION.each do |justification_field|
+    next unless h.key?(justification_field)
+
+    value = h[justification_field]
+
+    # Convert empty strings to nil
+    # Leave nil and non-empty strings as-is
+    h[justification_field] = nil if value == ''
+  end
+end
+</code></pre>
+<p><strong>Update before_action filter</strong> (around line 28):</p>
+<pre><code># Change from:
+before_action :convert_status_params, only: %i[create update]
+
+# To:
+before_action :cleanup_input_params, only: %i[create update]
+</code></pre>
+<h3>3. Testing Considerations</h3>
+
+<p><strong>Tests to add/verify:</strong></p>
+
+<ol>
+<li><p><strong>Controller test</strong> (<code>test/controllers/projects_controller_test.rb</code>):</p>
+
+<ul>
+<li>Verify empty string justifications are converted to nil on update</li>
+<li>Verify non-empty justifications are preserved</li>
+<li>Verify nil justifications remain nil</li>
+</ul></li>
+<li><p><strong>Integration test</strong> (optional):</p>
+
+<ul>
+<li>Submit a form with empty justification fields</li>
+<li>Verify the saved project has nil (not &#39;&#39;) for those fields</li>
+</ul></li>
+<li><p><strong>Migration test</strong>:</p>
+
+<ul>
+<li>The migration should be tested manually in development</li>
+<li>Run migration on development database and verify empty strings
+are converted to NULL</li>
+</ul></li>
+</ol>
+
+<p><strong>Example test case:</strong></p>
+<pre><code>test 'empty justification strings converted to nil on update' do
+  project = projects(:one)
+  sign_in users(:admin_user)
+
+  patch project_path(project, locale: :en), params: {
+    project: {
+      description_good_justification: '',  # Empty string
+      name: 'Test Project'
+    }
+  }
+
+  project.reload
+  assert_nil project.description_good_justification
+end
+</code></pre>
+<h3>4. Additional Changes Required</h3>
+
+<p><strong>None identified.</strong></p>
+
+<p>After careful analysis:</p>
+
+<ul>
+<li><strong>No view changes needed</strong>: Rails automatically renders <code>nil.to_s</code> as <code>&#39;&#39;</code>
+in form fields</li>
+<li><strong>No model changes needed</strong>: Validations already use <code>.blank?</code> and
+<code>.present?</code> which treat nil and &#39;&#39; identically</li>
+<li><strong>No serializer changes needed</strong>: JSON serialization will output <code>null</code>
+instead of <code>&quot;&quot;</code>, but this is semantically correct and already occurs
+(72.97% of justifications are already NULL)</li>
+<li><strong>No other controllers exist</strong> that update projects (verified via grep)</li>
+<li><strong>No schema changes needed</strong>: Columns already permit NULL values</li>
+</ul>
+
+<h3>5. Deployment Steps</h3>
+
+<ol>
+<li><strong>Run migration</strong> on production database:</li>
+</ol>
+<pre><code>   rails db:migrate
+</code></pre>
+<ol>
+<li><p><strong>Deploy code</strong> with controller changes</p></li>
+<li><p><strong>Verify</strong> by checking a few projects in production:</p>
+
+<ul>
+<li>Empty justifications should be NULL in database</li>
+<li>Empty justifications should render as empty strings in forms</li>
+</ul></li>
+</ol>
+
+<h3>6. Rollback Plan</h3>
+
+<p>If issues are discovered:</p>
+
+<ol>
+<li><strong>Revert controller changes</strong> (remove the before_action and methods)</li>
+<li><strong>Rollback migration</strong>:</li>
+</ol>
+<pre><code>   rails db:rollback
+</code></pre>
+<p>This will convert all NULL justifications back to empty strings,
+   restoring the previous state (but re-creating the memory problem).</p>
+
+<h3>7. Monitoring</h3>
+
+<p>After deployment, monitor:</p>
+
+<ul>
+<li><strong>Memory usage</strong>: Should decrease slightly due to fewer object allocations</li>
+<li><strong>GC metrics</strong>: Should see reduced garbage collection pressure</li>
+<li><strong>Error logs</strong>: Watch for any unexpected issues with nil justifications</li>
+<li><strong>User reports</strong>: Watch for any UI issues with empty justification fields</li>
+</ul>
+
+<p>The impact will be gradual as projects are loaded and re-saved over time.</p>
+  </body>
+  </html>

@@ -1,0 +1,2871 @@
+  <!DOCTYPE html>
+  <html>
+  <head>
+  <title>docs/routes-consolidation-plan.md</title>
+  </head>
+  <body>
+<h1>Route Consolidation Plan</h1>
+
+<p>This document outlines a plan to consolidate and simplify the routing
+structure for <code>/projects</code> GET routes in the Best Practices Badge application.</p>
+
+<h2>Problem Statement</h2>
+
+<p>The current routing configuration for GET ... <code>/projects</code>
+has significant issues:</p>
+
+<ol>
+<li><strong>Route Proliferation</strong>: Multiple overlapping patterns cause the router
+to repeatedly attempt pattern matching for the same request</li>
+<li><strong>Maintenance Burden</strong>: Obsolete section names (0, 1, 2, bronze) require
+extensive redirect handling</li>
+<li><strong>Scattered Logic</strong>: Format handling and validation spread across routes
+instead of centralized in controllers</li>
+<li><strong>Performance</strong>: Each request may traverse many route patterns before
+finding a match</li>
+</ol>
+
+<p>The current routes were generated and stored in <code>,projects-routes</code> for
+analysis, revealing these inefficiencies.</p>
+
+<p>Note: the PUT, PATCH, etc., routes are simpler and not what we&#39;re focusing on.</p>
+
+<h2>Goals</h2>
+
+<ol>
+<li><strong>Simplify Routing</strong>: Reduce the number of route patterns by consolidating
+related functionality</li>
+<li><strong>Centralize Logic</strong>: Move format and section handling from routes to
+controllers where appropriate</li>
+<li><strong>Maintain Compatibility</strong>: Preserve all existing widely-used
+URLs through redirects. We&#39;re less concerned about URLs for
+markdown (.md) format, as those aren&#39;t widely known. We&#39;re less concerned
+about &quot;edit&quot; for obsolete section names, as those aren&#39;t normally linked to.</li>
+<li><strong>Improve Performance</strong>: Reduce route matching overhead</li>
+<li><strong>Future-Proof</strong>: Support planned features like per-project default sections</li>
+</ol>
+
+<h2>Proposed Route Structure</h2>
+
+<h3>Badge Images (Unchanged)</h3>
+<pre><code>GET /projects/:id/badge(.:format)
+  → projects#badge
+  → Constraints: format: "svg", id: /[1-9][0-9]*/
+  → No locale needed (badges are locale-independent)
+</code></pre>
+<p>This route remains as-is since it works well.</p>
+
+<h3>Project Listing (Unchanged)</h3>
+<pre><code>GET (/:locale)/projects(.:format)
+  → projects#index
+  → Shows list of all projects
+  → If :locale omitted: 302 redirect to /:detected_locale/projects
+</code></pre>
+<h3>New Project (Unchanged)</h3>
+<pre><code>GET (/:locale)/projects/new(.:format)
+  → projects#new
+  → Shows form to create new project
+  → If :locale omitted: 302 redirect to /:detected_locale/projects/new
+</code></pre>
+<h3>Delete Confirmation (Unchanged)</h3>
+
+<p>This is unchanged.</p>
+<pre><code>GET (/:locale)/projects/:id/delete_form(.:format)
+  → projects#delete_form
+  → Shows delete confirmation page
+  → If :locale omitted: 302 redirect to /:detected_locale/projects/:id/delete_form
+  → Kept as separate route for security (requires GET before DELETE)
+</code></pre>
+<h3>Edit Section</h3>
+<pre><code>GET (/:locale)/projects/:id/:section/edit
+  → projects#edit
+  → Constraints: :section must be valid section (passing, silver, gold,
+    baseline-1, baseline-2, baseline-3, permissions)
+  → Does NOT accept obsolete values (0, 1, 2, bronze). We don't expect
+    those URLs to be widely linked to.
+  → If :locale omitted: 302 redirect to /:detected_locale/projects/:id/:section/edit
+</code></pre>
+<h3>View Section (HTML or Markdown)</h3>
+<pre><code>GET (/:locale)/projects/:id/:section(.:format)
+  → Handles both viewing and format-specific requests
+  → If :locale omitted: 302 redirect to /:detected_locale/projects/:id/:section
+
+  Behavior by :section value:
+
+  - If :section is obsolete (bronze, 0, 1, 2):
+    → 301 redirect to current name with same locale/format
+    → Mapping: bronze→passing, 0→passing, 1→silver, 2→gold
+
+  - If :section is valid (passing, silver, gold, baseline-*, permissions):
+    → Behavior depends on format:
+      - .html or no format: projects#show (HTML view)
+      - .md: projects#show (Markdown view)
+    → Controller uses respond_to to handle format
+</code></pre>
+<p>I suspect the controller will call some sort of method like
+<code>show_handler</code> that takes the section and format, then handles it
+(e.g., redirects, calls <code>show</code>, or calls <code>show_json</code>)</p>
+
+<h3>View Project (Default Section)</h3>
+<pre><code>GET (/:locale)/projects/:id(.:format)
+  → 302 redirect to (/:locale)/projects/:id/passing(.:format)
+  → Preserves format if specified
+  → If :locale omitted: 302 redirect happens first to add locale,
+    then redirects again to add section
+  → Future: May redirect to project-specific default section instead
+    of always "passing"
+</code></pre>
+<h3>JSON API (Locale-Independent)</h3>
+<pre><code>GET /(:locale/)projects/:id.json
+  → Eventually calls projects#show_json (though the implementation
+    might call another method first, like "show", and then call show_json).
+  → Returns complete project data as JSON
+  → If locale in URL, always 301 redirect to non-locale version
+    (JSON is locale-independent)
+  → NO per-section JSON (doesn't make semantic sense)
+  → Note: Different from HTML/Markdown which ARE locale-specific and
+    depend on sections.
+</code></pre>
+<h3>Markdown Without Locale (Redirect Chain)</h3>
+<pre><code>GET /projects/:id.md
+  → 302 redirect to /:detected_locale/projects/:id.md
+  → Which then 302 redirects to /:detected_locale/projects/:id/passing.md
+  → Markdown IS locale-specific (unlike JSON)
+  → Default section is "passing" until per-project defaults implemented
+</code></pre>
+<h2>Opportunities for Additional Consolidation</h2>
+
+<p>The current plan keeps several routes separate. Two specific patterns suggest
+opportunities for further consolidation that might simplify the router
+(speeding it up) and clarify format overlap.</p>
+
+<h3>Opportunity 1: Consolidate <code>delete_form</code> as a Section</h3>
+
+<p><strong>Current Separate Routes:</strong></p>
+<pre><code>GET (/:locale)/projects/:id/delete_form(.:format) → projects#delete_form
+GET (/:locale)/projects/:id/:section(.:format)    → projects#show
+</code></pre>
+<p><strong>Proposed Consolidation:</strong></p>
+<pre><code>GET (/:locale)/projects/:id/:section(.:format) → projects#show_or_action
+  where :section can be:
+  - A criteria level: passing, silver, gold, baseline-1, baseline-2, baseline-3
+  - A special view: permissions, delete_form
+</code></pre>
+<h4>Implications</h4>
+
+<p>This would treat <code>delete_form</code> as just another &quot;section&quot; of the project view,
+similar to how &quot;permissions&quot; is already handled as a section. The controller
+would need to distinguish between criteria sections and special action sections.</p>
+
+<h4>Pros</h4>
+
+<ol>
+<li><strong>Single Route Pattern</strong>: Eliminates one route definition, making the
+route table simpler</li>
+<li><strong>Consistent URL Structure</strong>: All project &quot;views&quot; follow the same pattern
+<code>/:locale/projects/:id/:view_name</code></li>
+<li><strong>Format Flexibility</strong>: If we ever need <code>delete_form.json</code> or
+<code>delete_form.md</code>, it would work automatically without new routes</li>
+<li><strong>Easier Extension</strong>: Adding new special views (like &quot;audit_log&quot;,
+&quot;contributors&quot;) wouldn&#39;t require new route definitions</li>
+<li><strong>Clear Conceptual Model</strong>: Everything under <code>/:id/:something</code> is a
+&quot;view of the project&quot;</li>
+</ol>
+
+<h4>Cons</h4>
+
+<ol>
+<li><p><strong>Semantic Confusion</strong>: <code>delete_form</code> is not really a &quot;section&quot; of
+criteria - it&#39;s a confirmation page for deletion</p>
+
+<ul>
+<li>Mixing data views (sections) with action confirmations (delete) is
+conceptually unclear</li>
+<li>Future developers might not realize <code>delete_form</code> is special</li>
+</ul></li>
+<li><p><strong>Security Concerns</strong>: Delete confirmation requires special authorization</p>
+
+<ul>
+<li>Currently isolated in separate route and controller action</li>
+<li>Consolidation means authorization logic must be added to generic <code>show</code></li>
+<li>Higher risk of accidentally exposing delete_form to unauthorized users</li>
+</ul></li>
+<li><p><strong>Different Behavior Requirements</strong>:</p>
+
+<ul>
+<li>Sections: cacheable, can be public, support multiple formats</li>
+<li>delete_form: not cacheable, requires authentication, only HTML makes sense</li>
+<li>Consolidation forces generic code to handle very different requirements</li>
+</ul></li>
+<li><p><strong>RESTful Convention Violation</strong>: Rails convention is:</p>
+
+<ul>
+<li>GET <code>/projects/:id/edit</code> - edit form</li>
+<li>DELETE <code>/projects/:id</code> - destroy action</li>
+<li>GET <code>/projects/:id/delete_form</code> fits the &quot;confirmation form&quot; pattern</li>
+<li>Treating it as a &quot;section&quot; breaks this convention</li>
+</ul></li>
+<li><p><strong>Format Handling Complexity</strong>:</p>
+
+<ul>
+<li><code>delete_form.json</code> - what would this return? The JSON representation
+of a delete button?</li>
+<li><code>delete_form.md</code> - markdown of a delete confirmation form is nonsensical</li>
+<li>Would need format constraints or validation specific to this &quot;section&quot;</li>
+</ul></li>
+<li><p><strong>Testing Complexity</strong>: Tests for sections and tests for delete_form
+have different concerns</p>
+
+<ul>
+<li>Section tests: verify correct criteria display, test caching, check
+all formats</li>
+<li>delete_form tests: verify authorization, ensure CSRF token, check
+deletion flow</li>
+<li>Consolidating makes test suite organization less clear</li>
+</ul></li>
+</ol>
+
+<h4>Recommendation</h4>
+
+<p><strong>Do NOT consolidate delete_form with sections.</strong></p>
+
+<p>Rationale:</p>
+
+<ul>
+<li><code>delete_form</code> is fundamentally different: it&#39;s an action confirmation,
+not a data view</li>
+<li>Security implications of consolidation are significant</li>
+<li>The single-route benefit is outweighed by increased conceptual complexity</li>
+<li>Rails conventions favor keeping destructive action confirmations separate</li>
+<li>Only one route is saved, but multiple concerns are mixed</li>
+</ul>
+
+<p><strong>Alternative:</strong> If route consolidation is critical, consider a different
+pattern:</p>
+
+<ul>
+<li>Keep sections separate from special actions</li>
+<li>Create a pattern for special actions: <code>/:id/_action/:action_name</code></li>
+<li>Example: <code>/projects/123/_action/delete_form</code></li>
+<li>This makes it clear these are different from data sections</li>
+</ul>
+
+<h3>Opportunity 2: Consolidate JSON Format into Main Show Route</h3>
+
+<p><strong>Current Separate Routes:</strong></p>
+<pre><code>GET /projects/:id.json                            → projects#show_json
+GET (/:locale)/projects/:id(/:section)(.:format)  → projects#show
+</code></pre>
+<p><strong>Proposed Consolidation:</strong></p>
+<pre><code>GET /(:locale/)projects/:id(/:section)(.:format) → projects#show
+  where format can be html, md, or json
+  - If format is json: ignore locale and section parameters
+  - If format is html/md: use locale and section normally
+</code></pre>
+<h4>Implications</h4>
+
+<p>This would unify all project viewing into a single controller action that
+handles format-specific rendering. The controller would need to handle
+JSON as a special case that bypasses locale and section logic.</p>
+
+<h4>Pros</h4>
+
+<ol>
+<li><strong>True Route Unification</strong>: Single route handles all project viewing
+regardless of format</li>
+<li><strong>Consistent respond_to Block</strong>: All formats in one place makes it
+obvious what formats are supported</li>
+<li><strong>Reduced Route Complexity</strong>: Eliminates the special-case route for JSON</li>
+<li><strong>Potential Code Sharing</strong>: If JSON and HTML need similar data loading,
+it&#39;s already in the same action</li>
+<li><strong>Future Format Support</strong>: Adding new formats (e.g., XML, CSV) would
+naturally fit the existing pattern</li>
+</ol>
+
+<h4>Cons</h4>
+
+<ol>
+<li><p><strong>Locale Handling Complexity</strong>: Route becomes <code>/(:locale/)projects/...</code></p>
+
+<ul>
+<li>Optional locale makes routing more complex</li>
+<li>Need to handle locale-in-URL for HTML/MD but reject for JSON</li>
+<li>Redirect logic becomes more complex: if JSON requested with locale,
+must redirect to remove it</li>
+</ul></li>
+<li><p><strong>Section Parameter Confusion</strong>: JSON ignores section parameter</p>
+
+<ul>
+<li>URL <code>/fr/projects/123/passing.json</code> - what does this mean?</li>
+<li>Should it error? Redirect to <code>/projects/123.json</code>? Silently ignore
+&quot;passing&quot;?</li>
+<li>Creates &quot;valid&quot; URLs that don&#39;t make semantic sense</li>
+</ul></li>
+<li><p><strong>Conceptual Mismatch</strong>: JSON represents fundamentally different data</p>
+
+<ul>
+<li>HTML/MD: Shows one section at a time, localized text</li>
+<li>JSON: Shows entire project, no localization, structure-focused</li>
+<li>Forcing them into one route obscures this difference</li>
+</ul></li>
+<li><p><strong>Controller Logic Branching</strong>: The <code>show</code> action becomes:</p></li>
+</ol>
+<pre><code>   def show
+     if request.format.json?
+       # Completely different code path
+       render json: @project.to_json
+     else
+       # Section-based rendering
+       @section = params[:section] || 'passing'
+       # ... rest of section logic
+     end
+   end
+</code></pre>
+<p>This is effectively two actions in one, making the code harder to understand</p>
+
+<ol>
+<li><p><strong>Testing Becomes Complex</strong>:</p>
+
+<ul>
+<li>Tests for JSON have completely different setup and assertions</li>
+<li>Tests for HTML/MD need locale and section fixtures</li>
+<li>Consolidated action means tests are harder to organize and maintain</li>
+</ul></li>
+<li><p><strong>Route Constraints Complexity</strong>: To make this work properly:</p></li>
+</ol>
+<pre><code>   # Need complex constraints:
+   get '(:locale/)projects/:id(/:section)',
+       to: 'projects#show',
+       constraints: {
+         locale: /en|fr|.../,
+         section: /passing|silver|.../,
+         format: /html|md|json/
+       }
+
+   # Plus redirect logic for invalid combinations:
+   # - /en/projects/123.json → /projects/123.json
+   # - /projects/123/passing.json → /projects/123.json
+</code></pre>
+<p>This constraint complexity is harder to maintain than two simple routes</p>
+
+<ol>
+<li><p><strong>Breaking Existing API Contracts</strong>: If external clients use
+<code>/projects/:id.json</code>, they might accidentally request
+<code>/en/projects/:id.json</code> and get unexpected redirects</p></li>
+<li><p><strong>Performance Consideration</strong>: Every HTML/MD request would need to check
+&quot;is this JSON?&quot; before proceeding with section logic, adding tiny overhead</p></li>
+</ol>
+
+<h4>Recommendation</h4>
+
+<p><strong>Do NOT consolidate JSON into the main show route.</strong></p>
+
+<p>Rationale:</p>
+
+<ul>
+<li>JSON is conceptually different enough to warrant separate handling</li>
+<li>The route parameters (locale, section) that make sense for HTML/MD don&#39;t
+apply to JSON</li>
+<li>Controller logic would become significantly more complex with branching</li>
+<li>Creating &quot;valid but nonsensical&quot; URLs like <code>/en/projects/123/passing.json</code>
+is worse than having two routes</li>
+<li>Separate routes make the API clearer: one route for human viewing
+(HTML/MD with sections), another for machine consumption (JSON)</li>
+</ul>
+
+<p>The current plan of separate routes is the right choice. The routes are:</p>
+
+<ul>
+<li>Self-documenting: clear which URLs are valid</li>
+<li>Simple: each route has one purpose</li>
+<li>Maintainable: changing JSON behavior doesn&#39;t affect HTML rendering</li>
+</ul>
+
+<p><strong>Alternative Considered:</strong> Could use route constraints to make JSON-only
+route match first, then fallback to section-based route. However, this
+creates route ordering dependencies and is harder to understand than
+explicit separate routes.</p>
+
+<h3>Summary of Recommendations</h3>
+
+<p>Both consolidation opportunities should be <strong>rejected</strong>:</p>
+
+<ol>
+<li><strong>delete_form</strong>: Keep separate due to different purpose (action
+confirmation vs. data view), security concerns, and semantic clarity</li>
+<li><strong>JSON format</strong>: Keep separate due to different parameters (no locale,
+no section), different data structure, and API clarity</li>
+</ol>
+
+<p>The current plan strikes the right balance between consolidation and
+clarity. Further consolidation would trade minor route table simplification
+for significant increases in controller complexity and conceptual confusion.</p>
+
+<h2>Detailed Implementation Plan</h2>
+
+<p>This section provides the exact implementation details including route
+definitions, controller methods, and memory impact analysis.</p>
+
+<h3>Phase 0: Rename and Consolidate Constants (COMPLETED)</h3>
+
+<p><strong>Status</strong>: This phase has been completed. The constants have been defined in
+<code>config/initializers/01_section_names.rb</code> (not <code>00_section_names.rb</code> as originally
+planned, because it needs to load after <code>00_criteria_hash.rb</code>).</p>
+
+<p><strong>Goal</strong>: Rename constants to accurately reflect their meaning, compute them once
+in a single location, freeze them, and make them available to both routes and
+controllers. This provides clear, consistent naming for all subsequent changes.</p>
+
+<h4>Current State Problems</h4>
+
+<ol>
+<li><strong>Misleading names</strong>: <code>ALL_CRITERIA_LEVEL_NAMES</code> includes &quot;permissions&quot; which
+is a section/view, not a criteria level</li>
+<li><strong>Scattered definitions</strong>: Constants defined in multiple places (initializers,
+routes.rb, controller)</li>
+<li><strong>Recomputation</strong>: Same values calculated multiple times</li>
+<li><strong>Unclear dependencies</strong>: Routes depend on initializers, controller depends on
+routes</li>
+</ol>
+
+<h4>Proposed Constants (All Frozen)</h4>
+
+<p>Define these in <code>config/initializers/01_section_names.rb</code> (named with &quot;01_&quot;
+prefix because it must load AFTER <code>00_criteria_hash.rb</code> which loads the YAML
+and exports level keys):</p>
+<pre><code># frozen_string_literal: true
+
+# **CANONICAL LISTS** of valid criteria level names and routing constants
+#
+# This file defines the authoritative list of criteria levels and sections
+# used throughout the application. These constants are used by:
+# - config/routes.rb - to build routing constraints
+# - app/controllers - for validation and redirects
+# - config/initializers/cors.rb - to build CORS resource patterns
+#
+# This file is named with "01_" prefix to ensure it loads AFTER
+# 00_criteria_hash.rb which loads the YAML and exports level keys.
+#
+# IMPORTANT: Level names are DERIVED from the YAML criteria files via
+# constants exported from 00_criteria_hash.rb (YAML_METAL_LEVEL_KEYS and
+# YAML_BASELINE_LEVEL_KEYS). This ensures YAML is loaded only once.
+
+module Sections
+  # Map of obsolete names to their canonical equivalents
+  # This mapping is the authoritative source for canonical names
+  # NOTE: The YAML files use obsolete numeric keys ('0', '1', '2')
+  # but we route using canonical names ('passing', 'silver', 'gold')
+  REDIRECTS = {
+    '0' => 'passing',
+    '1' => 'silver',
+    '2' => 'gold',
+    'bronze' => 'passing'
+  }.freeze
+
+  # Use level keys exported from 00_criteria_hash.rb (which loaded the YAML)
+  # This avoids loading YAML twice - single source of truth
+
+  # Metal badge levels - map numeric YAML keys to canonical names
+  # The YAML uses '0', '1', '2' but we want canonical names
+  # E.g., ['passing', 'silver', 'gold']
+  METAL_LEVEL_NAMES = YAML_METAL_LEVEL_KEYS.map { |k| REDIRECTS[k] || k }
+                                           .freeze
+
+  # Metal level numbers (obsolete keys still used in YAML)
+  # E.g., ['0', '1', '2']
+  METAL_LEVEL_NUMBERS = YAML_METAL_LEVEL_KEYS
+
+  # Baseline badge levels (already use canonical names in YAML)
+  # E.g., ['baseline-1', 'baseline-2', 'baseline-3']
+  BASELINE_LEVEL_NAMES = YAML_BASELINE_LEVEL_KEYS
+
+  # Synonyms for existing levels (obsolete names beyond numeric keys)
+  SYNONYMS = %w[bronze].freeze # bronze = passing
+
+  # Special forms (non-criteria sections - views/forms not tied to a criteria level)
+  SPECIAL_FORMS = %w[permissions].freeze
+
+  # All criteria levels (canonical names only - no obsolete numbers)
+  # Built up from canonical level names derived from YAML
+  ALL_CRITERIA_LEVEL_NAMES = (METAL_LEVEL_NAMES + BASELINE_LEVEL_NAMES).freeze
+
+  # All canonical section names (criteria levels + special sections)
+  # These are the preferred names that we redirect to - no obsolete names
+  ALL_CANONICAL_NAMES = (ALL_CRITERIA_LEVEL_NAMES + SPECIAL_FORMS).freeze
+
+  # Obsolete section names (deprecated, should redirect to canonical names)
+  # Built up from obsolete numeric keys and synonym names
+  OBSOLETE_NAMES = (METAL_LEVEL_NUMBERS + SYNONYMS).freeze
+
+  # Valid section names (all names we accept - canonical + obsolete)
+  # Used for validation where we accept obsolete names (then redirect to canonical)
+  VALID_NAMES = (ALL_CANONICAL_NAMES + OBSOLETE_NAMES).freeze
+
+  # Regex matching only primary/canonical section names
+  # Used in controller validation and routes that reject obsolete names
+  PRIMARY_SECTION_REGEX = Regexp.union(ALL_CANONICAL_NAMES)
+
+  # Regex matching all valid section names (canonical + obsolete synonyms)
+  # Used in routes.rb for :section parameter validation
+  # (accepts obsolete for redirect)
+  VALID_SECTION_REGEX = Regexp.union(VALID_NAMES)
+
+  # Default section to use when none specified
+  DEFAULT_SECTION = 'passing'
+end
+</code></pre>
+<h4>Benefits of This Approach</h4>
+
+<ol>
+<li><strong>Single source of truth</strong>: All section-related constants in one file</li>
+<li><strong>Namespaced</strong>: Under <code>Sections::</code> module to avoid polluting global namespace</li>
+<li><strong>Clear naming</strong>:
+
+<ul>
+<li><code>Sections::ALL_CRITERIA_LEVEL_NAMES</code> - only actual criteria levels</li>
+<li><code>Sections::ALL_CANONICAL_NAMES</code> - includes special sections like permissions (canonical only)</li>
+<li><code>Sections::VALID_NAMES</code> - all names we accept (canonical + obsolete)</li>
+<li><code>Sections::REDIRECTS</code> - obsolete to canonical mapping</li>
+<li><code>Sections::PRIMARY_SECTION_REGEX</code> - route constraint for primary sections only</li>
+<li><code>Sections::VALID_SECTION_REGEX</code> - route constraint including obsolete</li>
+<li><code>Sections::DEFAULT_SECTION</code> - default section (&#39;passing&#39;)</li>
+<li><code>Sections::SPECIAL_FORMS</code> - non-criteria sections (e.g., permissions)</li>
+</ul></li>
+<li><strong>Computed once</strong>: Regexes and arrays frozen, not recomputed</li>
+<li><strong>Available everywhere</strong>: Initializers load before routes and controllers</li>
+<li><strong>Easy maintenance</strong>: Adding new levels only requires updating one place</li>
+<li><strong>Type clarity</strong>: Frozen arrays, hashes, and regexes (not strings or symbols)</li>
+</ol>
+
+<h4>Usage in Routes</h4>
+<pre><code># config/routes.rb
+
+Rails.application.routes.draw do
+  scope '(:locale)', locale: LEGAL_LOCALE do
+    # Use VALID_SECTION_REGEX for routes that accept obsolete names (will redirect)
+    get 'projects/:id/:section', to: 'projects#show',
+        constraints: { id: VALID_ID, section: Sections::VALID_SECTION_REGEX }
+
+    # Use PRIMARY_SECTION_REGEX for routes that reject obsolete names
+    get 'projects/:id/:section/edit', to: 'projects#edit',
+        constraints: { id: VALID_ID, section: Sections::PRIMARY_SECTION_REGEX }
+  end
+end
+</code></pre>
+<h4>Usage in Controller</h4>
+<pre><code># app/controllers/projects_controller.rb
+
+class ProjectsController < ApplicationController
+  # Reference the frozen constants from Sections module directly
+  # No need to redefine - use Sections:: prefix throughout
+
+  def show
+    @section = params[:section]
+
+    # Check obsolete names using Sections::REDIRECTS frozen hash
+    if Sections::REDIRECTS.key?(@section)
+      redirect_to project_section_path(@project,
+                                       Sections::REDIRECTS[@section],
+                                       locale: params[:locale]),
+                  status: :moved_permanently
+      return
+    end
+
+    # Validate using Sections::VALID_NAMES frozen array
+    unless Sections::VALID_NAMES.include?(@section)
+      raise ActionController::RoutingError, "Invalid section: #{@section}"
+    end
+    # ...
+  end
+end
+</code></pre>
+<h4>Migration Steps for Phase 0</h4>
+
+<ol>
+<li><p><strong>Create/update initializer</strong>:</p>
+
+<ul>
+<li>File: <code>config/initializers/01_section_names.rb</code></li>
+<li>Define all constants as shown above</li>
+<li>Ensure file loads after 00_criteria_hash.rb (01_ prefix ensures correct order)</li>
+</ul></li>
+<li><p><strong>Update routes.rb</strong>:</p>
+
+<ul>
+<li>Remove <code>LEVEL_REDIRECTS</code> constant (use <code>SECTION_REDIRECTS</code> instead)</li>
+<li>Remove <code>VALID_CRITERIA_LEVEL</code> regex (use <code>SECTION_REGEX</code> instead)</li>
+<li>Replace all references with new constant names</li>
+</ul></li>
+<li><p><strong>Update controllers</strong>:</p>
+
+<ul>
+<li>Remove any local constant definitions</li>
+<li>Use frozen constants from initializer directly</li>
+</ul></li>
+<li><p><strong>Test</strong>:</p>
+
+<ul>
+<li>Run <code>rake routes</code> to verify routes still work</li>
+<li>Run controller tests to verify validation still works</li>
+<li>Verify no performance regression (constants frozen/memoized)</li>
+</ul></li>
+<li><p><strong>Commit separately</strong>:</p>
+
+<ul>
+<li>This is a pure refactoring (no behavior change)</li>
+<li>Makes subsequent route consolidation changes clearer</li>
+</ul></li>
+</ol>
+
+<h4>Why This Must Be Done First</h4>
+
+<ul>
+<li><strong>Clearer subsequent changes</strong>: Route consolidation will use accurate names
+like <code>SECTION_REGEX</code> instead of misleading <code>VALID_CRITERIA_LEVEL</code></li>
+<li><strong>Single point of failure</strong>: If constant names are wrong, fix once, not
+scattered across files</li>
+<li><strong>Easier review</strong>: Rename commit separate from behavior change commits</li>
+<li><strong>Lower risk</strong>: Pure refactoring can be tested independently</li>
+</ul>
+
+<h3>Migration from Current Routes</h3>
+
+<p>This section shows exactly how the current routes will be transformed.</p>
+
+<h4>Current Route Structure (BEFORE)</h4>
+
+<p>The existing <code>config/routes.rb</code> currently has this structure for <code>/projects</code>:</p>
+<pre><code>Rails.application.routes.draw do
+  # 1. Badge route (outside scope) - UNCHANGED
+  get '/projects/:id/badge' => 'projects#badge',
+      constraints: { id: VALID_ID },
+      defaults: { format: 'svg' }
+
+  # 2. Loop-generated redirects for obsolete levels (bronze, 0, 1, 2)
+  # This generates 16 routes total (4 obsolete levels × 4 routes each):
+  LEVEL_REDIRECTS.each do |old_level, new_level|
+    # Show with locale (301 permanent)
+    get "/:locale/projects/:id/#{old_level}(.:format)",
+        to: redirect(301) { ... }
+
+    # Show without locale (302 temporary, adds locale)
+    get "/projects/:id/#{old_level}(.:format)",
+        to: redirect_to_level(new_level, status: 302)
+
+    # Edit with locale (301 permanent)
+    get "/:locale/projects/:id/#{old_level}/edit(.:format)",
+        to: redirect(301) { ... }
+
+    # Edit without locale (302 temporary, adds locale)
+    get "/projects/:id/#{old_level}/edit(.:format)",
+        to: redirect_to_level(new_level, suffix: '/edit', status: 302)
+  end
+  # = 16 routes generated by this loop
+
+  # 3. Redirect to default section (complex lambda constraints)
+  # Show routes with complex format exclusions
+  get '/:locale/projects/:id(.:format)',
+      to: redirect_to_level('passing', status: 302),
+      constraints: lambda { |req|
+        id_ok && locale_ok && format_ok && no_criteria_level
+      }
+
+  get '/projects/:id(.:format)',
+      to: redirect_to_level('passing', status: 302),
+      constraints: lambda { |req| ... }
+
+  # Edit routes to default section
+  get '/:locale/projects/:id/edit(.:format)',
+      to: redirect_to_level('passing', suffix: '/edit', status: 302)
+
+  get '/projects/:id/edit(.:format)',
+      to: redirect_to_level('passing', suffix: '/edit', status: 302)
+  # = 4 routes for default section redirects
+
+  # 4. Resources block with member routes
+  scope '(:locale)', locale: LEGAL_LOCALE do
+    resources :projects, constraints: { id: VALID_ID } do
+      member do
+        # Delete confirmation
+        get 'delete_form' => 'projects#delete_form'
+
+        # JSON format (special constraint)
+        get '' => 'projects#show_json',
+            constraints: ->(req) { req.format == :json }
+
+        # Markdown format (special constraint)
+        get '' => 'projects#show_markdown',
+            constraints: ->(req) { req.format == :md }
+
+        # Show with criteria level
+        get ':criteria_level(.:format)' => 'projects#show',
+            constraints: { criteria_level: VALID_CRITERIA_LEVEL },
+            as: :level
+
+        # Edit with criteria level
+        get ':criteria_level/edit(.:format)' => 'projects#edit',
+            constraints: { criteria_level: VALID_CRITERIA_LEVEL },
+            as: :level_edit
+      end
+    end
+  end
+  # = 5 routes in resources block
+end
+
+# TOTAL: ~25 routes for /projects GET operations
+</code></pre>
+<p><strong>Problems with current structure:</strong></p>
+
+<ol>
+<li><strong>16 redirect routes</strong> generated by <code>LEVEL_REDIRECTS.each</code> loop</li>
+<li><strong>Complex lambda constraints</strong> with inline logic that&#39;s hard to understand</li>
+<li><strong>Format handling split</strong> between lambda constraints and resources block</li>
+<li><strong>Duplicate locale handling</strong> (with/without locale patterns repeated)</li>
+<li><strong>Three separate controller methods</strong> for formats (show, show_json, show_markdown)</li>
+</ol>
+
+<h4>New Route Structure (AFTER)</h4>
+<pre><code>Rails.application.routes.draw do
+  # ROUTE 1: Badge image (UNCHANGED - outside scope, no locale)
+  get 'projects/:id/badge', to: 'projects#badge',
+      constraints: { id: VALID_ID, format: 'svg' },
+      defaults: { format: 'svg' },
+      as: :project_badge
+
+  # ROUTE 2: JSON API - locale-independent (MODIFIED - moved outside scope)
+  # This is the expected common case, so match it first for performance
+  get 'projects/:id', to: 'projects#show_json',
+      constraints: { id: VALID_ID, format: 'json' },
+      defaults: { format: 'json' },
+      as: :project_json
+
+  # ROUTE 3: Redirect localized JSON to non-localized (NEW)
+  # Handle common mistake of adding locale to JSON URLs (less frequent)
+  get ':locale/projects/:id', to: redirect('/projects/%{id}.json', status: 301),
+      constraints: { id: VALID_ID, format: 'json', locale: LEGAL_LOCALE }
+
+  # Localized routes (optional locale parameter)
+  scope '(:locale)', locale: LEGAL_LOCALE do
+    # Standard RESTful routes
+    # Excludes :show and :edit (custom routes below)
+    # Excludes :update (custom route below with section parameter)
+    resources :projects, only: [:index, :new, :create, :destroy],
+              constraints: { id: VALID_ID }
+
+    # ROUTE 4: Delete confirmation (UNCHANGED - extracted from resources)
+    get 'projects/:id/delete_form', to: 'projects#delete_form',
+        constraints: { id: VALID_ID },
+        as: :delete_form_project
+
+    # ROUTE 5: Edit with section (MODIFIED - was in resources member block)
+    get 'projects/:id/:section/edit', to: 'projects#edit',
+        constraints: { id: VALID_ID, section: VALID_CRITERIA_LEVEL },
+        as: :edit_project_section
+
+    # ROUTE 6: Show section (MODIFIED - consolidates show + show_markdown)
+    # Handles obsolete sections via controller redirect
+    get 'projects/:id/:section', to: 'projects#show',
+        constraints: { id: VALID_ID, section: VALID_CRITERIA_LEVEL },
+        as: :project_section,
+        defaults: { format: 'html' }
+
+    # ROUTE 7: Redirect to default section (MODIFIED - consolidates 4 routes)
+    # Handles all formats, with/without locale (via scope's optional locale)
+    get 'projects/:id', to: 'projects#redirect_to_default_section',
+        constraints: { id: VALID_ID },
+        as: :project_redirect
+
+    # ROUTE 8: Update project (PUT/PATCH) - section optional
+    # Pattern: PUT/PATCH /projects/:id(/:section)(/edit)
+    # Accepts all these patterns:
+    # - PUT/PATCH /projects/:id (section inferred from referrer or defaults to passing)
+    # - PUT/PATCH /projects/:id/:section (preferred - explicit redirect target)
+    # - PUT/PATCH /projects/:id/:section/edit (backward compat - deprecated /edit suffix)
+    # Section in URL indicates where to redirect after successful update
+    # IMPORTANT: ANY project field can be updated regardless of section in URL
+    match 'projects/:id(/:section)(/edit)', to: 'projects#update',
+          via: %i[put patch],
+          constraints: { id: VALID_ID, section: VALID_CRITERIA_LEVEL },
+          as: :update_project
+  end
+end
+
+# TOTAL: 7 GET routes + 1 PUT/PATCH route for /projects operations (down from ~25)
+</code></pre>
+<h4>Key Changes</h4>
+
+<table><thead>
+<tr>
+<th>Current Approach</th>
+<th>New Approach</th>
+<th>Benefit</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>16 routes via <code>LEVEL_REDIRECTS.each</code> loop</td>
+<td>Obsolete sections handled in controller</td>
+<td>Reduces routes by 16</td>
+</tr>
+<tr>
+<td>Lambda constraints with complex logic</td>
+<td>Simple hash constraints</td>
+<td>Easier to understand</td>
+</tr>
+<tr>
+<td>3 controller methods (show, show_json, show_markdown)</td>
+<td>2 methods (show handles HTML+MD, show_json separate)</td>
+<td>Reduces controller complexity</td>
+</tr>
+<tr>
+<td>Format handling split across routes</td>
+<td>Format handled via <code>respond_to</code> in controller</td>
+<td>Centralized logic</td>
+</tr>
+<tr>
+<td>Separate with/without locale routes</td>
+<td><code>scope &#39;(:locale)&#39;</code> with optional parameter</td>
+<td>Eliminates duplication</td>
+</tr>
+<tr>
+<td>Complex redirect helpers (<code>redirect_to_level</code>)</td>
+<td>Single <code>redirect_to_default_section</code> method</td>
+<td>Simpler redirect logic</td>
+</tr>
+</tbody></table>
+
+<h4>Routes Removed</h4>
+<pre><code># REMOVED: All 16 loop-generated routes
+LEVEL_REDIRECTS.each do |old_level, new_level|
+  # These 4 routes × 4 obsolete levels = 16 routes REMOVED
+  # Functionality moved to controller (projects#show handles redirects)
+end
+
+# REMOVED: Complex lambda constraint routes
+get '/:locale/projects/:id(.:format)',
+    to: redirect_to_level('passing', status: 302),
+    constraints: lambda { ... } # REMOVED
+
+get '/projects/:id(.:format)',
+    to: redirect_to_level('passing', status: 302),
+    constraints: lambda { ... } # REMOVED
+
+# REMOVED: Duplicate edit redirect routes (consolidated into Route 7)
+get '/:locale/projects/:id/edit(.:format)',
+    to: redirect_to_level('passing', suffix: '/edit', status: 302) # REMOVED
+
+get '/projects/:id/edit(.:format)',
+    to: redirect_to_level('passing', suffix: '/edit', status: 302) # REMOVED
+
+# REMOVED: Resources member block (routes extracted to explicit definitions)
+resources :projects do
+  member do
+    get '' => 'projects#show_markdown' # REMOVED (merged into show)
+    get ':criteria_level(.:format)' => 'projects#show' # REPLACED by Route 6
+    get ':criteria_level/edit(.:format)' => 'projects#edit' # REPLACED by Route 5
+  end
+end
+</code></pre>
+<h4>Routes Added</h4>
+<pre><code># NEW: Redirect localized JSON to non-localized (Route 3)
+# Handles common mistake of adding locale to JSON URLs
+get ':locale/projects/:id', to: redirect('/projects/%{id}.json', status: 301),
+    constraints: { id: VALID_ID, format: 'json', locale: LEGAL_LOCALE }
+
+# NEW: Single redirect handler for default section (Route 7)
+# Consolidates 4 previous routes into one
+# Handles all formats, all locale variations (via scope's optional locale)
+get 'projects/:id', to: 'projects#redirect_to_default_section',
+    constraints: { id: VALID_ID },
+    as: :project_redirect
+</code></pre>
+<h4>Routes Modified</h4>
+<pre><code># BEFORE: Inside resources member block
+get '' => 'projects#show_json', constraints: ->(req) { req.format == :json }
+
+# AFTER: Outside scope, explicit route (Route 2)
+# Moved before localized JSON redirect for performance (common case first)
+get 'projects/:id', to: 'projects#show_json',
+    constraints: { id: VALID_ID, format: 'json' }
+
+# ----
+
+# BEFORE: Inside resources member block
+get ':criteria_level(.:format)' => 'projects#show',
+    constraints: { criteria_level: VALID_CRITERIA_LEVEL }
+
+# AFTER: Explicit route, renamed parameter (Route 6)
+get 'projects/:id/:section', to: 'projects#show',
+    constraints: { id: VALID_ID, section: VALID_CRITERIA_LEVEL }
+
+# ----
+
+# BEFORE: Separate match outside resources, optional criteria_level with /edit suffix
+match 'projects/:id/(:criteria_level/)edit' => 'projects#update',
+      via: [:put, :patch]
+# Accepts: PUT/PATCH /projects/:id/passing/edit (non-standard)
+#       or PUT/PATCH /projects/:id/edit (if criteria_level omitted)
+
+# AFTER: Inside scope, optional section, optional /edit suffix (Route 8)
+# Follows REST conventions while maintaining backward compatibility
+match 'projects/:id(/:section)(/edit)', to: 'projects#update',
+      via: [:put, :patch],
+      constraints: { id: VALID_ID, section: VALID_CRITERIA_LEVEL }
+# Accepts all these patterns:
+# - PUT/PATCH /projects/:id (section inferred from referrer or defaults to passing)
+# - PUT/PATCH /projects/:id/:section (preferred - explicit redirect target, standard REST)
+# - PUT/PATCH /projects/:id/:section/edit (deprecated - backward compat)
+</code></pre>
+<p><strong>Forms should be updated to use the new pattern:</strong></p>
+
+<ul>
+<li>Internal forms: Update to use <code>update_project_section_path</code> (no <code>/edit</code> suffix)</li>
+<li>External clients: Both patterns work, but <code>/edit</code> is deprecated</li>
+<li>Transition period: Old pattern continues working but generates deprecation warnings (optional)</li>
+</ul>
+
+<h3>Routing Table Implementation</h3>
+
+<p><strong>Proposed routes in <code>config/routes.rb</code> (order matters):</strong></p>
+<pre><code># Route order is critical - Rails matches top to bottom
+# More specific routes must come before more generic routes
+
+# Note: Using these constants:
+# From config/routes.rb:
+#   LEGAL_LOCALE - derived from I18n.available_locales
+#   VALID_ID - matches [1-9][0-9]*
+# From config/initializers/01_section_names.rb (Sections module):
+#   Sections::VALID_SECTION_REGEX - matches primary and obsolete section names
+#   Sections::PRIMARY_SECTION_REGEX - matches only primary sections (excludes obsolete)
+
+Rails.application.routes.draw do
+  # ROUTE 1: Badge image (no locale needed, must be outside locale scope)
+  # GET /projects/:id/badge.svg
+  # Badge images need canonical URLs for CDN caching
+  get 'projects/:id/badge', to: 'projects#badge',
+      constraints: { id: VALID_ID, format: 'svg' },
+      defaults: { format: 'svg' },
+      as: :project_badge
+
+  # ROUTE 2: JSON API (locale-independent, outside scope)
+  # GET /projects/:id.json
+  # This is the expected common case, so it's matched first for performance
+  get 'projects/:id', to: 'projects#show_json',
+      constraints: { id: VALID_ID, format: 'json' },
+      defaults: { format: 'json' },
+      as: :project_json
+
+  # ROUTE 3: Redirect localized JSON to non-localized version
+  # GET /:locale/projects/:id.json → /projects/:id.json (301 permanent)
+  # Handle common mistake of adding locale to JSON URLs (less frequent)
+  get ':locale/projects/:id', to: redirect('/projects/%{id}.json', status: 301),
+      constraints: {
+        id: VALID_ID,
+        format: 'json',
+        locale: LEGAL_LOCALE
+      }
+
+  # Localized routes (optional locale parameter)
+  scope '(:locale)', locale: LEGAL_LOCALE do
+    # Standard RESTful routes
+    # Excludes :show and :edit (custom routes below)
+    # Excludes :update (custom route below with section parameter)
+    resources :projects, only: [:index, :new, :create, :destroy]
+
+    # ROUTE 4: Delete confirmation form (specific, before generic :section)
+    # GET (/:locale)/projects/:id/delete_form
+    get 'projects/:id/delete_form', to: 'projects#delete_form',
+        constraints: { id: VALID_ID },
+        as: :delete_form_project
+
+    # ROUTE 5: Edit with section (before show to avoid conflicts)
+    # GET (/:locale)/projects/:id/:section/edit
+    # Use PRIMARY_SECTION_REGEX to reject obsolete sections in edit URLs
+    get 'projects/:id/:section/edit', to: 'projects#edit',
+        constraints: {
+          id: VALID_ID,
+          section: Sections::PRIMARY_SECTION_REGEX
+        },
+        as: :edit_project_section
+
+    # ROUTE 6: Show section with format (HTML or Markdown)
+    # GET (/:locale)/projects/:id/:section(.:format)
+    # Use VALID_SECTION_REGEX to accept obsolete sections (controller will redirect)
+    get 'projects/:id/:section', to: 'projects#show',
+        constraints: {
+          id: VALID_ID,
+          section: Sections::VALID_SECTION_REGEX
+        },
+        as: :project_section,
+        defaults: { format: 'html' }
+
+    # ROUTE 7: Redirect to default section (all formats, with/without locale)
+    # GET (/:locale)/projects/:id(.:format) → (/:locale)/projects/:id/passing(.:format)
+    get 'projects/:id', to: 'projects#redirect_to_default_section',
+        constraints: { id: VALID_ID },
+        as: :project_redirect
+
+    # ROUTE 8: Update project (PUT/PATCH) - section optional
+    # PUT/PATCH (/:locale)/projects/:id(/:section)(/edit) → projects#update
+    # Accepts all these patterns:
+    # - PUT/PATCH /:locale/projects/:id (section inferred from referrer or defaults)
+    # - PUT/PATCH /:locale/projects/:id/:section (preferred - explicit redirect target)
+    # - PUT/PATCH /:locale/projects/:id/:section/edit (deprecated - backward compat)
+    # The /edit suffix is optional to support external clients during transition
+    # IMPORTANT: Section in URL is for routing only - ANY project field can be
+    # updated regardless of section. Programs can update any field without knowing
+    # which section it belongs to.
+    # Use PRIMARY_SECTION_REGEX to reject obsolete sections in update URLs
+    match 'projects/:id(/:section)(/edit)', to: 'projects#update',
+          via: %i[put patch],
+          constraints: { id: VALID_ID, section: Sections::PRIMARY_SECTION_REGEX },
+          as: :update_project
+  end
+end
+</code></pre>
+<h3>Route Ordering Analysis</h3>
+
+<p><strong>Why this order is critical:</strong></p>
+
+<ol>
+<li><strong>Badge (Route 1)</strong>: Outside scope, format-constrained, canonical URL for CDN</li>
+<li><strong>JSON API (Route 2)</strong>: Outside scope, handles non-localized JSON requests
+
+<ul>
+<li><strong>Common case first</strong>: Most JSON requests use this pattern</li>
+<li>Performance: Matches expected usage immediately</li>
+</ul></li>
+<li><strong>JSON redirect (Route 3)</strong>: Outside scope, redirects localized JSON
+
+<ul>
+<li><strong>Error case second</strong>: Handles mistaken locale in JSON URL</li>
+<li>Won&#39;t match Route 2 due to extra <code>:locale</code> path segment</li>
+</ul></li>
+<li><strong>Localized scope begins</strong>: All remaining routes inside <code>scope &#39;(:locale)&#39;</code></li>
+<li><strong>delete_form (Route 4)</strong>: Literal string <code>delete_form</code> must match before
+generic <code>:section</code> parameter</li>
+<li><strong>:section/edit (Route 5)</strong>: Edit URLs have <code>/edit</code> suffix, must match
+before generic <code>:section</code> route</li>
+<li><strong>:section show (Route 6)</strong>: Displays section content (HTML/Markdown)</li>
+<li><strong>:id redirect (Route 7)</strong>: Catches bare project ID, redirects to default
+section; must come after more specific routes</li>
+<li><strong>Update (Route 8)</strong>: PUT/PATCH for project updates with section parameter
+
+<ul>
+<li>Order doesn&#39;t matter for this route (different HTTP verbs from GET routes)</li>
+</ul></li>
+</ol>
+
+<p><strong>Route order errors to avoid:</strong></p>
+<pre><code># WRONG - generic route matches before specific:
+scope '(:locale)' do
+  get 'projects/:id/:section', to: 'projects#show'        # Too generic
+  get 'projects/:id/delete_form', to: 'projects#delete_form'  # Never reached!
+end
+
+# CORRECT - specific before generic:
+scope '(:locale)' do
+  get 'projects/:id/delete_form', to: 'projects#delete_form'  # Matches first
+  get 'projects/:id/:section', to: 'projects#show'            # Catches rest
+end
+
+# WRONG - JSON inside scope would require locale:
+scope '(:locale)' do
+  get 'projects/:id', to: 'projects#show_json',
+      constraints: { format: 'json' }  # Would require locale in URL!
+end
+
+# CORRECT - JSON outside scope, locale-independent:
+get 'projects/:id', to: 'projects#show_json',
+    constraints: { format: 'json' }  # Works without locale
+</code></pre>
+<h3>Controller Methods Implementation</h3>
+
+<p><strong>Changes to <code>app/controllers/projects_controller.rb</code>:</strong></p>
+<pre><code>class ProjectsController < ApplicationController
+  # Use frozen constants from Sections module (config/initializers/01_section_names.rb)
+  # All constants computed once at boot time and available via Sections:: prefix
+  # No need to redefine them - just reference Sections::CONSTANT_NAME directly
+
+  # Existing before_action filters
+  before_action :set_project, only: [:show, :edit, :update, :destroy,
+                                      :delete_form, :badge, :show_json,
+                                      :redirect_to_default_section]
+  before_action :set_locale, except: [:badge, :show_json]
+
+  # EXISTING METHOD (minimal changes)
+  def index
+    # Unchanged - shows project list
+  end
+
+  # EXISTING METHOD (minimal changes)
+  def new
+    # Unchanged - shows new project form
+  end
+
+  # EXISTING METHOD (minimal changes)
+  def create
+    # Unchanged - creates new project
+  end
+
+  # MODIFIED METHOD: Handle optional section parameter
+  def update
+    # Section is now OPTIONAL in the URL
+    @section = params[:section]
+
+    # Authorize user can edit this project
+    authorize_edit!
+
+    # Update the project with submitted parameters
+    if @project.update(project_params)
+      # Determine where to redirect after successful update
+      redirect_section = determine_redirect_section(@section)
+
+      redirect_to project_section_path(@project, redirect_section,
+                                       locale: params[:locale]),
+                  notice: t('projects.update.success')
+    else
+      # Failed - re-render edit form
+      # Load section-specific data for the form
+      load_section_data_for_edit(@section || DEFAULT_SECTION)
+      render "projects/edit_#{@section || DEFAULT_SECTION}"
+    end
+  end
+
+  private
+
+  # Determine where to redirect after successful project update
+  # @param section [String, nil] section from URL (may be nil)
+  # @return [String] section name to redirect to
+  def determine_redirect_section(section)
+    # If section provided in UPDATE request URL, use it (explicit redirect target)
+    # Example: PUT /projects/123/silver → section='silver' from params[:section]
+    # Use Sections::VALID_NAMES from initializer (frozen array)
+    return section if section.present? && Sections::VALID_NAMES.include?(section)
+
+    # Otherwise, try to infer from referrer (the page they came from)
+    # This handles unusual cases where update URL lacks section but referrer has it
+    # Example: PUT /projects/123 (no section) but came from /en/projects/123/silver/edit
+    # Note: Most edit links will include section, so this is primarily a fallback
+    if request.referer.present?
+      # Extract section from REFERRER URL (different from update URL)
+      # Example referrer: /en/projects/123/silver/edit → extract "silver"
+      match = request.referer.match(%r{/projects/\d+/([^/]+)(/edit)?$})
+      return match[1] if match && Sections::VALID_NAMES.include?(match[1])
+    end
+
+    # Fallback: redirect to default section
+    # Use Sections::DEFAULT_SECTION from initializer (frozen string)
+    Sections::DEFAULT_SECTION
+  end
+
+  # Load section-specific data needed for edit forms
+  # @param section [String] section name
+  def load_section_data_for_edit(section)
+    if section == 'permissions'
+      @additional_rights_str = @project.additional_rights_to_s
+    else
+      @criteria = @project.criteria_for_section(section)
+    end
+  end
+
+  # EXISTING METHOD (minimal changes)
+  def destroy
+    # Unchanged - destroys project
+  end
+
+  # EXISTING METHOD (unchanged)
+  def delete_form
+    # Shows delete confirmation page
+    # No changes - already isolated as separate action
+    authorize_admin_or_owner!
+    # Renders delete confirmation view
+  end
+
+  # EXISTING METHOD (unchanged)
+  def badge
+    # Returns SVG badge image
+    # No changes - already locale-independent
+    respond_to do |format|
+      format.svg { render_badge_svg }
+    end
+  end
+
+  # MODIFIED METHOD: Replaces old show/show_markdown with section-aware version
+  def show
+    # Section is always present (route constraint ensures it)
+    # No default needed - this action is ONLY called when :section is in URL
+    @section = params[:section]
+
+    # Handle obsolete section names with permanent redirect
+    # Use Sections::REDIRECTS from initializer (frozen hash)
+    if Sections::REDIRECTS.key?(@section)
+      redirect_to project_section_path(@project,
+                                       Sections::REDIRECTS[@section],
+                                       locale: params[:locale]),
+                  status: :moved_permanently
+      return
+    end
+
+    # Validate section is known (should always pass due to route constraints,
+    # but provides safety and better error messages)
+    # Use Sections::VALID_NAMES from initializer (frozen array)
+    unless Sections::VALID_NAMES.include?(@section)
+      raise ActionController::RoutingError, "Invalid section: #{@section}"
+    end
+
+    # Load ONLY section-specific data (optimization: don't load irrelevant criteria)
+    # Different sections need different data
+    if @section == 'permissions'
+      # Permissions section: load additional rights data
+      # Call model method in controller, not view (Rails best practice)
+      @additional_rights_str = @project.additional_rights_to_s
+
+      # SAFEGUARD: Permissions section doesn't support markdown format
+      # Markdown is for criteria only, not permissions
+      if request.format.md?
+        raise ActionController::RoutingError,
+              'Markdown format not supported for permissions section'
+      end
+    else
+      # Criteria sections: load criteria and status for this section
+      @criteria = @project.criteria_for_section(@section)
+      @section_status = @project.section_status(@section)
+
+      # For markdown format, set @criteria_level for the view
+      # The existing show_markdown.erb checks @criteria_level:
+      # - If blank: generates markdown for ALL levels (old behavior)
+      # - If set: generates markdown for ONLY that level (new per-section behavior)
+      @criteria_level = @section if request.format.md?
+    end
+
+    respond_to do |format|
+      format.html { render "projects/show_#{@section}", layout: 'application' }
+      format.md do
+        # Only reach here if @section is a criteria level (not permissions)
+        render 'projects/show_markdown', layout: false,
+               content_type: 'text/markdown'
+      end
+    end
+  end
+
+  # MODIFIED METHOD: Replaces old edit with section-aware version
+  def edit
+    # Section is always present (route constraint ensures it)
+    # No default needed - this action is ONLY called when :section is in URL
+    @section = params[:section]
+
+    # Validate section is known (should always pass due to route constraints,
+    # but provides safety and better error messages)
+    # Use Sections::VALID_NAMES from initializer (frozen array)
+    unless Sections::VALID_NAMES.include?(@section)
+      raise ActionController::RoutingError, "Invalid section: #{@section}"
+    end
+
+    authorize_edit!
+
+    # Load ONLY section-specific data (optimization: don't load irrelevant criteria)
+    # Use same helper method as update method for consistency
+    load_section_data_for_edit(@section)
+    render "projects/edit_#{@section}"
+  end
+
+  # NEW METHOD: Replaces old show_json with explicit method
+  def show_json
+    # If locale in URL, redirect to remove it (301 permanent)
+    if params[:locale].present?
+      redirect_to project_json_path(@project), status: :moved_permanently
+      return
+    end
+
+    # Return full project JSON (all sections, no localization)
+    render json: @project.to_json(
+      include: {
+        criteria_answers: { only: [:criterion_id, :value, :justification] },
+        additional_rights: { only: [:user_id, :project_id] }
+      },
+      methods: [:badge_level, :all_sections_status]
+    )
+  end
+
+  # NEW METHOD: Redirects bare project URL to default section
+  def redirect_to_default_section
+    # Future: could read @project.default_section from database
+    # Use Sections::DEFAULT_SECTION from initializer (frozen string)
+    default_section = Sections::DEFAULT_SECTION
+
+    # Preserve format if specified
+    format = request.format.symbol == :html ? nil : request.format.symbol
+
+    redirect_to project_section_path(@project, default_section,
+                                     locale: params[:locale],
+                                     format: format),
+                status: :found  # 302 temporary (may become configurable)
+  end
+
+  # NEW METHOD: Redirects markdown without locale to add detected locale
+  def redirect_markdown_to_locale
+    detected_locale = detect_locale_from_browser
+    redirect_to project_section_path(@project, DEFAULT_SECTION,
+                                     locale: detected_locale,
+                                     format: :md),
+                status: :found  # 302 temporary
+  end
+
+  # NEW METHOD: Redirects markdown with locale to default section
+  def redirect_markdown_to_section
+    redirect_to project_section_path(@project, DEFAULT_SECTION,
+                                     locale: params[:locale],
+                                     format: :md),
+                status: :found  # 302 temporary
+  end
+
+  private
+
+  def set_project
+    @project = Project.find(params[:id])
+  end
+
+  def set_locale
+    I18n.locale = params[:locale] || detect_locale_from_browser
+  end
+
+  def detect_locale_from_browser
+    # Existing locale detection logic
+  end
+
+  def authorize_edit!
+    # Existing authorization logic
+  end
+
+  def authorize_admin_or_owner!
+    # Existing authorization logic
+  end
+end
+</code></pre>
+<h3>Markdown Generation Changes</h3>
+
+<p>The current markdown generation in <code>app/views/projects/show_markdown.erb</code>
+already supports per-section rendering, but it needs to be integrated with the
+new routing structure.</p>
+
+<h4>Current Implementation (lines 4-8 of show_markdown.erb)</h4>
+<pre><code><%-
+  # @criteria_level should always be a string, but handle nil gracefully.
+  if @criteria_level.blank? then
+    criteria_levels = Criteria.keys.map { |key| normalize_criteria_level(key) }
+  else
+    criteria_levels = [@criteria_level]
+  end
+-%>
+</code></pre>
+<p><strong>Current behavior:</strong></p>
+
+<ul>
+<li>If <code>@criteria_level</code> is blank → generates markdown for ALL levels</li>
+<li>If <code>@criteria_level</code> is set → generates markdown for ONLY that level</li>
+</ul>
+
+<h4>Changes Required</h4>
+
+<p><strong>Controller (projects_controller.rb):</strong></p>
+<pre><code>def show
+  @section = params[:section]
+  # ... validation and redirects ...
+
+  # NEW: Set @criteria_level for markdown rendering
+  # The view already supports this - we just need to set it
+  @criteria_level = @section if request.format.md?
+
+  respond_to do |format|
+    format.html { render "projects/show_#{@section}", layout: 'application' }
+    format.md   { render 'projects/show_markdown', layout: false }
+  end
+end
+</code></pre>
+<p><strong>View (show_markdown.erb):</strong></p>
+
+<p>The view already supports per-section rendering! No changes needed to the view
+logic. When <code>@criteria_level</code> is set (which it will always be now), the view
+generates markdown for only that section.</p>
+
+<p><strong>Result:</strong></p>
+
+<ul>
+<li>Old URL: <code>/projects/123.md</code> → generates markdown for ALL sections</li>
+<li>New URL: <code>/en/projects/123/passing.md</code> → generates markdown for ONLY passing section</li>
+<li>New URL: <code>/en/projects/123/silver.md</code> → generates markdown for ONLY silver section</li>
+</ul>
+
+<p>This change aligns markdown with HTML behavior (both are per-section) and
+reduces the size of markdown downloads for users who only need one section.</p>
+
+<h3>Permissions Section Database Query Issue</h3>
+
+<p><strong>Current Problem:</strong></p>
+
+<p>The permissions view (<code>app/views/projects/_form_permissions.html.erb</code>) makes
+database queries from the view, which is a Rails anti-pattern. Queries should
+be in the controller.</p>
+
+<p><strong>Lines 56 and 145 of _form_permissions.html.erb:</strong></p>
+<pre><code><%= t('projects.form_basics.additional_rights_changes.description',
+      current_rights: project.additional_rights_to_s) %>
+</code></pre>
+<p><strong>What <code>additional_rights_to_s</code> does (app/models/project.rb:317-321):</strong></p>
+<pre><code>def additional_rights_to_s
+  # "distinct" shouldn't be needed; it's purely defensive here
+  list = AdditionalRight.for_project(id).distinct.pluck(:user_id)
+  list.sort.to_s
+end
+</code></pre>
+<p>This executes a database query: <code>AdditionalRight.for_project(id)</code> retrieves all
+additional rights records for the project, then plucks user IDs.</p>
+
+<p><strong>Required Fix:</strong></p>
+
+<p>Call the model method in the controller (not in the view) and set an instance variable:</p>
+<pre><code>def show
+  @section = params[:section]
+  # ... existing validation ...
+
+  # Load section-specific data
+  if @section == 'permissions'
+    # Call model method in controller, not view (Rails best practice)
+    # This executes the query once and caches the result
+    @additional_rights_str = @project.additional_rights_to_s
+  else
+    @criteria = @project.criteria_for_section(@section)
+    @section_status = @project.section_status(@section)
+  end
+
+  # ... rest of method ...
+end
+</code></pre>
+<p><strong>Update view to use instance variable:</strong></p>
+<pre><code><%# Before: calls model method from view (bad - query in view) %>
+current_rights: project.additional_rights_to_s
+
+<%# After: uses instance variable set by controller (good - query in controller) %>
+current_rights: @additional_rights_str
+</code></pre>
+<p><strong>Benefits:</strong></p>
+
+<ul>
+<li>Follows Rails best practices (queries in controller, not view)</li>
+<li>Makes it explicit what data the view depends on</li>
+<li>Easier to optimize and test</li>
+<li>Consistent with the optimization of loading only section-specific data</li>
+</ul>
+
+<h3>Form URL Changes Required</h3>
+
+<p><strong>CHANGE (with backward compatibility):</strong> The update route pattern has changed to
+follow REST conventions, but the old pattern with <code>/edit</code> suffix will continue to
+work for backward compatibility.</p>
+
+<h4>Forms That Need Updates</h4>
+
+<p>All project edit forms currently submit to URLs ending in <code>/edit</code>:</p>
+
+<p><strong>Files to update:</strong></p>
+
+<ul>
+<li><code>app/views/projects/_form_0.html.erb</code></li>
+<li><code>app/views/projects/_form_1.html.erb</code></li>
+<li><code>app/views/projects/_form_2.html.erb</code></li>
+<li><code>app/views/projects/_form_baseline-1.html.erb</code></li>
+<li><code>app/views/projects/_form_baseline-2.html.erb</code> (if exists)</li>
+<li><code>app/views/projects/_form_baseline-3.html.erb</code> (if exists)</li>
+<li><code>app/views/projects/_form_permissions.html.erb</code></li>
+</ul>
+
+<h4>Current Form Pattern (deprecated but still works)</h4>
+<pre><code><%# Example from _form_permissions.html.erb line 64 %>
+<%= bootstrap_form_for project, url: put_project_path(project, criteria_level: 'permissions') do |f| %>
+  <%# Form fields... %>
+<% end %>
+</code></pre>
+<p>Generates: <code>PUT /projects/123/permissions/edit</code> (deprecated, but backward compatible)</p>
+
+<h4>Preferred Form Pattern (standard REST)</h4>
+<pre><code><%# Updated form - preferred, section explicit in URL %>
+<%= bootstrap_form_for project, url: update_project_path(project, section: @section) do |f| %>
+  <%# Form fields... %>
+<% end %>
+</code></pre>
+<p>Generates: <code>PUT /projects/123/permissions</code> (standard REST, section explicit)</p>
+
+<p><strong>Why include section in URL:</strong></p>
+
+<ul>
+<li>Makes redirect target explicit (no need to infer from referrer)</li>
+<li>Form handler knows which section to return to after successful update</li>
+<li>Cleaner than relying on fallback logic</li>
+</ul>
+
+<p><strong>Alternative using route helper with explicit section:</strong></p>
+<pre><code><%# Also acceptable - uses named section directly %>
+<%= bootstrap_form_for project, url: update_project_path(project, section: 'permissions') do |f| %>
+  <%# Form fields... %>
+<% end %>
+</code></pre>
+<h4>Important Note About Section Parameter</h4>
+
+<p><strong>The section in the URL is for routing only.</strong> When the update is submitted to
+<code>PUT /projects/:id/:section</code>, the controller receives ALL form parameters and
+can update ANY field in the project, regardless of which section that field
+belongs to.</p>
+
+<p>This design makes it easier for programs to update projects without needing to:</p>
+
+<ul>
+<li>Know which fields belong to which section</li>
+<li>Send multiple requests to update different sections</li>
+<li>Implement complex field-to-section mapping logic</li>
+</ul>
+
+<p><strong>Example:</strong> A form at <code>/projects/123/passing/edit</code> can submit updates to
+both passing-level criteria AND user preferences (like notification settings)
+in a single request to <code>PUT /projects/123/passing</code>.</p>
+
+<h4>Backward Compatibility Strategy</h4>
+
+<p>The route pattern <code>&#39;projects/:id/:section(/edit)&#39;</code> uses parentheses to make
+<code>/edit</code> optional. This means:</p>
+
+<p><strong>Both patterns accepted:</strong></p>
+
+<ol>
+<li><code>PUT /projects/123/passing</code> - <strong>Preferred</strong>, standard REST</li>
+<li><code>PUT /projects/123/passing/edit</code> - <strong>Deprecated</strong>, backward compatible</li>
+</ol>
+
+<p><strong>Migration approach:</strong></p>
+
+<ol>
+<li><strong>Phase 1:</strong> Deploy new routes (both patterns work)</li>
+<li><strong>Phase 2:</strong> Update all internal forms to use preferred pattern</li>
+<li><strong>Phase 3:</strong> Test that old pattern still works for external clients</li>
+<li><strong>Optional Phase 4:</strong> Add deprecation warnings for <code>/edit</code> pattern</li>
+<li><strong>Optional Phase 5:</strong> Remove <code>/edit</code> pattern after sufficient transition period</li>
+</ol>
+
+<p><strong>Advantages of this approach:</strong></p>
+
+<ul>
+<li>No breaking changes for external API clients</li>
+<li>Internal forms can be updated gradually</li>
+<li>Easy to roll back if issues discovered</li>
+<li>Clear migration path with measurable progress</li>
+<li>Can add logging to track usage of deprecated pattern</li>
+</ul>
+
+<p><strong>Optional deprecation logging:</strong></p>
+<pre><code># In projects_controller.rb update method
+def update
+  # Log deprecation if /edit pattern used
+  if request.path.end_with?('/edit')
+    Rails.logger.warn(
+      "DEPRECATED: PUT/PATCH to #{request.path} uses deprecated /edit suffix. " \
+      "Use #{request.path.sub('/edit', '')} instead."
+    )
+  end
+  # ... rest of update logic
+end
+</code></pre>
+<p>This logging helps identify external clients that need to update their code.</p>
+
+<h3>Controller Method Changes Summary</h3>
+
+<table><thead>
+<tr>
+<th>Method</th>
+<th>Change Type</th>
+<th>Rationale</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>index</code></td>
+<td>Unchanged</td>
+<td>No routing changes affect this</td>
+</tr>
+<tr>
+<td><code>new</code></td>
+<td>Unchanged</td>
+<td>No routing changes affect this</td>
+</tr>
+<tr>
+<td><code>create</code></td>
+<td>Unchanged</td>
+<td>POST, not part of GET consolidation</td>
+</tr>
+<tr>
+<td><code>update</code></td>
+<td><strong>Modified</strong></td>
+<td>Now handles optional section parameter; infers redirect target from section, referrer, or default; uses shared helper for data loading</td>
+</tr>
+<tr>
+<td><code>destroy</code></td>
+<td>Unchanged</td>
+<td>DELETE, not part of GET consolidation</td>
+</tr>
+<tr>
+<td><code>delete_form</code></td>
+<td>Unchanged</td>
+<td>Kept separate (see Opportunity 1 analysis)</td>
+</tr>
+<tr>
+<td><code>badge</code></td>
+<td>Unchanged</td>
+<td>Already simple and locale-independent</td>
+</tr>
+<tr>
+<td><code>show</code></td>
+<td><strong>Modified</strong></td>
+<td>Now section-aware; section always present in params (no default); loads only section-specific data; handles HTML and MD formats; includes obsolete section redirects; safeguards against markdown for permissions</td>
+</tr>
+<tr>
+<td><code>edit</code></td>
+<td><strong>Modified</strong></td>
+<td>Now section-aware; section always present in params (no default); loads only section-specific data using shared helper; validates section parameter</td>
+</tr>
+<tr>
+<td><code>show_json</code></td>
+<td><strong>New explicit</strong></td>
+<td>Separated from show; handles locale redirect; returns full project JSON</td>
+</tr>
+<tr>
+<td><code>show_markdown</code></td>
+<td><strong>Removed</strong></td>
+<td>Functionality merged into <code>show</code> with format.md</td>
+</tr>
+<tr>
+<td><code>redirect_to_default_section</code></td>
+<td><strong>New</strong></td>
+<td>Handles <code>/:locale/projects/:id</code> → <code>/:locale/projects/:id/passing</code></td>
+</tr>
+<tr>
+<td><code>redirect_markdown_to_locale</code></td>
+<td><strong>Removed</strong></td>
+<td>Consolidated into <code>redirect_to_default_section</code></td>
+</tr>
+<tr>
+<td><code>redirect_markdown_to_section</code></td>
+<td><strong>Removed</strong></td>
+<td>Consolidated into <code>redirect_to_default_section</code></td>
+</tr>
+<tr>
+<td><code>determine_redirect_section</code></td>
+<td><strong>New (private)</strong></td>
+<td>Helper to determine redirect target after update (from section param, referrer, or default)</td>
+</tr>
+<tr>
+<td><code>load_section_data_for_edit</code></td>
+<td><strong>New (private)</strong></td>
+<td>Shared helper for loading section-specific data (permissions vs criteria)</td>
+</tr>
+</tbody></table>
+
+<h3>Critical Implementation Details</h3>
+
+<p>This section addresses the critical issues identified during comprehensive review
+to ensure low risk and high likelihood of immediate success.</p>
+
+<h4>Issue 1: Section Parameter Must Be Optional (RESOLVED)</h4>
+
+<p><strong>Problem</strong>: Initial proposal required <code>:section</code> parameter in update route,
+which would break <code>_form_0.html.erb</code> that uses <code>project_path(project)</code> to
+generate <code>PATCH /projects/123</code> without section.</p>
+
+<p><strong>Solution</strong>: Made section optional using parentheses: <code>&#39;projects/:id(/:section)(/edit)&#39;</code></p>
+
+<p><strong>Route now accepts</strong>:</p>
+
+<ul>
+<li><code>PUT/PATCH /projects/:id</code> - section inferred from referrer or defaults to passing</li>
+<li><code>PUT/PATCH /projects/:id/:section</code> - explicit section (preferred)</li>
+<li><code>PUT/PATCH /projects/:id/:section/edit</code> - backward compatibility</li>
+</ul>
+
+<p><strong>Controller implementation</strong>: <code>determine_redirect_section</code> method (lines 889-910)
+handles all three cases:</p>
+
+<ol>
+<li>If section in URL → use it</li>
+<li>Else if section in referrer → extract it</li>
+<li>Else → default to &#39;passing&#39;</li>
+</ol>
+
+<p><strong>Recommended form updates</strong>: When generating edit URLs and form submission URLs,
+include the section parameter so the recipient (form handler) knows which section
+to redirect to after successful update. This makes the redirect target explicit
+rather than relying on the referrer fallback.</p>
+
+<p>Example:</p>
+<pre><code># In edit action or view that generates form URL:
+url: update_project_path(project, section: @section)
+# Generates: PUT /projects/123/passing (section explicit in URL)
+</code></pre>
+<h4>Issue 2: Permissions Section Markdown Generation (RESOLVED)</h4>
+
+<p><strong>Problem</strong>: Permissions section doesn&#39;t have criteria, so generating markdown
+would fail or produce nonsensical output.</p>
+
+<p><strong>Solution</strong>: Added safeguard in <code>show</code> method (lines 964-969) to raise error
+if markdown format requested for permissions section.</p>
+
+<p><strong>Error message</strong>: &quot;Markdown format not supported for permissions section&quot;</p>
+
+<p><strong>Why this works</strong>: Permissions section only makes sense as HTML (form for
+editing user permissions). Markdown is only for criteria documentation.</p>
+
+<h4>Issue 3: Edit Method Data Loading (RESOLVED)</h4>
+
+<p><strong>Problem</strong>: Edit method needs same permissions data loading logic as show method.</p>
+
+<p><strong>Solution</strong>: Created shared helper method <code>load_section_data_for_edit</code> (lines
+904-912) that:</p>
+
+<ul>
+<li>Loads <code>@additional_rights_str</code> for permissions section</li>
+<li>Loads <code>@criteria</code> for criteria sections</li>
+<li>Used by both <code>edit</code> and <code>update</code> methods (DRY)</li>
+</ul>
+
+<h4>Issue 4: VALID_SECTIONS Calculation (RESOLVED via Phase 0)</h4>
+
+<p><strong>Solution</strong>: All section-related constants computed once in
+<code>config/initializers/00_section_names.rb</code> (see Phase 0).</p>
+
+<p><strong>Constants available</strong>:</p>
+<pre><code># From config/initializers/00_section_names.rb (all frozen, in Sections module)
+Sections::VALID_NAMES                        # Array of valid sections (excludes obsolete)
+Sections::REDIRECTS                          # Hash mapping obsolete → canonical names
+Sections::PRIMARY_SECTION_REGEX              # Regex for route constraints (primary only)
+Sections::VALID_SECTION_REGEX  # Regex for route constraints (all sections)
+Sections::DEFAULT_SECTION                    # String 'passing'
+</code></pre>
+<p><strong>Benefits</strong>:</p>
+
+<ul>
+<li>Single source of truth in one initializer file</li>
+<li>Namespaced under <code>Sections::</code> to avoid global namespace pollution</li>
+<li>Computed once at boot time, frozen, reused everywhere</li>
+<li>No dependencies between routes.rb and controller</li>
+<li>Clear, accurate naming (e.g., <code>Sections::VALID_NAMES</code> not <code>VALID_SECTION_NAMES</code>)</li>
+<li>Updates automatically when new sections added to initializer</li>
+</ul>
+
+<h4>Issue 5: Redirect Logic After Update (RESOLVED)</h4>
+
+<p><strong>Implementation</strong>: <code>determine_redirect_section</code> method provides clear fallback chain:</p>
+
+<ol>
+<li><p><strong>Explicit section in URL</strong> (preferred):</p>
+
+<ul>
+<li><code>PUT /projects/123/silver</code> → redirects to <code>/projects/123/silver</code></li>
+<li>Clear, unambiguous</li>
+</ul></li>
+<li><p><strong>Inferred from referrer</strong>:</p>
+
+<ul>
+<li>User submitted form from <code>/projects/123/gold/edit</code></li>
+<li>Extract &quot;gold&quot; from referrer URL</li>
+<li>Redirect to <code>/projects/123/gold</code></li>
+</ul></li>
+<li><p><strong>Default fallback</strong>:</p>
+
+<ul>
+<li>No section in URL, no valid section in referrer</li>
+<li>Redirect to <code>/projects/123/passing</code></li>
+<li>Consistent behavior</li>
+</ul></li>
+</ol>
+
+<p><strong>Why this is safe</strong>:</p>
+
+<ul>
+<li>Validates section against VALID_SECTIONS before using</li>
+<li>Regex extraction from referrer is simple and robust</li>
+<li>Always has valid fallback</li>
+<li>No edge cases that result in invalid redirects</li>
+</ul>
+
+<h4>Testing Requirements for Critical Issues</h4>
+
+<p><strong>Must test</strong>:</p>
+
+<ol>
+<li><p>Update without section parameter (from <code>_form_0.html.erb</code>)</p>
+
+<ul>
+<li>Verifies optional section works</li>
+<li>Verifies redirect to default section</li>
+</ul></li>
+<li><p>Update with section parameter (from other forms)</p>
+
+<ul>
+<li>Verifies explicit section preserved in redirect</li>
+</ul></li>
+<li><p>Markdown request for permissions section</p>
+
+<ul>
+<li>Verifies error raised (not silent failure)</li>
+</ul></li>
+<li><p>Edit method with permissions section</p>
+
+<ul>
+<li>Verifies <code>@additional_rights_str</code> loaded correctly</li>
+</ul></li>
+<li><p>Redirect inference from referrer</p>
+
+<ul>
+<li>Verifies section extracted from referrer URL</li>
+<li>Verifies fallback to default if extraction fails</li>
+</ul></li>
+<li><p>VALID_SECTIONS calculation</p>
+
+<ul>
+<li>Verifies obsolete sections excluded</li>
+<li>Verifies all valid sections included</li>
+</ul></li>
+</ol>
+
+<h3>Memory Requirement Analysis</h3>
+
+<p><strong>Will this reduce memory requirements? Yes, significantly.</strong></p>
+
+<h4>Current Route Memory Consumption</h4>
+
+<p>Each route in Rails requires memory for:</p>
+
+<ol>
+<li><strong>Route object</strong>: Pattern matcher, constraints, defaults (~500-800 bytes)</li>
+<li><strong>Regex compilation</strong>: Compiled regular expressions for matching (~200-400 bytes per regex)</li>
+<li><strong>Journey tree nodes</strong>: Internal routing tree structure (~300-500 bytes per node)</li>
+</ol>
+
+<p><strong>Current implementation (from Appendix):</strong></p>
+
+<ul>
+<li>23 GET routes for <code>/projects</code> (not counting POST/PATCH/PUT/DELETE)</li>
+<li>Many with duplicated patterns for locale handling</li>
+<li>Many with duplicated regex patterns</li>
+</ul>
+
+<p><strong>Estimated current memory: 23 routes × 1000 bytes = ~23 KB</strong></p>
+
+<h4>Proposed Route Memory Consumption</h4>
+
+<p><strong>Proposed implementation:</strong></p>
+
+<ul>
+<li>10 route definitions (vs. 23 current)</li>
+<li>Reduced regex duplication (shared constraints)</li>
+<li>Simpler route tree structure</li>
+</ul>
+
+<p><strong>Estimated proposed memory: 10 routes × 1000 bytes = ~10 KB</strong></p>
+
+<p><strong>Memory savings: ~13 KB (56% reduction)</strong></p>
+
+<h4>Why the Reduction Happens</h4>
+
+<ol>
+<li><strong>Eliminated Redundant Patterns</strong>:</li>
+</ol>
+
+<p><strong>Current (wasteful):</strong></p>
+<pre><code>   # Each of these is a separate route object in memory:
+   get '(/:locale)/:locale/projects/:id/0'          # Route object 1
+   get '(/:locale)/projects/:id/0'                   # Route object 2
+   get '(/:locale)/:locale/projects/:id/0/edit'     # Route object 3
+   get '(/:locale)/projects/:id/0/edit'             # Route object 4
+   # ... 16 more similar routes for 1, 2, bronze ...
+</code></pre>
+<p><strong>Proposed (efficient):</strong></p>
+<pre><code>   # Single route handles all obsolete sections via constraint:
+   get ':id/:section', constraints: { section: /.../}  # Route object 1
+   # Obsolete redirects handled in controller, not separate routes
+</code></pre>
+<ol>
+<li><strong>Consolidated Format Handling</strong>:</li>
+</ol>
+
+<p><strong>Current (wasteful):</strong></p>
+<pre><code>   # Three separate routes for same URL pattern:
+   get '(/:locale)/projects/:id' → projects#show          # HTML
+   get '(/:locale)/projects/:id' → projects#show_json     # JSON
+   get '(/:locale)/projects/:id' → projects#show_markdown # MD
+</code></pre>
+<p><strong>Proposed (efficient):</strong></p>
+<pre><code>   # One route with format discrimination:
+   get ':id/:section'            # HTML/MD via respond_to
+   get '(:locale/)projects/:id'  # JSON separate (different params)
+   # = 2 routes instead of 3
+</code></pre>
+<ol>
+<li><strong>Shared Constraint Objects</strong>:</li>
+</ol>
+
+<p>Rails can reuse constraint regex objects when they&#39;re identical:</p>
+<pre><code>   # If multiple routes use: constraints: { id: /[1-9][0-9]*/ }
+   # Rails stores ONE compiled regex object, referenced by all routes
+   # Proposed plan uses same constraints repeatedly = more sharing
+</code></pre>
+<ol>
+<li><strong>Simpler Route Tree</strong>:</li>
+</ol>
+
+<p>Rails builds an internal tree structure for route matching:
+   - Current: Deep tree with many branches for locale variations,
+     format variations, section variations
+   - Proposed: Shallower tree with fewer branches, more constraint-based
+     matching</p>
+
+<p>Fewer tree nodes = less memory</p>
+
+<h4>Runtime Performance Impact</h4>
+
+<p><strong>Memory reduction improves runtime performance:</strong></p>
+
+<ol>
+<li><p><strong>Faster route matching</strong>: Fewer routes to check = faster lookups</p>
+
+<ul>
+<li>Current: Rails may check 15-20 routes before finding match</li>
+<li>Proposed: Rails checks 5-8 routes maximum</li>
+</ul></li>
+<li><p><strong>Better CPU cache utilization</strong>: Smaller route table fits in CPU cache</p>
+
+<ul>
+<li>10 KB route table likely fits in L2 cache</li>
+<li>23 KB route table may spill to L3 or RAM</li>
+</ul></li>
+<li><p><strong>Reduced GC pressure</strong>: Less memory allocated = less garbage collection</p></li>
+</ol>
+
+<p><strong>Estimated performance improvement: 15-25% faster route matching</strong></p>
+
+<h3>Simplifications and Improvements</h3>
+
+<p>After reviewing the implementation plan, several opportunities exist to reduce
+complexity and work:</p>
+
+<h4>1. Reuse Existing Route Constants (ADDRESSED IN PHASE 0)</h4>
+
+<p><strong>Status</strong>: ✅ This is now handled by Phase 0 constant consolidation.</p>
+
+<p><strong>Previous issue</strong>: Constants were scattered across routes.rb and initializers
+with inconsistent naming.</p>
+
+<p><strong>Solution</strong>: All section-related constants now defined in
+<code>config/initializers/00_section_names.rb</code> under <code>Sections::</code> module:</p>
+
+<ul>
+<li><code>Sections::VALID_SECTION_REGEX</code> - replaces <code>VALID_CRITERIA_LEVEL</code></li>
+<li><code>Sections::PRIMARY_SECTION_REGEX</code> - for routes requiring valid sections only</li>
+<li><code>Sections::REDIRECTS</code> - replaces <code>LEVEL_REDIRECTS</code></li>
+<li><code>Sections::VALID_NAMES</code> - array of valid sections</li>
+<li><code>Sections::DEFAULT_SECTION</code> - default section string</li>
+</ul>
+
+<p><strong>Benefits achieved:</strong></p>
+
+<ul>
+<li><strong>Single source of truth</strong> - all constants in one initializer</li>
+<li><strong>Namespaced</strong> - <code>Sections::</code> module avoids global namespace pollution</li>
+<li><strong>Clear naming</strong> - SECTION_NAMES vs CRITERIA_LEVEL_NAMES distinction</li>
+<li><strong>Computed once</strong> - frozen at boot time, reused everywhere</li>
+<li><strong>No dependencies</strong> - routes and controllers both use initializer constants</li>
+</ul>
+
+<h4>2. Simplify JSON Route Handling</h4>
+
+<p><strong>Current (confusing):</strong></p>
+<pre><code># ROUTE 7: Tries to handle both cases
+get '(:locale/)projects/:id', to: 'projects#show_json'
+
+# ROUTE 8: Then redirects one case
+get ':locale/projects/:id', to: redirect('/projects/%{id}.json', status: 301)
+</code></pre>
+<p><strong>Improved (clearer):</strong></p>
+<pre><code># ROUTE 7: Redirect localized JSON FIRST (more specific)
+get ':locale/projects/:id', to: redirect('/projects/%{id}.json', status: 301),
+    constraints: {
+      id: VALID_ID,
+      format: 'json',
+      locale: LEGAL_LOCALE
+    }
+
+# ROUTE 8: Then handle non-localized JSON (less specific)
+get 'projects/:id', to: 'projects#show_json',
+    constraints: {
+      id: VALID_ID,
+      format: 'json'
+    },
+    defaults: { format: 'json' },
+    as: :project_json
+</code></pre>
+<p><strong>Benefits:</strong></p>
+
+<ul>
+<li>Routes ordered from specific to generic (standard Rails pattern)</li>
+<li>Each route has one clear purpose</li>
+<li>No optional locale parameter confusion</li>
+<li>Easier to understand what matches what</li>
+</ul>
+
+<h4>3. Consolidate All Default Section Redirects</h4>
+
+<p><strong>Current (three separate routes and methods):</strong></p>
+<pre><code># ROUTE 5: HTML without section
+get '/:locale/projects/:id', to: 'projects#redirect_to_default_section'
+
+# ROUTE 9: Markdown without locale
+get '/projects/:id', to: 'projects#redirect_markdown_to_locale',
+    constraints: { format: 'md' }
+
+# ROUTE 10: Markdown without section
+get '/:locale/projects/:id', to: 'projects#redirect_markdown_to_section',
+    constraints: { format: 'md' }
+</code></pre>
+<p><strong>Improved (one route, one method):</strong></p>
+<pre><code># Single route with optional locale handles all formats
+scope '(:locale)', locale: LEGAL_LOCALE do
+  get 'projects/:id', to: 'projects#redirect_to_default_section',
+      constraints: { id: VALID_ID }
+end
+
+# Single controller method handles everything
+def redirect_to_default_section
+  # Detect locale if not provided (can reuse existing locale detection logic)
+  locale = params[:locale] || detect_locale_from_browser
+
+  # Preserve format (HTML, Markdown, etc.)
+  format = request.format.symbol == :html ? nil : request.format.symbol
+
+  redirect_to project_section_path(@project, DEFAULT_SECTION,
+                                   locale: locale, format: format),
+              status: :found
+end
+</code></pre>
+<p><strong>Benefits:</strong></p>
+
+<ul>
+<li><strong>3 routes reduced to 1</strong> (major simplification)</li>
+<li><strong>3 controller methods reduced to 1</strong> (significant code reduction)</li>
+<li>Handles all combinations: with/without locale, any format</li>
+<li>Optional locale in scope handles both cases automatically</li>
+<li>Same logic path for all redirect scenarios</li>
+<li>Much simpler to test and understand</li>
+</ul>
+
+<h4>4. Consider Route Redirects Instead of Controller Methods</h4>
+
+<p><strong>Current approach:</strong></p>
+<pre><code># Route calls controller method
+get ':id', to: 'projects#redirect_to_default_section'
+
+# Controller method
+def redirect_to_default_section
+  default_section = DEFAULT_SECTION
+  format = request.format.symbol == :html ? nil : request.format.symbol
+  redirect_to project_section_path(@project, default_section, ...)
+end
+</code></pre>
+<p><strong>Alternative (if per-project defaults not needed soon):</strong></p>
+<pre><code># Simple redirect in routes (no controller method needed)
+get ':id', to: redirect { |params, request|
+  "/#{params[:locale]}/projects/#{params[:id]}/passing"
+}, constraints: { id: RouteConstraints::POSITIVE_INTEGER }
+</code></pre>
+<p><strong>Trade-off:</strong></p>
+
+<ul>
+<li><strong>Pro</strong>: No controller method needed, simpler</li>
+<li><strong>Con</strong>: Harder to make per-project configurable later</li>
+<li><strong>Recommendation</strong>: Keep controller method if per-project defaults planned
+within 6-12 months; otherwise use route redirect</li>
+</ul>
+
+<h4>5. Derive VALID_SECTIONS from Existing Constants (ADDRESSED IN PHASE 0)</h4>
+
+<p><strong>Status</strong>: ✅ This is now handled by Phase 0 constant consolidation.</p>
+
+<p><strong>Solution</strong>: All section-related constants computed once in
+<code>config/initializers/00_section_names.rb</code> under <code>Sections::</code> module:</p>
+<pre><code># All computed at boot time, frozen, available everywhere via Sections:: prefix
+module Sections
+  VALID_NAMES = (ALL_NAMES - OBSOLETE_NAMES).freeze
+  PRIMARY_SECTION_REGEX = /#{Regexp.union(VALID_NAMES)}/.freeze
+  VALID_SECTION_REGEX = /#{Regexp.union(ALL_NAMES + OBSOLETE_NAMES)}/.freeze
+end
+</code></pre>
+<p><strong>Usage:</strong></p>
+<pre><code># Routes - use VALID_SECTION_REGEX to accept obsolete (controller redirects)
+constraints: { section: Sections::VALID_SECTION_REGEX }
+
+# Routes - use PRIMARY_SECTION_REGEX to reject obsolete
+constraints: { section: Sections::PRIMARY_SECTION_REGEX }
+
+# Controller - use Sections::VALID_NAMES array for validation
+unless Sections::VALID_NAMES.include?(@section)
+</code></pre>
+<p><strong>Benefits achieved:</strong></p>
+
+<ul>
+<li>Single source of truth in one initializer file</li>
+<li>Namespaced under <code>Sections::</code> to avoid global namespace pollution</li>
+<li>Clear naming: ALL_NAMES (includes permissions) vs ALL_CRITERIA_LEVEL_NAMES (only levels)</li>
+<li>Computed once at boot, not recalculated</li>
+<li>No dependencies between routes and controller</li>
+</ul>
+
+<h4>6. Avoid <code>resources</code> Block for Custom Routes</h4>
+
+<p><strong>Current (mixed approach):</strong></p>
+<pre><code>scope '(:locale)' do
+  resources :projects do
+    # Custom routes inside resources block
+    get ':id/delete_form', to: 'projects#delete_form'
+    get ':id/:section/edit', to: 'projects#edit'
+    # ...
+  end
+end
+</code></pre>
+<p><strong>Improved (explicit routes):</strong></p>
+<pre><code>scope '(:locale)', locale: RouteConstraints::LOCALE do
+  # Standard RESTful routes only
+  resources :projects, only: [:index, :new, :create, :update, :destroy]
+
+  # Custom routes explicitly defined
+  get 'projects/:id/delete_form', to: 'projects#delete_form',
+      constraints: { id: RouteConstraints::POSITIVE_INTEGER },
+      as: :delete_form_project
+
+  get 'projects/:id/:section/edit', to: 'projects#edit',
+      constraints: {
+        id: RouteConstraints::POSITIVE_INTEGER,
+        section: RouteConstraints::VALID_SECTIONS
+      },
+      as: :edit_project_section
+  # ...
+end
+</code></pre>
+<p><strong>Benefits:</strong></p>
+
+<ul>
+<li>Clearer what routes actually exist</li>
+<li>No confusion about path generation</li>
+<li>Easier to see full route paths</li>
+<li>More explicit about which RESTful actions are used</li>
+</ul>
+
+<h3>Recommended Simplified Implementation</h3>
+
+<p>Incorporating all improvements:</p>
+<pre><code># config/routes.rb
+
+# Note: This file already defines these constants (reuse them):
+# LEGAL_LOCALE - derived from I18n.available_locales
+# VALID_CRITERIA_LEVEL - built from ALL_CRITERIA_LEVEL_NAMES
+# VALID_ID - matches [1-9][0-9]*
+# LEVEL_REDIRECTS - maps obsolete to canonical level names
+
+Rails.application.routes.draw do
+  # Badge (no locale, format-specific)
+  get 'projects/:id/badge', to: 'projects#badge',
+      constraints: { id: VALID_ID, format: 'svg' },
+      defaults: { format: 'svg' },
+      as: :project_badge
+
+  # JSON redirects (locale → no locale)
+  get ':locale/projects/:id', to: redirect('/projects/%{id}.json', status: 301),
+      constraints: {
+        id: VALID_ID,
+        format: 'json',
+        locale: LEGAL_LOCALE
+      }
+
+  # JSON API (no locale)
+  get 'projects/:id', to: 'projects#show_json',
+      constraints: { id: VALID_ID, format: 'json' },
+      defaults: { format: 'json' },
+      as: :project_json
+
+  # Localized routes
+  scope '(:locale)', locale: LEGAL_LOCALE do
+    # Standard RESTful routes
+    resources :projects, only: [:index, :new, :create, :update, :destroy]
+
+    # Custom routes (specific before generic)
+    get 'projects/:id/delete_form', to: 'projects#delete_form',
+        constraints: { id: VALID_ID },
+        as: :delete_form_project
+
+    get 'projects/:id/:section/edit', to: 'projects#edit',
+        constraints: {
+          id: VALID_ID,
+          section: VALID_CRITERIA_LEVEL
+        },
+        as: :edit_project_section
+
+    get 'projects/:id/:section', to: 'projects#show',
+        constraints: {
+          id: VALID_ID,
+          section: VALID_CRITERIA_LEVEL
+        },
+        as: :project_section,
+        defaults: { format: 'html' }
+
+    # Redirect to default section (handles all formats, with or without locale)
+    get 'projects/:id', to: 'projects#redirect_to_default_section',
+        constraints: { id: VALID_ID },
+        as: :project_redirect
+  end
+end
+</code></pre>
+<p><strong>Controller changes:</strong></p>
+<pre><code># Consolidated redirect method (handles all formats, with or without locale)
+def redirect_to_default_section
+  # Detect locale if not provided
+  locale = params[:locale] || detect_locale_from_browser
+
+  # Preserve format if specified
+  format = request.format.symbol == :html ? nil : request.format.symbol
+
+  redirect_to project_section_path(@project, DEFAULT_SECTION,
+                                   locale: locale,
+                                   format: format),
+              status: :found  # 302 temporary (may become configurable)
+end
+
+# Remove these methods (all consolidated into redirect_to_default_section):
+# - redirect_markdown_to_locale (was handling markdown without locale)
+# - redirect_markdown_to_section (was handling markdown with locale)
+# - redirect_markdown (was the intermediate consolidation)
+# All now handled by single redirect_to_default_section method
+</code></pre>
+<h3>Summary of Simplifications</h3>
+
+<table><thead>
+<tr>
+<th>Improvement</th>
+<th>Routes Reduced</th>
+<th>Methods Reduced</th>
+<th>Complexity Reduction</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Reuse existing constants</td>
+<td>0</td>
+<td>0</td>
+<td>High (DRY, maintainability)</td>
+</tr>
+<tr>
+<td>Simplify JSON routes</td>
+<td>0</td>
+<td>0</td>
+<td>Medium (clarity)</td>
+</tr>
+<tr>
+<td>Consolidate default section redirects</td>
+<td><strong>2</strong></td>
+<td><strong>2</strong></td>
+<td><strong>High</strong> (major simplification)</td>
+</tr>
+<tr>
+<td>Use explicit routes vs resources</td>
+<td>0</td>
+<td>0</td>
+<td>Low (clarity)</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>2 routes</strong></td>
+<td><strong>2 methods</strong></td>
+<td><strong>Very Significant</strong></td>
+</tr>
+</tbody></table>
+
+<p><strong>Net result:</strong></p>
+
+<ul>
+<li><strong>8 routes instead of 10</strong> (20% reduction)</li>
+<li><strong>12 controller methods instead of 14</strong> (14% reduction)</li>
+<li>Much more maintainable (constraints in one place)</li>
+<li>Clearer intent (explicit routes, ordered specific→generic)</li>
+<li>Optional locale scope eliminates duplicate routes</li>
+<li><strong>Significant code reduction overall</strong></li>
+</ul>
+
+<h3>Testing the Implementation</h3>
+
+<p><strong>Verification steps after implementation:</strong></p>
+
+<ol>
+<li><strong>Route inspection:</strong></li>
+</ol>
+<pre><code>   rake routes | grep projects
+   # Should show ~10 route definitions (not 23)
+</code></pre>
+<ol>
+<li><strong>Memory measurement:</strong></li>
+</ol>
+<pre><code>   # In rails console:
+   memory_before = `ps -o rss= -p #{Process.pid}`.to_i
+   Rails.application.reload_routes!
+   memory_after = `ps -o rss= -p #{Process.pid}`.to_i
+   puts "Route memory: #{memory_after - memory_before} KB"
+</code></pre>
+<ol>
+<li><strong>Performance measurement:</strong></li>
+</ol>
+<pre><code>   # Benchmark route matching:
+   require 'benchmark'
+   url = '/en/projects/123/passing'
+   Benchmark.bmbm do |x|
+     x.report('route match') do
+       10000.times { Rails.application.routes.recognize_path(url) }
+     end
+   end
+</code></pre>
+<h2>Format Handling Details</h2>
+
+<h3>HTML (Default)</h3>
+
+<ul>
+<li>URL: <code>/:locale/projects/:id/:section</code> or <code>/:locale/projects/:id/:section.html</code></li>
+<li>Renders localized HTML view of the specified section</li>
+<li>Uses Rails templates with I18n</li>
+</ul>
+
+<h3>Markdown</h3>
+
+<ul>
+<li>URL: <code>/:locale/projects/:id/:section.md</code></li>
+<li>Renders localized Markdown view of the specified section</li>
+<li><strong>Change from current</strong>: Markdown is now per-section, not per-project</li>
+<li>Old project-level markdown route will be removed</li>
+<li>Redirect chain: <code>/projects/:id.md</code> → <code>/:locale/projects/:id.md</code> →
+<code>/:locale/projects/:id/passing.md</code></li>
+</ul>
+
+<h3>JSON</h3>
+
+<ul>
+<li>URL: <code>/(:locale/)projects/:id.json</code></li>
+<li>If locale provided, redirects (permanently) to non-locale version.</li>
+<li>Returns complete project data as JSON</li>
+<li>Not locale-specific (client handles localization if needed)</li>
+<li>No per-section JSON endpoint</li>
+</ul>
+
+<h3>Controller Implementation</h3>
+<pre><code>def show
+  @section = params[:section] || 'passing'
+
+  # Handle obsolete section names with permanent redirect
+  if OBSOLETE_SECTIONS[@section]
+    redirect_to project_section_path(@project, OBSOLETE_SECTIONS[@section]),
+                status: :moved_permanently
+    return
+  end
+
+  respond_to do |format|
+    format.html { render_section_html }
+    format.md   { render_section_markdown }
+    # We will NOT use: format.json { render_project_json }
+  end
+end
+</code></pre>
+<h2>Redirect Types and Rationale</h2>
+
+<h3>Permanent Redirects (301)</h3>
+
+<p>Used when URLs should <strong>never</strong> be used again:</p>
+
+<ul>
+<li><strong>Obsolete section names</strong>: <code>bronze</code> → <code>passing</code>, <code>0</code> → <code>passing</code>,
+<code>1</code> → <code>silver</code>, <code>2</code> → <code>gold</code></li>
+<li><strong>Localized JSON URLs</strong>: <code>/en/projects/123.json</code> → <code>/projects/123.json</code>
+(JSON is locale-independent)</li>
+</ul>
+
+<p>Rationale: Search engines and browsers will cache these redirects,
+reducing server load for old bookmarks.</p>
+
+<h3>Temporary Redirects (302)</h3>
+
+<p>Used when redirect target <strong>may change</strong> in the future:</p>
+
+<ul>
+<li><strong>Locale detection</strong>: <code>/projects</code> → <code>/:detected_locale/projects</code>
+(user&#39;s browser language may change)</li>
+<li><strong>Default section</strong>: <code>/projects/:id</code> → <code>/projects/:id/passing</code>
+(will become per-project configurable)</li>
+<li><strong>Markdown section</strong>: <code>/projects/:id.md</code> → <code>/:locale/projects/:id/passing.md</code>
+(default section may become configurable)</li>
+</ul>
+
+<p>Rationale: Prevents caching of redirects that may change based on
+user preferences or future features.</p>
+
+<h2>Routes Being Removed</h2>
+
+<p>We don&#39;t need to support <code>/:locale/:locale/projects/...</code> routes;
+doubled locales make no sense. Don&#39;t support them.</p>
+
+<p>These current routes will be removed (functionality replaced):</p>
+<pre><code># Old project-level markdown (replaced by section-level markdown)
+GET (/:locale)/projects/:id(.:format) → projects#show_markdown
+
+# Old project-level edit (replaced by section-level edit)
+GET (/:locale)/projects/:id/edit(.:format) → projects#edit
+
+# Note: Localized JSON routes will redirect (301) to non-localized version,
+# not removed. See URL Migration Examples table for details.
+</code></pre>
+<h2>URL Migration Examples</h2>
+
+<table><thead>
+<tr>
+<th>Old URL</th>
+<th>New URL</th>
+<th>Redirect Type</th>
+<th>Notes</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>/projects/123</code></td>
+<td><code>/:locale/projects/123/passing</code></td>
+<td>302</td>
+<td>Locale detected, then section added</td>
+</tr>
+<tr>
+<td><code>/fr/projects/123</code></td>
+<td><code>/fr/projects/123/passing</code></td>
+<td>302</td>
+<td>Section added (which one may become configurable)</td>
+</tr>
+<tr>
+<td><code>/en/projects/123/bronze</code></td>
+<td><code>/en/projects/123/passing</code></td>
+<td>301</td>
+<td>Obsolete section name</td>
+</tr>
+<tr>
+<td><code>/en/projects/123/0</code></td>
+<td><code>/en/projects/123/passing</code></td>
+<td>301</td>
+<td>Obsolete numeric section</td>
+</tr>
+<tr>
+<td><code>/en/projects/123/1</code></td>
+<td><code>/en/projects/123/silver</code></td>
+<td>301</td>
+<td>Obsolete numeric section</td>
+</tr>
+<tr>
+<td><code>/en/projects/123/2</code></td>
+<td><code>/en/projects/123/gold</code></td>
+<td>301</td>
+<td>Obsolete numeric section</td>
+</tr>
+<tr>
+<td><code>/projects/123.md</code></td>
+<td><code>/:locale/projects/123/passing.md</code></td>
+<td>302 (maybe chain)</td>
+<td>Locale added, then section. It&#39;d be okay to do this in a chain or all at once.</td>
+</tr>
+<tr>
+<td><code>/en/projects/123.md</code></td>
+<td><code>/en/projects/123/passing.md</code></td>
+<td>302</td>
+<td>Section added</td>
+</tr>
+<tr>
+<td><code>/en/projects/123.json</code></td>
+<td><code>/projects/123.json</code></td>
+<td>301</td>
+<td>JSON has no locale</td>
+</tr>
+<tr>
+<td><code>/en/projects/123/edit</code></td>
+<td><code>/en/projects/123/passing/edit</code></td>
+<td>302</td>
+<td>Section added</td>
+</tr>
+<tr>
+<td><code>/en/projects/123/bronze/edit</code></td>
+<td>N/A</td>
+<td>Error</td>
+<td>Obsolete sections not accepted in edit URLs</td>
+</tr>
+</tbody></table>
+
+<h2>Migration Strategy</h2>
+
+<h3>Phase 1: Preparation (No User Impact)</h3>
+
+<ol>
+<li><p><strong>Add Controller Logic</strong></p>
+
+<ul>
+<li>Implement section validation in controller</li>
+<li>Add format handling with <code>respond_to</code></li>
+<li>Create obsolete section redirect logic</li>
+<li>Add comprehensive controller tests</li>
+</ul></li>
+<li><p><strong>Add New Routes</strong></p>
+
+<ul>
+<li>Deploy new consolidated routes alongside existing ones</li>
+<li>New routes point to updated controller methods</li>
+<li>Existing routes remain functional</li>
+<li>No user-visible changes yet</li>
+</ul></li>
+<li><p><strong>Test Extensively</strong></p>
+
+<ul>
+<li>Verify all new routes work correctly</li>
+<li>Test redirect chains</li>
+<li>Validate format handling</li>
+<li>Check locale detection</li>
+</ul></li>
+</ol>
+
+<h3>Phase 2: Redirect Old Routes (Minimal Impact)</h3>
+
+<ol>
+<li><p><strong>Convert Old Routes to Redirects</strong></p>
+
+<ul>
+<li>Update old route definitions to redirect to new canonical URLs</li>
+<li>Use 301 for obsolete sections</li>
+<li>Use 302 for locale/section defaults</li>
+</ul></li>
+<li><p><strong>Monitor and Measure</strong></p>
+
+<ul>
+<li>Log redirect usage to identify high-traffic patterns</li>
+<li>Monitor error rates and 404s</li>
+<li>Check performance metrics</li>
+<li>Validate redirect chains aren&#39;t too long</li>
+</ul></li>
+<li><p><strong>Update Internal Links</strong></p>
+
+<ul>
+<li>Change all internal application links to use new URLs</li>
+<li>Update documentation</li>
+<li>Fix any test fixtures</li>
+</ul></li>
+</ol>
+
+<h3>Phase 3: Deprecation (6-12 Months Later)</h3>
+
+<ol>
+<li><p><strong>Announce Deprecation</strong></p>
+
+<ul>
+<li>Document old URL patterns as deprecated</li>
+<li>Encourage users to update bookmarks</li>
+<li>Add deprecation warnings to logs</li>
+</ul></li>
+<li><p><strong>Remove Old Routes</strong></p>
+
+<ul>
+<li>After sufficient transition period</li>
+<li>Keep redirect routes for obsolete sections (bronze, 0, 1, 2)</li>
+<li>Remove only truly redundant routes</li>
+</ul></li>
+<li><p><strong>Cleanup</strong></p>
+
+<ul>
+<li>Remove old controller methods if unused</li>
+<li>Remove route-related technical debt</li>
+<li>Update all documentation</li>
+</ul></li>
+</ol>
+
+<h2>Testing Strategy</h2>
+
+<h3>Route Tests (test/controllers/routing/)</h3>
+
+<ul>
+<li>[ ] Verify all redirect paths work correctly</li>
+<li>[ ] Test 301 redirects for obsolete sections</li>
+<li>[ ] Test 302 redirects for locale detection</li>
+<li>[ ] Test 302 redirects for default section</li>
+<li>[ ] Confirm section validation (accept valid, reject invalid)</li>
+<li>[ ] Test locale detection and redirection</li>
+<li>[ ] Validate format detection (.html, .md, .json)</li>
+<li>[ ] Test redirect chains (e.g., <code>/projects/123.md</code>)</li>
+<li>[ ] Verify JSON route has no locale</li>
+<li>[ ] Confirm markdown routes have locale</li>
+</ul>
+
+<h3>Controller Tests (test/controllers/projects_controller_test.rb)</h3>
+
+<ul>
+<li>[ ] Test section parameter handling</li>
+<li>[ ] Test obsolete section redirects</li>
+<li>[ ] Test format responses (HTML, Markdown, JSON)</li>
+<li>[ ] Test locale handling in views</li>
+<li>[ ] Verify proper rendering for each section</li>
+<li>[ ] Test error handling for invalid sections</li>
+<li>[ ] Test that /en/projects/123.json redirects 301 to /projects/123.json</li>
+<li>[ ] Verify show_json method works correctly</li>
+<li>[ ] Test JSON response contains all expected fields</li>
+</ul>
+
+<h3>Integration Tests</h3>
+
+<ul>
+<li>[ ] Update existing tests using old URL patterns</li>
+<li>[ ] Add tests for new consolidated routes</li>
+<li>[ ] Verify backward compatibility during transition</li>
+<li>[ ] Test complete user workflows with new URLs</li>
+<li>[ ] Verify bookmarked URLs still work (via redirects)</li>
+</ul>
+
+<h3>System Tests (test/system/)</h3>
+
+<ul>
+<li>[ ] Test user navigation through sections</li>
+<li>[ ] Verify edit workflows</li>
+<li>[ ] Test markdown download</li>
+<li>[ ] Verify JSON API access</li>
+<li>[ ] Test locale switching</li>
+<li>[ ] Verify proper redirects in browser</li>
+</ul>
+
+<h3>Performance Tests</h3>
+
+<ul>
+<li>[ ] Measure route matching time before/after</li>
+<li>[ ] Benchmark controller logic overhead</li>
+<li>[ ] Test redirect chain performance</li>
+<li>[ ] Verify CDN compatibility with new URLs</li>
+</ul>
+
+<h2>Rollback Strategy</h2>
+
+<p>If critical issues arise during deployment:</p>
+
+<ol>
+<li><p><strong>Keep Old Routes Available</strong></p>
+
+<ul>
+<li>Comment out old routes in code rather than deleting</li>
+<li>Can be quickly uncommented and redeployed</li>
+</ul></li>
+<li><p><strong>Monitor Key Metrics</strong></p>
+
+<ul>
+<li>404 error rate (should not increase)</li>
+<li>Response time (should improve or stay same)</li>
+<li>User error reports</li>
+<li>Redirect chain length</li>
+</ul></li>
+<li><p><strong>Database of Changes</strong></p>
+
+<ul>
+<li>Maintain list of all changed URLs</li>
+<li>Keep redirect mappings documented</li>
+<li>Easy to revert redirect logic if needed</li>
+</ul></li>
+<li><p><strong>Feature Flag (Optional)</strong></p>
+
+<ul>
+<li>Consider feature flag for new route system</li>
+<li>Can toggle between old and new routes</li>
+<li>Useful for gradual rollout</li>
+</ul></li>
+</ol>
+
+<h2>Impact Analysis</h2>
+
+<h3>Positive Impacts</h3>
+
+<ul>
+<li><strong>Performance</strong>: Fewer route patterns to match reduces routing overhead</li>
+<li><strong>Maintainability</strong>: Centralized logic easier to understand and modify</li>
+<li><strong>Consistency</strong>: Clearer URL structure</li>
+<li><strong>Future-Ready</strong>: Easier to add per-project default sections</li>
+</ul>
+
+<h3>Potential Concerns</h3>
+
+<ul>
+<li><strong>Controller Complexity</strong>: Section validation moves from routes to controller</li>
+</ul>
+
+<p>Mitigation: Well-tested controller methods, clear documentation</p>
+
+<ul>
+<li><strong>Redirect Chains</strong>: Some URLs require multiple redirects</li>
+</ul>
+
+<p>Mitigation: Only 2 redirects maximum, acceptable for user experience</p>
+
+<ul>
+<li><strong>Bookmark Updates</strong>: Users may need to update bookmarks</li>
+</ul>
+
+<p>Mitigation: Redirects handle this automatically, no action required</p>
+
+<h3>SEO Considerations</h3>
+
+<ul>
+<li><strong>301 Redirects</strong>: Search engines will update indexed URLs for obsolete sections</li>
+<li><strong>302 Redirects</strong>: Search engines will preserve original URLs for temporary redirects</li>
+<li><strong>Canonical URLs</strong>: New structure provides clearer canonical URLs for each section</li>
+<li><strong>Impact</strong>: Minimal to none; redirects properly signal intent to search engines</li>
+</ul>
+
+<h2>Future Enhancements</h2>
+
+<h3>Rename ALL_CRITERIA_LEVEL_NAMES to ALL_SECTION_NAMES</h3>
+
+<p><strong>Status</strong>: ✅ MOVED TO PHASE 0 - This is now part of the initial constant
+renaming and consolidation that must be done FIRST.</p>
+
+<p>See &quot;Phase 0: Rename and Consolidate Constants&quot; section above for complete
+implementation details.</p>
+
+<h3>Per-Project Default Section</h3>
+
+<p>Currently <code>/projects/:id</code> redirects to <code>/projects/:id/passing</code> for all projects.</p>
+
+<p>Future implementation:</p>
+
+<ul>
+<li>Add <code>default_section</code> column to projects table</li>
+<li>Redirect to project-specific default section</li>
+<li>Change redirect from 302 to 307 (Temporary Redirect, preserves method)</li>
+</ul>
+
+<h3>Section Permissions</h3>
+
+<p>Some sections may become restricted based on project visibility or user permissions:</p>
+
+<ul>
+<li>Public projects: All sections visible</li>
+<li>Private projects: Restrict access to certain sections</li>
+<li>Implement in controller, not routes</li>
+</ul>
+
+<h2>Key Decisions</h2>
+
+<ol>
+<li><strong>JSON is locale-independent</strong>: Returns same data regardless of user&#39;s language;
+client responsible for localization</li>
+<li><strong>Markdown is per-section</strong>: Changed from per-project to align with HTML
+view structure</li>
+<li><strong>Obsolete edit URLs not supported</strong>: Bronze/0/1/2 section edit URLs will error
+rather than redirect (not expected to be widely linked)</li>
+<li><strong>Doubled locale routes removed</strong>: <code>/:locale/:locale/...</code> patterns are
+malformed and won&#39;t be supported</li>
+<li><strong>Default section is &quot;passing&quot;</strong>: Until per-project defaults implemented</li>
+</ol>
+
+<h2>Appendix: Current Routes</h2>
+
+<p>For reference, these are the current GET routes for <code>/projects</code>:</p>
+<pre><code>GET /projects/:id/badge(.:format)
+  → projects#badge {format: "svg", id: /[1-9][0-9]*/}
+
+GET (/:locale)/:locale/projects/:id/0(.:format)
+  → redirect(301) {locale: /(?:en|zh-CN|es|fr|de|ja|pt-BR|ru|sw)/, id: /[1-9][0-9]*/}
+
+GET (/:locale)/projects/:id/0(.:format)
+  → redirect(302) {locale: /(?:en|zh-CN|es|fr|de|ja|pt-BR|ru|sw)/, id: /[1-9][0-9]*/}
+
+GET (/:locale)/:locale/projects/:id/0/edit(.:format)
+  → redirect(301) {locale: /(?:en|zh-CN|es|fr|de|ja|pt-BR|ru|sw)/, id: /[1-9][0-9]*/}
+
+GET (/:locale)/projects/:id/0/edit(.:format)
+  → redirect(302) {locale: /(?:en|zh-CN|es|fr|de|ja|pt-BR|ru|sw)/, id: /[1-9][0-9]*/}
+
+GET (/:locale)/:locale/projects/:id/1(.:format)
+  → redirect(301) {locale: /(?:en|zh-CN|es|fr|de|ja|pt-BR|ru|sw)/, id: /[1-9][0-9]*/}
+
+GET (/:locale)/projects/:id/1(.:format)
+  → redirect(302) {locale: /(?:en|zh-CN|es|fr|de|ja|pt-BR|ru|sw)/, id: /[1-9][0-9]*/}
+
+GET (/:locale)/:locale/projects/:id/1/edit(.:format)
+  → redirect(301) {locale: /(?:en|zh-CN|es|fr|de|ja|pt-BR|ru|sw)/, id: /[1-9][0-9]*/}
+
+GET (/:locale)/projects/:id/1/edit(.:format)
+  → redirect(302) {locale: /(?:en|zh-CN|es|fr|de|ja|pt-BR|ru|sw)/, id: /[1-9][0-9]*/}
+
+GET (/:locale)/:locale/projects/:id/2(.:format)
+  → redirect(301) {locale: /(?:en|zh-CN|es|fr|de|ja|pt-BR|ru|sw)/, id: /[1-9][0-9]*/}
+
+GET (/:locale)/projects/:id/2(.:format)
+  → redirect(302) {locale: /(?:en|zh-CN|es|fr|de|ja|pt-BR|ru|sw)/, id: /[1-9][0-9]*/}
+
+GET (/:locale)/:locale/projects/:id/2/edit(.:format)
+  → redirect(301) {locale: /(?:en|zh-CN|es|fr|de|ja|pt-BR|ru|sw)/, id: /[1-9][0-9]*/}
+
+GET (/:locale)/projects/:id/2/edit(.:format)
+  → redirect(302) {locale: /(?:en|zh-CN|es|fr|de|ja|pt-BR|ru|sw)/, id: /[1-9][0-9]*/}
+
+GET (/:locale)/:locale/projects/:id/bronze(.:format)
+  → redirect(301) {locale: /(?:en|zh-CN|es|fr|de|ja|pt-BR|ru|sw)/, id: /[1-9][0-9]*/}
+
+GET (/:locale)/projects/:id/bronze(.:format)
+  → redirect(302) {locale: /(?:en|zh-CN|es|fr|de|ja|pt-BR|ru|sw)/, id: /[1-9][0-9]*/}
+
+GET (/:locale)/:locale/projects/:id/bronze/edit(.:format)
+  → redirect(301) {locale: /(?:en|zh-CN|es|fr|de|ja|pt-BR|ru|sw)/, id: /[1-9][0-9]*/}
+
+GET (/:locale)/projects/:id/bronze/edit(.:format)
+  → redirect(302) {locale: /(?:en|zh-CN|es|fr|de|ja|pt-BR|ru|sw)/, id: /[1-9][0-9]*/}
+
+GET (/:locale)/:locale/projects/:id(.:format)
+  → redirect(302) {locale: /(?:en|zh-CN|es|fr|de|ja|pt-BR|ru|sw)/}
+
+GET (/:locale)/projects/:id(.:format)
+  → redirect(302) {locale: /(?:en|zh-CN|es|fr|de|ja|pt-BR|ru|sw)/}
+
+GET (/:locale)/:locale/projects/:id/edit(.:format)
+  → redirect(302) {locale: /(?:en|zh-CN|es|fr|de|ja|pt-BR|ru|sw)/, id: /[1-9][0-9]*/}
+
+GET (/:locale)/projects/:id/edit(.:format)
+  → redirect(302) {locale: /(?:en|zh-CN|es|fr|de|ja|pt-BR|ru|sw)/, id: /[1-9][0-9]*/}
+
+GET (/:locale)/projects/:id/delete_form(.:format)
+  → projects#delete_form {id: /[1-9][0-9]*/, locale: /(?:en|zh-CN|es|fr|de|ja|pt-BR|ru|sw)/}
+
+GET (/:locale)/projects/:id(.:format)
+  → projects#show_json {id: /[1-9][0-9]*/, locale: /(?:en|zh-CN|es|fr|de|ja|pt-BR|ru|sw)/}
+
+GET (/:locale)/projects/:id(.:format)
+  → projects#show_markdown {id: /[1-9][0-9]*/, locale: /(?:en|zh-CN|es|fr|de|ja|pt-BR|ru|sw)/}
+
+GET (/:locale)/projects/:id/:criteria_level(.:format)
+  → projects#show {id: /[1-9][0-9]*/, locale: /(?:en|zh-CN|es|fr|de|ja|pt-BR|ru|sw)/,
+    criteria_level: /(?-mix:passing|silver|gold|0|1|2|baseline\-1|baseline\-2|baseline\-3|bronze|permissions)/}
+
+GET (/:locale)/projects/:id/:criteria_level/edit(.:format)
+  → projects#edit {id: /[1-9][0-9]*/, locale: /(?:en|zh-CN|es|fr|de|ja|pt-BR|ru|sw)/,
+    criteria_level: /(?-mix:passing|silver|gold|0|1|2|baseline\-1|baseline\-2|baseline\-3|bronze|permissions)/}
+
+GET (/:locale)/projects(.:format)
+  → projects#index {locale: /(?:en|zh-CN|es|fr|de|ja|pt-BR|ru|sw)/}
+
+GET (/:locale)/projects/new(.:format)
+  → projects#new {locale: /(?:en|zh-CN|es|fr|de|ja|pt-BR|ru|sw)/}
+
+GET (/:locale)/projects/:id/edit(.:format)
+  → projects#edit {id: /[1-9][0-9]*/, locale: /(?:en|zh-CN|es|fr|de|ja|pt-BR|ru|sw)/}
+
+GET (/:locale)/projects/:id(.:format)
+  → projects#show {id: /[1-9][0-9]*/, locale: /(?:en|zh-CN|es|fr|de|ja|pt-BR|ru|sw)/}
+</code></pre>
+  </body>
+  </html>

@@ -3,6 +3,7 @@
 <!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
 
 [![OpenSSF Best Practices](https://bestpractices.coreinfrastructure.org/projects/1/badge)](https://bestpractices.coreinfrastructure.org/projects/1)
+[![OpenSSF Baseline](https://www.bestpractices.dev/projects/1/baseline)](https://www.bestpractices.dev/projects/1)
 [![CircleCI Build Status](https://circleci.com/gh/coreinfrastructure/best-practices-badge.svg?&style=shield)](https://app.circleci.com/pipelines/github/coreinfrastructure/best-practices-badge)
 [![codecov](https://codecov.io/gh/coreinfrastructure/best-practices-badge/branch/master/graph/badge.svg)](https://codecov.io/gh/coreinfrastructure/best-practices-badge)
 [![License](https://img.shields.io/:license-mit-blue.svg)](https://badges.mit-license.org)

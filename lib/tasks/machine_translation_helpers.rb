@@ -20,7 +20,10 @@ module MachineTranslationHelpers
   TRANSLATION_PRIORITY = %w[fr de ja zh-CN pt-BR es ru sw].freeze
 
   # Keys to exclude from translation (test keys, internal-only, etc.)
-  KEYS_TO_IGNORE = %w[do_not_translate_this].freeze
+  KEYS_TO_IGNORE = %w[
+    do_not_translate_this
+    test_pluralization_only_one.one
+  ].freeze
 
   # Human-readable language names for prompts
   LANGUAGE_NAMES = {
@@ -295,9 +298,6 @@ module MachineTranslationHelpers
     end
 
     def print_status
-      puts 'Translation Status:'
-      puts '-' * 60
-
       english = load_flat_translations('en')
       # Only count English keys that have non-blank values (actually need translation)
       translatable_keys =
@@ -306,24 +306,35 @@ module MachineTranslationHelpers
           !value.nil? && !value.to_s.strip.empty? && !KEYS_TO_IGNORE.include?(key)
         end
 
-      TRANSLATION_PRIORITY.each do |locale|
-        human = load_flat_translations(locale, human_only: true)
-        machine = load_flat_translations(locale, machine_only: true)
+      # Collect per-locale stats first, then display in two passes
+      locale_stats =
+        TRANSLATION_PRIORITY.map do |locale|
+          compute_locale_status(locale, translatable_keys)
+        end
 
-        # Only count non-empty values as translated
-        human_count = count_non_empty_translations(human, translatable_keys)
-        machine_count = count_non_empty_translations(machine, translatable_keys)
-        missing = translatable_keys.length - human_count - machine_count
-
-        puts format('%-8<loc>s Human: %4<human>d  Machine: %4<machine>d  Missing: %4<miss>d',
-                    loc: locale, human: human_count, machine: machine_count, miss: missing)
+      # Pass 1: summary table
+      puts 'Translation Status:'
+      puts '-' * 60
+      locale_stats.each do |stats|
+        puts format(
+          '%-8<loc>s Human: %4<human>d  Machine: %4<machine>d  Missing: %4<miss>d',
+          loc: stats[:locale], human: stats[:human_count],
+          machine: stats[:machine_only_count], miss: stats[:missing_keys].length
+        )
       end
-    end
 
-    # Count translations that are non-empty and match English keys
-    def count_non_empty_translations(translations, english_keys)
-      translations.count do |key, value|
-        english_keys.include?(key) && !value.nil? && !value.to_s.strip.empty?
+      # Pass 2: sample missing keys
+      locales_with_missing = locale_stats.select { |s| s[:missing_keys].any? }
+      return if locales_with_missing.empty?
+
+      puts ''
+      puts 'Sample missing keys (up to 10 per locale):'
+      puts '-' * 60
+      locales_with_missing.each do |stats|
+        puts "#{stats[:locale]}:"
+        stats[:missing_keys].first(10).each { |key| puts "  #{key}" }
+        remaining = stats[:missing_keys].length - 10
+        puts "  ... (#{remaining} more)" if remaining.positive?
       end
     end
 
@@ -542,6 +553,36 @@ module MachineTranslationHelpers
     end
 
     private
+
+    # Partition translatable keys into human, machine-only, and missing.
+    # Returns a hash with counts and the list of missing keys.
+    def compute_locale_status(locale, translatable_keys)
+      human = load_flat_translations(locale, human_only: true)
+      machine = load_flat_translations(locale, machine_only: true)
+
+      human_count = 0
+      machine_only_count = 0
+      missing_keys = []
+
+      translatable_keys.each do |key|
+        if non_empty_value?(human[key])
+          human_count += 1
+        elsif non_empty_value?(machine[key])
+          machine_only_count += 1
+        else
+          missing_keys << key
+        end
+      end
+
+      {
+        locale: locale, human_count: human_count,
+        machine_only_count: machine_only_count, missing_keys: missing_keys
+      }
+    end
+
+    def non_empty_value?(value)
+      !value.nil? && !value.to_s.strip.empty?
+    end
 
     def load_flat_translations(locale, human_only: false, machine_only: false)
       result = {}

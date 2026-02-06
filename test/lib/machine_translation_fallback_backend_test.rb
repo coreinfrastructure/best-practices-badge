@@ -174,7 +174,7 @@ class MachineTranslationFallbackBackendTest < ActiveSupport::TestCase
     # The test_pluralization_only_one should create a parent hash
     result = t[:en]['test_pluralization_only_one']
     assert result.is_a?(Hash)
-    assert_equal 'just one item', result[:one]
+    assert_equal 'just one item. Do not translate this.', result[:one]
   end
 
   test 'merge_locale creates pluralization parent hashes' do

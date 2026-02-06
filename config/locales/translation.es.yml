@@ -40,6 +40,7 @@ es:
     login_html: Iniciar sesión
     footer_text_html:
     toggle_navigation:
+    translation_disclaimer_html:
   admin_only:
   account_activations:
     activated: "¡Cuenta activada!"
@@ -49,6 +50,7 @@ es:
       one:
       few:
       other:
+      many:
   password_resets:
     forgot_password:
     reset_password:
@@ -313,6 +315,8 @@ es:
       submit_cdla_permissive_20_html:
       new_owner:
       new_owner_repeat:
+      current_owner:
+      ownership_edit_hint:
     show:
       edit:
       delete:
@@ -369,12 +373,23 @@ es:
         1_html:
         '2':
         2_html:
+        baseline-1:
+        baseline-1_html:
+        baseline-2:
+        baseline-2_html:
+        baseline-3:
+        baseline-3_html:
       got_badge:
         description_1:
         badge_alt:
         description_2:
         details_html:
         editing_description_html:
+      got_baseline_badge:
+        description_1:
+        badge_alt:
+        description_2:
+        details_html:
     form_basics:
       project_name:
         description:
@@ -953,6 +968,193 @@ es:
         description:
       dynamic_analysis_enable_assertions:
         description:
+    baseline-1:
+      osps_ac_01_01:
+        description:
+        details:
+      osps_ac_02_01:
+        description:
+        details:
+      osps_ac_03_01:
+        description:
+        details:
+      osps_ac_03_02:
+        description:
+        details:
+      osps_br_01_01:
+        description:
+      osps_br_01_02:
+        description:
+      osps_br_03_01:
+        description:
+        details:
+      osps_br_03_02:
+        description:
+        details:
+      osps_br_07_01:
+        description:
+        details:
+      osps_do_01_01:
+        description:
+        details:
+      osps_do_02_01:
+        description:
+        details:
+      osps_gv_02_01:
+        description:
+        details:
+      osps_gv_03_01:
+        description:
+        details:
+      osps_le_02_01:
+        description:
+        details:
+      osps_le_02_02:
+        description:
+        details:
+      osps_le_03_01:
+        description:
+        details:
+      osps_le_03_02:
+        description:
+        details:
+      osps_qa_01_01:
+        description:
+        details:
+      osps_qa_01_02:
+        description:
+        details:
+      osps_qa_02_01:
+        description:
+        details:
+      osps_qa_04_01:
+        description:
+        details:
+      osps_qa_05_01:
+        description:
+        details:
+      osps_qa_05_02:
+        description:
+        details:
+      osps_vm_02_01:
+        description:
+        details:
+    baseline-2:
+      osps_ac_04_01:
+        description:
+        details:
+      osps_br_02_01:
+        description:
+        details:
+      osps_br_04_01:
+        description:
+        details:
+      osps_br_05_01:
+        description:
+        details:
+      osps_br_06_01:
+        description:
+        details:
+      osps_do_06_01:
+        description:
+        details:
+      osps_gv_01_01:
+        description:
+        details:
+      osps_gv_01_02:
+        description:
+        details:
+      osps_gv_03_02:
+        description:
+        details:
+      osps_le_01_01:
+        description:
+        details:
+      osps_qa_03_01:
+        description:
+        details:
+      osps_qa_06_01:
+        description:
+        details:
+      osps_sa_01_01:
+        description:
+        details:
+      osps_sa_02_01:
+        description:
+        details:
+      osps_sa_03_01:
+        description:
+        details:
+      osps_vm_01_01:
+        description:
+        details:
+      osps_vm_03_01:
+        description:
+        details:
+      osps_vm_04_01:
+        description:
+        details:
+    baseline-3:
+      osps_ac_04_02:
+        description:
+        details:
+      osps_br_02_02:
+        description:
+        details:
+      osps_br_07_02:
+        description:
+        details:
+      osps_do_03_01:
+        description:
+        details:
+      osps_do_03_02:
+        description:
+        details:
+      osps_do_04_01:
+        description:
+        details:
+      osps_do_05_01:
+        description:
+        details:
+      osps_gv_04_01:
+        description:
+        details:
+      osps_qa_02_02:
+        description:
+        details:
+      osps_qa_04_02:
+        description:
+        details:
+      osps_qa_06_02:
+        description:
+        details:
+      osps_qa_06_03:
+        description:
+        details:
+      osps_qa_07_01:
+        description:
+        details:
+      osps_sa_03_02:
+        description:
+        details:
+      osps_vm_04_02:
+        description:
+        details:
+      osps_vm_05_01:
+        description:
+        details:
+      osps_vm_05_02:
+        description:
+        details:
+      osps_vm_05_03:
+        description:
+        details:
+      osps_vm_06_01:
+        description:
+        details:
+      osps_vm_06_02:
+        description:
+        details:
   headings:
     Accessibility and internationalization:
     Analysis:
@@ -997,6 +1199,8 @@ es:
     Vulnerability report process: Proceso de informe de vulnerabilidad
     Warning flags: Banderas de advertencia
     Working build system:
+    Controls:
+    General:
   criterion_status:
     Met:
     Unmet:
@@ -1105,3 +1309,6 @@ es:
     missing_parameters:
     invalid_parameters:
     error:
+  do_not_translate_this:
+  test_pluralization_only_one:
+    one:

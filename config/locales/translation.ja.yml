@@ -49,6 +49,7 @@ ja:
       target="_blank" rel="noopener">利用条件</a>を必ずお読みください。</small>
     choose_locale: 言語を選択する
     toggle_navigation: 折りたたみ可能なナビゲーションを切り替える
+    translation_disclaimer_html:
   account_activations:
     activated: アカウントが有効になりました！
     failed_activation: 無効なアクティベーション リンクです
@@ -57,6 +58,7 @@ ja:
       one: スパム対策として、ログインできるまでに、アクティベーション後1時間待つ必要があります。
       few: スパム対策として、ログインできるまでに、アクティベーション後%{count}時間待つ必要があります。
       other: スパム対策として、ログインできるまでに、アクティベーション後%{count}時間待つ必要があります。
+      many: スパム対策として、ログインできるまでに、アクティベーション後%{count}時間待つ必要があります。
   password_resets:
     forgot_password: パスワードを忘れた方はこちら
     reset_password: パスワードをリセットしてください
@@ -287,6 +289,8 @@ ja:
       submit_cdla_permissive_20_html:
       new_owner:
       new_owner_repeat:
+      current_owner:
+      ownership_edit_hint:
     form_basics:
       project_name:
         description: プロジェクトの名前は何ですか？
@@ -369,6 +373,17 @@ ja:
         '0': 合格
         '1': シルバー
         '2': ゴールド
+        baseline-1:
+        baseline-1_html:
+        baseline-2:
+        baseline-2_html:
+        baseline-3:
+        baseline-3_html:
+      got_baseline_badge:
+        description_1:
+        badge_alt:
+        description_2:
+        details_html:
     misc:
       disabled_reminders: >-
         （詳細）非アクティビティ リマインダーを無効にします（このままにしておくことをお勧めします。リマインダーを送信するかどうかを変更するには、プロジェクトエントリーを編集する必要があります。）
@@ -1511,6 +1526,193 @@ ja:
           プロジェクトは、生成するソフトウェアに多くの実行時アサーションを含めるべきであり、動的分析中にそれらのアサーションをチェックするべきです。
       achieve_silver:
         description: プロジェクトは、シルバー レベル バッジを達成しなければなりません。
+    baseline-1:
+      osps_ac_01_01:
+        description:
+        details:
+      osps_ac_02_01:
+        description:
+        details:
+      osps_ac_03_01:
+        description:
+        details:
+      osps_ac_03_02:
+        description:
+        details:
+      osps_br_01_01:
+        description:
+      osps_br_01_02:
+        description:
+      osps_br_03_01:
+        description:
+        details:
+      osps_br_03_02:
+        description:
+        details:
+      osps_br_07_01:
+        description:
+        details:
+      osps_do_01_01:
+        description:
+        details:
+      osps_do_02_01:
+        description:
+        details:
+      osps_gv_02_01:
+        description:
+        details:
+      osps_gv_03_01:
+        description:
+        details:
+      osps_le_02_01:
+        description:
+        details:
+      osps_le_02_02:
+        description:
+        details:
+      osps_le_03_01:
+        description:
+        details:
+      osps_le_03_02:
+        description:
+        details:
+      osps_qa_01_01:
+        description:
+        details:
+      osps_qa_01_02:
+        description:
+        details:
+      osps_qa_02_01:
+        description:
+        details:
+      osps_qa_04_01:
+        description:
+        details:
+      osps_qa_05_01:
+        description:
+        details:
+      osps_qa_05_02:
+        description:
+        details:
+      osps_vm_02_01:
+        description:
+        details:
+    baseline-2:
+      osps_ac_04_01:
+        description:
+        details:
+      osps_br_02_01:
+        description:
+        details:
+      osps_br_04_01:
+        description:
+        details:
+      osps_br_05_01:
+        description:
+        details:
+      osps_br_06_01:
+        description:
+        details:
+      osps_do_06_01:
+        description:
+        details:
+      osps_gv_01_01:
+        description:
+        details:
+      osps_gv_01_02:
+        description:
+        details:
+      osps_gv_03_02:
+        description:
+        details:
+      osps_le_01_01:
+        description:
+        details:
+      osps_qa_03_01:
+        description:
+        details:
+      osps_qa_06_01:
+        description:
+        details:
+      osps_sa_01_01:
+        description:
+        details:
+      osps_sa_02_01:
+        description:
+        details:
+      osps_sa_03_01:
+        description:
+        details:
+      osps_vm_01_01:
+        description:
+        details:
+      osps_vm_03_01:
+        description:
+        details:
+      osps_vm_04_01:
+        description:
+        details:
+    baseline-3:
+      osps_ac_04_02:
+        description:
+        details:
+      osps_br_02_02:
+        description:
+        details:
+      osps_br_07_02:
+        description:
+        details:
+      osps_do_03_01:
+        description:
+        details:
+      osps_do_03_02:
+        description:
+        details:
+      osps_do_04_01:
+        description:
+        details:
+      osps_do_05_01:
+        description:
+        details:
+      osps_gv_04_01:
+        description:
+        details:
+      osps_qa_02_02:
+        description:
+        details:
+      osps_qa_04_02:
+        description:
+        details:
+      osps_qa_06_02:
+        description:
+        details:
+      osps_qa_06_03:
+        description:
+        details:
+      osps_qa_07_01:
+        description:
+        details:
+      osps_sa_03_02:
+        description:
+        details:
+      osps_vm_04_02:
+        description:
+        details:
+      osps_vm_05_01:
+        description:
+        details:
+      osps_vm_05_02:
+        description:
+        details:
+      osps_vm_05_03:
+        description:
+        details:
+      osps_vm_06_01:
+        description:
+        details:
+      osps_vm_06_02:
+        description:
+        details:
   static_pages:
     home:
       badge_program: OpenSSF ベストプラクティス バッジ プログラム
@@ -1629,6 +1831,8 @@ ja:
     Identification: 識別情報
     Prerequisites: 前提要件
     FLOSS license: FLOSSライセンス
+    Controls:
+    General:
   last_entry: 最後の翻訳エントリ
   admin_only: 管理者のみ。
   criterion_status:
@@ -1838,3 +2042,6 @@ ja:
     missing_parameters:
     invalid_parameters:
     error:
+  do_not_translate_this:
+  test_pluralization_only_one:
+    one:

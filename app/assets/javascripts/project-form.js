@@ -723,26 +723,37 @@ function setupProjectForm() {
     }
   });
 
+  // Get current level and populate CRITERIA_HASH for both view and edit modes
+  var level = getLevel();
+  // Normalize named levels to numeric for CRITERIA_HASH_FULL access
+  if (level === 'passing' || level === 'bronze') {
+    level = '0';
+  }
+  if (level === 'silver') {
+    level = '1';
+  }
+  if (level === 'gold') {
+    level = '2';
+  }
+
+  CRITERIA_HASH = CRITERIA_HASH_FULL[level];
+
   if (globalisEditing) {
-    var level = getLevel();
-    // Normalize named levels to numeric for CRITERIA_HASH_FULL access
-    if (level === 'passing' || level === 'bronze') {
-      level = '0';
-    }
-    if (level === 'silver') {
-      level = '1';
-    }
-    if (level === 'gold') {
-      level = '2';
-    }
-
-    CRITERIA_HASH = CRITERIA_HASH_FULL[level];
-
     $('#project_entry_form').on('criteriaResultHashComplete', function(e) {
       setupProjectFields();
       resetProgressBar();
     });
     fillCriteriaResultHash();
+  } else {
+    // In view-only mode, still need to populate satisfaction levels
+    fillCriteriaResultHash();
+    // Set panel satisfaction levels after criteria hash is filled
+    $('.satisfaction-bullet').each(function() {
+      var panelID = $(this).closest('.panel-heading').attr('id');
+      if (panelID) {
+        setPanelSatisfactionLevel(panelID);
+      }
+    });
   }
 
   getAllPanelsReady();

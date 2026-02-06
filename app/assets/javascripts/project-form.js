@@ -170,16 +170,18 @@ function getCriterionResult(criterion) {
   var status = criterionStatus(criterion);
   var justification = '';
 
-  // Try to get justification from data attribute first (view-only mode)
-  var criterionDiv = $('#' + criterion);
-  var dataJustification = criterionDiv.attr('data-justification');
-  if (dataJustification !== undefined && dataJustification !== null) {
-    justification = dataJustification;
-  } else {
-    // Fallback: read from textarea (edit mode)
+  // In edit mode, always read from form inputs (they're live and editable)
+  // In view-only mode, read from data attributes (form inputs don't exist)
+  if (globalisEditing) {
     var justificationInput = $('#project_' + criterion + '_justification');
     if (justificationInput.length > 0) {
       justification = justificationInput[0].value || '';
+    }
+  } else {
+    var criterionDiv = $('#' + criterion);
+    var dataJustification = criterionDiv.attr('data-justification');
+    if (dataJustification !== undefined && dataJustification !== null) {
+      justification = dataJustification;
     }
   }
 

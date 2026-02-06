@@ -214,10 +214,17 @@ function setPanelSatisfactionLevel(panelID) {
     }
   });
   var panel = $('#' + panelID);
-  $(panel).find('.satisfaction-text')
-                 .text(enough.toString() + '/' + total.toString());
-  $(panel).find('.satisfaction-bullet')
-                 .css({ 'color' : getColor(enough / total) });
+  var satisfactionSpan = $(panel).find('.satisfaction');
+  if (total === 0) {
+    // Hide satisfaction indicator when there are no criteria
+    satisfactionSpan.hide();
+  } else {
+    satisfactionSpan.show();
+    $(panel).find('.satisfaction-text')
+                   .text(enough.toString() + '/' + total.toString());
+    $(panel).find('.satisfaction-bullet')
+                   .css({ 'color' : getColor(enough / total) });
+  }
 }
 
 function resetProgressBar() {

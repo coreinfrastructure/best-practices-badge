@@ -422,10 +422,12 @@ class Project < ApplicationRecord
   # Returns satisfaction data for a specific level and panel.
   # @param level [String, Integer] the badge level
   # @param panel [String] the panel name to filter criteria
-  # @return [Hash] hash with :text and :color keys for satisfaction display
+  # @return [Hash] hash with :text and :color keys, or nil if no criteria
   def get_satisfaction_data(level, panel)
     # Use precomputed nested hash to avoid string operations and array allocations
     total = CRITERIA_BY_PANEL.dig(level, panel) || []
+    return if total.empty? # Don't show 0/0
+
     passing = total.count { |criterion| enough?(criterion) }
     {
       text: "#{passing}/#{total.size}",

@@ -155,11 +155,20 @@ class Project < ApplicationRecord
   # rubocop:disable Style/MethodCalledOnDoEndBlock
   CRITERIA_BY_PANEL =
     {}.tap do |hash|
+      # Include metal levels (0, 1, 2)
       LEVEL_IDS.each do |level|
         # Group criteria by normalized panel name for this level
         hash[level] =
           Criteria[level].values.group_by do |criterion|
             criterion.major.downcase.delete(' ')
+          end.transform_values(&:freeze).freeze
+      end
+      # Include baseline levels (baseline-1, baseline-2, baseline-3)
+      Sections::BASELINE_LEVEL_NAMES.each do |level|
+        # For baseline levels, group by minor category (not major)
+        hash[level] =
+          Criteria[level].values.group_by do |criterion|
+            criterion.minor.downcase.delete(' ')
           end.transform_values(&:freeze).freeze
       end
     end.freeze

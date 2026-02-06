@@ -38,18 +38,15 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
   EMPTY_ARRAY = [].freeze
 
   # Override parent's initialize to load and merge translations from files.
-  # After building the merged hash, source data is discarded for GC.
+  # Files are loaded one at a time to minimize peak memory usage.
   # @param human_files [Array<String>] paths to human translation YAML files
   # @param machine_files [Array<String>] paths to machine translation YAML files
   def initialize(human_files, machine_files)
     super()
-    human_nested = load_yaml_files(human_files)
-    machine_nested = load_yaml_files(machine_files)
-    @translations = build_merged_hash(human_nested, machine_nested)
+    @translations = build_merged_hash(human_files, machine_files)
     load_ruby_locale_files
     # Tell parent class we're initialized (prevents lazy reload in lookup)
     @initialized = true
-    # human_nested and machine_nested go out of scope and are GC'd
   end
 
   # Override parent's translate to use optimized single hash lookup.
@@ -156,36 +153,25 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
 
   private
 
-  # Load translations from YAML files into a nested hash.
-  # @param files [Array<String>] paths to YAML files
-  # @return [Hash] nested translations {locale: {key: value}}
-  def load_yaml_files(files)
-    result = {}
-    files.each do |filepath|
-      next unless File.exist?(filepath)
+  # Load a single YAML file and flatten its translations into the
+  # accumulator. The YAML nested data is discarded after flattening.
+  # Blank values are always skipped; present values overwrite earlier ones,
+  # so loading machine files first and human files second gives correct
+  # precedence. Pluralization parent hashes are built as we go.
+  # @param accumulator [Hash] {locale: {"dotted.key" => value}} to merge into
+  # @param filepath [String] path to a YAML file
+  def flatten_yaml_file_into(accumulator, filepath)
+    return unless File.exist?(filepath)
 
-      yaml_data = YAML.load_file(filepath)
-      next unless yaml_data.is_a?(Hash)
+    yaml_data = YAML.load_file(filepath)
+    return unless yaml_data.is_a?(Hash)
 
-      yaml_data.each do |locale, translations|
-        locale_sym = locale.to_sym
-        result[locale_sym] ||= {}
-        deep_merge!(result[locale_sym], translations) if translations.is_a?(Hash)
-      end
-    end
-    result
-  end
+    yaml_data.each do |locale, translations|
+      next unless translations.is_a?(Hash)
 
-  # Deep merge source hash into target hash (mutates target).
-  # @param target [Hash] hash to merge into
-  # @param source [Hash] hash to merge from
-  def deep_merge!(target, source)
-    source.each do |key, value|
-      if value.is_a?(Hash) && target[key].is_a?(Hash)
-        deep_merge!(target[key], value)
-      else
-        target[key] = value
-      end
+      locale_sym = locale.to_sym
+      accumulator[locale_sym] ||= {}
+      flatten_tree(translations, '', accumulator[locale_sym])
     end
   end
 
@@ -243,38 +229,31 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
   end
 
   # Build a single merged hash: machine base → human overlay → English fallback.
-  # Note: This method is only called during initialization, not in the hot path,
-  # so creating new hash objects here is acceptable for clarity.
-  # @param human [Hash] nested human translations {locale: {key: value}}
-  # @param machine [Hash] nested machine translations
+  # Uses one accumulator: machine files flattened first, then human files
+  # overlay (present values overwrite). Blank values are always skipped, so
+  # a blank human entry never erases a machine translation.
+  # Pluralization parent hashes are built during flattening, not in a
+  # separate pass. Only one YAML file is in memory at a time.
+  # @param human_files [Array<String>] paths to human translation YAML files
+  # @param machine_files [Array<String>] paths to machine translation YAML files
   # @return [Hash] flat hash {locale: {"dotted.key" => value}} with frozen values
-  def build_merged_hash(human, machine)
-    human_flat = flatten_all(human)
-    machine_flat = flatten_all(machine)
-    english = human_flat[:en] || EMPTY_HASH
+  def build_merged_hash(human_files, machine_files)
+    merged = {}
+    machine_files.each { |f| flatten_yaml_file_into(merged, f) }
+    human_files.each { |f| flatten_yaml_file_into(merged, f) }
+
+    english = merged[:en] || EMPTY_HASH
 
     result = {}
-    (human_flat.keys | machine_flat.keys).each do |locale|
-      result[locale] = merge_locale(
-        human_flat[locale] || EMPTY_HASH,
-        machine_flat[locale] || EMPTY_HASH,
-        locale == :en ? EMPTY_HASH : english
-      )
+    merged.each do |locale, flat_data|
+      fallback = locale == :en ? EMPTY_HASH : english
+      result[locale] = apply_fallback(flat_data, fallback)
     end
     result
   end
 
-  # Flatten all locales from nested to dotted-key format.
-  # @param nested [Hash] nested translations
-  # @return [Hash] {locale: {"dotted.key" => value}}
-  def flatten_all(nested)
-    result = {}
-    nested.each { |locale, tree| result[locale] = flatten_tree(tree, '') }
-    result
-  end
-
   # Recursively flatten a nested hash into dotted-key format.
-  # Flattens ALL nested hashes including pluralization hashes.
+  # Skips blank values and builds pluralization parent hashes as it goes.
   # @param hash [Hash] the hash to flatten
   # @param prefix [String] the key prefix built up during recursion
   # @param result [Hash] accumulator (modified in place for efficiency)
@@ -284,46 +263,30 @@ class MachineTranslationFallbackBackend < I18n::Backend::Simple
       full_key = prefix.empty? ? key.to_s : "#{prefix}.#{key}"
       if value.is_a?(Hash)
         flatten_tree(value, full_key, result)
-      else
-        result[full_key] = value
+      elsif present_string?(value)
+        result[full_key] = value.freeze
+        add_to_parent_if_plural(result, full_key, value)
       end
     end
     result
   end
 
-  # Merge translations for one locale: human > machine > english precedence.
-  # Builds parent pluralization hashes as we go for efficient I18n lookups.
-  # @param human [Hash] flat human translations for this locale
-  # @param machine [Hash] flat machine translations for this locale
+  # Apply English fallback for keys not already present.
+  # The flat_data already has correct values and pluralization parent
+  # hashes from flatten_tree; this just fills gaps from English.
+  # @param flat_data [Hash] merged flat translations for one locale
   # @param english [Hash] flat English translations (fallback)
-  # @return [Hash] merged translations with frozen values
-  def merge_locale(human, machine, english)
-    all_keys = english.keys | machine.keys | human.keys
-    result = {}
+  # @return [Hash] the same hash, with fallbacks added
+  def apply_fallback(flat_data, english)
+    english.each do |key, value|
+      next if present_string?(flat_data[key])
+      next unless present_string?(value)
 
-    all_keys.each do |key|
-      merged = merge_with_precedence(human[key], machine[key], english[key])
-      next unless present_string?(merged)
-
-      result[key] = merged.freeze
-      add_to_parent_if_plural(result, key, merged)
+      flat_data[key] = value.freeze
+      add_to_parent_if_plural(flat_data, key, value)
     end
 
-    # Freeze all parent pluralization hashes
-    result.each_value { |v| v.freeze if v.is_a?(Hash) }
-    result
-  end
-
-  # Return first present value with precedence: human > machine > english.
-  # @param human [String, nil] human translation
-  # @param machine [String, nil] machine translation
-  # @param english [String, nil] English fallback
-  # @return [String, nil] first present value
-  def merge_with_precedence(human, machine, english)
-    return human if present_string?(human)
-    return machine if present_string?(machine)
-
-    english
+    flat_data
   end
 
   # If key ends with a plural key, add merged value to parent hash.

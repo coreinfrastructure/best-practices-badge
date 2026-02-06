@@ -35,6 +35,13 @@ fr:
         badge_alt: Le niveau du badge de référence pour le projet %{id} est %{level}
         description_2: 'Voici comment intégrer le badge de référence :'
         details_html: Vous pouvez afficher votre statut de badge de référence en incorporant ceci dans votre fichier markdown :<br /> %{markdown_embedding}<br /> ou en incorporant ceci dans votre HTML :<br /> %{html_embedding}<br />
+      level:
+        baseline-1: Niveau de référence 1
+        baseline-1_html: Voici les critères du niveau de référence 1.
+        baseline-2: Niveau de référence 2
+        baseline-2_html: Voici les critères du niveau de référence 2.
+        baseline-3: Niveau de référence 3
+        baseline-3_html: Voici les critères du niveau de référence 3.
     misc:
       reminder_notification_note:
         title: Paramètres de notification par email

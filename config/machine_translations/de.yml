@@ -38,6 +38,13 @@ de:
         badge_alt: Baseline-Badge-Level für Projekt %{id} ist %{level}
         description_2: 'So betten Sie das Baseline-Badge ein:'
         details_html: Sie können Ihren Baseline-Badge-Status anzeigen, indem Sie Folgendes in Ihre Markdown-Datei einbetten:<br /> %{markdown_embedding}<br /> oder indem Sie Folgendes in Ihr HTML einbetten:<br /> %{html_embedding}<br />
+      level:
+        baseline-1: Baseline Niveau 1
+        baseline-1_html: Dies sind die Baseline Niveau 1 Kriterien.
+        baseline-2: Baseline Niveau 2
+        baseline-2_html: Dies sind die Baseline Niveau 2 Kriterien.
+        baseline-3: Baseline Niveau 3
+        baseline-3_html: Dies sind die Baseline Niveau 3 Kriterien.
     misc:
       reminder_notification_note:
         title: E-Mail-Benachrichtigungseinstellungen

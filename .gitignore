@@ -28,10 +28,14 @@
 # Dropbox
 .DS_Store
 
-# Rake output files
+# Rake output files and generated documentation
 /*.html
 doc/*.html
+docs/*.html
 license_okay
+tags
+papertrail-logs
+requested-paths-*.txt
 
 # Temporary files
 ,*

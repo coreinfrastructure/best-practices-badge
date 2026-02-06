@@ -168,13 +168,23 @@ function getUnmetResult(criterion, justification) {
 // If you change this function change "get_criterion_result" accordingly.
 function getCriterionResult(criterion) {
   var status = criterionStatus(criterion);
-  var justification = $('#project_' + criterion + '_justification');
-  if (justification.length > 0) {
-    justification = $(justification)[0].value;
+  var justification = '';
+
+  // In edit mode, always read from form inputs (they're live and editable)
+  // In view-only mode, read from data attributes (form inputs don't exist)
+  if (globalisEditing) {
+    var justificationInput = $('#project_' + criterion + '_justification');
+    if (justificationInput.length > 0) {
+      justification = justificationInput[0].value || '';
+    }
+  } else {
+    var criterionDiv = $('#' + criterion);
+    var dataJustification = criterionDiv.attr('data-justification');
+    if (dataJustification !== undefined && dataJustification !== null) {
+      justification = dataJustification;
+    }
   }
-  if (!justification) {
-    justification = '';
-  }
+
   if (status === '?') {
     return 'criterion_unknown';
   } else if (status === 'Met') {
@@ -206,10 +216,17 @@ function setPanelSatisfactionLevel(panelID) {
     }
   });
   var panel = $('#' + panelID);
-  $(panel).find('.satisfaction-text')
-                 .text(enough.toString() + '/' + total.toString());
-  $(panel).find('.satisfaction-bullet')
-                 .css({ 'color' : getColor(enough / total) });
+  var satisfactionSpan = $(panel).find('.satisfaction');
+  if (total === 0) {
+    // Hide satisfaction indicator when there are no criteria
+    satisfactionSpan.hide();
+  } else {
+    satisfactionSpan.show();
+    $(panel).find('.satisfaction-text')
+                   .text(enough.toString() + '/' + total.toString());
+    $(panel).find('.satisfaction-bullet')
+                   .css({ 'color' : getColor(enough / total) });
+  }
 }
 
 function resetProgressBar() {
@@ -302,8 +319,8 @@ function fillCriteriaResultHash() {
     globalCriteriaResultHash[key] = {};
     var inputSelector = 'input[name="project[' + key + '_status]"]:checked';
     var checkedInput = $(inputSelector)[0];
-    globalCriteriaResultHash[key]['status'] =
-      checkedInput ? checkedInput.value : '?';
+    var status = checkedInput ? checkedInput.value : '?';
+    globalCriteriaResultHash[key]['status'] = status;
     globalCriteriaResultHash[key]['result'] = getCriterionResult(key);
 
     // Baseline levels use minor category for panel ID, others use major
@@ -548,10 +565,8 @@ function getAllPanelsReady() {
         .removeClass('glyphicon-chevron-up');
     }
   }
-  // Set the satisfaction level in each panel
-  $('.satisfaction-bullet').each(function(index) {
-    $(this).css({ 'color' : $(this).attr('data-color')});
-  });
+  // Note: satisfaction-bullet colors are now set by setPanelSatisfactionLevel()
+  // which is called after fillCriteriaResultHash() completes
 }
 
 // Implement "press this button to make all crypto N/A"
@@ -723,26 +738,46 @@ function setupProjectForm() {
     }
   });
 
+  // Get current level and populate CRITERIA_HASH for both view and edit modes
+  var level = getLevel();
+  // Normalize named levels to numeric for CRITERIA_HASH_FULL access
+  if (level === 'passing' || level === 'bronze') {
+    level = '0';
+  }
+  if (level === 'silver') {
+    level = '1';
+  }
+  if (level === 'gold') {
+    level = '2';
+  }
+  // Note: baseline levels (baseline-1, baseline-2, baseline-3) are NOT
+  // normalized
+
+  CRITERIA_HASH = CRITERIA_HASH_FULL[level];
+
   if (globalisEditing) {
-    var level = getLevel();
-    // Normalize named levels to numeric for CRITERIA_HASH_FULL access
-    if (level === 'passing' || level === 'bronze') {
-      level = '0';
-    }
-    if (level === 'silver') {
-      level = '1';
-    }
-    if (level === 'gold') {
-      level = '2';
-    }
-
-    CRITERIA_HASH = CRITERIA_HASH_FULL[level];
-
     $('#project_entry_form').on('criteriaResultHashComplete', function(e) {
       setupProjectFields();
       resetProgressBar();
+      // Set initial panel satisfaction levels in edit mode
+      $('.satisfaction-bullet').each(function() {
+        var panelID = $(this).closest('.panel-heading').attr('id');
+        if (panelID) {
+          setPanelSatisfactionLevel(panelID);
+        }
+      });
     });
     fillCriteriaResultHash();
+  } else {
+    // In view-only mode, still need to populate satisfaction levels
+    fillCriteriaResultHash();
+    // Set panel satisfaction levels after criteria hash is filled
+    $('.satisfaction-bullet').each(function() {
+      var panelID = $(this).closest('.panel-heading').attr('id');
+      if (panelID) {
+        setPanelSatisfactionLevel(panelID);
+      }
+    });
   }
 
   getAllPanelsReady();

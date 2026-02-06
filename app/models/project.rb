@@ -155,11 +155,20 @@ class Project < ApplicationRecord
   # rubocop:disable Style/MethodCalledOnDoEndBlock
   CRITERIA_BY_PANEL =
     {}.tap do |hash|
+      # Include metal levels (0, 1, 2)
       LEVEL_IDS.each do |level|
         # Group criteria by normalized panel name for this level
         hash[level] =
           Criteria[level].values.group_by do |criterion|
             criterion.major.downcase.delete(' ')
+          end.transform_values(&:freeze).freeze
+      end
+      # Include baseline levels (baseline-1, baseline-2, baseline-3)
+      Sections::BASELINE_LEVEL_NAMES.each do |level|
+        # For baseline levels, group by minor category (not major)
+        hash[level] =
+          Criteria[level].values.group_by do |criterion|
+            criterion.minor.downcase.delete(' ')
           end.transform_values(&:freeze).freeze
       end
     end.freeze
@@ -413,10 +422,12 @@ class Project < ApplicationRecord
   # Returns satisfaction data for a specific level and panel.
   # @param level [String, Integer] the badge level
   # @param panel [String] the panel name to filter criteria
-  # @return [Hash] hash with :text and :color keys for satisfaction display
+  # @return [Hash] hash with :text and :color keys, or nil if no criteria
   def get_satisfaction_data(level, panel)
     # Use precomputed nested hash to avoid string operations and array allocations
     total = CRITERIA_BY_PANEL.dig(level, panel) || []
+    return if total.empty? # Don't show 0/0
+
     passing = total.count { |criterion| enough?(criterion) }
     {
       text: "#{passing}/#{total.size}",

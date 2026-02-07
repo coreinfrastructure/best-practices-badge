@@ -27,6 +27,7 @@ require 'json'
 # AI assistants just can't help but add whitespace at the end of lines.
 task(:default).clear.enhance %w[
   rbenv_rvm_setup
+  notice
   whitespace_check
   ruby_syntax
   bundle
@@ -301,6 +302,13 @@ file 'license_finder_report.html' => [
   'docs/dependency_decisions.yml'
 ] do
   sh 'bundle exec license_finder report --format html > license_finder_report.html'
+end
+
+desc 'Notice about proposal requirements (for AI)'
+task :notice do
+  puts 'NOTE: Change proposals are *required* to pass "rake default" including'
+  puts 'all linters and tests, and *must* have 100% test statement coverage.'
+  puts
 end
 
 # Don't do whitespace checks on these YAML files:
@@ -930,6 +938,7 @@ task 'test:coverage_gaps' do
 
     range_strs = ranges.map { |f, l| f == l ? f.to_s : "#{f}-#{l}" }
     relative_path = source_file.filename.sub("#{Rails.root}/", '')
+    puts 'FAILURE: Untested production code statements exist.' unless gaps_found
     puts 'Untested lines (FILENAME: LINE NUMBERS) are:' unless gaps_found
     puts "#{relative_path}: #{range_strs.join(', ')}"
     gaps_found = true

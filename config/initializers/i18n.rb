@@ -85,33 +85,50 @@ Rails.application.config.i18n.fallbacks = [:en]
 
 require_relative '../../lib/machine_translation_fallback_backend'
 
-Rails.application.config.after_initialize do
-  # Pre-build locale display names and select options AFTER translations are loaded
-  # Outer key = UI locale, inner key = target locale, value = display string
-  Rails.application.config.locale_display_names = {}.tap do |outer_hash|
+# Build display name for a single locale pair
+# @param ui_locale [Symbol] The locale for the UI display
+# @param target_locale [Symbol] The locale being described
+# @return [String] Formatted display name
+def build_single_locale_display_name(ui_locale, target_locale)
+  I18n.with_locale(ui_locale) do
+    name = I18n.t("locale_name.#{target_locale}")
+    name += " / #{I18n.t("locale_name.#{target_locale}", locale: target_locale)}" if target_locale != ui_locale
+    "#{name} (#{target_locale})".freeze
+  end
+end
+
+# Build locale display names hash for all UI and target locale combinations
+# @return [Hash] Nested hash: {ui_locale => {target_locale => display_string}}
+def build_locale_display_names
+  {}.tap do |outer_hash|
     I18n.available_locales.each do |ui_locale|
       outer_hash[ui_locale.to_s] = {}.tap do |inner_hash|
         I18n.available_locales.each do |target_locale|
-          I18n.with_locale(ui_locale) do
-            name = I18n.t("locale_name.#{target_locale}")
-            name += " / #{I18n.t("locale_name.#{target_locale}", locale: target_locale)}" if target_locale != ui_locale
-            inner_hash[target_locale.to_s] = "#{name} (#{target_locale})".freeze
-          end
+          inner_hash[target_locale.to_s] = build_single_locale_display_name(ui_locale, target_locale)
         end
       end.freeze
     end
   end.freeze
+end
 
-  # Pre-build locale select options for form dropdowns (frozen arrays)
-  # Format: [[display_name, code], ...] as required by Rails select helper
-  Rails.application.config.locale_select_options = {}.tap do |hash|
+# Build select options arrays for Rails form helpers
+# @return [Hash] Hash mapping UI locale to array of [display_name, code] pairs
+def build_locale_select_options(display_names)
+  {}.tap do |hash|
     I18n.available_locales.each do |ui_locale|
       hash[ui_locale.to_s] =
-        Rails.application.config.locale_display_names[ui_locale.to_s]
-             .map { |code, name| [name, code].freeze }
-             .freeze
+        display_names[ui_locale.to_s]
+        .map { |code, name| [name, code].freeze }
+        .freeze
     end
   end.freeze
+end
+
+Rails.application.config.after_initialize do
+  # Pre-build locale display names and select options AFTER translations are loaded
+  Rails.application.config.locale_display_names = build_locale_display_names
+  Rails.application.config.locale_select_options =
+    build_locale_select_options(Rails.application.config.locale_display_names)
 
   # CRITICAL SAFETY CHECK: Ensure machine translations are isolated
   # from translation.io. translation.io syncs all files

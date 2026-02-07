@@ -169,7 +169,11 @@ has many configuration files.
 - **Frozen String Literals**: All files must include `# frozen_string_literal: true`
 - **Security Headers**: Each file has copyright and SPDX-License-Identifier
 - **Refinements**: Uses custom `StringRefinements` and `SymbolRefinements`
-- **Documentation**: Comprehensive inline documentation expected
+- **Method Documentation**: Use YARD format for documenting public methods in classes and modules:
+  - `@param name [Type] description` - documents parameters
+  - `@return [Type] description` - documents return values
+  - `@raise [ExceptionClass] description` - documents exceptions
+  - Focus on non-obvious methods; private helpers don't always need documentation
 
 ### Testing Strategy
 

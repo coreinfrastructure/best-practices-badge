@@ -403,6 +403,33 @@ You may use the safe navigation operator '&amp;.' added in
 Our static analysis tools' parsers can now handle this syntax.
 This means that this application *requires* Ruby version 2.3.0 or later to run.
 
+**Method Documentation**: All public methods in classes and modules should
+include inline documentation using YARD (Yet Another Ruby Documentation) format.
+This helps developers understand the purpose, parameters, and return values
+at a glance. Use these YARD tags:
+
+* `@param name [Type] description` - Documents a parameter
+* `@return [Type] description` - Documents the return value
+* `@raise [ExceptionClass] description` - Documents exceptions that may be raised
+
+Example:
+
+~~~~ruby
+# Calculates badge percentage for a specific level.
+# Iterates through all criteria for the level and determines what
+# percentage of MUST and SHOULD criteria are satisfied.
+# @param level [String] the badge level ('passing', 'silver', 'gold', etc.)
+# @return [Integer] percentage from 0-100
+# @raise [ArgumentError] if level is invalid
+def calculate_badge_percentage(level)
+  # method implementation
+end
+~~~~
+
+You don't need to document every private helper method, but any method
+that could be called from another class/module should be documented.
+Focus documentation on methods that aren't immediately obvious.
+
 When making new tests, if you need to modify the setup or teardown methods for a
 test class, please use callbacks instead of overwrites; i.e.  use "setup do"
 instead of "def setup."  This preserves any changes to those methods that

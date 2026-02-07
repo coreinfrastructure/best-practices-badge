@@ -102,12 +102,14 @@ namespace :translation do
     end
   end
 
-  desc 'Translate all remaining strings across all locales (runs until complete)'
+  desc 'Translate all missing/obsolete segments in all locales (runs until complete)'
   task :all, [:batch_size] => :environment do |_t, args|
     batch_size = (args[:batch_size] || MachineTranslationHelpers::COPILOT_BATCH_SIZE).to_i
     wait_time = 10 # Seconds to wait between batches
 
-    puts 'Starting automated translation for all locales...'
+    puts 'Starting automated machine translation for all locales...'
+    puts '(this provides machine translations for missing segments and'
+    puts 'segments that have machine translations but the English has changed)'
     puts "Batch size: #{batch_size}, Wait time: #{wait_time} seconds (#{wait_time / 60} minutes)"
     puts
 

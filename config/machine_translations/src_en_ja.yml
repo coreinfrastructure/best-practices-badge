@@ -46,6 +46,10 @@ en:
       reminder_notification_note:
         title: Email Notification Settings
         description_html: If you are the owner of this badge entry and want to disable inactivity reminder emails, please edit your <a href="/users/%{user_id}/edit">user profile settings</a>. This setting applies to all your projects.
+    form_basics:
+      entry_locale:
+        description: What language is used for this badge entry's description and justifications?
+        details: Select the language used for the project description and criterion justification text. This helps browser translation tools correctly identify the language of this content. Most projects use English.
   report_mailer:
     unsubscribe_notice_html: 'To unsubscribe from these email notifications, please visit: <a href="%{unsubscribe_url}">%{unsubscribe_url}</a>'
     unsubscribe_notice_text: 'To unsubscribe from these email notifications, please visit: %{unsubscribe_url}'

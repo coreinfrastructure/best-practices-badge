@@ -372,6 +372,9 @@ pt-BR:
         details_html: Use o <a href="https://spdx.org/licenses/">formato de expressão de licença SPDX</a>; exemplos incluem "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause", "GPL-2.0+", "LGPL-3.0+", "MIT" e "(BSD-2-Clause OR Ruby)". <b>Não</b> inclua aspas simples ou aspas duplas.
         title: Licença no formato de expressão de licença SPDX, por exemplo, "MIT" ou "GPL-3.0+", sem aspas simples ou aspas duplas
         placeholder: Licença FLOSS
+      entry_locale:
+        description: Qual idioma é usado para a descrição e justificativas desta entrada de badge?
+        details: Selecione o idioma usado para a descrição do projeto e o texto de justificativa dos critérios. Isso ajuda as ferramentas de tradução do navegador a identificarem corretamente o idioma deste conteúdo. A maioria dos projetos usa inglês.
     misc:
       in_javascript:
         collapse_all_title: Recolher todos os painéis

@@ -49,6 +49,10 @@ de:
       reminder_notification_note:
         title: E-Mail-Benachrichtigungseinstellungen
         description_html: Wenn Sie der Eigentümer dieses Badge-Eintrags sind und Erinnerungs-E-Mails bei Inaktivität deaktivieren möchten, bearbeiten Sie bitte Ihre <a href="/users/%{user_id}/edit">Benutzerprofileinstellungen</a>. Diese Einstellung gilt für alle Ihre Projekte.
+    form_basics:
+      entry_locale:
+        description: Welche Sprache wird für die Beschreibung und Begründungen dieses Badge-Eintrags verwendet?
+        details: Wählen Sie die Sprache aus, die für die Projektbeschreibung und den Begründungstext der Kriterien verwendet wird. Dies hilft Browser-Übersetzungstools, die Sprache dieses Inhalts korrekt zu identifizieren. Die meisten Projekte verwenden Englisch.
   report_mailer:
     unsubscribe_notice_html: 'Um sich von diesen E-Mail-Benachrichtigungen abzumelden, besuchen Sie bitte: <a href="%{unsubscribe_url}">%{unsubscribe_url}</a>'
     unsubscribe_notice_text: 'Um sich von diesen E-Mail-Benachrichtigungen abzumelden, besuchen Sie bitte: %{unsubscribe_url}'

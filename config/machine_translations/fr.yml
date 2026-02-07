@@ -46,6 +46,10 @@ fr:
       reminder_notification_note:
         title: Paramètres de notification par email
         description_html: Si vous êtes le propriétaire de cette entrée de badge et souhaitez désactiver les emails de rappel d'inactivité, veuillez modifier vos <a href="/users/%{user_id}/edit">paramètres de profil utilisateur</a>. Ce paramètre s'applique à tous vos projets.
+    form_basics:
+      entry_locale:
+        description: Quelle langue est utilisée pour la description et les justifications de cette soumission de badge ?
+        details: Sélectionnez la langue utilisée pour la description du projet et le texte de justification des critères. Cela aide les outils de traduction du navigateur à identifier correctement la langue de ce contenu. La plupart des projets utilisent l'anglais.
   report_mailer:
     unsubscribe_notice_html: 'Pour vous désabonner de ces notifications par email, veuillez visiter : <a href="%{unsubscribe_url}">%{unsubscribe_url}</a>'
     unsubscribe_notice_text: 'Pour vous désabonner de ces notifications par email, veuillez visiter : %{unsubscribe_url}'

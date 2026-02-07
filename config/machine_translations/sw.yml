@@ -223,6 +223,9 @@ sw:
         details_html: Tafadhali tumia <a href="https://spdx.org/licenses/">muundo wa maneno ya leseni ya SPDX</a>; mifano ni pamoja na "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause", "GPL-2.0+", "LGPL-3.0+", "MIT", na "(BSD-2-Clause OR Ruby)". <b>Usitumie</b> alama za nukuu za moja au mbili.
         title: Leseni katika muundo wa maneno ya leseni ya SPDX, k.m., "MIT" au "GPL-3.0+", bila alama za nukuu za moja au mbili
         placeholder: Leseni ya FLOSS
+      entry_locale:
+        description: Ni lugha gani inayotumiwa kwa maelezo ya ingizo hili la nishani na sababu zake?
+        details: Chagua lugha inayotumiwa kwa maelezo ya mradi na maandishi ya sababu za kigezo. Hii husaidia zana za tafsiri ya kivinjari kutambua lugha ya maudhui haya kwa usahihi. Miradi mingi hutumia Kiingereza.
     misc:
       in_javascript:
         collapse_all_title: Kunja paneli zote

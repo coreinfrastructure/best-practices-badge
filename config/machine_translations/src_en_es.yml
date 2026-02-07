@@ -358,6 +358,9 @@ en:
         details_html: Please use <a href="https://spdx.org/licenses/">SPDX license expression format</a>; examples include "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause", "GPL-2.0+", "LGPL-3.0+", "MIT", and "(BSD-2-Clause OR Ruby)".  Do <b>not</b> include single quotes or double quotes.
         title: License in SPDX license expression format, e.g., "MIT" or "GPL-3.0+", without single quotes or double quotes
         placeholder: FLOSS License
+      entry_locale:
+        description: What language is used for this badge entry's description and justifications?
+        details: Select the language used for the project description and criterion justification text. This helps browser translation tools correctly identify the language of this content. Most projects use English.
     misc:
       in_javascript:
         collapse_all_title: Collapse all panels

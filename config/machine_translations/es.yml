@@ -337,6 +337,9 @@ es:
         details_html: Por favor use <a href="https://spdx.org/licenses/">formato de expresión de licencia SPDX</a>; los ejemplos incluyen "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause", "GPL-2.0+", "LGPL-3.0+", "MIT" y "(BSD-2-Clause OR Ruby)". <b>No</b> incluya comillas simples o comillas dobles.
         title: Licencia en formato de expresión de licencia SPDX, por ejemplo, "MIT" o "GPL-3.0+", sin comillas simples o comillas dobles
         placeholder: Licencia FLOSS
+      entry_locale:
+        description: "¿Qué idioma se utiliza para la descripción y justificaciones de esta entrada de insignia?"
+        details: Seleccione el idioma utilizado para la descripción del proyecto y el texto de justificación de criterios. Esto ayuda a las herramientas de traducción del navegador a identificar correctamente el idioma de este contenido. La mayoría de los proyectos utilizan inglés.
     misc:
       in_javascript:
         collapse_all_title: Contraer todos los paneles

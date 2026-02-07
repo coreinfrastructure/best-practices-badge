@@ -144,6 +144,10 @@ class ProjectsController < ApplicationController
                            .join(',').freeze
 
   # Memory optimization: Pre-computed field lists for selective Project loading
+  # IMPORTANT: These lists control which fields are loaded from the database.
+  # When adding new fields to Project model that are used in views, you MUST
+  # add them to the appropriate list below or views will get nil values.
+  #
   # Base fields always needed regardless of which section is being viewed
   # lock_version isn't needed for mere viewing, but it's a *big* problem
   # if we forget to include it where needed, so let's include it.

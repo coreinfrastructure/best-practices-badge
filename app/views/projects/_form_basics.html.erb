@@ -1,3 +1,9 @@
+<%# IMPORTANT: This view uses selective field loading for performance.
+    The @project object only has fields listed in projects_controller.rb:
+    - PROJECT_BASE_FIELDS (for show/edit pages)
+    - HTML_INDEX_FIELDS (for project listings)
+    - FEED_DISPLAY_FIELDS (for Atom feeds)
+    If you add a new field to this view, ensure it's in the appropriate list! %>
             <div class="hidable-text-entry">
             <span><%= f.label :name, t('projects.form_basics.project_name.description') %></span>
             <%= render(partial: "details", locals: {

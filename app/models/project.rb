@@ -104,6 +104,13 @@ class Project < ApplicationRecord
     2 => 'gold'
   }.freeze
 
+  # IMPORTANT: When adding new fields to this list, you MUST also add them
+  # to the appropriate field selection lists in projects_controller.rb:
+  #   - PROJECT_BASE_FIELDS (for show/edit pages)
+  #   - HTML_INDEX_FIELDS (for projects listing)
+  #   - FEED_DISPLAY_FIELDS (for Atom feeds)
+  #   - BADGE_PROJECT_FIELDS (for badge SVG endpoints)
+  # Without this, views will get nil for the field even though the database has a value.
   PROJECT_OTHER_FIELDS = %i[
     name description homepage_url repo_url cpe implementation_languages
     license general_comments user_id lock_version
@@ -290,6 +297,8 @@ class Project < ApplicationRecord
   validates :description, length: MAXIMUM_IS_MAX_TEXT_LENGTH, text: true
   validates :license, length: MAXIMUM_IS_MAX_SHORT_STRING_LENGTH, text: true
   validates :general_comments, text: true
+  # NOTE: Use allow_blank (not allow_nil) for form fields. HTML forms submit
+  # empty string ("") for blank inputs, not nil. allow_blank handles both.
   validates :entry_locale,
             inclusion: { in: Rails.application.config.valid_locale_strings },
             allow_blank: true

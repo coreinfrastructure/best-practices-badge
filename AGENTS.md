@@ -6,7 +6,7 @@ This file provides guidance to an AI assistant when working with the code in thi
 
 This is the **OpenSSF Best Practices Badge** project (formerly CII Best Practices Badge) - a Rails web application that helps FLOSS projects self-certify that they meet security and quality best practices. The application provides a badging system with three "metal" levels (passing, silver, and gold) and three "baseline" levels (1, 2, and 3).
 
-This software is open source software. The production site running this code is extremely busy and always under attack. High performance and strong security are required.
+This software is open source software. The production site running this code is extremely busy and always under attack. High performance and strong security are required. Minimize creating new objects after initialization, as unchecked memory growth leads to crashes.
 
 **Key URLs:**
 

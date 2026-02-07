@@ -311,6 +311,29 @@ That includes any generated HTML.
 That way we can use CSP entries
 that harden the program against security attacks.
 
+### Database Migrations and Assets
+
+**Database migrations:** The test environment maintains a separate database.
+After creating or running a migration, you must migrate BOTH environments:
+
+```bash
+rails db:migrate                    # Development
+RAILS_ENV=test rails db:migrate     # Test
+```
+
+Note: If you forget, test_helper.rb will detect pending migrations and halt
+with instructions before any confusing errors occur.
+
+**Asset precompilation:** After modifying assets (JavaScript, CSS, images),
+you must recompile:
+
+```bash
+rake assets:precompile
+```
+
+Note: If you forget, test_helper.rb will detect stale assets and halt
+with instructions before running tests.
+
 Below are guidelines for specific languages.
 
 ### Ruby

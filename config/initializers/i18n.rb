@@ -50,8 +50,11 @@ Rails.application.config.locale_display_names = {}.tap do |outer_hash|
 end.freeze
 
 # Pre-build locale select options for form dropdowns (frozen arrays)
-# Format: [[display_name, code], ...] as required by Rails select helper
-# This avoids creating new objects on every form render
+# Format: [[display_name, code], ...] as required by Rails select helper.
+# Rails select helpers expect [display_text, value] order.
+# Hash.to_a produces [[key, value]] but we need [[value, key]] for display,
+# so we explicitly map to [name, code] order.
+# This avoids creating new objects on every form render.
 Rails.application.config.locale_select_options = {}.tap do |hash|
   I18n.available_locales.each do |ui_locale|
     hash[ui_locale.to_s] =
@@ -114,8 +117,9 @@ Rails.application.config.i18n.fallbacks = [:en]
 require_relative '../../lib/machine_translation_fallback_backend'
 
 Rails.application.config.after_initialize do
-  # CRITICAL SAFETY CHECK: Ensure machine translations are isolated from translation.io
-  # translation.io syncs all files in I18n.load_path, so machine translations MUST NOT be there
+  # CRITICAL SAFETY CHECK: Ensure machine translations are isolated
+  # from translation.io. translation.io syncs all files
+  # in I18n.load_path, so machine translations MUST NOT be there
   machine_translations_dir = Rails.root.join('config', 'machine_translations').to_s
   contaminated_paths = I18n.load_path.select { |path| path.to_s.start_with?(machine_translations_dir) }
 

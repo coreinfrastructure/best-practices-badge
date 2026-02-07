@@ -79,7 +79,8 @@ class LoginTest < ApplicationSystemTestCase
     click_button('Save (and continue)', match: :first)
     # After routing changes, edit paths now include criteria_level
     assert_equal "/en/projects/#{@project.id}/passing/edit", current_path
-    assert has_content? 'Project was successfully updated.'
+    # Use assert_text which waits for content to appear (event-based waiting)
+    assert_text 'Project was successfully updated.'
     # TODO: Get the clicking working again with capybara.
     # Details: If we expand all panels first and dont click this test passes.
     #          If we instead click each section, Capybara has issues not seen

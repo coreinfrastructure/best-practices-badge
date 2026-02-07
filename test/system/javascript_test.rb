@@ -72,7 +72,7 @@ class JavascriptTest < ApplicationSystemTestCase
     fill_in 'Email', with: @user.email
     fill_in 'Password', with: 'password'
     click_button 'Log in using custom account'
-    assert has_content? 'Logged in!'
+    assert_text 'Logged in!'
 
     # Visit the baseline-1 edit page directly
     visit "/en/projects/#{@project.id}/baseline-1/edit"

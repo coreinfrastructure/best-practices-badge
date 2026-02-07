@@ -1,3 +1,7 @@
+<%# IMPORTANT: This view uses selective field loading for performance.
+    The project objects only have fields listed in projects_controller.rb:
+    - HTML_INDEX_FIELDS (for project listings)
+    If you add a new field reference to this view, ensure it's in that list! %>
 <table class="table table-bordered table-striped table-responsive">
   <%# Can't cache, because user selection could invert them %>
   <thead>

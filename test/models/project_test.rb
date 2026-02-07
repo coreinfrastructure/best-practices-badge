@@ -716,7 +716,8 @@ class ProjectTest < ActiveSupport::TestCase
     assert_not @project_built.valid?, 'Invalid locale should be rejected'
     @project_built.entry_locale = ''
     assert @project_built.valid?, 'Empty locale should be accepted (defaults to en)'
-    assert_equal 'en', @project_built.entry_locale, 'Empty locale should return en'
+    # After validation, blank is normalized to 'en'
+    assert_equal 'en', @project_built.entry_locale, 'Empty locale normalized to en'
     @project_built.entry_locale = 'english'
     assert_not @project_built.valid?, 'Full language name should be rejected'
   end

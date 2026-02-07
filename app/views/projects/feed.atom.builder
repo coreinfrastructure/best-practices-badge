@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
 # Generate /feed view.
-# If you add new fields to be displayed, be sure to modify
-# the calling controller(s) to retrieve those fields.  Typically the
-# callers will only retrieve the fields necessary for display.
+# IMPORTANT: This view uses selective field loading for performance.
+# If you add new fields to be displayed, be sure to add them to
+# ProjectsController::FEED_DISPLAY_FIELDS. Typically the callers will
+# only retrieve the fields necessary for display.
 #
-# We cache the feed based on projects[0].updated_at, the time of first entry.
+# We cache the feed based on projects.first.updated_at, the time of first entry.
 # If there's any later activity, there will be a different time and
 # this will invalidate the cache. The title depends on the locale, and
 # other data might also, so the cache must be locale-specific.
@@ -13,10 +14,10 @@
 # Disable cache for Rails.env.test?. There is a bug in the
 # test framework that doesn't handle caching correctly in tests.
 cache_frozen_if (!Rails.env.test? && !@projects.empty?),
-         ['feed-index', I18n.locale, @projects[0].updated_at] do
+                ['feed-index', I18n.locale, @projects.first.updated_at] do
   atom_feed(language: I18n.locale) do |feed|
     feed.title(t('feed_title'))
-    feed.updated(@projects[0].updated_at) unless @projects.empty?
+    feed.updated(@projects.first.updated_at) unless @projects.empty?
 
     @projects.each do |project|
       cache_frozen_if !Rails.env.test?, [project, I18n.locale] do

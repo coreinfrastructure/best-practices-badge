@@ -284,6 +284,7 @@ class Project < ApplicationRecord
   # We'll also record previous versions of information:
   has_paper_trail
 
+  before_validation :normalize_entry_locale
   before_save :update_badge_percentages, unless: :skip_callbacks
 
   # A project is associated with a user
@@ -302,16 +303,6 @@ class Project < ApplicationRecord
   validates :entry_locale,
             inclusion: { in: Rails.application.config.valid_locale_strings },
             allow_blank: true
-
-  # Return entry_locale with fallback to 'en' if nil or blank (for old fixtures/data)
-  def entry_locale
-    value = read_attribute(:entry_locale)
-    value.present? ? value : 'en'
-  end
-
-  def entry_locale=(value)
-    write_attribute(:entry_locale, value)
-  end
 
   # We'll do automated analysis on these URLs, which means we will *download*
   # from URLs provided by untrusted users.  Thus we'll add additional
@@ -827,6 +818,19 @@ class Project < ApplicationRecord
   WHAT_IS_ENOUGH = %i[criterion_passing criterion_barely].freeze
 
   private
+
+  # Normalize blank entry_locale to 'en' (the expected default)
+  # HTML forms submit empty string ("") for blank selects. We normalize
+  # this to 'en' to match the database default and satisfy NOT NULL constraint.
+  # IMPORTANT: Only normalize if the attribute was actually loaded or assigned.
+  # Due to selective field loading, the attribute might not be present at all.
+  def normalize_entry_locale
+    # Only normalize if attribute is present (was loaded or explicitly set)
+    # has_attribute? returns false if field wasn't in SELECT query
+    return unless has_attribute?(:entry_locale)
+
+    self.entry_locale = 'en' if entry_locale.blank?
+  end
 
   # def all_active_criteria_passing?
   #   Criteria.active.all? { |criterion| enough? criterion }

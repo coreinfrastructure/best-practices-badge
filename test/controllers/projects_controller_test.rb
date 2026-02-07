@@ -581,6 +581,67 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'ja', @project.entry_locale
   end
 
+  test 'partial update with only name should not reset entry_locale' do
+    log_in_as(@project.user)
+    # First set entry_locale to non-default value
+    @project.update!(entry_locale: 'fr')
+    original_description = @project.description
+    original_license = @project.license
+
+    # Send partial update with only name field
+    patch "/en/projects/#{@project.id}",
+          params: { project: { name: 'New Name Only' } }
+    assert_response :redirect
+
+    # Verify: name changed, but entry_locale and other fields unchanged
+    @project.reload
+    assert_equal 'New Name Only', @project.name
+    assert_equal 'fr', @project.entry_locale, 'entry_locale must not reset to en'
+    assert_equal original_description, @project.description
+    assert_equal original_license, @project.license
+  end
+
+  test 'partial update with multiple fields should not affect entry_locale' do
+    log_in_as(@project.user)
+    # Set entry_locale to non-default value
+    @project.update!(entry_locale: 'de')
+    original_homepage = @project.homepage_url
+
+    # Send partial update with description and license only
+    patch "/en/projects/#{@project.id}",
+          params: {
+            project: {
+              description: 'Updated description',
+                        license: 'Apache-2.0'
+            }
+          }
+    assert_response :redirect
+
+    # Verify: sent fields changed, entry_locale and other fields unchanged
+    @project.reload
+    assert_equal 'Updated description', @project.description
+    assert_equal 'Apache-2.0', @project.license
+    assert_equal 'de', @project.entry_locale, 'entry_locale must not reset'
+    assert_equal original_homepage, @project.homepage_url
+  end
+
+  test 'partial update with blank entry_locale should set to en' do
+    log_in_as(@project.user)
+    # Set entry_locale to non-default value
+    @project.update!(entry_locale: 'fr')
+    assert_equal 'fr', @project.entry_locale
+
+    # Explicitly send blank entry_locale (form with nothing selected)
+    patch "/en/projects/#{@project.id}",
+          params: { project: { entry_locale: '' } }
+    assert_response :redirect
+
+    # Blank should normalize to 'en'
+    @project.reload
+    assert_equal 'en', @project.entry_locale,
+                 'Explicitly blank entry_locale should normalize to en'
+  end
+
   # Negative test
   test 'should fail to update project if not logged in' do
     # NOTE: no log_in_as

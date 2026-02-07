@@ -311,7 +311,7 @@
       <% else %>
         <%= f.text_area :general_comments,
                         class:"form-control", skip_label: true,
-                        lang: 'en', spellcheck: true,
+                        lang: project.entry_locale, spellcheck: true,
                         placeholder:
                           t('projects.misc.general_comments.placeholder'),
                         disabled: view_only %>

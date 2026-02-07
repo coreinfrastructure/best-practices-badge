@@ -28,7 +28,7 @@
             word_breakdown(project.name.presence || t('.paren_name_unknown')),
             project
           ) %></td>
-        <td><span lang="en"><%= markdown(
+        <td><span lang="<%= project.entry_locale %>"><%= markdown(
                   (project.description || '').
                   truncate(160, separator: ' ')) %></span></td>
         <td class='website'>

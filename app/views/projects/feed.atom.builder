@@ -29,7 +29,7 @@ cache_frozen_if (!Rails.env.test? && !@projects.empty?),
           status += "</strong> (Tiered #{project.tiered_percentage}%)</p>"
           url = project.homepage_url.presence || project.repo_url
           link = "<p><a href='#{url}'>#{url}</a></p>"
-          description = '<span lang="en">' +
+          description = "<span lang=\"#{ERB::Util.html_escape(project.entry_locale)}\">" +
                         markdown(project.description || '') +
                         '</span>'
           content = status + link + description

@@ -148,7 +148,7 @@ class ProjectsController < ApplicationController
   # lock_version isn't needed for mere viewing, but it's a *big* problem
   # if we forget to include it where needed, so let's include it.
   PROJECT_BASE_FIELDS = %i[
-    id user_id name description homepage_url repo_url license
+    id user_id name description homepage_url repo_url license entry_locale
     created_at updated_at tiered_percentage
     achieved_passing_at achieved_silver_at achieved_gold_at
     lost_passing_at lost_silver_at lost_gold_at
@@ -650,7 +650,7 @@ class ProjectsController < ApplicationController
                         'tiered_percentage, ' \
                         'badge_percentage_0, badge_percentage_1, ' \
                         'badge_percentage_2, ' \
-                        'homepage_url, repo_url, description, user_id'
+                        'homepage_url, repo_url, description, entry_locale, user_id'
 
   # Generate Atom feed of recently updated projects.
   # @return [void]
@@ -687,7 +687,7 @@ class ProjectsController < ApplicationController
   MAX_GITHUB_REPOS_FROM_USER = 50
 
   # Database fields for HTML index display (performance optimization)
-  HTML_INDEX_FIELDS = 'projects.id, projects.name, description, ' \
+  HTML_INDEX_FIELDS = 'projects.id, projects.name, description, entry_locale, ' \
                       'homepage_url, repo_url, license, projects.user_id, ' \
                       'achieved_passing_at, projects.updated_at, ' \
                       'badge_percentage_0, tiered_percentage'

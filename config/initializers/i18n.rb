@@ -29,6 +29,38 @@
 
 I18n.available_locales = %i[en zh-CN es fr de ja pt-BR ru sw].freeze
 
+# String version of available locales for validations
+Rails.application.config.valid_locale_strings =
+  I18n.available_locales.map(&:to_s).freeze
+
+# Pre-build locale display names (frozen hash-of-hashes for memory efficiency)
+# Outer key = UI locale, inner key = target locale, value = display string
+Rails.application.config.locale_display_names = {}.tap do |outer_hash|
+  I18n.available_locales.each do |ui_locale|
+    outer_hash[ui_locale.to_s] = {}.tap do |inner_hash|
+      I18n.available_locales.each do |target_locale|
+        I18n.with_locale(ui_locale) do
+          name = I18n.t("locale_name.#{target_locale}")
+          name += " / #{I18n.t("locale_name.#{target_locale}", locale: target_locale)}" if target_locale != ui_locale
+          inner_hash[target_locale.to_s] = "#{name} (#{target_locale})".freeze
+        end
+      end
+    end.freeze
+  end
+end.freeze
+
+# Pre-build locale select options for form dropdowns (frozen arrays)
+# Format: [[display_name, code], ...] as required by Rails select helper
+# This avoids creating new objects on every form render
+Rails.application.config.locale_select_options = {}.tap do |hash|
+  I18n.available_locales.each do |ui_locale|
+    hash[ui_locale.to_s] =
+      Rails.application.config.locale_display_names[ui_locale.to_s]
+           .map { |code, name| [name, code].freeze }
+           .freeze
+  end
+end.freeze
+
 # Here are the locales we will *automatically* switch to.
 # This *may* be the same as I18n.available_locales, but if a locale's
 # translation isn't ready we will remove it here.

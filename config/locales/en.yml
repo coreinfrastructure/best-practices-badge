@@ -721,6 +721,15 @@ en:
           Include key comments about the project.  Use markdown.
           This information is used when displaying badge information.
         placeholder: Project Description
+      entry_locale:
+        description: >-
+          What language is used for this badge entry's description and
+          justifications?
+        details: >-
+          Select the language used for the project description
+          and criterion justification text. This helps browser
+          translation tools correctly identify the language of
+          this content. Most projects use English.
       homepage_url:
         description: What is the URL for the project (as a whole)?
         placeholder: Project Website URL

@@ -38,18 +38,11 @@
             <span class="fa fa-language fa-lg" title="<%= t(:choose_locale, scope: :layouts) %>"></span>
             <b class="caret"></b></a>
           <ul class="dropdown-menu reverse-dropdown">
-            <% I18n.available_locales.map do |loc| %>
+            <% Rails.application.config.locale_display_names[I18n.locale.to_s].each do |loc, name| %>
               <li><a href="<%=
                 # TODO: This doesn't include the anchor.
                 force_locale_url(request.original_url, loc)
-                %>"><%= t("locale_name.#{loc}") %>
-                <%=
-                  if loc != I18n.locale
-                    '/ ' + t("locale_name.#{loc}", locale: loc)
-                  end
-                %>
-                (<%= loc %>)</a>
-              </li>
+              %>"><%= name %></a></li>
             <% end %>
           </ul>
         </li>

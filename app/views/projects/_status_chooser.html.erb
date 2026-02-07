@@ -119,7 +119,7 @@
          if project_criterion_justification&.presence
            cache ['markdown', project.id, criterion_str,
                   project.lock_version] do %>
-          <div class="justification-markdown" lang="en">
+          <div class="justification-markdown" lang="<%= project.entry_locale %>">
             <%= markdown(project_criterion_justification) %>
           </div>
         <% end # cache 'markdown'
@@ -132,7 +132,7 @@
     <% else %>
       <%= f.text_area justification_symbol,
                       class: 'justification-text', hide_label: true,
-                      lang: 'en', spellcheck: true,
+                      lang: project.entry_locale, spellcheck: true,
                       placeholder:t('projects.misc.in_javascript.unknown_placeholder'),
                       disabled: view_only %>
     <% end # view_only %>

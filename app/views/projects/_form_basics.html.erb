@@ -14,7 +14,7 @@
             <div class="hidable-text-entry">
             <span><%= f.label :description, t('projects.form_basics.description.description') %></span>
             <% if view_only %>
-              <div class="discussion-markdown" id="project_description" id="en">
+              <div class="discussion-markdown" id="project_description" lang="<%= project.entry_locale %>">
                 <%= markdown(project[:description]) %>
               </div>
             <% else %>
@@ -25,9 +25,26 @@
             <%= f.text_area :description, class:"form-control",
                             skip_label: true,
                             placeholder: t('projects.form_basics.description.placeholder'),
-                            lang: 'en', spellcheck: true,
+                            lang: project.entry_locale, spellcheck: true,
                             disabled: view_only %>
             <% end %>
+            </div>
+
+            <div class="hidable-text-entry">
+              <span><%= f.label :entry_locale, t('projects.form_basics.entry_locale.description') %></span>
+              <%= render(partial: "details", locals: {
+                         criterion: "entry_locale",
+                         details: t('projects.form_basics.entry_locale.details')
+              }) %>
+              <% if view_only %>
+                <div id="project_entry_locale">
+                  <%= Rails.application.config.locale_display_names.dig(I18n.locale.to_s, project.entry_locale) || project.entry_locale %>
+                </div>
+              <% else %>
+                <%= f.select :entry_locale,
+                             Rails.application.config.locale_select_options[I18n.locale.to_s],
+                             {}, {class: 'form-control'} %>
+              <% end %>
             </div>
 
             <div class="hidable-text-entry">

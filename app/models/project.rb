@@ -107,7 +107,7 @@ class Project < ApplicationRecord
   PROJECT_OTHER_FIELDS = %i[
     name description homepage_url repo_url cpe implementation_languages
     license general_comments user_id lock_version
-    level additional_rights_changes
+    level additional_rights_changes entry_locale
   ].freeze
   PROJECT_USER_ID_REPEAT = %i[user_id_repeat].freeze # Repeat to change owner
 
@@ -290,6 +290,19 @@ class Project < ApplicationRecord
   validates :description, length: MAXIMUM_IS_MAX_TEXT_LENGTH, text: true
   validates :license, length: MAXIMUM_IS_MAX_SHORT_STRING_LENGTH, text: true
   validates :general_comments, text: true
+  validates :entry_locale,
+            inclusion: { in: Rails.application.config.valid_locale_strings },
+            allow_blank: true
+
+  # Return entry_locale with fallback to 'en' if nil or blank (for old fixtures/data)
+  def entry_locale
+    value = read_attribute(:entry_locale)
+    value.present? ? value : 'en'
+  end
+
+  def entry_locale=(value)
+    write_attribute(:entry_locale, value)
+  end
 
   # We'll do automated analysis on these URLs, which means we will *download*
   # from URLs provided by untrusted users.  Thus we'll add additional

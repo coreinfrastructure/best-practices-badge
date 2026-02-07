@@ -105,8 +105,8 @@ class User < ApplicationRecord
 
   # We don't allow locale nil. There's no need to, because the record has a
   # default value (and the default is used if we don't supply a value).
-  VALID_LOCALES_STRINGS = I18n.available_locales.map(&:to_s)
-  validates :preferred_locale, inclusion: { in: VALID_LOCALES_STRINGS }
+  VALID_LOCALE_STRINGS = Rails.application.config.valid_locale_strings
+  validates :preferred_locale, inclusion: { in: VALID_LOCALE_STRINGS }
 
   MAX_NICKNAME_LENGTH_GITHUB = 39
   validates :nickname, length: { maximum: MAX_NICKNAME_LENGTH_GITHUB },

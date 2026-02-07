@@ -573,6 +573,14 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
                  @project.osps_ac_01_01_justification
   end
 
+  test 'should update entry_locale' do
+    log_in_as(@project.user)
+    patch "/en/projects/#{@project.id}",
+          params: { project: { entry_locale: 'ja' } }
+    @project.reload
+    assert_equal 'ja', @project.entry_locale
+  end
+
   # Negative test
   test 'should fail to update project if not logged in' do
     # NOTE: no log_in_as

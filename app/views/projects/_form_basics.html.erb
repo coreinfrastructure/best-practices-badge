@@ -36,22 +36,18 @@
             <% end %>
             </div>
 
-            <div class="hidable-text-entry">
-              <span><%= f.label :entry_locale, t('projects.form_basics.entry_locale.description') %></span>
-              <%= render(partial: "details", locals: {
-                         criterion: "entry_locale",
-                         details: t('projects.form_basics.entry_locale.details')
-              }) %>
-              <% if view_only %>
-                <div id="project_entry_locale">
-                  <%= Rails.application.config.locale_display_names.dig(I18n.locale.to_s, project.entry_locale) || project.entry_locale %>
-                </div>
-              <% else %>
+            <% unless view_only %>
+              <div class="hidable-text-entry">
+                <%= t('projects.form_basics.entry_locale.description') %>
+                <%= render(partial: "details", locals: {
+                           criterion: "entry_locale",
+                           details: t('projects.form_basics.entry_locale.details')
+                }) %>
                 <%= f.select :entry_locale,
                              Rails.application.config.locale_select_options[I18n.locale.to_s],
-                             {}, {class: 'form-control'} %>
-              <% end %>
-            </div>
+                             {skip_label: true}, {class: 'form-control'} %>
+              </div>
+            <% end %>
 
             <div class="hidable-text-entry">
             <span><%= f.label :homepage_url, t('projects.form_basics.homepage_url.description') %></span>

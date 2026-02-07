@@ -18,6 +18,8 @@ class ProjectsController < ApplicationController
   # So we'll take steps to only load a subset of the columns we need,
   # when we only need a subset. We need to load project data *before* using
   # that data (e.g., to check on who owns the project)
+  # NOTE: Rails 8+ automatically raises ActiveModel::MissingAttributeError when
+  # code tries to access attributes that weren't included in SELECT queries.
   before_action :set_project_all_values, only: %i[update show_json]
   before_action :set_criteria_level, only: %i[show edit update]
   before_action :set_project_for_section, only: %i[show edit]

@@ -75,6 +75,11 @@ end
 require File.expand_path('../config/environment', __dir__)
 require 'rails/test_help'
 
+# NOTE: Rails 8+ automatically raises ActiveModel::MissingAttributeError when
+# code tries to access attributes that weren't included in SELECT queries.
+# This built-in protection catches bugs where fields are added to views but
+# not to controller field selection lists.
+
 # We must specially allow web calls by test drivers, e.g.,
 # GET https://chromedriver.storage.googleapis.com/LATEST_RELEASE_75.0.3770
 # See: https://github.com/titusfortner/webdrivers/issues/109

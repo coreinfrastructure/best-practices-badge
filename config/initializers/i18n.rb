@@ -29,6 +29,10 @@
 
 I18n.available_locales = %i[en zh-CN es fr de ja pt-BR ru sw].freeze
 
+# String version of available locales for validations
+Rails.application.config.valid_locale_strings =
+  I18n.available_locales.map(&:to_s).freeze
+
 # Here are the locales we will *automatically* switch to.
 # This *may* be the same as I18n.available_locales, but if a locale's
 # translation isn't ready we will remove it here.
@@ -81,9 +85,54 @@ Rails.application.config.i18n.fallbacks = [:en]
 
 require_relative '../../lib/machine_translation_fallback_backend'
 
+# Build display name for a single locale pair
+# @param ui_locale [Symbol] The locale for the UI display
+# @param target_locale [Symbol] The locale being described
+# @return [String] Formatted display name
+def build_single_locale_display_name(ui_locale, target_locale)
+  I18n.with_locale(ui_locale) do
+    name = I18n.t("locale_name.#{target_locale}")
+    name += " / #{I18n.t("locale_name.#{target_locale}", locale: target_locale)}" if target_locale != ui_locale
+    "#{name} (#{target_locale})".freeze
+  end
+end
+
+# Build locale display names hash for all UI and target locale combinations
+# @return [Hash] Nested hash: {ui_locale => {target_locale => display_string}}
+def build_locale_display_names
+  {}.tap do |outer_hash|
+    I18n.available_locales.each do |ui_locale|
+      outer_hash[ui_locale.to_s] = {}.tap do |inner_hash|
+        I18n.available_locales.each do |target_locale|
+          inner_hash[target_locale.to_s] = build_single_locale_display_name(ui_locale, target_locale)
+        end
+      end.freeze
+    end
+  end.freeze
+end
+
+# Build select options arrays for Rails form helpers
+# @return [Hash] Hash mapping UI locale to array of [display_name, code] pairs
+def build_locale_select_options(display_names)
+  {}.tap do |hash|
+    I18n.available_locales.each do |ui_locale|
+      hash[ui_locale.to_s] =
+        display_names[ui_locale.to_s]
+        .map { |code, name| [name, code].freeze }
+        .freeze
+    end
+  end.freeze
+end
+
 Rails.application.config.after_initialize do
-  # CRITICAL SAFETY CHECK: Ensure machine translations are isolated from translation.io
-  # translation.io syncs all files in I18n.load_path, so machine translations MUST NOT be there
+  # Pre-build locale display names and select options AFTER translations are loaded
+  Rails.application.config.locale_display_names = build_locale_display_names
+  Rails.application.config.locale_select_options =
+    build_locale_select_options(Rails.application.config.locale_display_names)
+
+  # CRITICAL SAFETY CHECK: Ensure machine translations are isolated
+  # from translation.io. translation.io syncs all files
+  # in I18n.load_path, so machine translations MUST NOT be there
   machine_translations_dir = Rails.root.join('config', 'machine_translations').to_s
   contaminated_paths = I18n.load_path.select { |path| path.to_s.start_with?(machine_translations_dir) }
 

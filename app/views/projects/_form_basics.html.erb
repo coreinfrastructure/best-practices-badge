@@ -1,3 +1,9 @@
+<%# IMPORTANT: This view uses selective field loading for performance.
+    The @project object only has fields listed in projects_controller.rb:
+    - PROJECT_BASE_FIELDS (for show/edit pages)
+    - HTML_INDEX_FIELDS (for project listings)
+    - FEED_DISPLAY_FIELDS (for Atom feeds)
+    If you add a new field to this view, ensure it's in the appropriate list! %>
             <div class="hidable-text-entry">
             <span><%= f.label :name, t('projects.form_basics.project_name.description') %></span>
             <%= render(partial: "details", locals: {
@@ -14,7 +20,7 @@
             <div class="hidable-text-entry">
             <span><%= f.label :description, t('projects.form_basics.description.description') %></span>
             <% if view_only %>
-              <div class="discussion-markdown" id="project_description" id="en">
+              <div class="discussion-markdown" id="project_description" lang="<%= project.entry_locale %>">
                 <%= markdown(project[:description]) %>
               </div>
             <% else %>
@@ -25,10 +31,23 @@
             <%= f.text_area :description, class:"form-control",
                             skip_label: true,
                             placeholder: t('projects.form_basics.description.placeholder'),
-                            lang: 'en', spellcheck: true,
+                            lang: project.entry_locale, spellcheck: true,
                             disabled: view_only %>
             <% end %>
             </div>
+
+            <% unless view_only %>
+              <div class="hidable-text-entry">
+                <%= t('projects.form_basics.entry_locale.description') %>
+                <%= render(partial: "details", locals: {
+                           criterion: "entry_locale",
+                           details: t('projects.form_basics.entry_locale.details')
+                }) %>
+                <%= f.select :entry_locale,
+                             Rails.application.config.locale_select_options[I18n.locale.to_s],
+                             {skip_label: true}, {class: 'form-control'} %>
+              </div>
+            <% end %>
 
             <div class="hidable-text-entry">
             <span><%= f.label :homepage_url, t('projects.form_basics.homepage_url.description') %></span>

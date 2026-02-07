@@ -18,6 +18,8 @@ class ProjectsController < ApplicationController
   # So we'll take steps to only load a subset of the columns we need,
   # when we only need a subset. We need to load project data *before* using
   # that data (e.g., to check on who owns the project)
+  # NOTE: Rails 8+ automatically raises ActiveModel::MissingAttributeError when
+  # code tries to access attributes that weren't included in SELECT queries.
   before_action :set_project_all_values, only: %i[update show_json]
   before_action :set_criteria_level, only: %i[show edit update]
   before_action :set_project_for_section, only: %i[show edit]
@@ -144,11 +146,15 @@ class ProjectsController < ApplicationController
                            .join(',').freeze
 
   # Memory optimization: Pre-computed field lists for selective Project loading
+  # IMPORTANT: These lists control which fields are loaded from the database.
+  # When adding new fields to Project model that are used in views, you MUST
+  # add them to the appropriate list below or views will get nil values.
+  #
   # Base fields always needed regardless of which section is being viewed
   # lock_version isn't needed for mere viewing, but it's a *big* problem
   # if we forget to include it where needed, so let's include it.
   PROJECT_BASE_FIELDS = %i[
-    id user_id name description homepage_url repo_url license
+    id user_id name description homepage_url repo_url license entry_locale
     created_at updated_at tiered_percentage
     achieved_passing_at achieved_silver_at achieved_gold_at
     lost_passing_at lost_silver_at lost_gold_at
@@ -650,7 +656,7 @@ class ProjectsController < ApplicationController
                         'tiered_percentage, ' \
                         'badge_percentage_0, badge_percentage_1, ' \
                         'badge_percentage_2, ' \
-                        'homepage_url, repo_url, description, user_id'
+                        'homepage_url, repo_url, description, entry_locale, user_id'
 
   # Generate Atom feed of recently updated projects.
   # @return [void]
@@ -687,7 +693,7 @@ class ProjectsController < ApplicationController
   MAX_GITHUB_REPOS_FROM_USER = 50
 
   # Database fields for HTML index display (performance optimization)
-  HTML_INDEX_FIELDS = 'projects.id, projects.name, description, ' \
+  HTML_INDEX_FIELDS = 'projects.id, projects.name, description, entry_locale, ' \
                       'homepage_url, repo_url, license, projects.user_id, ' \
                       'achieved_passing_at, projects.updated_at, ' \
                       'badge_percentage_0, tiered_percentage'

@@ -693,5 +693,33 @@ class ProjectTest < ActiveSupport::TestCase
     project.update_baseline_tiered_percentage
     assert_equal 140, project.baseline_tiered_percentage
   end
+
+  test 'entry_locale defaults to en' do
+    project = @user.projects.build(
+      homepage_url: 'https://www.example.org',
+      repo_url: 'https://www.example.org/code'
+    )
+    assert_equal 'en', project.entry_locale
+  end
+
+  test 'entry_locale accepts valid locales' do
+    @project_built.entry_locale = 'fr'
+    assert @project_built.valid?, 'French locale should be valid'
+    @project_built.entry_locale = 'zh-CN'
+    assert @project_built.valid?, 'Chinese locale should be valid'
+    @project_built.entry_locale = 'ja'
+    assert @project_built.valid?, 'Japanese locale should be valid'
+  end
+
+  test 'entry_locale rejects invalid locales' do
+    @project_built.entry_locale = 'xx'
+    assert_not @project_built.valid?, 'Invalid locale should be rejected'
+    @project_built.entry_locale = ''
+    assert @project_built.valid?, 'Empty locale should be accepted (defaults to en)'
+    # After validation, blank is normalized to 'en'
+    assert_equal 'en', @project_built.entry_locale, 'Empty locale normalized to en'
+    @project_built.entry_locale = 'english'
+    assert_not @project_built.valid?, 'Full language name should be rejected'
+  end
 end
 # rubocop:enable Metrics/ClassLength

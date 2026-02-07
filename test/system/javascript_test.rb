@@ -72,7 +72,7 @@ class JavascriptTest < ApplicationSystemTestCase
     fill_in 'Email', with: @user.email
     fill_in 'Password', with: 'password'
     click_button 'Log in using custom account'
-    assert has_content? 'Logged in!'
+    assert_text 'Logged in!'
 
     # Visit the baseline-1 edit page directly
     visit "/en/projects/#{@project.id}/baseline-1/edit"
@@ -80,7 +80,10 @@ class JavascriptTest < ApplicationSystemTestCase
 
     # Expand all panels to ensure proper initialization
     find('#toggle-expand-all-panels').click
+    # Wait for jQuery to finish, which includes panel expansion animations
     wait_for_jquery
+    # Wait for the radio button to be present and enabled before trying to click it
+    assert_selector '#project_osps_ac_01_01_status_met', visible: true
 
     # Get initial panel count (should start with 0/)
     initial_panel_text = find('#controls .satisfaction-text').text

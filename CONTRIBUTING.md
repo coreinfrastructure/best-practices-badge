@@ -311,6 +311,29 @@ That includes any generated HTML.
 That way we can use CSP entries
 that harden the program against security attacks.
 
+### Database Migrations and Assets
+
+**Database migrations:** The test environment maintains a separate database.
+After creating or running a migration, you must migrate BOTH environments:
+
+```bash
+rails db:migrate                    # Development
+RAILS_ENV=test rails db:migrate     # Test
+```
+
+Note: If you forget, test_helper.rb will detect pending migrations and halt
+with instructions before any confusing errors occur.
+
+**Asset precompilation:** After modifying assets (JavaScript, CSS, images),
+you must recompile:
+
+```bash
+rake assets:precompile
+```
+
+Note: If you forget, test_helper.rb will detect stale assets and halt
+with instructions before running tests.
+
 Below are guidelines for specific languages.
 
 ### Ruby
@@ -379,6 +402,33 @@ You may use the safe navigation operator '&amp;.' added in
 [Ruby version 2.3.0](https://www.ruby-lang.org/en/news/2015/12/25/ruby-2-3-0-released/).
 Our static analysis tools' parsers can now handle this syntax.
 This means that this application *requires* Ruby version 2.3.0 or later to run.
+
+**Method Documentation**: All public methods in classes and modules should
+include inline documentation using YARD (Yet Another Ruby Documentation) format.
+This helps developers understand the purpose, parameters, and return values
+at a glance. Use these YARD tags:
+
+* `@param name [Type] description` - Documents a parameter
+* `@return [Type] description` - Documents the return value
+* `@raise [ExceptionClass] description` - Documents exceptions that may be raised
+
+Example:
+
+~~~~ruby
+# Calculates badge percentage for a specific level.
+# Iterates through all criteria for the level and determines what
+# percentage of MUST and SHOULD criteria are satisfied.
+# @param level [String] the badge level ('passing', 'silver', 'gold', etc.)
+# @return [Integer] percentage from 0-100
+# @raise [ArgumentError] if level is invalid
+def calculate_badge_percentage(level)
+  # method implementation
+end
+~~~~
+
+You don't need to document every private helper method, but any method
+that could be called from another class/module should be documented.
+Focus documentation on methods that aren't immediately obvious.
 
 When making new tests, if you need to modify the setup or teardown methods for a
 test class, please use callbacks instead of overwrites; i.e.  use "setup do"

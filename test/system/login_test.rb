@@ -38,7 +38,7 @@ class LoginTest < ApplicationSystemTestCase
     fill_in 'Email', with: @user.email
     fill_in 'Password', with: 'WRONG_PASSWORD'
     click_button 'Log in using custom account'
-    assert has_content? 'Invalid email/password combination'
+    assert_text 'Invalid email/password combination'
     assert_equal login_path(locale: :en), current_path
   end
 
@@ -50,7 +50,7 @@ class LoginTest < ApplicationSystemTestCase
     fill_in 'Email', with: @user.email
     # NOTE: we do NOT fill in a password.
     click_button 'Log in using custom account'
-    assert has_content? 'Invalid email/password combination'
+    assert_text 'Invalid email/password combination'
     assert_equal login_path(locale: :en), current_path
   end
 
@@ -61,15 +61,17 @@ class LoginTest < ApplicationSystemTestCase
     fill_in 'Email', with: @user.email
     fill_in 'Password', with: 'password'
     click_button 'Log in using custom account'
-    assert has_content? 'Logged in!'
+    assert_text 'Logged in!'
     assert_equal projects_path(locale: :en), current_path
 
     # Visit the passing level edit page directly (with explicit criteria_level)
     visit "/en/projects/#{@project.id}/passing/edit"
-    assert has_content? 'This is not the production system'
-    assert has_content? 'We have updated our requirements for the criterion ' \
-                        'static_analysis. Please add a justification for ' \
-                        'this criterion.'
+    # Wait for page to be ready by checking for presence of form element
+    assert_selector 'input#project_name'
+    assert_text 'This is not the production system'
+    assert_text 'We have updated our requirements for the criterion ' \
+                'static_analysis. Please add a justification for ' \
+                'this criterion.'
 
     fill_in 'project_name', with: 'It does not matter'
     # Click the "Save (and continue)" button to stay on edit page
@@ -77,8 +79,8 @@ class LoginTest < ApplicationSystemTestCase
     click_button('Save (and continue)', match: :first)
     # After routing changes, edit paths now include criteria_level
     assert_equal "/en/projects/#{@project.id}/passing/edit", current_path
-    wait_for_page_load # Wait for page to fully load before checking flash message
-    assert has_content? 'Project was successfully updated.'
+    # Use assert_text which waits for content to appear (event-based waiting)
+    assert_text 'Project was successfully updated.'
     # TODO: Get the clicking working again with capybara.
     # Details: If we expand all panels first and dont click this test passes.
     #          If we instead click each section, Capybara has issues not seen
@@ -148,7 +150,7 @@ class LoginTest < ApplicationSystemTestCase
     fill_in 'Email', with: @user.email
     fill_in 'Password', with: 'password'
     click_button 'Log in using custom account'
-    assert has_content? 'Logged in!'
+    assert_text 'Logged in!'
     assert_equal projects_path(locale: :en), current_path
   end
 
@@ -161,7 +163,7 @@ class LoginTest < ApplicationSystemTestCase
     fill_in 'Email', with: fr_user.email
     fill_in 'Password', with: 'password'
     click_button 'Log in using custom account'
-    assert has_content? 'Connecté !'
+    assert_text 'Connecté !'
     assert_equal '/fr/projects', current_path
   end
 
@@ -173,7 +175,7 @@ class LoginTest < ApplicationSystemTestCase
     fill_in 'Email', with: fr_user.email
     fill_in 'Password', with: 'password'
     click_button 'Log in using custom account'
-    assert has_content? 'Connecté !'
+    assert_text 'Connecté !'
     assert_equal '/fr', current_path
   end
 
@@ -185,7 +187,7 @@ class LoginTest < ApplicationSystemTestCase
     fill_in 'Email', with: fr_user.email
     fill_in 'Mot de passe', with: 'password'
     click_button 'Connectez-vous en utilisant un compte personnalisé'
-    assert has_content? 'Connecté !'
+    assert_text 'Connecté !'
     assert_equal '/fr', current_path
   end
 

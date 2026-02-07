@@ -72,6 +72,9 @@ en:
     form_basics:
       license:
         title: License in SPDX license expression format, e.g., "MIT" or "GPL-3.0+", without single quotes or double quotes
+      entry_locale:
+        description: What language is used for this badge entry's description and justifications?
+        details: Select the language used for the project description and criterion justification text. This helps browser translation tools correctly identify the language of this content. Most projects use English.
     misc:
       reminder_notification_note:
         title: Email Notification Settings

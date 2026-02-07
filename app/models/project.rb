@@ -104,10 +104,17 @@ class Project < ApplicationRecord
     2 => 'gold'
   }.freeze
 
+  # IMPORTANT: When adding new fields to this list, you MUST also add them
+  # to the appropriate field selection lists in projects_controller.rb:
+  #   - PROJECT_BASE_FIELDS (for show/edit pages)
+  #   - HTML_INDEX_FIELDS (for projects listing)
+  #   - FEED_DISPLAY_FIELDS (for Atom feeds)
+  #   - BADGE_PROJECT_FIELDS (for badge SVG endpoints)
+  # Without this, views will get nil for the field even though the database has a value.
   PROJECT_OTHER_FIELDS = %i[
     name description homepage_url repo_url cpe implementation_languages
     license general_comments user_id lock_version
-    level additional_rights_changes
+    level additional_rights_changes entry_locale
   ].freeze
   PROJECT_USER_ID_REPEAT = %i[user_id_repeat].freeze # Repeat to change owner
 
@@ -277,6 +284,7 @@ class Project < ApplicationRecord
   # We'll also record previous versions of information:
   has_paper_trail
 
+  before_validation :normalize_entry_locale
   before_save :update_badge_percentages, unless: :skip_callbacks
 
   # A project is associated with a user
@@ -290,6 +298,11 @@ class Project < ApplicationRecord
   validates :description, length: MAXIMUM_IS_MAX_TEXT_LENGTH, text: true
   validates :license, length: MAXIMUM_IS_MAX_SHORT_STRING_LENGTH, text: true
   validates :general_comments, text: true
+  # NOTE: Use allow_blank (not allow_nil) for form fields. HTML forms submit
+  # empty string ("") for blank inputs, not nil. allow_blank handles both.
+  validates :entry_locale,
+            inclusion: { in: Rails.application.config.valid_locale_strings },
+            allow_blank: true
 
   # We'll do automated analysis on these URLs, which means we will *download*
   # from URLs provided by untrusted users.  Thus we'll add additional
@@ -805,6 +818,19 @@ class Project < ApplicationRecord
   WHAT_IS_ENOUGH = %i[criterion_passing criterion_barely].freeze
 
   private
+
+  # Normalize blank entry_locale to 'en' (the expected default)
+  # HTML forms submit empty string ("") for blank selects. We normalize
+  # this to 'en' to match the database default and satisfy NOT NULL constraint.
+  # IMPORTANT: Only normalize if the attribute was actually loaded or assigned.
+  # Due to selective field loading, the attribute might not be present at all.
+  def normalize_entry_locale
+    # Only normalize if attribute is present (was loaded or explicitly set)
+    # has_attribute? returns false if field wasn't in SELECT query
+    return unless has_attribute?(:entry_locale)
+
+    self.entry_locale = 'en' if entry_locale.blank?
+  end
 
   # def all_active_criteria_passing?
   #   Criteria.active.all? { |criterion| enough? criterion }

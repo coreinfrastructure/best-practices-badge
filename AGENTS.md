@@ -6,7 +6,17 @@ This file provides guidance to an AI assistant when working with the code in thi
 
 This is the **OpenSSF Best Practices Badge** project (formerly CII Best Practices Badge) - a Rails web application that helps FLOSS projects self-certify that they meet security and quality best practices. The application provides a badging system with three "metal" levels (passing, silver, and gold) and three "baseline" levels (1, 2, and 3).
 
-This software is open source software. The production site running this code is extremely busy and always under attack. High performance and strong security are required.
+This software is open source software. The production site running this code is extremely busy and always under attack. High performance and strong security are required. Minimize creating new objects after initialization, as unchecked memory growth leads to crashes.
+
+Long-term maintainability is critical. Minimize the amount of code by preferring to reuse existing infrastructure and refactoring common code into methods.
+
+When you have difficulty fixing a bug or making a change, determine the root cause and find ways to systemically prevent similar problems in the future. For example:
+
+* Add a test to detect similar problems
+* Improve bug feedback mechanisms (better error messages, fail-fast checks)
+* Add documentation near the construct in use
+
+However, documentation is often unnoticed and too much can obscure what's important. Prefer automated prevention (tests, type checks, linters) over documentation when possible.
 
 **Key URLs:**
 
@@ -169,7 +179,11 @@ has many configuration files.
 - **Frozen String Literals**: All files must include `# frozen_string_literal: true`
 - **Security Headers**: Each file has copyright and SPDX-License-Identifier
 - **Refinements**: Uses custom `StringRefinements` and `SymbolRefinements`
-- **Documentation**: Comprehensive inline documentation expected
+- **Method Documentation**: Use YARD format for documenting public methods in classes and modules:
+  - `@param name [Type] description` - documents parameters
+  - `@return [Type] description` - documents return values
+  - `@raise [ExceptionClass] description` - documents exceptions
+  - Focus on non-obvious methods; private helpers don't always need documentation
 
 ### Testing Strategy
 

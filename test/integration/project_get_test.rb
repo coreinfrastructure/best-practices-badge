@@ -195,5 +195,34 @@ class ProjectGetTest < ActionDispatch::IntegrationTest
     # Verify section dropdown contains link to permissions
     assert_select 'a[href=?]', "/en/projects/#{@project_one.id}/permissions"
   end
+
+  test 'project text fields display with correct lang attribute' do
+    @project_one.update!(entry_locale: 'fr')
+    @project_one.update!(description_good_status: 3,
+                         description_good_justification: 'Test justification')
+
+    # Test show page has correct lang attributes
+    get project_section_path(@project_one, 'passing', locale: 'en')
+    assert_response :success
+
+    # Check description has correct lang
+    assert_select 'div.discussion-markdown[lang="fr"]',
+                  minimum: 1, text: /#{@project_one.description}/
+
+    # Check justification has correct lang
+    assert_select 'div.justification-markdown[lang="fr"]',
+                  minimum: 1
+
+    # Test project listing page
+    get '/en/projects'
+    assert_response :success
+    assert_select 'td span[lang="fr"]', minimum: 1
+
+    # Test Atom feed
+    get '/en/feed'
+    assert_response :success
+    assert_match(/lang="fr"/, @response.body,
+                 'Feed should contain lang="fr" for descriptions')
+  end
 end
 # rubocop:enable Metrics/ClassLength

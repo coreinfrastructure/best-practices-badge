@@ -46,6 +46,10 @@ ja:
       reminder_notification_note:
         title: メール通知設定
         description_html: このバッジエントリの所有者で、非アクティブリマインダーメールを無効にしたい場合は、<a href="/users/%{user_id}/edit">ユーザープロファイル設定</a>を編集してください。この設定はすべてのプロジェクトに適用されます。
+    form_basics:
+      entry_locale:
+        description: このバッジエントリの説明と正当な理由にはどの言語を使用しますか？
+        details: プロジェクトの概要と基準の正当な理由のテキストに使用されている言語を選択してください。これによりブラウザの翻訳ツールがこのコンテンツの言語を正しく識別できるようになります。ほとんどのプロジェクトは英語を使用します。
   report_mailer:
     unsubscribe_notice_html: これらのメール通知の登録を解除するには、次のURLにアクセスしてください：<a href="%{unsubscribe_url}">%{unsubscribe_url}</a>
     unsubscribe_notice_text: これらのメール通知の登録を解除するには、次のURLにアクセスしてください：%{unsubscribe_url}

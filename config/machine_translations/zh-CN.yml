@@ -46,6 +46,10 @@ zh-CN:
       reminder_notification_note:
         title: 电子邮件通知设置
         description_html: 如果您是此徽章条目的所有者，并且想要禁用非活动提醒邮件，请编辑您的<a href="/users/%{user_id}/edit">用户个人资料设置</a>。此设置适用于您的所有项目。
+    form_basics:
+      entry_locale:
+        description: 此徽章条目的描述和理由使用什么语言？
+        details: 选择项目描述和标准理由文本所使用的语言。这有助于浏览器翻译工具正确识别此内容的语言。大多数项目使用英语。
   report_mailer:
     unsubscribe_notice_html: 要取消订阅这些电子邮件通知，请访问：<a href="%{unsubscribe_url}">%{unsubscribe_url}</a>
     unsubscribe_notice_text: 要取消订阅这些电子邮件通知，请访问：%{unsubscribe_url}

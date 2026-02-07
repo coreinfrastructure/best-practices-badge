@@ -75,6 +75,11 @@ end
 require File.expand_path('../config/environment', __dir__)
 require 'rails/test_help'
 
+# NOTE: Rails 8+ automatically raises ActiveModel::MissingAttributeError when
+# code tries to access attributes that weren't included in SELECT queries.
+# This built-in protection catches bugs where fields are added to views but
+# not to controller field selection lists.
+
 # We must specially allow web calls by test drivers, e.g.,
 # GET https://chromedriver.storage.googleapis.com/LATEST_RELEASE_75.0.3770
 # See: https://github.com/titusfortner/webdrivers/issues/109
@@ -409,6 +414,27 @@ module ActiveSupport
       false
     end
     # rubocop:enable Naming/PredicateMethod
+
+    # Assert that the current page has no form validation errors
+    # This is useful in system tests to detect when forms fail validation,
+    # which often manifests as unexpected redirects or page reloads.
+    # The helper checks for common Rails form error patterns.
+    #
+    # Usage in system tests:
+    #   fill_in 'Name', with: 'Test'
+    #   click_button 'Save'
+    #   assert_no_form_errors  # Fails with clear message if validation errors exist
+    def assert_no_form_errors
+      # Check for Rails form error div (field_with_errors class)
+      assert_no_selector '.field_with_errors',
+                         'Form has validation errors (field_with_errors present)'
+
+      # Check for error explanation divs
+      assert_no_selector '#error_explanation',
+                         'Form has validation errors (error_explanation present)'
+      assert_no_selector '.alert-danger',
+                         'Form has error alert'
+    end
   end
   # rubocop: enable Metrics/ClassLength
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_02_163707) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_07_021953) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -219,6 +219,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_02_163707) do
     t.integer "english_status", limit: 2, default: 0, null: false
     t.text "enhancement_responses_justification"
     t.integer "enhancement_responses_status", limit: 2, default: 0, null: false
+    t.string "entry_locale", limit: 7, default: "en", null: false, comment: "Locale of project description and justification text"
     t.text "external_dependencies_justification"
     t.integer "external_dependencies_status", limit: 2, default: 0, null: false
     t.datetime "first_achieved_baseline_1_at", comment: "First time baseline-1 was achieved"

@@ -296,3 +296,8 @@ Performance/ArraySemiInfiniteRangeSlice:
 # idiomatic Ruby. Forcing a line break makes the code harder to read.
 Layout/SingleLineBlockChain:
   Enabled: false
+
+# Chaining .freeze to do...end blocks is common and idiomatic for
+# creating frozen data structures at initialization time.
+Style/MethodCalledOnDoEndBlock:
+  Enabled: false

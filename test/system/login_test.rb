@@ -66,6 +66,8 @@ class LoginTest < ApplicationSystemTestCase
 
     # Visit the passing level edit page directly (with explicit criteria_level)
     visit "/en/projects/#{@project.id}/passing/edit"
+    # Wait for page to be ready by checking for presence of form element
+    assert_selector 'input#project_name'
     assert has_content? 'This is not the production system'
     assert has_content? 'We have updated our requirements for the criterion ' \
                         'static_analysis. Please add a justification for ' \
@@ -77,7 +79,6 @@ class LoginTest < ApplicationSystemTestCase
     click_button('Save (and continue)', match: :first)
     # After routing changes, edit paths now include criteria_level
     assert_equal "/en/projects/#{@project.id}/passing/edit", current_path
-    wait_for_page_load # Wait for page to fully load before checking flash message
     assert has_content? 'Project was successfully updated.'
     # TODO: Get the clicking working again with capybara.
     # Details: If we expand all panels first and dont click this test passes.

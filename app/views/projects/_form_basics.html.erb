@@ -38,7 +38,7 @@
 
             <% unless view_only %>
               <div class="hidable-text-entry">
-                <%= t('projects.form_basics.entry_locale.description') %>
+                <span><label><%= t('projects.form_basics.entry_locale.description') %></label></span>
                 <%= render(partial: "details", locals: {
                            criterion: "entry_locale",
                            details: t('projects.form_basics.entry_locale.details')

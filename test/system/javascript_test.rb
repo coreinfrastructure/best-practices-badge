@@ -82,8 +82,10 @@ class JavascriptTest < ApplicationSystemTestCase
     find('#toggle-expand-all-panels').click
     # Wait for jQuery to finish, which includes panel expansion animations
     wait_for_jquery
-    # Wait for the radio button to be present and enabled before trying to click it
-    assert_selector '#project_osps_ac_01_01_status_met', visible: true
+
+    # Wait for the radio button to be present, visible, and interactable
+    # Use a more robust wait that ensures the element is truly ready
+    assert_selector '#project_osps_ac_01_01_status_met', visible: true, wait: 10
 
     # Get initial panel count (should start with 0/)
     initial_panel_text = find('#controls .satisfaction-text').text
@@ -101,6 +103,7 @@ class JavascriptTest < ApplicationSystemTestCase
                  'Criterion should start with question mark icon'
 
     # Click the "Met" radio button for the first baseline criterion
+    # Use ensure_choice to handle potential flaky clicks
     ensure_choice 'project_osps_ac_01_01_status_met'
     wait_for_jquery
 

@@ -2025,5 +2025,83 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert controller.instance_variable_get(:@chief_failed)
     assert_equal [:floss_license_osi_status], controller.instance_variable_get(:@chief_failed_fields)
   end
+
+  # Integration tests using TestForcedDetective to trigger forced overrides
+  test 'save with forced override and continue redirects to edit with warning' do
+    log_in_as(@user)
+
+    # Set repo_url to trigger TestForcedDetective forced override
+    @project.repo_url = 'https://example.com/test/force-override'
+    @project.description_good_status = '?'
+    @project.save!
+    
+    # Verify the URL was saved
+    @project.reload
+    assert_equal 'https://example.com/test/force-override', @project.repo_url
+
+    # User tries to change description_good
+    patch project_path(@project, locale: :en), params: {
+      criteria_level: 'passing',
+      project: { description_good_status: 'Met' },
+      continue: '1' # Save and continue
+    }
+
+    # Should redirect to edit (not show) with warning about override
+    assert_response :redirect
+    assert_not_nil flash[:warning], "Expected warning flash but got: #{flash.inspect}"
+    assert_match(/corrected.*field/i, flash[:warning])
+    assert_match(/description.*good/i, flash[:warning])
+  end
+
+  test 'save with forced override and exit redirects to edit with warning' do
+    log_in_as(@user)
+
+    # Set repo_url to trigger TestForcedDetective forced override
+    @project.repo_url = 'https://example.com/test/force-override'
+    @project.description_good_status = '?'
+    @project.save!
+
+    # User tries to change description_good, save and exit
+    patch project_path(@project, locale: :en), params: {
+      criteria_level: 'passing',
+      project: { description_good_status: 'Met' }
+      # No continue param = save and exit
+    }
+
+    # Should redirect to edit (NOT show) with warning about override
+    assert_response :redirect
+    assert_match(/corrected.*field/i, flash[:warning])
+    assert_match(/description.*good/i, flash[:warning])
+    # Should redirect to edit, not to show (verify not redirecting to show page)
+    refute_match(/projects\/\d+\z/, response.location)
+  end
+
+  test 'JSON request with forced override includes automation metadata' do
+    log_in_as(@user)
+
+    # Reload to get fresh state (other tests may have modified @project)
+    @project.reload
+    
+    # Set repo_url to trigger TestForcedDetective forced override
+    @project.repo_url = 'https://example.com/test/force-override'
+    @project.description_good_status = '?'
+    @project.passing_saved = false # Ensure automation runs
+    @project.save!
+
+    # User tries to change description_good via JSON
+    patch project_path(@project, locale: :en, format: :json), params: {
+      criteria_level: 'passing',
+      project: { description_good_status: 'Met' }
+    }
+
+    assert_response :success
+    json_response = JSON.parse(response.body)
+
+    # Should include automation metadata with overridden field
+    assert json_response.key?('automation')
+    assert json_response['automation'].key?('overridden')
+    overridden = json_response['automation']['overridden']
+    assert overridden.any? { |f| f['field'] == 'description_good_status' }
+  end
 end
 # rubocop:enable Metrics/ClassLength

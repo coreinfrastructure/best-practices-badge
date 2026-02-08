@@ -21,14 +21,33 @@ class Chief
   CONFIDENCE_OVERRIDE = 4
 
   # TODO: Identify classes automatically and do topological sort.
-  ALL_DETECTIVES =
-    [
-      NameFromUrlDetective, ProjectSitesHttpsDetective,
-      GithubBasicDetective, HowAccessRepoFilesDetective,
-      RepoFilesExamineDetective, FlossLicenseDetective,
-      HardenedSitesDetective, BlankDetective, BuildDetective,
-      SubdirFileContentsDetective, BaselineDetective
-    ].freeze
+  # Automatically discover all Detective subclasses from app/lib/*_detective.rb
+  # This prevents the footgun of forgetting to register new detectives.
+  def self.discover_detectives
+    # Load all detective files from app/lib (not test/)
+    detective_files = Dir[Rails.root.join('app/lib/*_detective.rb')]
+    detective_files.each { |file| require_dependency file }
+    
+    # Get all Detective subclasses
+    all_detectives = Detective.descendants
+    
+    # Filter to only classes defined in app/lib files (not test fixtures)
+    # Check if the class is defined in a file under app/lib
+    result = all_detectives.select do |detective_class|
+      # Get the source location of the class
+      source_file = Object.const_source_location(detective_class.name)&.first
+      next false unless source_file
+      
+      # Only include if defined in app/lib
+      source_file.include?('/app/lib/') &&
+        # Exclude Test* detectives unless in test environment
+        (Rails.env.test? || !detective_class.name.start_with?('Test'))
+    end
+    
+    result
+  end
+
+  ALL_DETECTIVES = discover_detectives.freeze
 
   # List fields allowed to be written into Project (an ActiveRecord).
   ALLOWED_FIELDS = Project::PROJECT_PERMITTED_FIELDS.to_set.freeze

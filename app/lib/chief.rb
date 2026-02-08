@@ -51,12 +51,17 @@ class Chief
 
   # Given two changesets, produce merged "best" version
   # When confidence is the same, c1 wins.
+  # Adds a :forced flag based on confidence level (internal detail not exposed)
   def merge_changeset(c1, c2)
     result = c1.dup
     c2.each do |field, data|
       if !result.key?(field) ||
          (data[:confidence] > result[field][:confidence])
-        result[field] = data
+        # Add forced flag based on confidence (hide confidence from callers)
+        enhanced_data = data.dup
+        enhanced_data[:forced] =
+          data[:confidence].present? && data[:confidence] >= CONFIDENCE_OVERRIDE
+        result[field] = enhanced_data
       end
     end
     result

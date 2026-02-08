@@ -563,10 +563,24 @@ class ProjectsController < ApplicationController
         final_project_params = final_project_params.except('user_id')
       end
       final_project_params = final_project_params.except('user_id_repeat')
+      
+      # Track which fields user is trying to change
+      changed_fields = final_project_params.keys.map(&:to_sym)
+      
+      # Apply user's changes first
       final_project_params.each do |key, user_value| # mass assign
         @project[key] = user_value
       end
-      Chief.new(@project, client_factory).autofill
+      
+      # Capture what the user just set (BEFORE Chief runs)
+      user_set_values = {}
+      changed_fields.each do |field|
+        user_set_values[field] = @project[field]
+      end
+      
+      # Run Chief analysis with level and changed_fields for targeted validation
+      # Pass user_set_values so we can detect overrides
+      run_save_automation(changed_fields, user_set_values)
 
       @project.repo_url_updated_at = Time.now.utc if @project.repo_url_changed?
 
@@ -1332,20 +1346,36 @@ class ProjectsController < ApplicationController
     section = criteria_level || Sections::DEFAULT_SECTION
     # @project.purge
     format.html do
-      if params[:continue]
-        flash[:info] = t('projects.edit.successfully_updated')
-        # Build edit URL with section in path (new routing)
-        edit_url = edit_project_section_path(@project, section,
-                                             locale: params[:locale])
-        redirect_to edit_url + url_anchor
+      # Check if Chief failed during save
+      if @chief_failed
+        flash[:warning] = t('projects.edit.automation.analysis_failed',
+                           count: @chief_failed_fields&.size || 0,
+                           fields: @chief_failed_fields&.join(', ') || '')
+        redirect_to edit_project_section_path(@project, section,
+                                              locale: params[:locale])
+      # "Save and Continue" - always go back to edit
+      elsif params[:continue]
+        if @overridden_fields&.any?
+          handle_overridden_fields_redirect(section)
+        else
+          flash[:info] = t('projects.edit.successfully_updated')
+          redirect_to edit_project_section_path(@project, section,
+                                               locale: params[:locale]) + url_anchor
+        end
+      # "Save and Exit" - check for forced overrides
+      elsif @overridden_fields&.any?
+        # Forced overrides - redirect to edit with warning (not show page)
+        handle_overridden_fields_redirect(section)
       else
-        # Redirect to show page for the section (new path-based routing)
+        # Normal save - exit to show page
         redirect_to project_section_path(@project, section,
                                          locale: params[:locale]),
                     success: t('projects.edit.successfully_updated')
       end
     end
-    format.json { render :show, status: :ok, location: @project }
+    format.json do
+      handle_json_response_with_automation
+    end
     # Check if the level being worked on has changed
     new_badge_level = current_working_level(criteria_level, @project)
     return if new_badge_level == old_badge_level
@@ -1486,6 +1516,171 @@ class ProjectsController < ApplicationController
       end
     end
     automated
+  end
+
+  # Run Chief automation during save with override detection
+  # @param changed_fields [Array<Symbol>] Fields that user modified
+  # @param user_set_values [Hash] Values that user just set (before Chief)
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def run_save_automation(changed_fields, user_set_values)
+    begin
+      chief = Chief.new(@project, client_factory)
+      proposed_changes = chief.propose_changes(
+        level: @criteria_level,
+        changed_fields: changed_fields
+      )
+
+      # Track which fields will be overridden BEFORE applying changes
+      @overridden_fields = []
+      @automated_fields = []
+
+      proposed_changes.each do |field, data|
+        # Skip non-forced suggestions
+        next unless data[:forced]
+
+        user_value = user_set_values[field]
+        chief_value = data[:value]
+
+        # Only track if Chief is changing what the user set
+        next if user_value == chief_value
+
+        if user_value.present? && user_value != '?'
+          # Chief is overriding a real value user set - ORANGE
+          @overridden_fields << {
+            field: field,
+            old_value: user_value,
+            new_value: chief_value,
+            explanation: data[:explanation]
+          }
+        elsif user_value == '?' || user_value.blank?
+          # Chief is filling in an unknown - YELLOW
+          @automated_fields << {
+            field: field,
+            new_value: chief_value,
+            explanation: data[:explanation]
+          }
+        end
+      end
+
+      # Now apply Chief's changes
+      chief.apply_changes(@project, proposed_changes)
+
+      # Mark level as saved (automation ran)
+      set_level_saved_flag(true)
+
+    rescue StandardError => e
+      handle_chief_save_failure(e, changed_fields, user_set_values)
+    end
+  end
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+
+  # Handle Chief failures during save
+  # @param error [StandardError] The exception that occurred
+  # @param changed_fields [Array<Symbol>] Fields user tried to change
+  # @param user_set_values [Hash] Values user set before Chief ran
+  def handle_chief_save_failure(error, changed_fields, user_set_values)
+    Rails.logger.error("Chief analysis failed during save: #{error.class} #{error.message}")
+    Rails.logger.error(error.backtrace.join("\n"))
+
+    # Find which fields might have been affected by Chief
+    potentially_overridable = find_overridable_fields_for_level(changed_fields)
+
+    # Restore user's input for overridable fields
+    potentially_overridable.each do |field|
+      if user_set_values.key?(field)
+        @project[field] = user_set_values[field]
+      end
+    end
+
+    # Set error info for flash message
+    @chief_failed = true
+    @chief_failed_fields = potentially_overridable
+  end
+
+  # Find which changed fields are potentially overridable by Chief
+  # @param changed_fields [Array<Symbol>] Fields that were changed
+  # @return [Array<Symbol>] Fields that are overridable
+  def find_overridable_fields_for_level(changed_fields)
+    # Get all overridable fields from all detectives
+    all_overridable = Set.new
+    Chief::ALL_DETECTIVES.each do |detective_class|
+      all_overridable.merge(detective_class::OVERRIDABLE_OUTPUTS)
+    end
+
+    # Return intersection
+    changed_fields.select { |f| all_overridable.include?(f) }
+  end
+
+  # Handle redirect to edit form with overridden fields highlighted
+  # @param section [String] The section/level being edited
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def handle_overridden_fields_redirect(section)
+    # Build detailed flash message
+    override_details = @overridden_fields.map do |r|
+      criterion = Criteria[criteria_level_to_internal(@criteria_level)][r[:field]]
+      criterion_name = criterion&.title || r[:field].to_s.humanize
+      t('projects.edit.automation.override_detail',
+        criterion: criterion_name,
+        old: r[:old_value],
+        new: r[:new_value],
+        explanation: r[:explanation])
+    end.join("\n")
+
+    flash[:warning] = t('projects.edit.automation.chief_overrode',
+                       count: @overridden_fields.size) + "\n" + override_details
+
+    # Log overrides for monitoring
+    Rails.logger.info(
+      "Chief override: project=#{@project.id} user=#{current_user&.id} " \
+      "fields=#{@overridden_fields.map { |f| f[:field] }.join(',')}"
+    )
+
+    # Redirect with highlight parameters
+    overridden_field_names = @overridden_fields.map { |r| r[:field].to_s }
+    automated_field_names = @automated_fields.map { |r| r[:field].to_s }
+    first_overridden = overridden_field_names.first
+
+    redirect_to edit_project_section_path(
+      @project,
+      section,
+      locale: params[:locale],
+      anchor: first_overridden,
+      overridden: overridden_field_names.join(','),
+      automated: automated_field_names.join(',')
+    )
+  end
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+
+  # Handle JSON response with automation details
+  def handle_json_response_with_automation
+    response_data = {
+      id: @project.id,
+      status: 'updated',
+      message: 'Project updated successfully'
+    }
+
+    if @overridden_fields&.any? || @automated_fields&.any?
+      response_data[:automation] = {
+        overridden: @overridden_fields&.map { |r|
+          {
+            field: r[:field],
+            old_value: r[:old_value],
+            new_value: r[:new_value],
+            explanation: r[:explanation],
+            confidence: r[:confidence]
+          }
+        } || [],
+        automated: @automated_fields&.map { |r|
+          {
+            field: r[:field],
+            value: r[:new_value],
+            explanation: r[:explanation]
+          }
+        } || []
+      }
+    end
+
+    render json: response_data, status: :ok
   end
 end
 # rubocop:enable Metrics/ClassLength

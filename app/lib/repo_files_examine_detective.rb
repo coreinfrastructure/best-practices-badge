@@ -12,6 +12,7 @@ class RepoFilesExamineDetective < Detective
   INPUTS = [:repo_files].freeze
   OUTPUTS = %i[
     contribution_status license_location_status release_notes_status
+    osps_do_02_01_status osps_le_02_02_status
   ].freeze
 
   # Minimum file sizes (in bytes) before they are considered useful.
@@ -86,12 +87,34 @@ class RepoFilesExamineDetective < Detective
 
     # TODO: Look in subdirectories.
 
+    check_contribution_files
+    check_license_files
+    check_release_notes
+
+    @results
+  end
+  # rubocop:enable Metrics/MethodLength
+
+  # Check for contribution files and set both metal and baseline criteria
+  def check_contribution_files
     determine_results(
       :contribution_status,
       /\A(contributing|contribute)(\.md|\.txt)?\Z/i,
       CONTRIBUTION_MIN_SIZE, 'contribution'
     )
 
+    # Also set baseline contribution criterion if we found a contribution file
+    return unless @results[:contribution_status]&.dig(:value) == CriterionStatus::MET
+
+    @results[:osps_do_02_01_status] = {
+      value: CriterionStatus::MET,
+      confidence: @results[:contribution_status][:confidence],
+      explanation: 'Contribution instructions found in repository.'
+    }
+  end
+
+  # Check for license files and set both metal and baseline criteria
+  def check_license_files
     determine_results(
       :license_location_status,
       /\A([A-Za-z0-9]+-)?(license|copying)(\.md|\.txt)?\Z/i,
@@ -105,13 +128,26 @@ class RepoFilesExamineDetective < Detective
       'licenses directory'
     )
 
+    set_baseline_license_status
+  end
+
+  # Set baseline license file criterion if license location is met
+  def set_baseline_license_status
+    return unless @results[:license_location_status]&.dig(:value) == CriterionStatus::MET
+
+    @results[:osps_le_02_02_status] = {
+      value: CriterionStatus::MET,
+      confidence: @results[:license_location_status][:confidence],
+      explanation: 'License file found in repository.'
+    }
+  end
+
+  # Check for release notes files
+  def check_release_notes
     determine_results(
       :release_notes_status,
       /\A(changelog|news)(\.md|\.markdown|\.txt|\.html)?\Z/i,
       NONTRIVIAL_MIN_SIZE, 'release notes'
     )
-
-    @results
   end
-  # rubocop:enable Metrics/MethodLength
 end

@@ -8,7 +8,9 @@
 
 class ProjectSitesHttpsDetective < Detective
   INPUTS = %i[repo_url homepage_url].freeze
-  OUTPUTS = [:sites_https_status].freeze
+  OUTPUTS = %i[
+    sites_https_status osps_br_03_01_status osps_br_03_02_status
+  ].freeze
 
   # rubocop:disable Metrics/MethodLength
   # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
@@ -33,6 +35,17 @@ class ProjectSitesHttpsDetective < Detective
         {
           value: CriterionStatus::MET, confidence: 3,
           explanation: 'Given only https: URLs.'
+        }
+      # Also mark baseline criteria as met
+      @results[:osps_br_03_01_status] =
+        {
+          value: CriterionStatus::MET, confidence: 4,
+          explanation: 'Project URLs use HTTPS exclusively.'
+        }
+      @results[:osps_br_03_02_status] =
+        {
+          value: CriterionStatus::MET, confidence: 4,
+          explanation: 'Distribution channels use HTTPS exclusively.'
         }
     end
     @results

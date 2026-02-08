@@ -11,7 +11,10 @@
 class FlossLicenseDetective < Detective
   # Individual detectives must identify their inputs, outputs
   INPUTS = [:license].freeze
-  OUTPUTS = %i[floss_license_osi_status floss_license_status].freeze
+  OUTPUTS = %i[
+    floss_license_osi_status floss_license_status
+    osps_le_03_01_status osps_le_03_02_status
+  ].freeze
 
   # From: http://opensource.org/licenses/alphabetical
   # Note: We accept the older GNU license forms, e.g., "GPL-2.0", and
@@ -146,6 +149,17 @@ class FlossLicenseDetective < Detective
             value: CriterionStatus::MET, confidence: 5,
             explanation: "The #{license} license is approved by the " \
                          'Open Source Initiative (OSI).'
+          },
+        osps_le_03_01_status:
+          {
+            value: CriterionStatus::MET, confidence: 5,
+            explanation: "The #{license} license is OSI-approved."
+          },
+        osps_le_03_02_status:
+          {
+            value: CriterionStatus::MET, confidence: 5,
+            explanation: "The #{license} license is OSI-approved for " \
+                         'public use.'
           }
       }
     elsif license.match?(/\A[^(]/)

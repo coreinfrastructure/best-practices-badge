@@ -19,7 +19,7 @@ Like all plans, we will need to make adjustments as we go. The purpose of creati
 6. [Phase 4: Baseline Badge Images](#phase-4-baseline-badge-images)
 7. [Phase 5: Baseline-2 and Baseline-3](#phase-5-baseline-2-and-baseline-3)
 9. [Phase 6: Translation Support](#phase-7-translation-support)
-8. [Phase 7: Automation](#phase-6-automation)
+8. [Phase 7: Trivial Automation](#phase-6-automation)
 10. [Phase 8: Project Search and Filtering](#phase-8-project-search-and-filtering)
 
 ### Supporting Information
@@ -4681,9 +4681,9 @@ such cases, so this seems acceptable.
 
 ---
 
-## Phase 7: Automation
+## Phase 7: Trivial Automation
 
-**Goal**: Add automated checking for baseline criteria, leveraging existing automation where possible.
+**Goal**: Add trivial automated checking for baseline criteria, leveraging existing automation where possible.
 
 ### 6.1: Analyze Existing Automation
 
@@ -4693,7 +4693,7 @@ such cases, so this seems acceptable.
 
 - Which metal criteria have automation
 - What external services are used (GitHub API, etc.)
-- How can we map those to baseline criteria
+- How can we map those to baseline criteria (e.g., for OSS licenses)
 
 **Example mappings**:
 
@@ -4774,9 +4774,9 @@ Similar to how the metal series provides suggestions, add hints for baseline cri
 
 **File**: Extend views to show suggestions based on available data.
 
-### 6.5: Add Dashboard for Automation Status
+### 6.5: Summarize Automation Status
 
-**Optional**: Create admin dashboard showing:
+**Optional**: Create summary showing:
 
 - Which baseline criteria have automation
 - Success rate of automated checks

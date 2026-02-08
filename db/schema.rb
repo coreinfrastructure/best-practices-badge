@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_07_021953) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_08_053037) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -110,6 +110,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_07_021953) do
     t.integer "badge_percentage_baseline_1"
     t.integer "badge_percentage_baseline_2"
     t.integer "badge_percentage_baseline_3"
+    t.boolean "baseline_1_saved", default: false, null: false
+    t.boolean "baseline_2_saved", default: false, null: false
+    t.boolean "baseline_3_saved", default: false, null: false
     t.integer "baseline_tiered_percentage", comment: "Tiered percentage for baseline series (0-300)"
     t.text "build_common_tools_justification"
     t.integer "build_common_tools_status", limit: 2, default: 0, null: false
@@ -233,6 +236,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_07_021953) do
     t.integer "floss_license_osi_status", limit: 2, default: 0, null: false
     t.integer "floss_license_status", limit: 2, default: 0, null: false
     t.text "general_comments"
+    t.boolean "gold_saved", default: false, null: false
     t.text "governance_justification"
     t.integer "governance_status", limit: 2, default: 0, null: false
     t.text "hardened_site_justification"
@@ -407,6 +411,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_07_021953) do
     t.integer "osps_vm_06_01_status", limit: 2, default: 0, null: false
     t.text "osps_vm_06_02_justification"
     t.integer "osps_vm_06_02_status", limit: 2, default: 0, null: false
+    t.boolean "passing_saved", default: false, null: false
     t.text "regression_tests_added50_justification"
     t.integer "regression_tests_added50_status", limit: 2, default: 0, null: false
     t.text "release_notes_justification"
@@ -443,6 +448,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_07_021953) do
     t.integer "security_review_status", limit: 2, default: 0, null: false
     t.text "signed_releases_justification"
     t.integer "signed_releases_status", limit: 2, default: 0, null: false
+    t.boolean "silver_saved", default: false, null: false
     t.text "sites_https_justification"
     t.integer "sites_https_status", limit: 2, default: 0, null: false
     t.text "sites_password_security_justification"

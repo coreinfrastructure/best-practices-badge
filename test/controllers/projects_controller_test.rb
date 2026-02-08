@@ -2026,6 +2026,29 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal [:floss_license_osi_status], controller.instance_variable_get(:@chief_failed_fields)
   end
 
+  test 'chief failure during save shows analysis failed warning' do
+    log_in_as(@user)
+
+    # Set repo_url to trigger TestForcedDetective exception
+    @project.repo_url = 'https://example.com/test/chief-failure'
+    @project.description_good_status = '?'
+    @project.passing_saved = false # Ensure automation runs
+    @project.save!
+
+    # User tries to change description_good
+    patch project_path(@project, locale: :en), params: {
+      criteria_level: 'passing',
+      project: { description_good_status: 'Met' },
+      continue: '1' # Save and continue
+    }
+
+    # Should redirect to edit with analysis failed warning
+    assert_response :redirect
+    assert_redirected_to edit_project_section_path(@project, 'passing', locale: :en)
+    assert_not_nil flash[:warning], "Expected warning flash but got: #{flash.inspect}"
+    assert_match(/analysis failed/i, flash[:warning])
+  end
+
   # Integration tests using TestForcedDetective to trigger forced overrides
   test 'save with forced override and continue redirects to edit with warning' do
     log_in_as(@user)

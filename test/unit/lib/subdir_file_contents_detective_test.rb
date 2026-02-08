@@ -60,4 +60,34 @@ class SubdirFileContentsDetectiveTest < ActiveSupport::TestCase
       assert_equal CriterionStatus::UNMET, dbs[:value]
     end
   end
+
+  test 'Subdir File Contents Detective Test for no matching folder' do
+    # Mock repo_files that has no matching documentation folder
+    mock_repo_files = Object.new
+    mock_repo_files.define_singleton_method(:blank?) { false }
+    mock_repo_files.define_singleton_method(:get_info) do |path|
+      if path == '/'
+        # Return top-level with no doc/docs/documentation folder
+        [
+          { 'name' => 'README.md', 'type' => 'file' },
+          { 'name' => 'src', 'type' => 'dir' },
+          { 'name' => 'test', 'type' => 'dir' }
+        ]
+      else
+        []
+      end
+    end
+
+    results = SubdirFileContentsDetective.new.analyze(
+      @evidence,
+      repo_files: mock_repo_files
+    )
+    
+    assert results.key?(:documentation_basics_status)
+    dbs = results[:documentation_basics_status]
+    assert dbs.key?(:explanation)
+    assert_match(/No appropriate folder found/, dbs[:explanation])
+    assert dbs.key?(:value)
+    assert_equal CriterionStatus::UNMET, dbs[:value]
+  end
 end

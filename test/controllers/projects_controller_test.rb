@@ -2057,7 +2057,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     @project.repo_url = 'https://example.com/test/force-override'
     @project.description_good_status = '?'
     @project.save!
-    
+
     # Verify the URL was saved
     @project.reload
     assert_equal 'https://example.com/test/force-override', @project.repo_url
@@ -2096,7 +2096,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_match(/corrected.*field/i, flash[:warning])
     assert_match(/description.*good/i, flash[:warning])
     # Should redirect to edit, not to show (verify not redirecting to show page)
-    refute_match(/projects\/\d+\z/, response.location)
+    assert_no_match(%r{projects/\d+\z}, response.location)
   end
 
   test 'JSON request with forced override includes automation metadata' do
@@ -2104,7 +2104,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     # Reload to get fresh state (other tests may have modified @project)
     @project.reload
-    
+
     # Set repo_url to trigger TestForcedDetective forced override
     @project.repo_url = 'https://example.com/test/force-override'
     @project.description_good_status = '?'
@@ -2118,13 +2118,13 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     }
 
     assert_response :success
-    json_response = JSON.parse(response.body)
+    json_response = response.parsed_body
 
     # Should include automation metadata with overridden field
     assert json_response.key?('automation')
     assert json_response['automation'].key?('overridden')
     overridden = json_response['automation']['overridden']
-    assert overridden.any? { |f| f['field'] == 'description_good_status' }
+    assert(overridden.any? { |f| f['field'] == 'description_good_status' })
   end
 end
 # rubocop:enable Metrics/ClassLength

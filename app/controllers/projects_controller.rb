@@ -153,13 +153,17 @@ class ProjectsController < ApplicationController
   # Base fields always needed regardless of which section is being viewed
   # lock_version isn't needed for mere viewing, but it's a *big* problem
   # if we forget to include it where needed, so let's include it.
-  PROJECT_BASE_FIELDS = %i[
-    id user_id name description homepage_url repo_url license entry_locale
-    created_at updated_at tiered_percentage
-    achieved_passing_at achieved_silver_at achieved_gold_at
-    lost_passing_at lost_silver_at lost_gold_at
-    lock_version disabled_reminders last_reminder_at
-  ].freeze
+  # Base fields always needed for all project views/edits
+  # Dynamically include saved flags for all levels
+  PROJECT_BASE_FIELDS = (
+    %i[
+      id user_id name description homepage_url repo_url license entry_locale
+      created_at updated_at tiered_percentage
+      achieved_passing_at achieved_silver_at achieved_gold_at
+      lost_passing_at lost_silver_at lost_gold_at
+      lock_version disabled_reminders last_reminder_at
+    ] + Sections::LEVEL_SAVED_FLAGS.values
+  ).freeze
 
   # Levels that need project metadata fields (implementation_languages, etc.)
   LEVELS_WITH_METADATA = %w[0 baseline-1].freeze
@@ -476,6 +480,10 @@ class ProjectsController < ApplicationController
     # Only check static analysis notification for criteria sections (not permissions)
     # Permissions section doesn't load criteria fields
     return if @criteria_level == 'permissions'
+
+    # Run first-edit automation if this level hasn't been edited yet
+    run_first_edit_automation_if_needed
+
     return unless @project.notify_for_static_analysis?('0')
 
     message = t('.static_analysis_updated_html')
@@ -508,7 +516,7 @@ class ProjectsController < ApplicationController
     # do a save yet.
 
     @project.homepage_url ||= set_homepage_url
-    Chief.new(@project, client_factory).autofill
+    # Clean up homepage URL
     if @project.homepage_url
       @project.homepage_url = clean_url(@project.homepage_url)
     end
@@ -1408,6 +1416,76 @@ class ProjectsController < ApplicationController
     # Remove all trailing slashes. Even "/" becomes the empty string
     url = url.chop while url.end_with?('/')
     url
+  end
+
+  # Run first-edit automation if this badge level hasn't been saved yet.
+  # Tracks which fields were filled (for highlighting in view).
+  def run_first_edit_automation_if_needed
+    return if level_already_saved?
+
+    # Capture original values before automation
+    original_values = capture_original_values
+
+    # Run Chief analysis for this specific level
+    chief = Chief.new(@project, client_factory)
+    chief.autofill(level: @criteria_level)
+
+    # Track which fields were changed (for highlighting)
+    @automated_fields = find_automated_fields(original_values)
+    @overridden_fields = [] # No overrides on first edit (all were '?')
+
+    # Mark this level as saved so we don't re-run automation
+    set_level_saved_flag(true)
+  end
+
+  # Check if current badge level has already been saved/edited
+  # @return [Boolean]
+  def level_already_saved?
+    flag_name = level_saved_flag_name
+    return false unless flag_name
+
+    @project.public_send(flag_name)
+  end
+
+  # Get the flag name for the current badge level
+  # @return [Symbol, nil]
+  def level_saved_flag_name
+    Sections::LEVEL_SAVED_FLAGS[@criteria_level]
+  end
+
+  # Set the saved flag for the current badge level
+  # @param value [Boolean]
+  def set_level_saved_flag(value)
+    flag_name = level_saved_flag_name
+    @project.update_column(flag_name, value) if flag_name
+  end
+
+  # Capture original field values for this level before automation
+  # @return [Hash] Field name => current value
+  def capture_original_values
+    original = {}
+    # Convert level to internal format for Criteria.active
+    internal_level = criteria_level_to_internal(@criteria_level)
+    Criteria.active(internal_level).each do |criterion|
+      field_name = :"#{criterion.name}_status"
+      original[field_name] = @project.public_send(field_name)
+    end
+    original
+  end
+
+  # Find which fields were automatically filled (changed from '?' or nil)
+  # @param original_values [Hash] Original field values
+  # @return [Array<Symbol>] List of field names that were filled
+  def find_automated_fields(original_values)
+    automated = []
+    original_values.each do |field_name, old_value|
+      new_value = @project.public_send(field_name)
+      # Field was automated if it was '?' or blank and now has a value
+      if (old_value.blank? || old_value == '?') && new_value.present? && new_value != '?'
+        automated << field_name
+      end
+    end
+    automated
   end
 end
 # rubocop:enable Metrics/ClassLength

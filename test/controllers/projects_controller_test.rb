@@ -2003,5 +2003,27 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     assert_includes automated, :license
   end
+
+  test 'run_save_automation catches chief exceptions' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+
+    # Create a mock chief that raises
+    mock_chief = Object.new
+    mock_chief.define_singleton_method(:propose_changes) do |**_kwargs|
+      raise StandardError, 'Test exception'
+    end
+
+    changed_fields = [:floss_license_osi_status]
+    user_set_values = { floss_license_osi_status: 'Met' }
+
+    # This should catch the exception and set @chief_failed
+    controller.send(:run_save_automation, changed_fields, user_set_values, mock_chief)
+
+    assert controller.instance_variable_get(:@chief_failed)
+    assert_equal [:floss_license_osi_status], controller.instance_variable_get(:@chief_failed_fields)
+  end
 end
 # rubocop:enable Metrics/ClassLength

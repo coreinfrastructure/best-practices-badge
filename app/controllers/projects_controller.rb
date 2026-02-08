@@ -1346,32 +1346,7 @@ class ProjectsController < ApplicationController
     section = criteria_level || Sections::DEFAULT_SECTION
     # @project.purge
     format.html do
-      # Check if Chief failed during save
-      if @chief_failed
-        flash[:warning] = t('projects.edit.automation.analysis_failed',
-                            count: @chief_failed_fields&.size || 0,
-                            fields: @chief_failed_fields&.join(', ') || '')
-        redirect_to edit_project_section_path(@project, section,
-                                              locale: params[:locale])
-      # "Save and Continue" - always go back to edit
-      elsif params[:continue]
-        if @overridden_fields&.any?
-          handle_overridden_fields_redirect(section)
-        else
-          flash[:info] = t('projects.edit.successfully_updated')
-          redirect_to edit_project_section_path(@project, section,
-                                                locale: params[:locale]) + url_anchor
-        end
-      # "Save and Exit" - check for forced overrides
-      elsif @overridden_fields&.any?
-        # Forced overrides - redirect to edit with warning (not show page)
-        handle_overridden_fields_redirect(section)
-      else
-        # Normal save - exit to show page
-        redirect_to project_section_path(@project, section,
-                                         locale: params[:locale]),
-                    success: t('projects.edit.successfully_updated')
-      end
+      perform_html_redirect_after_save(section)
     end
     format.json do
       handle_json_response_with_automation
@@ -1554,9 +1529,10 @@ class ProjectsController < ApplicationController
   # Run Chief automation during save with override detection
   # @param changed_fields [Array<Symbol>] Fields that user modified
   # @param user_set_values [Hash] Values that user just set (before Chief)
+  # @param chief_instance [Chief, nil] Optional Chief instance for testing
   # rubocop:disable Metrics/MethodLength
-  def run_save_automation(changed_fields, user_set_values)
-    chief = Chief.new(@project, client_factory, entry_locale: @project.entry_locale)
+  def run_save_automation(changed_fields, user_set_values, chief_instance = nil)
+    chief = chief_instance || Chief.new(@project, client_factory, entry_locale: @project.entry_locale)
     proposed_changes = chief.propose_changes(
       level: @criteria_level,
       changed_fields: changed_fields
@@ -1667,6 +1643,39 @@ class ProjectsController < ApplicationController
     )
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+
+  # Perform HTML redirect after save based on automation state
+  # @param section [String] The section/level being edited
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def perform_html_redirect_after_save(section)
+    # Check if Chief failed during save
+    if @chief_failed
+      flash[:warning] = t('projects.edit.automation.analysis_failed',
+                          count: @chief_failed_fields&.size || 0,
+                          fields: @chief_failed_fields&.join(', ') || '')
+      redirect_to edit_project_section_path(@project, section, locale: params[:locale])
+    # "Save and Continue" - always go back to edit
+    elsif params[:continue]
+      if @overridden_fields&.any?
+        handle_overridden_fields_redirect(section)
+      else
+        flash[:info] = t('projects.edit.successfully_updated')
+        redirect_to edit_project_section_path(@project, section,
+                                              locale: params[:locale]) + url_anchor
+      end
+    # "Save and Exit" - check for forced overrides
+    elsif @overridden_fields&.any?
+      # Forced overrides - redirect to edit with warning (not show page)
+      handle_overridden_fields_redirect(section)
+    else
+      # Normal save - exit to show page
+      redirect_to project_section_path(@project, section, locale: params[:locale]),
+                  success: t('projects.edit.successfully_updated')
+    end
+  end
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   # Build automation metadata for JSON response
   # @return [Hash] Automation details (overridden and automated fields)

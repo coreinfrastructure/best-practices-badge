@@ -27,7 +27,7 @@ class Chief
       GithubBasicDetective, HowAccessRepoFilesDetective,
       RepoFilesExamineDetective, FlossLicenseDetective,
       HardenedSitesDetective, BlankDetective, BuildDetective,
-      SubdirFileContentsDetective
+      SubdirFileContentsDetective, BaselineDetective
     ].freeze
 
   # List fields allowed to be written into Project (an ActiveRecord).

@@ -6,6 +6,7 @@
 
 require 'test_helper'
 
+# rubocop:disable Metrics/ClassLength
 class ChiefTest < ActiveSupport::TestCase
   setup do
     @full_name = 'linuxfoundation/cii-best-practices-badge'
@@ -155,10 +156,10 @@ class ChiefTest < ActiveSupport::TestCase
     # Request only license-related outputs
     needed = Set.new(%i[floss_license_osi_status floss_license_status])
     result = chief.filter_needed_detectives(needed)
-    
+
     # Should include FlossLicenseDetective (produces these outputs)
     assert_includes result, FlossLicenseDetective
-    
+
     # Should be smaller than full list
     assert result.size < Chief::ALL_DETECTIVES.size
   end
@@ -168,10 +169,10 @@ class ChiefTest < ActiveSupport::TestCase
     # Request repo_files (output of HowAccessRepoFilesDetective)
     needed = Set.new([:contribution_status])
     result = chief.filter_needed_detectives(needed)
-    
+
     # Should include RepoFilesExamineDetective (produces contribution_status)
     assert_includes result, RepoFilesExamineDetective
-    
+
     # Should also include HowAccessRepoFilesDetective (provides :repo_files input)
     assert_includes result, HowAccessRepoFilesDetective
   end
@@ -189,18 +190,18 @@ class ChiefTest < ActiveSupport::TestCase
     # RepoFilesExamineDetective needs :repo_files as input
     detectives = [RepoFilesExamineDetective, HowAccessRepoFilesDetective]
     result = chief.topological_sort_detectives(detectives)
-    
+
     # HowAccessRepoFilesDetective should come before RepoFilesExamineDetective
     how_index = result.index(HowAccessRepoFilesDetective)
     repo_index = result.index(RepoFilesExamineDetective)
-    assert how_index < repo_index, 
-           "HowAccessRepoFilesDetective should come before RepoFilesExamineDetective"
+    assert how_index < repo_index,
+           'HowAccessRepoFilesDetective should come before RepoFilesExamineDetective'
   end
 
   test 'needed_outputs_for_level returns all outputs when level is nil' do
     chief = Chief.new(@sample_project, proc { Octokit::Client.new })
     result = chief.needed_outputs_for_level(nil)
-    
+
     # Should include outputs from all detectives
     assert_includes result, :floss_license_osi_status # metal
     assert_includes result, :osps_le_03_01_status     # baseline
@@ -210,11 +211,11 @@ class ChiefTest < ActiveSupport::TestCase
   test 'needed_outputs_for_level returns metal criteria for passing level' do
     chief = Chief.new(@sample_project, proc { Octokit::Client.new })
     result = chief.needed_outputs_for_level('passing')
-    
+
     # Should include metal criteria (no osps_ prefix)
     assert_includes result, :floss_license_osi_status
     assert_includes result, :contribution_status
-    
+
     # Should not include baseline-only criteria (osps_ prefix)
     # (though some osps_ are in both metal and baseline detectives)
   end
@@ -222,7 +223,7 @@ class ChiefTest < ActiveSupport::TestCase
   test 'needed_outputs_for_level returns baseline criteria for baseline-1 level' do
     chief = Chief.new(@sample_project, proc { Octokit::Client.new })
     result = chief.needed_outputs_for_level('baseline-1')
-    
+
     # Should include baseline criteria (osps_ prefix)
     assert_includes result, :osps_le_03_01_status
     assert_includes result, :osps_br_03_01_status
@@ -231,7 +232,7 @@ class ChiefTest < ActiveSupport::TestCase
   test 'needed_outputs_for_level includes changed_fields' do
     chief = Chief.new(@sample_project, proc { Octokit::Client.new })
     result = chief.needed_outputs_for_level('passing', [:custom_field])
-    
+
     # Should include the explicitly changed field
     assert_includes result, :custom_field
   end
@@ -246,21 +247,19 @@ class ChiefTest < ActiveSupport::TestCase
 
   test 'propose_changes with level runs fewer detectives than without' do
     chief = Chief.new(@sample_project, proc { Octokit::Client.new })
-    
+
     # Mock to count detective invocations
-    detective_count_all = 0
-    detective_count_level = 0
-    
+
     # Count how many detectives would run for level=nil
     needed_all = chief.needed_outputs_for_level(nil)
     detectives_all = chief.filter_needed_detectives(needed_all)
     detective_count_all = detectives_all.size
-    
+
     # Count how many detectives would run for level='passing'
     needed_passing = chief.needed_outputs_for_level('passing')
     detectives_passing = chief.filter_needed_detectives(needed_passing)
     detective_count_level = detectives_passing.size
-    
+
     # Should run fewer detectives for a specific level
     assert detective_count_level <= detective_count_all,
            "Level-specific should run <= detectives than all (#{detective_count_level} vs #{detective_count_all})"
@@ -279,24 +278,25 @@ class ChiefTest < ActiveSupport::TestCase
     # Create two identical projects
     project1 = Project.new
     project1[:repo_url] = "https://github.com/#{@full_name}"
-    
+
     project2 = Project.new
     project2[:repo_url] = "https://github.com/#{@full_name}"
-    
+
     VCR.use_cassette('github') do
       # Run autofill with level on project1
       chief1 = Chief.new(project1, proc { Octokit::Client.new })
       chief1.autofill(level: 'passing')
-      
+
       # Run autofill without level on project2
       chief2 = Chief.new(project2, proc { Octokit::Client.new })
       chief2.autofill
     end
-    
+
     # For metal criteria, results should be the same
-    assert_equal project1[:floss_license_osi_status], 
+    assert_equal project1[:floss_license_osi_status],
                  project2[:floss_license_osi_status]
-    assert_equal project1[:contribution_status], 
+    assert_equal project1[:contribution_status],
                  project2[:contribution_status]
   end
 end
+# rubocop:enable Metrics/ClassLength

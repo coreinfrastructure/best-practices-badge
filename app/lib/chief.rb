@@ -34,9 +34,10 @@ class Chief
   ALLOWED_FIELDS = Project::PROJECT_PERMITTED_FIELDS.to_set.freeze
 
   # rubocop:disable Style/ConditionalAssignment
-  def initialize(project, client_factory)
+  def initialize(project, client_factory, entry_locale: nil)
     @evidence = Evidence.new(project)
     @client_factory = client_factory
+    @entry_locale = entry_locale || project.entry_locale
 
     # Determine what exceptions to intercept - if we're in
     # test or development, we will only intercept an exception we don't use.
@@ -55,14 +56,14 @@ class Chief
   def merge_changeset(c1, c2)
     result = c1.dup
     c2.each do |field, data|
-      if !result.key?(field) ||
-         (data[:confidence] > result[field][:confidence])
-        # Add forced flag based on confidence (hide confidence from callers)
-        enhanced_data = data.dup
-        enhanced_data[:forced] =
-          data[:confidence].present? && data[:confidence] >= CONFIDENCE_OVERRIDE
-        result[field] = enhanced_data
-      end
+      next if result.key?(field) &&
+              (data[:confidence] <= result[field][:confidence])
+
+      # Add forced flag based on confidence (hide confidence from callers)
+      enhanced_data = data.dup
+      enhanced_data[:forced] =
+        data[:confidence].present? && data[:confidence] >= CONFIDENCE_OVERRIDE
+      result[field] = enhanced_data
     end
     result
   end
@@ -145,7 +146,7 @@ class Chief
 
         # If this detective provides any output we need, include it
         # Use set intersection to check overlap
-        next if (detective_class::OUTPUTS.to_set & required_outputs).empty?
+        next unless detective_class::OUTPUTS.to_set.intersect?(required_outputs)
 
         required_detectives.add(detective_class)
         # Now we also need its inputs
@@ -176,7 +177,7 @@ class Chief
 
         # If other_detective provides outputs that detective_class needs as inputs
         outputs_provided = other_detective::OUTPUTS.to_set
-        if (outputs_provided & inputs_needed).any?
+        if outputs_provided.intersect?(inputs_needed)
           dependencies[detective_class].add(other_detective)
         end
       end

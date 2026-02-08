@@ -10,18 +10,20 @@
 
 document.addEventListener('DOMContentLoaded', function() {
   // Auto-expand panels containing highlighted fields
-  const highlightedFields = document.querySelectorAll('.highlight-automated, .highlight-overridden');
+  var highlightedFields = document.querySelectorAll(
+    '.highlight-automated, .highlight-overridden'
+  );
 
   highlightedFields.forEach(function(field) {
     // Find parent panel-collapse and expand it
-    const panel = field.closest('.panel-collapse');
+    var panel = field.closest('.panel-collapse');
     if (panel && !panel.classList.contains('in')) {
       panel.classList.add('in');
 
       // Also expand all parent panels (for nested panels)
-      let currentElement = panel.parentElement;
+      var currentElement = panel.parentElement;
       while (currentElement) {
-        const parentPanel = currentElement.closest('.panel-collapse');
+        var parentPanel = currentElement.closest('.panel-collapse');
         if (parentPanel && !parentPanel.classList.contains('in')) {
           parentPanel.classList.add('in');
         }
@@ -34,13 +36,13 @@ document.addEventListener('DOMContentLoaded', function() {
   // Overridden fields are more important than automated fields
   if (window.location.hash) {
     setTimeout(function() {
-      const targetId = 'criterion-' + window.location.hash.substring(1);
-      const target = document.getElementById(targetId);
+      var targetId = 'criterion-' + window.location.hash.substring(1);
+      var target = document.getElementById(targetId);
       if (target && target.classList.contains('highlight-overridden')) {
         target.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
         // Set focus for keyboard navigation
-        const focusable = target.querySelector('input, select, textarea');
+        var focusable = target.querySelector('input, select, textarea');
         if (focusable) {
           focusable.focus();
         }

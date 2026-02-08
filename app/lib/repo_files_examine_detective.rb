@@ -8,6 +8,7 @@
 # (those conventionally used for source and documentation).
 # Note that a key precondition is determining how to open repo files.
 
+# rubocop:disable Metrics/ClassLength
 class RepoFilesExamineDetective < Detective
   INPUTS = [:repo_files].freeze
   OUTPUTS = %i[
@@ -157,3 +158,4 @@ class RepoFilesExamineDetective < Detective
     )
   end
 end
+# rubocop:enable Metrics/ClassLength

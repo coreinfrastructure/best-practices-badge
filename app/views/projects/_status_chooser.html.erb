@@ -19,12 +19,12 @@
    # Add automation highlighting classes if this field was automated
    highlight_class = ''
    automation_icon = ''
-   if defined?(@automated_fields) && @automated_fields&.include?(status_symbol)
+   if defined?(@automated_fields) && @automated_fields&.any? { |f| f[:field] == status_symbol }
      highlight_class = ' highlight-automated'
      automation_icon = '<span class="automation-icon" title="' +
                       t('projects.edit.automation.automated_tooltip') +
                       '" aria-hidden="true">🤖</span>'
-   elsif defined?(@overridden_fields) && @overridden_fields&.include?(status_symbol)
+   elsif defined?(@overridden_fields) && @overridden_fields&.any? { |f| f[:field] == status_symbol }
      highlight_class = ' highlight-overridden'
      automation_icon = '<span class="override-icon" title="' +
                       t('projects.edit.automation.overridden_tooltip') +

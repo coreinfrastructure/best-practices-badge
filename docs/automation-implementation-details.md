@@ -3,6 +3,7 @@
 Supplement to `automation-thoughts.md` with detailed implementation code.
 
 **Note**: This document reflects all decisions from automation-thoughts.md including:
+
 - OVERRIDABLE_OUTPUTS architecture (Decision #6)
 - Highlighting rules: orange for overrides, yellow for automation (Decision #2)
 - i18n throughout (Decision #5)
@@ -14,6 +15,7 @@ Supplement to `automation-thoughts.md` with detailed implementation code.
 ## Controller Implementation: Overridden Field Handling (Decision #2)
 
 When save operations result in forced overrides (confidence >= 4), we must:
+
 1. Save the overridden values
 2. Redirect back to edit form (never to show page)
 3. Highlight overridden fields in ORANGE (Decision #2)
@@ -21,6 +23,7 @@ When save operations result in forced overrides (confidence >= 4), we must:
 5. Show detailed i18n flash message (Decision #5)
 
 **Highlighting Rules**:
+
 - **Orange** (.highlight-overridden): Field was non-'?' → overridden by Chief (needs attention)
 - **Yellow** (.highlight-automated): Field was '?' → filled by Chief (helpful suggestion)
 
@@ -41,7 +44,7 @@ def update
   end
 
   chief = Chief.new(@project, client_factory)
-  
+
   # Handle potential Chief failure (Decision #6)
   begin
     proposed_changes = chief.propose_changes(
@@ -57,13 +60,13 @@ def update
   # Track which fields Chief is overriding vs auto-filling
   overridden_fields = []  # Orange highlight
   automated_fields = []   # Yellow highlight
-  
+
   proposed_changes.each do |field, data|
     old_value = original_values[field] || @project[field]
-    
+
     if data[:confidence] >= Chief::CONFIDENCE_OVERRIDE &&
        data[:value] != old_value
-       
+
       if old_value.present? && old_value != '?'
         # Overriding a real value - ORANGE
         overridden_fields << {
@@ -86,7 +89,7 @@ def update
 
   # Apply changes (including forced overrides)
   chief.apply_changes(@project, proposed_changes)
-  
+
   # Log overrides for monitoring (Decision #7)
   if overridden_fields.any?
     Rails.logger.info(
@@ -163,7 +166,7 @@ def handle_automated_fields(automated_fields)
       criterion&.title || r[:field].to_s.humanize
     }.join(', ')
   )
-  
+
   # Continue editing to review automated suggestions
   redirect_to edit_project_path(
     @project,
@@ -174,20 +177,20 @@ end
 
 def handle_chief_failure(error, changed_fields)
   # Decision #6: Save non-overridable fields, keep user input for overridable ones
-  
+
   # Find which fields are potentially overridable
   overridable = Set.new
   Chief::ALL_DETECTIVES.each do |detective_class|
     overridable.merge(detective_class::OVERRIDABLE_OUTPUTS)
   end
-  
+
   potentially_affected = changed_fields.select { |f| overridable.include?(f) }
-  
+
   # Restore user's original input for overridable fields (don't save Chief's unvalidated changes)
   potentially_affected.each do |field|
     # Already has user's input from params, no need to change
   end
-  
+
   # Try to save (all non-overridable fields + user input for overridable fields)
   if @project.save
     flash[:warning] = t('projects.update.analysis_failed',
@@ -208,10 +211,12 @@ end
 **Critical** (Decision #4): CSS classes must be added server-side so highlights work without JavaScript.
 
 **Highlighting Rules** (Decision #2):
+
 - **Orange** (.highlight-overridden): Chief overrode a non-'?' value (needs attention) - includes icon ⚠️
 - **Yellow** (.highlight-automated): Chief filled in a '?' value (helpful) - includes icon 🤖
 
 **Accessibility** (Decision #4):
+
 - Color coding (orange/yellow backgrounds)
 - Icons (⚠️ for overridden, 🤖 for automated)
 - ARIA labels with descriptive text
@@ -249,7 +254,7 @@ def edit
       field.match?(/\A[a-z_0-9]+\z/)
     end.map(&:to_sym)
   end
-  
+
   # Check for automated fields from save redirect (YELLOW highlights)
   if params[:automated]
     @automated_fields = params[:automated].split(',').select do |field|
@@ -295,7 +300,7 @@ end
     css_classes << 'highlight-overridden'
     aria_label_parts << t('projects.edit.aria_overridden')  # "Value was corrected"
   end
-  
+
   aria_label = aria_label_parts.any? ? " aria-label=\"#{aria_label_parts.join(', ')}\"" : ""
 %>
 
@@ -303,20 +308,21 @@ end
      data-criterion="<%= field_name %>"
      id="criterion-<%= field_name %>"
      <%= aria_label.html_safe %>>
-  
+
   <% if @automated_fields&.include?(field_name) %>
     <span class="automation-icon" title="<%= t('projects.edit.automated_tooltip') %>" aria-hidden="true">🤖</span>
   <% end %>
-  
+
   <% if @overridden_fields&.include?(field_name) %>
     <span class="override-icon" title="<%= t('projects.edit.overridden_tooltip') %>" aria-hidden="true">⚠️</span>
   <% end %>
-  
+
   <%= render_criterion_row(criterion, project) %>
 </div>
 ```
 
 **Accessibility Features** (Decision #4):
+
 - `.highlight-automated` and `.highlight-overridden` CSS classes (color)
 - 🤖 and ⚠️ icons (visual indicator)
 - ARIA labels (screen reader support)
@@ -327,6 +333,7 @@ end
 ### JavaScript Enhancement (Progressive Enhancement Only)
 
 JavaScript only provides **optional enhancements**:
+
 - Auto-expand panels containing highlighted fields
 - Smooth scroll to first overridden field
 - Focus management for accessibility
@@ -371,6 +378,7 @@ document.addEventListener('DOMContentLoaded', function() {
 ```
 
 **Graceful Degradation Without JavaScript**:
+
 - ✅ Highlights still visible (server-rendered CSS classes)
 - ✅ Icons visible (🤖 for automated, ⚠️ for overridden)
 - ✅ ARIA labels work (screen readers announce changes)
@@ -446,7 +454,7 @@ Add to `app/assets/stylesheets/projects.scss`:
     background-color: #4d3319; // Dark orange background
     border-left-color: #ff9933;
   }
-  
+
   .highlight-automated {
     background-color: #4d4d19; // Dark yellow background
     border-left-color: #ffdd55;
@@ -455,6 +463,7 @@ Add to `app/assets/stylesheets/projects.scss`:
 ```
 
 **Visual Design Goals**:
+
 - **Orange** is more prominent (6px border, stronger pulse) - "Hey, we changed what you said!"
 - **Yellow** is more subtle (4px border, no pulse) - "We helpfully filled this in"
 - Both work with high contrast for accessibility
@@ -794,6 +803,7 @@ end
 ### Example JSON Responses
 
 **Normal save (no overrides)**:
+
 ```json
 {
   "id": 12345,
@@ -803,6 +813,7 @@ end
 ```
 
 **Save with overrides**:
+
 ```json
 {
   "id": 12345,
@@ -830,6 +841,7 @@ end
 ```
 
 **Chief analysis failed** (Decision #6):
+
 ```json
 {
   "error": "Automated analysis failed",
@@ -856,22 +868,22 @@ en:
       aria_overridden: "This field value was corrected by automation"
       automated_tooltip: "We filled this in based on project analysis"
       overridden_tooltip: "We corrected this value based on project analysis"
-    
+
     update:
       chief_overrode:
         one: "We corrected 1 field based on project analysis:"
         other: "We corrected %{count} fields based on project analysis:"
-      
+
       override_detail: "'%{criterion}' changed from '%{old}' to '%{new}' — %{explanation}"
-      
+
       chief_automated:
         one: "We automatically filled 1 field: %{fields}"
         other: "We automatically filled %{count} fields: %{fields}"
-      
+
       analysis_failed:
         one: "Warning: Automated analysis failed for 1 field (%{fields}). Your other changes were saved."
         other: "Warning: Automated analysis failed for %{count} fields (%{fields}). Your other changes were saved."
-      
+
       save_failed: "Failed to save project changes. Please try again."
       updated: "Project successfully updated!"
 ```
@@ -886,27 +898,28 @@ fr:
       aria_overridden: "Cette valeur a été corrigée par l'automatisation"
       automated_tooltip: "Nous avons rempli ceci basé sur l'analyse du projet"
       overridden_tooltip: "Nous avons corrigé cette valeur basé sur l'analyse du projet"
-    
+
     update:
       chief_overrode:
         one: "Nous avons corrigé 1 champ basé sur l'analyse du projet:"
         other: "Nous avons corrigé %{count} champs basés sur l'analyse du projet:"
-      
+
       override_detail: "'%{criterion}' changé de '%{old}' à '%{new}' — %{explanation}"
-      
+
       chief_automated:
         one: "Nous avons rempli automatiquement 1 champ: %{fields}"
         other: "Nous avons rempli automatiquement %{count} champs: %{fields}"
-      
+
       analysis_failed:
         one: "Attention: L'analyse automatisée a échoué pour 1 champ (%{fields}). Vos autres changements ont été enregistrés."
         other: "Attention: L'analyse automatisée a échoué pour %{count} champs (%{fields}). Vos autres changements ont été enregistrés."
-      
+
       save_failed: "Échec de l'enregistrement des modifications du projet. Veuillez réessayer."
       updated: "Projet mis à jour avec succès!"
 ```
 
 **Note on JSON responses** (Decision #5):
+
 - English only for now (API clients don't provide locale context)
 - `explanation` strings from detectives are English-only
 - Future: Could add `Accept-Language` header support if needed
@@ -922,10 +935,10 @@ Each detective must declare which outputs can override user input (confidence >=
 class FlossLicenseDetective
   INPUTS = %i[repo_url].freeze
   OUTPUTS = %i[floss_license_osi_status osps_le_03_01_status].freeze
-  
+
   # Decision #6: Declare which outputs can override user input
   OVERRIDABLE_OUTPUTS = %i[floss_license_osi_status osps_le_03_01_status].freeze
-  
+
   # ... rest of detective code
 end
 ```
@@ -937,10 +950,10 @@ end
 class NameFromUrlDetective
   INPUTS = %i[repo_url].freeze
   OUTPUTS = %i[name].freeze
-  
+
   # Decision #6: This detective CANNOT override (suggestions only)
   OVERRIDABLE_OUTPUTS = [].freeze
-  
+
   # ... rest of detective code
 end
 ```
@@ -954,7 +967,7 @@ def find_overridable_fields(level, changed_fields)
   Chief::ALL_DETECTIVES.each do |detective_class|
     overridable.merge(detective_class::OVERRIDABLE_OUTPUTS)
   end
-  
+
   # Return intersection of changed fields and overridable fields
   (changed_fields || []).select { |f| overridable.include?(f) }
 end

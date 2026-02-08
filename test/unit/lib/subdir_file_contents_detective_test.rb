@@ -82,7 +82,7 @@ class SubdirFileContentsDetectiveTest < ActiveSupport::TestCase
       @evidence,
       repo_files: mock_repo_files
     )
-    
+
     assert results.key?(:documentation_basics_status)
     dbs = results[:documentation_basics_status]
     assert dbs.key?(:explanation)

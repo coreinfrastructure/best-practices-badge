@@ -17,12 +17,12 @@ class TestForcedDetective < Detective
   def analyze(_evidence, current)
     # Only force override for specific test URL pattern (non-GitHub to avoid VCR)
     repo_url = current[:repo_url]
-    
+
     # Special URL to test Chief exception handling
     if repo_url == 'https://example.com/test/chief-failure'
       raise StandardError, 'Test chief failure for coverage'
     end
-    
+
     return {} unless repo_url == 'https://example.com/test/force-override'
 
     {

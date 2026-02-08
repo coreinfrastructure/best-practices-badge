@@ -223,6 +223,37 @@ In addition, we create special keys that are recorded in the cassettes,
 and those keys are revoked at the end of the test.
 Thus, any access key stored in the cassette won't work later anyway.
 
+### VCR cassettes and OAuth credentials
+
+The VCR cassettes in `test/vcr_cassettes/*.yml` contain recorded HTTP
+interactions including GitHub OAuth credentials. These credentials are
+**intentionally safe to commit and public** for the following reasons:
+
+1. **Test-only OAuth app**: The credentials belong to a GitHub OAuth
+   application configured specifically for testing with callback URL
+   `http://127.0.0.1:31337/auth/github`. This callback URL only works
+   on localhost, making the OAuth app useless outside the test environment.
+
+2. **Test users only**: The OAuth tokens in cassettes are associated with
+   test accounts (`bestpracticestest`, `ciitest`) that have no access to
+   real projects or sensitive data.
+
+3. **Public data only**: The cassettes only record interactions with public
+   repositories (e.g., `coreinfrastructure/best-practices-badge`) and
+   contain no private repository data or personal information.
+
+4. **Clearly marked**: The `.env` file header states "DO NOT PUT REAL
+   SECRETS HERE" and uses environment variables prefixed with `TEST_`
+   (`TEST_GITHUB_KEY`, `TEST_GITHUB_SECRET`) to distinguish them from
+   production credentials.
+
+5. **Already public**: These credentials have been in the public Git history
+   since the project's inception and are documented as test-only.
+
+When tests run and update VCR cassettes (adding `http_version:` fields or
+new recordings), this is normal VCR behavior and poses no security risk.
+The updated cassettes should be committed to maintain test reproducibility.
+
 ## Troubleshooting
 
 A flapping test is one that fails apparently randomly.

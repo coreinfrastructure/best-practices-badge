@@ -23,6 +23,14 @@ class GithubBasicDetective < Detective
     osps_br_07_01_status osps_do_02_01_status
   ].freeze
 
+  # This detective can override with high confidence for repo-based criteria
+  # name and implementation_languages are lower confidence (suggestions)
+  OVERRIDABLE_OUTPUTS = %i[
+    discussion_status repo_public_status repo_track_status
+    repo_distributed_status contribution_status
+    osps_br_07_01_status osps_do_02_01_status
+  ].freeze
+
   # These are the 'correct' display case for SPDX for OSI-approved licenses.
   LICENSE_CORRECT_CASE = {
     'APACHE-2.0' => 'Apache-2.0',

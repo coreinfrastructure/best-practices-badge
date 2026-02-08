@@ -16,6 +16,13 @@ class FlossLicenseDetective < Detective
     osps_le_03_01_status osps_le_03_02_status
   ].freeze
 
+  # This detective can override with high confidence (5) when it
+  # detects OSI-approved or non-OSI licenses
+  OVERRIDABLE_OUTPUTS = %i[
+    floss_license_osi_status floss_license_status
+    osps_le_03_01_status osps_le_03_02_status
+  ].freeze
+
   # From: http://opensource.org/licenses/alphabetical
   # Note: We accept the older GNU license forms, e.g., "GPL-2.0", and
   # the newer SPDX 3.0 license names, e.g.,

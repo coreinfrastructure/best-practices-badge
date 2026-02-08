@@ -10,6 +10,10 @@ class NameFromUrlDetective < Detective
   INPUTS = %i[repo_url homepage_url].freeze
   OUTPUTS = [:name].freeze
 
+  # This detective suggests names but should not override user input
+  # (confidence level 1 - suggestion only)
+  OVERRIDABLE_OUTPUTS = [].freeze
+
   # rubocop:disable Metrics/MethodLength
   # rubocop:disable Metrics/AbcSize
   # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity

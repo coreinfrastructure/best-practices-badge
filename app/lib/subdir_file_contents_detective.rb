@@ -11,6 +11,10 @@
 class SubdirFileContentsDetective < Detective
   INPUTS = [:repo_files].freeze
   OUTPUTS = %i[documentation_basics_status osps_do_01_01_status].freeze
+
+  # This detective can override documentation criteria with moderate confidence
+  OVERRIDABLE_OUTPUTS = %i[documentation_basics_status osps_do_01_01_status].freeze
+
   DOCS_BASICS = {
     folder: /\Adoc(s|umentation)?\Z/i,
     file: /(\.md|\.markdown|\.txt|\.html)?\Z/i,

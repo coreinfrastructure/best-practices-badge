@@ -20,6 +20,11 @@ class BaselineDetective < Detective
     osps_gv_02_01_status osps_gv_03_01_status osps_le_02_01_status
   ].freeze
 
+  # This detective can override baseline-specific criteria with high confidence
+  OVERRIDABLE_OUTPUTS = %i[
+    osps_gv_02_01_status osps_gv_03_01_status osps_le_02_01_status
+  ].freeze
+
   # Analyze project evidence and return changeset for baseline-unique criteria
   def analyze(_evidence, current)
     result = {}

@@ -12,6 +12,12 @@ class ProjectSitesHttpsDetective < Detective
     sites_https_status osps_br_03_01_status osps_br_03_02_status
   ].freeze
 
+  # This detective can override with high confidence when detecting
+  # HTTP vs HTTPS usage (confidence 3-5)
+  OVERRIDABLE_OUTPUTS = %i[
+    sites_https_status osps_br_03_01_status osps_br_03_02_status
+  ].freeze
+
   # rubocop:disable Metrics/MethodLength
   # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def analyze(_evidence, current)

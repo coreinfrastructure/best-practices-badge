@@ -15,6 +15,12 @@ class RepoFilesExamineDetective < Detective
     osps_do_02_01_status osps_le_02_02_status
   ].freeze
 
+  # This detective can override file-presence criteria with high confidence
+  OVERRIDABLE_OUTPUTS = %i[
+    contribution_status license_location_status release_notes_status
+    osps_do_02_01_status osps_le_02_02_status
+  ].freeze
+
   # Minimum file sizes (in bytes) before they are considered useful.
   # Empty files, in particular, clearly do NOT have enough content.
   NONTRIVIAL_MIN_SIZE = 40

@@ -1872,44 +1872,74 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
   test 'save with chief failure continues without automation' do
     log_in_as(@user)
-    # Just test that save works even if automation has issues
-    patch project_path(@project, locale: :en),
-          params: {
-            criteria_level: 'passing',
-                    project: { name: 'Updated Name' }
-          }
+    controller = ProjectsController.new
 
-    assert_response :redirect
-    @project.reload
-    assert_equal 'Updated Name', @project.name
+    # Simulate Chief failure by calling the failure handler directly
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+
+    # Create an exception with backtrace
+    begin
+      raise StandardError, 'Test Chief failure'
+    rescue StandardError => e
+      error = e
+    end
+
+    changed_fields = [:floss_license_osi_status] # Use an actually overridable field
+    user_set_values = { floss_license_osi_status: 'Met' }
+
+    controller.send(:handle_chief_save_failure, error, changed_fields, user_set_values)
+
+    # Check that failure was recorded
+    assert controller.instance_variable_get(:@chief_failed)
+    assert_equal [:floss_license_osi_status], controller.instance_variable_get(:@chief_failed_fields)
   end
 
   test 'save and continue with overrides redirects to edit' do
     log_in_as(@user)
-    # Need to set up a scenario where Chief would override something
-    # For now, just test the path exists
-    patch project_path(@project, locale: :en),
-          params: {
-            criteria_level: 'passing',
-                    continue: 'true',
-                    project: { name: 'Updated Name' }
-          }
+    controller = ProjectsController.new
 
-    # Should redirect somewhere (either edit or show)
-    assert_response :redirect
+    # Set up override scenario
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+    controller.instance_variable_set(:@overridden_fields, [
+                                       {
+                                         field: :license, old_value: 'MIT', new_value: 'Apache-2.0',
+                                         explanation: 'Detected Apache license'
+                                       }
+                                     ])
+    controller.instance_variable_set(:@automated_fields, [])
+
+    # Test the format_override_details method
+    details = controller.send(:format_override_details)
+
+    # Should format override details
+    assert_not_nil details
+    assert_match(/license/i, details.downcase)
   end
 
   test 'save with overrides redirects to edit with warning' do
     log_in_as(@user)
-    # This would require mocking Chief to return forced overrides
-    # For now, test the normal save path
-    patch project_path(@project, locale: :en),
-          params: {
-            criteria_level: 'passing',
-                    project: { name: 'Updated Name' }
-          }
+    controller = ProjectsController.new
 
-    assert_response :redirect
+    # Set up controller state to test categorize_chief_proposal
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+    controller.instance_variable_set(:@overridden_fields, [])
+    controller.instance_variable_set(:@automated_fields, [])
+
+    # Test categorizing a forced override
+    controller.send(:categorize_chief_proposal,
+                    :license,
+                    { value: 'Apache-2.0', explanation: 'Detected Apache', forced: true },
+                    'MIT') # User had set MIT
+
+    # Should be categorized as override (not automation)
+    overrides = controller.instance_variable_get(:@overridden_fields)
+    assert_equal 1, overrides.length
+    assert_equal :license, overrides[0][:field]
+    assert_equal 'MIT', overrides[0][:old_value]
+    assert_equal 'Apache-2.0', overrides[0][:new_value]
   end
 
   test 'JSON update includes automation metadata' do
@@ -1924,6 +1954,54 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     json = response.parsed_body
     assert json.key?('id')
     assert_equal 'updated', json['status']
+  end
+
+  test 'chief fills in unknown values as automated not overridden' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+
+    # Set up controller state
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+    controller.instance_variable_set(:@overridden_fields, [])
+    controller.instance_variable_set(:@automated_fields, [])
+
+    # Test categorizing automation (filling in '?')
+    controller.send(:categorize_chief_proposal,
+                    :license,
+                    { value: 'MIT', explanation: 'Found MIT license', forced: false },
+                    '?') # User left as ?
+
+    # Should be categorized as automation (not override)
+    automated = controller.instance_variable_get(:@automated_fields)
+    overrides = controller.instance_variable_get(:@overridden_fields)
+
+    assert_equal 1, automated.length
+    assert_equal :license, automated[0][:field]
+    assert_equal 'MIT', automated[0][:new_value]
+    assert_equal 0, overrides.length # No overrides
+  end
+
+  test 'find_automated_fields detects filled in unknowns' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+
+    # Set up project with '?' value
+    @project.license = '?'
+    @project.save!
+
+    controller.instance_variable_set(:@project, @project)
+
+    # Capture original values
+    original = { license: '?' }
+
+    # Change to real value (simulating Chief fill-in)
+    @project.license = 'MIT'
+
+    # Find automated fields
+    automated = controller.send(:find_automated_fields, original)
+
+    assert_includes automated, :license
   end
 end
 # rubocop:enable Metrics/ClassLength

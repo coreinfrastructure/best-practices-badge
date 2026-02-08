@@ -43,16 +43,48 @@ Add boolean fields to track whether each badge level has been saved:
 
 ```ruby
 class AddLevelSavedFlags < ActiveRecord::Migration[7.0]
-  def change
+  def up
     add_column :projects, :passing_saved, :boolean, default: false, null: false
     add_column :projects, :silver_saved, :boolean, default: false, null: false
     add_column :projects, :gold_saved, :boolean, default: false, null: false
     add_column :projects, :baseline_1_saved, :boolean, default: false, null: false
     add_column :projects, :baseline_2_saved, :boolean, default: false, null: false
     add_column :projects, :baseline_3_saved, :boolean, default: false, null: false
+    
+    # Backfill: Mark as saved if level has non-'?' criteria filled
+    # Indicates user has already edited this level
+    
+    # For passing: Check if any passing-only or shared criteria are non-'?'
+    Project.where('badge_percentage_0 > 0').find_each do |project|
+      # Only mark saved if at least one passing criteria is explicitly set
+      has_passing_data = Criteria.active('passing').any? do |criterion|
+        value = project.public_send(:"#{criterion.name}_status")
+        value.present? && value != '?'
+      end
+      project.update_column(:passing_saved, true) if has_passing_data
+    end
+    
+    # Similar for silver, gold, and baseline levels
+    Project.where('badge_percentage_1 > 0').update_all(silver_saved: true)
+    Project.where('badge_percentage_2 > 0').update_all(gold_saved: true)
+    
+    # Baseline is trickier - need to check specific baseline criteria
+    # For now, mark baseline levels as saved if any baseline percentage > 0
+    # (Can refine later if needed)
+  end
+  
+  def down
+    remove_column :projects, :baseline_3_saved
+    remove_column :projects, :baseline_2_saved
+    remove_column :projects, :baseline_1_saved
+    remove_column :projects, :gold_saved
+    remove_column :projects, :silver_saved
+    remove_column :projects, :passing_saved
   end
 end
 ```
+
+**Note**: Backfilling prevents wasting resources on mature projects during first edit post-deployment.
 
 ## Use Case 1: Before Edit (First Time)
 
@@ -80,11 +112,19 @@ end
 
 **Goal**: Make it obvious which fields were auto-filled so users can review them
 
-**Implementation** (Server-Side for Accessibility):
+**Highlighting Rules** (Decision #2):
+- **Yellow** highlight: Field was '?' and is now filled (helpful suggestion)
+- **Orange** highlight: Field had a non-'?' value that was overridden (correction)
+- No highlight: Field unchanged or user didn't set it
 
-1. **Track automated fields**: When Chief runs before edit, store changed fields in controller:
+**Implementation** (Server-Side for Accessibility - Decision #4):
+
+1. **Track automated fields and their previous values**: When Chief runs, store changes in controller:
    ```ruby
-   @automated_fields = [:description_good_status, :interact_status, ...]
+   @automated_changes = {
+     description_good_status: { old: '?', new: 'Met' },  # Yellow
+     floss_license_osi_status: { old: 'Met', new: 'Unmet' }  # Orange
+   }
    ```
 
 2. **Apply CSS classes in view template** (not JavaScript):
@@ -92,14 +132,30 @@ end
    <%
      field_name = :"#{criterion.name}_status"
      css_classes = ['criterion-data']
-     css_classes << 'highlight-automated' if @automated_fields&.include?(field_name)
+     
+     if @automated_changes&.key?(field_name)
+       change = @automated_changes[field_name]
+       if change[:old] == '?'
+         css_classes << 'highlight-automated'  # Yellow
+         aria_label = t('automation.filled_unknown')
+       else
+         css_classes << 'highlight-overridden'  # Orange
+         aria_label = t('automation.overridden', 
+                       old: change[:old], new: change[:new])
+       end
+     end
    %>
-   <div class="<%= css_classes.join(' ') %>" data-criterion="<%= field_name %>">
+   <div class="<%= css_classes.join(' ') %>" 
+        data-criterion="<%= field_name %>"
+        <% if aria_label.present? %>
+          aria-label="<%= aria_label %>"
+          role="status"
+        <% end %>>
      <%= render_criterion_row(criterion, project) %>
    </div>
    ```
 
-3. **Highlight with CSS**:
+3. **CSS styling**:
    ```scss
    .highlight-automated {
      background-color: #ffffcc; // Light yellow
@@ -112,22 +168,40 @@ end
        opacity: 0.7;
      }
    }
+   
+   .highlight-overridden {
+     background-color: #fff4e6; // Light orange
+     border-left: 4px solid #ff8c00; // Dark orange border
+     padding-left: 8px;
+     
+     &::before {
+       content: "⚠️ ";
+       font-size: 0.9em;
+       opacity: 0.8;
+     }
+   }
    ```
 
-4. **Optional JavaScript enhancement**: Auto-expand panels containing automated fields:
+4. **i18n translations** (Decision #5):
+   ```yaml
+   # config/locales/en.yml
+   en:
+     automation:
+       filled_unknown: "This field was automatically filled. Please review."
+       overridden: "We changed this from '%{old}' to '%{new}' based on project analysis."
+   ```
+
+5. **Optional JavaScript enhancement**: Auto-expand panels containing highlighted fields:
    ```javascript
    // Progressive enhancement only
-   document.querySelectorAll('.highlight-automated').forEach(field => {
+   document.querySelectorAll('.highlight-automated, .highlight-overridden').forEach(field => {
      const panel = field.closest('.panel-collapse');
      if (panel) panel.classList.add('show');
    });
    ```
 
-5. **No-JavaScript fallback**: Highlights visible, users manually expand panels
-
 **Note**: Automated field list is NOT stored in database (ephemeral data).
-It only exists during the edit session. If user navigates away and comes back,
-no highlighting (they've already reviewed once).
+It only exists during the edit session.
 
 ## Chief Optimization: Topological Sort
 
@@ -231,7 +305,7 @@ even if user isn't editing the silver level via web form.
 **Current buttons**: "Save and Continue", "Save and Exit"
 
 **Key principle**: If we override ANY values with high confidence (4-5),
-we ALWAYS re-open the edit form so users can see what was rejected and why.
+we ALWAYS re-open the edit form so users can see what was changed and why.
 
 #### "Save and Continue"
 
@@ -242,24 +316,26 @@ we ALWAYS re-open the edit form so users can see what was rejected and why.
 3. Save to database
 4. Set `{level}_saved = true`
 5. Redirect back to edit form
-6. Highlight all changed fields (yellow background)
+6. Highlight changed fields:
+   - **Yellow**: Was '?' → now filled
+   - **Orange**: Had non-'?' value → overridden (Decision #2)
 7. Auto-expand panels containing changes
-8. Flash message: "Saved. Re-analyzed X fields." (if any changes made)
+8. Flash message (i18n): t('projects.update.reanalyzed', count: X) if changes made
 
 **Use case**: User wants fresh automation suggestions after changing values
 
 #### "Save and Exit"
 
-1. Run Chief analysis (level + changed_fields)
+1. Run Chief analysis (level + changed_fields)  
 2. Apply ONLY high-confidence changes (confidence >= 4)
-3. **If ANY forced overrides were made** (Chief changed values user explicitly set):
+3. **If ANY forced overrides were made** (Chief changed non-'?' values user set):
    - Save to database WITH the forced overrides
    - Set `{level}_saved = true`
    - Redirect back to edit form (NOT to show page - ensure transparency)
    - **Ensure panels with overridden values start OPEN**
    - **Scroll to/focus on FIRST overridden value** (anchor link or JavaScript scroll)
-   - Flash warning: "We corrected X fields based on project analysis. Please review."
-   - List which fields were overridden, from what to what, and why with explanations
+   - Flash warning (i18n): List all overridden fields with old→new values and explanations
+   - Log override (Decision #7): `Rails.logger.warn "Override: project=#{@project.id} user=#{current_user.id} fields=#{overridden_fields.map(&:to_s).join(',')}"`
 4. If no forced overrides:
    - Save to database
    - Set `{level}_saved = true`
@@ -278,6 +354,11 @@ Chief detects:
   - License is "Proprietary" (confidence: 5) → Force "Unmet"
   - Crypto usage found in code (confidence: 4) → Force "Met"
   - CONTRIBUTING file exists (confidence: 5) → Force "Met"
+
+Highlighting:
+  - floss_license_osi_status: ORANGE (was 'Met', now 'Unmet')
+  - crypto_used_network_status: ORANGE (was 'N/A', now 'Met')
+  - contribution_status: YELLOW (was '?', now 'Met')
                 
 Action: 
   1. Save with all three overrides applied
@@ -286,20 +367,166 @@ Action:
   4. Open "Security" panel (has crypto_used_network_status) 
   5. Open "Change Control" panel (has contribution_status)
   6. Scroll to first overridden field (floss_license_osi_status)
-  7. Flash message (neutral tone, not error):
-     "We corrected 3 fields based on project analysis:
-      • 'OSI-approved license' changed from 'Met' to 'Unmet' 
-        (Detected license 'Proprietary' is not OSI-approved)
-      • 'Cryptography used' changed from 'N/A' to 'Met' 
-        (Found network crypto usage in codebase)
-      • 'Contributing file' changed from '?' to 'Met' 
-        (CONTRIBUTING.md file found in repository)
-     Please review these changes."
+  7. Flash message (i18n):
+     t('projects.update.corrected_intro', count: 3)
+     • t('projects.update.corrected_detail', 
+         criterion: 'OSI-approved license', 
+         old: 'Met', new: 'Unmet',
+         reason: '...')
+     • t('projects.update.corrected_detail', ...)
+     • t('projects.update.corrected_detail', ...)
+     t('projects.update.please_review')
 ```
 
 **Rationale**: Users should ALWAYS know when we override their explicit input, 
 regardless of direction. Most overrides will be helpful ("?" → "Met"), but some
 will be corrections ("Met" → "Unmet"). Consistent transparency builds trust.
+
+### API Responses (JSON) - Decision #1
+
+For API calls (format.json), handle overrides differently since we can't redirect to edit form:
+
+```ruby
+respond_to do |format|
+  format.html { 
+    # Redirect to edit if overrides, or show page if clean save
+  }
+  format.json {
+    if @project.save
+      if overridden_fields.any?
+        render json: {
+          success: true,
+          saved: true,
+          overrides: overridden_fields.map { |f| 
+            { 
+              field: f[:field], 
+              old_value: f[:old_value], 
+              new_value: f[:new_value], 
+              reason: f[:explanation]  # English only for JSON
+            }
+          },
+          message: "Saved with #{overridden_fields.size} correction(s)"
+        }, status: :ok  # 200 OK - data was saved successfully
+      else
+        render json: { success: true }, status: :ok
+      end
+    else
+      render json: { errors: @project.errors }, status: :unprocessable_content
+    end
+  }
+end
+```
+
+**Rationale**: Return 200 OK because save succeeded. Clients can inspect `overrides` array to see what was changed.
+
+### Error Handling: Chief Failures (Decision #6)
+
+**Problem**: If Chief or detectives crash during save, we could:
+- Lose all user data (if we don't save anything)
+- Allow invalid data (if we save everything without validation)
+
+**Solution**: Detective Architecture Change + Selective Saving
+
+#### 1. Detective Declaration of Overridable Outputs
+
+Each detective must declare which outputs CAN override human input:
+
+```ruby
+class FlossLicenseDetective < Detective
+  INPUTS = [:license].freeze
+  OUTPUTS = %i[floss_license_osi_status floss_license_status
+               osps_le_03_01_status osps_le_03_02_status].freeze
+  
+  # NEW: Outputs that can have confidence >= 4 and override user input
+  OVERRIDABLE_OUTPUTS = %i[floss_license_osi_status floss_license_status
+                           osps_le_03_01_status osps_le_03_02_status].freeze
+end
+
+class NameFromUrlDetective < Detective
+  INPUTS = %i[repo_url homepage_url].freeze
+  OUTPUTS = [:name].freeze
+  OVERRIDABLE_OUTPUTS = [].freeze  # Never overrides with high confidence
+end
+```
+
+**Rationale**: Allows controller to know which fields are "safe" to save even if Chief fails.
+
+#### 2. Controller Error Handling
+
+```ruby
+def update
+  # ... existing setup ...
+  
+  changed_fields = project_params.keys.map(&:to_sym)
+  
+  # Determine which fields might be overridden by Chief
+  potentially_overridable_fields = find_overridable_fields(
+    @criteria_level, 
+    changed_fields
+  )
+  
+  begin
+    chief = Chief.new(@project, client_factory)
+    proposed_changes = chief.propose_changes(
+      level: @criteria_level,
+      changed_fields: changed_fields
+    )
+    chief.apply_changes(@project, proposed_changes)
+    
+    # Normal save path
+    if @project.save
+      # ... handle overrides or exit normally ...
+    end
+    
+  rescue StandardError => e
+    # Chief failed - save selectively
+    Rails.logger.error "Chief analysis failed during save: #{e.class} #{e.message}"
+    Rails.logger.error e.backtrace.join("\n")
+    
+    # Revert potentially overridable fields to original values
+    potentially_overridable_fields.each do |field|
+      if @project[field] != project_params[field]
+        @project[field] = project_params[field]  # Keep user input
+      end
+    end
+    
+    # Try to save (all non-overridable fields + user input for overridable fields)
+    if @project.save
+      flash[:warning] = t('projects.update.analysis_failed',
+                         count: potentially_overridable_fields.size,
+                         fields: potentially_overridable_fields.join(', '))
+      render :edit  # Show edit form with fields they tried to change
+    else
+      flash[:alert] = t('projects.update.save_failed')
+      render :edit
+    end
+  end
+end
+
+private
+
+def find_overridable_fields(level, changed_fields)
+  # Union of: fields in this level + explicitly changed fields
+  relevant_fields = []
+  relevant_fields += Criteria.active(level).map { |c| :"#{c.name}_status" } if level
+  relevant_fields += changed_fields
+  relevant_fields.uniq!
+  
+  # Filter to only those that detectives can override
+  overridable = Set.new
+  Chief::ALL_DETECTIVES.each do |detective_class|
+    overridable.merge(detective_class::OVERRIDABLE_OUTPUTS)
+  end
+  
+  relevant_fields.select { |f| overridable.include?(f) }
+end
+```
+
+**Behavior on Chief failure**:
+- HTML: Re-render edit form with flash warning listing which fields weren't validated
+- JSON: Return error with list of fields that couldn't be validated
+
+**Rationale**: Prevents data loss while maintaining security. User knows validation failed and can retry.
 
 ## Use Case 3: Periodic Verification (Cron Job)
 
@@ -311,44 +538,75 @@ if projects no longer meet requirements
 **Why later**: Complex retry logic, false positive handling, notification system,
 extensive testing needed. Not required for immediate UX improvements.
 
-### Design
+### Design (Decision #12: Model after Existing Email Reminder Process)
 
-**Frequency**: Run nightly or weekly (configurable)
+**Existing System**: Email reminders sent to projects without passing badges
 
-**Scope**: All projects with badges (passing, silver, gold, baseline-1/2/3)
+**Changes Needed**:
+1. Stop sending reminder if project has passing OR baseline-1 badge (not just passing)
+2. Use same daily limit pattern for verification process
 
-**Process**:
+**Frequency**: Daily with configurable limits (via environment variables)
 
-1. **Iterate through projects**:
+**Scope**: All projects with badges, processed incrementally
+
+**Process** (similar to reminder email system):
+
+1. **Daily Batch Processing**:
    ```ruby
-   Project.where.not(badge_percentage_0: 0).find_each do |project|
+   # Environment variables
+   MAX_VERIFICATIONS_PER_DAY = ENV.fetch('MAX_BADGE_VERIFICATIONS_PER_DAY', 100).to_i
+   
+   # Select projects needing verification
+   # - Has a badge (badge_percentage > 0 for any level)
+   # - Not verified recently (last_verified_at nil OR > 7 days ago)
+   # - Verification enabled (can be disabled by admin)
+   # - Limit to daily max
+   
+   projects_to_verify = Project.where(verification_enabled: true)
+     .where('badge_percentage_0 > 0 OR badge_percentage_1 > 0 OR ....')
+     .where('last_verified_at IS NULL OR last_verified_at < ?', 7.days.ago)
+     .order('last_verified_at ASC NULLS FIRST')  # Oldest first
+     .limit(MAX_VERIFICATIONS_PER_DAY)
+   
+   projects_to_verify.find_each do |project|
      VerifyBadgeJob.perform_later(project.id)
+     project.update_column(:last_verified_at, Time.current)
    end
    ```
 
-2. **For each project**:
+2. **For each project** (in VerifyBadgeJob):
    - Run Chief with `level: nil, changed_fields: nil` (analyze everything)
    - Compare Chief results to current values
    - Identify fields where Chief has confidence >= 4 and disagrees
-   - Track failures in database
+   - Update `verification_failures` JSONB column
 
 3. **Failure tracking**:
-   - Add `verification_failures` JSON column to projects table
-   - Store: `{ "floss_license_osi_status" => { count: 2, first_failed_at: "2026-02-01", last_checked_at: "2026-02-07" } }`
-   - Increment failure count each time verification fails
-   - Reset count to 0 if verification succeeds
+   ```ruby
+   # verification_failures structure:
+   {
+     "floss_license_osi_status" => {
+       "count" => 2,
+       "first_failed_at" => "2026-02-01T10:00:00Z",
+       "last_checked_at" => "2026-02-07T10:00:00Z",
+       "last_explanation" => "Detected license (Proprietary) is not OSI-approved"
+     }
+   }
+   ```
+   - Increment count each time verification fails for that field
+   - Reset to 0 if verification succeeds
 
-4. **Force corrections after N failures**:
+4. **Force corrections after threshold**:
    - **Threshold**: 3 consecutive failures over 3+ days
-   - **Action**: Apply high-confidence changes (confidence >= 4)
+   - **Action**: Apply high-confidence changes, send email notification
    - **Effect**: May cause badge loss if criteria no longer met
-   - **Rationale**: Prevents false positives from temporary outages
 
-5. **Notification**:
-   - Email project owner: "Your [passing] badge has been revoked because..."
-   - List which criteria failed and why
-   - Provide link to re-apply
-   - CC: Badge admin team (for monitoring)
+5. **Notification** (Decision #10: Use BCC for logging):
+   - Email to: project owner
+   - Subject: "Your [passing] badge status has changed"
+   - Body: List which criteria failed, explanations, link to fix
+   - BCC: trusted logging endpoint (separate from main system)
+   - **Rationale**: Stores audit trail without overwhelming main logs
 
 ### Retry Logic & False Positive Prevention
 
@@ -379,7 +637,32 @@ extensive testing needed. Not required for immediate UX improvements.
 5. **Job queue**: Use solid_queue with retry logic for failures
 6. **Monitoring**: Track job duration, failure rates, API usage
 
-**Acceptable runtime**: 4-6 hours for ~25,000 projects (6-7 projects/second)
+**Acceptable runtime**: With daily limits, verification spreads across ~250 days for 25,000 projects at 100/day. Projects cycle through verification every ~8 months.
+
+### Updating Existing Email Reminder System
+
+**Current Behavior**: Send reminder emails to projects without passing badges
+
+**Required Update** (Decision #12):
+- Stop sending if project has passing badge OR baseline-1 badge
+- Rationale: Both demonstrate minimum community standards
+
+**Code Location**: Find existing reminder email logic (likely in `lib/tasks/` or `app/jobs/`)
+
+**Change**:
+```ruby
+# Before
+if project.badge_percentage_0 < 100
+  send_reminder_email(project)
+end
+
+# After  
+if project.badge_percentage_0 < 100 && project.baseline_badge_percentage_1 < 100
+  send_reminder_email(project)
+end
+```
+
+**Testing**: Verify reminders stop for projects with only baseline-1 badge
 
 ### Database Schema Changes
 
@@ -415,16 +698,64 @@ end
 0 2 * * * cd /app && bundle exec rake badges:verify_all
 ```
 
-### Implementation Priority
+### Implementation Priority (Decision #11: Phased Rollout with Feature Flags)
+
+**Approach**: Gradual deployment with independent feature flags for each component
 
 **Phase 1 (8-12 hours)**: Chief optimization with topological sort - DO NOW
 - Foundation for all three use cases
 - Immediate performance benefits for human editing
+- Add OVERRIDABLE_OUTPUTS to all detective classes
+- **Feature flag**: `CHIEF_OPTIMIZED=true/false` (default: false initially)
+- **Testing**: Compare results against legacy Chief, verify identical outputs
+- **Rollout**: Enable in production after 1 week in staging
+- **Success metrics**: Response time improvements, no errors in logs
 
-**Phase 2 (10-15 hours)**: Before-edit automation and UI highlighting - DO NEXT
-- Database migration for `*_saved` flags
+**Phase 2A (6-8 hours)**: Database migrations - DO NEXT
+- Add `*_saved` flags to projects table with backfill logic
+- Add `verification_failures`, `last_verified_at`, `verification_enabled` columns
+- **Testing**: Verify backfill correctly identifies edited projects
+- **Rollout**: Can deploy immediately (passive schema changes)
+
+**Phase 2B (10-12 hours)**: Before-edit automation and UI highlighting - DO NEXT
 - Controller logic for first-edit automation
-- View highlighting with CSS/JavaScript
+- View highlighting with CSS/JavaScript (server-side classes)
+- i18n translations for automation messages
+- **Feature flag**: `AUTOMATION_FIRST_EDIT=true/false` (default: false)
+- **Testing**: Verify highlighting works with/without JavaScript
+- **Rollout**: Enable after 1 week monitoring in staging
+- **Success metrics**: User feedback, no performance degradation
+
+**Phase 3 (10-14 hours)**: Save button differentiation and error handling - DO NEXT
+- "Save and Continue" vs "Save and Exit" behavior
+- Flash messages for overrides (i18n)
+- Chief failure handling (selective saving)
+- API JSON responses with override details
+- Logging for overrides
+- **Feature flag**: `AUTOMATION_OVERRIDES=true/false` (default: false)
+- **Testing**: Test all override scenarios, Chief failure scenarios
+- **Rollout**: Enable after 2 weeks in staging (monitor override frequency)
+- **Success metrics**: Override rate < 5% of saves, no user complaints
+
+**Phase 4 (24-40 hours)**: Periodic verification cron job - DO LATER (months)
+- Update reminder email logic (baseline-1 stops reminders)
+- VerifyBadgeJob implementation
+- Retry logic and failure tracking
+- Email notifications with BCC logging
+- **Feature flag**: `AUTOMATION_CRON=true/false` (default: false)
+- **Testing**: 
+  - Run on 100 test projects in staging (week 1-2)
+  - Monitor for false positives
+  - Run on 1,000 random projects in staging (week 3-4)
+  - Verify daily limits work correctly
+- **Rollout**: Gradual production (10/day week 1, 50/day week 2, 100/day week 3+)
+- **Success metrics**: False positive rate < 1%, no email delivery issues
+
+**Total estimated effort**: 54-86 hours (spread across 3-6 months)
+
+**Rollback Plan**: Each feature flag can be independently disabled if issues arise
+
+**Monitoring Dashboard**: Track per-flag metrics (usage, errors, performance)
 - Testing
 
 **Phase 3 (8-12 hours)**: Save button differentiation - DO NEXT
@@ -441,6 +772,25 @@ end
 - Production rollout with feature flag
 
 **Total estimated effort**: 50-79 hours
+
+## Key Decisions Summary
+
+Based on review, the following decisions have been made:
+
+1. **API responses**: Return 200 OK with override details in JSON body
+2. **Highlighting**: Orange only when overriding non-'?' values; yellow for filling '?'
+3. **Migration backfill**: Yes, set `*_saved=true` if level has non-'?' criteria filled
+4. **Accessibility**: Use color + icons + ARIA labels (server-side)
+5. **i18n**: Implement from start for HTML flash messages; English for JSON
+6. **Error handling**: Save non-overridable fields, block overridable fields on Chief failure, return to edit with flash
+7. **Monitoring**: Simple Rails.logger entries for overrides (project#, user, fields)
+8. **Skip automation**: Not needed now
+9. **Confidence display**: Skip for now
+10. **Audit log**: Defer until cron job; use BCC'd emails to separate system for logging
+11. **Phased rollout**: Yes, use feature flags for gradual deployment
+12. **Cron verification**: Model after existing email reminder process with daily limits
+
+**Key architectural change from #6**: Detectives must declare which outputs can override (new OVERRIDABLE_OUTPUTS list), so we can handle Chief failures safely.
 
 ## Open Questions and Concerns
 

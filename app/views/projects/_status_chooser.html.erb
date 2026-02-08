@@ -15,10 +15,30 @@
                    else
                      ''
                    end
+
+   # Add automation highlighting classes if this field was automated
+   highlight_class = ''
+   automation_icon = ''
+   if defined?(@automated_fields) && @automated_fields&.include?(status_symbol)
+     highlight_class = ' highlight-automated'
+     automation_icon = '<span class="automation-icon" title="' +
+                      t('projects.edit.automation.automated_tooltip') +
+                      '" aria-hidden="true">🤖</span>'
+   elsif defined?(@overridden_fields) && @overridden_fields&.include?(status_symbol)
+     highlight_class = ' highlight-overridden'
+     automation_icon = '<span class="override-icon" title="' +
+                      t('projects.edit.automation.overridden_tooltip') +
+                      '" aria-hidden="true">⚠️</span>'
+   end
 %>
-  <div id="<%= criterion_str %>" class="row criterion-data<%= passing_class %>"
+  <div id="<%= criterion_str %>" class="row criterion-data<%= passing_class %><%= highlight_class %>"
        data-status="<%= status_to_string(project_criterion_status) %>"
-       data-justification="<%= h(project_criterion_justification) %>">
+       data-justification="<%= h(project_criterion_justification) %>"
+       <% if highlight_class.present? %>
+       aria-label="<%= highlight_class.include?('automated') ? t('projects.edit.automation.aria_automated') : t('projects.edit.automation.aria_overridden') %>"
+       role="status"
+       <% end %>>
+    <%= automation_icon.html_safe if automation_icon.present? %>
     <% is_crypto = criterion_str.match(/^crypto_/)
        crypto_class = is_crypto ? ' criterion-is-crypto' : '' %>
 

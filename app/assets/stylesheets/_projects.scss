@@ -131,3 +131,73 @@ td.project_name {
   font-size: 1.2em;
   text-transform: capitalize;
 }
+
+// Automation highlighting for first-edit
+// Orange: Chief overrode a non-'?' value (needs attention)
+.highlight-overridden {
+  border-left: 6px solid #e65c00 !important; // Strong orange
+  background-color: #fff4e6; // Light orange background
+  padding-left: 16px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+  animation: pulse-orange 2s ease-in-out 3; // Pulse 3 times
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #ffe6cc; // Slightly darker on hover
+  }
+}
+
+@keyframes pulse-orange {
+  0%, 100% {
+    background-color: #fff4e6;
+    border-left-width: 6px;
+  }
+  50% {
+    background-color: #ffe6cc;
+    border-left-width: 8px;
+  }
+}
+
+// Yellow: Chief filled in a '?' value (helpful suggestion)
+.highlight-automated {
+  border-left: 4px solid #ffcc00 !important; // Gold
+  background-color: #ffffed; // Very light yellow
+  padding-left: 14px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  margin-bottom: 6px;
+
+  &:hover {
+    background-color: #ffffcc; // Slightly darker on hover
+  }
+}
+
+// Icons for automation indicators
+.automation-icon, .override-icon {
+  font-size: 0.9em;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.override-icon {
+  opacity: 0.9; // ⚠️ slightly prominent
+}
+
+.automation-icon {
+  opacity: 0.7; // 🤖 more subtle
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .highlight-overridden {
+    background-color: #4d3319; // Dark orange background
+    border-left-color: #ff9933;
+  }
+
+  .highlight-automated {
+    background-color: #4d4d19; // Dark yellow background
+    border-left-color: #ffdd55;
+  }
+}

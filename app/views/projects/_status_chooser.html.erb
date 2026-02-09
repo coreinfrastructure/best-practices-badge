@@ -20,15 +20,11 @@
    highlight_class = ''
    automation_icon = ''
    if defined?(@automated_fields) && @automated_fields&.any? { |f| f[:field] == status_symbol }
-     highlight_class = ' highlight-automated'
-     automation_icon = '<span class="automation-icon" title="' +
-                      t('projects.edit.automation.automated_tooltip') +
-                      '" aria-hidden="true">🤖</span>'
+     highlight_class = " #{ApplicationHelper::HIGHLIGHT_AUTOMATED_CLASS}"
+     automation_icon = %(<span class="automation-icon" title="#{t('projects.edit.automation.automated_tooltip')}" aria-hidden="true">#{ApplicationHelper::ROBOT_EMOJI_SAFE}</span>).html_safe
    elsif defined?(@overridden_fields) && @overridden_fields&.any? { |f| f[:field] == status_symbol }
      highlight_class = ' highlight-overridden'
-     automation_icon = '<span class="override-icon" title="' +
-                      t('projects.edit.automation.overridden_tooltip') +
-                      '" aria-hidden="true">⚠️</span>'
+     automation_icon = %(<span class="override-icon" title="#{t('projects.edit.automation.overridden_tooltip')}" aria-hidden="true">⚠️</span>).html_safe
    end
 %>
   <div id="<%= criterion_str %>" class="row criterion-data<%= passing_class %><%= highlight_class %>"

@@ -37,12 +37,10 @@ class ProjectsController < ApplicationController
 
         # Get all criteria for this level
         criteria_hash = Criteria[internal_level]
-        if criteria_hash
-          criteria_hash.each_key do |criterion_name|
-            # Add both _status and _justification fields
-            field_set << :"#{criterion_name}_status"
-            field_set << :"#{criterion_name}_justification"
-          end
+        criteria_hash&.each_key do |criterion_name|
+          # Add both _status and _justification fields
+          field_set << :"#{criterion_name}_status"
+          field_set << :"#{criterion_name}_justification"
         end
         fields_map[internal_level] = field_set.freeze
       end

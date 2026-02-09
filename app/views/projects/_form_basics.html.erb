@@ -10,9 +10,9 @@
               name_automated = automated_field_names.include?(:name)
               description_automated = automated_field_names.include?(:description)
             %>
-            <div class="hidable-text-entry <%= 'highlight-automated' if name_automated %>">
+            <div class="hidable-text-entry <%= ApplicationHelper::HIGHLIGHT_AUTOMATED_CLASS if name_automated %>">
             <span><%= f.label :name, t('projects.form_basics.project_name.description') %></span>
-            <%= '🤖 '.html_safe if name_automated %>
+            <%= ApplicationHelper::ROBOT_EMOJI_SAFE if name_automated %>
             <%= render(partial: "details", locals: {
                        criterion: "project_name",
                        details: t('projects.form_basics.project_name.details')
@@ -24,9 +24,9 @@
                              disabled: view_only %>
             </div>
 
-            <div class="hidable-text-entry <%= 'highlight-automated' if description_automated %>">
+            <div class="hidable-text-entry <%= ApplicationHelper::HIGHLIGHT_AUTOMATED_CLASS if description_automated %>">
             <span><%= f.label :description, t('projects.form_basics.description.description') %></span>
-            <%= '🤖 '.html_safe if description_automated %>
+            <%= ApplicationHelper::ROBOT_EMOJI_SAFE if description_automated %>
             <% if view_only %>
               <div class="discussion-markdown" id="project_description" lang="<%= project.entry_locale %>">
                 <%= markdown(project[:description]) %>

@@ -1445,7 +1445,9 @@ class ProjectsController < ApplicationController
     chief.autofill(level: @criteria_level)
 
     # Track which fields were changed (for highlighting)
-    @automated_fields = find_automated_fields(original_values)
+    # Filter to only fields in the current section
+    all_automated_fields = find_automated_fields(original_values)
+    @automated_fields = filter_automated_fields_for_current_section(all_automated_fields)
     @overridden_fields = [] # No overrides on first edit (all were '?')
 
     # NOTE: We do NOT set level_saved_flag here. That should only happen
@@ -1592,19 +1594,22 @@ class ProjectsController < ApplicationController
       changed_fields: changed_fields
     )
 
+    # Filter proposed changes to only fields in the current section
+    current_section_changes = filter_changes_for_current_section(proposed_changes)
+
     # Track which fields will be overridden BEFORE applying changes
     @overridden_fields = []
     @automated_fields = []
 
-    proposed_changes.each do |field, data|
+    current_section_changes.each do |field, data|
       # Skip non-forced suggestions
       next unless data[:forced]
 
       categorize_chief_proposal(field, data, user_set_values[field], track_automated)
     end
 
-    # Now apply Chief's changes
-    chief.apply_changes(@project, proposed_changes)
+    # Now apply Chief's changes (only for current section)
+    chief.apply_changes(@project, current_section_changes)
 
     # Mark level as saved (automation ran)
     set_level_saved_flag(true)
@@ -1612,6 +1617,37 @@ class ProjectsController < ApplicationController
     handle_chief_save_failure(e, changed_fields, user_set_values)
   end
   # rubocop:enable Metrics/MethodLength
+
+  # Filter proposed changes to only include fields for the current section.
+  # Detectives may propose changes for fields outside the current section,
+  # but we shouldn't apply them since the user won't see/review them.
+  # @param proposed_changes [Hash] Changes proposed by Chief
+  # @return [Hash] Filtered changes for current section only
+  def filter_changes_for_current_section(proposed_changes)
+    # Get normalized level for lookup
+    normalized_level = criteria_level_to_internal(@criteria_level)
+    valid_fields = Criteria::FIELDS_BY_SECTION[normalized_level]
+
+    # If we don't have a valid field set, don't filter (safety fallback)
+    return proposed_changes if valid_fields.nil?
+
+    # Return only fields that belong to this section
+    proposed_changes.select { |field, _data| valid_fields.include?(field) }
+  end
+
+  # Filter automated fields to only those in the current section.
+  # @param automated_fields [Array<Hash>] Array of automated field hashes
+  # @return [Array<Hash>] Filtered array
+  def filter_automated_fields_for_current_section(automated_fields)
+    normalized_level = criteria_level_to_internal(@criteria_level)
+    valid_fields = Criteria::FIELDS_BY_SECTION[normalized_level]
+
+    # If we don't have a valid field set, don't filter (safety fallback)
+    return automated_fields if valid_fields.nil?
+
+    # Return only fields that belong to this section
+    automated_fields.select { |entry| valid_fields.include?(entry[:field]) }
+  end
 
   # Handle Chief failures during save
   # @param error [StandardError] The exception that occurred

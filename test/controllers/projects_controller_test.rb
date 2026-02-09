@@ -1858,7 +1858,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
   # Automation feature tests
 
-  test 'first edit runs automation and sets saved flag' do
+  test 'first edit runs automation without setting saved flag' do
     log_in_as(@user)
     # Ensure baseline_1_saved is false (not yet saved)
     @project.update_column(:baseline_1_saved, false)
@@ -1867,7 +1867,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     @project.reload
-    assert @project.baseline_1_saved, 'baseline_1_saved flag should be set'
+    # Flag should NOT be set until user actually saves
+    assert_not @project.baseline_1_saved, 'baseline_1_saved flag should not be set until user saves'
   end
 
   test 'save with chief failure continues without automation' do
@@ -2001,7 +2002,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     # Find automated fields
     automated = controller.send(:find_automated_fields, original)
 
-    assert_includes automated, :license
+    assert_includes automated.map { |f| f[:field] }, :license
   end
 
   test 'run_save_automation catches chief exceptions' do

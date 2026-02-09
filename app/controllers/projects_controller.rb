@@ -484,6 +484,10 @@ class ProjectsController < ApplicationController
     # Run first-edit automation if this level hasn't been edited yet
     run_first_edit_automation_if_needed
 
+    # Ensure automation tracking arrays are initialized
+    @automated_fields ||= []
+    @overridden_fields ||= []
+
     return unless @project.notify_for_static_analysis?('0')
 
     message = t('.static_analysis_updated_html')
@@ -546,6 +550,9 @@ class ProjectsController < ApplicationController
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   # rubocop:disable Metrics/PerceivedComplexity
   def update
+    # Restore automation state from hidden fields (for save-and-continue highlighting)
+    restore_automation_state_from_params
+
     # Only accept updates if there's no repo_url change OR if change is ok
     if repo_url_unchanged_or_change_allowed?
       # Send CDN purge early, to give it time to distribute purge request
@@ -1439,8 +1446,10 @@ class ProjectsController < ApplicationController
     @automated_fields = find_automated_fields(original_values)
     @overridden_fields = [] # No overrides on first edit (all were '?')
 
-    # Mark this level as saved so we don't re-run automation
-    set_level_saved_flag(true)
+    # NOTE: We do NOT set level_saved_flag here. That should only happen
+    # when the user actually clicks save. The automated/overridden fields
+    # are stored in hidden form fields to preserve highlighting across
+    # "save and continue".
   end
 
   # Check if current badge level has already been saved/edited
@@ -1483,17 +1492,59 @@ class ProjectsController < ApplicationController
 
   # Find which fields were automatically filled (changed from '?' or nil)
   # @param original_values [Hash] Original field values
-  # @return [Array<Symbol>] List of field names that were filled
+  # @return [Array<Hash>] List of automated field info with :field, :new_value, :explanation
   def find_automated_fields(original_values)
     automated = []
     original_values.each do |field_name, old_value|
       new_value = @project.public_send(field_name)
       # Field was automated if it was '?' or blank and now has a value
       if (old_value.blank? || old_value == '?') && new_value.present? && new_value != '?'
-        automated << field_name
+        # Get the explanation from the justification field
+        justification_field = field_name.to_s.sub('_status', '_justification').to_sym
+        explanation = @project.public_send(justification_field) if @project.respond_to?(justification_field)
+        
+        automated << {
+          field: field_name,
+          new_value: new_value,
+          explanation: explanation
+        }
       end
     end
     automated
+  end
+
+  # Restore automation state from hidden form fields
+  # This preserves highlighting across "save and continue"
+  # Validates that field names are legitimate project status fields
+  def restore_automation_state_from_params
+    @automated_fields = parse_and_validate_field_list(params[:automated_fields])
+    @overridden_fields = parse_and_validate_field_list(params[:overridden_fields])
+  end
+
+  # Parse comma-separated field list and validate field names
+  # @param field_string [String, nil] Comma-separated field names
+  # @return [Array<Hash>] Array of validated field hashes with :field key
+  def parse_and_validate_field_list(field_string)
+    return [] if field_string.blank?
+
+    # Split by comma, strip whitespace, remove empty strings
+    field_names = field_string.split(',').map(&:strip).reject(&:blank?)
+    
+    # Validate each field name
+    validated_fields = []
+    field_names.each do |field_name|
+      # Convert to symbol and validate it's a legitimate status field
+      field_sym = field_name.to_sym
+      
+      # Check if it's a valid project column ending in _status
+      if field_name.match?(/\A[a-z_]+_status\z/) &&
+         @project.class.column_names.include?(field_name)
+        validated_fields << { field: field_sym }
+      end
+      # Silently skip invalid field names (don't raise error, just ignore)
+    end
+    
+    validated_fields
   end
 
   # Categorize a single Chief proposal (override vs automated)

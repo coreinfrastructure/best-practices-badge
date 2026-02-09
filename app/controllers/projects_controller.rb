@@ -1490,15 +1490,16 @@ class ProjectsController < ApplicationController
     original
   end
 
-  # Find which fields were automatically filled (changed from '?' or nil)
+  # Find which fields were automatically filled (changed from Unknown to a known value)
   # @param original_values [Hash] Original field values
   # @return [Array<Hash>] List of automated field info with :field, :new_value, :explanation
   def find_automated_fields(original_values)
     automated = []
     original_values.each do |field_name, old_value|
       new_value = @project.public_send(field_name)
-      # Field was automated if it was '?' or blank and now has a value
-      if (old_value.blank? || old_value == '?') && new_value.present? && new_value != '?'
+      # Field was automated if it was UNKNOWN and now has a different value
+      if old_value == CriterionStatus::UNKNOWN && 
+         new_value != CriterionStatus::UNKNOWN
         # Get the explanation from the justification field
         justification_field = field_name.to_s.sub('_status', '_justification').to_sym
         explanation = @project.public_send(justification_field) if @project.respond_to?(justification_field)

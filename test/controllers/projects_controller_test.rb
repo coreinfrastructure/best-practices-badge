@@ -1987,22 +1987,22 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     log_in_as(@user)
     controller = ProjectsController.new
 
-    # Set up project with '?' value
-    @project.license = '?'
+    # Set up project with Unknown status value
+    @project.contribution_status = CriterionStatus::UNKNOWN
     @project.save!
 
     controller.instance_variable_set(:@project, @project)
 
     # Capture original values
-    original = { license: '?' }
+    original = { contribution_status: CriterionStatus::UNKNOWN }
 
-    # Change to real value (simulating Chief fill-in)
-    @project.license = 'MIT'
+    # Change to Met (simulating Chief fill-in)
+    @project.contribution_status = CriterionStatus::MET
 
     # Find automated fields
     automated = controller.send(:find_automated_fields, original)
 
-    assert_includes automated.map { |f| f[:field] }, :license
+    assert_includes automated.map { |f| f[:field] }, :contribution_status
   end
 
   test 'run_save_automation catches chief exceptions' do

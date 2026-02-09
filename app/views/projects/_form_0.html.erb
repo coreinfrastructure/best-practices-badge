@@ -28,6 +28,12 @@
     <%# Store automation state across save-and-continue (just field names) %>
     <%= hidden_field_tag :automated_fields, (@automated_fields || []).map { |f| f[:field] }.join(',') %>
     <%= hidden_field_tag :overridden_fields, (@overridden_fields || []).map { |f| f[:field] }.join(',') %>
+    <%
+      # Check if non-criteria fields were automated (for highlighting)
+      automated_field_names = defined?(@automated_fields) ? @automated_fields.map { |f| f[:field] } : []
+      license_automated = automated_field_names.include?(:license)
+      implementation_languages_automated = automated_field_names.include?(:implementation_languages)
+    %>
 
   <br>
 
@@ -53,8 +59,9 @@
                            criteria_level: criteria_level
                          }) %>
 
-            <div class="hidable-text-entry">
+            <div class="hidable-text-entry <%= ApplicationHelper::HIGHLIGHT_AUTOMATED_CLASS if implementation_languages_automated %>">
             <strong><%= t 'projects.form_basics.implementation_languages.description' %></strong>
+            <%= ApplicationHelper::ROBOT_EMOJI_SAFE if implementation_languages_automated %>
             <%= render(partial: "details", locals: {
               criterion: "implementation_languages",
               details:
@@ -204,8 +211,9 @@
             t('FLOSS license',
               scope: :headings) %></h3>
 
-            <div class="hidable-text-entry">
+            <div class="hidable-text-entry <%= ApplicationHelper::HIGHLIGHT_AUTOMATED_CLASS if license_automated %>">
             <strong><%= t('projects.form_basics.license.description_html') %></strong>
+            <%= ApplicationHelper::ROBOT_EMOJI_SAFE if license_automated %>
             <%= render(partial: 'details',
                        locals: {
                          criterion: 'license',

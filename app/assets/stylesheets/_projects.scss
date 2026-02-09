@@ -176,8 +176,9 @@ td.project_name {
 
 // Icons for automation indicators
 .automation-icon, .override-icon {
+  display: inline-block;
   font-size: 0.9em;
-  margin-right: 8px;
+  margin-right: 0.25em; // Small space after icon
   vertical-align: middle;
 }
 

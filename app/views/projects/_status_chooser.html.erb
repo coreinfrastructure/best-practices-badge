@@ -34,11 +34,11 @@
        aria-label="<%= highlight_class.include?('automated') ? t('projects.edit.automation.aria_automated') : t('projects.edit.automation.aria_overridden') %>"
        role="status"
        <% end %>>
-    <%= automation_icon.html_safe if automation_icon.present? %>
     <% is_crypto = criterion_str.match(/^crypto_/)
        crypto_class = is_crypto ? ' criterion-is-crypto' : '' %>
 
     <div class="col-md-3 col-sm-4 col-xs-4 criteria-radio<%= crypto_class %>">
+      <%= automation_icon.html_safe if automation_icon.present? %>
       <div class="status-chooser">
       <%= f.form_group status_symbol do %>
         <%= link_to("##{criterion}") do %>

@@ -1527,12 +1527,12 @@ class ProjectsController < ApplicationController
       field_name = :"#{criterion.name}_status"
       original[field_name] = @project.public_send(field_name)
     end
-    
+
     # Also capture non-criteria fields that can be automated
     ALWAYS_AUTOMATABLE.each do |field_name|
       original[field_name] = @project.public_send(field_name) if @project.respond_to?(field_name)
     end
-    
+
     original
   end
 
@@ -1540,31 +1540,64 @@ class ProjectsController < ApplicationController
   # @param original_values [Hash] Original field values
   # @return [Array<Hash>] List of automated field info with :field, :new_value, :explanation
   def find_automated_fields(original_values)
-    automated = []
-    original_values.each do |field_name, old_value|
+    original_values.filter_map do |field_name, old_value|
       new_value = @project.public_send(field_name)
-      
-      # For criteria status fields: automated if changed from UNKNOWN
-      if field_name.to_s.end_with?('_status')
-        next unless old_value == CriterionStatus::UNKNOWN &&
-                    new_value != CriterionStatus::UNKNOWN
-
-        # Get the explanation from the justification field
-        justification_field = field_name.to_s.sub('_status', '_justification').to_sym
-        explanation = @project.public_send(justification_field) if @project.respond_to?(justification_field)
-
-        automated << { field: field_name, new_value: new_value, explanation: explanation }
-      # For non-criteria fields: automated if was blank/nil and now has value
-      elsif ALWAYS_AUTOMATABLE.include?(field_name)
-        was_blank = old_value.blank?
-        now_has_value = new_value.present?
-        
-        if was_blank && now_has_value
-          automated << { field: field_name, new_value: new_value, explanation: nil }
-        end
-      end
+      detect_automated_field_change(field_name, old_value, new_value)
     end
-    automated
+  end
+
+  # Check if a specific field was automated and return field info if so
+  # @param field_name [Symbol] The field being checked
+  # @param old_value [Object] Original value before automation
+  # @param new_value [Object] Current value after automation
+  # @return [Hash, nil] Field info hash if automated, nil otherwise
+  def detect_automated_field_change(field_name, old_value, new_value)
+    if criteria_status_field?(field_name)
+      detect_criteria_status_automation(field_name, old_value, new_value)
+    elsif ALWAYS_AUTOMATABLE.include?(field_name)
+      detect_non_criteria_automation(field_name, old_value, new_value)
+    end
+  end
+
+  # Check if field is a criteria status field
+  # @param field_name [Symbol] The field name
+  # @return [Boolean] true if this is a criteria status field
+  def criteria_status_field?(field_name)
+    field_name.to_s.end_with?('_status')
+  end
+
+  # Detect if a criteria status field was automated (changed from UNKNOWN)
+  # @param field_name [Symbol] The status field name
+  # @param old_value [Integer] Original status value
+  # @param new_value [Integer] Current status value
+  # @return [Hash, nil] Field info if automated, nil otherwise
+  def detect_criteria_status_automation(field_name, old_value, new_value)
+    return unless old_value == CriterionStatus::UNKNOWN &&
+                  new_value != CriterionStatus::UNKNOWN
+
+    explanation = get_justification_for_status(field_name)
+    { field: field_name, new_value: new_value, explanation: explanation }
+  end
+
+  # Get the justification text for a criteria status field
+  # @param status_field_name [Symbol] The status field name (e.g., :foo_status)
+  # @return [String, nil] Justification text or nil
+  def get_justification_for_status(status_field_name)
+    justification_field = status_field_name.to_s.sub('_status', '_justification').to_sym
+    return unless @project.respond_to?(justification_field)
+
+    @project.public_send(justification_field)
+  end
+
+  # Detect if a non-criteria field was automated (changed from blank to present)
+  # @param field_name [Symbol] The field name
+  # @param old_value [Object] Original value
+  # @param new_value [Object] Current value
+  # @return [Hash, nil] Field info if automated, nil otherwise
+  def detect_non_criteria_automation(field_name, old_value, new_value)
+    return if old_value.present? || new_value.blank?
+
+    { field: field_name, new_value: new_value, explanation: nil }
   end
 
   # Restore automation state from hidden form fields

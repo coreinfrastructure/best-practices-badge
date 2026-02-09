@@ -587,7 +587,9 @@ class ProjectsController < ApplicationController
 
       # Run Chief analysis with level and changed_fields for targeted validation
       # Pass user_set_values so we can detect overrides
-      run_save_automation(changed_fields, user_set_values)
+      # Only track automated fields if continuing to edit (for highlighting)
+      track_automated = params[:continue].present?
+      run_save_automation(changed_fields, user_set_values, track_automated: track_automated)
 
       @project.repo_url_updated_at = Time.now.utc if @project.repo_url_changed?
 
@@ -1498,18 +1500,14 @@ class ProjectsController < ApplicationController
     original_values.each do |field_name, old_value|
       new_value = @project.public_send(field_name)
       # Field was automated if it was UNKNOWN and now has a different value
-      if old_value == CriterionStatus::UNKNOWN && 
-         new_value != CriterionStatus::UNKNOWN
-        # Get the explanation from the justification field
-        justification_field = field_name.to_s.sub('_status', '_justification').to_sym
-        explanation = @project.public_send(justification_field) if @project.respond_to?(justification_field)
-        
-        automated << {
-          field: field_name,
-          new_value: new_value,
-          explanation: explanation
-        }
-      end
+      next unless old_value == CriterionStatus::UNKNOWN &&
+                  new_value != CriterionStatus::UNKNOWN
+
+      # Get the explanation from the justification field
+      justification_field = field_name.to_s.sub('_status', '_justification').to_sym
+      explanation = @project.public_send(justification_field) if @project.respond_to?(justification_field)
+
+      automated << { field: field_name, new_value: new_value, explanation: explanation }
     end
     automated
   end
@@ -1529,14 +1527,14 @@ class ProjectsController < ApplicationController
     return [] if field_string.blank?
 
     # Split by comma, strip whitespace, remove empty strings
-    field_names = field_string.split(',').map(&:strip).reject(&:blank?)
-    
+    field_names = field_string.split(',').map(&:strip).compact_blank
+
     # Validate each field name
     validated_fields = []
     field_names.each do |field_name|
       # Convert to symbol and validate it's a legitimate status field
       field_sym = field_name.to_sym
-      
+
       # Check if it's a valid project column ending in _status
       if field_name.match?(/\A[a-z_]+_status\z/) &&
          @project.class.column_names.include?(field_name)
@@ -1544,7 +1542,7 @@ class ProjectsController < ApplicationController
       end
       # Silently skip invalid field names (don't raise error, just ignore)
     end
-    
+
     validated_fields
   end
 
@@ -1552,23 +1550,26 @@ class ProjectsController < ApplicationController
   # @param field [Symbol] Field name
   # @param data [Hash] Chief proposal with :value, :explanation, :forced
   # @param user_value [Object] Value user set
+  # @param track_automated [Boolean] Whether to track automated fills (optimization)
   # rubocop:disable Metrics/MethodLength
-  def categorize_chief_proposal(field, data, user_value)
+  def categorize_chief_proposal(field, data, user_value, track_automated = true)
     chief_value = data[:value]
 
     # Only track if Chief is changing what the user set
     return if user_value == chief_value
 
-    if user_value.present? && user_value != '?'
+    if user_value.present? && user_value != CriterionStatus::UNKNOWN
       # Chief is overriding a real value user set - ORANGE
+      # Always track overrides (needed for warning messages)
       @overridden_fields << {
         field: field,
         old_value: user_value,
         new_value: chief_value,
         explanation: data[:explanation]
       }
-    elsif user_value == '?' || user_value.blank?
+    elsif (user_value == CriterionStatus::UNKNOWN || user_value.blank?) && track_automated
       # Chief is filling in an unknown - YELLOW
+      # Only track if we're continuing to edit (for highlighting)
       @automated_fields << {
         field: field,
         new_value: chief_value,
@@ -1582,8 +1583,9 @@ class ProjectsController < ApplicationController
   # @param changed_fields [Array<Symbol>] Fields that user modified
   # @param user_set_values [Hash] Values that user just set (before Chief)
   # @param chief_instance [Chief, nil] Optional Chief instance for testing
+  # @param track_automated [Boolean] Whether to track automated fills (for highlighting)
   # rubocop:disable Metrics/MethodLength
-  def run_save_automation(changed_fields, user_set_values, chief_instance = nil)
+  def run_save_automation(changed_fields, user_set_values, chief_instance: nil, track_automated: true)
     chief = chief_instance || Chief.new(@project, client_factory, entry_locale: @project.entry_locale)
     proposed_changes = chief.propose_changes(
       level: @criteria_level,
@@ -1598,7 +1600,7 @@ class ProjectsController < ApplicationController
       # Skip non-forced suggestions
       next unless data[:forced]
 
-      categorize_chief_proposal(field, data, user_set_values[field])
+      categorize_chief_proposal(field, data, user_set_values[field], track_automated)
     end
 
     # Now apply Chief's changes

@@ -1967,19 +1967,19 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     controller.instance_variable_set(:@overridden_fields, [])
     controller.instance_variable_set(:@automated_fields, [])
 
-    # Test categorizing automation (filling in '?')
+    # Test categorizing automation (filling in Unknown status)
     controller.send(:categorize_chief_proposal,
-                    :license,
-                    { value: 'MIT', explanation: 'Found MIT license', forced: false },
-                    '?') # User left as ?
+                    :contribution_status,
+                    { value: CriterionStatus::MET, explanation: 'GitHub uses issues/PRs', forced: true },
+                    CriterionStatus::UNKNOWN) # User left as Unknown
 
     # Should be categorized as automation (not override)
     automated = controller.instance_variable_get(:@automated_fields)
     overrides = controller.instance_variable_get(:@overridden_fields)
 
     assert_equal 1, automated.length
-    assert_equal :license, automated[0][:field]
-    assert_equal 'MIT', automated[0][:new_value]
+    assert_equal :contribution_status, automated[0][:field]
+    assert_equal CriterionStatus::MET, automated[0][:new_value]
     assert_equal 0, overrides.length # No overrides
   end
 
@@ -2002,7 +2002,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     # Find automated fields
     automated = controller.send(:find_automated_fields, original)
 
-    assert_includes automated.map { |f| f[:field] }, :contribution_status
+    assert_includes automated.pluck(:field), :contribution_status
   end
 
   test 'run_save_automation catches chief exceptions' do
@@ -2021,7 +2021,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     user_set_values = { floss_license_osi_status: 'Met' }
 
     # This should catch the exception and set @chief_failed
-    controller.send(:run_save_automation, changed_fields, user_set_values, mock_chief)
+    controller.send(:run_save_automation, changed_fields, user_set_values, chief_instance: mock_chief)
 
     assert controller.instance_variable_get(:@chief_failed)
     assert_equal [:floss_license_osi_status], controller.instance_variable_get(:@chief_failed_fields)
@@ -2126,6 +2126,24 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert json_response['automation'].key?('overridden')
     overridden = json_response['automation']['overridden']
     assert(overridden.any? { |f| f['field'] == 'description_good_status' })
+  end
+
+  test 'automated fields JSON includes field metadata' do
+    # Test the JSON serialization of automated fields directly
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@automated_fields, [
+                                       { field: :contribution_status, new_value: CriterionStatus::MET, explanation: 'Auto-detected' }
+                                     ])
+    controller.instance_variable_set(:@overridden_fields, [])
+
+    json_metadata = controller.send(:build_automation_metadata)
+
+    assert json_metadata.key?(:automated)
+    assert_equal 1, json_metadata[:automated].length
+    assert_equal :contribution_status, json_metadata[:automated][0][:field]
+    assert_equal CriterionStatus::MET, json_metadata[:automated][0][:value]
   end
 end
 # rubocop:enable Metrics/ClassLength

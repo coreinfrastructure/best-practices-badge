@@ -30,29 +30,6 @@ class Criteria
     # Class methods
     include Enumerable
 
-    # Build the FIELDS_BY_SECTION mapping after criteria are loaded
-    def build_fields_by_section
-      fields_map = {}
-      instantiate # Ensure criteria are loaded
-      # Use ALL_CRITERIA_LEVEL_NAMES which includes both metal and baseline levels
-      Sections::ALL_CRITERIA_LEVEL_NAMES.each do |level_name|
-        # Convert to internal format (e.g., "passing" -> "0", "baseline-1" -> "baseline-1")
-        internal_level = Sections::INPUT_TO_INTERNAL[level_name] || level_name
-        field_set = Set.new
-        # Get all criteria for this level
-        criteria_hash = self[internal_level]
-        next unless criteria_hash
-
-        criteria_hash.each_key do |criterion_name|
-          # Add both _status and _justification fields
-          field_set << :"#{criterion_name}_status"
-          field_set << :"#{criterion_name}_justification"
-        end
-        fields_map[internal_level] = field_set.freeze
-      end
-      fields_map.freeze
-    end
-
     # Retrieves criteria for a specific level.
     # @param key [String, Symbol] the criteria level key
     # @return [Hash] criteria hash for the specified level
@@ -290,6 +267,3 @@ class Criteria
   end
 end
 # rubocop:enable Metrics/ClassLength
-
-# Build the FIELDS_BY_SECTION constant now that the class is fully loaded
-Criteria.const_set(:FIELDS_BY_SECTION, Criteria.build_fields_by_section)

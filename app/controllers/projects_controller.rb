@@ -11,6 +11,44 @@ require 'net/http'
 class ProjectsController < ApplicationController
   include ProjectsHelper
 
+  # Fields that can always be automated regardless of section being edited.
+  # These are non-criteria fields that detectives can fill in (from their OUTPUTS).
+  # Based on detective analysis: name, license, description, implementation_languages
+  ALWAYS_AUTOMATABLE = %i[
+    name
+    license
+    description
+    implementation_languages
+  ].freeze
+
+  # Map each section/level to the set of valid automatable field names.
+  # Includes both criteria-specific fields (_status, _justification) and
+  # always-automatable fields (name, description, etc.).
+  # Built once at load time for efficient O(1) lookup during automation filtering.
+  FIELDS_BY_SECTION =
+    begin
+      fields_map = {}
+      Criteria.instantiate # Ensure criteria are loaded
+      # Use ALL_CRITERIA_LEVEL_NAMES which includes both metal and baseline levels
+      Sections::ALL_CRITERIA_LEVEL_NAMES.each do |level_name|
+        # Convert to internal format (e.g., "passing" -> "0", "baseline-1" -> "baseline-1")
+        internal_level = Sections::INPUT_TO_INTERNAL[level_name] || level_name
+        field_set = Set.new(ALWAYS_AUTOMATABLE) # Start with always-automatable fields
+
+        # Get all criteria for this level
+        criteria_hash = Criteria[internal_level]
+        if criteria_hash
+          criteria_hash.each_key do |criterion_name|
+            # Add both _status and _justification fields
+            field_set << :"#{criterion_name}_status"
+            field_set << :"#{criterion_name}_justification"
+          end
+        end
+        fields_map[internal_level] = field_set.freeze
+      end
+      fields_map.freeze
+    end
+
   # The 'badge', 'baseline_badge', and 'show_json' actions are special and
   # do NOT take a locale.
   skip_before_action :redir_missing_locale, only: %i[badge baseline_badge show_json]
@@ -1626,13 +1664,13 @@ class ProjectsController < ApplicationController
   def filter_changes_for_current_section(proposed_changes)
     # Get normalized level for lookup
     normalized_level = criteria_level_to_internal(@criteria_level)
-    valid_fields = Criteria::FIELDS_BY_SECTION[normalized_level]
+    valid_fields = FIELDS_BY_SECTION[normalized_level]
 
     # If we don't have a valid field set, don't filter (safety fallback)
     return proposed_changes if valid_fields.nil?
 
     # Return only fields that belong to this section
-    proposed_changes.select { |field, _data| valid_fields.include?(field) }
+    proposed_changes.slice(*valid_fields)
   end
 
   # Filter automated fields to only those in the current section.
@@ -1640,7 +1678,7 @@ class ProjectsController < ApplicationController
   # @return [Array<Hash>] Filtered array
   def filter_automated_fields_for_current_section(automated_fields)
     normalized_level = criteria_level_to_internal(@criteria_level)
-    valid_fields = Criteria::FIELDS_BY_SECTION[normalized_level]
+    valid_fields = FIELDS_BY_SECTION[normalized_level]
 
     # If we don't have a valid field set, don't filter (safety fallback)
     return automated_fields if valid_fields.nil?

@@ -589,8 +589,8 @@ en:
       automation:
         aria_automated: This field was automatically filled
         aria_overridden: This field value was corrected by automation
-        automated_tooltip: We filled this in based on project analysis
-        overridden_tooltip: We corrected this value based on project analysis
+        automated_tooltip: We filled this in using automated project analysis
+        overridden_tooltip: We corrected this value using automated project analysis
         chief_overrode:
           one: "We corrected 1 field based on project analysis:"
           other: "We corrected %{count} fields based on project analysis:"

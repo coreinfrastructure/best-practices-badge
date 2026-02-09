@@ -1527,6 +1527,12 @@ class ProjectsController < ApplicationController
       field_name = :"#{criterion.name}_status"
       original[field_name] = @project.public_send(field_name)
     end
+    
+    # Also capture non-criteria fields that can be automated
+    ALWAYS_AUTOMATABLE.each do |field_name|
+      original[field_name] = @project.public_send(field_name) if @project.respond_to?(field_name)
+    end
+    
     original
   end
 
@@ -1537,15 +1543,26 @@ class ProjectsController < ApplicationController
     automated = []
     original_values.each do |field_name, old_value|
       new_value = @project.public_send(field_name)
-      # Field was automated if it was UNKNOWN and now has a different value
-      next unless old_value == CriterionStatus::UNKNOWN &&
-                  new_value != CriterionStatus::UNKNOWN
+      
+      # For criteria status fields: automated if changed from UNKNOWN
+      if field_name.to_s.end_with?('_status')
+        next unless old_value == CriterionStatus::UNKNOWN &&
+                    new_value != CriterionStatus::UNKNOWN
 
-      # Get the explanation from the justification field
-      justification_field = field_name.to_s.sub('_status', '_justification').to_sym
-      explanation = @project.public_send(justification_field) if @project.respond_to?(justification_field)
+        # Get the explanation from the justification field
+        justification_field = field_name.to_s.sub('_status', '_justification').to_sym
+        explanation = @project.public_send(justification_field) if @project.respond_to?(justification_field)
 
-      automated << { field: field_name, new_value: new_value, explanation: explanation }
+        automated << { field: field_name, new_value: new_value, explanation: explanation }
+      # For non-criteria fields: automated if was blank/nil and now has value
+      elsif ALWAYS_AUTOMATABLE.include?(field_name)
+        was_blank = old_value.blank?
+        now_has_value = new_value.present?
+        
+        if was_blank && now_has_value
+          automated << { field: field_name, new_value: new_value, explanation: nil }
+        end
+      end
     end
     automated
   end

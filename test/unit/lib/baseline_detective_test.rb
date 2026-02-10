@@ -124,6 +124,32 @@ class BaselineDetectiveTest < ActiveSupport::TestCase
     assert_not results.key?(:osps_gv_03_01_status)
   end
 
+  # Mock repo_files that simulates an empty GitHub repo.
+  # GithubContentAccess#get_info returns [] for empty repos.
+  class MockEmptyRepoFiles
+    def present?
+      true
+    end
+
+    def respond_to?(method, include_all = false)
+      return true if method == :get_info
+
+      super
+    end
+
+    def get_info(_path)
+      []
+    end
+  end
+
+  test 'empty repo does not crash and returns no security policy' do
+    repo_files = MockEmptyRepoFiles.new
+    results = @detective.analyze(nil, repo_files: repo_files)
+
+    assert_not results.key?(:osps_gv_02_01_status)
+    assert_not results.key?(:osps_gv_03_01_status)
+  end
+
   # Test that we don't create false positives
   test 'returns empty hash when no criteria can be determined' do
     results = @detective.analyze(nil, {})

@@ -20,6 +20,30 @@ class RepoFilesExamineDetectiveTest < ActiveSupport::TestCase
     @octokit_client = true # anything other than nil
   end
 
+  # Mock repo_files that simulates an empty GitHub repo.
+  # GithubContentAccess#get_info returns [] for empty repos.
+  class MockEmptyRepoFiles
+    def blank?
+      false
+    end
+
+    def get_info(_path)
+      []
+    end
+  end
+
+  test 'empty repo returns unmet results without crashing' do
+    repo_files = MockEmptyRepoFiles.new
+    results = RepoFilesExamineDetective.new.analyze(nil, repo_files: repo_files)
+
+    assert results.key?(:contribution_status)
+    assert_equal CriterionStatus::UNMET, results[:contribution_status][:value]
+    assert results.key?(:license_location_status)
+    assert_equal CriterionStatus::UNMET, results[:license_location_status][:value]
+    assert results.key?(:release_notes_status)
+    assert_equal CriterionStatus::UNMET, results[:release_notes_status][:value]
+  end
+
   test 'LICENSES directory probably has licenses' do
     file_mock = MockRepoFilesLicenses.new
     results = RepoFilesExamineDetective.new.analyze(nil, repo_files: file_mock)

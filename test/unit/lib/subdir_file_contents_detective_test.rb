@@ -61,6 +61,22 @@ class SubdirFileContentsDetectiveTest < ActiveSupport::TestCase
     end
   end
 
+  test 'empty repo returns unmet results without crashing' do
+    # GithubContentAccess#get_info returns [] for empty repos
+    mock_repo_files = Object.new
+    mock_repo_files.define_singleton_method(:blank?) { false }
+    mock_repo_files.define_singleton_method(:get_info) { |_path| [] }
+
+    results = SubdirFileContentsDetective.new.analyze(
+      @evidence, repo_files: mock_repo_files
+    )
+
+    assert results.key?(:documentation_basics_status)
+    dbs = results[:documentation_basics_status]
+    assert_match(/No appropriate folder found/, dbs[:explanation])
+    assert_equal CriterionStatus::UNMET, dbs[:value]
+  end
+
   test 'Subdir File Contents Detective Test for no matching folder' do
     # Mock repo_files that has no matching documentation folder
     mock_repo_files = Object.new

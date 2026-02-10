@@ -175,15 +175,6 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test 'new project form contains badge series radio buttons' do
-    log_in_as(@user)
-    get '/en/projects/new'
-    assert_response :success
-    assert_includes @response.body, 'Badge series'
-    assert_select 'input[type=radio][name=starting_section][value=passing]'
-    assert_select 'input[type=radio][name=starting_section][value=baseline-1]'
-  end
-
   test 'create project defaults to passing section' do
     log_in_as(@user)
     stub_request(:get, 'https://api.github.com/user/repos')

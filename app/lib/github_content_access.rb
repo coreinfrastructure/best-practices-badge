@@ -29,5 +29,10 @@ class GithubContentAccess
   def get_info(filename)
     @octokit_client = @octokit_client_factory.call if @octokit_client.nil?
     @octokit_client.contents @fullname, path: filename
+  rescue Octokit::NotFound
+    # Empty repositories return 404 from the GitHub contents API.
+    # Return an empty array so callers iterate over zero entries
+    # instead of crashing.
+    []
   end
 end

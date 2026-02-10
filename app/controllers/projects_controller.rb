@@ -1480,6 +1480,10 @@ class ProjectsController < ApplicationController
     chief = Chief.new(@project, client_factory, entry_locale: @project.entry_locale)
     chief.autofill(level: @criteria_level)
 
+    # Apply any automation proposals from URL query parameters
+    # This allows external tools to propose field values
+    apply_url_automation_proposals(original_values)
+
     # Track which fields were changed (for highlighting)
     # Filter to only fields in the current section
     all_automated_fields = find_automated_fields(original_values)
@@ -1524,8 +1528,11 @@ class ProjectsController < ApplicationController
     # Convert level to internal format for Criteria.active
     internal_level = criteria_level_to_internal(@criteria_level)
     Criteria.active(internal_level).each do |criterion|
-      field_name = :"#{criterion.name}_status"
-      original[field_name] = @project.public_send(field_name)
+      # Capture both status and justification for criteria
+      status_field = :"#{criterion.name}_status"
+      justification_field = :"#{criterion.name}_justification"
+      original[status_field] = @project.public_send(status_field)
+      original[justification_field] = @project.public_send(justification_field) if @project.respond_to?(justification_field)
     end
 
     # Also capture non-criteria fields that can be automated
@@ -1554,6 +1561,8 @@ class ProjectsController < ApplicationController
   def detect_automated_field_change(field_name, old_value, new_value)
     if criteria_status_field?(field_name)
       detect_criteria_status_automation(field_name, old_value, new_value)
+    elsif criteria_justification_field?(field_name)
+      detect_criteria_justification_automation(field_name, old_value, new_value)
     elsif ALWAYS_AUTOMATABLE.include?(field_name)
       detect_non_criteria_automation(field_name, old_value, new_value)
     end
@@ -1564,6 +1573,13 @@ class ProjectsController < ApplicationController
   # @return [Boolean] true if this is a criteria status field
   def criteria_status_field?(field_name)
     field_name.to_s.end_with?('_status')
+  end
+
+  # Check if field is a criteria justification field
+  # @param field_name [Symbol] The field name
+  # @return [Boolean] true if this is a criteria justification field
+  def criteria_justification_field?(field_name)
+    field_name.to_s.end_with?('_justification')
   end
 
   # Detect if a criteria status field was automated (changed from UNKNOWN)
@@ -1589,6 +1605,22 @@ class ProjectsController < ApplicationController
     @project.public_send(justification_field)
   end
 
+  # Detect if a criteria justification field was automated (changed value)
+  # URL proposals always count as automated when they change a field
+  # @param field_name [Symbol] The justification field name
+  # @param old_value [String] Original justification
+  # @param new_value [String] Current justification
+  # @return [Hash, nil] Field info if automated, nil otherwise
+  def detect_criteria_justification_automation(field_name, old_value, new_value)
+    # Any change to justification counts as automation
+    # (typically from URL proposal or Chief detective)
+    return if old_value == new_value
+
+    # Get the corresponding status field to track as parent
+    status_field = field_name.to_s.sub('_justification', '_status').to_sym
+    { field: status_field, new_value: new_value, explanation: new_value }
+  end
+
   # Detect if a non-criteria field was automated (changed from blank to present)
   # @param field_name [Symbol] The field name
   # @param old_value [Object] Original value
@@ -1598,6 +1630,76 @@ class ProjectsController < ApplicationController
     return if old_value.present? || new_value.blank?
 
     { field: field_name, new_value: new_value, explanation: nil }
+  end
+
+  # Apply automation proposals from URL query parameters
+  # External tools can propose field values by including them in the URL
+  # Example: /projects/123/edit?section=0&contribution_status=3&contribution_justification=Found+file
+  # This allows tools to generate URLs that, when clicked by authorized users,
+  # show forms pre-filled with proposed values (highlighted for review)
+  # @param original_values [Hash] Original field values before any automation
+  def apply_url_automation_proposals(original_values)
+    # Get valid fields for current section
+    valid_fields = FIELDS_BY_SECTION[@criteria_level]
+    return if valid_fields.nil?
+
+    # Check each query parameter
+    params.each do |param_name, param_value|
+      field_sym = param_name.to_sym
+      
+      # Skip if not a valid field for this section
+      next unless valid_fields.include?(field_sym)
+      
+      # Skip if value is blank
+      next if param_value.blank?
+      
+      # Apply the value based on field type
+      apply_url_proposal_value(field_sym, param_value, original_values)
+    end
+  end
+
+  # Apply a single URL proposal value to the project
+  # URL proposals override any existing value (user clicked the URL to see these proposals)
+  # @param field_sym [Symbol] Field name
+  # @param value [String] Proposed value from URL
+  # @param original_values [Hash] Original values for tracking changes (unused here)
+  def apply_url_proposal_value(field_sym, value, original_values)
+    field_name = field_sym.to_s
+
+    # For status fields, convert string to integer (must be valid status)
+    if field_name.end_with?('_status')
+      # Parse and validate status value - must be one of 4 legal values
+      status_value = parse_status_value(value)
+      return unless status_value # Ignore invalid status values
+
+      @project.public_send(:"#{field_name}=", status_value)
+    # For justification fields, accept any UTF-8 string
+    elsif field_name.end_with?('_justification')
+      # Strip leading/trailing whitespace but otherwise accept as-is
+      @project.public_send(:"#{field_name}=", value.strip)
+    # For non-criteria fields (name, license, etc.), accept any string
+    else
+      @project.public_send(:"#{field_name}=", value.strip)
+    end
+  end
+
+  # Parse a status value from URL parameter
+  # External status values are always strings: '?', 'Unmet', 'N/A', 'Met'
+  # (case-insensitive, with whitespace stripped)
+  # @param value [String] Value from URL parameter
+  # @return [Integer, nil] Status integer or nil if invalid
+  def parse_status_value(value)
+    # Strip whitespace and normalize to lowercase
+    normalized = value.to_s.strip.downcase
+
+    # Parse status string to internal integer
+    case normalized
+    when '?', 'unknown' then CriterionStatus::UNKNOWN
+    when 'unmet' then CriterionStatus::UNMET
+    when 'n/a', 'na' then CriterionStatus::NA
+    when 'met' then CriterionStatus::MET
+    else nil # Invalid status value - will be ignored
+    end
   end
 
   # Restore automation state from hidden form fields

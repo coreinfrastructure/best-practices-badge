@@ -8,6 +8,10 @@ require 'test_helper'
 
 # rubocop:disable Metrics/ClassLength
 class ChiefTest < ActiveSupport::TestCase
+  # Use the same field sets as production (computed from Criteria at load time).
+  # Keys: '0' = passing, '1' = silver, '2' = gold, 'baseline-1', etc.
+  FIELDS = ProjectsController::FIELDS_BY_SECTION
+
   setup do
     @full_name = 'linuxfoundation/cii-best-practices-badge'
     @repo_name = 'best-practices-badge'
@@ -211,43 +215,38 @@ class ChiefTest < ActiveSupport::TestCase
     assert result.size > 10
   end
 
-  test 'needed_outputs returns only requested metal fields' do
+  test 'needed_outputs returns only requested passing fields' do
     chief = Chief.new(@sample_project, proc { Octokit::Client.new })
-    metal_fields = Set.new(%i[
-                             floss_license_osi_status floss_license_status
-                             contribution_status build_status
-                           ])
-    result = chief.needed_outputs(metal_fields)
+    result = chief.needed_outputs(FIELDS['0'])
 
-    # Should include the requested metal criteria
-    assert_includes result, :floss_license_osi_status
-    assert_includes result, :contribution_status
+    # Should include passing-level criteria that detectives produce
+    passing_detective_outputs = result
+    assert passing_detective_outputs.size.positive?
 
-    # Should not include unrequested baseline criteria
-    assert_not_includes result, :osps_le_03_01_status
+    # Should not include baseline-only criteria
+    baseline_only = FIELDS['baseline-1'] - FIELDS['0']
+    baseline_only.each do |field|
+      assert_not_includes result, field
+    end
   end
 
   test 'needed_outputs returns only requested baseline fields' do
     chief = Chief.new(@sample_project, proc { Octokit::Client.new })
-    baseline_fields = Set.new(%i[
-                                osps_le_03_01_status osps_br_03_01_status
-                                osps_gv_02_01_status
-                              ])
-    result = chief.needed_outputs(baseline_fields)
+    result = chief.needed_outputs(FIELDS['baseline-1'])
 
-    # Should include the requested baseline criteria
-    assert_includes result, :osps_le_03_01_status
-    assert_includes result, :osps_br_03_01_status
+    # Should include baseline criteria that detectives produce
+    assert result.size.positive?
 
-    # Should not include unrequested metal criteria
-    assert_not_includes result, :floss_license_osi_status
+    # Should not include passing-only criteria
+    passing_only = FIELDS['0'] - FIELDS['baseline-1']
+    passing_only.each do |field|
+      assert_not_includes result, field
+    end
   end
 
   test 'needed_outputs includes changed_fields' do
     chief = Chief.new(@sample_project, proc { Octokit::Client.new })
-    result = chief.needed_outputs(
-      Set.new([:floss_license_status]), [:custom_field]
-    )
+    result = chief.needed_outputs(FIELDS['0'], [:custom_field])
 
     # Should include the explicitly changed field
     assert_includes result, :custom_field
@@ -255,13 +254,8 @@ class ChiefTest < ActiveSupport::TestCase
 
   test 'propose_changes accepts needed_fields parameter' do
     chief = Chief.new(@sample_project, proc { Octokit::Client.new })
-    metal_fields = Set.new(%i[
-                             floss_license_osi_status floss_license_status
-                             contribution_status build_status name description license
-                             implementation_languages
-                           ])
     VCR.use_cassette('github') do
-      result = chief.propose_changes(needed_fields: metal_fields)
+      result = chief.propose_changes(needed_fields: FIELDS['0'])
       assert_kind_of Hash, result
     end
   end
@@ -274,8 +268,8 @@ class ChiefTest < ActiveSupport::TestCase
     detectives_all = chief.filter_needed_detectives(needed_all)
     detective_count_all = detectives_all.size
 
-    # Count how many detectives would run for a subset of fields
-    subset = Set.new(%i[floss_license_osi_status floss_license_status])
+    # Count how many detectives would run for a single detective's outputs
+    subset = Set.new(FlossLicenseDetective::OUTPUTS)
     needed_subset = chief.needed_outputs(subset)
     detectives_subset = chief.filter_needed_detectives(needed_subset)
     detective_count_subset = detectives_subset.size
@@ -287,13 +281,8 @@ class ChiefTest < ActiveSupport::TestCase
 
   test 'autofill accepts needed_fields parameter' do
     chief = Chief.new(@sample_project, proc { Octokit::Client.new })
-    metal_fields = Set.new(%i[
-                             floss_license_osi_status floss_license_status
-                             contribution_status build_status name description license
-                             implementation_languages
-                           ])
     VCR.use_cassette('github') do
-      chief.autofill(needed_fields: metal_fields)
+      chief.autofill(needed_fields: FIELDS['0'])
     end
     # Should not raise an error
     assert_equal "https://github.com/#{@full_name}", @sample_project[:repo_url]
@@ -307,25 +296,17 @@ class ChiefTest < ActiveSupport::TestCase
     project2 = Project.new
     project2[:repo_url] = "https://github.com/#{@full_name}"
 
-    metal_fields = Set.new(%i[
-                             floss_license_osi_status floss_license_status
-                             contribution_status build_status name description license
-                             implementation_languages release_notes_status
-                             build_common_tools_status license_location_status
-                             documentation_basics_status
-                           ])
-
     VCR.use_cassette('github') do
-      # Run autofill with specific fields on project1
+      # Run autofill with passing-level fields on project1
       chief1 = Chief.new(project1, proc { Octokit::Client.new })
-      chief1.autofill(needed_fields: metal_fields)
+      chief1.autofill(needed_fields: FIELDS['0'])
 
       # Run autofill with all fields on project2
       chief2 = Chief.new(project2, proc { Octokit::Client.new })
       chief2.autofill
     end
 
-    # For metal criteria, results should be the same
+    # For passing-level criteria, results should be the same
     assert_equal project1[:floss_license_osi_status],
                  project2[:floss_license_osi_status]
     assert_equal project1[:contribution_status],

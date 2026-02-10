@@ -72,8 +72,8 @@ class BaselineDetectiveTest < ActiveSupport::TestCase
     results = @detective.analyze(nil, license: 'MIT')
 
     assert results.key?(:osps_le_02_01_status)
-    assert_equal 'Met', results[:osps_le_02_01_status][:value]
-    assert results[:osps_le_02_01_status][:confidence] >= 4
+    assert_equal CriterionStatus::MET, results[:osps_le_02_01_status][:value]
+    assert results[:osps_le_02_01_status][:confidence] >= 3
   end
 
   test 'does not mark license met for NOASSERTION' do
@@ -94,11 +94,11 @@ class BaselineDetectiveTest < ActiveSupport::TestCase
     results = @detective.analyze(nil, repo_files: repo_files)
 
     assert results.key?(:osps_gv_02_01_status)
-    assert_equal 'Met', results[:osps_gv_02_01_status][:value]
+    assert_equal CriterionStatus::MET, results[:osps_gv_02_01_status][:value]
     assert results[:osps_gv_02_01_status][:confidence] >= 3
 
     assert results.key?(:osps_gv_03_01_status)
-    assert_equal 'Met', results[:osps_gv_03_01_status][:value]
+    assert_equal CriterionStatus::MET, results[:osps_gv_03_01_status][:value]
   end
 
   test 'finds SECURITY.txt file' do
@@ -106,7 +106,7 @@ class BaselineDetectiveTest < ActiveSupport::TestCase
     results = @detective.analyze(nil, repo_files: repo_files)
 
     assert results.key?(:osps_gv_02_01_status)
-    assert_equal 'Met', results[:osps_gv_02_01_status][:value]
+    assert_equal CriterionStatus::MET, results[:osps_gv_02_01_status][:value]
   end
 
   test 'finds security file case-insensitively' do

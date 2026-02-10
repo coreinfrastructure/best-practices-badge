@@ -51,6 +51,9 @@ class ChiefTest < ActiveSupport::TestCase
                  results[:build_justification]
     assert_equal 'Ruby, JavaScript, Shell, SCSS, Dockerfile, Makefile, Procfile',
                  results[:implementation_languages]
+    # BaselineDetective should detect license declaration via Chief pipeline
+    assert_equal CriterionStatus::MET, results[:osps_le_02_01_status],
+                 'BaselineDetective should set osps_le_02_01 when license is known'
   end
   # rubocop:enable Metrics/BlockLength
 
@@ -198,9 +201,9 @@ class ChiefTest < ActiveSupport::TestCase
            'HowAccessRepoFilesDetective should come before RepoFilesExamineDetective'
   end
 
-  test 'needed_outputs_for_level returns all outputs when level is nil' do
+  test 'needed_outputs returns all outputs when needed_fields is nil' do
     chief = Chief.new(@sample_project, proc { Octokit::Client.new })
-    result = chief.needed_outputs_for_level(nil)
+    result = chief.needed_outputs(nil)
 
     # Should include outputs from all detectives
     assert_includes result, :floss_license_osi_status # metal
@@ -208,73 +211,95 @@ class ChiefTest < ActiveSupport::TestCase
     assert result.size > 10
   end
 
-  test 'needed_outputs_for_level returns metal criteria for passing level' do
+  test 'needed_outputs returns only requested metal fields' do
     chief = Chief.new(@sample_project, proc { Octokit::Client.new })
-    result = chief.needed_outputs_for_level('passing')
+    metal_fields = Set.new(%i[
+                             floss_license_osi_status floss_license_status
+                             contribution_status build_status
+                           ])
+    result = chief.needed_outputs(metal_fields)
 
-    # Should include metal criteria (no osps_ prefix)
+    # Should include the requested metal criteria
     assert_includes result, :floss_license_osi_status
     assert_includes result, :contribution_status
 
-    # Should not include baseline-only criteria (osps_ prefix)
-    # (though some osps_ are in both metal and baseline detectives)
+    # Should not include unrequested baseline criteria
+    assert_not_includes result, :osps_le_03_01_status
   end
 
-  test 'needed_outputs_for_level returns baseline criteria for baseline-1 level' do
+  test 'needed_outputs returns only requested baseline fields' do
     chief = Chief.new(@sample_project, proc { Octokit::Client.new })
-    result = chief.needed_outputs_for_level('baseline-1')
+    baseline_fields = Set.new(%i[
+                                osps_le_03_01_status osps_br_03_01_status
+                                osps_gv_02_01_status
+                              ])
+    result = chief.needed_outputs(baseline_fields)
 
-    # Should include baseline criteria (osps_ prefix)
+    # Should include the requested baseline criteria
     assert_includes result, :osps_le_03_01_status
     assert_includes result, :osps_br_03_01_status
+
+    # Should not include unrequested metal criteria
+    assert_not_includes result, :floss_license_osi_status
   end
 
-  test 'needed_outputs_for_level includes changed_fields' do
+  test 'needed_outputs includes changed_fields' do
     chief = Chief.new(@sample_project, proc { Octokit::Client.new })
-    result = chief.needed_outputs_for_level('passing', [:custom_field])
+    result = chief.needed_outputs(
+      Set.new([:floss_license_status]), [:custom_field]
+    )
 
     # Should include the explicitly changed field
     assert_includes result, :custom_field
   end
 
-  test 'propose_changes accepts level parameter' do
+  test 'propose_changes accepts needed_fields parameter' do
     chief = Chief.new(@sample_project, proc { Octokit::Client.new })
+    metal_fields = Set.new(%i[
+                             floss_license_osi_status floss_license_status
+                             contribution_status build_status name description license
+                             implementation_languages
+                           ])
     VCR.use_cassette('github') do
-      result = chief.propose_changes(level: 'passing')
+      result = chief.propose_changes(needed_fields: metal_fields)
       assert_kind_of Hash, result
     end
   end
 
-  test 'propose_changes with level runs fewer detectives than without' do
+  test 'propose_changes with needed_fields runs fewer detectives than without' do
     chief = Chief.new(@sample_project, proc { Octokit::Client.new })
 
-    # Mock to count detective invocations
-
-    # Count how many detectives would run for level=nil
-    needed_all = chief.needed_outputs_for_level(nil)
+    # Count how many detectives would run for all fields
+    needed_all = chief.needed_outputs(nil)
     detectives_all = chief.filter_needed_detectives(needed_all)
     detective_count_all = detectives_all.size
 
-    # Count how many detectives would run for level='passing'
-    needed_passing = chief.needed_outputs_for_level('passing')
-    detectives_passing = chief.filter_needed_detectives(needed_passing)
-    detective_count_level = detectives_passing.size
+    # Count how many detectives would run for a subset of fields
+    subset = Set.new(%i[floss_license_osi_status floss_license_status])
+    needed_subset = chief.needed_outputs(subset)
+    detectives_subset = chief.filter_needed_detectives(needed_subset)
+    detective_count_subset = detectives_subset.size
 
-    # Should run fewer detectives for a specific level
-    assert detective_count_level <= detective_count_all,
-           "Level-specific should run <= detectives than all (#{detective_count_level} vs #{detective_count_all})"
+    # Should run fewer detectives for a subset of fields
+    assert detective_count_subset <= detective_count_all,
+           "Subset should run <= detectives than all (#{detective_count_subset} vs #{detective_count_all})"
   end
 
-  test 'autofill accepts level parameter' do
+  test 'autofill accepts needed_fields parameter' do
     chief = Chief.new(@sample_project, proc { Octokit::Client.new })
+    metal_fields = Set.new(%i[
+                             floss_license_osi_status floss_license_status
+                             contribution_status build_status name description license
+                             implementation_languages
+                           ])
     VCR.use_cassette('github') do
-      chief.autofill(level: 'passing')
+      chief.autofill(needed_fields: metal_fields)
     end
     # Should not raise an error
     assert_equal "https://github.com/#{@full_name}", @sample_project[:repo_url]
   end
 
-  test 'autofill with level produces same results for overlapping criteria' do
+  test 'autofill with needed_fields produces same results for overlapping criteria' do
     # Create two identical projects
     project1 = Project.new
     project1[:repo_url] = "https://github.com/#{@full_name}"
@@ -282,12 +307,20 @@ class ChiefTest < ActiveSupport::TestCase
     project2 = Project.new
     project2[:repo_url] = "https://github.com/#{@full_name}"
 
-    VCR.use_cassette('github') do
-      # Run autofill with level on project1
-      chief1 = Chief.new(project1, proc { Octokit::Client.new })
-      chief1.autofill(level: 'passing')
+    metal_fields = Set.new(%i[
+                             floss_license_osi_status floss_license_status
+                             contribution_status build_status name description license
+                             implementation_languages release_notes_status
+                             build_common_tools_status license_location_status
+                             documentation_basics_status
+                           ])
 
-      # Run autofill without level on project2
+    VCR.use_cassette('github') do
+      # Run autofill with specific fields on project1
+      chief1 = Chief.new(project1, proc { Octokit::Client.new })
+      chief1.autofill(needed_fields: metal_fields)
+
+      # Run autofill with all fields on project2
       chief2 = Chief.new(project2, proc { Octokit::Client.new })
       chief2.autofill
     end

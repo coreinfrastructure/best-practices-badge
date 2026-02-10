@@ -1495,7 +1495,7 @@ class ProjectsController < ApplicationController
 
     # Run Chief analysis for this specific level
     chief = Chief.new(@project, client_factory, entry_locale: @project.entry_locale)
-    chief.autofill(level: @criteria_level)
+    chief.autofill(needed_fields: fields_for_current_section)
 
     # Apply any automation proposals from URL query parameters
     # This allows external tools to propose field values
@@ -1554,6 +1554,13 @@ class ProjectsController < ApplicationController
     return false unless flag_name
 
     @project.public_send(flag_name)
+  end
+
+  # Return the set of automatable field names for the current section.
+  # Used to tell Chief which fields to fill, avoiding heuristics.
+  # @return [Set<Symbol>, nil] Field set, or nil if section unknown
+  def fields_for_current_section
+    FIELDS_BY_SECTION[criteria_level_to_internal(@criteria_level)]
   end
 
   # Get the flag name for the current badge level
@@ -1809,7 +1816,7 @@ class ProjectsController < ApplicationController
   def run_save_automation(changed_fields, user_set_values, chief_instance: nil, track_automated: true)
     chief = chief_instance || Chief.new(@project, client_factory, entry_locale: @project.entry_locale)
     proposed_changes = chief.propose_changes(
-      level: @criteria_level,
+      needed_fields: fields_for_current_section,
       changed_fields: changed_fields
     )
 

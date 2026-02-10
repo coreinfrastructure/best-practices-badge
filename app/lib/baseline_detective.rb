@@ -12,8 +12,8 @@
 # This detective only handles truly baseline-unique checks like SECURITY.md
 # file detection.
 class BaselineDetective < Detective
-  # We need repo_files to check for baseline-specific files
-  INPUTS = [:repo_files].freeze
+  # We need repo_files for security file detection and license for declaration check
+  INPUTS = %i[repo_files license].freeze
 
   # Baseline criteria that are unique to baseline (not checked by metal series)
   OUTPUTS = %i[
@@ -51,13 +51,13 @@ class BaselineDetective < Detective
   # Add security policy results to the changeset
   def add_security_policy_results(result, security_file)
     result[:osps_gv_02_01_status] = {
-      value: 'Met',
+      value: CriterionStatus::MET,
       confidence: 3,
       explanation: "Security policy found: #{security_file['name']}."
     }
 
     result[:osps_gv_03_01_status] = {
-      value: 'Met',
+      value: CriterionStatus::MET,
       confidence: 3,
       explanation: 'Security policy file suggests vulnerability reporting ' \
                    'process is documented.'
@@ -71,7 +71,7 @@ class BaselineDetective < Detective
     return if %w[NOASSERTION NONE].include?(current[:license])
 
     result[:osps_le_02_01_status] = {
-      value: 'Met',
+      value: CriterionStatus::MET,
       confidence: 3,
       explanation: "License declared: #{current[:license]}."
     }

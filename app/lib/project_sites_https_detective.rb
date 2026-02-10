@@ -35,7 +35,7 @@ class ProjectSitesHttpsDetective < Detective
           value: CriterionStatus::UNMET, confidence: 5,
           explanation: '// Given an http: URL.'
         }
-        # Also mark baseline criteria as unmet
+      # Also mark baseline criteria as unmet
       @results[:osps_br_03_01_status] =
         {
           value: CriterionStatus::UNMET, confidence: 5,

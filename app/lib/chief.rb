@@ -224,38 +224,24 @@ class Chief
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
-  # Determine which output fields are needed based on the badge level.
-  # @param level [String, nil] Badge level ('passing', 'silver', 'gold',
-  #   'baseline-1', 'baseline-2', 'baseline-3') or nil for all criteria
-  # @param changed_fields [Array<Symbol>, nil] Additional fields that were changed
-  # @return [Set<Symbol>] Set of field symbols needed
-  # rubocop:disable Metrics/MethodLength
-  def needed_outputs_for_level(level, changed_fields = nil)
+  # Determine which detective outputs are needed.
+  # The caller supplies the set of fields relevant to the current section;
+  # Chief intersects that with detective OUTPUTS to decide what to run.
+  # @param needed_fields [Set<Symbol>, nil] Fields the caller wants filled,
+  #   or nil to request all detective outputs (e.g. cron job scenario)
+  # @param changed_fields [Array<Symbol>, nil] Additional fields to include
+  # @return [Set<Symbol>] Set of output field symbols needed
+  def needed_outputs(needed_fields, changed_fields = nil)
     needed = Set.new
 
-    # If level is nil, we need everything (cron job scenario)
-    if level.nil?
+    if needed_fields.nil?
+      # nil means "everything" (cron job / full-autofill scenario)
       ALL_DETECTIVES.each { |d| needed.merge(d::OUTPUTS) }
-      return needed
-    end
-
-    # Add outputs for fields in this level
-    # Note: This is a simplified version. Real implementation would query
-    # Criteria.active(level) to get the actual criteria for this level.
-    # For now, we'll use a heuristic based on field name patterns.
-    case level
-    when 'passing', 'silver', 'gold'
-      # Metal series - fields without osps_ prefix
+    else
+      # Keep only detective outputs that the caller actually wants
       ALL_DETECTIVES.each do |detective_class|
         detective_class::OUTPUTS.each do |output|
-          needed.add(output) unless output.to_s.start_with?('osps_')
-        end
-      end
-    when 'baseline-1', 'baseline-2', 'baseline-3'
-      # Baseline series - fields with osps_ prefix
-      ALL_DETECTIVES.each do |detective_class|
-        detective_class::OUTPUTS.each do |output|
-          needed.add(output) if output.to_s.start_with?('osps_')
+          needed.add(output) if needed_fields.include?(output)
         end
       end
     end
@@ -265,20 +251,20 @@ class Chief
 
     needed
   end
-  # rubocop:enable Metrics/MethodLength
 
   # Analyze project and reply with a changeset in the form
   # { fieldname1: { value: value, confidence: 1..5, explanation: text}, ...}
   # Do this by determining the right order and way to invoke "detectives"
   # for this project, invoke them, and process their results.
-  # @param level [String, nil] Badge level to analyze (nil = all)
+  # @param needed_fields [Set<Symbol>, nil] Fields the caller wants filled
+  #   (nil = all detective outputs, e.g. cron job)
   # @param changed_fields [Array<Symbol>, nil] Fields that were explicitly changed
   # rubocop:disable Metrics/MethodLength
-  def propose_changes(level: nil, changed_fields: nil)
+  def propose_changes(needed_fields: nil, changed_fields: nil)
     current_proposal = {} # Current best changeset.
 
-    # Determine what outputs we need based on level and changed fields
-    needed = needed_outputs_for_level(level, changed_fields)
+    # Determine what outputs we need
+    needed = needed_outputs(needed_fields, changed_fields)
 
     # Filter to only needed detectives (subset varies per request)
     detectives_to_run = filter_needed_detectives(needed)
@@ -327,10 +313,13 @@ class Chief
   # rubocop:enable Metrics/PerceivedComplexity
 
   # Given form data about a project, return an improved version.
-  # @param level [String, nil] Badge level to analyze (nil = all)
+  # @param needed_fields [Set<Symbol>, nil] Fields the caller wants filled
+  #   (nil = all detective outputs)
   # @param changed_fields [Array<Symbol>, nil] Fields that were explicitly changed
-  def autofill(level: nil, changed_fields: nil)
-    my_proposed_changes = propose_changes(level: level, changed_fields: changed_fields)
+  def autofill(needed_fields: nil, changed_fields: nil)
+    my_proposed_changes = propose_changes(
+      needed_fields: needed_fields, changed_fields: changed_fields
+    )
     apply_changes(@evidence.project, my_proposed_changes)
   end
 end

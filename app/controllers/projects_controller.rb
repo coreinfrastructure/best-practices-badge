@@ -1609,6 +1609,7 @@ class ProjectsController < ApplicationController
   end
 
   # Parse comma-separated field list and validate field names
+  # Only accepts fields valid for the current section being edited
   # @param field_string [String, nil] Comma-separated field names
   # @return [Array<Hash>] Array of validated field hashes with :field key
   def parse_and_validate_field_list(field_string)
@@ -1617,15 +1618,18 @@ class ProjectsController < ApplicationController
     # Split by comma, strip whitespace, remove empty strings
     field_names = field_string.split(',').map(&:strip).compact_blank
 
+    # Get valid fields for current section
+    valid_fields = FIELDS_BY_SECTION[@criteria_level]
+    return [] if valid_fields.nil? # Invalid section level
+
     # Validate each field name
     validated_fields = []
     field_names.each do |field_name|
-      # Convert to symbol and validate it's a legitimate status field
+      # Convert to symbol
       field_sym = field_name.to_sym
 
-      # Check if it's a valid project column ending in _status
-      if field_name.match?(/\A[a-z_]+_status\z/) &&
-         @project.class.column_names.include?(field_name)
+      # Only accept if field is in the valid set for this section
+      if valid_fields.include?(field_sym)
         validated_fields << { field: field_sym }
       end
       # Silently skip invalid field names (don't raise error, just ignore)

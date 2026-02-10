@@ -2145,5 +2145,139 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal :contribution_status, json_metadata[:automated][0][:field]
     assert_equal CriterionStatus::MET, json_metadata[:automated][0][:value]
   end
+
+  # Security tests for automation field validation
+  # These ensure malicious/invalid data in hidden fields is rejected
+
+  test 'parse_and_validate_field_list rejects SQL injection attempt' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.params = ActionController::Parameters.new(id: @project.id)
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, '0')
+
+    # SQL injection attempts should be silently ignored
+    malicious = "'; DROP TABLE projects; --"
+    result = controller.send(:parse_and_validate_field_list, malicious)
+    assert_equal [], result, 'SQL injection attempt should be rejected'
+  end
+
+  test 'parse_and_validate_field_list rejects non-existent field' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.params = ActionController::Parameters.new(id: @project.id)
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, '0')
+
+    # Non-existent field should be rejected
+    result = controller.send(:parse_and_validate_field_list, 'not_a_field')
+    assert_equal [], result, 'Non-existent field should be rejected'
+  end
+
+  test 'parse_and_validate_field_list rejects field from different section' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.params = ActionController::Parameters.new(id: @project.id)
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, '0') # Editing passing level
+
+    # osps_br_01_01_status is a baseline-1 criterion, not in passing
+    result = controller.send(:parse_and_validate_field_list, 'osps_br_01_01_status')
+    assert_equal [], result, 'Field from different section should be rejected'
+  end
+
+  test 'parse_and_validate_field_list accepts valid criteria field for section' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.params = ActionController::Parameters.new(id: @project.id)
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, '0')
+
+    # contribution_status is valid for passing level
+    result = controller.send(:parse_and_validate_field_list, 'contribution_status')
+    assert_equal 1, result.length
+    assert_equal :contribution_status, result[0][:field]
+  end
+
+  test 'parse_and_validate_field_list accepts valid non-criteria field' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.params = ActionController::Parameters.new(id: @project.id)
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, '0')
+
+    # name is always automatable, valid for any section
+    result = controller.send(:parse_and_validate_field_list, 'name')
+    assert_equal 1, result.length
+    assert_equal :name, result[0][:field]
+
+    # license is always automatable
+    result = controller.send(:parse_and_validate_field_list, 'license')
+    assert_equal 1, result.length
+    assert_equal :license, result[0][:field]
+  end
+
+  test 'parse_and_validate_field_list handles mixed valid and invalid fields' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.params = ActionController::Parameters.new(id: @project.id)
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, '0')
+
+    # Mix of valid and invalid - only valid should be accepted
+    mixed = 'name,not_a_field,contribution_status,"; DROP TABLE users;--,license'
+    result = controller.send(:parse_and_validate_field_list, mixed)
+
+    assert_equal 3, result.length
+    field_names = result.pluck(:field)
+    assert_includes field_names, :name
+    assert_includes field_names, :contribution_status
+    assert_includes field_names, :license
+    assert_not_includes field_names, :not_a_field
+  end
+
+  test 'parse_and_validate_field_list rejects XSS attempt' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.params = ActionController::Parameters.new(id: @project.id)
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, '0')
+
+    # XSS attempts should be rejected
+    xss = '<script>alert("xss")</script>'
+    result = controller.send(:parse_and_validate_field_list, xss)
+    assert_equal [], result, 'XSS attempt should be rejected'
+  end
+
+  test 'parse_and_validate_field_list rejects path traversal attempt' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.params = ActionController::Parameters.new(id: @project.id)
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, '0')
+
+    # Path traversal attempts should be rejected
+    traversal = '../../../etc/passwd'
+    result = controller.send(:parse_and_validate_field_list, traversal)
+    assert_equal [], result, 'Path traversal attempt should be rejected'
+  end
+
+  test 'parse_and_validate_field_list handles empty and whitespace' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.params = ActionController::Parameters.new(id: @project.id)
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, '0')
+
+    # Empty should return empty array
+    assert_equal [], controller.send(:parse_and_validate_field_list, '')
+    assert_equal [], controller.send(:parse_and_validate_field_list, nil)
+    assert_equal [], controller.send(:parse_and_validate_field_list, '   ')
+
+    # Whitespace with valid field should work
+    result = controller.send(:parse_and_validate_field_list, '  name  ')
+    assert_equal 1, result.length
+    assert_equal :name, result[0][:field]
+  end
 end
 # rubocop:enable Metrics/ClassLength

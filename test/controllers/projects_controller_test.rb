@@ -175,6 +175,103 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test 'new project form contains badge series radio buttons' do
+    log_in_as(@user)
+    get '/en/projects/new'
+    assert_response :success
+    assert_includes @response.body, 'Badge series'
+    assert_select 'input[type=radio][name=starting_section][value=passing]'
+    assert_select 'input[type=radio][name=starting_section][value=baseline-1]'
+  end
+
+  test 'create project defaults to passing section' do
+    log_in_as(@user)
+    stub_request(:get, 'https://api.github.com/user/repos')
+      .to_return(status: 200, body: '', headers: {})
+    assert_difference('Project.count') do
+      post '/en/projects', params: {
+        project: {
+          name: @project.name,
+          repo_url: 'https://www.example.org/default-section',
+          homepage_url: @project.homepage_url
+        }
+      }
+    end
+    new_project = Project.find_by(repo_url: 'https://www.example.org/default-section')
+    assert_redirected_to edit_project_section_path(new_project, 'passing')
+  end
+
+  test 'create project with starting_section passing' do
+    log_in_as(@user)
+    stub_request(:get, 'https://api.github.com/user/repos')
+      .to_return(status: 200, body: '', headers: {})
+    assert_difference('Project.count') do
+      post '/en/projects', params: {
+        project: {
+          name: @project.name,
+          repo_url: 'https://www.example.org/passing-section',
+          homepage_url: @project.homepage_url
+        },
+        starting_section: 'passing'
+      }
+    end
+    new_project = Project.find_by(repo_url: 'https://www.example.org/passing-section')
+    assert_redirected_to edit_project_section_path(new_project, 'passing')
+  end
+
+  test 'create project with starting_section baseline-1' do
+    log_in_as(@user)
+    stub_request(:get, 'https://api.github.com/user/repos')
+      .to_return(status: 200, body: '', headers: {})
+    assert_difference('Project.count') do
+      post '/en/projects', params: {
+        project: {
+          name: @project.name,
+          repo_url: 'https://www.example.org/baseline-section',
+          homepage_url: @project.homepage_url
+        },
+        starting_section: 'baseline-1'
+      }
+    end
+    new_project = Project.find_by(repo_url: 'https://www.example.org/baseline-section')
+    assert_redirected_to edit_project_section_path(new_project, 'baseline-1')
+  end
+
+  test 'create project with invalid starting_section defaults to passing' do
+    log_in_as(@user)
+    stub_request(:get, 'https://api.github.com/user/repos')
+      .to_return(status: 200, body: '', headers: {})
+    assert_difference('Project.count') do
+      post '/en/projects', params: {
+        project: {
+          name: @project.name,
+          repo_url: 'https://www.example.org/invalid-section',
+          homepage_url: @project.homepage_url
+        },
+        starting_section: 'gold'
+      }
+    end
+    new_project = Project.find_by(repo_url: 'https://www.example.org/invalid-section')
+    assert_redirected_to edit_project_section_path(new_project, 'passing')
+  end
+
+  test 'duplicate project redirect respects starting_section' do
+    log_in_as(@user)
+    stub_request(:get, 'https://api.github.com/user/repos')
+      .to_return(status: 200, body: '', headers: {})
+    assert_no_difference('Project.count') do
+      post '/en/projects', params: {
+        project: {
+          name: 'Duplicate test',
+          repo_url: @project.repo_url,
+          homepage_url: @project.homepage_url
+        },
+        starting_section: 'baseline-1'
+      }
+    end
+    assert_redirected_to project_section_path(@project, 'baseline-1')
+  end
+
   test 'should show project' do
     get "/en/projects/#{@project.id}/passing"
     assert_response :success

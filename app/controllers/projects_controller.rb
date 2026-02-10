@@ -546,9 +546,8 @@ class ProjectsController < ApplicationController
       if Project.exists?(repo_url: project_repo_url)
         flash[:info] = t('projects.new.project_already_exists')
         existing_project = Project.select(:id).find_by(repo_url: project_repo_url)
-        # Future: could read existing_project.default_section from database
-        default_section = Sections::DEFAULT_SECTION
-        return redirect_to project_section_path(existing_project, default_section)
+        return redirect_to project_section_path(existing_project,
+                                                validated_starting_section)
       end
     end
 
@@ -566,8 +565,8 @@ class ProjectsController < ApplicationController
         @project.send_new_project_email
         # @project.purge_all
         flash[:success] = t('projects.new.thanks_adding')
-        # Redirect to passing level edit form (explicit criteria_level required)
-        format.html { redirect_to edit_project_section_path(@project, 'passing') }
+        starting_section = validated_starting_section
+        format.html { redirect_to edit_project_section_path(@project, starting_section) }
         format.json { render :show, status: :created, location: @project }
       else
         format.html { render :new }
@@ -766,6 +765,15 @@ class ProjectsController < ApplicationController
                       'badge_percentage_0, tiered_percentage'
 
   private
+
+  # Validate starting_section param against allowed starting sections.
+  # @return [String] validated starting section, defaults to 'passing'
+  def validated_starting_section
+    section = params[:starting_section]
+    return Sections::DEFAULT_SECTION unless section
+
+    Sections::STARTING_SECTIONS.include?(section) ? section : Sections::DEFAULT_SECTION
+  end
 
   # Send reminders to users for inactivity. Return array of project ids
   # that were sent reminders (this array may be empty).

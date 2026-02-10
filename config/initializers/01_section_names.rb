@@ -111,6 +111,12 @@ module Sections
   # Default section to use when none specified
   DEFAULT_SECTION = 'passing'
 
+  # Valid starting sections for new projects (first level of each series)
+  STARTING_SECTIONS = [
+    METAL_LEVEL_NAMES.first,
+    BASELINE_LEVEL_NAMES.first
+  ].freeze
+
   # Reverse mapping: canonical name -> internal numeric key
   # E.g., 'passing' -> '0', 'silver' -> '1', 'gold' -> '2'
   # Pre-computed once to avoid recalculation on every request

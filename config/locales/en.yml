@@ -509,6 +509,9 @@ en:
         Note - if your repository URL is on GitHub, anyone who
         can commit to the repository will be able to edit the
         badge information.
+      badge_series: "Badge series"
+      badge_series_metal: "Metal (passing, silver, gold)"
+      badge_series_baseline: "Baseline (baseline-1, baseline-2, baseline-3)"
       sign_in_first: Please sign in to add a project!
       original_repos: "=> Original GitHub Repos"
       fork_repos: "=> Forked GitHub Repos"

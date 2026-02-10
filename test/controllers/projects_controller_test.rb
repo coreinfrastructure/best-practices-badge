@@ -2279,5 +2279,263 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, result.length
     assert_equal :name, result[0][:field]
   end
+
+  # Test apply_query_string_proposals_to_project method directly
+  # This method applies external automation proposals from URL parameters
+  test 'apply_query_string_proposals accepts valid status strings' do
+    project = projects(:perfect)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, project)
+    original_values = { contribution_status: CriterionStatus::UNKNOWN }
+
+    # Test valid status strings (external representation)
+    test_cases = {
+      'Met' => CriterionStatus::MET,
+      'met' => CriterionStatus::MET,
+      'MET' => CriterionStatus::MET,
+      'Unmet' => CriterionStatus::UNMET,
+      'unmet' => CriterionStatus::UNMET,
+      '?' => CriterionStatus::UNKNOWN,
+      'N/A' => CriterionStatus::NA,
+      'n/a' => CriterionStatus::NA,
+      'NA' => CriterionStatus::NA,
+      'na' => CriterionStatus::NA
+    }
+
+    test_cases.each do |input, expected|
+      project.contribution_status = CriterionStatus::UNKNOWN
+      params = { 'contribution_status' => input }
+      modified = controller.send(:apply_query_string_proposals_to_project,
+                                 project, params, '0', original_values)
+
+      assert_includes modified, :contribution_status,
+                      "Status '#{input}' should be accepted"
+      assert_equal expected, project.contribution_status,
+                   "Status '#{input}' should convert to #{expected}"
+    end
+  end
+
+  test 'apply_query_string_proposals rejects invalid status values' do
+    project = projects(:perfect)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, project)
+    original_values = { contribution_status: CriterionStatus::UNKNOWN }
+
+    # Test invalid status values
+    invalid_values = %w[0 1 2 3 invalid true false 99 yes no]
+
+    invalid_values.each do |invalid_value|
+      project.contribution_status = CriterionStatus::UNKNOWN
+      params = { 'contribution_status' => invalid_value }
+      modified = controller.send(:apply_query_string_proposals_to_project,
+                                 project, params, '0', original_values)
+
+      assert_not_includes modified, :contribution_status,
+                          "Invalid status '#{invalid_value}' should be rejected"
+      assert_equal CriterionStatus::UNKNOWN, project.contribution_status,
+                   "Project should remain unchanged after invalid status '#{invalid_value}'"
+    end
+  end
+
+  test 'apply_query_string_proposals accepts justification strings' do
+    project = projects(:perfect)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, project)
+    original_values = { contribution_justification: '' }
+
+    justifications = [
+      'Found CONTRIBUTING.md file',
+      'See section 3.2 of documentation',
+      'UTF-8: ñoño café 中文',
+      '  whitespace should be stripped  '
+    ]
+
+    justifications.each do |just|
+      project.contribution_justification = ''
+      params = { 'contribution_justification' => just }
+      modified = controller.send(:apply_query_string_proposals_to_project,
+                                 project, params, '0', original_values)
+
+      assert_includes modified, :contribution_justification,
+                      "Justification should be accepted: #{just[0..30]}"
+      assert_equal just.strip, project.contribution_justification,
+                   'Whitespace should be stripped'
+    end
+  end
+
+  test 'apply_query_string_proposals accepts non-criteria fields' do
+    project = projects(:perfect)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, project)
+    original_values = { name: '', license: '', description: '' }
+
+    params = {
+      'name' => 'New Project Name',
+      'license' => 'MIT',
+      'description' => 'A test project'
+    }
+
+    modified = controller.send(:apply_query_string_proposals_to_project,
+                               project, params, '0', original_values)
+
+    assert_includes modified, :name
+    assert_includes modified, :license
+    assert_includes modified, :description
+    assert_equal 'New Project Name', project.name
+    assert_equal 'MIT', project.license
+    assert_equal 'A test project', project.description
+  end
+
+  test 'apply_query_string_proposals rejects fields not in section' do
+    project = projects(:perfect)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, project)
+    original_values = {}
+
+    # Silver (level '1') should not accept passing (level '0') criteria
+    params = {
+      'contribution_status' => 'Met', # This is in passing, not silver
+      'name' => 'New Name' # Always automatable
+    }
+
+    modified = controller.send(:apply_query_string_proposals_to_project,
+                               project, params, '1', original_values)
+
+    # name should be accepted (always automatable)
+    assert_includes modified, :name
+    # contribution_status should be rejected (not in silver section)
+    assert_not_includes modified, :contribution_status
+    assert_equal 'New Name', project.name
+  end
+
+  test 'apply_query_string_proposals ignores unrelated params' do
+    project = projects(:perfect)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, project)
+    original_values = {}
+
+    # Mix valid fields with unrelated params
+    params = {
+      'name' => 'Valid Name',
+      'not_a_field' => 'Should be ignored',
+      'random_key' => 'Also ignored',
+      'controller' => 'projects', # Rails internal param
+      'action' => 'edit' # Rails internal param
+    }
+
+    modified = controller.send(:apply_query_string_proposals_to_project,
+                               project, params, '0', original_values)
+
+    # Only 'name' should be accepted
+    assert_equal 1, modified.length
+    assert_includes modified, :name
+    assert_equal 'Valid Name', project.name
+  end
+
+  test 'apply_query_string_proposals handles mixed valid and invalid fields' do
+    project = projects(:perfect)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, project)
+    original_values = {
+      contribution_status: CriterionStatus::UNKNOWN,
+      name: ''
+    }
+
+    # Set up project state
+    project.contribution_status = CriterionStatus::UNKNOWN
+
+    params = {
+      'name' => 'Good Name',
+      'contribution_status' => '99', # Invalid status (numeric string)
+      'license' => 'MIT'
+    }
+
+    modified = controller.send(:apply_query_string_proposals_to_project,
+                               project, params, '0', original_values)
+
+    # Valid fields should be accepted
+    assert_includes modified, :name
+    assert_includes modified, :license
+    # Invalid status should be rejected
+    assert_not_includes modified, :contribution_status
+
+    assert_equal 'Good Name', project.name
+    assert_equal 'MIT', project.license
+    assert_equal CriterionStatus::UNKNOWN, project.contribution_status
+  end
+
+  test 'apply_query_string_proposals accepts blank values for non-status fields' do
+    project = projects(:perfect)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, project)
+
+    # Store original values
+    original_name = project.name
+    original_status = project.contribution_status
+    original_values = { name: original_name, contribution_status: original_status }
+
+    params = {
+      'name' => '',
+      'license' => '   ',
+      'description' => nil,
+      'contribution_status' => '' # Blank status should be rejected
+    }
+
+    modified = controller.send(:apply_query_string_proposals_to_project,
+                               project, params, '0', original_values)
+
+    # Non-status blank values should be accepted
+    assert_includes modified, :name
+    assert_includes modified, :license
+    assert_includes modified, :description
+    # Blank status should be rejected
+    assert_not_includes modified, :contribution_status
+
+    assert_equal '', project.name
+    assert_equal '', project.license
+    assert_equal '', project.description
+    assert_equal original_status, project.contribution_status
+  end
+
+  test 'apply_query_string_proposals returns list of modified fields' do
+    project = projects(:perfect)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, project)
+    original_values = {}
+
+    params = {
+      'name' => 'New Name',
+      'license' => 'Apache-2.0',
+      'contribution_status' => 'Met'
+    }
+
+    modified = controller.send(:apply_query_string_proposals_to_project,
+                               project, params, '0', original_values)
+
+    assert_equal 3, modified.length
+    assert_includes modified, :name
+    assert_includes modified, :license
+    assert_includes modified, :contribution_status
+  end
+
+  test 'apply_query_string_proposals handles baseline sections' do
+    project = projects(:perfect)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, project)
+    original_values = {}
+
+    # Test baseline-1 section - use a field that actually exists in baseline-1
+    params = {
+      'osps_ac_01_01_status' => 'Met',
+      'name' => 'Baseline Project'
+    }
+
+    modified = controller.send(:apply_query_string_proposals_to_project,
+                               project, params, 'baseline-1', original_values)
+
+    # Both should be accepted for baseline-1
+    assert_includes modified, :osps_ac_01_01_status
+    assert_includes modified, :name
+  end
 end
 # rubocop:enable Metrics/ClassLength

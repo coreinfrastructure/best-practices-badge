@@ -1482,7 +1482,7 @@ class ProjectsController < ApplicationController
 
     # Apply any automation proposals from URL query parameters
     # This allows external tools to propose field values
-    apply_url_automation_proposals(original_values)
+    apply_query_string_proposals_to_project(@project, params, @criteria_level, original_values)
 
     # Track which fields were changed (for highlighting)
     # Filter to only fields in the current section
@@ -1494,6 +1494,40 @@ class ProjectsController < ApplicationController
     # when the user actually clicks save. The automated/overridden fields
     # are stored in hidden form fields to preserve highlighting across
     # "save and continue".
+  end
+
+  # Apply field value proposals from query string parameters to a project
+  # This is a standalone method that can be tested without HTTP requests
+  # External tools can propose values via URL like:
+  #   /projects/123/passing/edit?contribution_status=Met&name=MyProject
+  # Blank values are accepted for non-status fields (e.g., ?description=&name=foo)
+  # @param project [Project] The project to modify
+  # @param params_hash [Hash] Query parameters (can be ActionController::Parameters or Hash)
+  # @param section_level [String] Current section being edited (e.g., '0', 'baseline-1')
+  # @param _original_values [Hash] Original field values for change tracking (unused but kept for consistency)
+  # @return [Array<Symbol>] List of field names that were modified
+  def apply_query_string_proposals_to_project(project, params_hash, section_level, _original_values)
+    modified_fields = []
+
+    # Get valid fields for this section
+    valid_fields = FIELDS_BY_SECTION[section_level]
+    return modified_fields if valid_fields.nil?
+
+    # Check each query parameter
+    params_hash.each do |param_name, param_value|
+      field_sym = param_name.to_sym
+
+      # Skip if not a valid field for this section
+      next if valid_fields.exclude?(field_sym)
+
+      # Apply the value and track if successful
+      # Note: Blank values are allowed for non-status fields
+      if apply_proposal_value_to_project(project, field_sym, param_value)
+        modified_fields << field_sym
+      end
+    end
+
+    modified_fields
   end
 
   # Check if current badge level has already been saved/edited
@@ -1632,55 +1666,32 @@ class ProjectsController < ApplicationController
     { field: field_name, new_value: new_value, explanation: nil }
   end
 
-  # Apply automation proposals from URL query parameters
-  # External tools can propose field values by including them in the URL
-  # Example: /projects/123/edit?section=0&contribution_status=3&contribution_justification=Found+file
-  # This allows tools to generate URLs that, when clicked by authorized users,
-  # show forms pre-filled with proposed values (highlighted for review)
-  # @param original_values [Hash] Original field values before any automation
-  def apply_url_automation_proposals(original_values)
-    # Get valid fields for current section
-    valid_fields = FIELDS_BY_SECTION[@criteria_level]
-    return if valid_fields.nil?
-
-    # Check each query parameter
-    params.each do |param_name, param_value|
-      field_sym = param_name.to_sym
-      
-      # Skip if not a valid field for this section
-      next unless valid_fields.include?(field_sym)
-      
-      # Skip if value is blank
-      next if param_value.blank?
-      
-      # Apply the value based on field type
-      apply_url_proposal_value(field_sym, param_value, original_values)
-    end
-  end
-
-  # Apply a single URL proposal value to the project
-  # URL proposals override any existing value (user clicked the URL to see these proposals)
+  # Apply a single proposal value to a project (helper for apply_query_string_proposals_to_project)
+  # @param project [Project] The project to modify
   # @param field_sym [Symbol] Field name
   # @param value [String] Proposed value from URL
-  # @param original_values [Hash] Original values for tracking changes (unused here)
-  def apply_url_proposal_value(field_sym, value, original_values)
+  # @return [Boolean] true if value was applied, false if invalid/rejected
+  # rubocop:disable Naming/PredicateMethod
+  def apply_proposal_value_to_project(project, field_sym, value)
+    # rubocop:enable Naming/PredicateMethod
     field_name = field_sym.to_s
 
     # For status fields, convert string to integer (must be valid status)
     if field_name.end_with?('_status')
-      # Parse and validate status value - must be one of 4 legal values
-      status_value = parse_status_value(value)
-      return unless status_value # Ignore invalid status values
+      # Reject blank status values
+      return false if value.blank?
 
-      @project.public_send(:"#{field_name}=", status_value)
-    # For justification fields, accept any UTF-8 string
-    elsif field_name.end_with?('_justification')
-      # Strip leading/trailing whitespace but otherwise accept as-is
-      @project.public_send(:"#{field_name}=", value.strip)
-    # For non-criteria fields (name, license, etc.), accept any string
+      status_value = parse_status_value(value)
+      return false unless status_value # Reject invalid status values
+
+      project.public_send(:"#{field_name}=", status_value)
+    # For justification and non-criteria fields, accept any value (including blank)
     else
-      @project.public_send(:"#{field_name}=", value.strip)
+      # Convert nil to empty string, strip whitespace from strings
+      cleaned_value = value.nil? ? '' : value.to_s.strip
+      project.public_send(:"#{field_name}=", cleaned_value)
     end
+    true
   end
 
   # Parse a status value from URL parameter
@@ -1698,7 +1709,6 @@ class ProjectsController < ApplicationController
     when 'unmet' then CriterionStatus::UNMET
     when 'n/a', 'na' then CriterionStatus::NA
     when 'met' then CriterionStatus::MET
-    else nil # Invalid status value - will be ignored
     end
   end
 

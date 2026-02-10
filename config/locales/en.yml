@@ -541,6 +541,7 @@ en:
       too_short: Must have at least 20 characters.
       more_non_whitespace: Must have at least 15 non-whitespace characters.
     edit:
+      not_authorized: You are not authorized to edit this project.
       edit_status: Edit Project Badge Status
       repo_url_limits: >-
         You may only change your repo_url if it is

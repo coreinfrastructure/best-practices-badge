@@ -568,7 +568,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     # TODO: Currently we don't report an error if a non-owner
     # tries to remove an "additional rights" user, we just ignore it.
     # If we add an error report, we should check for that error report here.
-    assert_redirected_to root_path(locale: 'en')
+    # Unauthorized users are redirected to the project show page
+    assert_redirected_to project_section_path(@project, 'passing', locale: 'en')
     assert_equal 2, AdditionalRight.for_project(@project.id).count
   end
 
@@ -583,7 +584,10 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     test_user = users(:test_user_mark)
     log_in_as(test_user)
     get "/en/projects/#{@project.id}/passing/edit" # Routes to 'edit'
-    assert_redirected_to root_url
+    # Unauthorized logged-in users are redirected to the project show page
+    assert_redirected_to project_section_path(@project, 'passing')
+    assert_equal 'You are not authorized to edit this project.',
+                 flash[:danger]
   end
 
   # Having trouble translating this test, will do later.
@@ -846,7 +850,9 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     patch "/en/projects/#{@project_two.id}", params: {
       project: { name: new_name }
     }
-    assert_redirected_to root_url(locale: :en)
+    # Unauthorized logged-in users are redirected to the project show page
+    assert_redirected_to project_section_path(@project_two, 'passing',
+                                              locale: :en)
     @project_two.reload
     assert_equal old_name, @project_two.name
   end

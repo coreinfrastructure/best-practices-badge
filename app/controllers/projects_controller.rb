@@ -932,13 +932,22 @@ class ProjectsController < ApplicationController
     convert_justification_params_of_hash!(p)
   end
 
-  # Verifies that the current user can edit the project, or redirects to root.
-  # Used as a before_action filter to enforce edit permissions.
-  # @return [Boolean] True if user can edit, otherwise redirects to root path
+  # Verifies that the current user can edit the project, or redirects.
+  # For GET requests from unauthenticated users, stores the full request URL
+  # (preserving query params like automation proposals) and redirects to
+  # login page so they can authenticate and return to the original page.
+  # If logged in but not authorized, redirects to project show page.
+  # @return [Boolean] True if user can edit, otherwise redirects
   def can_edit_else_redirect
     return true if can_edit?
 
-    redirect_to root_path
+    if !logged_in? && request.get?
+      session[:forwarding_url] = request.original_url
+      return redirect_to login_path
+    end
+
+    flash[:danger] = t('projects.edit.not_authorized')
+    redirect_to project_section_path(@project, @criteria_level)
   end
 
   # Verifies that the current user can control the project or redirects to root.

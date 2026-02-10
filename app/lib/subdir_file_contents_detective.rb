@@ -10,10 +10,10 @@
 
 class SubdirFileContentsDetective < Detective
   INPUTS = [:repo_files].freeze
-  OUTPUTS = %i[documentation_basics_status osps_do_01_01_status].freeze
+  OUTPUTS = %i[documentation_basics_status].freeze
 
   # This detective can override documentation criteria with moderate confidence
-  OVERRIDABLE_OUTPUTS = %i[documentation_basics_status osps_do_01_01_status].freeze
+  OVERRIDABLE_OUTPUTS = %i[documentation_basics_status].freeze
 
   DOCS_BASICS = {
     folder: /\Adoc(s|umentation)?\Z/i,
@@ -98,11 +98,5 @@ class SubdirFileContentsDetective < Detective
   # Set baseline README criterion if documentation basics are met
   def set_baseline_documentation_status
     return unless @results[:documentation_basics_status]&.dig(:value) == CriterionStatus::MET
-
-    @results[:osps_do_01_01_status] = {
-      value: CriterionStatus::MET,
-      confidence: @results[:documentation_basics_status][:confidence],
-      explanation: 'README/documentation found in repository.'
-    }
   end
 end

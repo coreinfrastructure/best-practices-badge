@@ -13,7 +13,8 @@ class ProjectSitesHttpsDetective < Detective
   ].freeze
 
   # This detective can override with high confidence when detecting
-  # HTTP vs HTTPS usage (confidence 3-5)
+  # HTTP vs HTTPS usage (confidence 3-5), because http:// URL being listed
+  # as an official source is a *problem*.
   OVERRIDABLE_OUTPUTS = %i[
     sites_https_status osps_br_03_01_status osps_br_03_02_status
   ].freeze
@@ -34,6 +35,17 @@ class ProjectSitesHttpsDetective < Detective
           value: CriterionStatus::UNMET, confidence: 5,
           explanation: '// Given an http: URL.'
         }
+        # Also mark baseline criteria as unmet
+      @results[:osps_br_03_01_status] =
+        {
+          value: CriterionStatus::UNMET, confidence: 5,
+          explanation: 'Project URLs lists http (not https) as official.'
+        }
+      @results[:osps_br_03_02_status] =
+        {
+          value: CriterionStatus::UNMET, confidence: 5,
+          explanation: 'Distribution channels listed as http (not https).'
+        }
     elsif homepage_url.blank? && repo_url.blank?
       # Do nothing.  Shouldn't happen.
     elsif homepage_url =~ https_pattern || repo_url =~ https_pattern
@@ -45,12 +57,12 @@ class ProjectSitesHttpsDetective < Detective
       # Also mark baseline criteria as met
       @results[:osps_br_03_01_status] =
         {
-          value: CriterionStatus::MET, confidence: 4,
+          value: CriterionStatus::MET, confidence: 3,
           explanation: 'Project URLs use HTTPS exclusively.'
         }
       @results[:osps_br_03_02_status] =
         {
-          value: CriterionStatus::MET, confidence: 4,
+          value: CriterionStatus::MET, confidence: 3,
           explanation: 'Distribution channels use HTTPS exclusively.'
         }
     end

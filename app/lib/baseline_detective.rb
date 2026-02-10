@@ -21,9 +21,7 @@ class BaselineDetective < Detective
   ].freeze
 
   # This detective can override baseline-specific criteria with high confidence
-  OVERRIDABLE_OUTPUTS = %i[
-    osps_gv_02_01_status osps_gv_03_01_status osps_le_02_01_status
-  ].freeze
+  OVERRIDABLE_OUTPUTS = %i[].freeze
 
   # Analyze project evidence and return changeset for baseline-unique criteria
   def analyze(_evidence, current)
@@ -54,7 +52,7 @@ class BaselineDetective < Detective
   def add_security_policy_results(result, security_file)
     result[:osps_gv_02_01_status] = {
       value: 'Met',
-      confidence: 4,
+      confidence: 3,
       explanation: "Security policy found: #{security_file['name']}."
     }
 
@@ -74,7 +72,7 @@ class BaselineDetective < Detective
 
     result[:osps_le_02_01_status] = {
       value: 'Met',
-      confidence: 4,
+      confidence: 3,
       explanation: "License declared: #{current[:license]}."
     }
   end

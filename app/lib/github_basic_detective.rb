@@ -20,7 +20,7 @@ class GithubBasicDetective < Detective
   OUTPUTS = %i[
     name license discussion_status repo_public_status repo_track_status
     repo_distributed_status contribution_status implementation_languages
-    osps_br_07_01_status osps_do_02_01_status
+    osps_do_02_01_status
   ].freeze
 
   # This detective can override with high confidence for repo-based criteria
@@ -28,7 +28,7 @@ class GithubBasicDetective < Detective
   OVERRIDABLE_OUTPUTS = %i[
     discussion_status repo_public_status repo_track_status
     repo_distributed_status contribution_status
-    osps_br_07_01_status osps_do_02_01_status
+    osps_do_02_01_status
   ].freeze
 
   # These are the 'correct' display case for SPDX for OSI-approved licenses.
@@ -126,15 +126,10 @@ class GithubBasicDetective < Detective
         value: CriterionStatus::MET, confidence: 3,
         explanation: 'GitHub supports discussions on issues and pull requests.'
       }
-      # Baseline criteria - version control usage
-      results[:osps_br_07_01_status] = {
-        value: CriterionStatus::MET, confidence: 5,
-        explanation: 'Project uses a version control system (git on GitHub).'
-      }
-      # Baseline criteria - contribution instructions (low confidence)
+      # Baseline criteria - defect reporting instructions (low confidence)
       results[:osps_do_02_01_status] = {
         value: CriterionStatus::MET, confidence: 2,
-        explanation: 'GitHub provides contribution mechanisms by default.'
+        explanation: 'GitHub provides defect reporting mechanisms by default.'
       }
 
       # Get basic evidence

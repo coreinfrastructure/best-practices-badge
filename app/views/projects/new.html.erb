@@ -30,15 +30,6 @@
                                { prompt: t('.select_one_github'),
                                  disabled: lambda{ |repo| repo.last == 'none' }}
        %>
-       <div class="form-group">
-         <label><%= t('.badge_series') %></label><br>
-         <%= radio_button_tag :starting_section, 'passing', true %>
-         <%= label_tag :starting_section_passing, t('.badge_series_metal') %>
-         <br>
-         <%= radio_button_tag :starting_section, 'baseline-1', false %>
-         <%= label_tag :starting_section_baseline_1,
-                       t('.badge_series_baseline') %>
-       </div>
        <%= f.submit t('.submit_github'), class: 'btn btn-primary',
                     'data-toggle' => 'tooltip',
                     title: t('.post_delay_warning') %>
@@ -62,15 +53,6 @@
             type: 'url', skip_label: true,
             pattern: url_pattern,
             placeholder: t('.placeholder_of_repo') %>
-      <div class="form-group">
-        <label><%= t('.badge_series') %></label><br>
-        <%= radio_button_tag :starting_section, 'passing', true %>
-        <%= label_tag :starting_section_passing, t('.badge_series_metal') %>
-        <br>
-        <%= radio_button_tag :starting_section, 'baseline-1', false %>
-        <%= label_tag :starting_section_baseline_1,
-                      t('.badge_series_baseline') %>
-      </div>
      <%= f.submit t('.submit_urls'), class: 'btn btn-primary',
                   'data-toggle' => 'tooltip', title: t('.post_delay_warning') %>
   <% end %>

@@ -205,6 +205,49 @@ class ChiefTest < ActiveSupport::TestCase
            'HowAccessRepoFilesDetective should come before RepoFilesExamineDetective'
   end
 
+  test 'topological_sort handles multiple no-dependency detectives' do
+    chief = Chief.new(@sample_project, proc { Octokit::Client.new })
+    # Test with multiple detectives that have no dependencies (all start with
+    # no dependencies), plus some that depend on one of them.
+    # This tests the bug where detectives were added to no_dependencies
+    # queue multiple times, causing incorrect ordering.
+    detectives = [
+      SubdirFileContentsDetective,  # depends on repo_files
+      RepoFilesExamineDetective,    # depends on repo_files
+      ProjectSitesHttpsDetective,   # no dependencies
+      NameFromUrlDetective,         # no dependencies
+      HowAccessRepoFilesDetective,  # no dependencies (provides repo_files)
+      GithubBasicDetective,         # no dependencies (provides license)
+      FlossLicenseDetective,        # depends on license
+      BuildDetective                # depends on repo_files
+    ]
+    result = chief.topological_sort_detectives(detectives)
+
+    # Verify all detectives are included exactly once
+    assert_equal detectives.size, result.size
+    assert_equal detectives.to_set, result.to_set
+
+    # Verify dependencies are respected
+    how_index = result.index(HowAccessRepoFilesDetective)
+    repo_examine_index = result.index(RepoFilesExamineDetective)
+    subdir_index = result.index(SubdirFileContentsDetective)
+    build_index = result.index(BuildDetective)
+    github_index = result.index(GithubBasicDetective)
+    floss_index = result.index(FlossLicenseDetective)
+
+    # HowAccessRepoFilesDetective must come before anything that needs repo_files
+    assert how_index < repo_examine_index,
+           'HowAccessRepoFilesDetective should come before RepoFilesExamineDetective'
+    assert how_index < subdir_index,
+           'HowAccessRepoFilesDetective should come before SubdirFileContentsDetective'
+    assert how_index < build_index,
+           'HowAccessRepoFilesDetective should come before BuildDetective'
+
+    # GithubBasicDetective must come before FlossLicenseDetective
+    assert github_index < floss_index,
+           'GithubBasicDetective should come before FlossLicenseDetective'
+  end
+
   test 'needed_outputs returns all outputs when needed_fields is nil' do
     chief = Chief.new(@sample_project, proc { Octokit::Client.new })
     result = chief.needed_outputs(nil)

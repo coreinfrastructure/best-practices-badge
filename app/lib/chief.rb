@@ -214,7 +214,10 @@ class Chief
       # Remove this detective from all dependency lists
       dependencies.each do |dependent, deps|
         deps.delete(detective)
-        no_dependencies << dependent if deps.empty? && !sorted.include?(dependent)
+        if deps.empty? && !sorted.include?(dependent) &&
+           !no_dependencies.include?(dependent)
+          no_dependencies << dependent
+        end
       end
     end
 

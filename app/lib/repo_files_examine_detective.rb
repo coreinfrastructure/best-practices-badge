@@ -46,29 +46,34 @@ class RepoFilesExamineDetective < Detective
     end
   end
 
-  def unmet_result(result_description)
+  def unmet_result(result_description, confidence: 1)
     {
-      value: CriterionStatus::UNMET, confidence: 1,
+      value: CriterionStatus::UNMET, confidence: confidence,
       explanation: "// No #{result_description} file found."
     }
   end
 
-  def met_result(result_description, html_url)
+  def met_result(result_description, html_url, confidence: 3)
     {
-      value: CriterionStatus::MET, confidence: 3,
+      value: CriterionStatus::MET, confidence: confidence,
       explanation:
         "Non-trivial #{result_description} file in repository: " \
         "<#{html_url}>."
     }
   end
 
-  def determine_results(status, name_pattern, minimum_size, result_description)
+  # @param confidence [Hash] optional :met and :unmet confidence overrides
+  def determine_results(
+    status, name_pattern, minimum_size, result_description, confidence: {}
+  )
     found_files = files_named(name_pattern, minimum_size)
     @results[status] =
       if found_files.empty?
-        unmet_result result_description
+        unmet_result(result_description,
+                     confidence: confidence.fetch(:unmet, 1))
       else
-        met_result result_description, found_files.first['html_url']
+        met_result(result_description, found_files.first['html_url'],
+                   confidence: confidence.fetch(:met, 3))
       end
   end
 
@@ -139,7 +144,7 @@ class RepoFilesExamineDetective < Detective
     determine_results(
       :license_location_status,
       /\A([A-Za-z0-9]+-)?(license|copying)(\.md|\.txt)?\Z/i,
-      NONTRIVIAL_MIN_SIZE, 'license location'
+      NONTRIVIAL_MIN_SIZE, 'license location', confidence: { unmet: 5 }
     )
 
     # If there's a LICENSES directory, then license_location probably met.

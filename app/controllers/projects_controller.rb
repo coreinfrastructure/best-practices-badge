@@ -1925,11 +1925,11 @@ class ProjectsController < ApplicationController
   # Format override details for flash message
   # @return [String] Formatted override details
   def format_override_details
-    level = criteria_level_to_internal(@criteria_level)
+    criteria_level_to_internal(@criteria_level)
     details =
       @overridden_fields.map do |r|
         # Derive criterion key from status field: license_location_status -> license_location
-        criterion_key = r[:field].to_s.sub(/_status\z/, '').to_sym
+        criterion_key = r[:field].to_s.delete_suffix('_status').to_sym
         # Show user-visible criterion ID (e.g., license_location or OSPS-LE-03.01)
         display_id = helpers.baseline_id_to_display(criterion_key)
         t('projects.edit.automation.override_detail',

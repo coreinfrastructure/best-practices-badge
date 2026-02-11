@@ -1441,11 +1441,21 @@ class ProjectsController < ApplicationController
 
   # Generates URL anchor fragment for form navigation.
   # Creates anchor tag for specific form sections, excluding the generic "Save".
+  # SECURITY: Strictly validates input to prevent URL injection attacks.
+  # Only accepts alphanumeric, underscore, hyphen, and dot characters.
   # @return [String] URL anchor fragment (e.g., "#section_name") or empty string
   def url_anchor
-    return '#' + params[:continue] unless params[:continue] == 'Save'
+    return '' if params[:continue].blank? || params[:continue] == 'Save'
 
-    ''
+    # Sanitize: only allow safe characters for URL fragment identifiers
+    # Allow letters, digits, underscores, hyphens, and dots (for OSPS IDs like OSPS-AC-03.01)
+    raw_anchor = params[:continue].to_s
+    safe_anchor = raw_anchor.gsub(/[^A-Za-z0-9_.-]/, '_')
+
+    # Return empty if sanitization produced nothing useful
+    return '' if safe_anchor.empty?
+
+    "##{safe_anchor}"
   end
 
   # Determines the current working level based on criteria level or badge level.

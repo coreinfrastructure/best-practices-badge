@@ -1755,8 +1755,8 @@ class ProjectsController < ApplicationController
     # Split by comma, strip whitespace, remove empty strings
     field_names = field_string.split(',').map(&:strip).compact_blank
 
-    # Get valid fields for current section
-    valid_fields = FIELDS_BY_SECTION[@criteria_level]
+    # Get valid fields for current section (convert display name to internal key)
+    valid_fields = FIELDS_BY_SECTION[criteria_level_to_internal(@criteria_level)]
     return [] if valid_fields.nil? # Invalid section level
 
     # Validate each field name
@@ -1984,21 +1984,16 @@ class ProjectsController < ApplicationController
                           count: @chief_failed_fields&.size || 0,
                           fields: @chief_failed_fields&.join(', ') || '')
       redirect_to edit_project_section_path(@project, section, locale: params[:locale])
-    # "Save and Continue" - always go back to edit
-    elsif params[:continue]
-      if @overridden_fields&.any?
-        handle_overridden_fields_redirect(section)
-      else
-        flash[:info] = t('projects.edit.successfully_updated')
-        redirect_to edit_project_section_path(@project, section,
-                                              locale: params[:locale]) + url_anchor
-      end
-    # "Save and Exit" - check for forced overrides
+    # Forced overrides changed user values - redirect to edit with warning
     elsif @overridden_fields&.any?
-      # Forced overrides - redirect to edit with warning (not show page)
       handle_overridden_fields_redirect(section)
+    # "Save and Continue" - go back to edit
+    elsif params[:continue]
+      flash[:info] = t('projects.edit.successfully_updated')
+      redirect_to edit_project_section_path(@project, section,
+                                            locale: params[:locale]) + url_anchor
     else
-      # Normal save - exit to show page
+      # Normal "Save and Exit" - go to show page
       redirect_to project_section_path(@project, section, locale: params[:locale]),
                   success: t('projects.edit.successfully_updated')
     end

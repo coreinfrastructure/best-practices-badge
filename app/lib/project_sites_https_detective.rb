@@ -16,21 +16,22 @@ class ProjectSitesHttpsDetective < Detective
   # HTTP vs HTTPS usage (confidence 3-5), because http:// URL being listed
   # as an official source is a *problem*.
   OVERRIDABLE_OUTPUTS = %i[
-    sites_https_status osps_br_03_01_status osps_br_03_02_status
+    sites_https_status osps_br_03_01_status
   ].freeze
+
+  HTTP_PATTERN = %r{\Ahttp://}i
+  HTTPS_PATTERN = %r{\Ahttps://}i
 
   def analyze(_evidence, current)
     homepage_url = current[:homepage_url]
     repo_url = current[:repo_url]
     @results = {}
 
-    http_pattern = %r{\Ahttp://}i
-    if homepage_url =~ http_pattern || repo_url =~ http_pattern
-      set_http_results(repo_url, http_pattern)
+    if homepage_url =~ HTTP_PATTERN || repo_url =~ HTTP_PATTERN
+      set_http_results
     elsif homepage_url.present? || repo_url.present?
-      https_pattern = %r{\Ahttps://}i
-      set_https_results if homepage_url =~ https_pattern ||
-                           repo_url =~ https_pattern
+      set_https_results if homepage_url =~ HTTPS_PATTERN ||
+                           repo_url =~ HTTPS_PATTERN
     end
     @results
   end
@@ -38,7 +39,7 @@ class ProjectSitesHttpsDetective < Detective
   private
 
   # rubocop:disable Metrics/MethodLength
-  def set_http_results(repo_url, http_pattern)
+  def set_http_results
     @results[:sites_https_status] =
       {
         value: CriterionStatus::UNMET, confidence: 5,
@@ -50,14 +51,15 @@ class ProjectSitesHttpsDetective < Detective
         value: CriterionStatus::UNMET, confidence: 5,
         explanation: 'Project URLs lists http (not https) as official.'
       }
-    # Distribution channels: only repo_url is a distribution channel,
-    # homepage_url alone should not trigger UNMET.
-    return unless repo_url&.match?(http_pattern)
-
+    # We don't know enough to be *certain* what the distribution channels
+    # are; it's possible that the official distribution channels *are*
+    # encrypted (authenticated). However, if we have any http: links, odds
+    # are good that we have a distribution channel that's not
+    # properly protected.
     @results[:osps_br_03_02_status] =
       {
-        value: CriterionStatus::UNMET, confidence: 5,
-        explanation: 'Repository URL uses http (not https).'
+        value: CriterionStatus::UNMET, confidence: 3,
+        explanation: 'We were given a URL that uses http (not https).'
       }
   end
   # rubocop:enable Metrics/MethodLength

@@ -13,14 +13,14 @@ class FlossLicenseDetective < Detective
   INPUTS = [:license].freeze
   OUTPUTS = %i[
     floss_license_osi_status floss_license_status
-    osps_le_02_01_status osps_le_02_02_status
+    osps_le_02_01_status
   ].freeze
 
   # This detective can override with high confidence (5) when it
   # detects OSI-approved or non-OSI licenses
   OVERRIDABLE_OUTPUTS = %i[
     floss_license_osi_status floss_license_status
-    osps_le_02_01_status osps_le_02_02_status
+    osps_le_02_01_status
   ].freeze
 
   # From: http://opensource.org/licenses/alphabetical
@@ -160,15 +160,16 @@ class FlossLicenseDetective < Detective
         osps_le_02_01_status:
           {
             value: CriterionStatus::MET, confidence: 5,
-            explanation: "The #{license} license is approved by the " \
+            explanation: "The #{license} license for the repository " \
+                         'contents is approved by the ' \
                          'Open Source Initiative (OSI).'
           },
-        osps_le_02_02_status:
-          {
-            value: CriterionStatus::MET, confidence: 5,
-            explanation: "The #{license} license is approved by the " \
-                         'Open Source Initiative (OSI).'
-          }
+        # We can't know what the license of the *released* assets are
+        # looking only at the repository, as the LICENSE file is focused
+        # on the repository contents, so we can't do osps_le_02_02_status.
+        # Often they're the same, but they don't *have* to be (the project
+        # may choose to compile in some other components with different
+        # licenses and release *that* as released software assets).
       }
     elsif license.match?(/\A[^(]/)
       {

@@ -20,8 +20,7 @@ class RepoFilesExamineDetective < Detective
   # This detective can override file-presence criteria with high confidence
   OVERRIDABLE_OUTPUTS = %i[
     contribution_status license_location_status release_notes_status
-    osps_do_02_01_status osps_gv_03_01_status
-    osps_le_03_01_status osps_le_03_02_status
+    osps_le_03_01_status
   ].freeze
 
   # Minimum file sizes (in bytes) before they are considered useful.
@@ -99,6 +98,7 @@ class RepoFilesExamineDetective < Detective
     check_contribution_files
     check_license_files
     check_release_notes
+    check_security_md_files
 
     @results
   end
@@ -114,15 +114,20 @@ class RepoFilesExamineDetective < Detective
     set_baseline_contribution_status
   end
 
+  def check_security_md_files
+    # SECURITY.md file present?
+    determine_results(
+      :osps_do_02_01_status,
+      /\A(security)(\.md|\.txt)?\Z/i,
+      CONTRIBUTION_MIN_SIZE, 'SECURITY[.md] file found'
+    )
+  end
+
   # Set baseline contribution criteria if contribution file is met
   def set_baseline_contribution_status
     return unless @results[:contribution_status]&.dig(:value) == CriterionStatus::MET
 
     confidence = @results[:contribution_status][:confidence]
-    @results[:osps_do_02_01_status] = {
-      value: CriterionStatus::MET, confidence: confidence,
-      explanation: 'Contribution instructions found in repository.'
-    }
     @results[:osps_gv_03_01_status] = {
       value: CriterionStatus::MET, confidence: confidence,
       explanation: 'Contribution process documented in repository.'
@@ -148,20 +153,32 @@ class RepoFilesExamineDetective < Detective
   end
 
   # Set baseline license-file-presence criteria if license location is met
+  # rubocop:disable Metrics/MethodLength
   def set_baseline_license_status
-    return unless @results[:license_location_status]&.dig(:value) == CriterionStatus::MET
-
-    confidence = @results[:license_location_status][:confidence]
-    @results[:osps_le_03_01_status] = {
-      value: CriterionStatus::MET, confidence: confidence,
-      explanation: 'License file found in repository.'
-    }
-    @results[:osps_le_03_02_status] = {
-      value: CriterionStatus::MET, confidence: 2,
-      explanation: 'License file found in repository (likely included ' \
-                   'in releases).'
-    }
+    if @results[:license_location_status]&.dig(:value) == CriterionStatus::MET
+      confidence = @results[:license_location_status][:confidence]
+      @results[:osps_le_03_01_status] = {
+        value: CriterionStatus::MET, confidence: confidence,
+        explanation: 'License file found in repository.'
+      }
+      @results[:osps_le_03_02_status] = {
+        value: CriterionStatus::MET, confidence: 2,
+        explanation: 'License file found in repository (likely included ' \
+                     'in releases).'
+      }
+    else
+      @results[:osps_le_03_01_status] = {
+        value: CriterionStatus::UNMET, confidence: 5,
+        explanation: 'License file not found in repository.'
+      }
+      @results[:osps_le_03_02_status] = {
+        value: CriterionStatus::UNMET, confidence: 2,
+        explanation: 'License file not found in repository (likely not ' \
+                     'included in releases).'
+      }
+    end
   end
+  # rubocop:enable Metrics/MethodLength
 
   # Check for release notes files
   def check_release_notes

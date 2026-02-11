@@ -29,10 +29,6 @@ class FlossLicenseDetectiveTest < ActiveSupport::TestCase
     assert results.key?(:osps_le_02_01_status)
     assert results[:osps_le_02_01_status][:value] == CriterionStatus::MET
     assert results[:osps_le_02_01_status][:confidence] == 5
-
-    assert results.key?(:osps_le_02_02_status)
-    assert results[:osps_le_02_02_status][:value] == CriterionStatus::MET
-    assert results[:osps_le_02_02_status][:confidence] == 5
   end
 
   test 'GPL-2.0+ is OSS' do

@@ -20,6 +20,18 @@ module ProjectsHelper
     MarkdownProcessor.render(content)
   end
 
+  # Precomputed Set of automated field symbols for O(1) lookup.
+  # Memoized per request (computed once, used by every status_chooser).
+  def automated_field_set
+    @automated_field_set ||= Set.new(@automated_fields&.pluck(:field))
+  end
+
+  # Precomputed Set of overridden field symbols for O(1) lookup.
+  # Memoized per request (computed once, used by every status_chooser).
+  def overridden_field_set
+    @overridden_field_set ||= Set.new(@overridden_fields&.pluck(:field))
+  end
+
   # Convert a status integer value to its string representation.
   # @param value [Integer] Status value (0-3)
   # @return [String] String representation ('?', 'Unmet', 'N/A', 'Met')

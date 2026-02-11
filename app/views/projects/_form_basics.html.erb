@@ -6,9 +6,8 @@
     If you add a new field to this view, ensure it's in the appropriate list! %>
             <%
               # Check if name or description were automated (for highlighting)
-              automated_field_names = defined?(@automated_fields) ? @automated_fields.map { |f| f[:field] } : []
-              name_automated = automated_field_names.include?(:name)
-              description_automated = automated_field_names.include?(:description)
+              name_automated = automated_field_set.include?(:name)
+              description_automated = automated_field_set.include?(:description)
             %>
             <div class="hidable-text-entry <%= ApplicationHelper::HIGHLIGHT_AUTOMATED_CLASS if name_automated %>">
             <span><%= f.label :name, t('projects.form_basics.project_name.description') %></span>

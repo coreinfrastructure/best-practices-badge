@@ -30,9 +30,8 @@
     <%= hidden_field_tag :overridden_fields, (@overridden_fields || []).map { |f| f[:field] }.join(',') %>
     <%
       # Check if non-criteria fields were automated (for highlighting)
-      automated_field_names = defined?(@automated_fields) ? @automated_fields.map { |f| f[:field] } : []
-      license_automated = automated_field_names.include?(:license)
-      implementation_languages_automated = automated_field_names.include?(:implementation_languages)
+      license_automated = automated_field_set.include?(:license)
+      implementation_languages_automated = automated_field_set.include?(:implementation_languages)
     %>
 
   <br>

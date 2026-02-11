@@ -520,9 +520,10 @@ class ProjectsController < ApplicationController
     # Run first-edit automation if this level hasn't been edited yet
     run_first_edit_automation_if_needed
 
-    # Ensure automation tracking arrays are initialized
-    @automated_fields ||= []
-    @overridden_fields ||= []
+    # Restore override/automated highlighting from redirect query params
+    # (handle_overridden_fields_redirect passes overridden= and automated=)
+    @overridden_fields ||= parse_and_validate_field_list(params[:overridden])
+    @automated_fields ||= parse_and_validate_field_list(params[:automated])
 
     return unless @project.notify_for_static_analysis?('0')
 
@@ -1912,6 +1913,15 @@ class ProjectsController < ApplicationController
     changed_fields.select { |f| all_overridable.include?(f) }
   end
 
+  # Convert a status value (integer or string) to its display string.
+  # @param value [Integer, String] Status value
+  # @return [String] Display string ('Met', 'Unmet', 'N/A', '?')
+  def status_value_to_string(value)
+    return value if value.is_a?(String)
+
+    CriterionStatus::STATUS_VALUES[value] || value.to_s
+  end
+
   # Format override details for flash message
   # @return [String] Formatted override details
   def format_override_details
@@ -1921,8 +1931,8 @@ class ProjectsController < ApplicationController
         criterion_name = criterion&.title || r[:field].to_s.humanize
         t('projects.edit.automation.override_detail',
           criterion: criterion_name,
-          old: r[:old_value],
-          new: r[:new_value],
+          old: status_value_to_string(r[:old_value]),
+          new: status_value_to_string(r[:new_value]),
           explanation: r[:explanation])
       end
     details.join("\n")

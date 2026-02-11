@@ -57,7 +57,7 @@ class ChiefTest < ActiveSupport::TestCase
                  results[:implementation_languages]
     # BaselineDetective should detect license declaration via Chief pipeline
     assert_equal CriterionStatus::MET, results[:osps_le_02_01_status],
-                 'BaselineDetective should set osps_le_02_01 when license is known'
+                 'FlossLicenseDetective should set osps_le_02_01 for OSI license'
   end
   # rubocop:enable Metrics/BlockLength
 
@@ -254,7 +254,7 @@ class ChiefTest < ActiveSupport::TestCase
 
     # Should include outputs from all detectives
     assert_includes result, :floss_license_osi_status # metal
-    assert_includes result, :osps_le_03_01_status     # baseline
+    assert_includes result, :osps_le_02_01_status     # baseline
     assert result.size > 10
   end
 

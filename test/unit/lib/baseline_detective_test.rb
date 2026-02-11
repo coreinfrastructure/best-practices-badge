@@ -6,170 +6,32 @@
 
 require 'test_helper'
 
-# Test the BaselineDetective which handles baseline-unique automated checks.
-# Most baseline automation is now handled by extending existing detectives
-# (e.g., FlossLicenseDetective outputs both metal and baseline fields).
-# This detective only handles checks unique to baseline.
+# Test the BaselineDetective placeholder.
+# BaselineDetective currently has no INPUTS/OUTPUTS; all baseline
+# automation is handled by existing detectives (GithubBasicDetective,
+# RepoFilesExamineDetective, FlossLicenseDetective, etc.).
 class BaselineDetectiveTest < ActiveSupport::TestCase
-  # Mock repo_files with SECURITY.md
-  class MockRepoFilesWithSecurity
-    def present?
-      true
-    end
-
-    def get_info(_pattern)
-      [
-        { 'type' => 'file', 'name' => 'SECURITY.md', 'size' => 100 }
-      ]
-    end
-  end
-
-  # Mock repo_files with security.txt
-  class MockRepoFilesWithSecurityTxt
-    def present?
-      true
-    end
-
-    def get_info(_pattern)
-      [
-        { 'type' => 'file', 'name' => 'SECURITY.txt', 'size' => 100 }
-      ]
-    end
-  end
-
-  # Mock repo_files with lowercase security.md
-  class MockRepoFilesWithLowercaseSecurity
-    def present?
-      true
-    end
-
-    def get_info(_pattern)
-      [
-        { 'type' => 'file', 'name' => 'security.md', 'size' => 100 }
-      ]
-    end
-  end
-
-  # Mock repo_files without security file
-  class MockRepoFilesNoSecurity
-    def present?
-      true
-    end
-
-    def get_info(_pattern)
-      [
-        { 'type' => 'file', 'name' => 'README.md', 'size' => 100 }
-      ]
-    end
-  end
-
   setup do
     @detective = BaselineDetective.new
   end
 
-  # Test license declaration (osps_le_02_01)
-  test 'marks license declaration met when license is present' do
-    results = @detective.analyze(nil, license: 'MIT')
-
-    assert results.key?(:osps_le_02_01_status)
-    assert_equal CriterionStatus::MET, results[:osps_le_02_01_status][:value]
-    assert results[:osps_le_02_01_status][:confidence] >= 3
+  test 'has empty inputs and outputs' do
+    assert_equal [], BaselineDetective::INPUTS
+    assert_equal [], BaselineDetective::OUTPUTS
+    assert_equal [], BaselineDetective::OVERRIDABLE_OUTPUTS
   end
 
-  test 'does not mark license met for NOASSERTION' do
-    results = @detective.analyze(nil, license: 'NOASSERTION')
-
-    assert_not results.key?(:osps_le_02_01_status)
-  end
-
-  test 'does not mark license met for NONE' do
-    results = @detective.analyze(nil, license: 'NONE')
-
-    assert_not results.key?(:osps_le_02_01_status)
-  end
-
-  # Test security policy detection (osps_gv_02_01, osps_gv_03_01)
-  test 'marks security policy met when SECURITY.md exists' do
-    repo_files = MockRepoFilesWithSecurity.new
-    results = @detective.analyze(nil, repo_files: repo_files)
-
-    assert results.key?(:osps_gv_02_01_status)
-    assert_equal CriterionStatus::MET, results[:osps_gv_02_01_status][:value]
-    assert results[:osps_gv_02_01_status][:confidence] >= 3
-
-    assert results.key?(:osps_gv_03_01_status)
-    assert_equal CriterionStatus::MET, results[:osps_gv_03_01_status][:value]
-  end
-
-  test 'finds SECURITY.txt file' do
-    repo_files = MockRepoFilesWithSecurityTxt.new
-    results = @detective.analyze(nil, repo_files: repo_files)
-
-    assert results.key?(:osps_gv_02_01_status)
-    assert_equal CriterionStatus::MET, results[:osps_gv_02_01_status][:value]
-  end
-
-  test 'finds security file case-insensitively' do
-    repo_files = MockRepoFilesWithLowercaseSecurity.new
-    results = @detective.analyze(nil, repo_files: repo_files)
-
-    assert results.key?(:osps_gv_02_01_status)
-  end
-
-  test 'does not mark security policy met when no SECURITY file' do
-    repo_files = MockRepoFilesNoSecurity.new
-    results = @detective.analyze(nil, repo_files: repo_files)
-
-    assert_not results.key?(:osps_gv_02_01_status)
-    assert_not results.key?(:osps_gv_03_01_status)
-  end
-
-  # Mock repo_files that simulates an empty GitHub repo.
-  # GithubContentAccess#get_info returns [] for empty repos.
-  class MockEmptyRepoFiles
-    def present?
-      true
-    end
-
-    def respond_to?(method, include_all = false)
-      return true if method == :get_info
-
-      super
-    end
-
-    def get_info(_path)
-      []
-    end
-  end
-
-  test 'empty repo does not crash and returns no security policy' do
-    repo_files = MockEmptyRepoFiles.new
-    results = @detective.analyze(nil, repo_files: repo_files)
-
-    assert_not results.key?(:osps_gv_02_01_status)
-    assert_not results.key?(:osps_gv_03_01_status)
-  end
-
-  # Test that we don't create false positives
-  test 'returns empty hash when no criteria can be determined' do
+  test 'analyze returns empty hash' do
     results = @detective.analyze(nil, {})
 
     assert results.is_a?(Hash)
     assert results.empty?
   end
 
-  test 'handles combination of license and security file' do
-    repo_files = MockRepoFilesWithSecurity.new
+  test 'analyze returns empty hash with arbitrary inputs' do
+    results = @detective.analyze(nil, license: 'MIT', repo_files: 'something')
 
-    results = @detective.analyze(
-      nil,
-      license: 'Apache-2.0',
-      repo_files: repo_files
-    )
-
-    # Should have both license and security criteria
-    assert results.key?(:osps_le_02_01_status)
-    assert results.key?(:osps_gv_02_01_status)
-    assert results.key?(:osps_gv_03_01_status)
+    assert results.is_a?(Hash)
+    assert results.empty?
   end
 end

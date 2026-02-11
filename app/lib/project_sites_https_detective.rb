@@ -19,55 +19,58 @@ class ProjectSitesHttpsDetective < Detective
     sites_https_status osps_br_03_01_status osps_br_03_02_status
   ].freeze
 
-  # rubocop:disable Metrics/MethodLength
-  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def analyze(_evidence, current)
     homepage_url = current[:homepage_url]
     repo_url = current[:repo_url]
     @results = {}
 
-    https_pattern = %r{\Ahttps://}i
     http_pattern = %r{\Ahttp://}i
-
     if homepage_url =~ http_pattern || repo_url =~ http_pattern
-      @results[:sites_https_status] =
-        {
-          value: CriterionStatus::UNMET, confidence: 5,
-          explanation: '// Given an http: URL.'
-        }
-      # Also mark baseline criteria as unmet
-      @results[:osps_br_03_01_status] =
-        {
-          value: CriterionStatus::UNMET, confidence: 5,
-          explanation: 'Project URLs lists http (not https) as official.'
-        }
-      @results[:osps_br_03_02_status] =
-        {
-          value: CriterionStatus::UNMET, confidence: 5,
-          explanation: 'Distribution channels listed as http (not https).'
-        }
-    elsif homepage_url.blank? && repo_url.blank?
-      # Do nothing.  Shouldn't happen.
-    elsif homepage_url =~ https_pattern || repo_url =~ https_pattern
-      @results[:sites_https_status] =
-        {
-          value: CriterionStatus::MET, confidence: 3,
-          explanation: 'Given only https: URLs.'
-        }
-      # Also mark baseline criteria as met
-      @results[:osps_br_03_01_status] =
-        {
-          value: CriterionStatus::MET, confidence: 3,
-          explanation: 'Project URLs use HTTPS exclusively.'
-        }
-      @results[:osps_br_03_02_status] =
-        {
-          value: CriterionStatus::MET, confidence: 3,
-          explanation: 'Distribution channels use HTTPS exclusively.'
-        }
+      set_http_results(repo_url, http_pattern)
+    elsif homepage_url.present? || repo_url.present?
+      https_pattern = %r{\Ahttps://}i
+      set_https_results if homepage_url =~ https_pattern ||
+                           repo_url =~ https_pattern
     end
     @results
   end
+
+  private
+
+  # rubocop:disable Metrics/MethodLength
+  def set_http_results(repo_url, http_pattern)
+    @results[:sites_https_status] =
+      {
+        value: CriterionStatus::UNMET, confidence: 5,
+        explanation: '// Given an http: URL.'
+      }
+    # Any official channel using http is a problem
+    @results[:osps_br_03_01_status] =
+      {
+        value: CriterionStatus::UNMET, confidence: 5,
+        explanation: 'Project URLs lists http (not https) as official.'
+      }
+    # Distribution channels: only repo_url is a distribution channel,
+    # homepage_url alone should not trigger UNMET.
+    return unless repo_url&.match?(http_pattern)
+
+    @results[:osps_br_03_02_status] =
+      {
+        value: CriterionStatus::UNMET, confidence: 5,
+        explanation: 'Repository URL uses http (not https).'
+      }
+  end
   # rubocop:enable Metrics/MethodLength
-  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+
+  def met_result(explanation)
+    { value: CriterionStatus::MET, confidence: 3, explanation: explanation }
+  end
+
+  def set_https_results
+    @results[:sites_https_status] = met_result('Given only https: URLs.')
+    @results[:osps_br_03_01_status] =
+      met_result('Project URLs use HTTPS exclusively.')
+    @results[:osps_br_03_02_status] =
+      met_result('Distribution channels use HTTPS exclusively.')
+  end
 end

@@ -13,14 +13,14 @@ class FlossLicenseDetective < Detective
   INPUTS = [:license].freeze
   OUTPUTS = %i[
     floss_license_osi_status floss_license_status
-    osps_le_03_01_status osps_le_03_02_status
+    osps_le_02_01_status osps_le_02_02_status
   ].freeze
 
   # This detective can override with high confidence (5) when it
   # detects OSI-approved or non-OSI licenses
   OVERRIDABLE_OUTPUTS = %i[
     floss_license_osi_status floss_license_status
-    osps_le_03_01_status osps_le_03_02_status
+    osps_le_02_01_status osps_le_02_02_status
   ].freeze
 
   # From: http://opensource.org/licenses/alphabetical
@@ -157,16 +157,17 @@ class FlossLicenseDetective < Detective
             explanation: "The #{license} license is approved by the " \
                          'Open Source Initiative (OSI).'
           },
-        osps_le_03_01_status:
+        osps_le_02_01_status:
           {
             value: CriterionStatus::MET, confidence: 5,
-            explanation: "The #{license} license is OSI-approved."
+            explanation: "The #{license} license is approved by the " \
+                         'Open Source Initiative (OSI).'
           },
-        osps_le_03_02_status:
+        osps_le_02_02_status:
           {
             value: CriterionStatus::MET, confidence: 5,
-            explanation: "The #{license} license is OSI-approved for " \
-                         'public use.'
+            explanation: "The #{license} license is approved by the " \
+                         'Open Source Initiative (OSI).'
           }
       }
     elsif license.match?(/\A[^(]/)

@@ -20,6 +20,15 @@ class GithubBasicDetective < Detective
   OUTPUTS = %i[
     name license discussion_status repo_public_status repo_track_status
     repo_distributed_status contribution_status implementation_languages
+    osps_do_02_01_status osps_gv_02_01_status
+    osps_ac_01_01_status
+    osps_qa_01_01_status osps_qa_01_02_status
+  ].freeze
+
+  # This detective can override with high confidence for repo-based criteria
+  # name and implementation_languages are lower confidence (suggestions)
+  OVERRIDABLE_OUTPUTS = %i[
+    repo_track_status repo_distributed_status
   ].freeze
 
   # These are the 'correct' display case for SPDX for OSI-approved licenses.
@@ -116,6 +125,33 @@ class GithubBasicDetective < Detective
       results[:discussion_status] = {
         value: CriterionStatus::MET, confidence: 3,
         explanation: 'GitHub supports discussions on issues and pull requests.'
+      }
+      # Baseline: public discussion mechanisms (same evidence as discussion_status)
+      results[:osps_gv_02_01_status] = {
+        value: CriterionStatus::MET, confidence: 3,
+        explanation: 'GitHub supports public discussions on proposed changes (via pull requests) and usage obstacles (via issues).'
+      }
+      # Baseline criteria - defect reporting instructions (low confidence)
+      results[:osps_do_02_01_status] = {
+        value: CriterionStatus::MET, confidence: 2,
+        explanation: 'GitHub provides defect reporting mechanisms by default (via issues).'
+      }
+      # 2FA required by GitHub. An organization *might* use multiple repo
+      # hosts, but given our information, 2FA seems highly likely.
+      results[:osps_ac_01_01_status] = {
+        value: CriterionStatus::MET, confidence: 3,
+        explanation: 'GitHub requires 2FA as of March 2023.'
+      }
+      # Publicly readable, if we can read it. It's possible it's not current,
+      # but if this really is the "main" repo (as claimed) then this is met.
+      results[:osps_qa_01_01_status] = {
+        value: CriterionStatus::MET, confidence: 3,
+        explanation: 'Repository is publcly available on GitHub.'
+      }
+      # If the main repo is on GitHub, then git will store this
+      results[:osps_qa_01_02_status] = {
+        value: CriterionStatus::MET, confidence: 3,
+        explanation: 'Repository git metadata is publcly available on GitHub.'
       }
 
       # Get basic evidence

@@ -36,6 +36,9 @@ class HardenedSitesDetective < Detective
   INPUTS = %i[repo_url homepage_url].freeze
   OUTPUTS = [:hardened_site_status].freeze
 
+  # This detective can override hardened site detection with high confidence
+  OVERRIDABLE_OUTPUTS = [:hardened_site_status].freeze
+
   # Check the given hash of header values to make sure that all expected
   # keys are present. Return a list of missing fields (preferably empty).
   def missing_security_fields(headers)

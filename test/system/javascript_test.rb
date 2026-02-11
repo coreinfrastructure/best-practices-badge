@@ -82,25 +82,27 @@ class JavascriptTest < ApplicationSystemTestCase
     find('#toggle-expand-all-panels').click
     # Wait for jQuery to finish, which includes panel expansion animations
     wait_for_jquery
-    # Wait for the radio button to be present and enabled before trying to click it
-    assert_selector '#project_osps_ac_01_01_status_met', visible: true
 
-    # Get initial panel count (should start with 0/)
+    # Wait for the radio button to be present, visible, and interactable
+    # Use a more robust wait that ensures the element is truly ready
+    assert_selector '#project_osps_ac_01_01_status_met', visible: true, wait: 10
+
+    # Get initial panel count - automation may fill some criteria on first edit
     initial_panel_text = find('#controls .satisfaction-text').text
-    assert_match(%r{^0/\d+$}, initial_panel_text,
-                 'Panel should start with 0/ count')
+    # Extract the number filled (e.g., "4/24" -> 4)
+    initial_filled = initial_panel_text.match(%r{^(\d+)/\d+$})[1].to_i
 
     # Get initial progress bar percentage
     initial_progress = find('.badge-progress').text
-    assert_equal '0%', initial_progress, 'Progress should start at 0%'
 
     # Find the first baseline criterion (osps_ac_01_01) and verify it starts
-    # with question mark icon
+    # with question mark icon (automation doesn't fill osps_ac_01_01)
     first_criterion_icon = find('#osps_ac_01_01_enough')
     assert_match QUESTION, first_criterion_icon['src'],
                  'Criterion should start with question mark icon'
 
     # Click the "Met" radio button for the first baseline criterion
+    # Use ensure_choice to handle potential flaky clicks
     ensure_choice 'project_osps_ac_01_01_status_met'
     wait_for_jquery
 
@@ -109,17 +111,16 @@ class JavascriptTest < ApplicationSystemTestCase
     assert_match CHECK, first_criterion_icon['src'],
                  'Criterion icon should change to check mark'
 
-    # Verify panel count increased from 0/
+    # Verify panel count increased by 1
     new_panel_text = find('#controls .satisfaction-text').text
-    assert_no_match(%r{^0/}, new_panel_text,
-                    'Panel count should have increased from 0/')
-    assert_match(%r{^\d+/\d+$}, new_panel_text,
-                 'Panel count should be in N/M format')
+    new_filled = new_panel_text.match(%r{^(\d+)/\d+$})[1].to_i
+    assert_equal initial_filled + 1, new_filled,
+                 'Panel count should have increased by 1'
 
-    # Verify progress bar increased from 0%
+    # Verify progress bar increased from initial value
     new_progress = find('.badge-progress').text
-    assert_not_equal '0%', new_progress,
-                     'Progress bar should have increased from 0%'
+    assert_not_equal initial_progress, new_progress,
+                     "Progress bar should have increased from #{initial_progress}"
     assert_match(/^\d+%$/, new_progress,
                  'Progress bar should be a percentage')
   end

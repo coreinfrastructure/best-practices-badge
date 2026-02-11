@@ -175,6 +175,94 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test 'create project defaults to passing section' do
+    log_in_as(@user)
+    stub_request(:get, 'https://api.github.com/user/repos')
+      .to_return(status: 200, body: '', headers: {})
+    assert_difference('Project.count') do
+      post '/en/projects', params: {
+        project: {
+          name: @project.name,
+          repo_url: 'https://www.example.org/default-section',
+          homepage_url: @project.homepage_url
+        }
+      }
+    end
+    new_project = Project.find_by(repo_url: 'https://www.example.org/default-section')
+    assert_redirected_to edit_project_section_path(new_project, 'passing')
+  end
+
+  test 'create project with starting_section passing' do
+    log_in_as(@user)
+    stub_request(:get, 'https://api.github.com/user/repos')
+      .to_return(status: 200, body: '', headers: {})
+    assert_difference('Project.count') do
+      post '/en/projects', params: {
+        project: {
+          name: @project.name,
+          repo_url: 'https://www.example.org/passing-section',
+          homepage_url: @project.homepage_url
+        },
+        starting_section: 'passing'
+      }
+    end
+    new_project = Project.find_by(repo_url: 'https://www.example.org/passing-section')
+    assert_redirected_to edit_project_section_path(new_project, 'passing')
+  end
+
+  test 'create project with starting_section baseline-1' do
+    log_in_as(@user)
+    stub_request(:get, 'https://api.github.com/user/repos')
+      .to_return(status: 200, body: '', headers: {})
+    assert_difference('Project.count') do
+      post '/en/projects', params: {
+        project: {
+          name: @project.name,
+          repo_url: 'https://www.example.org/baseline-section',
+          homepage_url: @project.homepage_url
+        },
+        starting_section: 'baseline-1'
+      }
+    end
+    new_project = Project.find_by(repo_url: 'https://www.example.org/baseline-section')
+    assert_redirected_to edit_project_section_path(new_project, 'baseline-1')
+  end
+
+  test 'create project with invalid starting_section defaults to passing' do
+    log_in_as(@user)
+    stub_request(:get, 'https://api.github.com/user/repos')
+      .to_return(status: 200, body: '', headers: {})
+    assert_difference('Project.count') do
+      post '/en/projects', params: {
+        project: {
+          name: @project.name,
+          repo_url: 'https://www.example.org/invalid-section',
+          homepage_url: @project.homepage_url
+        },
+        starting_section: 'gold'
+      }
+    end
+    new_project = Project.find_by(repo_url: 'https://www.example.org/invalid-section')
+    assert_redirected_to edit_project_section_path(new_project, 'passing')
+  end
+
+  test 'duplicate project redirect respects starting_section' do
+    log_in_as(@user)
+    stub_request(:get, 'https://api.github.com/user/repos')
+      .to_return(status: 200, body: '', headers: {})
+    assert_no_difference('Project.count') do
+      post '/en/projects', params: {
+        project: {
+          name: 'Duplicate test',
+          repo_url: @project.repo_url,
+          homepage_url: @project.homepage_url
+        },
+        starting_section: 'baseline-1'
+      }
+    end
+    assert_redirected_to project_section_path(@project, 'baseline-1')
+  end
+
   test 'should show project' do
     get "/en/projects/#{@project.id}/passing"
     assert_response :success
@@ -471,7 +559,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     # TODO: Currently we don't report an error if a non-owner
     # tries to remove an "additional rights" user, we just ignore it.
     # If we add an error report, we should check for that error report here.
-    assert_redirected_to root_path(locale: 'en')
+    # Unauthorized users are redirected to the project show page
+    assert_redirected_to project_section_path(@project, 'passing', locale: 'en')
     assert_equal 2, AdditionalRight.for_project(@project.id).count
   end
 
@@ -486,7 +575,10 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     test_user = users(:test_user_mark)
     log_in_as(test_user)
     get "/en/projects/#{@project.id}/passing/edit" # Routes to 'edit'
-    assert_redirected_to root_url
+    # Unauthorized logged-in users are redirected to the project show page
+    assert_redirected_to project_section_path(@project, 'passing')
+    assert_equal 'You are not authorized to edit this project.',
+                 flash[:danger]
   end
 
   # Having trouble translating this test, will do later.
@@ -749,7 +841,9 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     patch "/en/projects/#{@project_two.id}", params: {
       project: { name: new_name }
     }
-    assert_redirected_to root_url(locale: :en)
+    # Unauthorized logged-in users are redirected to the project show page
+    assert_redirected_to project_section_path(@project_two, 'passing',
+                                              locale: :en)
     @project_two.reload
     assert_equal old_name, @project_two.name
   end
@@ -1854,6 +1948,688 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_equal 'Accept-Encoding', @response.headers['Vary']
     assert_equal @project.record_key, @response.headers['Surrogate-Key']
+  end
+
+  # Automation feature tests
+
+  test 'first edit runs automation without setting saved flag' do
+    log_in_as(@user)
+    # Ensure baseline_1_saved is false (not yet saved)
+    @project.update_column(:baseline_1_saved, false)
+
+    get edit_project_section_path(@project, 'baseline-1', locale: :en)
+
+    assert_response :success
+    @project.reload
+    # Flag should NOT be set until user actually saves
+    assert_not @project.baseline_1_saved, 'baseline_1_saved flag should not be set until user saves'
+  end
+
+  test 'save with chief failure continues without automation' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+
+    # Simulate Chief failure by calling the failure handler directly
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+
+    # Create an exception with backtrace
+    begin
+      raise StandardError, 'Test Chief failure'
+    rescue StandardError => e
+      error = e
+    end
+
+    changed_fields = [:floss_license_osi_status] # Use an actually overridable field
+    user_set_values = { floss_license_osi_status: 'Met' }
+
+    controller.send(:handle_chief_save_failure, error, changed_fields, user_set_values)
+
+    # Check that failure was recorded
+    assert controller.instance_variable_get(:@chief_failed)
+    assert_equal [:floss_license_osi_status], controller.instance_variable_get(:@chief_failed_fields)
+  end
+
+  test 'save and continue with overrides redirects to edit' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+
+    # Set up override scenario
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+    controller.instance_variable_set(:@overridden_fields, [
+                                       {
+                                         field: :license, old_value: 'MIT', new_value: 'Apache-2.0',
+                                         explanation: 'Detected Apache license'
+                                       }
+                                     ])
+    controller.instance_variable_set(:@automated_fields, [])
+
+    # Test the format_override_details method
+    details = controller.send(:format_override_details)
+
+    # Should format override details
+    assert_not_nil details
+    assert_match(/license/i, details.downcase)
+  end
+
+  test 'save with overrides redirects to edit with warning' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+
+    # Set up controller state to test categorize_chief_proposal
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+    controller.instance_variable_set(:@overridden_fields, [])
+    controller.instance_variable_set(:@automated_fields, [])
+
+    # Test categorizing a forced override
+    controller.send(:categorize_chief_proposal,
+                    :license,
+                    { value: 'Apache-2.0', explanation: 'Detected Apache', forced: true },
+                    'MIT') # User had set MIT
+
+    # Should be categorized as override (not automation)
+    overrides = controller.instance_variable_get(:@overridden_fields)
+    assert_equal 1, overrides.length
+    assert_equal :license, overrides[0][:field]
+    assert_equal 'MIT', overrides[0][:old_value]
+    assert_equal 'Apache-2.0', overrides[0][:new_value]
+  end
+
+  test 'JSON update includes automation metadata' do
+    log_in_as(@user)
+    patch project_path(@project, locale: :en, format: :json),
+          params: {
+            criteria_level: 'passing',
+                    project: { name: 'Updated Name' }
+          }
+
+    assert_response :success
+    json = response.parsed_body
+    assert json.key?('id')
+    assert_equal 'updated', json['status']
+  end
+
+  test 'chief fills in unknown values as automated not overridden' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+
+    # Set up controller state
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+    controller.instance_variable_set(:@overridden_fields, [])
+    controller.instance_variable_set(:@automated_fields, [])
+
+    # Test categorizing automation (filling in Unknown status)
+    controller.send(:categorize_chief_proposal,
+                    :contribution_status,
+                    { value: CriterionStatus::MET, explanation: 'GitHub uses issues/PRs', forced: true },
+                    CriterionStatus::UNKNOWN) # User left as Unknown
+
+    # Should be categorized as automation (not override)
+    automated = controller.instance_variable_get(:@automated_fields)
+    overrides = controller.instance_variable_get(:@overridden_fields)
+
+    assert_equal 1, automated.length
+    assert_equal :contribution_status, automated[0][:field]
+    assert_equal CriterionStatus::MET, automated[0][:new_value]
+    assert_equal 0, overrides.length # No overrides
+  end
+
+  test 'find_automated_fields detects filled in unknowns' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+
+    # Set up project with Unknown status value
+    @project.contribution_status = CriterionStatus::UNKNOWN
+    @project.save!
+
+    controller.instance_variable_set(:@project, @project)
+
+    # Capture original values
+    original = { contribution_status: CriterionStatus::UNKNOWN }
+
+    # Change to Met (simulating Chief fill-in)
+    @project.contribution_status = CriterionStatus::MET
+
+    # Find automated fields
+    automated = controller.send(:find_automated_fields, original)
+
+    assert_includes automated.pluck(:field), :contribution_status
+  end
+
+  test 'run_save_automation catches chief exceptions' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+
+    # Create a mock chief that raises
+    mock_chief = Object.new
+    mock_chief.define_singleton_method(:propose_changes) do |**_kwargs|
+      raise StandardError, 'Test exception'
+    end
+
+    changed_fields = [:floss_license_osi_status]
+    user_set_values = { floss_license_osi_status: 'Met' }
+
+    # This should catch the exception and set @chief_failed
+    controller.send(:run_save_automation, changed_fields, user_set_values, chief_instance: mock_chief)
+
+    assert controller.instance_variable_get(:@chief_failed)
+    assert_equal [:floss_license_osi_status], controller.instance_variable_get(:@chief_failed_fields)
+  end
+
+  test 'chief failure during save shows analysis failed warning' do
+    log_in_as(@user)
+
+    # Set repo_url to trigger TestForcedDetective exception
+    @project.repo_url = 'https://example.com/test/chief-failure'
+    @project.description_good_status = '?'
+    @project.passing_saved = false # Ensure automation runs
+    @project.save!
+
+    # User tries to change description_good
+    patch project_path(@project, locale: :en), params: {
+      criteria_level: 'passing',
+      project: { description_good_status: 'Met' },
+      continue: '1' # Save and continue
+    }
+
+    # Should redirect to edit with analysis failed warning
+    assert_response :redirect
+    assert_redirected_to edit_project_section_path(@project, 'passing', locale: :en)
+    assert_not_nil flash[:warning], "Expected warning flash but got: #{flash.inspect}"
+    assert_match(/analysis failed/i, flash[:warning])
+  end
+
+  # Integration tests using TestForcedDetective to trigger forced overrides
+  test 'save with forced override and continue redirects to edit with warning' do
+    log_in_as(@user)
+
+    # Set repo_url to trigger TestForcedDetective forced override
+    @project.repo_url = 'https://example.com/test/force-override'
+    @project.description_good_status = '?'
+    @project.save!
+
+    # Verify the URL was saved
+    @project.reload
+    assert_equal 'https://example.com/test/force-override', @project.repo_url
+
+    # User tries to change description_good
+    patch project_path(@project, locale: :en), params: {
+      criteria_level: 'passing',
+      project: { description_good_status: 'Met' },
+      continue: '1' # Save and continue
+    }
+
+    # Should redirect to edit (not show) with warning about override
+    assert_response :redirect
+    assert_not_nil flash[:warning], "Expected warning flash but got: #{flash.inspect}"
+    assert_match(/corrected.*field/i, flash[:warning])
+    assert_match(/description.*good/i, flash[:warning])
+  end
+
+  test 'save with forced override and exit redirects to edit with warning' do
+    log_in_as(@user)
+
+    # Set repo_url to trigger TestForcedDetective forced override
+    @project.repo_url = 'https://example.com/test/force-override'
+    @project.description_good_status = '?'
+    @project.save!
+
+    # User tries to change description_good, save and exit
+    patch project_path(@project, locale: :en), params: {
+      criteria_level: 'passing',
+      project: { description_good_status: 'Met' }
+      # No continue param = save and exit
+    }
+
+    # Should redirect to edit (NOT show) with warning about override
+    assert_response :redirect
+    assert_match(/corrected.*field/i, flash[:warning])
+    assert_match(/description.*good/i, flash[:warning])
+    # Should redirect to edit, not to show (verify not redirecting to show page)
+    assert_no_match(%r{projects/\d+\z}, response.location)
+  end
+
+  test 'JSON request with forced override includes automation metadata' do
+    log_in_as(@user)
+
+    # Reload to get fresh state (other tests may have modified @project)
+    @project.reload
+
+    # Set repo_url to trigger TestForcedDetective forced override
+    @project.repo_url = 'https://example.com/test/force-override'
+    @project.description_good_status = '?'
+    @project.passing_saved = false # Ensure automation runs
+    @project.save!
+
+    # User tries to change description_good via JSON
+    patch project_path(@project, locale: :en, format: :json), params: {
+      criteria_level: 'passing',
+      project: { description_good_status: 'Met' }
+    }
+
+    assert_response :success
+    json_response = response.parsed_body
+
+    # Should include automation metadata with overridden field
+    assert json_response.key?('automation')
+    assert json_response['automation'].key?('overridden')
+    overridden = json_response['automation']['overridden']
+    assert(overridden.any? { |f| f['field'] == 'description_good_status' })
+  end
+
+  test 'automated fields JSON includes field metadata' do
+    # Test the JSON serialization of automated fields directly
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@automated_fields, [
+                                       { field: :contribution_status, new_value: CriterionStatus::MET, explanation: 'Auto-detected' }
+                                     ])
+    controller.instance_variable_set(:@overridden_fields, [])
+
+    json_metadata = controller.send(:build_automation_metadata)
+
+    assert json_metadata.key?(:automated)
+    assert_equal 1, json_metadata[:automated].length
+    assert_equal :contribution_status, json_metadata[:automated][0][:field]
+    assert_equal CriterionStatus::MET, json_metadata[:automated][0][:value]
+  end
+
+  # Security tests for automation field validation
+  # These ensure malicious/invalid data in hidden fields is rejected
+
+  test 'parse_and_validate_field_list rejects SQL injection attempt' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.params = ActionController::Parameters.new(id: @project.id)
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, '0')
+
+    # SQL injection attempts should be silently ignored
+    malicious = "'; DROP TABLE projects; --"
+    result = controller.send(:parse_and_validate_field_list, malicious)
+    assert_equal [], result, 'SQL injection attempt should be rejected'
+  end
+
+  test 'parse_and_validate_field_list rejects non-existent field' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.params = ActionController::Parameters.new(id: @project.id)
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, '0')
+
+    # Non-existent field should be rejected
+    result = controller.send(:parse_and_validate_field_list, 'not_a_field')
+    assert_equal [], result, 'Non-existent field should be rejected'
+  end
+
+  test 'parse_and_validate_field_list rejects field from different section' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.params = ActionController::Parameters.new(id: @project.id)
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, '0') # Editing passing level
+
+    # osps_br_01_01_status is a baseline-1 criterion, not in passing
+    result = controller.send(:parse_and_validate_field_list, 'osps_br_01_01_status')
+    assert_equal [], result, 'Field from different section should be rejected'
+  end
+
+  test 'parse_and_validate_field_list accepts valid criteria field for section' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.params = ActionController::Parameters.new(id: @project.id)
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, '0')
+
+    # contribution_status is valid for passing level
+    result = controller.send(:parse_and_validate_field_list, 'contribution_status')
+    assert_equal 1, result.length
+    assert_equal :contribution_status, result[0][:field]
+  end
+
+  test 'parse_and_validate_field_list accepts valid non-criteria field' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.params = ActionController::Parameters.new(id: @project.id)
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, '0')
+
+    # name is always automatable, valid for any section
+    result = controller.send(:parse_and_validate_field_list, 'name')
+    assert_equal 1, result.length
+    assert_equal :name, result[0][:field]
+
+    # license is always automatable
+    result = controller.send(:parse_and_validate_field_list, 'license')
+    assert_equal 1, result.length
+    assert_equal :license, result[0][:field]
+  end
+
+  test 'parse_and_validate_field_list handles mixed valid and invalid fields' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.params = ActionController::Parameters.new(id: @project.id)
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, '0')
+
+    # Mix of valid and invalid - only valid should be accepted
+    mixed = 'name,not_a_field,contribution_status,"; DROP TABLE users;--,license'
+    result = controller.send(:parse_and_validate_field_list, mixed)
+
+    assert_equal 3, result.length
+    field_names = result.pluck(:field)
+    assert_includes field_names, :name
+    assert_includes field_names, :contribution_status
+    assert_includes field_names, :license
+    assert_not_includes field_names, :not_a_field
+  end
+
+  test 'parse_and_validate_field_list rejects XSS attempt' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.params = ActionController::Parameters.new(id: @project.id)
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, '0')
+
+    # XSS attempts should be rejected
+    xss = '<script>alert("xss")</script>'
+    result = controller.send(:parse_and_validate_field_list, xss)
+    assert_equal [], result, 'XSS attempt should be rejected'
+  end
+
+  test 'parse_and_validate_field_list rejects path traversal attempt' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.params = ActionController::Parameters.new(id: @project.id)
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, '0')
+
+    # Path traversal attempts should be rejected
+    traversal = '../../../etc/passwd'
+    result = controller.send(:parse_and_validate_field_list, traversal)
+    assert_equal [], result, 'Path traversal attempt should be rejected'
+  end
+
+  test 'parse_and_validate_field_list handles empty and whitespace' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.params = ActionController::Parameters.new(id: @project.id)
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, '0')
+
+    # Empty should return empty array
+    assert_equal [], controller.send(:parse_and_validate_field_list, '')
+    assert_equal [], controller.send(:parse_and_validate_field_list, nil)
+    assert_equal [], controller.send(:parse_and_validate_field_list, '   ')
+
+    # Whitespace with valid field should work
+    result = controller.send(:parse_and_validate_field_list, '  name  ')
+    assert_equal 1, result.length
+    assert_equal :name, result[0][:field]
+  end
+
+  # Test apply_query_string_proposals_to_project method directly
+  # This method applies external automation proposals from URL parameters
+  test 'apply_query_string_proposals accepts valid status strings' do
+    project = projects(:perfect)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, project)
+    original_values = { contribution_status: CriterionStatus::UNKNOWN }
+
+    # Test valid status strings (external representation)
+    test_cases = {
+      'Met' => CriterionStatus::MET,
+      'met' => CriterionStatus::MET,
+      'MET' => CriterionStatus::MET,
+      'Unmet' => CriterionStatus::UNMET,
+      'unmet' => CriterionStatus::UNMET,
+      '?' => CriterionStatus::UNKNOWN,
+      'N/A' => CriterionStatus::NA,
+      'n/a' => CriterionStatus::NA,
+      'NA' => CriterionStatus::NA,
+      'na' => CriterionStatus::NA
+    }
+
+    test_cases.each do |input, expected|
+      project.contribution_status = CriterionStatus::UNKNOWN
+      params = { 'contribution_status' => input }
+      modified = controller.send(:apply_query_string_proposals_to_project,
+                                 project, params, '0', original_values)
+
+      assert_includes modified, :contribution_status,
+                      "Status '#{input}' should be accepted"
+      assert_equal expected, project.contribution_status,
+                   "Status '#{input}' should convert to #{expected}"
+    end
+  end
+
+  test 'apply_query_string_proposals rejects invalid status values' do
+    project = projects(:perfect)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, project)
+    original_values = { contribution_status: CriterionStatus::UNKNOWN }
+
+    # Test invalid status values
+    invalid_values = %w[0 1 2 3 invalid true false 99 yes no]
+
+    invalid_values.each do |invalid_value|
+      project.contribution_status = CriterionStatus::UNKNOWN
+      params = { 'contribution_status' => invalid_value }
+      modified = controller.send(:apply_query_string_proposals_to_project,
+                                 project, params, '0', original_values)
+
+      assert_not_includes modified, :contribution_status,
+                          "Invalid status '#{invalid_value}' should be rejected"
+      assert_equal CriterionStatus::UNKNOWN, project.contribution_status,
+                   "Project should remain unchanged after invalid status '#{invalid_value}'"
+    end
+  end
+
+  test 'apply_query_string_proposals accepts justification strings' do
+    project = projects(:perfect)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, project)
+    original_values = { contribution_justification: '' }
+
+    justifications = [
+      'Found CONTRIBUTING.md file',
+      'See section 3.2 of documentation',
+      'UTF-8: ñoño café 中文',
+      '  whitespace should be stripped  '
+    ]
+
+    justifications.each do |just|
+      project.contribution_justification = ''
+      params = { 'contribution_justification' => just }
+      modified = controller.send(:apply_query_string_proposals_to_project,
+                                 project, params, '0', original_values)
+
+      assert_includes modified, :contribution_justification,
+                      "Justification should be accepted: #{just[0..30]}"
+      assert_equal just.strip, project.contribution_justification,
+                   'Whitespace should be stripped'
+    end
+  end
+
+  test 'apply_query_string_proposals accepts non-criteria fields' do
+    project = projects(:perfect)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, project)
+    original_values = { name: '', license: '', description: '' }
+
+    params = {
+      'name' => 'New Project Name',
+      'license' => 'MIT',
+      'description' => 'A test project'
+    }
+
+    modified = controller.send(:apply_query_string_proposals_to_project,
+                               project, params, '0', original_values)
+
+    assert_includes modified, :name
+    assert_includes modified, :license
+    assert_includes modified, :description
+    assert_equal 'New Project Name', project.name
+    assert_equal 'MIT', project.license
+    assert_equal 'A test project', project.description
+  end
+
+  test 'apply_query_string_proposals rejects fields not in section' do
+    project = projects(:perfect)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, project)
+    original_values = {}
+
+    # Silver (level '1') should not accept passing (level '0') criteria
+    params = {
+      'contribution_status' => 'Met', # This is in passing, not silver
+      'name' => 'New Name' # Always automatable
+    }
+
+    modified = controller.send(:apply_query_string_proposals_to_project,
+                               project, params, '1', original_values)
+
+    # name should be accepted (always automatable)
+    assert_includes modified, :name
+    # contribution_status should be rejected (not in silver section)
+    assert_not_includes modified, :contribution_status
+    assert_equal 'New Name', project.name
+  end
+
+  test 'apply_query_string_proposals ignores unrelated params' do
+    project = projects(:perfect)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, project)
+    original_values = {}
+
+    # Mix valid fields with unrelated params
+    params = {
+      'name' => 'Valid Name',
+      'not_a_field' => 'Should be ignored',
+      'random_key' => 'Also ignored',
+      'controller' => 'projects', # Rails internal param
+      'action' => 'edit' # Rails internal param
+    }
+
+    modified = controller.send(:apply_query_string_proposals_to_project,
+                               project, params, '0', original_values)
+
+    # Only 'name' should be accepted
+    assert_equal 1, modified.length
+    assert_includes modified, :name
+    assert_equal 'Valid Name', project.name
+  end
+
+  test 'apply_query_string_proposals handles mixed valid and invalid fields' do
+    project = projects(:perfect)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, project)
+    original_values = {
+      contribution_status: CriterionStatus::UNKNOWN,
+      name: ''
+    }
+
+    # Set up project state
+    project.contribution_status = CriterionStatus::UNKNOWN
+
+    params = {
+      'name' => 'Good Name',
+      'contribution_status' => '99', # Invalid status (numeric string)
+      'license' => 'MIT'
+    }
+
+    modified = controller.send(:apply_query_string_proposals_to_project,
+                               project, params, '0', original_values)
+
+    # Valid fields should be accepted
+    assert_includes modified, :name
+    assert_includes modified, :license
+    # Invalid status should be rejected
+    assert_not_includes modified, :contribution_status
+
+    assert_equal 'Good Name', project.name
+    assert_equal 'MIT', project.license
+    assert_equal CriterionStatus::UNKNOWN, project.contribution_status
+  end
+
+  test 'apply_query_string_proposals accepts blank values for non-status fields' do
+    project = projects(:perfect)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, project)
+
+    # Store original values
+    original_name = project.name
+    original_status = project.contribution_status
+    original_values = { name: original_name, contribution_status: original_status }
+
+    params = {
+      'name' => '',
+      'license' => '   ',
+      'description' => nil,
+      'contribution_status' => '' # Blank status should be rejected
+    }
+
+    modified = controller.send(:apply_query_string_proposals_to_project,
+                               project, params, '0', original_values)
+
+    # Non-status blank values should be accepted
+    assert_includes modified, :name
+    assert_includes modified, :license
+    assert_includes modified, :description
+    # Blank status should be rejected
+    assert_not_includes modified, :contribution_status
+
+    assert_equal '', project.name
+    assert_equal '', project.license
+    assert_equal '', project.description
+    assert_equal original_status, project.contribution_status
+  end
+
+  test 'apply_query_string_proposals returns list of modified fields' do
+    project = projects(:perfect)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, project)
+    original_values = {}
+
+    params = {
+      'name' => 'New Name',
+      'license' => 'Apache-2.0',
+      'contribution_status' => 'Met'
+    }
+
+    modified = controller.send(:apply_query_string_proposals_to_project,
+                               project, params, '0', original_values)
+
+    assert_equal 3, modified.length
+    assert_includes modified, :name
+    assert_includes modified, :license
+    assert_includes modified, :contribution_status
+  end
+
+  test 'apply_query_string_proposals handles baseline sections' do
+    project = projects(:perfect)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, project)
+    original_values = {}
+
+    # Test baseline-1 section - use a field that actually exists in baseline-1
+    params = {
+      'osps_ac_01_01_status' => 'Met',
+      'name' => 'Baseline Project'
+    }
+
+    modified = controller.send(:apply_query_string_proposals_to_project,
+                               project, params, 'baseline-1', original_values)
+
+    # Both should be accepted for baseline-1
+    assert_includes modified, :osps_ac_01_01_status
+    assert_includes modified, :name
   end
 end
 # rubocop:enable Metrics/ClassLength

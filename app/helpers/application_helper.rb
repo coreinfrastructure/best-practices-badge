@@ -10,6 +10,15 @@ module ApplicationHelper
   # Frozen string constant for unknown project names (memory optimization)
   NAME_UNKNOWN = '(Name Unknown)'
 
+  # Frozen string constant for robot emoji indicating automation (memory optimization)
+  ROBOT_EMOJI = '🤖 '
+  # rubocop:disable Rails/OutputSafety
+  ROBOT_EMOJI_SAFE = ROBOT_EMOJI.html_safe.freeze
+  # rubocop:enable Rails/OutputSafety
+
+  # Frozen string constant for automation highlight CSS class (memory optimization)
+  HIGHLIGHT_AUTOMATED_CLASS = 'highlight-automated'
+
   # Pre-computed section dropdown data for project show navigation.
   # Lazy-initialized (memoized) to avoid I18n initialization order issues.
   # Eagerly triggered during app boot (see config/initializers/zz_eager_load_helpers.rb)

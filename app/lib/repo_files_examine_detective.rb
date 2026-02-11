@@ -8,10 +8,19 @@
 # (those conventionally used for source and documentation).
 # Note that a key precondition is determining how to open repo files.
 
+# rubocop:disable Metrics/ClassLength
 class RepoFilesExamineDetective < Detective
   INPUTS = [:repo_files].freeze
   OUTPUTS = %i[
     contribution_status license_location_status release_notes_status
+    osps_do_02_01_status osps_gv_03_01_status
+    osps_le_03_01_status osps_le_03_02_status
+  ].freeze
+
+  # This detective can override file-presence criteria with high confidence
+  OVERRIDABLE_OUTPUTS = %i[
+    contribution_status license_location_status release_notes_status
+    osps_le_03_01_status
   ].freeze
 
   # Minimum file sizes (in bytes) before they are considered useful.
@@ -37,29 +46,34 @@ class RepoFilesExamineDetective < Detective
     end
   end
 
-  def unmet_result(result_description)
+  def unmet_result(result_description, confidence: 1)
     {
-      value: CriterionStatus::UNMET, confidence: 1,
+      value: CriterionStatus::UNMET, confidence: confidence,
       explanation: "// No #{result_description} file found."
     }
   end
 
-  def met_result(result_description, html_url)
+  def met_result(result_description, html_url, confidence: 3)
     {
-      value: CriterionStatus::MET, confidence: 3,
+      value: CriterionStatus::MET, confidence: confidence,
       explanation:
         "Non-trivial #{result_description} file in repository: " \
         "<#{html_url}>."
     }
   end
 
-  def determine_results(status, name_pattern, minimum_size, result_description)
+  # @param confidence [Hash] optional :met and :unmet confidence overrides
+  def determine_results(
+    status, name_pattern, minimum_size, result_description, confidence: {}
+  )
     found_files = files_named(name_pattern, minimum_size)
     @results[status] =
       if found_files.empty?
-        unmet_result result_description
+        unmet_result(result_description,
+                     confidence: confidence.fetch(:unmet, 1))
       else
-        met_result result_description, found_files.first['html_url']
+        met_result(result_description, found_files.first['html_url'],
+                   confidence: confidence.fetch(:met, 3))
       end
   end
 
@@ -86,16 +100,51 @@ class RepoFilesExamineDetective < Detective
 
     # TODO: Look in subdirectories.
 
+    check_contribution_files
+    check_license_files
+    check_release_notes
+    check_security_md_files
+
+    @results
+  end
+  # rubocop:enable Metrics/MethodLength
+
+  # Check for contribution files and set both metal and baseline criteria
+  def check_contribution_files
     determine_results(
       :contribution_status,
       /\A(contributing|contribute)(\.md|\.txt)?\Z/i,
       CONTRIBUTION_MIN_SIZE, 'contribution'
     )
+    set_baseline_contribution_status
+  end
 
+  def check_security_md_files
+    # SECURITY.md file present?
+    determine_results(
+      :osps_do_02_01_status,
+      /\A(security)(\.md|\.txt)?\Z/i,
+      CONTRIBUTION_MIN_SIZE, 'SECURITY[.md] file found'
+    )
+  end
+
+  # Set baseline contribution criteria if contribution file is met
+  def set_baseline_contribution_status
+    return unless @results[:contribution_status]&.dig(:value) == CriterionStatus::MET
+
+    confidence = @results[:contribution_status][:confidence]
+    @results[:osps_gv_03_01_status] = {
+      value: CriterionStatus::MET, confidence: confidence,
+      explanation: 'Contribution process documented in repository.'
+    }
+  end
+
+  # Check for license files and set both metal and baseline criteria
+  def check_license_files
     determine_results(
       :license_location_status,
       /\A([A-Za-z0-9]+-)?(license|copying)(\.md|\.txt)?\Z/i,
-      NONTRIVIAL_MIN_SIZE, 'license location'
+      NONTRIVIAL_MIN_SIZE, 'license location', confidence: { unmet: 5 }
     )
 
     # If there's a LICENSES directory, then license_location probably met.
@@ -105,13 +154,39 @@ class RepoFilesExamineDetective < Detective
       'licenses directory'
     )
 
+    set_baseline_license_status
+  end
+
+  # Set baseline license-file-presence criteria if license location is met
+  # rubocop:disable Metrics/MethodLength
+  def set_baseline_license_status
+    if @results[:license_location_status]&.dig(:value) == CriterionStatus::MET
+      confidence = @results[:license_location_status][:confidence]
+      @results[:osps_le_03_01_status] = {
+        value: CriterionStatus::MET, confidence: confidence,
+        explanation: 'License file found in repository.'
+      }
+    else
+      @results[:osps_le_03_01_status] = {
+        value: CriterionStatus::UNMET, confidence: 5,
+        explanation: 'License file not found in repository.'
+      }
+      @results[:osps_le_03_02_status] = {
+        value: CriterionStatus::UNMET, confidence: 2,
+        explanation: 'License file not found in repository (likely not ' \
+                     'included in releases).'
+      }
+    end
+  end
+  # rubocop:enable Metrics/MethodLength
+
+  # Check for release notes files
+  def check_release_notes
     determine_results(
       :release_notes_status,
       /\A(changelog|news)(\.md|\.markdown|\.txt|\.html)?\Z/i,
       NONTRIVIAL_MIN_SIZE, 'release notes'
     )
-
-    @results
   end
-  # rubocop:enable Metrics/MethodLength
 end
+# rubocop:enable Metrics/ClassLength

@@ -509,6 +509,9 @@ en:
         Note - if your repository URL is on GitHub, anyone who
         can commit to the repository will be able to edit the
         badge information.
+      badge_series: "Badge series"
+      badge_series_metal: "Metal (passing, silver, gold)"
+      badge_series_baseline: "Baseline (baseline-1, baseline-2, baseline-3)"
       sign_in_first: Please sign in to add a project!
       original_repos: "=> Original GitHub Repos"
       fork_repos: "=> Forked GitHub Repos"
@@ -538,6 +541,7 @@ en:
       too_short: Must have at least 20 characters.
       more_non_whitespace: Must have at least 15 non-whitespace characters.
     edit:
+      not_authorized: You are not authorized to edit this project.
       edit_status: Edit Project Badge Status
       repo_url_limits: >-
         You may only change your repo_url if it is
@@ -586,6 +590,18 @@ en:
         with respect to the use, modification, or sharing of Results.
         You retain copyright (if any), and
         the project license is unaffected.<br><br>
+      automation:
+        aria_automated: This field was automatically filled
+        aria_overridden: This field value was corrected by automation
+        automated_tooltip: We filled this in using automated project analysis
+        overridden_tooltip: We corrected this value using automated project analysis
+        chief_overrode:
+          one: "We corrected 1 field based on project analysis:"
+          other: "We corrected %{count} fields based on project analysis:"
+        override_detail: "'%{criterion}' changed from '%{old}' to '%{new}' — %{explanation}"
+        analysis_failed:
+          one: "Warning: Automated analysis failed for 1 field (%{fields}). Your other changes were saved."
+          other: "Warning: Automated analysis failed for %{count} fields (%{fields}). Your other changes were saved."
     show:
       section_selector: Section
       edit: Edit

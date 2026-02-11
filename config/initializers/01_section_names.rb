@@ -73,6 +73,20 @@ module Sections
   # Built up from canonical level names derived from YAML
   ALL_CRITERIA_LEVEL_NAMES = (METAL_LEVEL_NAMES + BASELINE_LEVEL_NAMES).freeze
 
+  # Map criteria level names to their corresponding *_saved flag names
+  # Used for first-edit automation tracking
+  # Automatically derived from level names to support new levels easily
+  LEVEL_SAVED_FLAGS = {}.tap do |hash|
+    METAL_LEVEL_NAMES.each do |level|
+      hash[level] = :"#{level}_saved"
+    end
+    BASELINE_LEVEL_NAMES.each do |level|
+      # baseline-1 → baseline_1_saved
+      flag_name = level.tr('-', '_') + '_saved'
+      hash[level] = flag_name.to_sym
+    end
+  end.freeze
+
   # All canonical section names (criteria levels + special sections)
   # These are the preferred names that we redirect to - no obsolete names
   ALL_CANONICAL_NAMES = (ALL_CRITERIA_LEVEL_NAMES + SPECIAL_FORMS).freeze
@@ -96,6 +110,12 @@ module Sections
 
   # Default section to use when none specified
   DEFAULT_SECTION = 'passing'
+
+  # Valid starting sections for new projects (first level of each series)
+  STARTING_SECTIONS = [
+    METAL_LEVEL_NAMES.first,
+    BASELINE_LEVEL_NAMES.first
+  ].freeze
 
   # Reverse mapping: canonical name -> internal numeric key
   # E.g., 'passing' -> '0', 'silver' -> '1', 'gold' -> '2'

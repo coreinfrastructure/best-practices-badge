@@ -4,8 +4,14 @@
     - HTML_INDEX_FIELDS (for project listings)
     - FEED_DISPLAY_FIELDS (for Atom feeds)
     If you add a new field to this view, ensure it's in the appropriate list! %>
-            <div class="hidable-text-entry">
+            <%
+              # Check if name or description were automated (for highlighting)
+              name_automated = automated_field_set.include?(:name)
+              description_automated = automated_field_set.include?(:description)
+            %>
+            <div class="hidable-text-entry <%= ApplicationHelper::HIGHLIGHT_AUTOMATED_CLASS if name_automated %>">
             <span><%= f.label :name, t('projects.form_basics.project_name.description') %></span>
+            <%= ApplicationHelper::ROBOT_EMOJI_SAFE if name_automated %>
             <%= render(partial: "details", locals: {
                        criterion: "project_name",
                        details: t('projects.form_basics.project_name.details')
@@ -17,8 +23,9 @@
                              disabled: view_only %>
             </div>
 
-            <div class="hidable-text-entry">
+            <div class="hidable-text-entry <%= ApplicationHelper::HIGHLIGHT_AUTOMATED_CLASS if description_automated %>">
             <span><%= f.label :description, t('projects.form_basics.description.description') %></span>
+            <%= ApplicationHelper::ROBOT_EMOJI_SAFE if description_automated %>
             <% if view_only %>
               <div class="discussion-markdown" id="project_description" lang="<%= project.entry_locale %>">
                 <%= markdown(project[:description]) %>

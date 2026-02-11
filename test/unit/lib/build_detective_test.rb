@@ -18,4 +18,24 @@ class BuildDetectiveTest < ActiveSupport::TestCase
     results = BuildDetective.new.analyze(@evidence, repo_url: @repo_url)
     assert results == {}
   end
+
+  # Mock repo_files that simulates an empty GitHub repo.
+  # GithubContentAccess#get_info returns [] for empty repos.
+  class MockEmptyRepoFiles
+    def blank?
+      false
+    end
+
+    def get_info(_path)
+      []
+    end
+  end
+
+  test 'empty repo returns empty results' do
+    repo_files = MockEmptyRepoFiles.new
+    results = BuildDetective.new.analyze(
+      @evidence, repo_url: @repo_url, repo_files: repo_files
+    )
+    assert_equal({}, results)
+  end
 end

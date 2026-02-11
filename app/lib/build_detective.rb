@@ -15,6 +15,10 @@ class BuildDetective < Detective
   # Individual detectives must identify their inputs, outputs
   INPUTS = %i[repo_url repo_files].freeze # repo_url for future use
   OUTPUTS = %i[build_status build_common_tools_status].freeze
+
+  # This detective can override build tool detection with moderate confidence
+  OVERRIDABLE_OUTPUTS = %i[build_status build_common_tools_status].freeze
+
   def files_named(name_pattern)
     @top_level.select do |fso|
       fso['type'] == 'file' && fso['name'].match(name_pattern)

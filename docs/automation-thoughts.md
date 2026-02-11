@@ -896,13 +896,13 @@ fr:
     edit:
       aria_automated: "Ce champ a été rempli automatiquement"
       aria_overridden: "Cette valeur a été corrigée par l'automatisation"
-      automated_tooltip: "Nous avons rempli ceci basé sur l'analyse du projet"
-      overridden_tooltip: "Nous avons corrigé cette valeur basé sur l'analyse du projet"
+      automated_tooltip: ...
+      overridden_tooltip: ...
 
     update:
       chief_overrode:
-        one: "Nous avons corrigé 1 champ basé sur l'analyse du projet:"
-        other: "Nous avons corrigé %{count} champs basés sur l'analyse du projet:"
+        one: ...
+        other: ...
 
       override_detail: "'%{criterion}' changé de '%{old}' à '%{new}' — %{explanation}"
 
@@ -914,8 +914,8 @@ fr:
         one: "Attention: L'analyse automatisée a échoué pour 1 champ (%{fields}). Vos autres changements ont été enregistrés."
         other: "Attention: L'analyse automatisée a échoué pour %{count} champs (%{fields}). Vos autres changements ont été enregistrés."
 
-      save_failed: "Échec de l'enregistrement des modifications du projet. Veuillez réessayer."
-      updated: "Projet mis à jour avec succès!"
+      save_failed: ...
+      updated: ...
 ```
 
 **Note on JSON responses** (Decision #5):

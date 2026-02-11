@@ -161,11 +161,6 @@ class RepoFilesExamineDetective < Detective
         value: CriterionStatus::MET, confidence: confidence,
         explanation: 'License file found in repository.'
       }
-      @results[:osps_le_03_02_status] = {
-        value: CriterionStatus::MET, confidence: 2,
-        explanation: 'License file found in repository (likely included ' \
-                     'in releases).'
-      }
     else
       @results[:osps_le_03_01_status] = {
         value: CriterionStatus::UNMET, confidence: 5,

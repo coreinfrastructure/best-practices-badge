@@ -193,6 +193,57 @@ might request.
 
     <img src="https://bestpractices.coreinfrastructure.org/projects/NUMBER/badge" alt="OpenSSF N/A">
 
+*   `GET /en/projects?as=edit&url=MY_URL`
+    `GET /en/projects?as=edit&section=SECTION&url=MY_URL`
+
+    Perform a query for a project with the given URL (repository URL or
+    home page URL) and redirect to its *edit* page.
+    This is intended for external automation tools that know a project's
+    URL but not its numeric ID, and want to propose changes to the
+    badge entry (see
+    [automation-proposals.md](automation-proposals.md) for details
+    on the automation proposals mechanism).
+
+    If a single project matches, the user is redirected (HTTP 302) to:
+
+    ```text
+    /projects/:id/:section/edit?PROPOSAL_PARAMS
+    ```
+
+    Where `:section` is taken from the `section` query parameter
+    (e.g., `passing`, `silver`, `gold`, `baseline-1`),
+    defaulting to `passing` if not provided or invalid.
+    Only the automation-proposal query parameters are forwarded;
+    the consumed parameters (`as`, `url`, `section`, `pq`, `q`) are
+    stripped from the redirect URL.
+
+    The redirect URL intentionally omits the locale prefix, so the
+    application will determine the user's preferred locale and
+    redirect accordingly.
+    If the user is not logged in, they will be prompted to log in
+    (the original URL with all proposal parameters is preserved).
+    If the user is logged in and authorized to edit, they will see
+    the edit form with the proposed values highlighted for review.
+
+    If no project matches, or if multiple projects match, the normal
+    project list is shown instead (same behavior as `as=entry`).
+
+    This returns status 404 (not found) for zero matches
+    only when using `as=badge`; with `as=edit` zero or multiple
+    matches simply fall back to the project list.
+
+    Example proposing that a project's `floss_license` criterion is Met:
+
+    ```text
+    /en/projects?as=edit&floss_license_status=Met&url=https%3A%2F%2Fgithub.com%2FORG%2FPROJECT
+    ```
+
+    Example proposing changes to a specific section (silver):
+
+    ```text
+    /en/projects?as=edit&section=silver&url=https%3A%2F%2Fgithub.com%2FORG%2FPROJECT
+    ```
+
 ## Tiered percentage in OpenSSF Best Practices Badge
 
 The `tiered_percentage` field of a project
@@ -293,6 +344,10 @@ list of projects in the requested format. The "as" parameter changes this:
 *   as=badge : Display the *single* badge for the resulting project.
     If no project matches the criteria, status 404 (not found) is returned.
     If multiple projects match the criteria, status 409 (conflict) is returned.
+*   as=edit : Redirect to the *edit* page for the resulting project.
+    If a single project matches, the user is redirected (302) to the
+    project's edit URL. If no or multiple projects match, the normal
+    project list is shown instead. See below for details.
 *   as=entry : Display the project badge *entry* for the resulting project.
     If no or multiple projects match, the normal project display
     is shown instead.

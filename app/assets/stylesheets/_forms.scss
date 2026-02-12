@@ -46,7 +46,7 @@ label.required:after {
   content:" *";
 }
 
-.radio {
+input[type=radio] {
   width: 15px;
 }
 

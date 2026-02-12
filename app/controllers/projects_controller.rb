@@ -1242,13 +1242,22 @@ class ProjectsController < ApplicationController
   # @return [String, nil] The determined homepage URL or nil if no repo data
   def set_homepage_url
     retrieved_repo_data = repo_data
+    find_homepage_url(retrieved_repo_data, @project.repo_url)
+  end
+
+  # Pure function to find homepage URL from repo data.
+  # @param retrieved_repo_data [Array, nil] Repository data from GitHub API
+  # @param project_repo_url [String] The project's repository URL
+  # @return [String, nil] The determined homepage URL or nil
+  def find_homepage_url(retrieved_repo_data, project_repo_url)
     return if retrieved_repo_data.nil?
 
-    # Assign to repo.homepage if it exists, and else repo_url
-    repo = retrieved_repo_data.find { |r| @project.repo_url == r[3] }
+    # Find repo matching the project's repo_url
+    repo = retrieved_repo_data.find { |r| project_repo_url == r[3] }
     return if repo.nil?
 
-    repo[2].present? ? repo[2] : @project.repo_url
+    # Return repo homepage if present, otherwise repo_url
+    repo[2].present? ? repo[2] : project_repo_url
   end
 
   # Callback to load project instance from params[:id].

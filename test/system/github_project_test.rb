@@ -56,8 +56,8 @@ class GithubProjectTest < ApplicationSystemTestCase
       # assert has_no_selector?(
       # "option[value='https://github.com/andrewfader/test-repo-shared']"
       # )
-      select 'bestpracticestest/best-practices-badge', from: 'project[repo_url]'
-      click_on 'Submit GitHub Repository'
+      select 'bestpracticestest/best-practices-badge', from: 'github_repo'
+      click_on 'Submit Project'
       assert_text 'Thanks for adding the Project! Please fill out ' \
                   'the rest of the information to get the Badge.'
       assert_equal num + 2, ActionMailer::Base.deliveries.size

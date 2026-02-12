@@ -1,11 +1,12 @@
 # Mimalloc
 
-This document analyzes and justifies how we use mimalloc.
+This document analyzes and justifies how we use mimalloc
+(Microsoft malloc) in production.
 
 ## The problem: Unbounded memory growth
 
-We had a serious problem with unbounded memory growth,
-and mimalloc greatly solved it. See [memory-growth](memory-growth.md).
+Our production system had a serious problem with unbounded memory growth
+once we started getting a massive number of requests.
 
 ## Solution: mimalloc
 
@@ -13,10 +14,19 @@ The jemalloc allocator is often recommended for Rails applications.
 However, the jemalloc allocator has been archived on GitHub, and it appears
 all jemalloc work has ceased. They mentioned mimalloc as an alternative.
 
+So, I investigated mimalloc.
+Tests show that mimalloc significantly reduces the memory growth
+in operation. See [memory-growth](memory-growth.md).
+
 A malloc replacement is highly sensitive, since it has direct access
-to all memory. However, there's good reason to believe mimalloc
+to all memory. So I did some sanity checks to see if it might become
+a problem.
+
+I determined that the risk appeared to be quite low.
+
+Fist, there's good reason to believe **mimalloc**
 (as released as a system package) is fine.
-**mimalloc** (Microsoft's memory allocator) is:
+This library is:
 
 - Actively maintained on https://github.com/microsoft/mimalloc - there
   were many recent commits
@@ -79,11 +89,8 @@ who has also contributed to `rails/propshaft`
 and heroku-buildpack-jemalloc.
 He has contributed to projects by Dead Man's Switch and Collective Idea.
 He reports his location as Holland, MI.
-I see no indication of concerns, this developer seems to be a capable
+I see no indication of concerns; this developer seems to be a capable
 developer and there are no indications of malicious intent.
-
-To supplement this, I asked Google Gemini for analysis of the
-supply chain risk from this buildpack
 
 Collective Idea acquired Dead Man's Snitch in 2013 as confirmed both directions:
 [Collective Idea's statement](https://collectiveidea.com/blog/archives/2013/07/30/collective-idea-acquires-dead-mans-snitch/) and
@@ -145,13 +152,17 @@ I asked Google Gemini to also analyze the supply chain risk.
 > Compare the two files. Note: They likely won't have identical hashes due to compilation timestamps (non-deterministic builds), but you can use tools like diffoscope to see if the actual logic differs.
 
 The statement from Gemini is misleading though the thrust is correct.
-The [compile script](https://github.com/deadmanssnitch/buildpack-mimalloc/blob/main/bin/compile) downloads *source* code, and then *compiles* it - it
-doesn't just download compiled versions.
-However, it's true that *users* of the *resulting* buildpack download and
-run it.
+The [compile script](https://github.com/deadmanssnitch/buildpack-mimalloc/blob/main/bin/compile) downloads *source* code from the mimalloc project,
+and then *compiles* it running the scripts in the buildpack-mimalloc repo.
+It doesn't just download compiled versions.
+However, it's true that *users* of the *resulting* buildpack download source
+code and scripts, run them, and install the resulting executable library.
+There *are* arguments for doing things this way: if there's an update,
+then the next time the buildpack is built, we get the update.
 
-However, the organizations here are reputable, and the people involved
-appear knowledgeable and reputable, so this seems like a low risk.
+The organizations here are reputable, and the people involved
+appear knowledgeable and reputable.
+This seems like a relatively low risk.
 
 ## mimalloc buildpack installation and configuration
 

@@ -1733,18 +1733,17 @@ class ProjectsController < ApplicationController
     @project.public_send(justification_field)
   end
 
-  # Detect if a criteria justification field was automated (changed value)
-  # URL proposals always count as automated when they change a field
+  # Detect if a criteria justification field was automated (changed value).
+  # Any actual change to justification counts as automation — Chief already
+  # prevents overwriting non-empty justifications when the status is
+  # unchanged, so only legitimate changes reach this point.
   # @param field_name [Symbol] The justification field name
   # @param old_value [String] Original justification
   # @param new_value [String] Current justification
   # @return [Hash, nil] Field info if automated, nil otherwise
   def detect_criteria_justification_automation(field_name, old_value, new_value)
-    # Any change to justification counts as automation
-    # (typically from URL proposal or Chief detective)
     return if old_value == new_value
 
-    # Get the corresponding status field to track as parent
     status_field = field_name.to_s.sub('_justification', '_status').to_sym
     { field: status_field, new_value: new_value, explanation: new_value }
   end

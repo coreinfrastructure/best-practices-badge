@@ -481,15 +481,16 @@ en:
         it harms users, and it will not help SEO anyway (all hyperlinks
         are marked with <tt>ugc</tt> and <tt>nofollow</tt>).
       may_select_html: >-
-        You may select from one of your GitHub repos <em>OR</em>
-        provide information about some other project.
-        If your project hasn't earned a passing badge and
+        You may optionally select from one of your GitHub repos below
+        to pre-fill the repository URL.
+      reminder_email_html: >-
+        If your project hasn't earned a badge and
         you haven't made any edits for at least 30 days,
         we'll send you a reminder email
         (you can disable reminders at any time if you want to).
-      new_badge_or: OR
+      github_repo_label: "Select a GitHub repository (optional)"
       select_one_github: Select one of your GitHub repos
-      submit_github: Submit GitHub Repository
+      submit: Submit Project
       project_already_exists: This project already exists!
       url_of_homepage: >-
         What is the URL for the project home page (the URL for
@@ -504,12 +505,12 @@ en:
         "?")
       placeholder_of_repo: >-
         http(s)://... for project repo URL, use https:// if you can
-      submit_urls: Submit URL
       final_text_html: >-
         Note - if your repository URL is on GitHub, anyone who
         can commit to the repository will be able to edit the
         badge information.
       badge_series: "Badge series"
+      badge_series_description: "You can choose which badge series to start with."
       badge_series_metal: "Metal (passing, silver, gold)"
       badge_series_baseline: "Baseline (baseline-1, baseline-2, baseline-3)"
       sign_in_first: Please sign in to add a project!

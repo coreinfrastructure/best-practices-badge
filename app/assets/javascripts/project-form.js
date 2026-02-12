@@ -823,4 +823,13 @@ $(document).ready(function() {
 
   // Polyfill datalist (for Safari users)
   polyfillDatalist();
+
+  // When a GitHub repo is selected from the dropdown, copy its URL
+  // to the repo_url text field. No-op if dropdown doesn't exist.
+  $('#github_repo_selector').on('change', function() {
+    var repoUrl = $(this).val();
+    if (repoUrl) {
+      $('#project_repo_url').val(repoUrl);
+    }
+  });
 });

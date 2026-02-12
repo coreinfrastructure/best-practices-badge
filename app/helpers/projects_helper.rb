@@ -59,14 +59,6 @@ module ProjectsHelper
     CriterionStatus::STATUS_VALUES[value]
   end
 
-  # List original then forked Github projects, with headers
-  def github_select
-    retrieved_repo_data = repo_data # Get external data
-    fork_repos, original_repos = fork_and_original(retrieved_repo_data)
-    original_header(original_repos) + original_repos +
-      fork_header(fork_repos) + fork_repos
-  end
-
   # Handles fork and original functionality.
   # @param retrieved_repo_data - Repository data from GitHub API
   def fork_and_original(retrieved_repo_data)
@@ -77,14 +69,31 @@ module ProjectsHelper
     end
   end
 
-  # @param original_repos [Array] Array of original (non-fork) repositories
-  def original_header(original_repos)
-    original_repos.blank? ? EMPTY_ARRAY : [[t('.original_repos'), '', 'none']]
+  # Build grouped options for GitHub repo selector (for select_tag).
+  # Returns array suitable for grouped_options_for_select with originals first.
+  # @return [Array] Array of [group_label, options_array] tuples
+  def github_repo_select_groups
+    retrieved_repo_data = repo_data
+    build_repo_select_groups(retrieved_repo_data, t('.original_repos'), t('.fork_repos'))
   end
 
-  # @param fork_repos [Array] Array of forked repositories
-  def fork_header(fork_repos)
-    fork_repos.blank? ? EMPTY_ARRAY : [[t('.fork_repos'), '', 'none']]
+  # Pure function to build grouped options from repo data.
+  # @param retrieved_repo_data [Array] Repository data from GitHub API
+  # @param original_label [String] Label for original repos group
+  # @param fork_label [String] Label for forked repos group
+  # @return [Array] Array of [group_label, options_array] tuples
+  def build_repo_select_groups(retrieved_repo_data, original_label, fork_label)
+    return [] if retrieved_repo_data.blank?
+
+    fork_repos, original_repos = fork_and_original(retrieved_repo_data)
+    groups = []
+    if original_repos.present?
+      groups << [original_label, original_repos.map { |r| [r.first, r[3]] }]
+    end
+    if fork_repos.present?
+      groups << [fork_label, fork_repos.map { |r| [r.first, r[3]] }]
+    end
+    groups
   end
 
   # Use the status_chooser to render the given criterion.

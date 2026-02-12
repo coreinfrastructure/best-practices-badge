@@ -767,6 +767,49 @@ class ProjectsHelperTest < ActionView::TestCase
     assert_equal "<p><em>emphasis</em></p>\n", result
     assert result.html_safe?
   end
+
+  test 'build_repo_select_groups with mixed repos' do
+    repo_data_input = [
+      ['repo1', false, 'http://example.com', 'https://github.com/user/repo1'],
+      ['repo2', true, 'http://example2.com', 'https://github.com/user/repo2']
+    ]
+    result = build_repo_select_groups(repo_data_input, 'Original', 'Forked')
+    assert_equal 2, result.length
+    assert_equal 'Original', result[0][0]
+    assert_equal 'Forked', result[1][0]
+    assert_equal [['repo1', 'https://github.com/user/repo1']], result[0][1]
+    assert_equal [['repo2', 'https://github.com/user/repo2']], result[1][1]
+  end
+
+  test 'build_repo_select_groups with only original repos' do
+    repo_data_input = [
+      ['repo1', false, 'http://example.com', 'https://github.com/user/repo1']
+    ]
+    result = build_repo_select_groups(repo_data_input, 'Original', 'Forked')
+    assert_equal 1, result.length
+    assert_equal 'Original', result[0][0]
+    assert_equal [['repo1', 'https://github.com/user/repo1']], result[0][1]
+  end
+
+  test 'build_repo_select_groups with only forked repos' do
+    repo_data_input = [
+      ['repo2', true, 'http://example.com', 'https://github.com/user/repo2']
+    ]
+    result = build_repo_select_groups(repo_data_input, 'Original', 'Forked')
+    assert_equal 1, result.length
+    assert_equal 'Forked', result[0][0]
+    assert_equal [['repo2', 'https://github.com/user/repo2']], result[0][1]
+  end
+
+  test 'build_repo_select_groups with empty data' do
+    result = build_repo_select_groups([], 'Original', 'Forked')
+    assert_equal [], result
+  end
+
+  test 'build_repo_select_groups with nil data' do
+    result = build_repo_select_groups(nil, 'Original', 'Forked')
+    assert_equal [], result
+  end
   # rubocop:enable Metrics/BlockLength
 end
 # rubocop:enable Metrics/ClassLength

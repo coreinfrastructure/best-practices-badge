@@ -263,6 +263,60 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to project_section_path(@project, 'baseline-1')
   end
 
+  test 'new project form contains badge series radio buttons' do
+    log_in_as(@user)
+    get '/en/projects/new'
+    assert_response :success
+    assert_includes @response.body, 'Badge series'
+    # Exactly one form (unified), one set of radio buttons
+    assert_select 'form', count: 1
+    assert_select 'input[type=radio][name=starting_section][value=passing]',
+                  count: 1
+    assert_select 'input[type=radio][name=starting_section][value=baseline-1]',
+                  count: 1
+  end
+
+  test 'local user does not see repo dropdown on new project form' do
+    log_in_as(@user)
+    get '/en/projects/new'
+    assert_response :success
+    assert_select 'select#github_repo_selector', count: 0
+    assert_select 'form', count: 1
+  end
+
+  test 'find_homepage_url returns nil when no repo data' do
+    controller = ProjectsController.new
+    result = controller.send(:find_homepage_url, nil, 'https://github.com/test/repo')
+    assert_nil result
+  end
+
+  test 'find_homepage_url returns nil when repo not found in data' do
+    controller = ProjectsController.new
+    repo_data = [
+      ['other_repo', false, 'http://homepage.com', 'https://github.com/user/other']
+    ]
+    result = controller.send(:find_homepage_url, repo_data, 'https://github.com/test/repo')
+    assert_nil result
+  end
+
+  test 'find_homepage_url returns repo homepage when present' do
+    controller = ProjectsController.new
+    repo_data = [
+      ['test_repo', false, 'http://homepage.com', 'https://github.com/test/repo']
+    ]
+    result = controller.send(:find_homepage_url, repo_data, 'https://github.com/test/repo')
+    assert_equal 'http://homepage.com', result
+  end
+
+  test 'find_homepage_url returns repo_url when homepage blank' do
+    controller = ProjectsController.new
+    repo_data = [
+      ['test_repo', false, '', 'https://github.com/test/repo']
+    ]
+    result = controller.send(:find_homepage_url, repo_data, 'https://github.com/test/repo')
+    assert_equal 'https://github.com/test/repo', result
+  end
+
   test 'should show project' do
     get "/en/projects/#{@project.id}/passing"
     assert_response :success

@@ -725,9 +725,14 @@ class Project < ApplicationRecord
     #   and inactive and not_recently_reminded and valid_email
     #   and owner_accepts_emails.
     # where these terms are defined as:
-    #   in_progress = badge_percentage less than 100%.
-    #   not_recently_lost_badge = lost_passing_at IS NULL OR
-    #     less than LOST_PASSING_REMINDER (30) days ago
+    #   in_progress = badge_percentage_0 (passing) less than 100% AND
+    #     badge_percentage_baseline_1 is NULL or less than 100%.
+    #     A project that has completed either passing or baseline-1
+    #     is not considered "in progress" for reminder purposes.
+    #   not_recently_lost_badge = (lost_passing_at IS NULL OR
+    #     less than LOST_PASSING_REMINDER days ago) AND
+    #     (lost_baseline_1_at IS NULL OR less than
+    #     LOST_PASSING_REMINDER days ago)
     #   inactive = updated_at is LAST_UPDATED_REMINDER (30) days ago or more
     #   not_recently_reminded = last_reminder_at IS NULL OR
     #     more than 60 days ago. Notice that if recently_reminded is null
@@ -762,9 +767,16 @@ class Project < ApplicationRecord
     # (e.g., one that does the coalescing).
     Project
       .select('projects.*, users.encrypted_email as user_encrypted_email')
-      .where('badge_percentage_0 < 100')
-      .where('lost_passing_at IS NULL OR lost_passing_at < ?',
-             LOST_PASSING_REMINDER.days.ago)
+      .where(
+        'badge_percentage_0 < 100 AND ' \
+        '(badge_percentage_baseline_1 IS NULL OR ' \
+        'badge_percentage_baseline_1 < 100)'
+      )
+      .where(
+        '(lost_passing_at IS NULL OR lost_passing_at < ?) AND ' \
+        '(lost_baseline_1_at IS NULL OR lost_baseline_1_at < ?)',
+        LOST_PASSING_REMINDER.days.ago, LOST_PASSING_REMINDER.days.ago
+      )
       .where(projects: { updated_at: ...LAST_UPDATED_REMINDER.days.ago })
       .where('last_reminder_at IS NULL OR last_reminder_at < ?',
              LAST_SENT_REMINDER.days.ago)

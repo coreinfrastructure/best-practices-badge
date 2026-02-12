@@ -1424,6 +1424,64 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, 'Projects'
   end
 
+  test 'as=edit redirects to edit page (single result, default section)' do
+    expected_id = projects(:perfect).id
+    get '/en/projects?as=edit&' \
+        'url=https%3A%2F%2Fgithub.com%2Fbestpracticestest%2Ftest-repo-shared'
+    assert_response :found # 302
+    assert_redirected_to "/projects/#{expected_id}/passing/edit"
+  end
+
+  test 'as=edit redirects to edit page with explicit section' do
+    expected_id = projects(:perfect).id
+    # Params in alphabetical order to avoid set_valid_query_url reorder
+    get '/en/projects?as=edit&' \
+        'section=silver&' \
+        'url=https%3A%2F%2Fgithub.com%2Fbestpracticestest%2Ftest-repo-shared'
+    assert_response :found
+    assert_redirected_to "/projects/#{expected_id}/silver/edit"
+  end
+
+  test 'as=edit defaults to passing for invalid section' do
+    expected_id = projects(:perfect).id
+    get '/en/projects?as=edit&' \
+        'section=bogus&' \
+        'url=https%3A%2F%2Fgithub.com%2Fbestpracticestest%2Ftest-repo-shared'
+    assert_response :found
+    assert_redirected_to "/projects/#{expected_id}/passing/edit"
+  end
+
+  test 'as=edit forwards proposal params and strips consumed params' do
+    expected_id = projects(:perfect).id
+    # Params in alphabetical order, %20 for spaces (not +) to match
+    # Addressable::URI normalization and avoid a reorder redirect.
+    get '/en/projects?' \
+        'as=edit&' \
+        'floss_license_justification=MIT%20license&' \
+        'floss_license_status=Met&' \
+        'url=https%3A%2F%2Fgithub.com%2Fbestpracticestest%2Ftest-repo-shared'
+    assert_response :found
+    location = response.headers['Location']
+    assert_includes location,
+                    "/projects/#{expected_id}/passing/edit?"
+    assert_includes location, 'floss_license_status=Met'
+    assert_includes location, 'floss_license_justification=MIT'
+    assert_not_includes location, 'as=edit'
+    assert_not_includes location, 'url='
+  end
+
+  test 'as=edit quietly returns project list if >1 match' do
+    get '/en/projects?as=edit&pq=https%3A%2F%2F'
+    assert_response :success
+    assert_includes @response.body, 'Projects'
+  end
+
+  test 'as=edit quietly returns project list if no match' do
+    get '/en/projects?as=edit&url=https%3A%2F%2FNO_SUCH_THING'
+    assert_response :success
+    assert_includes @response.body, 'Projects'
+  end
+
   test 'Check ids= projects index query' do
     # %2c is the comma
     get "/en/projects.json?ids=#{@project.id}%2c#{@project_two.id}"

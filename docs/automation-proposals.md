@@ -265,7 +265,7 @@ the same field.
 
 External tools that want to propose changes should:
 
-1. Know the project's numeric ID and the section to edit.
+1. Know the project's numeric ID (or its URL) and the section to edit.
 2. Construct the URL with the appropriate field names and values.
 3. URL-encode all values (especially spaces, ampersands, and
    special characters).
@@ -284,9 +284,41 @@ External tools that want to propose changes should:
 /en/projects/42/baseline-1/edit?osps_ac_01_01_status=Met&osps_ac_01_01_justification=GitHub+org+enforces+2FA&osps_ac_03_01_status=Met&osps_ac_03_01_justification=Branch+protection+enabled+on+main
 ```
 
+## Looking Up Projects by URL (`as=edit`)
+
+If an external tool knows a project's repository URL or home page URL
+but not its numeric ID, it can use the `as=edit` query on the
+projects index to look up and redirect to the edit page:
+
+```text
+/en/projects?as=edit&url=ENCODED_URL
+/en/projects?as=edit&section=SECTION&url=ENCODED_URL
+```
+
+The `section` parameter selects the badge level to edit
+(e.g., `passing`, `silver`, `baseline-1`); it defaults to `passing`.
+Any additional query parameters (automation proposals) are forwarded
+to the edit page with the consumed parameters (`as`, `url`, `section`,
+`pq`, `q`) stripped.
+
+For example, to propose license detection results for a project
+known only by its repository URL:
+
+```text
+/en/projects?as=edit&floss_license_status=Met&url=https%3A%2F%2Fgithub.com%2FORG%2FPROJECT
+```
+
+If the URL matches exactly one project, the user is redirected
+(HTTP 302) to its edit page. If there are zero or multiple matches,
+the normal project list is shown instead.
+
+See [api.md](api.md) for full details on the `as=edit` query
+parameter and the redirect behavior.
+
 ## Related Documentation
 
-- `docs/api.md` - General documentation on the API
+- `docs/api.md` - General documentation on the API, including the
+  `as=edit` URL lookup for automation proposals.
 - `criteria/criteria.yml` - Metal series criteria definitions.
 - `criteria/baseline_criteria.yml` - Baseline (OSPS) criteria
   definitions.

@@ -257,7 +257,11 @@ class ProjectsController < ApplicationController
   # rubocop:enable Metrics/BlockLength
 
   # as= values, which redirect to alternative views
-  ALLOWED_AS = %w[badge entry].freeze
+  ALLOWED_AS = %w[badge edit entry].freeze
+
+  # Query parameters consumed by the as=edit redirect (stripped before
+  # forwarding to the edit URL so only automation-proposal params remain).
+  AS_EDIT_CONSUMED_PARAMS = %w[as url section pq q].freeze
 
   # Permitted criteria_level parameter (frozen array for memory optimization)
   CRITERIA_LEVEL_PERMITTED = [:criteria_level].freeze
@@ -289,7 +293,14 @@ class ProjectsController < ApplicationController
         # full list of matches, so we limit() ourselves to two responses.
         ids = @projects.limit(2).ids
         redir_to_badge(ids)
-      elsif params[:as] == 'entry' # Redirect to badge view
+      elsif params[:as] == 'edit' # Redirect to edit view
+        ids = @projects.limit(2).ids
+        if ids.size == 1
+          redirect_to redir_to_edit_url(ids.first), status: :found
+        else
+          show_normal_index
+        end
+      elsif params[:as] == 'entry' # Redirect to entry view
         ids = @projects.limit(2).ids
         if ids.size == 1
           suffix = request&.format&.symbol == :json ? '.json' : ''
@@ -339,6 +350,40 @@ class ProjectsController < ApplicationController
     end
   end
   # rubocop:disable Metrics/MethodLength
+
+  # Build the redirect URL for as=edit, pointing to the project edit page.
+  # Validates the section parameter and strips consumed query parameters,
+  # forwarding only the automation-proposal parameters.
+  # @param project_id [Integer] The project ID to edit
+  # @return [String] The edit URL with proposal query string
+  def redir_to_edit_url(project_id)
+    section = validated_edit_section
+    proposal_params = edit_proposal_query_string
+    url = "/projects/#{project_id}/#{section}/edit"
+    url += "?#{proposal_params}" unless proposal_params.empty?
+    url
+  end
+
+  # Validate the section parameter for as=edit redirect.
+  # @return [String] A valid primary section name, or the default
+  def validated_edit_section
+    section = params[:section]
+    return Sections::DEFAULT_SECTION if section.blank?
+
+    if Sections::PRIMARY_SECTION_REGEX.match?(section)
+      section
+    else
+      Sections::DEFAULT_SECTION
+    end
+  end
+
+  # Build the query string for the edit redirect, stripping consumed params.
+  # @return [String] URL-encoded query string (may be empty)
+  def edit_proposal_query_string
+    request.query_parameters
+           .except(*AS_EDIT_CONSUMED_PARAMS)
+           .to_query
+  end
 
   # Display individual project details with criteria_level query fixes.
   # Redirects criteria_level queries (well-formed and malformed).
@@ -864,6 +909,11 @@ class ProjectsController < ApplicationController
     return integer_list?(value) if key == 'ids'
     return ALLOWED_AS.include?(value) if key == 'as'
     return true if key == 'url'
+    return true if key == 'section'
+
+    # When as=edit, allow all other params through (automation proposals).
+    # The edit action filters to only valid field names.
+    return true if params[:as] == 'edit'
 
     false
   end

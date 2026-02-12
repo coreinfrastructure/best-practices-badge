@@ -284,6 +284,13 @@ en:
       sign_in_first: Please sign in to add a project!
       original_repos: "=> Original GitHub Repos"
       fork_repos: "=> Forked GitHub Repos"
+      reminder_email_html: If your project hasn't earned a badge and you haven't made any edits for at least 30 days, we'll send you a reminder email (you can disable reminders at any time if you want to).
+      github_repo_label: Select a GitHub repository (optional)
+      submit: Submit Project
+      badge_series: Badge series
+      badge_series_description: You can choose which badge series to start with.
+      badge_series_metal: Metal (passing, silver, gold)
+      badge_series_baseline: Baseline (baseline-1, baseline-2, baseline-3)
     delete_form:
       info_html: "<b>Warning</b> - you are about to <b>permanently delete</b> the badge entry for %{project_name}. This <b>cannot</b> be easily undone, so we recommend that you do <b>not</b> delete this badge entry. You don't need to complete badge criteria all at once; most projects get the badge by identifying and meeting missing criteria over time. If you think some criteria don't make any sense, cannot figure out how to meet some criteria, or have other questions, please contact us. Note that not all criteria must be met to get a badge (some criteria SHOULD be met or are simply SUGGESTED). If you don't want reminders emailed to you, simply edit the project entry and turn off email reminders instead. However, if you are <i>certain</i> that you want to <i>permanently delete</i> this badge entry, please explain below why you are permanently deleting it."
       rationale_placeholder: "(Required) Please explain why you are permanently deleting this project badge entry, and if applicable, what you wish we did instead (20+ characters, 15+ non-whitespace)"
@@ -306,6 +313,19 @@ en:
       submit_and_exit: Submit (and exit)
       submit_cc_by_3plus_html: By submitting this data about the project you agree to release it under at least the <a href="https://creativecommons.org/licenses/by/3.0/us" target="_blank" rel="noopener">Creative Commons Attribution version 3.0 or later license (CC-BY-3.0+)</a>. This means that all are free to share and adapt the data, but they must give appropriate credit. You retain copyright (if any), and the project license is unaffected.<br><br>
       submit_cdla_permissive_20_html: By submitting this data about the project you agree to release it under at least the <a href="https://cdla.dev/permissive-2-0/" >Community Data License Agreement – Permissive, Version 2.0</a>. This means that a Data Recipient may share the Data, with or without modifications, so long as the Data Recipient makes available the text of this agreement with the shared Data. This agreement does <i>not</i> impose any restriction or obligations with respect to the use, modification, or sharing of Results. You retain copyright (if any), and the project license is unaffected.<br><br>
+      not_authorized: You are not authorized to edit this project.
+      automation:
+        aria_automated: This field was automatically filled
+        aria_overridden: This field value was corrected by automation
+        automated_tooltip: We filled this in using automated project analysis
+        overridden_tooltip: We corrected this value using automated project analysis
+        chief_overrode:
+          one: 'We corrected 1 field based on project analysis:'
+          other: 'We corrected %{count} fields based on project analysis:'
+        override_detail: "'%{criterion}' changed from '%{old}' to '%{new}' — %{explanation}"
+        analysis_failed:
+          one: 'Warning: Automated analysis failed for 1 field (%{fields}). Your other changes were saved.'
+          other: 'Warning: Automated analysis failed for %{count} fields (%{fields}). Your other changes were saved.'
     show:
       section_selector: Section
       edit: Edit

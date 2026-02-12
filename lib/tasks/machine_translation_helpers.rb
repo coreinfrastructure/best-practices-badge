@@ -370,6 +370,15 @@ module MachineTranslationHelpers
       LANGUAGE_NAMES[locale] || locale
     end
 
+    # Print file contents with a description header for debugging/insight
+    # @param description [String] what this file contains
+    # @param filename [String, Pathname] path to the file to print
+    def print_file(description, filename)
+      puts "+++ #{description} #{filename}"
+      puts File.read(filename)
+      puts
+    end
+
     # Copilot-specific: Create empty target file for Copilot to fill
     # Copilot needs an empty structure showing what keys to translate
     def export_for_copilot(locale, keys)
@@ -529,7 +538,21 @@ module MachineTranslationHelpers
       prompt_file = Rails.root.join('tmp', "copilot_prompt_#{locale}_#{files[:timestamp]}.txt")
       File.write(prompt_file, prompt)
 
+      # Print all inputs for insight into copilot translation
+      if files[:examples]
+        print_file('Sample English translations (YAML)', files[:examples][:en_filepath])
+        print_file("Sample #{language_name(locale)} translations (YAML)",
+                   files[:examples][:locale_filepath])
+      end
+      print_file('English to translate (YAML)', files[:source])
+      print_file('Translation instructions', files[:instructions])
+
       copilot_success = execute_copilot(prompt, files[:target])
+
+      # Print resulting translation for insight
+      if File.exist?(files[:target])
+        print_file("Resulting #{language_name(locale)} translation (YAML)", files[:target])
+      end
 
       # Try to import translations even if copilot had issues - use what we can
       imported_count = false

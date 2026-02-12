@@ -26,6 +26,19 @@ fr:
       current_owner: 'Identifiant du propriétaire actuel :'
       ownership_edit_hint: "(La propriété peut être transférée lors de la modification de cette section.)"
       submit_cdla_permissive_20_html: En soumettant ces données concernant le projet, vous acceptez de les publier sous au moins la licence <a href="https://cdla.dev/permissive-2-0/" >Community Data License Agreement – Permissive, Version 2.0</a>. Cela signifie qu'un destinataire de données peut partager les données, avec ou sans modifications, à condition que le destinataire de données rende disponible le texte de cet accord avec les données partagées. Cet accord n'impose <i>aucune</i> restriction ou obligation concernant l'utilisation, la modification ou le partage des résultats. Vous conservez les droits d'auteur (le cas échéant), et la licence du projet n'est pas affectée.<br><br>
+      not_authorized: Vous n'êtes pas autorisé à modifier ce projet.
+      automation:
+        aria_automated: Ce champ a été rempli automatiquement
+        aria_overridden: La valeur de ce champ a été corrigée par l'automatisation
+        automated_tooltip: Nous avons rempli ceci en utilisant l'analyse automatisée du projet
+        overridden_tooltip: Nous avons corrigé cette valeur en utilisant l'analyse automatisée du projet
+        chief_overrode:
+          one: 'Nous avons corrigé 1 champ sur la base de l''analyse du projet :'
+          other: 'Nous avons corrigé %{count} champs sur la base de l''analyse du projet :'
+        override_detail: "« %{criterion} » modifié de « %{old} » à « %{new} » — %{explanation}"
+        analysis_failed:
+          one: 'Avertissement : L''analyse automatisée a échoué pour 1 champ (%{fields}). Vos autres modifications ont été enregistrées.'
+          other: 'Avertissement : L''analyse automatisée a échoué pour %{count} champs (%{fields}). Vos autres modifications ont été enregistrées.'
     show:
       section_selector: Section
       cdla_permissive_20_html: Ces données sont disponibles sous la licence <a href="https://cdla.dev/permissive-2-0/" >Community Data License Agreement – Permissive, Version 2.0 (CDLA-Permissive-2.0)</a>. Cela signifie qu'un destinataire de données peut partager les données, avec ou sans modifications, à condition que le destinataire de données rende disponible le texte de cet accord avec les données partagées. Veuillez créditer %{user} et les contributeurs du badge des meilleures pratiques de la OpenSSF.<br><br>
@@ -50,6 +63,14 @@ fr:
       entry_locale:
         description: Quelle langue est utilisée pour la description et les justifications de cette soumission de badge ?
         details: Sélectionnez la langue utilisée pour la description du projet et le texte de justification des critères. Cela aide les outils de traduction du navigateur à identifier correctement la langue de ce contenu. La plupart des projets utilisent l'anglais.
+    new:
+      reminder_email_html: Si votre projet n'a pas obtenu de badge et que vous n'avez apporté aucune modification pendant au moins 30 jours, nous vous enverrons un e-mail de rappel (vous pouvez désactiver les rappels à tout moment si vous le souhaitez).
+      github_repo_label: Sélectionner un dépôt GitHub (optionnel)
+      submit: Soumettre le projet
+      badge_series: Série de badges
+      badge_series_description: Vous pouvez choisir la série de badges avec laquelle commencer.
+      badge_series_metal: Métal (basique, argent, or)
+      badge_series_baseline: Baseline (baseline-1, baseline-2, baseline-3)
   report_mailer:
     unsubscribe_notice_html: 'Pour vous désabonner de ces notifications par email, veuillez visiter : <a href="%{unsubscribe_url}">%{unsubscribe_url}</a>'
     unsubscribe_notice_text: 'Pour vous désabonner de ces notifications par email, veuillez visiter : %{unsubscribe_url}'

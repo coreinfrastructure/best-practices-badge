@@ -26,6 +26,19 @@ en:
       current_owner: 'Current owner ID:'
       ownership_edit_hint: "(Ownership can be transferred when editing this section.)"
       submit_cdla_permissive_20_html: By submitting this data about the project you agree to release it under at least the <a href="https://cdla.dev/permissive-2-0/" >Community Data License Agreement – Permissive, Version 2.0</a>. This means that a Data Recipient may share the Data, with or without modifications, so long as the Data Recipient makes available the text of this agreement with the shared Data. This agreement does <i>not</i> impose any restriction or obligations with respect to the use, modification, or sharing of Results. You retain copyright (if any), and the project license is unaffected.<br><br>
+      not_authorized: You are not authorized to edit this project.
+      automation:
+        aria_automated: This field was automatically filled
+        aria_overridden: This field value was corrected by automation
+        automated_tooltip: We filled this in using automated project analysis
+        overridden_tooltip: We corrected this value using automated project analysis
+        chief_overrode:
+          one: 'We corrected 1 field based on project analysis:'
+          other: 'We corrected %{count} fields based on project analysis:'
+        override_detail: "'%{criterion}' changed from '%{old}' to '%{new}' — %{explanation}"
+        analysis_failed:
+          one: 'Warning: Automated analysis failed for 1 field (%{fields}). Your other changes were saved.'
+          other: 'Warning: Automated analysis failed for %{count} fields (%{fields}). Your other changes were saved.'
     show:
       section_selector: Section
       cdla_permissive_20_html: This data is available under the <a href="https://cdla.dev/permissive-2-0/" >Community Data License Agreement – Permissive, Version 2.0 (CDLA-Permissive-2.0)</a>. This means that a Data Recipient may share the Data, with or without modifications, so long as the Data Recipient makes available the text of this agreement with the shared Data. Please credit %{user} and the OpenSSF Best Practices badge contributors.<br><br>
@@ -50,6 +63,14 @@ en:
       entry_locale:
         description: What language is used for this badge entry's description and justifications?
         details: Select the language used for the project description and criterion justification text. This helps browser translation tools correctly identify the language of this content. Most projects use English.
+    new:
+      reminder_email_html: If your project hasn't earned a badge and you haven't made any edits for at least 30 days, we'll send you a reminder email (you can disable reminders at any time if you want to).
+      github_repo_label: Select a GitHub repository (optional)
+      submit: Submit Project
+      badge_series: Badge series
+      badge_series_description: You can choose which badge series to start with.
+      badge_series_metal: Metal (passing, silver, gold)
+      badge_series_baseline: Baseline (baseline-1, baseline-2, baseline-3)
   report_mailer:
     unsubscribe_notice_html: 'To unsubscribe from these email notifications, please visit: <a href="%{unsubscribe_url}">%{unsubscribe_url}</a>'
     unsubscribe_notice_text: 'To unsubscribe from these email notifications, please visit: %{unsubscribe_url}'

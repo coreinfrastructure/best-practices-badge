@@ -276,6 +276,13 @@ pt-BR:
       sign_in_first: Por favor, faça login para adicionar um projeto!
       original_repos: "=> Repositórios Originais do GitHub"
       fork_repos: "=> Repositórios Bifurcados do GitHub"
+      reminder_email_html: Se o seu projeto não ganhou um selo e você não fez nenhuma edição por pelo menos 30 dias, enviaremos um e-mail de lembrete (você pode desativar os lembretes a qualquer momento, se desejar).
+      github_repo_label: Selecione um repositório do GitHub (opcional)
+      submit: Enviar Projeto
+      badge_series: Série de selos
+      badge_series_description: Você pode escolher com qual série de selos começar.
+      badge_series_metal: Metal (aprovação, prata, ouro)
+      badge_series_baseline: Linha de base (baseline-1, baseline-2, baseline-3)
     delete_form:
       info_html: "<b>Aviso</b> - você está prestes a <b>excluir permanentemente</b> a entrada do selo para %{project_name}. Isso <b>não</b> pode ser facilmente desfeito, por isso recomendamos que você <b>não</b> exclua essa entrada de selo. Você não precisa completar os critérios do selo de uma só vez; a maioria dos projetos obtém o selo identificando e atendendo aos critérios ausentes ao longo do tempo. Se você achar que alguns critérios não fazem sentido, não conseguir descobrir como atender a alguns critérios ou tiver outras perguntas, por favor entre em contato conosco. Observe que nem todos os critérios devem ser atendidos para obter um selo (alguns critérios DEVERIAM ser atendidos ou são simplesmente SUGERIDOS). Se você não quiser receber lembretes por e-mail, simplesmente edite a entrada do projeto e desative os lembretes por e-mail. No entanto, se você tem <i>certeza</i> de que deseja <i>excluir permanentemente</i> esta entrada de selo, por favor explique abaixo por que está excluindo-a permanentemente."
       rationale_placeholder: "(Obrigatório) Por favor, explique por que você está excluindo permanentemente esta entrada de selo do projeto e, se aplicável, o que você gostaria que fizéssemos em vez disso (20+ caracteres, 15+ não-espaços em branco)"
@@ -298,6 +305,19 @@ pt-BR:
       submit_and_exit: Enviar (e sair)
       submit_cc_by_3plus_html: Ao enviar esses dados sobre o projeto, você concorda em liberá-los sob pelo menos a <a href="https://creativecommons.org/licenses/by/3.0/us" target="_blank" rel="noopener">Creative Commons Attribution versão 3.0 ou licença posterior (CC-BY-3.0+)</a>. Isso significa que todos são livres para compartilhar e adaptar os dados, mas devem dar o crédito apropriado. Você mantém os direitos autorais (se houver), e a licença do projeto não é afetada.<br><br>
       submit_cdla_permissive_20_html: Ao enviar esses dados sobre o projeto, você concorda em liberá-los sob pelo menos o <a href="https://cdla.dev/permissive-2-0/" >Community Data License Agreement – Permissive, Version 2.0</a>. Isso significa que um Destinatário de Dados pode compartilhar os Dados, com ou sem modificações, desde que o Destinatário de Dados disponibilize o texto deste acordo com os Dados compartilhados. Este acordo <i>não</i> impõe nenhuma restrição ou obrigação com relação ao uso, modificação ou compartilhamento de Resultados. Você mantém os direitos autorais (se houver), e a licença do projeto não é afetada.<br><br>
+      not_authorized: Você não está autorizado a editar este projeto.
+      automation:
+        aria_automated: Este campo foi preenchido automaticamente
+        aria_overridden: O valor deste campo foi corrigido por automação
+        automated_tooltip: Preenchemos isso usando análise automatizada do projeto
+        overridden_tooltip: Corrigimos este valor usando análise automatizada do projeto
+        chief_overrode:
+          one: 'Corrigimos 1 campo com base na análise do projeto:'
+          other: 'Corrigimos %{count} campos com base na análise do projeto:'
+        override_detail: "'%{criterion}' alterado de '%{old}' para '%{new}' — %{explanation}"
+        analysis_failed:
+          one: 'Aviso: A análise automatizada falhou para 1 campo (%{fields}). Suas outras alterações foram salvas.'
+          other: 'Aviso: A análise automatizada falhou para %{count} campos (%{fields}). Suas outras alterações foram salvas.'
     show:
       section_selector: Seção
       edit: Editar

@@ -26,6 +26,19 @@ ja:
       current_owner: 現在の所有者ID：
       ownership_edit_hint: "（このセクションを編集する際に所有権を譲渡できます。）"
       submit_cdla_permissive_20_html: このプロジェクトのデータを提出することにより、少なくとも<a href="https://cdla.dev/permissive-2-0/" >Community Data License Agreement – Permissive, Version 2.0</a>のもとでリリースすることに同意します。これは、データ受領者が、データ受領者がこの契約のテキストを共有データとともに利用可能にする限り、変更の有無にかかわらずデータを共有できることを意味します。この契約は、結果の使用、変更、または共有に関して制限または義務を課すことは<i>ありません</i>。あなたは著作権（もしあれば）を保持し、プロジェクトライセンスは影響を受けません。<br><br>
+      not_authorized: このプロジェクトを編集する権限がありません。
+      automation:
+        aria_automated: このフィールドは自動入力されました
+        aria_overridden: このフィールドの値は自動化により修正されました
+        automated_tooltip: プロジェクトの自動分析を使用してこの項目を入力しました
+        overridden_tooltip: プロジェクトの自動分析を使用してこの値を修正しました
+        chief_overrode:
+          one: プロジェクト分析に基づいて1個のフィールドを修正しました：
+          other: プロジェクト分析に基づいて%{count}個のフィールドを修正しました：
+        override_detail: "「%{criterion}」は「%{old}」から「%{new}」に変更されました — %{explanation}"
+        analysis_failed:
+          one: 警告：1個のフィールド（%{fields}）の自動分析に失敗しました。その他の変更は保存されました。
+          other: 警告：%{count}個のフィールド（%{fields}）の自動分析に失敗しました。その他の変更は保存されました。
     show:
       section_selector: セクション
       cdla_permissive_20_html: このデータは、<a href="https://cdla.dev/permissive-2-0/" >Community Data License Agreement – Permissive, Version 2.0 (CDLA-Permissive-2.0)</a>のもとで利用可能です。これは、データ受領者が、データ受領者がこの契約のテキストを共有データとともに利用可能にする限り、変更の有無にかかわらずデータを共有できることを意味します。%{user}およびOpenSSFベストプラクティスバッジのコントリビューターにクレジットを表示してください。<br><br>
@@ -50,6 +63,14 @@ ja:
       entry_locale:
         description: このバッジエントリの説明と正当な理由にはどの言語を使用しますか？
         details: プロジェクトの概要と基準の正当な理由のテキストに使用されている言語を選択してください。これによりブラウザの翻訳ツールがこのコンテンツの言語を正しく識別できるようになります。ほとんどのプロジェクトは英語を使用します。
+    new:
+      reminder_email_html: プロジェクトがバッジを取得しておらず、30日以上編集がない場合、リマインダーメールを送信します（いつでもリマインダーを無効にすることができます）。
+      github_repo_label: GitHubリポジトリを選択してください（任意）
+      submit: プロジェクトを投稿
+      badge_series: バッジシリーズ
+      badge_series_description: どのバッジシリーズから開始するかを選択できます。
+      badge_series_metal: メタル（合格、シルバー、ゴールド）
+      badge_series_baseline: ベースライン（baseline-1、baseline-2、baseline-3）
   report_mailer:
     unsubscribe_notice_html: これらのメール通知の登録を解除するには、次のURLにアクセスしてください：<a href="%{unsubscribe_url}">%{unsubscribe_url}</a>
     unsubscribe_notice_text: これらのメール通知の登録を解除するには、次のURLにアクセスしてください：%{unsubscribe_url}

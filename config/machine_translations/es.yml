@@ -242,6 +242,13 @@ es:
       sign_in_first: "¡Por favor inicie sesión para agregar un proyecto!"
       original_repos: "=> Repositorios Originales de GitHub"
       fork_repos: "=> Repositorios Bifurcados de GitHub"
+      reminder_email_html: Si su proyecto no ha obtenido una insignia y no ha realizado ninguna edición durante al menos 30 días, le enviaremos un correo electrónico de recordatorio (puede desactivar los recordatorios en cualquier momento si lo desea).
+      github_repo_label: Seleccione un repositorio de GitHub (opcional)
+      submit: Enviar Proyecto
+      badge_series: Serie de insignias
+      badge_series_description: Puede elegir con qué serie de insignias comenzar.
+      badge_series_metal: Metal (aprobado, plata, oro)
+      badge_series_baseline: Línea de base (línea de base-1, línea de base-2, línea de base-3)
     delete_form:
       info_html: "<b>Advertencia</b> - está a punto de <b>eliminar permanentemente</b> la entrada de insignia para %{project_name}. Esto <b>no</b> se puede deshacer fácilmente, por lo que recomendamos que <b>no</b> elimine esta entrada de insignia. No necesita completar todos los criterios de la insignia de una vez; la mayoría de los proyectos obtienen la insignia identificando y cumpliendo los criterios faltantes a lo largo del tiempo. Si cree que algunos criterios no tienen sentido, no puede averiguar cómo cumplir con algunos criterios, o tiene otras preguntas, por favor contáctenos. Tenga en cuenta que no todos los criterios deben cumplirse para obtener una insignia (algunos criterios DEBERÍAN cumplirse o simplemente son SUGERIDOS). Si no desea que se le envíen recordatorios por correo electrónico, simplemente edite la entrada del proyecto y desactive los recordatorios por correo electrónico. Sin embargo, si está <i>seguro</i> de que desea <i>eliminar permanentemente</i> esta entrada de insignia, por favor explique a continuación por qué la está eliminando permanentemente."
       rationale_placeholder: "(Requerido) Por favor explique por qué está eliminando permanentemente esta entrada de insignia del proyecto, y si corresponde, qué desearía que hiciéramos en su lugar (20+ caracteres, 15+ caracteres sin espacios)"
@@ -264,6 +271,19 @@ es:
       submit_and_exit: Enviar (y salir)
       submit_cc_by_3plus_html: Al enviar estos datos sobre el proyecto, usted acepta publicarlos bajo al menos la <a href="https://creativecommons.org/licenses/by/3.0/us" target="_blank" rel="noopener">licencia Creative Commons Attribution versión 3.0 o posterior (CC-BY-3.0+)</a>. Esto significa que todos son libres de compartir y adaptar los datos, pero deben dar el crédito apropiado. Usted conserva los derechos de autor (si los hay), y la licencia del proyecto no se ve afectada.<br><br>
       submit_cdla_permissive_20_html: Al enviar estos datos sobre el proyecto, usted acepta publicarlos bajo al menos el <a href="https://cdla.dev/permissive-2-0/" >Acuerdo de Licencia de Datos de la Comunidad – Permisivo, Versión 2.0</a>. Esto significa que un Destinatario de Datos puede compartir los Datos, con o sin modificaciones, siempre que el Destinatario de Datos ponga a disposición el texto de este acuerdo con los Datos compartidos. Este acuerdo <i>no</i> impone ninguna restricción u obligación con respecto al uso, modificación o compartición de Resultados. Usted conserva los derechos de autor (si los hubiera), y la licencia del proyecto no se ve afectada.<br><br>
+      not_authorized: No está autorizado para editar este proyecto.
+      automation:
+        aria_automated: Este campo se completó automáticamente
+        aria_overridden: Este valor de campo fue corregido por automatización
+        automated_tooltip: Completamos esto usando análisis automatizado del proyecto
+        overridden_tooltip: Corregimos este valor usando análisis automatizado del proyecto
+        chief_overrode:
+          one: 'Corregimos 1 campo basándonos en el análisis del proyecto:'
+          other: 'Corregimos %{count} campos basándonos en el análisis del proyecto:'
+        override_detail: "'%{criterion}' cambió de '%{old}' a '%{new}' — %{explanation}"
+        analysis_failed:
+          one: 'Advertencia: El análisis automatizado falló para 1 campo (%{fields}). Sus otros cambios se guardaron.'
+          other: 'Advertencia: El análisis automatizado falló para %{count} campos (%{fields}). Sus otros cambios se guardaron.'
     show:
       section_selector: Sección
       edit: Editar

@@ -26,6 +26,19 @@ zh-CN:
       current_owner: 当前所有者ID：
       ownership_edit_hint: "（编辑此部分时可以转移所有权。）"
       submit_cdla_permissive_20_html: 通过提交该项目的相关数据，您同意以<a href="https://cdla.dev/permissive-2-0/" >社区数据许可协议 – 许可性，版本 2.0</a>发布数据。这意味着数据接收方可以共享数据，无论是否经过修改，只要数据接收方在共享数据时提供本协议文本。本协议<i>不会</i>对结果的使用、修改或共享施加任何限制或义务。您保留版权（如有），且项目许可证不受影响。<br><br>
+      not_authorized: 您无权编辑此项目。
+      automation:
+        aria_automated: 此字段已自动填写
+        aria_overridden: 此字段值已由自动化更正
+        automated_tooltip: 我们使用自动项目分析填写了此字段
+        overridden_tooltip: 我们使用自动项目分析更正了此值
+        chief_overrode:
+          one: 我们根据项目分析更正了 1 个字段：
+          other: 我们根据项目分析更正了 %{count} 个字段：
+        override_detail: '"%{criterion}"从"%{old}"更改为"%{new}" — %{explanation}'
+        analysis_failed:
+          one: 警告：1 个字段（%{fields}）的自动分析失败。您的其他更改已保存。
+          other: 警告：%{count} 个字段（%{fields}）的自动分析失败。您的其他更改已保存。
     show:
       section_selector: 部分
       cdla_permissive_20_html: 该数据可在<a href="https://cdla.dev/permissive-2-0/" >社区数据许可协议 – 许可性，版本 2.0 (CDLA-Permissive-2.0)</a>下获取。这意味着数据接收方可以共享数据，无论是否经过修改，只要数据接收方在共享数据时提供本协议文本。请注明%{user}和OpenSSF最佳实践徽章贡献者。<br><br>
@@ -50,6 +63,14 @@ zh-CN:
       entry_locale:
         description: 此徽章条目的描述和理由使用什么语言？
         details: 选择项目描述和标准理由文本所使用的语言。这有助于浏览器翻译工具正确识别此内容的语言。大多数项目使用英语。
+    new:
+      reminder_email_html: 如果您的项目尚未获得徽章且您已至少 30 天未进行任何编辑，我们将向您发送一封提醒邮件（如果您愿意，可以随时禁用提醒）。
+      github_repo_label: 选择一个 GitHub 仓库（可选）
+      submit: 提交项目
+      badge_series: 徽章系列
+      badge_series_description: 您可以选择从哪个徽章系列开始。
+      badge_series_metal: 金属（passing、silver、gold）
+      badge_series_baseline: 基线（baseline-1、baseline-2、baseline-3）
   report_mailer:
     unsubscribe_notice_html: 要取消订阅这些电子邮件通知，请访问：<a href="%{unsubscribe_url}">%{unsubscribe_url}</a>
     unsubscribe_notice_text: 要取消订阅这些电子邮件通知，请访问：%{unsubscribe_url}

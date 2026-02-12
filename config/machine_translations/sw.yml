@@ -127,6 +127,13 @@ sw:
       sign_in_first: Tafadhali ingia ili kuongeza mradi!
       original_repos: "=> Hifadhi za Asili za GitHub"
       fork_repos: "=> Hifadhi za GitHub Zilizopigwa Forki"
+      reminder_email_html: Ikiwa mradi wako haujapata nishani na hukufanya marekebisho yoyote kwa angalau siku 30, tutakutumia barua pepe ya ukumbusho (unaweza kuzima vikumbusho wakati wowote ukitaka).
+      github_repo_label: Chagua hazina ya GitHub (si lazima)
+      submit: Wasilisha Mradi
+      badge_series: Mfululizo wa nishani
+      badge_series_description: Unaweza kuchagua ni mfululizo upi wa nishani wa kuanza nao.
+      badge_series_metal: Chuma (kuhitimu, fedha, dhahabu)
+      badge_series_baseline: Msingi (msingi-1, msingi-2, msingi-3)
     delete_form:
       info_html: "<b>Onyo</b> - unakaribia <b>kufuta kabisa</b> ingizo la nishani kwa %{project_name}. Hii <b>HAIWEZI</b> kutendeka upya kwa urahisi, kwa hivyo tunapendekeza kwamba <b>USIFUTE</b> ingizo hili la nishani. Huhitaji kukamilisha vigezo vya nishani kwa pamoja; miradi mingi hupata nishani kwa kutambua na kukidhi vigezo vilivyokosekana kwa muda. Ikiwa unafikiri baadhi ya vigezo havifanyi maana, huwezi kuelewa jinsi ya kukidhi baadhi ya vigezo, au una maswali mengine, tafadhali wasiliana nasi. Kumbuka kwamba si vigezo vyote lazima vikidhiwe ili kupata nishani (baadhi ya vigezo VINAPASWA kukidhiwa au ni VIPENDEKEZWA tu). Ikiwa hutaki ukumbusho utumwe kwako kwa barua pepe, hariri tu ingizo la mradi na uzime ukumbusho wa barua pepe badala yake. Hata hivyo, ikiwa una <i>uhakika</i> kwamba unataka <i>kufuta kabisa</i> ingizo hili la nishani, tafadhali eleza hapa chini kwa nini unafuta kabisa."
       rationale_placeholder: "(Inahitajika) Tafadhali eleza kwa nini unafuta kabisa ingizo hili la nishani ya mradi, na ikiwa inafaa, unataka tufanye nini badala yake (herufi 20+, zisizo za nafasi 15+)"
@@ -149,6 +156,19 @@ sw:
       submit_and_exit: Wasilisha (na uondoke)
       submit_cc_by_3plus_html: Kwa kuwasilisha data hii kuhusu mradi unakubali kuiachia chini ya angalau <a href="https://creativecommons.org/licenses/by/3.0/us" target="_blank" rel="noopener">leseni ya Creative Commons Attribution toleo 3.0 au baadaye (CC-BY-3.0+)</a>. Hii inamaanisha kuwa wote wako huru kushiriki na kurekebisha data, lakini lazima watoe heshima inayofaa. Unabaki na hakimiliki (ikiwa ipo), na leseni ya mradi haijaadhiriwa.<br><br>
       submit_cdla_permissive_20_html: Kwa kuwasilisha data hii kuhusu mradi unakubali kuiachia chini ya angalau <a href="https://cdla.dev/permissive-2-0/" >Community Data License Agreement – Permissive, Version 2.0</a>. Hii inamaanisha kuwa Mpokeaji wa Data anaweza kushiriki Data, na au bila marekebisho, mradi Mpokeaji wa Data anapatanisha maandishi ya mkataba huu na Data iliyoshirikiwa. Mkataba huu <i>haufanyi</i> kizuizi au wajibu chochote kuhusiana na matumizi, marekebisho, au kushiriki Matokeo. Unabaki na hakimiliki (ikiwa ipo), na leseni ya mradi haijaadhiriwa.<br><br>
+      not_authorized: Hauruhusiwi kuhariri mradi huu.
+      automation:
+        aria_automated: Sehemu hii ilijazwa kiatomati
+        aria_overridden: Thamani ya sehemu hii ilirekebishwa na mfumo wa kiatomati
+        automated_tooltip: Tulijaza hii kwa kutumia uchambuzi wa mradi wa kiatomati
+        overridden_tooltip: Tulirekebisha thamani hii kwa kutumia uchambuzi wa mradi wa kiatomati
+        chief_overrode:
+          one: 'Tulirekebisha sehemu 1 kulingana na uchambuzi wa mradi:'
+          other: 'Tulirekebisha sehemu %{count} kulingana na uchambuzi wa mradi:'
+        override_detail: "'%{criterion}' imebadilishwa kutoka '%{old}' hadi '%{new}' — %{explanation}"
+        analysis_failed:
+          one: 'Onyo: Uchambuzi wa kiatomati ulishindwa kwa sehemu 1 (%{fields}). Mabadiliko yako mengine yalihifadhiwa.'
+          other: 'Onyo: Uchambuzi wa kiatomati ulishindwa kwa sehemu %{count} (%{fields}). Mabadiliko yako mengine yalihifadhiwa.'
     show:
       section_selector: Sehemu
       edit: Hariri

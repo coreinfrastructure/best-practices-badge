@@ -13,5 +13,6 @@ class PurgeCdnProjectJob < ApplicationJob
   def perform(cdn_badge_key)
     # Send purge message to CDN
     FastlyRails.purge_by_key cdn_badge_key
+    Rails.logger.debug "Purged CDN key #{cdn_badge_key}"
   end
 end

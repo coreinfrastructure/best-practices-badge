@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_08_053037) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_12_174356) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -60,6 +60,21 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_08_053037) do
     t.integer "percent_2_ge_50"
     t.integer "percent_2_ge_75"
     t.integer "percent_2_ge_90"
+    t.integer "percent_baseline_1_ge_100"
+    t.integer "percent_baseline_1_ge_25"
+    t.integer "percent_baseline_1_ge_50"
+    t.integer "percent_baseline_1_ge_75"
+    t.integer "percent_baseline_1_ge_90"
+    t.integer "percent_baseline_2_ge_100"
+    t.integer "percent_baseline_2_ge_25"
+    t.integer "percent_baseline_2_ge_50"
+    t.integer "percent_baseline_2_ge_75"
+    t.integer "percent_baseline_2_ge_90"
+    t.integer "percent_baseline_3_ge_100"
+    t.integer "percent_baseline_3_ge_25"
+    t.integer "percent_baseline_3_ge_50"
+    t.integer "percent_baseline_3_ge_75"
+    t.integer "percent_baseline_3_ge_90"
     t.integer "percent_ge_0", null: false
     t.integer "percent_ge_100", null: false
     t.integer "percent_ge_25", null: false

@@ -56,7 +56,9 @@ RemoveUnusedMethodsInModelsCheck: { except_methods: [
   'User#digest',
   'User#created_since', # Used by daily stamp (rake); doesn't notice
   'User#updated_since', # Used by daily stamp (rake); doesn't notice
-  'Badge#reset_widths!' # Used in tests and after regenerating badge images
+  'Badge#reset_widths!', # Used in tests and after regenerating badge images
+  'ProjectStat#baseline_percent_field_name', # Parallel to percent_field_name
+  'ProjectStat#baseline_percent_field_description' # Parallel to percent_field_description
   ] }
 ReplaceComplexCreationWithFactoryMethodCheck: { attribute_assignment_count: 3 }
 # Disable false positive ReplaceInstanceVariableWithLocalVariableCheck for

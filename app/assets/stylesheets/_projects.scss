@@ -190,15 +190,3 @@ td.project_name {
   opacity: 0.7; // 🤖 more subtle
 }
 
-// Dark mode support
-@media (prefers-color-scheme: dark) {
-  .highlight-overridden {
-    background-color: #4d3319; // Dark orange background
-    border-left-color: #ff9933;
-  }
-
-  .highlight-automated {
-    background-color: #4d4d19; // Dark yellow background
-    border-left-color: #ffdd55;
-  }
-}

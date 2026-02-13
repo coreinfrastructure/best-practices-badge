@@ -573,6 +573,13 @@ class ProjectsController < ApplicationController
     # Run first-edit automation if this level hasn't been edited yet
     run_first_edit_automation_if_needed
 
+    # Always consume query string proposals, even on revisits, so we
+    # will use information from any external automation.
+    # Runs AFTER first-edit automation so query strings can override Chief
+    # (Chief implements the built-in automation).
+    # Results merge into @automated_fields for highlighting.
+    apply_query_string_automation
+
     # Restore override/automated highlighting from redirect query params
     # (handle_overridden_fields_redirect passes overridden= and automated=)
     @overridden_fields ||= parse_and_validate_field_list(params[:overridden])
@@ -1570,6 +1577,9 @@ class ProjectsController < ApplicationController
 
   # Run first-edit automation if this badge level hasn't been saved yet.
   # Tracks which fields were filled (for highlighting in view).
+  # Fields that were '?' and got filled are @automated_fields (yellow).
+  # Fields that had a real value and got overridden are @overridden_fields
+  # (orange).
   def run_first_edit_automation_if_needed
     return if level_already_saved?
 
@@ -1580,15 +1590,8 @@ class ProjectsController < ApplicationController
     chief = Chief.new(@project, client_factory, entry_locale: @project.entry_locale)
     chief.autofill(needed_fields: fields_for_current_section)
 
-    # Apply any automation proposals from URL query parameters
-    # This allows external tools to propose field values
-    apply_query_string_proposals_to_project(@project, params, @criteria_level, original_values)
-
-    # Track which fields were changed (for highlighting)
-    # Filter to only fields in the current section
-    all_automated_fields = find_automated_fields(original_values)
-    @automated_fields = filter_automated_fields_for_current_section(all_automated_fields)
-    @overridden_fields = [] # No overrides on first edit (all were '?')
+    # Categorize changes into automated (yellow) and overridden (orange)
+    categorize_automation_changes(original_values)
 
     # NOTE: We do NOT set level_saved_flag here. That should only happen
     # when the user actually clicks save. The automated/overridden fields
@@ -1628,6 +1631,56 @@ class ProjectsController < ApplicationController
     end
 
     modified_fields
+  end
+
+  # Apply query string proposals and track them as automated fields.
+  # Called unconditionally from edit so we always use them.
+  # Captures values before applying, then adds changed fields to
+  # @automated_fields for yellow highlighting.
+  def apply_query_string_automation
+    original_values = capture_query_string_field_values
+    internal_level = criteria_level_to_internal(@criteria_level)
+    modified = apply_query_string_proposals_to_project(
+      @project, params, internal_level, {}
+    )
+    return if modified.empty?
+
+    @automated_fields ||= []
+    track_query_string_changes(modified, original_values)
+  end
+
+  # Track which query string proposals actually changed field values.
+  # Appends changed fields to @automated_fields for highlighting.
+  # @param modified [Array<Symbol>] Fields that were written
+  # @param original_values [Hash] Snapshot of values before proposals
+  def track_query_string_changes(modified, original_values)
+    modified.each do |field_name|
+      new_value = @project.public_send(field_name)
+      next if original_values[field_name] == new_value
+
+      @automated_fields << {
+        field: field_name, new_value: new_value, explanation: nil
+      }
+    end
+  end
+
+  # Capture current values only for fields that appear in query params.
+  # Lightweight alternative to capture_original_values -- only snapshots
+  # the fields that the query string might change.
+  # @return [Hash] Field name (Symbol) => current value
+  def capture_query_string_field_values
+    internal_level = criteria_level_to_internal(@criteria_level)
+    valid_fields = FIELDS_BY_SECTION[internal_level]
+    return {} if valid_fields.nil?
+
+    values = {}
+    params.each_key do |key|
+      field_sym = key.to_sym
+      next if valid_fields.exclude?(field_sym)
+
+      values[field_sym] = @project.public_send(field_sym)
+    end
+    values
   end
 
   # Check if current badge level has already been saved/edited
@@ -1684,28 +1737,76 @@ class ProjectsController < ApplicationController
     original
   end
 
-  # Find which fields were automatically filled (changed from Unknown to a known value)
-  # @param original_values [Hash] Original field values
-  # @return [Array<Hash>] List of automated field info with :field, :new_value, :explanation
-  def find_automated_fields(original_values)
-    original_values.filter_map do |field_name, old_value|
+  # Categorize automation changes into @automated_fields and
+  # @overridden_fields based on old vs new values.
+  # - Status changed from '?' to a real value: automated (yellow)
+  # - Status changed from a real value to another: overridden (orange)
+  # - Justification changed: automated (Chief filled it)
+  # - Non-criteria field filled from blank: automated
+  # Both lists are filtered to the current section.
+  # @param original_values [Hash] Field name => value before automation
+  def categorize_automation_changes(original_values)
+    automated = []
+    overridden = []
+
+    original_values.each do |field_name, old_value|
       new_value = @project.public_send(field_name)
-      detect_automated_field_change(field_name, old_value, new_value)
+      next if old_value == new_value
+
+      categorize_single_change(field_name, old_value, new_value,
+                               automated, overridden)
     end
+
+    @automated_fields = filter_automated_fields_for_current_section(automated)
+    @overridden_fields = filter_automated_fields_for_current_section(overridden)
   end
 
-  # Check if a specific field was automated and return field info if so
-  # @param field_name [Symbol] The field being checked
-  # @param old_value [Object] Original value before automation
-  # @param new_value [Object] Current value after automation
-  # @return [Hash, nil] Field info hash if automated, nil otherwise
-  def detect_automated_field_change(field_name, old_value, new_value)
+  # Categorize a single field change as automated or overridden.
+  # @param field_name [Symbol] Field that changed
+  # @param old_value [Object] Value before automation
+  # @param new_value [Object] Value after automation
+  # @param automated [Array] Accumulator for automated (yellow) entries
+  # @param overridden [Array] Accumulator for overridden (orange) entries
+  # rubocop:disable Metrics/MethodLength
+  def categorize_single_change(
+    field_name, old_value, new_value, automated, overridden
+  )
     if criteria_status_field?(field_name)
-      detect_criteria_status_automation(field_name, old_value, new_value)
+      categorize_status_change(
+        field_name, old_value, new_value, automated, overridden
+      )
     elsif criteria_justification_field?(field_name)
-      detect_criteria_justification_automation(field_name, old_value, new_value)
-    elsif ALWAYS_AUTOMATABLE.include?(field_name)
-      detect_non_criteria_automation(field_name, old_value, new_value)
+      status_field = field_name.to_s.sub('_justification', '_status').to_sym
+      automated << {
+        field: status_field, new_value: new_value, explanation: new_value
+      }
+    elsif ALWAYS_AUTOMATABLE.include?(field_name) &&
+          old_value.blank? && new_value.present?
+      automated << {
+        field: field_name, new_value: new_value, explanation: nil
+      }
+    end
+  end
+  # rubocop:enable Metrics/MethodLength
+
+  # Categorize a status field change as automated or overridden.
+  # @param field_name [Symbol] Status field name
+  # @param old_value [Integer] Old status value
+  # @param new_value [Integer] New status value
+  # @param automated [Array] Accumulator for automated entries
+  # @param overridden [Array] Accumulator for overridden entries
+  def categorize_status_change(
+    field_name, old_value, new_value, automated, overridden
+  )
+    explanation = get_justification_for_status(field_name)
+    info = {
+      field: field_name, new_value: new_value, explanation: explanation
+    }
+    if old_value == CriterionStatus::UNKNOWN
+      automated << info
+    else
+      info[:old_value] = old_value
+      overridden << info
     end
   end
 
@@ -1723,19 +1824,6 @@ class ProjectsController < ApplicationController
     field_name.to_s.end_with?('_justification')
   end
 
-  # Detect if a criteria status field was automated (changed from UNKNOWN)
-  # @param field_name [Symbol] The status field name
-  # @param old_value [Integer] Original status value
-  # @param new_value [Integer] Current status value
-  # @return [Hash, nil] Field info if automated, nil otherwise
-  def detect_criteria_status_automation(field_name, old_value, new_value)
-    return unless old_value == CriterionStatus::UNKNOWN &&
-                  new_value != CriterionStatus::UNKNOWN
-
-    explanation = get_justification_for_status(field_name)
-    { field: field_name, new_value: new_value, explanation: explanation }
-  end
-
   # Get the justification text for a criteria status field
   # @param status_field_name [Symbol] The status field name (e.g., :foo_status)
   # @return [String, nil] Justification text or nil
@@ -1744,32 +1832,6 @@ class ProjectsController < ApplicationController
     return unless @project.respond_to?(justification_field)
 
     @project.public_send(justification_field)
-  end
-
-  # Detect if a criteria justification field was automated (changed value).
-  # Any actual change to justification counts as automation — Chief already
-  # prevents overwriting non-empty justifications when the status is
-  # unchanged, so only legitimate changes reach this point.
-  # @param field_name [Symbol] The justification field name
-  # @param old_value [String] Original justification
-  # @param new_value [String] Current justification
-  # @return [Hash, nil] Field info if automated, nil otherwise
-  def detect_criteria_justification_automation(field_name, old_value, new_value)
-    return if old_value == new_value
-
-    status_field = field_name.to_s.sub('_justification', '_status').to_sym
-    { field: status_field, new_value: new_value, explanation: new_value }
-  end
-
-  # Detect if a non-criteria field was automated (changed from blank to present)
-  # @param field_name [Symbol] The field name
-  # @param old_value [Object] Original value
-  # @param new_value [Object] Current value
-  # @return [Hash, nil] Field info if automated, nil otherwise
-  def detect_non_criteria_automation(field_name, old_value, new_value)
-    return if old_value.present? || new_value.blank?
-
-    { field: field_name, new_value: new_value, explanation: nil }
   end
 
   # Apply a single proposal value to a project (helper for apply_query_string_proposals_to_project)

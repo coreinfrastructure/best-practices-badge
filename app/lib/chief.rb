@@ -295,20 +295,21 @@ class Chief
       next if ALLOWED_FIELDS.exclude?(key)
       next unless update_value?(project, key, data)
 
-      # Store change:
+      old_value = project.attribute_present?(key) ? project[key] : nil
       project[key] = data[:value]
-      # Now add the explanation, if we can.
+      # Set justification if the status actually changed, or if the
+      # justification is empty. If the status is unchanged and there's
+      # already a justification, leave it alone — the user's rationale
+      # should not be modified when no status change occurred.
       next unless key.to_s.end_with?('_status') && data.key?(:explanation)
 
+      status_changed = old_value != data[:value]
       justification_key = (key.to_s.chomp('_status') + '_justification').to_sym
-      if project.attribute_present?(justification_key)
-        unless project[justification_key].end_with?(data[:explanation])
-          project[justification_key] =
-            project[justification_key] + ' ' + data[:explanation]
-        end
-      else
-        project[justification_key] = data[:explanation]
-      end
+      existing = project.attribute_present?(justification_key) &&
+                 project[justification_key]
+      next if !status_changed && existing.present?
+
+      project[justification_key] = data[:explanation]
     end
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize

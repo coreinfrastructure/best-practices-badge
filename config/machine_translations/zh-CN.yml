@@ -39,6 +39,7 @@ zh-CN:
         analysis_failed:
           one: 警告：1 个字段（%{fields}）的自动分析失败。您的其他更改已保存。
           other: 警告：%{count} 个字段（%{fields}）的自动分析失败。您的其他更改已保存。
+      save_and_continue_tooltip: 运行自动化以填充未知值
     show:
       section_selector: 部分
       cdla_permissive_20_html: 该数据可在<a href="https://cdla.dev/permissive-2-0/" >社区数据许可协议 – 许可性，版本 2.0 (CDLA-Permissive-2.0)</a>下获取。这意味着数据接收方可以共享数据，无论是否经过修改，只要数据接收方在共享数据时提供本协议文本。请注明%{user}和OpenSSF最佳实践徽章贡献者。<br><br>
@@ -68,9 +69,11 @@ zh-CN:
       github_repo_label: 选择一个 GitHub 仓库（可选）
       submit: 提交项目
       badge_series: 徽章系列
-      badge_series_description: 您可以选择从哪个徽章系列开始。
+      badge_series_description: 您可以选择从哪个徽章系列开始。基线系列是更简化的清单，仅关注必须满足的安全要求，部分源自全球网络安全法规和框架。金属系列是一组更大的标准，包括影响安全性的建议和质量问题，部分源自安全FLOSS项目的经验。两者都关注安全性，我们鼓励项目最终完成这两个系列；您可以选择从哪里开始。
       badge_series_metal: 金属（passing、silver、gold）
       badge_series_baseline: 基线（baseline-1、baseline-2、baseline-3）
+      github_reconnect_html: 我们无法加载您的GitHub存储库。您的GitHub会话可能已过期。
+      github_reconnect_link: 重新连接到GitHub
   report_mailer:
     unsubscribe_notice_html: 要取消订阅这些电子邮件通知，请访问：<a href="%{unsubscribe_url}">%{unsubscribe_url}</a>
     unsubscribe_notice_text: 要取消订阅这些电子邮件通知，请访问：%{unsubscribe_url}
@@ -313,6 +316,7 @@ zh-CN:
   headings:
     Controls: 控制
     General: 通用
+    General_project_info: 常规
   activerecord:
     errors:
       messages:

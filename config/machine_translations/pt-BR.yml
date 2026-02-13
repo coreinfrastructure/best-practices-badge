@@ -280,9 +280,11 @@ pt-BR:
       github_repo_label: Selecione um repositório do GitHub (opcional)
       submit: Enviar Projeto
       badge_series: Série de selos
-      badge_series_description: Você pode escolher com qual série de selos começar.
+      badge_series_description: Você pode escolher com qual série de selos começar. A série baseline é uma lista de verificação mais mínima focando apenas em requisitos de segurança DEVE e é derivada em parte de regulamentações e estruturas globais de cibersegurança. A série metal é um conjunto maior de critérios que inclui sugestões e questões de qualidade que impactam a segurança, e é derivada em parte das experiências de projetos FLOSS seguros. Ambas focam em segurança, e encorajamos os projetos a eventualmente fazerem ambas; você escolhe por onde começar.
       badge_series_metal: Metal (aprovação, prata, ouro)
       badge_series_baseline: Linha de base (baseline-1, baseline-2, baseline-3)
+      github_reconnect_html: Não foi possível carregar seus repositórios do GitHub. Sua sessão do GitHub pode ter expirado.
+      github_reconnect_link: Reconectar ao GitHub
     delete_form:
       info_html: "<b>Aviso</b> - você está prestes a <b>excluir permanentemente</b> a entrada do selo para %{project_name}. Isso <b>não</b> pode ser facilmente desfeito, por isso recomendamos que você <b>não</b> exclua essa entrada de selo. Você não precisa completar os critérios do selo de uma só vez; a maioria dos projetos obtém o selo identificando e atendendo aos critérios ausentes ao longo do tempo. Se você achar que alguns critérios não fazem sentido, não conseguir descobrir como atender a alguns critérios ou tiver outras perguntas, por favor entre em contato conosco. Observe que nem todos os critérios devem ser atendidos para obter um selo (alguns critérios DEVERIAM ser atendidos ou são simplesmente SUGERIDOS). Se você não quiser receber lembretes por e-mail, simplesmente edite a entrada do projeto e desative os lembretes por e-mail. No entanto, se você tem <i>certeza</i> de que deseja <i>excluir permanentemente</i> esta entrada de selo, por favor explique abaixo por que está excluindo-a permanentemente."
       rationale_placeholder: "(Obrigatório) Por favor, explique por que você está excluindo permanentemente esta entrada de selo do projeto e, se aplicável, o que você gostaria que fizéssemos em vez disso (20+ caracteres, 15+ não-espaços em branco)"
@@ -318,6 +320,7 @@ pt-BR:
         analysis_failed:
           one: 'Aviso: A análise automatizada falhou para 1 campo (%{fields}). Suas outras alterações foram salvas.'
           other: 'Aviso: A análise automatizada falhou para %{count} campos (%{fields}). Suas outras alterações foram salvas.'
+      save_and_continue_tooltip: Executa automação para preencher valores desconhecidos
     show:
       section_selector: Seção
       edit: Editar
@@ -1370,6 +1373,7 @@ pt-BR:
     Vulnerability report process: Processo de relato de vulnerabilidades
     Warning flags: Sinalizadores de aviso
     Working build system: Sistema de compilação funcional
+    General_project_info: Geral
   criterion_status:
     Met: Atendido
     Unmet: Não atendido

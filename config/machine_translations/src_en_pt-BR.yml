@@ -288,9 +288,11 @@ en:
       github_repo_label: Select a GitHub repository (optional)
       submit: Submit Project
       badge_series: Badge series
-      badge_series_description: You can choose which badge series to start with.
+      badge_series_description: You can choose which badge series to start with. The baseline series is a more minimal checklist focusing only on MUST security requirements and is derived in part from global cybersecurity regulations and frameworks. The metal series is a larger set of criteria that includes suggestions and quality issues that impact security, and is derived in part from experiences of secure FLOSS projects. Both focus on security, and we encourage projects to eventually do both; you choose where to start.
       badge_series_metal: Metal (passing, silver, gold)
       badge_series_baseline: Baseline (baseline-1, baseline-2, baseline-3)
+      github_reconnect_html: We could not load your GitHub repositories. Your GitHub session may have expired.
+      github_reconnect_link: Reconnect to GitHub
     delete_form:
       info_html: "<b>Warning</b> - you are about to <b>permanently delete</b> the badge entry for %{project_name}. This <b>cannot</b> be easily undone, so we recommend that you do <b>not</b> delete this badge entry. You don't need to complete badge criteria all at once; most projects get the badge by identifying and meeting missing criteria over time. If you think some criteria don't make any sense, cannot figure out how to meet some criteria, or have other questions, please contact us. Note that not all criteria must be met to get a badge (some criteria SHOULD be met or are simply SUGGESTED). If you don't want reminders emailed to you, simply edit the project entry and turn off email reminders instead. However, if you are <i>certain</i> that you want to <i>permanently delete</i> this badge entry, please explain below why you are permanently deleting it."
       rationale_placeholder: "(Required) Please explain why you are permanently deleting this project badge entry, and if applicable, what you wish we did instead (20+ characters, 15+ non-whitespace)"
@@ -326,6 +328,7 @@ en:
         analysis_failed:
           one: 'Warning: Automated analysis failed for 1 field (%{fields}). Your other changes were saved.'
           other: 'Warning: Automated analysis failed for %{count} fields (%{fields}). Your other changes were saved.'
+      save_and_continue_tooltip: Runs automation to fill unknown values
     show:
       section_selector: Section
       edit: Edit
@@ -1396,6 +1399,7 @@ en:
     Vulnerability report process: Vulnerability report process
     Warning flags: Warning flags
     Working build system: Working build system
+    General_project_info: General
   criterion_status:
     Met: Met
     Unmet: Unmet

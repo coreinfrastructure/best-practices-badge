@@ -42,6 +42,7 @@ de:
         analysis_failed:
           one: 'Warnung: Automatisierte Analyse für 1 Feld fehlgeschlagen (%{fields}). Ihre anderen Änderungen wurden gespeichert.'
           other: 'Warnung: Automatisierte Analyse für %{count} Felder fehlgeschlagen (%{fields}). Ihre anderen Änderungen wurden gespeichert.'
+      save_and_continue_tooltip: Führt Automatisierung aus, um unbekannte Werte zu füllen
     show:
       section_selector: Abschnitt
       cdla_permissive_20_html: Diese Daten sind unter der <a href="https://cdla.dev/permissive-2-0/" >Community Data License Agreement – Permissive, Version 2.0 (CDLA-Permissive-2.0)</a> verfügbar. Dies bedeutet, dass ein Datenempfänger die Daten mit oder ohne Änderungen weitergeben darf, solange der Datenempfänger den Text dieser Vereinbarung mit den weitergegebenen Daten zur Verfügung stellt. Bitte nennen Sie %{user} und die OpenSSF Best Practices Badge-Mitwirkenden als Urheber.<br><br>
@@ -71,9 +72,11 @@ de:
       github_repo_label: Ein GitHub-Repository auswählen (optional)
       submit: Projekt einreichen
       badge_series: Badge-Serie
-      badge_series_description: Sie können auswählen, mit welcher Badge-Serie Sie beginnen möchten.
+      badge_series_description: Sie können wählen, mit welcher Badge-Serie Sie beginnen möchten. Die Baseline-Serie ist eine minimale Checkliste, die sich nur auf MUSS-Sicherheitsanforderungen konzentriert und teilweise aus globalen Cybersicherheitsvorschriften und -rahmenwerken abgeleitet ist. Die Metal-Serie ist ein umfangreicherer Kriterienkatalog, der Empfehlungen und Qualitätsfragen enthält, die sich auf die Sicherheit auswirken, und teilweise aus den Erfahrungen sicherer FLOSS-Projekte abgeleitet ist. Beide konzentrieren sich auf Sicherheit, und wir ermutigen Projekte, letztendlich beide zu absolvieren; Sie wählen, wo Sie beginnen.
       badge_series_metal: Metall (passing, silver, gold)
       badge_series_baseline: Baseline (baseline-1, baseline-2, baseline-3)
+      github_reconnect_html: Wir konnten Ihre GitHub-Repositories nicht laden. Ihre GitHub-Sitzung ist möglicherweise abgelaufen.
+      github_reconnect_link: Erneut mit GitHub verbinden
   report_mailer:
     unsubscribe_notice_html: 'Um sich von diesen E-Mail-Benachrichtigungen abzumelden, besuchen Sie bitte: <a href="%{unsubscribe_url}">%{unsubscribe_url}</a>'
     unsubscribe_notice_text: 'Um sich von diesen E-Mail-Benachrichtigungen abzumelden, besuchen Sie bitte: %{unsubscribe_url}'
@@ -336,6 +339,7 @@ de:
   headings:
     Controls: Steuerelemente
     General: Allgemein
+    General_project_info: Allgemein
   activerecord:
     errors:
       messages:

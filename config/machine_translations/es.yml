@@ -246,9 +246,11 @@ es:
       github_repo_label: Seleccione un repositorio de GitHub (opcional)
       submit: Enviar Proyecto
       badge_series: Serie de insignias
-      badge_series_description: Puede elegir con qué serie de insignias comenzar.
+      badge_series_description: Puede elegir con qué serie de insignias comenzar. La serie baseline es una lista de verificación más minimalista que se enfoca únicamente en los requisitos de seguridad DEBE y se deriva en parte de regulaciones y marcos de ciberseguridad globales. La serie metal es un conjunto más amplio de criterios que incluye sugerencias y cuestiones de calidad que impactan la seguridad, y se deriva en parte de las experiencias de proyectos FLOSS seguros. Ambas se enfocan en la seguridad, y alentamos a los proyectos a hacer ambas eventualmente; usted elige por dónde empezar.
       badge_series_metal: Metal (aprobado, plata, oro)
       badge_series_baseline: Línea de base (línea de base-1, línea de base-2, línea de base-3)
+      github_reconnect_html: No pudimos cargar sus repositorios de GitHub. Su sesión de GitHub puede haber expirado.
+      github_reconnect_link: Reconectar a GitHub
     delete_form:
       info_html: "<b>Advertencia</b> - está a punto de <b>eliminar permanentemente</b> la entrada de insignia para %{project_name}. Esto <b>no</b> se puede deshacer fácilmente, por lo que recomendamos que <b>no</b> elimine esta entrada de insignia. No necesita completar todos los criterios de la insignia de una vez; la mayoría de los proyectos obtienen la insignia identificando y cumpliendo los criterios faltantes a lo largo del tiempo. Si cree que algunos criterios no tienen sentido, no puede averiguar cómo cumplir con algunos criterios, o tiene otras preguntas, por favor contáctenos. Tenga en cuenta que no todos los criterios deben cumplirse para obtener una insignia (algunos criterios DEBERÍAN cumplirse o simplemente son SUGERIDOS). Si no desea que se le envíen recordatorios por correo electrónico, simplemente edite la entrada del proyecto y desactive los recordatorios por correo electrónico. Sin embargo, si está <i>seguro</i> de que desea <i>eliminar permanentemente</i> esta entrada de insignia, por favor explique a continuación por qué la está eliminando permanentemente."
       rationale_placeholder: "(Requerido) Por favor explique por qué está eliminando permanentemente esta entrada de insignia del proyecto, y si corresponde, qué desearía que hiciéramos en su lugar (20+ caracteres, 15+ caracteres sin espacios)"
@@ -284,6 +286,7 @@ es:
         analysis_failed:
           one: 'Advertencia: El análisis automatizado falló para 1 campo (%{fields}). Sus otros cambios se guardaron.'
           other: 'Advertencia: El análisis automatizado falló para %{count} campos (%{fields}). Sus otros cambios se guardaron.'
+      save_and_continue_tooltip: Ejecuta la automatización para llenar valores desconocidos
     show:
       section_selector: Sección
       edit: Editar
@@ -1314,6 +1317,7 @@ es:
     Other: Otro
     Secure release: Lanzamiento seguro
     Working build system: Sistema de construcción funcional
+    General_project_info: General
   criterion_status:
     Met: Cumplido
     Unmet: No cumplido

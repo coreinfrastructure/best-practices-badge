@@ -39,6 +39,7 @@ fr:
         analysis_failed:
           one: 'Avertissement : L''analyse automatisée a échoué pour 1 champ (%{fields}). Vos autres modifications ont été enregistrées.'
           other: 'Avertissement : L''analyse automatisée a échoué pour %{count} champs (%{fields}). Vos autres modifications ont été enregistrées.'
+      save_and_continue_tooltip: Exécute l'automatisation pour remplir les valeurs inconnues
     show:
       section_selector: Section
       cdla_permissive_20_html: Ces données sont disponibles sous la licence <a href="https://cdla.dev/permissive-2-0/" >Community Data License Agreement – Permissive, Version 2.0 (CDLA-Permissive-2.0)</a>. Cela signifie qu'un destinataire de données peut partager les données, avec ou sans modifications, à condition que le destinataire de données rende disponible le texte de cet accord avec les données partagées. Veuillez créditer %{user} et les contributeurs du badge des meilleures pratiques de la OpenSSF.<br><br>
@@ -68,9 +69,11 @@ fr:
       github_repo_label: Sélectionner un dépôt GitHub (optionnel)
       submit: Soumettre le projet
       badge_series: Série de badges
-      badge_series_description: Vous pouvez choisir la série de badges avec laquelle commencer.
+      badge_series_description: Vous pouvez choisir avec quelle série de badges commencer. La série baseline est une liste de contrôle plus minimale se concentrant uniquement sur les exigences de sécurité DOIT et est dérivée en partie de réglementations et cadres de cybersécurité mondiaux. La série metal est un ensemble plus large de critères qui inclut des suggestions et des problèmes de qualité qui impactent la sécurité, et est dérivée en partie des expériences de projets FLOSS sécurisés. Les deux se concentrent sur la sécurité, et nous encourageons les projets à éventuellement faire les deux ; vous choisissez par où commencer.
       badge_series_metal: Métal (basique, argent, or)
       badge_series_baseline: Baseline (baseline-1, baseline-2, baseline-3)
+      github_reconnect_html: Nous n'avons pas pu charger vos dépôts GitHub. Votre session GitHub a peut-être expiré.
+      github_reconnect_link: Se reconnecter à GitHub
   report_mailer:
     unsubscribe_notice_html: 'Pour vous désabonner de ces notifications par email, veuillez visiter : <a href="%{unsubscribe_url}">%{unsubscribe_url}</a>'
     unsubscribe_notice_text: 'Pour vous désabonner de ces notifications par email, veuillez visiter : %{unsubscribe_url}'
@@ -265,6 +268,7 @@ fr:
   headings:
     Controls: Contrôles
     General: Général
+    General_project_info: Général
   activerecord:
     errors:
       messages:

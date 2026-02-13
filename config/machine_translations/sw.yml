@@ -131,9 +131,11 @@ sw:
       github_repo_label: Chagua hazina ya GitHub (si lazima)
       submit: Wasilisha Mradi
       badge_series: Mfululizo wa nishani
-      badge_series_description: Unaweza kuchagua ni mfululizo upi wa nishani wa kuanza nao.
+      badge_series_description: Unaweza kuchagua ni mfululizo wa nishani upi kuanza nao. Mfululizo wa msingi ni orodha ya ukaguzi mdogo zaidi inayozingatia mahitaji ya usalama ya LAZIMA pekee na imetokana kwa sehemu kutoka kwa kanuni za usalama wa mtandao na miundo kote ulimwenguni. Mfululizo wa chuma ni seti kubwa zaidi ya vigezo ambavyo vinajumuisha mapendekezo na masuala ya ubora ambayo yanaathiri usalama, na imetokana kwa sehemu kutoka uzoefu wa miradi ya FLOSS salama. Zote mbili zinazingatia usalama, na tunawahimiza miradi hatimaye kufanya zote mbili; unachagua mahali pa kuanza.
       badge_series_metal: Chuma (kuhitimu, fedha, dhahabu)
       badge_series_baseline: Msingi (msingi-1, msingi-2, msingi-3)
+      github_reconnect_html: Hatukuweza kupakia hifadhi zako za GitHub. Kipindi chako cha GitHub kinaweza kuwa kimeisha muda wake.
+      github_reconnect_link: Unganisha tena na GitHub
     delete_form:
       info_html: "<b>Onyo</b> - unakaribia <b>kufuta kabisa</b> ingizo la nishani kwa %{project_name}. Hii <b>HAIWEZI</b> kutendeka upya kwa urahisi, kwa hivyo tunapendekeza kwamba <b>USIFUTE</b> ingizo hili la nishani. Huhitaji kukamilisha vigezo vya nishani kwa pamoja; miradi mingi hupata nishani kwa kutambua na kukidhi vigezo vilivyokosekana kwa muda. Ikiwa unafikiri baadhi ya vigezo havifanyi maana, huwezi kuelewa jinsi ya kukidhi baadhi ya vigezo, au una maswali mengine, tafadhali wasiliana nasi. Kumbuka kwamba si vigezo vyote lazima vikidhiwe ili kupata nishani (baadhi ya vigezo VINAPASWA kukidhiwa au ni VIPENDEKEZWA tu). Ikiwa hutaki ukumbusho utumwe kwako kwa barua pepe, hariri tu ingizo la mradi na uzime ukumbusho wa barua pepe badala yake. Hata hivyo, ikiwa una <i>uhakika</i> kwamba unataka <i>kufuta kabisa</i> ingizo hili la nishani, tafadhali eleza hapa chini kwa nini unafuta kabisa."
       rationale_placeholder: "(Inahitajika) Tafadhali eleza kwa nini unafuta kabisa ingizo hili la nishani ya mradi, na ikiwa inafaa, unataka tufanye nini badala yake (herufi 20+, zisizo za nafasi 15+)"
@@ -169,6 +171,7 @@ sw:
         analysis_failed:
           one: 'Onyo: Uchambuzi wa kiatomati ulishindwa kwa sehemu 1 (%{fields}). Mabadiliko yako mengine yalihifadhiwa.'
           other: 'Onyo: Uchambuzi wa kiatomati ulishindwa kwa sehemu %{count} (%{fields}). Mabadiliko yako mengine yalihifadhiwa.'
+      save_and_continue_tooltip: Inaendesha automation kujaza thamani zisizojulikana
     show:
       section_selector: Sehemu
       edit: Hariri
@@ -1164,6 +1167,7 @@ sw:
     Vulnerability report process: Mchakato wa kuripoti udhaifu
     Warning flags: Bendera za maonyo
     Working build system: Mfumo wa ujenzi unaofanya kazi
+    General_project_info: Jumla
   criterion_status:
     Met: Umetimizwa
     Unmet: Haujatimizwa

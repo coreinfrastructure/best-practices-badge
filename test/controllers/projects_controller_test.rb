@@ -2929,6 +2929,28 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'Automated justification text', automated[0][:new_value]
   end
 
+  test 'save and continue passes automated fields in redirect URL' do
+    log_in_as(@user)
+
+    # Set repo_url to trigger TestForcedDetective non-forced auto-fill
+    @project.repo_url = 'https://example.com/test/auto-fill'
+    @project.description_good_status = CriterionStatus::UNKNOWN
+    @project.save!
+
+    # User sets description_good to Unknown and saves-and-continues;
+    # Chief should auto-fill it back to Met and the redirect should
+    # include the automated parameter so the edit page highlights it.
+    patch project_path(@project, locale: :en), params: {
+      criteria_level: 'passing',
+      project: { description_good_status: '0' },
+      continue: '1'
+    }
+
+    assert_response :redirect
+    assert_match(/automated=.*description_good_status/, response.location,
+                 'Redirect URL must include automated fields for highlighting')
+  end
+
   private
 
   # Build an OmniAuth hash for a GitHub user fixture.

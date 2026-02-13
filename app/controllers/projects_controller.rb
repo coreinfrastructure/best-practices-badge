@@ -2092,8 +2092,13 @@ class ProjectsController < ApplicationController
     # "Save and Continue" - go back to edit
     elsif params[:continue]
       flash[:info] = t('projects.edit.successfully_updated')
+      redirect_params = { locale: params[:locale] }
+      if @automated_fields&.any?
+        redirect_params[:automated] =
+          @automated_fields.map { |r| r[:field].to_s }.join(',')
+      end
       redirect_to edit_project_section_path(@project, section,
-                                            locale: params[:locale]) + url_anchor
+                                            **redirect_params) + url_anchor
     else
       # Normal "Save and Exit" - go to show page
       redirect_to project_section_path(@project, section, locale: params[:locale]),

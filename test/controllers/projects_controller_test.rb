@@ -1984,8 +1984,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
             continue: 'Quality'
           }
     assert_response :redirect
-    # Should redirect to baseline-1/edit with anchor
-    assert_redirected_to edit_project_section_path(@project, 'baseline-1') + '#Quality'
+    # Should redirect to baseline-1/edit with anchor (may include automated= param)
+    assert_match %r{/baseline-1/edit(\?[^#]*)?#Quality\z}, response.location
   end
 
   # Test SQL fieldname quoting functionality

@@ -25,9 +25,6 @@
   <%= bootstrap_form_for project, url: update_project_path(project, section: criteria_level) do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
     <%= f.hidden_field :lock_version %>
-    <%# Store automation state across save-and-continue (just field names) %>
-    <%= hidden_field_tag :automated_fields, (@automated_fields || []).map { |f| f[:field] }.join(',') %>
-    <%= hidden_field_tag :overridden_fields, (@overridden_fields || []).map { |f| f[:field] }.join(',') %>
 
   <br>
 

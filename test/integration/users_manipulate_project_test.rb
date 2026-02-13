@@ -188,8 +188,9 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
       continue: 'Save'
     }
 
-    # Should redirect to edit page without anchor (url_anchor returns '')
-    assert_redirected_to "/en/projects/#{project.id}/passing/edit"
+    # Should redirect to edit page (may include automated= query param)
+    assert_match %r{/en/projects/#{project.id}/passing/edit(\?automated=.*)?\z},
+                 response.location
     follow_redirect!
     assert_response :success
     assert_match 'Project was successfully updated', flash[:info]

@@ -646,9 +646,6 @@ class ProjectsController < ApplicationController
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   # rubocop:disable Metrics/PerceivedComplexity
   def update
-    # Restore automation state from hidden fields (for save-and-continue highlighting)
-    restore_automation_state_from_params
-
     # Only accept updates if there's no repo_url change OR if change is ok
     if repo_url_unchanged_or_change_allowed?
       # Send CDN purge early, to give it time to distribute purge request
@@ -1842,14 +1839,6 @@ class ProjectsController < ApplicationController
     when 'n/a', 'na' then CriterionStatus::NA
     when 'met' then CriterionStatus::MET
     end
-  end
-
-  # Restore automation state from hidden form fields
-  # This preserves highlighting across "save and continue"
-  # Validates that field names are legitimate project status fields
-  def restore_automation_state_from_params
-    @automated_fields = parse_and_validate_field_list(params[:automated_fields])
-    @overridden_fields = parse_and_validate_field_list(params[:overridden_fields])
   end
 
   # Parse comma-separated field list and validate field names

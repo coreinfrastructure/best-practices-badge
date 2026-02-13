@@ -146,12 +146,12 @@ class GithubBasicDetective < Detective
       # but if this really is the "main" repo (as claimed) then this is met.
       results[:osps_qa_01_01_status] = {
         value: CriterionStatus::MET, confidence: 3,
-        explanation: 'Repository is publcly available on GitHub.'
+        explanation: 'Repository is publicly available on GitHub.'
       }
       # If the main repo is on GitHub, then git will store this
       results[:osps_qa_01_02_status] = {
         value: CriterionStatus::MET, confidence: 3,
-        explanation: 'Repository git metadata is publcly available on GitHub.'
+        explanation: 'Repository git metadata is publicly available on GitHub.'
       }
 
       # Get basic evidence

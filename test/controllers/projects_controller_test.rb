@@ -1984,8 +1984,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
             continue: 'Quality'
           }
     assert_response :redirect
-    # Should redirect to baseline-1/edit with anchor
-    assert_redirected_to edit_project_section_path(@project, 'baseline-1') + '#Quality'
+    # Should redirect to baseline-1/edit with anchor (may include automated= param)
+    assert_match %r{/baseline-1/edit(\?[^#]*)?#Quality\z}, response.location
   end
 
   # Test SQL fieldname quoting functionality
@@ -2263,7 +2263,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 0, overrides.length # No overrides
   end
 
-  test 'find_automated_fields detects filled in unknowns' do
+  test 'categorize_automation_changes detects filled in unknowns' do
     log_in_as(@user)
     controller = ProjectsController.new
 
@@ -2272,6 +2272,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     @project.save!
 
     controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
 
     # Capture original values
     original = { contribution_status: CriterionStatus::UNKNOWN }
@@ -2279,10 +2280,42 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     # Change to Met (simulating Chief fill-in)
     @project.contribution_status = CriterionStatus::MET
 
-    # Find automated fields
-    automated = controller.send(:find_automated_fields, original)
+    # Categorize automation changes
+    controller.send(:categorize_automation_changes, original)
 
+    automated = controller.instance_variable_get(:@automated_fields)
+    overridden = controller.instance_variable_get(:@overridden_fields)
     assert_includes automated.pluck(:field), :contribution_status
+    assert_empty overridden
+  end
+
+  test 'categorize_automation_changes detects overrides on initial edit' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+
+    # Set up project with a real (non-Unknown) status value
+    @project.contribution_status = CriterionStatus::MET
+    @project.save!
+
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+
+    # Capture original values with a real value
+    original = { contribution_status: CriterionStatus::MET }
+
+    # Chief overrides Met -> Unmet (simulating forced override)
+    @project.contribution_status = CriterionStatus::UNMET
+
+    # Categorize automation changes
+    controller.send(:categorize_automation_changes, original)
+
+    automated = controller.instance_variable_get(:@automated_fields)
+    overridden = controller.instance_variable_get(:@overridden_fields)
+    assert_empty automated
+    assert_equal 1, overridden.length
+    assert_equal :contribution_status, overridden[0][:field]
+    assert_equal CriterionStatus::MET, overridden[0][:old_value]
+    assert_equal CriterionStatus::UNMET, overridden[0][:new_value]
   end
 
   test 'run_save_automation catches chief exceptions' do
@@ -2566,7 +2599,6 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     project = projects(:perfect)
     controller = ProjectsController.new
     controller.instance_variable_set(:@project, project)
-    original_values = { contribution_status: CriterionStatus::UNKNOWN }
 
     # Test valid status strings (external representation)
     test_cases = {
@@ -2586,7 +2618,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       project.contribution_status = CriterionStatus::UNKNOWN
       params = { 'contribution_status' => input }
       modified = controller.send(:apply_query_string_proposals_to_project,
-                                 project, params, '0', original_values)
+                                 project, params, '0')
 
       assert_includes modified, :contribution_status,
                       "Status '#{input}' should be accepted"
@@ -2599,7 +2631,6 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     project = projects(:perfect)
     controller = ProjectsController.new
     controller.instance_variable_set(:@project, project)
-    original_values = { contribution_status: CriterionStatus::UNKNOWN }
 
     # Test invalid status values
     invalid_values = %w[0 1 2 3 invalid true false 99 yes no]
@@ -2608,7 +2639,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       project.contribution_status = CriterionStatus::UNKNOWN
       params = { 'contribution_status' => invalid_value }
       modified = controller.send(:apply_query_string_proposals_to_project,
-                                 project, params, '0', original_values)
+                                 project, params, '0')
 
       assert_not_includes modified, :contribution_status,
                           "Invalid status '#{invalid_value}' should be rejected"
@@ -2621,7 +2652,6 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     project = projects(:perfect)
     controller = ProjectsController.new
     controller.instance_variable_set(:@project, project)
-    original_values = { contribution_justification: '' }
 
     justifications = [
       'Found CONTRIBUTING.md file',
@@ -2634,7 +2664,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       project.contribution_justification = ''
       params = { 'contribution_justification' => just }
       modified = controller.send(:apply_query_string_proposals_to_project,
-                                 project, params, '0', original_values)
+                                 project, params, '0')
 
       assert_includes modified, :contribution_justification,
                       "Justification should be accepted: #{just[0..30]}"
@@ -2647,7 +2677,6 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     project = projects(:perfect)
     controller = ProjectsController.new
     controller.instance_variable_set(:@project, project)
-    original_values = { name: '', license: '', description: '' }
 
     params = {
       'name' => 'New Project Name',
@@ -2656,7 +2685,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     }
 
     modified = controller.send(:apply_query_string_proposals_to_project,
-                               project, params, '0', original_values)
+                               project, params, '0')
 
     assert_includes modified, :name
     assert_includes modified, :license
@@ -2670,7 +2699,6 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     project = projects(:perfect)
     controller = ProjectsController.new
     controller.instance_variable_set(:@project, project)
-    original_values = {}
 
     # Silver (level '1') should not accept passing (level '0') criteria
     params = {
@@ -2679,7 +2707,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     }
 
     modified = controller.send(:apply_query_string_proposals_to_project,
-                               project, params, '1', original_values)
+                               project, params, '1')
 
     # name should be accepted (always automatable)
     assert_includes modified, :name
@@ -2692,7 +2720,6 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     project = projects(:perfect)
     controller = ProjectsController.new
     controller.instance_variable_set(:@project, project)
-    original_values = {}
 
     # Mix valid fields with unrelated params
     params = {
@@ -2704,7 +2731,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     }
 
     modified = controller.send(:apply_query_string_proposals_to_project,
-                               project, params, '0', original_values)
+                               project, params, '0')
 
     # Only 'name' should be accepted
     assert_equal 1, modified.length
@@ -2716,10 +2743,6 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     project = projects(:perfect)
     controller = ProjectsController.new
     controller.instance_variable_set(:@project, project)
-    original_values = {
-      contribution_status: CriterionStatus::UNKNOWN,
-      name: ''
-    }
 
     # Set up project state
     project.contribution_status = CriterionStatus::UNKNOWN
@@ -2731,7 +2754,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     }
 
     modified = controller.send(:apply_query_string_proposals_to_project,
-                               project, params, '0', original_values)
+                               project, params, '0')
 
     # Valid fields should be accepted
     assert_includes modified, :name
@@ -2749,10 +2772,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     controller = ProjectsController.new
     controller.instance_variable_set(:@project, project)
 
-    # Store original values
-    original_name = project.name
     original_status = project.contribution_status
-    original_values = { name: original_name, contribution_status: original_status }
 
     params = {
       'name' => '',
@@ -2762,7 +2782,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     }
 
     modified = controller.send(:apply_query_string_proposals_to_project,
-                               project, params, '0', original_values)
+                               project, params, '0')
 
     # Non-status blank values should be accepted
     assert_includes modified, :name
@@ -2781,7 +2801,6 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     project = projects(:perfect)
     controller = ProjectsController.new
     controller.instance_variable_set(:@project, project)
-    original_values = {}
 
     params = {
       'name' => 'New Name',
@@ -2790,7 +2809,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     }
 
     modified = controller.send(:apply_query_string_proposals_to_project,
-                               project, params, '0', original_values)
+                               project, params, '0')
 
     assert_equal 3, modified.length
     assert_includes modified, :name
@@ -2802,7 +2821,6 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     project = projects(:perfect)
     controller = ProjectsController.new
     controller.instance_variable_set(:@project, project)
-    original_values = {}
 
     # Test baseline-1 section - use a field that actually exists in baseline-1
     params = {
@@ -2811,11 +2829,126 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     }
 
     modified = controller.send(:apply_query_string_proposals_to_project,
-                               project, params, 'baseline-1', original_values)
+                               project, params, 'baseline-1')
 
     # Both should be accepted for baseline-1
     assert_includes modified, :osps_ac_01_01_status
     assert_includes modified, :name
+  end
+
+  test 'apply_query_string_automation works on revisit (section saved)' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+
+    # Simulate a revisit: set the saved flag so level_already_saved? is true
+    @project.update_column(:passing_saved, true)
+
+    # Original contribution_status is Unknown
+    @project.contribution_status = CriterionStatus::UNKNOWN
+    @project.save!
+
+    # Simulate query string params with a proposal
+    fake_params = ActionController::Parameters.new(
+      'contribution_status' => 'Met',
+      'controller' => 'projects', 'action' => 'edit'
+    )
+    controller.define_singleton_method(:params) { fake_params }
+
+    controller.send(:apply_query_string_automation)
+
+    # Field should be set and tracked as automated
+    assert_equal CriterionStatus::MET, @project.contribution_status
+    automated = controller.instance_variable_get(:@automated_fields)
+    assert_equal 1, automated.length
+    assert_equal :contribution_status, automated[0][:field]
+  end
+
+  test 'apply_query_string_automation works on first edit (section not saved)' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+
+    # Ensure saved flag is false (first edit)
+    @project.update_column(:passing_saved, false)
+
+    # Original contribution_status is Unknown
+    @project.contribution_status = CriterionStatus::UNKNOWN
+    @project.save!
+
+    # Simulate query string params with a proposal
+    fake_params = ActionController::Parameters.new(
+      'contribution_status' => 'Met',
+      'controller' => 'projects', 'action' => 'edit'
+    )
+    controller.define_singleton_method(:params) { fake_params }
+
+    controller.send(:apply_query_string_automation)
+
+    # Field should be set and tracked as automated
+    assert_equal CriterionStatus::MET, @project.contribution_status
+    automated = controller.instance_variable_get(:@automated_fields)
+    assert_equal 1, automated.length
+    assert_equal :contribution_status, automated[0][:field]
+  end
+
+  test 'apply_query_string_automation maps justification to status field' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+
+    @project.update_column(:passing_saved, true)
+
+    # Clear justification so the proposal is a real change
+    @project.contribution_justification = ''
+    @project.save!
+
+    # Simulate query string with a _justification field
+    fake_params = ActionController::Parameters.new(
+      'contribution_justification' => 'Automated justification text',
+      'controller' => 'projects', 'action' => 'edit'
+    )
+    controller.define_singleton_method(:params) { fake_params }
+
+    controller.send(:apply_query_string_automation)
+
+    # The justification value should be applied
+    assert_equal 'Automated justification text',
+                 @project.contribution_justification
+
+    # The automated_fields entry should map to the _status counterpart
+    automated = controller.instance_variable_get(:@automated_fields)
+    assert_equal 1, automated.length
+    assert_equal :contribution_status, automated[0][:field]
+    assert_equal 'Automated justification text', automated[0][:new_value]
+  end
+
+  test 'save and continue passes automated fields in redirect URL' do
+    log_in_as(@user)
+
+    # Set repo_url to trigger TestForcedDetective non-forced auto-fill
+    @project.repo_url = 'https://example.com/test/auto-fill'
+    @project.description_good_status = CriterionStatus::UNKNOWN
+    @project.save!
+
+    # User sets description_good to Unknown and saves-and-continues;
+    # Chief should auto-fill it back to Met and the redirect should
+    # include the automated parameter so the edit page highlights it.
+    patch project_path(@project, locale: :en), params: {
+      criteria_level: 'passing',
+      project: { description_good_status: '0' },
+      continue: '1'
+    }
+
+    assert_response :redirect
+    assert_match(/automated=.*description_good_status/, response.location,
+                 'Redirect URL must include automated fields for highlighting')
   end
 
   private

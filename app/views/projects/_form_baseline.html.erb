@@ -32,9 +32,6 @@
   <%= bootstrap_form_for project, url: update_project_path(project, section: criteria_level) do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
     <%= f.hidden_field :lock_version %>
-    <%# Store automation state across save-and-continue (just field names) %>
-    <%= hidden_field_tag :automated_fields, (@automated_fields || []).map { |f| f[:field] }.join(',') %>
-    <%= hidden_field_tag :overridden_fields, (@overridden_fields || []).map { |f| f[:field] }.join(',') %>
 
   <br>
 
@@ -50,7 +47,7 @@
              }) %>
       <div class="panel-collapse collapse in">
         <ul class="list-group">
-          <li class="list-group-item"><h3 id="section_identification"><%= t('headings.Identification') %></h3>
+          <li class="list-group-item"><h3 id="section_general_project_info"><%= t('headings.General_project_info') %></h3>
             <%= render(partial: 'form_basics',
                  locals:
                    {
@@ -64,8 +61,9 @@
         <% unless view_only %>
           <div class="panel-footer text-center">
             <%= t 'projects.edit.submit_cdla_permissive_20_html' %>
-            <%= f.button t('projects.edit.save_and_continue'), type: 'submit', name: 'continue',
-                value: 'controls', class:"btn btn-success btn-submit" %>
+            <%= f.button "#{t('projects.edit.save_and_continue')} #{ApplicationHelper::ROBOT_EMOJI_SAFE}".html_safe, type: 'submit', name: 'continue',
+                value: 'controls', class:"btn btn-success btn-submit",
+                title: t('projects.edit.save_and_continue_tooltip') %>
             <%= f.submit t('projects.edit.submit_and_exit'), class:"btn btn-success btn-submit" %>
           </div>
         <% end %>
@@ -105,8 +103,9 @@
               user: project.user_display_name %>
       <% else %>
         <%= t 'projects.edit.submit_cdla_permissive_20_html' %>
-        <%= f.button t('projects.edit.save_and_continue'), type: 'submit', name: 'continue',
-          value: 'Save', class:"btn btn-success btn-submit" %>
+        <%= f.button "#{t('projects.edit.save_and_continue')} #{ApplicationHelper::ROBOT_EMOJI_SAFE}".html_safe, type: 'submit', name: 'continue',
+          value: 'Save', class:"btn btn-success btn-submit",
+          title: t('projects.edit.save_and_continue_tooltip') %>
         <%= f.submit t('projects.edit.submit_and_exit'), class:"btn btn-success btn-submit" %>
       <% end %>
       </div>

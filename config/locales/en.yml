@@ -573,6 +573,7 @@ en:
         static_analysis. Please add
         a justification for this criterion.
       save_and_continue: Save (and continue)
+      save_and_continue_tooltip: Runs automation to fill unknown values
       submit_and_exit: Submit (and exit)
       submit_cc_by_3plus_html: >-
         By submitting this data about the project you agree to
@@ -3725,6 +3726,7 @@ en:
       internationalization
     Analysis: Analysis
     Automated test suite: Automated test suite
+    General_project_info: General
     Identification: Identification
     Prerequisites: Prerequisites
     Basic project website content: Basic project website content

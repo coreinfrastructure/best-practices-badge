@@ -1657,14 +1657,22 @@ class ProjectsController < ApplicationController
     )
     return if modified.empty?
 
-    # Track which proposals actually changed values
+    # Track which proposals actually changed values.
+    # Map _justification fields to their _status counterpart so the
+    # view (which highlights by status symbol) can find them.
     @automated_fields ||= []
     modified.each do |field_name|
       new_value = @project.public_send(field_name)
       next if original_values[field_name] == new_value
 
+      highlight_field =
+        if field_name.to_s.end_with?('_justification')
+          field_name.to_s.sub('_justification', '_status').to_sym
+        else
+          field_name
+        end
       @automated_fields << {
-        field: field_name, new_value: new_value, explanation: nil
+        field: highlight_field, new_value: new_value, explanation: nil
       }
     end
   end

@@ -2896,6 +2896,39 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal :contribution_status, automated[0][:field]
   end
 
+  test 'apply_query_string_automation maps justification to status field' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+
+    @project.update_column(:passing_saved, true)
+
+    # Clear justification so the proposal is a real change
+    @project.contribution_justification = ''
+    @project.save!
+
+    # Simulate query string with a _justification field
+    fake_params = ActionController::Parameters.new(
+      'contribution_justification' => 'Automated justification text',
+      'controller' => 'projects', 'action' => 'edit'
+    )
+    controller.define_singleton_method(:params) { fake_params }
+
+    controller.send(:apply_query_string_automation)
+
+    # The justification value should be applied
+    assert_equal 'Automated justification text',
+                 @project.contribution_justification
+
+    # The automated_fields entry should map to the _status counterpart
+    automated = controller.instance_variable_get(:@automated_fields)
+    assert_equal 1, automated.length
+    assert_equal :contribution_status, automated[0][:field]
+    assert_equal 'Automated justification text', automated[0][:new_value]
+  end
+
   private
 
   # Build an OmniAuth hash for a GitHub user fixture.

@@ -22,16 +22,25 @@
     <%= render 'shared/error_messages', object: f.object %>
     <% if current_user.provider == 'github' %>
       <br>
-      <%= raw t('.may_select_html') %>
-      <!-- GitHub repo dropdown (not model-bound); JS copies value to repo_url -->
-      <div class="form-group">
-        <label for="github_repo_selector"><%= t('.github_repo_label') %></label>
-        <%= select_tag :github_repo,
-              grouped_options_for_select(github_repo_select_groups),
-              prompt: t('.select_one_github'),
-              id: 'github_repo_selector',
-              class: 'form-control' %>
-      </div>
+      <% repo_groups = github_repo_select_groups %>
+      <% if repo_groups.nil? %>
+        <p><%= t('.github_reconnect_html') %>
+        <%= link_to t('.github_reconnect_link'),
+              "/auth/github?locale=#{I18n.locale}",
+              method: 'post', class: 'btn btn-sm btn-default' %>
+        </p>
+      <% elsif repo_groups.present? %>
+        <%= raw t('.may_select_html') %>
+        <!-- GitHub repo dropdown (not model-bound); JS copies value to repo_url -->
+        <div class="form-group">
+          <label for="github_repo_selector"><%= t('.github_repo_label') %></label>
+          <%= select_tag :github_repo,
+                grouped_options_for_select(repo_groups),
+                prompt: t('.select_one_github'),
+                id: 'github_repo_selector',
+                class: 'form-control' %>
+        </div>
+      <% end %>
     <% end %>
     <span><%= f.label :repo_url, t('.url_of_repo') %></span>
     <%= f.text_field :repo_url, class: "form-control",

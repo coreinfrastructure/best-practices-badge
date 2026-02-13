@@ -2599,7 +2599,6 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     project = projects(:perfect)
     controller = ProjectsController.new
     controller.instance_variable_set(:@project, project)
-    original_values = { contribution_status: CriterionStatus::UNKNOWN }
 
     # Test valid status strings (external representation)
     test_cases = {
@@ -2619,7 +2618,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       project.contribution_status = CriterionStatus::UNKNOWN
       params = { 'contribution_status' => input }
       modified = controller.send(:apply_query_string_proposals_to_project,
-                                 project, params, '0', original_values)
+                                 project, params, '0')
 
       assert_includes modified, :contribution_status,
                       "Status '#{input}' should be accepted"
@@ -2632,7 +2631,6 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     project = projects(:perfect)
     controller = ProjectsController.new
     controller.instance_variable_set(:@project, project)
-    original_values = { contribution_status: CriterionStatus::UNKNOWN }
 
     # Test invalid status values
     invalid_values = %w[0 1 2 3 invalid true false 99 yes no]
@@ -2641,7 +2639,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       project.contribution_status = CriterionStatus::UNKNOWN
       params = { 'contribution_status' => invalid_value }
       modified = controller.send(:apply_query_string_proposals_to_project,
-                                 project, params, '0', original_values)
+                                 project, params, '0')
 
       assert_not_includes modified, :contribution_status,
                           "Invalid status '#{invalid_value}' should be rejected"
@@ -2654,7 +2652,6 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     project = projects(:perfect)
     controller = ProjectsController.new
     controller.instance_variable_set(:@project, project)
-    original_values = { contribution_justification: '' }
 
     justifications = [
       'Found CONTRIBUTING.md file',
@@ -2667,7 +2664,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       project.contribution_justification = ''
       params = { 'contribution_justification' => just }
       modified = controller.send(:apply_query_string_proposals_to_project,
-                                 project, params, '0', original_values)
+                                 project, params, '0')
 
       assert_includes modified, :contribution_justification,
                       "Justification should be accepted: #{just[0..30]}"
@@ -2680,7 +2677,6 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     project = projects(:perfect)
     controller = ProjectsController.new
     controller.instance_variable_set(:@project, project)
-    original_values = { name: '', license: '', description: '' }
 
     params = {
       'name' => 'New Project Name',
@@ -2689,7 +2685,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     }
 
     modified = controller.send(:apply_query_string_proposals_to_project,
-                               project, params, '0', original_values)
+                               project, params, '0')
 
     assert_includes modified, :name
     assert_includes modified, :license
@@ -2703,7 +2699,6 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     project = projects(:perfect)
     controller = ProjectsController.new
     controller.instance_variable_set(:@project, project)
-    original_values = {}
 
     # Silver (level '1') should not accept passing (level '0') criteria
     params = {
@@ -2712,7 +2707,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     }
 
     modified = controller.send(:apply_query_string_proposals_to_project,
-                               project, params, '1', original_values)
+                               project, params, '1')
 
     # name should be accepted (always automatable)
     assert_includes modified, :name
@@ -2725,7 +2720,6 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     project = projects(:perfect)
     controller = ProjectsController.new
     controller.instance_variable_set(:@project, project)
-    original_values = {}
 
     # Mix valid fields with unrelated params
     params = {
@@ -2737,7 +2731,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     }
 
     modified = controller.send(:apply_query_string_proposals_to_project,
-                               project, params, '0', original_values)
+                               project, params, '0')
 
     # Only 'name' should be accepted
     assert_equal 1, modified.length
@@ -2749,10 +2743,6 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     project = projects(:perfect)
     controller = ProjectsController.new
     controller.instance_variable_set(:@project, project)
-    original_values = {
-      contribution_status: CriterionStatus::UNKNOWN,
-      name: ''
-    }
 
     # Set up project state
     project.contribution_status = CriterionStatus::UNKNOWN
@@ -2764,7 +2754,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     }
 
     modified = controller.send(:apply_query_string_proposals_to_project,
-                               project, params, '0', original_values)
+                               project, params, '0')
 
     # Valid fields should be accepted
     assert_includes modified, :name
@@ -2782,10 +2772,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     controller = ProjectsController.new
     controller.instance_variable_set(:@project, project)
 
-    # Store original values
-    original_name = project.name
     original_status = project.contribution_status
-    original_values = { name: original_name, contribution_status: original_status }
 
     params = {
       'name' => '',
@@ -2795,7 +2782,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     }
 
     modified = controller.send(:apply_query_string_proposals_to_project,
-                               project, params, '0', original_values)
+                               project, params, '0')
 
     # Non-status blank values should be accepted
     assert_includes modified, :name
@@ -2814,7 +2801,6 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     project = projects(:perfect)
     controller = ProjectsController.new
     controller.instance_variable_set(:@project, project)
-    original_values = {}
 
     params = {
       'name' => 'New Name',
@@ -2823,7 +2809,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     }
 
     modified = controller.send(:apply_query_string_proposals_to_project,
-                               project, params, '0', original_values)
+                               project, params, '0')
 
     assert_equal 3, modified.length
     assert_includes modified, :name
@@ -2835,7 +2821,6 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     project = projects(:perfect)
     controller = ProjectsController.new
     controller.instance_variable_set(:@project, project)
-    original_values = {}
 
     # Test baseline-1 section - use a field that actually exists in baseline-1
     params = {
@@ -2844,7 +2829,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     }
 
     modified = controller.send(:apply_query_string_proposals_to_project,
-                               project, params, 'baseline-1', original_values)
+                               project, params, 'baseline-1')
 
     # Both should be accepted for baseline-1
     assert_includes modified, :osps_ac_01_01_status

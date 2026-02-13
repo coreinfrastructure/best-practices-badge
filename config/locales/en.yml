@@ -514,7 +514,16 @@ en:
         can commit to the repository will be able to edit the
         badge information.
       badge_series: "Badge series"
-      badge_series_description: "You can choose which badge series to start with."
+      badge_series_description: >-
+        You can choose which badge series to start with.
+        The baseline series is a more minimal checklist focusing only
+        on MUST security requirements and is derived in part from global
+        cybersecurity regulations and frameworks.
+        The metal series is a larger set of criteria that
+        includes suggestions and quality issues that impact security,
+        and is derived in part from experiences of secure FLOSS projects.
+        Both focus on security, and we encourage projects to eventually
+        do both; you choose where to start.
       badge_series_metal: "Metal (passing, silver, gold)"
       badge_series_baseline: "Baseline (baseline-1, baseline-2, baseline-3)"
       sign_in_first: Please sign in to add a project!

@@ -70,10 +70,13 @@ module ProjectsHelper
   end
 
   # Build grouped options for GitHub repo selector (for select_tag).
-  # Returns array suitable for grouped_options_for_select with originals first.
-  # @return [Array] Array of [group_label, options_array] tuples
+  # Returns nil if GitHub token is stale (triggers reconnect prompt),
+  # or an array suitable for grouped_options_for_select with originals first.
+  # @return [Array, nil] Array of [group_label, options_array] tuples, or nil
   def github_repo_select_groups
     retrieved_repo_data = repo_data
+    return if retrieved_repo_data.nil?
+
     build_repo_select_groups(retrieved_repo_data, t('.original_repos'), t('.fork_repos'))
   end
 

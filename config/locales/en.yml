@@ -490,6 +490,10 @@ en:
         (you can disable reminders at any time if you want to).
       github_repo_label: "Select a GitHub repository (optional)"
       select_one_github: Select one of your GitHub repos
+      github_reconnect_html: >-
+        We could not load your GitHub repositories.
+        Your GitHub session may have expired.
+      github_reconnect_link: Reconnect to GitHub
       submit: Submit Project
       project_already_exists: This project already exists!
       url_of_homepage: >-

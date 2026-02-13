@@ -284,6 +284,80 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_select 'form', count: 1
   end
 
+  test 'github user with stale token sees reconnect link' do
+    github_user = users(:github_user)
+    OmniAuth.config.test_mode = true
+    OmniAuth.config.add_mock(:github, github_omniauth_hash(github_user))
+    get '/auth/github/callback'
+    # Stub API as 401 BEFORE visiting the page (VCR blocks unstubbed calls)
+    stub_request(:get, %r{api\.github\.com/user/repos})
+      .to_return(status: 401, body: '{"message":"Requires authentication"}')
+    # Clear token and visit — simulates expired GitHub token
+    get '/en/projects/new', params: { clear_token: '1' }
+    assert_response :success
+    # Should show reconnect link, not the repo dropdown
+    assert_select 'select#github_repo_selector', count: 0
+    assert_includes @response.body, 'Reconnect to GitHub'
+    assert_select 'a[data-method="post"][href*="/auth/github"]', count: 1
+  ensure
+    OmniAuth.config.test_mode = false
+    OmniAuth.config.mock_auth[:github] = nil
+  end
+
+  test 'clear_token param triggers reconnect prompt for github user' do
+    github_user = users(:github_user)
+    OmniAuth.config.test_mode = true
+    OmniAuth.config.add_mock(:github, github_omniauth_hash(github_user))
+    get '/auth/github/callback'
+    # With valid token, should not show reconnect
+    stub_request(:get, %r{api\.github\.com/user/repos})
+      .to_return(status: 200, body: '', headers: {})
+    get '/en/projects/new'
+    assert_response :success
+    assert_not_includes @response.body, 'Reconnect to GitHub'
+    # Now clear the token — should show reconnect
+    stub_request(:get, %r{api\.github\.com/user/repos})
+      .to_return(status: 401, body: '', headers: {})
+    get '/en/projects/new', params: { clear_token: '1' }
+    assert_response :success
+    assert_includes @response.body, 'Reconnect to GitHub'
+  ensure
+    OmniAuth.config.test_mode = false
+    OmniAuth.config.mock_auth[:github] = nil
+  end
+
+  # rubocop:disable Metrics/BlockLength
+  test 'github reconnect flow restores token and redirects to new project' do
+    github_user = users(:github_user)
+    OmniAuth.config.test_mode = true
+    OmniAuth.config.add_mock(:github, github_omniauth_hash(github_user))
+    get '/auth/github/callback'
+    # Clear token to simulate expiration
+    stub_request(:get, %r{api\.github\.com/user/repos})
+      .to_return(status: 401, body: '{"message":"Requires authentication"}')
+    get '/en/projects/new', params: { clear_token: '1' }
+    assert_response :success
+    assert_includes @response.body, 'Reconnect to GitHub'
+
+    # Reconnect: re-mock OmniAuth with fresh token, trigger callback
+    OmniAuth.config.add_mock(
+      :github, github_omniauth_hash(github_user, 'fresh_token_123')
+    )
+    get '/auth/github/callback'
+    assert_redirected_to new_project_url(locale: :en)
+
+    # Follow redirect — token is now fresh, repos should load
+    stub_request(:get, %r{api\.github\.com/user/repos})
+      .to_return(status: 200, body: '', headers: {})
+    follow_redirect!
+    assert_response :success
+    assert_not_includes @response.body, 'Reconnect to GitHub'
+  ensure
+    OmniAuth.config.test_mode = false
+    OmniAuth.config.mock_auth[:github] = nil
+  end
+  # rubocop:enable Metrics/BlockLength
+
   test 'find_homepage_url returns nil when no repo data' do
     controller = ProjectsController.new
     result = controller.send(:find_homepage_url, nil, 'https://github.com/test/repo')
@@ -1606,7 +1680,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_nil result
   end
 
-  test 'repo_data with empty repos returns nil' do
+  test 'repo_data with empty repos returns empty array' do
     controller = ProjectsController.new
 
     # Mock github client that returns empty array
@@ -1618,7 +1692,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     result = controller.send(:repo_data, mock_github)
 
-    assert_nil result
+    assert_equal [], result
   end
 
   test 'repo_data filters out existing projects' do
@@ -1663,7 +1737,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'user/newrepo', result[0][0] # Only the new repo should be returned
   end
 
-  test 'repo_data with nil repos returns nil' do
+  test 'repo_data with nil repos returns empty array' do
     controller = ProjectsController.new
 
     # Mock github client that returns nil
@@ -1675,7 +1749,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     result = controller.send(:repo_data, mock_github)
 
-    assert_nil result
+    assert_equal [], result
   end
 
   test 'repo_data sorts repositories by full_name' do
@@ -2742,6 +2816,25 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     # Both should be accepted for baseline-1
     assert_includes modified, :osps_ac_01_01_status
     assert_includes modified, :name
+  end
+
+  private
+
+  # Build an OmniAuth hash for a GitHub user fixture.
+  # @param user [User] GitHub user fixture
+  # @param token [String] OAuth token (default: 'test_token')
+  # @return [Hash] OmniAuth-compatible auth hash
+  def github_omniauth_hash(user, token = 'test_token')
+    {
+      'provider' => 'github',
+      'uid' => user.uid || '12345',
+      'credentials' => { 'token' => token },
+      'info' => {
+        'name' => user.name,
+        'nickname' => user.nickname,
+        'email' => user.email
+      }
+    }
   end
 end
 # rubocop:enable Metrics/ClassLength

@@ -551,6 +551,14 @@ class ProjectsController < ApplicationController
   def new
     use_secure_headers_override(:allow_github_form_action)
     store_location_and_locale
+    # Ensure reconnect-to-GitHub redirects back here after OAuth,
+    # even if store_location_and_locale missed due to query params.
+    session[:forwarding_url] = new_project_url
+    # Allow ?clear_token=1 to clear the GitHub token for debugging.
+    # This is safe in production: it only affects the current user's own
+    # session (less destructive than logging out), discloses nothing,
+    # and lets users/support trigger the "Reconnect to GitHub" flow.
+    session.delete(:user_token) if params[:clear_token]
     @project = Project.new
   end
 
@@ -1210,9 +1218,14 @@ class ProjectsController < ApplicationController
         type: 'public', sort: 'pushed', per_page: MAX_GITHUB_REPOS_FROM_USER
       )
     rescue Octokit::Unauthorized
+      # Clear stale token so next visit triggers re-authentication
+      begin
+        session.delete(:user_token)
+      rescue StandardError # rubocop:disable Lint/SuppressedException
+      end
       return
     end
-    return if repos.blank?
+    return [] if repos.blank?
 
     # Find & remove the repos already in our database.
     # We do this to make the user's job easier.

@@ -1861,16 +1861,16 @@ class ProjectsController < ApplicationController
   # @param data [Hash] Chief proposal with :value, :explanation, :forced
   # @param user_value [Object] Value user set
   # @param track_automated [Boolean] Whether to track automated fills (optimization)
-  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity
   def categorize_chief_proposal(field, data, user_value, track_automated = true)
     chief_value = data[:value]
 
     # Only track if Chief is changing what the user set
     return if user_value == chief_value
 
-    if user_value.present? && user_value != CriterionStatus::UNKNOWN
-      # Chief is overriding a real value user set - ORANGE
-      # Always track overrides (needed for warning messages)
+    if data[:forced] && user_value.present? && user_value != CriterionStatus::UNKNOWN
+      # Forced Chief override of user's real value - ORANGE
+      # Always track overrides (needed for warning messages on any save)
       @overridden_fields << {
         field: field,
         old_value: user_value,
@@ -1878,8 +1878,8 @@ class ProjectsController < ApplicationController
         explanation: data[:explanation]
       }
     elsif (user_value == CriterionStatus::UNKNOWN || user_value.blank?) && track_automated
-      # Chief is filling in an unknown - YELLOW
-      # Only track if we're continuing to edit (for highlighting)
+      # Chief filling an unknown value - YELLOW
+      # Only track on save-and-continue so user reviews before accepting
       @automated_fields << {
         field: field,
         new_value: chief_value,
@@ -1887,7 +1887,7 @@ class ProjectsController < ApplicationController
       }
     end
   end
-  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/MethodLength, Metrics/CyclomaticComplexity
 
   # Run Chief automation during save with override detection
   # @param changed_fields [Array<Symbol>] Fields that user modified
@@ -1905,19 +1905,27 @@ class ProjectsController < ApplicationController
     # Filter proposed changes to only fields in the current section
     current_section_changes = filter_changes_for_current_section(proposed_changes)
 
-    # Track which fields will be overridden BEFORE applying changes
+    # Categorize all proposals BEFORE applying changes.
+    # Forced overrides of real user values are always tracked (for warnings).
+    # Non-forced fills are tracked only on save-and-continue (for highlighting).
     @overridden_fields = []
     @automated_fields = []
 
     current_section_changes.each do |field, data|
-      # Skip non-forced suggestions
-      next unless data[:forced]
-
       categorize_chief_proposal(field, data, user_set_values[field], track_automated)
     end
 
-    # Now apply Chief's changes (only for current section)
-    chief.apply_changes(@project, current_section_changes)
+    # For save-and-exit, only apply forced changes — non-forced proposals
+    # haven't been reviewed by the user and must not be persisted.
+    # For save-and-continue, apply everything; the edit form highlights
+    # unreviewed automation for the user to accept or change.
+    changes_to_apply =
+      if track_automated
+        current_section_changes
+      else
+        current_section_changes.select { |_, d| d[:forced] }
+      end
+    chief.apply_changes(@project, changes_to_apply)
 
     # Mark level as saved (automation ran)
     set_level_saved_flag(true)

@@ -84,21 +84,6 @@
       <%# Ownership transfer and collaborator management moved to
           /projects/:id/permissions/edit - a dedicated permissions form %>
 
-      <br><br>
-      <%= f.label :general_comments,
-                  t('projects.misc.general_comments.description') %><br>
-      <% if view_only %>
-        <div class="discussion-markdown" id="project_general_comments">
-          <%= markdown(project[:general_comments]) %>
-        </div>
-      <% else %>
-        <%= f.text_area :general_comments,
-                        class:"form-control", skip_label: true,
-                        lang: project.entry_locale, spellcheck: true,
-                        placeholder:
-                          t('projects.misc.general_comments.placeholder'),
-                        disabled: view_only %>
-      <% end %>
       <% unless view_only %>
         <div class="panel-footer text-center">
           <%= t 'projects.edit.submit_cdla_permissive_20_html' %>

@@ -11,6 +11,7 @@
               license_automated = automated_field_set.include?(:license)
               implementation_languages_automated = automated_field_set.include?(:implementation_languages)
               cpe_automated = automated_field_set.include?(:cpe)
+              general_comments_automated = automated_field_set.include?(:general_comments)
             %>
             <div class="hidable-text-entry <%= ApplicationHelper::HIGHLIGHT_AUTOMATED_CLASS if name_automated %>">
             <span><%= f.label :name, t('projects.form_basics.project_name.description') %></span>
@@ -300,4 +301,21 @@
                   skip_label: true, class:"form-control",
                   placeholder: t('projects.form_basics.cpe.placeholder'),
                   spellcheck: false, disabled: view_only %>
+            </div>
+
+            <div class="hidable-text-entry <%= ApplicationHelper::HIGHLIGHT_AUTOMATED_CLASS if general_comments_automated %>">
+            <span><%= f.label :general_comments, t('projects.misc.general_comments.description') %></span>
+            <%= ApplicationHelper::ROBOT_EMOJI_SAFE if general_comments_automated %>
+            <% if view_only %>
+              <div class="discussion-markdown" id="project_general_comments">
+                <%= markdown(project[:general_comments]) %>
+              </div>
+            <% else %>
+              <%= f.text_area :general_comments,
+                              class:"form-control", skip_label: true,
+                              lang: project.entry_locale, spellcheck: true,
+                              placeholder:
+                                t('projects.misc.general_comments.placeholder'),
+                              disabled: view_only %>
+            <% end %>
             </div>

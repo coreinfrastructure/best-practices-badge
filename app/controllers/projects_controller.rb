@@ -13,13 +13,14 @@ class ProjectsController < ApplicationController
 
   # Fields that can always be automated regardless of section being edited.
   # These are non-criteria fields that detectives can fill in (from their OUTPUTS).
-  # Based on detective analysis: name, license, description, implementation_languages, cpe
+  # Based on detective analysis: name, license, description, implementation_languages, cpe, general_comments
   ALWAYS_AUTOMATABLE = %i[
     name
     license
     description
     implementation_languages
     cpe
+    general_comments
   ].freeze
 
   # Map each section/level to the set of valid automatable field names.
@@ -195,16 +196,13 @@ class ProjectsController < ApplicationController
   PROJECT_BASE_FIELDS = (
     %i[
       id user_id name description homepage_url repo_url license
-      implementation_languages cpe entry_locale
+      implementation_languages cpe general_comments entry_locale
       created_at updated_at tiered_percentage
       achieved_passing_at achieved_silver_at achieved_gold_at
       lost_passing_at lost_silver_at lost_gold_at
       lock_version disabled_reminders last_reminder_at
     ] + Sections::LEVEL_SAVED_FLAGS.values
   ).freeze
-
-  # Levels that need additional metadata fields (beyond base fields)
-  LEVELS_WITH_EXTRA_METADATA = %w[0].freeze
 
   # Complete field lists for each section as SQL strings
   # Pre-computed as comma-separated strings to avoid runtime symbol-to-string
@@ -221,11 +219,6 @@ class ProjectsController < ApplicationController
         fields = PROJECT_BASE_FIELDS.dup
         # Add badge percentage field for this criteria level
         fields << :"badge_percentage_#{level_number}"
-
-        # Add extra metadata fields (only used in passing form: general_comments)
-        if LEVELS_WITH_EXTRA_METADATA.include?(level_number)
-          fields << :general_comments
-        end
 
         # Add all criteria status and justification fields for this criteria level
         Criteria.active(level_number).each do |criterion|

@@ -24,22 +24,24 @@ class SubdirFileContentsDetective < Detective
   def unmet_result(result_description)
     {
       value: CriterionStatus::UNMET, confidence: 1,
-      explanation: "// No #{result_description} file(s) found."
+      explanation: I18n.t('detectives.subdir_files.no_files_found',
+                          description: result_description)
     }
   end
 
   def unmet_result_folder(result_description)
     {
       value: CriterionStatus::UNMET, confidence: 3,
-      explanation: "// No appropriate folder found for #{result_description}."
+      explanation: I18n.t('detectives.subdir_files.no_folder_found',
+                          description: result_description)
     }
   end
 
   def met_result(result_description)
     {
       value: CriterionStatus::MET, confidence: 3,
-      explanation:
-        "Some #{result_description} file contents found."
+      explanation: I18n.t('detectives.subdir_files.some_contents_found',
+                          description: result_description)
     }
   end
 

@@ -1337,3 +1337,49 @@ es:
         comma_separated_list: " debe ser una lista separada por comas de nombres usando solo caracteres ASCII"
         begin_with_cpe: ' debe comenzar con "cpe:"'
   last_entry: Última entrada de traducción
+  detectives:
+    github:
+      repo_public: Repositorio en GitHub, que proporciona repositorios git públicos con URLs.
+      repo_track: Repositorio en GitHub, que usa git. git puede rastrear los cambios, quién los hizo y cuándo se hicieron.
+      repo_distributed: Repositorio en GitHub, que usa git. git es distribuido.
+      contribution: Los proyectos en GitHub de forma predeterminada usan issues y pull requests, como lo fomenta la documentación como <https://guides.github.com/activities/contributing-to-open-source/>.
+      discussion: GitHub admite discusiones en issues y pull requests.
+      osps_gv_02_01: GitHub admite discusiones públicas sobre cambios propuestos (a través de pull requests) y obstáculos de uso (a través de issues).
+      osps_do_02_01: GitHub proporciona mecanismos de informes de defectos de forma predeterminada (a través de issues).
+      osps_ac_01_01: GitHub requiere 2FA desde marzo de 2023.
+      osps_qa_01_01: El repositorio está públicamente disponible en GitHub.
+      osps_qa_01_02: Los metadatos git del repositorio están públicamente disponibles en GitHub.
+      name: Nombre de GitHub
+      description: Descripción de GitHub
+      license: Análisis de licencia de la API de GitHub
+      implementation_languages: Análisis de lenguaje de implementación de la API de GitHub
+    floss_license:
+      osi_approved: La licencia %{license} está aprobada por la Open Source Initiative (OSI).
+      osi_approved_repository: La licencia %{license} para el contenido del repositorio está aprobada por la Open Source Initiative (OSI).
+      not_in_osi_list: No se encontró la licencia en la lista de OSI.
+    hardened_sites:
+      all_headers_found: Se encontraron todos los encabezados de endurecimiento de seguridad requeridos.
+      headers_missing: 'Faltan encabezados de endurecimiento de seguridad requeridos: '
+      nosniff_not_set: X-Content-Type-Options no se estableció en "nosniff".
+    name_from_url:
+      domain_suggests: El nombre de dominio de la URL del proyecto sugiere esto.
+      tail_suggests: La cola de la URL del proyecto sugiere esto.
+      repo_tail_suggests: La cola de la URL del repositorio sugiere esto.
+    project_sites_https:
+      given_http: Dado una URL http:.
+      official_http: Las URLs del proyecto listan http (no https) como oficial.
+      url_uses_http: Se nos proporcionó una URL que usa http (no https).
+      given_https: Solo se proporcionaron URLs https:.
+    repo_files:
+      no_file_found: No se encontró ningún archivo de %{description}.
+      file_found: 'Archivo de %{description} no trivial en el repositorio: <%{url}>.'
+      contribution_documented: Proceso de contribución documentado en el repositorio.
+      license_found: Archivo de licencia encontrado en el repositorio.
+      license_not_found: Archivo de licencia no encontrado en el repositorio.
+      license_not_in_releases: Archivo de licencia no encontrado en el repositorio (probablemente no incluido en los lanzamientos).
+    subdir_files:
+      no_files_found: No se encontraron archivos de %{description}.
+      no_folder_found: No se encontró ninguna carpeta apropiada para %{description}.
+      some_contents_found: Se encontraron algunos contenidos de archivos de %{description}.
+    test_forced:
+      test_automation: Automatización de pruebas (confianza %{confidence})

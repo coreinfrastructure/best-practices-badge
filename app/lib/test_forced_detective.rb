@@ -42,7 +42,8 @@ class TestForcedDetective < Detective
     {
       value: 'Met',
       confidence: confidence,
-      explanation: "Test automation (confidence #{confidence})"
+      explanation: I18n.t('detectives.test_forced.test_automation',
+                          confidence: confidence)
     }
   end
 end

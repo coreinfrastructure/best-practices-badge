@@ -53,7 +53,7 @@ class SubdirFileContentsDetectiveTest < ActiveSupport::TestCase
       dbs = results[:documentation_basics_status]
       assert dbs.key?(:explanation)
       assert_equal(
-        '// No documentation basics file(s) found.',
+        'No documentation basics file(s) found.',
         dbs[:explanation]
       )
       assert dbs.key?(:value)

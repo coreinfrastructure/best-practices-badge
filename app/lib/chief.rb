@@ -124,6 +124,18 @@ class Chief
     end
   end
 
+  # Execute a block with I18n.locale temporarily set to the project's entry_locale.
+  # This ensures detective explanations are generated in the project's language.
+  # @yield Block to execute with project locale set
+  # @return Result of the block
+  def with_project_locale
+    original_locale = I18n.locale
+    I18n.locale = @entry_locale&.to_sym || :en
+    yield
+  ensure
+    I18n.locale = original_locale
+  end
+
   # Invoke one "Detective", which will
   # analyze the project and reply with an updated changeset in the form
   # { fieldname1: { value: value, confidence: 1..5, explanation: text}, ...}
@@ -264,24 +276,26 @@ class Chief
   # @param changed_fields [Array<Symbol>, nil] Fields that were explicitly changed
   # rubocop:disable Metrics/MethodLength
   def propose_changes(needed_fields: nil, changed_fields: nil)
-    current_proposal = {} # Current best changeset.
+    with_project_locale do
+      current_proposal = {} # Current best changeset.
 
-    # Determine what outputs we need
-    needed = needed_outputs(needed_fields, changed_fields)
+      # Determine what outputs we need
+      needed = needed_outputs(needed_fields, changed_fields)
 
-    # Filter to only needed detectives (subset varies per request)
-    detectives_to_run = filter_needed_detectives(needed)
+      # Filter to only needed detectives (subset varies per request)
+      detectives_to_run = filter_needed_detectives(needed)
 
-    # Sort that specific subset in dependency order
-    detectives_to_run = topological_sort_detectives(detectives_to_run)
+      # Sort that specific subset in dependency order
+      detectives_to_run = topological_sort_detectives(detectives_to_run)
 
-    # Run each detective in the sorted order
-    detectives_to_run.each do |detective_class|
-      detective = detective_class.new
-      detective.octokit_client_factory = @client_factory
-      current_proposal = propose_one_change(detective, current_proposal)
+      # Run each detective in the sorted order
+      detectives_to_run.each do |detective_class|
+        detective = detective_class.new
+        detective.octokit_client_factory = @client_factory
+        current_proposal = propose_one_change(detective, current_proposal)
+      end
+      current_proposal
     end
-    current_proposal
   end
   # rubocop:enable Metrics/MethodLength
 

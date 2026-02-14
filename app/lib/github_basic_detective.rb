@@ -101,57 +101,50 @@ class GithubBasicDetective < Detective
       # We have a github repo.
       results[:repo_public_status] = {
         value: CriterionStatus::MET, confidence: 3,
-        explanation: 'Repository on GitHub, which provides ' \
-                     'public git repositories with URLs.'
+        explanation: I18n.t('detectives.github.repo_public')
       }
       results[:repo_track_status] = {
         value: CriterionStatus::MET, confidence: 4,
-        explanation: 'Repository on GitHub, which uses git. ' \
-                     'git can track the changes, ' \
-                     'who made them, and when they were made.'
+        explanation: I18n.t('detectives.github.repo_track')
       }
       results[:repo_distributed_status] = {
         value: CriterionStatus::MET, confidence: 4,
-        explanation: 'Repository on GitHub, which uses git. ' \
-                     'git is distributed.'
+        explanation: I18n.t('detectives.github.repo_distributed')
       }
       results[:contribution_status] = {
         value: CriterionStatus::MET, confidence: 2,
-        explanation: 'Projects on GitHub by default use issues and ' \
-                     'pull requests, as encouraged by documentation such as ' \
-                     '<https://guides.github.com/activities/' \
-                     'contributing-to-open-source/>.'
+        explanation: I18n.t('detectives.github.contribution')
       }
       results[:discussion_status] = {
         value: CriterionStatus::MET, confidence: 3,
-        explanation: 'GitHub supports discussions on issues and pull requests.'
+        explanation: I18n.t('detectives.github.discussion')
       }
       # Baseline: public discussion mechanisms (same evidence as discussion_status)
       results[:osps_gv_02_01_status] = {
         value: CriterionStatus::MET, confidence: 3,
-        explanation: 'GitHub supports public discussions on proposed changes (via pull requests) and usage obstacles (via issues).'
+        explanation: I18n.t('detectives.github.osps_gv_02_01')
       }
       # Baseline criteria - defect reporting instructions (low confidence)
       results[:osps_do_02_01_status] = {
         value: CriterionStatus::MET, confidence: 2,
-        explanation: 'GitHub provides defect reporting mechanisms by default (via issues).'
+        explanation: I18n.t('detectives.github.osps_do_02_01')
       }
       # 2FA required by GitHub. An organization *might* use multiple repo
       # hosts, but given our information, 2FA seems highly likely.
       results[:osps_ac_01_01_status] = {
         value: CriterionStatus::MET, confidence: 3,
-        explanation: 'GitHub requires 2FA as of March 2023.'
+        explanation: I18n.t('detectives.github.osps_ac_01_01')
       }
       # Publicly readable, if we can read it. It's possible it's not current,
       # but if this really is the "main" repo (as claimed) then this is met.
       results[:osps_qa_01_01_status] = {
         value: CriterionStatus::MET, confidence: 3,
-        explanation: 'Repository is publicly available on GitHub.'
+        explanation: I18n.t('detectives.github.osps_qa_01_01')
       }
       # If the main repo is on GitHub, then git will store this
       results[:osps_qa_01_02_status] = {
         value: CriterionStatus::MET, confidence: 3,
-        explanation: 'Repository git metadata is publicly available on GitHub.'
+        explanation: I18n.t('detectives.github.osps_qa_01_02')
       }
 
       # Get basic evidence
@@ -169,7 +162,7 @@ class GithubBasicDetective < Detective
       if basic_repo_data[:name]
         results[:name] = {
           value: basic_repo_data[:name],
-          confidence: 3, explanation: 'GitHub name'
+          confidence: 3, explanation: I18n.t('detectives.github.name')
         }
       end
       if basic_repo_data[:description]
@@ -177,7 +170,7 @@ class GithubBasicDetective < Detective
           value: basic_repo_data[:description].gsub(
             /(\A|\s)\:[a-zA-Z]+\:(\s|\Z)/, ' '
           ).strip,
-          confidence: 3, explanation: 'GitHub description'
+          confidence: 3, explanation: I18n.t('detectives.github.description')
         }
       end
       # rubocop:enable Metrics/BlockLength
@@ -194,7 +187,7 @@ class GithubBasicDetective < Detective
         license = cleanup_license(license_data_raw[:key])
         results[:license] = {
           value: license,
-          confidence: 3, explanation: 'GitHub API license analysis'
+          confidence: 3, explanation: I18n.t('detectives.github.license')
         }
       end
 
@@ -204,7 +197,7 @@ class GithubBasicDetective < Detective
       results[:implementation_languages] = {
         value: implementation_languages,
         confidence: 3,
-        explanation: 'GitHub API implementation language analysis'
+        explanation: I18n.t('detectives.github.implementation_languages')
       }
     end
 

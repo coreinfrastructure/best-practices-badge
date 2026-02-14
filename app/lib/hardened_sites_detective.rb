@@ -17,21 +17,20 @@ class HardenedSitesDetective < Detective
     content-security-policy strict-transport-security
     x-content-type-options
   ].freeze
-  MET =
+
+  def met_result
     {
       value: CriterionStatus::MET, confidence: 3,
-      explanation: 'Found all required security hardening headers.'
-    }.freeze
-  UNMET_MISSING =
+      explanation: I18n.t('detectives.hardened_sites.all_headers_found')
+    }
+  end
+
+  def unmet_missing_result
     {
       value: CriterionStatus::UNMET, confidence: 5,
-      explanation: 'Required security hardening headers missing: '
-    }.freeze
-  UNMET_NOSNIFF =
-    {
-      value: CriterionStatus::UNMET, confidence: 5,
-      explanation: '// X-Content-Type-Options was not set to "nosniff".'
-    }.freeze
+      explanation: I18n.t('detectives.hardened_sites.headers_missing')
+    }
+  end
 
   INPUTS = %i[repo_url homepage_url].freeze
   OUTPUTS = [:hardened_site_status].freeze
@@ -114,9 +113,9 @@ class HardenedSitesDetective < Detective
       all_problems = problems_in_urls(evidence, urls)
       results[:hardened_site_status] =
         if all_problems.empty?
-          MET
+          met_result
         else
-          answer = UNMET_MISSING.deep_dup # clone but result is not frozen
+          answer = unmet_missing_result
           answer[:explanation] += all_problems.join(', ')
           answer
         end

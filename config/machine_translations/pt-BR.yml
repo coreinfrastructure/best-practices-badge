@@ -1397,3 +1397,49 @@ pt-BR:
         comma_separated_list: " deve ser uma lista separada por vírgulas de nomes usando apenas caracteres ASCII"
         begin_with_cpe: ' deve começar com "cpe:"'
   last_entry: Última entrada de tradução
+  detectives:
+    github:
+      repo_public: Repositório no GitHub, que fornece repositórios git públicos com URLs.
+      repo_track: Repositório no GitHub, que usa git. O git pode rastrear as mudanças, quem as fez e quando foram feitas.
+      repo_distributed: Repositório no GitHub, que usa git. O git é distribuído.
+      contribution: Projetos no GitHub, por padrão, usam issues e pull requests, conforme incentivado pela documentação como <https://guides.github.com/activities/contributing-to-open-source/>.
+      discussion: O GitHub suporta discussões em issues e pull requests.
+      osps_gv_02_01: O GitHub suporta discussões públicas sobre mudanças propostas (via pull requests) e obstáculos de uso (via issues).
+      osps_do_02_01: O GitHub fornece mecanismos de relatório de defeitos por padrão (via issues).
+      osps_ac_01_01: O GitHub exige 2FA desde março de 2023.
+      osps_qa_01_01: O repositório está disponível publicamente no GitHub.
+      osps_qa_01_02: Os metadados git do repositório estão disponíveis publicamente no GitHub.
+      name: Nome do GitHub
+      description: Descrição do GitHub
+      license: Análise de licença da API do GitHub
+      implementation_languages: Análise de linguagem de implementação da API do GitHub
+    floss_license:
+      osi_approved: A licença %{license} é aprovada pela Open Source Initiative (OSI).
+      osi_approved_repository: A licença %{license} para o conteúdo do repositório é aprovada pela Open Source Initiative (OSI).
+      not_in_osi_list: Não foi encontrada a licença na lista da OSI.
+    hardened_sites:
+      all_headers_found: Encontrados todos os cabeçalhos de proteção de segurança necessários.
+      headers_missing: 'Faltam cabeçalhos de proteção de segurança necessários: '
+      nosniff_not_set: X-Content-Type-Options não foi definido como "nosniff".
+    name_from_url:
+      domain_suggests: O nome de domínio da URL do projeto sugere isso.
+      tail_suggests: A parte final da URL do projeto sugere isso.
+      repo_tail_suggests: A parte final da URL do repositório sugere isso.
+    project_sites_https:
+      given_http: Fornecida uma URL http:.
+      official_http: As URLs do projeto listam http (não https) como oficial.
+      url_uses_http: Foi fornecida uma URL que usa http (não https).
+      given_https: Fornecidas apenas URLs https:.
+    repo_files:
+      no_file_found: Nenhum arquivo de %{description} encontrado.
+      file_found: 'Arquivo não trivial de %{description} no repositório: <%{url}>.'
+      contribution_documented: Processo de contribuição documentado no repositório.
+      license_found: Arquivo de licença encontrado no repositório.
+      license_not_found: Arquivo de licença não encontrado no repositório.
+      license_not_in_releases: Arquivo de licença não encontrado no repositório (provavelmente não incluído nas versões).
+    subdir_files:
+      no_files_found: Nenhum arquivo de %{description} encontrado.
+      no_folder_found: Nenhuma pasta apropriada encontrada para %{description}.
+      some_contents_found: Alguns conteúdos de arquivo de %{description} encontrados.
+    test_forced:
+      test_automation: Automação de testes (confiança %{confidence})

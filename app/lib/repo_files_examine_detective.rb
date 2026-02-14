@@ -49,16 +49,16 @@ class RepoFilesExamineDetective < Detective
   def unmet_result(result_description, confidence: 1)
     {
       value: CriterionStatus::UNMET, confidence: confidence,
-      explanation: "// No #{result_description} file found."
+      explanation: I18n.t('detectives.repo_files.no_file_found',
+                          description: result_description)
     }
   end
 
   def met_result(result_description, html_url, confidence: 3)
     {
       value: CriterionStatus::MET, confidence: confidence,
-      explanation:
-        "Non-trivial #{result_description} file in repository: " \
-        "<#{html_url}>."
+      explanation: I18n.t('detectives.repo_files.file_found',
+                          description: result_description, url: html_url)
     }
   end
 
@@ -135,7 +135,7 @@ class RepoFilesExamineDetective < Detective
     confidence = @results[:contribution_status][:confidence]
     @results[:osps_gv_03_01_status] = {
       value: CriterionStatus::MET, confidence: confidence,
-      explanation: 'Contribution process documented in repository.'
+      explanation: I18n.t('detectives.repo_files.contribution_documented')
     }
   end
 
@@ -164,17 +164,16 @@ class RepoFilesExamineDetective < Detective
       confidence = @results[:license_location_status][:confidence]
       @results[:osps_le_03_01_status] = {
         value: CriterionStatus::MET, confidence: confidence,
-        explanation: 'License file found in repository.'
+        explanation: I18n.t('detectives.repo_files.license_found')
       }
     else
       @results[:osps_le_03_01_status] = {
         value: CriterionStatus::UNMET, confidence: 5,
-        explanation: 'License file not found in repository.'
+        explanation: I18n.t('detectives.repo_files.license_not_found')
       }
       @results[:osps_le_03_02_status] = {
         value: CriterionStatus::UNMET, confidence: 2,
-        explanation: 'License file not found in repository (likely not ' \
-                     'included in releases).'
+        explanation: I18n.t('detectives.repo_files.license_not_in_releases')
       }
     end
   end

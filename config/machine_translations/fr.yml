@@ -279,3 +279,49 @@ fr:
   account_activations:
     delay:
       many: En tant que mesure anti-spam, vous devez attendre %{count} heures après l'activation avant de pouvoir vous connecter.
+  detectives:
+    github:
+      repo_public: Dépôt sur GitHub, qui fournit des dépôts git publics avec des URLs.
+      repo_track: Dépôt sur GitHub, qui utilise git. git peut suivre les modifications, qui les a faites et quand elles ont été faites.
+      repo_distributed: Dépôt sur GitHub, qui utilise git. git est distribué.
+      contribution: Les projets sur GitHub utilisent par défaut les problèmes (issues) et les pull requests, comme encouragé par la documentation telle que <https://guides.github.com/activities/contributing-to-open-source/>.
+      discussion: GitHub supporte les discussions sur les problèmes (issues) et les pull requests.
+      osps_gv_02_01: GitHub supporte les discussions publiques sur les modifications proposées (via les pull requests) et les obstacles d'utilisation (via les problèmes).
+      osps_do_02_01: GitHub fournit par défaut des mécanismes de signalement de défauts (via les problèmes).
+      osps_ac_01_01: GitHub exige l'authentification à deux facteurs (2FA) depuis mars 2023.
+      osps_qa_01_01: Le dépôt est publiquement disponible sur GitHub.
+      osps_qa_01_02: Les métadonnées git du dépôt sont publiquement disponibles sur GitHub.
+      name: nom GitHub
+      description: description GitHub
+      license: analyse de licence de l'API GitHub
+      implementation_languages: analyse des langages d'implémentation de l'API GitHub
+    floss_license:
+      osi_approved: La licence %{license} est approuvée par l'Open Source Initiative (OSI).
+      osi_approved_repository: La licence %{license} pour le contenu du dépôt est approuvée par l'Open Source Initiative (OSI).
+      not_in_osi_list: La licence n'a pas été trouvée dans la liste OSI.
+    hardened_sites:
+      all_headers_found: Tous les en-têtes de durcissement de sécurité requis ont été trouvés.
+      headers_missing: 'En-têtes de durcissement de sécurité requis manquants : '
+      nosniff_not_set: X-Content-Type-Options n'était pas défini à "nosniff".
+    name_from_url:
+      domain_suggests: Le nom de domaine de l'URL du projet suggère cela.
+      tail_suggests: La fin de l'URL du projet suggère cela.
+      repo_tail_suggests: La fin de l'URL du dépôt suggère cela.
+    project_sites_https:
+      given_http: 'URL http : fournie.'
+      official_http: Les URL du projet listent http (et non https) comme officiel.
+      url_uses_http: On nous a fourni une URL qui utilise http (et non https).
+      given_https: 'Seules les URL https : ont été fournies.'
+    repo_files:
+      no_file_found: Aucun fichier %{description} trouvé.
+      file_found: 'Fichier %{description} non trivial dans le dépôt : <%{url}>.'
+      contribution_documented: Processus de contribution documenté dans le dépôt.
+      license_found: Fichier de licence trouvé dans le dépôt.
+      license_not_found: Fichier de licence introuvable dans le dépôt.
+      license_not_in_releases: Fichier de licence introuvable dans le dépôt (probablement non inclus dans les versions).
+    subdir_files:
+      no_files_found: Aucun fichier %{description} trouvé.
+      no_folder_found: Aucun dossier approprié trouvé pour %{description}.
+      some_contents_found: Certains contenus de fichier %{description} trouvés.
+    test_forced:
+      test_automation: Automatisation des tests (confiance %{confidence})

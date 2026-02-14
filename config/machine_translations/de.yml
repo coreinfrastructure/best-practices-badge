@@ -350,3 +350,49 @@ de:
   account_activations:
     delay:
       many: Als Anti-Spam-Maßnahme müssen Sie %{count} Stunden nach der Aktivierung warten, bevor Sie sich anmelden können.
+  detectives:
+    github:
+      repo_public: Repository auf GitHub, das öffentliche Git-Repositorys mit URLs bereitstellt.
+      repo_track: Repository auf GitHub, das Git verwendet. Git kann die Änderungen verfolgen, wer sie vorgenommen hat und wann sie vorgenommen wurden.
+      repo_distributed: Repository auf GitHub, das Git verwendet. Git ist verteilt.
+      contribution: Projekte auf GitHub verwenden standardmäßig Issues und Pull-Requests, wie in der Dokumentation unter <https://guides.github.com/activities/contributing-to-open-source/> empfohlen.
+      discussion: GitHub unterstützt Diskussionen zu Issues und Pull-Requests.
+      osps_gv_02_01: GitHub unterstützt öffentliche Diskussionen zu vorgeschlagenen Änderungen (über Pull-Requests) und Nutzungshindernissen (über Issues).
+      osps_do_02_01: GitHub bietet standardmäßig Fehlermeldemechanismen (über Issues).
+      osps_ac_01_01: GitHub erfordert seit März 2023 2FA.
+      osps_qa_01_01: Repository ist öffentlich auf GitHub verfügbar.
+      osps_qa_01_02: Repository-Git-Metadaten sind öffentlich auf GitHub verfügbar.
+      name: GitHub-Name
+      description: GitHub-Beschreibung
+      license: GitHub-API-Lizenzanalyse
+      implementation_languages: GitHub-API-Implementierungssprachenanalyse
+    floss_license:
+      osi_approved: Die %{license}-Lizenz ist von der Open Source Initiative (OSI) genehmigt.
+      osi_approved_repository: Die %{license}-Lizenz für den Repository-Inhalt ist von der Open Source Initiative (OSI) genehmigt.
+      not_in_osi_list: Lizenz wurde nicht in der OSI-Liste gefunden.
+    hardened_sites:
+      all_headers_found: Alle erforderlichen Security-Hardening-Header gefunden.
+      headers_missing: 'Erforderliche Security-Hardening-Header fehlen: '
+      nosniff_not_set: X-Content-Type-Options wurde nicht auf "nosniff" gesetzt.
+    name_from_url:
+      domain_suggests: Der Domainname der Projekt-URL deutet darauf hin.
+      tail_suggests: Das Ende der Projekt-URL deutet darauf hin.
+      repo_tail_suggests: Das Ende der Repository-URL deutet darauf hin.
+    project_sites_https:
+      given_http: http:-URL angegeben.
+      official_http: Projekt-URLs listen http (nicht https) als offiziell auf.
+      url_uses_http: Uns wurde eine URL gegeben, die http (nicht https) verwendet.
+      given_https: Nur https:-URLs angegeben.
+    repo_files:
+      no_file_found: Keine %{description}-Datei gefunden.
+      file_found: 'Nicht-triviale %{description}-Datei im Repository: <%{url}>.'
+      contribution_documented: Beitragsprozess im Repository dokumentiert.
+      license_found: Lizenzdatei im Repository gefunden.
+      license_not_found: Lizenzdatei im Repository nicht gefunden.
+      license_not_in_releases: Lizenzdatei im Repository nicht gefunden (wahrscheinlich nicht in Releases enthalten).
+    subdir_files:
+      no_files_found: Keine %{description}-Datei(en) gefunden.
+      no_folder_found: Kein geeigneter Ordner für %{description} gefunden.
+      some_contents_found: Einige %{description}-Dateiinhalte gefunden.
+    test_forced:
+      test_automation: Testautomatisierung (Vertrauen %{confidence})

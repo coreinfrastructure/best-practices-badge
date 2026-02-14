@@ -1194,3 +1194,49 @@ sw:
   account_activations:
     delay:
       many: Kama hatua ya kupambana na taka, lazima usubiri masaa %{count} baada ya uanzishaji kabla hujaingia.
+  detectives:
+    github:
+      repo_public: Hifadhi kwenye GitHub, ambayo inatoa hifadhi za git za umma zenye URL.
+      repo_track: Hifadhi kwenye GitHub, ambayo hutumia git. git inaweza kufuatilia mabadiliko, ni nani aliyoyafanya, na wakati walipofanyika.
+      repo_distributed: Hifadhi kwenye GitHub, ambayo hutumia git. git imegawanywa.
+      contribution: Miradi kwenye GitHub kwa chaguo-msingi hutumia masuala na maombi ya kuvuta, kama inavyohimizwa na nyaraka kama vile <https://guides.github.com/activities/contributing-to-open-source/>.
+      discussion: GitHub inasaidia majadiliano kuhusu masuala na maombi ya kuvuta.
+      osps_gv_02_01: GitHub inasaidia majadiliano ya umma kuhusu mabadiliko yaliyopendekezwa (kupitia maombi ya kuvuta) na vikwazo vya matumizi (kupitia masuala).
+      osps_do_02_01: GitHub hutoa taratibu za kuripoti hitilafu kwa chaguo-msingi (kupitia masuala).
+      osps_ac_01_01: GitHub inahitaji 2FA tangu Machi 2023.
+      osps_qa_01_01: Hifadhi inapatikana kwa umma kwenye GitHub.
+      osps_qa_01_02: Metadata ya git ya hifadhi inapatikana kwa umma kwenye GitHub.
+      name: Jina la GitHub
+      description: Maelezo ya GitHub
+      license: Uchambuzi wa leseni wa API ya GitHub
+      implementation_languages: Uchambuzi wa lugha ya utekelezaji wa API ya GitHub
+    floss_license:
+      osi_approved: Leseni ya %{license} imeidhinishwa na Open Source Initiative (OSI).
+      osi_approved_repository: Leseni ya %{license} kwa maudhui ya hifadhi imeidhinishwa na Open Source Initiative (OSI).
+      not_in_osi_list: Haikupata leseni katika orodha ya OSI.
+    hardened_sites:
+      all_headers_found: Kupata vichwa vyote vinavyohitajika vya kuimarisha usalama.
+      headers_missing: 'Vichwa vinavyohitajika vya kuimarisha usalama havijumuishwa: '
+      nosniff_not_set: X-Content-Type-Options haikuwekwa kuwa "nosniff".
+    name_from_url:
+      domain_suggests: Jina la kikoa cha URL ya mradi linapendekeza hili.
+      tail_suggests: Mwisho wa URL ya mradi unapendekeza hili.
+      repo_tail_suggests: Mwisho wa URL ya hazina unapendekeza hili.
+    project_sites_https:
+      given_http: Tulipewa URL ya http:.
+      official_http: Orodha ya URL za mradi zinaonyesha http (sio https) kama rasmi.
+      url_uses_http: Tulipewa URL inayotumia http (sio https).
+      given_https: Tulipewa tu URL za https:.
+    repo_files:
+      no_file_found: Hakuna faili ya %{description} iliyopatikana.
+      file_found: 'Faili isiyo ya kawaida ya %{description} katika hazina: <%{url}>.'
+      contribution_documented: Mchakato wa mchango umeandikwa katika hazina.
+      license_found: Faili ya leseni imepatikana katika hazina.
+      license_not_found: Faili ya leseni haikupatikana katika hazina.
+      license_not_in_releases: Faili ya leseni haikupatikana katika hazina (pengine haikujumuishwa katika matoleo).
+    subdir_files:
+      no_files_found: Hakuna faili za %{description} zilizopatikana.
+      no_folder_found: Hakuna folda inayofaa iliyopatikana kwa %{description}.
+      some_contents_found: Baadhi ya yaliyomo ya faili ya %{description} yamepatikana.
+    test_forced:
+      test_automation: Utomatiaji wa majaribio (kujiamini %{confidence})

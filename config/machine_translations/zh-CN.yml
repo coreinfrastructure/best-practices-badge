@@ -327,3 +327,49 @@ zh-CN:
   account_activations:
     delay:
       many: 作为反垃圾邮件措施，您必须在激活后等待 %{count} 小时才能登录。
+  detectives:
+    github:
+      repo_public: GitHub上的仓库，提供带有URL的公共git仓库。
+      repo_track: GitHub上的仓库，使用git。git可以跟踪更改、更改者以及更改时间。
+      repo_distributed: GitHub上的仓库，使用git。git是分布式的。
+      contribution: GitHub上的项目默认使用问题列表（Issues）和拉取请求（Pull Requests），如<https://guides.github.com/activities/contributing-to-open-source/>等文档所鼓励的。
+      discussion: GitHub支持对问题列表（Issues）和拉取请求（Pull Requests）的讨论。
+      osps_gv_02_01: GitHub支持对提议更改（通过拉取请求）和使用障碍（通过问题列表）的公开讨论。
+      osps_do_02_01: GitHub默认提供缺陷报告机制（通过问题列表）。
+      osps_ac_01_01: 自2023年3月起，GitHub要求启用双因素认证（2FA）。
+      osps_qa_01_01: 仓库在GitHub上公开可用。
+      osps_qa_01_02: 仓库的git元数据在GitHub上公开可用。
+      name: GitHub名称
+      description: GitHub描述
+      license: GitHub API许可证分析
+      implementation_languages: GitHub API实现语言分析
+    floss_license:
+      osi_approved: "%{license}许可证已获得开放源代码促进会（OSI）批准。"
+      osi_approved_repository: 仓库内容的%{license}许可证已获得开放源代码促进会（OSI）批准。
+      not_in_osi_list: 未在OSI列表中找到许可证。
+    hardened_sites:
+      all_headers_found: 找到所有必需的安全强化标头。
+      headers_missing: 缺少必需的安全强化标头：
+      nosniff_not_set: X-Content-Type-Options未设置为"nosniff"。
+    name_from_url:
+      domain_suggests: 项目 URL 的域名暗示了这一点。
+      tail_suggests: 项目 URL 的尾部暗示了这一点。
+      repo_tail_suggests: 仓库 URL 的尾部暗示了这一点。
+    project_sites_https:
+      given_http: '给定的 http: URL。'
+      official_http: 项目 URL 列表中官方使用 http（而非 https）。
+      url_uses_http: 我们收到的 URL 使用 http（而非 https）。
+      given_https: '仅给定 https: URL。'
+    repo_files:
+      no_file_found: 未找到 %{description} 文件。
+      file_found: 仓库中存在非平凡的 %{description} 文件：<%{url}>。
+      contribution_documented: 仓库中记录了贡献流程。
+      license_found: 在仓库中找到许可证文件。
+      license_not_found: 在仓库中未找到许可证文件。
+      license_not_in_releases: 在仓库中未找到许可证文件（可能未包含在发布版本中）。
+    subdir_files:
+      no_files_found: 未找到 %{description} 文件。
+      no_folder_found: 未找到适合 %{description} 的文件夹。
+      some_contents_found: 找到一些 %{description} 文件内容。
+    test_forced:
+      test_automation: 测试自动化（置信度 %{confidence}）

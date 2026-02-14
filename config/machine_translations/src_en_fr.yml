@@ -281,3 +281,49 @@ en:
       many: 'As an anti-spam measure, you must wait %{count} hours after activation before you can log in.
 
         '
+  detectives:
+    github:
+      repo_public: Repository on GitHub, which provides public git repositories with URLs.
+      repo_track: Repository on GitHub, which uses git. git can track the changes, who made them, and when they were made.
+      repo_distributed: Repository on GitHub, which uses git. git is distributed.
+      contribution: Projects on GitHub by default use issues and pull requests, as encouraged by documentation such as <https://guides.github.com/activities/contributing-to-open-source/>.
+      discussion: GitHub supports discussions on issues and pull requests.
+      osps_gv_02_01: GitHub supports public discussions on proposed changes (via pull requests) and usage obstacles (via issues).
+      osps_do_02_01: GitHub provides defect reporting mechanisms by default (via issues).
+      osps_ac_01_01: GitHub requires 2FA as of March 2023.
+      osps_qa_01_01: Repository is publicly available on GitHub.
+      osps_qa_01_02: Repository git metadata is publicly available on GitHub.
+      name: GitHub name
+      description: GitHub description
+      license: GitHub API license analysis
+      implementation_languages: GitHub API implementation language analysis
+    floss_license:
+      osi_approved: The %{license} license is approved by the Open Source Initiative (OSI).
+      osi_approved_repository: The %{license} license for the repository contents is approved by the Open Source Initiative (OSI).
+      not_in_osi_list: Did not find license in the OSI list.
+    hardened_sites:
+      all_headers_found: Found all required security hardening headers.
+      headers_missing: 'Required security hardening headers missing: '
+      nosniff_not_set: X-Content-Type-Options was not set to "nosniff".
+    name_from_url:
+      domain_suggests: The project URL's domain name suggests this.
+      tail_suggests: The project URL's tail suggests this.
+      repo_tail_suggests: The repo URL's tail suggests this.
+    project_sites_https:
+      given_http: 'Given an http: URL.'
+      official_http: Project URLs lists http (not https) as official.
+      url_uses_http: We were given a URL that uses http (not https).
+      given_https: 'Given only https: URLs.'
+    repo_files:
+      no_file_found: No %{description} file found.
+      file_found: 'Non-trivial %{description} file in repository: <%{url}>.'
+      contribution_documented: Contribution process documented in repository.
+      license_found: License file found in repository.
+      license_not_found: License file not found in repository.
+      license_not_in_releases: License file not found in repository (likely not included in releases).
+    subdir_files:
+      no_files_found: No %{description} file(s) found.
+      no_folder_found: No appropriate folder found for %{description}.
+      some_contents_found: Some %{description} file contents found.
+    test_forced:
+      test_automation: Test automation (confidence %{confidence})

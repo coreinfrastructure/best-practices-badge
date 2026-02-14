@@ -279,3 +279,49 @@ ja:
   account_activations:
     delay:
       many: スパム対策として、アクティベーション後 %{count} 時間待ってからログインする必要があります。
+  detectives:
+    github:
+      repo_public: 公開された git リポジトリ用の URL を提供する GitHub 上のリポジトリ。
+      repo_track: git を使用する GitHub 上のリポジトリ。git は変更を追跡し、誰がいつ変更したかを記録できます。
+      repo_distributed: git を使用する GitHub 上のリポジトリ。git は分散型です。
+      contribution: GitHub 上のプロジェクトは、デフォルトで課題管理とプルリクエストを使用します。<https://guides.github.com/activities/contributing-to-open-source/> などのドキュメントに従って奨励されています。
+      discussion: GitHub は、課題管理とプルリクエストでの議論をサポートしています。
+      osps_gv_02_01: GitHub は、提案された変更（プルリクエスト経由）と使用上の障害（課題経由）に関する公開議論をサポートしています。
+      osps_do_02_01: GitHub は、デフォルトで（課題経由で）欠陥報告メカニズムを提供しています。
+      osps_ac_01_01: GitHub は、2023年3月から2要素認証（2FA）を必要としています。
+      osps_qa_01_01: リポジトリは GitHub 上で公開されています。
+      osps_qa_01_02: リポジトリの git メタデータは GitHub 上で公開されています。
+      name: GitHub 名
+      description: GitHub 説明
+      license: GitHub API ライセンス分析
+      implementation_languages: GitHub API 実装言語分析
+    floss_license:
+      osi_approved: "%{license} ライセンスは、オープンソース・イニシアチブ（OSI）によって承認されています。"
+      osi_approved_repository: リポジトリの内容に対する %{license} ライセンスは、オープンソース・イニシアチブ（OSI）によって承認されています。
+      not_in_osi_list: OSI リストにライセンスが見つかりませんでした。
+    hardened_sites:
+      all_headers_found: 必要なセキュリティ強化ヘッダーがすべて見つかりました。
+      headers_missing: 必要なセキュリティ強化ヘッダーがありません：
+      nosniff_not_set: X-Content-Type-Options が "nosniff" に設定されていませんでした。
+    name_from_url:
+      domain_suggests: プロジェクトURLのドメイン名がこれを示唆しています。
+      tail_suggests: プロジェクトURLの末尾がこれを示唆しています。
+      repo_tail_suggests: リポジトリURLの末尾がこれを示唆しています。
+    project_sites_https:
+      given_http: 'http: URLが与えられました。'
+      official_http: プロジェクトURLリストは、公式としてhttp（httpsではない）をリストしています。
+      url_uses_http: http（httpsではない）を使用するURLが与えられました。
+      given_https: 'https: URLのみが与えられました。'
+    repo_files:
+      no_file_found: "%{description} ファイルが見つかりません。"
+      file_found: リポジトリに自明でない %{description} ファイル：<%{url}>。
+      contribution_documented: リポジトリにコントリビューションプロセスが記録されています。
+      license_found: リポジトリにライセンスファイルが見つかりました。
+      license_not_found: リポジトリにライセンスファイルが見つかりません。
+      license_not_in_releases: リポジトリにライセンスファイルが見つかりません（おそらくリリースに含まれていない）。
+    subdir_files:
+      no_files_found: "%{description} ファイルが見つかりません。"
+      no_folder_found: "%{description} に適切なフォルダーが見つかりません。"
+      some_contents_found: いくつかの %{description} ファイルの内容が見つかりました。
+    test_forced:
+      test_automation: テスト自動化（確信度 %{confidence}）

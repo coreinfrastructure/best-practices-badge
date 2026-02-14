@@ -358,3 +358,49 @@ ru:
   account_activations:
     delay:
       many: В качестве меры защиты от спама вы должны подождать %{count} часов после активации, прежде чем сможете войти в систему.
+  detectives:
+    github:
+      repo_public: Репозиторий на GitHub, который предоставляет публичные git-репозитории с URL-адресами.
+      repo_track: Репозиторий на GitHub, который использует git. git может отслеживать изменения, кто их сделал и когда они были сделаны.
+      repo_distributed: Репозиторий на GitHub, который использует git. git является распределенным.
+      contribution: Проекты на GitHub по умолчанию используют issues и pull requests, как рекомендовано в документации такой как <https://guides.github.com/activities/contributing-to-open-source/>.
+      discussion: GitHub поддерживает обсуждения issues и pull requests.
+      osps_gv_02_01: GitHub поддерживает публичные обсуждения предлагаемых изменений (через pull requests) и препятствий в использовании (через issues).
+      osps_do_02_01: GitHub предоставляет механизмы сообщения об ошибках по умолчанию (через issues).
+      osps_ac_01_01: GitHub требует 2FA с марта 2023 года.
+      osps_qa_01_01: Репозиторий публично доступен на GitHub.
+      osps_qa_01_02: Метаданные git репозитория публично доступны на GitHub.
+      name: Название GitHub
+      description: Описание GitHub
+      license: Анализ лицензии API GitHub
+      implementation_languages: Анализ языков реализации API GitHub
+    floss_license:
+      osi_approved: Лицензия %{license} одобрена Open Source Initiative (OSI).
+      osi_approved_repository: Лицензия %{license} для содержимого репозитория одобрена Open Source Initiative (OSI).
+      not_in_osi_list: Лицензия не найдена в списке OSI.
+    hardened_sites:
+      all_headers_found: Найдены все необходимые заголовки безопасности для упрочнения.
+      headers_missing: 'Отсутствуют необходимые заголовки безопасности для упрочнения: '
+      nosniff_not_set: X-Content-Type-Options не был установлен в "nosniff".
+    name_from_url:
+      domain_suggests: Доменное имя URL проекта подразумевает это.
+      tail_suggests: Конец URL проекта подразумевает это.
+      repo_tail_suggests: Конец URL репозитория подразумевает это.
+    project_sites_https:
+      given_http: 'Предоставлен http: URL.'
+      official_http: URL проекта указывает http (не https) как официальный.
+      url_uses_http: Нам был предоставлен URL, который использует http (не https).
+      given_https: 'Предоставлены только https: URL.'
+    repo_files:
+      no_file_found: Файл %{description} не найден.
+      file_found: 'Нетривиальный файл %{description} в репозитории: <%{url}>.'
+      contribution_documented: Процесс внесения вкладов задокументирован в репозитории.
+      license_found: Файл лицензии найден в репозитории.
+      license_not_found: Файл лицензии не найден в репозитории.
+      license_not_in_releases: Файл лицензии не найден в репозитории (вероятно, не включен в релизы).
+    subdir_files:
+      no_files_found: Файл(ы) %{description} не найдены.
+      no_folder_found: Подходящая папка для %{description} не найдена.
+      some_contents_found: Найдено некоторое содержимое файлов %{description}.
+    test_forced:
+      test_automation: Автоматизация тестирования (уверенность %{confidence})

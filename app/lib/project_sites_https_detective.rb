@@ -43,13 +43,13 @@ class ProjectSitesHttpsDetective < Detective
     @results[:sites_https_status] =
       {
         value: CriterionStatus::UNMET, confidence: 5,
-        explanation: '// Given an http: URL.'
+        explanation: I18n.t('detectives.project_sites_https.given_http')
       }
     # Any official channel using http is a problem
     @results[:osps_br_03_01_status] =
       {
         value: CriterionStatus::UNMET, confidence: 5,
-        explanation: 'Project URLs lists http (not https) as official.'
+        explanation: I18n.t('detectives.project_sites_https.official_http')
       }
     # We don't know enough to be *certain* what the distribution channels
     # are; it's possible that the official distribution channels *are*
@@ -59,7 +59,7 @@ class ProjectSitesHttpsDetective < Detective
     @results[:osps_br_03_02_status] =
       {
         value: CriterionStatus::UNMET, confidence: 3,
-        explanation: 'We were given a URL that uses http (not https).'
+        explanation: I18n.t('detectives.project_sites_https.url_uses_http')
       }
   end
   # rubocop:enable Metrics/MethodLength
@@ -69,7 +69,8 @@ class ProjectSitesHttpsDetective < Detective
   end
 
   def set_https_results
-    @results[:sites_https_status] = met_result('Given only https: URLs.')
+    @results[:sites_https_status] =
+      met_result(I18n.t('detectives.project_sites_https.given_https'))
     @results[:osps_br_03_01_status] =
       met_result('Project URLs use HTTPS exclusively.')
     @results[:osps_br_03_02_status] =

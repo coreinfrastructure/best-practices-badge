@@ -28,9 +28,8 @@ class BuildDetective < Detective
   def met_result(result_description, html_url)
     {
       value: CriterionStatus::MET, confidence: 3,
-      explanation:
-        "Non-trivial #{result_description} file in repository: " \
-        "<#{html_url}>."
+      explanation: I18n.t('detectives.repo_files.file_found',
+                          description: result_description, url: html_url)
     }
   end
 

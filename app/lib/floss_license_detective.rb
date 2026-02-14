@@ -148,21 +148,20 @@ class FlossLicenseDetective < Detective
         floss_license_osi_status:
                   {
                     value: CriterionStatus::MET, confidence: 5,
-                    explanation: "The #{license} license is approved by the " \
-                                 'Open Source Initiative (OSI).'
+                    explanation: I18n.t('detectives.floss_license.osi_approved',
+                                        license: license)
                   },
         floss_license_status:
           {
             value: CriterionStatus::MET, confidence: 5,
-            explanation: "The #{license} license is approved by the " \
-                         'Open Source Initiative (OSI).'
+            explanation: I18n.t('detectives.floss_license.osi_approved',
+                                license: license)
           },
         osps_le_02_01_status:
           {
             value: CriterionStatus::MET, confidence: 5,
-            explanation: "The #{license} license for the repository " \
-                         'contents is approved by the ' \
-                         'Open Source Initiative (OSI).'
+            explanation: I18n.t('detectives.floss_license.osi_approved_repository',
+                                license: license)
           },
         # We can't know what the license of the *released* assets are
         # looking only at the repository, as the LICENSE file is focused
@@ -176,7 +175,7 @@ class FlossLicenseDetective < Detective
         floss_license_osi_status:
                   {
                     value: CriterionStatus::UNMET, confidence: 1,
-                    explanation: '// Did not find license in the OSI list.'
+                    explanation: I18n.t('detectives.floss_license.not_in_osi_list')
                   }
       }
     else

@@ -3824,7 +3824,6 @@ en:
     hardened_sites:
       all_headers_found: "Found all required security hardening headers."
       headers_missing: "Required security hardening headers missing: "
-      nosniff_not_set: 'X-Content-Type-Options was not set to "nosniff".'
     name_from_url:
       domain_suggests: "The project URL's domain name suggests this."
       tail_suggests: "The project URL's tail suggests this."

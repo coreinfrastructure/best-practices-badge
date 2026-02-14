@@ -32,13 +32,6 @@ class HardenedSitesDetective < Detective
     }
   end
 
-  def unmet_nosniff_result
-    {
-      value: CriterionStatus::UNMET, confidence: 5,
-      explanation: I18n.t('detectives.hardened_sites.nosniff_not_set')
-    }
-  end
-
   INPUTS = %i[repo_url homepage_url].freeze
   OUTPUTS = [:hardened_site_status].freeze
 

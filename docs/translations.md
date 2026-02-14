@@ -1,7 +1,15 @@
 # Translations
 
-This document describes how translations are managed for the
+This document describes how human-generated translations are managed for the
 OpenSSF Best Practices Badge application.
+
+We use both human-generated and machine-generated translations.
+Where available, the human-generated translations are used, otherwise
+we use machine-generated translations so there's always a translation available.
+The machine-generated translations are heavily guided by our
+human-generated translations.
+For details on that, see the document on
+[machine-generated translations](./machine-translations.md).
 
 ## Overview
 

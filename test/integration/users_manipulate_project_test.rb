@@ -188,8 +188,8 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
       continue: 'Save'
     }
 
-    # Should redirect to edit page (may include automated= query param)
-    assert_match %r{/en/projects/#{project.id}/passing/edit(\?automated=.*)?\z},
+    # Should redirect to edit page (may include automated_fields_list= query param)
+    assert_match %r{/en/projects/#{project.id}/passing/edit(\?automated_fields_list=.*)?\z},
                  response.location
     follow_redirect!
     assert_response :success

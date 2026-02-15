@@ -2026,7 +2026,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
             continue: 'Quality'
           }
     assert_response :redirect
-    # Should redirect to baseline-1/edit with anchor (may include automated= param)
+    # Should redirect to baseline-1/edit with anchor (may include automated_fields_list= param)
     assert_match %r{/baseline-1/edit(\?[^#]*)?#Quality\z}, response.location
   end
 

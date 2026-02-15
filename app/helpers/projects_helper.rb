@@ -20,16 +20,16 @@ module ProjectsHelper
     MarkdownProcessor.render(content)
   end
 
-  # Precomputed Set of automated field symbols for O(1) lookup.
-  # Memoized per request (computed once, used by every status_chooser).
+  # Hash of automated fields for O(1) lookup via Hash#include?.
+  # Returns empty hash when @automated_fields is nil.
   def automated_field_set
-    @automated_field_set ||= Set.new(@automated_fields&.pluck(:field))
+    @automated_fields || {}
   end
 
-  # Precomputed Set of overridden field symbols for O(1) lookup.
-  # Memoized per request (computed once, used by every status_chooser).
+  # Hash of overridden fields for O(1) lookup via Hash#include?.
+  # Returns empty hash when @overridden_fields is nil.
   def overridden_field_set
-    @overridden_field_set ||= Set.new(@overridden_fields&.pluck(:field))
+    @overridden_fields || {}
   end
 
   # Convert a status integer value to its string representation.

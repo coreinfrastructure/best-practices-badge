@@ -49,6 +49,32 @@ class ProjectsController < ApplicationController
       fields_map.freeze
     end
 
+  # When editing a specific project there are two instance variables to track
+  # automation highlights: @automated_fields and @overridden_fields.
+  # These instance variables track which project fields were changed by
+  # automation (Chief or query-string proposals) so the edit form can
+  # highlight them for the user.
+  #
+  # Both are Hash{Symbol => Hash} keyed by field symbol
+  # (e.g. :contribution_status):
+  # - @automated_fields (yellow highlight): fields that were unknown/blank
+  #   (as old values) and then got filled in by automation.
+  #   Values: { new_value:, explanation: }
+  # - @overridden_fields (orange highlight): fields that had a real user
+  #   value (not '?' or blank) and were forcibly changed by Chief.
+  #   Values: { old_value:, new_value:, explanation: }
+  #
+  # They are populated by categorize_automation_changes (first-edit),
+  # apply_query_string_automation (URL proposals), run_save_automation
+  # (save-time Chief), and parse_and_validate_field_list (redirect params).
+  # Consumed by the edit view (via projects_helper automated_field_set /
+  # overridden_field_set), format_override_details, and
+  # build_automation_metadata (JSON API).
+  #
+  # The external query parameters automated_fields_list and
+  # overridden_fields_list will set the keys, with the value {} if
+  # there is nothing more specific, to highlight those fields.
+
   # The 'badge', 'baseline_badge', and 'show_json' actions are special and
   # do NOT take a locale.
   skip_before_action :redir_missing_locale, only: %i[badge baseline_badge show_json]
@@ -566,6 +592,9 @@ class ProjectsController < ApplicationController
     return if @criteria_level == 'permissions'
 
     # Run first-edit automation if this level hasn't been edited yet
+    # (`SECTION_saved` is false). Only do this on "first edit of this section"
+    # because automation *can* take a while or the remote system could
+    # crash; we don't want to slow down simple edits from users.
     run_first_edit_automation_if_needed
 
     # Always consume query string proposals, even on revisits, so we
@@ -575,10 +604,13 @@ class ProjectsController < ApplicationController
     # Results merge into @automated_fields for highlighting.
     apply_query_string_automation
 
-    # Restore override/automated highlighting from redirect query params
-    # (handle_overridden_fields_redirect passes overridden= and automated=)
-    @overridden_fields ||= parse_and_validate_field_list(params[:overridden])
-    @automated_fields ||= parse_and_validate_field_list(params[:automated])
+    # Merge override/automated highlighting from redirect query params.
+    # (handle_overridden_fields_redirect passes overridden_fields_list= and automated_fields_list=)
+    # Existing entries (from automation) take priority over URL params.
+    @overridden_fields =
+      merge_field_lists(params[:overridden_fields_list], @overridden_fields)
+    @automated_fields =
+      merge_field_lists(params[:automated_fields_list], @automated_fields)
 
     return unless @project.notify_for_static_analysis?('0')
 
@@ -1652,7 +1684,7 @@ class ProjectsController < ApplicationController
     # Track which proposals actually changed values.
     # Map _justification fields to their _status counterpart so the
     # view (which highlights by status symbol) can find them.
-    @automated_fields ||= []
+    @automated_fields ||= {}
     modified.each do |field_name|
       new_value = @project.public_send(field_name)
       next if original_values[field_name] == new_value
@@ -1663,8 +1695,8 @@ class ProjectsController < ApplicationController
         else
           field_name
         end
-      @automated_fields << {
-        field: highlight_field, new_value: new_value, explanation: nil
+      @automated_fields[highlight_field] = {
+        new_value: new_value, explanation: nil
       }
     end
   end
@@ -1733,10 +1765,10 @@ class ProjectsController < ApplicationController
   # - Non-criteria field filled from blank: automated
   # Both lists are filtered to the current section.
   # @param original_values [Hash] Field name => value before automation
-  # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/AbcSize
   def categorize_automation_changes(original_values)
-    automated = []
-    overridden = []
+    automated = {}
+    overridden = {}
 
     original_values.each do |field_name, old_value|
       new_value = @project.public_send(field_name)
@@ -1749,13 +1781,13 @@ class ProjectsController < ApplicationController
         )
       elsif field_str.end_with?('_justification')
         status_field = field_str.sub('_justification', '_status').to_sym
-        automated << {
-          field: status_field, new_value: new_value, explanation: new_value
+        automated[status_field] = {
+          new_value: new_value, explanation: new_value
         }
       elsif ALWAYS_AUTOMATABLE.include?(field_name) &&
             old_value.blank? && new_value.present?
-        automated << {
-          field: field_name, new_value: new_value, explanation: nil
+        automated[field_name] = {
+          new_value: new_value, explanation: nil
         }
       end
     end
@@ -1763,7 +1795,7 @@ class ProjectsController < ApplicationController
     @automated_fields = filter_to_current_section(automated)
     @overridden_fields = filter_to_current_section(overridden)
   end
-  # rubocop:enable Metrics/MethodLength, Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/AbcSize
 
   # Categorize a status field change as automated or overridden.
   # Unknown -> real value is automated (yellow); real -> real is
@@ -1778,14 +1810,14 @@ class ProjectsController < ApplicationController
       if @project.respond_to?(justification_field)
         @project.public_send(justification_field)
       end
-    info = {
-      field: field_name, new_value: new_value, explanation: explanation
-    }
     if old_value == CriterionStatus::UNKNOWN
-      automated << info
+      automated[field_name] = {
+        new_value: new_value, explanation: explanation
+      }
     else
-      info[:old_value] = old_value
-      overridden << info
+      overridden[field_name] = {
+        old_value: old_value, new_value: new_value, explanation: explanation
+      }
     end
   end
   # rubocop:enable Metrics/MethodLength
@@ -1836,34 +1868,46 @@ class ProjectsController < ApplicationController
     end
   end
 
-  # Parse comma-separated field list and validate field names
-  # Only accepts fields valid for the current section being edited
+  # Merge field list from URL params with existing field data.
+  # URL params provide field names (for highlighting), while existing_fields
+  # may have rich metadata (old_value, new_value, explanation).
+  # Rich metadata always takes priority over empty {} from URL params.
+  # If we're just highlighting we don't *need* the rich metadata
+  # (mere presence is enough), but we don't want to lose the rich metadata,
+  # in case later changes to our code use the rich metadata.
+  # @param field_list_param [String, nil] Comma-separated field names from URL
+  # @param existing_fields [Hash, nil] Existing field data with metadata
+  # @return [Hash{Symbol => Hash}] Merged fields preserving rich data
+  def merge_field_lists(field_list_param, existing_fields)
+    url_fields = parse_and_validate_field_list(field_list_param)
+    return existing_fields || {} if url_fields.empty?
+    return url_fields if existing_fields.blank?
+
+    # Merge: existing rich data takes priority over URL's empty {} values
+    url_fields.merge(existing_fields)
+  end
+
+  # Parse comma-separated field list and validate field names.
+  # Only accepts fields valid for the current section being edited.
   # @param field_string [String, nil] Comma-separated field names
-  # @return [Array<Hash>] Array of validated field hashes with :field key
+  # @return [Hash{Symbol => Hash}] Validated fields keyed by field symbol
   def parse_and_validate_field_list(field_string)
-    return [] if field_string.blank?
+    return {} if field_string.blank?
 
     # Split by comma, strip whitespace, remove empty strings
     field_names = field_string.split(',').map(&:strip).compact_blank
 
     # Get valid fields for current section
     valid_fields = fields_for_current_section
-    return [] if valid_fields.nil? # Invalid section level
+    return {} if valid_fields.nil? # Invalid section level
 
-    # Validate each field name
-    validated_fields = []
+    # Validate each field name; silently skip invalid ones
+    validated = {}
     field_names.each do |field_name|
-      # Convert to symbol
       field_sym = field_name.to_sym
-
-      # Only accept if field is in the valid set for this section
-      if valid_fields.include?(field_sym)
-        validated_fields << { field: field_sym }
-      end
-      # Silently skip invalid field names (don't raise error, just ignore)
+      validated[field_sym] = {} if valid_fields.include?(field_sym)
     end
-
-    validated_fields
+    validated
   end
 
   # Categorize a single Chief proposal (override vs automated)
@@ -1881,8 +1925,7 @@ class ProjectsController < ApplicationController
     if data[:forced] && user_value.present? && user_value != CriterionStatus::UNKNOWN
       # Forced Chief override of user's real value - ORANGE
       # Always track overrides (needed for warning messages on any save)
-      @overridden_fields << {
-        field: field,
+      @overridden_fields[field] = {
         old_value: user_value,
         new_value: chief_value,
         explanation: data[:explanation]
@@ -1890,8 +1933,7 @@ class ProjectsController < ApplicationController
     elsif (user_value == CriterionStatus::UNKNOWN || user_value.blank?) && track_automated
       # Chief filling an unknown value - YELLOW
       # Only track on save-and-continue so user reviews before accepting
-      @automated_fields << {
-        field: field,
+      @automated_fields[field] = {
         new_value: chief_value,
         explanation: data[:explanation]
       }
@@ -1918,8 +1960,8 @@ class ProjectsController < ApplicationController
     # Categorize all proposals BEFORE applying changes.
     # Forced overrides of real user values are always tracked (for warnings).
     # Non-forced fills are tracked only on save-and-continue (for highlighting).
-    @overridden_fields = []
-    @automated_fields = []
+    @overridden_fields = {}
+    @automated_fields = {}
 
     current_section_changes.each do |field, data|
       categorize_chief_proposal(field, data, user_set_values[field], track_automated)
@@ -1944,22 +1986,16 @@ class ProjectsController < ApplicationController
   end
   # rubocop:enable Metrics/MethodLength
 
-  # Filter a collection to only fields in the current section.
-  # Accepts a Hash (Chief proposals keyed by field name) or an Array
-  # of hashes with a :field key (automated/overridden field lists).
-  # @param collection [Hash, Array<Hash>] Items to filter
-  # @return [Hash, Array<Hash>] Filtered collection (same type as input)
+  # Filter a Hash to only include fields in the current section.
+  # @param collection [Hash] Items keyed by field symbol
+  # @return [Hash] Filtered to fields valid for the current section
   def filter_to_current_section(collection)
     valid_fields = fields_for_current_section
 
     # If we don't have a valid field set, don't filter (safety fallback)
     return collection if valid_fields.nil?
 
-    if collection.is_a?(Hash)
-      collection.slice(*valid_fields)
-    else
-      collection.select { |entry| valid_fields.include?(entry[:field]) }
-    end
+    collection.slice(*valid_fields)
   end
 
   # Handle Chief failures during save
@@ -2013,16 +2049,16 @@ class ProjectsController < ApplicationController
   def format_override_details
     criteria_level_to_internal(@criteria_level)
     details =
-      @overridden_fields.map do |r|
+      @overridden_fields.map do |field, data|
         # Derive criterion key from status field: license_location_status -> license_location
-        criterion_key = r[:field].to_s.delete_suffix('_status').to_sym
+        criterion_key = field.to_s.delete_suffix('_status').to_sym
         # Show user-visible criterion ID (e.g., license_location or OSPS-LE-03.01)
         display_id = helpers.baseline_id_to_display(criterion_key)
         t('projects.edit.automation.override_detail',
           criterion: display_id,
-          old: status_value_to_string(r[:old_value]),
-          new: status_value_to_string(r[:new_value]),
-          explanation: r[:explanation])
+          old: status_value_to_string(data[:old_value]),
+          new: status_value_to_string(data[:new_value]),
+          explanation: data[:explanation])
       end
     details.join("\n")
   end
@@ -2040,12 +2076,12 @@ class ProjectsController < ApplicationController
     # Log overrides for monitoring
     Rails.logger.info(
       "Chief override: project=#{@project.id} user=#{current_user&.id} " \
-      "fields=#{@overridden_fields.pluck(:field).join(',')}"
+      "fields=#{@overridden_fields.keys.join(',')}"
     )
 
     # Redirect with highlight parameters
-    overridden_field_names = @overridden_fields.map { |r| r[:field].to_s }
-    automated_field_names = @automated_fields.map { |r| r[:field].to_s }
+    overridden_field_names = @overridden_fields.keys.map(&:to_s)
+    automated_field_names = @automated_fields.keys.map(&:to_s)
     first_overridden = overridden_field_names.first
 
     redirect_to edit_project_section_path(
@@ -2053,8 +2089,8 @@ class ProjectsController < ApplicationController
       section,
       locale: params[:locale],
       anchor: first_overridden,
-      overridden: overridden_field_names.join(','),
-      automated: automated_field_names.join(',')
+      overridden_fields_list: overridden_field_names.join(','),
+      automated_fields_list: automated_field_names.join(',')
     )
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
@@ -2078,8 +2114,8 @@ class ProjectsController < ApplicationController
       flash[:info] = t('projects.edit.successfully_updated')
       redirect_params = { locale: params[:locale] }
       if @automated_fields&.any?
-        redirect_params[:automated] =
-          @automated_fields.map { |r| r[:field].to_s }.join(',')
+        redirect_params[:automated_fields_list] =
+          @automated_fields.keys.join(',')
       end
       redirect_to edit_project_section_path(@project, section,
                                             **redirect_params) + url_anchor
@@ -2097,19 +2133,19 @@ class ProjectsController < ApplicationController
   # rubocop:disable Metrics/MethodLength
   def build_automation_metadata
     {
-      overridden: @overridden_fields&.map do |r|
+      overridden: @overridden_fields&.map do |field, data|
         {
-          field: r[:field],
-          old_value: r[:old_value],
-          new_value: r[:new_value],
-          explanation: r[:explanation]
+          field: field,
+          old_value: data[:old_value],
+          new_value: data[:new_value],
+          explanation: data[:explanation]
         }
       end || [],
-      automated: @automated_fields&.map do |r|
+      automated: @automated_fields&.map do |field, data|
         {
-          field: r[:field],
-          value: r[:new_value],
-          explanation: r[:explanation]
+          field: field,
+          value: data[:new_value],
+          explanation: data[:explanation]
         }
       end || []
     }

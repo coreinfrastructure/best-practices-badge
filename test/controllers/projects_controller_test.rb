@@ -606,6 +606,48 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, 'Edit Project Badge Status'
   end
 
+  test 'automated_fields_list query param highlights fields with robot icon' do
+    log_in_as(@project.user)
+
+    # Request edit page with automated_fields_list parameter
+    # Use _status suffix for criteria fields
+    get "/en/projects/#{@project.id}/passing/edit",
+        params: { automated_fields_list: 'contribution_status,license_status' }
+    assert_response :success
+
+    # Verify robot icon is now present (indicates automated highlighting)
+    assert_includes @response.body, '🤖',
+                    'Robot icon should appear when automated_fields_list param is set'
+
+    # Verify the automation icon appears with proper structure
+    assert_includes @response.body, 'automation-icon',
+                    'Automation icon span should be present'
+
+    # Verify it's associated with the contribution field
+    assert_match(/contribution.*automation-icon|automation-icon.*contribution/m,
+                 @response.body,
+                 'Automation icon should be near contribution field')
+  end
+
+  test 'overridden_fields_list query param highlights overridden fields' do
+    log_in_as(@project.user)
+
+    # First, get edit page without highlighting
+    get "/en/projects/#{@project.id}/passing/edit"
+    assert_response :success
+
+    # Verify that contribution_status field exists
+    assert_includes @response.body, 'project_contribution_status'
+
+    # Now request edit page with overridden_fields_list parameter
+    get "/en/projects/#{@project.id}/passing/edit",
+        params: { overridden_fields_list: 'contribution_status' }
+    assert_response :success
+
+    # Verify the field still appears (override highlighting uses CSS)
+    assert_includes @response.body, 'project_contribution_status'
+  end
+
   # rubocop:disable Metrics/BlockLength
   test 'can add users with additional rights using "+"' do
     log_in_as(@project.user)
@@ -1984,7 +2026,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
             continue: 'Quality'
           }
     assert_response :redirect
-    # Should redirect to baseline-1/edit with anchor (may include automated= param)
+    # Should redirect to baseline-1/edit with anchor (may include automated_fields_list= param)
     assert_match %r{/baseline-1/edit(\?[^#]*)?#Quality\z}, response.location
   end
 
@@ -2183,13 +2225,13 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     # Set up override scenario
     controller.instance_variable_set(:@project, @project)
     controller.instance_variable_set(:@criteria_level, 'passing')
-    controller.instance_variable_set(:@overridden_fields, [
-                                       {
-                                         field: :license, old_value: 'MIT', new_value: 'Apache-2.0',
+    controller.instance_variable_set(:@overridden_fields, {
+                                       license: {
+                                         old_value: 'MIT', new_value: 'Apache-2.0',
                                          explanation: 'Detected Apache license'
                                        }
-                                     ])
-    controller.instance_variable_set(:@automated_fields, [])
+                                     })
+    controller.instance_variable_set(:@automated_fields, {})
 
     # Test the format_override_details method
     details = controller.send(:format_override_details)
@@ -2206,8 +2248,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     # Set up controller state to test categorize_chief_proposal
     controller.instance_variable_set(:@project, @project)
     controller.instance_variable_set(:@criteria_level, 'passing')
-    controller.instance_variable_set(:@overridden_fields, [])
-    controller.instance_variable_set(:@automated_fields, [])
+    controller.instance_variable_set(:@overridden_fields, {})
+    controller.instance_variable_set(:@automated_fields, {})
 
     # Test categorizing a forced override
     controller.send(:categorize_chief_proposal,
@@ -2217,10 +2259,10 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     # Should be categorized as override (not automation)
     overrides = controller.instance_variable_get(:@overridden_fields)
-    assert_equal 1, overrides.length
-    assert_equal :license, overrides[0][:field]
-    assert_equal 'MIT', overrides[0][:old_value]
-    assert_equal 'Apache-2.0', overrides[0][:new_value]
+    assert_equal 1, overrides.size
+    assert overrides.key?(:license)
+    assert_equal 'MIT', overrides[:license][:old_value]
+    assert_equal 'Apache-2.0', overrides[:license][:new_value]
   end
 
   test 'JSON update includes automation metadata' do
@@ -2244,8 +2286,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     # Set up controller state
     controller.instance_variable_set(:@project, @project)
     controller.instance_variable_set(:@criteria_level, 'passing')
-    controller.instance_variable_set(:@overridden_fields, [])
-    controller.instance_variable_set(:@automated_fields, [])
+    controller.instance_variable_set(:@overridden_fields, {})
+    controller.instance_variable_set(:@automated_fields, {})
 
     # Test categorizing automation (filling in Unknown status)
     controller.send(:categorize_chief_proposal,
@@ -2257,10 +2299,10 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     automated = controller.instance_variable_get(:@automated_fields)
     overrides = controller.instance_variable_get(:@overridden_fields)
 
-    assert_equal 1, automated.length
-    assert_equal :contribution_status, automated[0][:field]
-    assert_equal CriterionStatus::MET, automated[0][:new_value]
-    assert_equal 0, overrides.length # No overrides
+    assert_equal 1, automated.size
+    assert automated.key?(:contribution_status)
+    assert_equal CriterionStatus::MET, automated[:contribution_status][:new_value]
+    assert_empty overrides
   end
 
   test 'categorize_automation_changes detects filled in unknowns' do
@@ -2285,7 +2327,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     automated = controller.instance_variable_get(:@automated_fields)
     overridden = controller.instance_variable_get(:@overridden_fields)
-    assert_includes automated.pluck(:field), :contribution_status
+    assert automated.key?(:contribution_status)
     assert_empty overridden
   end
 
@@ -2312,10 +2354,10 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     automated = controller.instance_variable_get(:@automated_fields)
     overridden = controller.instance_variable_get(:@overridden_fields)
     assert_empty automated
-    assert_equal 1, overridden.length
-    assert_equal :contribution_status, overridden[0][:field]
-    assert_equal CriterionStatus::MET, overridden[0][:old_value]
-    assert_equal CriterionStatus::UNMET, overridden[0][:new_value]
+    assert_equal 1, overridden.size
+    assert overridden.key?(:contribution_status)
+    assert_equal CriterionStatus::MET, overridden[:contribution_status][:old_value]
+    assert_equal CriterionStatus::UNMET, overridden[:contribution_status][:new_value]
   end
 
   test 'run_save_automation catches chief exceptions' do
@@ -2446,10 +2488,10 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     log_in_as(@user)
     controller = ProjectsController.new
     controller.instance_variable_set(:@project, @project)
-    controller.instance_variable_set(:@automated_fields, [
-                                       { field: :contribution_status, new_value: CriterionStatus::MET, explanation: 'Auto-detected' }
-                                     ])
-    controller.instance_variable_set(:@overridden_fields, [])
+    controller.instance_variable_set(:@automated_fields, {
+                                       contribution_status: { new_value: CriterionStatus::MET, explanation: 'Auto-detected' }
+                                     })
+    controller.instance_variable_set(:@overridden_fields, {})
 
     json_metadata = controller.send(:build_automation_metadata)
 
@@ -2472,7 +2514,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     # SQL injection attempts should be silently ignored
     malicious = "'; DROP TABLE projects; --"
     result = controller.send(:parse_and_validate_field_list, malicious)
-    assert_equal [], result, 'SQL injection attempt should be rejected'
+    assert_equal({}, result, 'SQL injection attempt should be rejected')
   end
 
   test 'parse_and_validate_field_list rejects non-existent field' do
@@ -2484,7 +2526,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     # Non-existent field should be rejected
     result = controller.send(:parse_and_validate_field_list, 'not_a_field')
-    assert_equal [], result, 'Non-existent field should be rejected'
+    assert_equal({}, result, 'Non-existent field should be rejected')
   end
 
   test 'parse_and_validate_field_list rejects field from different section' do
@@ -2496,7 +2538,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     # osps_br_01_01_status is a baseline-1 criterion, not in passing
     result = controller.send(:parse_and_validate_field_list, 'osps_br_01_01_status')
-    assert_equal [], result, 'Field from different section should be rejected'
+    assert_equal({}, result, 'Field from different section should be rejected')
   end
 
   test 'parse_and_validate_field_list accepts valid criteria field for section' do
@@ -2508,8 +2550,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     # contribution_status is valid for passing level
     result = controller.send(:parse_and_validate_field_list, 'contribution_status')
-    assert_equal 1, result.length
-    assert_equal :contribution_status, result[0][:field]
+    assert_equal 1, result.size
+    assert result.key?(:contribution_status)
   end
 
   test 'parse_and_validate_field_list accepts valid non-criteria field' do
@@ -2521,13 +2563,13 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     # name is always automatable, valid for any section
     result = controller.send(:parse_and_validate_field_list, 'name')
-    assert_equal 1, result.length
-    assert_equal :name, result[0][:field]
+    assert_equal 1, result.size
+    assert result.key?(:name)
 
     # license is always automatable
     result = controller.send(:parse_and_validate_field_list, 'license')
-    assert_equal 1, result.length
-    assert_equal :license, result[0][:field]
+    assert_equal 1, result.size
+    assert result.key?(:license)
   end
 
   test 'parse_and_validate_field_list handles mixed valid and invalid fields' do
@@ -2541,12 +2583,11 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     mixed = 'name,not_a_field,contribution_status,"; DROP TABLE users;--,license'
     result = controller.send(:parse_and_validate_field_list, mixed)
 
-    assert_equal 3, result.length
-    field_names = result.pluck(:field)
-    assert_includes field_names, :name
-    assert_includes field_names, :contribution_status
-    assert_includes field_names, :license
-    assert_not_includes field_names, :not_a_field
+    assert_equal 3, result.size
+    assert result.key?(:name)
+    assert result.key?(:contribution_status)
+    assert result.key?(:license)
+    assert_not result.key?(:not_a_field)
   end
 
   test 'parse_and_validate_field_list rejects XSS attempt' do
@@ -2559,7 +2600,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     # XSS attempts should be rejected
     xss = '<script>alert("xss")</script>'
     result = controller.send(:parse_and_validate_field_list, xss)
-    assert_equal [], result, 'XSS attempt should be rejected'
+    assert_equal({}, result, 'XSS attempt should be rejected')
   end
 
   test 'parse_and_validate_field_list rejects path traversal attempt' do
@@ -2572,7 +2613,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     # Path traversal attempts should be rejected
     traversal = '../../../etc/passwd'
     result = controller.send(:parse_and_validate_field_list, traversal)
-    assert_equal [], result, 'Path traversal attempt should be rejected'
+    assert_equal({}, result, 'Path traversal attempt should be rejected')
   end
 
   test 'parse_and_validate_field_list handles empty and whitespace' do
@@ -2582,15 +2623,114 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     controller.instance_variable_set(:@project, @project)
     controller.instance_variable_set(:@criteria_level, '0')
 
-    # Empty should return empty array
-    assert_equal [], controller.send(:parse_and_validate_field_list, '')
-    assert_equal [], controller.send(:parse_and_validate_field_list, nil)
-    assert_equal [], controller.send(:parse_and_validate_field_list, '   ')
+    # Empty should return empty hash
+    assert_equal({}, controller.send(:parse_and_validate_field_list, ''))
+    assert_equal({}, controller.send(:parse_and_validate_field_list, nil))
+    assert_equal({}, controller.send(:parse_and_validate_field_list, '   '))
 
     # Whitespace with valid field should work
     result = controller.send(:parse_and_validate_field_list, '  name  ')
-    assert_equal 1, result.length
-    assert_equal :name, result[0][:field]
+    assert_equal 1, result.size
+    assert result.key?(:name)
+  end
+
+  test 'merge_field_lists preserves rich metadata from existing fields' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.params = ActionController::Parameters.new(id: @project.id)
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, '0')
+
+    # Existing fields with rich metadata
+    existing = {
+      contribution_status: {
+        old_value: '?',
+        new_value: 'Met',
+        explanation: 'Auto-detected from repo'
+      },
+      license_status: {
+        old_value: 'Unmet',
+        new_value: 'Met',
+        explanation: 'Found MIT license'
+      }
+    }
+
+    # URL params only have field names (empty values)
+    result = controller.send(:merge_field_lists,
+                             'contribution_status,license_status',
+                             existing)
+
+    # Should preserve rich metadata
+    assert_equal 2, result.size
+    assert_equal 'Met', result[:contribution_status][:new_value]
+    assert_equal 'Auto-detected from repo',
+                 result[:contribution_status][:explanation]
+    assert_equal 'Found MIT license', result[:license_status][:explanation]
+  end
+
+  test 'merge_field_lists adds new fields from URL params' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.params = ActionController::Parameters.new(id: @project.id)
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, '0')
+
+    # Existing fields with one entry
+    existing = {
+      contribution_status: {
+        new_value: 'Met',
+        explanation: 'Auto-detected'
+      }
+    }
+
+    # URL params include both existing and new field (both valid in basics)
+    result = controller.send(:merge_field_lists,
+                             'contribution_status,name',
+                             existing)
+
+    # Should have both fields, preserving metadata for existing
+    assert_equal 2, result.size
+    assert_equal 'Met', result[:contribution_status][:new_value]
+    assert_equal({}, result[:name]) # New field has empty metadata
+  end
+
+  test 'merge_field_lists handles nil existing fields' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.params = ActionController::Parameters.new(id: @project.id)
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, '0')
+
+    # No existing fields (typical after redirect)
+    # Use fields that are valid in basics section (0)
+    result = controller.send(:merge_field_lists,
+                             'name,description',
+                             nil)
+
+    # Should create fields with empty metadata
+    assert_equal 2, result.size
+    assert_equal({}, result[:name])
+    assert_equal({}, result[:description])
+  end
+
+  test 'merge_field_lists handles empty URL params' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.params = ActionController::Parameters.new(id: @project.id)
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, '0')
+
+    existing = { contribution_status: { new_value: 'Met' } }
+
+    # Empty URL params
+    result = controller.send(:merge_field_lists, '', existing)
+
+    # Should return existing fields unchanged
+    assert_equal existing, result
+
+    # Nil URL params
+    result = controller.send(:merge_field_lists, nil, existing)
+    assert_equal existing, result
   end
 
   # Test apply_query_string_proposals_to_project method directly
@@ -2862,8 +3002,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     # Field should be set and tracked as automated
     assert_equal CriterionStatus::MET, @project.contribution_status
     automated = controller.instance_variable_get(:@automated_fields)
-    assert_equal 1, automated.length
-    assert_equal :contribution_status, automated[0][:field]
+    assert_equal 1, automated.size
+    assert automated.key?(:contribution_status)
   end
 
   test 'apply_query_string_automation works on first edit (section not saved)' do
@@ -2892,8 +3032,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     # Field should be set and tracked as automated
     assert_equal CriterionStatus::MET, @project.contribution_status
     automated = controller.instance_variable_get(:@automated_fields)
-    assert_equal 1, automated.length
-    assert_equal :contribution_status, automated[0][:field]
+    assert_equal 1, automated.size
+    assert automated.key?(:contribution_status)
   end
 
   test 'apply_query_string_automation maps justification to status field' do
@@ -2924,9 +3064,9 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     # The automated_fields entry should map to the _status counterpart
     automated = controller.instance_variable_get(:@automated_fields)
-    assert_equal 1, automated.length
-    assert_equal :contribution_status, automated[0][:field]
-    assert_equal 'Automated justification text', automated[0][:new_value]
+    assert_equal 1, automated.size
+    assert automated.key?(:contribution_status)
+    assert_equal 'Automated justification text', automated[:contribution_status][:new_value]
   end
 
   test 'save and continue passes automated fields in redirect URL' do
@@ -2947,8 +3087,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     }
 
     assert_response :redirect
-    assert_match(/automated=.*description_good_status/, response.location,
-                 'Redirect URL must include automated fields for highlighting')
+    assert_match(/automated_fields_list=.*description_good_status/, response.location,
+                 'Redirect URL must include automated_fields_list for highlighting')
   end
 
   private

@@ -575,10 +575,14 @@ class ProjectsController < ApplicationController
     # Results merge into @automated_fields for highlighting.
     apply_query_string_automation
 
-    # Restore override/automated highlighting from redirect query params
+    # Merge override/automated highlighting from redirect query params
     # (handle_overridden_fields_redirect passes overridden= and automated=)
-    @overridden_fields ||= parse_and_validate_field_list(params[:overridden])
-    @automated_fields ||= parse_and_validate_field_list(params[:automated])
+    @overridden_fields = merge_field_lists(
+      @overridden_fields, parse_and_validate_field_list(params[:overridden])
+    )
+    @automated_fields = merge_field_lists(
+      @automated_fields, parse_and_validate_field_list(params[:automated])
+    )
 
     return unless @project.notify_for_static_analysis?('0')
 
@@ -1864,6 +1868,19 @@ class ProjectsController < ApplicationController
     end
 
     validated_fields
+  end
+
+  # Merge two field-highlight lists, deduplicating by :field key.
+  # Entries from +existing+ take priority over +additions+.
+  # @param existing [Array<Hash>, nil] current field list (may be nil)
+  # @param additions [Array<Hash>] new entries to merge in
+  # @return [Array<Hash>] combined list with unique :field values
+  def merge_field_lists(existing, additions)
+    existing ||= []
+    return existing if additions.empty?
+
+    seen = existing.to_set { |h| h[:field] }
+    existing + additions.reject { |h| seen.include?(h[:field]) }
   end
 
   # Categorize a single Chief proposal (override vs automated)

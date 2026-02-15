@@ -2634,6 +2634,105 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert result.key?(:name)
   end
 
+  test 'merge_field_lists preserves rich metadata from existing fields' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.params = ActionController::Parameters.new(id: @project.id)
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, '0')
+
+    # Existing fields with rich metadata
+    existing = {
+      contribution_status: {
+        old_value: '?',
+        new_value: 'Met',
+        explanation: 'Auto-detected from repo'
+      },
+      license_status: {
+        old_value: 'Unmet',
+        new_value: 'Met',
+        explanation: 'Found MIT license'
+      }
+    }
+
+    # URL params only have field names (empty values)
+    result = controller.send(:merge_field_lists,
+                             'contribution_status,license_status',
+                             existing)
+
+    # Should preserve rich metadata
+    assert_equal 2, result.size
+    assert_equal 'Met', result[:contribution_status][:new_value]
+    assert_equal 'Auto-detected from repo',
+                 result[:contribution_status][:explanation]
+    assert_equal 'Found MIT license', result[:license_status][:explanation]
+  end
+
+  test 'merge_field_lists adds new fields from URL params' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.params = ActionController::Parameters.new(id: @project.id)
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, '0')
+
+    # Existing fields with one entry
+    existing = {
+      contribution_status: {
+        new_value: 'Met',
+        explanation: 'Auto-detected'
+      }
+    }
+
+    # URL params include both existing and new field (both valid in basics)
+    result = controller.send(:merge_field_lists,
+                             'contribution_status,name',
+                             existing)
+
+    # Should have both fields, preserving metadata for existing
+    assert_equal 2, result.size
+    assert_equal 'Met', result[:contribution_status][:new_value]
+    assert_equal({}, result[:name]) # New field has empty metadata
+  end
+
+  test 'merge_field_lists handles nil existing fields' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.params = ActionController::Parameters.new(id: @project.id)
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, '0')
+
+    # No existing fields (typical after redirect)
+    # Use fields that are valid in basics section (0)
+    result = controller.send(:merge_field_lists,
+                             'name,description',
+                             nil)
+
+    # Should create fields with empty metadata
+    assert_equal 2, result.size
+    assert_equal({}, result[:name])
+    assert_equal({}, result[:description])
+  end
+
+  test 'merge_field_lists handles empty URL params' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.params = ActionController::Parameters.new(id: @project.id)
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, '0')
+
+    existing = { contribution_status: { new_value: 'Met' } }
+
+    # Empty URL params
+    result = controller.send(:merge_field_lists, '', existing)
+
+    # Should return existing fields unchanged
+    assert_equal existing, result
+
+    # Nil URL params
+    result = controller.send(:merge_field_lists, nil, existing)
+    assert_equal existing, result
+  end
+
   # Test apply_query_string_proposals_to_project method directly
   # This method applies external automation proposals from URL parameters
   test 'apply_query_string_proposals accepts valid status strings' do

@@ -608,11 +608,9 @@ class ProjectsController < ApplicationController
     # (handle_overridden_fields_redirect passes overridden_fields_list= and automated_fields_list=)
     # Existing entries (from automation) take priority over URL params.
     @overridden_fields =
-      parse_and_validate_field_list(params[:overridden_fields_list])
-      .merge(@overridden_fields || {})
+      merge_field_lists(params[:overridden_fields_list], @overridden_fields)
     @automated_fields =
-      parse_and_validate_field_list(params[:automated_fields_list])
-      .merge(@automated_fields || {})
+      merge_field_lists(params[:automated_fields_list], @automated_fields)
 
     return unless @project.notify_for_static_analysis?('0')
 
@@ -1868,6 +1866,25 @@ class ProjectsController < ApplicationController
     when 'n/a', 'na' then CriterionStatus::NA
     when 'met' then CriterionStatus::MET
     end
+  end
+
+  # Merge field list from URL params with existing field data.
+  # URL params provide field names (for highlighting), while existing_fields
+  # may have rich metadata (old_value, new_value, explanation).
+  # Rich metadata always takes priority over empty {} from URL params.
+  # If we're just highlighting we don't *need* the rich metadata
+  # (mere presence is enough), but we don't want to lose the rich metadata,
+  # in case later changes to our code use the rich metadata.
+  # @param field_list_param [String, nil] Comma-separated field names from URL
+  # @param existing_fields [Hash, nil] Existing field data with metadata
+  # @return [Hash{Symbol => Hash}] Merged fields preserving rich data
+  def merge_field_lists(field_list_param, existing_fields)
+    url_fields = parse_and_validate_field_list(field_list_param)
+    return existing_fields || {} if url_fields.empty?
+    return url_fields if existing_fields.blank?
+
+    # Merge: existing rich data takes priority over URL's empty {} values
+    url_fields.merge(existing_fields)
   end
 
   # Parse comma-separated field list and validate field names.

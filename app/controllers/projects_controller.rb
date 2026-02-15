@@ -70,6 +70,10 @@ class ProjectsController < ApplicationController
   # Consumed by the edit view (via projects_helper automated_field_set /
   # overridden_field_set), format_override_details, and
   # build_automation_metadata (JSON API).
+  #
+  # The external query parameters automated_fields_list and
+  # overridden_fields_list will set the keys, with the value {} if
+  # there is nothing more specific, to highlight those fields.
 
   # The 'badge', 'baseline_badge', and 'show_json' actions are special and
   # do NOT take a locale.
@@ -601,13 +605,13 @@ class ProjectsController < ApplicationController
     apply_query_string_automation
 
     # Merge override/automated highlighting from redirect query params.
-    # (handle_overridden_fields_redirect passes overridden= and automated=)
+    # (handle_overridden_fields_redirect passes overridden_fields_list= and automated_fields_list=)
     # Existing entries (from automation) take priority over URL params.
     @overridden_fields =
-      parse_and_validate_field_list(params[:overridden])
+      parse_and_validate_field_list(params[:overridden_fields_list])
       .merge(@overridden_fields || {})
     @automated_fields =
-      parse_and_validate_field_list(params[:automated])
+      parse_and_validate_field_list(params[:automated_fields_list])
       .merge(@automated_fields || {})
 
     return unless @project.notify_for_static_analysis?('0')
@@ -2068,8 +2072,8 @@ class ProjectsController < ApplicationController
       section,
       locale: params[:locale],
       anchor: first_overridden,
-      overridden: overridden_field_names.join(','),
-      automated: automated_field_names.join(',')
+      overridden_fields_list: overridden_field_names.join(','),
+      automated_fields_list: automated_field_names.join(',')
     )
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
@@ -2093,7 +2097,7 @@ class ProjectsController < ApplicationController
       flash[:info] = t('projects.edit.successfully_updated')
       redirect_params = { locale: params[:locale] }
       if @automated_fields&.any?
-        redirect_params[:automated] =
+        redirect_params[:automated_fields_list] =
           @automated_fields.keys.join(',')
       end
       redirect_to edit_project_section_path(@project, section,

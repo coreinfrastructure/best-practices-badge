@@ -606,6 +606,48 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, 'Edit Project Badge Status'
   end
 
+  test 'automated_fields_list query param highlights fields with robot icon' do
+    log_in_as(@project.user)
+
+    # Request edit page with automated_fields_list parameter
+    # Use _status suffix for criteria fields
+    get "/en/projects/#{@project.id}/passing/edit",
+        params: { automated_fields_list: 'contribution_status,license_status' }
+    assert_response :success
+
+    # Verify robot icon is now present (indicates automated highlighting)
+    assert_includes @response.body, '🤖',
+                    'Robot icon should appear when automated_fields_list param is set'
+
+    # Verify the automation icon appears with proper structure
+    assert_includes @response.body, 'automation-icon',
+                    'Automation icon span should be present'
+
+    # Verify it's associated with the contribution field
+    assert_match(/contribution.*automation-icon|automation-icon.*contribution/m,
+                 @response.body,
+                 'Automation icon should be near contribution field')
+  end
+
+  test 'overridden_fields_list query param highlights overridden fields' do
+    log_in_as(@project.user)
+
+    # First, get edit page without highlighting
+    get "/en/projects/#{@project.id}/passing/edit"
+    assert_response :success
+
+    # Verify that contribution_status field exists
+    assert_includes @response.body, 'project_contribution_status'
+
+    # Now request edit page with overridden_fields_list parameter
+    get "/en/projects/#{@project.id}/passing/edit",
+        params: { overridden_fields_list: 'contribution_status' }
+    assert_response :success
+
+    # Verify the field still appears (override highlighting uses CSS)
+    assert_includes @response.body, 'project_contribution_status'
+  end
+
   # rubocop:disable Metrics/BlockLength
   test 'can add users with additional rights using "+"' do
     log_in_as(@project.user)

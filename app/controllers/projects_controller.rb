@@ -588,6 +588,9 @@ class ProjectsController < ApplicationController
     return if @criteria_level == 'permissions'
 
     # Run first-edit automation if this level hasn't been edited yet
+    # (`SECTION_saved` is false). Only do this on "first edit of this section"
+    # because automation *can* take a while or the remote system could
+    # crash; we don't want to slow down simple edits from users.
     run_first_edit_automation_if_needed
 
     # Always consume query string proposals, even on revisits, so we

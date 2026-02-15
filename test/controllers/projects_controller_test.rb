@@ -3087,8 +3087,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     }
 
     assert_response :redirect
-    assert_match(/automated=.*description_good_status/, response.location,
-                 'Redirect URL must include automated fields for highlighting')
+    assert_match(/automated_fields_list=.*description_good_status/, response.location,
+                 'Redirect URL must include automated_fields_list for highlighting')
   end
 
   private

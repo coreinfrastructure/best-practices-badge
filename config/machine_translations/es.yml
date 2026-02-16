@@ -1383,3 +1383,5 @@ es:
       some_contents_found: Se encontraron algunos contenidos de archivos de %{description}.
     test_forced:
       test_automation: Automatización de pruebas (confianza %{confidence})
+    repo_json:
+      field_from_file: Valor del archivo JSON de bestpractices del proyecto

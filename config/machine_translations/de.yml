@@ -396,3 +396,5 @@ de:
       some_contents_found: Einige %{description}-Dateiinhalte gefunden.
     test_forced:
       test_automation: Testautomatisierung (Vertrauen %{confidence})
+    repo_json:
+      field_from_file: Wert aus der bestpractices JSON-Datei des Projekts

@@ -1240,3 +1240,5 @@ sw:
       some_contents_found: Baadhi ya yaliyomo ya faili ya %{description} yamepatikana.
     test_forced:
       test_automation: Utomatiaji wa majaribio (kujiamini %{confidence})
+    repo_json:
+      field_from_file: Thamani kutoka faili ya JSON ya bestpractices ya mradi

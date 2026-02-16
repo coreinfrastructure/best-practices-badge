@@ -404,3 +404,5 @@ ru:
       some_contents_found: Найдено некоторое содержимое файлов %{description}.
     test_forced:
       test_automation: Автоматизация тестирования (уверенность %{confidence})
+    repo_json:
+      field_from_file: Значение из JSON-файла bestpractices проекта

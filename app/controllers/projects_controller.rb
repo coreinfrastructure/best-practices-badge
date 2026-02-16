@@ -1856,16 +1856,7 @@ class ProjectsController < ApplicationController
   # @param value [String] Value from URL parameter
   # @return [Integer, nil] Status integer or nil if invalid
   def parse_status_value(value)
-    # Strip whitespace and normalize to lowercase
-    normalized = value.to_s.strip.downcase
-
-    # Parse status string to internal integer
-    case normalized
-    when '?', 'unknown' then CriterionStatus::UNKNOWN
-    when 'unmet' then CriterionStatus::UNMET
-    when 'n/a', 'na' then CriterionStatus::NA
-    when 'met' then CriterionStatus::MET
-    end
+    CriterionStatus.parse(value)
   end
 
   # Merge field list from URL params with existing field data.

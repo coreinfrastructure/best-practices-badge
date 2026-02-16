@@ -9,22 +9,24 @@
 # validate status values and justification text.
 module CriterionFieldValidator
   # Parse status value string to integer with canonical form conversion.
-  # Accepts case-insensitive text: 'met', 'Met', 'MET' all map to 3.
-  # Ignores '?' and empty values (not useful for automation).
+  # For JSON automation - rejects '?' and empty (no automation value).
+  # Accepts: 'met', 'unmet', 'n/a', 'na' (case-insensitive)
+  # Rejects: '?', 'unknown', empty strings
   # @param value [String] status value (must be string, not integer)
   # @return [Hash{Symbol => Object}, nil]
-  #   {value: Integer, canonical: String} or nil if invalid
+  #   {value: Integer, canonical: String} or nil if invalid/unknown
   def self.parse_status_value(value)
     return unless value.is_a?(String)
 
     stripped = value.strip
-    return if stripped.empty? || stripped == '?'
+    return if stripped.empty?
 
-    # Case-insensitive lookup, return both integer and canonical form
-    CriterionStatus::STATUS_BY_NAME.each do |canonical_name, int_value|
-      return { value: int_value, canonical: canonical_name } if canonical_name.casecmp?(stripped)
-    end
-    nil
+    # Use shared CriterionStatus logic (rejects UNKNOWN for automation)
+    canonical = CriterionStatus.canonicalize_for_automation(stripped)
+    return unless canonical
+
+    # Return both integer and canonical form for JSON processing
+    { value: CriterionStatus.parse(stripped), canonical: canonical }
   end
 
   # Validate and sanitize justification text.

@@ -43,6 +43,24 @@ class CriterionFieldValidatorTest < ActiveSupport::TestCase
     assert_nil CriterionFieldValidator.parse_status_value('false')
   end
 
+  test 'parse_status_value rejects question mark and unknown for automation' do
+    # JSON automation: '?' and 'unknown' mean "I don't know" - no automation value
+    assert_nil CriterionFieldValidator.parse_status_value('?')
+    assert_nil CriterionFieldValidator.parse_status_value('unknown')
+    assert_nil CriterionFieldValidator.parse_status_value('UNKNOWN')
+  end
+
+  test 'parse_status_value accepts aliases for automation' do
+    # JSON can use 'na' as alias for 'N/A'
+    result = CriterionFieldValidator.parse_status_value('na')
+    assert_equal 2, result[:value]
+    assert_equal 'N/A', result[:canonical]
+
+    result = CriterionFieldValidator.parse_status_value('NA')
+    assert_equal 2, result[:value]
+    assert_equal 'N/A', result[:canonical]
+  end
+
   test 'validate_justification accepts valid UTF-8 text' do
     text = 'This is a valid justification'
     result = CriterionFieldValidator.validate_justification(text)

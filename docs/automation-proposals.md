@@ -181,6 +181,33 @@ the field keeps its previous value.
 The `na_allowed` attribute in the criteria YAML files controls whether
 a criterion accepts `N/A` as a valid status.
 
+### Status Value Semantics: Query Strings vs JSON
+
+There's an important distinction between query string proposals and
+JSON file automation (see [.bestpractices.json](bestpractices-json.md)):
+
+**Query String Proposals (this mechanism):**
+
+- `?` means **"explicitly reset this field to unknown"**
+- Users can clear a previously-set status by passing `?` in the URL
+- Example: `...edit?contribution_status=?` resets the status to unknown
+- This is intentional - humans can use URLs to reset fields
+
+**JSON File Automation (`.bestpractices.json`):**
+
+- `?` or `"unknown"` means **"I don't know the answer"**
+- These values are **ignored entirely** - they provide no automation information
+- Example: `{"contribution_status": "?"}` is skipped, existing value unchanged
+- This lets you safely reuse JSON files containing placeholder `?` values
+
+**Why the difference?** Query string proposals represent explicit human actions
+through a URL. JSON files represent automated tool outputs where `?` means
+"no information available" rather than "please clear this field."
+
+This design allows projects to copy `.bestpractices.json` files from templates
+or other projects that are filled with `?` placeholders without accidentally
+clearing their existing answers.
+
 ## Justification Values
 
 Justification fields (`*_justification`) accept any text string.

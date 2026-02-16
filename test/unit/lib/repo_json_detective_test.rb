@@ -99,6 +99,24 @@ class RepoJsonDetectiveTest < ActiveSupport::TestCase
     assert result.key?(:license_location_status)
   end
 
+  test 'ignores unknown status values for automation' do
+    # JSON automation: 'unknown' means "I don't know" - provides no value
+    json_content = {
+      'contribution_status' => 'unknown',
+      'contribution_justification' => 'This should be ignored',
+      'license_location_status' => 'Met'
+    }.to_json
+
+    repo_files = MockRepoFiles.new(primary_content: json_content)
+    detective = RepoJsonDetective.new
+
+    result = detective.analyze(nil, { repo_files: repo_files })
+
+    assert_not result.key?(:contribution_status),
+               'JSON "unknown" status should be ignored (no automation value)'
+    assert result.key?(:license_location_status)
+  end
+
   test 'ignores empty status values' do
     json_content = {
       'contribution_status' => '',

@@ -2937,6 +2937,35 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal original_status, project.contribution_status
   end
 
+  test 'apply_query_string_proposals can reset status to UNKNOWN' do
+    # Query strings must allow users to explicitly reset status to '?'
+    project = projects(:perfect)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, project)
+
+    # Set a status value
+    project.contribution_status = CriterionStatus::MET
+
+    # User explicitly sets it to '?' to reset/clear
+    params = { 'contribution_status' => '?' }
+    modified = controller.send(:apply_query_string_proposals_to_project,
+                               project, params, '0')
+
+    assert_includes modified, :contribution_status,
+                    'Query string should accept ? to reset status'
+    assert_equal CriterionStatus::UNKNOWN, project.contribution_status,
+                 'Status should be reset to UNKNOWN'
+
+    # Also test 'unknown' alias
+    project.contribution_status = CriterionStatus::MET
+    params = { 'contribution_status' => 'unknown' }
+    modified = controller.send(:apply_query_string_proposals_to_project,
+                               project, params, '0')
+
+    assert_includes modified, :contribution_status
+    assert_equal CriterionStatus::UNKNOWN, project.contribution_status
+  end
+
   test 'apply_query_string_proposals returns list of modified fields' do
     project = projects(:perfect)
     controller = ProjectsController.new

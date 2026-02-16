@@ -274,8 +274,11 @@ class Chief
   # @param needed_fields [Set<Symbol>, nil] Fields the caller wants filled
   #   (nil = all detective outputs, e.g. cron job)
   # @param changed_fields [Array<Symbol>, nil] Fields that were explicitly changed
+  # @param only_consider_overrides [Boolean] Whether to only run detectives that
+  #   can force overrides (confidence >= CONFIDENCE_OVERRIDE). Default false.
+  #   Set to true for "save and exit" to skip unnecessary work.
   # rubocop:disable Metrics/MethodLength
-  def propose_changes(needed_fields: nil, changed_fields: nil)
+  def propose_changes(needed_fields: nil, changed_fields: nil, only_consider_overrides: false)
     with_project_locale do
       current_proposal = {} # Current best changeset.
 
@@ -294,6 +297,18 @@ class Chief
         detective.octokit_client_factory = @client_factory
         current_proposal = propose_one_change(detective, current_proposal)
       end
+
+      # Run RepoJsonDetective last as a final overlay of project
+      # self-declarations.
+      # We only run this if non-overridable results might be used
+      # (initial edit or save-continue). We skip this on
+      # save-exit since these self-declarations can never force an override.
+      if !only_consider_overrides && repo_files_available?
+        repo_json_detective = RepoJsonDetective.new
+        repo_json_detective.octokit_client_factory = @client_factory
+        current_proposal = propose_one_change(repo_json_detective, current_proposal)
+      end
+
       current_proposal
     end
   end
@@ -334,11 +349,22 @@ class Chief
   # @param needed_fields [Set<Symbol>, nil] Fields the caller wants filled
   #   (nil = all detective outputs)
   # @param changed_fields [Array<Symbol>, nil] Fields that were explicitly changed
-  def autofill(needed_fields: nil, changed_fields: nil)
+  # @param only_consider_overrides [Boolean] Whether to only run detectives that
+  #   can force overrides. Set true for "save and exit" optimization.
+  def autofill(needed_fields: nil, changed_fields: nil, only_consider_overrides: false)
     my_proposed_changes = propose_changes(
-      needed_fields: needed_fields, changed_fields: changed_fields
+      needed_fields: needed_fields,
+      changed_fields: changed_fields,
+      only_consider_overrides: only_consider_overrides
     )
     apply_changes(@evidence.project, my_proposed_changes)
+  end
+
+  private
+
+  # Check if repo_files is available (HowAccessRepoFilesDetective ran)
+  def repo_files_available?
+    @evidence.project.repo_url.present?
   end
 end
 # rubocop:enable Metrics/ClassLength

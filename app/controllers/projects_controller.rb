@@ -1856,16 +1856,7 @@ class ProjectsController < ApplicationController
   # @param value [String] Value from URL parameter
   # @return [Integer, nil] Status integer or nil if invalid
   def parse_status_value(value)
-    # Strip whitespace and normalize to lowercase
-    normalized = value.to_s.strip.downcase
-
-    # Parse status string to internal integer
-    case normalized
-    when '?', 'unknown' then CriterionStatus::UNKNOWN
-    when 'unmet' then CriterionStatus::UNMET
-    when 'n/a', 'na' then CriterionStatus::NA
-    when 'met' then CriterionStatus::MET
-    end
+    CriterionStatus.parse(value)
   end
 
   # Merge field list from URL params with existing field data.
@@ -1946,12 +1937,15 @@ class ProjectsController < ApplicationController
   # @param user_set_values [Hash] Values that user just set (before Chief)
   # @param chief_instance [Chief, nil] Optional Chief instance for testing
   # @param track_automated [Boolean] Whether to track automated fills (for highlighting)
+  #   true = save-and-continue (apply all proposals including non-forced)
+  #   false = save-and-exit (apply only forced overrides for speed)
   # rubocop:disable Metrics/MethodLength
   def run_save_automation(changed_fields, user_set_values, chief_instance: nil, track_automated: true)
     chief = chief_instance || Chief.new(@project, client_factory, entry_locale: @project.entry_locale)
     proposed_changes = chief.propose_changes(
       needed_fields: fields_for_current_section,
-      changed_fields: changed_fields
+      changed_fields: changed_fields,
+      only_consider_overrides: !track_automated # Skip non-overridable work on save-and-exit
     )
 
     # Filter proposed changes to only fields in the current section

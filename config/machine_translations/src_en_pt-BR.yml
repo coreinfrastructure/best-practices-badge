@@ -1469,3 +1469,5 @@ en:
       some_contents_found: Some %{description} file contents found.
     test_forced:
       test_automation: Test automation (confidence %{confidence})
+    repo_json:
+      field_from_file: Value from project's bestpractices JSON file

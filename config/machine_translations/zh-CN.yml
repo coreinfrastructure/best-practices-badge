@@ -373,3 +373,5 @@ zh-CN:
       some_contents_found: 找到一些 %{description} 文件内容。
     test_forced:
       test_automation: 测试自动化（置信度 %{confidence}）
+    repo_json:
+      field_from_file: 来自项目的 bestpractices JSON 文件的值

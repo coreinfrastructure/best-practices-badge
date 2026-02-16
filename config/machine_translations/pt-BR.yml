@@ -1443,3 +1443,5 @@ pt-BR:
       some_contents_found: Alguns conteúdos de arquivo de %{description} encontrados.
     test_forced:
       test_automation: Automação de testes (confiança %{confidence})
+    repo_json:
+      field_from_file: Valor do arquivo JSON bestpractices do projeto

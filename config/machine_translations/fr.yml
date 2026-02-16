@@ -325,3 +325,5 @@ fr:
       some_contents_found: Certains contenus de fichier %{description} trouvés.
     test_forced:
       test_automation: Automatisation des tests (confiance %{confidence})
+    repo_json:
+      field_from_file: Valeur provenant du fichier JSON bestpractices du projet

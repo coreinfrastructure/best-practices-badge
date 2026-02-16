@@ -325,3 +325,5 @@ ja:
       some_contents_found: いくつかの %{description} ファイルの内容が見つかりました。
     test_forced:
       test_automation: テスト自動化（確信度 %{confidence}）
+    repo_json:
+      field_from_file: プロジェクトのbestpractices JSONファイルからの値

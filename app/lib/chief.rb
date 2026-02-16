@@ -299,10 +299,10 @@ class Chief
       end
 
       # Run RepoJsonDetective last as a final overlay of project
-      #  self-declarations.
+      # self-declarations.
       # We only run this if non-overridable results might be used
       # (initial edit or save-continue). We skip this on
-      # save-exit since tehse can never force an override.
+      # save-exit since these self-declarations can never force an override.
       if !only_consider_overrides && repo_files_available?
         repo_json_detective = RepoJsonDetective.new
         repo_json_detective.octokit_client_factory = @client_factory

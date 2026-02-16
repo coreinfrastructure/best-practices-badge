@@ -1946,12 +1946,15 @@ class ProjectsController < ApplicationController
   # @param user_set_values [Hash] Values that user just set (before Chief)
   # @param chief_instance [Chief, nil] Optional Chief instance for testing
   # @param track_automated [Boolean] Whether to track automated fills (for highlighting)
+  #   true = save-and-continue (apply all proposals including non-forced)
+  #   false = save-and-exit (apply only forced overrides for speed)
   # rubocop:disable Metrics/MethodLength
   def run_save_automation(changed_fields, user_set_values, chief_instance: nil, track_automated: true)
     chief = chief_instance || Chief.new(@project, client_factory, entry_locale: @project.entry_locale)
     proposed_changes = chief.propose_changes(
       needed_fields: fields_for_current_section,
-      changed_fields: changed_fields
+      changed_fields: changed_fields,
+      only_consider_overrides: !track_automated # Skip non-overridable work on save-and-exit
     )
 
     # Filter proposed changes to only fields in the current section

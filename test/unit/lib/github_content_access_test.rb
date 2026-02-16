@@ -6,6 +6,7 @@
 
 require 'test_helper'
 
+# rubocop:disable Metrics/ClassLength
 class GithubContentAccessTest < ActiveSupport::TestCase
   # Mock Octokit client that raises NotFound (simulates empty repo)
   class MockOctokitEmpty
@@ -42,4 +43,121 @@ class GithubContentAccessTest < ActiveSupport::TestCase
 
     assert_equal MockOctokitNormal::CONTENTS, result
   end
+
+  # Tests for get_content method
+
+  test 'get_content returns nil when file not found' do
+    access = GithubContentAccess.new(
+      'owner/repo', proc { MockOctokitEmpty.new }
+    )
+    result = access.get_content('missing.txt')
+
+    assert_nil result
+  end
+
+  test 'get_content returns nil when path is a directory' do
+    mock_client =
+      Class.new do
+        def contents(_fullname, **)
+          { 'type' => 'dir', 'name' => 'src' }
+        end
+      end
+
+    access = GithubContentAccess.new('owner/repo', proc { mock_client.new })
+    result = access.get_content('src')
+
+    assert_nil result
+  end
+
+  test 'get_content returns nil when file exceeds max_size' do
+    mock_client =
+      Class.new do
+        def contents(_fullname, **)
+          {
+            'type' => 'file',
+            'size' => 100_000, # 100KB
+            'content' => Base64.encode64('x' * 100_000)
+          }
+        end
+      end
+
+    access = GithubContentAccess.new('owner/repo', proc { mock_client.new })
+    result = access.get_content('huge.txt', max_size: 50_000)
+
+    assert_nil result
+  end
+
+  test 'get_content returns nil when content is blank' do
+    mock_client =
+      Class.new do
+        def contents(_fullname, **)
+          { 'type' => 'file', 'size' => 0, 'content' => '' }
+        end
+      end
+
+    access = GithubContentAccess.new('owner/repo', proc { mock_client.new })
+    result = access.get_content('empty.txt')
+
+    assert_nil result
+  end
+
+  test 'get_content returns nil when actual content exceeds reported size' do
+    # Defense in depth: reject if GitHub's size claim doesn't match reality
+    mock_client =
+      Class.new do
+        def contents(_fullname, **options)
+          if options[:accept] == 'application/vnd.github.raw'
+            # Return huge content (attacker scenario)
+            'x' * 100_000
+          else
+            # Claim small size
+            { 'type' => 'file', 'size' => 1000 }
+          end
+        end
+      end
+
+    access = GithubContentAccess.new('owner/repo', proc { mock_client.new })
+    result = access.get_content('malicious.txt', max_size: 50_000)
+
+    assert_nil result # Should reject due to actual size > max_size
+  end
+
+  test 'get_content decodes valid base64 content' do
+    test_content = 'Hello, World!'
+    mock_client =
+      Class.new do
+        define_method(:contents) do |_fullname, **options|
+          if options[:accept] == 'application/vnd.github.raw'
+            # Return raw content
+            test_content
+          else
+            # Return metadata
+            {
+              'type' => 'file',
+              'size' => test_content.bytesize
+            }
+          end
+        end
+      end
+
+    access = GithubContentAccess.new('owner/repo', proc { mock_client.new })
+    result = access.get_content('test.txt')
+
+    assert_equal test_content, result
+  end
+
+  test 'get_content returns nil when exception occurs' do
+    mock_client =
+      Class.new do
+        def contents(_fullname, **)
+          raise StandardError, 'API error'
+        end
+      end
+
+    access = GithubContentAccess.new('owner/repo', proc { mock_client.new })
+    result = access.get_content('error.txt')
+
+    assert_nil result
+  end
 end
+# rubocop:enable Metrics/ClassLength

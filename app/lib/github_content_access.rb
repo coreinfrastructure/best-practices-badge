@@ -35,4 +35,57 @@ class GithubContentAccess
     # instead of crashing.
     []
   end
+
+  # Get the actual content of a file (not just metadata).
+  # @param filename [String] path to file
+  # @param max_size [Integer] maximum file size in bytes
+  # @return [String, nil] file content or nil if not found/too large/error
+  #
+  # SECURITY NOTE: DoS Protection Limitation
+  # =========================================
+  # This method CANNOT truly limit bytes read from the network. The GitHub API
+  # (via Octokit gem) reads the entire HTTP response into memory before
+  # returning to us. By the time we have the content, it's already in RAM.
+  #
+  # Our DoS protection strategy relies on TRUSTING GitHub's size field:
+  # 1. We check GitHub's reported size BEFORE fetching content (first API call)
+  # 2. If size > max_size, we don't fetch content (avoiding the second call)
+  # 3. After fetching, we verify actual size matches (defense in depth)
+  #
+  # This trust assumption is acceptable because:
+  # - GitHub's API over HTTPS (not user-supplied data)
+  # - GitHub has no incentive to misreport file sizes
+  # - We verify the actual content size after receiving it
+  #
+  # However, this means a compromised GitHub or MITM attack could still cause
+  # us to load oversized content into memory. If this is unacceptable, the
+  # only solution is HTTP streaming with size limits at a lower level than
+  # the Octokit gem provides.
+  # rubocop:disable Metrics/MethodLength
+  def get_content(filename, max_size: 50_000)
+    # First, get metadata to check size BEFORE fetching content
+    file_info = get_info(filename)
+    return if file_info.blank? || file_info.is_a?(Array)
+    return if file_info['type'] != 'file'
+
+    # Trust but verify: Check GitHub's reported size before fetching
+    return if file_info['size'] > max_size
+
+    # Now fetch raw content. GitHub already told us the size is OK.
+    # Use raw API to get unencoded content (avoids base64 overhead).
+    @octokit_client = @octokit_client_factory.call if @octokit_client.nil?
+    content = @octokit_client.contents(
+      @fullname,
+      path: filename,
+      accept: 'application/vnd.github.raw'
+    )
+
+    # Defense in depth: Verify actual size matches GitHub's claim
+    return if content.bytesize > max_size
+
+    content
+  rescue StandardError
+    nil
+  end
+  # rubocop:enable Metrics/MethodLength
 end

@@ -383,7 +383,7 @@ GEM
       nio4r (~> 2.0)
     raabro (1.4.0)
     racc (1.8.1)
-    rack (3.2.4)
+    rack (3.2.5)
     rack-attack (6.8.0)
       rack (>= 1.0, < 4)
     rack-cors (3.0.0)
@@ -660,7 +660,7 @@ DEPENDENCIES
   pg_search (~> 2.3)
   pry-byebug
   puma (~> 7.0)
-  rack (~> 3.2.3)
+  rack (~> 3.2.5)
   rack-attack (~> 6.8)
   rack-cors (~> 3.0)
   rack-headers_filter (~> 0.0.1)

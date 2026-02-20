@@ -56,11 +56,6 @@ Rails.application.configure do
   # yet still be able to expire them through the digest params.
   config.assets.digest = true
 
-  # Adds additional error checking when serving assets at runtime.
-  # Checks for improperly declared sprockets dependencies.
-  # Raises helpful error messages.
-  config.assets.raise_runtime_errors = true
-
   config.after_initialize do
     # The 'bullet' gem watches application queries and notifies
     # when you should add eager loading (N+1 queries),

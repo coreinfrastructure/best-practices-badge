@@ -177,7 +177,6 @@ Rails.application.configure do
   # Use Fastly as a CDN. See: https://devcenter.heroku.com/articles/fastly
   # config.action_controller.asset_host = ENV['FASTLY_CDN_URL']
   # Use CDN directly for static assets
-  # TODO: Do we need to set this to true?
   # The documentation for Fastly suggests setting
   # "config.serve_static_assets = true".  However, this has since been
   # renamed to "config.serve_static_files", which we already conditionally set.

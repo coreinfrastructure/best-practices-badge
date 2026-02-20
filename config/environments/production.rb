@@ -234,7 +234,7 @@ Rails.application.configure do
   # recovery mechanism if things get stuck.  We don't do this in test or
   # development, because it interferes with their purposes.
   # This call will fail in fake_production, so we ignore the exception.
-  # rubocop:disable Lint/HandleExceptions
+  # rubocop:disable Lint/SuppressedException
   begin
     # Unfortunately Rack::Timeout doesn't provide a lot of control over logging.
     # What it provides (now) is described here:
@@ -245,7 +245,7 @@ Rails.application.configure do
   rescue NameError
     # Do nothing if it's unavailable (this happens if we didn't load the gem)
   end
-  # rubocop:enable Lint/HandleExceptions
+  # rubocop:enable Lint/SuppressedException
 
   # Configure active_job to use solid_queue as its back end when in production.
   config.active_job.queue_adapter = :solid_queue

@@ -22,6 +22,19 @@ module BadgeApp
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
 
+    # Load framework defaults cumulatively from 5.0 through 8.1. Each version
+    # includes all defaults from earlier versions. Key effects per version:
+    #   5.0: per-form CSRF tokens, origin-header CSRF check, belongs_to required
+    #   5.2: AES-256-GCM cookie encryption (rotation in cookies_rotations.rb)
+    #   6.0: cookie metadata, modern mail delivery job
+    #   6.1: has_many_inversing, SameSite=Lax, jitter on job retries
+    #   7.0: SHA-256 key derivation, partial_inserts=false, open-redirect raise
+    #   7.1: autoload path isolation, secure-token on initialize
+    #   7.2: PostgreSQL date decoding
+    #   8.0: Regexp.timeout (ReDoS defense), strict ETag freshness
+    #   8.1: YJIT off in dev/test, no JSON HTML-escaping, relative-redirect raise
+    config.load_defaults 8.1
+
     # Add lib/ to autoload paths so modules there are automatically loaded
     config.autoload_paths << Rails.root.join('lib')
   end

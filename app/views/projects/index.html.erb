@@ -28,7 +28,7 @@
 
 <div class="center">
 <h2><%= t 'projects_count', count: @count %></h2>
-  <%= form_for projects_path, method: 'get', enforce_utf8: false,
+  <%= form_for projects_path, method: 'get',
                html: { class: 'project_search' } do %>
     <label for="gteq"><%= t '.badge_status' %></label>
     <%= select_tag(:gteq, options_for_select(badge_status_options,

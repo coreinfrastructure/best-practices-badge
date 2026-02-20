@@ -1,0 +1,24 @@
+<%# Baseline criteria version notice shown near the top of every baseline form.
+    Edit the variables below when upgrading the baseline criteria version.
+
+    baseline_in_transition:  set to true during a version transition period.
+    baseline_current_version: the version whose criteria are currently shown.
+    baseline_new_version:     (transition only) the new version being adopted.
+    baseline_enforce_date:    (transition only) date new criteria are enforced,
+                              in YYYY-MM-DD format.
+%>
+<%
+  baseline_in_transition  = false
+  baseline_current_version = 'v2025.10.10'
+  baseline_new_version     = 'v2026.02.19'  # used only during transition
+  baseline_enforce_date    = 'YYYY-MM-DD'   # used only during transition
+%>
+<% if baseline_in_transition %>
+  <span><%= t('projects.baseline_version_notice.transition_html',
+       current_version: baseline_current_version,
+       new_version:     baseline_new_version,
+       enforce_date:    baseline_enforce_date) %></span>
+<% else %><%# Mute when not in transition, few will care at that point. %>
+  <span class="text-muted"><%= t('projects.baseline_version_notice.current',
+       version: baseline_current_version) %></span>
+<% end %>

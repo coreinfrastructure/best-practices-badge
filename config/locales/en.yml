@@ -655,6 +655,20 @@ en:
         of use</a>. All are free to share and adapt the data,
         but must give appropriate credit. Please credit %{user}
         and the OpenSSF Best Practices badge contributors.<br><br>
+    baseline_version_notice:
+      # Displayed on baseline criteria forms when not in a version transition.
+      current: "These are criteria version %{version}."
+      # Displayed during a transition from one baseline version to the next.
+      # The old criteria text has been updated to the new version, but criteria
+      # that are new in the new version are labeled "future" until enforce_date.
+      transition_html: >-
+        These criteria are from baseline version %{current_version} with
+        updated criteria text from version %{new_version}.
+        Criteria that are new in version %{new_version} are labeled
+        &ldquo;future&rdquo; and will begin to be enforced starting
+        %{enforce_date}.
+        Please provide answers to the &ldquo;future&rdquo; criteria before
+        that date.
     form_early:
       badge_intro:
         description: >-

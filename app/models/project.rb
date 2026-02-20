@@ -287,8 +287,8 @@ class Project < ApplicationRecord
   before_validation :normalize_entry_locale
   before_save :update_badge_percentages, unless: :skip_callbacks
 
-  # A project is associated with a user
-  belongs_to :user
+  # A project is associated with a user (optional: user_id may be NULL in DB)
+  belongs_to :user, optional: true
   delegate :name, to: :user, prefix: true # Support "user_name"
   delegate :nickname, to: :user, prefix: true # Support "user_nickname"
 

@@ -108,8 +108,9 @@ Rails.application.configure do
 
   # Log to stdout (12-factor app style). The rails_stdout_logging gem
   # previously did this; we now configure it directly.
-  # NOTE: This will likely become redundant when we add config.load_defaults
-  # (Rails 5.0+ defaults include RAILS_LOG_TO_STDOUT support).
+  # NOTE: Rails 5.0+ defaults enable stdout logging when the RAILS_LOG_TO_STDOUT
+  # env var is set. This explicit setup ensures stdout logging regardless of that
+  # variable and adds TaggedLogging, so we keep it rather than relying on defaults.
   $stdout.sync = true
   config.logger = ActiveSupport::TaggedLogging.new(
     ActiveSupport::Logger.new($stdout)

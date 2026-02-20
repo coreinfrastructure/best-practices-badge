@@ -2021,6 +2021,11 @@ as of 2015-12-14:
    to ensure that clients cannot undetectably change
    these cookies; a changed value created without being re-authenticated
    is thrown away.
+   Session cookies are encrypted with AES-256-GCM (authenticated
+   encryption) using a key derived with SHA-256, providing both
+   confidentiality and integrity protection against tampering.
+   Rotating the `SECRET_KEY_BASE` environment variable immediately
+   invalidates all existing sessions (a useful incident-response tool).
    Logged-in users have their user id stored in this authenticated cookie
    (There is also a `session_id`, not currently used.)
    Session data is intentionally kept small, because of the limited
@@ -2053,6 +2058,12 @@ as of 2015-12-14:
    The application uses relatively few redirects; those that do involve
    the "id", which only works if it can find the value corresponding to
    the id first (which is an allowlist).
+   Additionally, the framework is configured to raise an error on open
+   redirects (`action_controller.action_on_open_redirect = :raise`,
+   from `load_defaults 7.0`) and on relative-path redirects
+   (`action_controller.action_on_path_relative_redirect = :raise`,
+   from `load_defaults 8.1`), providing defense-in-depth at the Rails
+   level against redirect-based attacks.
    File uploads aren't directly supported; the application does
    temporarily load some files (as part of autofill), but those filenames
    and contents are not directly made available to any other user
@@ -2115,6 +2126,10 @@ as of 2015-12-14:
    which can lead to defects (you're supposed to use \A and \Z instead).
    However, Ruby's format validator and the "Brakeman" tool both detect
    this common mistake with regexes, so this should be unlikely.
+   We also set `Regexp.timeout = 1` second (via `load_defaults 8.0`),
+   which limits regular expression evaluation time and provides a
+   defense against ReDoS (Regular Expression Denial of Service) attacks,
+   where specially crafted input causes catastrophic backtracking.
    Since the project data is public, manipulating the 'id' cannot reveal
    private public data.  We don't consider the list of valid users
    private either, so again, manipulating 'id' cannot reveal anything private.
@@ -2271,25 +2286,29 @@ secure=true (which is irrelevant because we always use HTTPS but it
 can't hurt), and SameSite=Lax (which counters CSRF attacks on
 web browsers that support it).
 
-We also use the Rails 5.2 default setting which embeds
-the expiry information in encrypted or signed cookies value to
-improve security.
-Embedding and checking expiration data
-makes it harder to exploit these cookies.
+Session and signed cookies are encrypted with AES-256-GCM
+(authenticated encryption) using SHA-256 key derivation,
+providing confidentiality and integrity protection stronger than
+the AES-256-CBC with SHA-1 used by older Rails applications.
+Expiry information is also embedded in cookie values, making it
+harder to exploit old or captured cookies.
 See
 [expiry in signed or encrypted cookie is now embedded in the cookies values](https://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html#expiry-in-signed-or-encrypted-cookie-is-now-embedded-in-the-cookies-values).
 
 #### CSRF token hardening
 
 We use two additional CSRF token hardening techniques
-to further harden the system against CSRF attacks.
-Both of these techniques are Rails 5 additions:
+to further harden the system against CSRF attacks,
+both enabled as framework defaults via `config.load_defaults`:
 
-* We enable per-form CSRF tokens
-  (`Rails.application.config.action_controller.` `per_form_csrf_tokens`).
-* We enable origin-checking CSRF mitigation
-  (`Rails.application.config.action_controller.`
-  `forgery_protection_origin_check`).
+* Per-form CSRF tokens
+  (`action_controller.per_form_csrf_tokens`):
+  each form gets a unique token bound to that specific action,
+  so a token captured from one form cannot be replayed against another.
+* Origin-header CSRF check
+  (`action_controller.forgery_protection_origin_check`):
+  the HTTP `Origin` request header is validated against the host,
+  providing an additional layer of CSRF defense independent of the token.
 
 These help counter CSRF, in addition to our other measures.
 

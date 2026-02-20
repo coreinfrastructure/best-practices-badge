@@ -24,7 +24,7 @@
 
 <% if current_user&.admin? %>
 <h2 class>New Search</h2>
- <%= form_for users_path, method: 'get', enforce_utf8: true do %>
+ <%= form_for users_path, method: 'get' do %>
   <label for="search_names"><%= 'Names (one per line)' %></label>
   <%= text_area_tag :search_names, params[:search_names], rows: 3, cols: 40, placeholder: 'User names (1/line, case-insensitive, % for 0+ chars, _ for 1 char)' %>
   <label for="search_emails"><%= 'Emails (one per line)' %></label>

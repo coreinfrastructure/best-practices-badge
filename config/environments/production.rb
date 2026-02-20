@@ -35,10 +35,11 @@ Rails.application.configure do
   # NGINX, varnish or squid.
   # config.action_dispatch.rack_cache = true
 
-  # Disable serving static files from the `/public` folder by default since
-  # Apache or NGINX already handles this.
-  # config.serve_static_files = ENV['RAILS_SERVE_STATIC_FILES'].present?
-  config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
+  # Serve static files from the `/public` folder.
+  # The rails_serve_static_assets gem previously forced this to true;
+  # we now set it directly. Our deployment requires Rails to serve
+  # static files (no separate Apache/NGINX for static assets).
+  config.public_file_server.enabled = true
 
   # Compress JavaScripts and CSS.
   config.assets.js_compressor = :terser
@@ -84,8 +85,14 @@ Rails.application.configure do
   # Prepend all log lines with the following tags.
   # config.log_tags = [ :subdomain, :uuid ]
 
-  # Use a different logger for distributed setups.
-  # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
+  # Log to stdout (12-factor app style). The rails_stdout_logging gem
+  # previously did this; we now configure it directly.
+  # NOTE: This will likely become redundant when we add config.load_defaults
+  # (Rails 5.0+ defaults include RAILS_LOG_TO_STDOUT support).
+  $stdout.sync = true
+  config.logger = ActiveSupport::TaggedLogging.new(
+    ActiveSupport::Logger.new($stdout)
+  )
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store

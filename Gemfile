@@ -190,7 +190,6 @@ end
 
 group :production do
   gem 'rack-timeout', '~> 0.7.0' # Timeout; https://github.com/heroku/rack-timeout
-  gem 'rails_12factor', '~> 0.0.3' # make 12-factor - PROBABLY UNNEEDED
 end
 
 # Post-install message from autoprefixer-rails:

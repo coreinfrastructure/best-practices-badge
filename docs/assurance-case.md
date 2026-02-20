@@ -2929,8 +2929,8 @@ would, so combining these approaches has its advantages.
 
 This is a [12 factor app](https://12factor.net/); as such,
 events are streamed to standard out for logging.
-We use the "rails_12factor" to ensure that all Rails logs go to
-standard out, and then use standard Heroku logging mechanisms.
+Rails is configured to send all logs to
+standard out, and we use standard logging mechanisms.
 The logs then go out to other components for further analysis.
 
 System logs are expressly *not* publicly available.

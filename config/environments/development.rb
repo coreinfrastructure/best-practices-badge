@@ -23,6 +23,8 @@ Rails.application.configure do
   # Show full error reports and disable caching.
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = true
+  # Cache store config - must match production.rb (see explanation there
+  # for why this is duplicated rather than shared in application.rb).
   require_relative '../../lib/no_dup_coder'
   config.cache_store =
     :memory_store,
@@ -55,34 +57,4 @@ Rails.application.configure do
   # assets,
   # yet still be able to expire them through the digest params.
   config.assets.digest = true
-
-  # Adds additional error checking when serving assets at runtime.
-  # Checks for improperly declared sprockets dependencies.
-  # Raises helpful error messages.
-  config.assets.raise_runtime_errors = true
-
-  config.after_initialize do
-    # The 'bullet' gem watches application queries and notifies
-    # when you should add eager loading (N+1 queries),
-    # when you're using eager loading that isn't necessary and
-    # when you should use counter cache.
-    Bullet.enable = true
-    Bullet.rails_logger = true
-    Bullet.add_footer = true
-    # Bullet.alert = true
-    # Bullet.bullet_logger = true
-    # Bullet.console = true
-    # Bullet.growl = true
-    # Bullet.xmpp = { :account  => 'bullets_account@jabber.org',
-    #               :password => 'bullets_password_for_jabber',
-    #               :receiver => 'your_account@jabber.org',
-    #               :show_online_status => true }
-    # Bullet.honeybadger = true
-    # Bullet.bugsnag = true
-    # Bullet.airbrake = true
-    # Bullet.rollbar = true
-    # Bullet.stacktrace_includes = [ 'your_gem', 'your_middleware' ]
-    # Bullet.stacktrace_excludes = [ 'their_gem', 'their_middleware' ]
-    # Bullet.slack = { webhook_url: 'http://some.slack.url', foo: 'bar' }
-  end
 end

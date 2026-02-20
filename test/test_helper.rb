@@ -250,6 +250,24 @@ module ActiveSupport
       execute_script("document.getElementById('#{id}').scrollIntoView(false);")
     end
 
+    # Click a radio button and verify it becomes checked.
+    # Scrolls into view first to avoid fixed headers intercepting the click.
+    # Retries if the click doesn't take (a known Capybara/Selenium issue).
+    def ensure_choice(radio_button_id)
+      Timeout.timeout(Capybara.default_max_wait_time) do
+        loop do
+          scroll_to_see(radio_button_id)
+          choose radio_button_id
+          break if find("##{radio_button_id}")['checked']
+
+          sleep 0.1
+        end
+      end
+    rescue Timeout::Error
+      raise Timeout::Error,
+            "Timeout: radio button '#{radio_button_id}' never became checked"
+    end
+
     def user_logged_in?
       # Returns true if a test user is logged in.
       !session[:user_id].nil?

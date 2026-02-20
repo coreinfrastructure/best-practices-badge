@@ -7,15 +7,12 @@ This file is designed to test if the current Markdown environment (like GitHub o
 If your renderer supports the latest Mermaid features, the diagram below should display distinct shapes like a **cloud**, a **cylinder**, a **document**, and a **lightning bolt**.
 
 ```mermaid
+---
+config:
+  look: handDrawn
+  theme: neutral
+---
 flowchart TD
-    %% Global config for the new 'handDrawn' look (v11.10+)
-    %% Remove the lines below if you want a standard sharp look
-    ---
-    config:
-      look: handDrawn
-      theme: neutral
-    ---
-
     %% Version Check (Displays version inside the diagram if supported)
     V@{ shape: lean-right, label: "Checking Mermaid Version..." }
 
@@ -25,7 +22,7 @@ flowchart TD
     Doc@{ shape: doc, label: "User Manual" }
     Comm@{ shape: lightning-bolt, label: "Fast Comm" }
     Step@{ shape: step, label: "Next Step" }
-    
+
     %% Traditional shapes for comparison
     Start([Start Loop])
     Choice{Decision?}

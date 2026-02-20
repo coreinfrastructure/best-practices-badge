@@ -190,10 +190,5 @@ class LoginTest < ApplicationSystemTestCase
     assert_text 'Connecté !'
     assert_equal '/fr', current_path
   end
-
-  def ensure_choice(radio_button_id)
-    # Necessary because Capybara click doesn't always take the first time
-    choose radio_button_id until find("##{radio_button_id}")['checked']
-  end
 end
 # rubocop:enable Metrics/ClassLength

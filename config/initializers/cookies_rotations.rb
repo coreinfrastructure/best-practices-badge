@@ -14,9 +14,14 @@
 #   Old: AES-256-CBC cipher + SHA1 key generator
 #   New (at 7.0): AES-256-GCM cipher + SHA256 key generator
 #
-# This file is intentionally kept until a planned session invalidation event.
-# At that point, delete this file AND change the session cookie name in
-# config/initializers/session_store.rb (e.g., _BadgeApp_session_v2).
+# ROUTINE CLEANUP: Delete this file a few days after the load_defaults
+# deployment (commit d17bdb84). The session TTL is 48 hours, so by then
+# every active session will have been transparently re-encrypted in the new
+# format on the user's first post-deployment visit. The tiny minority of
+# cookies still in the old format will belong to sessions that are already
+# server-side expired, so deleting this file causes no forced logouts.
+# See config/initializers/session_store.rb for how to force a global logout
+# if that is ever needed instead.
 Rails.application.config.action_dispatch.cookies_rotations.tap do |cookies|
   cookies.rotate :encrypted, cipher: 'aes-256-cbc', digest: 'SHA1'
   cookies.rotate :signed,    digest: 'SHA1'

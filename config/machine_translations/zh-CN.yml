@@ -74,6 +74,9 @@ zh-CN:
       badge_series_baseline: 基线（baseline-1、baseline-2、baseline-3）
       github_reconnect_html: 我们无法加载您的GitHub存储库。您的GitHub会话可能已过期。
       github_reconnect_link: 重新连接到GitHub
+    baseline_version_notice:
+      current: 这些是标准版本 %{version}。
+      transition: 这些标准来自基准版本 %{current_version}，并包含来自版本 %{new_version} 的更新标准文本。版本 %{new_version} 中新增的标准标记为"未来"，将从 %{enforce_date} 开始强制执行。请在该日期之前提供对"未来"标准的回答。
   report_mailer:
     unsubscribe_notice_html: 要取消订阅这些电子邮件通知，请访问：<a href="%{unsubscribe_url}">%{unsubscribe_url}</a>
     unsubscribe_notice_text: 要取消订阅这些电子邮件通知，请访问：%{unsubscribe_url}

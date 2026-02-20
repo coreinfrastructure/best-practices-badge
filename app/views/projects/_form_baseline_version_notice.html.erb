@@ -14,7 +14,7 @@
   baseline_enforce_date    = 'YYYY-MM-DD'   # used only during transition
 %>
 <% if baseline_in_transition %>
-  <span><%= t('projects.baseline_version_notice.transition_html',
+  <span><%= t('projects.baseline_version_notice.transition',
        current_version: baseline_current_version,
        new_version:     baseline_new_version,
        enforce_date:    baseline_enforce_date) %></span>

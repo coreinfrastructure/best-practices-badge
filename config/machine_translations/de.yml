@@ -77,6 +77,9 @@ de:
       badge_series_baseline: Baseline (baseline-1, baseline-2, baseline-3)
       github_reconnect_html: Wir konnten Ihre GitHub-Repositories nicht laden. Ihre GitHub-Sitzung ist möglicherweise abgelaufen.
       github_reconnect_link: Erneut mit GitHub verbinden
+    baseline_version_notice:
+      current: Dies sind Kriterienversion %{version}.
+      transition: Diese Kriterien stammen aus der Basisversion %{current_version} mit aktualisierten Kriterientexten aus Version %{new_version}. Kriterien, die in Version %{new_version} neu sind, sind als "zukünftig" gekennzeichnet und werden ab dem %{enforce_date} durchgesetzt. Bitte beantworten Sie die "zukünftigen" Kriterien vor diesem Datum.
   report_mailer:
     unsubscribe_notice_html: 'Um sich von diesen E-Mail-Benachrichtigungen abzumelden, besuchen Sie bitte: <a href="%{unsubscribe_url}">%{unsubscribe_url}</a>'
     unsubscribe_notice_text: 'Um sich von diesen E-Mail-Benachrichtigungen abzumelden, besuchen Sie bitte: %{unsubscribe_url}'

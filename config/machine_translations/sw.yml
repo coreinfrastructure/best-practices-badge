@@ -294,6 +294,9 @@ sw:
       close: Funga
     delete:
       done: Mradi ulifutwa kwa mafanikio.
+    baseline_version_notice:
+      current: Hizi ni vigezo vya toleo %{version}.
+      transition: Vigezo hivi vinatoka toleo la msingi %{current_version} na maandishi ya vigezo yaliyosasishwa kutoka toleo %{new_version}. Vigezo vipya katika toleo %{new_version} vimewekwa alama "mustakabali" na vitaanza kutekelezwa kuanzia %{enforce_date}. Tafadhali toa majibu kwa vigezo vya "mustakabali" kabla ya tarehe hiyo.
   report_mailer:
     new_project_heading: Asante kwa kuongeza mradi wako kwenye Programu ya Nishani za Mazoea Bora
     new_project_part1: |-

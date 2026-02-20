@@ -74,6 +74,9 @@ ja:
       badge_series_baseline: ベースライン（baseline-1、baseline-2、baseline-3）
       github_reconnect_html: GitHub リポジトリを読み込めませんでした。GitHub セッションの有効期限が切れている可能性があります。
       github_reconnect_link: GitHub に再接続する
+    baseline_version_notice:
+      current: これらは基準バージョン %{version} の評価項目です。
+      transition: これらの基準はベースラインバージョン %{current_version} のものであり、バージョン %{new_version} の更新された基準テキストが含まれています。バージョン %{new_version} で新たに追加された基準は「future」とラベル付けされており、%{enforce_date} から適用が開始されます。その日までに「future」基準への回答を提供してください。
   report_mailer:
     unsubscribe_notice_html: これらのメール通知の登録を解除するには、次のURLにアクセスしてください：<a href="%{unsubscribe_url}">%{unsubscribe_url}</a>
     unsubscribe_notice_text: これらのメール通知の登録を解除するには、次のURLにアクセスしてください：%{unsubscribe_url}

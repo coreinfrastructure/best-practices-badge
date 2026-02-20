@@ -77,6 +77,10 @@ en:
       badge_series_baseline: Baseline (baseline-1, baseline-2, baseline-3)
       github_reconnect_html: We could not load your GitHub repositories. Your GitHub session may have expired.
       github_reconnect_link: Reconnect to GitHub
+    baseline_version_notice:
+      current: These are criteria version %{version}.
+      transition_html: These criteria are from baseline version %{current_version} with updated criteria text from version %{new_version}. Criteria that are new in version %{new_version} are labeled &ldquo;future&rdquo; and will begin to be enforced starting %{enforce_date}. Please provide answers to the &ldquo;future&rdquo; criteria before that date.
+      transition: These criteria are from baseline version %{current_version} with updated criteria text from version %{new_version}. Criteria that are new in version %{new_version} are labeled "future" and will begin to be enforced starting %{enforce_date}. Please provide answers to the "future" criteria before that date.
   report_mailer:
     unsubscribe_notice_html: 'To unsubscribe from these email notifications, please visit: <a href="%{unsubscribe_url}">%{unsubscribe_url}</a>'
     unsubscribe_notice_text: 'To unsubscribe from these email notifications, please visit: %{unsubscribe_url}'

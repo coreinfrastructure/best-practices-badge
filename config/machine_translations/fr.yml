@@ -74,6 +74,9 @@ fr:
       badge_series_baseline: Baseline (baseline-1, baseline-2, baseline-3)
       github_reconnect_html: Nous n'avons pas pu charger vos dépôts GitHub. Votre session GitHub a peut-être expiré.
       github_reconnect_link: Se reconnecter à GitHub
+    baseline_version_notice:
+      current: Il s'agit des critères version %{version}.
+      transition: Ces critères proviennent de la version de référence %{current_version} avec le texte des critères mis à jour depuis la version %{new_version}. Les critères nouveaux dans la version %{new_version} sont étiquetés « futur » et commenceront à être appliqués à partir du %{enforce_date}. Veuillez fournir des réponses aux critères « futur » avant cette date.
   report_mailer:
     unsubscribe_notice_html: 'Pour vous désabonner de ces notifications par email, veuillez visiter : <a href="%{unsubscribe_url}">%{unsubscribe_url}</a>'
     unsubscribe_notice_text: 'Pour vous désabonner de ces notifications par email, veuillez visiter : %{unsubscribe_url}'

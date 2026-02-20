@@ -408,6 +408,9 @@ es:
       close: Cerrar
     delete:
       done: El proyecto fue eliminado exitosamente.
+    baseline_version_notice:
+      current: Estos son los criterios de la versión %{version}.
+      transition: Estos criterios son de la versión base %{current_version} con texto de criterios actualizado de la versión %{new_version}. Los criterios que son nuevos en la versión %{new_version} están etiquetados como "futuros" y comenzarán a aplicarse a partir del %{enforce_date}. Por favor, proporcione respuestas a los criterios "futuros" antes de esa fecha.
   report_mailer:
     subject_achieved_passing: "¡FELICITACIONES por alcanzar una insignia de mejores prácticas de nivel %{new_level}!"
     subject_no_longer_passing: Su insignia de mejores prácticas ya no es de nivel %{old_level}

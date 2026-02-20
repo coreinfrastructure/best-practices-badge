@@ -70,6 +70,9 @@
       silver: %{<a href='#{silver_path}' title='#{silver_level_name}'>#{image_tag('silver.svg', size: '41x20', alt: silver_level_name)}</a>}.html_safe,
       gold: %{<a href='#{gold_path}' title='#{gold_level_name}'>#{image_tag('gold.svg', size: '35x20', alt: gold_level_name)}</a>}.html_safe,
       ) %>
+<% if Sections.section_type(criteria_level) == :baseline %>
+  <%= render 'form_baseline_version_notice' %>
+<% end %>
 <br><br>
 <strong>Baseline Series:</strong>
 <%= link_to baseline_1_level_name, baseline_1_path, class: (criteria_level == 'baseline-1' ? 'btn btn-primary btn-xs' : 'btn btn-default btn-xs') %>

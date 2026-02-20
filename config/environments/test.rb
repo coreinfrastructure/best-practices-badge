@@ -28,6 +28,8 @@ Rails.application.configure do
   # Show full error reports and disable caching.
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = true
+  # Cache store config - must match production.rb (see explanation there
+  # for why this is duplicated rather than shared in application.rb).
   require_relative '../../lib/no_dup_coder'
   config.cache_store =
     :memory_store,

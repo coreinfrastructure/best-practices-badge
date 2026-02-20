@@ -21,6 +21,27 @@ Rails.application.configure do
   # Full error reports are disabled and caching is turned on.
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = true
+  # Cache store config (identical in development.rb and test.rb).
+  # Ideally this would live in config/application.rb to avoid
+  # repetition, but that file loads during `rails test` CLI boot
+  # *before* SimpleCov starts, making no_dup_coder.rb invisible to
+  # coverage tracking and breaking the 100% coverage requirement.
+  # Keeping it in the environment files ensures the require happens
+  # after SimpleCov starts (during Rails.application.initialize!).
+  #
+  # Moving to an initializer doesn't help either: initializers run
+  # too late -- the cache store is already built from config set
+  # during environment file loading, so an initializer's assignment
+  # to config.cache_store is silently ignored (tests pass but the
+  # cache doesn't actually use NoDupCoder).
+  #
+  # Using `load` instead of `require` in the test file to force
+  # re-evaluation triggers "already initialized constant" warnings
+  # and still leaves structural lines (module/def) uncovered.
+  #
+  # SimpleCov's track_files directive also doesn't help: it controls
+  # which files appear in reports but can't retroactively record
+  # coverage for lines executed before SimpleCov started.
   require_relative '../../lib/no_dup_coder'
   config.cache_store =
     :memory_store,

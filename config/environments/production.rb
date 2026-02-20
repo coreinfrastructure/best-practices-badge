@@ -40,9 +40,6 @@ Rails.application.configure do
   # config.serve_static_files = ENV['RAILS_SERVE_STATIC_FILES'].present?
   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
 
-  # We want to serve compressed values
-  config.assets.compress = true
-
   # Compress JavaScripts and CSS.
   config.assets.js_compressor = :terser
   config.assets.css_compressor = :sass

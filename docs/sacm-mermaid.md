@@ -1145,7 +1145,7 @@ Representation of Assurance Cases using SACM 2.x", p. 12.
 
 **Paper description**: An example showing the NeedsSupportClaim.
 The 'Ambiguous Regions' Claim, which contributes to 'Segmentation
-Outcome Performance', is defined as a NeedsSupportClaim — meaning it
+Outcome Performance', is defined as a NeedsSupportClaim, meaning it
 needs further argumentation or evidence to be provided.
 This richer example combines ArtifactReferences (context and evidence),
 ArgumentReasoning nodes, and multiple Claims at different levels,

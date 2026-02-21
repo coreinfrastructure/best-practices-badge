@@ -1048,6 +1048,22 @@ order to justify the inference from G2 and G3 to G1.
 - A solid arrow `-->` leads from the dot to the target Claim G1, matching
   the spec's filled arrowhead pointing at the supported claim
 
+```
+flowchart BT
+    G2["G2: Sub-claim A"]
+    G3["G3: Sub-claim B"]
+    A1(["A1: Assumed condition ~"])
+    Inf1((" "))
+    G1["G1: Top-level claim"]
+
+    A1 -. "assumed" .-> Inf1
+    G2 --- Inf1
+    G3 --- Inf1
+    Inf1 --> G1
+```
+
+Rendered:
+
 ```mermaid
 ---
 config:
@@ -1090,6 +1106,16 @@ assurance case.
   the ↗ icon retained from the spec's corner notation
 - The AssertedEvidence reification dot may be dropped; in this case
   E1 gets a direct arrow to G4
+
+```
+flowchart BT
+    E1[("E1 ↗<br/>Evidence artifact")]
+    G4["G4: Top-level claim"]
+
+    E1 --> G4
+```
+
+Rendered:
 
 ```mermaid
 ---

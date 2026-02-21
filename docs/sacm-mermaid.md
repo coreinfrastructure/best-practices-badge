@@ -1169,15 +1169,15 @@ demonstrating SACM's reified relationships in a realistic setting.
 
 ```
 flowchart BT
-    SOP["Segmentation Outcome Performance<br/>Segmentation network produces device-independent<br/>tissue-segmentation maps"]
-    CS[("Clinical Setting ↗<br/>Triage in an ophthalmology referral pathway at<br/>Moorfields Eye Hospital, with more than 50 common diagnoses")]
-    DTS[/"Device Training Strategy<br/>Argument by training segmentation network on<br/>scans from 2 different devices"/]
-    OS[/"Output Strategy<br/>Argument over ambiguous and unambiguous regions"/]
-    DI["Device Independence<br/>AUC of 99.21 and 99.93 achieved for the 1st and<br/>2nd device considering urgent referral"]
-    UR["Unambiguous Regions<br/>Tissue-segmentation map obtained by network is<br/>consistent with manual segmentation map"]
-    AR["Ambiguous Regions<br/>The ambiguous regions in OCT scans are addressed<br/>by training multiple instances of the network<br/>..."]
-    DIE[("Device Independence Evidence ↗<br/>Performance results")]
-    ASD[("Automated Segmentation Device ↗<br/>Results of Segmentation Network")]
+    SOP["Segmentation Outcome Performance:<br/>Segmentation network produces device-independent<br/>tissue-segmentation maps"]
+    CS[("Clinical Setting: ↗<br/>Triage in an ophthalmology referral pathway at<br/>Moorfields Eye Hospital, with more than 50 common diagnoses")]
+    DTS[/"Device Training Strategy:<br/>Argument by training segmentation network on<br/>scans from 2 different devices"/]
+    OS[/"Output Strategy:<br/>Argument over ambiguous and unambiguous regions"/]
+    DI["Device Independence:<br/>AUC of 99.21 and 99.93 achieved for the 1st and<br/>2nd device considering urgent referral"]
+    UR["Unambiguous Regions:<br/>Tissue-segmentation map obtained by network is<br/>consistent with manual segmentation map"]
+    AR["Ambiguous Regions:<br/>The ambiguous regions in OCT scans are addressed<br/>by training multiple instances of the network<br/>..."]
+    DIE[("Device Independence Evidence: ↗<br/>Performance results")]
+    ASD[("Automated Segmentation Device: ↗<br/>Results of Segmentation Network")]
     Inf1((" "))
     Inf2((" "))
 
@@ -1191,7 +1191,6 @@ flowchart BT
     Inf2 --> SOP
     DIE --> DI
     ASD --> UR
-    ASD --> AR
 ```
 
 Rendered:
@@ -1208,15 +1207,15 @@ config:
     padding: 15
 ---
 flowchart BT
-    SOP["Segmentation Outcome Performance<br/>Segmentation network produces device-independent<br/>tissue-segmentation maps"]
-    CS[("Clinical Setting ↗<br/>Triage in an ophthalmology referral pathway at<br/>Moorfields Eye Hospital, with more than 50 common diagnoses")]
-    DTS[/"Device Training Strategy<br/>Argument by training segmentation network on<br/>scans from 2 different devices"/]
-    OS[/"Output Strategy<br/>Argument over ambiguous and unambiguous regions"/]
-    DI["Device Independence<br/>AUC of 99.21 and 99.93 achieved for the 1st and<br/>2nd device considering urgent referral"]
-    UR["Unambiguous Regions<br/>Tissue-segmentation map obtained by network is<br/>consistent with manual segmentation map"]
-    AR["Ambiguous Regions<br/>The ambiguous regions in OCT scans are addressed<br/>by training multiple instances of the network<br/>..."]
-    DIE[("Device Independence Evidence ↗<br/>Performance results")]
-    ASD[("Automated Segmentation Device ↗<br/>Results of Segmentation Network")]
+    SOP["Segmentation Outcome Performance:<br/>Segmentation network produces device-independent<br/>tissue-segmentation maps"]
+    CS[("Clinical Setting: ↗<br/>Triage in an ophthalmology referral pathway at<br/>Moorfields Eye Hospital, with more than 50 common diagnoses")]
+    DTS[/"Device Training Strategy:<br/>Argument by training segmentation network on<br/>scans from 2 different devices"/]
+    OS[/"Output Strategy:<br/>Argument over ambiguous and unambiguous regions"/]
+    DI["Device Independence:<br/>AUC of 99.21 and 99.93 achieved for the 1st and<br/>2nd device considering urgent referral"]
+    UR["Unambiguous Regions:<br/>Tissue-segmentation map obtained by network is<br/>consistent with manual segmentation map"]
+    AR["Ambiguous Regions:<br/>The ambiguous regions in OCT scans are addressed<br/>by training multiple instances of the network<br/>..."]
+    DIE[("Device Independence Evidence: ↗<br/>Performance results")]
+    ASD[("Automated Segmentation Device: ↗<br/>Results of Segmentation Network")]
     Inf1((" "))
     Inf2((" "))
 
@@ -1230,7 +1229,6 @@ flowchart BT
     Inf2 --> SOP
     DIE --> DI
     ASD --> UR
-    ASD --> AR
 ```
 
 ## High-level justification for mapping

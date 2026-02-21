@@ -129,22 +129,14 @@ and repeat the name in the displayed label, separated by a colon:
 C1["C1: The system meets all safety requirements"]
 ```
 
-**Alternative A** — name on its own line above the statement:
+Note that ArtifactRefence (e.g., for evidence) has an arrow (↗);
+typically that will be noted as name, colon, space, arrow, line break,
+then the description.
 
-```
-C1["C1<br/>The system meets all safety requirements"]
-```
-
-**Alternative B** — omit name from label, rely on node ID only:
-
-```
-C1["The system meets all safety requirements"]
-```
-
-Alternative A gives the clearest visual separation between name and
-statement but is more verbose. Alternative B produces the cleanest
-labels but requires readers to know that node IDs correspond to SACM
-names, which may not be obvious in rendered diagrams.
+Users *may* break a line just before beginning any statement or
+description. Traditional SACM uses a line break and text alignment,
+but we have less control, and we want to clearly
+separate the name from the rest.
 
 ### C.1 ArgumentPackage
 
@@ -361,7 +353,7 @@ flowchart BT
     C1["C1: Claim statement ..."]
 ```
 
-We could use `⋯` but that's more complex to type, and not as
+We could use the suffix `⋯` but that's more complex to type, and not as
 obvious; using 3 full dots is easier to write and more obvious.
 Note that the GSN notation for needs support (incomplete) is a diamond,
 not 3 dots.

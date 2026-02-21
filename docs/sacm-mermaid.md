@@ -421,40 +421,63 @@ AR1[/"AR1: Reasoning statement"\]
 
 ### Assertion states for relationships (C.8–C.12)
 
-Sections C.8–C.12 each define a relationship type with eight
-assertion-state variants. The spec encodes the state in the
-decoration on the target end of the arrow. Use this table:
-
-| Assertion state | Mermaid edge | Notes |
-|---|---|---|
-| asserted (default) | `A --> B` | Solid arrow; no annotation needed |
-| assumed | `A -. "assumed" .-> B` | Dashed with label |
-| needsSupport | `A -- "..." --> B` | Labeled solid arrow |
-| axiomatic | `A ==> B` | Thick arrow |
-| defeated | `A --x B` | X at target end |
-| asCited | `A -- "cited" --> B` | Add citation details in label |
-| abstract | `A -.-> B` | Dashed arrow, no label |
-| counter | `A --x B` | X at target; add `"counter"` label |
-
-When both "defeated" and "counter" appear in the same diagram,
-add a label on `--x` to disambiguate them.
-
-**Note on reification**: The spec's relationships are reified, that is, a dot
-represents the relationship instance itself, with one edge to its
-source and a separate decorated edge to its target. This is optional
-(*not* dropped) in our mapping; we use a single direct edge instead
-it's not needed.
-In cases where the relationship instance itself must be referenced (e.g., to
-attach a +metaClaim to it), represent it as an explicit tiny node:
+Each of C.8–C.12 is a reified relationship: the relationship instance
+is a dot node, sources connect to it with plain lines, and the dot
+connects to the target with a decorated edge that encodes the assertion
+state. Full form with dot:
 
 ```
 Src --- Dot(("●")) --> Tgt
 ```
 
+When there is only a single source and the dot need not be referenced
+(no +metaClaim attached), the dot may be omitted and the same edge
+style applied directly:
+
+```
+Src --> Tgt
+```
+
+The assertion state is always encoded on the **Dot→Tgt edge** (or the
+direct Src→Tgt edge when the dot is omitted). There are two base
+arrow families across the five relationship types:
+
+**Inferential** (`-->` base) — used by C.8 AssertedInference,
+C.9 AssertedEvidence, and C.11 AssertedArtifactSupport:
+
+| Assertion state | Dot→Tgt edge | Notes |
+|---|---|---|
+| asserted (default) | `Dot --> Tgt` | Solid arrow |
+| assumed | `Dot -. "assumed" .-> Tgt` | Dashed with label |
+| needsSupport | `Dot -- "..." --> Tgt` | Label signals incompleteness |
+| axiomatic | `Dot ==> Tgt` | Thick arrow |
+| defeated | `Dot -- "defeated" --x Tgt` | Label distinguishes from counter |
+| asCited | `Dot -- "cited: Pkg::Name" --> Tgt` | Include citation in label |
+| abstract | `Dot -.-> Tgt` | Dashed, no label |
+| counter | `Dot -- "counter" --x Tgt` | Label distinguishes from defeated |
+
+**Context** (`--o` base) — used by C.10 AssertedContext and
+C.12 AssertedArtifactContext. The `ctx` suffix on labels distinguishes
+context edges from inferential edges when both appear in a diagram:
+
+| Assertion state | Dot→Tgt edge | Notes |
+|---|---|---|
+| asserted (default) | `Dot --o Tgt` | Circle (○) approximates spec's filled square (■) |
+| assumed | `Dot -. "assumed ctx" .-> Tgt` | Dashed+circle unsupported; use dashed+label |
+| needsSupport | `Dot -- "... ctx" --o Tgt` | Labeled circle end |
+| axiomatic | `Dot == "axiomatic ctx" ==> Tgt` | Labeled thick arrow |
+| defeated | `Dot -- "defeated ctx" --x Tgt` | `ctx` label distinguishes from inferential |
+| asCited | `Dot -- "cited ctx: Pkg::Name" --o Tgt` | Labeled circle end |
+| abstract | `Dot -. "ctx" .-> Tgt` | Dashed+circle unsupported; use dashed+label |
+| counter | `Dot -- "counter ctx" --x Tgt` | X end; `ctx` label distinguishes |
+
+When both "defeated" and "counter" appear in the same diagram, always
+label the `--x` edge to disambiguate them.
+
 **If expanded shapes were supported**: Use `f-circ` (the filled/junction
 circle) instead of `(("●"))` — the filled circle matches the spec's
 solid filled dot more closely than an open circle.
-Syntax: `Inf1@{ shape: f-circ }`.
+Syntax: `Dot@{ shape: f-circ }`.
 
 ### C.8 AssertedInference
 
@@ -491,16 +514,7 @@ When there is only a single source, the dot may be omitted and a
 direct arrow used instead (`C2 --> C1`), since there is no ambiguity
 about joint vs. independent support.
 
-| Assertion state | Mermaid | Notes |
-|---|---|---|
-| asserted (default) | `Src --> Tgt` | Solid arrow; no label needed |
-| assumed | `Src -. "assumed" .-> Tgt` | Dashed with label |
-| needsSupport | `Src -- "..." --> Tgt` | Label signals incompleteness |
-| axiomatic | `Src ==> Tgt` | Thick arrow |
-| defeated | `Src -- "defeated" --x Tgt` | Label distinguishes from counter |
-| asCited | `Src -- "cited: Pkg::Name" --> Tgt` | Include citation in label |
-| abstract | `Src -.-> Tgt` | Dashed, no label |
-| counter | `Src -- "counter" --x Tgt` | Label distinguishes from defeated |
+**Assertion states**: use the **Inferential** table above.
 
 ### C.9 AssertedEvidence
 
@@ -525,16 +539,7 @@ flowchart BT
     EV1 --> C1
 ```
 
-| Assertion state | Mermaid | Notes |
-|---|---|---|
-| asserted (default) | `ArtRef --> Tgt` | Source must be ArtifactReference shape |
-| assumed | `ArtRef -. "assumed" .-> Tgt` | Dashed with label |
-| needsSupport | `ArtRef -- "..." --> Tgt` | Label signals incompleteness |
-| axiomatic | `ArtRef ==> Tgt` | Thick arrow |
-| defeated | `ArtRef -- "defeated" --x Tgt` | Label distinguishes from counter |
-| asCited | `ArtRef -- "cited: Pkg::Name" --> Tgt` | Include citation in label |
-| abstract | `ArtRef -.-> Tgt` | Dashed, no label |
-| counter | `ArtRef -- "counter" --x Tgt` | Label distinguishes from defeated |
+**Assertion states**: use the **Inferential** table above.
 
 ### C.10 AssertedContext
 
@@ -566,16 +571,7 @@ Dashed-line-with-circle is not supported in GitHub's Mermaid, so
 `assumed` and `abstract` variants fall back to dashed arrows with
 a `ctx` label to preserve the context meaning.
 
-| Assertion state | Mermaid | Notes |
-|---|---|---|
-| asserted (default) | `Src --o Tgt` | Circle (○) approximates spec's filled square (■) |
-| assumed | `Src -. "assumed ctx" .-> Tgt` | Dashed+circle unsupported; use dashed+label |
-| needsSupport | `Src -- "... ctx" --o Tgt` | Labeled circle end |
-| axiomatic | `Src == "axiomatic ctx" ==> Tgt` | Labeled thick arrow |
-| defeated | `Src -- "defeated ctx" --x Tgt` | Add `ctx` to distinguish from inference |
-| asCited | `Src -- "cited ctx: Pkg::Name" --o Tgt` | Labeled circle end |
-| abstract | `Src -. "ctx" .-> Tgt` | Dashed+circle unsupported; use dashed+label |
-| counter | `Src -- "counter ctx" --x Tgt` | Open square (□) → X end; add `ctx` label |
+**Assertion states**: use the **Context** table above.
 
 ### C.11 AssertedArtifactSupport
 
@@ -593,26 +589,18 @@ ArtifactReferences.
 **Annex C notation**: Same reified notation as AssertedInference,
 but both source and target are ArtifactReferences.
 
-**Mermaid**: Same arrow style as C.8, distinguished from
-AssertedInference by the target node's shape (cylinder + ↗):
+**Mermaid**: Same arrow style as C.8. Both source and target are
+ArtifactReferences (cylinders + ↗), which distinguishes this from
+AssertedInference (whose nodes are Claims or ArgumentReasoning):
 
 ```mermaid
 flowchart BT
-    C1["C1: Claim"]
-    AR1[("Artifact ↗<br/>Description")]
-    C1 --> AR1
+    AR1[("Source Artifact ↗<br/>Description")]
+    AR2[("Target Artifact ↗<br/>Description")]
+    AR1 --> AR2
 ```
 
-| Assertion state | Mermaid | Notes |
-|---|---|---|
-| asserted (default) | `Src --> ArtRef` | Target must be ArtifactReference shape |
-| assumed | `Src -. "assumed" .-> ArtRef` | Dashed with label |
-| needsSupport | `Src -- "..." --> ArtRef` | Label signals incompleteness |
-| axiomatic | `Src ==> ArtRef` | Thick arrow |
-| defeated | `Src -- "defeated" --x ArtRef` | Label distinguishes from counter |
-| asCited | `Src -- "cited: Pkg::Name" --> ArtRef` | Include citation in label |
-| abstract | `Src -.-> ArtRef` | Dashed, no label |
-| counter | `Src -- "counter" --x ArtRef` | Label distinguishes from defeated |
+**Assertion states**: use the **Inferential** table above.
 
 ### C.12 AssertedArtifactContext
 
@@ -626,26 +614,18 @@ target may be a Claim rather than an ArtifactReference.
 **Annex C notation**: Same reified notation as AssertedContext,
 but both source and target are ArtifactReferences.
 
-**Mermaid**: Same `--o` base style as C.10, distinguished from
-AssertedContext by the target node's shape (cylinder + ↗):
+**Mermaid**: Same `--o` base style as C.10. Both source and target are
+ArtifactReferences (cylinders + ↗), which distinguishes this from
+AssertedContext (whose nodes may be Claims):
 
 ```mermaid
 flowchart BT
     AR1[("Context Artifact ↗<br/>Description")]
-    C1["C1: Claim"]
-    AR1 --o C1
+    AR2[("Target Artifact ↗<br/>Description")]
+    AR1 --o AR2
 ```
 
-| Assertion state | Mermaid | Notes |
-|---|---|---|
-| asserted (default) | `Src --o ArtRef` | Target must be ArtifactReference shape |
-| assumed | `Src -. "assumed ctx" .-> ArtRef` | Dashed+circle unsupported; use dashed+label |
-| needsSupport | `Src -- "... ctx" --o ArtRef` | Labeled circle end |
-| axiomatic | `Src == "axiomatic ctx" ==> ArtRef` | Labeled thick arrow |
-| defeated | `Src -- "defeated ctx" --x ArtRef` | Add `ctx` to distinguish from inference |
-| asCited | `Src -- "cited ctx: Pkg::Name" --o ArtRef` | Labeled circle end |
-| abstract | `Src -. "ctx" .-> ArtRef` | Dashed+circle unsupported; use dashed+label |
-| counter | `Src -- "counter ctx" --x ArtRef` | Open square (□) → X end; add `ctx` label |
+**Assertion states**: use the **Context** table above.
 
 ## Demonstrations
 

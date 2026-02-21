@@ -33,16 +33,28 @@ when editing the graphics, and it doesn't integrate well with version control.
 
 More recent markdown implementations, including GitHub's, include
 support for mermaid diagrams (such as mermaid flowcharts).
-GitHub's markdown implementation is limited, for example, through testing
-we've determined that it currently doesn't
-support expanded node shapes in Mermaid flowcharts (available in v11.3.0+).
+Mermaid, especially its older subset,
+cannot exactly implement the SACM graphical notation.
+Indeed, Mermaid is *much* less capable, graphically, than what LibreOffice
+can generate, and it doesn't let you "place" symbols.
 
 Nevertheless, the ability to *easily* integrate diagrams into the
 markdown format is alluring, and SACM's graphical notation is on the
-whole nice and well-designed. Mermaid, especially its older subset,
-cannot exactly implement the SACM graphical notation. However,
-it doesn't need to be *exact* - it simply needs to be adequate
+whole nice and well-designed.
+A mermaid representation
+doesn't need to be *exactly* like the spec - it simply needs to be adequate
 to be clear to readers.
+
+## Mermaid
+
+Mermaid's syntax is described in
+[its reference](https://mermaid.ai/open-source/intro/syntax-reference.html).
+
+GitHub's markdown implementation is even more limited.
+For example, through testing
+we've determined that it currently doesn't
+support expanded node shapes in Mermaid flowcharts (available in v11.3.0+).
+For our purposes we must stick to what GitHub supports.
 
 ## Mapping
 

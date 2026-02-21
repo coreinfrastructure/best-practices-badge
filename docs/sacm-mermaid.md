@@ -671,7 +671,11 @@ order to justify the inference from G2 and G3 to G1.
   the spec's filled arrowhead pointing at the supported claim
 
 ```mermaid
-%%{ init: { "flowchart": { "curve": "linear" } } }%%
+---
+config:
+  flowchart:
+    curve: linear
+---
 flowchart BT
     G2["G2: Sub-claim A"]
     G3["G3: Sub-claim B"]
@@ -705,7 +709,11 @@ assurance case.
   E1 gets a direct arrow to G4
 
 ```mermaid
-%%{ init: { "flowchart": { "curve": "linear" } } }%%
+---
+config:
+  flowchart:
+    curve: linear
+---
 flowchart BT
     E1[("E1 ↗<br/>Evidence artifact")]
     G4["G4: Top-level claim"]

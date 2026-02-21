@@ -199,7 +199,10 @@ folded upper-right corner) with an upward-right arrow (↗) in the
 fold, indicating a reference to an external artifact or evidence.
 
 **Mermaid**: No document shape is available in GitHub's Mermaid
-renderer. Use a stadium/pill shape `([...])` with `↗` appended
+renderer. In particular, nothing is like the dog-eared document shape
+(LibreOffice can do this easily with shadows,
+but we don't have that option here).
+Use a stadium/pill shape `([...])` with `↗` appended
 to the name, preserving the "external reference" cue:
 
 ```mermaid
@@ -592,6 +595,71 @@ flowchart BT
 | asCited | `Src -- "cited ctx: Pkg::Name" --o ArtRef` | Labeled circle end |
 | abstract | `Src -. "ctx" .-> ArtRef` | Dashed+circle unsupported; use dashed+label |
 | counter | `Src -- "counter ctx" --x ArtRef` | Open square (□) → X end; add `ctx` label |
+
+## Demonstrations
+
+The following subsections implement selected figures from Annex D (informative)
+of the SACM v2.3 specification (OMG Formal/23-05-08, October 2023) using the
+Mermaid mapping established above. Each subsection names the source figure and
+reproduces the spec's prose description, then shows the Mermaid equivalent.
+
+### Figure D1 — Example of Claim Assumptions
+
+**Source**: Figure D1, SACM v2.3 Annex D (informative), p. 67.
+
+**Spec description**: Claims G2 and G3 are asserted to support Claim G1 via an
+AssertedInference. An assumed Claim A1 is declared to explicitly describe the
+assumption being made to support that AssertedInference. The assumed assertion
+state on A1 signals that A1 is not itself argued; it is taken as a given in
+order to justify the inference from G2 and G3 to G1.
+
+**Mapping notes**:
+
+- G1, G2, G3 are asserted Claims → rectangle `["…"]`
+- A1 is an assumed Claim → rounded rectangle `("…")` with a dashed
+  `"assumed"` edge (the spec uses bracket-feet notation; Mermaid has no
+  direct equivalent)
+- The AssertedInference reification dot is dropped; each source Claim gets a
+  direct edge to the target Claim
+
+```mermaid
+flowchart BT
+    G2["G2: Sub-claim A"]
+    G3["G3: Sub-claim B"]
+    A1("A1: Assumed condition")
+    G1["G1: Top-level claim"]
+
+    G2 --> G1
+    G3 --> G1
+    A1 -. "assumed" .-> G1
+```
+
+### Figure D9 — ArtifactReference Citation via AssertedEvidence
+
+**Source**: Figure D9, SACM v2.3 Annex D (informative), p. 74.
+
+**Spec description**: Claim G4 is supported by evidence cited via an
+ArtifactReference E1. The support relationship is modeled as AssertedEvidence,
+connecting the ArtifactReference (source) to the Claim (target). This pattern
+is the standard way to ground a claim in a concrete artifact (a document,
+test result, measurement, etc.) without embedding the artifact itself in the
+assurance case.
+
+**Mapping notes**:
+
+- G4 is an asserted Claim → rectangle `["…"]`
+- E1 is an ArtifactReference → stadium/pill shape `(["… ↗"])` with the ↗
+  icon standing in arrow of the original spec notation.
+- The AssertedEvidence reification dot is dropped; E1 gets a direct arrow
+  to G4
+
+```mermaid
+flowchart BT
+    E1(["E1 ↗<br/>Evidence artifact"])
+    G4["G4: Top-level claim"]
+
+    E1 --> G4
+```
 
 ## Justification for mapping
 

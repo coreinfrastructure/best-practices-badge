@@ -331,10 +331,11 @@ The rounded rectangle `("…")` is not visually distinctive enough —
 it resembles a plain rectangle at a glance. The stadium (rounded on
 both ends) is more visually distinct, and the mandatory `~` suffix
 reinforces the assumed status even when shape rendering is subtle.
+The original SACM symbol is visually very different from a normal claim.
 Together, shape plus suffix make assumed Claims unambiguous.
 
-**Alternative** — rounded rectangle with `~` suffix, if stadium
-is unavailable or unwanted:
+**Alternative** — normal rectangle or rounded rectangle with `~` suffix,
+if stadium is unavailable or unwanted:
 
 ```
 C1("C1: Assumed statement ~")

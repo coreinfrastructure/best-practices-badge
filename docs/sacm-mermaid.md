@@ -664,8 +664,9 @@ order to justify the inference from G2 and G3 to G1.
   relationship
 - Plain (undirected) lines `---` connect each asserted source to the dot,
   matching the spec's plain lines from sources to the dot
-- A dashed undirected line `-. "assumed" .-` connects A1 to the dot,
-  encoding the assumed assertion state on that source
+- A dashed directed line `-. "assumed" .->` connects A1 to the dot,
+  encoding the assumed assertion state on that source and preserving
+  the directionality of the source-to-dot connection in the spec
 - A solid arrow `-->` leads from the dot to the target Claim G1, matching
   the spec's filled arrowhead pointing at the supported claim
 
@@ -677,7 +678,7 @@ flowchart BT
     Inf1(("●"))
     G1["G1: Top-level claim"]
 
-    A1 -. "assumed" .- Inf1
+    A1 -. "assumed" .-> Inf1
     G2 --- Inf1
     G3 --- Inf1
     Inf1 --> G1

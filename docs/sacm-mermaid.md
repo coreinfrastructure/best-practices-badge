@@ -1138,6 +1138,101 @@ flowchart BT
     E1 --> G4
 ```
 
+### Figure 8 Example of NeedsSupport
+
+**Source**: Figure 8, Selviandro et al., "A Visual Notation for the
+Representation of Assurance Cases using SACM 2.x", p. 12.
+
+**Paper description**: An example showing the NeedsSupportClaim.
+The 'Ambiguous Regions' Claim, which contributes to 'Segmentation
+Outcome Performance', is defined as a NeedsSupportClaim — meaning it
+needs further argumentation or evidence to be provided.
+This richer example combines ArtifactReferences (context and evidence),
+ArgumentReasoning nodes, and multiple Claims at different levels,
+demonstrating SACM's reified relationships in a realistic setting.
+
+**Mapping notes**:
+
+- SOP is the top-level asserted Claim → plain rectangle `["…"]`
+- CS (Clinical Setting) is an ArtifactReference providing context for SOP
+  → cylinder `[("…↗")]`, connected with `--o` (AssertedContext)
+- DTS and OS are ArgumentReasoning nodes → parallelogram `[/…/]`
+- DI and UR are asserted Claims → plain rectangle `["…"]`
+- AR (Ambiguous Regions) is a NeedsSupport Claim → plain rectangle with
+  `...` suffix, indicating it requires further evidence or argumentation
+- DIE and ASD are ArtifactReferences → cylinder `[("…↗")]`
+- Two AssertedInference relationships, each reified with a dot:
+  - Inf1 gathers {DI, DTS} and infers SOP
+  - Inf2 gathers {UR, AR, OS} and infers SOP
+- DIE provides evidence for DI (AssertedEvidence, direct arrow)
+- ASD provides evidence for both UR and AR (two direct AssertedEvidence arrows)
+
+```
+flowchart BT
+    SOP["Segmentation Outcome Performance<br/>Segmentation network produces device-independent<br/>tissue-segmentation maps"]
+    CS[("Clinical Setting ↗<br/>Triage in an ophthalmology referral pathway at<br/>Moorfields Eye Hospital, with more than 50 common diagnoses")]
+    DTS[/"Device Training Strategy<br/>Argument by training segmentation network on<br/>scans from 2 different devices"/]
+    OS[/"Output Strategy<br/>Argument over ambiguous and unambiguous regions"/]
+    DI["Device Independence<br/>AUC of 99.21 and 99.93 achieved for the 1st and<br/>2nd device considering urgent referral"]
+    UR["Unambiguous Regions<br/>Tissue-segmentation map obtained by network is<br/>consistent with manual segmentation map"]
+    AR["Ambiguous Regions<br/>The ambiguous regions in OCT scans are addressed<br/>by training multiple instances of the network<br/>..."]
+    DIE[("Device Independence Evidence ↗<br/>Performance results")]
+    ASD[("Automated Segmentation Device ↗<br/>Results of Segmentation Network")]
+    Inf1((" "))
+    Inf2((" "))
+
+    CS --o SOP
+    DI --- Inf1
+    DTS --- Inf1
+    Inf1 --> SOP
+    UR --- Inf2
+    AR --- Inf2
+    OS --- Inf2
+    Inf2 --> SOP
+    DIE --> DI
+    ASD --> UR
+    ASD --> AR
+```
+
+Rendered:
+
+```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
+flowchart BT
+    SOP["Segmentation Outcome Performance<br/>Segmentation network produces device-independent<br/>tissue-segmentation maps"]
+    CS[("Clinical Setting ↗<br/>Triage in an ophthalmology referral pathway at<br/>Moorfields Eye Hospital, with more than 50 common diagnoses")]
+    DTS[/"Device Training Strategy<br/>Argument by training segmentation network on<br/>scans from 2 different devices"/]
+    OS[/"Output Strategy<br/>Argument over ambiguous and unambiguous regions"/]
+    DI["Device Independence<br/>AUC of 99.21 and 99.93 achieved for the 1st and<br/>2nd device considering urgent referral"]
+    UR["Unambiguous Regions<br/>Tissue-segmentation map obtained by network is<br/>consistent with manual segmentation map"]
+    AR["Ambiguous Regions<br/>The ambiguous regions in OCT scans are addressed<br/>by training multiple instances of the network<br/>..."]
+    DIE[("Device Independence Evidence ↗<br/>Performance results")]
+    ASD[("Automated Segmentation Device ↗<br/>Results of Segmentation Network")]
+    Inf1((" "))
+    Inf2((" "))
+
+    CS --o SOP
+    DI --- Inf1
+    DTS --- Inf1
+    Inf1 --> SOP
+    UR --- Inf2
+    AR --- Inf2
+    OS --- Inf2
+    Inf2 --> SOP
+    DIE --> DI
+    ASD --> UR
+    ASD --> AR
+```
+
 ## High-level justification for mapping
 
 The SACM Annex C graphical constructs are:

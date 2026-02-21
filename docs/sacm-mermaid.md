@@ -442,6 +442,16 @@ The assertion state is always encoded on the **Dot→Tgt edge** (or the
 direct Src→Tgt edge when the dot is omitted). There are two base
 arrow families across the five relationship types:
 
+**Note on orthogonality**: Relationship assertion states (C.8–C.12)
+and Claim assertion states (C.6) are entirely independent. Both
+inherit `assertionDeclaration` from the abstract `Assertion` class
+(§11.10, p. 39), but they are encoded differently and do not
+interfere. A Claim node can carry `assumed` (stadium shape + `~`
+prefix) while the relationship pointing to it simultaneously carries
+`defeated` (`Dot --x Tgt`). The visual motifs reuse similar symbols
+(bracket feet, three dots) in both contexts, but they apply to
+different objects.
+
 **Inferential** (`-->` base) — used by C.8 AssertedInference,
 C.9 AssertedEvidence, and C.11 AssertedArtifactSupport:
 

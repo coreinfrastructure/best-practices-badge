@@ -2,7 +2,7 @@
 
 This document explains our approach to implementing the
 [Structured Assurance Case Metamodel (SACM)](https://www.omg.org/spec/SACM)
-graphical notation in mermaid (as best we can on GitHub).
+graphical notation in mermaid as it is currently implemented by GitHub.
 
 ## Introduction
 
@@ -27,9 +27,12 @@ notation defined in Annex C
 
 In the best practices badge project we have traditionally used diagrams
 edited with LibreOffice, connected together and provided detail in
-markdown format. However, while this is flexible and LibreOffice is
-quite capable, this approach creates significant effort
-when editing the graphics, and it doesn't integrate well with version control.
+markdown format. This is flexible and LibreOffice is
+quite capable, and the resulting images look quite close to annex C.
+However, this approach creates significant effort
+when editing the graphics, because of the manual placement and regeneration
+of images after editing it requires,
+and it doesn't integrate well with version control.
 
 More recent markdown implementations, including GitHub's, include
 support for mermaid diagrams (such as mermaid flowcharts).
@@ -38,21 +41,22 @@ cannot exactly implement the SACM graphical notation.
 Indeed, Mermaid is *much* less capable, graphically, than what LibreOffice
 can generate, and it doesn't let you "place" symbols.
 
-Nevertheless, the ability to *easily* integrate diagrams into the
-markdown format is alluring, and SACM's graphical notation is on the
-whole nice and well-designed.
-A mermaid representation
-doesn't need to be *exactly* like the spec - it simply needs to be adequate
-to be clear to readers.
+Nevertheless, the ability to *easily* integrate SACM diagrams into the
+markdown format is compelling.
+This would let us easily edit markdown files to update both the
+text and graphical representation.
+A mermaid representation doesn't need to be *exactly* like the SACM spec -
+it simply needs to be adequate to be clear to stakeholder readers.
 
 ## Mermaid
 
 Mermaid's syntax is described in
 [its reference](https://mermaid.ai/open-source/intro/syntax-reference.html).
 
-GitHub's markdown implementation is even more limited.
+GitHub's markdown implementation is even more limited than the
+current version of mermaid.
 For example, through testing
-we've determined that it currently doesn't
+we've determined that GitHub's implementation currently doesn't
 support expanded node shapes in Mermaid flowcharts (available in v11.3.0+).
 For our purposes we must stick to what GitHub supports.
 

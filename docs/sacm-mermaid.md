@@ -14,12 +14,13 @@ Assurance Case is a set of auditable claims, arguments, and evidence
 created to support the claim that a defined system/service will satisfy
 the particular requirements [and] facilitates information exchange
 between various system stakeholder[s]...".
+In particular, it defines an XML-based scheme for exchanging detailed
+data between tools specialized to support an assurance case.
 
-However, sometimes you don't need a metamodel for an assurance case;
-you simply need to provide a simple editable assurance case for others
-to read and edit. In our case, we also don't need to exchange between tools.
-It's more important that the information be easily edited and
-displayed with open source software tools.
+We instead wanted to be able to edit and view a simple editable document
+describing an assurance case
+using simple widely-available and widely-used open source software tools.
+The OMG SACM document was not designed for this use case.
 
 Thankfully, newer versions of SACM also include a recommended graphical
 notation defined in Annex C
@@ -27,12 +28,12 @@ notation defined in Annex C
 
 In the best practices badge project we have traditionally used diagrams
 edited with LibreOffice, connected together and provided detail in
-markdown format. This is flexible and LibreOffice is
-quite capable, and the resulting images look quite close to annex C.
+markdown format. This is flexible, and LibreOffice is
+quite capable. The resulting images look quite close to annex C.
 However, this approach creates significant effort
 when editing the graphics, because of the manual placement and regeneration
-of images after editing it requires,
-and it doesn't integrate well with version control.
+of images after editing it requires.
+It also doesn't integrate well with version control.
 
 More recent markdown implementations, including GitHub's, include
 support for mermaid diagrams (such as mermaid flowcharts).
@@ -50,6 +51,9 @@ it simply needs to be adequate to be clear to stakeholder readers.
 
 ## Mermaid
 
+We presume the document is overall in Commonmark markdown (.md) format,
+interspersed with mermaid diagrams.
+
 Mermaid's syntax is described in
 [its reference](https://mermaid.ai/open-source/intro/syntax-reference.html).
 
@@ -59,6 +63,36 @@ For example, through testing
 we've determined that GitHub's implementation currently doesn't
 support expanded node shapes in Mermaid flowcharts (available in v11.3.0+).
 For our purposes we must stick to what GitHub supports.
+
+### Mermaid Frontmatter
+
+To indicate a mermaid diagram begin its
+first line with <tt>&#96;&#96;&#96;mermaid</tt>
+and the following line should just have `---` to indicate
+the start of frontmatter. Use this frontmatter:
+
+~~~~yaml
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+~~~~
+
+Reasons:
+
+* theme: neutral: This removes the vibrant colors of the "default" theme and uses a grayscale/white-and-black palette that matches more formal safety case documentation.
+* curve: linear: Use (more) straight lines; they don't exactly match the SACM conventions but they're close.
+* htmlLabels: true: This allows you to use standard HTML inside your nodes.
+* rankSpacing: Assurance cases can get "crowded." Increasing rank spacing helps prevent the nodes from overlapping vertically and keeps the hierarchical levels distinct.
+* nodeSpacing: Assurance cases can get "crowded." This helps us have slightly more horizontal nodes.
+* padding: Reducing padding inside a node gives a little more space for multiple nodes on a line.
+
+After the front matter have another line with `---`, then the
+diagram, then a final <tt>&#96;&#96;&#96</tt> to end the diagram.
 
 ## Mapping
 
@@ -677,8 +711,8 @@ config:
   flowchart:
     curve: linear
     htmlLabels: true
-    rankSpacing: 50
-    nodeSpacing: 50
+    rankSpacing: 60
+    nodeSpacing: 45
     padding: 15
 ---
 flowchart BT
@@ -720,8 +754,8 @@ config:
   flowchart:
     curve: linear
     htmlLabels: true
-    rankSpacing: 50
-    nodeSpacing: 50
+    rankSpacing: 60
+    nodeSpacing: 45
     padding: 15
 ---
 flowchart BT

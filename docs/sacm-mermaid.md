@@ -289,17 +289,26 @@ flowchart BT
 
 Declared without any supporting evidence or argumentation.
 
-**Recommended** — rounded rectangle to signal the softer status:
+**Recommended** — stadium/pill shape with a required `~` prefix
+(tilde followed by a space before the name):
 
 ```mermaid
 flowchart BT
-    C1("C1: Assumed statement")
+    C1(["~ C1: Assumed statement"])
 ```
 
-**Alternative** — rectangle with a leading `~`:
+The rounded rectangle `("…")` is not visually distinctive enough —
+it resembles a plain rectangle at a glance. The stadium (rounded on
+both ends) is more visually distinct, and the mandatory `~` prefix
+(with a following space) reinforces the assumed status even when shape
+rendering is subtle. Together, shape plus prefix make assumed Claims
+unambiguous.
+
+**Alternative** — rounded rectangle with `~` prefix, if stadium
+is unavailable or unwanted:
 
 ```
-C1["~C1: Assumed statement"]
+C1("~ C1: Assumed statement")
 ```
 
 #### NeedsSupport
@@ -646,8 +655,8 @@ order to justify the inference from G2 and G3 to G1.
 **Mapping notes**:
 
 - G1, G2, G3 are asserted Claims → rectangle `["…"]`
-- A1 is an assumed Claim → rounded rectangle `("…")` (spec uses bracket-feet
-  notation; Mermaid has no direct equivalent)
+- A1 is an assumed Claim → stadium `(["~ …"])` with `~` prefix and space
+  (spec uses bracket-feet notation; Mermaid has no direct equivalent)
 - The AssertedInference reification dot is rendered as a small circle node
   `((" "))`, matching the spec's filled dot that sits at the centre of the
   relationship
@@ -662,7 +671,7 @@ order to justify the inference from G2 and G3 to G1.
 flowchart BT
     G2["G2: Sub-claim A"]
     G3["G3: Sub-claim B"]
-    A1("A1: Assumed condition")
+    A1(["~ A1: Assumed condition"])
     Inf1((" "))
     G1["G1: Top-level claim"]
 
@@ -731,9 +740,9 @@ Among the alternatives:
 The three decisive reasons flowchart wins are:
 
 1. Shape variety: It has the most node shapes GitHub supports — rectangle [],
-   parallelogram [//], circle (()), rounded rectangle (), asymmetric >] — enough
-   to meaningfully distinguish Claim, ArgumentReasoning, and ArtifactReference
-   from each other.
+   stadium ([]), cylinder [()], parallelogram [//], circle (()), rounded
+   rectangle (), asymmetric >] — enough to meaningfully distinguish Claim,
+   assumed Claim, ArtifactReference, and ArgumentReasoning from each other.
 
 2. Edge variety: --> (solid), -.-> (dashed), ==> (thick), --o (circle
    endpoint), --x (X endpoint), plus labeled edges — enough to encode assertion

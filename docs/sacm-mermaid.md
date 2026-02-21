@@ -352,13 +352,19 @@ C1("~ C1: Assumed statement")
 #### NeedsSupport
 
 Declared as requiring further evidence or argumentation.
-Append `⋯` to signal incompleteness, echoing the three dots
-shown below the rectangle in the spec:
+Append `...` to signal incompleteness, echoing the three dots
+shown below the rectangle in the spec. These could be
+forced (with a break) to be below.
 
 ```mermaid
 flowchart BT
-    C1["C1: Claim statement ⋯"]
+    C1["C1: Claim statement ..."]
 ```
+
+We could use `⋯` but that's more complex to type, and not as
+obvious; using 3 full dots is easier to write and more obvious.
+Note that the GSN notation for needs support (incomplete) is a diamond,
+not 3 dots.
 
 #### Axiomatic
 

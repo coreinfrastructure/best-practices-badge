@@ -427,7 +427,7 @@ connects to the target with a decorated edge that encodes the assertion
 state. Full form with dot:
 
 ```
-Src --- Dot(("●")) --> Tgt
+Src --- Dot(("")) --> Tgt
 ```
 
 When there is only a single source and the dot need not be referenced
@@ -485,7 +485,7 @@ When both "defeated" and "counter" appear in the same diagram, always
 label the `--x` edge to disambiguate them.
 
 **If expanded shapes were supported**: Use `f-circ` (the filled/junction
-circle) instead of `(("●"))` — the filled circle matches the spec's
+circle) instead of `((""))` — the filled circle matches the spec's
 solid filled dot more closely than an open circle.
 Syntax: `Dot@{ shape: f-circ }`.
 
@@ -513,7 +513,7 @@ ArgumentReasoning nodes appear below the Claim they support:
 flowchart BT
     C2["C2: Sub-claim"]
     AR1[/"AR1: Reasoning"/]
-    Inf1(("●"))
+    Inf1((""))
     C1["C1: Top-level claim"]
     C2 --- Inf1
     AR1 --- Inf1
@@ -660,7 +660,7 @@ order to justify the inference from G2 and G3 to G1.
 - A1 is an assumed Claim → stadium `(["~ …"])` with `~` prefix and space
   (spec uses bracket-feet notation; Mermaid has no direct equivalent)
 - The AssertedInference reification dot is rendered as a small circle node
-  `(("●"))`, matching the spec's filled dot that sits at the centre of the
+  `((""))`, matching the spec's filled dot that sits at the centre of the
   relationship
 - Plain (undirected) lines `---` connect each asserted source to the dot,
   matching the spec's plain lines from sources to the dot
@@ -675,7 +675,7 @@ flowchart BT
     G2["G2: Sub-claim A"]
     G3["G3: Sub-claim B"]
     A1(["~ A1: Assumed condition"])
-    Inf1(("●"))
+    Inf1((""))
     G1["G1: Top-level claim"]
 
     A1 -. "assumed" .-> Inf1

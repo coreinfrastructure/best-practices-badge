@@ -198,12 +198,12 @@ is the citation within the argument; the actual evidentiary object
 (test report, specification, etc.) is described in the Artifact
 Metamodel (§12.7).
 
-**Annex C notation**: A dog-eared document shape (rectangle with
-folded upper-right corner) with an upward-right arrow (↗) in the
+**Annex C notation**: A multi-page shape (stacked offset rectangles)
+with an upward-right arrow (↗) in the
 fold, indicating a reference to an external artifact or evidence.
 
 **Mermaid**: No document shape is available in GitHub's Mermaid
-renderer. In particular, nothing is like the dog-eared document shape
+renderer. In particular, nothing is like the multi-page document shape
 (LibreOffice can do this easily with shadows,
 but we don't have that option here).
 Use a cylinder/database shape `[(...)]` to hint at "stored evidence" and
@@ -219,8 +219,8 @@ The cylinder is more visually distinct from Claims (rectangles and
 rounded rectangles) than a stadium/pill would be, reducing the risk of
 misreading a diagram at a glance. The ↗ icon is retained from the spec
 to indicate that this is a reference to external information
-(the ↗ icon is unrelated to the spec's dog-eared corner notation,
-as the corner notation merely indicates a document that is likely to
+(the ↗ icon is unrelated to the spec's stacked rectangles; the
+stacked rectangles indicates a document that is likely to
 have multiple pages).
 
 Previously, the recommended shape was a stadium/pill `(["…"])`. The
@@ -239,9 +239,9 @@ Less visually distinct from a Claim but simpler.
 **Alternative B** — circle `(("EvidenceName ↗"))`:
 maximally distinct from Claims, but harder to fit multi-line text.
 
-**If expanded shapes were supported**: The `doc` shape would directly
-render the spec's dog-eared document, eliminating the cylinder
-workaround and matching the source notation exactly.
+**If expanded shapes were supported**: The `docs` shape would better
+render the spec's document symbol, eliminating the cylinder
+workaround and matching the source notation much more closely
 Syntax: `AR1@{ shape: doc, label: "Name ↗<br/>Description" }`.
 The ↗ can be kept for continuity with the spec's corner arrow.
 
@@ -699,7 +699,7 @@ assurance case.
 
 - G4 is an asserted Claim → rectangle `["…"]`
 - E1 is an ArtifactReference → cylinder/database shape `[("… ↗")]` with
-  the ↗ icon retained from the spec's dog-eared corner notation
+  the ↗ icon retained from the spec's corner notation
 - The AssertedEvidence reification dot may be dropped; in this case
   E1 gets a direct arrow to G4
 
@@ -716,7 +716,8 @@ flowchart BT
 The SACM Annex C graphical constructs are:
 
 * Node types (shapes): ArgumentPackage, ArgumentPackageInterface,
-  ArgumentPackageBinding, ArtifactReference (dog-eared document), and Claim with
+  ArgumentPackageBinding, ArtifactReference (arrow with stack of
+  papers), and Claim with
   7 variants (asserted=plain rect, assumed=bracket feet, needsSupport=dots
   below, axiomatic=double bottom line, defeated=crossed-out, asCited=corner
   notches, abstract=dashed rect), plus ArgumentReasoning (open-left bracket

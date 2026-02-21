@@ -202,9 +202,9 @@ fold, indicating a reference to an external artifact or evidence.
 renderer. In particular, nothing is like the dog-eared document shape
 (LibreOffice can do this easily with shadows,
 but we don't have that option here).
-Use a cylinder/database shape `[(...)]` with `↗` appended
-to the name, preserving the "external reference" cue from the spec
-notation while hinting at "stored evidence":
+Use a cylinder/database shape `[(...)]` to hint at "stored evidence" and
+append `↗` to the name to preserving the "external reference" arrow
+cue from the spec notation:
 
 ```mermaid
 flowchart BT
@@ -213,9 +213,11 @@ flowchart BT
 
 The cylinder is more visually distinct from Claims (rectangles and
 rounded rectangles) than a stadium/pill would be, reducing the risk of
-misreading a diagram at a glance. The ↗ icon is retained to connect
-visually with the spec's dog-eared corner notation even though the
-overall shape has changed.
+misreading a diagram at a glance. The ↗ icon is retained from the spec
+to indicate that this is a reference to external information
+(the ↗ icon is unrelated to the spec's dog-eared corner notation,
+as the corner notation merely indicates a document that is likely to
+have multiple pages).
 
 Previously, the recommended shape was a stadium/pill `(["…"])`. The
 switch to cylinder was made because the cylinder better hints at
@@ -232,6 +234,12 @@ Less visually distinct from a Claim but simpler.
 
 **Alternative B** — circle `(("EvidenceName ↗"))`:
 maximally distinct from Claims, but harder to fit multi-line text.
+
+**If expanded shapes were supported**: The `doc` shape would directly
+render the spec's dog-eared document, eliminating the cylinder
+workaround and matching the source notation exactly.
+Syntax: `AR1@{ shape: doc, label: "Name ↗<br/>Description" }`.
+The ↗ can be kept for continuity with the spec's corner arrow.
 
 ### C.5 +metaClaim reference
 
@@ -344,6 +352,11 @@ flowchart BT
     C1["C1 [PkgName::CitedName]<br/>Statement"]
 ```
 
+**If expanded shapes were supported**: The `notch-rect` (card) shape
+has corner notches that directly match the spec's asCited notation,
+removing the need to embed the citation only in the label text.
+Syntax: `C1@{ shape: notch-rect, label: "C1 [Pkg::Name]<br/>Statement" }`.
+
 #### Abstract
 
 Part of a pattern or template, not a concrete instance.
@@ -423,6 +436,11 @@ attach a +metaClaim to it), represent it as an explicit tiny node:
 ```
 Src --- Dot((" ")) --> Tgt
 ```
+
+**If expanded shapes were supported**: Use `f-circ` (the filled/junction
+circle) instead of `((" "))` — the filled circle matches the spec's
+solid filled dot more closely than an open circle.
+Syntax: `Inf1@{ shape: f-circ }`.
 
 ### C.8 AssertedInference
 

@@ -58,7 +58,7 @@ For our purposes we must stick to what GitHub supports.
 
 ## Mapping
 
-For each graphical element identified in Annex C, here is our
+For each SACM graphical element identified in Annex C, here is our
 recommended Mermaid representation.
 
 ### Layout and direction
@@ -110,8 +110,13 @@ names, which may not be obvious in rendered diagrams.
 
 ### C.1 ArgumentPackage
 
-**Spec**: A bordered rectangular container with a tab header and a
-side panel — a named grouping of argument elements.
+**SACM §11.4 (p. 36)**: "ArgumentPackage is the containing element
+for a structured argument represented using the SACM Argumentation
+Metamodel." ArgumentPackages contain structured arguments composed of
+ArgumentAssets and can be nested.
+
+**Annex C notation**: A bordered rectangular container with a tab
+header and a side panel — a named grouping of argument elements.
 
 **Mermaid**: Use `subgraph`:
 
@@ -126,9 +131,15 @@ No close alternative — `subgraph` is Mermaid's only grouping construct.
 
 ### C.2 ArgumentPackageInterface
 
-**Spec**: Like ArgumentPackage but with a lollipop (○—) symbol
-in the side panel, indicating an interface through which the package
-exposes elements to other packages.
+**SACM §11.6 (p. 37)**: "ArgumentPackageInterface is a kind of
+ArgumentPackage that defines an interface that may be exchanged
+between users." It declares which ArgumentAssets inside a package
+are visible to other packages. Distinguished from ArgumentPackageBinding
+(C.3), which joins packages together using those interfaces.
+
+**Annex C notation**: Like ArgumentPackage but with a lollipop (○—)
+symbol in the side panel, indicating an interface through which the
+package exposes elements to other packages.
 
 **Mermaid**: Use `subgraph` with a `⊙` prefix in the label
 to suggest the lollipop symbol:
@@ -146,8 +157,15 @@ connection point (not its contents), use a standalone circle node:
 
 ### C.3 ArgumentPackageBinding
 
-**Spec**: Like ArgumentPackage but with two overlapping circles
-in the side panel, indicating a binding between two packages.
+**SACM §11.5 (p. 36)**: "ArgumentPackageBindings can be used to map
+resolved dependencies between the Claims of two or more
+ArgumentPackages." A binding is itself an ArgumentPackage and links
+elements of participant packages via citation. Distinguished from
+ArgumentPackageInterface (C.2), which exposes elements; a binding
+connects two or more packages using those interfaces.
+
+**Annex C notation**: Like ArgumentPackage but with two overlapping
+circles in the side panel, indicating a binding between two packages.
 
 **Mermaid**: Use `subgraph` with a `⊗` prefix
 (or `⊕`, or another compound-circle character):
@@ -164,9 +182,21 @@ edge: `pkg1 -- "binds" --- pkg2`.
 
 ### C.4 ArtifactReference
 
-**Spec**: A dog-eared document shape (rectangle with folded
-upper-right corner) with an upward-right arrow (↗) in the fold,
-indicating a reference to an external artifact or evidence.
+**SACM §11.9 (p. 38)**: "ArtifactReference enables the citation of
+an artifact as information that relates to the structured argument."
+The spec elaborates: "It is necessary to be able to cite artifacts
+that provide supporting evidence, context, or additional description
+within an argument structure. ArtifactReferences allow there to be
+an objectified citation of this information within the structured
+argument, thereby allowing the relationship between this artifact and
+the argument to also be explicitly declared." Note: ArtifactReference
+is the citation within the argument; the actual evidentiary object
+(test report, specification, etc.) is described in the Artifact
+Metamodel (§12.7).
+
+**Annex C notation**: A dog-eared document shape (rectangle with
+folded upper-right corner) with an upward-right arrow (↗) in the
+fold, indicating a reference to an external artifact or evidence.
 
 **Mermaid**: No document shape is available in GitHub's Mermaid
 renderer. Use a stadium/pill shape `([...])` with `↗` appended
@@ -190,9 +220,15 @@ maximally distinct from Claims, but harder to fit multi-line text.
 
 ### C.5 +metaClaim reference
 
-**Spec**: A horizontal line with an open left-pointing arrowhead
-(`——<`), used to attach a Claim that comments on an Assertion
-(e.g., expressing confidence in the assertion itself).
+**SACM §11.10 (p. 39)**: The +metaClaim is an association on
+Assertion: "metaClaim:Claim[0..*] — references Claims concerning
+(i.e., about) the Assertion (e.g., regarding the confidence in the
+Assertion)." It allows any Assertion (a Claim or a relationship)
+to have Claims attached to it as commentary or meta-level observation.
+
+**Annex C notation**: A horizontal line with an open left-pointing
+arrowhead (`——<`), used to attach a Claim that comments on an
+Assertion (e.g., expressing confidence in the assertion itself).
 
 **Mermaid**: A dashed labeled edge, visually distinct from
 regular inference arrows:
@@ -203,9 +239,18 @@ MetaClaim -. "+metaClaim" .-> Assertion1
 
 ### C.6 Claim
 
-**Spec**: A rectangle. Seven assertion-state variants are indicated
-by decorations (bracket feet, dots, double lines, X, dashes, corner
-notches) that Mermaid cannot render.
+**SACM §11.11 (p. 39)**: "Claims are used to record the propositions
+of any structured argument contained in an ArgumentPackage.
+Propositions are instances of statements that could be true or false,
+but cannot be true and false simultaneously." The spec adds: "The
+core of any argument is a series of claims (premises) that are
+asserted to provide sufficient reasoning to support a (higher-level)
+claim (a conclusion)." The assertionDeclaration attribute (§11.8,
+p. 38) governs the seven assertion-state variants below.
+
+**Annex C notation**: A rectangle. Seven assertion-state variants are
+indicated by decorations (bracket feet, dots, double lines, X,
+dashes, corner notches) that Mermaid cannot render.
 Use text and shape conventions to distinguish them instead.
 
 #### Asserted (default)
@@ -303,9 +348,19 @@ C1["{abstract} C1: Statement"]
 
 ### C.7 ArgumentReasoning
 
-**Spec**: An open-left-bracket shape — only the right vertical side
-and two short horizontal lines are drawn, forming a `]` bracket —
-containing name and statement. Analogous to a "Strategy" node in GSN.
+**SACM §11.12 (p. 40)**: "ArgumentReasoning can be used to provide
+additional description or explanation of the asserted relationship.
+For example, it can be used to provide description of an
+AssertedInference that connects one or more Claims (premises) to
+another Claim (conclusion)." The spec adds: "The AssertedRelationship
+that relates one or more Claims (premises) to another Claim
+(conclusion) ... may not always be obvious. In such cases
+ArgumentReasoning can be used to provide further description of the
+reasoning involved." Analogous to a "Strategy" node in GSN.
+
+**Annex C notation**: An open-left-bracket shape — only the right
+vertical side and two short horizontal lines are drawn, forming a
+`]` bracket — containing name and statement.
 
 **Mermaid**: The parallelogram `[/..../]` is the closest available
 shape — visually non-rectangular and conventionally used for
@@ -356,7 +411,17 @@ Src --- Dot((" ")) --> Tgt
 
 ### C.8 AssertedInference
 
-**Spec**: Reified relationship. Source is a Claim or
+**SACM §11.14 (p. 40)**: "AssertedInference association records the
+inference that a user declares to exist between one or more Assertion
+(premise) and another Assertion (conclusion). It is important to note
+that such a declaration is itself an assertion on behalf of the user."
+The spec explains: "An AssertedInference between two claims
+(A – the source – and B – the target) denotes that the truth of
+Claim A is said to infer the truth of Claim B." Distinguished from
+AssertedEvidence (C.9), where the source must be an ArtifactReference
+rather than a Claim or ArgumentReasoning.
+
+**Annex C notation**: Reified relationship. Source is a Claim or
 ArgumentReasoning; target is a Claim.
 
 **Mermaid**: Direct arrow from source to target (reification dropped).
@@ -385,7 +450,15 @@ flowchart BT
 
 ### C.9 AssertedEvidence
 
-**Spec**: Same reified notation as AssertedInference,
+**SACM §11.15 (p. 41)**: "AssertedEvidence association records the
+declaration that one or more artifacts of Evidence (cited by
+ArtifactReference) provide information that helps establish the
+truth of a Claim." The spec constrains: "The source of
+AssertedEvidence relationships must be ArtifactReference."
+Distinguished from AssertedInference (C.8), where the source is a
+Claim or ArgumentReasoning rather than an ArtifactReference.
+
+**Annex C notation**: Same reified notation as AssertedInference,
 but the source is an ArtifactReference and the target is a Claim.
 
 **Mermaid**: Same arrow style as C.8. The relationship type is implied
@@ -411,9 +484,18 @@ flowchart BT
 
 ### C.10 AssertedContext
 
-**Spec**: Same reified notation but the target endpoint is a filled
-square (■) rather than a filled arrowhead, indicating the source
-provides context to the target rather than inferential support.
+**SACM §11.16 (p. 41)**: "AssertedContext can be used to declare that
+the artifact cited by an ArtifactReference(s) provides the context
+for the interpretation and scoping of a Claim or ArgumentReasoning
+element. In addition, the AssertedContext can be used to declare a
+Claim asserted as necessary context (i.e. a precondition) for another
+Assertion or ArgumentReasoning." Distinguished from AssertedInference
+(C.8) — context establishes interpretation scope or preconditions,
+not inferential support for the truth of a claim.
+
+**Annex C notation**: Same reified notation but the target endpoint
+is a filled square (■) rather than a filled arrowhead, indicating the
+source provides context to the target rather than inferential support.
 The counter variant uses an open square (□).
 
 **Mermaid**: Use `--o` (circle at target end) as the closest
@@ -443,9 +525,19 @@ a `ctx` label to preserve the context meaning.
 
 ### C.11 AssertedArtifactSupport
 
-**Spec**: Same reified notation as AssertedInference,
-but the target is an ArtifactReference
-(a Claim or ArgumentReasoning supports an artifact).
+**SACM §11.17 (p. 41)**: "AssertedArtifactSupport records the
+assertion that one or more artifacts support another artifact."
+The spec constrains: "The source and target of
+AssertedArtifactSupport must be of type ArtifactReference." The spec
+cautions this "can be an ambiguous relationship if the nature of
+these Assertions is unclear. In such cases, it would be clearer to
+declare explicit AssertedInferences between Claims drawn out from the
+ArtifactReference." Distinguished from AssertedInference (C.8) and
+AssertedEvidence (C.9) — both source and target must be
+ArtifactReferences.
+
+**Annex C notation**: Same reified notation as AssertedInference,
+but both source and target are ArtifactReferences.
 
 **Mermaid**: Same arrow style as C.8, distinguished from
 AssertedInference by the target node's shape (stadium + ↗):
@@ -470,8 +562,15 @@ flowchart BT
 
 ### C.12 AssertedArtifactContext
 
-**Spec**: Same reified notation as AssertedContext,
-but the target is an ArtifactReference.
+**SACM §11.18 (p. 41)**: "AssertedArtifactContext records the
+assertion that one or more artifacts provide context for another
+artifact." The spec constrains: "The source and target of
+AssertedArtifactContext must be of type ArtifactReference."
+Distinguished from AssertedContext (C.10), where the source or
+target may be a Claim rather than an ArtifactReference.
+
+**Annex C notation**: Same reified notation as AssertedContext,
+but both source and target are ArtifactReferences.
 
 **Mermaid**: Same `--o` base style as C.10, distinguished from
 AssertedContext by the target node's shape (stadium + ↗):

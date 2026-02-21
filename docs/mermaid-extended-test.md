@@ -6,6 +6,12 @@ This file is designed to test if the current Markdown environment (like GitHub o
 
 ```mermaid
 flowchart TD
+    A([Start]) --> B{Logged in?}
+    B -- Yes --> C[View Dashboard]
+    B -- No --> D[/Login Form/]
+    D --> E[(User DB)]
+    E --> B
+    C --> F([End])
 ```
 
 ## Mermaid v11.3.0+ Shape Support Test

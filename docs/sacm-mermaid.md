@@ -319,26 +319,25 @@ flowchart BT
 
 Declared without any supporting evidence or argumentation.
 
-**Recommended** — stadium/pill shape with a required `~` prefix
-(tilde followed by a space before the name):
+**Recommended** — stadium/pill shape with a required `~` suffix
+(space then tilde after the statement):
 
 ```mermaid
 flowchart BT
-    C1(["~ C1: Assumed statement"])
+    C1(["C1: Assumed statement ~"])
 ```
 
 The rounded rectangle `("…")` is not visually distinctive enough —
 it resembles a plain rectangle at a glance. The stadium (rounded on
-both ends) is more visually distinct, and the mandatory `~` prefix
-(with a following space) reinforces the assumed status even when shape
-rendering is subtle. Together, shape plus prefix make assumed Claims
-unambiguous.
+both ends) is more visually distinct, and the mandatory `~` suffix
+reinforces the assumed status even when shape rendering is subtle.
+Together, shape plus suffix make assumed Claims unambiguous.
 
-**Alternative** — rounded rectangle with `~` prefix, if stadium
+**Alternative** — rounded rectangle with `~` suffix, if stadium
 is unavailable or unwanted:
 
 ```
-C1("~ C1: Assumed statement")
+C1("C1: Assumed statement ~")
 ```
 
 #### NeedsSupport
@@ -363,28 +362,28 @@ not 3 dots.
 Intentionally declared as axiomatically true; no further
 support needed or expected.
 
-**Recommended** — subroutine shape `[[...]]` (double vertical bars)
-to suggest the spec's double bottom line:
+Plain rectangle with `===` suffix, typically on its own line via
+`<br/>` to echo the spec's double bottom line:
 
 ```mermaid
 flowchart BT
-    C1[["C1: Axiomatic statement"]]
+    C1["C1: Axiomatic statement<br/>==="]
 ```
 
-**Alternative** — rectangle with a `═══` suffix on a separate line:
+The `===` suffix may also appear inline if the label is short:
 
 ```
-C1["C1: Axiomatic statement<br/>═══"]
+C1["C1: Short claim ==="]
 ```
 
 #### Defeated
 
-Defeated by counter-evidence. Prefix with `✗`
+Defeated by counter-evidence. Append ` ✗` as a suffix
 (Mermaid cannot render the spec's crossed-out rectangle):
 
 ```mermaid
 flowchart BT
-    C1["✗ C1: Defeated statement"]
+    C1["C1: Defeated statement ✗"]
 ```
 
 #### AsCited
@@ -689,7 +688,7 @@ order to justify the inference from G2 and G3 to G1.
 **Mapping notes**:
 
 - G1, G2, G3 are asserted Claims → rectangle `["…"]`
-- A1 is an assumed Claim → stadium `(["~ …"])` with `~` prefix and space
+- A1 is an assumed Claim → stadium `(["… ~"])` with `~` suffix
   (spec uses bracket-feet notation; Mermaid has no direct equivalent)
 - The AssertedInference reification dot is rendered as a small circle node
   `((" "))`, matching the spec's filled dot that sits at the centre of the
@@ -716,7 +715,7 @@ config:
 flowchart BT
     G2["G2: Sub-claim A"]
     G3["G3: Sub-claim B"]
-    A1(["~ A1: Assumed condition"])
+    A1(["A1: Assumed condition ~"])
     Inf1((" "))
     G1["G1: Top-level claim"]
 

@@ -616,22 +616,30 @@ order to justify the inference from G2 and G3 to G1.
 **Mapping notes**:
 
 - G1, G2, G3 are asserted Claims → rectangle `["…"]`
-- A1 is an assumed Claim → rounded rectangle `("…")` with a dashed
-  `"assumed"` edge (the spec uses bracket-feet notation; Mermaid has no
-  direct equivalent)
-- The AssertedInference reification dot is dropped; each source Claim gets a
-  direct edge to the target Claim
+- A1 is an assumed Claim → rounded rectangle `("…")` (spec uses bracket-feet
+  notation; Mermaid has no direct equivalent)
+- The AssertedInference reification dot is rendered as a small circle node
+  `((" "))`, matching the spec's filled dot that sits at the centre of the
+  relationship
+- Plain (undirected) lines `---` connect each asserted source to the dot,
+  matching the spec's plain lines from sources to the dot
+- A dashed undirected line `-. "assumed" .-` connects A1 to the dot,
+  encoding the assumed assertion state on that source
+- A solid arrow `-->` leads from the dot to the target Claim G1, matching
+  the spec's filled arrowhead pointing at the supported claim
 
 ```mermaid
 flowchart BT
     G2["G2: Sub-claim A"]
     G3["G3: Sub-claim B"]
     A1("A1: Assumed condition")
+    Inf1((" "))
     G1["G1: Top-level claim"]
 
-    G2 --> G1
-    G3 --> G1
-    A1 -. "assumed" .-> G1
+    G2 --- Inf1
+    G3 --- Inf1
+    A1 -. "assumed" .- Inf1
+    Inf1 --> G1
 ```
 
 ### Figure D9 — ArtifactReference Citation via AssertedEvidence

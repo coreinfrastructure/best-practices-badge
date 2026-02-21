@@ -148,9 +148,27 @@ ArgumentAssets and can be nested.
 **Annex C notation**: A bordered rectangular container with a tab
 header and a side panel — a named grouping of argument elements.
 
-**Mermaid**: Use `subgraph`:
+**Mermaid**: Use `subgraph`. Text to type:
+
+```
+subgraph pkg1["PackageName: description"]
+    C1["C1: element"]
+end
+```
+
+Rendered:
 
 ```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
 flowchart BT
     subgraph pkg1["PackageName: description"]
         C1["C1: Top-level claim"]
@@ -174,7 +192,25 @@ package exposes elements to other packages.
 **Mermaid**: Use `subgraph` with a `⊙` prefix in the label
 to suggest the lollipop symbol:
 
+```
+subgraph pi1["⊙ InterfaceName: description"]
+    C1["Exposed claim"]
+end
+```
+
+Rendered:
+
 ```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
 flowchart BT
     subgraph pi1["⊙ InterfaceName: description"]
         C1["Exposed claim"]
@@ -200,7 +236,24 @@ circles in the side panel, indicating a binding between two packages.
 **Mermaid**: Use `subgraph` with a `⊗` prefix
 (or `⊕`, or another compound-circle character):
 
+```
+subgraph pb1["⊗ BindingName: description"]
+end
+```
+
+Rendered:
+
 ```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
 flowchart BT
     subgraph pb1["⊗ BindingName: description"]
     end
@@ -236,7 +289,23 @@ Use a cylinder/database shape `[(...)]` to hint at "stored evidence" and
 append `↗` to the name to preserving the "external reference" arrow
 cue from the spec notation:
 
+```
+AR1[("EvidenceName ↗<br/>Description of artifact")]
+```
+
+Rendered:
+
 ```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
 flowchart BT
     AR1[("EvidenceName ↗<br/>Description of artifact")]
 ```
@@ -287,7 +356,26 @@ Assertion (e.g., expressing confidence in the assertion itself).
 regular inference arrows:
 
 ```
-MetaClaim -. "+metaClaim" .-> Assertion1
+MC1 -. "+metaClaim" .-> C1
+```
+
+Rendered:
+
+```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
+flowchart BT
+    C1["C1: Top-level claim"]
+    MC1["MC1: Confidence is high"]
+    MC1 -. "+metaClaim" .-> C1
 ```
 
 ### C.6 Claim
@@ -310,7 +398,23 @@ Use text and shape conventions to distinguish them instead.
 
 The normal, fully-supported state. Plain rectangle:
 
+```
+C1["C1: Claim statement"]
+```
+
+Rendered:
+
 ```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
 flowchart BT
     C1["C1: Claim statement"]
 ```
@@ -322,7 +426,23 @@ Declared without any supporting evidence or argumentation.
 **Recommended** — stadium/pill shape with a required `~` suffix
 (space then tilde after the statement):
 
+```
+C1(["C1: Assumed statement ~"])
+```
+
+Rendered:
+
 ```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
 flowchart BT
     C1(["C1: Assumed statement ~"])
 ```
@@ -348,7 +468,23 @@ Append `...` to signal incompleteness, echoing the three dots
 shown below the rectangle in the spec. These could be
 forced (with a break) to be below.
 
+```
+C1["C1: Claim statement ..."]
+```
+
+Rendered:
+
 ```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
 flowchart BT
     C1["C1: Claim statement ..."]
 ```
@@ -366,7 +502,23 @@ support needed or expected.
 Plain rectangle with `===` suffix, typically on its own line via
 `<br/>` to echo the spec's double bottom line:
 
+```
+C1["C1: Axiomatic statement<br/>==="]
+```
+
+Rendered:
+
 ```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
 flowchart BT
     C1["C1: Axiomatic statement<br/>==="]
 ```
@@ -382,7 +534,23 @@ C1["C1: Short claim ==="]
 Defeated by counter-evidence. Append ` ✗` as a suffix
 (Mermaid cannot render the spec's crossed-out rectangle):
 
+```
+C1["C1: Defeated statement ✗"]
+```
+
+Rendered:
+
 ```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
 flowchart BT
     C1["C1: Defeated statement ✗"]
 ```
@@ -392,7 +560,23 @@ flowchart BT
 Cites a claim from another package. Include the citation in the
 label, mirroring the spec's "Cited Pkg [Cited name]" notation:
 
+```
+C1["C1 [PkgName::CitedName]<br/>Statement"]
+```
+
+Rendered:
+
 ```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
 flowchart BT
     C1["C1 [PkgName::CitedName]<br/>Statement"]
 ```
@@ -408,7 +592,23 @@ Part of a pattern or template, not a concrete instance.
 The spec uses a dashed rectangle (not available in Mermaid).
 Use angle brackets around the name:
 
+```
+C1["〈C1〉: Abstract statement"]
+```
+
+Rendered:
+
 ```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
 flowchart BT
     C1["〈C1〉: Abstract statement"]
 ```
@@ -439,7 +639,23 @@ vertical side and two short horizontal lines are drawn, forming a
 shape — visually non-rectangular and conventionally used for
 strategy/reasoning in GSN-influenced notations:
 
+```
+AR1[/"AR1: Reasoning statement"/]
+```
+
+Rendered:
+
 ```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
 flowchart BT
     AR1[/"AR1: Reasoning statement"/]
 ```
@@ -498,6 +714,46 @@ C.9 AssertedEvidence, and C.11 AssertedArtifactSupport:
 | abstract | `Dot -.-> Tgt` | Dashed, no label |
 | counter | `Dot -- "counter" --x Tgt` | Label distinguishes from defeated |
 
+Visual examples of each inferential assertion state (all include
+the reification dot):
+
+```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
+flowchart LR
+    S1["Src"] --- D1((" "))
+    D1 --> T1["Tgt — asserted"]
+
+    S2["Src"] --- D2((" "))
+    D2 -. "assumed" .-> T2["Tgt — assumed"]
+
+    S3["Src"] --- D3((" "))
+    D3 -- "..." --> T3["Tgt — needsSupport"]
+
+    S4["Src"] --- D4((" "))
+    D4 ==> T4["Tgt — axiomatic"]
+
+    S5["Src"] --- D5((" "))
+    D5 -- "defeated" --x T5["Tgt — defeated"]
+
+    S6["Src"] --- D6((" "))
+    D6 -- "cited: Pkg::Name" --> T6["Tgt — asCited"]
+
+    S7["Src"] --- D7((" "))
+    D7 -.-> T7["Tgt — abstract"]
+
+    S8["Src"] --- D8((" "))
+    D8 -- "counter" --x T8["Tgt — counter"]
+```
+
 **Context** (`--o` base) — used by C.10 AssertedContext and
 C.12 AssertedArtifactContext. The `ctx` suffix on labels distinguishes
 context edges from inferential edges when both appear in a diagram:
@@ -512,6 +768,46 @@ context edges from inferential edges when both appear in a diagram:
 | asCited | `Dot -- "cited ctx: Pkg::Name" --o Tgt` | Labeled circle end |
 | abstract | `Dot -. "ctx" .-> Tgt` | Dashed+circle unsupported; use dashed+label |
 | counter | `Dot -- "counter ctx" --x Tgt` | X end; `ctx` label distinguishes |
+
+Visual examples of each context assertion state (all include
+the reification dot):
+
+```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
+flowchart LR
+    CS1["Src"] --- CD1((" "))
+    CD1 --o CT1["Tgt — asserted"]
+
+    CS2["Src"] --- CD2((" "))
+    CD2 -. "assumed ctx" .-> CT2["Tgt — assumed"]
+
+    CS3["Src"] --- CD3((" "))
+    CD3 -- "... ctx" --o CT3["Tgt — needsSupport"]
+
+    CS4["Src"] --- CD4((" "))
+    CD4 == "axiomatic ctx" ==> CT4["Tgt — axiomatic"]
+
+    CS5["Src"] --- CD5((" "))
+    CD5 -- "defeated ctx" --x CT5["Tgt — defeated"]
+
+    CS6["Src"] --- CD6((" "))
+    CD6 -- "cited ctx: Pkg::Name" --o CT6["Tgt — asCited"]
+
+    CS7["Src"] --- CD7((" "))
+    CD7 -. "ctx" .-> CT7["Tgt — abstract"]
+
+    CS8["Src"] --- CD8((" "))
+    CD8 -- "counter ctx" --x CT8["Tgt — counter"]
+```
 
 When both "defeated" and "counter" appear in the same diagram, always
 label the `--x` edge to disambiguate them.
@@ -542,6 +838,16 @@ independent inferences. In `flowchart BT`, sub-claims and
 ArgumentReasoning nodes appear below the Claim they support:
 
 ```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
 flowchart BT
     C2["C2: Sub-claim"]
     AR1[/"AR1: Reasoning"/]
@@ -575,6 +881,16 @@ but the source is an ArtifactReference and the target is a Claim.
 by the source node's shape (cylinder + ↗):
 
 ```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
 flowchart BT
     EV1[("EvidenceName ↗<br/>Description")]
     C1["C1: Claim"]
@@ -603,6 +919,16 @@ The counter variant uses an open square (□).
 approximation to the spec's filled-square endpoint:
 
 ```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
 flowchart BT
     CTX["Context claim"]
     C1["C1: Claim"]
@@ -636,6 +962,16 @@ ArtifactReferences (cylinders + ↗), which distinguishes this from
 AssertedInference (whose nodes are Claims or ArgumentReasoning):
 
 ```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
 flowchart BT
     AR1[("Source Artifact ↗<br/>Description")]
     AR2[("Target Artifact ↗<br/>Description")]
@@ -661,6 +997,16 @@ ArtifactReferences (cylinders + ↗), which distinguishes this from
 AssertedContext (whose nodes may be Claims):
 
 ```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
 flowchart BT
     AR1[("Context Artifact ↗<br/>Description")]
     AR2[("Target Artifact ↗<br/>Description")]

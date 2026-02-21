@@ -673,8 +673,13 @@ order to justify the inference from G2 and G3 to G1.
 ```mermaid
 ---
 config:
+  theme: neutral
   flowchart:
     curve: linear
+    htmlLabels: true
+    rankSpacing: 50
+    nodeSpacing: 50
+    padding: 15
 ---
 flowchart BT
     G2["G2: Sub-claim A"]
@@ -711,8 +716,13 @@ assurance case.
 ```mermaid
 ---
 config:
+  theme: neutral
   flowchart:
     curve: linear
+    htmlLabels: true
+    rankSpacing: 50
+    nodeSpacing: 50
+    padding: 15
 ---
 flowchart BT
     E1[("E1 ↗<br/>Evidence artifact")]

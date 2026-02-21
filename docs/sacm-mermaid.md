@@ -471,19 +471,25 @@ rather than a Claim or ArgumentReasoning.
 **Annex C notation**: Reified relationship. Source is a Claim or
 ArgumentReasoning; target is a Claim.
 
-**Mermaid**: Direct arrow from source to target if there's only one
-(reification is optional when there's only one connection).
-In `flowchart BT`, sub-claims and ArgumentReasoning nodes appear
-below the Claim they support, with arrows pointing upward:
+**Mermaid**: Use a reification dot when there are multiple sources, to
+show they jointly constitute one `AssertedInference` rather than
+independent inferences. In `flowchart BT`, sub-claims and
+ArgumentReasoning nodes appear below the Claim they support:
 
 ```mermaid
 flowchart BT
     C2["C2: Sub-claim"]
     AR1[/"AR1: Reasoning"/]
+    Inf1(("●"))
     C1["C1: Top-level claim"]
-    C2 --> C1
-    AR1 --> C1
+    C2 --- Inf1
+    AR1 --- Inf1
+    Inf1 --> C1
 ```
+
+When there is only a single source, the dot may be omitted and a
+direct arrow used instead (`C2 --> C1`), since there is no ambiguity
+about joint vs. independent support.
 
 | Assertion state | Mermaid | Notes |
 |---|---|---|

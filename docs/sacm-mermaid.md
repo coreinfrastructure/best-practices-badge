@@ -202,13 +202,25 @@ fold, indicating a reference to an external artifact or evidence.
 renderer. In particular, nothing is like the dog-eared document shape
 (LibreOffice can do this easily with shadows,
 but we don't have that option here).
-Use a stadium/pill shape `([...])` with `↗` appended
-to the name, preserving the "external reference" cue:
+Use a cylinder/database shape `[(...)]` with `↗` appended
+to the name, preserving the "external reference" cue from the spec
+notation while hinting at "stored evidence":
 
 ```mermaid
 flowchart BT
-    AR1(["EvidenceName ↗<br/>Description of artifact"])
+    AR1[("EvidenceName ↗<br/>Description of artifact")]
 ```
+
+The cylinder is more visually distinct from Claims (rectangles and
+rounded rectangles) than a stadium/pill would be, reducing the risk of
+misreading a diagram at a glance. The ↗ icon is retained to connect
+visually with the spec's dog-eared corner notation even though the
+overall shape has changed.
+
+Previously, the recommended shape was a stadium/pill `(["…"])`. The
+switch to cylinder was made because the cylinder better hints at
+"stored evidence" (an organized collection of data supporting the
+argument) and is more visually distinct from Claim nodes.
 
 **Alternative A** — plain rectangle with `↗`:
 
@@ -465,11 +477,11 @@ Claim or ArgumentReasoning rather than an ArtifactReference.
 but the source is an ArtifactReference and the target is a Claim.
 
 **Mermaid**: Same arrow style as C.8. The relationship type is implied
-by the source node's shape (stadium + ↗):
+by the source node's shape (cylinder + ↗):
 
 ```mermaid
 flowchart BT
-    EV1(["EvidenceName ↗<br/>Description"])
+    EV1[("EvidenceName ↗<br/>Description")]
     C1["C1: Claim"]
     EV1 --> C1
 ```
@@ -543,12 +555,12 @@ ArtifactReferences.
 but both source and target are ArtifactReferences.
 
 **Mermaid**: Same arrow style as C.8, distinguished from
-AssertedInference by the target node's shape (stadium + ↗):
+AssertedInference by the target node's shape (cylinder + ↗):
 
 ```mermaid
 flowchart BT
     C1["C1: Claim"]
-    AR1(["Artifact ↗<br/>Description"])
+    AR1[("Artifact ↗<br/>Description")]
     C1 --> AR1
 ```
 
@@ -576,11 +588,11 @@ target may be a Claim rather than an ArtifactReference.
 but both source and target are ArtifactReferences.
 
 **Mermaid**: Same `--o` base style as C.10, distinguished from
-AssertedContext by the target node's shape (stadium + ↗):
+AssertedContext by the target node's shape (cylinder + ↗):
 
 ```mermaid
 flowchart BT
-    AR1(["Context Artifact ↗<br/>Description"])
+    AR1[("Context Artifact ↗<br/>Description")]
     C1["C1: Claim"]
     AR1 --o C1
 ```
@@ -656,14 +668,14 @@ assurance case.
 **Mapping notes**:
 
 - G4 is an asserted Claim → rectangle `["…"]`
-- E1 is an ArtifactReference → stadium/pill shape `(["… ↗"])` with the ↗
-  icon standing in arrow of the original spec notation.
+- E1 is an ArtifactReference → cylinder/database shape `[("… ↗")]` with
+  the ↗ icon retained from the spec's dog-eared corner notation
 - The AssertedEvidence reification dot is dropped; E1 gets a direct arrow
   to G4
 
 ```mermaid
 flowchart BT
-    E1(["E1 ↗<br/>Evidence artifact"])
+    E1[("E1 ↗<br/>Evidence artifact")]
     G4["G4: Top-level claim"]
 
     E1 --> G4

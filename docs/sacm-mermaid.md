@@ -1048,6 +1048,9 @@ order to justify the inference from G2 and G3 to G1.
 - A solid arrow `-->` leads from the dot to the target Claim G1, matching
   the spec's filled arrowhead pointing at the supported claim
 
+Here's the text for the mermaid chart (not including the standard
+Mermaid Frontmatter described earlier).
+
 ```
 flowchart BT
     G2["G2: Sub-claim A"]
@@ -1135,7 +1138,7 @@ flowchart BT
     E1 --> G4
 ```
 
-## Justification for mapping
+## High-level justification for mapping
 
 The SACM Annex C graphical constructs are:
 
@@ -1164,6 +1167,7 @@ Among the alternatives:
 * mindmap - only a few fixed shapes, parent-child edges only
 * stateDiagram-v2 - only state box shapes, only edge transitions
 * erDiagram - only entity box shapes, with ER relation styles
+* graph - legacy type, more limited capabilities compared to flowchart
 
 The three decisive reasons flowchart wins are:
 

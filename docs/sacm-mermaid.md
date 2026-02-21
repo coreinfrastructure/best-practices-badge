@@ -435,11 +435,12 @@ decoration on the target end of the arrow. Use this table:
 When both "defeated" and "counter" appear in the same diagram,
 add a label on `--x` to disambiguate them.
 
-**Note on reification**: The spec's relationships are reified — a dot
+**Note on reification**: The spec's relationships are reified, that is, a dot
 represents the relationship instance itself, with one edge to its
-source and a separate decorated edge to its target. This is dropped in
-our mapping; we use a single direct edge instead. In the rare case
-where the relationship instance itself must be referenced (e.g., to
+source and a separate decorated edge to its target. This is optional
+(*not* dropped) in our mapping; we use a single direct edge instead
+it's not needed.
+In cases where the relationship instance itself must be referenced (e.g., to
 attach a +metaClaim to it), represent it as an explicit tiny node:
 
 ```
@@ -466,7 +467,8 @@ rather than a Claim or ArgumentReasoning.
 **Annex C notation**: Reified relationship. Source is a Claim or
 ArgumentReasoning; target is a Claim.
 
-**Mermaid**: Direct arrow from source to target (reification dropped).
+**Mermaid**: Direct arrow from source to target if there's only one
+(reification is optional when there's only one connection).
 In `flowchart BT`, sub-claims and ArgumentReasoning nodes appear
 below the Claim they support, with arrows pointing upward:
 
@@ -675,9 +677,9 @@ flowchart BT
     Inf1(("●"))
     G1["G1: Top-level claim"]
 
+    A1 -. "assumed" .- Inf1
     G2 --- Inf1
     G3 --- Inf1
-    A1 -. "assumed" .- Inf1
     Inf1 --> G1
 ```
 
@@ -697,8 +699,8 @@ assurance case.
 - G4 is an asserted Claim → rectangle `["…"]`
 - E1 is an ArtifactReference → cylinder/database shape `[("… ↗")]` with
   the ↗ icon retained from the spec's dog-eared corner notation
-- The AssertedEvidence reification dot is dropped; E1 gets a direct arrow
-  to G4
+- The AssertedEvidence reification dot may be dropped; in this case
+  E1 gets a direct arrow to G4
 
 ```mermaid
 flowchart BT

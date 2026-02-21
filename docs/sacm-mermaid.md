@@ -443,11 +443,11 @@ where the relationship instance itself must be referenced (e.g., to
 attach a +metaClaim to it), represent it as an explicit tiny node:
 
 ```
-Src --- Dot((" ")) --> Tgt
+Src --- Dot(("●")) --> Tgt
 ```
 
 **If expanded shapes were supported**: Use `f-circ` (the filled/junction
-circle) instead of `((" "))` — the filled circle matches the spec's
+circle) instead of `(("●"))` — the filled circle matches the spec's
 solid filled dot more closely than an open circle.
 Syntax: `Inf1@{ shape: f-circ }`.
 
@@ -658,7 +658,7 @@ order to justify the inference from G2 and G3 to G1.
 - A1 is an assumed Claim → stadium `(["~ …"])` with `~` prefix and space
   (spec uses bracket-feet notation; Mermaid has no direct equivalent)
 - The AssertedInference reification dot is rendered as a small circle node
-  `((" "))`, matching the spec's filled dot that sits at the centre of the
+  `(("●"))`, matching the spec's filled dot that sits at the centre of the
   relationship
 - Plain (undirected) lines `---` connect each asserted source to the dot,
   matching the spec's plain lines from sources to the dot
@@ -672,7 +672,7 @@ flowchart BT
     G2["G2: Sub-claim A"]
     G3["G3: Sub-claim B"]
     A1(["~ A1: Assumed condition"])
-    Inf1((" "))
+    Inf1(("●"))
     G1["G1: Top-level claim"]
 
     G2 --- Inf1

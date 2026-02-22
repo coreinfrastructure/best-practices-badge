@@ -939,7 +939,6 @@ flowchart BT
     MC1 -. "+metaClaim" .-> C1
 ```
 
-
 ### Unmapped constructs
 
 Annex C has some constructs we've chosen to not map.
@@ -1216,8 +1215,9 @@ processes implement security, and Certifications & Controls provide confidence
 in operating results. Six lifecycle-phase claims (Requirements, Design,
 Implementation, Integration & Verification, Transition & Operation, and
 Maintenance) support the Technical sub-claim via a second AssertedInference.
-A context element ("Process organization") scopes the top claim by noting
-that the argument is organized by lifecycle processes.
+An ArgumentReasoning ("Process organization") explains why dividing the
+argument into Technical, Non-Technical, and Certifications & Controls is
+an appropriate strategy — the system is organized by lifecycle processes.
 
 **Mapping notes**:
 
@@ -1225,8 +1225,9 @@ that the argument is organized by lifecycle processes.
 - The eight leaf claims (Non-Technical, C and C, Requirements, Design,
   Implementation, I&V, Deployment, Maintenance) are AsCited Claims →
   double rectangle `[["…"]]`, indicating they are fully described elsewhere
-- PO (Process organization) is an ArtifactReference providing
-  AssertedContext → cylinder + ↗ `[("… ↗<br>…")]`, connected with `--o` to TC
+- PO (Process organization) is an ArgumentReasoning explaining why the
+  Technical / Non-Technical / C and C division is appropriate →
+  trapezoid `[/"…"/]`, feeding into Inf1 with a plain `---` line
 - Inf1 is the reification dot for the AssertedInference from
   {Technical, Non-Technical, C and C} → TC
 - Inf2 is the reification dot for the AssertedInference from
@@ -1242,7 +1243,7 @@ Mermaid Frontmatter described earlier):
 ```
 flowchart BT
     TC["<b>TC: Top claim</b><br>System is adequately secure against moderate threats"]
-    PO[("<b>PO: Process organization</b> ↗<br>Organized by lifecycle processes (though we do not use a waterfall approach)")]
+    PO[/"<b>PO: Process organization</b><br>Organized by lifecycle processes (though we do not use a waterfall approach)"/]
     Tech["<b>Technical</b><br>Technical lifecycle processes implement security"]
     NonTech[["<b>Non-Technical: Non-Technical Processes</b><br>Non-Technical lifecycle processes implement security"]]
     CC[["<b>C and C: Security Certifications & Controls</b><br>Certifications & Controls provide confidence in operating results"]]
@@ -1255,7 +1256,7 @@ flowchart BT
     Inf1((" "))
     Inf2((" "))
 
-    PO --o TC
+    PO --- Inf1
     Tech --- Inf1
     NonTech --- Inf1
     CC --- Inf1
@@ -1284,7 +1285,7 @@ config:
 ---
 flowchart BT
     TC["<b>TC: Top claim</b><br>System is adequately secure against moderate threats"]
-    PO[("<b>PO: Process organization</b> ↗<br>Organized by lifecycle processes (though we do not use a waterfall approach)")]
+    PO[/"<b>PO: Process organization</b><br>Organized by lifecycle processes (though we do not use a waterfall approach)"/]
     Tech["<b>Technical</b><br>Technical lifecycle processes implement security"]
     NonTech[["<b>Non-Technical: Non-Technical Processes</b><br>Non-Technical lifecycle processes implement security"]]
     CC[["<b>C and C: Security Certifications & Controls</b><br>Certifications & Controls provide confidence in operating results"]]
@@ -1297,7 +1298,7 @@ flowchart BT
     Inf1((" "))
     Inf2((" "))
 
-    PO --o TC
+    PO --- Inf1
     Tech --- Inf1
     NonTech --- Inf1
     CC --- Inf1

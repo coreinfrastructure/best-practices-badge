@@ -143,17 +143,22 @@ It would also be more difficult to edit diagrams if the displayed name
 didn't include the short names we'd use to identify the nodes in a diagram.
 
 We can resolve this by having a naming convention.
-By convention, the names we use for nodes will begin with a short id
-(generally starting with a capital letter), and colon and space, and
-then a clearer human name (typically 1-3 words).
-The name will be bolded, following the example of
-[Selviandro et al.], and followed by a line break &lt;br/&gt;.
-Note that ArtifactRefence (e.g., for evidence) has a space and an
-unbolded northeast arrow (↗)
+By convention, the full names we use for nodes will have the following
+structure:
+
+* a short name (generally starting with a capital letter),
+* colon-space (: ), and
+* a long name (typically 1-3 words).
+
+When displayed the full name will be bolded, following the example of
+[Selviandro et al.], followed by a line break &lt;br/&gt;, followed
+by the description of the node.
+As a special case, ArtifactRefence (e.g., for evidence) will have
+a space and an unbolded northeast arrow (↗) after the full name
 just before this line break; this attempts to emulate its appearance
 in SACM and remind readers that we're referencing external materials.
 
-We *could* left-align the name, and center the description, the
+We *could* left-align the name, and center the description, as this is the
 SACM convention.
 However, this would require a lot of extra ceremony in each
 node, making them harder to edit.
@@ -192,7 +197,7 @@ append `↗` to the name to preserving the "external reference" arrow
 cue from the spec notation:
 
 ```
-AR1[("EvidenceName ↗<br/>Description of artifact")]
+AR1[("<b>AR1: EvidenceName</b> ↗<br>Description of artifact")]
 ```
 
 Rendered:
@@ -209,38 +214,31 @@ config:
     padding: 15
 ---
 flowchart BT
-    AR1[("EvidenceName ↗<br/>Description of artifact")]
+    AR1[("<b>AR1: EvidenceName</b> ↗<br>Description of artifact")]
 ```
 
 The cylinder is more visually distinct from Claims (rectangles and
 rounded rectangles) than a stadium/pill would be, reducing the risk of
 misreading a diagram at a glance. The ↗ icon is retained from the spec
-to indicate that this is a reference to external information
-(the ↗ icon is unrelated to the spec's stacked rectangles; the
-stacked rectangles indicates a document that is likely to
-have multiple pages).
-
-Previously, the recommended shape was a stadium/pill `(["…"])`. The
-switch to cylinder was made because the cylinder better hints at
-"stored evidence" (an organized collection of data supporting the
-argument) and is more visually distinct from Claim nodes.
-
-**Alternative A** — plain rectangle with `↗`:
-
-```
-AR1["EvidenceName ↗<br/>Description"]
-```
-
-Less visually distinct from a Claim but simpler.
-
-**Alternative B** — circle `(("EvidenceName ↗"))`:
-maximally distinct from Claims, but harder to fit multi-line text.
+to indicate that this is a reference to external information.
 
 **If expanded shapes were supported**: The `docs` shape would better
 render the spec's document symbol, eliminating the cylinder
 workaround and matching the source notation much more closely
-Syntax: `AR1@{ shape: doc, label: "Name ↗<br/>Description" }`.
-The ↗ can be kept for continuity with the spec's corner arrow.
+Syntax:
+
+~~~~
+`AR1@{ shape: docs,
+       label: "<b>AR1: EvidenceName</b> ↗<br>Description of artifact"
+ }`
+~~~~
+
+Note that we would use `docs` not `doc` because `docs` has multiple
+rectangles representing pages, making it closer to the SACM symbol.
+The ↗ icon is unrelated to the spec's stacked rectangles;
+it represents externality, while the stacked rectangles indicates a
+document that is likely to have multiple pages.
+Thus, we would retain the ↗ icon.
 
 ### C.5 +metaClaim reference
 
@@ -275,8 +273,8 @@ config:
     padding: 15
 ---
 flowchart BT
-    C1["C1: Top-level claim"]
-    MC1["MC1: Confidence is high"]
+    C1["<b>C1: Top-level claim<b>"]
+    MC1["<b>MC1: Confidence is high<b>"]
     MC1 -. "+metaClaim" .-> C1
 ```
 
@@ -294,14 +292,20 @@ p. 38) governs the seven assertion-state variants below.
 **Annex C notation**: A rectangle. Seven assertion-state variants are
 indicated by decorations (bracket feet, dots, double lines, X,
 dashes, corner notches) that Mermaid cannot render.
-Use text and shape conventions to distinguish them instead.
+We'll use text and shape conventions to distinguish them instead.
+
+For a Claim, the "statement" is the field "description"
+(similarly, for ArgumentReasoning, the "reasoning" is the "description").
+So "statement" and "description" are not different fields, a
+"statement" is simply a description with a specific semantic role.
+Since annex C says "statement" here, we will too.
 
 #### Asserted (default)
 
 The normal, fully-supported state. Plain rectangle:
 
 ```
-C1["C1: Claim statement"]
+C1["<b>C1: Claim long name</b><br>statement"]
 ```
 
 Rendered:
@@ -318,18 +322,17 @@ config:
     padding: 15
 ---
 flowchart BT
-    C1["C1: Claim statement"]
+    C1["<b>C1: Claim long name</b><br>statement"]
 ```
 
 #### Assumed
 
 Declared without any supporting evidence or argumentation.
 
-**Approach** — stadium/pill shape with a required `~` suffix
-(space then tilde after the statement):
+**Approach** — stadium/pill shape with a required `ASSUMED` suffix:
 
 ```
-C1(["C1: Assumed statement ~"])
+C1["<b>C1: Claim long name</b><br>Assumed statement<br>ASSUMED"]
 ```
 
 Rendered:
@@ -346,32 +349,26 @@ config:
     padding: 15
 ---
 flowchart BT
-    C1(["C1: Assumed statement ~"])
+    C1["<b>C1: Claim long name</b><br>statement<br>ASSUMED"]
 ```
 
-The rounded rectangle `("…")` is not visually distinctive enough —
-it resembles a plain rectangle at a glance. The stadium (rounded on
-both ends) is more visually distinct, and the mandatory `~` suffix
-reinforces the assumed status even when shape rendering is subtle.
-The original SACM symbol is visually very different from a normal claim.
-Together, shape plus suffix make assumed Claims unambiguous.
-
-**Alternative** — normal rectangle or rounded rectangle with `~` suffix,
-if stadium is unavailable or unwanted:
-
-```
-C1("C1: Assumed statement ~")
-```
+**Alternative** — we originally had
+rounded rectangles or pills, to make it obvious that this was different
+from other claims, and we used a small suffix indicator `~`.
+However, if we use a "normal" rectangle for all other claims, and
+use a special shape for AsCited, it's a simpler and clearer mapping.
+The `~` symbol isn't obvious nor clear, so a simple English keyword
+ASSUMED is used instead.
 
 #### NeedsSupport
 
 Declared as requiring further evidence or argumentation.
 Append `...` to signal incompleteness, echoing the three dots
-shown below the rectangle in the spec. These could be
-forced (with a break) to be below.
+shown below the rectangle in the spec. These would typically be
+forced (with a break) to be below the other text.
 
 ```
-C1["C1: Claim statement ..."]
+C1["<b>C1: Claim long name</b><br>Statement needing support<br>..."]
 ```
 
 Rendered:
@@ -388,13 +385,14 @@ config:
     padding: 15
 ---
 flowchart BT
-    C1["C1: Claim statement ..."]
+    C1["<b>C1: Claim long name</b><br>Statement needing support<br>..."]
 ```
 
-We could use the suffix `⋯` but that's more complex to type, and not as
-obvious; using 3 full dots is easier to write and more obvious.
+We could use the Unicode character suffix `⋯`
+but that's more complex to type, and since it's smaller it's not as obvious.
+Using 3 full dots is easier to write and more obvious when reading.
 Note that the GSN notation for needs support (incomplete) is a diamond,
-not 3 dots.
+not 3 dots, but this is SACM.
 
 #### Axiomatic
 
@@ -402,10 +400,10 @@ Intentionally declared as axiomatically true; no further
 support needed or expected.
 
 Plain rectangle with `===` suffix, typically on its own line via
-`<br/>` to echo the spec's double bottom line:
+`<br>` to echo the spec's double bottom line:
 
 ```
-C1["C1: Axiomatic statement<br/>==="]
+C1["<b>C1: Long claim name</b><br>Axiomatic statement<br>==="]
 ```
 
 Rendered:
@@ -422,13 +420,7 @@ config:
     padding: 15
 ---
 flowchart BT
-    C1["C1: Axiomatic statement<br/>==="]
-```
-
-The `===` suffix may also appear inline if the label is short:
-
-```
-C1["C1: Short claim ==="]
+    C1["<b>C1: Long claim name</b><br>Axiomatic statement<br>==="]
 ```
 
 #### Defeated
@@ -437,7 +429,7 @@ Defeated by counter-evidence. Append ` ✗` as a suffix
 (Mermaid cannot render the spec's crossed-out rectangle):
 
 ```
-C1["C1: Defeated statement ✗"]
+C1["<b>C1: Long claim name</b><br>Defeated statement<br>✗"]
 ```
 
 Rendered:
@@ -454,7 +446,7 @@ config:
     padding: 15
 ---
 flowchart BT
-    C1["C1: Defeated statement ✗"]
+    C1["<b>C1: Long claim name</b><br>Defeated statement<br>✗"]
 ```
 
 #### AsCited
@@ -462,8 +454,10 @@ flowchart BT
 Cites a claim from another package. Include the citation in the
 label, mirroring the spec's "Cited Pkg [Cited name]" notation:
 
+???
+
 ```
-C1["C1 [PkgName::CitedName]<br/>Statement"]
+C1["C1 [PkgName::CitedName]<br>Statement"]
 ```
 
 Rendered:
@@ -480,22 +474,17 @@ config:
     padding: 15
 ---
 flowchart BT
-    C1["C1 [PkgName::CitedName]<br/>Statement"]
+    C1["C1 [PkgName::CitedName]<br>Statement"]
 ```
-
-**If expanded shapes were supported**: The `notch-rect` (card) shape
-has corner notches that directly match the spec's asCited notation,
-removing the need to embed the citation only in the label text.
-Syntax: `C1@{ shape: notch-rect, label: "C1 [Pkg::Name]<br/>Statement" }`.
 
 #### Abstract
 
 Part of a pattern or template, not a concrete instance.
 The spec uses a dashed rectangle (not available in Mermaid).
-Use angle brackets around the name:
+Use curly braces around the name, as it's easy to type:
 
 ```
-C1["〈C1〉: Abstract statement"]
+C1["<b>{C1: Claim long name}</b><br>Abstract statement"]
 ```
 
 Rendered:
@@ -512,13 +501,7 @@ config:
     padding: 15
 ---
 flowchart BT
-    C1["〈C1〉: Abstract statement"]
-```
-
-**Alternative** — `{abstract}` prefix:
-
-```
-C1["{abstract} C1: Statement"]
+    C1["<b>{C1: Claim long name}</b><br>Abstract statement"]
 ```
 
 ### C.7 ArgumentReasoning
@@ -542,7 +525,7 @@ shape — visually non-rectangular and conventionally used for
 strategy/reasoning in GSN-influenced notations:
 
 ```
-AR1[/"AR1: Reasoning statement"/]
+AR1[/"<b>AR1: Long reasoning name</b><br>Reasoning statement"/]
 ```
 
 Rendered:
@@ -559,14 +542,7 @@ config:
     padding: 15
 ---
 flowchart BT
-    AR1[/"AR1: Reasoning statement"/]
-```
-
-**Alternative** — trapezoid `[/....\]` for a slightly different
-silhouette:
-
-```
-AR1[/"AR1: Reasoning statement"\]
+    AR1[/"<b>AR1: Long reasoning name</b><br>Reasoning statement"/]
 ```
 
 ### Assertion states for relationships (C.8–C.12)
@@ -794,7 +770,7 @@ config:
     padding: 15
 ---
 flowchart BT
-    EV1[("EvidenceName ↗<br/>Description")]
+    EV1[("EvidenceName ↗<br>Description")]
     C1["C1: Claim"]
     EV1 --> C1
 ```
@@ -875,8 +851,8 @@ config:
     padding: 15
 ---
 flowchart BT
-    AR1[("Source Artifact ↗<br/>Description")]
-    AR2[("Target Artifact ↗<br/>Description")]
+    AR1[("Source Artifact ↗<br>Description")]
+    AR2[("Target Artifact ↗<br>Description")]
     AR1 --> AR2
 ```
 
@@ -910,8 +886,8 @@ config:
     padding: 15
 ---
 flowchart BT
-    AR1[("Context Artifact ↗<br/>Description")]
-    AR2[("Target Artifact ↗<br/>Description")]
+    AR1[("Context Artifact ↗<br>Description")]
+    AR2[("Target Artifact ↗<br>Description")]
     AR1 --o AR2
 ```
 
@@ -980,7 +956,7 @@ order to justify the inference from G2 and G3 to G1.
 **Mapping notes**:
 
 - G1, G2, G3 are asserted Claims → rectangle `["…"]`
-- A1 is an assumed Claim → stadium `(["… ~"])` with `~` suffix
+- A1 is an assumed Claim → stadium `(["… ASSUMED"])` with `ASSUMED` suffix
   (spec uses bracket-feet notation; Mermaid has no direct equivalent)
 - The AssertedInference reification dot is rendered as a small circle node
   `((" "))`, matching the spec's filled dot that sits at the centre of the
@@ -1000,7 +976,7 @@ Mermaid Frontmatter described earlier).
 flowchart BT
     G2["G2: Sub-claim A"]
     G3["G3: Sub-claim B"]
-    A1(["A1: Assumed condition ~"])
+    A1(["A1: Assumed condition<br>ASSUMED"])
     Inf1((" "))
     G1["G1: Top-level claim"]
 
@@ -1026,7 +1002,7 @@ config:
 flowchart BT
     G2["G2: Sub-claim A"]
     G3["G3: Sub-claim B"]
-    A1(["A1: Assumed condition ~"])
+    A1(["A1: Assumed conditionASSUMED<br>ASSUMED"])
     Inf1((" "))
     G1["G1: Top-level claim"]
 
@@ -1057,7 +1033,7 @@ assurance case.
 
 ```
 flowchart BT
-    E1[("E1 ↗<br/>Evidence artifact")]
+    E1[("E1 ↗<br>Evidence artifact")]
     G4["G4: Top-level claim"]
 
     E1 --> G4
@@ -1077,7 +1053,7 @@ config:
     padding: 15
 ---
 flowchart BT
-    E1[("E1 ↗<br/>Evidence artifact")]
+    E1[("E1 ↗<br>Evidence artifact")]
     G4["G4: Top-level claim"]
 
     E1 --> G4
@@ -1114,15 +1090,15 @@ demonstrating SACM's reified relationships in a realistic setting.
 
 ```
 flowchart BT
-    SOP["Segmentation Outcome Performance:<br/>Segmentation network produces device-independent<br/>tissue-segmentation maps"]
-    CS[("Clinical Setting: ↗<br/>Triage in an ophthalmology referral pathway at<br/>Moorfields Eye Hospital, with more than 50 common diagnoses")]
-    DTS[/"Device Training Strategy:<br/>Argument by training segmentation network on<br/>scans from 2 different devices"/]
-    OS[/"Output Strategy:<br/>Argument over ambiguous and unambiguous regions"/]
-    DI["Device Independence:<br/>AUC of 99.21 and 99.93 achieved for the 1st and<br/>2nd device considering urgent referral"]
-    UR["Unambiguous Regions:<br/>Tissue-segmentation map obtained by network is<br/>consistent with manual segmentation map"]
-    AR["Ambiguous Regions:<br/>The ambiguous regions in OCT scans are addressed<br/>by training multiple instances of the network<br/>..."]
-    DIE[("Device Independence Evidence: ↗<br/>Performance results")]
-    ASD[("Automated Segmentation Device: ↗<br/>Results of Segmentation Network")]
+    SOP["Segmentation Outcome Performance:<br>Segmentation network produces device-independent<br>tissue-segmentation maps"]
+    CS[("Clinical Setting: ↗<br>Triage in an ophthalmology referral pathway at<br>Moorfields Eye Hospital, with more than 50 common diagnoses")]
+    DTS[/"Device Training Strategy:<br>Argument by training segmentation network on<br>scans from 2 different devices"/]
+    OS[/"Output Strategy:<br>Argument over ambiguous and unambiguous regions"/]
+    DI["Device Independence:<br>AUC of 99.21 and 99.93 achieved for the 1st and<br>2nd device considering urgent referral"]
+    UR["Unambiguous Regions:<br>Tissue-segmentation map obtained by network is<br>consistent with manual segmentation map"]
+    AR["Ambiguous Regions:<br>The ambiguous regions in OCT scans are addressed<br>by training multiple instances of the network<br>..."]
+    DIE[("Device Independence Evidence: ↗<br>Performance results")]
+    ASD[("Automated Segmentation Device: ↗<br>Results of Segmentation Network")]
     Inf1((" "))
     Inf2((" "))
 
@@ -1152,15 +1128,15 @@ config:
     padding: 15
 ---
 flowchart BT
-    SOP["Segmentation Outcome Performance:<br/>Segmentation network produces device-independent<br/>tissue-segmentation maps"]
-    CS[("Clinical Setting: ↗<br/>Triage in an ophthalmology referral pathway at<br/>Moorfields Eye Hospital, with more than 50 common diagnoses")]
-    DTS[/"Device Training Strategy:<br/>Argument by training segmentation network on<br/>scans from 2 different devices"/]
-    OS[/"Output Strategy:<br/>Argument over ambiguous and unambiguous regions"/]
-    DI["Device Independence:<br/>AUC of 99.21 and 99.93 achieved for the 1st and<br/>2nd device considering urgent referral"]
-    UR["Unambiguous Regions:<br/>Tissue-segmentation map obtained by network is<br/>consistent with manual segmentation map"]
-    AR["Ambiguous Regions:<br/>The ambiguous regions in OCT scans are addressed<br/>by training multiple instances of the network<br/>..."]
-    DIE[("Device Independence Evidence: ↗<br/>Performance results")]
-    ASD[("Automated Segmentation Device: ↗<br/>Results of Segmentation Network")]
+    SOP["Segmentation Outcome Performance:<br>Segmentation network produces device-independent<br>tissue-segmentation maps"]
+    CS[("Clinical Setting: ↗<br>Triage in an ophthalmology referral pathway at<br>Moorfields Eye Hospital, with more than 50 common diagnoses")]
+    DTS[/"Device Training Strategy:<br>Argument by training segmentation network on<br>scans from 2 different devices"/]
+    OS[/"Output Strategy:<br>Argument over ambiguous and unambiguous regions"/]
+    DI["Device Independence:<br>AUC of 99.21 and 99.93 achieved for the 1st and<br>2nd device considering urgent referral"]
+    UR["Unambiguous Regions:<br>Tissue-segmentation map obtained by network is<br>consistent with manual segmentation map"]
+    AR["Ambiguous Regions:<br>The ambiguous regions in OCT scans are addressed<br>by training multiple instances of the network<br>..."]
+    DIE[("Device Independence Evidence: ↗<br>Performance results")]
+    ASD[("Automated Segmentation Device: ↗<br>Results of Segmentation Network")]
     Inf1((" "))
     Inf2((" "))
 

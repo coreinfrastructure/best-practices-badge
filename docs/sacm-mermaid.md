@@ -1165,6 +1165,112 @@ flowchart BT
     ASD --> UR
 ```
 
+### Top-Level Assurance Case (assurance-case-toplevel-sacm.odg)
+
+**Source**: `docs/assurance-case-toplevel-sacm.odg` in this repository
+(LibreOffice Draw file).
+
+**Description**: The top-level assurance case for the OpenSSF Best Practices
+Badge project. The top claim is that the system is adequately secure against
+moderate threats. Three sub-claims support this via an AssertedInference:
+Technical lifecycle processes implement security, Non-Technical lifecycle
+processes implement security, and Certifications & Controls provide confidence
+in operating results. Six lifecycle-phase claims (Requirements, Design,
+Implementation, Integration & Verification, Transition & Operation, and
+Maintenance) support the Technical sub-claim via a second AssertedInference.
+A context element ("Process organization") scopes the top claim by noting
+that the argument is organized by lifecycle processes.
+
+**Mapping notes**:
+
+- All claims (TC, Technical, Non-Technical, C and C, and the six lifecycle
+  claims) are asserted Claims → rectangle `["…"]`
+- PO (Process organization) is an ArtifactReference providing
+  AssertedContext → cylinder + ↗ `[("… ↗<br>…")]`, connected with `--o` to TC
+- Inf1 is the reification dot for the AssertedInference from
+  {Technical, Non-Technical, C and C} → TC
+- Inf2 is the reification dot for the AssertedInference from
+  {Requirements, Design, Implementation, I&V, Deployment, Maintenance} → Technical
+- Nodes whose ODG label shows `Name [gid]` use that bracketed text as the gid;
+  nodes without brackets (TC, PO, Technical) are assigned short gids
+- The ArgumentPackage "Top level" wrapper is omitted; Mermaid subgraphs are
+  reserved for when the grouping is essential to the argument structure
+
+Here is the text of the mermaid diagram (not including the standard
+Mermaid Frontmatter described earlier):
+
+```
+flowchart BT
+    TC["<b>TC: Top claim</b><br>System is adequately secure against moderate threats"]
+    PO[("<b>PO: Process organization</b> ↗<br>Organized by lifecycle processes (though we do not use a waterfall approach)")]
+    Tech["<b>Technical</b><br>Technical lifecycle processes implement security"]
+    NonTech["<b>Non-Technical: Non-Technical Processes</b><br>Non-Technical lifecycle processes implement security"]
+    CC["<b>C and C: Security Certifications & Controls</b><br>Certifications & Controls provide confidence in operating results"]
+    Req["<b>Requirements: Security in Requirements</b><br>Security requirements identified and met by functionality"]
+    Des["<b>Design: Security in Design</b><br>Design has security built in"]
+    Impl["<b>Implementation: Security in Implementation</b><br>Implementation process maintains security"]
+    IV["<b>I&V: Security in Integration & Verification</b><br>Integration & verification confirm security"]
+    Dep["<b>Deployment: Security in Transition & Operation</b><br>Deployment maintains security"]
+    Maint["<b>Maintenance: Security in Maintenance</b><br>Maintenance process maintains security"]
+    Inf1((" "))
+    Inf2((" "))
+
+    PO --o TC
+    Tech --- Inf1
+    NonTech --- Inf1
+    CC --- Inf1
+    Inf1 --> TC
+    Req --- Inf2
+    Des --- Inf2
+    Impl --- Inf2
+    IV --- Inf2
+    Dep --- Inf2
+    Maint --- Inf2
+    Inf2 --> Tech
+```
+
+Rendered:
+
+```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
+flowchart BT
+    TC["<b>TC: Top claim</b><br>System is adequately secure against moderate threats"]
+    PO[("<b>PO: Process organization</b> ↗<br>Organized by lifecycle processes (though we do not use a waterfall approach)")]
+    Tech["<b>Technical</b><br>Technical lifecycle processes implement security"]
+    NonTech["<b>Non-Technical: Non-Technical Processes</b><br>Non-Technical lifecycle processes implement security"]
+    CC["<b>C and C: Security Certifications & Controls</b><br>Certifications & Controls provide confidence in operating results"]
+    Req["<b>Requirements: Security in Requirements</b><br>Security requirements identified and met by functionality"]
+    Des["<b>Design: Security in Design</b><br>Design has security built in"]
+    Impl["<b>Implementation: Security in Implementation</b><br>Implementation process maintains security"]
+    IV["<b>I&V: Security in Integration & Verification</b><br>Integration & verification confirm security"]
+    Dep["<b>Deployment: Security in Transition & Operation</b><br>Deployment maintains security"]
+    Maint["<b>Maintenance: Security in Maintenance</b><br>Maintenance process maintains security"]
+    Inf1((" "))
+    Inf2((" "))
+
+    PO --o TC
+    Tech --- Inf1
+    NonTech --- Inf1
+    CC --- Inf1
+    Inf1 --> TC
+    Req --- Inf2
+    Des --- Inf2
+    Impl --- Inf2
+    IV --- Inf2
+    Dep --- Inf2
+    Maint --- Inf2
+    Inf2 --> Tech
+```
+
 ## High-level justification for mapping
 
 The SACM Annex C graphical constructs are:

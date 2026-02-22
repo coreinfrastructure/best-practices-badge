@@ -1430,8 +1430,7 @@ Here is an example.
 
 ```
 flowchart BT
-    %% sacmDot: Reifies AssertedInference, color:#000 hides the text
-    classDef sacmDot fill:#000,stroke:#000,width:6px,height:6px,color:#000,font-size:1px
+    classDef sacmDot fill:#000,stroke:#000
 
     %% --- Top Level Section ---
     C_High["<b>C: Higher level</b><br>The system meets all<br>specified security requirements"]
@@ -1491,8 +1490,7 @@ config:
     padding: 15
 ---
 flowchart BT
-    %% sacmDot: Reifies AssertedInference, color:#000 hides the text
-    classDef sacmDot fill:#000,stroke:#000,width:6px,height:6px,color:#000,font-size:1px
+    classDef sacmDot fill:#000,stroke:#000
 
     %% --- Top Level Section ---
     C_High["<b>C: Higher level</b><br>The system meets all<br>specified security requirements"]

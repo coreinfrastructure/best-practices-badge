@@ -600,25 +600,39 @@ The +source is typically a Claim or ArgumentReasoning, and the
 The dot can be replaced with other symbols to indicate information about
 the AssertedInference (e.g., that it is assumed).
 
-In mermaid, these intermediate dots can be a pain to handle.
+The dot can be replaced with other assertions about the association.
+For **Assertion states** use the **Inferential** table below.
+
+In mermaid, these intermediate (reified) dots for associations
+can be a pain to handle.
 So in our SACM notation implementation, we will support the dot for
-AssertedInference and the other relationships like it, but we will
-make it *optional*. The full version is called the reified dot form.
+AssertedInference and the other associations like it, but we
+make the reified dots *optional*.
+The full version is called the reified dot form.
 
 #### Reified dot form
 
 **Mermaid**: Use a reification dot when there are multiple sources, to
-show they jointly constitute one `AssertedInference` rather than
-independent inferences.
-We prefer to use a hair space
-(U+200A, UTF-8 e2 80 8a) instead of regular space, so that the dot is smaller.
+show they jointly constitute one association.
+
+We use a class definition `classDef sacmDot fill:#000,stroke:#000` to
+create the solid black dot appearance.
+For each dot's text, we prefer to use a hair space
+(U+200A, UTF-8 e2 80 8a) as the dot's textual contents.
+We have a script `script/fix_reification_spaces.sh` that automatically converts
+any one character (such as a space) in `((" "))` into a hair space.
+Thus, each dot looks like this: `Inf1((" ")):::sacmDot`.
+
 A hair space is the thinnest visible space.
-We can't have a filled-in dot (as SACM prefers), the mermaid processor
+The mermaid processor
 doesn't permit an empty string, and a zero-width character in file like this
 can lead to other problems.
-We have a script `script/fix_reification_spaces.sh` that automatically converts
-regular spaces in this situation to hair spaces.
-In `flowchart BT`, sub-claims and
+We could use a period or centered period, and set the background and
+font text to black, something like this:
+`classDef sacmDot fill:#000,stroke:#000,width:8px,height:8px,color:#000,font-size:1px`.
+However, this doesn't work well; mermaid determines the item size too early.
+
+Here's an example, where sub-claims and
 ArgumentReasoning nodes appear below the Claim they support:
 
 ```mermaid
@@ -633,77 +647,51 @@ config:
     padding: 15
 ---
 flowchart BT
+    classDef sacmDot fill:#000,stroke:#000
     C2["C2: Sub-claim"]
     AR1[/"AR1: Reasoning"/]
-    Inf1((" "))
+    Inf1((" ")):::sacmDot
     C1["C1: Top-level claim"]
     C2 --- Inf1
     AR1 --- Inf1
     Inf1 --> C1
 ```
 
+#### Unreified form
+
 When there is only a single source, the dot may be omitted and a
 direct arrow used instead (`C2 --> C1`), since there is no ambiguity
 about joint vs. independent support.
 
-**Assertion states**: use the **Inferential** table above.
+This is our extension to SACM graphical notation, not in the original,
+as a concession to mermaid's limited abilities.
 
-???
-nex C defines exactly two edge types for the AssertedInference reification  
-  notation (C.8, p. 59, Figure C14):                                            
+#### Meaning of +source and +target
+
+Annex C defines exactly two edge types for the AssertedInference reification  
+notation (C.8, p. 59, Figure C14):                                            
                                                             
-  - Edge without arrow = +source reference — the premises/supporting elements
-  - Edge with arrow = +target reference — the conclusion being supported
+- Edge without arrow = +source reference, 1+ ArgumentAssets
+  (premises/supporting elements)
+- Edge with arrow = +target reference, a single ArgumentAsset
+  (the conclusion being supported)
 
-  C.8 explicitly states: "Source is a Claim or ArgumentReasoning." So
-  ArgumentReasoning acting as a +source uses the same undirected edge as a Claim
-   source. Figure D3 (p. 69) confirms this — AC1 (an axiomatic Claim) connects
-  to the dot with a plain undirected line, identical to the regular Claim
-  sources G8 and G9.
+Per SACM figure 11.1, an AssertedInference is an AssertedRelationship,
+and all of the AssertedRelationships work in a similar way.
 
-  There is no defined Annex C graphical notation for a directed connection
-  from/to ArgumentReasoning. The reasoning: ArgumentReasoning[0..1] property
-  that exists in the §11.13 meta-model simply has no corresponding graphical
-  construct in Annex C. Annex C never shows it.
+An ArgumentAsset is very general. Per figure 11.1 it may be a(n):
 
-  So your intuition about two connection types turns out to be wrong — Annex C
-  only defines the undirected (+source) connection for ArgumentReasoning. Our
-  current PO --- Inf1 is correct.
-Page 59 is very clear on C.8: the undirected edge is +source and the arrowed  
-  edge is +target. But it doesn't say where ArgumentReasoning fits. Let me read 
-  the next pages to find that
+* Assertion, which can be a Claim or some kind of AssertedRelationship
+  (including AssertedInference)
+* ArgumentReasoning
+* ArtifactReference
 
-  The distinction in SACM's meta-model (§11.13 AssertedRelationship, §11.12     
-  ArgumentReasoning):                                                           
-                                                                                
-  AssertedRelationship has two separate ways ArgumentReasoning can appear:      
-                                                            
-  1. As a source/premise — if ArgumentReasoning is a subtype of MultiLevelClaim,
-   it can appear in subject: MultiLevelClaim[1..*], the list of premises. Our
-  C.8 section treats this case: AR --- Inf1 (undirected line, same as a Claim
-  source). The ArgumentReasoning is itself one of the logical inputs to the
-  inference.
-  2. In the reasoning role — AssertedRelationship has a separate reasoning:
-  ArgumentReasoning[0..1] property (§11.13). This is a descriptor/annotation on
-  the relationship itself, not a premise. It explains why the inference is
-  valid, not what the premises are. In Annex C notation this is shown with a
-  directed connection from the dot to the ArgumentReasoning — the dot "cites"
-  its reasoning strategy.
-
-  The ODG file supports this: id1 --> id3 has the arrow going from the Inf1 dot
-  to PO, which matches case 2 (the reasoning role). So Inf1 --> PO would be the
-  correct Mermaid representation, not PO --- Inf1.
-
-  Where in the spec: §11.13 (p. 40) defines the reasoning property on
-  AssertedRelationship; the graphical convention for the two cases is in Annex
-  C, specifically the sections on ArgumentReasoning (C.7) and AssertedInference
-  (C.8). Our current C.8 section doesn't clearly distinguish the two cases — it
-  only shows the --- undirected form.
-
-  Honest caveat: I'm confident about the meta-model distinction, but I'd want to
-   verify the exact graphical notation for the reasoning role in Annex C before
-  updating the diagram, since the spec may show it with a dashed line or a
-  different arrowhead rather than a plain
+However, per 11.14, an AssertedInference has an additional
+requirement; its 1+ +source and its
+sole +target must be Assertions (a Claim or AssertedRelationship).
+This is why the annex C notation can use reified dots everywhere for different
+types of AssertedRelationships and still "know" which one is being used
+(because of the types of +source and +target).
 
 ### C.9 AssertedEvidence
 
@@ -864,7 +852,7 @@ connects to the target with a decorated edge that encodes the assertion
 state. Full form with dot:
 
 ```
-Src --- Dot((" ")) --> Tgt
+Src --- Dot((" ")):::sacmDot --> Tgt
 ```
 
 When there is only a single source and the dot need not be referenced
@@ -918,28 +906,28 @@ config:
     padding: 15
 ---
 flowchart LR
-    S1["Src"] --- D1((" "))
+    S1["Src"] --- D1((" ")):::sacmDot
     D1 --> T1["Tgt — asserted"]
 
-    S2["Src"] --- D2((" "))
+    S2["Src"] --- D2((" ")):::sacmDot
     D2 -. "assumed" .-> T2["Tgt — assumed"]
 
-    S3["Src"] --- D3((" "))
+    S3["Src"] --- D3((" ")):::sacmDot
     D3 -- "..." --> T3["Tgt — needsSupport"]
 
-    S4["Src"] --- D4((" "))
+    S4["Src"] --- D4((" ")):::sacmDot
     D4 ==> T4["Tgt — axiomatic"]
 
-    S5["Src"] --- D5((" "))
+    S5["Src"] --- D5((" ")):::sacmDot
     D5 -- "defeated" --x T5["Tgt — defeated"]
 
-    S6["Src"] --- D6((" "))
+    S6["Src"] --- D6((" ")):::sacmDot
     D6 -- "cited: Pkg::Name" --> T6["Tgt — asCited"]
 
-    S7["Src"] --- D7((" "))
+    S7["Src"] --- D7((" ")):::sacmDot
     D7 -.-> T7["Tgt — abstract"]
 
-    S8["Src"] --- D8((" "))
+    S8["Src"] --- D8((" ")):::sacmDot
     D8 -- "counter" --x T8["Tgt — counter"]
 ```
 
@@ -973,28 +961,28 @@ config:
     padding: 15
 ---
 flowchart LR
-    CS1["Src"] --- CD1((" "))
+    CS1["Src"] --- CD1((" ")):::sacmDot
     CD1 --o CT1["Tgt — asserted"]
 
-    CS2["Src"] --- CD2((" "))
+    CS2["Src"] --- CD2((" ")):::sacmDot
     CD2 -. "assumed ctx" .-> CT2["Tgt — assumed"]
 
-    CS3["Src"] --- CD3((" "))
+    CS3["Src"] --- CD3((" ")):::sacmDot
     CD3 -- "... ctx" --o CT3["Tgt — needsSupport"]
 
-    CS4["Src"] --- CD4((" "))
+    CS4["Src"] --- CD4((" ")):::sacmDot
     CD4 == "axiomatic ctx" ==> CT4["Tgt — axiomatic"]
 
-    CS5["Src"] --- CD5((" "))
+    CS5["Src"] --- CD5((" ")):::sacmDot
     CD5 -- "defeated ctx" --x CT5["Tgt — defeated"]
 
-    CS6["Src"] --- CD6((" "))
+    CS6["Src"] --- CD6((" ")):::sacmDot
     CD6 -- "cited ctx: Pkg::Name" --o CT6["Tgt — asCited"]
 
-    CS7["Src"] --- CD7((" "))
+    CS7["Src"] --- CD7((" ")):::sacmDot
     CD7 -. "ctx" .-> CT7["Tgt — abstract"]
 
-    CS8["Src"] --- CD8((" "))
+    CS8["Src"] --- CD8((" ")):::sacmDot
     CD8 -- "counter ctx" --x CT8["Tgt — counter"]
 ```
 
@@ -1002,7 +990,7 @@ When both "defeated" and "counter" appear in the same diagram, always
 label the `--x` edge to disambiguate them.
 
 **If expanded shapes were supported**: Use `f-circ` (the filled/junction
-circle) instead of `((" "))` — the filled circle matches the spec's
+circle) instead of `((" ")):::sacmDot` — the filled circle matches the spec's
 solid filled dot more closely than an open circle.
 
 Syntax: `Dot@{ shape: f-circ }`.
@@ -1111,7 +1099,7 @@ order to justify the inference from G2 and G3 to G1.
 - A1 is an assumed Claim → stadium `(["… ASSUMED"])` with `ASSUMED` suffix
   (spec uses bracket-feet notation; Mermaid has no direct equivalent)
 - The AssertedInference reification dot is rendered as a small circle node
-  `((" "))`, matching the spec's filled dot that sits at the centre of the
+  `((" ")):::sacmDot`, matching the spec's filled dot that sits at the centre of the
   relationship
 - Plain (undirected) lines `---` connect each asserted source to the dot,
   matching the spec's plain lines from sources to the dot
@@ -1129,7 +1117,7 @@ flowchart BT
     G2["<b>G2</b><br>Sub-claim A"]
     G3["<b>G3</b><br>Sub-claim B"]
     A1(["<b>A1</b><br>Assumed condition</b><br>ASSUMED"])
-    Inf1((" "))
+    Inf1((" ")):::sacmDot
     G1["<b>G1</b><br>Top-level claim"]
 
     A1 -. "assumed" .-> Inf1
@@ -1152,10 +1140,11 @@ config:
     padding: 15
 ---
 flowchart BT
+    classDef sacmDot fill:#000,stroke:#000
     G2["<b>G2</b><br>Sub-claim A"]
     G3["<b>G3</b><br>Sub-claim B"]
     A1(["<b>A1</b><br>Assumed condition</b><br>ASSUMED"])
-    Inf1((" "))
+    Inf1((" ")):::sacmDot
     G1["<b>G1</b><br>Top-level claim"]
 
     A1 -. "assumed" .-> Inf1
@@ -1246,6 +1235,7 @@ demonstrating SACM's reified relationships in a realistic setting.
 
 ```
 flowchart BT
+    classDef sacmDot fill:#000,stroke:#000
     SOP["<b>SOP: Segmentation Outcome Performance</b><br>Segmentation network produces device-independent tissue-segmentation maps"]
     CS[("<b>CS: Clinical Setting</b> ↗<br>Triage in an ophthalmology referral pathway at Moorfields Eye Hospital, with more than 50 common diagnoses")]
     DTS[/"<b>DTS: Device Training Strategy</b><br>Argument by training segmentation network on scans from 2 different devices"/]
@@ -1255,8 +1245,8 @@ flowchart BT
     AR["<b>AR: Ambiguous Regions</b><br>The ambiguous regions in OCT scans are addressed by training multiple instances of the network<br>..."]
     DIE[("<b>DIE: Device Independence Evidence</b> ↗<br>Performance results")]
     ASD[("<b>ASD: Automated Segmentation Device</b> ↗<br>Results of Segmentation Network")]
-    Inf1((" "))
-    Inf2((" "))
+    Inf1((" ")):::sacmDot
+    Inf2((" ")):::sacmDot
 
     CS --o SOP
     DI --- Inf1
@@ -1284,6 +1274,7 @@ config:
     padding: 15
 ---
 flowchart BT
+    classDef sacmDot fill:#000,stroke:#000
     SOP["<b>SOP: Segmentation Outcome Performance</b><br>Segmentation network produces device-independent tissue-segmentation maps"]
     CS[("<b>CS: Clinical Setting</b> ↗<br>Triage in an ophthalmology referral pathway at Moorfields Eye Hospital, with more than 50 common diagnoses")]
     DTS[/"<b>DTS: Device Training Strategy</b><br>Argument by training segmentation network on scans from 2 different devices"/]
@@ -1293,8 +1284,8 @@ flowchart BT
     AR["<b>AR: Ambiguous Regions</b><br>The ambiguous regions in OCT scans are addressed by training multiple instances of the network<br>..."]
     DIE[("<b>DIE: Device Independence Evidence</b> ↗<br>Performance results")]
     ASD[("<b>ASD: Automated Segmentation Device</b> ↗<br>Results of Segmentation Network")]
-    Inf1((" "))
-    Inf2((" "))
+    Inf1((" ")):::sacmDot
+    Inf2((" ")):::sacmDot
 
     CS --o SOP
     DI --- Inf1
@@ -1348,6 +1339,7 @@ Mermaid Frontmatter described earlier):
 
 ```
 flowchart BT
+    classDef sacmDot fill:#000,stroke:#000
     TC["<b>TC: Top claim</b><br>System is adequately secure against moderate threats"]
     PO[/"<b>PO: Process organization</b><br>Organized by lifecycle processes (though we do not use a waterfall approach)"/]
     Tech["<b>Technical</b><br>Technical lifecycle processes implement security"]
@@ -1359,8 +1351,8 @@ flowchart BT
     IV[["<b>I&V: Security in Integration & Verification</b><br>Integration & verification confirm security"]]
     Dep[["<b>Deployment: Security in Transition & Operation</b><br>Deployment maintains security"]]
     Maint[["<b>Maintenance: Security in Maintenance</b><br>Maintenance process maintains security"]]
-    Inf1((" "))
-    Inf2((" "))
+    Inf1((" ")):::sacmDot
+    Inf2((" ")):::sacmDot
 
     PO --- Inf1
 In SACM, the `AssertedInference` link *points* to the `ArgumentReasoning` to explain why the inference is valid.    Tech --- Inf1
@@ -1390,6 +1382,7 @@ config:
     padding: 15
 ---
 flowchart BT
+    classDef sacmDot fill:#000,stroke:#000
     TC["<b>TC: Top claim</b><br>System is adequately secure against moderate threats"]
     PO[/"<b>PO: Process organization</b><br>Organized by lifecycle processes (though we do not use a waterfall approach)"/]
     Tech["<b>Technical</b><br>Technical lifecycle processes implement security"]
@@ -1401,8 +1394,8 @@ flowchart BT
     IV[["<b>I&V: Security in Integration & Verification</b><br>Integration & verification confirm security"]]
     Dep[["<b>Deployment: Security in Transition & Operation</b><br>Deployment maintains security"]]
     Maint[["<b>Maintenance: Security in Maintenance</b><br>Maintenance process maintains security"]]
-    Inf1((" "))
-    Inf2((" "))
+    Inf1((" ")):::sacmDot
+    Inf2((" ")):::sacmDot
 
     PO --- Inf1
     Tech --- Inf1
@@ -1460,7 +1453,7 @@ flowchart BT
 
     %% --- Second Level Section ---
     %% Junction for the continued claims
-    Inf2(("&#x200a;")):::sacmDot
+    Inf2(("&#x200a;"))::::sacmDot
 
     %% Supporting Claims 6-10
     C6["<b>C6</b>"]

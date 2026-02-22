@@ -1270,8 +1270,8 @@ flowchart BT
     IV[["<b>I&V: Security in Integration & Verification</b><br>Integration & verification confirm security"]]
     Dep[["<b>Deployment: Security in Transition & Operation</b><br>Deployment maintains security"]]
     Maint[["<b>Maintenance: Security in Maintenance</b><br>Maintenance process maintains security"]]
-    Inf1((" "))
-    Inf2((" "))
+    Inf1((" "))
+    Inf2((" "))
 
     PO --- Inf1
     Tech --- Inf1
@@ -1312,8 +1312,8 @@ flowchart BT
     IV[["<b>I&V: Security in Integration & Verification</b><br>Integration & verification confirm security"]]
     Dep[["<b>Deployment: Security in Transition & Operation</b><br>Deployment maintains security"]]
     Maint[["<b>Maintenance: Security in Maintenance</b><br>Maintenance process maintains security"]]
-    Inf1((" "))
-    Inf2((" "))
+    Inf1((" "))
+    Inf2((" "))
 
     PO --- Inf1
     Tech --- Inf1

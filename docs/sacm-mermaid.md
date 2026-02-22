@@ -3,7 +3,8 @@
 This document explains our approach to implementing the
 [Structured Assurance Case Metamodel (SACM)](https://www.omg.org/spec/SACM)
 graphical notation using the mermaid implementation
-currently available on GitHub.
+currently available on GitHub while making the
+mermaid diagrams part of a markdown document.
 
 ## Introduction
 
@@ -22,13 +23,13 @@ data between tools specialized to support an assurance case.
 We *instead* want to be able to edit and view an assurance case
 as a simple editable document
 using simple widely-available and widely-used open source software tools.
-The OMG SACM document was not designed for this use case;
-it instead focuses on transfer of complex XML structures.
+The OMG SACM specification was not designed for this use case;
+the specification instead focuses on transfer of complex XML structures.
 
 Thankfully, newer versions of SACM also include a recommended graphical
 notation defined in Annex C
 ("Concrete Syntax (Graphical Notations) for the Argumentation Metamodel").
-This graphical notation can be used in simple documents.
+This graphical notation *can* be used in simple documents.
 
 In the best practices badge project we have traditionally used diagrams
 edited with LibreOffice, connected together and provided detail in
@@ -36,12 +37,16 @@ markdown format. This is flexible, and LibreOffice is
 quite capable. For a while we used the simpler claims, arguments, and
 evidence (CAE) notation.
 More recently, we started using LibreOffice to create SACM
-diagrams. The resulting images look quite close to annex C.
-However, this approach creates significant effort
-when editing the graphics, because of the manual placement and regeneration
+diagrams. The resulting images look quite close to annex C notation,
+and generally look good.
+
+However, the approach to editing graphics with LibreOffice
+creates significant effort when editing the graphics,
+because of the manual placement and regeneration
 of images after editing it requires.
-It also doesn't integrate well with version control,
-nor is it easy to add hyperlinks from the images to the document
+It also doesn't integrate well with version control, as the graphic
+information is essentially opaque complex structures.
+It's also not easy to add hyperlinks from the images to the document
 sections that provide detail.
 
 More recent markdown implementations, including GitHub's, include
@@ -49,7 +54,11 @@ support for mermaid diagrams (such as mermaid flowcharts).
 Mermaid, especially its older subset,
 cannot exactly implement the SACM graphical notation.
 Indeed, Mermaid is *much* less capable, graphically, than what LibreOffice
-can generate, and it doesn't let you "place" symbols.
+can generate.
+Mermaid it doesn't let you "place" symbols at all!
+Its placement algorithm is quite naive (less capable than graphviz),
+as it really only understands ranks and graphs become harder if they
+are more than six across.
 The GitHub mermaid implementation also *requires* the user to run
 client-side JavaScript, which some may prefer to disable, and
 that esxecution imposes a small display delay.
@@ -57,9 +66,12 @@ that esxecution imposes a small display delay.
 Nevertheless, the ability to *easily* integrate SACM diagrams into the
 markdown format is compelling.
 This would let us easily edit markdown files to update both the
-text and graphical representation, as well as add hyperlinks into the figures.
-A mermaid representation doesn't need to be *exactly* like the SACM spec -
-it simply needs to be adequate to be clear to stakeholder readers.
+text and graphical representation, easy to keep the graphics and text
+in sync, and make it easy to add hyperlinks from the figures to their
+corresponding text.
+A mermaid representation doesn't need to look *exactly* like the SACM spec -
+it simply needs to be adequate to be clear represent constructs
+to stakeholder readers.
 
 ## Document structure
 

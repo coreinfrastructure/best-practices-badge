@@ -2,7 +2,8 @@
 
 This document explains our approach to implementing the
 [Structured Assurance Case Metamodel (SACM)](https://www.omg.org/spec/SACM)
-graphical notation in mermaid as it is currently implemented by GitHub.
+graphical notation using the mermaid implementation
+currently available on GitHub.
 
 ## Introduction
 
@@ -14,26 +15,34 @@ Assurance Case is a set of auditable claims, arguments, and evidence
 created to support the claim that a defined system/service will satisfy
 the particular requirements [and] facilitates information exchange
 between various system stakeholder[s]...".
-In particular, it defines an XML-based scheme for exchanging detailed
+In particular, the SACM specification
+defines an XML-based scheme for exchanging detailed
 data between tools specialized to support an assurance case.
 
-We instead wanted to be able to edit and view a simple editable document
-describing an assurance case
+We *instead* want to be able to edit and view an assurance case
+as a simple editable document
 using simple widely-available and widely-used open source software tools.
-The OMG SACM document was not designed for this use case.
+The OMG SACM document was not designed for this use case;
+it instead focuses on transfer of complex XML structures.
 
 Thankfully, newer versions of SACM also include a recommended graphical
 notation defined in Annex C
 ("Concrete Syntax (Graphical Notations) for the Argumentation Metamodel").
+This graphical notation can be used in simple documents.
 
 In the best practices badge project we have traditionally used diagrams
 edited with LibreOffice, connected together and provided detail in
 markdown format. This is flexible, and LibreOffice is
-quite capable. The resulting images look quite close to annex C.
+quite capable. For a while we used the simpler claims, arguments, and
+evidence (CAE) notation.
+More recently, we started using LibreOffice to create SACM
+diagrams. The resulting images look quite close to annex C.
 However, this approach creates significant effort
 when editing the graphics, because of the manual placement and regeneration
 of images after editing it requires.
-It also doesn't integrate well with version control.
+It also doesn't integrate well with version control,
+nor is it easy to add hyperlinks from the images to the document
+sections that provide detail.
 
 More recent markdown implementations, including GitHub's, include
 support for mermaid diagrams (such as mermaid flowcharts).
@@ -41,11 +50,14 @@ Mermaid, especially its older subset,
 cannot exactly implement the SACM graphical notation.
 Indeed, Mermaid is *much* less capable, graphically, than what LibreOffice
 can generate, and it doesn't let you "place" symbols.
+The GitHub mermaid implementation also *requires* the user to run
+client-side JavaScript, which some may prefer to disable, and
+that esxecution imposes a small display delay.
 
 Nevertheless, the ability to *easily* integrate SACM diagrams into the
 markdown format is compelling.
 This would let us easily edit markdown files to update both the
-text and graphical representation.
+text and graphical representation, as well as add hyperlinks into the figures.
 A mermaid representation doesn't need to be *exactly* like the SACM spec -
 it simply needs to be adequate to be clear to stakeholder readers.
 
@@ -98,6 +110,12 @@ diagram, then a final <tt>&#96;&#96;&#96</tt> to end the diagram.
 
 For each SACM graphical element identified in Annex C, here is our
 recommended Mermaid representation.
+
+We first start with some overall approaches, then explain how we map
+each graphical element (or don't, in some cases).
+We won't follow the *order* of Annex C, but instead will focus on more
+important issues first sucha s general layout, naming, and how to
+map the claim element.
 
 ### Layout and direction
 
@@ -158,125 +176,19 @@ a space and an unbolded northeast arrow (↗) after the full name
 just before this line break; this attempts to emulate its appearance
 in SACM and remind readers that we're referencing external materials.
 
+When used in an assurance case, we expect that bolded name
+would be turned into a hyperlink, that is, it'd be
+surrounded by <tt>&lt;a href="#..."&gt;</tt>NAME<tt>&lt;/a&gt;</tt>.
+That link would go to the corresponding heading (if present) with
+the same name that would provide more detail.
+This would make it easy to learn more detail.
+
 We *could* left-align the name, and center the description, as this is the
 SACM convention.
 However, this would require a lot of extra ceremony in each
-node, making them harder to edit.
+node, making each node harder to edit.
 We'll just use bold text instead to clearly differentiate
 the name. This is still clear, yet it's much easier to read and edit later.
-
-### C.4 ArtifactReference
-
-**SACM §11.9 (p. 38)**: "ArtifactReference enables the citation of
-an artifact as information that relates to the structured argument."
-The spec elaborates: "It is necessary to be able to cite artifacts
-that provide supporting evidence, context, or additional description
-within an argument structure. ArtifactReferences allow there to be
-an objectified citation of this information within the structured
-argument, thereby allowing the relationship between this artifact and
-the argument to also be explicitly declared." Note: ArtifactReference
-is the citation within the argument; the actual evidentiary object
-(test report, specification, etc.) is described in the Artifact
-Metamodel (§12.7).
-
-We will tend to use this to point to evidence, if we want to do that
-in the diagram. However, as this is embedded in a larger document,
-most of the arguments and pointers to evidence will be within the
-document, and not represented in the diagram itself.
-
-**Annex C notation**: A multi-page shape (stacked offset rectangles)
-with an upward-right arrow (↗) in the
-fold, indicating a reference to an external artifact or evidence.
-
-**Mermaid**: No document shape is available in GitHub's Mermaid
-renderer. In particular, nothing is like the multi-page document shape
-(LibreOffice can do this easily with shadows,
-but we don't have that option here).
-Use a cylinder/database shape `[(...)]` to hint at "stored evidence" and
-append `↗` to the name to preserving the "external reference" arrow
-cue from the spec notation:
-
-```
-AR1[("<b>AR1: EvidenceName</b> ↗<br>Description of artifact")]
-```
-
-Rendered:
-
-```mermaid
----
-config:
-  theme: neutral
-  flowchart:
-    curve: linear
-    htmlLabels: true
-    rankSpacing: 60
-    nodeSpacing: 45
-    padding: 15
----
-flowchart BT
-    AR1[("<b>AR1: EvidenceName</b> ↗<br>Description of artifact")]
-```
-
-The cylinder is more visually distinct from Claims (rectangles and
-rounded rectangles) than a stadium/pill would be, reducing the risk of
-misreading a diagram at a glance. The ↗ icon is retained from the spec
-to indicate that this is a reference to external information.
-
-**If expanded shapes were supported**: The `docs` shape would better
-render the spec's document symbol, eliminating the cylinder
-workaround and matching the source notation much more closely
-Syntax:
-
-~~~~
-`AR1@{ shape: docs,
-       label: "<b>AR1: EvidenceName</b> ↗<br>Description of artifact"
- }`
-~~~~
-
-Note that we would use `docs` not `doc` because `docs` has multiple
-rectangles representing pages, making it closer to the SACM symbol.
-The ↗ icon is unrelated to the spec's stacked rectangles;
-it represents externality, while the stacked rectangles indicates a
-document that is likely to have multiple pages.
-Thus, we would retain the ↗ icon.
-
-### C.5 +metaClaim reference
-
-**SACM §11.10 (p. 39)**: The +metaClaim is an association on
-Assertion: "metaClaim:Claim[0..*] — references Claims concerning
-(i.e., about) the Assertion (e.g., regarding the confidence in the
-Assertion)." It allows any Assertion (a Claim or a relationship)
-to have Claims attached to it as commentary or meta-level observation.
-
-**Annex C notation**: A horizontal line with an open left-pointing
-arrowhead (`——<`), used to attach a Claim that comments on an
-Assertion (e.g., expressing confidence in the assertion itself).
-
-**Mermaid**: A dashed labeled edge, visually distinct from
-regular inference arrows:
-
-```
-MC1 -. "+metaClaim" .-> C1
-```
-
-Rendered:
-
-```mermaid
----
-config:
-  theme: neutral
-  flowchart:
-    curve: linear
-    htmlLabels: true
-    rankSpacing: 60
-    nodeSpacing: 45
-    padding: 15
----
-flowchart BT
-    C1["<b>C1: Top-level claim<b>"]
-    MC1["<b>MC1: Confidence is high<b>"]
-    MC1 -. "+metaClaim" .-> C1
-```
 
 ### C.6 Claim
 
@@ -553,6 +465,81 @@ config:
 flowchart BT
     AR1[/"<b>AR1: Long reasoning name</b><br>Reasoning statement"/]
 ```
+
+### C.4 ArtifactReference
+
+**SACM §11.9 (p. 38)**: "ArtifactReference enables the citation of
+an artifact as information that relates to the structured argument."
+The spec elaborates: "It is necessary to be able to cite artifacts
+that provide supporting evidence, context, or additional description
+within an argument structure. ArtifactReferences allow there to be
+an objectified citation of this information within the structured
+argument, thereby allowing the relationship between this artifact and
+the argument to also be explicitly declared." Note: ArtifactReference
+is the citation within the argument; the actual evidentiary object
+(test report, specification, etc.) is described in the Artifact
+Metamodel (§12.7).
+
+We will tend to use this to point to evidence, if we want to do that
+in the diagram. However, as this is embedded in a larger document,
+most of the arguments and pointers to evidence will be within the
+document, and not represented in the diagram itself.
+
+**Annex C notation**: A multi-page shape (stacked offset rectangles)
+with an upward-right arrow (↗) in the
+fold, indicating a reference to an external artifact or evidence.
+
+**Mermaid**: No document shape is available in GitHub's Mermaid
+renderer. In particular, nothing is like the multi-page document shape
+(LibreOffice can do this easily with shadows,
+but we don't have that option here).
+Use a cylinder/database shape `[(...)]` to hint at "stored evidence" and
+append `↗` to the name to preserving the "external reference" arrow
+cue from the spec notation:
+
+```
+AR1[("<b>AR1: EvidenceName</b> ↗<br>Description of artifact")]
+```
+
+Rendered:
+
+```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
+flowchart BT
+    AR1[("<b>AR1: EvidenceName</b> ↗<br>Description of artifact")]
+```
+
+The cylinder is more visually distinct from Claims (rectangles and
+rounded rectangles) than a stadium/pill would be, reducing the risk of
+misreading a diagram at a glance. The ↗ icon is retained from the spec
+to indicate that this is a reference to external information.
+
+**If expanded shapes were supported**: The `docs` shape would better
+render the spec's document symbol, eliminating the cylinder
+workaround and matching the source notation much more closely
+Syntax:
+
+~~~~
+`AR1@{ shape: docs,
+       label: "<b>AR1: EvidenceName</b> ↗<br>Description of artifact"
+ }`
+~~~~
+
+Note that we would use `docs` not `doc` because `docs` has multiple
+rectangles representing pages, making it closer to the SACM symbol.
+The ↗ icon is unrelated to the spec's stacked rectangles;
+it represents externality, while the stacked rectangles indicates a
+document that is likely to have multiple pages.
+Thus, we would retain the ↗ icon.
 
 ### Assertion states for relationships (C.8–C.12)
 
@@ -901,6 +888,45 @@ flowchart BT
 ```
 
 **Assertion states**: use the **Context** table above.
+
+### C.5 +metaClaim reference
+
+**SACM §11.10 (p. 39)**: The +metaClaim is an association on
+Assertion: "metaClaim:Claim[0..*] — references Claims concerning
+(i.e., about) the Assertion (e.g., regarding the confidence in the
+Assertion)." It allows any Assertion (a Claim or a relationship)
+to have Claims attached to it as commentary or meta-level observation.
+
+**Annex C notation**: A horizontal line with an open left-pointing
+arrowhead (`——<`), used to attach a Claim that comments on an
+Assertion (e.g., expressing confidence in the assertion itself).
+
+**Mermaid**: A dashed labeled edge, visually distinct from
+regular inference arrows:
+
+```
+MC1 -. "+metaClaim" .-> C1
+```
+
+Rendered:
+
+```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
+flowchart BT
+    C1["<b>C1: Top-level claim<b>"]
+    MC1["<b>MC1: Confidence is high<b>"]
+    MC1 -. "+metaClaim" .-> C1
+```
+
 
 ### Unmapped constructs
 

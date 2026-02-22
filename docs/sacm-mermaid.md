@@ -116,27 +116,47 @@ but reverses the SACM arrow semantics.
 Whichever direction is chosen, document the convention explicitly
 in the diagram or accompanying text.
 
-### Name and description
+### Name, gid (id), and description
 
-Each SACM element has a **name** (short identifier) and a
-**statement** or **description** (the substantive content).
-Mermaid node labels combine these into a single string.
+In SACM, model node elements like "claim" have possibly 3 related values:
 
-**Recommended**: Use the Mermaid node identifier as the SACM name
-and repeat the name in the displayed label, separated by a colon:
+* `gid` String[0..1]:
+  an optional identifier that is unique within the scope of the model instance.
+  This is from §8.2 SACMElement
+  (the root abstract class everything inherits from).
+  This is not normally directly displayed in the SACM graphical notation.
+* `name`: LangString[1]: the (human-readable) name of the ModelElement.
+  Examples show this may be several words. This is from §8.6 ModelElement.
+* `description` Description[0..1]: the description of the ModelElement.
+  This is also from §8.6 ModelElement.
+  Section §8.9 Description says
+  "In many cases Description is used to provide the 'content' of a SACM element.
+  For example, it would be used to provide the text of a Claim."
 
-```
-C1["C1: The system meets all safety requirements"]
-```
+Mermaid diagrams need *short* names to identify nodes.
+It's *possible* to use long names, but it'd be painful.
+These short names, more useful when defining nodes with connections,
+are roughly analogous to the `gid` of SACM.
+SACM does not require that the displayed `name` include the `gid` anywhere.
+However, in practice it's helpful to display a unique short name for reference.
+It would also be more difficult to edit diagrams if the displayed name
+didn't include the short names we'd use to identify the nodes in a diagram.
 
-Note that ArtifactRefence (e.g., for evidence) has an arrow (↗);
-typically that will be noted as name, colon, space, arrow, line break,
-then the description.
+We can resolve this by having a naming convention.
+By convention, the names we use for nodes will begin with a short id
+(generally starting with a capital letter), and colon and space, and
+then a clearer human name (typically 1-3 words).
+The name will be bolded, following the example of
+[Selviandro et al.], and followed by a line break &lt;br/&gt;.
+Note that ArtifactRefence (e.g., for evidence) has a space and arrow (↗)
+just before this line break; this attempts to emulate its appearance
+in SACM and remind readers that we're referencing external materials.
 
-Users *may* break a line just before beginning any statement or
-description. Traditional SACM uses a line break and text alignment,
-but we have less control, and we want to clearly
-separate the name from the rest.
+We *could* left-align the name, and center the description, which is the
+SACM convention, but this would require a lot of extra ceremony in each
+node (making them harder to edit).
+We'll just use bold text instead to indicate the name, which is
+clear but much easier to read and edit later.
 
 ### C.1 ArgumentPackage
 
@@ -423,7 +443,7 @@ flowchart BT
 
 Declared without any supporting evidence or argumentation.
 
-**Recommended** — stadium/pill shape with a required `~` suffix
+**Approach** — stadium/pill shape with a required `~` suffix
 (space then tilde after the statement):
 
 ```
@@ -1292,6 +1312,8 @@ a poor fit.
 
 ## Source documents
 
+* GitHub, [Creating Diagrams (Creating Mermaid Diagrams)](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams#creating-mermaid-diagrams)
 * OMG, [Structured Assurance Case Metamodel (SACM)](https://www.omg.org/spec/SACM) version 2.3.
 * [Mermaid Flowchart syntax](https://mermaid.ai/open-source/syntax/flowchart.html)
-* GitHub, [Creating Diagrams (Creating Mermaid Diagrams)](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams#creating-mermaid-diagrams)
+* Selviandro et al., "A Visual Notation for the
+  Representation of Assurance Cases using SACM 2.x"

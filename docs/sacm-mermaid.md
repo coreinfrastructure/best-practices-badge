@@ -561,156 +561,6 @@ it represents externality, while the stacked rectangles indicates a
 document that is likely to have multiple pages.
 Thus, we would retain the ↗ icon.
 
-### Assertion states for relationships (C.8–C.12)
-
-Each of C.8–C.12 is a reified relationship: the relationship instance
-is a dot node, sources connect to it with plain lines, and the dot
-connects to the target with a decorated edge that encodes the assertion
-state. Full form with dot:
-
-```
-Src --- Dot((" ")) --> Tgt
-```
-
-When there is only a single source and the dot need not be referenced
-(no +metaClaim attached), the dot may be omitted and the same edge
-style applied directly:
-
-```
-Src --> Tgt
-```
-
-The assertion state is always encoded on the **Dot→Tgt edge** (or the
-direct Src→Tgt edge when the dot is omitted). There are two base
-arrow families across the five relationship types:
-
-**Note on orthogonality**: Relationship assertion states (C.8–C.12)
-and Claim assertion states (C.6) are entirely independent. Both
-inherit `assertionDeclaration` from the abstract `Assertion` class
-(§11.10, p. 39), but they are encoded differently and do not
-interfere. A Claim node can carry `assumed` (stadium shape + `~`
-prefix) while the relationship pointing to it simultaneously carries
-`defeated` (`Dot --x Tgt`). The visual motifs reuse similar symbols
-(bracket feet, three dots) in both contexts, but they apply to
-different objects.
-
-**Inferential** (`-->` base) — used by C.8 AssertedInference,
-C.9 AssertedEvidence, and C.11 AssertedArtifactSupport:
-
-| Assertion state | Dot→Tgt edge | Notes |
-|---|---|---|
-| asserted (default) | `Dot --> Tgt` | Solid arrow |
-| assumed | `Dot -. "assumed" .-> Tgt` | Dashed with label |
-| needsSupport | `Dot -- "..." --> Tgt` | Label signals incompleteness |
-| axiomatic | `Dot ==> Tgt` | Thick arrow |
-| defeated | `Dot -- "defeated" --x Tgt` | Label distinguishes from counter |
-| asCited | `Dot -- "cited: Pkg::Name" --> Tgt` | Include citation in label |
-| abstract | `Dot -.-> Tgt` | Dashed, no label |
-| counter | `Dot -- "counter" --x Tgt` | Label distinguishes from defeated |
-
-Visual examples of each inferential assertion state (all include
-the reification dot):
-
-```mermaid
----
-config:
-  theme: neutral
-  flowchart:
-    curve: linear
-    htmlLabels: true
-    rankSpacing: 60
-    nodeSpacing: 45
-    padding: 15
----
-flowchart LR
-    S1["Src"] --- D1((" "))
-    D1 --> T1["Tgt — asserted"]
-
-    S2["Src"] --- D2((" "))
-    D2 -. "assumed" .-> T2["Tgt — assumed"]
-
-    S3["Src"] --- D3((" "))
-    D3 -- "..." --> T3["Tgt — needsSupport"]
-
-    S4["Src"] --- D4((" "))
-    D4 ==> T4["Tgt — axiomatic"]
-
-    S5["Src"] --- D5((" "))
-    D5 -- "defeated" --x T5["Tgt — defeated"]
-
-    S6["Src"] --- D6((" "))
-    D6 -- "cited: Pkg::Name" --> T6["Tgt — asCited"]
-
-    S7["Src"] --- D7((" "))
-    D7 -.-> T7["Tgt — abstract"]
-
-    S8["Src"] --- D8((" "))
-    D8 -- "counter" --x T8["Tgt — counter"]
-```
-
-**Context** (`--o` base) — used by C.10 AssertedContext and
-C.12 AssertedArtifactContext. The `ctx` suffix on labels distinguishes
-context edges from inferential edges when both appear in a diagram:
-
-| Assertion state | Dot→Tgt edge | Notes |
-|---|---|---|
-| asserted (default) | `Dot --o Tgt` | Circle (○) approximates spec's filled square (■) |
-| assumed | `Dot -. "assumed ctx" .-> Tgt` | Dashed+circle unsupported; use dashed+label |
-| needsSupport | `Dot -- "... ctx" --o Tgt` | Labeled circle end |
-| axiomatic | `Dot == "axiomatic ctx" ==> Tgt` | Labeled thick arrow |
-| defeated | `Dot -- "defeated ctx" --x Tgt` | `ctx` label distinguishes from inferential |
-| asCited | `Dot -- "cited ctx: Pkg::Name" --o Tgt` | Labeled circle end |
-| abstract | `Dot -. "ctx" .-> Tgt` | Dashed+circle unsupported; use dashed+label |
-| counter | `Dot -- "counter ctx" --x Tgt` | X end; `ctx` label distinguishes |
-
-Visual examples of each context assertion state (all include
-the reification dot):
-
-```mermaid
----
-config:
-  theme: neutral
-  flowchart:
-    curve: linear
-    htmlLabels: true
-    rankSpacing: 60
-    nodeSpacing: 45
-    padding: 15
----
-flowchart LR
-    CS1["Src"] --- CD1((" "))
-    CD1 --o CT1["Tgt — asserted"]
-
-    CS2["Src"] --- CD2((" "))
-    CD2 -. "assumed ctx" .-> CT2["Tgt — assumed"]
-
-    CS3["Src"] --- CD3((" "))
-    CD3 -- "... ctx" --o CT3["Tgt — needsSupport"]
-
-    CS4["Src"] --- CD4((" "))
-    CD4 == "axiomatic ctx" ==> CT4["Tgt — axiomatic"]
-
-    CS5["Src"] --- CD5((" "))
-    CD5 -- "defeated ctx" --x CT5["Tgt — defeated"]
-
-    CS6["Src"] --- CD6((" "))
-    CD6 -- "cited ctx: Pkg::Name" --o CT6["Tgt — asCited"]
-
-    CS7["Src"] --- CD7((" "))
-    CD7 -. "ctx" .-> CT7["Tgt — abstract"]
-
-    CS8["Src"] --- CD8((" "))
-    CD8 -- "counter ctx" --x CT8["Tgt — counter"]
-```
-
-When both "defeated" and "counter" appear in the same diagram, always
-label the `--x` edge to disambiguate them.
-
-**If expanded shapes were supported**: Use `f-circ` (the filled/junction
-circle) instead of `((" "))` — the filled circle matches the spec's
-solid filled dot more closely than an open circle.
-Syntax: `Dot@{ shape: f-circ }`.
-
 ### C.8 AssertedInference
 
 **SACM §11.14 (p. 40)**: "AssertedInference association records the
@@ -728,7 +578,16 @@ ArgumentReasoning; target is a Claim.
 
 **Mermaid**: Use a reification dot when there are multiple sources, to
 show they jointly constitute one `AssertedInference` rather than
-independent inferences. In `flowchart BT`, sub-claims and
+independent inferences.
+In all reification dots, we prefer to use a hair space
+(U+200A, UTF-8 e2 80 8a) instead of regular space, so that the dot is smaller.
+A hair space is the thinnest visible space.
+We can't have a filled-in dot (as SACM prefers), the mermaid processor
+doesn't permit an empty string, and a zero-width character in file like this
+can lead to other problems.
+We have a script `script/fix_reification_spaces.sh` that automatically converts
+regular spaces in this situation to hair spaces.
+In `flowchart BT`, sub-claims and
 ArgumentReasoning nodes appear below the Claim they support:
 
 ```mermaid
@@ -908,6 +767,156 @@ flowchart BT
 ```
 
 **Assertion states**: use the **Context** table above.
+
+### Assertion states for relationships (C.8–C.12)
+
+Each of C.8–C.12 is a reified relationship: the relationship instance
+is a dot node, sources connect to it with plain lines, and the dot
+connects to the target with a decorated edge that encodes the assertion
+state. Full form with dot:
+
+```
+Src --- Dot((" ")) --> Tgt
+```
+
+When there is only a single source and the dot need not be referenced
+(no +metaClaim attached), the dot may be omitted and the same edge
+style applied directly:
+
+```
+Src --> Tgt
+```
+
+The assertion state is always encoded on the **Dot→Tgt edge** (or the
+direct Src→Tgt edge when the dot is omitted). There are two base
+arrow families across the five relationship types:
+
+**Note on orthogonality**: Relationship assertion states (C.8–C.12)
+and Claim assertion states (C.6) are entirely independent. Both
+inherit `assertionDeclaration` from the abstract `Assertion` class
+(§11.10, p. 39), but they are encoded differently and do not
+interfere. A Claim node can carry `assumed` (stadium shape + `~`
+prefix) while the relationship pointing to it simultaneously carries
+`defeated` (`Dot --x Tgt`). The visual motifs reuse similar symbols
+(bracket feet, three dots) in both contexts, but they apply to
+different objects.
+
+**Inferential** (`-->` base) — used by C.8 AssertedInference,
+C.9 AssertedEvidence, and C.11 AssertedArtifactSupport:
+
+| Assertion state | Dot→Tgt edge | Notes |
+|---|---|---|
+| asserted (default) | `Dot --> Tgt` | Solid arrow |
+| assumed | `Dot -. "assumed" .-> Tgt` | Dashed with label |
+| needsSupport | `Dot -- "..." --> Tgt` | Label signals incompleteness |
+| axiomatic | `Dot ==> Tgt` | Thick arrow |
+| defeated | `Dot -- "defeated" --x Tgt` | Label distinguishes from counter |
+| asCited | `Dot -- "cited: Pkg::Name" --> Tgt` | Include citation in label |
+| abstract | `Dot -.-> Tgt` | Dashed, no label |
+| counter | `Dot -- "counter" --x Tgt` | Label distinguishes from defeated |
+
+Visual examples of each inferential assertion state (all include
+the reification dot):
+
+```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
+flowchart LR
+    S1["Src"] --- D1((" "))
+    D1 --> T1["Tgt — asserted"]
+
+    S2["Src"] --- D2((" "))
+    D2 -. "assumed" .-> T2["Tgt — assumed"]
+
+    S3["Src"] --- D3((" "))
+    D3 -- "..." --> T3["Tgt — needsSupport"]
+
+    S4["Src"] --- D4((" "))
+    D4 ==> T4["Tgt — axiomatic"]
+
+    S5["Src"] --- D5((" "))
+    D5 -- "defeated" --x T5["Tgt — defeated"]
+
+    S6["Src"] --- D6((" "))
+    D6 -- "cited: Pkg::Name" --> T6["Tgt — asCited"]
+
+    S7["Src"] --- D7((" "))
+    D7 -.-> T7["Tgt — abstract"]
+
+    S8["Src"] --- D8((" "))
+    D8 -- "counter" --x T8["Tgt — counter"]
+```
+
+**Context** (`--o` base) — used by C.10 AssertedContext and
+C.12 AssertedArtifactContext. The `ctx` suffix on labels distinguishes
+context edges from inferential edges when both appear in a diagram:
+
+| Assertion state | Dot→Tgt edge | Notes |
+|---|---|---|
+| asserted (default) | `Dot --o Tgt` | Circle (○) approximates spec's filled square (■) |
+| assumed | `Dot -. "assumed ctx" .-> Tgt` | Dashed+circle unsupported; use dashed+label |
+| needsSupport | `Dot -- "... ctx" --o Tgt` | Labeled circle end |
+| axiomatic | `Dot == "axiomatic ctx" ==> Tgt` | Labeled thick arrow |
+| defeated | `Dot -- "defeated ctx" --x Tgt` | `ctx` label distinguishes from inferential |
+| asCited | `Dot -- "cited ctx: Pkg::Name" --o Tgt` | Labeled circle end |
+| abstract | `Dot -. "ctx" .-> Tgt` | Dashed+circle unsupported; use dashed+label |
+| counter | `Dot -- "counter ctx" --x Tgt` | X end; `ctx` label distinguishes |
+
+Visual examples of each context assertion state (all include
+the reification dot):
+
+```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
+flowchart LR
+    CS1["Src"] --- CD1((" "))
+    CD1 --o CT1["Tgt — asserted"]
+
+    CS2["Src"] --- CD2((" "))
+    CD2 -. "assumed ctx" .-> CT2["Tgt — assumed"]
+
+    CS3["Src"] --- CD3((" "))
+    CD3 -- "... ctx" --o CT3["Tgt — needsSupport"]
+
+    CS4["Src"] --- CD4((" "))
+    CD4 == "axiomatic ctx" ==> CT4["Tgt — axiomatic"]
+
+    CS5["Src"] --- CD5((" "))
+    CD5 -- "defeated ctx" --x CT5["Tgt — defeated"]
+
+    CS6["Src"] --- CD6((" "))
+    CD6 -- "cited ctx: Pkg::Name" --o CT6["Tgt — asCited"]
+
+    CS7["Src"] --- CD7((" "))
+    CD7 -. "ctx" .-> CT7["Tgt — abstract"]
+
+    CS8["Src"] --- CD8((" "))
+    CD8 -- "counter ctx" --x CT8["Tgt — counter"]
+```
+
+When both "defeated" and "counter" appear in the same diagram, always
+label the `--x` edge to disambiguate them.
+
+**If expanded shapes were supported**: Use `f-circ` (the filled/junction
+circle) instead of `((" "))` — the filled circle matches the spec's
+solid filled dot more closely than an open circle.
+Syntax: `Dot@{ shape: f-circ }`.
 
 ### C.5 +metaClaim reference
 

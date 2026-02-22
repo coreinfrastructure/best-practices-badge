@@ -451,13 +451,20 @@ flowchart BT
 
 #### AsCited
 
-Cites a claim from another package. Include the citation in the
-label, mirroring the spec's "Cited Pkg [Cited name]" notation:
+Cites a claim from another package.
+The SACM notation is complex with a name, Cited Pkg [Cited name], and
+as usual a statement.
 
-???
+Here we'll opt for simplicity, and simply use the name as usual
+without the package references (our document isn't that complicated).
+The idea is that this is a reference, and the claim
+is more fully justified elsewhere.
+
+The mermaid symbol that looks closest to this is the subroutine, so
+we'll use that:
 
 ```
-C1["C1 [PkgName::CitedName]<br>Statement"]
+C1[["<b>C1: Long claim name</b><br>Cited statement"]]
 ```
 
 Rendered:
@@ -474,8 +481,10 @@ config:
     padding: 15
 ---
 flowchart BT
-    C1["C1 [PkgName::CitedName]<br>Statement"]
+    C1[["<b>C1: Long claim name</b><br>Cited statement"]]
 ```
+
+If space is tight, the cited statement could be omitted.
 
 #### Abstract
 

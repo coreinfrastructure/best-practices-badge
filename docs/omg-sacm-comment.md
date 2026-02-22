@@ -1,0 +1,411 @@
+# Issue: ArgumentReasoning Connection to AssertedInference is Underspecified in SACM v2.3
+
+**Specification**: OMG Structured Assurance Case Metamodel (SACM), v2.3
+**Document**: OMG Formal/23-05-08, October 2023
+**Sections affected**: §11.12, §11.13, §11.14, Annex C §C.7, §C.8
+
+## Summary
+
+Annex C of SACM v2.3 defines a graphical shape for `ArgumentReasoning` (§C.7,
+Figure C13) and §C.8 describes `AssertedInference` diagrams in which sources
+connect to the reification dot with undirected line segments. The intent,
+evident from §11.12's semantics, is that `ArgumentReasoning` elements appear
+in diagrams connected with an `AssertedRelationship`, at least
+`AssertedInference`. However, the normative class definitions in
+§11 do not provide a clear basis for this connection. Specifically:
+
+1. §11.14 informally restricts `AssertedInference` +source values
+   to `Assertion`, but
+   `ArgumentReasoning` (§11.12) is **not** a subtype of `Assertion` per
+   Figure 11.1, so it cannot satisfy that constraint.
+2. §11.13 defines a `+reasoning: ArgumentReasoning[0..1]` property on
+   `AssertedRelationship` that could serve this purpose, but Annex C defines
+   **no graphical notation** for it.
+
+The result: a diagram showing `ArgumentReasoning` connected by an undirected
+line to a reification dot is underspecified — it cannot be unambiguously
+serialized to a SACM model instance using only the specification.
+
+In addition, Figure 11.1 defines `+reasonging` from `AssertedRelationship`
+to `ArgumentReasoning`, but this is clearly a typo and should instead be
+`+reasoning` (only `g`, the one at the end).
+
+## Background
+
+### Class Hierarchy (Figure 11.1, p. 35)
+
+The relevant portion of the Argumentation Package hierarchy is:
+
+- `ArgumentAsset` (abstract)
+  - `ArtifactReference` (§11.9)
+  - `ArgumentReasoning` (§11.12)
+  - `Assertion` (abstract, §11.10)
+    - `Claim` (§11.11)
+    - `AssertedRelationship` (abstract, §11.13)
+      - `AssertedInference` (§11.14)
+      - `AssertedEvidence` (§11.15)
+      - `AssertedContext` (§11.16)
+      - `AssertedArtifactSupport` (§11.17)
+      - `AssertedArtifactContext` (§11.18)
+
+`ArgumentReasoning` is a **sibling** of `Assertion` under `ArgumentAsset`,
+not a subtype of `Assertion`.
+
+### §11.12 ArgumentReasoning (p. 40)
+
+§11.12 states that `ArgumentReasoning` "can be used to provide additional
+description or explanation of the asserted relationship. For example, it can
+be used to provide description of an **AssertedInference** that connects one
+or more Claims (premises) to another Claim (conclusion)." It further states:
+"ArgumentReasoning elements are therefore **related to AssertedInferences,
+AssertedContexts, and AssertedEvidence**."
+
+This explicitly establishes intent: `ArgumentReasoning` is meant to appear
+in diagrams involving these relationship types. The normative mechanism for
+this connection, however, is not made clear in §C.7 or §C.8.
+
+### Real-world demonstration in Selviandro et al
+
+In the paper "A Visual Notation for the Representation of
+Assurance Cases using SACM" by
+Nungki Selviandro, Richard Hawkins, and Ibrahim Habli,
+they clearly expect ArgumentReasoning to be connectable with
+AssertedInference (at least). They say:
+
+> In some cases, the relationship that associates more than one Claim
+> may not always be obvious. In such cases, ArgumentReasoning can be
+> used to provide a further description of the reasoning involved. An
+> ArgumentReasoning is visu- ally represented using an annotation symbol
+> (as shown in Figure 1). It can be attached to the AssertedInference
+> relationship that connect the Claims.
+
+Their figure 2 clearly shows an `AssertedInference` (represented by
+a black dot) with a `Claim` as its target. This figure shows two
+(sub)Claims connected with undirected lines, presumably sources.
+This figure also shows the black dot connected with an undirected line
+to a single `ArgumentReasoning` instance.
+
+This paper discusses an older version of SACM, but this is
+pretty fundamental. It's clearly expected that an ArgumentReasoning
+instance can be visually connected to an AssertedInference, but it's
+not clear what that means.
+
+### §11.13 AssertedRelationship (p. 40)
+
+`AssertedRelationship` defines:
+
+- `source: ArgumentAsset[1..*]` — the source(s) of the relationship
+- `target: ArgumentAsset[1]` — the target of the relationship
+- `reasoning: ArgumentReasoning[0..1]` — "an optional reference to
+  [a] description of the reasoning underlying the AssertedRelationship"
+
+Note: the spec text as printed for `reasoning`
+reads "an optional reference to **the a**
+description", which appears to be a typographical error; "the a" should
+read "a" or "the" (probably "the").
+
+Note also that the `+reasoning` property exists at the `AssertedRelationship`
+level, meaning it applies to all five subtypes (§11.14–§11.18), not only
+`AssertedInference`, though that isn't necessarily a problem.
+
+### §11.14 AssertedInference (p. 40)
+
+§11.14 states: "AssertedInference association records the inference that a
+user declares to exist between **one or more Assertion (premise)** and
+**another Assertion (conclusion)**."
+
+No OCL constraint is given to enforce this source/target type restriction.
+This stands in contrast to, for example, §11.15 (AssertedEvidence), which
+provides an explicit OCL constraint:
+
+```
+self.source->forall(s | s.oclIsTypeOf(ArtifactReference))
+```
+
+and §11.17 (AssertedArtifactSupport) and §11.18 (AssertedArtifactContext),
+which each state explicitly: "The source and target of [this relationship]
+must be of type ArtifactReference."
+
+The absence of an OCL constraint in §11.14 makes it ambiguous whether the
+prose "one or more Assertion (premise)" is normative or merely descriptive.
+
+### §C.7 and §C.8 (p. 59)
+
+- **§C.7**: Defines the graphical shape for `ArgumentReasoning` (Figure C13:
+  an open-right-bracket shape containing name and statement).
+- **§C.8**: Defines `AssertedInference` graphical notation (Figure C14):
+  "the edge **without** an arrow represents the `+source` reference of the
+  AssertedInference, and the edge **with** an arrow represents the `+target`
+  reference of the AssertedInference."
+
+§C.8 says nothing about how (or whether) an `ArgumentReasoning` node connects
+to the reification dot. No figure in Annex C or Annex D shows an
+`ArgumentReasoning` connected to an `AssertedInference` dot, despite §11.12
+explicitly describing this use case.
+
+No section in Annex C defines a graphical notation for the `+reasoning`
+property of §11.13.
+
+### How Annex C Identifies the Dot's Relationship Type (§C.8–§C.12, pp. 59–64)
+
+All five `AssertedRelationship` subtypes use the same reified-dot graphical
+form: a solid dot node connected to source(s) via plain (undirected) lines, and
+connected to the target via a decorated directed edge. Annex C provides no
+explicit algorithm for identifying which subtype a dot represents; the type
+instead appears to be derived by combining two implicit visual cues.
+
+**Cue 1: The endpoint decoration on the `+target` edge** (primary
+discriminator).
+
+§C.10 (p. 61) introduces a **filled square (■)** endpoint on the target edge
+for `AssertedContext`, in contrast to the **filled arrowhead (→)** used by the
+other three subtypes (§C.8, §C.9, §C.11). This separates the five subtypes
+into two groups:
+
+- **Arrow group** (`→` endpoint): `AssertedInference` (§C.8),
+  `AssertedEvidence` (§C.9), `AssertedArtifactSupport` (§C.11)
+- **Square group** (`■` endpoint): `AssertedContext` (§C.10),
+  `AssertedArtifactContext` (§C.12)
+
+**Cue 2: The node types (shapes) at `+source` and `+target`** (secondary
+discriminator, within each group).
+
+Within the arrow group, the subtypes are distinguished by whether the source
+and target nodes are `ArtifactReference` instances or not:
+
+- **`AssertedInference`** (§C.8, §11.14): sources are `Claim` or
+  `AssertedRelationship`; target is `Claim` or `AssertedRelationship`.
+- **`AssertedEvidence`** (§C.9, §11.15): sources are `ArtifactReference`
+  (enforced by OCL constraint); target is `Claim` or `AssertedRelationship`.
+- **`AssertedArtifactSupport`** (§C.11, §11.17): source **and** target are
+  both `ArtifactReference` (§11.17: "The source and target…must be of type
+  ArtifactReference").
+
+Within the square group:
+
+- **`AssertedContext`** (§C.10, §11.16): source may be `ArtifactReference`
+  or `Claim`; target may be `Claim`, `AssertedRelationship`, or
+  `ArgumentReasoning` (§11.16 explicitly permits `ArgumentReasoning` as
+  target).
+- **`AssertedArtifactContext`** (§C.12, §11.18): source **and** target are
+  both `ArtifactReference` (§11.18: "The source and target…must be of type
+  ArtifactReference").
+
+The complete discrimination matrix, as implied by §C.8–§C.12:
+
+| `+target` endpoint | Source shape | Target shape | Inferred subtype |
+|---|---|---|---|
+| Arrow (→) | `Claim` or `AssertedRelationship` | `Claim` or `AssertedRelationship` | `AssertedInference` (§C.8) |
+| Arrow (→) | `ArtifactReference` | `Claim` or `AssertedRelationship` | `AssertedEvidence` (§C.9) |
+| Arrow (→) | `ArtifactReference` | `ArtifactReference` | `AssertedArtifactSupport` (§C.11) |
+| Square (■) | `Claim` or `ArtifactReference` | `Claim`, `AssertedRelationship`, or `ArgumentReasoning` | `AssertedContext` (§C.10) |
+| Square (■) | `ArtifactReference` | `ArtifactReference` | `AssertedArtifactContext` (§C.12) |
+
+Note that the `AssertedInference` and `AssertedContext` rows overlap on source
+shape (`Claim`), but are cleanly separated by the target endpoint decoration
+(→ vs ■). The target decoration is therefore the **primary** discriminator, and
+node types provide the secondary discrimination within each group.
+
+`ArgumentReasoning` does not appear in **any source column** of this matrix.
+It appears only as a valid **target** of `AssertedContext` (§11.16). This
+omission from the source side is precisely the gap described as the issue below.
+
+**Significance for the proposed solutions.**
+
+The discrimination within the arrow group is entirely between
+`ArtifactReference` and non-`ArtifactReference` source shapes.
+`ArtifactReference` has a distinctive graphical notation (stacked-pages shape
+with corner ↗ arrow, §C.9), visually different from both `Claim` (plain
+rectangle, §C.6) and `ArgumentReasoning` (open right-bracket, §C.7).
+
+Consequently, in the proposed solutions discussed later:
+
+- **Solution 2a/2b** (allow `ArgumentReasoning` as `+source` of
+  `AssertedInference`): the `ArgumentReasoning` shape is distinct from
+  `ArtifactReference`, so no row in the table above collapses. The
+  type-discrimination mechanism is **fully preserved**.
+
+- **Solution 1** (map undirected line from `ArgumentReasoning` to
+  `+reasoning`): the undirected plain line currently uniformly represents
+  `+source` across all five subtypes. Under Solution 1, it would additionally
+  represent `+reasoning` when the connected node is `ArgumentReasoning`.
+  This does not collapse any row of the table (the five subtypes remain
+  distinguishable), but it introduces a **new implicit rule** absent from the
+  current Annex C mechanism: a reader must inspect the connected node's shape
+  to determine whether the line means `+source` or `+reasoning`. This
+  additional rule could be eliminated by using a visually distinct notation
+  (e.g., a dashed undirected line) for `+reasoning`.
+
+## The Problem
+
+Taken together, the above produces a contradiction with no specified
+resolution:
+
+1. **`ArgumentReasoning` cannot be a `+source`** of `AssertedInference`,
+   because §11.14's prose says sources must be `Assertion`, and
+   `ArgumentReasoning` is not a subtype of `Assertion` (Figure 11.1).
+   (This is an informal constraint with no OCL; but if taken literally,
+   it excludes `ArgumentReasoning`.)
+
+2. **`ArgumentReasoning` could connect via `+reasoning`** (§11.13), but
+   Annex C defines no graphical notation for this property. A reader of
+   Annex C diagrams has no way to determine that an undirected line from
+   an `ArgumentReasoning` represents `+reasoning` rather than `+source`.
+   This might be the intent, but the specification fails to say this clearly.
+
+3. **`ArgumentReasoning` is clearly intended to appear in diagrams**
+   (§11.12, §C.7), but the normative pathway for this appearance is
+   undefined.
+
+The net result: any diagram showing `ArgumentReasoning` connected to an
+`AssertedInference` dot is **underspecified** with respect to the normative
+model. A tool or human cannot unambiguously be certain of what is
+meant reading only the SACM specification.
+
+## Proposed Solutions
+
+### Solution 1: Formalize `+reasoning` as the Graphical Connection
+
+Declare in Annex C that an undirected line from an `ArgumentReasoning` node
+to a reification dot represents the `+reasoning` property of
+`AssertedRelationship` (§11.13), distinct from a `+source` line (which must
+come from an `Assertion` or `ArtifactReference` per the relevant subtype).
+
+Required changes:
+
+1. **§C.8**: Add text stating that when an `ArgumentReasoning` (open-bracket
+   shape, §C.7) connects to an `AssertedInference` dot with an undirected
+   line, this represents the `+reasoning` association of §11.13, **not** a
+   `+source` reference. Optionally add a new figure (e.g., Figure C14a)
+   illustrating this.
+2. **§11.14**: Optionally add an explicit OCL constraint (absent today)
+   confirming that `+source` must be `Assertion`:
+   ```
+   self.source->forall(s | s.oclIsKindOf(Assertion))
+   ```
+
+**Advantage**: Minimal change. Preserves the semantics that `+source`
+premises are propositional (`Assertion`) elements.
+
+**Limitation**: The undirected line would be overloaded:
+it would represent `+source`
+when the connected node is a `Claim` or `AssertedRelationship`, and
+`+reasoning` when the connected node is an `ArgumentReasoning`. Readers
+must rely on the node's shape to determine which property is represented.
+Defining a visually distinct notation for `+reasoning` (e.g., a dashed
+undirected line) would eliminate this residual ambiguity.
+That said, the black dot already overloads several types, which can
+be disambiguated from the local context, so perhaps this isn't really
+much different.
+
+In addition, `+reasoning` is defined as having at most one value.
+This would mean that multiple ArgumentReasonings could not be
+connected to a given `AssertedRelationship`.
+That seems like a reasonable limitation, but it's important that
+this be intentional.
+
+### Solution 2: Formally Allow `ArgumentReasoning` as a `+source` of `AssertedInference`
+
+Permit `ArgumentReasoning` to be a valid `+source` of `AssertedInference`,
+treating it as a reasoning premise rather than a mere annotation. Several
+sub-options are possible:
+
+#### Sub-option 2a: Revise §11.14 prose and add OCL (minimal change)
+
+Revise the semantics of §11.14 to read "one or more **Assertion or
+ArgumentReasoning** (premise)" and add an explicit OCL constraint:
+
+```
+self.source->forall(s | s.oclIsKindOf(Assertion) or
+                        s.oclIsKindOf(ArgumentReasoning))
+```
+
+This is the smallest targeted change. It brings the normative constraint
+into agreement with the evident intent of Annex C, while leaving the rest
+of the meta-model untouched. The `+reasoning` property of §11.13 would
+remain available for metadata annotation purposes, distinct from the
+`+source` role in a diagram.
+
+#### Sub-option 2b: Introduce per-subtype OCL constraints in §11.14 (and siblings)
+
+Remove the informal source-type language from §11.14's prose and instead
+add explicit, per-subtype OCL constraints across all five `AssertedRelationship`
+subtypes (§11.14–§11.18), matching the pattern already established by
+§11.15, §11.17, and §11.18. For `AssertedInference`:
+
+```
+self.source->forall(s | s.oclIsKindOf(Assertion) or
+                        s.oclIsKindOf(ArgumentReasoning))
+self.target.oclIsKindOf(Assertion)
+```
+
+This approach makes type constraints uniformly explicit across all subtypes,
+rather than relying on informal prose, and reduces the discrepancy between
+the documented constraints in §11.14 and those in §11.15, §11.17, §11.18.
+
+#### Sub-option 2c: Move `ArgumentReasoning` under `Assertion` in the hierarchy
+
+Revise Figure 11.1 to make `ArgumentReasoning` a subtype of `Assertion`.
+This would automatically satisfy the "source = Assertion" constraint of
+§11.14, allow `ArgumentReasoning` to carry an `assertionDeclaration`
+attribute (§11.10), and permit it to appear as `+target` as well as
+`+source`.
+
+However, this is a significant semantic change: `Assertion` carries the
+`assertionDeclaration: AssertionDeclaration[1] = asserted` attribute
+(§11.10) with enumeration values (asserted, needsSupport, assumed,
+axiomatic, defeated, asCited), which may not be conceptually appropriate
+for a reasoning description. This sub-option is listed for completeness but
+is likely too disruptive to the meta-model's intended semantics.
+
+## Effect on Annex C Dot Ambiguity
+
+As described above in "How Annex C Identifies the Dot's Relationship Type",
+the five `AssertedRelationship` subtypes are discriminated by (a) the
+endpoint decoration on the `+target` edge and (b) whether source/target
+nodes are `ArtifactReference` instances. `ArgumentReasoning` does not
+participate in this discrimination on the source side in the current spec.
+
+None of the proposed solutions collapse the discrimination matrix.
+Specifically:
+
+- **Solutions 2a, 2b** (allow `ArgumentReasoning` as `+source` of
+  `AssertedInference`): `ArgumentReasoning`'s open-bracket shape is
+  visually distinct from `ArtifactReference`'s stacked-pages shape.
+  Adding `ArgumentReasoning` to the `AssertedInference` source row does
+  not make that row indistinguishable from the `AssertedEvidence` or
+  `AssertedArtifactSupport` rows. No change to Annex C is required.
+
+- **Solution 2c** (move `ArgumentReasoning` under `Assertion`): no change
+  to the discrimination mechanism; the shapes and endpoint decorations
+  are unaffected.
+
+- **Solution 1** (formalize `+reasoning` as a distinct graphical connection):
+  this is the solution most likely to introduce reader confusion, because
+  the undirected plain line would now carry two meanings depending on the
+  connected node's shape. The five-subtype discrimination itself remains
+  intact, but a visually distinct notation for `+reasoning` (e.g., a dashed
+  undirected line) would be preferable to prevent overloading.
+
+## Summary of Proposed Changes
+
+| | Sol. 1 | Sol. 2a | Sol. 2b | Sol. 2c |
+|---|:---:|:---:|:---:|:---:|
+| Change §11.13 (fix typo) | Yes | Yes | Yes | Yes |
+| Change §11.14 prose | No | Yes | Yes | No |
+| Add OCL to §11.14 | Optional | Yes | Yes | No |
+| Change class hierarchy | No | No | No | Yes |
+| Change Annex C | Yes | No | No | No |
+| Semantic impact | Minimal | Minimal | Minimal | Significant |
+| Dot ambiguity introduced | No | No | No | No |
+
+I recommend **solution 1**, though **solution 2a** is also compelling.
+
+In addition:
+
+1. **§11.13**: Fix the typographical error: "an optional reference to
+   **the a** description" → "an optional reference to **the** description".
+   (or **a**).
+2. **Figure 11.1** defines `+reasonging` from `AssertedRelationship`
+to `ArgumentReasoning`, but this is clearly a typo and should instead be
+`+reasoning` (only `g`, the one at the end).

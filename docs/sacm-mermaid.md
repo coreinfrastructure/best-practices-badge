@@ -153,6 +153,8 @@ In SACM, model node elements like "claim" have possibly 3 related values:
   Section §8.9 Description says
   "In many cases Description is used to provide the 'content' of a SACM element.
   For example, it would be used to provide the text of a Claim."
+  So a claim "statement" is simply the claim's description
+  (it's not a different field).
 
 Mermaid diagrams need *short* names to identify nodes.
 It's *possible* to use long names, but it'd be painful.
@@ -164,14 +166,18 @@ It would also be more difficult to edit diagrams if the displayed name
 didn't include the short names we'd use to identify the nodes in a diagram.
 
 We can resolve this by having a naming convention.
-By convention, the full names we use for nodes will have the following
-structure:
+By convention, the name we use for a node (aka its "full name")
+will normally have the following structure, in order:
 
-* a short name (generally starting with a capital letter),
-* colon-space (: ), and
-* a long name (typically 1-3 words).
+1. short name (generally starting with a capital letter),
+2. colon-space (: ), and
+3. long name (typically 1-3 words).
 
-When displayed the full name will be bolded, following the example of
+In some cases the short name can serve as the full name.
+In this case, only part 1 (the short name) is used as the name.
+
+When displayed, the name (aka full name) will be bolded, following
+the example of
 [Selviandro et al.], followed by a line break &lt;br/&gt;, followed
 by the description of the node.
 As a special case, ArtifactRefence (e.g., for evidence) will have
@@ -198,9 +204,11 @@ the name. This is still clear, yet it's much easier to read and edit later.
 For each SACM graphical element identified in Annex C, here is our
 recommended Mermaid representation.
 
-We won't follow the *order* of Annex C, but instead will focus on more
-important issues first such as general layout, naming, and how to
-map the claim element.
+This section doesn't follow the *order* of Annex C.
+We instead will focus on the most important mappings first, starting
+with Claim.
+However, in this section we do discuss every graphical notation
+in Annex C.
 
 ### C.6 Claim
 

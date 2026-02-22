@@ -1408,6 +1408,7 @@ flowchart BT
 ```
 
 ```mermaid
+---
 config:
   theme: neutral
   flowchart:

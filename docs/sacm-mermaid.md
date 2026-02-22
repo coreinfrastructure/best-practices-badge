@@ -1358,14 +1358,14 @@ Here is an example.
 
 ```
 flowchart BT
-    %% Define the SACM Dot style once
-    classDef sacmDot fill:#000,stroke:#333,width:15px,color:#fff
+    %% sacmDot: Reifies AssertedInference, color:#000 hides the text
+    classDef sacmDot fill:#000,stroke:#000,width:6px,height:6px,color:#000,font-size:1px
 
     %% --- Top Level Section ---
     C_High["<b>C: Higher level</b><br>The system meets all<br>specified security requirements"]
 
     %% Junction for the first set of claims
-    Inf1(("&#x200a;")):::sacmDot
+    Inf1(("·")):::sacmDot
     Arg1[/"<b>Arg: Argument A</b><br>Direct evidence from<br>primary subsystems"/]
 
     %% Supporting Claims
@@ -1419,14 +1419,14 @@ config:
     padding: 15
 ---
 flowchart BT
-    %% sacmDot: Reifies AssertedInference, color:#000 hides the period.
-    classDef sacmDot fill:#000,stroke:#000,width:8px,height:8px,color:#000
+    %% sacmDot: Reifies AssertedInference, color:#000 hides the text
+    classDef sacmDot fill:#000,stroke:#000,width:6px,height:6px,color:#000,font-size:1px
 
     %% --- Top Level Section ---
     C_High["<b>C: Higher level</b><br>The system meets all<br>specified security requirements"]
 
     %% Junction for the first set of claims
-    Inf1((".")):::sacmDot
+    Inf1(("·")):::sacmDot
     Arg1[/"<b>Arg: Argument A</b><br>Direct evidence from<br>primary subsystems"/]
 
     %% Supporting Claims

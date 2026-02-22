@@ -983,11 +983,11 @@ Mermaid Frontmatter described earlier).
 
 ```
 flowchart BT
-    G2["G2: Sub-claim A"]
-    G3["G3: Sub-claim B"]
-    A1(["A1: Assumed condition<br>ASSUMED"])
-    Inf1((" "))
-    G1["G1: Top-level claim"]
+    G2["<b>G2</b><br>Sub-claim A"]
+    G3["<b>G3</b><br>Sub-claim B"]
+    A1(["<b>A1</b><br>Assumed condition</b><br>ASSUMED"])
+    Inf1((" "))
+    G1["<b>G1</b><br>Top-level claim"]
 
     A1 -. "assumed" .-> Inf1
     G2 --- Inf1
@@ -1009,11 +1009,11 @@ config:
     padding: 15
 ---
 flowchart BT
-    G2["G2: Sub-claim A"]
-    G3["G3: Sub-claim B"]
-    A1(["A1: Assumed conditionASSUMED<br>ASSUMED"])
+    G2["<b>G2</b><br>Sub-claim A"]
+    G3["<b>G3</b><br>Sub-claim B"]
+    A1(["<b>A1</b><br>Assumed condition</b><br>ASSUMED"])
     Inf1((" "))
-    G1["G1: Top-level claim"]
+    G1["<b>G1</b><br>Top-level claim"]
 
     A1 -. "assumed" .-> Inf1
     G2 --- Inf1
@@ -1032,6 +1032,9 @@ is the standard way to ground a claim in a concrete artifact (a document,
 test result, measurement, etc.) without embedding the artifact itself in the
 assurance case.
 
+I've embellished the information in each node to make it clearer
+that both a name and a description are supported.
+
 **Mapping notes**:
 
 - G4 is an asserted Claim → rectangle `["…"]`
@@ -1042,8 +1045,8 @@ assurance case.
 
 ```
 flowchart BT
-    E1[("E1 ↗<br>Evidence artifact")]
-    G4["G4: Top-level claim"]
+    E1[("<b>E1: Long evidence name</b> ↗<br>Evidence artifact description")]
+    G4["<b>G4: Long claim name</b><br>Claim statement"]
 
     E1 --> G4
 ```
@@ -1062,8 +1065,8 @@ config:
     padding: 15
 ---
 flowchart BT
-    E1[("E1 ↗<br>Evidence artifact")]
-    G4["G4: Top-level claim"]
+    E1[("<b>E1: Long evidence name</b> ↗<br>Evidence artifact description")]
+    G4["<b>G4: Long claim name</b><br>Claim statement"]
 
     E1 --> G4
 ```

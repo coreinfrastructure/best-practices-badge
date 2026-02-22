@@ -1437,7 +1437,7 @@ flowchart BT
     C_High["<b>C: Higher level</b><br>The system meets all<br>specified security requirements"]
 
     %% Junction for the first set of claims
-    Inf1(("·")):::sacmDot
+    Inf1((" ")):::sacmDot
     Arg1[/"<b>Arg: Argument A</b><br>Direct evidence from<br>primary subsystems"/]
 
     %% Supporting Claims
@@ -1498,7 +1498,7 @@ flowchart BT
     C_High["<b>C: Higher level</b><br>The system meets all<br>specified security requirements"]
 
     %% Junction for the first set of claims
-    Inf1(("·")):::sacmDot
+    Inf1((" ")):::sacmDot
     Arg1[/"<b>Arg: Argument A</b><br>Direct evidence from<br>primary subsystems"/]
 
     %% Supporting Claims
@@ -1522,7 +1522,7 @@ flowchart BT
 
     %% --- Second Level Section ---
     %% Junction for the continued claims
-    Inf2((".")):::sacmDot
+    Inf2((" ")):::sacmDot
 
     %% Supporting Claims 6-10
     C6["<b>C6</b>"]

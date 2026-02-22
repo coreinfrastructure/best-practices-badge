@@ -21,7 +21,7 @@ fi
 
 for f in "$@"; do
     tmp=$(mktemp)
-    sed "s/((\" \"))/((\"${HAIR}\"))/g" "$f" > "$tmp"
+    sed "s/((\".\"))/((\"${HAIR}\"))/g" "$f" > "$tmp"
     if cmp -s "$f" "$tmp"; then
         # No change, remove result and don't change original timestamp
         rm -- "$tmp"

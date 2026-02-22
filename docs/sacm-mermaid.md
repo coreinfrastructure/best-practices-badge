@@ -557,7 +557,8 @@ to indicate that this is a reference to external information.
 
 **If expanded shapes were supported**: The `docs` shape would better
 render the spec's document symbol, eliminating the cylinder
-workaround and matching the source notation much more closely
+workaround and matching the source notation much more closely.
+
 Syntax:
 
 ~~~~
@@ -928,6 +929,7 @@ label the `--x` edge to disambiguate them.
 **If expanded shapes were supported**: Use `f-circ` (the filled/junction
 circle) instead of `((" "))` — the filled circle matches the spec's
 solid filled dot more closely than an open circle.
+
 Syntax: `Dot@{ shape: f-circ }`.
 
 ### C.5 +metaClaim reference

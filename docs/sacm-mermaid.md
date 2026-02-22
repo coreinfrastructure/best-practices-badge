@@ -1363,7 +1363,7 @@ flowchart BT
 
     %% --- Top Level Section ---
     C_High["<b>C: Higher level</b><br>The system meets all<br>specified security requirements"]
-    
+
     %% Junction for the first set of claims
     Inf1(("&#x200a;")):::sacmDot
     Arg1[/"<b>Arg: Argument A</b><br>Direct evidence from<br>primary subsystems"/]
@@ -1383,7 +1383,7 @@ flowchart BT
     C4 --- Inf1
     C5 --- Inf1
     C_Cont --- Inf1
-    
+
     Arg1 -.-> Inf1
     Inf1 --> C_High
 
@@ -1420,11 +1420,11 @@ config:
 ---
 flowchart BT
     %% sacmDot: Reifies AssertedInference, color:#000 hides the period.
-    classDef sacmDot fill:#000,stroke:#000,width:12px,height:12px,color:#000
+    classDef sacmDot fill:#000,stroke:#000,width:8px,height:8px,color:#000
 
     %% --- Top Level Section ---
     C_High["<b>C: Higher level</b><br>The system meets all<br>specified security requirements"]
-    
+
     %% Junction for the first set of claims
     Inf1((".")):::sacmDot
     Arg1[/"<b>Arg: Argument A</b><br>Direct evidence from<br>primary subsystems"/]
@@ -1444,8 +1444,8 @@ flowchart BT
     C4 --- Inf1
     C5 --- Inf1
     C_Cont --- Inf1
-    
-    Arg1 -.-> Inf1
+
+    Arg1 --> Inf1
     Inf1 --> C_High
 
     %% --- Second Level Section ---

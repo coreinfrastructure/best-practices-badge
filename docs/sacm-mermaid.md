@@ -181,12 +181,15 @@ We can resolve this by having a naming convention.
 By convention, the name we use for a node (aka its "full name")
 will normally have the following structure, in order:
 
-1. short name (generally starting with a capital letter),
+1. short name (generally starting with a capital letter), an
+   identifier that is unique across the entire assurance case
 2. colon-space (: ), and
 3. long name (typically 1-3 words).
 
 In some cases the short name can serve as the full name.
 In this case, only part 1 (the short name) is used as the name.
+Note that all displayed names are unique, since they always include
+a unique short name.
 
 When displayed, the name (aka full name) will be bolded, following
 the example of

@@ -148,140 +148,17 @@ By convention, the names we use for nodes will begin with a short id
 then a clearer human name (typically 1-3 words).
 The name will be bolded, following the example of
 [Selviandro et al.], and followed by a line break &lt;br/&gt;.
-Note that ArtifactRefence (e.g., for evidence) has a space and arrow (↗)
+Note that ArtifactRefence (e.g., for evidence) has a space and an
+unbolded northeast arrow (↗)
 just before this line break; this attempts to emulate its appearance
 in SACM and remind readers that we're referencing external materials.
 
-We *could* left-align the name, and center the description, which is the
-SACM convention, but this would require a lot of extra ceremony in each
-node (making them harder to edit).
-We'll just use bold text instead to indicate the name, which is
-clear but much easier to read and edit later.
-
-### C.1 ArgumentPackage
-
-**SACM §11.4 (p. 36)**: "ArgumentPackage is the containing element
-for a structured argument represented using the SACM Argumentation
-Metamodel." ArgumentPackages contain structured arguments composed of
-ArgumentAssets and can be nested.
-
-**Annex C notation**: A bordered rectangular container with a tab
-header and a side panel — a named grouping of argument elements.
-
-**Mermaid**: Use `subgraph`. Text to type:
-
-```
-subgraph pkg1["PackageName: description"]
-    C1["C1: element"]
-end
-```
-
-Rendered:
-
-```mermaid
----
-config:
-  theme: neutral
-  flowchart:
-    curve: linear
-    htmlLabels: true
-    rankSpacing: 60
-    nodeSpacing: 45
-    padding: 15
----
-flowchart BT
-    subgraph pkg1["PackageName: description"]
-        C1["C1: Top-level claim"]
-    end
-```
-
-No close alternative — `subgraph` is Mermaid's only grouping construct.
-
-### C.2 ArgumentPackageInterface
-
-**SACM §11.6 (p. 37)**: "ArgumentPackageInterface is a kind of
-ArgumentPackage that defines an interface that may be exchanged
-between users." It declares which ArgumentAssets inside a package
-are visible to other packages. Distinguished from ArgumentPackageBinding
-(C.3), which joins packages together using those interfaces.
-
-**Annex C notation**: Like ArgumentPackage but with a lollipop (○—)
-symbol in the side panel, indicating an interface through which the
-package exposes elements to other packages.
-
-**Mermaid**: Use `subgraph` with a `⊙` prefix in the label
-to suggest the lollipop symbol:
-
-```
-subgraph pi1["⊙ InterfaceName: description"]
-    C1["Exposed claim"]
-end
-```
-
-Rendered:
-
-```mermaid
----
-config:
-  theme: neutral
-  flowchart:
-    curve: linear
-    htmlLabels: true
-    rankSpacing: 60
-    nodeSpacing: 45
-    padding: 15
----
-flowchart BT
-    subgraph pi1["⊙ InterfaceName: description"]
-        C1["Exposed claim"]
-    end
-```
-
-**Alternative**: When showing the interface only as an external
-connection point (not its contents), use a standalone circle node:
-`pi1(("InterfaceName"))`.
-
-### C.3 ArgumentPackageBinding
-
-**SACM §11.5 (p. 36)**: "ArgumentPackageBindings can be used to map
-resolved dependencies between the Claims of two or more
-ArgumentPackages." A binding is itself an ArgumentPackage and links
-elements of participant packages via citation. Distinguished from
-ArgumentPackageInterface (C.2), which exposes elements; a binding
-connects two or more packages using those interfaces.
-
-**Annex C notation**: Like ArgumentPackage but with two overlapping
-circles in the side panel, indicating a binding between two packages.
-
-**Mermaid**: Use `subgraph` with a `⊗` prefix
-(or `⊕`, or another compound-circle character):
-
-```
-subgraph pb1["⊗ BindingName: description"]
-end
-```
-
-Rendered:
-
-```mermaid
----
-config:
-  theme: neutral
-  flowchart:
-    curve: linear
-    htmlLabels: true
-    rankSpacing: 60
-    nodeSpacing: 45
-    padding: 15
----
-flowchart BT
-    subgraph pb1["⊗ BindingName: description"]
-    end
-```
-
-**Alternative**: When the binding is better expressed as an explicit
-connection between two packages, connect two subgraphs with a labeled
-edge: `pkg1 -- "binds" --- pkg2`.
+We *could* left-align the name, and center the description, the
+SACM convention.
+However, this would require a lot of extra ceremony in each
+node, making them harder to edit.
+We'll just use bold text instead to clearly differentiate
+the name. This is still clear, yet it's much easier to read and edit later.
 
 ### C.4 ArtifactReference
 
@@ -296,6 +173,11 @@ the argument to also be explicitly declared." Note: ArtifactReference
 is the citation within the argument; the actual evidentiary object
 (test report, specification, etc.) is described in the Artifact
 Metamodel (§12.7).
+
+We will tend to use this to point to evidence, if we want to do that
+in the diagram. However, as this is embedded in a larger document,
+most of the arguments and pointers to evidence will be within the
+document, and not represented in the diagram itself.
 
 **Annex C notation**: A multi-page shape (stacked offset rectangles)
 with an upward-right arrow (↗) in the
@@ -1034,6 +916,49 @@ flowchart BT
 ```
 
 **Assertion states**: use the **Context** table above.
+
+### Unmapped constructs
+
+Annex C has some constructs we've chosen to not map.
+We don't really need them, and it's hard to represent them visually
+with Mermaid anyway. We could try using subgraphs, but they're
+messy and not worth it.
+
+Here are the sections and constructs:
+
+#### C.1 ArgumentPackage
+
+**SACM §11.4 (p. 36)**: "ArgumentPackage is the containing element
+for a structured argument represented using the SACM Argumentation
+Metamodel." ArgumentPackages contain structured arguments composed of
+ArgumentAssets and can be nested.
+
+**Annex C notation**: A bordered rectangular container with a tab
+header and a side panel — a named grouping of argument elements.
+
+#### C.2 ArgumentPackageInterface
+
+**SACM §11.6 (p. 37)**: "ArgumentPackageInterface is a kind of
+ArgumentPackage that defines an interface that may be exchanged
+between users." It declares which ArgumentAssets inside a package
+are visible to other packages. Distinguished from ArgumentPackageBinding
+(C.3), which joins packages together using those interfaces.
+
+**Annex C notation**: Like ArgumentPackage but with a lollipop (○—)
+symbol in the side panel, indicating an interface through which the
+package exposes elements to other packages.
+
+#### C.3 ArgumentPackageBinding
+
+**SACM §11.5 (p. 36)**: "ArgumentPackageBindings can be used to map
+resolved dependencies between the Claims of two or more
+ArgumentPackages." A binding is itself an ArgumentPackage and links
+elements of participant packages via citation. Distinguished from
+ArgumentPackageInterface (C.2), which exposes elements; a binding
+connects two or more packages using those interfaces.
+
+**Annex C notation**: Like ArgumentPackage but with two overlapping
+circles in the side panel, indicating a binding between two packages.
 
 ## Demonstrations
 

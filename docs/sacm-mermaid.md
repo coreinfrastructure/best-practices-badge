@@ -1419,14 +1419,14 @@ config:
     padding: 15
 ---
 flowchart BT
-    %% Define the SACM Dot style once
-    classDef sacmDot fill:#000,stroke:#333,width:15px,color:#fff
+    %% sacmDot: Reifies AssertedInference, color:#000 hides the period.
+    classDef sacmDot fill:#000,stroke:#000,width:12px,height:12px,color:#000
 
     %% --- Top Level Section ---
     C_High["<b>C: Higher level</b><br>The system meets all<br>specified security requirements"]
     
     %% Junction for the first set of claims
-    Inf1(("&#x200a;")):::sacmDot
+    Inf1((".")):::sacmDot
     Arg1[/"<b>Arg: Argument A</b><br>Direct evidence from<br>primary subsystems"/]
 
     %% Supporting Claims
@@ -1450,7 +1450,7 @@ flowchart BT
 
     %% --- Second Level Section ---
     %% Junction for the continued claims
-    Inf2(("&#x200a;")):::sacmDot
+    Inf2((".")):::sacmDot
 
     %% Supporting Claims 6-10
     C6["<b>C6</b>"]

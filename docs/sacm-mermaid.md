@@ -61,10 +61,24 @@ text and graphical representation, as well as add hyperlinks into the figures.
 A mermaid representation doesn't need to be *exactly* like the SACM spec -
 it simply needs to be adequate to be clear to stakeholder readers.
 
-## Mermaid
+## Document structure
 
-We presume the document is overall in Commonmark markdown (.md) format,
-interspersed with mermaid diagrams.
+We presume that there is a single assurance case document.
+This document is overall in Commonmark markdown (.md) format,
+interspersed with mermaid diagrams used to represent SACM
+(as well as possibly other materials such as images).
+
+The document will have various headings and sub-headings.
+Many of the headings will have the name of some node in a SACM diagram.
+
+SACM permits many structures, but we will intentionally limit SACM use
+to cases where there is a "topmost claim" for a given diagram.
+The diagram will introduce a heading with the name of the topmost claim.
+Each of the nodes will have hyperlinks from their names with GitHub
+style links, so that clicking on the name will navigate to *that*
+part of the document.
+
+## Mermaid approach to SACM
 
 Mermaid's syntax is described in
 [its reference](https://mermaid.ai/open-source/intro/syntax-reference.html).
@@ -105,17 +119,6 @@ Reasons:
 
 After the front matter have another line with `---`, then the
 diagram, then a final <tt>&#96;&#96;&#96</tt> to end the diagram.
-
-## Mapping
-
-For each SACM graphical element identified in Annex C, here is our
-recommended Mermaid representation.
-
-We first start with some overall approaches, then explain how we map
-each graphical element (or don't, in some cases).
-We won't follow the *order* of Annex C, but instead will focus on more
-important issues first sucha s general layout, naming, and how to
-map the claim element.
 
 ### Layout and direction
 
@@ -189,6 +192,15 @@ However, this would require a lot of extra ceremony in each
 node, making each node harder to edit.
 We'll just use bold text instead to clearly differentiate
 the name. This is still clear, yet it's much easier to read and edit later.
+
+## Mapping SACM to mermaid
+
+For each SACM graphical element identified in Annex C, here is our
+recommended Mermaid representation.
+
+We won't follow the *order* of Annex C, but instead will focus on more
+important issues first such as general layout, naming, and how to
+map the claim element.
 
 ### C.6 Claim
 

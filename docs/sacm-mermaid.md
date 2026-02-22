@@ -1291,7 +1291,7 @@ flowchart BT
     Inf2((" "))
 
     PO --- Inf1
-    Tech --- Inf1
+In SACM, the `AssertedInference` link *points* to the `ArgumentReasoning` to explain why the inference is valid.    Tech --- Inf1
     NonTech --- Inf1
     CC --- Inf1
     Inf1 --> TC
@@ -1344,6 +1344,127 @@ flowchart BT
     Dep --- Inf2
     Maint --- Inf2
     Inf2 --> Tech
+```
+
+### Continuations to grow diagrams vertically
+
+Portrait pages can only handle a few nodes across (I try to stay around 6).
+To handle this horizontal crowding issue in Mermaid,
+we can use a hierarchical decomposition (aka a "link-out" pattern)
+with one or more continuation claims,
+effectively paging out the argument by
+allowing the diagram to grow vertically instead of horizontally.
+Here is an example.
+
+```
+flowchart BT
+    %% Define the SACM Dot style once
+    classDef sacmDot fill:#000,stroke:#333,width:15px,color:#fff
+
+    %% --- Top Level Section ---
+    C_High["<b>C: Higher level</b><br>The system meets all<br>specified security requirements"]
+    
+    %% Junction for the first set of claims
+    Inf1(("&#x200a;")):::sacmDot
+    Arg1[/"<b>Arg: Argument A</b><br>Direct evidence from<br>primary subsystems"/]
+
+    %% Supporting Claims
+    C1["<b>C1</b>"]
+    C2["<b>C2</b>"]
+    C3["<b>C3</b>"]
+    C4["<b>C4</b>"]
+    C5["<b>C5</b>"]
+    C_Cont["<b>C: Continued</b>"]
+
+    %% Connections
+    C1 --- Inf1
+    C2 --- Inf1
+    C3 --- Inf1
+    C4 --- Inf1
+    C5 --- Inf1
+    C_Cont --- Inf1
+    
+    Arg1 -.-> Inf1
+    Inf1 --> C_High
+
+    %% --- Second Level Section ---
+    %% Junction for the continued claims
+    Inf2(("&#x200a;")):::sacmDot
+
+    %% Supporting Claims 6-10
+    C6["<b>C6</b>"]
+    C7["<b>C7</b>"]
+    C8["<b>C8</b>"]
+    C9["<b>C9</b>"]
+    C10["<b>C10</b>"]
+
+    %% Connections
+    C6 --- Inf2
+    C7 --- Inf2
+    C8 --- Inf2
+    C9 --- Inf2
+    C10 --- Inf2
+    Inf2 --> C_Cont
+```
+
+```mermaid
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
+flowchart BT
+    %% Define the SACM Dot style once
+    classDef sacmDot fill:#000,stroke:#333,width:15px,color:#fff
+
+    %% --- Top Level Section ---
+    C_High["<b>C: Higher level</b><br>The system meets all<br>specified security requirements"]
+    
+    %% Junction for the first set of claims
+    Inf1(("&#x200a;")):::sacmDot
+    Arg1[/"<b>Arg: Argument A</b><br>Direct evidence from<br>primary subsystems"/]
+
+    %% Supporting Claims
+    C1["<b>C1</b>"]
+    C2["<b>C2</b>"]
+    C3["<b>C3</b>"]
+    C4["<b>C4</b>"]
+    C5["<b>C5</b>"]
+    C_Cont["<b>C: Continued</b>"]
+
+    %% Connections
+    C1 --- Inf1
+    C2 --- Inf1
+    C3 --- Inf1
+    C4 --- Inf1
+    C5 --- Inf1
+    C_Cont --- Inf1
+    
+    Arg1 -.-> Inf1
+    Inf1 --> C_High
+
+    %% --- Second Level Section ---
+    %% Junction for the continued claims
+    Inf2(("&#x200a;")):::sacmDot
+
+    %% Supporting Claims 6-10
+    C6["<b>C6</b>"]
+    C7["<b>C7</b>"]
+    C8["<b>C8</b>"]
+    C9["<b>C9</b>"]
+    C10["<b>C10</b>"]
+
+    %% Connections
+    C6 --- Inf2
+    C7 --- Inf2
+    C8 --- Inf2
+    C9 --- Inf2
+    C10 --- Inf2
+    Inf2 --> C_Cont
 ```
 
 ## High-level justification for mapping

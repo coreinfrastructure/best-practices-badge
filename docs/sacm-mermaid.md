@@ -620,7 +620,8 @@ create the solid black dot appearance.
 For each dot's text, we prefer to use a hair space
 (U+200A, UTF-8 e2 80 8a) as the dot's textual contents.
 We have a script `script/fix_reification_spaces.sh` that automatically converts
-any one character (such as a space) in `((" "))` into a hair space.
+any one character (such as a space) within the phrase
+<tt>&#x28;("&nbsp;"))</tt> into a hair space.
 Thus, each dot looks like this: `Inf1((" ")):::sacmDot`.
 
 A hair space is the thinnest visible space.
@@ -668,9 +669,9 @@ as a concession to mermaid's limited abilities.
 
 #### Meaning of +source and +target
 
-Annex C defines exactly two edge types for the AssertedInference reification  
-notation (C.8, p. 59, Figure C14):                                            
-                                                            
+Annex C defines exactly two edge types for the AssertedInference reification
+notation (C.8, p. 59, Figure C14):
+
 - Edge without arrow = +source reference, 1+ ArgumentAssets
   (premises/supporting elements)
 - Edge with arrow = +target reference, a single ArgumentAsset

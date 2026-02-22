@@ -1165,7 +1165,7 @@ flowchart BT
     ASD --> UR
 ```
 
-### Top-Level Assurance Case (assurance-case-toplevel-sacm.odg)
+### BP Badge Top-Level Assurance Case (assurance-case-toplevel-sacm.odg)
 
 **Source**: `docs/assurance-case-toplevel-sacm.odg` in this repository
 (LibreOffice Draw file).
@@ -1183,8 +1183,10 @@ that the argument is organized by lifecycle processes.
 
 **Mapping notes**:
 
-- All claims (TC, Technical, Non-Technical, C and C, and the six lifecycle
-  claims) are asserted Claims → rectangle `["…"]`
+- TC and Technical are asserted Claims → rectangle `["…"]`
+- The eight leaf claims (Non-Technical, C and C, Requirements, Design,
+  Implementation, I&V, Deployment, Maintenance) are AsCited Claims →
+  double rectangle `[["…"]]`, indicating they are fully described elsewhere
 - PO (Process organization) is an ArtifactReference providing
   AssertedContext → cylinder + ↗ `[("… ↗<br>…")]`, connected with `--o` to TC
 - Inf1 is the reification dot for the AssertedInference from
@@ -1204,14 +1206,14 @@ flowchart BT
     TC["<b>TC: Top claim</b><br>System is adequately secure against moderate threats"]
     PO[("<b>PO: Process organization</b> ↗<br>Organized by lifecycle processes (though we do not use a waterfall approach)")]
     Tech["<b>Technical</b><br>Technical lifecycle processes implement security"]
-    NonTech["<b>Non-Technical: Non-Technical Processes</b><br>Non-Technical lifecycle processes implement security"]
-    CC["<b>C and C: Security Certifications & Controls</b><br>Certifications & Controls provide confidence in operating results"]
-    Req["<b>Requirements: Security in Requirements</b><br>Security requirements identified and met by functionality"]
-    Des["<b>Design: Security in Design</b><br>Design has security built in"]
-    Impl["<b>Implementation: Security in Implementation</b><br>Implementation process maintains security"]
-    IV["<b>I&V: Security in Integration & Verification</b><br>Integration & verification confirm security"]
-    Dep["<b>Deployment: Security in Transition & Operation</b><br>Deployment maintains security"]
-    Maint["<b>Maintenance: Security in Maintenance</b><br>Maintenance process maintains security"]
+    NonTech[["<b>Non-Technical: Non-Technical Processes</b><br>Non-Technical lifecycle processes implement security"]]
+    CC[["<b>C and C: Security Certifications & Controls</b><br>Certifications & Controls provide confidence in operating results"]]
+    Req[["<b>Requirements: Security in Requirements</b><br>Security requirements identified and met by functionality"]]
+    Des[["<b>Design: Security in Design</b><br>Design has security built in"]]
+    Impl[["<b>Implementation: Security in Implementation</b><br>Implementation process maintains security"]]
+    IV[["<b>I&V: Security in Integration & Verification</b><br>Integration & verification confirm security"]]
+    Dep[["<b>Deployment: Security in Transition & Operation</b><br>Deployment maintains security"]]
+    Maint[["<b>Maintenance: Security in Maintenance</b><br>Maintenance process maintains security"]]
     Inf1((" "))
     Inf2((" "))
 
@@ -1246,14 +1248,14 @@ flowchart BT
     TC["<b>TC: Top claim</b><br>System is adequately secure against moderate threats"]
     PO[("<b>PO: Process organization</b> ↗<br>Organized by lifecycle processes (though we do not use a waterfall approach)")]
     Tech["<b>Technical</b><br>Technical lifecycle processes implement security"]
-    NonTech["<b>Non-Technical: Non-Technical Processes</b><br>Non-Technical lifecycle processes implement security"]
-    CC["<b>C and C: Security Certifications & Controls</b><br>Certifications & Controls provide confidence in operating results"]
-    Req["<b>Requirements: Security in Requirements</b><br>Security requirements identified and met by functionality"]
-    Des["<b>Design: Security in Design</b><br>Design has security built in"]
-    Impl["<b>Implementation: Security in Implementation</b><br>Implementation process maintains security"]
-    IV["<b>I&V: Security in Integration & Verification</b><br>Integration & verification confirm security"]
-    Dep["<b>Deployment: Security in Transition & Operation</b><br>Deployment maintains security"]
-    Maint["<b>Maintenance: Security in Maintenance</b><br>Maintenance process maintains security"]
+    NonTech[["<b>Non-Technical: Non-Technical Processes</b><br>Non-Technical lifecycle processes implement security"]]
+    CC[["<b>C and C: Security Certifications & Controls</b><br>Certifications & Controls provide confidence in operating results"]]
+    Req[["<b>Requirements: Security in Requirements</b><br>Security requirements identified and met by functionality"]]
+    Des[["<b>Design: Security in Design</b><br>Design has security built in"]]
+    Impl[["<b>Implementation: Security in Implementation</b><br>Implementation process maintains security"]]
+    IV[["<b>I&V: Security in Integration & Verification</b><br>Integration & verification confirm security"]]
+    Dep[["<b>Deployment: Security in Transition & Operation</b><br>Deployment maintains security"]]
+    Maint[["<b>Maintenance: Security in Maintenance</b><br>Maintenance process maintains security"]]
     Inf1((" "))
     Inf2((" "))
 

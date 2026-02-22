@@ -589,13 +589,28 @@ Claim A is said to infer the truth of Claim B." Distinguished from
 AssertedEvidence (C.9), where the source must be an ArtifactReference
 rather than a Claim or ArgumentReasoning.
 
-**Annex C notation**: Reified relationship. Source is a Claim or
-ArgumentReasoning; target is a Claim.
+**Annex C notation**: Reified relationship (by default a filled dot).
+
+The default concrete syntax of AssertedInference is defined in its
+Figure C14, where the "dot represents the AssertedInference
+instance, the edge without an arrow represents the +source reference of the AssertedInference, and the edge with an
+arrow represents the +target reference of the AssertedInference".
+The +source is typically a Claim or ArgumentReasoning, and the
++target is typically a Claim.
+The dot can be replaced with other symbols to indicate information about
+the AssertedInference (e.g., that it is assumed).
+
+In mermaid, these intermediate dots can be a pain to handle.
+So in our SACM notation implementation, we will support the dot for
+AssertedInference and the other relationships like it, but we will
+make it *optional*. The full version is called the reified dot form.
+
+#### Reified dot form
 
 **Mermaid**: Use a reification dot when there are multiple sources, to
 show they jointly constitute one `AssertedInference` rather than
 independent inferences.
-In all reification dots, we prefer to use a hair space
+We prefer to use a hair space
 (U+200A, UTF-8 e2 80 8a) instead of regular space, so that the dot is smaller.
 A hair space is the thinnest visible space.
 We can't have a filled-in dot (as SACM prefers), the mermaid processor
@@ -632,6 +647,63 @@ direct arrow used instead (`C2 --> C1`), since there is no ambiguity
 about joint vs. independent support.
 
 **Assertion states**: use the **Inferential** table above.
+
+???
+nex C defines exactly two edge types for the AssertedInference reification  
+  notation (C.8, p. 59, Figure C14):                                            
+                                                            
+  - Edge without arrow = +source reference — the premises/supporting elements
+  - Edge with arrow = +target reference — the conclusion being supported
+
+  C.8 explicitly states: "Source is a Claim or ArgumentReasoning." So
+  ArgumentReasoning acting as a +source uses the same undirected edge as a Claim
+   source. Figure D3 (p. 69) confirms this — AC1 (an axiomatic Claim) connects
+  to the dot with a plain undirected line, identical to the regular Claim
+  sources G8 and G9.
+
+  There is no defined Annex C graphical notation for a directed connection
+  from/to ArgumentReasoning. The reasoning: ArgumentReasoning[0..1] property
+  that exists in the §11.13 meta-model simply has no corresponding graphical
+  construct in Annex C. Annex C never shows it.
+
+  So your intuition about two connection types turns out to be wrong — Annex C
+  only defines the undirected (+source) connection for ArgumentReasoning. Our
+  current PO --- Inf1 is correct.
+Page 59 is very clear on C.8: the undirected edge is +source and the arrowed  
+  edge is +target. But it doesn't say where ArgumentReasoning fits. Let me read 
+  the next pages to find that
+
+  The distinction in SACM's meta-model (§11.13 AssertedRelationship, §11.12     
+  ArgumentReasoning):                                                           
+                                                                                
+  AssertedRelationship has two separate ways ArgumentReasoning can appear:      
+                                                            
+  1. As a source/premise — if ArgumentReasoning is a subtype of MultiLevelClaim,
+   it can appear in subject: MultiLevelClaim[1..*], the list of premises. Our
+  C.8 section treats this case: AR --- Inf1 (undirected line, same as a Claim
+  source). The ArgumentReasoning is itself one of the logical inputs to the
+  inference.
+  2. In the reasoning role — AssertedRelationship has a separate reasoning:
+  ArgumentReasoning[0..1] property (§11.13). This is a descriptor/annotation on
+  the relationship itself, not a premise. It explains why the inference is
+  valid, not what the premises are. In Annex C notation this is shown with a
+  directed connection from the dot to the ArgumentReasoning — the dot "cites"
+  its reasoning strategy.
+
+  The ODG file supports this: id1 --> id3 has the arrow going from the Inf1 dot
+  to PO, which matches case 2 (the reasoning role). So Inf1 --> PO would be the
+  correct Mermaid representation, not PO --- Inf1.
+
+  Where in the spec: §11.13 (p. 40) defines the reasoning property on
+  AssertedRelationship; the graphical convention for the two cases is in Annex
+  C, specifically the sections on ArgumentReasoning (C.7) and AssertedInference
+  (C.8). Our current C.8 section doesn't clearly distinguish the two cases — it
+  only shows the --- undirected form.
+
+  Honest caveat: I'm confident about the meta-model distinction, but I'd want to
+   verify the exact graphical notation for the reasoning role in Annex C before
+  updating the diagram, since the spec may show it with a dashed line or a
+  different arrowhead rather than a plain
 
 ### C.9 AssertedEvidence
 

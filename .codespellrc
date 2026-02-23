@@ -6,6 +6,7 @@ skip =
   ./config/locales/translation.*.yml,
   ./test/vcr_cassettes,
   ./lib/tasks/translation_instructions_template.rb,
+  ./docs/omg-sacm-comment.md,
   *.rake,*.pdf,*.svg
 
 ignore-words: .codespellignore

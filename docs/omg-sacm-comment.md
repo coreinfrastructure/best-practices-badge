@@ -279,7 +279,10 @@ is therefore `ArgumentAsset[*]`, **not** `Assertion`. The `target` property
 carries the same `ArgumentAsset` type with multiplicity 1.
 
 In the machine-readable definition, both `source` and `target` accept any
-`ArgumentAsset`, including `ArgumentReasoning`. The prose restriction in §11.14
+`ArgumentAsset`, including `ArgumentReasoning`.
+This is consistent with figure 11.1 in the textual spec, which also
+shows this.
+The prose restriction in §11.14
 ("one or more Assertion (premise)") does not appear in the profile.
 
 **Finding 2: `AssertedInference` adds no source/target type constraints.**
@@ -315,11 +318,14 @@ The `reasoning` property is defined on `AssertedRelationship` with type
 bound of 0 (optional), confirming it is a separate, optional annotation property
 coexisting with the `source` property that already accepts `ArgumentReasoning`.
 
+This is also what spec figure 11.1 says (presuming `reasonging` is
+supposed to be `reasoning`).
+
 **Finding 5: `ArtifactAssertedRelationship` contains a property-name typo.**
 
 A separate stereotype `ArtifactAssertedRelationship` (Artifact Package, distinct
-from the Argumentation Package) has its target property named `targt` rather than
-`target`:
+from the Argumentation Package) has its target property
+named `targt` rather than `target` at line 1108:
 
 ```xml
 <ownedAttribute xmi:type="uml:Property"
@@ -330,8 +336,10 @@ from the Argumentation Package) has its target property named `targt` rather tha
     association="_19_0_4_68a022b_1652244685644_369103_6143"/>
 ```
 
-This typo is unrelated to the primary issue but confirms the profile was
-submitted without complete editorial review.
+In the spec figure F.5 (Artifact component of the SACM profile)
+this is shown as the presumably corret `target` and not as `targt`.
+
+This typo is unrelated to the primary issue.
 
 **Significance.**
 
@@ -551,9 +559,9 @@ any change to Annex C or to the model as implemented.
 That said, it's possible that solution 1 (or another solution) was
 intended; if so, that needs to be clear.
 
-## Related errors Found
+## Related issues Found
 
-The following errors were identified in the materials reviewed.
+The following related issues were identified.
 
 ### In OMG Formal/23-05-08 (SACM v2.3)
 
@@ -587,3 +595,4 @@ The following errors were identified in the materials reviewed.
    `AssertedArtifactSupport` and `AssertedArtifactContext`. None of these
    constraints appear as `ownedRule` elements in the corresponding stereotypes
    in the profile. The profile was not cross-checked against the spec's OCL.
+   In a future version the OCL constraints should be in the XML.

@@ -399,6 +399,7 @@ Required changes:
    illustrating this.
 2. **§11.14**: Optionally add an explicit OCL constraint (absent today)
    confirming that `+source` must be `Assertion`:
+
    ```
    self.source->forall(s | s.oclIsKindOf(Assertion))
    ```

@@ -505,6 +505,63 @@ axiomatic, defeated, asCited), which may not be conceptually appropriate
 for a reasoning description. This sub-option is listed for completeness but
 is likely too disruptive to the meta-model's intended semantics.
 
+### Role of `+reasoning` if Solution 2 is Adopted
+
+Under Solution 2, both `+source` and `+reasoning` accept `ArgumentReasoning`
+values for `AssertedInference`, which could lead to inconsistent use without a
+clear semantic distinction. Any revision adopting Solution 2
+should clarify the intended difference between the two.
+
+**Semantic distinction.**
+
+- `+source` with an `ArgumentReasoning` node: the reasoning is a structural
+  participant in the argument. It is a visible premise or warrant that jointly
+  contributes to the inference, shown in Annex C diagrams as a node connected
+  to the reification dot with a plain undirected line.
+- `+reasoning`: a meta-level annotation on the relationship itself.
+  It has no Annex C graphical notation and no structural role in the argument.
+  Perhaps it's more of description of why the relationship exists at all.
+
+**`+reasoning` retains independent utility under Solution 2.**
+
+First, `+reasoning` is the only mechanism for attaching an `ArgumentReasoning`
+to four of the five subtypes. Solution 2a only loosens the source constraint
+for `AssertedInference` (§11.14). For `AssertedEvidence` (§11.15),
+`AssertedArtifactSupport` (§11.17), and `AssertedArtifactContext` (§11.18),
+sources are constrained to `ArtifactReference`; for `AssertedContext` (§11.16),
+sources are `ArtifactReference` or `Claim`. `ArgumentReasoning` cannot appear
+as `+source` in any of those four subtypes. The `+reasoning` property on the
+parent `AssertedRelationship` (§11.13) is therefore the only way to attach an
+`ArgumentReasoning` annotation to those relationships at all.
+
+Second, `+reasoning` has no Annex C graphical notation (see §C.7–§C.12), which
+makes it a natural home for model-level annotation that tools carry internally
+but do not display in diagrams.
+
+Third, the multiplicity difference is meaningful. `+source` permits multiple
+`ArgumentReasoning` values (inherited multiplicity `1..*`),
+while `+reasoning` is
+limited to one (0..1). If the intent is a single concise annotation on the
+relationship, `+reasoning` expresses that constraint directly.
+
+**Risk of ambiguity that a Solution 2 revision should address.**
+
+Under Solution 2, a developer creating an `AssertedInference` has two ways to
+attach an `ArgumentReasoning`: as `+source` (visible in diagrams, structurally
+participating in the inference) or as `+reasoning` (not displayed, annotation
+only). Without clarification, implementers might make inconsistent choices,
+harming model interchange. The revised §11.14 text, and ideally a note in
+§11.13, should state the intended semantic distinction explicitly.
+
+I don't know that distinction is.
+Here's one attempt at it: "Any `AssertedRelationship` `+source` of
+`ArgumentReasoning` nodes are structural premises, visible in Annex C diagrams.
+`+reasoning` is a non-displayed annotation applicable to all five
+`AssertedRelationship` subtypes."
+Note that `+reasoning` is the only `ArgumentReasoning` attachment mechanism
+available for the four subtypes whose source types are constrained to
+`ArtifactReference` or `Claim`."
+
 ## Effect on Annex C Dot Ambiguity
 
 As described above in "How Annex C Identifies the Dot's Relationship Type",

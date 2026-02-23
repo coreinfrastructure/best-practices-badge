@@ -61,7 +61,7 @@ or more Claims (premises) to another Claim (conclusion)." It further states:
 "ArgumentReasoning elements are therefore **related to AssertedInferences,
 AssertedContexts, and AssertedEvidence**."
 
-This explicitly establishes intent: `ArgumentReasoning` is meant to appear
+This indicates the intent: `ArgumentReasoning` is meant to appear
 in diagrams involving these relationship types. The normative mechanism for
 this connection, however, is not made clear in §C.7 or §C.8.
 
@@ -86,10 +86,10 @@ a black dot) with a `Claim` as its target. This figure shows two
 This figure also shows the black dot connected with an undirected line
 to a single `ArgumentReasoning` instance.
 
-This paper discusses an older version of SACM, but this is
-pretty fundamental. It's clearly expected that an ArgumentReasoning
-instance can be visually connected to an AssertedInference, but it's
-not clear what that means.
+This paper discusses an older version of SACM, but the same question
+applies to the current version: it is expected that an ArgumentReasoning
+instance can be visually connected to an AssertedInference, but the
+normative model does not clearly specify what that connection represents.
 
 ### §11.13 AssertedRelationship (p. 40)
 
@@ -306,9 +306,9 @@ has an explicit OCL constraint in §11.15 of the final spec:
 self.source->forall(s | s.oclIsTypeOf(ArtifactReference))
 ```
 
-This absence indicates the profile was not cross-checked against the OCL
-constraints in the spec text, and further illustrates that the source-type
-restrictions in the spec are not consistently formalized.
+This suggests the profile and the final spec text were developed somewhat
+independently. It also illustrates that the source-type restrictions in the
+spec text are not consistently carried through to the machine-readable form.
 
 **Finding 4: `reasoning: ArgumentReasoning[0..1]` is present and separate.**
 
@@ -346,9 +346,8 @@ This typo is unrelated to the primary issue.
 The profile provides machine-readable evidence that the SACM model was
 implemented with `source: ArgumentAsset[*]` (which already admits
 `ArgumentReasoning`) at the `AssertedRelationship` level, with no narrowing
-introduced by `AssertedInference`. This strongly suggests the §11.14 prose
-restriction ("one or more Assertion (premise)")
-was an editorial oversight rather
+introduced by `AssertedInference`. This is consistent with the §11.14 prose
+restriction ("one or more Assertion (premise)") being unintentional rather
 than a deliberate design choice. Under Solution 2a (see below), the spec prose
 would be brought into alignment with the profile definition; no change to the
 model as implemented would be required.
@@ -529,11 +528,11 @@ Specifically:
   are unaffected.
 
 - **Solution 1** (formalize `+reasoning` as a distinct graphical connection):
-  this is the solution most likely to introduce reader confusion, because
-  the undirected plain line would now carry two meanings depending on the
-  connected node's shape. The five-subtype discrimination itself remains
-  intact, but a visually distinct notation for `+reasoning` (e.g., a dashed
-  undirected line) would be preferable to prevent overloading.
+  the undirected plain line would carry two meanings depending on the connected
+  node's shape. The five-subtype discrimination itself remains intact, but a
+  visually distinct notation for `+reasoning` (e.g., a dashed undirected line)
+  would make the two meanings unambiguous without requiring a reader to inspect
+  the node shape.
 
 ## Summary of Proposed Changes
 
@@ -594,5 +593,5 @@ The following related issues were identified.
    `AssertedEvidence`, and §11.17/§11.18 include prose constraints for
    `AssertedArtifactSupport` and `AssertedArtifactContext`. None of these
    constraints appear as `ownedRule` elements in the corresponding stereotypes
-   in the profile. The profile was not cross-checked against the spec's OCL.
-   In a future version the OCL constraints should be in the XML.
+   in the profile. A future version of the profile should include these OCL
+   constraints so that the profile and spec remain consistent.

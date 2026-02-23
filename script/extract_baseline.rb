@@ -26,6 +26,35 @@ controls = parser.parse
 
 puts "Extracted #{controls.length} controls"
 
+# Load existing criteria so new ones can be marked future: true and
+# dropped ones can be re-added with obsolete: true.
+# existing_criteria_data maps criterion key -> { level:, major:, minor:, data: }
+existing_criteria_file = 'criteria/baseline_criteria.yml'
+existing_criteria_data = {}
+if File.exist?(existing_criteria_file)
+  existing_criteria = YAML.safe_load_file(
+    existing_criteria_file,
+    permitted_classes: [Symbol],
+    aliases: true
+  )
+  existing_criteria.each do |level, level_data|
+    next if level == '_metadata'
+
+    level_data.each do |major, major_data|
+      major_data.each do |minor, criteria|
+        criteria.each do |key, data|
+          existing_criteria_data[key] = {
+            level: level, major: major, minor: minor, data: data
+          }
+        end
+      end
+    end
+  end
+  puts "Loaded #{existing_criteria_data.size} existing criterion keys from #{existing_criteria_file}"
+else
+  puts "No existing #{existing_criteria_file}; all criteria will be treated as new"
+end
+
 # Save as JSON for easy review
 json_file = 'tmp/baseline_extracted.json'
 File.write(json_file, JSON.pretty_generate(controls))
@@ -42,6 +71,9 @@ yaml_data = {
   }
 }
 
+new_keys = []
+extracted_keys = controls.pluck(:field_name)
+
 # Group by maturity level
 controls.group_by { |c| c[:maturity_level].first }
         .each do |level, level_controls|
@@ -55,7 +87,10 @@ controls.group_by { |c| c[:maturity_level].first }
     yaml_data[level_key][category]['Controls'] = {}
 
     cat_controls.each do |control|
-      yaml_data[level_key][category]['Controls'][control[:field_name]] = {
+      is_new = !existing_criteria_data.key?(control[:field_name])
+      new_keys << control[:field_name] if is_new
+
+      entry = {
         'category' => 'MUST',
         'description' => control[:requirement],
         'details' => control[:recommendation],
@@ -64,8 +99,25 @@ controls.group_by { |c| c[:maturity_level].first }
         'na_allowed' => true,
         'na_justification_required' => true
       }
+      entry['future'] = true if is_new
+
+      yaml_data[level_key][category]['Controls'][control[:field_name]] = entry
     end
   end
+end
+
+# Re-add criteria dropped from the new version with obsolete: true so they
+# remain findable. We don't act on obsolete criteria yet, but the flag makes
+# future handling straightforward.
+obsolete_keys = existing_criteria_data.keys - extracted_keys
+obsolete_keys.each do |key|
+  info = existing_criteria_data[key]
+  yaml_data[info[:level]] ||= {}
+  yaml_data[info[:level]][info[:major]] ||= {}
+  yaml_data[info[:level]][info[:major]][info[:minor]] ||= {}
+  entry = info[:data].dup
+  entry['obsolete'] = true
+  yaml_data[info[:level]][info[:major]][info[:minor]][key] = entry
 end
 
 yaml_file = 'tmp/baseline_extracted.yml'
@@ -83,6 +135,20 @@ puts "\nSummary by category:"
 controls.group_by { |c| c[:category] }
         .sort.each do |category, cat_controls|
   puts "  #{category}: #{cat_controls.length} controls"
+end
+
+if new_keys.empty?
+  puts "\nNo new criteria (no future: true entries added)"
+else
+  puts "\nNew criteria marked future: true (#{new_keys.length}):"
+  new_keys.each { |key| puts "  #{key}" }
+end
+
+if obsolete_keys.empty?
+  puts "\nNo obsolete criteria (no obsolete: true entries added)"
+else
+  puts "\nObsolete criteria marked obsolete: true (#{obsolete_keys.length}):"
+  obsolete_keys.each { |key| puts "  #{key}" }
 end
 
 puts "\nFirst 3 controls:"

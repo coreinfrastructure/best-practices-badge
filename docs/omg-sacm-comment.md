@@ -3,8 +3,13 @@
 **Specification**: OMG Structured Assurance Case Metamodel (SACM), v2.3
 **Document**: OMG Formal/23-05-08, October 2023
 **Sections affected**: §11.12, §11.13, §11.14, Annex C §C.7, §C.8
+**Machine-readable source**: OMG ptc/22-03-014 (`SACM_profile.xml`, 2022-05-24)
 
 ## Summary
+
+Any Annex C diagram showing `ArgumentReasoning` connected to an
+`AssertedInference` dot is **underspecified** with respect to the normative
+model.
 
 Annex C of SACM v2.3 defines a graphical shape for `ArgumentReasoning` (§C.7,
 Figure C13) and §C.8 describes `AssertedInference` diagrams in which sources
@@ -23,12 +28,8 @@ in diagrams connected with an `AssertedRelationship`, at least
    **no graphical notation** for it.
 
 The result: a diagram showing `ArgumentReasoning` connected by an undirected
-line to a reification dot is underspecified — it cannot be unambiguously
+line to a reification dot is underspecified. It cannot be unambiguously
 serialized to a SACM model instance using only the specification.
-
-In addition, Figure 11.1 defines `+reasonging` from `AssertedRelationship`
-to `ArgumentReasoning`, but this is clearly a typo and should instead be
-`+reasoning` (only `g`, the one at the end).
 
 ## Background
 
@@ -94,9 +95,9 @@ not clear what that means.
 
 `AssertedRelationship` defines:
 
-- `source: ArgumentAsset[1..*]` — the source(s) of the relationship
-- `target: ArgumentAsset[1]` — the target of the relationship
-- `reasoning: ArgumentReasoning[0..1]` — "an optional reference to
+- `source: ArgumentAsset[1..*]`: the source(s) of the relationship
+- `target: ArgumentAsset[1]`: the target of the relationship
+- `reasoning: ArgumentReasoning[0..1]`: "an optional reference to
   [a] description of the reasoning underlying the AssertedRelationship"
 
 Note: the spec text as printed for `reasoning`
@@ -210,6 +211,13 @@ node types provide the secondary discrimination within each group.
 It appears only as a valid **target** of `AssertedContext` (§11.16). This
 omission from the source side is precisely the gap described as the issue below.
 
+Under Solution 2a or 2b (see below), the `AssertedInference` source column
+becomes "`Claim`, `AssertedRelationship`, or `ArgumentReasoning`". No other
+row changes. The discrimination is preserved because `ArgumentReasoning`'s
+open right-bracket shape (§C.7) is visually distinct from `ArtifactReference`'s
+stacked-pages shape (§C.9), so the `AssertedInference` row remains
+distinguishable from `AssertedEvidence` and `AssertedArtifactSupport`.
+
 **Significance for the proposed solutions.**
 
 The discrimination within the arrow group is entirely between
@@ -236,22 +244,126 @@ Consequently, in the proposed solutions discussed later:
   additional rule could be eliminated by using a visually distinct notation
   (e.g., a dashed undirected line) for `+reasoning`.
 
+### Evidence from the OMG XMI Profile (OMG ptc/22-03-014)
+
+The OMG document `ptc/22-03-014` contains a UML Profile for SACM in XMI format
+(`SACM_profile.xml`), exported from MagicDraw Clean XMI Exporter v19.0 and
+dated 2022-05-24. This is a pre-ballot document that predates the final v2.3
+specification (October 2023). It represents SACM as a set of UML stereotypes,
+and its content is directly relevant to the ambiguity described here.
+
+**Finding 1: `AssertedRelationship.source` and `.target` are typed
+`ArgumentAsset`, not `Assertion`.**
+
+The `source` property on the `AssertedRelationship` stereotype
+(xmi:id `_19_0_4_68a022b_1652244041732_228916_5398`) is declared as:
+
+```xml
+<ownedAttribute xmi:type="uml:Property"
+    xmi:id="_19_0_4_68a022b_1652244079675_278704_5441"
+    name="source"
+    visibility="public"
+    type="_19_0_4_68a022b_1652243886557_40724_5238"
+    association="_19_0_4_68a022b_1652244079675_691162_5440">
+  <upperValue xmi:type="uml:LiteralUnlimitedNatural"
+      xmi:id="_19_0_4_68a022b_1652244092460_391867_5452"
+      value="*"/>
+</ownedAttribute>
+```
+
+The `type` attribute `_19_0_4_68a022b_1652243886557_40724_5238` identifies the
+`ArgumentAsset` stereotype (confirmed by its `name="ArgumentAsset"` declaration
+elsewhere in the file). `ArgumentAsset` is the abstract parent of
+`ArtifactReference`, `ArgumentReasoning`, AND `Assertion`. The type of `source`
+is therefore `ArgumentAsset[*]`, **not** `Assertion`. The `target` property
+carries the same `ArgumentAsset` type with multiplicity 1.
+
+In the machine-readable definition, both `source` and `target` accept any
+`ArgumentAsset`, including `ArgumentReasoning`. The prose restriction in §11.14
+("one or more Assertion (premise)") does not appear in the profile.
+
+**Finding 2: `AssertedInference` adds no source/target type constraints.**
+
+The `AssertedInference` stereotype
+(xmi:id `_19_0_4_68a022b_1652244176182_10606_5548`) inherits from
+`AssertedRelationship` and adds only a `base_Class` attribute (standard
+boilerplate for UML profiles). It contains no `ownedRule` elements and no
+narrowing of the `source` or `target` types. The inherited `source:
+ArgumentAsset[*]` is therefore the effective constraint at the machine-readable
+level.
+
+**Finding 3: No OCL constraints exist anywhere in the profile.**
+
+A search of `SACM_profile.xml` for `ownedRule`, `OpaqueExpression`, and OCL
+keywords returns no matches. None of the five `AssertedRelationship` subtypes
+carry any OCL constraints in the profile, not even `AssertedEvidence`, which
+has an explicit OCL constraint in §11.15 of the final spec:
+
+```
+self.source->forall(s | s.oclIsTypeOf(ArtifactReference))
+```
+
+This absence indicates the profile was not cross-checked against the OCL
+constraints in the spec text, and further illustrates that the source-type
+restrictions in the spec are not consistently formalized.
+
+**Finding 4: `reasoning: ArgumentReasoning[0..1]` is present and separate.**
+
+The `reasoning` property is defined on `AssertedRelationship` with type
+`_19_0_4_68a022b_1652243876371_514933_5211`, which the file identifies as the
+`ArgumentReasoning` stereotype (`name="ArgumentReasoning"`). It has a lower
+bound of 0 (optional), confirming it is a separate, optional annotation property
+coexisting with the `source` property that already accepts `ArgumentReasoning`.
+
+**Finding 5: `ArtifactAssertedRelationship` contains a property-name typo.**
+
+A separate stereotype `ArtifactAssertedRelationship` (Artifact Package, distinct
+from the Argumentation Package) has its target property named `targt` rather than
+`target`:
+
+```xml
+<ownedAttribute xmi:type="uml:Property"
+    xmi:id="_19_0_4_68a022b_1652244685644_747127_6144"
+    name="targt"
+    visibility="public"
+    type="_19_0_4_68a022b_1652244401515_877827_5728"
+    association="_19_0_4_68a022b_1652244685644_369103_6143"/>
+```
+
+This typo is unrelated to the primary issue but confirms the profile was
+submitted without complete editorial review.
+
+**Significance.**
+
+The profile provides machine-readable evidence that the SACM model was
+implemented with `source: ArgumentAsset[*]` (which already admits
+`ArgumentReasoning`) at the `AssertedRelationship` level, with no narrowing
+introduced by `AssertedInference`. This strongly suggests the §11.14 prose
+restriction ("one or more Assertion (premise)")
+was an editorial oversight rather
+than a deliberate design choice. Under Solution 2a (see below), the spec prose
+would be brought into alignment with the profile definition; no change to the
+model as implemented would be required.
+
 ## The Problem
 
-Taken together, the above produces a contradiction with no specified
-resolution:
+Taken together, the above produces a lack of clarity
+or possibly contradiction with no specified resolution:
 
 1. **`ArgumentReasoning` cannot be a `+source`** of `AssertedInference`,
+   according to the §11.14 prose,
    because §11.14's prose says sources must be `Assertion`, and
    `ArgumentReasoning` is not a subtype of `Assertion` (Figure 11.1).
-   (This is an informal constraint with no OCL; but if taken literally,
-   it excludes `ArgumentReasoning`.)
+   This is a textual constraint with no OCL, but if taken literally,
+   it excludes `ArgumentReasoning`.
 
 2. **`ArgumentReasoning` could connect via `+reasoning`** (§11.13), but
-   Annex C defines no graphical notation for this property. A reader of
-   Annex C diagrams has no way to determine that an undirected line from
+   Annex C provides no clear statement that any
+   graphical notation is intended for this property. A reader of
+   Annex C has no way to determine with certainty that an undirected line from
    an `ArgumentReasoning` represents `+reasoning` rather than `+source`.
-   This might be the intent, but the specification fails to say this clearly.
+   This might be the intent, but if it is,
+   the specification fails to say this clearly.
 
 3. **`ArgumentReasoning` is clearly intended to appear in diagrams**
    (§11.12, §C.7), but the normative pathway for this appearance is
@@ -312,19 +424,47 @@ sub-options are possible:
 
 #### Sub-option 2a: Revise §11.14 prose and add OCL (minimal change)
 
-Revise the semantics of §11.14 to read "one or more **Assertion or
-ArgumentReasoning** (premise)" and add an explicit OCL constraint:
+The current §11.14 text reads (emphasis on the constraint being changed):
+
+> "AssertedInference association records the inference that a user
+> declares to exist between **one or more Assertion (premise)** and
+> **another Assertion (conclusion)**. It is important to note that such
+> a declaration is itself an assertion on behalf of the user."
+
+**Proposed revised text:**
+
+> "AssertedInference association records the inference that a user
+> declares to exist between **one or more `Assertion` or
+> `ArgumentReasoning` (premise)** and **another `Assertion`
+> (conclusion)**. It is important to note that such a declaration is
+> itself an assertion on behalf of the user."
+
+**Proposed OCL constraint** (to be added to §11.14, matching the pattern
+of §11.15, §11.17, §11.18):
 
 ```
 self.source->forall(s | s.oclIsKindOf(Assertion) or
                         s.oclIsKindOf(ArgumentReasoning))
+self.target.oclIsKindOf(Assertion)
 ```
 
+The source constraint explicitly permits `ArgumentReasoning` alongside
+`Assertion` (including all its subtypes: `Claim`, `AssertedRelationship`,
+and all five relationship subtypes). The target constraint formalizes the
+existing prose requirement that the conclusion be an `Assertion`.
+
+This wording is consistent with the `source: ArgumentAsset[*]` type
+declared in the OMG XMI profile (ptc/22-03-014), narrowed to exclude
+`ArtifactReference` (which belongs to `AssertedEvidence` and
+`AssertedArtifactSupport`) while including `ArgumentReasoning`.
+It also aligns with §11.12's explicit statement that `ArgumentReasoning`
+is "related to AssertedInferences, AssertedContexts, and AssertedEvidence."
+
 This is the smallest targeted change. It brings the normative constraint
-into agreement with the evident intent of Annex C, while leaving the rest
-of the meta-model untouched. The `+reasoning` property of §11.13 would
-remain available for metadata annotation purposes, distinct from the
-`+source` role in a diagram.
+into agreement with the evident intent of Annex C and the profile, while
+leaving the rest of the meta-model untouched. The `+reasoning` property
+of §11.13 would remain available for metadata annotation purposes,
+distinct from the `+source` role in a diagram.
 
 #### Sub-option 2b: Introduce per-subtype OCL constraints in §11.14 (and siblings)
 
@@ -398,14 +538,52 @@ Specifically:
 | Change Annex C | Yes | No | No | No |
 | Semantic impact | Minimal | Minimal | Minimal | Significant |
 | Dot ambiguity introduced | No | No | No | No |
+| Consistent with XMI profile (ptc/22-03-014) | No | **Yes** | **Yes** | No |
 
-I recommend **solution 1**, though **solution 2a** is also compelling.
+I recommend **solution 2a**, though **solution 1** is also plausible.
 
-In addition:
+The XMI profile evidence (ptc/22-03-014) provides additional support for
+**Solution 2a**: the machine-readable model already types `source` as
+`ArgumentAsset`, which inherently permits `ArgumentReasoning`. Solution 2a
+would bring the spec prose into agreement with the profile without requiring
+any change to Annex C or to the model as implemented.
 
-1. **§11.13**: Fix the typographical error: "an optional reference to
-   **the a** description" → "an optional reference to **the** description".
-   (or **a**).
-2. **Figure 11.1** defines `+reasonging` from `AssertedRelationship`
-to `ArgumentReasoning`, but this is clearly a typo and should instead be
-`+reasoning` (only `g`, the one at the end).
+That said, it's possible that solution 1 (or another solution) was
+intended; if so, that needs to be clear.
+
+## Related errors Found
+
+The following errors were identified in the materials reviewed.
+
+### In OMG Formal/23-05-08 (SACM v2.3)
+
+1. **§11.13, p. 40**: `reasoning` property description: the printed text reads
+   "an optional reference to **the a** description of the reasoning underlying
+   the AssertedRelationship". The phrase "the a" is a typographical error;
+   it should read "a" or "the" (probably "the").
+
+2. **Figure 11.1, p. 35**: the association from `AssertedRelationship` to
+   `ArgumentReasoning` is labeled `+reasonging` (with a transposed `g`).
+   The correct spelling is `+reasoning`.
+
+### In OMG ptc/22-03-014 (`SACM_profile.xml`)
+
+3. **`ArtifactAssertedRelationship` stereotype**: the `target` property is
+   named `targt` (missing `e`):
+
+   ```xml
+   <ownedAttribute xmi:type="uml:Property"
+       xmi:id="_19_0_4_68a022b_1652244685644_747127_6144"
+       name="targt"
+       .../>
+   ```
+
+   The intended name is `target`, consistent with the parallel `source`
+   property and with the `AssertedRelationship` stereotype.
+
+4. **OCL constraints absent from profile**: §11.15 includes an explicit OCL
+   constraint (`self.source->forall(s | s.oclIsTypeOf(ArtifactReference))`) for
+   `AssertedEvidence`, and §11.17/§11.18 include prose constraints for
+   `AssertedArtifactSupport` and `AssertedArtifactContext`. None of these
+   constraints appear as `ownedRule` elements in the corresponding stereotypes
+   in the profile. The profile was not cross-checked against the spec's OCL.

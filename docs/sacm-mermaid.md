@@ -278,8 +278,8 @@ flowchart BT
 #### Assumed
 
 Declared without any supporting evidence or argumentation.
-Mermaid cannot render the SACM spec's notation at all;
-the word `ASSUMED` is at least clear.
+Mermaid cannot render the SACM spec's notation at all.
+So we instead add the word `ASSUMED`, which is at least clear.
 
 **Approach** — a required `ASSUMED` suffix on its own line:
 

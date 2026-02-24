@@ -1598,9 +1598,14 @@ flowchart BT
     classDef sacmDot fill:#000,stroke:#000
 
     %% --- Top Level Section ---
-    C_High["<a href="#Introduction"><b>C: Higher level</b><br>The system meets all<br>specified security requirements</a>"]
+    %% A fragment URL "#..." does not work, because it's in an iframe
+    %% so the relative jump is inside a sandbox dedicated to only the image.
+    C_High["<a href="https://github.com/coreinfrastructure/best-practices-badge/blob/main/docs/sacm-mermaid.md#Introduction"><b>C: Higher level</b><br>The system meets all<br>specified security requirements</a>"]
     Inf1((" ")):::sacmDot
     C1["<b>C1</b>"]
+
+    % I doubt this will work
+    click C1 "https://github.com/coreinfrastructure/best-practices-badge/blob/main/docs/sacm-mermaid.md#Introduction"
 
     C1 --- Inf1
     Inf1 --> C_High

@@ -692,7 +692,7 @@ both the relationship family and the assertion state. The dot can be
 replaced with other symbols to indicate information about the assertion
 state (e.g., that it is assumed).
 
-#### Subclass determination
+#### Subclass determination of AssertedRelationship
 
 The five concrete subclasses of AssertedRelationship
 are AssertedInference (C.8), AssertedEvidence
@@ -703,9 +703,13 @@ graphical notation (by default as a small black dot).
 The subclass is implied entirely by the types of the
 +source and +target nodes and the arrow-head style on the +target edge.
 
+If you point to the target with
+a normal arrow `-->` that's a normal (non-context) relationship;
+if you use context arrow `--o` that means you're defining context.
+
 In short, you can simply draw the relationship, and the correct one
-will be automatically determined. However, for precision,
-here is how they are determined:
+will be automatically determined.
+However, for precision, here is how they are determined:
 
 | Subclass | Source type | Target type | Arrow style | SACM ref |
 |---|---|---|---|---|
@@ -727,12 +731,18 @@ ArtifactReferences, `-->` means AssertedArtifactSupport and `--o` means
 AssertedArtifactContext. When source is ArtifactReference and target is
 Claim, `-->` means AssertedEvidence and `--o` means AssertedContext.
 
-#### Reified dot form
+#### Reified form
 
-**Mermaid**: Use a reification dot when there are multiple sources, to
-show they jointly constitute one association.
+In SACM an AssertedRelationship is "reified", that is, it has
+a symbol on the diagram.
+By default an AssertedRelationship has the `assertedDeclaration` value
+of `asserted`, and this is represented by a small black dot
+(aka "reification dot" or "sacmDot").
+If the `assertedDeclaration` is something else, it will have a different
+form; for example, if it's "needsSupport" a "..." is there istead.
 
-We use a class definition `classDef sacmDot fill:#000,stroke:#000` to
+For the default `asserted`
+we use a class definition `classDef sacmDot fill:#000,stroke:#000` to
 create the solid black dot appearance.
 For each dot's text, we prefer to use a hair space
 (U+200A, UTF-8 e2 80 8a) as the dot's textual contents.
@@ -782,25 +792,29 @@ Src1 --- Dot((" ")):::sacmDot --> Tgt
 Src2 --- Dot
 ```
 
-**If expanded shapes were supported**: Use `f-circ` (the filled/junction
-circle) might be better instead of `((" ")):::sacmDot`,
+**If expanded shapes were supported**: We might someday
+use `f-circ` (the filled/junction
+circle) instead of `((" ")):::sacmDot` for the sacmDot,
 as it's a filled circle without any special styling.
 
 Syntax: `Dot@{ shape: f-circ }`.
 
 #### Our extension: Unreified (single-source) form
 
-When there is only a single source and the dot need not be referenced
-(no +metaClaim attached to the relationship), the dot may be omitted and a
-direct edge used instead for simple cases:
-
-```
-Src --> Tgt    (inferential: AssertedInference, AssertedEvidence, AssertedArtifactSupport)
-Src --o Tgt    (context: AssertedContext, AssertedArtifactContext)
-```
-
-This is our extension to SACM graphical notation, not in the original spec,
+We add an extension to SACM graphical notation, not in the original spec,
 as a concession to mermaid's limited graphical capabilities.
+
+When an AssertedRelationship has only a single source,
+it is `asserted` (the default), and there's no need to
+reference the dot (no +metaClaim attached to the relationship),
+the dot may be omitted and a
+direct edge may used instead for simple cases:
+
+```
+Src --> Tgt  (inferential: AssertedInference, AssertedEvidence, AssertedArtifactSupport)
+Src --o Tgt  (context: AssertedContext, AssertedArtifactContext)
+```
+
 The same assertion-state edge decorations apply to the direct Src→Tgt edge
 as to the Dot→Tgt edge in the reified form.
 

@@ -141,7 +141,7 @@ Reasons:
 * padding: Reducing padding inside a node gives a little more space for multiple nodes on a line.
 
 As discussed later,
-`sacmDot` will help represent an AssertedRelationship, and
+a `sacmDot` is the default way to represent an AssertedRelationship, and
 (if used) `abstractClaim` will help represent a Claim that is abstract.
 
 ### Layout and direction
@@ -672,13 +672,18 @@ Thus, we would retain the ↗ icon.
 ### AssertedRelationship (C.8–C.12)
 
 **SACM §11.13 (p. 40)**: AssertedRelationship is the abstract superclass
-for all asserted associations between ArgumentAssets. It declares that a
+for all asserted associations between ArgumentAssets (such as Claims).
+An AssertedRelationship declares that a
 connection exists between one or more +source ArgumentAssets and a single
 +target ArgumentAsset. As a subclass of Assertion, it carries an
 `assertionDeclaration` attribute (default: asserted) and an optional
 +metaClaim. It also has an `isCounter` flag (default false) that records
 whether the relationship counters its declared purpose (e.g.,
 counter-evidence for AssertedEvidence with isCounter=true).
+
+The most common kind of AssertedRelationship is an
+AssertedInference (C.8) that shows that a set of +source Claims
+justify a +target Claim.
 
 **Annex C notation**: A reified relationship. The relationship instance is
 rendered as a filled dot; +source edges enter the dot without arrowheads,
@@ -687,13 +692,20 @@ both the relationship family and the assertion state. The dot can be
 replaced with other symbols to indicate information about the assertion
 state (e.g., that it is assumed).
 
-The five concrete subclasses — AssertedInference (C.8), AssertedEvidence
+#### Subclass determination
+
+The five concrete subclasses of AssertedRelationship
+are AssertedInference (C.8), AssertedEvidence
 (C.9), AssertedContext (C.10), AssertedArtifactSupport (C.11), and
-AssertedArtifactContext (C.12) — all look identical as dots in the SACM
-graphical notation. The subclass is implied entirely by the types of the
+AssertedArtifactContext (C.12).
+The all look identical in the SACM
+graphical notation (by default as a small black dot).
+The subclass is implied entirely by the types of the
 +source and +target nodes and the arrow-head style on the +target edge.
 
-#### Subclass determination
+In short, you can simply draw the relationship, and the correct one
+will be automatically determined. However, for precision,
+here is how they are determined:
 
 | Subclass | Source type | Target type | Arrow style | SACM ref |
 |---|---|---|---|---|
@@ -704,10 +716,10 @@ graphical notation. The subclass is implied entirely by the types of the
 | AssertedArtifactContext | ArtifactReference | ArtifactReference | `--o` context | §11.18 |
 
 In mermaid notation, node shapes make types recognizable:
-Claims use rectangles (`["..."]`) or rounded rectangles (`(["..."])`);
+Claims typically use rectangles (`["..."]`),
 ArtifactReferences use cylinders with ↗ (`[("Name ↗")]`);
-ArgumentReasoning uses parallelograms (`[/"..."/]`);
-AssertedRelationship instances use the reified dot `((" ")):::sacmDot`.
+ArgumentReasoning uses parallelograms (`[/"..."/]`).
+Instead, AssertedRelationship instances use the reified dot `((" ")):::sacmDot`.
 
 The arrow style is the sole differentiator between subclass pairs that
 share the same source and target types: when both source and target are
@@ -770,11 +782,17 @@ Src1 --- Dot((" ")):::sacmDot --> Tgt
 Src2 --- Dot
 ```
 
-#### Unreified (single-source) form
+**If expanded shapes were supported**: Use `f-circ` (the filled/junction
+circle) might be better instead of `((" ")):::sacmDot`,
+as it's a filled circle without any special styling.
+
+Syntax: `Dot@{ shape: f-circ }`.
+
+#### Our extension: Unreified (single-source) form
 
 When there is only a single source and the dot need not be referenced
 (no +metaClaim attached to the relationship), the dot may be omitted and a
-direct edge used instead:
+direct edge used instead for simple cases:
 
 ```
 Src --> Tgt    (inferential: AssertedInference, AssertedEvidence, AssertedArtifactSupport)
@@ -782,15 +800,9 @@ Src --o Tgt    (context: AssertedContext, AssertedArtifactContext)
 ```
 
 This is our extension to SACM graphical notation, not in the original spec,
-as a concession to mermaid's limited support for reified associations.
+as a concession to mermaid's limited graphical capabilities.
 The same assertion-state edge decorations apply to the direct Src→Tgt edge
 as to the Dot→Tgt edge in the reified form.
-
-**If expanded shapes were supported**: Use `f-circ` (the filled/junction
-circle) instead of `((" ")):::sacmDot` — the filled circle matches the spec's
-solid filled dot more closely than an open circle.
-
-Syntax: `Dot@{ shape: f-circ }`.
 
 #### Assertion states for relationships (C.8–C.12)
 
@@ -805,9 +817,7 @@ inherit `assertionDeclaration` from the abstract `Assertion` class
 (§11.10, p. 39), but they are encoded differently and do not
 interfere. A Claim node can carry `assumed` (stadium shape + `~`
 prefix) while the relationship pointing to it simultaneously carries
-`defeated` (`Dot --x Tgt`). The visual motifs reuse similar symbols
-(bracket feet, three dots) in both contexts, but they apply to
-different objects.
+`defeated` (`Dot --x Tgt`).
 
 **Inferential** (`-->` base) — used by AssertedInference (C.8),
 AssertedEvidence (C.9), and AssertedArtifactSupport (C.11):

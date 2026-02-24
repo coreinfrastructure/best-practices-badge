@@ -525,7 +525,7 @@ flowchart BT
     AR1[/"<b>AR1: Long reasoning name</b><br>Reasoning statement"/]
 ```
 
-If we fully controlled the generated HTML or CSS, we *could* create 
+If we fully controlled the generated HTML or CSS, we *could* create
 this shape by using a rectangle and selectively showing borders.
 However, this won't work on GitHub; for security reasons they
 disable inline styles and such for the default renderer.
@@ -536,9 +536,9 @@ For completeness, here's what that would look like:
 graph TD
     %% Disable the node's actual border and fill
     %% Then we draw the 'Half Box' using an HTML div
-    A[Claim] --> B["<div style='border-left:2px solid #333; 
-                             border-top:2px solid #333; 
-                             border-bottom:2px solid #333; 
+    A[Claim] --> B["<div style='border-left:2px solid #333;
+                             border-top:2px solid #333;
+                             border-bottom:2px solid #333;
                              padding:10px;'>Argument Reasoning</div>"]
     style B fill:none,stroke-width:0px
 ```
@@ -1604,7 +1604,7 @@ flowchart BT
     Inf1((" ")):::sacmDot
     C1["<b>C1</b>"]
 
-    % I doubt this will work
+    %% I doubt this will work
     click C1 "https://github.com/coreinfrastructure/best-practices-badge/blob/main/docs/sacm-mermaid.md#Introduction"
 
     C1 --- Inf1

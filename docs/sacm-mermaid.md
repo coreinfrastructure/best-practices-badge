@@ -217,7 +217,18 @@ node, making each node harder to edit.
 We'll just use bold text instead to clearly differentiate
 the name. This is still clear, yet it's much easier to read and edit later.
 
-## Mapping SACM to mermaid
+### SACM Packages
+
+SACM supports dividing assurance cases into a variety of "packages".
+We're just drawing diagrams, but it'd be good to have conventions that
+matched the SACM metamodel.
+
+We will pretend that every diagram represents a small package
+named "Pkg:NAME" where "NAME" is the primary ArgumentAsset node
+(in practice a Claim). Claims that are defined further elsewhere
+would be shown as asCited claims, with their own main package.
+
+## Mapping SACM diagram symbols to mermaid
 
 For each SACM graphical element identified in Annex C, here is our
 recommended Mermaid representation.
@@ -1566,6 +1577,33 @@ flowchart BT
     C9 --- Inf2
     C10 --- Inf2
     Inf2 --> C_Cont
+```
+
+### Test mermaid figure
+
+Here is a further test:
+
+```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
+flowchart BT
+    classDef sacmDot fill:#000,stroke:#000
+
+    %% --- Top Level Section ---
+    C_High["<a href="#Introduction"><b>C: Higher level</b><br>The system meets all<br>specified security requirements</a>"]
+    Inf1((" ")):::sacmDot
+    C1["<b>C1</b>"]
+
+    C1 --- Inf1
+    Inf1 --> C_High
 ```
 
 ## High-level justification for mapping

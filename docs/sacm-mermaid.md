@@ -486,9 +486,12 @@ reasoning involved." Analogous to a "Strategy" node in GSN.
 vertical side and two short horizontal lines are drawn, forming a
 `]` bracket — containing name and statement.
 
-**Mermaid**: The parallelogram `[/..../]` is the closest available
-shape — visually non-rectangular and conventionally used for
-strategy/reasoning in GSN-influenced notations:
+**Mermaid**: Mermaid has nothing like this shape available.
+So we will use a parallelogram `[/..../]`. This is a somewhat similar shape,
+and clearly distinct from the rectangle.
+In addition, this is conventionally used for
+strategy/reasoning in GSN-influenced notations, so many readers will
+immediately know what the shape means:
 
 ```
 AR1[/"<b>AR1: Long reasoning name</b><br>Reasoning statement"/]
@@ -509,6 +512,24 @@ config:
 ---
 flowchart BT
     AR1[/"<b>AR1: Long reasoning name</b><br>Reasoning statement"/]
+```
+
+If we fully controlled the generated HTML or CSS, we *could* create 
+this shape by using a rectangle and selectively showing borders.
+However, this won't work on GitHub; for security reasons they
+disable inline styles and such for the default renderer.
+Using HTML to do this on each one would also be annoying.
+For completeness, here's what that would look like:
+
+```
+graph TD
+    %% Disable the node's actual border and fill
+    %% Then we draw the 'Half Box' using an HTML div
+    A[Claim] --> B["<div style='border-left:2px solid #333; 
+                             border-top:2px solid #333; 
+                             border-bottom:2px solid #333; 
+                             padding:10px;'>Argument Reasoning</div>"]
+    style B fill:none,stroke-width:0px
 ```
 
 ### ArtifactReference (C.4)
@@ -534,11 +555,13 @@ document, and not represented in the diagram itself.
 with an upward-right arrow (↗) in the
 fold, indicating a reference to an external artifact or evidence.
 
-**Mermaid**: No document shape is available in GitHub's Mermaid
+**Mermaid**: No document shape is available in the *current*
+version of GitHub's Mermaid
 renderer. In particular, nothing is like the multi-page document shape
 (LibreOffice can do this easily with shadows,
 but we don't have that option here).
-Use a cylinder/database shape `[(...)]` to hint at "stored evidence" and
+So we will
+use a cylinder/database shape `[(...)]` to hint at "stored evidence" and
 append `↗` to the name to preserving the "external reference" arrow
 cue from the spec notation:
 
@@ -568,9 +591,12 @@ rounded rectangles) than a stadium/pill would be, reducing the risk of
 misreading a diagram at a glance. The ↗ icon is retained from the spec
 to indicate that this is a reference to external information.
 
-**If expanded shapes were supported**: The `docs` shape would better
+**If expanded shapes were supported**: The Mermaid
+`docs` shape would better
 render the spec's document symbol, eliminating the cylinder
 workaround and matching the source notation much more closely.
+GitHub doesn't yet support this, but they probably will eventually,
+so we could switch to this once it becomes available:
 
 Syntax:
 

@@ -204,18 +204,19 @@ just before this line break; this attempts to emulate its appearance
 in SACM and remind readers that we're referencing external materials.
 
 When used in an assurance case, we expect that bolded name
-would be turned into a hyperlink, that is, it'd be
-surrounded by <tt>&lt;a href="#..."&gt;</tt>NAME<tt>&lt;/a&gt;</tt>.
+would be turned into a hyperlink (using `click`).
 That link would go to the corresponding heading (if present) with
 the same name that would provide more detail.
-This would make it easy to learn more detail.
+This makes it easy to learn more detail.
 
 We *could* left-align the name, and center the description, as this is the
 SACM convention.
 However, this would require a lot of extra ceremony in each
 node, making each node harder to edit.
-We'll just use bold text instead to clearly differentiate
-the name. This is still clear, yet it's much easier to read and edit later.
+It also risks getting stripped out by GitHub.
+So we'll just use bold text instead to clearly differentiate
+the name. This is still clear, using bold is common anyway,
+and this is much easier to read and edit later.
 
 ### SACM Packages
 
@@ -224,9 +225,53 @@ We're just drawing diagrams, but it'd be good to have conventions that
 matched the SACM metamodel.
 
 We will pretend that every diagram represents a small package
-named "Pkg:NAME" where "NAME" is the primary ArgumentAsset node
+named "Package NAME" where "NAME" is the primary ArgumentAsset node
 (in practice a Claim). Claims that are defined further elsewhere
 would be shown as asCited claims, with their own main package.
+
+Our packages will be smaller than typical, because mermaid's
+automatic layouts algorithm is limited and we're presenting
+information in portrait (not landscape). That's not necessarily
+bad; each diagram will be easier to follow.
+
+### Hyperlinks
+
+One *great* thing about this approach is that it's easy to enable
+hyperlinks from a diagram node to its contents (and defining
+package if there is one).
+GitHub supports both mermaid `click` and HTML `a href`, but
+`click` is easier to read and lets users click on the *entire*
+icon (not just the name), so we'll use `click`. 
+Unfortunately, mermaid diagrams are rendered
+in an iframe, so relative fragment URLs
+like `#name` won't work; you must use the absolute URL (`https:...`).
+This means you'll always refer to a specific branch (normally the main branch,
+not the current branch).
+So after every node with a header that can jumped to, add:
+
+```
+click ID "ABSOLUTE_URL#NAME_AS_FRAGMENT"
+```
+
+In each node, after the mermaid assurance diagram if there is one, add this:
+
+```
+Referenced by: [Package NAME](#NAME_AS_FRAGMENT)
+```
+
+In the "Referenced by" don't include NAME itself; if there's more than one,
+use a comma-separated list. While it's unfortunate these have to be
+created and maintained by hand, it's not that hard, and it means readers
+can easily move around the document.
+
+The `NAME_AS_FRAGMENT` is simply the header converted into a fragment id
+using GitHub's usual algorithm:
+
+1. Convert all characters to lowercase.
+2. Remove everything except Unicode alphanumerics, hyphens, and spaces.
+3. Convert spaces to hyphens.
+4. Collapse multiple adjacent hyphens into one hyphen.
+4. Remove leading and trailing hyphens.
 
 ## Mapping SACM diagram symbols to mermaid
 

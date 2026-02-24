@@ -102,14 +102,18 @@ we've determined that GitHub's implementation currently doesn't
 support expanded node shapes in Mermaid flowcharts (available in v11.3.0+).
 For our purposes we must stick to what GitHub supports.
 
-### Mermaid Frontmatter
+### Mermaid Embedding
 
-To indicate a mermaid diagram begin its
-first line with <tt>&#96;&#96;&#96;mermaid</tt>
-and the following line should just have `---` to indicate
-the start of frontmatter. Use this frontmatter:
+To embed a mermaid diagram in markdown use this format.
+This indicates
+that it's a mermaid diagram, uses mermaid frontmatter to configure
+its appearance, and sets some styles if desired.
+Then replace
+`INSERT-FIGURE-HERE`:
 
-~~~~yaml
+`````
+```mermaid
+---
 config:
   theme: neutral
   flowchart:
@@ -118,7 +122,14 @@ config:
     rankSpacing: 60
     nodeSpacing: 45
     padding: 15
-~~~~
+---
+flowchart BT
+    classDef sacmDot fill:#000,stroke:#000
+    %% If you have an AbstractClaim:
+    classDef abstractClaim stroke-width:2px,stroke-dasharray: 5 5;
+    INSERT-FIGURE-HERE
+```
+`````
 
 Reasons:
 
@@ -129,29 +140,21 @@ Reasons:
 * nodeSpacing: Assurance cases can get "crowded." This helps us have slightly more horizontal nodes.
 * padding: Reducing padding inside a node gives a little more space for multiple nodes on a line.
 
-After the front matter have another line with `---`, then the
-diagram, then a final <tt>&#96;&#96;&#96</tt> to end the diagram.
+As discussed later,
+`sacmDot` will help represent an AssertedRelationship, and
+(if used) `abstractClaim` will help represent a Claim that is abstract.
 
 ### Layout and direction
 
-Use `flowchart BT` (bottom-to-top) as the recommended layout.
+We use `flowchart BT` (bottom-to-top) as the recommended layout.
 In this layout sub-claims and evidence appear at the bottom,
 the top-level claim appears at the top,
 and edges point upward from supporting elements to the claim they support.
 This matches the SACM arrow direction and produces an intuitive hierarchy.
 
-**Alternative**: `flowchart TD` (top-down) with edges reversed so
-the parent claim points down to its sub-claims.
-This is common in many argument-tree tools and reads as decomposition,
-but reverses the SACM arrow semantics.
-`flowchart LR` is a further alternative for wide diagrams.
-
-Whichever direction is chosen, document the convention explicitly
-in the diagram or accompanying text.
-
 ### Name, gid (id), and description
 
-In SACM, model node elements like "claim" have possibly 3 related values:
+In SACM, model node elements like Claim have possibly 3 related values:
 
 * `gid` String[0..1]:
   an optional identifier that is unique within the scope of the model instance.
@@ -249,7 +252,7 @@ Since annex C says "statement" here, we will too.
 
 #### Asserted (default)
 
-The normal, fully-supported state. Plain rectangle:
+This normal, fully-supported state. Plain rectangle:
 
 ```
 C1["<b>C1: Claim long name</b><br>statement"]
@@ -275,8 +278,10 @@ flowchart BT
 #### Assumed
 
 Declared without any supporting evidence or argumentation.
+Mermaid cannot render the SACM spec's notation at all;
+the word `ASSUMED` is at least clear.
 
-**Approach** — stadium/pill shape with a required `ASSUMED` suffix:
+**Approach** — a required `ASSUMED` suffix on its own line:
 
 ```
 C1["<b>C1: Claim long name</b><br>Assumed statement<br>ASSUMED"]
@@ -311,8 +316,10 @@ ASSUMED is used instead.
 
 Declared as requiring further evidence or argumentation.
 Append `...` to signal incompleteness, echoing the three dots
-shown below the rectangle in the spec. These would typically be
+shown below the rectangle in the spec. This marking would typically be
 forced (with a break) to be below the other text.
+Mermaid cannot render the spec's dots as part of bottom rectangle line,
+but what is *can* show is close enough.
 
 ```
 C1["<b>C1: Claim long name</b><br>Statement needing support<br>..."]
@@ -346,11 +353,12 @@ not 3 dots, but this is SACM.
 Intentionally declared as axiomatically true; no further
 support needed or expected.
 
-Plain rectangle with `===` suffix, typically on its own line via
-`<br>` to echo the spec's double bottom line:
+In SACM this is an extra line under the rectangle; we'll simulate that
+by adding a text suffix on its own line of three "━" characters
+(U+2501, Box Drawings Heavy Horizontal).
 
 ```
-C1["<b>C1: Long claim name</b><br>Axiomatic statement<br>==="]
+C1["<b>C1: Long claim name</b><br>Axiomatic statement<br>━━━"]
 ```
 
 Rendered:
@@ -367,7 +375,7 @@ config:
     padding: 15
 ---
 flowchart BT
-    C1["<b>C1: Long claim name</b><br>Axiomatic statement<br>==="]
+    C1["<b>C1: Long claim name</b><br>Axiomatic statement<br>━━━"]
 ```
 
 #### Defeated
@@ -436,11 +444,12 @@ If space is tight, the cited statement could be omitted.
 #### Abstract
 
 Part of a pattern or template, not a concrete instance.
-The spec uses a dashed rectangle (not available in Mermaid).
-Use curly braces around the name, as it's easy to type:
+The spec uses a dashed rectangle, which is directly available in Mermaid
+through styles.
 
 ```
-C1["<b>{C1: Claim long name}</b><br>Abstract statement"]
+    C1["<b>C1: Long claim name</b><br>Abstract statement]:::abstractClaim
+
 ```
 
 Rendered:
@@ -457,7 +466,8 @@ config:
     padding: 15
 ---
 flowchart BT
-    C1["<b>{C1: Claim long name}</b><br>Abstract statement"]
+    classDef abstractClaim stroke-width:2px,stroke-dasharray: 5 5;
+    C1["<b>C1: Long claim name</b><br>Abstract statement]:::abstractClaim
 ```
 
 ### C.7 ArgumentReasoning

@@ -226,9 +226,9 @@ This section doesn't follow the *order* of Annex C.
 We instead will focus on the most important mappings first, starting
 with Claim.
 However, in this section we do discuss every graphical notation
-in Annex C.
+defined in the SACM specification Annex C.
 
-### C.6 Claim
+### Claim (C.6)
 
 **SACM §11.11 (p. 39)**: "Claims are used to record the propositions
 of any structured argument contained in an ArgumentPackage.
@@ -470,7 +470,7 @@ flowchart BT
     C1["<b>C1: Long claim name</b><br>Abstract statement]:::abstractClaim
 ```
 
-### C.7 ArgumentReasoning
+### ArgumentReasoning (C.7)
 
 **SACM §11.12 (p. 40)**: "ArgumentReasoning can be used to provide
 additional description or explanation of the asserted relationship.
@@ -511,7 +511,7 @@ flowchart BT
     AR1[/"<b>AR1: Long reasoning name</b><br>Reasoning statement"/]
 ```
 
-### C.4 ArtifactReference
+### ArtifactReference (C.4)
 
 **SACM §11.9 (p. 38)**: "ArtifactReference enables the citation of
 an artifact as information that relates to the structured argument."
@@ -587,7 +587,7 @@ it represents externality, while the stacked rectangles indicates a
 document that is likely to have multiple pages.
 Thus, we would retain the ↗ icon.
 
-### C.8 AssertedInference
+### AssertedInference (C.8)
 
 **SACM §11.14 (p. 40)**: "AssertedInference association records the
 inference that a user declares to exist between one or more Assertion
@@ -704,7 +704,7 @@ This is why the annex C notation can use reified dots everywhere for different
 types of AssertedRelationships and still "know" which one is being used
 (because of the types of +source and +target).
 
-### C.9 AssertedEvidence
+### AssertedEvidence (C.9)
 
 **SACM §11.15 (p. 41)**: "AssertedEvidence association records the
 declaration that one or more artifacts of Evidence (cited by
@@ -739,7 +739,7 @@ flowchart BT
 
 **Assertion states**: use the **Inferential** table above.
 
-### C.10 AssertedContext
+### AssertedContext (C.10)
 
 **SACM §11.16 (p. 41)**: "AssertedContext can be used to declare that
 the artifact cited by an ArtifactReference(s) provides the context
@@ -781,7 +781,7 @@ a `ctx` label to preserve the context meaning.
 
 **Assertion states**: use the **Context** table above.
 
-### C.11 AssertedArtifactSupport
+### AssertedArtifactSupport (C.11)
 
 **SACM §11.17 (p. 41)**: "AssertedArtifactSupport records the
 assertion that one or more artifacts support another artifact."
@@ -820,7 +820,7 @@ flowchart BT
 
 **Assertion states**: use the **Inferential** table above.
 
-### C.12 AssertedArtifactContext
+### AssertedArtifactContext (C.12)
 
 **SACM §11.18 (p. 41)**: "AssertedArtifactContext records the
 assertion that one or more artifacts provide context for another
@@ -1006,7 +1006,7 @@ solid filled dot more closely than an open circle.
 
 Syntax: `Dot@{ shape: f-circ }`.
 
-### C.5 +metaClaim reference
+### +metaClaim reference (C.5)
 
 **SACM §11.10 (p. 39)**: The +metaClaim is an association on
 Assertion: "metaClaim:Claim[0..*] — references Claims concerning
@@ -1053,7 +1053,7 @@ messy and not worth it.
 
 Here are the sections and constructs:
 
-#### C.1 ArgumentPackage
+#### ArgumentPackage (C.1)
 
 **SACM §11.4 (p. 36)**: "ArgumentPackage is the containing element
 for a structured argument represented using the SACM Argumentation
@@ -1063,7 +1063,7 @@ ArgumentAssets and can be nested.
 **Annex C notation**: A bordered rectangular container with a tab
 header and a side panel — a named grouping of argument elements.
 
-#### C.2 ArgumentPackageInterface
+#### ArgumentPackageInterface (C.2)
 
 **SACM §11.6 (p. 37)**: "ArgumentPackageInterface is a kind of
 ArgumentPackage that defines an interface that may be exchanged
@@ -1075,7 +1075,7 @@ are visible to other packages. Distinguished from ArgumentPackageBinding
 symbol in the side panel, indicating an interface through which the
 package exposes elements to other packages.
 
-#### C.3 ArgumentPackageBinding
+#### ArgumentPackageBinding (C.3)
 
 **SACM §11.5 (p. 36)**: "ArgumentPackageBindings can be used to map
 resolved dependencies between the Claims of two or more

@@ -125,7 +125,7 @@ config:
 ---
 flowchart BT
     classDef sacmDot fill:#000,stroke:#000
-    %% If you have an AbstractClaim:
+    %% If used:
     classDef abstractClaim stroke-width:2px,stroke-dasharray: 5 5;
     INSERT-FIGURE-HERE
 ```
@@ -699,8 +699,10 @@ Two AssertedRelationships are especially common:
   (representing the asserted relationship)
   and an square head pointing to the inferred target
   (representing the target controlled by the context).
-  Mermaid only supports circle heads, so we'll use that instead and
-  represent this specific case with the format
+  In mermaid we'll represent this with the circle head `--o`.
+  This unfortunately looks a lot like the sacmDot, but the only
+  alternateive is the cross head `--x` which looks ike
+  "forbidden". Thus the format is
   `SRC --- sacmDot --o TGT`.
 
 Here's an example of an AssertedInference:
@@ -722,8 +724,11 @@ flowchart BT
     AR1[/"AR1: Reasoning"/]
     Inf1((" ")):::sacmDot
     C1["C1: Top-level claim"]
+    E1[("<b>E1: Evidence</b>&nbsp;↗<br>Some evidence for context")]
+
     C2 --- Inf1
     AR1 --- Inf1
+    E1 --o Inf1
     Inf1 --> C1
 ```
 
@@ -881,9 +886,9 @@ of `asserted`, and this is represented by a small black dot
 (aka "reification dot" or "sacmDot").
 This symbol is almost all SACM diagrams, so it's important to do this well.
 
-For the default `asserted`
-we use a class definition `classDef sacmDot fill:#000,stroke:#000` to
-create the solid black dot appearance.
+To represent the AssertedRelationship default `asserted` state
+we use a mermaid class definition `classDef sacmDot fill:#000,stroke:#000` to
+create a solid black dot appearance.
 For each dot's text, we prefer to use a hair space
 (U+200A, UTF-8 e2 80 8a) as the dot's textual contents.
 We have a script `script/fix_reification_spaces.sh` that automatically converts

@@ -199,7 +199,7 @@ the example of
 [Selviandro et al.], followed by a line break &lt;br/&gt;, followed
 by the description of the node.
 As a special case, ArtifactRefence (e.g., for evidence) will have
-a space and an unbolded northeast arrow (↗) after the full name
+a non-breaking space and an unbolded northeast arrow (↗) after the full name
 just before this line break; this attempts to emulate its appearance
 in SACM and remind readers that we're referencing external materials.
 
@@ -622,7 +622,7 @@ append `↗` to the name to preserving the "external reference" arrow
 cue from the spec notation:
 
 ```
-AR1[("<b>AR1: EvidenceName</b> ↗<br>Description of artifact")]
+AR1[("<b>AR1: EvidenceName</b>&amp;nbsp;↗<br>Description of artifact")]
 ```
 
 Rendered:
@@ -639,13 +639,15 @@ config:
     padding: 15
 ---
 flowchart BT
-    AR1[("<b>AR1: EvidenceName</b> ↗<br>Description of artifact")]
+    AR1[("<b>AR1: EvidenceName</b>&nbsp;↗<br>Description of artifact")]
 ```
 
 The cylinder is more visually distinct from Claims (rectangles and
 rounded rectangles) than a stadium/pill would be, reducing the risk of
 misreading a diagram at a glance. The ↗ icon is retained from the spec
 to indicate that this is a reference to external information.
+We put a non-breaking space before ↗ because otherwise the ↗ could
+end up on a line of its own.
 
 **If expanded shapes were supported**: The Mermaid
 `docs` shape would better
@@ -658,7 +660,7 @@ Syntax:
 
 ~~~~
 `AR1@{ shape: docs,
-       label: "<b>AR1: EvidenceName</b> ↗<br>Description of artifact"
+       label: "<b>AR1: EvidenceName</b>&amp;nbsp;↗<br>Description of artifact"
  }`
 ~~~~
 
@@ -1144,12 +1146,12 @@ demonstrating SACM's reified relationships in a realistic setting.
 - Node labels follow the `<b>ShortID: Long name</b><br>description` convention
 - SOP is the top-level asserted Claim → plain rectangle
 - CS is an ArtifactReference providing context for SOP
-  → cylinder with `<b>name</b> ↗<br>description`, connected with `--o` (AssertedContext)
+  → cylinder with `<b>name</b>&amp;nbsp;↗<br>description`, connected with `--o` (AssertedContext)
 - DTS and OS are ArgumentReasoning nodes → parallelogram `[/…/]`
 - DI and UR are asserted Claims → plain rectangle
 - AR (Ambiguous Regions) is a NeedsSupport Claim → plain rectangle with
   `<br>...` suffix on its own line
-- DIE and ASD are ArtifactReferences → cylinder with `<b>name</b> ↗<br>description`
+- DIE and ASD are ArtifactReferences → cylinder with `<b>name</b>&amp;nbsp;↗<br>description`
 - Two AssertedInference relationships, each reified with a dot:
   - Inf1 gathers {DI, DTS} and infers SOP
   - Inf2 gathers {UR, AR, OS} and infers SOP
@@ -1160,14 +1162,14 @@ demonstrating SACM's reified relationships in a realistic setting.
 flowchart BT
     classDef sacmDot fill:#000,stroke:#000
     SOP["<b>SOP: Segmentation Outcome Performance</b><br>Segmentation network produces device-independent tissue-segmentation maps"]
-    CS[("<b>CS: Clinical Setting</b> ↗<br>Triage in an ophthalmology referral pathway at Moorfields Eye Hospital, with more than 50 common diagnoses")]
+    CS[("<b>CS: Clinical Setting</b>&amp;nbsp;↗<br>Triage in an ophthalmology referral pathway at Moorfields Eye Hospital, with more than 50 common diagnoses")]
     DTS[/"<b>DTS: Device Training Strategy</b><br>Argument by training segmentation network on scans from 2 different devices"/]
     OS[/"<b>OS: Output Strategy</b><br>Argument over ambiguous and unambiguous regions"/]
     DI["<b>DI: Device Independence</b><br>AUC of 99.21 and 99.93 achieved for the 1st and 2nd device considering urgent referral"]
     UR["<b>UR: Unambiguous Regions</b><br>Tissue-segmentation map obtained by network is consistent with manual segmentation map"]
     AR["<b>AR: Ambiguous Regions</b><br>The ambiguous regions in OCT scans are addressed by training multiple instances of the network<br>..."]
-    DIE[("<b>DIE: Device Independence Evidence</b> ↗<br>Performance results")]
-    ASD[("<b>ASD: Automated Segmentation Device</b> ↗<br>Results of Segmentation Network")]
+    DIE[("<b>DIE: Device Independence Evidence</b>&amp;nbsp;↗<br>Performance results")]
+    ASD[("<b>ASD: Automated Segmentation Device</b>&amp;nbsp;↗<br>Results of Segmentation Network")]
     Inf1((" ")):::sacmDot
     Inf2((" ")):::sacmDot
 
@@ -1199,14 +1201,14 @@ config:
 flowchart BT
     classDef sacmDot fill:#000,stroke:#000
     SOP["<b>SOP: Segmentation Outcome Performance</b><br>Segmentation network produces device-independent tissue-segmentation maps"]
-    CS[("<b>CS: Clinical Setting</b> ↗<br>Triage in an ophthalmology referral pathway at Moorfields Eye Hospital, with more than 50 common diagnoses")]
+    CS[("<b>CS: Clinical Setting</b>&nbsp;↗<br>Triage in an ophthalmology referral pathway at Moorfields Eye Hospital, with more than 50 common diagnoses")]
     DTS[/"<b>DTS: Device Training Strategy</b><br>Argument by training segmentation network on scans from 2 different devices"/]
     OS[/"<b>OS: Output Strategy</b><br>Argument over ambiguous and unambiguous regions"/]
     DI["<b>DI: Device Independence</b><br>AUC of 99.21 and 99.93 achieved for the 1st and 2nd device considering urgent referral"]
     UR["<b>UR: Unambiguous Regions</b><br>Tissue-segmentation map obtained by network is consistent with manual segmentation map"]
     AR["<b>AR: Ambiguous Regions</b><br>The ambiguous regions in OCT scans are addressed by training multiple instances of the network<br>..."]
-    DIE[("<b>DIE: Device Independence Evidence</b> ↗<br>Performance results")]
-    ASD[("<b>ASD: Automated Segmentation Device</b> ↗<br>Results of Segmentation Network")]
+    DIE[("<b>DIE: Device Independence Evidence</b>&nbsp;↗<br>Performance results")]
+    ASD[("<b>ASD: Automated Segmentation Device</b>&nbsp;↗<br>Results of Segmentation Network")]
     Inf1((" ")):::sacmDot
     Inf2((" ")):::sacmDot
 

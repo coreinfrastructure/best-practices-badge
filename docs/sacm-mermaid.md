@@ -1541,7 +1541,6 @@ flowchart BT
     Inf1 --> C_High
 ```
 
-
 ### Test mermaid figure
 
 Here is a further test:

@@ -682,17 +682,21 @@ Two AssertedRelationships are especially common:
   infer (justify) a +target Claim.
   The spec isn't clear that ArgumentReasoning is allowed as a source, but
   I believe that's the intent.
-  This is shown with a filled dot (representing the asserted relationship)
-  and arrow pointing to the inferred target (representing the inference).
-  In mermaid we'll use the format
-???
+  In annex C this is shown with a filled dot
+  (representing the asserted relationship)
+  and an arrow pointing to the inferred target (representing the inference).
+  In mermaid we'll represent this case with the format
+  `SRC --- sacmDot --> TGT`.
 * Default AssertedContext (11.16, C.10). This asserts that the
   +source ArtifactReference(s) provide the context for the interpretation
   and scope of a Claim or ArgumentReasoning.
-  This is shown with a filled dot (representing the asserted relationship)
-  and circle head pointing to the target that is controlled by the context
-  (representing context). The annex C notation is a square head, but
-  mermaid only supports circle heads (so we use that).
+  In annex C this is shown with a filled dot
+  (representing the asserted relationship)
+  and an square head pointing to the inferred target
+  (representing the target controlled by the context).
+  Mermaid only supports circle heads, so we'll use that instead and
+  represent this specific case with the format
+  `SRC --- sacmDot --o TGT`.
 
 Here's an example of an AssertedInference:
 
@@ -782,7 +786,7 @@ here is the annex C notation and our mermaid representation:
   from axiomatic.
 * axiomatic: single line across main line.
   In mermaid we'll use 3 Unicode Heavy Line
-  characters, `━━━`	(&amp;#x2501;&amp;#x2501;&amp;#x2501;).
+  characters, `━━━` (&amp;#x2501;&amp;#x2501;&amp;#x2501;).
 * defeated: "X" across line.
   In mermaid we will represent this with the letter `X`.
   (We could use `✕` multiplication X, U+2715, &amp;#x2715;,
@@ -821,16 +825,16 @@ here are the mermaid representations (these use solid lines):
 
 | Type | Not Counter | Is Counter |
 |---|---|---|
-| Inferential | `-->` | `-->|⊖|` |
-| Context | `--o` | `--o|⊖|` |
+| Inferential | <tt>--&gt;</tt> | <tt>--&gt;&#x7c;⊖&#x7c;</tt> |
+| Context | `--o` | <tt>--o&#x7c;⊖&#x7c;</tt> |
 
 For abstract relationships (isAbstract is true),
 here are the mermaid representations (these use dashed lines):
 
 | Type | Not Counter (Abstract) | Is Counter (Abstract) |
 |---|---|---|
-| Inferential | `-.->` | `-.->|⊖|` |
-| Context | `-.-o` | `-.-o|⊖|` |
+| Inferential | <tt>-.-&gt;</tt> | <tt>-.-&gt;&#x7c;⊖&#x7c;</tt> |
+| Context | `-.-o` | <tt>-.-o&#x7c;⊖&#x7c;</tt> |
 
 #### Subclass determination of AssertedRelationship
 

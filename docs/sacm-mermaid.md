@@ -127,6 +127,7 @@ config:
 flowchart BT
     classDef sacmDot fill:#000,stroke:#000
     %% If used:
+    classDef connector fill:none,stroke:#cccccc,stroke-width:1px;
     classDef abstractClaim stroke-width:2px,stroke-dasharray: 5 5;
     INSERT-FIGURE-HERE
 ```
@@ -989,6 +990,34 @@ flowchart BT
     MC1 --- "+metaClaim" --> C1
 ```
 
+### Our extension: Connectors
+
+SACM graphical notation doesn't have a symbol for combining multiple
+lines into a single line. The SACM specification is primarily about its
+data model, not the graphical noation.
+
+However, when drawing, it's sometimes helpful to combine many source
+lines into one source line, in a way that doesn't impact the meaning
+(the lines are still separate source lines) but simplifies the image.
+
+So we extend the mermaid notation by adding a `connector` node,
+an open circle with grayed edges (signifying this isn't important).
+To do this, make sure the mermaid has a classDef definition of its style:
+
+```
+    classDef connector fill:none,stroke:#cccccc,stroke-width:1px;
+```
+
+When you want to create a connector, use it like this:
+
+```
+    Conn1((" ")):::connector
+```
+
+You may want to force some of the undirected lines to be longer when
+using it; if it's a solid line, just add more dashes (e.g., `-----`
+instead of `---`).
+
 ### Unmapped constructs
 
 Annex C has some constructs we've chosen to not map.
@@ -1367,31 +1396,22 @@ flowchart BT
     Inf2 --> Tech
 ```
 
-### Continuations to grow diagrams vertically
+### Connectors to grow diagrams vertically
 
 Portrait pages can only handle a few nodes across (I try to stay around 6).
 To handle this horizontal crowding issue in Mermaid,
-we can use a hierarchical decomposition (aka a "link-out" pattern)
+you can use a hierarchical decomposition (aka a "link-out" pattern),
+along with connectors and making some lines longer
+(use an extra `--` on those connectors if they are solid lines).
 Here is an example.
 
-```mermaid
----
-config:
-  theme: neutral
-  flowchart:
-    curve: linear
-    htmlLabels: true
-    rankSpacing: 60
-    nodeSpacing: 45
-    padding: 15
----
+```
 flowchart BT
     classDef sacmDot fill:#000,stroke:#000
+    classDef connector fill:none,stroke:#cccccc,stroke-width:1px;
 
-    %% --- Top Level Section ---
+    %% Nodes
     C_High["<b>C: Higher level</b><br>The system meets all<br>specified security requirements"]
-
-    %% Junction for the first set of claims
     Inf1((" ")):::sacmDot
     Arg1[/"<b>Arg: Argument A</b><br>Direct evidence from<br>primary subsystems"/]
 
@@ -1401,40 +1421,31 @@ flowchart BT
     C3["<b>C3</b>"]
     C4["<b>C4</b>"]
     C5["<b>C5</b>"]
-    C_Cont["<b>C: Continued</b>"]
-
-    %% Connections
-    C1 --- Inf1
-    C2 --- Inf1
-    C3 --- Inf1
-    C4 --- Inf1
-    C5 --- Inf1
-    C_Cont --- Inf1
-
-    Arg1 --> Inf1
-    Inf1 --> C_High
-
-    %% --- Second Level Section ---
-    %% Junction for the continued claims
-    Inf2((" ")):::sacmDot
-
-    %% Supporting Claims 6-10
     C6["<b>C6</b>"]
     C7["<b>C7</b>"]
     C8["<b>C8</b>"]
     C9["<b>C9</b>"]
     C10["<b>C10</b>"]
+    Conn1((" ")):::connector
 
     %% Connections
-    C6 --- Inf2
-    C7 --- Inf2
-    C8 --- Inf2
-    C9 --- Inf2
-    C10 --- Inf2
-    Inf2 --> C_Cont
-```
+    C6 --- Conn1
+    C7 --- Conn1
+    C8 --- Conn1
+    C9 --- Conn1
+    C10 --- Conn1
 
-This demonstrates a connector:
+    C1 --- Inf1
+    C2 --- Inf1
+    C3 --- Inf1
+    %% interconnect is a little longer for more space, extra dash
+    Conn1 ---- Inf1
+    C4 --- Inf1
+    C5 --- Inf1
+    Arg1 --> Inf1
+
+    Inf1 --> C_High
+```
 
 ```mermaid
 ---
@@ -1449,7 +1460,7 @@ config:
 ---
 flowchart BT
     classDef sacmDot fill:#000,stroke:#000
-    classDef connector fill:none,stroke:#cccccc,stroke-width:1px;`
+    classDef connector fill:none,stroke:#cccccc,stroke-width:1px;
 
     %% Nodes
     C_High["<b>C: Higher level</b><br>The system meets all<br>specified security requirements"]

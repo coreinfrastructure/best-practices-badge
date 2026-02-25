@@ -1132,8 +1132,8 @@ flowchart BT
     G13["<b>G13</b><br>statement<br>..."]
     Inf1((" ")):::sacmDot
 
-    G11 --- Inf1
     G12 --- Inf1
+    G13 --- Inf1
     Inf1 --> G11
 ```
 
@@ -1157,8 +1157,8 @@ flowchart BT
     G13["<b>G13</b><br>statement<br>..."]
     Inf1((" ")):::sacmDot
 
-    G11 --- Inf1
     G12 --- Inf1
+    G13 --- Inf1
     Inf1 --> G11
 ```
 
@@ -1202,9 +1202,9 @@ flowchart BT
 
     A1 ----- Inf1
     Inf1 --> Inf2
-    G2 --- Inf1
-    G3 --- Inf1
-    Inf1 --> G1
+    G2 --- Inf2
+    G3 --- Inf2
+    Inf2 --> G1
 ```
 
 Rendered:
@@ -1231,9 +1231,9 @@ flowchart BT
 
     A1 ----- Inf1
     Inf1 --> Inf2
-    G2 --- Inf1
-    G3 --- Inf1
-    Inf1 --> G1
+    G2 --- Inf2
+    G3 --- Inf2
+    Inf2 --> G1
 ```
 
 ### Figure D9 — ArtifactReference Citation via AssertedEvidence

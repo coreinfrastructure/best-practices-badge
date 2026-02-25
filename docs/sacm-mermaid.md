@@ -849,6 +849,13 @@ here are the mermaid representations (these use dashed lines):
 | Inferential | <tt>-.-&gt;</tt> | <tt>-.-&gt;&#x7c;⊖&#x7c;</tt> |
 | Context | `-.-o` | <tt>-.-o&#x7c;⊖&#x7c;</tt> |
 
+Mermaid also has a cross arrow head `--x`, but while that would
+look good for *counter*, we'd still need to distinguish between
+inferential and contxt, and mermaid doens't have 4 arrow head types.
+Counter is less used anyway, so it made more sense to consistently
+use the same heads everywhere, and add a special marker for
+when the assertion is a counter assertion.
+
 #### Subclass determination of AssertedRelationship
 
 The five concrete subclasses of AssertedRelationship

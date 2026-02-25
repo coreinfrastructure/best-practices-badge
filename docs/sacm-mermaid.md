@@ -852,7 +852,7 @@ here are the mermaid representations (these use dashed lines):
 
 Mermaid also has a cross arrow head `--x`, but while that would
 look good for *counter*, we'd still need to distinguish between
-inferential and contxt, and mermaid doens't have 4 arrow head types.
+inferential and context, and mermaid doesn't have 4 arrow head types.
 Counter is less used anyway, so it made more sense to consistently
 use the same heads everywhere, and add a special marker for
 when the assertion is a counter assertion.

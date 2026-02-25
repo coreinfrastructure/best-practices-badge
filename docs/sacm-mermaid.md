@@ -436,8 +436,9 @@ flowchart BT
 
 #### Defeated
 
-Defeated by counter-evidence. Append ` ✗` as a suffix
-(Mermaid cannot render the spec's crossed-out rectangle):
+Defeated by counter-evidence. Append `✗` as a suffix
+(Mermaid cannot render the spec's crossed-out rectangle, and the
+distinctive appearand of this symbol makes it clear this is something special):
 
 ```
 C1["<b>C1: Long claim name</b><br>Defeated statement<br>✗"]
@@ -789,11 +790,14 @@ here is the annex C notation and our mermaid representation:
 * axiomatic: single line across main line.
   In mermaid we'll use 3 Unicode Heavy Line
   characters, `━━━` (&amp;#x2501;&amp;#x2501;&amp;#x2501;).
-* defeated: "X" across line.
-  In mermaid we will represent this with the letter `X`.
-  (We could use `✕` multiplication X, U+2715, &amp;#x2715;,
-  but that's more work than an "X" character and it's not
-  obviously better as a presentation).
+* defeated: a large "X" acorss the line.
+  In mermaid we will represent this with "✗"
+  (Ballot X &amp;#x2717;)
+  We could use the letter "X" or
+  `✕` multiplication X, U+2715, &amp;#x2715;.
+  However, we want to use the same symbol as Claim,
+  and it's important that the Claim symbol be distinctive from
+  the text in the Claim.
 * asCited: brackets around the line.
   In mermaid we will represent this as `[]`.
 

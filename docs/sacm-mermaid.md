@@ -1200,7 +1200,7 @@ flowchart BT
     Inf1((" ")):::sacmDot
     Inf2((" ")):::sacmDot
 
-    A1 ----- Inf1
+    A1 --- Inf1
     Inf1 --> Inf2
     G2 --- Inf2
     G3 --- Inf2
@@ -1229,7 +1229,7 @@ flowchart BT
     Inf1((" ")):::sacmDot
     Inf2((" ")):::sacmDot
 
-    A1 ----- Inf1
+    A1 --- Inf1
     Inf1 --> Inf2
     G2 --- Inf2
     G3 --- Inf2

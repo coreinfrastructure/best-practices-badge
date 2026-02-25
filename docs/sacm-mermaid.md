@@ -1172,7 +1172,7 @@ assumption being made to support that AssertedInference. The assumed assertion
 state on A1 signals that A1 is not itself argued; it is taken as a given in
 order to justify the inference from G2 and G3 to G1.
 
-Figure D1 is a somewhat complicated sitation, where an assumption
+Figure D1 is a somewhat complicated situation, where an assumption
 is justifying an inference (not merely one of its sources).
 
 **Mapping notes**:

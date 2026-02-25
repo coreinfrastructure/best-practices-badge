@@ -65,7 +65,7 @@ cannot exactly implement the SACM graphical notation.
 Indeed, Mermaid is *much* less capable, graphically, than what LibreOffice
 can generate.
 Mermaid it doesn't let you "place" symbols at all!
-Whta's worse, its placement algorithm is quite naive;
+What's worse, its placement algorithm is quite naive;
 it's far less capable than the older graphviz program,
 as it really only understands ranks.
 The GitHub mermaid implementation also *requires* the user to run
@@ -1013,7 +1013,7 @@ Assertion (e.g., expressing confidence in the assertion itself).
 and mermaid doesn't support a better mapping:
 
 ```
-MC1 --- "+metaClaim" --> C1
+MC1 -->|+metaClaim| C1
 ```
 
 Rendered:
@@ -1032,7 +1032,7 @@ config:
 flowchart BT
     C1["<b>C1: Top-level claim<b>"]
     MC1["<b>MC1: Confidence is high<b>"]
-    MC1 --- "+metaClaim" --> C1
+    MC1 -->|+metaClaim| C1
 ```
 
 ### Our extension: Connectors
@@ -1129,13 +1129,9 @@ order to justify the inference from G2 and G3 to G1.
 - A1 is an assumed Claim → stadium `(["… ASSUMED"])` with `ASSUMED` suffix
   (spec uses bracket-feet notation; Mermaid has no direct equivalent)
 - The AssertedInference reification dot is rendered as a small circle node
-  `((" ")):::sacmDot`, matching the spec's filled dot that sits at the centre of the
-  relationship
+  `((" ")):::sacmDot`.
 - Plain (undirected) lines `---` connect each asserted source to the dot,
   matching the spec's plain lines from sources to the dot
-- A dashed directed line `-. "assumed" .->` connects A1 to the dot,
-  encoding the assumed assertion state on that source and preserving
-  the directionality of the source-to-dot connection in the spec
 - A solid arrow `-->` leads from the dot to the target Claim G1, matching
   the spec's filled arrowhead pointing at the supported claim
 
@@ -1150,7 +1146,7 @@ flowchart BT
     Inf1((" ")):::sacmDot
     G1["<b>G1</b><br>Top-level claim"]
 
-    A1 --- "assumed" --> Inf1
+    A1 --- Inf1
     G2 --- Inf1
     G3 --- Inf1
     Inf1 --> G1
@@ -1177,7 +1173,7 @@ flowchart BT
     Inf1((" ")):::sacmDot
     G1["<b>G1</b><br>Top-level claim"]
 
-    A1 --- "assumed" --> Inf1
+    A1 --- Inf1
     G2 --- Inf1
     G3 --- Inf1
     Inf1 --> G1
@@ -1544,9 +1540,9 @@ flowchart BT
     Inf1 --> C_High
 ```
 
-### Test mermaid figure
+### Hyperlinked mermaid figure
 
-Here is a further test:
+Here is a demo of how to embed hyperlinks in the mermaid diagram:
 
 ```mermaid
 ---
@@ -1576,53 +1572,10 @@ flowchart BT
     Inf1 --> C_High
 ```
 
-## High-level justification for mapping
-
-The SACM Annex C graphical constructs are:
-
-* Node types (shapes): ArgumentPackage, ArgumentPackageInterface,
-  ArgumentPackageBinding, ArtifactReference (arrow with stack of
-  papers), and Claim with
-  7 variants (asserted=plain rect, assumed=bracket feet, needsSupport=dots
-  below, axiomatic=extra bottom line, defeated=crossed-out rectangle,
-  asCited=boxed rectangle,
-  abstract=no symbol), plus ArgumentReasoning (open-left bracket
-  shape).
-* Edge types: AssertedInference, AssertedEvidence, AssertedContext,
-  AssertedArtifactSupport, AssertedArtifactContext — each with the same 7
-  assertion-state variants.
-  relationships. The default `asserted` is a filled dot.
-  The decoration on the target end encodes assertion
-  state (filled arrowhead=asserted, open arrowhead=counter, filled
-  square=context, X=defeated, three dots=needsSupport, etc.).
-
-Among the mermaid diagram types, "flowchart TD" is the only viable choice.
-It supports many shapes, edge styles, edge labels, and subgraphs.
-
-Among the alternatives:
-
-* classDiagram - its only shapes are UML class boxes, its only edges
-  are UML relation types
-* mindmap - only a few fixed shapes, parent-child edges only
-* stateDiagram-v2 - only state box shapes, only edge transitions
-* erDiagram - only entity box shapes, with ER relation styles
-* graph - legacy type, more limited capabilities compared to flowchart
-
-Flowchart is the most flexible for our purposes:
-
-1. Shape variety: It has the most node shapes GitHub supports — rectangle [],
-   stadium ([]), cylinder [()], parallelogram [//], circle (()), rounded
-   rectangle (), asymmetric >].
-
-2. Edge variety: --> (solid), -.-> (dashed), ==> (thick), --o (circle
-   endpoint), --x (X endpoint), plus labeled edges.
-
-3. Subgraphs: subgraph blocks naturally represent ArgumentPackage grouping.
-
 ## Source documents
 
 * GitHub, [Creating Diagrams (Creating Mermaid Diagrams)](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams#creating-mermaid-diagrams)
 * OMG, [Structured Assurance Case Metamodel (SACM)](https://www.omg.org/spec/SACM) version 2.3.
 * [Mermaid Flowchart syntax](https://mermaid.ai/open-source/syntax/flowchart.html)
-* Selviandro et al., "A Visual Notation for the
-  Representation of Assurance Cases using SACM 2.x"
+* [Selviandro et al., "A Visual Notation for the Representation of Assurance Cases using SACM 2.x"](https://eprints.whiterose.ac.uk/id/eprint/165129/1/A_Visual_Notation_for_the_Representation_of_Assurance_Cases_using_SACM_2_.pdf)
+* Ankrum, T. Scott, May 2021, [BadgeApp Assurance Case in SACM Notation](https://www.researchgate.net/publication/351854207_BadgeApp_Assurance_Case_in_SACM_Notation)

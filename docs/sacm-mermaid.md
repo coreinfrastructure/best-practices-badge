@@ -1486,6 +1486,61 @@ flowchart BT
     Inf2 --> C_Cont
 ```
 
+Here's a try using long lines:
+
+```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
+flowchart BT
+    classDef sacmDot fill:#000,stroke:#000
+
+    %% --- Top Level Section ---
+    C_High["<b>C: Higher level</b><br>The system meets all<br>specified security requirements"]
+
+    %% Junction for the first set of claims
+    Inf1((" ")):::sacmDot
+    Arg1[/"<b>Arg: Argument A</b><br>Direct evidence from<br>primary subsystems"/]
+
+    %% Supporting Claims
+    C1["<b>C1</b>"]
+    C2["<b>C2</b>"]
+    C3["<b>C3</b>"]
+    C4["<b>C4</b>"]
+    C5["<b>C5</b>"]
+
+    %% Supporting Claims 6-10
+    C6["<b>C6</b>"]
+    C7["<b>C7</b>"]
+    C8["<b>C8</b>"]
+    C9["<b>C9</b>"]
+    C10["<b>C10</b>"]
+
+    %% Connections
+    C6 ----- Inf1
+    C7 ----- Inf1
+    C8 ----- Inf1
+    C9 ----- Inf1
+    C10 ----- Inf1
+
+    C1 --- Inf1
+    C2 --- Inf1
+    C3 --- Inf1
+    C4 --- Inf1
+    C5 --- Inf1
+
+    Arg1 --> Inf1
+    Inf1 --> C_High
+```
+
+
 ### Test mermaid figure
 
 Here is a further test:

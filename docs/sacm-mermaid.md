@@ -2,15 +2,14 @@
 
 This document explains our approach to implementing the
 [Structured Assurance Case Metamodel (SACM)](https://www.omg.org/spec/SACM)
-graphical notation using the mermaid implementation
-currently available on GitHub while making the
-mermaid diagrams part of a markdown document.
+graphical notation using the mermaid and markdown implementation
+available on GitHub.
 
 ## Introduction
 
 The Object Management Group (OMG) has defined
 [Structured Assurance Case Metamodel (SACM)](https://www.omg.org/spec/SACM),
-version 2.3 at time of writing.
+this is version 2.3 at time of writing.
 SACM "defines a metamodel for representing structured assurance cases. An
 Assurance Case is a set of auditable claims, arguments, and evidence
 created to support the claim that a defined system/service will satisfy
@@ -20,16 +19,21 @@ In particular, the SACM specification
 defines an XML-based scheme for exchanging detailed
 data between tools specialized to support an assurance case.
 
-We *instead* want to be able to edit and view an assurance case
+We want to be able to edit and view an assurance case
 as a simple editable document
 using simple widely-available and widely-used open source software tools.
 The OMG SACM specification was not designed for this use case;
 the specification instead focuses on transfer of complex XML structures.
 
-Thankfully, newer versions of SACM also include a recommended graphical
+Thankfully, newer versions of SACM include a recommended graphical
 notation defined in Annex C
 ("Concrete Syntax (Graphical Notations) for the Argumentation Metamodel").
 This graphical notation *can* be used in simple documents.
+The graphical notation is overall pretty good, for example, its simple
+rectangle for basic claims and its small full dot with arrow for inference
+connections make common cases easy to show. Arguments can be identified
+in the notation, but they are *optional* in the common case where the
+argument is obvious.
 
 In the best practices badge project we have traditionally used diagrams
 edited with LibreOffice, connected together and provided detail in
@@ -37,42 +41,54 @@ markdown format. This is flexible, and LibreOffice is
 quite capable. For a while we used the simpler claims, arguments, and
 evidence (CAE) notation.
 More recently, we started using LibreOffice to create SACM
-diagrams. The resulting images look quite close to annex C notation,
+diagrams. The resulting images look quite close to annex C notation
 and generally look good.
+A few conventions somewhat simplified the diagram editing process.
 
 However, the approach to editing graphics with LibreOffice
-creates significant effort when editing the graphics,
-because of the manual placement and regeneration
-of images after editing it requires.
-It also doesn't integrate well with version control, as the graphic
-information is essentially opaque complex structures.
+creates significant effort when editing the graphics.
+The manual placement of everything, and regeneration
+of images after editing it requires, add a lot of labor.
+It doesn't integrate well with version control, as the graphic
+information is essentially opaque complex structures (zipped XML files).
 It's also not easy to add hyperlinks from the images to the document
 sections that provide detail.
+Working hyperlinks *greatly* simplify using these diagrams.
 
 More recent markdown implementations, including GitHub's, include
 support for
 [mermaid diagrams (including flowcharts)](https://mermaid.ai/open-source/syntax/flowchart.html).
+
+There are drawbacks to using mermaid for SACM notation.
 Mermaid, especially its older subset,
 cannot exactly implement the SACM graphical notation.
 Indeed, Mermaid is *much* less capable, graphically, than what LibreOffice
 can generate.
 Mermaid it doesn't let you "place" symbols at all!
-Its placement algorithm is quite naive (less capable than graphviz),
-as it really only understands ranks and graphs become harder if they
-are more than six across.
+Whta's worse, its placement algorithm is quite naive;
+it's far less capable than the older graphviz program,
+as it really only understands ranks.
 The GitHub mermaid implementation also *requires* the user to run
 client-side JavaScript, which some may prefer to disable, and
-that esxecution imposes a small display delay.
+that execution imposes a small display delay.
 
-Nevertheless, the ability to *easily* integrate SACM diagrams into the
-markdown format is compelling.
-This would let us easily edit markdown files to update both the
-text and graphical representation, easy to keep the graphics and text
-in sync, and make it easy to add hyperlinks from the figures to their
-corresponding text.
-A mermaid representation doesn't need to look *exactly* like the SACM spec -
-it simply needs to be adequate to be clear represent constructs
-to stakeholder readers.
+However, using mermaid for SACM notation has some compelling advantages.
+Mermaid *easily* integrates into markdown, enabling excellent version control
+integration and group modification, as well as eliminating the
+often-forgotten regeneration step.
+Using mermaid would let us easily edit markdown files to update both the
+text and graphical representation, making it much easier to
+keep the graphics and text
+in sync.
+It ability to add hyperlinks from the figures to their
+corresponding text is compelling; that makes the diagrams
+far more usable.
+Mermaid cannot *precisely* represent the SACM annex C graphical notation,
+but for our purposes that isn't necessary.
+Mermaid simply needs to be adequate to clearly represent SACM constructs
+to our stakeholder readers.
+We can document in one place (this document) the adjustments we've made
+to represent SACM with mermaid.
 
 ## Document structure
 
@@ -83,13 +99,19 @@ interspersed with mermaid diagrams used to represent SACM
 
 The document will have various headings and sub-headings.
 Many of the headings will have the name of some node in a SACM diagram.
+In those headings there *may* be a SACM diagram; that diagram
+defines "Package NAME" where the topmost item (usually a claim) is NAME.
+This is followed by text that provides more information about NAME,
+corresponding to the SACM "contents" field of NAME.
 
-SACM permits many structures, but we will intentionally limit SACM use
-to cases where there is a "topmost claim" for a given diagram.
-The diagram will introduce a heading with the name of the topmost claim.
-Each of the nodes will have hyperlinks from their names with GitHub
-style links, so that clicking on the name will navigate to *that*
-part of the document.
+SACM permits many structures, but we will *intentionally* limit SACM use
+to cases where there is a "topmost element" (normally a claim)
+for a given diagram.
+
+Each of the nodes on a diagram
+will have hyperlinks to their names (in GitHub
+style links). As a result,
+clicking on the name will navigate to *that* part of the document.
 
 ## Mermaid approach to SACM
 
@@ -239,8 +261,8 @@ bad; each diagram will be easier to follow.
 ### Hyperlinks
 
 One *great* thing about this approach is that it's easy to enable
-hyperlinks from a diagram node to its contents (and defining
-package if there is one).
+hyperlinks from a diagram node to a heading defining its
+contents (and its defining package if there is one).
 GitHub supports both mermaid `click` and HTML `a href`, but
 `click` is easier to read and lets users click on the *entire*
 icon (not just the name), so we'll use `click`.

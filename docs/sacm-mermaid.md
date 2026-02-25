@@ -50,7 +50,8 @@ It's also not easy to add hyperlinks from the images to the document
 sections that provide detail.
 
 More recent markdown implementations, including GitHub's, include
-support for mermaid diagrams (such as mermaid flowcharts).
+support for
+[mermaid diagrams (including flowcharts)](https://mermaid.ai/open-source/syntax/flowchart.html).
 Mermaid, especially its older subset,
 cannot exactly implement the SACM graphical notation.
 Indeed, Mermaid is *much* less capable, graphically, than what LibreOffice

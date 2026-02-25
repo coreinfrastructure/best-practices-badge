@@ -438,7 +438,8 @@ flowchart BT
 
 Defeated by counter-evidence. Append `✗` as a suffix
 (Mermaid cannot render the spec's crossed-out rectangle, and the
-distinctive appearand of this symbol makes it clear this is something special):
+distinctive appearance of this symbol makes it clear
+this is something special and not simply part of the statement text):
 
 ```
 C1["<b>C1: Long claim name</b><br>Defeated statement<br>✗"]
@@ -500,12 +501,13 @@ If space is tight, the cited statement could be omitted.
 
 #### Abstract
 
-Part of a pattern or template, not a concrete instance.
-The spec uses a dashed rectangle, which is directly available in Mermaid
-through styles.
+An abstract claim is
+part of a pattern or template, and not a concrete instance.
+The spec uses a dashed rectangle for abstract claims,
+and this notation is directly available in Mermaid through styles.
 
 ```
-    C1["<b>C1: Long claim name</b><br>Abstract statement]:::abstractClaim
+    C1["<b>C1: Long claim name</b><br>Abstract statement"]:::abstractClaim
 
 ```
 
@@ -524,7 +526,7 @@ config:
 ---
 flowchart BT
     classDef abstractClaim stroke-width:2px,stroke-dasharray: 5 5;
-    C1["<b>C1: Long claim name</b><br>Abstract statement]:::abstractClaim
+    C1["<b>C1: Long claim name</b><br>Abstract statement"]:::abstractClaim
 ```
 
 ### ArgumentReasoning (C.7)

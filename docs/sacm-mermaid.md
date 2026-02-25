@@ -1096,7 +1096,7 @@ that both a name and a description are supported.
 
 ```
 flowchart BT
-    E1[("<b>E1: Long evidence name</b> ↗<br>Evidence artifact description")]
+    E1[("<b>E1: Long evidence name</b>&amp;nbsp;↗<br>Evidence artifact description")]
     G4["<b>G4: Long claim name</b><br>Claim statement"]
 
     E1 --> G4
@@ -1116,7 +1116,7 @@ config:
     padding: 15
 ---
 flowchart BT
-    E1[("<b>E1: Long evidence name</b> ↗<br>Evidence artifact description")]
+    E1[("<b>E1: Long evidence name</b>&nbsp;↗<br>Evidence artifact description")]
     G4["<b>G4: Long claim name</b><br>Claim statement"]
 
     E1 --> G4

@@ -921,21 +921,33 @@ Syntax: `Dot@{ shape: f-circ }`.
 
 #### Our extension: Unreified (single-source) form
 
-We add an extension to SACM graphical notation, not in the original spec,
+We add an extension to SACM graphical notation, that is
+not in the original spec,
 as a concession to mermaid's limited graphical capabilities.
 
-When an AssertedRelationship has only a single source,
-it is `asserted` (the default), and there's no need to
-reference the dot (no +metaClaim attached to the relationship),
-the dot may be omitted and a
-direct edge may used instead for simple cases:
+Normally an AssertedRelationship is represented by its own symbol,
+by default a black filled dot.
 
-```
-Src --> Tgt  (inferential: AssertedInference, AssertedEvidence, AssertedArtifactSupport)
-Src --o Tgt  (context: AssertedContext, AssertedArtifactContext)
-```
+However, when an AssertedRelationship has only a single source and is
+a "simple" case, we'll also allow a direct edge a sacmDot.
+The "simple" case means:
 
-The same assertion-state edge decorations apply to the direct Src→Tgt edge
+* it is `asserted` (the default), which would be normally be
+  represented as a sacmDot
+* there's no graphical need for the sacmDot.
+  That is, there's only 1 source and there's
+  no +metaClaim attached to the relationship
+* it is not abstract. In Annex C abstract relationships are shown with
+  dashed lines and without a sacmDot, and we don't want to be ambiguous.
+
+Thus you're allowed to simply these connectsions to:
+
+* `Src --> Tgt` - inferential:
+  AssertedInference, AssertedEvidence, AssertedArtifactSupport
+* `Src --o Tgt` - context: AssertedContext, AssertedArtifactContext
+
+Note that the same assertion-state
+edge decorations apply to the direct Src→Tgt edge
 as to the Dot→Tgt edge in the reified form.
 
 ### +metaClaim reference (C.5)
@@ -950,11 +962,11 @@ to have Claims attached to it as commentary or meta-level observation.
 arrowhead (`——<`), used to attach a Claim that comments on an
 Assertion (e.g., expressing confidence in the assertion itself).
 
-**Mermaid**: A dashed labeled edge, visually distinct from
-regular inference arrows:
+**Mermaid**: A directed edge labelled `+metaClaim`, as this is clear
+and mermaid doesn't support a better mapping:
 
 ```
-MC1 -.- "+metaClaim" -.-> C1
+MC1 --- "+metaClaim" --> C1
 ```
 
 Rendered:
@@ -973,7 +985,7 @@ config:
 flowchart BT
     C1["<b>C1: Top-level claim<b>"]
     MC1["<b>MC1: Confidence is high<b>"]
-    MC1 -.- "+metaClaim" -.-> C1
+    MC1 --- "+metaClaim" --> C1
 ```
 
 ### Unmapped constructs

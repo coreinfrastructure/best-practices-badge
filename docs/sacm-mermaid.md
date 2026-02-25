@@ -467,16 +467,41 @@ flowchart BT
 #### AsCited
 
 Cites a claim from another package.
-The SACM notation is complex with a name, Cited Pkg [Cited name], and
-as usual a statement.
+The SACM notation (as define in C.6) is complex.
+It shows a bracketed box, and it
+adds a `Cited Pkg [Cited name]` in addition to a `name`.
 
-Here we'll opt for simplicity, and simply use the name as usual
-without the package references (our document isn't that complicated).
-The idea is that this is a reference, and the claim
-is more fully justified elsewhere.
+This graphical notation is flexible,
+but dubious.
+The ability to use a completely different name for
+the same claim is flexible but a terrible idea - it's confusing.
+
+What's more, the additional complexity makes it hard to represent
+in mermaid. Having two mandatory names *and* requiring a package identifier
+uses a lot of space.
+The graphical representation can be partly simulated by mermaid with
+subgraphs, but not well, and it creates overhead problems for no obvious
+benefit.
+
+Here we'll opt for simplicity. We will record a *single* name
+(as is done with everything else), which fills both name roles.
+What's more, as an extension we'll say that the `[Cited Pkg]` is optional;
+if it's omitted, the cited package is named "Package NAME" where
+NAME is the name of the claim. In practice, we'll always omit
+the package citation.
 
 The mermaid symbol that looks closest to this is the subroutine, so
-we'll use that:
+we'll use that.
+
+The result is quite nice-looking.
+Every AsCited Claim clearly indicates the name of a claim that is
+fully defined somewhere else. Since the default is the package
+name is "Package NAME", we can set our hyperlink to NAME.
+This provides a clear visual indicator that more is defined
+somewhere else and it enables rapid navigation.
+
+If space is tight, the statement may be omitted. The statement would be
+provided in the claim's full definition elsewhere.
 
 ```
 C1[["<b>C1: Long claim name</b><br>Cited statement"]]
@@ -498,8 +523,6 @@ config:
 flowchart BT
     C1[["<b>C1: Long claim name</b><br>Cited statement"]]
 ```
-
-If space is tight, the cited statement could be omitted.
 
 #### Abstract
 

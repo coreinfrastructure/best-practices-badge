@@ -1479,7 +1479,8 @@ flowchart BT
     C1 --- Inf1
     C2 --- Inf1
     C3 --- Inf1
-    Conn1 --- Inf1
+    %% interconnect is a little longer for more space, extra dash
+    Conn1 ---- Inf1
     C4 --- Inf1
     C5 --- Inf1
     Arg1 --> Inf1

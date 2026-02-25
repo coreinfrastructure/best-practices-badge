@@ -700,26 +700,30 @@ We put a non-breaking space before ↗ because otherwise the ↗ could
 end up on a line of its own.
 
 **If expanded shapes were supported**: The Mermaid
-`docs` shape would better
+`processes` or `docs` shapes would better
 render the spec's document symbol, eliminating the cylinder
 workaround and matching the source notation much more closely.
-GitHub doesn't yet support this, but they probably will eventually,
+In both shapes the graphical lower pages (which look like shadows)
+go the "wrong" way; in mermaid they go "up to the right" and in annex C
+they go "down to the right. In practice, it's unlikely
+people would even notice this subtle difference.
+Between those two shapes, `processes` matches the annex C notation better,
+as it's a shadowed rectangle, while `docs` has a ragged bottom.
+GitHub doesn't yet support extended shapes, but they probably will eventually,
 so we could switch to this once it becomes available:
 
-Syntax:
-
-~~~~
-`AR1@{ shape: docs,
-       label: "<b>AR1: EvidenceName</b>&amp;nbsp;↗<br>Description of artifact"
- }`
-~~~~
-
-Note that we would use `docs` not `doc` because `docs` has multiple
-rectangles representing pages, making it closer to the SACM symbol.
 The ↗ icon is unrelated to the spec's stacked rectangles;
 it represents externality, while the stacked rectangles indicates a
 document that is likely to have multiple pages.
 Thus, we would retain the ↗ icon.
+
+Future syntax using extended nodes:
+
+~~~~
+`AR1@{ shape: processes,
+       label: "<b>AR1: EvidenceName</b>&amp;nbsp;↗<br>Description of artifact"
+ }`
+~~~~
 
 ### AssertedRelationship (C.8–C.12)
 
@@ -1113,6 +1117,51 @@ of the SACM v2.3 specification (OMG Formal/23-05-08, October 2023) using the
 Mermaid mapping established above. Each subsection names the source figure and
 reproduces the spec's prose description, then shows the Mermaid equivalent.
 
+### Figure D2
+
+**Source**: Figure D2, SACM v2.3 Annex D (informative)
+
+This is a simple diagram. G11 is justified by G12 and G13,
+but both need support.
+
+```
+flowchart BT
+    classDef sacmDot fill:#000,stroke:#000
+    G11["<b>G11</b><br>statement"]
+    G12["<b>G12</b><br>statement<br>..."]
+    G13["<b>G13</b><br>statement<br>..."]
+    Inf1((" ")):::sacmDot
+
+    G11 --- Inf1
+    G12 --- Inf1
+    Inf1 --> G11
+```
+
+Here is the rendered version:
+
+```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
+flowchart BT
+    classDef sacmDot fill:#000,stroke:#000
+    G11["<b>G11</b><br>statement"]
+    G12["<b>G12</b><br>statement<br>..."]
+    G13["<b>G13</b><br>statement<br>..."]
+    Inf1((" ")):::sacmDot
+
+    G11 --- Inf1
+    G12 --- Inf1
+    Inf1 --> G11
+```
+
 ### Figure D1 — Example of Claim Assumptions
 
 **Source**: Figure D1, SACM v2.3 Annex D (informative), p. 67.
@@ -1123,13 +1172,16 @@ assumption being made to support that AssertedInference. The assumed assertion
 state on A1 signals that A1 is not itself argued; it is taken as a given in
 order to justify the inference from G2 and G3 to G1.
 
+Figure D1 is a somewhat complicated sitation, where an assumption
+is justifying an inference (not merely one of its sources).
+
 **Mapping notes**:
 
 - G1, G2, G3 are asserted Claims → rectangle `["…"]`
 - A1 is an assumed Claim → stadium `(["… ASSUMED"])` with `ASSUMED` suffix
   (spec uses bracket-feet notation; Mermaid has no direct equivalent)
-- The AssertedInference reification dot is rendered as a small circle node
-  `((" ")):::sacmDot`.
+- The AssertedInference reification dots are rendered as a small circle node
+  `((" ")):::sacmDot`
 - Plain (undirected) lines `---` connect each asserted source to the dot,
   matching the spec's plain lines from sources to the dot
 - A solid arrow `-->` leads from the dot to the target Claim G1, matching
@@ -1140,13 +1192,16 @@ Mermaid Frontmatter described earlier).
 
 ```
 flowchart BT
-    G2["<b>G2</b><br>Sub-claim A"]
-    G3["<b>G3</b><br>Sub-claim B"]
-    A1(["<b>A1</b><br>Assumed condition</b><br>ASSUMED"])
+    classDef sacmDot fill:#000,stroke:#000
+    G1["<b>G1</b><br>statement"]
+    A1(["<b>A1</b><br>statement</b><br>ASSUMED"])
+    G2["<b>G2</b><br>statement"]
+    G3["<b>G3</b><br>statement"]
     Inf1((" ")):::sacmDot
-    G1["<b>G1</b><br>Top-level claim"]
+    Inf2((" ")):::sacmDot
 
-    A1 --- Inf1
+    A1 ----- Inf1
+    Inf1 --> Inf2
     G2 --- Inf1
     G3 --- Inf1
     Inf1 --> G1
@@ -1167,13 +1222,15 @@ config:
 ---
 flowchart BT
     classDef sacmDot fill:#000,stroke:#000
-    G2["<b>G2</b><br>Sub-claim A"]
-    G3["<b>G3</b><br>Sub-claim B"]
-    A1(["<b>A1</b><br>Assumed condition</b><br>ASSUMED"])
+    G1["<b>G1</b><br>statement"]
+    A1(["<b>A1</b><br>statement</b><br>ASSUMED"])
+    G2["<b>G2</b><br>statement"]
+    G3["<b>G3</b><br>statement"]
     Inf1((" ")):::sacmDot
-    G1["<b>G1</b><br>Top-level claim"]
+    Inf2((" ")):::sacmDot
 
-    A1 --- Inf1
+    A1 ----- Inf1
+    Inf1 --> Inf2
     G2 --- Inf1
     G3 --- Inf1
     Inf1 --> G1

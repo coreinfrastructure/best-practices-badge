@@ -790,7 +790,7 @@ here is the annex C notation and our mermaid representation:
 * axiomatic: single line across main line.
   In mermaid we'll use 3 Unicode Heavy Line
   characters, `━━━` (&amp;#x2501;&amp;#x2501;&amp;#x2501;).
-* defeated: a large "X" acorss the line.
+* defeated: a large "X" across the line.
   In mermaid we will represent this with "✗"
   (Ballot X &amp;#x2717;)
   We could use the letter "X" or

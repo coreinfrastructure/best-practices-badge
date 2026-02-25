@@ -1372,60 +1372,7 @@ flowchart BT
 Portrait pages can only handle a few nodes across (I try to stay around 6).
 To handle this horizontal crowding issue in Mermaid,
 we can use a hierarchical decomposition (aka a "link-out" pattern)
-with one or more continuation claims,
-effectively paging out the argument by
-allowing the diagram to grow vertically instead of horizontally.
 Here is an example.
-
-```
-flowchart BT
-    classDef sacmDot fill:#000,stroke:#000
-
-    %% --- Top Level Section ---
-    C_High["<b>C: Higher level</b><br>The system meets all<br>specified security requirements"]
-
-    %% Junction for the first set of claims
-    Inf1((" ")):::sacmDot
-    Arg1[/"<b>Arg: Argument A</b><br>Direct evidence from<br>primary subsystems"/]
-
-    %% Supporting Claims
-    C1["<b>C1</b>"]
-    C2["<b>C2</b>"]
-    C3["<b>C3</b>"]
-    C4["<b>C4</b>"]
-    C5["<b>C5</b>"]
-    C_Cont["<b>C: Continued</b>"]
-
-    %% Connections
-    C1 --- Inf1
-    C2 --- Inf1
-    C3 --- Inf1
-    C4 --- Inf1
-    C5 --- Inf1
-    C_Cont --- Inf1
-
-    Arg1 -.-> Inf1
-    Inf1 --> C_High
-
-    %% --- Second Level Section ---
-    %% Junction for the continued claims
-    Inf2((" "))::::sacmDot
-
-    %% Supporting Claims 6-10
-    C6["<b>C6</b>"]
-    C7["<b>C7</b>"]
-    C8["<b>C8</b>"]
-    C9["<b>C9</b>"]
-    C10["<b>C10</b>"]
-
-    %% Connections
-    C6 --- Inf2
-    C7 --- Inf2
-    C8 --- Inf2
-    C9 --- Inf2
-    C10 --- Inf2
-    Inf2 --> C_Cont
-```
 
 ```mermaid
 ---
@@ -1487,7 +1434,7 @@ flowchart BT
     Inf2 --> C_Cont
 ```
 
-Here's a try using long lines:
+This demonstrates a connector:
 
 ```mermaid
 ---
@@ -1502,11 +1449,10 @@ config:
 ---
 flowchart BT
     classDef sacmDot fill:#000,stroke:#000
+    classDef connector fill:none,stroke:#cccccc,stroke-width:1px;`
 
-    %% --- Top Level Section ---
+    %% Nodes
     C_High["<b>C: Higher level</b><br>The system meets all<br>specified security requirements"]
-
-    %% Junction for the first set of claims
     Inf1((" ")):::sacmDot
     Arg1[/"<b>Arg: Argument A</b><br>Direct evidence from<br>primary subsystems"/]
 
@@ -1516,28 +1462,28 @@ flowchart BT
     C3["<b>C3</b>"]
     C4["<b>C4</b>"]
     C5["<b>C5</b>"]
-
-    %% Supporting Claims 6-10
     C6["<b>C6</b>"]
     C7["<b>C7</b>"]
     C8["<b>C8</b>"]
     C9["<b>C9</b>"]
     C10["<b>C10</b>"]
+    Conn1((" ")):::connector
 
     %% Connections
-    C6 ----- Inf1
-    C7 ----- Inf1
-    C8 ----- Inf1
-    C9 ----- Inf1
-    C10 ----- Inf1
+    C6 --- Conn1
+    C7 --- Conn1
+    C8 --- Conn1
+    C9 --- Conn1
+    C10 --- Conn1
 
     C1 --- Inf1
     C2 --- Inf1
     C3 --- Inf1
+    Conn1 --- Inf1
     C4 --- Inf1
     C5 --- Inf1
-
     Arg1 --> Inf1
+
     Inf1 --> C_High
 ```
 

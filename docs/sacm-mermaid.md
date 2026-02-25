@@ -241,7 +241,7 @@ hyperlinks from a diagram node to its contents (and defining
 package if there is one).
 GitHub supports both mermaid `click` and HTML `a href`, but
 `click` is easier to read and lets users click on the *entire*
-icon (not just the name), so we'll use `click`. 
+icon (not just the name), so we'll use `click`.
 Unfortunately, mermaid diagrams are rendered
 in an iframe, so relative fragment URLs
 like `#name` won't work; you must use the absolute URL (`https:...`).
@@ -671,97 +671,30 @@ Thus, we would retain the ↗ icon.
 
 ### AssertedRelationship (C.8–C.12)
 
-**SACM §11.13 (p. 40)**: AssertedRelationship is the abstract superclass
-for all asserted associations between ArgumentAssets (such as Claims).
-An AssertedRelationship declares that a
-connection exists between one or more +source ArgumentAssets and a single
-+target ArgumentAsset. As a subclass of Assertion, it carries an
-`assertionDeclaration` attribute (default: asserted) and an optional
-+metaClaim. It also has an `isCounter` flag (default false) that records
-whether the relationship counters its declared purpose (e.g.,
-counter-evidence for AssertedEvidence with isCounter=true).
+An AssertedRelation shows the relationship between
+ArgumentAssets (such as Claims).
 
-The most common kind of AssertedRelationship is an
-AssertedInference (C.8) that shows that a set of +source Claims
-justify a +target Claim.
+Two AssertedRelationships are especially common:
 
-**Annex C notation**: A reified relationship. The relationship instance is
-rendered as a filled dot; +source edges enter the dot without arrowheads,
-and the single +target edge leaves the dot with a decoration that encodes
-both the relationship family and the assertion state. The dot can be
-replaced with other symbols to indicate information about the assertion
-state (e.g., that it is assumed).
+* Default AssertedInference (11.14, C.8). This
+  asserts that a set of +source ArgumentEvidence
+  (Claims, AssertedRelationship, or ArgumentReasoning)
+  infer (justify) a +target Claim.
+  The spec isn't clear that ArgumentReasoning is allowed as a source, but
+  I believe that's the intent.
+  This is shown with a filled dot (representing the asserted relationship)
+  and arrow pointing to the inferred target (representing the inference).
+  In mermaid we'll use the format
+???
+* Default AssertedContext (11.16, C.10). This asserts that the
+  +source ArtifactReference(s) provide the context for the interpretation
+  and scope of a Claim or ArgumentReasoning.
+  This is shown with a filled dot (representing the asserted relationship)
+  and circle head pointing to the target that is controlled by the context
+  (representing context). The annex C notation is a square head, but
+  mermaid only supports circle heads (so we use that).
 
-#### Subclass determination of AssertedRelationship
-
-The five concrete subclasses of AssertedRelationship
-are AssertedInference (C.8), AssertedEvidence
-(C.9), AssertedContext (C.10), AssertedArtifactSupport (C.11), and
-AssertedArtifactContext (C.12).
-The all look identical in the SACM
-graphical notation (by default as a small black dot).
-The subclass is implied entirely by the types of the
-+source and +target nodes and the arrow-head style on the +target edge.
-
-If you point to the target with
-a normal arrow `-->` that's a normal (non-context) relationship;
-if you use context arrow `--o` that means you're defining context.
-
-In short, you can simply draw the relationship, and the correct one
-will be automatically determined.
-However, for precision, here is how they are determined:
-
-| Subclass | Source type | Target type | Arrow style | SACM ref |
-|---|---|---|---|---|
-| AssertedInference | Assertion (Claim or AssertedRelationship) | Assertion | `-->` inferential | §11.14 |
-| AssertedEvidence | ArtifactReference | Claim | `-->` inferential | §11.15 |
-| AssertedArtifactSupport | ArtifactReference | ArtifactReference | `-->` inferential | §11.17 |
-| AssertedContext | Claim or ArtifactReference | Claim, Assertion, or ArgumentReasoning | `--o` context | §11.16 |
-| AssertedArtifactContext | ArtifactReference | ArtifactReference | `--o` context | §11.18 |
-
-In mermaid notation, node shapes make types recognizable:
-Claims typically use rectangles (`["..."]`),
-ArtifactReferences use cylinders with ↗ (`[("Name ↗")]`);
-ArgumentReasoning uses parallelograms (`[/"..."/]`).
-Instead, AssertedRelationship instances use the reified dot `((" ")):::sacmDot`.
-
-The arrow style is the sole differentiator between subclass pairs that
-share the same source and target types: when both source and target are
-ArtifactReferences, `-->` means AssertedArtifactSupport and `--o` means
-AssertedArtifactContext. When source is ArtifactReference and target is
-Claim, `-->` means AssertedEvidence and `--o` means AssertedContext.
-
-#### Reified form
-
-In SACM an AssertedRelationship is "reified", that is, it has
-a symbol on the diagram.
-By default an AssertedRelationship has the `assertedDeclaration` value
-of `asserted`, and this is represented by a small black dot
-(aka "reification dot" or "sacmDot").
-If the `assertedDeclaration` is something else, it will have a different
-form; for example, if it's "needsSupport" a "..." is there istead.
-
-For the default `asserted`
-we use a class definition `classDef sacmDot fill:#000,stroke:#000` to
-create the solid black dot appearance.
-For each dot's text, we prefer to use a hair space
-(U+200A, UTF-8 e2 80 8a) as the dot's textual contents.
-We have a script `script/fix_reification_spaces.sh` that automatically converts
-any one character (such as a space) within the phrase
-<tt>&#x28;("&nbsp;"))</tt> into a hair space.
-Thus, each dot looks like this: `Inf1((" ")):::sacmDot`.
-
-A hair space is the thinnest visible space.
-The mermaid processor
-doesn't permit an empty string, and a zero-width character in file like this
-can lead to other problems.
-We could use a period or centered period, and set the background and
-font text to black, something like this:
-`classDef sacmDot fill:#000,stroke:#000,width:8px,height:8px,color:#000,font-size:1px`.
-However, this doesn't work well; mermaid determines the item size too early.
-
-Here's an example showing AssertedInference with multiple sources
-(sub-claims and ArgumentReasoning nodes appearing below the Claim they support):
+Here's an example of an AssertedInference:
 
 ```mermaid
 ---
@@ -785,12 +718,175 @@ flowchart BT
     Inf1 --> C1
 ```
 
-Full reified-dot pattern (assertion state on the Dot→Tgt edge):
+You can generate lots of SACM models with just these two forms.
+However, the SACM notation supports many more options.
+In this section, we'll discuss the full generality.
 
-```
-Src1 --- Dot((" ")):::sacmDot --> Tgt
-Src2 --- Dot
-```
+#### AssertedRelationship in full generality
+
+According to the SACM specification §11.13 (p. 40),
+AssertedRelationship is the abstract superclass
+for all asserted associations between ArgumentAssets (such as Claims).
+An AssertedRelationship declares that a
+connection exists between one or more +source ArgumentAssets and a single
++target ArgumentAsset. Among its attributes are:
+
+* `assertionDeclaration` attribute (default: asserted). This can be
+   asserted, needsSupport, assumed, axiomatic, defeated, or asCited.
+* `+isCounter` flag (default false). If true, the relationship
+  counters its declared purpose. Counter-evidence doesn't always lead
+  to the defeat of a claim, but it might.
+* `+isAbstract` flag (default false); if true, this is abstract
+  (this is defined by SACMElement)
+* `+metaClaim` (optional).
+
+**Annex C notation**: The relationship instance is
+rendered as:
+
+* +source edge(s) without arrowheads
+* entity encoding the assertionDeclartion
+  (by default a filled dot meaning "asserted")
+* a single +target edge
+
+Let's look at the options for each.
+
+#### +source edge(s)
+
+A source edge is an undirected solid line if `isAbstract` is
+false, else it's a undirected dashed line.
+
+For mermaid that is `---` for an undirected solid line, and
+`-.-` for an undirected dashed line.
+
+#### entity encoding assertionDeclation
+
+The entity depends on assertionDeclation of the relationship;
+here is the annex C notation and our mermaid representation:
+
+* asserted (default): Solid dot for non-abstract,
+  no symbol (hidden) for abstract.
+  In mermaid we will represent this as `Inf1((" ")):::sacmDot`.
+  David A. Wheeler thinks the hidden symbol used for
+  *abstract* asserted relationship is a mistake, because
+  it lacks clarity. We *could* have a hidden image, but for the moment,
+  we'll just use the same representation when it's abstract.
+  We'll discuss the solid dot more later.
+* needsSupport: 3 dots. In mermaid
+  we'll represent this as `.&nbsp;.&nbsp;.`.
+* assumed: gap with lines on each end. In mermaid we'll use the text
+  `ASSUMED`.
+  Since lines tend to be vertical, we could instead use
+  use `〓` (Geta mark U+3013 &amp;#x3013;) or `===` or
+  `═══` (a sequence of Box Drawings Double Horizontal (U+2550,
+  &amp;#x2550;)). However, we worry these aren't distinctive enough
+  from axiomatic.
+* axiomatic: single line across main line.
+  In mermaid we'll use 3 Unicode Heavy Line
+  characters, `━━━`	(&amp;#x2501;&amp;#x2501;&amp;#x2501;).
+* defeated: "X" across line.
+  In mermaid we will represent this with the letter `X`.
+  (We could use `✕` multiplication X, U+2715, &amp;#x2715;,
+  but that's more work than an "X" character and it's not
+  obviously better as a presentation).
+* asCited: brackets around the line.
+  In mermaid we will represent this as `[]`.
+
+#### +target edge
+
+In annex C, the target edge appearance depends on:
+
+* Is this an inferential ("arrow") or context ("boxed rectangle") relationship?
+  The inferential relationships AssertedInference (C.8),
+  AssertedEvidence (C.9), and AssertedArtifactSupport (C.11).
+  The context relationships are AssertedContext (C.10) and
+  AssertedArtifactContext (C.12).
+  In my diagrams, inference ("arrow") is more common.
+  Mermaid provides an arrow, so we use that.
+  Mermaid doesn't support a box as an endpoint head, so the mermaid
+  representation uses a filled circle head.
+* `+isCounter` flag (default false). If true, the relationship
+  counters its declared purpose. Counter-evidence doesn't always lead
+  to the defeat of a claim, but it might.
+  In annex C a "counter" relationship is
+  represented as "open" versions of the endpoints.
+  Mermaid can't do that, and it's a terrible representation anyway
+  (it's too easily missed). So instead we'll decorate the +target edge
+  with Circled minus ⊖ Unicode U+2296 &amp;#x2296;.
+* `+isAbstract` flag (default false); if true, this is abstract
+  (this is defined by SACMElement).
+  If false, we use a solid line, if true, we use a dashed line.
+
+For non-abstract relationships (isAbstract is false),
+here are the mermaid representations (these use solid lines):
+
+| Type | Not Counter | Is Counter |
+|---|---|---|
+| Inferential | `-->` | `-->|⊖|` |
+| Context | `--o` | `--o|⊖|` |
+
+For abstract relationships (isAbstract is true),
+here are the mermaid representations (these use dashed lines):
+
+| Type | Not Counter (Abstract) | Is Counter (Abstract) |
+|---|---|---|
+| Inferential | `-.->` | `-.->|⊖|` |
+| Context | `-.-o` | `-.-o|⊖|` |
+
+#### Subclass determination of AssertedRelationship
+
+The five concrete subclasses of AssertedRelationship
+are AssertedInference (C.8), AssertedEvidence
+(C.9), AssertedContext (C.10), AssertedArtifactSupport (C.11), and
+AssertedArtifactContext (C.12).
+They all look identical in the SACM graphical notation.
+The subclass is implied entirely by the types of the
++source and +target nodes and the arrow-head style on the +target edge.
+
+In short, you can simply draw the relationship, and the correct one
+will be automatically determined.
+However, for precision, here is how they are determined:
+
+| Subclass | Source type | Target type | Arrow style | SACM ref |
+|---|---|---|---|---|
+| AssertedInference | Assertion (Claim or AssertedRelationship); we believe ArgumentReasoning also expected | Assertion | `-->` inferential | §11.14 |
+| AssertedEvidence | ArtifactReference | Claim | `-->` inferential | §11.15 |
+| AssertedArtifactSupport | ArtifactReference | ArtifactReference | `-->` inferential | §11.17 |
+| AssertedContext | Claim or ArtifactReference | Claim, Assertion, or ArgumentReasoning | `--o` context | §11.16 |
+| AssertedArtifactContext | ArtifactReference | ArtifactReference | `--o` context | §11.18 |
+
+If you point to the target with
+a normal arrow `-->` that's a normal (non-context) relationship;
+if you use context arrow `--o` that means you're defining context.
+By default they are *asserted*, in which case
+the relation is represented by a filled black dot.
+
+#### Solid dot (reified form)
+
+In SACM an AssertedRelationship is "reified", that is, it has
+its own symbol on the diagram.
+By default an AssertedRelationship has the `assertedDeclaration` value
+of `asserted`, and this is represented by a small black dot
+(aka "reification dot" or "sacmDot").
+This symbol is almost all SACM diagrams, so it's important to do this well.
+
+For the default `asserted`
+we use a class definition `classDef sacmDot fill:#000,stroke:#000` to
+create the solid black dot appearance.
+For each dot's text, we prefer to use a hair space
+(U+200A, UTF-8 e2 80 8a) as the dot's textual contents.
+We have a script `script/fix_reification_spaces.sh` that automatically converts
+any one character (such as a space) within the phrase
+<tt>&#x28;("&nbsp;"))</tt> into a hair space.
+Thus, each dot looks like this: `Inf1((" ")):::sacmDot`.
+
+A hair space is the thinnest visible space.
+The mermaid processor
+doesn't permit an empty string, and a zero-width character in file like this
+can lead to other problems.
+We could use a period or centered period, and set the background and
+font text to black, something like this:
+`classDef sacmDot fill:#000,stroke:#000,width:8px,height:8px,color:#000,font-size:1px`.
+However, this doesn't work well; mermaid determines the item size too early.
 
 **If expanded shapes were supported**: We might someday
 use `f-circ` (the filled/junction
@@ -818,133 +914,6 @@ Src --o Tgt  (context: AssertedContext, AssertedArtifactContext)
 The same assertion-state edge decorations apply to the direct Src→Tgt edge
 as to the Dot→Tgt edge in the reified form.
 
-#### Assertion states for relationships (C.8–C.12)
-
-Each AssertedRelationship carries an `assertionDeclaration`. The assertion
-state is always encoded on the **Dot→Tgt edge** (or the direct Src→Tgt edge
-when the dot is omitted). There are two edge families aligned with the
-subclass groups above.
-
-**Note on orthogonality**: Relationship assertion states (C.8–C.12)
-and Claim assertion states (C.6) are entirely independent. Both
-inherit `assertionDeclaration` from the abstract `Assertion` class
-(§11.10, p. 39), but they are encoded differently and do not
-interfere. A Claim node can carry `assumed` (stadium shape + `~`
-prefix) while the relationship pointing to it simultaneously carries
-`defeated` (`Dot --x Tgt`).
-
-**Inferential** (`-->` base) — used by AssertedInference (C.8),
-AssertedEvidence (C.9), and AssertedArtifactSupport (C.11):
-
-| Assertion state | Dot→Tgt edge | Notes |
-|---|---|---|
-| asserted (default) | `Dot --> Tgt` | Solid arrow |
-| assumed | `Dot -. "assumed" .-> Tgt` | Dashed with label |
-| needsSupport | `Dot -- "..." --> Tgt` | Label signals incompleteness |
-| axiomatic | `Dot ==> Tgt` | Thick arrow |
-| defeated | `Dot -- "defeated" --x Tgt` | Label distinguishes from counter |
-| asCited | `Dot -- "cited: Pkg::Name" --> Tgt` | Include citation in label |
-| abstract | `Dot -.-> Tgt` | Dashed, no label |
-| counter | `Dot -- "counter" --x Tgt` | Encodes isCounter=true; label distinguishes from defeated |
-
-Visual examples of each inferential assertion state (all include
-the reification dot):
-
-```mermaid
----
-config:
-  theme: neutral
-  flowchart:
-    curve: linear
-    htmlLabels: true
-    rankSpacing: 60
-    nodeSpacing: 45
-    padding: 15
----
-flowchart LR
-    S1["Src"] --- D1((" ")):::sacmDot
-    D1 --> T1["Tgt — asserted"]
-
-    S2["Src"] --- D2((" ")):::sacmDot
-    D2 -. "assumed" .-> T2["Tgt — assumed"]
-
-    S3["Src"] --- D3((" ")):::sacmDot
-    D3 -- "..." --> T3["Tgt — needsSupport"]
-
-    S4["Src"] --- D4((" ")):::sacmDot
-    D4 ==> T4["Tgt — axiomatic"]
-
-    S5["Src"] --- D5((" ")):::sacmDot
-    D5 -- "defeated" --x T5["Tgt — defeated"]
-
-    S6["Src"] --- D6((" ")):::sacmDot
-    D6 -- "cited: Pkg::Name" --> T6["Tgt — asCited"]
-
-    S7["Src"] --- D7((" ")):::sacmDot
-    D7 -.-> T7["Tgt — abstract"]
-
-    S8["Src"] --- D8((" ")):::sacmDot
-    D8 -- "counter" --x T8["Tgt — counter"]
-```
-
-**Context** (`--o` base) — used by AssertedContext (C.10) and
-AssertedArtifactContext (C.12). The `ctx` suffix on labels distinguishes
-context edges from inferential edges when both appear in a diagram:
-
-| Assertion state | Dot→Tgt edge | Notes |
-|---|---|---|
-| asserted (default) | `Dot --o Tgt` | Circle (○) approximates spec's filled square (■) |
-| assumed | `Dot -. "assumed ctx" .-> Tgt` | Dashed+circle unsupported; use dashed+label |
-| needsSupport | `Dot -- "... ctx" --o Tgt` | Labeled circle end |
-| axiomatic | `Dot == "axiomatic ctx" ==> Tgt` | Labeled thick arrow |
-| defeated | `Dot -- "defeated ctx" --x Tgt` | `ctx` label distinguishes from inferential |
-| asCited | `Dot -- "cited ctx: Pkg::Name" --o Tgt` | Labeled circle end |
-| abstract | `Dot -. "ctx" .-> Tgt` | Dashed+circle unsupported; use dashed+label |
-| counter | `Dot -- "counter ctx" --x Tgt` | Encodes isCounter=true; X end; `ctx` label distinguishes |
-
-Visual examples of each context assertion state (all include
-the reification dot):
-
-```mermaid
----
-config:
-  theme: neutral
-  flowchart:
-    curve: linear
-    htmlLabels: true
-    rankSpacing: 60
-    nodeSpacing: 45
-    padding: 15
----
-flowchart LR
-    CS1["Src"] --- CD1((" ")):::sacmDot
-    CD1 --o CT1["Tgt — asserted"]
-
-    CS2["Src"] --- CD2((" ")):::sacmDot
-    CD2 -. "assumed ctx" .-> CT2["Tgt — assumed"]
-
-    CS3["Src"] --- CD3((" ")):::sacmDot
-    CD3 -- "... ctx" --o CT3["Tgt — needsSupport"]
-
-    CS4["Src"] --- CD4((" ")):::sacmDot
-    CD4 == "axiomatic ctx" ==> CT4["Tgt — axiomatic"]
-
-    CS5["Src"] --- CD5((" ")):::sacmDot
-    CD5 -- "defeated ctx" --x CT5["Tgt — defeated"]
-
-    CS6["Src"] --- CD6((" ")):::sacmDot
-    CD6 -- "cited ctx: Pkg::Name" --o CT6["Tgt — asCited"]
-
-    CS7["Src"] --- CD7((" ")):::sacmDot
-    CD7 -. "ctx" .-> CT7["Tgt — abstract"]
-
-    CS8["Src"] --- CD8((" ")):::sacmDot
-    CD8 -- "counter ctx" --x CT8["Tgt — counter"]
-```
-
-When both "defeated" and "counter" appear in the same diagram, always
-label the `--x` edge to disambiguate them.
-
 ### +metaClaim reference (C.5)
 
 **SACM §11.10 (p. 39)**: The +metaClaim is an association on
@@ -961,7 +930,7 @@ Assertion (e.g., expressing confidence in the assertion itself).
 regular inference arrows:
 
 ```
-MC1 -. "+metaClaim" .-> C1
+MC1 -.- "+metaClaim" -.-> C1
 ```
 
 Rendered:
@@ -980,7 +949,7 @@ config:
 flowchart BT
     C1["<b>C1: Top-level claim<b>"]
     MC1["<b>MC1: Confidence is high<b>"]
-    MC1 -. "+metaClaim" .-> C1
+    MC1 -.- "+metaClaim" -.-> C1
 ```
 
 ### Unmapped constructs
@@ -1070,7 +1039,7 @@ flowchart BT
     Inf1((" ")):::sacmDot
     G1["<b>G1</b><br>Top-level claim"]
 
-    A1 -. "assumed" .-> Inf1
+    A1 --- "assumed" --> Inf1
     G2 --- Inf1
     G3 --- Inf1
     Inf1 --> G1
@@ -1097,7 +1066,7 @@ flowchart BT
     Inf1((" ")):::sacmDot
     G1["<b>G1</b><br>Top-level claim"]
 
-    A1 -. "assumed" .-> Inf1
+    A1 --- "assumed" --> Inf1
     G2 --- Inf1
     G3 --- Inf1
     Inf1 --> G1
@@ -1403,7 +1372,7 @@ flowchart BT
 
     %% --- Second Level Section ---
     %% Junction for the continued claims
-    Inf2(("&#x200a;"))::::sacmDot
+    Inf2((" "))::::sacmDot
 
     %% Supporting Claims 6-10
     C6["<b>C6</b>"]
@@ -1521,14 +1490,15 @@ The SACM Annex C graphical constructs are:
   ArgumentPackageBinding, ArtifactReference (arrow with stack of
   papers), and Claim with
   7 variants (asserted=plain rect, assumed=bracket feet, needsSupport=dots
-  below, axiomatic=double bottom line, defeated=crossed-out, asCited=corner
-  notches, abstract=dashed rect), plus ArgumentReasoning (open-left bracket
+  below, axiomatic=extra bottom line, defeated=crossed-out rectangle,
+  asCited=boxed rectangle,
+  abstract=no symbol), plus ArgumentReasoning (open-left bracket
   shape).
 * Edge types: AssertedInference, AssertedEvidence, AssertedContext,
   AssertedArtifactSupport, AssertedArtifactContext — each with the same 7
-  assertion-state variants. The key visual distinction: these are reified
-  relationships — a dot in the middle with a plain line to source and a
-  decorated arrow to target. The decoration on the target end encodes assertion
+  assertion-state variants.
+  relationships. The default `asserted` is a filled dot.
+  The decoration on the target end encodes assertion
   state (filled arrowhead=asserted, open arrowhead=counter, filled
   square=context, X=defeated, three dots=needsSupport, etc.).
 
@@ -1544,33 +1514,16 @@ Among the alternatives:
 * erDiagram - only entity box shapes, with ER relation styles
 * graph - legacy type, more limited capabilities compared to flowchart
 
-The three decisive reasons flowchart wins are:
+Flowchart is the most flexible for our purposes:
 
 1. Shape variety: It has the most node shapes GitHub supports — rectangle [],
    stadium ([]), cylinder [()], parallelogram [//], circle (()), rounded
-   rectangle (), asymmetric >] — enough to meaningfully distinguish Claim,
-   assumed Claim, ArtifactReference, and ArgumentReasoning from each other.
+   rectangle (), asymmetric >].
 
 2. Edge variety: --> (solid), -.-> (dashed), ==> (thick), --o (circle
-   endpoint), --x (X endpoint), plus labeled edges — enough to encode assertion
-   states and distinguish inference from context from counter relationships.
+   endpoint), --x (X endpoint), plus labeled edges.
 
 3. Subgraphs: subgraph blocks naturally represent ArgumentPackage grouping.
-
-One challenge is that SACM's relationships are reified, in particular,
-the dot in the middle is a first-class element.
-Mermaid can't express that directly.
-The practical workaround is to represent the relationship instance
-as a tiny node (e.g., a circle) with two edges or to drop the
-reification and use a direct labeled edge. The latter loses fidelity but stays
-readable.
-
-There is an exception: classDiagram is worth considering only for
-package-structure diagrams. Its built-in lollipop interface notation happens
-to visually echo the ArgumentPackageInterface lollipop symbol (C.2), and its
-compartmented class boxes vaguely resemble the ArgumentPackage shape. But for
-actual argument diagrams with Claims, reasoning, and evidence, classDiagram is
-a poor fit.
 
 ## Source documents
 

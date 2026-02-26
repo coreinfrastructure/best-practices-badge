@@ -19,11 +19,19 @@ In particular, the SACM specification
 defines an XML-based scheme for exchanging detailed
 data between tools specialized to support an assurance case.
 
+A "claim" is a true-or-false statement, often supported by other material
+to justify the claim. The point of an assurance is to logically show
+that the topmost claim is justified - not in the sense of a formal proof,
+but like evidence for a court. A trivial claim is easily handled, but
+modern systems are more complicated, and it's important to be able explain
+not just "I did many things" but "why my activities justify my claims".
+
 We want to be able to edit and view an assurance case
 as a simple editable document
 using simple widely-available and widely-used open source software tools.
-The OMG SACM specification was not designed for this use case;
-the specification instead focuses on transfer of complex XML structures.
+The OMG SACM specification was not directly designed for this use case;
+the specification instead focuses on transfer of complex XML structures
+managed by complex tools.
 
 Thankfully, newer versions of SACM include a recommended graphical
 notation defined in Annex C
@@ -31,9 +39,11 @@ notation defined in Annex C
 This graphical notation *can* be used in simple documents.
 The graphical notation is overall pretty good, for example, its simple
 rectangle for basic claims and its small full dot with arrow for inference
-connections make common cases easy to show. Arguments can be identified
-in the notation, but they are *optional* in the common case where the
-argument is obvious.
+connections make common cases easy to show. The "small full dot" for
+relations is helpful for drawing; many tools try to draw directly from one
+rectangle to another, producing a tangled hard-to-read mess.
+Arguments can be identified in the notation, but they are *optional*
+in the common case where the argument is obvious.
 
 In the best practices badge project we have traditionally used diagrams
 edited with LibreOffice, connected together and provided detail in
@@ -50,7 +60,8 @@ creates significant effort when editing the graphics.
 The manual placement of everything, and regeneration
 of images after editing it requires, add a lot of labor.
 It doesn't integrate well with version control, as the graphic
-information is essentially opaque complex structures (zipped XML files).
+information is essentially opaque complex data structures (zipped XML files),
+not simple text lines whose individual changes are easily tracked.
 It's also not easy to add hyperlinks from the images to the document
 sections that provide detail.
 Working hyperlinks *greatly* simplify using these diagrams.
@@ -96,22 +107,37 @@ We presume that there is a single assurance case document.
 This document is overall in Commonmark markdown (.md) format,
 interspersed with mermaid diagrams used to represent SACM
 (as well as possibly other materials such as images).
-
 The document will have various headings and sub-headings.
-Many of the headings will have the name of some node in a SACM diagram.
-In those headings there *may* be a SACM diagram; that diagram
-defines "Package NAME" where the topmost item (usually a claim) is NAME.
-This is followed by text that provides more information about NAME,
-corresponding to the SACM "contents" field of NAME.
 
-SACM permits many structures, but we will *intentionally* limit SACM use
-to cases where there is a "topmost element" (normally a claim)
-for a given diagram.
+A key heading will be named something like "SACM Package Diagrams".
+Each of its subheadings will have the form "Package NAME" where
+NAME is the name of the key most-important element (almost always
+the name of a package). In that subheading will be a mermaid diagram
+that shows the information in that package in SACM notation
+(per the SACM specification annex C).
+Note that these are our conventions; SACM doesn't *require* that there
+be one "most important" element, but this convention simplifies things.
+Note that all the diagrams are collected in one area, making it easy
+for readers to skim just the diagrams.
 
-Each of the nodes on a diagram
-will have hyperlinks to their names (in GitHub
-style links). As a result,
-clicking on the name will navigate to *that* part of the document.
+Many SACM package diagrams have Claims that are "asCited", that is,
+the claim is defined in more detail in another package diagram.
+Those asCited Claims will have a hyperlink to the corresponding
+package diagram ("package NAME" where NAME is the name of the claim).
+
+While it's not *required*, many of the other ArgumentAsset nodes
+(the Claims, ArgumentReasonings, and ArtifactReferences) with some NAME
+will have a hyperlink to a corresponding section with the same name.
+This corresponding section implements the "contents" field of that
+ArgumentAsset.
+As a result, clicking on the name will navigate to *that* part of the document.
+
+The section corresponding to the "content" section will begin with a
+"Description:" statement (providing its brief description, e.g., its
+statement).
+It will also have
+"Referenced in:" with links to the packages it's referenced in.
+This will make it easy to follow what it says and to traverse the document.
 
 ## Mermaid approach to SACM
 

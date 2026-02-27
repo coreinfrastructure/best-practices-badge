@@ -46,6 +46,11 @@ class BaselineHtmlParser
       current = current.next_element
     end
 
+    # Skip retired criteria — upstream marks them "Retired in ..." with no
+    # Requirement text. Returning nil excludes the control so the extraction
+    # script's obsolete-detection logic flags it correctly.
+    return if retired?(content_elements)
+
     # Extract requirement, recommendation, and other details
     requirement = extract_requirement(content_elements)
     recommendation = extract_recommendation(content_elements)
@@ -110,6 +115,11 @@ class BaselineHtmlParser
       return levels unless levels.empty?
     end
     [1] # Default to level 1
+  end
+
+  def retired?(elements)
+    elements.none? { |el| el.text.include?('Requirement:') } &&
+      elements.any? { |el| el.text.match?(/Retired/i) }
   end
 
   def id_to_field_name(original_id)

@@ -189,58 +189,7 @@ A passing run prints:
 
 Fix any reported errors before continuing.
 
-## Step 8: Restart the Application
-
-Criteria are loaded into `CriteriaHash` and `FullCriteriaHash` at Rails
-startup in `config/initializers/00_criteria_hash.rb`. Changes to
-`criteria/baseline_criteria.yml` or `config/locales/en.yml` do not take
-effect until the application is restarted.
-
-In development:
-
-```bash
-rails s
-```
-
-In production, follow the standard deployment procedure (e.g., restart
-Puma workers).
-
-## Step 9: Verify a Changed Criterion Shows the Updated Text
-
-Open a project's baseline form (e.g., `/en/projects/1/baseline-1`) and
-navigate to a criterion whose text was updated in Step 4. Confirm that the
-form now displays the new description and details text.
-
-Alternatively, check from the Rails console:
-
-```ruby
-Criteria['baseline-1']['osps_xx_nn_nn'].description
-```
-
-Replace `osps_xx_nn_nn` with the key of the changed criterion.
-
-## Step 10: Verify a New Criterion Is Served but Marked "Future"
-
-Open the same baseline form and locate the new criterion. It should be
-visible with the label "(upcoming criterion)" before its description. This
-label is rendered by `app/views/projects/_status_chooser.html.erb` when
-`criterion.future?` returns `true`.
-
-Confirm from the Rails console that the criterion exists but is excluded
-from the active set:
-
-```ruby
-# Should exist:
-Criteria['baseline-1']['osps_xx_nn_nn']
-
-# Should NOT appear in the active list:
-Criteria.active('baseline-1').map(&:name).include?('osps_xx_nn_nn')
-# => false
-```
-
-Replace `osps_xx_nn_nn` with the new criterion's key.
-
-## Step 11: Update the Version Notice Partial
+## Step 8: Update the Version Notice Partial
 
 Edit `app/views/projects/_form_baseline_version_notice.html.erb` to
 reflect the transition. During the transition period (after the new criteria
@@ -277,6 +226,57 @@ and update `baseline_current_version` to the new version string:
 
 The `baseline_new_version` and `baseline_enforce_date` variables are
 ignored when `baseline_in_transition` is `false`.
+
+## Step 9: Restart the Application
+
+Criteria are loaded into `CriteriaHash` and `FullCriteriaHash` at Rails
+startup in `config/initializers/00_criteria_hash.rb`. Changes to
+`criteria/baseline_criteria.yml` or `config/locales/en.yml` do not take
+effect until the application is restarted.
+
+In development:
+
+```bash
+rails s
+```
+
+In production, follow the standard deployment procedure (e.g., restart
+Puma workers).
+
+## Step 10: Verify a Changed Criterion Shows the Updated Text
+
+Open a project's baseline form (e.g., `/en/projects/1/baseline-1`) and
+navigate to a criterion whose text was updated in Step 4. Confirm that the
+form now displays the new description and details text.
+
+Alternatively, check from the Rails console:
+
+```ruby
+Criteria['baseline-1']['osps_xx_nn_nn'].description
+```
+
+Replace `osps_xx_nn_nn` with the key of the changed criterion.
+
+## Step 11: Verify a New Criterion Is Served but Marked "Future"
+
+Open the same baseline form and locate the new criterion. It should be
+visible with the label "(upcoming criterion)" before its description. This
+label is rendered by `app/views/projects/_status_chooser.html.erb` when
+`criterion.future?` returns `true`.
+
+Confirm from the Rails console that the criterion exists but is excluded
+from the active set:
+
+```ruby
+# Should exist:
+Criteria['baseline-1']['osps_xx_nn_nn']
+
+# Should NOT appear in the active list:
+Criteria.active('baseline-1').map(&:name).include?('osps_xx_nn_nn')
+# => false
+```
+
+Replace `osps_xx_nn_nn` with the new criterion's key.
 
 ## Step 12: Perform Machine Translation
 
@@ -318,7 +318,7 @@ active. To activate them:
 4. Update `app/views/projects/_form_baseline_version_notice.html.erb`:
    set `baseline_in_transition = false` and update
    `baseline_current_version` to the now-active version string (see
-   Step 11).
+   Step 8).
 
 5. Restart the application. The newly activated criteria will be included
    in `Criteria.active(level)` and will count toward badge percentages.

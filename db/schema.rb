@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_12_221406) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_27_180019) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -318,6 +318,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_12_221406) do
     t.integer "osps_br_01_01_status", limit: 2, default: 0, null: false
     t.text "osps_br_01_02_justification"
     t.integer "osps_br_01_02_status", limit: 2, default: 0, null: false
+    t.text "osps_br_01_03_justification"
+    t.integer "osps_br_01_03_status", limit: 2, default: 0, null: false
+    t.text "osps_br_01_04_justification"
+    t.integer "osps_br_01_04_status", limit: 2, default: 0, null: false
     t.text "osps_br_02_01_justification"
     t.integer "osps_br_02_01_status", limit: 2, default: 0, null: false
     t.text "osps_br_02_02_justification"
@@ -350,6 +354,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_12_221406) do
     t.integer "osps_do_05_01_status", limit: 2, default: 0, null: false
     t.text "osps_do_06_01_justification"
     t.integer "osps_do_06_01_status", limit: 2, default: 0, null: false
+    t.text "osps_do_07_01_justification"
+    t.integer "osps_do_07_01_status", limit: 2, default: 0, null: false
     t.text "osps_gv_01_01_justification"
     t.integer "osps_gv_01_01_status", limit: 2, default: 0, null: false
     t.text "osps_gv_01_02_justification"

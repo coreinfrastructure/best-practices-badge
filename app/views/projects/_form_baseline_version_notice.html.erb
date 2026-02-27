@@ -8,10 +8,10 @@
                               in YYYY-MM-DD format.
 %>
 <%
-  baseline_in_transition  = false
+  baseline_in_transition   = true
   baseline_current_version = 'v2025.10.10'
   baseline_new_version     = 'v2026.02.19'  # used only during transition
-  baseline_enforce_date    = 'YYYY-MM-DD'   # used only during transition
+  baseline_enforce_date    = '2026-06-01'   # used only during transition
 %>
 <% if baseline_in_transition %>
   <span><%= t('projects.baseline_version_notice.transition',

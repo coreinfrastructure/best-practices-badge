@@ -71,14 +71,17 @@ baseline-1:
         na_allowed: true
         na_justification_required: true
       osps_br_01_02:
+        obsolete: true
         category: MUST
-        description:
-        details:
+        description: When a CI/CD pipeline uses a branch name in its functionality,
+          that name value MUST be sanitized and validated prior to use in the pipeline.
+        details: ''
         met_url_required: false
         original_id: OSPS-BR-01.02
         na_allowed: true
         na_justification_required: true
       osps_br_01_03:
+        future: true
         category: MUST
         description: When a CI/CD pipeline operates on untrusted code snapshots, it
           MUST prevent access to privileged CI/CD credentials and assets.
@@ -392,6 +395,7 @@ baseline-2:
         na_allowed: true
         na_justification_required: true
       osps_do_07_01:
+        future: true
         category: MUST
         description: The project documentation MUST include instructions on how to
           build the software, including required libraries, frameworks, SDKs, and
@@ -579,6 +583,7 @@ baseline-3:
         na_allowed: true
         na_justification_required: true
       osps_br_01_04:
+        future: true
         category: MUST
         description: CI/CD pipelines which accept trusted collaborator input MUST
           sanitize and validate that input prior to use in the pipeline.

@@ -3211,6 +3211,9 @@ en:
       osps_vm_02_01:
         description: "While active, the project documentation MUST contain security contacts."
         details: "Create a security.md (or similarly-named) file that contains security contacts for the project."
+      osps_br_01_02:
+        description: "When a CI/CD pipeline uses a branch name in its functionality, that name value MUST be sanitized and validated prior to use in the pipeline."
+        details: ""
     baseline-2:
       osps_ac_04_01:
         description: "When a CI/CD task is executed with no permissions specified, the CI/CD system MUST default the task's permissions to the lowest permissions granted in the pipeline."

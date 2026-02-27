@@ -8,12 +8,14 @@ require 'yaml'
 require 'json'
 
 # Validates baseline criteria and mapping files
+# rubocop:disable Metrics/ClassLength
 class BaselineCriteriaValidator
   attr_reader :errors
 
   def initialize
     @criteria_file = Rails.root.join(BASELINE_CONFIG[:criteria_file])
     @mapping_file = Rails.root.join(BASELINE_CONFIG[:mapping_file])
+    @en_locale_file = Rails.root.join('config', 'locales', 'en.yml')
     @errors = []
   end
 
@@ -26,6 +28,7 @@ class BaselineCriteriaValidator
     validate_criteria_file_exists
     validate_criteria_yaml_valid
     validate_criteria_content
+    validate_i18n_descriptions
     validate_mapping_file_exists if File.exist?(@mapping_file)
 
     @errors.empty?
@@ -106,6 +109,37 @@ class BaselineCriteriaValidator
     @errors << "Criterion '#{key}' has no description"
   end
 
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  def validate_i18n_descriptions
+    return false unless validate_criteria_file_exists
+    return true unless File.exist?(@en_locale_file)
+
+    criteria = YAML.safe_load_file(
+      @criteria_file, permitted_classes: [Symbol], aliases: true
+    )
+    en_data = YAML.safe_load_file(@en_locale_file, aliases: true)
+    en_criteria = en_data.dig('en', 'criteria') || {}
+
+    criteria.each do |level, level_data|
+      next if level == '_metadata'
+
+      traverse_criteria(level_data) do |key, data|
+        next if data['description'].nil? || data['description'].to_s.strip.empty?
+
+        en_desc = en_criteria.dig(level, key, 'description').to_s.strip
+        if en_desc.empty?
+          @errors << "Criterion '#{key}' has description in criteria YAML but is missing from en.yml " \
+                     '(run: rake baseline:extract_i18n)'
+        end
+      end
+    end
+
+    true
+  rescue Psych::SyntaxError
+    false
+  end
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+
   def validate_mapping_file_exists
     unless File.exist?(@mapping_file)
       @errors << "Mapping file not found: #{@mapping_file}"
@@ -122,3 +156,4 @@ class BaselineCriteriaValidator
   end
   # rubocop:enable Naming/PredicateMethod
 end
+# rubocop:enable Metrics/ClassLength

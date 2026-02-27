@@ -120,6 +120,8 @@ controls.group_by { |c| c[:maturity_level].first }
       }
       is_future = is_new || existing_criteria_data.dig(control[:field_name], :data, 'future') == true
       entry['future'] = true if is_future
+      is_obsolete = existing_criteria_data.dig(control[:field_name], :data, 'obsolete') == true
+      entry['obsolete'] = true if is_obsolete
 
       yaml_data[level_key][category]['Controls'][control[:field_name]] = entry
     end

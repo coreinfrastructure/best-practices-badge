@@ -60,6 +60,8 @@ zh-CN:
       reminder_notification_note:
         title: 电子邮件通知设置
         description_html: 如果您是此徽章条目的所有者，并且想要禁用非活动提醒邮件，请编辑您的<a href="/users/%{user_id}/edit">用户个人资料设置</a>。此设置适用于您的所有项目。
+      obsolete_header_html: 这些是以前要求但已从上游基线中退出的标准。它们仅供参考，<em>不</em>是获得徽章的必要条件。
+      obsolete_criterion: 已废弃标准
     form_basics:
       entry_locale:
         description: 此徽章条目的描述和理由使用什么语言？
@@ -96,6 +98,7 @@ zh-CN:
         details: 在项目的版本控制系统中对主分支设置分支保护以防止删除。
       osps_br_01_01:
         description: 当CI/CD管道接受输入参数时,该参数必须在管道中使用之前进行清理和验证。
+        details: CI/CD 流水线应对所有来自不可信来源的元数据输入进行清理（引用、转义或在期望值时退出）。这包括分支名称、提交消息、标签、拉取请求标题和作者信息等数据。
       osps_br_01_02:
         description: 当CI/CD管道在其功能中使用分支名称时,该名称值必须在管道中使用之前进行清理和验证。
       osps_br_03_01:
@@ -152,6 +155,9 @@ zh-CN:
       osps_vm_02_01:
         description: 在活动期间，项目文档必须包含安全联系人。
         details: 创建一个security.md（或类似名称）文件，其中包含项目的安全联系人。
+      osps_br_01_03:
+        description: 当 CI/CD 流水线对不可信代码快照进行操作时，它必须阻止访问特权 CI/CD 凭据和资产。
+        details: CI/CD 流水线应将不可信代码快照与特权凭据和资产隔离。特别是，项目应谨慎确保在协作者审查之前构建或执行代码的工作流无法访问 CI/CD 凭据。
     baseline-2:
       osps_ac_04_01:
         description: 当执行CI/CD任务且未指定权限时，CI/CD系统必须将任务的权限默认为管道中授予的最低权限。
@@ -207,6 +213,9 @@ zh-CN:
       osps_vm_04_01:
         description: 处于活跃状态时，项目文档必须公开发布有关已发现漏洞的数据。
         details: 在可预测的公共渠道（例如CVE条目、博客文章或其他媒体）中提供有关已知漏洞的信息。在可能的情况下，此信息应包括受影响的版本、消费者如何确定他们是否容易受到攻击以及缓解或修复的说明。
+      osps_do_07_01:
+        description: 项目文档必须包含如何构建软件的说明，包括所需的库、框架、SDK 和依赖项。
+        details: 建议将此信息与项目的贡献者文档一起发布，例如在 CONTRIBUTING.md 或其他开发者任务文档中。也可以使用 Makefile 目标或其他自动化脚本来记录此信息。
     baseline-3:
       osps_ac_04_02:
         description: 当在CI/CD管道中为作业分配权限时，源代码或配置必须仅分配相应活动所需的最低权限。
@@ -268,12 +277,16 @@ zh-CN:
       osps_vm_06_02:
         description: 在活跃期间，对项目代码库的所有更改必须根据记录的安全弱点政策自动评估，并在违规的情况下阻止，除非声明并抑制为不可利用。
         details: 在项目的版本控制系统中创建一个状态检查，对代码库的所有更改运行静态应用程序安全测试（SAST）工具。要求状态检查在更改可以合并之前必须通过。
+      osps_br_01_04:
+        description: 接受可信协作者输入的 CI/CD 流水线在流水线中使用该输入之前，必须对其进行清理和验证。
+        details: CI/CD 流水线应对显式工作流执行中的所有协作者输入进行清理（引用、转义或在期望值时退出）。虽然协作者通常是可信的，但工作流的手动输入无法经过审查，可能被账户劫持或内部威胁所滥用。
   criteria_overall:
     future: "{未来}"
     na_allowed: "{允许N/A}"
     na_justification_required: "{N/A理由}"
     met_justification_required: "{满足理由}"
     met_url_required: "{满足URL}"
+    obsolete: "{Obsolete}"
   criteria_discussion:
     intro_p01_html: "<h1 id='criteria_discussion'>条款讨论</h1>"
     intro_p02_html: "<p> 没有一套实践可以<i>保证</i>软件永远不会有缺陷或漏洞。即使是形式化方法，如果规范或假设错误也可能失败。也没有任何一套实践可以保证项目将维持一个健康且运作良好的开发社区。</p>"
@@ -378,3 +391,6 @@ zh-CN:
       test_automation: 测试自动化（置信度 %{confidence}）
     repo_json:
       field_from_file: 来自项目的 bestpractices JSON 文件的值
+  static_pages:
+    criteria_stats:
+      obsolete: 已废弃

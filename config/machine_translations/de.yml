@@ -63,6 +63,8 @@ de:
       reminder_notification_note:
         title: E-Mail-Benachrichtigungseinstellungen
         description_html: Wenn Sie der Eigentümer dieses Badge-Eintrags sind und Erinnerungs-E-Mails bei Inaktivität deaktivieren möchten, bearbeiten Sie bitte Ihre <a href="/users/%{user_id}/edit">Benutzerprofileinstellungen</a>. Diese Einstellung gilt für alle Ihre Projekte.
+      obsolete_header_html: Dies sind Kriterien, die zuvor erforderlich waren, aber aus dem vorgelagerten Baseline zurückgezogen wurden. Sie werden zur Referenz angezeigt und sind <em>nicht</em> für ein Badge erforderlich.
+      obsolete_criterion: Veraltetes Kriterium
     form_basics:
       entry_locale:
         description: Welche Sprache wird für die Beschreibung und Begründungen dieses Badge-Eintrags verwendet?
@@ -105,6 +107,7 @@ de:
         details: Setzen Sie Branch-Schutz auf den primären Branch im Versionskontrollsystem des Projekts, um das Löschen zu verhindern.
       osps_br_01_01:
         description: Wenn eine CI/CD-Pipeline einen Eingabeparameter akzeptiert, MUSS dieser Parameter vor der Verwendung in der Pipeline bereinigt und validiert werden.
+        details: CI/CD-Pipelines sollten alle Metadaten-Eingaben, die nicht vertrauenswürdigen Quellen entsprechen, bereinigen (in Anführungszeichen setzen, escapen oder bei erwarteten Werten beenden). Dazu gehören Daten wie Branch-Namen, Commit-Nachrichten, Tags, Titel von Pull Requests und Autoreninformationen.
       osps_br_01_02:
         description: Wenn eine CI/CD-Pipeline einen Branch-Namen in ihrer Funktionalität verwendet, MUSS dieser Namenswert vor der Verwendung in der Pipeline bereinigt und validiert werden.
       osps_br_03_01:
@@ -161,6 +164,9 @@ de:
       osps_vm_02_01:
         description: Während aktiv, MUSS die Projektdokumentation Sicherheitskontakte enthalten.
         details: Erstellen Sie eine security.md (oder ähnlich benannte) Datei, die Sicherheitskontakte für das Projekt enthält.
+      osps_br_01_03:
+        description: Wenn eine CI/CD-Pipeline mit nicht vertrauenswürdigen Code-Snapshots arbeitet, MUSS sie den Zugriff auf privilegierte CI/CD-Anmeldeinformationen und -Ressourcen verhindern.
+        details: CI/CD-Pipelines sollten nicht vertrauenswürdige Code-Snapshots von privilegierten Anmeldeinformationen und Ressourcen isolieren. Insbesondere sollten Projekte sorgfältig darauf achten, dass Workflows, die Code vor der Überprüfung durch einen Mitarbeiter erstellen oder ausführen, keinen Zugriff auf CI/CD-Anmeldeinformationen haben.
     baseline-2:
       osps_ac_04_01:
         description: Wenn eine CI/CD-Aufgabe ohne angegebene Berechtigungen ausgeführt wird, MUSS das CI/CD-System die Berechtigungen der Aufgabe standardmäßig auf die niedrigsten in der Pipeline gewährten Berechtigungen setzen.
@@ -216,6 +222,9 @@ de:
       osps_vm_04_01:
         description: Während das Projekt aktiv ist, MUSS die Projektdokumentation öffentlich Daten über entdeckte Schwachstellen veröffentlichen.
         details: Bereitstellen von Informationen über bekannte Schwachstellen in einem vorhersehbaren öffentlichen Kanal, wie z.B. einem CVE-Eintrag, Blogbeitrag oder einem anderen Medium. Soweit möglich sollten diese Informationen betroffene Version(en) enthalten, wie ein Verbraucher feststellen kann, ob er betroffen ist, und Anweisungen zur Schadensbegrenzung oder Behebung.
+      osps_do_07_01:
+        description: Die Projektdokumentation MUSS Anweisungen enthalten, wie die Software gebaut wird, einschließlich erforderlicher Bibliotheken, Frameworks, SDKs und Abhängigkeiten.
+        details: Es wird empfohlen, diese Informationen zusammen mit der Beiträgerdokumentation des Projekts zu veröffentlichen, z. B. in CONTRIBUTING.md oder anderen Entwickleraufgabendokumentationen. Dies kann auch mithilfe von Makefile-Zielen oder anderen Automatisierungsskripten dokumentiert werden.
     baseline-3:
       osps_ac_04_02:
         description: Wenn einem Job Berechtigungen in einer CI/CD-Pipeline zugewiesen werden, MUSS der Quellcode oder die Konfiguration nur die minimal erforderlichen Berechtigungen für die entsprechende Aktivität zuweisen.
@@ -277,6 +286,9 @@ de:
       osps_vm_06_02:
         description: Während das Projekt aktiv ist, MÜSSEN alle Änderungen an der Codebasis des Projekts automatisch anhand einer dokumentierten Richtlinie auf Sicherheitsschwachstellen bewertet und im Falle von Verstößen blockiert werden, außer wenn sie als nicht ausnutzbar deklariert und unterdrückt wurden.
         details: Erstellen Sie eine Statusprüfung im Versionskontrollsystem des Projekts, die ein Static Application Security Testing (SAST) Tool bei allen Änderungen an der Codebasis ausführt. Verlangen Sie, dass die Statusprüfung erfolgreich ist, bevor Änderungen zusammengeführt werden können.
+      osps_br_01_04:
+        description: CI/CD-Pipelines, die vertrauenswürdige Mitarbeitereingaben akzeptieren, MÜSSEN diese Eingaben bereinigen und validieren, bevor sie in der Pipeline verwendet werden.
+        details: CI/CD-Pipelines sollten alle Mitarbeitereingaben bei expliziten Workflow-Ausführungen bereinigen (in Anführungszeichen setzen, escapen oder bei erwarteten Werten beenden). Obwohl Mitarbeiter im Allgemeinen vertrauenswürdig sind, können manuelle Eingaben in einen Workflow nicht überprüft werden und könnten durch eine Kontoübernahme oder eine Insider-Bedrohung missbraucht werden.
   criteria_discussion:
     intro_p01_html: "<h1 id='criteria_discussion'>Kriteriendiskussion</h1>"
     intro_p02_html: "<p>Es gibt keine Auswahl an Praktiken, die <i>garantieren</i> können, dass Software niemals Fehler oder Schwachstellen hat. Selbst formale Methoden können fehlschlagen, wenn die Spezifikationen oder Annahmen falsch sind. Auch gibt es keine Auswahl an Praktiken, die garantieren können, dass ein Projekt eine gesunde und gut funktionierende Entwicklungsgemeinschaft aufrechterhalten wird.</p>"
@@ -401,3 +413,8 @@ de:
       test_automation: Testautomatisierung (Vertrauen %{confidence})
     repo_json:
       field_from_file: Wert aus der bestpractices JSON-Datei des Projekts
+  static_pages:
+    criteria_stats:
+      obsolete: Veraltet
+  criteria_overall:
+    obsolete: "{Veraltet}"

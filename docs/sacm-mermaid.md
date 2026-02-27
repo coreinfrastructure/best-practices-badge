@@ -2,15 +2,14 @@
 
 This document explains our approach to implementing the
 [Structured Assurance Case Metamodel (SACM)](https://www.omg.org/spec/SACM)
-graphical notation using the mermaid implementation
-currently available on GitHub while making the
-mermaid diagrams part of a markdown document.
+graphical notation using the mermaid and markdown implementation
+available on GitHub.
 
 ## Introduction
 
 The Object Management Group (OMG) has defined
 [Structured Assurance Case Metamodel (SACM)](https://www.omg.org/spec/SACM),
-version 2.3 at time of writing.
+this is version 2.3 at time of writing.
 SACM "defines a metamodel for representing structured assurance cases. An
 Assurance Case is a set of auditable claims, arguments, and evidence
 created to support the claim that a defined system/service will satisfy
@@ -20,16 +19,31 @@ In particular, the SACM specification
 defines an XML-based scheme for exchanging detailed
 data between tools specialized to support an assurance case.
 
-We *instead* want to be able to edit and view an assurance case
+A "claim" is a true-or-false statement, often supported by other material
+to justify the claim. The point of an assurance is to logically show
+that the topmost claim is justified - not in the sense of a formal proof,
+but like evidence for a court. A trivial claim is easily handled, but
+modern systems are more complicated, and it's important to be able explain
+not just "I did many things" but "why my activities justify my claims".
+
+We want to be able to edit and view an assurance case
 as a simple editable document
 using simple widely-available and widely-used open source software tools.
-The OMG SACM specification was not designed for this use case;
-the specification instead focuses on transfer of complex XML structures.
+The OMG SACM specification was not directly designed for this use case;
+the specification instead focuses on transfer of complex XML structures
+managed by complex tools.
 
-Thankfully, newer versions of SACM also include a recommended graphical
+Thankfully, newer versions of SACM include a recommended graphical
 notation defined in Annex C
 ("Concrete Syntax (Graphical Notations) for the Argumentation Metamodel").
 This graphical notation *can* be used in simple documents.
+The graphical notation is overall pretty good, for example, its simple
+rectangle for basic claims and its small full dot with arrow for inference
+connections make common cases easy to show. The "small full dot" for
+relations is helpful for drawing; many tools try to draw directly from one
+rectangle to another, producing a tangled hard-to-read mess.
+Arguments can be identified in the notation, but they are *optional*
+in the common case where the argument is obvious.
 
 In the best practices badge project we have traditionally used diagrams
 edited with LibreOffice, connected together and provided detail in
@@ -37,41 +51,55 @@ markdown format. This is flexible, and LibreOffice is
 quite capable. For a while we used the simpler claims, arguments, and
 evidence (CAE) notation.
 More recently, we started using LibreOffice to create SACM
-diagrams. The resulting images look quite close to annex C notation,
+diagrams. The resulting images look quite close to annex C notation
 and generally look good.
+A few conventions somewhat simplified the diagram editing process.
 
 However, the approach to editing graphics with LibreOffice
-creates significant effort when editing the graphics,
-because of the manual placement and regeneration
-of images after editing it requires.
-It also doesn't integrate well with version control, as the graphic
-information is essentially opaque complex structures.
+creates significant effort when editing the graphics.
+The manual placement of everything, and regeneration
+of images after editing it requires, add a lot of labor.
+It doesn't integrate well with version control, as the graphic
+information is essentially opaque complex data structures (zipped XML files),
+not simple text lines whose individual changes are easily tracked.
 It's also not easy to add hyperlinks from the images to the document
 sections that provide detail.
+Working hyperlinks *greatly* simplify using these diagrams.
 
 More recent markdown implementations, including GitHub's, include
-support for mermaid diagrams (such as mermaid flowcharts).
+support for
+[mermaid diagrams (including flowcharts)](https://mermaid.ai/open-source/syntax/flowchart.html).
+
+There are drawbacks to using mermaid for SACM notation.
 Mermaid, especially its older subset,
 cannot exactly implement the SACM graphical notation.
 Indeed, Mermaid is *much* less capable, graphically, than what LibreOffice
 can generate.
-Mermaid it doesn't let you "place" symbols at all!
-Its placement algorithm is quite naive (less capable than graphviz),
-as it really only understands ranks and graphs become harder if they
-are more than six across.
+Mermaid it doesn't let you fully "place" symbols at all!
+What's worse, its placement algorithm is quite naive;
+it's far less capable than the older graphviz program,
+as mermaid really only understands ranks places nodes in a specific order.
 The GitHub mermaid implementation also *requires* the user to run
 client-side JavaScript, which some may prefer to disable, and
-that esxecution imposes a small display delay.
+that execution imposes a small display delay.
 
-Nevertheless, the ability to *easily* integrate SACM diagrams into the
-markdown format is compelling.
-This would let us easily edit markdown files to update both the
-text and graphical representation, easy to keep the graphics and text
-in sync, and make it easy to add hyperlinks from the figures to their
-corresponding text.
-A mermaid representation doesn't need to look *exactly* like the SACM spec -
-it simply needs to be adequate to be clear represent constructs
-to stakeholder readers.
+However, using mermaid for SACM notation has some compelling advantages.
+Mermaid *easily* integrates into markdown, enabling excellent version control
+integration and group modification, as well as eliminating the
+often-forgotten regeneration step.
+Using mermaid would let us easily edit markdown files to update both the
+text and graphical representation, making it much easier to
+keep the graphics and text
+in sync.
+It ability to add hyperlinks from the figures to their
+corresponding text is compelling; that makes the diagrams
+far more usable.
+Mermaid cannot *precisely* represent the SACM annex C graphical notation,
+but for our purposes that isn't necessary.
+Mermaid simply needs to be adequate to clearly represent SACM constructs
+to our stakeholder readers.
+We can document in one place (this document) the adjustments we've made
+to represent SACM with mermaid.
 
 ## Document structure
 
@@ -79,16 +107,37 @@ We presume that there is a single assurance case document.
 This document is overall in Commonmark markdown (.md) format,
 interspersed with mermaid diagrams used to represent SACM
 (as well as possibly other materials such as images).
-
 The document will have various headings and sub-headings.
-Many of the headings will have the name of some node in a SACM diagram.
 
-SACM permits many structures, but we will intentionally limit SACM use
-to cases where there is a "topmost claim" for a given diagram.
-The diagram will introduce a heading with the name of the topmost claim.
-Each of the nodes will have hyperlinks from their names with GitHub
-style links, so that clicking on the name will navigate to *that*
-part of the document.
+A key heading will be named something like "SACM Package Diagrams".
+Each of its subheadings will have the form "Package NAME" where
+NAME is the name of the key most-important element (almost always
+the name of a package). In that subheading will be a mermaid diagram
+that shows the information in that package in SACM notation
+(per the SACM specification annex C).
+Note that these are our conventions; SACM doesn't *require* that there
+be one "most important" element, but this convention simplifies things.
+Note that all the diagrams are collected in one area, making it easy
+for readers to skim just the diagrams.
+
+Many SACM package diagrams have Claims that are "asCited", that is,
+the claim is defined in more detail in another package diagram.
+Those asCited Claims will have a hyperlink to the corresponding
+package diagram ("package NAME" where NAME is the name of the claim).
+
+While it's not *required*, many of the other ArgumentAsset nodes
+(the Claims, ArgumentReasonings, and ArtifactReferences) with some NAME
+will have a hyperlink to a corresponding section with the same name.
+This corresponding section implements the "contents" field of that
+ArgumentAsset.
+As a result, clicking on the name will navigate to *that* part of the document.
+
+The section corresponding to the "content" section will begin with a
+"Description:" statement (providing its brief description, e.g., its
+statement).
+It will also have
+"Referenced in:" with links to the packages it's referenced in.
+This will make it easy to follow what it says and to traverse the document.
 
 ## Mermaid approach to SACM
 
@@ -102,14 +151,18 @@ we've determined that GitHub's implementation currently doesn't
 support expanded node shapes in Mermaid flowcharts (available in v11.3.0+).
 For our purposes we must stick to what GitHub supports.
 
-### Mermaid Frontmatter
+### Mermaid Embedding
 
-To indicate a mermaid diagram begin its
-first line with <tt>&#96;&#96;&#96;mermaid</tt>
-and the following line should just have `---` to indicate
-the start of frontmatter. Use this frontmatter:
+To embed a mermaid diagram in markdown use this format.
+This indicates
+that it's a mermaid diagram, uses mermaid frontmatter to configure
+its appearance, and sets some styles if desired.
+Then replace
+`INSERT-FIGURE-HERE`:
 
-~~~~yaml
+`````
+```mermaid
+---
 config:
   theme: neutral
   flowchart:
@@ -118,7 +171,16 @@ config:
     rankSpacing: 60
     nodeSpacing: 45
     padding: 15
-~~~~
+---
+flowchart BT
+    classDef invisible opacity:0
+    classDef sacmDot fill:#000,stroke:#000
+    %% If used:
+    classDef connector fill:none,stroke:#cccccc,stroke-width:1px;
+    classDef abstractClaim stroke-width:2px,stroke-dasharray: 5 5;
+    INSERT-FIGURE-HERE
+```
+`````
 
 Reasons:
 
@@ -129,29 +191,46 @@ Reasons:
 * nodeSpacing: Assurance cases can get "crowded." This helps us have slightly more horizontal nodes.
 * padding: Reducing padding inside a node gives a little more space for multiple nodes on a line.
 
-After the front matter have another line with `---`, then the
-diagram, then a final <tt>&#96;&#96;&#96</tt> to end the diagram.
+As discussed later,
+a `sacmDot` is the default way to represent an AssertedRelationship, and
+(if used) `abstractClaim` will help represent a Claim that is abstract.
 
-### Layout and direction
+We'll use `invisible` when want to prevent a node and its text
+from being displayed at all.
+We could use `fill:none, stroke:none`, but that wouldn't hide text.
+We could add `color: #00000000` (setting the alpha channel), but I'm
+concerned the alpha channel might not always be correctly supported.
+Setting `opacity:0` is simpler and ensures that both its shape and text
+are not shown.
 
-Use `flowchart BT` (bottom-to-top) as the recommended layout.
+### Layout, direction, and spacing
+
+We use `flowchart BT` (bottom-to-top) as the recommended layout.
 In this layout sub-claims and evidence appear at the bottom,
 the top-level claim appears at the top,
 and edges point upward from supporting elements to the claim they support.
 This matches the SACM arrow direction and produces an intuitive hierarchy.
 
-**Alternative**: `flowchart TD` (top-down) with edges reversed so
-the parent claim points down to its sub-claims.
-This is common in many argument-tree tools and reads as decomposition,
-but reverses the SACM arrow semantics.
-`flowchart LR` is a further alternative for wide diagrams.
+We can define the *nodes* top-to-bottom. However, when we specify
+the connections, we must specify them in order
+from the bottom (leaf) up to the top.
 
-Whichever direction is chosen, document the convention explicitly
-in the diagram or accompanying text.
+Unfortunately GitHub's rendering engine always shows controls on
+the bottow right, making it impossible to read the bottom right
+of the diagram. There's no way to disable to adjust it.
+We can work around this by adding some unused padding
+at the bottom with an invisible node.
+
+So the first connection will be for an invisible node, with an invisible
+connector, to the first "real" node; add `~` characters for more padding.
+
+```
+    BottomPadding[ ]:::invisible ~~~ PO
+```
 
 ### Name, gid (id), and description
 
-In SACM, model node elements like "claim" have possibly 3 related values:
+In SACM, model node elements like Claim have possibly 3 related values:
 
 * `gid` String[0..1]:
   an optional identifier that is unique within the scope of the model instance.
@@ -196,25 +275,81 @@ the example of
 [Selviandro et al.], followed by a line break &lt;br/&gt;, followed
 by the description of the node.
 As a special case, ArtifactRefence (e.g., for evidence) will have
-a space and an unbolded northeast arrow (↗) after the full name
+a non-breaking space and an unbolded northeast arrow (↗) after the full name
 just before this line break; this attempts to emulate its appearance
 in SACM and remind readers that we're referencing external materials.
 
 When used in an assurance case, we expect that bolded name
-would be turned into a hyperlink, that is, it'd be
-surrounded by <tt>&lt;a href="#..."&gt;</tt>NAME<tt>&lt;/a&gt;</tt>.
+would be turned into a hyperlink (using `click`).
 That link would go to the corresponding heading (if present) with
 the same name that would provide more detail.
-This would make it easy to learn more detail.
+This makes it easy to learn more detail.
 
 We *could* left-align the name, and center the description, as this is the
 SACM convention.
 However, this would require a lot of extra ceremony in each
 node, making each node harder to edit.
-We'll just use bold text instead to clearly differentiate
-the name. This is still clear, yet it's much easier to read and edit later.
+It also risks getting stripped out by GitHub.
+So we'll just use bold text instead to clearly differentiate
+the name. This is still clear, using bold is common anyway,
+and this is much easier to read and edit later.
 
-## Mapping SACM to mermaid
+### SACM Packages
+
+SACM supports dividing assurance cases into a variety of "packages".
+We're just drawing diagrams, but it'd be good to have conventions that
+matched the SACM metamodel about packages.
+
+We will pretend that every diagram represents a small package
+named "Package NAME" where "NAME" is the primary ArgumentAsset node
+(in practice a Claim). Claims that are defined further elsewhere
+would be shown as asCited claims, with their own main package.
+
+Our packages will be smaller than typical, because mermaid's
+automatic layouts algorithm is limited and we're presenting
+information in portrait (not landscape). That's not necessarily
+bad; each diagram will be easier to follow.
+
+### Hyperlinks
+
+One *great* thing about this approach is that it's easy to enable
+hyperlinks from a diagram node to a heading defining its
+contents (and its defining package if there is one).
+GitHub supports both mermaid `click` and HTML `a href`, but
+`click` is easier to read and lets users click on the *entire*
+icon (not just the name), so we'll use `click`.
+Unfortunately, mermaid diagrams are rendered
+in an iframe, so relative fragment URLs
+like `#name` won't work; you must use the absolute URL (`https:...`).
+This means you'll always refer to a specific branch (normally the main branch,
+not the current branch).
+So after every node with a header that can jumped to, add:
+
+```
+click ID "ABSOLUTE_URL#NAME_AS_FRAGMENT"
+```
+
+In each node, after the mermaid assurance diagram if there is one, add this:
+
+```
+Referenced by: [Package NAME](#NAME_AS_FRAGMENT)
+```
+
+In the "Referenced by" don't include NAME itself; if there's more than one,
+use a comma-separated list. While it's unfortunate these have to be
+created and maintained by hand, it's not that hard, and it means readers
+can easily move around the document.
+
+The `NAME_AS_FRAGMENT` is simply the header converted into a fragment id
+using GitHub's usual algorithm:
+
+1. Convert all characters to lowercase.
+2. Remove everything except Unicode alphanumerics, hyphens, and spaces.
+3. Convert spaces to hyphens.
+4. Collapse multiple adjacent hyphens into one hyphen.
+4. Remove leading and trailing hyphens.
+
+## Mapping SACM diagram symbols to mermaid
 
 For each SACM graphical element identified in Annex C, here is our
 recommended Mermaid representation.
@@ -223,9 +358,9 @@ This section doesn't follow the *order* of Annex C.
 We instead will focus on the most important mappings first, starting
 with Claim.
 However, in this section we do discuss every graphical notation
-in Annex C.
+defined in the SACM specification Annex C.
 
-### C.6 Claim
+### Claim (C.6)
 
 **SACM §11.11 (p. 39)**: "Claims are used to record the propositions
 of any structured argument contained in an ArgumentPackage.
@@ -249,7 +384,7 @@ Since annex C says "statement" here, we will too.
 
 #### Asserted (default)
 
-The normal, fully-supported state. Plain rectangle:
+This normal, fully-supported state. Plain rectangle:
 
 ```
 C1["<b>C1: Claim long name</b><br>statement"]
@@ -275,8 +410,10 @@ flowchart BT
 #### Assumed
 
 Declared without any supporting evidence or argumentation.
+Mermaid cannot render the SACM spec's notation at all.
+So we instead add the word `ASSUMED`, which is at least clear.
 
-**Approach** — stadium/pill shape with a required `ASSUMED` suffix:
+**Approach** — a required `ASSUMED` suffix on its own line:
 
 ```
 C1["<b>C1: Claim long name</b><br>Assumed statement<br>ASSUMED"]
@@ -311,8 +448,10 @@ ASSUMED is used instead.
 
 Declared as requiring further evidence or argumentation.
 Append `...` to signal incompleteness, echoing the three dots
-shown below the rectangle in the spec. These would typically be
+shown below the rectangle in the spec. This marking would typically be
 forced (with a break) to be below the other text.
+Mermaid cannot render the spec's dots as part of bottom rectangle line,
+but what is *can* show is close enough.
 
 ```
 C1["<b>C1: Claim long name</b><br>Statement needing support<br>..."]
@@ -346,11 +485,12 @@ not 3 dots, but this is SACM.
 Intentionally declared as axiomatically true; no further
 support needed or expected.
 
-Plain rectangle with `===` suffix, typically on its own line via
-`<br>` to echo the spec's double bottom line:
+In SACM this is an extra line under the rectangle; we'll simulate that
+by adding a text suffix on its own line of three "━" characters
+(U+2501, Box Drawings Heavy Horizontal).
 
 ```
-C1["<b>C1: Long claim name</b><br>Axiomatic statement<br>==="]
+C1["<b>C1: Long claim name</b><br>Axiomatic statement<br>━━━"]
 ```
 
 Rendered:
@@ -367,13 +507,15 @@ config:
     padding: 15
 ---
 flowchart BT
-    C1["<b>C1: Long claim name</b><br>Axiomatic statement<br>==="]
+    C1["<b>C1: Long claim name</b><br>Axiomatic statement<br>━━━"]
 ```
 
 #### Defeated
 
-Defeated by counter-evidence. Append ` ✗` as a suffix
-(Mermaid cannot render the spec's crossed-out rectangle):
+Defeated by counter-evidence. Append `✗` as a suffix
+(Mermaid cannot render the spec's crossed-out rectangle, and the
+distinctive appearance of this symbol makes it clear
+this is something special and not simply part of the statement text):
 
 ```
 C1["<b>C1: Long claim name</b><br>Defeated statement<br>✗"]
@@ -399,16 +541,41 @@ flowchart BT
 #### AsCited
 
 Cites a claim from another package.
-The SACM notation is complex with a name, Cited Pkg [Cited name], and
-as usual a statement.
+The SACM notation (as define in C.6) is complex.
+It shows a bracketed box, and it
+adds a `Cited Pkg [Cited name]` in addition to a `name`.
 
-Here we'll opt for simplicity, and simply use the name as usual
-without the package references (our document isn't that complicated).
-The idea is that this is a reference, and the claim
-is more fully justified elsewhere.
+This graphical notation is flexible,
+but dubious.
+The ability to use a completely different name for
+the same claim is flexible but a terrible idea - it's confusing.
+
+What's more, the additional complexity makes it hard to represent
+in mermaid. Having two mandatory names *and* requiring a package identifier
+uses a lot of space.
+The graphical representation can be partly simulated by mermaid with
+subgraphs, but not well, and it creates overhead problems for no obvious
+benefit.
+
+Here we'll opt for simplicity. We will record a *single* name
+(as is done with everything else), which fills both name roles.
+What's more, as an extension we'll say that the `[Cited Pkg]` is optional;
+if it's omitted, the cited package is named "Package NAME" where
+NAME is the name of the claim. In practice, we'll always omit
+the package citation.
 
 The mermaid symbol that looks closest to this is the subroutine, so
-we'll use that:
+we'll use that.
+
+The result is quite nice-looking.
+Every AsCited Claim clearly indicates the name of a claim that is
+fully defined somewhere else. Since the default is the package
+name is "Package NAME", we can set our hyperlink to NAME.
+This provides a clear visual indicator that more is defined
+somewhere else and it enables rapid navigation.
+
+If space is tight, the statement may be omitted. The statement would be
+provided in the claim's full definition elsewhere.
 
 ```
 C1[["<b>C1: Long claim name</b><br>Cited statement"]]
@@ -431,16 +598,16 @@ flowchart BT
     C1[["<b>C1: Long claim name</b><br>Cited statement"]]
 ```
 
-If space is tight, the cited statement could be omitted.
-
 #### Abstract
 
-Part of a pattern or template, not a concrete instance.
-The spec uses a dashed rectangle (not available in Mermaid).
-Use curly braces around the name, as it's easy to type:
+An abstract claim is
+part of a pattern or template, and not a concrete instance.
+The spec uses a dashed rectangle for abstract claims,
+and this notation is directly available in Mermaid through styles.
 
 ```
-C1["<b>{C1: Claim long name}</b><br>Abstract statement"]
+    C1["<b>C1: Long claim name</b><br>Abstract statement"]:::abstractClaim
+
 ```
 
 Rendered:
@@ -457,10 +624,11 @@ config:
     padding: 15
 ---
 flowchart BT
-    C1["<b>{C1: Claim long name}</b><br>Abstract statement"]
+    classDef abstractClaim stroke-width:2px,stroke-dasharray: 5 5;
+    C1["<b>C1: Long claim name</b><br>Abstract statement"]:::abstractClaim
 ```
 
-### C.7 ArgumentReasoning
+### ArgumentReasoning (C.7)
 
 **SACM §11.12 (p. 40)**: "ArgumentReasoning can be used to provide
 additional description or explanation of the asserted relationship.
@@ -476,9 +644,12 @@ reasoning involved." Analogous to a "Strategy" node in GSN.
 vertical side and two short horizontal lines are drawn, forming a
 `]` bracket — containing name and statement.
 
-**Mermaid**: The parallelogram `[/..../]` is the closest available
-shape — visually non-rectangular and conventionally used for
-strategy/reasoning in GSN-influenced notations:
+**Mermaid**: Mermaid has nothing like this shape available.
+So we will use a parallelogram `[/..../]`. This is a somewhat similar shape,
+and clearly distinct from the rectangle.
+In addition, this is conventionally used for
+strategy/reasoning in GSN-influenced notations, so many readers will
+immediately know what the shape means:
 
 ```
 AR1[/"<b>AR1: Long reasoning name</b><br>Reasoning statement"/]
@@ -501,7 +672,25 @@ flowchart BT
     AR1[/"<b>AR1: Long reasoning name</b><br>Reasoning statement"/]
 ```
 
-### C.4 ArtifactReference
+If we fully controlled the generated HTML or CSS, we *could* create
+this shape by using a rectangle and selectively showing borders.
+However, this won't work on GitHub; for security reasons they
+disable inline styles and such for the default renderer.
+Using HTML to do this on each one would also be annoying.
+For completeness, here's what that would look like:
+
+```
+graph TD
+    %% Disable the node's actual border and fill
+    %% Then we draw the 'Half Box' using an HTML div
+    A[Claim] --> B["<div style='border-left:2px solid #333;
+                             border-top:2px solid #333;
+                             border-bottom:2px solid #333;
+                             padding:10px;'>Argument Reasoning</div>"]
+    style B fill:none,stroke-width:0px
+```
+
+### ArtifactReference (C.4)
 
 **SACM §11.9 (p. 38)**: "ArtifactReference enables the citation of
 an artifact as information that relates to the structured argument."
@@ -524,16 +713,18 @@ document, and not represented in the diagram itself.
 with an upward-right arrow (↗) in the
 fold, indicating a reference to an external artifact or evidence.
 
-**Mermaid**: No document shape is available in GitHub's Mermaid
+**Mermaid**: No document shape is available in the *current*
+version of GitHub's Mermaid
 renderer. In particular, nothing is like the multi-page document shape
 (LibreOffice can do this easily with shadows,
 but we don't have that option here).
-Use a cylinder/database shape `[(...)]` to hint at "stored evidence" and
+So we will
+use a cylinder/database shape `[(...)]` to hint at "stored evidence" and
 append `↗` to the name to preserving the "external reference" arrow
 cue from the spec notation:
 
 ```
-AR1[("<b>AR1: EvidenceName</b> ↗<br>Description of artifact")]
+AR1[("<b>AR1: EvidenceName</b>&amp;nbsp;↗<br>Description of artifact")]
 ```
 
 Rendered:
@@ -550,91 +741,74 @@ config:
     padding: 15
 ---
 flowchart BT
-    AR1[("<b>AR1: EvidenceName</b> ↗<br>Description of artifact")]
+    AR1[("<b>AR1: EvidenceName</b>&nbsp;↗<br>Description of artifact")]
 ```
 
 The cylinder is more visually distinct from Claims (rectangles and
 rounded rectangles) than a stadium/pill would be, reducing the risk of
 misreading a diagram at a glance. The ↗ icon is retained from the spec
 to indicate that this is a reference to external information.
+We put a non-breaking space before ↗ because otherwise the ↗ could
+end up on a line of its own.
 
-**If expanded shapes were supported**: The `docs` shape would better
+**If expanded shapes were supported**: The Mermaid
+`processes` or `docs` shapes would better
 render the spec's document symbol, eliminating the cylinder
 workaround and matching the source notation much more closely.
+In both shapes the graphical lower pages (which look like shadows)
+go the "wrong" way; in mermaid they go "up to the right" and in annex C
+they go "down to the right. In practice, it's unlikely
+people would even notice this subtle difference.
+Between those two shapes, `processes` matches the annex C notation better,
+as it's a shadowed rectangle, while `docs` has a ragged bottom.
+GitHub doesn't yet support extended shapes, but they probably will eventually,
+so we could switch to this once it becomes available:
 
-Syntax:
-
-~~~~
-`AR1@{ shape: docs,
-       label: "<b>AR1: EvidenceName</b> ↗<br>Description of artifact"
- }`
-~~~~
-
-Note that we would use `docs` not `doc` because `docs` has multiple
-rectangles representing pages, making it closer to the SACM symbol.
 The ↗ icon is unrelated to the spec's stacked rectangles;
 it represents externality, while the stacked rectangles indicates a
 document that is likely to have multiple pages.
 Thus, we would retain the ↗ icon.
 
-### C.8 AssertedInference
+Future syntax using extended nodes:
 
-**SACM §11.14 (p. 40)**: "AssertedInference association records the
-inference that a user declares to exist between one or more Assertion
-(premise) and another Assertion (conclusion). It is important to note
-that such a declaration is itself an assertion on behalf of the user."
-The spec explains: "An AssertedInference between two claims
-(A – the source – and B – the target) denotes that the truth of
-Claim A is said to infer the truth of Claim B." Distinguished from
-AssertedEvidence (C.9), where the source must be an ArtifactReference
-rather than a Claim or ArgumentReasoning.
+~~~~
+`AR1@{ shape: processes,
+       label: "<b>AR1: EvidenceName</b>&amp;nbsp;↗<br>Description of artifact"
+ }`
+~~~~
 
-**Annex C notation**: Reified relationship (by default a filled dot).
+### AssertedRelationship (C.8–C.12)
 
-The default concrete syntax of AssertedInference is defined in its
-Figure C14, where the "dot represents the AssertedInference
-instance, the edge without an arrow represents the +source reference of the AssertedInference, and the edge with an
-arrow represents the +target reference of the AssertedInference".
-The +source is typically a Claim or ArgumentReasoning, and the
-+target is typically a Claim.
-The dot can be replaced with other symbols to indicate information about
-the AssertedInference (e.g., that it is assumed).
+An AssertedRelation shows the relationship between
+ArgumentAssets (such as Claims).
 
-The dot can be replaced with other assertions about the association.
-For **Assertion states** use the **Inferential** table below.
+Two AssertedRelationships are especially common:
 
-In mermaid, these intermediate (reified) dots for associations
-can be a pain to handle.
-So in our SACM notation implementation, we will support the dot for
-AssertedInference and the other associations like it, but we
-make the reified dots *optional*.
-The full version is called the reified dot form.
+* Default AssertedInference (11.14, C.8). This
+  asserts that a set of +source ArgumentEvidence
+  (Claims, AssertedRelationship, or ArgumentReasoning)
+  infer (justify) a +target Claim.
+  The spec isn't clear that ArgumentReasoning is allowed as a source, but
+  I believe that's the intent.
+  In annex C this is shown with a filled dot
+  (representing the asserted relationship)
+  and an arrow pointing to the inferred target (representing the inference).
+  In mermaid we'll represent this case with the format
+  `SRC --- sacmDot --> TGT`.
+* Default AssertedContext (11.16, C.10). This asserts that the
+  +source ArtifactReference(s) provide the context for the interpretation
+  and scope of a Claim or ArgumentReasoning.
+  In annex C this is shown with a filled dot
+  (representing the asserted relationship)
+  and an square head pointing to the inferred target
+  (representing the target controlled by the context).
+  In mermaid we'll represent this with the circle head `--o`.
+  This unfortunately looks a lot like the sacmDot, but the only
+  alternateive is the cross head `--x` which looks ike
+  "forbidden". Thus the format is
+  `SRC --- sacmDot --o TGT`.
 
-#### Reified dot form
-
-**Mermaid**: Use a reification dot when there are multiple sources, to
-show they jointly constitute one association.
-
-We use a class definition `classDef sacmDot fill:#000,stroke:#000` to
-create the solid black dot appearance.
-For each dot's text, we prefer to use a hair space
-(U+200A, UTF-8 e2 80 8a) as the dot's textual contents.
-We have a script `script/fix_reification_spaces.sh` that automatically converts
-any one character (such as a space) within the phrase
-<tt>&#x28;("&nbsp;"))</tt> into a hair space.
-Thus, each dot looks like this: `Inf1((" ")):::sacmDot`.
-
-A hair space is the thinnest visible space.
-The mermaid processor
-doesn't permit an empty string, and a zero-width character in file like this
-can lead to other problems.
-We could use a period or centered period, and set the background and
-font text to black, something like this:
-`classDef sacmDot fill:#000,stroke:#000,width:8px,height:8px,color:#000,font-size:1px`.
-However, this doesn't work well; mermaid determines the item size too early.
-
-Here's an example, where sub-claims and
-ArgumentReasoning nodes appear below the Claim they support:
+Here's an example of an AssertedInference:
 
 ```mermaid
 ---
@@ -651,352 +825,235 @@ flowchart BT
     classDef sacmDot fill:#000,stroke:#000
     C2["C2: Sub-claim"]
     AR1[/"AR1: Reasoning"/]
-    Inf1((" ")):::sacmDot
+    Inf1((" ")):::sacmDot
     C1["C1: Top-level claim"]
+    E1[("<b>E1: Evidence</b>&nbsp;↗<br>Some evidence for context")]
+
     C2 --- Inf1
     AR1 --- Inf1
+    E1 --o Inf1
     Inf1 --> C1
 ```
 
-#### Unreified form
+You can generate lots of SACM models with just these two forms.
+However, the SACM notation supports many more options.
+In this section, we'll discuss the full generality.
 
-When there is only a single source, the dot may be omitted and a
-direct arrow used instead (`C2 --> C1`), since there is no ambiguity
-about joint vs. independent support.
+#### AssertedRelationship in full generality
 
-This is our extension to SACM graphical notation, not in the original,
-as a concession to mermaid's limited abilities.
+According to the SACM specification §11.13 (p. 40),
+AssertedRelationship is the abstract superclass
+for all asserted associations between ArgumentAssets (such as Claims).
+An AssertedRelationship declares that a
+connection exists between one or more +source ArgumentAssets and a single
++target ArgumentAsset. Among its attributes are:
 
-#### Meaning of +source and +target
+* `assertionDeclaration` attribute (default: asserted). This can be
+   asserted, needsSupport, assumed, axiomatic, defeated, or asCited.
+* `+isCounter` flag (default false). If true, the relationship
+  counters its declared purpose. Counter-evidence doesn't always lead
+  to the defeat of a claim, but it might.
+* `+isAbstract` flag (default false); if true, this is abstract
+  (this is defined by SACMElement)
+* `+metaClaim` (optional).
 
-Annex C defines exactly two edge types for the AssertedInference reification
-notation (C.8, p. 59, Figure C14):
+**Annex C notation**: The relationship instance is
+rendered as:
 
-- Edge without arrow = +source reference, 1+ ArgumentAssets
-  (premises/supporting elements)
-- Edge with arrow = +target reference, a single ArgumentAsset
-  (the conclusion being supported)
+* +source edge(s) without arrowheads
+* entity encoding the assertionDeclartion
+  (by default a filled dot meaning "asserted")
+* a single +target edge
 
-Per SACM figure 11.1, an AssertedInference is an AssertedRelationship,
-and all of the AssertedRelationships work in a similar way.
+Let's look at the options for each.
 
-An ArgumentAsset is very general. Per figure 11.1 it may be a(n):
+#### +source edge(s)
 
-* Assertion, which can be a Claim or some kind of AssertedRelationship
-  (including AssertedInference)
-* ArgumentReasoning
-* ArtifactReference
+A source edge is an undirected solid line if `isAbstract` is
+false, else it's a undirected dashed line.
 
-However, per 11.14, an AssertedInference has an additional
-requirement; its 1+ +source and its
-sole +target must be Assertions (a Claim or AssertedRelationship).
-This is why the annex C notation can use reified dots everywhere for different
-types of AssertedRelationships and still "know" which one is being used
-(because of the types of +source and +target).
+For mermaid that is `---` for an undirected solid line, and
+`-.-` for an undirected dashed line.
 
-### C.9 AssertedEvidence
+#### entity encoding assertionDeclation
 
-**SACM §11.15 (p. 41)**: "AssertedEvidence association records the
-declaration that one or more artifacts of Evidence (cited by
-ArtifactReference) provide information that helps establish the
-truth of a Claim." The spec constrains: "The source of
-AssertedEvidence relationships must be ArtifactReference."
-Distinguished from AssertedInference (C.8), where the source is a
-Claim or ArgumentReasoning rather than an ArtifactReference.
+The entity depends on assertionDeclation of the relationship;
+here is the annex C notation and our mermaid representation:
 
-**Annex C notation**: Same reified notation as AssertedInference,
-but the source is an ArtifactReference and the target is a Claim.
+* asserted (default): Solid dot for non-abstract,
+  no symbol (invisible) for abstract.
+  In mermaid we will represent this as `Inf1((" ")):::sacmDot`.
+  David A. Wheeler thinks the invisible symbol used for
+  *abstract* asserted relationship is a mistake, because
+  it lacks clarity. We *could* have an invisible image, but for the moment,
+  we'll just use the same representation when it's abstract.
+  We'll discuss the solid dot more later.
+* needsSupport: 3 dots. In mermaid
+  we'll represent this as `.&nbsp;.&nbsp;.`.
+* assumed: gap with lines on each end. In mermaid we'll use the text
+  `ASSUMED`.
+  Since lines tend to be vertical, we could instead use
+  use `〓` (Geta mark U+3013 &amp;#x3013;) or `===` or
+  `═══` (a sequence of Box Drawings Double Horizontal (U+2550,
+  &amp;#x2550;)). However, we worry these aren't distinctive enough
+  from axiomatic.
+* axiomatic: single line across main line.
+  In mermaid we'll use 3 Unicode Heavy Line
+  characters, `━━━` (&amp;#x2501;&amp;#x2501;&amp;#x2501;).
+* defeated: a large "X" across the line.
+  In mermaid we will represent this with "✗"
+  (Ballot X &amp;#x2717;) the same symbol defeated as a Claim.
+  We could use the letter "X" or
+  `✕` multiplication X, U+2715, &amp;#x2715;.
+  However, we want to use the same symbol as Claim,
+  and it's important that the Claim symbol be distinctive from
+  text in the Claim.
+* asCited: brackets around the line.
+  In mermaid we will represent this as `[]`.
 
-**Mermaid**: Same arrow style as C.8. The relationship type is implied
-by the source node's shape (cylinder + ↗):
+#### +target edge
 
-```mermaid
----
-config:
-  theme: neutral
-  flowchart:
-    curve: linear
-    htmlLabels: true
-    rankSpacing: 60
-    nodeSpacing: 45
-    padding: 15
----
-flowchart BT
-    EV1[("EvidenceName ↗<br>Description")]
-    C1["C1: Claim"]
-    EV1 --> C1
-```
+In annex C, the target edge appearance depends on:
 
-**Assertion states**: use the **Inferential** table above.
+* Is this an inferential ("arrow") or context ("boxed rectangle") relationship?
+  The inferential relationships AssertedInference (C.8),
+  AssertedEvidence (C.9), and AssertedArtifactSupport (C.11).
+  The context relationships are AssertedContext (C.10) and
+  AssertedArtifactContext (C.12).
+  In my diagrams, inference ("arrow") is more common.
+  Mermaid provides an arrow, so we use that.
+  Mermaid doesn't support a box as an endpoint head, so the mermaid
+  representation uses a filled circle head.
+* `+isCounter` flag (default false). If true, the relationship
+  counters its declared purpose. Counter-evidence doesn't always lead
+  to the defeat of a claim, but it might.
+  In annex C a "counter" relationship is
+  represented as "open" versions of the endpoints.
+  Mermaid can't do that, and it's a terrible representation anyway
+  (it's too easily missed). So instead we'll decorate the +target edge
+  with Circled minus ⊖ Unicode U+2296 &amp;#x2296;.
+* `+isAbstract` flag (default false); if true, this is abstract
+  (this is defined by SACMElement).
+  If false, we use a solid line, if true, we use a dashed line.
 
-### C.10 AssertedContext
+For non-abstract relationships (isAbstract is false),
+here are the mermaid representations (these use solid lines):
 
-**SACM §11.16 (p. 41)**: "AssertedContext can be used to declare that
-the artifact cited by an ArtifactReference(s) provides the context
-for the interpretation and scoping of a Claim or ArgumentReasoning
-element. In addition, the AssertedContext can be used to declare a
-Claim asserted as necessary context (i.e. a precondition) for another
-Assertion or ArgumentReasoning." Distinguished from AssertedInference
-(C.8) — context establishes interpretation scope or preconditions,
-not inferential support for the truth of a claim.
-
-**Annex C notation**: Same reified notation but the target endpoint
-is a filled square (■) rather than a filled arrowhead, indicating the
-source provides context to the target rather than inferential support.
-The counter variant uses an open square (□).
-
-**Mermaid**: Use `--o` (circle at target end) as the closest
-approximation to the spec's filled-square endpoint:
-
-```mermaid
----
-config:
-  theme: neutral
-  flowchart:
-    curve: linear
-    htmlLabels: true
-    rankSpacing: 60
-    nodeSpacing: 45
-    padding: 15
----
-flowchart BT
-    CTX["Context claim"]
-    C1["C1: Claim"]
-    CTX --o C1
-```
-
-Dashed-line-with-circle is not supported in GitHub's Mermaid, so
-`assumed` and `abstract` variants fall back to dashed arrows with
-a `ctx` label to preserve the context meaning.
-
-**Assertion states**: use the **Context** table above.
-
-### C.11 AssertedArtifactSupport
-
-**SACM §11.17 (p. 41)**: "AssertedArtifactSupport records the
-assertion that one or more artifacts support another artifact."
-The spec constrains: "The source and target of
-AssertedArtifactSupport must be of type ArtifactReference." The spec
-cautions this "can be an ambiguous relationship if the nature of
-these Assertions is unclear. In such cases, it would be clearer to
-declare explicit AssertedInferences between Claims drawn out from the
-ArtifactReference." Distinguished from AssertedInference (C.8) and
-AssertedEvidence (C.9) — both source and target must be
-ArtifactReferences.
-
-**Annex C notation**: Same reified notation as AssertedInference,
-but both source and target are ArtifactReferences.
-
-**Mermaid**: Same arrow style as C.8. Both source and target are
-ArtifactReferences (cylinders + ↗), which distinguishes this from
-AssertedInference (whose nodes are Claims or ArgumentReasoning):
-
-```mermaid
----
-config:
-  theme: neutral
-  flowchart:
-    curve: linear
-    htmlLabels: true
-    rankSpacing: 60
-    nodeSpacing: 45
-    padding: 15
----
-flowchart BT
-    AR1[("Source Artifact ↗<br>Description")]
-    AR2[("Target Artifact ↗<br>Description")]
-    AR1 --> AR2
-```
-
-**Assertion states**: use the **Inferential** table above.
-
-### C.12 AssertedArtifactContext
-
-**SACM §11.18 (p. 41)**: "AssertedArtifactContext records the
-assertion that one or more artifacts provide context for another
-artifact." The spec constrains: "The source and target of
-AssertedArtifactContext must be of type ArtifactReference."
-Distinguished from AssertedContext (C.10), where the source or
-target may be a Claim rather than an ArtifactReference.
-
-**Annex C notation**: Same reified notation as AssertedContext,
-but both source and target are ArtifactReferences.
-
-**Mermaid**: Same `--o` base style as C.10. Both source and target are
-ArtifactReferences (cylinders + ↗), which distinguishes this from
-AssertedContext (whose nodes may be Claims):
-
-```mermaid
----
-config:
-  theme: neutral
-  flowchart:
-    curve: linear
-    htmlLabels: true
-    rankSpacing: 60
-    nodeSpacing: 45
-    padding: 15
----
-flowchart BT
-    AR1[("Context Artifact ↗<br>Description")]
-    AR2[("Target Artifact ↗<br>Description")]
-    AR1 --o AR2
-```
-
-**Assertion states**: use the **Context** table above.
-
-### Assertion states for relationships (C.8–C.12)
-
-Each of C.8–C.12 is a reified relationship: the relationship instance
-is a dot node, sources connect to it with plain lines, and the dot
-connects to the target with a decorated edge that encodes the assertion
-state. Full form with dot:
-
-```
-Src --- Dot((" ")):::sacmDot --> Tgt
-```
-
-When there is only a single source and the dot need not be referenced
-(no +metaClaim attached), the dot may be omitted and the same edge
-style applied directly:
-
-```
-Src --> Tgt
-```
-
-The assertion state is always encoded on the **Dot→Tgt edge** (or the
-direct Src→Tgt edge when the dot is omitted). There are two base
-arrow families across the five relationship types:
-
-**Note on orthogonality**: Relationship assertion states (C.8–C.12)
-and Claim assertion states (C.6) are entirely independent. Both
-inherit `assertionDeclaration` from the abstract `Assertion` class
-(§11.10, p. 39), but they are encoded differently and do not
-interfere. A Claim node can carry `assumed` (stadium shape + `~`
-prefix) while the relationship pointing to it simultaneously carries
-`defeated` (`Dot --x Tgt`). The visual motifs reuse similar symbols
-(bracket feet, three dots) in both contexts, but they apply to
-different objects.
-
-**Inferential** (`-->` base) — used by C.8 AssertedInference,
-C.9 AssertedEvidence, and C.11 AssertedArtifactSupport:
-
-| Assertion state | Dot→Tgt edge | Notes |
+| Type | Not Counter | Is Counter |
 |---|---|---|
-| asserted (default) | `Dot --> Tgt` | Solid arrow |
-| assumed | `Dot -. "assumed" .-> Tgt` | Dashed with label |
-| needsSupport | `Dot -- "..." --> Tgt` | Label signals incompleteness |
-| axiomatic | `Dot ==> Tgt` | Thick arrow |
-| defeated | `Dot -- "defeated" --x Tgt` | Label distinguishes from counter |
-| asCited | `Dot -- "cited: Pkg::Name" --> Tgt` | Include citation in label |
-| abstract | `Dot -.-> Tgt` | Dashed, no label |
-| counter | `Dot -- "counter" --x Tgt` | Label distinguishes from defeated |
+| Inferential | <tt>--&gt;</tt> | <tt>--&gt;&#x7c;⊖&#x7c;</tt> |
+| Context | `--o` | <tt>--o&#x7c;⊖&#x7c;</tt> |
 
-Visual examples of each inferential assertion state (all include
-the reification dot):
+For abstract relationships (isAbstract is true),
+here are the mermaid representations (these use dashed lines):
 
-```mermaid
----
-config:
-  theme: neutral
-  flowchart:
-    curve: linear
-    htmlLabels: true
-    rankSpacing: 60
-    nodeSpacing: 45
-    padding: 15
----
-flowchart LR
-    S1["Src"] --- D1((" ")):::sacmDot
-    D1 --> T1["Tgt — asserted"]
-
-    S2["Src"] --- D2((" ")):::sacmDot
-    D2 -. "assumed" .-> T2["Tgt — assumed"]
-
-    S3["Src"] --- D3((" ")):::sacmDot
-    D3 -- "..." --> T3["Tgt — needsSupport"]
-
-    S4["Src"] --- D4((" ")):::sacmDot
-    D4 ==> T4["Tgt — axiomatic"]
-
-    S5["Src"] --- D5((" ")):::sacmDot
-    D5 -- "defeated" --x T5["Tgt — defeated"]
-
-    S6["Src"] --- D6((" ")):::sacmDot
-    D6 -- "cited: Pkg::Name" --> T6["Tgt — asCited"]
-
-    S7["Src"] --- D7((" ")):::sacmDot
-    D7 -.-> T7["Tgt — abstract"]
-
-    S8["Src"] --- D8((" ")):::sacmDot
-    D8 -- "counter" --x T8["Tgt — counter"]
-```
-
-**Context** (`--o` base) — used by C.10 AssertedContext and
-C.12 AssertedArtifactContext. The `ctx` suffix on labels distinguishes
-context edges from inferential edges when both appear in a diagram:
-
-| Assertion state | Dot→Tgt edge | Notes |
+| Type | Not Counter (Abstract) | Is Counter (Abstract) |
 |---|---|---|
-| asserted (default) | `Dot --o Tgt` | Circle (○) approximates spec's filled square (■) |
-| assumed | `Dot -. "assumed ctx" .-> Tgt` | Dashed+circle unsupported; use dashed+label |
-| needsSupport | `Dot -- "... ctx" --o Tgt` | Labeled circle end |
-| axiomatic | `Dot == "axiomatic ctx" ==> Tgt` | Labeled thick arrow |
-| defeated | `Dot -- "defeated ctx" --x Tgt` | `ctx` label distinguishes from inferential |
-| asCited | `Dot -- "cited ctx: Pkg::Name" --o Tgt` | Labeled circle end |
-| abstract | `Dot -. "ctx" .-> Tgt` | Dashed+circle unsupported; use dashed+label |
-| counter | `Dot -- "counter ctx" --x Tgt` | X end; `ctx` label distinguishes |
+| Inferential | <tt>-.-&gt;</tt> | <tt>-.-&gt;&#x7c;⊖&#x7c;</tt> |
+| Context | `-.-o` | <tt>-.-o&#x7c;⊖&#x7c;</tt> |
 
-Visual examples of each context assertion state (all include
-the reification dot):
+Mermaid also has a cross arrow head `--x`, but while that would
+look good for *counter*, we'd still need to distinguish between
+inferential and context, and mermaid doesn't have 4 arrow head types.
+Counter is less used anyway, so it made more sense to consistently
+use the same heads everywhere, and add a special marker for
+when the assertion is a counter assertion.
 
-```mermaid
----
-config:
-  theme: neutral
-  flowchart:
-    curve: linear
-    htmlLabels: true
-    rankSpacing: 60
-    nodeSpacing: 45
-    padding: 15
----
-flowchart LR
-    CS1["Src"] --- CD1((" ")):::sacmDot
-    CD1 --o CT1["Tgt — asserted"]
+#### Subclass determination of AssertedRelationship
 
-    CS2["Src"] --- CD2((" ")):::sacmDot
-    CD2 -. "assumed ctx" .-> CT2["Tgt — assumed"]
+The five concrete subclasses of AssertedRelationship
+are AssertedInference (C.8), AssertedEvidence
+(C.9), AssertedContext (C.10), AssertedArtifactSupport (C.11), and
+AssertedArtifactContext (C.12).
+They all look identical in the SACM graphical notation.
+The subclass is implied entirely by the types of the
++source and +target nodes and the arrow-head style on the +target edge.
 
-    CS3["Src"] --- CD3((" ")):::sacmDot
-    CD3 -- "... ctx" --o CT3["Tgt — needsSupport"]
+In short, you can simply draw the relationship, and the correct one
+will be automatically determined.
+However, for precision, here is how they are determined:
 
-    CS4["Src"] --- CD4((" ")):::sacmDot
-    CD4 == "axiomatic ctx" ==> CT4["Tgt — axiomatic"]
+| Subclass | Source type | Target type | Arrow style | SACM ref |
+|---|---|---|---|---|
+| AssertedInference | Assertion (Claim or AssertedRelationship); we believe ArgumentReasoning also expected | Assertion | `-->` inferential | §11.14 |
+| AssertedEvidence | ArtifactReference | Claim | `-->` inferential | §11.15 |
+| AssertedArtifactSupport | ArtifactReference | ArtifactReference | `-->` inferential | §11.17 |
+| AssertedContext | Claim or ArtifactReference | Claim, Assertion, or ArgumentReasoning | `--o` context | §11.16 |
+| AssertedArtifactContext | ArtifactReference | ArtifactReference | `--o` context | §11.18 |
 
-    CS5["Src"] --- CD5((" ")):::sacmDot
-    CD5 -- "defeated ctx" --x CT5["Tgt — defeated"]
+If you point to the target with
+a normal arrow `-->` that's a normal (non-context) relationship;
+if you use context arrow `--o` that means you're defining context.
+By default they are *asserted*, in which case
+the relation is represented by a filled black dot.
 
-    CS6["Src"] --- CD6((" ")):::sacmDot
-    CD6 -- "cited ctx: Pkg::Name" --o CT6["Tgt — asCited"]
+#### Solid dot (reified form)
 
-    CS7["Src"] --- CD7((" ")):::sacmDot
-    CD7 -. "ctx" .-> CT7["Tgt — abstract"]
+In SACM an AssertedRelationship is "reified", that is, it has
+its own symbol on the diagram.
+By default an AssertedRelationship has the `assertedDeclaration` value
+of `asserted`, and this is represented by a small black dot
+(aka "reification dot" or "sacmDot").
+This symbol is almost all SACM diagrams, so it's important to do this well.
 
-    CS8["Src"] --- CD8((" ")):::sacmDot
-    CD8 -- "counter ctx" --x CT8["Tgt — counter"]
-```
+To represent the AssertedRelationship default `asserted` state
+we use a mermaid class definition `classDef sacmDot fill:#000,stroke:#000` to
+create a solid black dot appearance.
+For each dot's text, we prefer to use a hair space
+(U+200A, UTF-8 e2 80 8a) as the dot's textual contents.
+We have a script `script/fix_reification_spaces.sh` that automatically converts
+any one character (such as a space) within the phrase
+<tt>&#x28;("&nbsp;"))</tt> into a hair space.
+Thus, each dot looks like this: `Inf1((" ")):::sacmDot`.
 
-When both "defeated" and "counter" appear in the same diagram, always
-label the `--x` edge to disambiguate them.
+A hair space is the thinnest visible space.
+The mermaid processor
+doesn't permit an empty string, and a zero-width character in file like this
+can lead to other problems.
+We could use a period or centered period, and set the background and
+font text to black, something like this:
+`classDef sacmDot fill:#000,stroke:#000,width:8px,height:8px,color:#000,font-size:1px`.
+However, this doesn't work well; mermaid determines the item size too early.
 
-**If expanded shapes were supported**: Use `f-circ` (the filled/junction
-circle) instead of `((" ")):::sacmDot` — the filled circle matches the spec's
-solid filled dot more closely than an open circle.
+**If expanded shapes were supported**: We might someday
+use `f-circ` (the filled/junction
+circle) instead of `((" ")):::sacmDot` for the sacmDot,
+as it's a filled circle without any special styling.
 
 Syntax: `Dot@{ shape: f-circ }`.
 
-### C.5 +metaClaim reference
+#### Our extension: Unreified (single-source) form
+
+We add an extension to SACM graphical notation, that is
+not in the original spec,
+as a concession to mermaid's limited graphical capabilities.
+
+Normally an AssertedRelationship is represented by its own symbol,
+by default a black filled dot.
+
+However, when an AssertedRelationship has only a single source and is
+a "simple" case, we'll also allow a direct edge a sacmDot.
+The "simple" case means:
+
+* it is `asserted` (the default), which would be normally be
+  represented as a sacmDot
+* there's no graphical need for the sacmDot.
+  That is, there's only 1 source and there's
+  no +metaClaim attached to the relationship
+* it is not abstract. In Annex C abstract relationships are shown with
+  dashed lines and without a sacmDot, and we don't want to be ambiguous.
+
+Thus you're allowed to simply these connectsions to:
+
+* `Src --> Tgt` - inferential:
+  AssertedInference, AssertedEvidence, AssertedArtifactSupport
+* `Src --o Tgt` - context: AssertedContext, AssertedArtifactContext
+
+Note that the same assertion-state
+edge decorations apply to the direct Src→Tgt edge
+as to the Dot→Tgt edge in the reified form.
+
+### +metaClaim reference (C.5)
 
 **SACM §11.10 (p. 39)**: The +metaClaim is an association on
 Assertion: "metaClaim:Claim[0..*] — references Claims concerning
@@ -1008,11 +1065,11 @@ to have Claims attached to it as commentary or meta-level observation.
 arrowhead (`——<`), used to attach a Claim that comments on an
 Assertion (e.g., expressing confidence in the assertion itself).
 
-**Mermaid**: A dashed labeled edge, visually distinct from
-regular inference arrows:
+**Mermaid**: A directed edge labelled `+metaClaim`, as this is clear
+and mermaid doesn't support a better mapping:
 
 ```
-MC1 -. "+metaClaim" .-> C1
+MC1 -->|+metaClaim| C1
 ```
 
 Rendered:
@@ -1031,8 +1088,36 @@ config:
 flowchart BT
     C1["<b>C1: Top-level claim<b>"]
     MC1["<b>MC1: Confidence is high<b>"]
-    MC1 -. "+metaClaim" .-> C1
+    MC1 -->|+metaClaim| C1
 ```
+
+### Our extension: Connectors
+
+SACM graphical notation doesn't have a symbol for combining multiple
+lines into a single line. The SACM specification is primarily about its
+data model, not the graphical noation.
+
+However, when drawing, it's sometimes helpful to combine many source
+lines into one source line, in a way that doesn't impact the meaning
+(the lines are still separate source lines) but simplifies the image.
+
+So we extend the mermaid notation by adding a `connector` node,
+an open circle with grayed edges (signifying this isn't important).
+To do this, make sure the mermaid has a classDef definition of its style:
+
+```
+    classDef connector fill:none,stroke:#cccccc,stroke-width:1px;
+```
+
+When you want to create a connector, use it like this:
+
+```
+    Conn1((" ")):::connector
+```
+
+You may want to force some of the undirected lines to be longer when
+using it; if it's a solid line, just add more dashes (e.g., `-----`
+instead of `---`).
 
 ### Unmapped constructs
 
@@ -1043,7 +1128,7 @@ messy and not worth it.
 
 Here are the sections and constructs:
 
-#### C.1 ArgumentPackage
+#### ArgumentPackage (C.1)
 
 **SACM §11.4 (p. 36)**: "ArgumentPackage is the containing element
 for a structured argument represented using the SACM Argumentation
@@ -1053,7 +1138,7 @@ ArgumentAssets and can be nested.
 **Annex C notation**: A bordered rectangular container with a tab
 header and a side panel — a named grouping of argument elements.
 
-#### C.2 ArgumentPackageInterface
+#### ArgumentPackageInterface (C.2)
 
 **SACM §11.6 (p. 37)**: "ArgumentPackageInterface is a kind of
 ArgumentPackage that defines an interface that may be exchanged
@@ -1065,7 +1150,7 @@ are visible to other packages. Distinguished from ArgumentPackageBinding
 symbol in the side panel, indicating an interface through which the
 package exposes elements to other packages.
 
-#### C.3 ArgumentPackageBinding
+#### ArgumentPackageBinding (C.3)
 
 **SACM §11.5 (p. 36)**: "ArgumentPackageBindings can be used to map
 resolved dependencies between the Claims of two or more
@@ -1084,6 +1169,51 @@ of the SACM v2.3 specification (OMG Formal/23-05-08, October 2023) using the
 Mermaid mapping established above. Each subsection names the source figure and
 reproduces the spec's prose description, then shows the Mermaid equivalent.
 
+### Figure D2
+
+**Source**: Figure D2, SACM v2.3 Annex D (informative)
+
+This is a simple diagram. G11 is justified by G12 and G13,
+but both need support.
+
+```
+flowchart BT
+    classDef sacmDot fill:#000,stroke:#000
+    G11["<b>G11</b><br>statement"]
+    G12["<b>G12</b><br>statement<br>..."]
+    G13["<b>G13</b><br>statement<br>..."]
+    Inf1((" ")):::sacmDot
+
+    G12 --- Inf1
+    G13 --- Inf1
+    Inf1 --> G11
+```
+
+Here is the rendered version:
+
+```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
+flowchart BT
+    classDef sacmDot fill:#000,stroke:#000
+    G11["<b>G11</b><br>statement"]
+    G12["<b>G12</b><br>statement<br>..."]
+    G13["<b>G13</b><br>statement<br>..."]
+    Inf1((" ")):::sacmDot
+
+    G12 --- Inf1
+    G13 --- Inf1
+    Inf1 --> G11
+```
+
 ### Figure D1 — Example of Claim Assumptions
 
 **Source**: Figure D1, SACM v2.3 Annex D (informative), p. 67.
@@ -1094,19 +1224,18 @@ assumption being made to support that AssertedInference. The assumed assertion
 state on A1 signals that A1 is not itself argued; it is taken as a given in
 order to justify the inference from G2 and G3 to G1.
 
+Figure D1 is a somewhat complicated situation, where an assumption
+is justifying an inference (not merely one of its sources).
+
 **Mapping notes**:
 
 - G1, G2, G3 are asserted Claims → rectangle `["…"]`
 - A1 is an assumed Claim → stadium `(["… ASSUMED"])` with `ASSUMED` suffix
   (spec uses bracket-feet notation; Mermaid has no direct equivalent)
-- The AssertedInference reification dot is rendered as a small circle node
-  `((" ")):::sacmDot`, matching the spec's filled dot that sits at the centre of the
-  relationship
+- The AssertedInference reification dots are rendered as a small circle node
+  `((" ")):::sacmDot`
 - Plain (undirected) lines `---` connect each asserted source to the dot,
   matching the spec's plain lines from sources to the dot
-- A dashed directed line `-. "assumed" .->` connects A1 to the dot,
-  encoding the assumed assertion state on that source and preserving
-  the directionality of the source-to-dot connection in the spec
 - A solid arrow `-->` leads from the dot to the target Claim G1, matching
   the spec's filled arrowhead pointing at the supported claim
 
@@ -1115,16 +1244,19 @@ Mermaid Frontmatter described earlier).
 
 ```
 flowchart BT
-    G2["<b>G2</b><br>Sub-claim A"]
-    G3["<b>G3</b><br>Sub-claim B"]
-    A1(["<b>A1</b><br>Assumed condition</b><br>ASSUMED"])
+    classDef sacmDot fill:#000,stroke:#000
+    G1["<b>G1</b><br>statement"]
+    A1(["<b>A1</b><br>statement</b><br>ASSUMED"])
+    G2["<b>G2</b><br>statement"]
+    G3["<b>G3</b><br>statement"]
     Inf1((" ")):::sacmDot
-    G1["<b>G1</b><br>Top-level claim"]
+    Inf2((" ")):::sacmDot
 
-    A1 -. "assumed" .-> Inf1
-    G2 --- Inf1
-    G3 --- Inf1
-    Inf1 --> G1
+    A1 --- Inf1
+    Inf1 --> Inf2
+    G2 --- Inf2
+    G3 --- Inf2
+    Inf2 --> G1
 ```
 
 Rendered:
@@ -1142,16 +1274,18 @@ config:
 ---
 flowchart BT
     classDef sacmDot fill:#000,stroke:#000
-    G2["<b>G2</b><br>Sub-claim A"]
-    G3["<b>G3</b><br>Sub-claim B"]
-    A1(["<b>A1</b><br>Assumed condition</b><br>ASSUMED"])
+    G1["<b>G1</b><br>statement"]
+    A1(["<b>A1</b><br>statement</b><br>ASSUMED"])
+    G2["<b>G2</b><br>statement"]
+    G3["<b>G3</b><br>statement"]
     Inf1((" ")):::sacmDot
-    G1["<b>G1</b><br>Top-level claim"]
+    Inf2((" ")):::sacmDot
 
-    A1 -. "assumed" .-> Inf1
-    G2 --- Inf1
-    G3 --- Inf1
-    Inf1 --> G1
+    A1 --- Inf1
+    Inf1 --> Inf2
+    G2 --- Inf2
+    G3 --- Inf2
+    Inf2 --> G1
 ```
 
 ### Figure D9 — ArtifactReference Citation via AssertedEvidence
@@ -1178,7 +1312,7 @@ that both a name and a description are supported.
 
 ```
 flowchart BT
-    E1[("<b>E1: Long evidence name</b> ↗<br>Evidence artifact description")]
+    E1[("<b>E1: Long evidence name</b>&amp;nbsp;↗<br>Evidence artifact description")]
     G4["<b>G4: Long claim name</b><br>Claim statement"]
 
     E1 --> G4
@@ -1198,7 +1332,7 @@ config:
     padding: 15
 ---
 flowchart BT
-    E1[("<b>E1: Long evidence name</b> ↗<br>Evidence artifact description")]
+    E1[("<b>E1: Long evidence name</b>&nbsp;↗<br>Evidence artifact description")]
     G4["<b>G4: Long claim name</b><br>Claim statement"]
 
     E1 --> G4
@@ -1222,12 +1356,12 @@ demonstrating SACM's reified relationships in a realistic setting.
 - Node labels follow the `<b>ShortID: Long name</b><br>description` convention
 - SOP is the top-level asserted Claim → plain rectangle
 - CS is an ArtifactReference providing context for SOP
-  → cylinder with `<b>name</b> ↗<br>description`, connected with `--o` (AssertedContext)
+  → cylinder with `<b>name</b>&amp;nbsp;↗<br>description`, connected with `--o` (AssertedContext)
 - DTS and OS are ArgumentReasoning nodes → parallelogram `[/…/]`
 - DI and UR are asserted Claims → plain rectangle
 - AR (Ambiguous Regions) is a NeedsSupport Claim → plain rectangle with
   `<br>...` suffix on its own line
-- DIE and ASD are ArtifactReferences → cylinder with `<b>name</b> ↗<br>description`
+- DIE and ASD are ArtifactReferences → cylinder with `<b>name</b>&amp;nbsp;↗<br>description`
 - Two AssertedInference relationships, each reified with a dot:
   - Inf1 gathers {DI, DTS} and infers SOP
   - Inf2 gathers {UR, AR, OS} and infers SOP
@@ -1238,14 +1372,14 @@ demonstrating SACM's reified relationships in a realistic setting.
 flowchart BT
     classDef sacmDot fill:#000,stroke:#000
     SOP["<b>SOP: Segmentation Outcome Performance</b><br>Segmentation network produces device-independent tissue-segmentation maps"]
-    CS[("<b>CS: Clinical Setting</b> ↗<br>Triage in an ophthalmology referral pathway at Moorfields Eye Hospital, with more than 50 common diagnoses")]
+    CS[("<b>CS: Clinical Setting</b>&amp;nbsp;↗<br>Triage in an ophthalmology referral pathway at Moorfields Eye Hospital, with more than 50 common diagnoses")]
     DTS[/"<b>DTS: Device Training Strategy</b><br>Argument by training segmentation network on scans from 2 different devices"/]
     OS[/"<b>OS: Output Strategy</b><br>Argument over ambiguous and unambiguous regions"/]
     DI["<b>DI: Device Independence</b><br>AUC of 99.21 and 99.93 achieved for the 1st and 2nd device considering urgent referral"]
     UR["<b>UR: Unambiguous Regions</b><br>Tissue-segmentation map obtained by network is consistent with manual segmentation map"]
     AR["<b>AR: Ambiguous Regions</b><br>The ambiguous regions in OCT scans are addressed by training multiple instances of the network<br>..."]
-    DIE[("<b>DIE: Device Independence Evidence</b> ↗<br>Performance results")]
-    ASD[("<b>ASD: Automated Segmentation Device</b> ↗<br>Results of Segmentation Network")]
+    DIE[("<b>DIE: Device Independence Evidence</b>&amp;nbsp;↗<br>Performance results")]
+    ASD[("<b>ASD: Automated Segmentation Device</b>&amp;nbsp;↗<br>Results of Segmentation Network")]
     Inf1((" ")):::sacmDot
     Inf2((" ")):::sacmDot
 
@@ -1277,14 +1411,14 @@ config:
 flowchart BT
     classDef sacmDot fill:#000,stroke:#000
     SOP["<b>SOP: Segmentation Outcome Performance</b><br>Segmentation network produces device-independent tissue-segmentation maps"]
-    CS[("<b>CS: Clinical Setting</b> ↗<br>Triage in an ophthalmology referral pathway at Moorfields Eye Hospital, with more than 50 common diagnoses")]
+    CS[("<b>CS: Clinical Setting</b>&nbsp;↗<br>Triage in an ophthalmology referral pathway at Moorfields Eye Hospital, with more than 50 common diagnoses")]
     DTS[/"<b>DTS: Device Training Strategy</b><br>Argument by training segmentation network on scans from 2 different devices"/]
     OS[/"<b>OS: Output Strategy</b><br>Argument over ambiguous and unambiguous regions"/]
     DI["<b>DI: Device Independence</b><br>AUC of 99.21 and 99.93 achieved for the 1st and 2nd device considering urgent referral"]
     UR["<b>UR: Unambiguous Regions</b><br>Tissue-segmentation map obtained by network is consistent with manual segmentation map"]
     AR["<b>AR: Ambiguous Regions</b><br>The ambiguous regions in OCT scans are addressed by training multiple instances of the network<br>..."]
-    DIE[("<b>DIE: Device Independence Evidence</b> ↗<br>Performance results")]
-    ASD[("<b>ASD: Automated Segmentation Device</b> ↗<br>Results of Segmentation Network")]
+    DIE[("<b>DIE: Device Independence Evidence</b>&nbsp;↗<br>Performance results")]
+    ASD[("<b>ASD: Automated Segmentation Device</b>&nbsp;↗<br>Results of Segmentation Network")]
     Inf1((" ")):::sacmDot
     Inf2((" ")):::sacmDot
 
@@ -1341,6 +1475,7 @@ Mermaid Frontmatter described earlier):
 ```
 flowchart BT
     classDef sacmDot fill:#000,stroke:#000
+    classDef invisible opacity:0
     TC["<b>TC: Top claim</b><br>System is adequately secure against moderate threats"]
     PO[/"<b>PO: Process organization</b><br>Organized by lifecycle processes (though we do not use a waterfall approach)"/]
     Tech["<b>Technical</b><br>Technical lifecycle processes implement security"]
@@ -1354,7 +1489,9 @@ flowchart BT
     Maint[["<b>Maintenance: Security in Maintenance</b><br>Maintenance process maintains security"]]
     Inf1((" ")):::sacmDot
     Inf2((" ")):::sacmDot
+    Inf2((" ")):::sacmDot
 
+    BottomPadding[ ]:::invisible ~~~ PO
     PO --- Inf1
 In SACM, the `AssertedInference` link *points* to the `ArgumentReasoning` to explain why the inference is valid.    Tech --- Inf1
     NonTech --- Inf1
@@ -1384,6 +1521,7 @@ config:
 ---
 flowchart BT
     classDef sacmDot fill:#000,stroke:#000
+    classDef invisible fill:none,stroke:none
     TC["<b>TC: Top claim</b><br>System is adequately secure against moderate threats"]
     PO[/"<b>PO: Process organization</b><br>Organized by lifecycle processes (though we do not use a waterfall approach)"/]
     Tech["<b>Technical</b><br>Technical lifecycle processes implement security"]
@@ -1398,7 +1536,7 @@ flowchart BT
     Inf1((" ")):::sacmDot
     Inf2((" ")):::sacmDot
 
-    PO --- Inf1
+    BottomPadding[ ]:::invisible ~~~ PO
     Tech --- Inf1
     NonTech --- Inf1
     CC --- Inf1
@@ -1412,24 +1550,22 @@ flowchart BT
     Inf2 --> Tech
 ```
 
-### Continuations to grow diagrams vertically
+### Connectors to grow diagrams vertically
 
 Portrait pages can only handle a few nodes across (I try to stay around 6).
 To handle this horizontal crowding issue in Mermaid,
-we can use a hierarchical decomposition (aka a "link-out" pattern)
-with one or more continuation claims,
-effectively paging out the argument by
-allowing the diagram to grow vertically instead of horizontally.
+you can use a hierarchical decomposition (aka a "link-out" pattern),
+along with connectors and making some lines longer
+(use an extra `--` on those connectors if they are solid lines).
 Here is an example.
 
 ```
 flowchart BT
     classDef sacmDot fill:#000,stroke:#000
+    classDef connector fill:none,stroke:#cccccc,stroke-width:1px;
 
-    %% --- Top Level Section ---
+    %% Nodes
     C_High["<b>C: Higher level</b><br>The system meets all<br>specified security requirements"]
-
-    %% Junction for the first set of claims
     Inf1((" ")):::sacmDot
     Arg1[/"<b>Arg: Argument A</b><br>Direct evidence from<br>primary subsystems"/]
 
@@ -1439,38 +1575,87 @@ flowchart BT
     C3["<b>C3</b>"]
     C4["<b>C4</b>"]
     C5["<b>C5</b>"]
-    C_Cont["<b>C: Continued</b>"]
-
-    %% Connections
-    C1 --- Inf1
-    C2 --- Inf1
-    C3 --- Inf1
-    C4 --- Inf1
-    C5 --- Inf1
-    C_Cont --- Inf1
-
-    Arg1 -.-> Inf1
-    Inf1 --> C_High
-
-    %% --- Second Level Section ---
-    %% Junction for the continued claims
-    Inf2(("&#x200a;"))::::sacmDot
-
-    %% Supporting Claims 6-10
     C6["<b>C6</b>"]
     C7["<b>C7</b>"]
     C8["<b>C8</b>"]
     C9["<b>C9</b>"]
     C10["<b>C10</b>"]
+    Conn1((" ")):::connector
 
     %% Connections
-    C6 --- Inf2
-    C7 --- Inf2
-    C8 --- Inf2
-    C9 --- Inf2
-    C10 --- Inf2
-    Inf2 --> C_Cont
+    C6 --- Conn1
+    C7 --- Conn1
+    C8 --- Conn1
+    C9 --- Conn1
+    C10 --- Conn1
+
+    C1 --- Inf1
+    C2 --- Inf1
+    C3 --- Inf1
+    %% interconnect is a little longer for more space, extra dash
+    Conn1 ---- Inf1
+    C4 --- Inf1
+    C5 --- Inf1
+    Arg1 --> Inf1
+
+    Inf1 --> C_High
 ```
+
+```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
+flowchart BT
+    classDef sacmDot fill:#000,stroke:#000
+    classDef connector fill:none,stroke:#cccccc,stroke-width:1px;
+
+    %% Nodes
+    C_High["<b>C: Higher level</b><br>The system meets all<br>specified security requirements"]
+    Inf1((" ")):::sacmDot
+    Arg1[/"<b>Arg: Argument A</b><br>Direct evidence from<br>primary subsystems"/]
+
+    %% Supporting Claims
+    C1["<b>C1</b>"]
+    C2["<b>C2</b>"]
+    C3["<b>C3</b>"]
+    C4["<b>C4</b>"]
+    C5["<b>C5</b>"]
+    C6["<b>C6</b>"]
+    C7["<b>C7</b>"]
+    C8["<b>C8</b>"]
+    C9["<b>C9</b>"]
+    C10["<b>C10</b>"]
+    Conn1((" ")):::connector
+
+    %% Connections
+    C6 --- Conn1
+    C7 --- Conn1
+    C8 --- Conn1
+    C9 --- Conn1
+    C10 --- Conn1
+
+    C1 --- Inf1
+    C2 --- Inf1
+    C3 --- Inf1
+    %% interconnect is a little longer for more space, extra dash
+    Conn1 ---- Inf1
+    C4 --- Inf1
+    C5 --- Inf1
+    Arg1 --> Inf1
+
+    Inf1 --> C_High
+```
+
+### Hyperlinked mermaid figure
+
+Here is a demo of how to embed hyperlinks in the mermaid diagram:
 
 ```mermaid
 ---
@@ -1487,114 +1672,26 @@ flowchart BT
     classDef sacmDot fill:#000,stroke:#000
 
     %% --- Top Level Section ---
+    %% A fragment URL "#..." does not work, because it's in an iframe
+    %% so the relative jump is inside a sandbox dedicated to only the image.
     C_High["<b>C: Higher level</b><br>The system meets all<br>specified security requirements"]
+    click C_High "https://github.com/coreinfrastructure/best-practices-badge/blob/main/docs/sacm-mermaid.md#Introduction"
 
-    %% Junction for the first set of claims
     Inf1((" ")):::sacmDot
-    Arg1[/"<b>Arg: Argument A</b><br>Direct evidence from<br>primary subsystems"/]
-
-    %% Supporting Claims
     C1["<b>C1</b>"]
-    C2["<b>C2</b>"]
-    C3["<b>C3</b>"]
-    C4["<b>C4</b>"]
-    C5["<b>C5</b>"]
-    C_Cont["<b>C: Continued</b>"]
+    click C1 "https://github.com/coreinfrastructure/best-practices-badge/blob/main/docs/sacm-mermaid.md#Introduction"
 
-    %% Connections
     C1 --- Inf1
-    C2 --- Inf1
-    C3 --- Inf1
-    C4 --- Inf1
-    C5 --- Inf1
-    C_Cont --- Inf1
-
-    Arg1 --> Inf1
     Inf1 --> C_High
-
-    %% --- Second Level Section ---
-    %% Junction for the continued claims
-    Inf2((" ")):::sacmDot
-
-    %% Supporting Claims 6-10
-    C6["<b>C6</b>"]
-    C7["<b>C7</b>"]
-    C8["<b>C8</b>"]
-    C9["<b>C9</b>"]
-    C10["<b>C10</b>"]
-
-    %% Connections
-    C6 --- Inf2
-    C7 --- Inf2
-    C8 --- Inf2
-    C9 --- Inf2
-    C10 --- Inf2
-    Inf2 --> C_Cont
 ```
-
-## High-level justification for mapping
-
-The SACM Annex C graphical constructs are:
-
-* Node types (shapes): ArgumentPackage, ArgumentPackageInterface,
-  ArgumentPackageBinding, ArtifactReference (arrow with stack of
-  papers), and Claim with
-  7 variants (asserted=plain rect, assumed=bracket feet, needsSupport=dots
-  below, axiomatic=double bottom line, defeated=crossed-out, asCited=corner
-  notches, abstract=dashed rect), plus ArgumentReasoning (open-left bracket
-  shape).
-* Edge types: AssertedInference, AssertedEvidence, AssertedContext,
-  AssertedArtifactSupport, AssertedArtifactContext — each with the same 7
-  assertion-state variants. The key visual distinction: these are reified
-  relationships — a dot in the middle with a plain line to source and a
-  decorated arrow to target. The decoration on the target end encodes assertion
-  state (filled arrowhead=asserted, open arrowhead=counter, filled
-  square=context, X=defeated, three dots=needsSupport, etc.).
-
-Among the mermaid diagram types, "flowchart TD" is the only viable choice.
-It supports many shapes, edge styles, edge labels, and subgraphs.
-
-Among the alternatives:
-
-* classDiagram - its only shapes are UML class boxes, its only edges
-  are UML relation types
-* mindmap - only a few fixed shapes, parent-child edges only
-* stateDiagram-v2 - only state box shapes, only edge transitions
-* erDiagram - only entity box shapes, with ER relation styles
-* graph - legacy type, more limited capabilities compared to flowchart
-
-The three decisive reasons flowchart wins are:
-
-1. Shape variety: It has the most node shapes GitHub supports — rectangle [],
-   stadium ([]), cylinder [()], parallelogram [//], circle (()), rounded
-   rectangle (), asymmetric >] — enough to meaningfully distinguish Claim,
-   assumed Claim, ArtifactReference, and ArgumentReasoning from each other.
-
-2. Edge variety: --> (solid), -.-> (dashed), ==> (thick), --o (circle
-   endpoint), --x (X endpoint), plus labeled edges — enough to encode assertion
-   states and distinguish inference from context from counter relationships.
-
-3. Subgraphs: subgraph blocks naturally represent ArgumentPackage grouping.
-
-One challenge is that SACM's relationships are reified, in particular,
-the dot in the middle is a first-class element.
-Mermaid can't express that directly.
-The practical workaround is to represent the relationship instance
-as a tiny node (e.g., a circle) with two edges or to drop the
-reification and use a direct labeled edge. The latter loses fidelity but stays
-readable.
-
-There is an exception: classDiagram is worth considering only for
-package-structure diagrams. Its built-in lollipop interface notation happens
-to visually echo the ArgumentPackageInterface lollipop symbol (C.2), and its
-compartmented class boxes vaguely resemble the ArgumentPackage shape. But for
-actual argument diagrams with Claims, reasoning, and evidence, classDiagram is
-a poor fit.
 
 ## Source documents
 
 * GitHub, [Creating Diagrams (Creating Mermaid Diagrams)](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-diagrams#creating-mermaid-diagrams)
 * OMG, [Structured Assurance Case Metamodel (SACM)](https://www.omg.org/spec/SACM) version 2.3.
 * [Mermaid Flowchart syntax](https://mermaid.ai/open-source/syntax/flowchart.html)
-* Selviandro et al., "A Visual Notation for the
-  Representation of Assurance Cases using SACM 2.x"
+* [Selviandro et al., "A Visual Notation for the Representation of Assurance Cases using SACM 2.x"](https://eprints.whiterose.ac.uk/id/eprint/165129/1/A_Visual_Notation_for_the_Representation_of_Assurance_Cases_using_SACM_2_.pdf)
+* Ankrum, T. Scott, May 2021, [BadgeApp Assurance Case in SACM Notation](https://www.researchgate.net/publication/351854207_BadgeApp_Assurance_Case_in_SACM_Notation)
+* Holloway, C. Michael, 2020-07-04, [Understanding Assurance Cases: An Educational Presentation in Five Parts, Module 1: Foundation](https://shemesh.larc.nasa.gov/arg/uac-module1-foundation.pdf), NASA Langley Research Center [slide tutorial]
+* Wheeler, David A., [A Sample Security Assurance Case Pattern](https://www.ida.org/-/media/feature/publications/a/as/a-sample-security-assurance-case-pattern/p-9278.ashx)
+* Weinstock, Charles B., December 2008, [Assurance Cases](https://www.seas.upenn.edu/~lee/09cis480/lec-AssuranceCasesTutorial.pdf), Software Engineering Institute (SEI) [slide tutorial]

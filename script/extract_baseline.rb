@@ -5,6 +5,10 @@
 # OpenSSF Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
+# This script runs standalone outside of Rails, so ActiveRecord methods
+# like Array#pluck are unavailable. Use map instead.
+# rubocop:disable Rails/Pluck
+
 require_relative '../lib/baseline_html_parser'
 require 'json'
 require 'yaml'
@@ -72,7 +76,7 @@ yaml_data = {
 }
 
 new_keys = []
-extracted_keys = controls.pluck(:field_name)
+extracted_keys = controls.map { |c| c[:field_name] }
 
 # Group by maturity level
 controls.group_by { |c| c[:maturity_level].first }
@@ -94,7 +98,7 @@ controls.group_by { |c| c[:maturity_level].first }
         'category' => 'MUST',
         'description' => control[:requirement],
         'details' => control[:recommendation],
-        'met_url_required' => true,
+        'met_url_required' => false,
         'original_id' => control[:original_id],
         'na_allowed' => true,
         'na_justification_required' => true
@@ -157,3 +161,5 @@ controls.first(3).each do |control|
   puts "    Requirement: #{control[:requirement][0..80]}..."
   puts
 end
+
+# rubocop:enable Rails/Pluck

@@ -4,6 +4,10 @@
 # OpenSSF Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
+# This script runs standalone outside of Rails, so ActiveSupport extensions
+# like String#exclude? are unavailable. Use String#include? instead.
+# rubocop:disable Style/InvertibleUnlessCondition
+
 require 'nokogiri'
 
 # Parses OpenSSF Baseline HTML to extract criteria
@@ -61,7 +65,7 @@ class BaselineHtmlParser
 
   def extract_requirement(elements)
     elements.each do |el|
-      next if el.text.exclude?('Requirement:')
+      next unless el.text.include?('Requirement:')
 
       # Extract text after "Requirement:" removing the bold tag
       text = el.text.sub(/.*Requirement:\s*/, '').strip
@@ -91,7 +95,7 @@ class BaselineHtmlParser
   def extract_maturity_level(elements)
     # Look for "Control applies to:" and find maturity level
     elements.each do |el|
-      next if el.text.exclude?('Control applies to:')
+      next unless el.text.include?('Control applies to:')
 
       # Look at next element which typically has the level list
       next_el = el.next_element
@@ -124,3 +128,4 @@ class BaselineHtmlParser
       .strip
   end
 end
+# rubocop:enable Style/InvertibleUnlessCondition

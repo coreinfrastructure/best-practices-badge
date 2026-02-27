@@ -70,18 +70,30 @@ files in `tmp/`:
 script/extract_baseline.rb
 ```
 
-This reads `tmp/baseline_source.html` and writes:
+**Inputs:**
+
+- `tmp/baseline_source.html` — the downloaded HTML from Step 2
+- `criteria/baseline_criteria.yml` — the current criteria file, used to
+  detect new, obsolete, and changed criteria and to preserve `future:` and
+  `obsolete:` flags on re-extraction
+
+**Outputs (in `tmp/`, not yet committed):**
 
 - `tmp/baseline_extracted.yml` — criteria in the application's YAML format,
   with `future: true` automatically added to any criterion whose key does not
   yet exist in `criteria/baseline_criteria.yml`, and `obsolete: true`
-  added to any existing criterion whose key is absent from the new version
+  re-added to any existing criterion whose key is absent from the new version
 - `tmp/baseline_extracted.json` — same data in JSON (useful for review)
 
 It prints a summary showing how many controls were extracted, how they are
 distributed across maturity levels and categories, and which (if any) keys
-are new or obsolete. Verify the counts look reasonable compared with the
-previous version.
+are new, obsolete, or had their description/details text changed.
+Verify the counts look reasonable compared with the previous version.
+
+**Re-running is safe.** Given the same inputs the script always produces the
+same outputs—`future:` and `obsolete:` flags already present in
+`criteria/baseline_criteria.yml` are preserved in the extracted file.
+No data is lost by re-running.
 
 ## Step 4: Review and Merge Changes into baseline_criteria.yml
 
@@ -106,15 +118,11 @@ number of obsolete criteria is unexpectedly large it likely indicates a
 In that case, stop, investigate `tmp/baseline_extracted.yml`, and re-run
 Step 3 before continuing.
 
-The application does not yet act on `obsolete: true`; the flag is recorded
-now so future tooling has something to search for. Do not drop the
-corresponding database columns for obsolete criteria; retained columns cause
-no harm and preserve historical data.
-
-If you do have obsolete data, and want to deploy it that way, you
-should probably modify the forms to show "obsolete" and explain it.
-We haven't done that because it hasn't happened, but we know what to do
-if it does.
+Obsolete criteria are shown on the baseline form with an "(Obsolete criterion)"
+label so users can refer to them while updating their other answers. They are
+excluded from badge percentage calculations. Do not drop the corresponding
+database columns for obsolete criteria; retained columns cause no harm and
+preserve historical data.
 
 Also update the `_metadata` section at the top of
 `criteria/baseline_criteria.yml` to reflect the new version:
@@ -138,16 +146,30 @@ migration:
 rake baseline:generate_migration
 ```
 
-This compares `config/baseline_field_mapping.json` against the current
-database schema and writes a timestamped migration file under
-`db/migrate/`. If the mapping file does not exist yet, it is generated
-from `criteria/baseline_criteria.yml` automatically.
+**Inputs:**
 
-Be sure to `git add` this new migration file.
+- `criteria/baseline_criteria.yml` — source of truth for which criteria keys
+  must exist
+- `config/baseline_field_mapping.json` — maps criterion keys to database
+  column names (created automatically if absent)
 
-Update `config/baseline_field_mapping.json` to include the new criteria
-entries if the file was not regenerated automatically, then apply the
-migration:
+**Outputs:**
+
+- `config/baseline_field_mapping.json` — updated with any new criteria keys
+  not yet present in the file
+- `db/migrate/TIMESTAMP_add_baseline_criteria_*.rb` — a new migration adding
+  the `_status` and `_justification` columns for each new criterion
+
+Be sure to `git add` both the updated mapping file and the new migration.
+
+**Re-running:** If you re-run the task with no new criteria, it reports
+"No new fields to add" and writes no migration. If there are new criteria
+but you already ran the task, a second run will again find nothing to add
+(the mapping file was already updated). Running the migration itself
+(`rails db:migrate`) is always safe to re-run; Rails skips already-applied
+migrations.
+
+Apply the migration:
 
 ```bash
 rails db:migrate
@@ -165,21 +187,43 @@ Extract the updated `description`, `details`, and placeholder text from
 rake baseline:extract_i18n
 ```
 
-This replaces the content between the markers
+**Inputs:** `criteria/baseline_criteria.yml`
+
+**Output:** `config/locales/en.yml` — the section between markers
 `# BEGIN BASELINE CRITERIA AUTO-GENERATED` and
-`# END BASELINE CRITERIA AUTO-GENERATED` in `config/locales/en.yml`
-with the current baseline criteria text. All content outside those markers
-is preserved.
+`# END BASELINE CRITERIA AUTO-GENERATED` is replaced with the current
+criteria text. All content outside those markers is preserved unchanged.
+
+The extraction includes **all** criteria regardless of their `future:` or
+`obsolete:` status, so text for upcoming and retired criteria is available
+in the locale file for display on the form.
+
+**Re-running is safe and idempotent.** Re-run it whenever you modify
+`criteria/baseline_criteria.yml` to keep the locale file in sync.
 
 ## Step 7: Validate the Updated Criteria
 
-Run the validator to confirm that `criteria/baseline_criteria.yml` is valid
-YAML and that `config/baseline_field_mapping.json` (if present) is valid
-JSON:
+Run the validator to confirm the files are internally consistent:
 
 ```bash
 rake baseline:validate
 ```
+
+**Inputs (read-only, nothing is written):**
+
+- `criteria/baseline_criteria.yml`
+- `config/locales/en.yml`
+- `config/baseline_field_mapping.json` (if present)
+
+**What it checks:**
+
+- `criteria/baseline_criteria.yml` is valid YAML
+- No criterion has both `future: true` and `obsolete: true` simultaneously
+- Every criterion has a non-empty `description`
+- Every criterion whose description is in the criteria YAML is also present
+  in `config/locales/en.yml` (detects a missing `rake baseline:extract_i18n`
+  run)
+- `config/baseline_field_mapping.json` is valid JSON (if the file exists)
 
 A passing run prints:
 

@@ -28,7 +28,8 @@ grep -c 'future: true' criteria/baseline_criteria.yml
 This should print `0`. If it prints a non-zero number, the previous update
 cycle is not yet complete—existing future criteria have not yet been
 activated. Resolve that first (see
-[Removing the "Future" Marking](#removing-the-future-marking) below).
+[Completing the baseline update transition](#completing-the-baseline-update-transition)
+below).
 
 You can also run the validator to confirm the file is internally consistent:
 
@@ -344,37 +345,85 @@ You can check translation status before and after with:
 rake translation:status
 ```
 
-## Removing the "Future" Marking
+## Completing the baseline update transition
 
 When the enforce date arrives (the date set in `baseline_enforce_date`),
-the criteria that were previously marked `future: true` should become fully
-active. To activate them:
+complete the transition: activate the new criteria, retire the obsolete
+criteria from display, and close out the version notice.
 
-1. Remove `future: true` from each affected criterion in
-   `criteria/baseline_criteria.yml`. If `future: false` was set explicitly,
-   remove that line too (the default is `false`).
+1. **Activate the new criteria.** Remove `future: true` from each
+   previously-future criterion in `criteria/baseline_criteria.yml`.
+   If `future: false` was set explicitly, remove that line too (the
+   default is `false`).
 
-2. Run `rake baseline:extract_i18n` to sync any text changes that may have
-   occurred since the criteria were first added.
+2. **Archive and remove obsolete criteria.** For each `obsolete: true`
+   criterion in `criteria/baseline_criteria.yml`:
 
-3. Run `rake baseline:validate` to confirm the file is still valid.
+   a. Append an entry to `criteria/baseline_criteria_retired.yml`,
+      recording the criterion key, English text, original upstream ID,
+      and the baseline version in which it was retired. For example:
 
-4. Update `app/views/projects/_form_baseline_version_notice.html.erb`:
-   set `baseline_in_transition = false` and update
-   `baseline_current_version` to the now-active version string (see
-   Step 8).
+      ```yaml
+      osps_br_01_02:
+        original_id: OSPS-BR-01.02
+        retired_baseline_version: 'v2026.02.19'
+        removed_from_display: '2026-06-01'
+        description: >-
+          When a CI/CD pipeline uses a branch name in its functionality,
+          that name value MUST be sanitized and validated prior to use
+          in the pipeline.
+        details: ''
+      ```
 
-5. Restart the application. The newly activated criteria will be included
-   in `Criteria.active(level)` and will count toward badge percentages.
+      This file accumulates entries across update cycles and is never
+      loaded by the application — it exists solely as a human-readable
+      archive. If a criterion ever needs to be restored, the text is
+      here. Create the file if it does not yet exist, with a comment
+      header explaining its purpose.
 
-6. Verify by checking the Rails console:
+   b. Delete the entire criterion entry (not just the `obsolete: true`
+      line) from `criteria/baseline_criteria.yml`.
 
-   ```ruby
-   Criteria.active('baseline-1').map(&:name).include?('osps_xx_nn_nn')
-   # => true
+   After archiving, run `rake baseline:extract_i18n` to regenerate
+   the locale file without the now-removed criteria. This is safe
+   because the English text is preserved in the archive file.
+
+3. **Validate.** Run `rake baseline:validate` to confirm the criteria file
+   is still consistent:
+
+   ```bash
+   rake baseline:validate
    ```
 
-## Removing display of obsolete criteria
+4. **Update the version notice.** Edit
+   `app/views/projects/_form_baseline_version_notice.html.erb` to
+   reflect that the transition period has ended (see Step 8).
+   Set `baseline_in_transition = false` and update
+   `baseline_current_version` to the now-fully-active version string:
 
-If there were obsolete criteria, eventually you probably should remove
-them from display.
+   ```erb
+   <%
+     baseline_in_transition   = false
+     baseline_current_version = 'vYYYY.MM.DD'
+     baseline_new_version     = ''
+     baseline_enforce_date    = ''
+   %>
+   ```
+
+5. **Restart the application.** The newly activated criteria will be
+   included in `Criteria.active(level)` and will count toward badge
+   percentages. Obsolete criteria will no longer appear on the form.
+
+6. **Verify** from the Rails console:
+
+   ```ruby
+   # Previously-future criteria should now be active:
+   Criteria.active('baseline-1').map(&:name).include?('osps_xx_nn_nn')
+   # => true
+
+   # Previously-obsolete criteria should no longer be loaded:
+   Criteria['baseline-1']['osps_yy_nn_nn']
+   # => nil
+   ```
+
+   Replace `osps_xx_nn_nn` and `osps_yy_nn_nn` with the actual keys.

@@ -101,6 +101,31 @@ to our stakeholder readers.
 We can document in one place (this document) the adjustments we've made
 to represent SACM with mermaid.
 
+## Creating diagrams in LTAC
+
+We're seriously considering the possibility of using
+[Lightweight Text Assurance Case (LTAC)](https://www.argevide.com/lightweight-text-assurance-case-ltac/)
+to write the assurance case diagrams, then use a simple
+translator to convert LTAC to SACM's mermaid format.
+That way, it'll be easy to write/edit the assurance case graphic,
+*and* people can easily click on a part of the diagram to see
+other information.
+
+The idea would be to embed the generated mermaid in the markdown document,
+so people would immediately see it.
+We could even embed the LTAC text in a details/summary like this:
+
+```
+<details>
+<summary>Click to see the LTAC text summary</summary>
+````ltac
+LTAC text
+````
+</details>
+```
+
+Followed by the (re)generated Mermaid diagram.
+
 ## Document structure
 
 We presume that there is a single assurance case document.

@@ -76,6 +76,7 @@ yaml_data = {
 }
 
 new_keys = []
+changed_keys = []
 extracted_keys = controls.map { |c| c[:field_name] }
 
 # Group by maturity level
@@ -93,6 +94,15 @@ controls.group_by { |c| c[:maturity_level].first }
     cat_controls.each do |control|
       is_new = !existing_criteria_data.key?(control[:field_name])
       new_keys << control[:field_name] if is_new
+
+      unless is_new
+        old_data = existing_criteria_data[control[:field_name]][:data]
+        old_desc = old_data['description'].to_s.strip
+        old_details = old_data['details'].to_s.strip
+        new_desc = control[:requirement].to_s.strip
+        new_details = control[:recommendation].to_s.strip
+        changed_keys << control[:field_name] if old_desc != new_desc || old_details != new_details
+      end
 
       entry = {
         'category' => 'MUST',
@@ -153,6 +163,13 @@ if obsolete_keys.empty?
 else
   puts "\nObsolete criteria marked obsolete: true (#{obsolete_keys.length}):"
   obsolete_keys.each { |key| puts "  #{key}" }
+end
+
+if changed_keys.empty?
+  puts "\nNo criteria with changed description or details"
+else
+  puts "\nCriteria with changed description or details (#{changed_keys.length}):"
+  changed_keys.each { |key| puts "  #{key}" }
 end
 
 puts "\nFirst 3 controls:"

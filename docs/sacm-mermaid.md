@@ -219,7 +219,7 @@ Unfortunately GitHub's rendering engine always shows controls on
 the bottow right, making it impossible to read the bottom right
 of the diagram. There's no way to disable to adjust it.
 We can work around this by adding some unused padding
-at the botton with an invisible node.
+at the bottom with an invisible node.
 
 So the first connection will be for an invisible node, with an invisible
 connector, to the first "real" node; add `~` characters for more padding.

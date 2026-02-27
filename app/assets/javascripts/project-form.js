@@ -235,7 +235,9 @@ function resetProgressBar() {
   var percentage;
   var percentAsString;
   $.each(CRITERIA_HASH, function(criterion, value) {
-    if (!criterionHashTrue(criterion, 'future')) { // Ignore "future" criteria
+    // Ignore "future" and "obsolete" criteria in progress calculation
+    if (!criterionHashTrue(criterion, 'future') &&
+        !criterionHashTrue(criterion, 'obsolete')) {
       total++;
       if (isEnough(criterion)) {
         enough++;

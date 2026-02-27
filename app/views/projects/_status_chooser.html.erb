@@ -107,8 +107,10 @@
       <br>
       <%= if criterion.future?
            "(#{t('projects.misc.future_criterion')})"
+         elsif criterion.obsolete?
+           "(#{t('projects.misc.obsolete_criterion')})"
          else
-            ''
+           ''
          end %>
       <%= criterion.description %>
       <%= if criterion.met_url_required?

@@ -5,6 +5,7 @@
 # With each criterion identifiers the following keys may be inside:
 #   category: MUST|SHOULD|SUGGESTED # required
 #   future: true|false # optional, default false
+#   obsolete: true|false # optional, default false; criterion has been retired
 #   na_allowed: true|false # optional, default false
 #   na_justification_required: true|false # optional, default false
 #   met_justification_required: true|false # optional, default false

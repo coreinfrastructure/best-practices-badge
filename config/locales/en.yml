@@ -285,6 +285,7 @@ en:
       details: Includes details
       new_this_level: New at this level
       future: Future
+      obsolete: Obsolete
       project_stats_html: >-
         The "active" criteria are criteria that are included in
         the percentage calculations (as opposed to "future" criteria).
@@ -925,10 +926,15 @@ en:
         but are <em>not</em> currently required for a badge. This
         grace period allows projects to update to changed criteria
         and retain their badge as best practices improve.
+      obsolete_header_html: >-
+        These are criteria that were previously required but have been
+        retired from the upstream baseline. They are shown for reference
+        and are <em>not</em> required for a badge.
       toggle_details_title: Toggle details text
       details: Details
       url_required: URL required
       future_criterion: Future criterion
+      obsolete_criterion: Obsolete criterion
       url_required_warning: 'Warning: URL required, but no URL
         found.'
       justification_required_warning: 'Warning: Requires lengthier
@@ -3389,6 +3395,7 @@ en:
       See <a href="/en/criteria_discussion">criteria discussion</a> for
       more information about these criteria.
     future: "{Future}"
+    obsolete: "{Obsolete}"
     na_allowed: "{N/A allowed}"
     na_justification_required: "{N/A justification}"
     met_justification_required: "{Met justification}"

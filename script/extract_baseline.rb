@@ -24,6 +24,11 @@ end
 puts "Reading HTML from #{html_file}..."
 html_content = File.read(html_file)
 
+# Extract source URL from canonical link tag so it doesn't need to be hardcoded
+source_doc = Nokogiri::HTML(html_content)
+source_url = (source_doc.at('link[rel="canonical"]')&.attr('href') || 'unknown').sub(/\.html$/, '')
+puts "Source URL: #{source_url}"
+
 # Parse the HTML
 parser = BaselineHtmlParser.new(html_content)
 controls = parser.parse
@@ -68,7 +73,7 @@ puts "Saved JSON to: #{json_file}"
 yaml_data = {
   '_metadata' => {
     'source' => 'OpenSSF Baseline HTML',
-    'source_url' => 'https://baseline.openssf.org/versions/2025-10-10',
+    'source_url' => source_url,
     'extracted_at' => Time.now.iso8601,
     'auto_generated' => true,
     'total_controls' => controls.length
@@ -113,7 +118,8 @@ controls.group_by { |c| c[:maturity_level].first }
         'na_allowed' => true,
         'na_justification_required' => true
       }
-      entry['future'] = true if is_new
+      is_future = is_new || existing_criteria_data.dig(control[:field_name], :data, 'future') == true
+      entry['future'] = true if is_future
 
       yaml_data[level_key][category]['Controls'][control[:field_name]] = entry
     end

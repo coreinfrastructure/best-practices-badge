@@ -228,7 +228,6 @@ connector, to the first "real" node; add `~` characters for more padding.
     BottomPadding[ ]:::invisible ~~~ PO
 ```
 
-
 ### Name, gid (id), and description
 
 In SACM, model node elements like Claim have possibly 3 related values:
@@ -1693,3 +1692,6 @@ flowchart BT
 * [Mermaid Flowchart syntax](https://mermaid.ai/open-source/syntax/flowchart.html)
 * [Selviandro et al., "A Visual Notation for the Representation of Assurance Cases using SACM 2.x"](https://eprints.whiterose.ac.uk/id/eprint/165129/1/A_Visual_Notation_for_the_Representation_of_Assurance_Cases_using_SACM_2_.pdf)
 * Ankrum, T. Scott, May 2021, [BadgeApp Assurance Case in SACM Notation](https://www.researchgate.net/publication/351854207_BadgeApp_Assurance_Case_in_SACM_Notation)
+* Holloway, C. Michael, 2020-07-04, [Understanding Assurance Cases: An Educational Presentation in Five Parts, Module 1: Foundation](https://shemesh.larc.nasa.gov/arg/uac-module1-foundation.pdf), NASA Langley Research Center [slide tutorial]
+* Wheeler, David A., [A Sample Security Assurance Case Pattern](https://www.ida.org/-/media/feature/publications/a/as/a-sample-security-assurance-case-pattern/p-9278.ashx)
+* Weinstock, Charles B., December 2008, [Assurance Cases](https://www.seas.upenn.edu/~lee/09cis480/lec-AssuranceCasesTutorial.pdf), Software Engineering Institute (SEI) [slide tutorial]

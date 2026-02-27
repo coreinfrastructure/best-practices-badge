@@ -75,10 +75,10 @@ Mermaid, especially its older subset,
 cannot exactly implement the SACM graphical notation.
 Indeed, Mermaid is *much* less capable, graphically, than what LibreOffice
 can generate.
-Mermaid it doesn't let you "place" symbols at all!
+Mermaid it doesn't let you fully "place" symbols at all!
 What's worse, its placement algorithm is quite naive;
 it's far less capable than the older graphviz program,
-as it really only understands ranks.
+as mermaid really only understands ranks places nodes in a specific order.
 The GitHub mermaid implementation also *requires* the user to run
 client-side JavaScript, which some may prefer to disable, and
 that execution imposes a small display delay.
@@ -202,6 +202,10 @@ the top-level claim appears at the top,
 and edges point upward from supporting elements to the claim they support.
 This matches the SACM arrow direction and produces an intuitive hierarchy.
 
+We can define the *nodes* top-to-bottom. However, when we specify
+the connections, we must specify them in order
+from the bottom (leaf) up to the top.
+
 ### Name, gid (id), and description
 
 In SACM, model node elements like Claim have possibly 3 related values:
@@ -272,7 +276,7 @@ and this is much easier to read and edit later.
 
 SACM supports dividing assurance cases into a variety of "packages".
 We're just drawing diagrams, but it'd be good to have conventions that
-matched the SACM metamodel.
+matched the SACM metamodel about packages.
 
 We will pretend that every diagram represents a small package
 named "Package NAME" where "NAME" is the primary ArgumentAsset node

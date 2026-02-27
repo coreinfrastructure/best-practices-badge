@@ -173,6 +173,7 @@ config:
     padding: 15
 ---
 flowchart BT
+    classDef invisible opacity:0
     classDef sacmDot fill:#000,stroke:#000
     %% If used:
     classDef connector fill:none,stroke:#cccccc,stroke-width:1px;
@@ -194,7 +195,15 @@ As discussed later,
 a `sacmDot` is the default way to represent an AssertedRelationship, and
 (if used) `abstractClaim` will help represent a Claim that is abstract.
 
-### Layout and direction
+We'll use `invisible` when want to prevent a node and its text
+from being displayed at all.
+We could use `fill:none, stroke:none`, but that wouldn't hide text.
+We could add `color: #00000000` (setting the alpha channel), but I'm
+concerned the alpha channel might not always be correctly supported.
+Setting `opacity:0` is simpler and ensures that both its shape and text
+are not shown.
+
+### Layout, direction, and spacing
 
 We use `flowchart BT` (bottom-to-top) as the recommended layout.
 In this layout sub-claims and evidence appear at the bottom,
@@ -205,6 +214,20 @@ This matches the SACM arrow direction and produces an intuitive hierarchy.
 We can define the *nodes* top-to-bottom. However, when we specify
 the connections, we must specify them in order
 from the bottom (leaf) up to the top.
+
+Unfortunately GitHub's rendering engine always shows controls on
+the bottow right, making it impossible to read the bottom right
+of the diagram. There's no way to disable to adjust it.
+We can work around this by adding some unused padding
+at the botton with an invisible node.
+
+So the first connection will be for an invisible node, with an invisible
+connector, to the first "real" node; add `~` characters for more padding.
+
+```
+    BottomPadding[ ]:::invisible ~~~ PO
+```
+
 
 ### Name, gid (id), and description
 
@@ -859,11 +882,11 @@ The entity depends on assertionDeclation of the relationship;
 here is the annex C notation and our mermaid representation:
 
 * asserted (default): Solid dot for non-abstract,
-  no symbol (hidden) for abstract.
+  no symbol (invisible) for abstract.
   In mermaid we will represent this as `Inf1((" ")):::sacmDot`.
-  David A. Wheeler thinks the hidden symbol used for
+  David A. Wheeler thinks the invisible symbol used for
   *abstract* asserted relationship is a mistake, because
-  it lacks clarity. We *could* have a hidden image, but for the moment,
+  it lacks clarity. We *could* have an invisible image, but for the moment,
   we'll just use the same representation when it's abstract.
   We'll discuss the solid dot more later.
 * needsSupport: 3 dots. In mermaid
@@ -1453,6 +1476,7 @@ Mermaid Frontmatter described earlier):
 ```
 flowchart BT
     classDef sacmDot fill:#000,stroke:#000
+    classDef invisible opacity:0
     TC["<b>TC: Top claim</b><br>System is adequately secure against moderate threats"]
     PO[/"<b>PO: Process organization</b><br>Organized by lifecycle processes (though we do not use a waterfall approach)"/]
     Tech["<b>Technical</b><br>Technical lifecycle processes implement security"]
@@ -1466,7 +1490,9 @@ flowchart BT
     Maint[["<b>Maintenance: Security in Maintenance</b><br>Maintenance process maintains security"]]
     Inf1((" ")):::sacmDot
     Inf2((" ")):::sacmDot
+    Inf2((" ")):::sacmDot
 
+    BottomPadding[ ]:::invisible ~~~ PO
     PO --- Inf1
 In SACM, the `AssertedInference` link *points* to the `ArgumentReasoning` to explain why the inference is valid.    Tech --- Inf1
     NonTech --- Inf1
@@ -1496,6 +1522,7 @@ config:
 ---
 flowchart BT
     classDef sacmDot fill:#000,stroke:#000
+    classDef invisible fill:none,stroke:none
     TC["<b>TC: Top claim</b><br>System is adequately secure against moderate threats"]
     PO[/"<b>PO: Process organization</b><br>Organized by lifecycle processes (though we do not use a waterfall approach)"/]
     Tech["<b>Technical</b><br>Technical lifecycle processes implement security"]
@@ -1510,7 +1537,7 @@ flowchart BT
     Inf1((" ")):::sacmDot
     Inf2((" ")):::sacmDot
 
-    PO --- Inf1
+    BottomPadding[ ]:::invisible ~~~ PO
     Tech --- Inf1
     NonTech --- Inf1
     CC --- Inf1

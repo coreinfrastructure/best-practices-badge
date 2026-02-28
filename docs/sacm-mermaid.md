@@ -115,16 +115,161 @@ The idea would be to embed the generated mermaid in the markdown document,
 so people would immediately see it.
 We could even embed the LTAC text in a details/summary like this:
 
-```
+`````
 <details>
 <summary>Click to see the LTAC text summary</summary>
+
 ````ltac
 LTAC text
 ````
+
 </details>
-```
+`````
 
 Followed by the (re)generated Mermaid diagram.
+
+### LTAC mappings
+
+[Lightweight Text Assurance Case (LTAC)](https://www.argevide.com/lightweight-text-assurance-case-ltac/)
+defines six element types: **Claim**, **Strategy**, **Justification**,
+**Evidence**, **Context**, and **Assumption**.
+Every LTAC argument must begin with a Claim.
+Child elements nest beneath their parents using two-space indentation;
+a child *supports* (provides evidence for, or contextualizes) its parent.
+The per-line syntax is:
+
+```
+- NodeType Identifier: Descriptive_text (optional external reference)
+  - ChildType Child_Identifier: Descriptive_text (optional external reference)
+```
+
+Identifiers are optional but must be unique within the argument.
+The `Link` keyword cites a previously-defined element by its identifier
+without repeating the element: `- Link ExistingId`.
+
+#### LTAC element → SACM concept
+
+- Claim in LTAC corresponds to Claim in SACM.
+- Strategy in LTAC corresponds to ArgumentReasoning in SACM.
+- Evidence in LTAC corresponds to ArtifactReference in SACM.
+- Context in LTAC corresponds to ArtifactReference with an AssertedContext connection in SACM (otherwise an inference arrow is used).
+- Assumption in LTAC corresponds to Claim with assertionDeclaration
+  "assumed" in SACM.
+- Justification in LTAC corresponds to Claim in SACM.
+
+Unless otherwise noted, parents are connected through children via
+a Relationship represented by a sacmDot.
+When a Strategy (ArgumentReasoning), sub-Claims, and/or
+Evidence share the same parent Claim,
+they all connect to a **single** sacmDot because they form a single
+AssertedInference (SACM allows multiple +source ArgumentAssets).
+That's true even if the Strategy is the sole Child of a Claim, and the
+sub-Claims are all children of the Strategy, like this:
+
+```
+    C_sub1 --- Dot1
+    C_sub2 --- Dot1
+    AR1    --- Dot1
+    A1     --- Dot1
+    Dot1((" ")):::sacmDot --> C_parent
+```
+
+When there is only one source (and no metaClaim), the unreified form is allowed:
+
+```
+    C_sub --> C_parent
+```
+
+LTAC's SHOULD
+constraint that "Claims supported by Evidence should not be supported
+by any Justifications, Assumptions, or Strategies" aligns naturally with SACM:
+Evidence connects via AssertedEvidence (ArtifactReference source) while the
+other types connect via AssertedInference (Claim or ArgumentReasoning source).
+A translator may warn if this constraint is violated.
+
+LTAC is designed for single-module arguments, so it has no native
+cross-package citation mechanism.
+In SACM, an **asCited** Claim cites a Claim whose full definition lives in a
+different ArgumentPackage (diagram).
+We declare an extension to support cross-package citation.
+
+As an extension, a "^" prefix on the claim identifier,
+followed by an optional Package Name enclosed in brackets followed by a space,
+then the claim name.
+This may be optionally followed by ":"; text after the colon and any spaces
+is the statement/declaration.
+The `^` prefix is stripped when producing the mermaid node id.
+The `^` was chosen because:
+
+- It visually suggests "pointing upward or outward" — the definition is elsewhere.
+- It is easy to type and clearly distinct from normal identifier characters.
+- It does not conflict with LTAC's existing syntax (parentheses, colons, brackets).
+
+We add other extensions:
+
+* Suffix "{OPTIONS}" - a line may end with {OPTIONS}, where OPTIONS is a
+  comma-separated list of notation-specific terms.
+  The options `needsSupport`, `axiomatic`, and `defeated`
+  set the corresponding `assertionDeclaration`.
+  Option `counter` sets the `isCounter` flag.
+  Option `abstract` sets the `isAbstract` flag.
+* New Nodetype `Relation` - if present, represents the relationship otherwise
+  implied by indentation (useful for setting options).
+* New Nodetype `Connector` - represents a grouping
+  of children; used to visually simplify the diagram.
+  All of the children of `Connector` are considered the children of the
+  parent of `Connector`.
+
+#### Complete LTAC → SACM/mermaid example
+
+Given this LTAC input:
+
+```ltac
+- Claim C1: The software is sufficiently secure
+  - Strategy AR1: Argue security over threat categories
+    - Claim C2: No critical vulnerabilities in dependencies
+      - Evidence E1: Automated vulnerability scan (scan-2024.html)
+    - Claim ^C3: Secure development process is followed
+    - Context Ctx1: Scope is release v2.4 (release-notes.md)
+  - Assumption A1: The threat model is current
+```
+
+The translator produces this mermaid:
+
+```
+flowchart BT
+    classDef sacmDot fill:#000,stroke:#000
+    C1["<b>C1</b><br>The software is sufficiently secure"]
+    AR1[/"<b>AR1</b><br>Argue security over threat categories"/]
+    C2["<b>C2</b><br>No critical vulnerabilities in dependencies"]
+    E1[("<b>E1</b>&nbsp;↗<br>Automated vulnerability scan")]
+    C3[["<b>C3</b><br>Secure development process is followed"]]
+    Ctx1[("<b>Ctx1</b>&nbsp;↗<br>Scope is release v2.4")]
+    A1["<b>A1</b><br>The threat model is current<br>ASSUMED"]
+    Dot1((" ")):::sacmDot
+    Dot2((" ")):::sacmDot
+
+    E1 --- Dot1
+    Dot1 --> C2
+    C2  --- Dot2
+    C3  --- Dot2
+    AR1 --- Dot2
+    A1  --- Dot2
+    Dot2 --> C1
+    Ctx1 --o AR1
+```
+
+Key mapping decisions illustrated:
+
+- `[^C3]` in LTAC → asCited double-bracket `[[...]]` shape in mermaid.
+- `A1` (Assumption) → Claim with `ASSUMED` suffix.
+- `Ctx1` (Context) → ArtifactReference with context arrow `--o`.
+- `E1` (Evidence) → ArtifactReference with inference arrow via a sacmDot.
+- `C2`, `C3`, `AR1`, and `A1` are all children of the C1 inference path,
+  so they share one sacmDot (`Dot2`).
+- `E1` is the sole support for `C2`, so it uses its own `Dot1`.
+  (The unreified `E1 --> C2` would also be valid here since there is
+  only one source.)
 
 ## Document structure
 
@@ -186,6 +331,7 @@ Then replace
 `INSERT-FIGURE-HERE`:
 
 `````
+
 ```mermaid
 ---
 config:
@@ -205,6 +351,7 @@ flowchart BT
     classDef abstractClaim stroke-width:2px,stroke-dasharray: 5 5;
     INSERT-FIGURE-HERE
 ```
+
 `````
 
 Reasons:

@@ -3365,6 +3365,61 @@ This CLI is used only as a deployment tool to transfer the final
 build artifact to Heroku; it is not part of the deployed application
 itself, which limits the impact of any hypothetical compromise.
 
+### Deployment credential isolation
+
+This section documents how we satisfy
+**OSPS-BR-01.03**: *"When a CI/CD pipeline operates on untrusted code
+snapshots, it MUST prevent access to privileged CI/CD credentials and
+assets."*
+
+The primary privileged credential in our pipeline is `HEROKU_API_KEY`,
+which authorizes pushes to the Heroku staging and production
+environments.
+We isolate it from untrusted code through several interlocking controls:
+
+* **Credential stored in a scoped CircleCI context, not a
+  project-level variable.**
+  `HEROKU_API_KEY` is stored exclusively in the CircleCI context named
+  `heroku-deploy`.
+  Project-level environment variables in CircleCI are injected into
+  every job; context variables are only injected into jobs that
+  explicitly reference the context by name.
+  Because the credential is not a project-level variable, the `build`
+  job has no access to it whatsoever.
+
+* **Context referenced only by the `deploy` job.**
+  In `.circleci/config.yml`, the `context: heroku-deploy` key appears
+  only on the `deploy` job in the workflow definition.
+  The `build` job carries no `context:` key and therefore never
+  receives the credential, even though the `build` job runs on every
+  branch including unreviewed pull requests.
+
+* **Deploy job restricted to protected branches.**
+  The workflow filter `branches: only: [staging, production]` prevents
+  the `deploy` job from running on any other branch.
+  Code reaches the `staging` or `production` branches only through a
+  reviewed and approved pull request; it cannot arrive there directly
+  from an untrusted contributor.
+
+* **An explicit allowlist check inside the deploy job itself.**
+  As defense in depth, the `deploy` job contains a shell-level
+  `case` statement that exits with an error if `$CIRCLE_BRANCH` is
+  anything other than `staging` or `production`.
+  This catches any accidental misconfiguration of the workflow-level
+  filter.
+
+* **CI/CD configuration protected by CODEOWNERS.**
+  The `/.circleci/` path is covered by `.github/CODEOWNERS`, so any
+  change to the pipeline configuration — including any attempt to add
+  `context: heroku-deploy` to the `build` job or widen the branch
+  filter — requires explicit approval from designated code owners
+  before it can be merged.
+
+Together these controls ensure that `HEROKU_API_KEY` is never present
+in the environment of any job that executes unreviewed code, and that
+the configuration enforcing this isolation cannot itself be changed
+without security-focused review.
+
 ## Human resource management  (people)
 
 ISO/IEC/IEEE 12207 has a "human resource management" process;

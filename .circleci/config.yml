@@ -236,15 +236,15 @@ jobs:
               exit 1
             fi
             echo "** Hash verified. Installing Heroku CLI."
-            npm install -g ./heroku.tgz
+            npm install --prefix ~/heroku-cli ./heroku.tgz
+            export PATH="$HOME/heroku-cli/bin:$PATH"
+            echo 'export PATH="$HOME/heroku-cli/bin:$PATH"' >> "$BASH_ENV"
             rm -f heroku.tgz
             echo "** Heroku CLI version:"
             heroku --version
       - run:
           name: Deploy to Heroku
-          # export PATH="$PATH:$(pwd)/heroku/bin"
           command: |
-            export PATH="$PATH:/usr/local/bin:/usr/local/bin"
             export HEROKU_APP="$CIRCLE_BRANCH"-bestpractices
             # Set file .netrc so "git push heroku ..." will work later.
             # Heroku uses HEROKU_API_KEY, but git only knows about ~/.netrc.
@@ -271,7 +271,6 @@ jobs:
       - run:
           name: Migrate DB
           command: |
-            export PATH="$PATH:$(pwd)/heroku/bin"
             export HEROKU_APP="$CIRCLE_BRANCH"-bestpractices
             heroku run --app "$HEROKU_APP" -- bundle exec rails db:migrate
             if [ -f '.recalculate' ] ; then

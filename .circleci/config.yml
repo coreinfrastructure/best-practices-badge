@@ -191,32 +191,55 @@ jobs:
                 ;;
             esac
       - run:
-          # We are downloading these tools from a trusted source, so we *do*
-          # want to use the latest version, not a pinned version.
-          # Heroku doesn't support pinning these anyway.
-          # These aren't included in the final result, nor used
-          # in the process of testing the final result... they're
-          # just tools we use to *transfer* the final result to deployment.
-          # The shell installer loads and installs the actual tool.
-          # We aren't using pipe-to-shell, but downloading and printing a
-          # sha256 of the install program first.
-          # This provides a log to help us notice potential problems.
+          # Install the Heroku CLI at a pinned version with an independently
+          # hardcoded SHA-512 hash for integrity verification.
+          #
+          # We download the tarball directly from the npm registry, verify
+          # its SHA-512 against the hash we recorded when we set this pin,
+          # and only install if the hash matches.  This protects against:
+          #   - MITM attacks on the download
+          #   - A compromised npm registry that changes both the package
+          #     *and* the hash it reports (which a simple `npm install`
+          #     would not catch, since it trusts the registry's own hash)
+          #
+          # To upgrade the Heroku CLI:
+          #   1. Find the new version at https://github.com/heroku/cli/releases
+          #   2. Get its integrity hash:
+          #      npm view heroku@NEW_VERSION dist.integrity
+          #   3. Update HEROKU_VERSION and HEROKU_INTEGRITY below.
+          #
+          # These tools are only used to *transfer* the final build artifact
+          # to Heroku; they are not part of the deployed application.
           # See: https://devcenter.heroku.com/articles/heroku-cli
-          name: Download Heroku CLI tools (to easily control maintenance mode)
+          name: Install Heroku CLI tools (to easily control maintenance mode)
           command: |
-            echo "** PATH=$PATH"
-            # verifies the right Node.js version is in the environment
             echo "** Node version:"
-            node -v # should print `v22.12.0`
-            # verifies the right npm version is in the environment
-            echo "** Getting installer"
-            rm -f install.sh
-            wget https://cli-assets.heroku.com/install.sh
-            echo "** Computing SHA-256 of installer"
-            sha256sum install.sh
-            echo "** Running installer"
-            chmod a+x install.sh
-            sh install.sh
+            node -v
+            echo "** npm version:"
+            npm -v
+            HEROKU_VERSION="10.17.0"
+            HEROKU_TARBALL_URL="https://registry.npmjs.org/heroku/-/heroku-${HEROKU_VERSION}.tgz"
+            # SHA-512 integrity hash in SRI format, recorded from the npm registry.
+            # Obtain via: npm view heroku@${HEROKU_VERSION} dist.integrity
+            HEROKU_INTEGRITY="sha512-R07TALJrM2JROpvGaGDOf503pAVp/drz4Noep5bG4q1jekwT6d0rZRKsFUEFsg8ygAEBHYCCzlm43hg4PZmPiA=="
+            # Strip the "sha512-" prefix to get the raw base64-encoded hash.
+            HEROKU_EXPECTED_HASH="${HEROKU_INTEGRITY#sha512-}"
+            echo "** Downloading Heroku CLI ${HEROKU_VERSION}"
+            wget -q "$HEROKU_TARBALL_URL" -O heroku.tgz
+            echo "** Verifying SHA-512 hash of downloaded tarball"
+            ACTUAL_HASH=$(openssl dgst -sha512 -binary heroku.tgz | openssl base64 -A)
+            if [ "$ACTUAL_HASH" != "$HEROKU_EXPECTED_HASH" ]; then
+              echo "ERROR: Heroku CLI tarball hash mismatch - possible supply chain attack"
+              echo "  Expected: $HEROKU_EXPECTED_HASH"
+              echo "  Actual:   $ACTUAL_HASH"
+              rm -f heroku.tgz
+              exit 1
+            fi
+            echo "** Hash verified. Installing Heroku CLI."
+            npm install -g ./heroku.tgz
+            rm -f heroku.tgz
+            echo "** Heroku CLI version:"
+            heroku --version
       - run:
           name: Deploy to Heroku
           # export PATH="$PATH:$(pwd)/heroku/bin"

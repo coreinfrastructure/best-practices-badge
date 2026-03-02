@@ -3247,16 +3247,123 @@ Specifically, we implement:
       (which runs on all branches) and the deploy job (which also validates
       against a staging/production allow-list)
     * `.github/workflows/main.yml`: Validates branch names in the main CI workflow
-    * `.github/workflows/scorecard.yml`: Validates branch names in the
-      scorecard security workflow
     * `.github/workflows/codespell.yml`: Validates branch names in the
       codespell workflow
+    * `.github/workflows/scorecard.yml`: Branch name validation is
+      intentionally omitted here. Scorecard's `publish_results: true` mode
+      prohibits `run:` steps in the workflow (only approved actions may be
+      used). This is acceptable because this workflow does not use branch
+      names in any shell commands, so there is no injection risk.
 
 These validations provide defense in depth by ensuring that even if
 workflow-level filters were bypassed or misconfigured, the pipeline
 would fail fast and refuse to execute with potentially malicious input.
 The use of POSIX-compliant code (avoiding bash-specific extensions)
 ensures maximum portability and standards compliance.
+
+### GitHub Actions workflow hardening
+
+Our GitHub Actions workflows implement multiple layers of defense
+against supply chain attacks and privilege abuse:
+
+* **No dangerous triggers**: All workflows use the `pull_request` trigger
+  (or `push`/`schedule`), never `pull_request_target`.
+  The `pull_request_target` trigger runs with repository secrets and
+  elevated write permissions and can execute code from untrusted forks —
+  a primary vector for supply chain compromise. We do not use it.
+
+* **All third-party actions pinned to commit SHAs**: Every GitHub Action
+  referenced in our three workflows (`main.yml`, `scorecard.yml`,
+  `codespell.yml`) uses a full commit SHA rather than a mutable tag name
+  (e.g., `@v2`). Tags can be silently moved to point to different commits,
+  including malicious ones; a commit SHA is immutable.
+  Each pinned SHA is annotated with the corresponding human-readable
+  version tag in a comment for maintainability.
+
+* **Explicit minimal `permissions:` on every workflow**: All three
+  workflows declare explicit `permissions:` blocks at the workflow level,
+  restricting `GITHUB_TOKEN` to the minimum required access.
+  Any permission not explicitly listed is set to `none`.
+  No workflow grants write access to `contents`, `pull-requests`, or
+  `packages` beyond what is strictly necessary.
+
+* **`step-security/harden-runner`**: The main CI workflow uses
+  `step-security/harden-runner` (pinned by SHA) with
+  `egress-policy: audit`, which monitors and logs all outbound network
+  connections during the workflow. This provides visibility into
+  unexpected network calls (e.g., credential exfiltration attempts)
+  and can be tightened to `block` mode once the expected egress
+  pattern is fully characterized.
+
+* **`persist-credentials: false`**: The `scorecard.yml` workflow sets
+  `persist-credentials: false` during checkout, preventing the
+  `GITHUB_TOKEN` from being stored in the git credential store
+  where it could be accessed by subsequent steps.
+
+* **No user-controlled data in shell commands**: None of our workflows
+  interpolate user-controlled values (PR titles, branch names in
+  untrusted contexts, issue body text) directly into shell commands
+  or action inputs, preventing script injection attacks.
+
+### Mandatory review for security-sensitive changes
+
+We use `.github/CODEOWNERS` to enforce mandatory review by designated
+security-focused maintainers before any pull request that touches
+security-sensitive files can be merged into the main branch.
+The following paths require explicit approval from the designated
+code owners:
+
+* `.github/workflows/` — CI/CD pipeline definitions; changes here
+  determine what code runs during automated workflows and what
+  credentials are accessible
+* `.circleci/` — CircleCI pipeline configuration and deployment scripts
+* `SECURITY.md` — security policy and vulnerability disclosure process
+* `docs/assurance-case.md` — this security assurance case
+* `.github/dependabot.yml` — dependency update automation configuration
+* `Gemfile` and `Gemfile.lock` — Ruby dependency declarations and
+  lockfile
+
+This requirement, combined with GitHub branch protection rules that
+enforce "Require review from Code Owners" on the `main` branch, ensures
+that no single contributor can unilaterally modify these files without
+security-focused review.
+
+### Heroku CLI supply chain protection
+
+The CircleCI deployment pipeline uses the Heroku CLI to control
+maintenance mode and securely push the application to Heroku.
+
+The Heroku CLI is installed by downloading the tarball directly from
+the npm registry at a pinned version and verifying its SHA-512 hash
+against a value hardcoded in the CI configuration before installation
+proceeds.
+This provides two independent protections:
+
+* **Version pin**: only the exact pinned release is accepted.
+* **Hardcoded SHA-512 hash**: the SRI-format SHA-512 of the tarball
+  is recorded in the CI config at the time the pin is set, from a
+  registry we currently trust.
+  Even if the npm registry were later compromised and replaced both
+  the tarball *and* its own recorded hash in the manifest, our
+  independently-stored hash would detect the mismatch and fail the
+  build loudly.
+  A plain `npm install` trusts only the registry's own hash and
+  would not catch this scenario.
+
+When the Heroku CLI is upgraded, both the version pin and the
+hardcoded hash are updated together as a deliberate code change,
+which is subject to code review enforced by CODEOWNERS on the
+`.circleci/` path.
+
+Node.js (and therefore npm) is guaranteed to be present in the
+CircleCI Docker image: the image is tagged as a browsers variant
+with Node.js 22, and `node -v` is verified at the start of the
+deploy step. npm is bundled with every official Node.js distribution
+and cannot be absent when Node.js is available.
+
+This CLI is used only as a deployment tool to transfer the final
+build artifact to Heroku; it is not part of the deployed application
+itself, which limits the impact of any hypothetical compromise.
 
 ## Human resource management  (people)
 

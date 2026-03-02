@@ -236,7 +236,7 @@ jobs:
               exit 1
             fi
             echo "** Hash verified. Installing Heroku CLI."
-            npm install --prefix ~/heroku-cli ./heroku.tgz
+            npm install -g --prefix ~/heroku-cli ./heroku.tgz
             export PATH="$HOME/heroku-cli/bin:$PATH"
             echo 'export PATH="$HOME/heroku-cli/bin:$PATH"' >> "$BASH_ENV"
             rm -f heroku.tgz

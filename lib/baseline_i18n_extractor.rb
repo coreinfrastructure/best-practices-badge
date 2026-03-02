@@ -118,7 +118,9 @@ class BaselineI18nExtractor
     before_markers = content[0...begin_pos]
     after_end_marker_line = content.index("\n", end_pos)
     after_end_marker_line = content.length if after_end_marker_line.nil?
-    after_markers = content[after_end_marker_line..]
+    # Skip the newline that terminates the END_MARKER line itself; generated_content
+    # already ends with "\n", so including it here would produce a spurious blank line.
+    after_markers = content[(after_end_marker_line + 1)..]
 
     # Generate new content between markers
     generated_content = generate_yaml_content(i18n_data)

@@ -60,6 +60,8 @@ fr:
       reminder_notification_note:
         title: Paramètres de notification par email
         description_html: Si vous êtes le propriétaire de cette entrée de badge et souhaitez désactiver les emails de rappel d'inactivité, veuillez modifier vos <a href="/users/%{user_id}/edit">paramètres de profil utilisateur</a>. Ce paramètre s'applique à tous vos projets.
+      obsolete_header_html: Ce sont des critères qui étaient auparavant requis mais qui ont été retirés de la ligne de base en amont. Ils sont présentés à titre de référence et ne sont <em>pas</em> requis pour un badge.
+      obsolete_criterion: Critère obsolète
     form_basics:
       entry_locale:
         description: Quelle langue est utilisée pour la description et les justifications de cette soumission de badge ?
@@ -96,6 +98,7 @@ fr:
         details: Définissez une protection de branche sur la branche principale dans le système de contrôle de version du projet pour empêcher la suppression.
       osps_br_01_01:
         description: Lorsqu'un pipeline CI/CD accepte un paramètre d'entrée, ce paramètre DOIT être assaini et validé avant d'être utilisé dans le pipeline.
+        details: Les pipelines CI/CD doivent assainir (mettre entre guillemets, échapper ou quitter pour les valeurs attendues) toutes les entrées de métadonnées correspondant à des sources non fiables. Cela inclut des données telles que les noms de branches, les messages de commit, les tags, les titres des pull requests et les informations sur l'auteur.
       osps_br_01_02:
         description: Lorsqu'un pipeline CI/CD utilise un nom de branche dans sa fonctionnalité, cette valeur de nom DOIT être assainie et validée avant d'être utilisée dans le pipeline.
       osps_br_03_01:
@@ -152,6 +155,9 @@ fr:
       osps_vm_02_01:
         description: Pendant son activité, la documentation du projet DOIT contenir des contacts de sécurité.
         details: Créez un fichier security.md (ou portant un nom similaire) qui contient les contacts de sécurité pour le projet.
+      osps_br_01_03:
+        description: Lorsqu'un pipeline CI/CD opère sur des instantanés de code non fiables, il DOIT empêcher l'accès aux identifiants et aux ressources privilégiés du CI/CD.
+        details: Les pipelines CI/CD doivent isoler les instantanés de code non fiables des identifiants et des ressources privilégiés. En particulier, les projets doivent veiller à ce que les workflows qui compilent ou exécutent du code avant examen par un collaborateur n'aient pas accès aux identifiants CI/CD.
     baseline-2:
       osps_ac_04_01:
         description: Lorsqu'une tâche CI/CD est exécutée sans permissions spécifiées, le système CI/CD DOIT par défaut définir les permissions de la tâche aux permissions les plus faibles accordées dans le pipeline.
@@ -207,6 +213,9 @@ fr:
       osps_vm_04_01:
         description: Lorsqu'il est actif, la documentation du projet DOIT publier publiquement les données sur les vulnérabilités découvertes.
         details: Fournissez des informations sur les vulnérabilités connues dans un canal public prévisible, tel qu'une entrée CVE, un article de blog ou un autre moyen. Dans la mesure du possible, ces informations doivent inclure la ou les version(s) affectée(s), comment un consommateur peut déterminer s'il est vulnérable, et des instructions pour l'atténuation ou la correction.
+      osps_do_07_01:
+        description: La documentation du projet DOIT inclure des instructions sur la façon de compiler le logiciel, y compris les bibliothèques, les frameworks, les SDK et les dépendances requis.
+        details: Il est recommandé de publier ces informations aux côtés de la documentation destinée aux contributeurs du projet, par exemple dans CONTRIBUTING.md ou d'autres documentations de tâches pour les développeurs. Ces informations peuvent également être documentées à l'aide de cibles Makefile ou d'autres scripts d'automatisation.
     baseline-3:
       osps_ac_04_02:
         description: Lorsqu'une tâche se voit attribuer des permissions dans un pipeline CI/CD, le code source ou la configuration DOIT attribuer uniquement les privilèges minimaux nécessaires pour l'activité correspondante.
@@ -268,6 +277,9 @@ fr:
       osps_vm_06_02:
         description: Pendant qu'il est actif, toutes les modifications apportées à la base de code du projet DOIVENT être automatiquement évaluées par rapport à une politique documentée pour les faiblesses de sécurité et bloquées en cas de violations, sauf lorsqu'elles sont déclarées et supprimées comme non exploitables.
         details: Créez une vérification de statut dans le système de contrôle de version du projet qui exécute un outil de test de sécurité des applications statiques (SAST) sur toutes les modifications apportées à la base de code. Exigez que la vérification de statut réussisse avant que les modifications puissent être fusionnées.
+      osps_br_01_04:
+        description: Les pipelines CI/CD qui acceptent des entrées de collaborateurs de confiance DOIVENT assainir et valider ces entrées avant de les utiliser dans le pipeline.
+        details: Les pipelines CI/CD doivent assainir (mettre entre guillemets, échapper ou quitter pour les valeurs attendues) toutes les entrées des collaborateurs lors des exécutions explicites de workflows. Bien que les collaborateurs soient généralement de confiance, les entrées manuelles dans un workflow ne peuvent pas être revues et pourraient être détournées par une prise de contrôle de compte ou une menace interne.
   headings:
     Controls: Contrôles
     General: Général
@@ -330,3 +342,8 @@ fr:
       test_automation: Automatisation des tests (confiance %{confidence})
     repo_json:
       field_from_file: Valeur provenant du fichier JSON bestpractices du projet
+  static_pages:
+    criteria_stats:
+      obsolete: Obsolète
+  criteria_overall:
+    obsolete: "{Obsolète}"

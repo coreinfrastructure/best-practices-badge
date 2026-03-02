@@ -4,6 +4,10 @@
 # OpenSSF Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
+# This script runs standalone outside of Rails, so ActiveSupport extensions
+# like String#exclude? are unavailable. Use String#include? instead.
+# rubocop:disable Style/InvertibleUnlessCondition
+
 require 'nokogiri'
 
 # Parses OpenSSF Baseline HTML to extract criteria
@@ -42,6 +46,11 @@ class BaselineHtmlParser
       current = current.next_element
     end
 
+    # Skip retired criteria — upstream marks them "Retired in ..." with no
+    # Requirement text. Returning nil excludes the control so the extraction
+    # script's obsolete-detection logic flags it correctly.
+    return if retired?(content_elements)
+
     # Extract requirement, recommendation, and other details
     requirement = extract_requirement(content_elements)
     recommendation = extract_recommendation(content_elements)
@@ -61,7 +70,7 @@ class BaselineHtmlParser
 
   def extract_requirement(elements)
     elements.each do |el|
-      next if el.text.exclude?('Requirement:')
+      next unless el.text.include?('Requirement:')
 
       # Extract text after "Requirement:" removing the bold tag
       text = el.text.sub(/.*Requirement:\s*/, '').strip
@@ -91,7 +100,7 @@ class BaselineHtmlParser
   def extract_maturity_level(elements)
     # Look for "Control applies to:" and find maturity level
     elements.each do |el|
-      next if el.text.exclude?('Control applies to:')
+      next unless el.text.include?('Control applies to:')
 
       # Look at next element which typically has the level list
       next_el = el.next_element
@@ -106,6 +115,11 @@ class BaselineHtmlParser
       return levels unless levels.empty?
     end
     [1] # Default to level 1
+  end
+
+  def retired?(elements)
+    elements.none? { |el| el.text.include?('Requirement:') } &&
+      elements.any? { |el| el.text.match?(/Retired/i) }
   end
 
   def id_to_field_name(original_id)
@@ -124,3 +138,4 @@ class BaselineHtmlParser
       .strip
   end
 end
+# rubocop:enable Style/InvertibleUnlessCondition

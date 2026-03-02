@@ -285,6 +285,7 @@ en:
       details: Includes details
       new_this_level: New at this level
       future: Future
+      obsolete: Obsolete
       project_stats_html: >-
         The "active" criteria are criteria that are included in
         the percentage calculations (as opposed to "future" criteria).
@@ -925,10 +926,15 @@ en:
         but are <em>not</em> currently required for a badge. This
         grace period allows projects to update to changed criteria
         and retain their badge as best practices improve.
+      obsolete_header_html: >-
+        These are criteria that were previously required but have been
+        retired from the upstream baseline. They are shown for reference
+        and are <em>not</em> required for a badge.
       toggle_details_title: Toggle details text
       details: Details
       url_required: URL required
       future_criterion: Future criterion
+      obsolete_criterion: Obsolete criterion
       url_required_warning: 'Warning: URL required, but no URL
         found.'
       justification_required_warning: 'Warning: Requires lengthier
@@ -3146,17 +3152,17 @@ en:
         description: "When an attempt is made to delete the project's primary branch, the version control system MUST treat this as a sensitive activity and require explicit confirmation of intent."
         details: "Set branch protection on the primary branch in the project's version control system to prevent deletion."
       osps_br_01_01:
-        description: "When a CI/CD pipeline accepts an input parameter, that parameter MUST be sanitized and validated prior to use in the pipeline."
-        details: ""
-      osps_br_01_02:
-        description: "When a CI/CD pipeline uses a branch name in its functionality, that name value MUST be sanitized and validated prior to use in the pipeline."
-        details: ""
+        description: "When a CI/CD pipeline operates on untrusted metadata, those parameters MUST be sanitized and validated prior to use in the pipeline."
+        details: "CI/CD pipelines should sanitize (quote, escape or exit on expected values) all metadata inputs which correspond to untrusted sources. This includes data such as branch names, commit messages, tags, pull request titles, and author information."
+      osps_br_01_03:
+        description: "When a CI/CD pipeline operates on untrusted code snapshots, it MUST prevent access to privileged CI/CD credentials and assets."
+        details: "CI/CD pipelines should isolate untrusted code snapshots from privileged credentials and assets. In particular, projects should be careful to ensure that workflows which build or execute code prior to review by a collaborator do not have access to CI/CD credentials."
       osps_br_03_01:
         description: "When the project lists a URI as an official project channel, that URI MUST be exclusively delivered using encrypted channels."
         details: "Configure the project's websites and version control systems to use encrypted channels such as SSH or HTTPS for data transmission. Ensure all tools and domains referenced in project documentation can only be accessed via encrypted channels."
       osps_br_03_02:
-        description: "When the project lists a URI as an official distribution channel, that URI MUST be exclusively delivered using encrypted channels."
-        details: "Configure the project's release pipeline to only fetch data from websites, API responses, and other services which use encrypted channels such as SSH or HTTPS for data transmission."
+        description: "When the project lists a URI as an official distribution channel, that channel MUST be protected from adversary-in-the-middle attacks using cryptographically authenticated channels."
+        details: "Artifacts distributed by the project should be distributed through channels which ensure integrity and authenticity. Use of HTTPS for downloads, signed releases, or distribution through trusted package managers are all acceptable methods to protect against adversary-in-the-middle attacks."
       osps_br_07_01:
         description: "The project MUST prevent the unintentional storage of unencrypted sensitive data, such as secrets and credentials, in the version control system."
         details: "Configure .gitignore or equivalent to exclude files that may contain sensitive information. Use pre-commit hooks and automated scanning tools to detect and prevent the inclusion of sensitive data in commits."
@@ -3194,7 +3200,7 @@ en:
         description: "When the package management system supports it, the source code repository MUST contain a dependency list that accounts for the direct language dependencies."
         details: "This may take the form of a package manager or language dependency file that enumerates all direct dependencies such as package.json, Gemfile, or go.mod."
       osps_qa_04_01:
-        description: "While active, the project documentation MUST contain a list of any codebases that are considered subprojects."
+        description: "Projects with multiple repositories MUST document a list of codebases that are part of the project."
         details: "Document any additional subproject code repositories produced by the project and compiled into a release. This documentation should include the status and intent of the respective codebase."
       osps_qa_05_01:
         description: "While active, the version control system MUST NOT contain generated executable artifacts."
@@ -3205,6 +3211,9 @@ en:
       osps_vm_02_01:
         description: "While active, the project documentation MUST contain security contacts."
         details: "Create a security.md (or similarly-named) file that contains security contacts for the project."
+      osps_br_01_02:
+        description: "When a CI/CD pipeline uses a branch name in its functionality, that name value MUST be sanitized and validated prior to use in the pipeline."
+        details: ""
     baseline-2:
       osps_ac_04_01:
         description: "When a CI/CD task is executed with no permissions specified, the CI/CD system MUST default the task's permissions to the lowest permissions granted in the pipeline."
@@ -3224,6 +3233,9 @@ en:
       osps_do_06_01:
         description: "When the project has made a release, the project documentation MUST include a description of how the project selects, obtains, and tracks its dependencies."
         details: "It is recommended to publish this information alongside the project's technical & design documentation on a publicly viewable resource such as the source code repository, project website, or other channel."
+      osps_do_07_01:
+        description: "The project documentation MUST include instructions on how to build the software, including required libraries, frameworks, SDKs, and dependencies."
+        details: "It is recommended to publish this information alongside the project's contributor documentation, such as in CONTRIBUTING.md or other developer task documentation. This may also be documented using Makefile targets or other automation scripts."
       osps_gv_01_01:
         description: "While active, the project documentation MUST include a list of project members with access to sensitive resources."
         details: "Document project participants and their roles through such artifacts as members.md, governance.md, maintainers.md, or similar file within the source code repository of the project. This may be as simple as including names or account handles in a list of maintainers, or more complex depending on the project's governance."
@@ -3264,6 +3276,9 @@ en:
       osps_ac_04_02:
         description: "When a job is assigned permissions in a CI/CD pipeline, the source code or configuration MUST only assign the minimum privileges necessary for the corresponding activity."
         details: "Configure the project's CI/CD pipelines to assign the lowest available permissions to users and services by default, elevating permissions only when necessary for specific tasks. In some version control systems, this may be possible at the organizational or repository level. If not, set permissions at the top level of the pipeline."
+      osps_br_01_04:
+        description: "CI/CD pipelines which accept trusted collaborator input MUST sanitize and validate that input prior to use in the pipeline."
+        details: "CI/CD pipelines should sanitize (quote, escape or exit on expected values) all collaborator inputs on explicit workflow executions. While collaborators are generally trusted, manual inputs to a workflow cannot be reviewed and could be abused by an account takeover or insider threat."
       osps_br_02_02:
         description: "When an official release is created, all assets within that release MUST be clearly associated with the release identifier or another unique identifier for the asset."
         details: "Assign a unique version identifier to each software asset produced by the project, following a consistent naming convention or numbering scheme. Examples include SemVer, CalVer, or git commit id."
@@ -3383,6 +3398,7 @@ en:
       See <a href="/en/criteria_discussion">criteria discussion</a> for
       more information about these criteria.
     future: "{Future}"
+    obsolete: "{Obsolete}"
     na_allowed: "{N/A allowed}"
     na_justification_required: "{N/A justification}"
     met_justification_required: "{Met justification}"

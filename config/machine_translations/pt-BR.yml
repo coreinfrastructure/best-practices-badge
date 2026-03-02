@@ -125,6 +125,7 @@ pt-BR:
       new_this_level: Novo neste nível
       future: Futuro
       project_stats_html: Os critérios "ativos" são critérios que estão incluídos nos cálculos de porcentagem (ao contrário dos critérios "futuros"). As próximas colunas identificam o número de critérios ativos em cada nível que são DEVE, DEVERIA, SUGERIDO, permitem um "N/A" como resposta, exigem justificativa quando "atendido" é a resposta, exigem uma URL, exigem justificativa quando "atendido" é a resposta ou uma URL, incluem detalhes, ou são novos neste nível. Os critérios "Futuros" são mostrados no formulário e espera-se que sejam adicionados como critérios ativos a algum nível no futuro, mas não são incluídos nos cálculos de conclusão. <br><br> Você pode ver estatísticas sobre projetos ao longo do tempo na <a href="/pt-BR/project_stats">página de estatísticas do projeto</a>.
+      obsolete: Obsoleto
   users:
     new:
       signup_header: Inscrever-se
@@ -441,6 +442,8 @@ pt-BR:
       justification_required_warning: 'Aviso: Requer justificativa mais extensa.'
       in_development_warning_html: "<strong>Aviso!</strong> Este não é o sistema de produção; esta é uma camada de teste."
       close: Fechar
+      obsolete_header_html: Estes são critérios que eram anteriormente exigidos, mas foram retirados da linha de base upstream. Eles são exibidos para referência e <em>não</em> são necessários para um badge.
+      obsolete_criterion: Critério obsoleto
     delete:
       done: O projeto foi excluído com sucesso.
     baseline_version_notice:
@@ -1088,6 +1091,7 @@ pt-BR:
         details: Defina proteção de ramo no ramo principal no sistema de controle de versão do projeto para evitar exclusão.
       osps_br_01_01:
         description: Quando um pipeline de CI/CD aceitar um parâmetro de entrada, esse parâmetro DEVE ser sanitizado e validado antes de ser usado no pipeline.
+        details: Os pipelines de CI/CD devem sanitizar (citar, escapar ou sair com valores esperados) todas as entradas de metadados que correspondam a fontes não confiáveis. Isso inclui dados como nomes de branch, mensagens de commit, tags, títulos de pull requests e informações de autoria.
       osps_br_01_02:
         description: Quando um pipeline de CI/CD usar um nome de ramo em sua funcionalidade, esse valor de nome DEVE ser sanitizado e validado antes de ser usado no pipeline.
       osps_br_03_01:
@@ -1144,6 +1148,9 @@ pt-BR:
       osps_vm_02_01:
         description: Enquanto ativo, a documentação do projeto DEVE conter contatos de segurança.
         details: Crie um arquivo security.md (ou com nome similar) que contenha contatos de segurança para o projeto.
+      osps_br_01_03:
+        description: Quando um pipeline de CI/CD opera em snapshots de código não confiável, ele DEVE impedir o acesso a credenciais e ativos privilegiados de CI/CD.
+        details: Os pipelines de CI/CD devem isolar snapshots de código não confiável de credenciais e ativos privilegiados. Em particular, os projetos devem ter cuidado para garantir que os workflows que compilam ou executam código antes da revisão por um colaborador não tenham acesso às credenciais de CI/CD.
     baseline-2:
       osps_ac_04_01:
         description: Quando uma tarefa de CI/CD é executada sem permissões especificadas, o sistema de CI/CD DEVE definir como padrão as permissões da tarefa para as menores permissões concedidas no pipeline.
@@ -1199,6 +1206,9 @@ pt-BR:
       osps_vm_04_01:
         description: Enquanto ativo, a documentação do projeto DEVE publicar publicamente dados sobre vulnerabilidades descobertas.
         details: Forneça informações sobre vulnerabilidades conhecidas em um canal público previsível, como uma entrada CVE, postagem em blog ou outro meio. Na medida do possível, essa informação deve incluir versão(ões) afetada(s), como um consumidor pode determinar se está vulnerável e instruções para mitigação ou remediação.
+      osps_do_07_01:
+        description: A documentação do projeto DEVE incluir instruções sobre como compilar o software, incluindo bibliotecas, frameworks, SDKs e dependências necessários.
+        details: Recomenda-se publicar essas informações junto com a documentação de colaboradores do projeto, como em CONTRIBUTING.md ou outra documentação de tarefas de desenvolvimento. Isso também pode ser documentado usando alvos de Makefile ou outros scripts de automação.
     baseline-3:
       osps_ac_04_02:
         description: Quando um trabalho recebe permissões em um pipeline de CI/CD, o código-fonte ou configuração DEVE atribuir apenas os privilégios mínimos necessários para a atividade correspondente.
@@ -1260,6 +1270,9 @@ pt-BR:
       osps_vm_06_02:
         description: Enquanto ativo, todas as alterações na base de código do projeto DEVEM ser automaticamente avaliadas em relação a uma política documentada para fraquezas de segurança e bloqueadas em caso de violações, exceto quando declaradas e suprimidas como não exploráveis.
         details: Crie uma verificação de status no sistema de controle de versão do projeto que execute uma ferramenta de Teste de Segurança de Aplicação Estática (SAST) em todas as alterações na base de código. Exija que a verificação de status seja aprovada antes que as alterações possam ser mescladas.
+      osps_br_01_04:
+        description: Os pipelines de CI/CD que aceitam entradas de colaboradores confiáveis DEVEM sanitizar e validar essas entradas antes de usá-las no pipeline.
+        details: Os pipelines de CI/CD devem sanitizar (citar, escapar ou sair com valores esperados) todas as entradas de colaboradores em execuções explícitas de workflow. Embora os colaboradores sejam geralmente confiáveis, as entradas manuais em um workflow não podem ser revisadas e podem ser abusadas por uma tomada de conta ou ameaça interna.
   criteria_overall:
     beginning_header_all: Critérios de Melhores Práticas FLOSS (Todos os Níveis)
     beginning_header_0: Critérios de Melhores Práticas FLOSS (Selo de Aprovação)
@@ -1275,6 +1288,7 @@ pt-BR:
     na_justification_required: "{Justificativa de N/A}"
     met_justification_required: "{Justificativa de atendimento}"
     met_url_required: "{URL de atendimento}"
+    obsolete: "{Obsolete}"
   criteria_discussion:
     intro_p01_html: "<h1 id='criteria_discussion'>Discussão dos Critérios</h1>"
     intro_p02_html: "<p> Não existe um conjunto de práticas que possa <i>garantir</i> que o software nunca terá defeitos ou vulnerabilidades. Mesmo métodos formais podem falhar se as especificações ou suposições estiverem erradas. Nem existe qualquer conjunto de práticas que possa garantir que um projeto sustentará uma comunidade de desenvolvimento saudável e bem-funcionada.</p>"

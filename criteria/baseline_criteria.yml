@@ -1,10 +1,10 @@
 ---
 _metadata:
   source: OpenSSF Baseline HTML
-  source_url: https://baseline.openssf.org/versions/2025-10-10
-  extracted_at: '2025-11-24T13:01:02-05:00'
+  source_url: https://baseline.openssf.org/versions/2026-02-19
+  extracted_at: '2026-02-27T14:49:24-05:00'
   auto_generated: true
-  total_controls: 62
+  total_controls: 64
 baseline-1:
   General:
     Controls:
@@ -60,22 +60,29 @@ baseline-1:
         na_justification_required: true
       osps_br_01_01:
         category: MUST
-        description: When a CI/CD pipeline accepts an input parameter, that parameter
+        description: When a CI/CD pipeline operates on untrusted metadata, those parameters
           MUST be sanitized and validated prior to use in the pipeline.
-        details: ''
+        details: CI/CD pipelines should sanitize (quote, escape or exit on expected
+          values) all metadata inputs which correspond to untrusted sources. This
+          includes data such as branch names, commit messages, tags, pull request
+          titles, and author information.
         met_url_required: false
         original_id: OSPS-BR-01.01
         na_allowed: true
         na_justification_required: true
-      osps_br_01_02:
+      osps_br_01_03:
         category: MUST
-        description: When a CI/CD pipeline uses a branch name in its functionality,
-          that name value MUST be sanitized and validated prior to use in the pipeline.
-        details: ''
+        description: When a CI/CD pipeline operates on untrusted code snapshots, it
+          MUST prevent access to privileged CI/CD credentials and assets.
+        details: CI/CD pipelines should isolate untrusted code snapshots from privileged
+          credentials and assets. In particular, projects should be careful to ensure
+          that workflows which build or execute code prior to review by a collaborator
+          do not have access to CI/CD credentials.
         met_url_required: false
-        original_id: OSPS-BR-01.02
+        original_id: OSPS-BR-01.03
         na_allowed: true
         na_justification_required: true
+        future: true
       osps_br_03_01:
         category: MUST
         description: When the project lists a URI as an official project channel,
@@ -91,10 +98,12 @@ baseline-1:
       osps_br_03_02:
         category: MUST
         description: When the project lists a URI as an official distribution channel,
-          that URI MUST be exclusively delivered using encrypted channels.
-        details: Configure the project's release pipeline to only fetch data from
-          websites, API responses, and other services which use encrypted channels
-          such as SSH or HTTPS for data transmission.
+          that channel MUST be protected from adversary-in-the-middle attacks using
+          cryptographically authenticated channels.
+        details: Artifacts distributed by the project should be distributed through
+          channels which ensure integrity and authenticity. Use of HTTPS for downloads,
+          signed releases, or distribution through trusted package managers are all
+          acceptable methods to protect against adversary-in-the-middle attacks.
         met_url_required: false
         original_id: OSPS-BR-03.02
         na_allowed: true
@@ -255,8 +264,8 @@ baseline-1:
         na_justification_required: true
       osps_qa_04_01:
         category: MUST
-        description: While active, the project documentation MUST contain a list of
-          any codebases that are considered subprojects.
+        description: Projects with multiple repositories MUST document a list of codebases
+          that are part of the project.
         details: Document any additional subproject code repositories produced by
           the project and compiled into a release. This documentation should include
           the status and intent of the respective codebase.
@@ -297,6 +306,16 @@ baseline-1:
           contacts for the project.
         met_url_required: false
         original_id: OSPS-VM-02.01
+        na_allowed: true
+        na_justification_required: true
+      osps_br_01_02:
+        obsolete: true
+        category: MUST
+        description: When a CI/CD pipeline uses a branch name in its functionality,
+          that name value MUST be sanitized and validated prior to use in the pipeline.
+        details: ''
+        met_url_required: false
+        original_id: OSPS-BR-01.02
         na_allowed: true
         na_justification_required: true
 baseline-2:
@@ -375,6 +394,20 @@ baseline-2:
         original_id: OSPS-DO-06.01
         na_allowed: true
         na_justification_required: true
+      osps_do_07_01:
+        category: MUST
+        description: The project documentation MUST include instructions on how to
+          build the software, including required libraries, frameworks, SDKs, and
+          dependencies.
+        details: It is recommended to publish this information alongside the project's
+          contributor documentation, such as in CONTRIBUTING.md or other developer
+          task documentation. This may also be documented using Makefile targets or
+          other automation scripts.
+        met_url_required: false
+        original_id: OSPS-DO-07.01
+        na_allowed: true
+        na_justification_required: true
+        future: true
       osps_gv_01_01:
         category: MUST
         description: While active, the project documentation MUST include a list of
@@ -549,6 +582,19 @@ baseline-3:
         original_id: OSPS-AC-04.02
         na_allowed: true
         na_justification_required: true
+      osps_br_01_04:
+        category: MUST
+        description: CI/CD pipelines which accept trusted collaborator input MUST
+          sanitize and validate that input prior to use in the pipeline.
+        details: CI/CD pipelines should sanitize (quote, escape or exit on expected
+          values) all collaborator inputs on explicit workflow executions. While collaborators
+          are generally trusted, manual inputs to a workflow cannot be reviewed and
+          could be abused by an account takeover or insider threat.
+        met_url_required: false
+        original_id: OSPS-BR-01.04
+        na_allowed: true
+        na_justification_required: true
+        future: true
       osps_br_02_02:
         category: MUST
         description: When an official release is created, all assets within that release

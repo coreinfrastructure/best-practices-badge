@@ -10,7 +10,7 @@ class Criteria
   include LevelConversion # Shared level name/number conversion
 
   ACCESSORS = %i[
-    name category level future
+    name category level future obsolete
     rationale autofill
     met_suppress na_suppress unmet_suppress
     met_justification_required met_url_required met_url
@@ -44,7 +44,7 @@ class Criteria
     def active(level)
       instantiate if @criteria.blank?
       @active ||= {}
-      @active[level] ||= @criteria[level].values.reject(&:future?)
+      @active[level] ||= @criteria[level].values.reject { |c| c.future? || c.obsolete? }
     end
 
     # Returns all unique criteria names across all levels.
@@ -170,6 +170,12 @@ class Criteria
   # @return [Boolean] true if criterion is for future implementation
   def future?
     future == true
+  end
+
+  # Checks if this criterion is marked as obsolete (retired from upstream).
+  # @return [Boolean] true if criterion has been retired
+  def obsolete?
+    obsolete == true
   end
 
   # Creates a new Criteria instance and freezes it for immutability.

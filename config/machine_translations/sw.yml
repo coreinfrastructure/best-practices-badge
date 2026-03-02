@@ -37,6 +37,7 @@ sw:
       cookies_info_html: <p> Ili kufanya tovuti hii ifanye kazi vizuri, wakati mwingine tunaweka faili ndogo za data zinazojulikana kama vidakuzi kwenye kifaa chako. Tovuti nyingi hufanya hivi. </p> <p> Kidakuzi ni faili ndogo ya maandishi ambayo tovuti huhifadhi kwenye kompyuta yako (ikiwa ni pamoja na kifaa chako cha mkononi) unapozuru tovuti. Inawawezesha tovuti kukumbuka vitendo vyako na mapendeleo yako (kama vile kuingia, lugha, ukubwa wa fonti na mapendeleo mengine ya kuonyesha) kwa muda, ili usije ukaziendelea kuziingiza tena kila unapo rudi kwenye tovuti au kuvinjari kutoka ukurasa mmoja hadi mwingine. Vidakuzi ni sehemu ya kawaida ya itifaki ya HTTP inayotekeleza Wavuti ya Ulimwengu (WWW), na imebainishwa katika <a href="https://tools.ietf.org/html/rfc6265">RFC 6265</a>. </p> <p> Tunatumia vidakuzi vya "kikao" vya mtu wa kwanza unapoingia. Kwa ufafanuzi, vidakuzi vya kikao vimeundwa kuisha muda unapotoka kwenye kivinjari chako au kujiondoa. Ikiwa utawasha "Nibaki nimelogiwa" (pia inajulikana kama "Nikumbuke"), pia tunahifadhi maelezo katika kidakuzi cha "kudumu" cha mtu wa kwanza kwenye kivinjari chako ili tuweze kukuingia kiotomatiki tena unapotembelea tovuti yetu hata baada ya kutoka kwenye kivinjari chako. Ikiwa unachagua kutumia tovuti zingine (kama vile GitHub) kwa uthibitishaji kwenye tovuti hii, basi tovuti hiyo nyingine inaweza kutumia vidakuzi (na hivyo kile wanachofanya na vidakuzi pia kitatumika). Tafadhali kumbuka kwamba hatuwezi kudhibiti kile tovuti zingine hufanya. </p> <p> Vidakuzi tunavyoweka vinatumika tu kusaidia uwezo unaohusiana na tovuti hii. Idhini inaweza kuondolewa - futa tu vidakuzi kwenye kivinjari chako. Unaweza kudhibiti na/au kufuta vidakuzi kama unavyotaka. Kwa maelezo zaidi, angalia <a href="https://www.aboutcookies.org">cookies.org</a>. Unaweza kufuta vidakuzi vyote ambavyo tayari vipo kwenye kompyuta yako na unaweza kuweka vivinjari vingi ili kuzuia kuwekwa. Ikiwa unafanya hivi, hata hivyo, huenda ukaondoa baadhi ya mapendeleo kwa mkono kila unapotembelea tovuti na baadhi ya huduma na vitendaji huenda visifanye kazi. Hasa, kuingia kwenye tovuti hii kunategemea vidakuzi vya kikao (kwenye tovuti hii na nyingine nyingi). </p> <p> Maandishi haya yanakusudiwa kutimiza "Sheria za Vidakuzi" za UK na EU. </p>
     criteria_stats:
       project_stats_html: Vigezo "hai" ni vigezo ambavyo vimejumuishwa katika hesabu za asilimia (tofauti na vigezo vya "baadaye"). Safu zilizofuata zinabainisha idadi ya vigezo hai katika kila kiwango ambavyo ni LAZIMA, INAPASWA, IMEPENDEKEZWA, kuruhusu "N/A" kama jibu, kuhitaji uthibitisho wakati "zimekidhi" ni jibu, kuhitaji URL, kuhitaji uthibitisho wakati "zimekidhi" ni jibu au URL, kujumuisha maelezo, au ni mpya katika kiwango hiki. Vigezo vya "baadaye" vinaonyeshwa kwenye fomu, na vinatarajiwa kuongezwa kama vigezo hai katika kiwango fulani baadaye, lakini havijajumuishwa katika hesabu za ukamilishaji. <br><br> Unaweza kuona takwimu kuhusu miradi kwa muda katika <a href="/sw/project_stats">ukurasa wa takwimu za miradi</a>.
+      obsolete: Imepitwa na Wakati
   users:
     edit:
       notification_emails: Arifa za barua pepe
@@ -292,6 +293,8 @@ sw:
       justification_required_warning: 'Onyo: Inahitaji sababu ndefu zaidi.'
       in_development_warning_html: "<strong>Onyo!</strong> Hii si mfumo wa uzalishaji; hii ni kiwango cha majaribio."
       close: Funga
+      obsolete_header_html: Hizi ni vigezo ambavyo vilikuwa vinahitajika hapo awali lakini vimeondolewa kutoka kwa msingi wa juu. Vinaonyeshwa kwa marejeleo na <em>havihitajiki</em> kwa beji.
+      obsolete_criterion: Kigezo kilichopitwa na wakati
     delete:
       done: Mradi ulifutwa kwa mafanikio.
     baseline_version_notice:
@@ -881,6 +884,7 @@ sw:
         details: Weka ulinzi wa tawi kwenye tawi kuu katika mfumo wa udhibiti wa toleo wa mradi ili kuzuia ufutaji.
       osps_br_01_01:
         description: Wakati bomba la CI/CD linakubali kigezo cha ingizo, kigezo hicho LAZIMA kisafishwe na kuthibitishwa kabla ya kutumika katika bomba.
+        details: Mifuko ya CI/CD inapaswa kusafisha (kunukuu, kutoroka au kutoka kwa maadili yanayotarajiwa) pembejeo zote za metadata zinazohusiana na vyanzo visivyoaminika. Hii inajumuisha data kama vile majina ya matawi, ujumbe wa kujitolea, lebo, majina ya maombi ya kuvuta, na taarifa za mwandishi.
       osps_br_01_02:
         description: Wakati bomba la CI/CD linatumia jina la tawi katika utendaji wake, thamani ya jina hiyo LAZIMA isafishwe na kuthibitishwa kabla ya kutumika katika bomba.
       osps_br_03_01:
@@ -937,6 +941,9 @@ sw:
       osps_vm_02_01:
         description: Wakati mradi ukiwa hai, nyaraka za mradi LAZIMA ziwe na anwani za kuwasiliana za usalama.
         details: Unda faili ya security.md (au inayoitwa sawa) inayohifadhi anwani za kuwasiliana za usalama kwa mradi.
+      osps_br_01_03:
+        description: Wakati mfuko wa CI/CD unafanya kazi kwenye picha za nambari za kanuni ambazo haziaminiki, LAZIMA uzuie upatikanaji wa vitambulisho vya CI/CD vilivyopendelewa na mali.
+        details: Mifuko ya CI/CD inapaswa kutenga picha za nambari za kanuni ambazo haziaminiki kutoka kwa vitambulisho vilivyopendelewa na mali. Hasa, miradi inapaswa kuwa makini kuhakikisha kwamba mtiririko wa kazi ambao hujenga au kutekeleza nambari kabla ya ukaguzi na mshirika hana upatikanaji wa vitambulisho vya CI/CD.
     baseline-2:
       osps_ac_04_01:
         description: Wakati kazi ya CI/CD inatekelezwa bila ruhusa zilizobainishwa, mfumo wa CI/CD LAZIMA uweke chaguomsingi ruhusa za kazi kuwa ruhusa za chini kabisa zinazotolewa katika mfumo wa kuendeshea.
@@ -992,6 +999,9 @@ sw:
       osps_vm_04_01:
         description: Ikiwa iko hai, nyaraka za mradi LAZIMA zichapisha hadharani data kuhusu udhaifu uliogundulika.
         details: Toa habari kuhusu udhaifu unaojulikana katika kituo cha hadharani kinachoweza kutabirika, kama vile ingizo la CVE, chapisho la blogi, au njia nyingine. Kwa kiwango kinachowezekana, habari hii inapaswa kujumuisha toleo(matoleo) lililoathirika, jinsi mtumiaji anavyoweza kubaini kama wanaathirika, na maelekezo ya kuzuia au kurekebisha.
+      osps_do_07_01:
+        description: Nyaraka za mradi LAZIMA zijumuishe maelekezo ya jinsi ya kujenga programu, ikiwa ni pamoja na maktaba zinazohitajika, mifumo, SDK, na utegemezi.
+        details: Inashauriwa kuchapisha taarifa hii pamoja na nyaraka za wachangiaji wa mradi, kama vile katika CONTRIBUTING.md au nyaraka nyingine za kazi za msanidi. Hii inaweza pia kuandikwa kwa kutumia malengo ya Makefile au hati nyingine za uendeshaji.
     baseline-3:
       osps_ac_04_02:
         description: Ruhusa zinapopeana kwa kazi katika mfumo wa CI/CD, msimbo wa chanzo au usanidi LAZIMA upee tu ruhusa za chini zaidi zinazohitajika kwa shughuli zinazohusiana.
@@ -1053,6 +1063,9 @@ sw:
       osps_vm_06_02:
         description: Wakati uko hai, mabadiliko yote kwenye msingi wa msimbo wa mradi LAZIMA yaangaliwe kiatomati dhidi ya sera iliyoandikwa ya udhaifu wa usalama na kuzuiliwa katika hali ya ukiukaji isipokuwa inapotangazwa na kuzuiliwa kama isiyotumiwa vibaya.
         details: Unda ukaguzi wa hali katika mfumo wa kudhibiti toleo la mradi unaoendesha zana ya Upimaji wa Usalama wa Programu Tuli (SAST) kwenye mabadiliko yote ya msingi wa msimbo. Hitaji kwamba ukaguzi wa hali upite kabla mabadiliko kusanywa.
+      osps_br_01_04:
+        description: Mifuko ya CI/CD inayokubali pembejeo za mshirika anayeaminika LAZIMA isafishe na kuthibitisha pembejeo hiyo kabla ya kutumia katika mfuko.
+        details: Mifuko ya CI/CD inapaswa kusafisha (kunukuu, kutoroka au kutoka kwa maadili yanayotarajiwa) pembejeo zote za mshirika kwenye utekelezaji wa mtiririko wa kazi wa wazi. Ingawa washirika kwa ujumla wanaaminika, pembejeo za mwongozo kwa mtiririko wa kazi haiwezi kukaguliwa na inaweza kutumiwa vibaya na utekaji wa akaunti au tishio la ndani.
   criteria_overall:
     beginning_header_all: Vigezo vya Mazoea Bora vya FLOSS (Viwango Vyote)
     beginning_header_0: Vigezo vya Mazoea Bora vya FLOSS (Nishani Inayopita)
@@ -1068,6 +1081,7 @@ sw:
     na_justification_required: "{N/A sababu}"
     met_justification_required: "{Sababu iliyokidiwa}"
     met_url_required: "{URL iliyokidiwa}"
+    obsolete: "{Obsolete}"
   criteria_discussion:
     intro_p01_html: "<h1 id='criteria_discussion'>Mjadala wa Vigezo</h1>"
     intro_p02_html: "<p> Hakuna seti ya mazoea yawezayo <i>kuhakikisha</i> kwamba programu haitakuwa na kasoro au udhaifu kamwe. Hata mbinu rasmi zinaweza kushindwa ikiwa vipimo au dhana ni sahihi. Wala hakuna seti ya mazoea yawezayo kuhakikisha kuwa mradi utaendelea kuwa na jamii ya maendeleo yenye afya na inayofanya kazi vizuri.</p>"

@@ -54,7 +54,7 @@ class CriteriaTest < ActiveSupport::TestCase
 
   test 'Ensure that only allowed fields are in Criteria' do
     allowed_set = Set.new %i[
-      category future na_allowed met_url_required met_justification_required
+      category future obsolete na_allowed met_url_required met_justification_required
       na_justification_required met_suppress unmet_suppress autofill
       major minor rationale
     ]

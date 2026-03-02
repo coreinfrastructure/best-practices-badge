@@ -107,6 +107,7 @@ es:
       new_this_level: Nuevo en este nivel
       future: Futuro
       project_stats_html: Los criterios "activos" son los criterios que se incluyen en los cálculos de porcentaje (a diferencia de los criterios "futuros"). Las siguientes columnas identifican el número de criterios activos en cada nivel que son DEBE, DEBERÍA, SUGERIDO, permiten "N/A" como respuesta, requieren justificación cuando "cumplido" es la respuesta, requieren una URL, requieren justificación cuando "cumplido" es la respuesta o una URL, incluyen detalles, o son nuevos en este nivel. Los criterios "Futuros" se muestran en el formulario y se espera que se agreguen como criterios activos a algún nivel en el futuro, pero no se incluyen en los cálculos de finalización. <br><br> Puede ver estadísticas sobre proyectos a lo largo del tiempo en la <a href="/es/project_stats">página de estadísticas del proyecto</a>.
+      obsolete: Obsoleto
   users:
     new:
       signup_header: Registrarse
@@ -406,6 +407,8 @@ es:
       justification_required_warning: 'Advertencia: Requiere justificación más extensa.'
       in_development_warning_html: "<strong>¡Advertencia!</strong> Este no es el sistema de producción; este es un nivel de prueba."
       close: Cerrar
+      obsolete_header_html: Estos son criterios que antes eran obligatorios pero han sido retirados de la línea base original. Se muestran como referencia y <em>no</em> son obligatorios para obtener una insignia.
+      obsolete_criterion: Criterio obsoleto
     delete:
       done: El proyecto fue eliminado exitosamente.
     baseline_version_notice:
@@ -1048,6 +1051,7 @@ es:
         details: Establezca protección de rama en la rama principal en el sistema de control de versiones del proyecto para evitar la eliminación.
       osps_br_01_01:
         description: Cuando un pipeline de CI/CD acepta un parámetro de entrada, ese parámetro DEBE ser saneado y validado antes de usarse en el pipeline.
+        details: Los flujos de CI/CD deben sanear (entre comillas, escapar o salir en valores esperados) todas las entradas de metadatos que correspondan a fuentes no confiables. Esto incluye datos como nombres de ramas, mensajes de confirmación, etiquetas, títulos de solicitudes de incorporación e información del autor.
       osps_br_01_02:
         description: Cuando un pipeline de CI/CD usa un nombre de rama en su funcionalidad, ese valor de nombre DEBE ser saneado y validado antes de usarse en el pipeline.
       osps_br_03_01:
@@ -1104,6 +1108,9 @@ es:
       osps_vm_02_01:
         description: Mientras esté activa, la documentación del proyecto DEBE contener contactos de seguridad.
         details: Cree un archivo security.md (o con nombre similar) que contenga contactos de seguridad para el proyecto.
+      osps_br_01_03:
+        description: Cuando un flujo de CI/CD opera sobre instantáneas de código no confiable, DEBE impedir el acceso a credenciales y activos privilegiados de CI/CD.
+        details: Los flujos de CI/CD deben aislar las instantáneas de código no confiable de las credenciales y activos privilegiados. En particular, los proyectos deben tener cuidado de garantizar que los flujos de trabajo que compilan o ejecutan código antes de su revisión por un colaborador no tengan acceso a las credenciales de CI/CD.
     baseline-2:
       osps_ac_04_01:
         description: Cuando una tarea de CI/CD se ejecuta sin permisos especificados, el sistema de CI/CD DEBE establecer por defecto los permisos de la tarea a los permisos más bajos otorgados en el pipeline.
@@ -1159,6 +1166,9 @@ es:
       osps_vm_04_01:
         description: Mientras esté activo, la documentación del proyecto DEBE publicar públicamente datos sobre las vulnerabilidades descubiertas.
         details: Proporcione información sobre vulnerabilidades conocidas en un canal público predecible, como una entrada CVE, publicación de blog u otro medio. En la medida de lo posible, esta información debe incluir la(s) versión(es) afectada(s), cómo un consumidor puede determinar si es vulnerable, e instrucciones para la mitigación o remediación.
+      osps_do_07_01:
+        description: La documentación del proyecto DEBE incluir instrucciones sobre cómo compilar el software, incluyendo las bibliotecas, marcos, SDK y dependencias necesarias.
+        details: Se recomienda publicar esta información junto con la documentación para colaboradores del proyecto, por ejemplo en CONTRIBUTING.md u otra documentación de tareas para desarrolladores. También puede documentarse utilizando objetivos de Makefile u otros scripts de automatización.
     baseline-3:
       osps_ac_04_02:
         description: Cuando se asigna permisos a un trabajo en un pipeline de CI/CD, el código fuente o configuración DEBE asignar solo los privilegios mínimos necesarios para la actividad correspondiente.
@@ -1220,6 +1230,9 @@ es:
       osps_vm_06_02:
         description: Mientras esté activo, todos los cambios en la base de código del proyecto DEBEN ser automáticamente evaluados contra una política documentada para debilidades de seguridad y bloqueados en caso de violaciones excepto cuando se declaren y supriman como no explotables.
         details: Cree una verificación de estado en el sistema de control de versiones del proyecto que ejecute una herramienta de Pruebas de Seguridad de Aplicaciones Estáticas (SAST) en todos los cambios en la base de código. Requiera que la verificación de estado pase antes de que los cambios puedan fusionarse.
+      osps_br_01_04:
+        description: Los flujos de CI/CD que aceptan entradas de colaboradores de confianza DEBEN sanear y validar dichas entradas antes de utilizarlas en el flujo.
+        details: Los flujos de CI/CD deben sanear (entre comillas, escapar o salir en valores esperados) todas las entradas de colaboradores en ejecuciones explícitas de flujos de trabajo. Aunque los colaboradores son generalmente de confianza, las entradas manuales a un flujo de trabajo no pueden revisarse y podrían ser abusadas por una toma de control de cuenta o una amenaza interna.
   criteria_overall:
     beginning_header_all: Criterios de Mejores Prácticas FLOSS (Todos los Niveles)
     beginning_header_0: Criterios de Mejores Prácticas FLOSS (Insignia de Aprobación)
@@ -1235,6 +1248,7 @@ es:
     na_justification_required: "{Justificación de N/A}"
     met_justification_required: "{Justificación de cumplimiento}"
     met_url_required: "{URL de cumplimiento}"
+    obsolete: "{Obsoleto}"
   criteria_discussion:
     intro_p01_html: "<h1 id='criteria_discussion'>Discusión de Criterios</h1>"
     intro_p02_html: "<p> No existe un conjunto de prácticas que pueda <i>garantizar</i> que el software nunca tendrá defectos o vulnerabilidades. Incluso los métodos formales pueden fallar si las especificaciones o suposiciones son incorrectas. Tampoco existe un conjunto de prácticas que pueda garantizar que un proyecto mantendrá una comunidad de desarrollo saludable y que funcione bien.</p>"

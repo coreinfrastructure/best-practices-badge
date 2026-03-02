@@ -42,7 +42,8 @@ class BaselineMigrationGenerator
 
   def ensure_mapping_exists
     if File.exist?(@mapping_file)
-      JSON.parse(File.read(@mapping_file))
+      mapping = JSON.parse(File.read(@mapping_file))
+      sync_mapping_with_criteria(mapping)
     else
       # Generate mapping from criteria file
       puts "Generating field mapping from #{@criteria_file}..."
@@ -52,6 +53,45 @@ class BaselineMigrationGenerator
       mapping
     end
   end
+
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  def sync_mapping_with_criteria(mapping)
+    criteria = YAML.safe_load_file(
+      @criteria_file,
+      permitted_classes: [Symbol],
+      aliases: true
+    )
+
+    existing_keys = mapping['mappings'].to_set { |m| m['criterion_key'] }
+    new_entries = []
+
+    criteria.each do |level, level_data|
+      next if level == '_metadata'
+
+      traverse_criteria(level_data) do |criterion_key, criterion_data|
+        next if existing_keys.include?(criterion_key)
+
+        new_entries << {
+          'level' => level,
+          'criterion_key' => criterion_key,
+          'database_field' => criterion_key,
+          'baseline_id' => criterion_data['baseline_id'] || criterion_data['external_id'],
+          'category' => criterion_data['category']
+        }
+      end
+    end
+
+    if new_entries.any?
+      puts "Adding #{new_entries.size} new entr#{new_entries.size == 1 ? 'y' : 'ies'} to mapping:"
+      new_entries.each { |e| puts "  + #{e['criterion_key']}" }
+      mapping['mappings'].concat(new_entries)
+      mapping['generated_at'] = Time.now.iso8601
+      File.write(@mapping_file, JSON.pretty_generate(mapping))
+    end
+
+    mapping
+  end
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   # rubocop:disable Metrics/MethodLength
   def generate_mapping_from_criteria

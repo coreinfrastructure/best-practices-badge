@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated_at": "2025-11-24T13:18:37-05:00",
+  "generated_at": "2026-02-27T13:00:19-05:00",
   "mappings": [
     {
       "level": "baseline-1",
@@ -433,6 +433,27 @@
       "level": "baseline-3",
       "criterion_key": "osps_vm_06_02",
       "database_field": "osps_vm_06_02",
+      "baseline_id": null,
+      "category": "MUST"
+    },
+    {
+      "level": "baseline-1",
+      "criterion_key": "osps_br_01_03",
+      "database_field": "osps_br_01_03",
+      "baseline_id": null,
+      "category": "MUST"
+    },
+    {
+      "level": "baseline-2",
+      "criterion_key": "osps_do_07_01",
+      "database_field": "osps_do_07_01",
+      "baseline_id": null,
+      "category": "MUST"
+    },
+    {
+      "level": "baseline-3",
+      "criterion_key": "osps_br_01_04",
+      "database_field": "osps_br_01_04",
       "baseline_id": null,
       "category": "MUST"
     }

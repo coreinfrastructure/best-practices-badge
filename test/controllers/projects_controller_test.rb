@@ -835,6 +835,33 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
                  @project.osps_ac_01_01_justification
   end
 
+  test 'should update and show future baseline-1 criterion (osps_br_01_03)' do
+    log_in_as(@project.user)
+    # Future criterion must appear on the edit page (view and edit, just not counted)
+    get "/en/projects/#{@project.id}/baseline-1/edit"
+    assert_response :success
+    assert_select '#osps_br_01_03'
+    assert_select '#project_osps_br_01_03_status_met'
+    # Save new values for the future criterion
+    patch "/en/projects/#{@project.id}", params: {
+      criteria_level: 'baseline-1',
+      project: {
+        osps_br_01_03_status: 'Met',
+        osps_br_01_03_justification: 'We validate branch names in CI'
+      }
+    }
+    assert_response :redirect
+    @project.reload
+    assert_equal CriterionStatus::MET, @project.osps_br_01_03_status
+    assert_equal 'We validate branch names in CI',
+                 @project.osps_br_01_03_justification
+    # Saved values must appear on the show page
+    get "/en/projects/#{@project.id}/baseline-1"
+    assert_response :success
+    assert_select '#osps_br_01_03'
+    assert_includes @response.body, 'We validate branch names in CI'
+  end
+
   test 'should update entry_locale' do
     log_in_as(@project.user)
     patch "/en/projects/#{@project.id}",

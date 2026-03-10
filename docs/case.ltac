@@ -1,0 +1,170 @@
+- Claim Security: The system is adequately secure against moderate threats
+  - Strategy Processes: Security is argued by examining all lifecycle processes
+    - Claim TechProcesses: Technical lifecycle processes implement security
+      - Claim ^Requirements
+      - Claim ^Design
+      - Claim ^Implementation
+      - Claim ^Verification
+      - Claim ^Deployment
+      - Claim ^Maintenance
+    - Claim ^NonTechnical
+  - Claim ^Controls
+
+- Claim Requirements: Security requirements are identified and met
+  - Strategy SecTriad: Security triad (CIA) and access control address the requirements
+    - Claim Confidentiality: Confidentiality is maintained
+      - Claim NonPublicData: Non-public data is kept confidential
+        - Claim ConfDataAtRest: Confidential data at rest is protected
+          - Claim Passwords: User passwords stored securely (using bcrypt) ()
+            - Evidence PasswordsEv: has_secure_password in user model stores passwords via bcrypt (../app/models/user.rb)
+          - Claim RememberMe: Remember me token is secured
+            - Evidence RememberMeEv: remember method in user model creates bcrypt-stored nonce; sessions controller and helper manage it; login test verifies cleartext not stored in cookie (../app/controllers/sessions_controller.rb)
+          - Claim EmailSecured: Email addresses are secured (encrypted and only accessible to admin & owner) ()
+            - Evidence EmailSecuredEv: Views, mailers, and controllers restrict email address access to owners and admins; use grep -Ri 'user.*\.email' to verify (../app/views/users/)
+        - Claim DataInMotion: Data in motion encrypted with HTTPS
+          - Evidence DataInMotionEv: config.force_ssl = true enforces HTTPS with TLS redirection and secure cookies in production (../config/environments/production.rb)
+      - Claim UserPrivacy: User privacy is maintained
+      - Claim MostDataPublic: Almost all data is not confidential
+    - Claim Integrity: Integrity is maintained
+      - Claim DataModAuth: Data modification requires authorization
+        - Evidence DataModAuthEv: before_action guards can_edit_else_redirect and can_control_else_redirect protect all project modifications (../app/controllers/projects_controller.rb)
+      - Claim AppModAuth: Application modification requires authorization
+      - Link DataInMotion
+    - Claim Availability: Availability is maintained including limited DDoS resilience
+      - Claim CDNDDoS: CDN counters DDoS attacks on specific resources
+      - Claim Timeout: Timeout limits maximum request time
+        - Evidence TimeoutEv: Rack::Timeout.service_timeout set in production configuration limits all request times (../config/environments/production.rb)
+      - Claim QuickRecovery: Can return to operation quickly after DDoS ended
+      - Claim LoginDisabled: Logon disabled mode mitigates against some vulnerabilities
+        - Evidence LoginDisabledEv: deny_login initializer reads BADGEAPP_DENY_LOGIN env var to disable all logins (../config/initializers/deny_login.rb)
+      - Claim Backups: Data corruption and loss are mitigated by multiple backups
+      - Claim ScaleUp: Cloud resources can be rapidly increased
+    - Claim AccessControl: Access control is in place
+      - Claim AuthN: Users must identify and authenticate themselves
+        - Claim LocalAuthN: Local users must supply a password
+        - Claim RemoteAuthN: Remote users are authenticated by a trusted remote service
+      - Claim AuthZ: Authorization to resources and actions is controlled
+        - Evidence AuthZEv: can_edit? and can_control? methods implement role-based authorization; all access enforced server-side through controllers (../app/controllers/application_controller.rb)
+  - Claim Assets: Assets & threat actors identified & addressed
+
+- Claim Design: Security in design
+  - Claim SimpleDesign: Economy of mechanism: simple design is used
+  - Claim STRIDE: STRIDE threat model has been analyzed
+  - Claim DesignPrinciples: Secure design principles are applied
+    - Claim EconomyMech: Economy of mechanism
+    - Claim CompleteMed: Complete mediation
+    - Claim FailSafe: Fail-safe defaults
+    - Claim OpenDesign: Open design
+    - Claim SepPriv: Separation of privilege
+    - Claim LeastPriv: Least privilege
+    - Claim LeastCommon: Least common mechanism
+    - Claim PsychAccept: Psychological acceptability
+    - Claim LimitedAttack: Limited attack surface
+    - Claim InputValid: Input validation with whitelists
+  - Claim Scalability: Availability through scalability
+  - Claim MemSafe: Memory-safe languages are used
+
+- Claim Implementation: Security in implementation
+  - Strategy CommonVulns: Most implementation vulnerabilities are due to common types of implementation errors or common misconfigurations, so countering them greatly reduces security risks
+    - Claim OWASPClaim: All of the most common important implementation vulnerability types (weaknesses) countered
+      - Strategy OWASPStrat: OWASP top 10 represents a broad consensus of the most critical web application security flaws
+        - Claim OWASP1013: All OWASP top 10 (2013 & 2017) countered
+          - Claim OWASP1: Injection (including SQL injection) countered
+          - Claim OWASP2: Broken Authentication and Session Management countered
+          - Claim OWASP3: Cross-site scripting (XSS) countered
+          - Claim OWASP4: Insecure Direct Object References countered
+          - Claim OWASP5: Security Misconfiguration countered
+          - Claim OWASP6: Sensitive Data Exposure countered
+          - Claim OWASP7: Missing Access Control countered
+          - Claim OWASP8: CSRF countered
+          - Claim OWASP9: Known Vulnerabilities countered
+          - Claim OWASP10: Unvalidated Redirects and Forwards countered
+          - Claim OWASP11: XXE countered (2017 A4) ()
+          - Claim OWASP12: Insecure Deserialization countered (2017 A8) ()
+          - Claim OWASP13: Insufficient Logging and Monitoring countered (2017 A10) ()
+    - Claim MisconfigClaim: All of the most common known security-relevant misconfiguration errors countered
+      - Claim RailsGuide: Entire most-relevant security guide applied
+    - Claim ReuseSec: Reused software is secure
+      - Strategy ReuseStrat: Reuse is often appropriate and can be done securely
+        - Claim ReuseReview: Reused software is reviewed before use
+        - Claim ReuseAuth: Reused software is authentic
+        - Claim PkgMgr: Package managers used
+          - Evidence PkgMgrEv: Gemfile and Gemfile.lock manage all gem dependencies via bundler (../Gemfile)
+        - Claim SpecialAnalysis: Special analysis justifies exceptions
+      - Claim KnownVulns: Known vulnerabilities detected
+  - Strategy HardeningStrat: Hardening can reduce or eliminate the impact of defects in some cases
+    - Claim Hardening: Hardening is applied
+      - Claim HardenHTTPS: HTTPS use enforced (including by HSTS) ()
+        - Evidence HardenHTTPSEv: config.force_ssl enables TLS redirection, secure cookies, and HSTS; domain in Chrome HSTS preload list (../config/environments/production.rb)
+      - Claim HardenCSP: Outgoing HTTP headers hardened including restrictive CSP
+        - Evidence HardenCSPEv: secure_headers gem enforces CSP and security headers; integration test verifies header values (../test/integration/project_get_test.rb)
+      - Claim HardenCookies: Cookies limited
+        - Evidence HardenCookiesEv: secure_headers gem sets httponly, secure, and SameSite=Lax cookie attributes; session cookies use AES-256-GCM (../Gemfile)
+      - Claim HardenCSRF: CSRF tokens hardened
+        - Evidence HardenCSRFEv: protect_from_forgery with per-form tokens and origin-header check, enabled via load_defaults (../app/controllers/application_controller.rb)
+      - Claim HardenRateIn: Incoming rate limits enforced
+        - Evidence HardenRateInEv: Rack::Attack rate limits on requests, logins, and signups by client IP address (../config/initializers/rack_attack.rb)
+      - Claim HardenRateOut: Outgoing email rate limits enforced
+        - Evidence HardenRateOutEv: projects_to_remind class method and hard limit on outgoing reminder email count (../app/models/project.rb)
+      - Claim HardenEmailEnc: Email addresses encrypted
+        - Evidence HardenEmailEncEv: attr_encrypted and blind_index gems encrypt email addresses with AES-256-GCM and PBKDF2-HMAC-SHA256 index (../app/models/user.rb)
+      - Claim HardenGravatar: Gravatar restricted
+        - Evidence HardenGravatarEv: use_gravatar boolean controls whether gravatar MD5 hash is revealed for each local user (../app/models/user.rb)
+  - Claim PubVulns: Public vulnerability information monitored
+
+- Claim Verification: Security in integration & verification
+  - Strategy VerifStrat: Static & dynamic verifications are performed and enforced on all integrations, reducing risk
+    - Claim VerifSteps: Verification steps reduce risk
+      - Claim StaticVerif: Static verifications are performed
+        - Claim StyleChecks: Style checks pass
+          - Evidence StyleEv: Style checkers as pronto runners in Gemfile: eslint, rails_best_practices, rubocop (../.circleci/config.yml)
+        - Claim WeaknessAnalysis: Source code analyzed for weaknesses & all issues resolved
+          - Evidence BrakemanEv: Brakeman source code weakness analyzer (../.github/workflows/main.yml)
+        - Claim FLOSSVerif: All reused components are verified as FLOSS
+          - Evidence LicenseFinderEv: license_finder (../.circleci/config.yml)
+          - Evidence FOSSAEv: FOSSA check (https://github.com/coreinfrastructure/best-practices-badge/settings/)
+      - Claim DynamicVerif: Dynamic verifications are performed
+        - Claim TestCoverage: Automated testing performed with excellent statement coverage
+          - Evidence CITestEv: Automated tests run by CI (https://codecov.io/gh/coreinfrastructure/best-practices-badge)
+        - Claim NegTests: Negative tests failed as desired
+          - Evidence NegTestsEv: Negative test suite (../test/)
+    - Claim CIRequired: Successful verification required by continuous integration before deployment
+      - Evidence CIConfigEv: CI configuration (../.circleci/config.yml)
+
+- Claim Deployment: Security in transition & operation
+  - Claim DeployProvider: Deployment provider maintains security
+    - Evidence HerokuSecEv: Heroku security policy describes physical and environmental safeguards (https://www.heroku.com/policy/security)
+  - Claim Detection: Threats and anomalies are detected
+    - Claim ExtMonitor: External monitoring is in place
+      - Evidence ExtMonitorEv: UptimeRobot provides external alerting when the website goes down (https://uptimerobot.com/dashboard)
+    - Claim IntLogging: Internal logging and anomaly detection is in place
+      - Evidence IntLoggingEv: filter_parameter_logging.rb excludes passwords from logs; events stream to stdout per 12-factor app (../config/initializers/filter_parameter_logging.rb)
+  - Claim OnlineCheckers: Online security checkers are used
+  - Claim RecoveryPlan: Recovery plan including backups is in place
+
+- Claim Maintenance: Security in maintenance
+  - Claim AutoDetect: Vulnerabilities are auto-detected when publicly reported
+    - Evidence AutoDetectBundleEv: bundle-audit checks all gem versions against NVD vulnerability database on every rake run (../Gemfile.lock)
+    - Evidence AutoDetectGitHubEv: GitHub Dependabot alerts and automated pull requests for vulnerable dependencies (../.github/dependabot.yml)
+  - Claim RapidUpdate: Rapid update process is in place
+
+- Claim NonTechnical: Security implemented by other life cycle processes
+  - Claim AgreementProc: Agreement processes implement security
+    - Claim Acquisition: Acquisition process implements security
+      - Claim Contracts: Contracts with deployment and CDN provider address security
+  - Claim OrgProc: Organizational project-enabling processes implement security
+    - Claim Infrastructure: Infrastructure management implements security
+      - Claim DevEnvSec: Development & test environments are protected from attack
+      - Claim CINoData: CI automated test environment does not contain protected data
+    - Claim HumanRes: Human resource management implements security
+      - Claim DevKnowledge: Key developers know how to develop secure software
+  - Claim TechMgmt: Technical management processes implement security
+    - Claim ProjectPlanning: Project planning addresses security
+    - Claim RiskMgmt: Risk management addresses security
+    - Claim ConfigMgmt: Configuration management addresses security
+      - Evidence ConfigMgmtEv: Git version control via GitHub with authenticated access; governance documented (../governance.md)
+    - Claim QA: Quality assurance addresses security
+
+- Claim Controls: Certifications & controls provide confidence in operating results
+  - Claim CIIBadge: CII Best Practices Badge certification is obtained
+    - Evidence CIIBadgeEv: BadgeApp achieves gold CII Best Practices Badge (https://bestpractices.coreinfrastructure.org/en/projects/1)

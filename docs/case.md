@@ -122,138 +122,64 @@ flowchart BT
     Requirements["<b>Requirements</b><br>Security requirements are identified and met"]
     SecTriad[/"<b>SecTriad</b><br>Security triad (CIA) and access control address the requirements"/]
     Assets["<b>Assets</b><br>Assets &amp; threat actors identified &amp; addressed"]
-    Confidentiality["<b>Confidentiality</b><br>Confidentiality is maintained"]
+    Confidentiality[["<b>Confidentiality</b><br>Confidentiality is maintained"]]
     Integrity["<b>Integrity</b><br>Integrity is maintained"]
-    Availability["<b>Availability</b><br>Availability is maintained including limited DDoS resilience"]
+    Availability[["<b>Availability</b><br>Availability is maintained including limited DDoS resilience"]]
     AccessControl["<b>AccessControl</b><br>Access control is in place"]
     AssetsIdentified["<b>AssetsIdentified</b><br>Key assets (badge data, user credentials, system availability) have been identified<br>..."]
     ThreatsIdentified["<b>ThreatsIdentified</b><br>Key threat actors (external attackers, bots, insiders, nation-states) have been identified and addressed<br>..."]
-    NonPublicData["<b>NonPublicData</b><br>Non-public data is kept confidential"]
-    UserPrivacy["<b>UserPrivacy</b><br>User privacy is maintained"]
-    MostDataPublic["<b>MostDataPublic</b><br>Almost all data is not confidential<br>━━━"]
     DataModAuth["<b>DataModAuth</b><br>Data modification requires authorization"]
     AppModAuth["<b>AppModAuth</b><br>Application modification requires authorization"]
-    CDNDDoS["<b>CDNDDoS</b><br>CDN counters DDoS attacks on specific resources"]
-    Timeout["<b>Timeout</b><br>Timeout limits maximum request time"]
-    QuickRecovery["<b>QuickRecovery</b><br>Can return to operation quickly after DDoS ended"]
-    LoginDisabled["<b>LoginDisabled</b><br>Logon disabled mode mitigates against some vulnerabilities"]
-    Backups["<b>Backups</b><br>Data corruption and loss are mitigated by multiple backups"]
-    ScaleUp["<b>ScaleUp</b><br>Cloud resources can be rapidly increased"]
     AuthN["<b>AuthN</b><br>Users must identify and authenticate themselves"]
     AuthZ["<b>AuthZ</b><br>Authorization to resources and actions is controlled"]
-    ConfDataAtRest["<b>ConfDataAtRest</b><br>Confidential data at rest is protected"]
-    DataInMotion["<b>DataInMotion</b><br>Data in motion encrypted with HTTPS"]
-    SelfHostedAssets["<b>SelfHostedAssets</b><br>All web assets are self-hosted; no third-party transclusions reveal user activity to unrelated sites"]
-    GravatarPrivacyEv[("<b>GravatarPrivacyEv</b>&nbsp;↗<br>use_gravatar boolean controls whether any MD5 hash is sent to Gravatar, giving each user control over this external disclosure")]
     DataModAuthEv[("<b>DataModAuthEv</b>&nbsp;↗<br>before_action guards can_edit_else_redirect and can_control_else_redirect protect all project modifications")]
     AppModAuthEv[("<b>AppModAuthEv</b>&nbsp;↗<br>GitHub repository requires authenticated access; branch protection rules enforce code review before merging to main; governance.md documents the process")]
-    FastlyCDNEv[("<b>FastlyCDNEv</b>&nbsp;↗<br>Fastly CDN configured as reverse proxy; badge image and static asset requests absorbed by CDN before reaching origin application server")]
-    TimeoutEv[("<b>TimeoutEv</b>&nbsp;↗<br>Rack::Timeout.service_timeout set in production configuration limits all request times")]
-    QuickRecoveryEv[("<b>QuickRecoveryEv</b>&nbsp;↗<br>Heroku allows rapid dyno restart and redeploy from last known good git commit, restoring service within minutes of an incident")]
-    LoginDisabledEv[("<b>LoginDisabledEv</b>&nbsp;↗<br>deny_login initializer reads BADGEAPP_DENY_LOGIN env var to disable all logins")]
-    BackupsEv[("<b>BackupsEv</b>&nbsp;↗<br>Heroku Postgres automated daily backups retained across multiple snapshots; standard Rails and PostgreSQL restore mechanisms enable database recovery")]
-    ScaleUpEv[("<b>ScaleUpEv</b>&nbsp;↗<br>Heroku cloud platform supports on-demand dyno scaling; Fastly CDN reduces origin load during traffic spikes")]
     LocalAuthN["<b>LocalAuthN</b><br>Local users must supply a password"]
     RemoteAuthN["<b>RemoteAuthN</b><br>Remote users are authenticated by a trusted remote service"]
     AuthZEv[("<b>AuthZEv</b>&nbsp;↗<br>can_edit? and can_control? methods implement role-based authorization; all access enforced server-side through controllers")]
-    Passwords["<b>Passwords</b><br>User passwords stored securely (using bcrypt)"]
-    RememberMe["<b>RememberMe</b><br>Remember me token is secured"]
-    EmailSecured["<b>EmailSecured</b><br>Email addresses are secured (encrypted and only accessible to admin &amp; owner)"]
-    DataInMotionEv[("<b>DataInMotionEv</b>&nbsp;↗<br>config.force_ssl = true enforces HTTPS with TLS redirection and secure cookies in production")]
-    SelfHostedAssetsEv[("<b>SelfHostedAssetsEv</b>&nbsp;↗<br>Content-Security-Policy restricts script-src and style-src to self; application layouts contain no external CDN script or font references")]
     LocalAuthNEv[("<b>LocalAuthNEv</b>&nbsp;↗<br>sessions_controller create action authenticates local users by verifying email and bcrypt password hash before establishing session")]
     OAuthEv[("<b>OAuthEv</b>&nbsp;↗<br>OmniAuth-GitHub middleware authenticates remote users via GitHub OAuth 2.0; callback validates identity before creating local session")]
-    PasswordsEv[("<b>PasswordsEv</b>&nbsp;↗<br>has_secure_password in user model stores passwords via bcrypt")]
-    RememberMeEv[("<b>RememberMeEv</b>&nbsp;↗<br>remember method in user model creates bcrypt-stored nonce; sessions controller and helper manage it; login test verifies cleartext not stored in cookie")]
-    EmailSecuredEv[("<b>EmailSecuredEv</b>&nbsp;↗<br>Views, mailers, and controllers restrict email address access to owners and admins; use grep -Ri 'user.*\.email' to verify")]
     Dot1((" ")):::sacmDot
     Dot2((" ")):::sacmDot
     Dot3((" ")):::sacmDot
     Dot4((" ")):::sacmDot
     Dot5((" ")):::sacmDot
-    Dot6((" ")):::sacmDot
-    Dot7((" ")):::sacmDot
-    Dot8((" ")):::sacmDot
-    Dot9((" ")):::sacmDot
-    Dot10((" ")):::sacmDot
-    click GravatarPrivacyEv "../app/models/user.rb"
     click DataModAuthEv "../app/controllers/projects_controller.rb"
     click AppModAuthEv "../governance.md"
-    click FastlyCDNEv "../config/initializers/fastly.rb"
-    click TimeoutEv "../config/environments/production.rb"
-    click QuickRecoveryEv "../Procfile"
-    click LoginDisabledEv "../config/initializers/deny_login.rb"
-    click BackupsEv "https://devcenter.heroku.com/articles/heroku-postgres-backups"
-    click ScaleUpEv "../Procfile"
     click AuthZEv "../app/controllers/application_controller.rb"
-    click DataInMotionEv "../config/environments/production.rb"
-    click SelfHostedAssetsEv "../config/initializers/secure_headers.rb"
     click LocalAuthNEv "../app/controllers/sessions_controller.rb"
     click OAuthEv "../config/initializers/omniauth.rb"
-    click PasswordsEv "../app/models/user.rb"
-    click RememberMeEv "../app/controllers/sessions_controller.rb"
-    click EmailSecuredEv "../app/views/users/"
 
-    BottomPadding[ ]:::invisible ~~~ PasswordsEv
-    PasswordsEv --> Passwords
-    RememberMeEv --> RememberMe
-    EmailSecuredEv --> EmailSecured
-    Passwords --- Dot1
-    RememberMe --- Dot1
-    EmailSecured --- Dot1
-    Dot1 --> ConfDataAtRest
-    DataInMotionEv --> DataInMotion
-    ConfDataAtRest --- Dot2
-    DataInMotion --- Dot2
-    Dot2 --> NonPublicData
-    SelfHostedAssetsEv --> SelfHostedAssets
-    SelfHostedAssets --- Dot3
-    GravatarPrivacyEv --- Dot3
-    Dot3 --> UserPrivacy
-    NonPublicData --- Dot4
-    UserPrivacy --- Dot4
-    MostDataPublic --- Dot4
-    Dot4 --> Confidentiality
+    BottomPadding[ ]:::invisible ~~~ Confidentiality
     DataModAuthEv --> DataModAuth
     AppModAuthEv --> AppModAuth
-    DataModAuth --- Dot5
-    AppModAuth --- Dot5
-    Dot5 --> Integrity
-    FastlyCDNEv --> CDNDDoS
-    TimeoutEv --> Timeout
-    QuickRecoveryEv --> QuickRecovery
-    LoginDisabledEv --> LoginDisabled
-    BackupsEv --> Backups
-    ScaleUpEv --> ScaleUp
-    CDNDDoS --- Dot6
-    Timeout --- Dot6
-    QuickRecovery --- Dot6
-    LoginDisabled --- Dot6
-    Backups --- Dot6
-    ScaleUp --- Dot6
-    Dot6 --> Availability
+    DataModAuth --- Dot1
+    AppModAuth --- Dot1
+    Dot1 --> Integrity
     LocalAuthNEv --> LocalAuthN
     OAuthEv --> RemoteAuthN
-    LocalAuthN --- Dot7
-    RemoteAuthN --- Dot7
-    Dot7 --> AuthN
+    LocalAuthN --- Dot2
+    RemoteAuthN --- Dot2
+    Dot2 --> AuthN
     AuthZEv --> AuthZ
-    AuthN --- Dot8
-    AuthZ --- Dot8
-    Dot8 --> AccessControl
-    AssetsIdentified --- Dot9
-    ThreatsIdentified --- Dot9
-    Dot9 --> Assets
-    Confidentiality --- Dot10
-    Integrity --- Dot10
-    Availability --- Dot10
-    AccessControl --- Dot10
-    SecTriad --- Dot10
-    Assets --- Dot10
-    Dot10 --> Requirements
+    AuthN --- Dot3
+    AuthZ --- Dot3
+    Dot3 --> AccessControl
+    AssetsIdentified --- Dot4
+    ThreatsIdentified --- Dot4
+    Dot4 --> Assets
+    Confidentiality --- Dot5
+    Integrity --- Dot5
+    Availability --- Dot5
+    AccessControl --- Dot5
+    SecTriad --- Dot5
+    Assets --- Dot5
+    Dot5 --> Requirements
 ```
 
-Defines: **[Claim Requirements](#claim-requirements)**, [Claim Assets](#claim-assets), [Claim ThreatsIdentified](#claim-threatsidentified), [Claim AssetsIdentified](#claim-assetsidentified), [Strategy SecTriad](#strategy-sectriad), [Claim AccessControl](#claim-accesscontrol), [Claim AuthZ](#claim-authz), [Evidence AuthZEv](#evidence-authzev), [Claim AuthN](#claim-authn), [Claim RemoteAuthN](#claim-remoteauthn), [Evidence OAuthEv](#evidence-oauthev), [Claim LocalAuthN](#claim-localauthn), [Evidence LocalAuthNEv](#evidence-localauthnev), [Claim Availability](#claim-availability), [Claim ScaleUp](#claim-scaleup), [Evidence ScaleUpEv](#evidence-scaleupev), [Claim Backups](#claim-backups), [Evidence BackupsEv](#evidence-backupsev), [Claim LoginDisabled](#claim-logindisabled), [Evidence LoginDisabledEv](#evidence-logindisabledev), [Claim QuickRecovery](#claim-quickrecovery), [Evidence QuickRecoveryEv](#evidence-quickrecoveryev), [Claim Timeout](#claim-timeout), [Evidence TimeoutEv](#evidence-timeoutev), [Claim CDNDDoS](#claim-cdnddos), [Evidence FastlyCDNEv](#evidence-fastlycdnev), [Claim Integrity](#claim-integrity), [Link DataInMotion](#link-datainmotion), [Claim AppModAuth](#claim-appmodauth), [Evidence AppModAuthEv](#evidence-appmodauthev), [Claim DataModAuth](#claim-datamodauth), [Evidence DataModAuthEv](#evidence-datamodauthev), [Claim Confidentiality](#claim-confidentiality), [Claim MostDataPublic](#claim-mostdatapublic), [Claim UserPrivacy](#claim-userprivacy), [Evidence GravatarPrivacyEv](#evidence-gravatarprivacyev), [Claim SelfHostedAssets](#claim-selfhostedassets), [Evidence SelfHostedAssetsEv](#evidence-selfhostedassetsev), [Claim NonPublicData](#claim-nonpublicdata), [Claim DataInMotion](#claim-datainmotion), [Evidence DataInMotionEv](#evidence-datainmotionev), [Claim ConfDataAtRest](#claim-confdataatrest), [Claim EmailSecured](#claim-emailsecured), [Evidence EmailSecuredEv](#evidence-emailsecuredev), [Claim RememberMe](#claim-rememberme), [Evidence RememberMeEv](#evidence-remembermeev), [Claim Passwords](#claim-passwords), [Evidence PasswordsEv](#evidence-passwordsev)
+Defines: **[Claim Requirements](#claim-requirements)**, [Claim Assets](#claim-assets), [Claim ThreatsIdentified](#claim-threatsidentified), [Claim AssetsIdentified](#claim-assetsidentified), [Strategy SecTriad](#strategy-sectriad), [Claim AccessControl](#claim-accesscontrol), [Claim AuthZ](#claim-authz), [Evidence AuthZEv](#evidence-authzev), [Claim AuthN](#claim-authn), [Claim RemoteAuthN](#claim-remoteauthn), [Evidence OAuthEv](#evidence-oauthev), [Claim LocalAuthN](#claim-localauthn), [Evidence LocalAuthNEv](#evidence-localauthnev), [Claim Integrity](#claim-integrity), [Claim AppModAuth](#claim-appmodauth), [Evidence AppModAuthEv](#evidence-appmodauthev), [Claim DataModAuth](#claim-datamodauth), [Evidence DataModAuthEv](#evidence-datamodauthev)
+
+Citing: [Claim Availability](#package-availability), [Claim Confidentiality](#package-confidentiality)
 
 Cited by: [Package Security](#package-security)
 
@@ -386,182 +312,92 @@ flowchart BT
     CommonVulns[/"<b>CommonVulns</b><br>Most implementation vulnerabilities are due to common types of implementation errors or common misconfigurations, so countering them greatly reduces security risks"/]
     HardeningStrat[/"<b>HardeningStrat</b><br>Hardening can reduce or eliminate the impact of defects in some cases"/]
     PubVulns["<b>PubVulns</b><br>Public vulnerability information monitored"]
-    OWASPClaim["<b>OWASPClaim</b><br>All of the most common important implementation vulnerability types (weaknesses) countered"]
+    OWASPClaim[["<b>OWASPClaim</b><br>All of the most common important implementation vulnerability types (weaknesses) countered"]]
     MisconfigClaim["<b>MisconfigClaim</b><br>All of the most common known security-relevant misconfiguration errors countered"]
     ReuseSec["<b>ReuseSec</b><br>Reused software is secure"]
-    Hardening["<b>Hardening</b><br>Hardening is applied"]
+    Hardening[["<b>Hardening</b><br>Hardening is applied"]]
     PubVulnsBundleEv[("<b>PubVulnsBundleEv</b>&nbsp;↗<br>bundle-audit checks all gem versions against NVD vulnerability database on every rake run")]
     PubVulnsDependabotEv[("<b>PubVulnsDependabotEv</b>&nbsp;↗<br>GitHub Dependabot alerts and automated pull requests for vulnerable dependencies")]
-    OWASPStrat[/"<b>OWASPStrat</b><br>OWASP top 10 represents a broad consensus of the most critical web application security flaws"/]
     RailsGuide["<b>RailsGuide</b><br>Entire most-relevant security guide applied"]
     ReuseStrat[/"<b>ReuseStrat</b><br>Reuse is often appropriate and can be done securely"/]
-    KnownVulns["<b>KnownVulns</b><br>Known vulnerabilities detected<br>..."]
-    HardenHTTPS["<b>HardenHTTPS</b><br>HTTPS use enforced (including by HSTS)"]
-    HardenCSP["<b>HardenCSP</b><br>Outgoing HTTP headers hardened including restrictive CSP"]
-    HardenCookies["<b>HardenCookies</b><br>Cookies limited"]
-    HardenCSRF["<b>HardenCSRF</b><br>CSRF tokens hardened"]
-    HardenRateIn["<b>HardenRateIn</b><br>Incoming rate limits enforced"]
-    HardenRateOut["<b>HardenRateOut</b><br>Outgoing email rate limits enforced"]
-    HardenEmailEnc["<b>HardenEmailEnc</b><br>Email addresses encrypted"]
-    HardenGravatar["<b>HardenGravatar</b><br>Gravatar restricted"]
-    OWASP1013["<b>OWASP1013</b><br>All OWASP top 10 (2013 &amp; 2017) countered"]
+    KnownVulns["<b>KnownVulns</b><br>Known vulnerabilities in reused components are detected"]
     RailsGuideEv[("<b>RailsGuideEv</b>&nbsp;↗<br>Rails security guide reviewed and countermeasures applied for sessions, CSRF, XSS, injection, and other Rails-specific issues")]
     ReuseReview["<b>ReuseReview</b><br>Reused software is reviewed before use"]
     ReuseAuth["<b>ReuseAuth</b><br>Reused software is authentic"]
     PkgMgr["<b>PkgMgr</b><br>Package managers used"]
-    SpecialAnalysis["<b>SpecialAnalysis</b><br>Special analysis justifies exceptions<br>..."]
-    HardenHTTPSEv[("<b>HardenHTTPSEv</b>&nbsp;↗<br>config.force_ssl enables TLS redirection, secure cookies, and HSTS; domain in Chrome HSTS preload list")]
-    HardenCSPEv[("<b>HardenCSPEv</b>&nbsp;↗<br>secure_headers gem enforces CSP and security headers; integration test verifies header values")]
-    HardenCookiesEv[("<b>HardenCookiesEv</b>&nbsp;↗<br>secure_headers gem sets httponly, secure, and SameSite=Lax cookie attributes; session cookies use AES-256-GCM")]
-    HardenCSRFEv[("<b>HardenCSRFEv</b>&nbsp;↗<br>protect_from_forgery with per-form tokens and origin-header check, enabled via load_defaults")]
-    HardenRateInEv[("<b>HardenRateInEv</b>&nbsp;↗<br>Rack::Attack rate limits on requests, logins, and signups by client IP address")]
-    HardenRateOutEv[("<b>HardenRateOutEv</b>&nbsp;↗<br>projects_to_remind class method and hard limit on outgoing reminder email count")]
-    HardenEmailEncEv[("<b>HardenEmailEncEv</b>&nbsp;↗<br>attr_encrypted and blind_index gems encrypt email addresses with AES-256-GCM and PBKDF2-HMAC-SHA256 index")]
-    HardenGravatarEv[("<b>HardenGravatarEv</b>&nbsp;↗<br>use_gravatar boolean controls whether gravatar MD5 hash is revealed for each local user")]
-    OWASP1["<b>OWASP1</b><br>Injection (including SQL injection) countered"]
-    OWASP2["<b>OWASP2</b><br>Broken Authentication and Session Management countered"]
-    OWASP3["<b>OWASP3</b><br>Cross-site scripting (XSS) countered"]
-    SynConnect_00000000((" ")):::connector
-    OWASP11["<b>OWASP11</b><br>XXE countered (2017 A4)"]
-    OWASP12["<b>OWASP12</b><br>Insecure Deserialization countered (2017 A8)"]
-    OWASP13["<b>OWASP13</b><br>Insufficient Logging and Monitoring countered (2017 A10)"]
+    SpecialAnalysis["<b>SpecialAnalysis</b><br>Special analysis justifies exceptions"]
+    KnownVulnsBundleEv[("<b>KnownVulnsBundleEv</b>&nbsp;↗<br>bundle-audit checks all gem versions against the NVD on every rake run, detecting known CVEs in dependencies")]
+    KnownVulnsDependabotEv[("<b>KnownVulnsDependabotEv</b>&nbsp;↗<br>GitHub Dependabot automatically alerts on vulnerable gem dependencies and opens PRs with updated versions")]
     ReuseReviewEv[("<b>ReuseReviewEv</b>&nbsp;↗<br>New gem dependencies reviewed for purpose, maintenance, and security before addition; CONTRIBUTING.md documents review expectations")]
     ReuseAuthEv[("<b>ReuseAuthEv</b>&nbsp;↗<br>Gemfile.lock records exact versions and SHA-512 checksums for all gems, ensuring reproducible authenticated builds")]
     PkgMgrEv[("<b>PkgMgrEv</b>&nbsp;↗<br>Gemfile and Gemfile.lock manage all gem dependencies via bundler")]
-    OWASP1Ev[("<b>OWASP1Ev</b>&nbsp;↗<br>ActiveRecord ORM uses parameterized queries by default; direct SQL uses sanitize_sql_like or bound parameters; shell is never used to process untrusted content")]
-    OWASP2Ev[("<b>OWASP2Ev</b>&nbsp;↗<br>Sessions use encrypted signed cookies; has_secure_password enforces bcrypt; remember-me uses bcrypt-stored nonce; session_store.rb configures secure cookie settings")]
-    OWASP3Ev[("<b>OWASP3Ev</b>&nbsp;↗<br>Rails SafeBuffer escapes all template output by default; markdown processing whitelists safe tags and attributes; CSP enforced via secure_headers gem")]
-    OWASP4["<b>OWASP4</b><br>Insecure Direct Object References countered"]
-    OWASP5["<b>OWASP5</b><br>Security Misconfiguration countered"]
-    OWASP6["<b>OWASP6</b><br>Sensitive Data Exposure countered"]
-    OWASP7["<b>OWASP7</b><br>Missing Access Control countered"]
-    OWASP8["<b>OWASP8</b><br>CSRF countered"]
-    OWASP9["<b>OWASP9</b><br>Known Vulnerabilities countered"]
-    OWASP10["<b>OWASP10</b><br>Unvalidated Redirects and Forwards countered"]
-    OWASP11Ev[("<b>OWASP11Ev</b>&nbsp;↗<br>Nokogiri configured to disable external entity processing; XML parsing restricted to safe subset; SpecialAnalysis documents this exception")]
-    OWASP12Ev[("<b>OWASP12Ev</b>&nbsp;↗<br>Rails session data stored in signed encrypted cookies; no untrusted object deserialization; JSON used for API data")]
-    OWASP13Ev[("<b>OWASP13Ev</b>&nbsp;↗<br>filter_parameter_logging excludes passwords from logs; events stream to stdout per 12-factor app; UptimeRobot monitors availability externally")]
-    OWASP4Ev[("<b>OWASP4Ev</b>&nbsp;↗<br>All project access goes through can_edit? and can_control? authorization checks; no direct object references exposed without authorization")]
-    OWASP5Ev[("<b>OWASP5Ev</b>&nbsp;↗<br>secure_headers gem enforces HTTP security headers; Rails secrets managed via environment variables; CI runs security checks on every commit")]
-    OWASP6Ev[("<b>OWASP6Ev</b>&nbsp;↗<br>Email encrypted with AES-256-GCM; passwords stored via bcrypt; all data in transit protected by TLS; filter_parameter_logging excludes sensitive fields from logs")]
-    OWASP7Ev[("<b>OWASP7Ev</b>&nbsp;↗<br>can_edit? and can_control? enforced server-side on all mutating actions; no security decisions made client-side")]
-    OWASP8Ev[("<b>OWASP8Ev</b>&nbsp;↗<br>protect_from_forgery with per-form tokens and origin-header check, enabled via load_defaults")]
-    OWASP9BundleEv[("<b>OWASP9BundleEv</b>&nbsp;↗<br>bundle-audit checks all gems against NVD vulnerability database on every rake run")]
-    OWASP9DependabotEv[("<b>OWASP9DependabotEv</b>&nbsp;↗<br>GitHub Dependabot alerts on vulnerable dependencies and opens PRs to update them")]
-    OWASP10Ev[("<b>OWASP10Ev</b>&nbsp;↗<br>Redirect destinations validated against allowlists; no open redirect vulnerabilities; after-login redirect uses stored path validated server-side")]
+    XXESafe["<b>XXESafe</b><br>Nokogiri/libxml2 XXE exception (CVE-2016-9318) poses no risk in our deployment"]
+    ErubisSafe["<b>ErubisSafe</b><br>XSS from erubis via pronto-rails_best_practices poses no production risk"]
+    LocalSecretSafe["<b>LocalSecretSafe</b><br>Checked-in tmp/local_secret.txt secret_key_base value poses no security risk"]
+    ActionCableSafe["<b>ActionCableSafe</b><br>ActionCable information-exposure risk is mitigated because ActionCable is not used"]
+    XXESafeEv[("<b>XXESafeEv</b>&nbsp;↗<br>Nokogiri disables DTD loading and network access by default; we never process incoming XML in production; loofah never opts into DTDLOAD or NONET")]
+    ErubisSafeEv[("<b>ErubisSafeEv</b>&nbsp;↗<br>rails_best_practices and pronto are dev/test-only dependencies; they never execute against untrusted input in production")]
+    LocalSecretSafeEv[("<b>LocalSecretSafeEv</b>&nbsp;↗<br>The file is only used in development and test; production always uses the SECRET_KEY_BASE environment variable; the checked-in value protects no real secrets")]
+    ActionCableSafeEv[("<b>ActionCableSafeEv</b>&nbsp;↗<br>ActionCable is a Rails transitive dependency but is never configured or invoked; no sensitive data flows through it")]
     Dot1((" ")):::sacmDot
     Dot2((" ")):::sacmDot
     Dot3((" ")):::sacmDot
     Dot4((" ")):::sacmDot
     Dot5((" ")):::sacmDot
-    Dot6((" ")):::sacmDot
-    Dot7((" ")):::sacmDot
     click PubVulnsBundleEv "../Gemfile.lock"
     click PubVulnsDependabotEv "../.github/dependabot.yml"
     click RailsGuideEv "https://guides.rubyonrails.org/security.html"
-    click HardenHTTPSEv "../config/environments/production.rb"
-    click HardenCSPEv "../test/integration/project_get_test.rb"
-    click HardenCookiesEv "../Gemfile"
-    click HardenCSRFEv "../app/controllers/application_controller.rb"
-    click HardenRateInEv "../config/initializers/rack_attack.rb"
-    click HardenRateOutEv "../app/models/project.rb"
-    click HardenEmailEncEv "../app/models/user.rb"
-    click HardenGravatarEv "../app/models/user.rb"
+    click KnownVulnsBundleEv "../Gemfile.lock"
+    click KnownVulnsDependabotEv "../.github/dependabot.yml"
     click ReuseReviewEv "../CONTRIBUTING.md"
     click ReuseAuthEv "../Gemfile.lock"
     click PkgMgrEv "../Gemfile"
-    click OWASP1Ev "../app/models/project.rb"
-    click OWASP2Ev "../config/initializers/session_store.rb"
-    click OWASP3Ev "../config/initializers/secure_headers.rb"
-    click OWASP11Ev "../docs/case.md"
-    click OWASP12Ev "../config/initializers/session_store.rb"
-    click OWASP13Ev "../config/initializers/filter_parameter_logging.rb"
-    click OWASP4Ev "../app/controllers/projects_controller.rb"
-    click OWASP5Ev "../config/initializers/secure_headers.rb"
-    click OWASP6Ev "../config/initializers/filter_parameter_logging.rb"
-    click OWASP7Ev "../app/controllers/application_controller.rb"
-    click OWASP8Ev "../app/controllers/application_controller.rb"
-    click OWASP9BundleEv "../Gemfile.lock"
-    click OWASP9DependabotEv "../.github/dependabot.yml"
-    click OWASP10Ev "../app/controllers/sessions_controller.rb"
+    click XXESafeEv "../Gemfile.lock"
+    click ErubisSafeEv "../Gemfile"
+    click LocalSecretSafeEv "../tmp/local_secret.txt"
+    click ActionCableSafeEv "../Gemfile.lock"
 
-    BottomPadding[ ]:::invisible ~~~ OWASP1Ev
-    OWASP1Ev --> OWASP1
-    OWASP2Ev --> OWASP2
-    OWASP3Ev --> OWASP3
-    OWASP4Ev --> OWASP4
-    OWASP5Ev --> OWASP5
-    OWASP6Ev --> OWASP6
-    OWASP7Ev --> OWASP7
-    OWASP8Ev --> OWASP8
-    OWASP9BundleEv --- Dot1
-    OWASP9DependabotEv --- Dot1
-    Dot1 --> OWASP9
-    OWASP10Ev --> OWASP10
-    OWASP4 --- SynConnect_00000000
-    OWASP5 --- SynConnect_00000000
-    OWASP6 --- SynConnect_00000000
-    OWASP7 --- SynConnect_00000000
-    OWASP8 --- SynConnect_00000000
-    OWASP9 --- SynConnect_00000000
-    OWASP10 --- SynConnect_00000000
-    OWASP11Ev --> OWASP11
-    OWASP12Ev --> OWASP12
-    OWASP13Ev --> OWASP13
-    OWASP1 --- Dot2
-    OWASP2 --- Dot2
-    OWASP3 --- Dot2
-    SynConnect_00000000 --- Dot2
-    OWASP11 --- Dot2
-    OWASP12 --- Dot2
-    OWASP13 --- Dot2
-    Dot2 --> OWASP1013
-    OWASP1013 --- Dot3
-    OWASPStrat --- Dot3
-    Dot3 --> OWASPClaim
+    BottomPadding[ ]:::invisible ~~~ OWASPClaim
     RailsGuideEv --> RailsGuide
     RailsGuide --> MisconfigClaim
     ReuseReviewEv --> ReuseReview
     ReuseAuthEv --> ReuseAuth
     PkgMgrEv --> PkgMgr
-    ReuseReview --- Dot4
-    ReuseAuth --- Dot4
-    PkgMgr --- Dot4
-    SpecialAnalysis --- Dot4
-    ReuseStrat --- Dot4
-    KnownVulns --- Dot4
-    Dot4 --> ReuseSec
-    HardenHTTPSEv --> HardenHTTPS
-    HardenCSPEv --> HardenCSP
-    HardenCookiesEv --> HardenCookies
-    HardenCSRFEv --> HardenCSRF
-    HardenRateInEv --> HardenRateIn
-    HardenRateOutEv --> HardenRateOut
-    HardenEmailEncEv --> HardenEmailEnc
-    HardenGravatarEv --> HardenGravatar
-    HardenHTTPS --- Dot5
-    HardenCSP --- Dot5
-    HardenCookies --- Dot5
-    HardenCSRF --- Dot5
-    HardenRateIn --- Dot5
-    HardenRateOut --- Dot5
-    HardenEmailEnc --- Dot5
-    HardenGravatar --- Dot5
-    Dot5 --> Hardening
-    PubVulnsBundleEv --- Dot6
-    PubVulnsDependabotEv --- Dot6
-    Dot6 --> PubVulns
-    OWASPClaim --- Dot7
-    MisconfigClaim --- Dot7
-    ReuseSec --- Dot7
-    CommonVulns --- Dot7
-    Hardening --- Dot7
-    HardeningStrat --- Dot7
-    PubVulns --- Dot7
-    Dot7 --> Implementation
+    XXESafeEv --> XXESafe
+    ErubisSafeEv --> ErubisSafe
+    LocalSecretSafeEv --> LocalSecretSafe
+    ActionCableSafeEv --> ActionCableSafe
+    XXESafe --- Dot1
+    ErubisSafe --- Dot1
+    LocalSecretSafe --- Dot1
+    ActionCableSafe --- Dot1
+    Dot1 --> SpecialAnalysis
+    KnownVulnsBundleEv --- Dot2
+    KnownVulnsDependabotEv --- Dot2
+    Dot2 --> KnownVulns
+    ReuseReview --- Dot3
+    ReuseAuth --- Dot3
+    PkgMgr --- Dot3
+    SpecialAnalysis --- Dot3
+    ReuseStrat --- Dot3
+    KnownVulns --- Dot3
+    Dot3 --> ReuseSec
+    PubVulnsBundleEv --- Dot4
+    PubVulnsDependabotEv --- Dot4
+    Dot4 --> PubVulns
+    OWASPClaim --- Dot5
+    MisconfigClaim --- Dot5
+    ReuseSec --- Dot5
+    CommonVulns --- Dot5
+    Hardening --- Dot5
+    HardeningStrat --- Dot5
+    PubVulns --- Dot5
+    Dot5 --> Implementation
 ```
 
-Defines: **[Claim Implementation](#claim-implementation)**, [Claim PubVulns](#claim-pubvulns), [Evidence PubVulnsDependabotEv](#evidence-pubvulnsdependabotev), [Evidence PubVulnsBundleEv](#evidence-pubvulnsbundleev), [Strategy HardeningStrat](#strategy-hardeningstrat), [Claim Hardening](#claim-hardening), [Claim HardenGravatar](#claim-hardengravatar), [Evidence HardenGravatarEv](#evidence-hardengravatarev), [Claim HardenEmailEnc](#claim-hardenemailenc), [Evidence HardenEmailEncEv](#evidence-hardenemailencev), [Claim HardenRateOut](#claim-hardenrateout), [Evidence HardenRateOutEv](#evidence-hardenrateoutev), [Claim HardenRateIn](#claim-hardenratein), [Evidence HardenRateInEv](#evidence-hardenrateinev), [Claim HardenCSRF](#claim-hardencsrf), [Evidence HardenCSRFEv](#evidence-hardencsrfev), [Claim HardenCookies](#claim-hardencookies), [Evidence HardenCookiesEv](#evidence-hardencookiesev), [Claim HardenCSP](#claim-hardencsp), [Evidence HardenCSPEv](#evidence-hardencspev), [Claim HardenHTTPS](#claim-hardenhttps), [Evidence HardenHTTPSEv](#evidence-hardenhttpsev), [Strategy CommonVulns](#strategy-commonvulns), [Claim ReuseSec](#claim-reusesec), [Claim KnownVulns](#claim-knownvulns), [Strategy ReuseStrat](#strategy-reusestrat), [Claim SpecialAnalysis](#claim-specialanalysis), [Claim PkgMgr](#claim-pkgmgr), [Evidence PkgMgrEv](#evidence-pkgmgrev), [Claim ReuseAuth](#claim-reuseauth), [Evidence ReuseAuthEv](#evidence-reuseauthev), [Claim ReuseReview](#claim-reusereview), [Evidence ReuseReviewEv](#evidence-reusereviewev), [Claim MisconfigClaim](#claim-misconfigclaim), [Claim RailsGuide](#claim-railsguide), [Evidence RailsGuideEv](#evidence-railsguideev), [Claim OWASPClaim](#claim-owaspclaim), [Strategy OWASPStrat](#strategy-owaspstrat), [Claim OWASP1013](#claim-owasp1013), [Claim OWASP13](#claim-owasp13), [Evidence OWASP13Ev](#evidence-owasp13ev), [Claim OWASP12](#claim-owasp12), [Evidence OWASP12Ev](#evidence-owasp12ev), [Claim OWASP11](#claim-owasp11), [Evidence OWASP11Ev](#evidence-owasp11ev), [Claim OWASP10](#claim-owasp10), [Evidence OWASP10Ev](#evidence-owasp10ev), [Claim OWASP9](#claim-owasp9), [Evidence OWASP9DependabotEv](#evidence-owasp9dependabotev), [Evidence OWASP9BundleEv](#evidence-owasp9bundleev), [Claim OWASP8](#claim-owasp8), [Evidence OWASP8Ev](#evidence-owasp8ev), [Claim OWASP7](#claim-owasp7), [Evidence OWASP7Ev](#evidence-owasp7ev), [Claim OWASP6](#claim-owasp6), [Evidence OWASP6Ev](#evidence-owasp6ev), [Claim OWASP5](#claim-owasp5), [Evidence OWASP5Ev](#evidence-owasp5ev), [Claim OWASP4](#claim-owasp4), [Evidence OWASP4Ev](#evidence-owasp4ev), [Claim OWASP3](#claim-owasp3), [Evidence OWASP3Ev](#evidence-owasp3ev), [Claim OWASP2](#claim-owasp2), [Evidence OWASP2Ev](#evidence-owasp2ev), [Claim OWASP1](#claim-owasp1), [Evidence OWASP1Ev](#evidence-owasp1ev)
+Defines: **[Claim Implementation](#claim-implementation)**, [Claim PubVulns](#claim-pubvulns), [Evidence PubVulnsDependabotEv](#evidence-pubvulnsdependabotev), [Evidence PubVulnsBundleEv](#evidence-pubvulnsbundleev), [Strategy HardeningStrat](#strategy-hardeningstrat), [Strategy CommonVulns](#strategy-commonvulns), [Claim ReuseSec](#claim-reusesec), [Claim KnownVulns](#claim-knownvulns), [Evidence KnownVulnsDependabotEv](#evidence-knownvulnsdependabotev), [Evidence KnownVulnsBundleEv](#evidence-knownvulnsbundleev), [Strategy ReuseStrat](#strategy-reusestrat), [Claim SpecialAnalysis](#claim-specialanalysis), [Claim ActionCableSafe](#claim-actioncablesafe), [Evidence ActionCableSafeEv](#evidence-actioncablesafeev), [Claim LocalSecretSafe](#claim-localsecretsafe), [Evidence LocalSecretSafeEv](#evidence-localsecretsafeev), [Claim ErubisSafe](#claim-erubissafe), [Evidence ErubisSafeEv](#evidence-erubissafeev), [Claim XXESafe](#claim-xxesafe), [Evidence XXESafeEv](#evidence-xxesafeev), [Claim PkgMgr](#claim-pkgmgr), [Evidence PkgMgrEv](#evidence-pkgmgrev), [Claim ReuseAuth](#claim-reuseauth), [Evidence ReuseAuthEv](#evidence-reuseauthev), [Claim ReuseReview](#claim-reusereview), [Evidence ReuseReviewEv](#evidence-reusereviewev), [Claim MisconfigClaim](#claim-misconfigclaim), [Claim RailsGuide](#claim-railsguide), [Evidence RailsGuideEv](#evidence-railsguideev)
+
+Citing: [Claim Hardening](#package-hardening), [Claim OWASPClaim](#package-owaspclaim)
 
 Cited by: [Package Security](#package-security)
 
@@ -868,6 +704,316 @@ flowchart BT
 Defines: **[Claim Controls](#claim-controls)**, [Claim CIIBadge](#claim-ciibadge), [Evidence CIIBadgeEv](#evidence-ciibadgeev)
 
 Cited by: [Package Security](#package-security)
+
+<a id="package-owaspclaim"></a>
+### Package OWASPClaim: All of the most common important implementation vulnerability types (weaknesses) countered
+
+```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
+flowchart BT
+    classDef invisible opacity:0
+    classDef sacmDot fill:#000,stroke:#000
+    classDef connector fill:none,stroke:#cccccc,stroke-width:1px;
+    classDef abstractClaim stroke-width:2px,stroke-dasharray: 5 5;
+    OWASPClaim["<b>OWASPClaim</b><br>All of the most common important implementation vulnerability types (weaknesses) countered"]
+    OWASPStrat[/"<b>OWASPStrat</b><br>OWASP top 10 represents a broad consensus of the most critical web application security flaws"/]
+    OWASP1013["<b>OWASP1013</b><br>All OWASP top 10 (2013 &amp; 2017) countered"]
+    OWASP1["<b>OWASP1</b><br>Injection (including SQL injection) countered"]
+    OWASP2["<b>OWASP2</b><br>Broken Authentication and Session Management countered"]
+    OWASP3["<b>OWASP3</b><br>Cross-site scripting (XSS) countered"]
+    SynConnect_00000000((" ")):::connector
+    OWASP11["<b>OWASP11</b><br>XXE countered (2017 A4)"]
+    OWASP12["<b>OWASP12</b><br>Insecure Deserialization countered (2017 A8)"]
+    OWASP13["<b>OWASP13</b><br>Insufficient Logging and Monitoring countered (2017 A10)"]
+    OWASP1Ev[("<b>OWASP1Ev</b>&nbsp;↗<br>ActiveRecord ORM uses parameterized queries by default; direct SQL uses sanitize_sql_like or bound parameters; shell is never used to process untrusted content")]
+    OWASP2Ev[("<b>OWASP2Ev</b>&nbsp;↗<br>Sessions use encrypted signed cookies; has_secure_password enforces bcrypt; remember-me uses bcrypt-stored nonce; session_store.rb configures secure cookie settings")]
+    OWASP3Ev[("<b>OWASP3Ev</b>&nbsp;↗<br>Rails SafeBuffer escapes all template output by default; markdown processing whitelists safe tags and attributes; CSP enforced via secure_headers gem")]
+    OWASP4["<b>OWASP4</b><br>Insecure Direct Object References countered"]
+    OWASP5["<b>OWASP5</b><br>Security Misconfiguration countered"]
+    OWASP6["<b>OWASP6</b><br>Sensitive Data Exposure countered"]
+    OWASP7["<b>OWASP7</b><br>Missing Access Control countered"]
+    OWASP8["<b>OWASP8</b><br>CSRF countered"]
+    OWASP9["<b>OWASP9</b><br>Known Vulnerabilities countered"]
+    OWASP10["<b>OWASP10</b><br>Unvalidated Redirects and Forwards countered"]
+    OWASP11Ev[("<b>OWASP11Ev</b>&nbsp;↗<br>Nokogiri configured to disable external entity processing; XML parsing restricted to safe subset; SpecialAnalysis documents this exception")]
+    OWASP12Ev[("<b>OWASP12Ev</b>&nbsp;↗<br>Rails session data stored in signed encrypted cookies; no untrusted object deserialization; JSON used for API data")]
+    OWASP13Ev[("<b>OWASP13Ev</b>&nbsp;↗<br>filter_parameter_logging excludes passwords from logs; events stream to stdout per 12-factor app; UptimeRobot monitors availability externally")]
+    OWASP4Ev[("<b>OWASP4Ev</b>&nbsp;↗<br>All project access goes through can_edit? and can_control? authorization checks; no direct object references exposed without authorization")]
+    OWASP5Ev[("<b>OWASP5Ev</b>&nbsp;↗<br>secure_headers gem enforces HTTP security headers; Rails secrets managed via environment variables; CI runs security checks on every commit")]
+    OWASP6Ev[("<b>OWASP6Ev</b>&nbsp;↗<br>Email encrypted with AES-256-GCM; passwords stored via bcrypt; all data in transit protected by TLS; filter_parameter_logging excludes sensitive fields from logs")]
+    OWASP7Ev[("<b>OWASP7Ev</b>&nbsp;↗<br>can_edit? and can_control? enforced server-side on all mutating actions; no security decisions made client-side")]
+    OWASP8Ev[("<b>OWASP8Ev</b>&nbsp;↗<br>protect_from_forgery with per-form tokens and origin-header check, enabled via load_defaults")]
+    OWASP9BundleEv[("<b>OWASP9BundleEv</b>&nbsp;↗<br>bundle-audit checks all gems against NVD vulnerability database on every rake run")]
+    OWASP9DependabotEv[("<b>OWASP9DependabotEv</b>&nbsp;↗<br>GitHub Dependabot alerts on vulnerable dependencies and opens PRs to update them")]
+    OWASP10Ev[("<b>OWASP10Ev</b>&nbsp;↗<br>Redirect destinations validated against allowlists; no open redirect vulnerabilities; after-login redirect uses stored path validated server-side")]
+    Dot1((" ")):::sacmDot
+    Dot2((" ")):::sacmDot
+    Dot3((" ")):::sacmDot
+    click OWASP1Ev "../app/models/project.rb"
+    click OWASP2Ev "../config/initializers/session_store.rb"
+    click OWASP3Ev "../config/initializers/secure_headers.rb"
+    click OWASP11Ev "../docs/case.md"
+    click OWASP12Ev "../config/initializers/session_store.rb"
+    click OWASP13Ev "../config/initializers/filter_parameter_logging.rb"
+    click OWASP4Ev "../app/controllers/projects_controller.rb"
+    click OWASP5Ev "../config/initializers/secure_headers.rb"
+    click OWASP6Ev "../config/initializers/filter_parameter_logging.rb"
+    click OWASP7Ev "../app/controllers/application_controller.rb"
+    click OWASP8Ev "../app/controllers/application_controller.rb"
+    click OWASP9BundleEv "../Gemfile.lock"
+    click OWASP9DependabotEv "../.github/dependabot.yml"
+    click OWASP10Ev "../app/controllers/sessions_controller.rb"
+
+    BottomPadding[ ]:::invisible ~~~ OWASP1Ev
+    OWASP1Ev --> OWASP1
+    OWASP2Ev --> OWASP2
+    OWASP3Ev --> OWASP3
+    OWASP4Ev --> OWASP4
+    OWASP5Ev --> OWASP5
+    OWASP6Ev --> OWASP6
+    OWASP7Ev --> OWASP7
+    OWASP8Ev --> OWASP8
+    OWASP9BundleEv --- Dot1
+    OWASP9DependabotEv --- Dot1
+    Dot1 --> OWASP9
+    OWASP10Ev --> OWASP10
+    OWASP4 --- SynConnect_00000000
+    OWASP5 --- SynConnect_00000000
+    OWASP6 --- SynConnect_00000000
+    OWASP7 --- SynConnect_00000000
+    OWASP8 --- SynConnect_00000000
+    OWASP9 --- SynConnect_00000000
+    OWASP10 --- SynConnect_00000000
+    OWASP11Ev --> OWASP11
+    OWASP12Ev --> OWASP12
+    OWASP13Ev --> OWASP13
+    OWASP1 --- Dot2
+    OWASP2 --- Dot2
+    OWASP3 --- Dot2
+    SynConnect_00000000 --- Dot2
+    OWASP11 --- Dot2
+    OWASP12 --- Dot2
+    OWASP13 --- Dot2
+    Dot2 --> OWASP1013
+    OWASP1013 --- Dot3
+    OWASPStrat --- Dot3
+    Dot3 --> OWASPClaim
+```
+
+Defines: **[Claim OWASPClaim](#claim-owaspclaim)**, [Strategy OWASPStrat](#strategy-owaspstrat), [Claim OWASP1013](#claim-owasp1013), [Claim OWASP13](#claim-owasp13), [Evidence OWASP13Ev](#evidence-owasp13ev), [Claim OWASP12](#claim-owasp12), [Evidence OWASP12Ev](#evidence-owasp12ev), [Claim OWASP11](#claim-owasp11), [Evidence OWASP11Ev](#evidence-owasp11ev), [Claim OWASP10](#claim-owasp10), [Evidence OWASP10Ev](#evidence-owasp10ev), [Claim OWASP9](#claim-owasp9), [Evidence OWASP9DependabotEv](#evidence-owasp9dependabotev), [Evidence OWASP9BundleEv](#evidence-owasp9bundleev), [Claim OWASP8](#claim-owasp8), [Evidence OWASP8Ev](#evidence-owasp8ev), [Claim OWASP7](#claim-owasp7), [Evidence OWASP7Ev](#evidence-owasp7ev), [Claim OWASP6](#claim-owasp6), [Evidence OWASP6Ev](#evidence-owasp6ev), [Claim OWASP5](#claim-owasp5), [Evidence OWASP5Ev](#evidence-owasp5ev), [Claim OWASP4](#claim-owasp4), [Evidence OWASP4Ev](#evidence-owasp4ev), [Claim OWASP3](#claim-owasp3), [Evidence OWASP3Ev](#evidence-owasp3ev), [Claim OWASP2](#claim-owasp2), [Evidence OWASP2Ev](#evidence-owasp2ev), [Claim OWASP1](#claim-owasp1), [Evidence OWASP1Ev](#evidence-owasp1ev)
+
+Cited by: [Package Implementation](#package-implementation)
+
+<a id="package-hardening"></a>
+### Package Hardening: Hardening is applied
+
+```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
+flowchart BT
+    classDef invisible opacity:0
+    classDef sacmDot fill:#000,stroke:#000
+    classDef connector fill:none,stroke:#cccccc,stroke-width:1px;
+    classDef abstractClaim stroke-width:2px,stroke-dasharray: 5 5;
+    Hardening["<b>Hardening</b><br>Hardening is applied"]
+    HardenHTTPS["<b>HardenHTTPS</b><br>HTTPS use enforced (including by HSTS)"]
+    HardenCSP["<b>HardenCSP</b><br>Outgoing HTTP headers hardened including restrictive CSP"]
+    HardenCookies["<b>HardenCookies</b><br>Cookies limited"]
+    HardenCSRF["<b>HardenCSRF</b><br>CSRF tokens hardened"]
+    HardenRateIn["<b>HardenRateIn</b><br>Incoming rate limits enforced"]
+    HardenRateOut["<b>HardenRateOut</b><br>Outgoing email rate limits enforced"]
+    HardenEmailEnc["<b>HardenEmailEnc</b><br>Email addresses encrypted"]
+    HardenGravatar["<b>HardenGravatar</b><br>Gravatar restricted"]
+    HardenHTTPSEv[("<b>HardenHTTPSEv</b>&nbsp;↗<br>config.force_ssl enables TLS redirection, secure cookies, and HSTS; domain in Chrome HSTS preload list")]
+    HardenCSPEv[("<b>HardenCSPEv</b>&nbsp;↗<br>secure_headers gem enforces CSP and security headers; integration test verifies header values")]
+    HardenCookiesEv[("<b>HardenCookiesEv</b>&nbsp;↗<br>secure_headers gem sets httponly, secure, and SameSite=Lax cookie attributes; session cookies use AES-256-GCM")]
+    HardenCSRFEv[("<b>HardenCSRFEv</b>&nbsp;↗<br>protect_from_forgery with per-form tokens and origin-header check, enabled via load_defaults")]
+    HardenRateInEv[("<b>HardenRateInEv</b>&nbsp;↗<br>Rack::Attack rate limits on requests, logins, and signups by client IP address")]
+    HardenRateOutEv[("<b>HardenRateOutEv</b>&nbsp;↗<br>projects_to_remind class method and hard limit on outgoing reminder email count")]
+    HardenEmailEncEv[("<b>HardenEmailEncEv</b>&nbsp;↗<br>attr_encrypted and blind_index gems encrypt email addresses with AES-256-GCM and PBKDF2-HMAC-SHA256 index")]
+    HardenGravatarEv[("<b>HardenGravatarEv</b>&nbsp;↗<br>use_gravatar boolean controls whether gravatar MD5 hash is revealed for each local user")]
+    Dot1((" ")):::sacmDot
+    click HardenHTTPSEv "../config/environments/production.rb"
+    click HardenCSPEv "../test/integration/project_get_test.rb"
+    click HardenCookiesEv "../Gemfile"
+    click HardenCSRFEv "../app/controllers/application_controller.rb"
+    click HardenRateInEv "../config/initializers/rack_attack.rb"
+    click HardenRateOutEv "../app/models/project.rb"
+    click HardenEmailEncEv "../app/models/user.rb"
+    click HardenGravatarEv "../app/models/user.rb"
+
+    BottomPadding[ ]:::invisible ~~~ HardenHTTPSEv
+    HardenHTTPSEv --> HardenHTTPS
+    HardenCSPEv --> HardenCSP
+    HardenCookiesEv --> HardenCookies
+    HardenCSRFEv --> HardenCSRF
+    HardenRateInEv --> HardenRateIn
+    HardenRateOutEv --> HardenRateOut
+    HardenEmailEncEv --> HardenEmailEnc
+    HardenGravatarEv --> HardenGravatar
+    HardenHTTPS --- Dot1
+    HardenCSP --- Dot1
+    HardenCookies --- Dot1
+    HardenCSRF --- Dot1
+    HardenRateIn --- Dot1
+    HardenRateOut --- Dot1
+    HardenEmailEnc --- Dot1
+    HardenGravatar --- Dot1
+    Dot1 --> Hardening
+```
+
+Defines: **[Claim Hardening](#claim-hardening)**, [Claim HardenGravatar](#claim-hardengravatar), [Evidence HardenGravatarEv](#evidence-hardengravatarev), [Claim HardenEmailEnc](#claim-hardenemailenc), [Evidence HardenEmailEncEv](#evidence-hardenemailencev), [Claim HardenRateOut](#claim-hardenrateout), [Evidence HardenRateOutEv](#evidence-hardenrateoutev), [Claim HardenRateIn](#claim-hardenratein), [Evidence HardenRateInEv](#evidence-hardenrateinev), [Claim HardenCSRF](#claim-hardencsrf), [Evidence HardenCSRFEv](#evidence-hardencsrfev), [Claim HardenCookies](#claim-hardencookies), [Evidence HardenCookiesEv](#evidence-hardencookiesev), [Claim HardenCSP](#claim-hardencsp), [Evidence HardenCSPEv](#evidence-hardencspev), [Claim HardenHTTPS](#claim-hardenhttps), [Evidence HardenHTTPSEv](#evidence-hardenhttpsev)
+
+Cited by: [Package Implementation](#package-implementation)
+
+<a id="package-confidentiality"></a>
+### Package Confidentiality: Confidentiality is maintained
+
+```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
+flowchart BT
+    classDef invisible opacity:0
+    classDef sacmDot fill:#000,stroke:#000
+    classDef connector fill:none,stroke:#cccccc,stroke-width:1px;
+    classDef abstractClaim stroke-width:2px,stroke-dasharray: 5 5;
+    Confidentiality["<b>Confidentiality</b><br>Confidentiality is maintained"]
+    NonPublicData["<b>NonPublicData</b><br>Non-public data is kept confidential"]
+    UserPrivacy["<b>UserPrivacy</b><br>User privacy is maintained"]
+    MostDataPublic["<b>MostDataPublic</b><br>Almost all data is not confidential<br>━━━"]
+    ConfDataAtRest["<b>ConfDataAtRest</b><br>Confidential data at rest is protected"]
+    DataInMotion["<b>DataInMotion</b><br>Data in motion encrypted with HTTPS"]
+    SelfHostedAssets["<b>SelfHostedAssets</b><br>All web assets are self-hosted; no third-party transclusions reveal user activity to unrelated sites"]
+    GravatarPrivacyEv[("<b>GravatarPrivacyEv</b>&nbsp;↗<br>use_gravatar boolean controls whether any MD5 hash is sent to Gravatar, giving each user control over this external disclosure")]
+    Passwords["<b>Passwords</b><br>User passwords stored securely (using bcrypt)"]
+    RememberMe["<b>RememberMe</b><br>Remember me token is secured"]
+    EmailSecured["<b>EmailSecured</b><br>Email addresses are secured (encrypted and only accessible to admin &amp; owner)"]
+    DataInMotionEv[("<b>DataInMotionEv</b>&nbsp;↗<br>config.force_ssl = true enforces HTTPS with TLS redirection and secure cookies in production")]
+    SelfHostedAssetsEv[("<b>SelfHostedAssetsEv</b>&nbsp;↗<br>Content-Security-Policy restricts script-src and style-src to self; application layouts contain no external CDN script or font references")]
+    PasswordsEv[("<b>PasswordsEv</b>&nbsp;↗<br>has_secure_password in user model stores passwords via bcrypt")]
+    RememberMeEv[("<b>RememberMeEv</b>&nbsp;↗<br>remember method in user model creates bcrypt-stored nonce; sessions controller and helper manage it; login test verifies cleartext not stored in cookie")]
+    EmailSecuredEv[("<b>EmailSecuredEv</b>&nbsp;↗<br>Views, mailers, and controllers restrict email address access to owners and admins; use grep -Ri 'user.*\.email' to verify")]
+    Dot1((" ")):::sacmDot
+    Dot2((" ")):::sacmDot
+    Dot3((" ")):::sacmDot
+    Dot4((" ")):::sacmDot
+    click GravatarPrivacyEv "../app/models/user.rb"
+    click DataInMotionEv "../config/environments/production.rb"
+    click SelfHostedAssetsEv "../config/initializers/secure_headers.rb"
+    click PasswordsEv "../app/models/user.rb"
+    click RememberMeEv "../app/controllers/sessions_controller.rb"
+    click EmailSecuredEv "../app/views/users/"
+
+    BottomPadding[ ]:::invisible ~~~ PasswordsEv
+    PasswordsEv --> Passwords
+    RememberMeEv --> RememberMe
+    EmailSecuredEv --> EmailSecured
+    Passwords --- Dot1
+    RememberMe --- Dot1
+    EmailSecured --- Dot1
+    Dot1 --> ConfDataAtRest
+    DataInMotionEv --> DataInMotion
+    ConfDataAtRest --- Dot2
+    DataInMotion --- Dot2
+    Dot2 --> NonPublicData
+    SelfHostedAssetsEv --> SelfHostedAssets
+    SelfHostedAssets --- Dot3
+    GravatarPrivacyEv --- Dot3
+    Dot3 --> UserPrivacy
+    NonPublicData --- Dot4
+    UserPrivacy --- Dot4
+    MostDataPublic --- Dot4
+    Dot4 --> Confidentiality
+```
+
+Defines: **[Claim Confidentiality](#claim-confidentiality)**, [Claim MostDataPublic](#claim-mostdatapublic), [Claim UserPrivacy](#claim-userprivacy), [Evidence GravatarPrivacyEv](#evidence-gravatarprivacyev), [Claim SelfHostedAssets](#claim-selfhostedassets), [Evidence SelfHostedAssetsEv](#evidence-selfhostedassetsev), [Claim NonPublicData](#claim-nonpublicdata), [Claim DataInMotion](#claim-datainmotion), [Evidence DataInMotionEv](#evidence-datainmotionev), [Claim ConfDataAtRest](#claim-confdataatrest), [Claim EmailSecured](#claim-emailsecured), [Evidence EmailSecuredEv](#evidence-emailsecuredev), [Claim RememberMe](#claim-rememberme), [Evidence RememberMeEv](#evidence-remembermeev), [Claim Passwords](#claim-passwords), [Evidence PasswordsEv](#evidence-passwordsev)
+
+Cited by: [Package Requirements](#package-requirements)
+
+<a id="package-availability"></a>
+### Package Availability: Availability is maintained including limited DDoS resilience
+
+```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
+flowchart BT
+    classDef invisible opacity:0
+    classDef sacmDot fill:#000,stroke:#000
+    classDef connector fill:none,stroke:#cccccc,stroke-width:1px;
+    classDef abstractClaim stroke-width:2px,stroke-dasharray: 5 5;
+    Availability["<b>Availability</b><br>Availability is maintained including limited DDoS resilience"]
+    CDNDDoS["<b>CDNDDoS</b><br>CDN counters DDoS attacks on specific resources"]
+    Timeout["<b>Timeout</b><br>Timeout limits maximum request time"]
+    QuickRecovery["<b>QuickRecovery</b><br>Can return to operation quickly after DDoS ended"]
+    LoginDisabled["<b>LoginDisabled</b><br>Logon disabled mode mitigates against some vulnerabilities"]
+    Backups["<b>Backups</b><br>Data corruption and loss are mitigated by multiple backups"]
+    ScaleUp["<b>ScaleUp</b><br>Cloud resources can be rapidly increased"]
+    FastlyCDNEv[("<b>FastlyCDNEv</b>&nbsp;↗<br>Fastly CDN configured as reverse proxy; badge image and static asset requests absorbed by CDN before reaching origin application server")]
+    TimeoutEv[("<b>TimeoutEv</b>&nbsp;↗<br>Rack::Timeout.service_timeout set in production configuration limits all request times")]
+    QuickRecoveryEv[("<b>QuickRecoveryEv</b>&nbsp;↗<br>Heroku allows rapid dyno restart and redeploy from last known good git commit, restoring service within minutes of an incident")]
+    LoginDisabledEv[("<b>LoginDisabledEv</b>&nbsp;↗<br>deny_login initializer reads BADGEAPP_DENY_LOGIN env var to disable all logins")]
+    BackupsEv[("<b>BackupsEv</b>&nbsp;↗<br>Heroku Postgres automated daily backups retained across multiple snapshots; standard Rails and PostgreSQL restore mechanisms enable database recovery")]
+    ScaleUpEv[("<b>ScaleUpEv</b>&nbsp;↗<br>Heroku cloud platform supports on-demand dyno scaling; Fastly CDN reduces origin load during traffic spikes")]
+    Dot1((" ")):::sacmDot
+    click FastlyCDNEv "../config/initializers/fastly.rb"
+    click TimeoutEv "../config/environments/production.rb"
+    click QuickRecoveryEv "../Procfile"
+    click LoginDisabledEv "../config/initializers/deny_login.rb"
+    click BackupsEv "https://devcenter.heroku.com/articles/heroku-postgres-backups"
+    click ScaleUpEv "../Procfile"
+
+    BottomPadding[ ]:::invisible ~~~ FastlyCDNEv
+    FastlyCDNEv --> CDNDDoS
+    TimeoutEv --> Timeout
+    QuickRecoveryEv --> QuickRecovery
+    LoginDisabledEv --> LoginDisabled
+    BackupsEv --> Backups
+    ScaleUpEv --> ScaleUp
+    CDNDDoS --- Dot1
+    Timeout --- Dot1
+    QuickRecovery --- Dot1
+    LoginDisabled --- Dot1
+    Backups --- Dot1
+    ScaleUp --- Dot1
+    Dot1 --> Availability
+```
+
+Defines: **[Claim Availability](#claim-availability)**, [Claim ScaleUp](#claim-scaleup), [Evidence ScaleUpEv](#evidence-scaleupev), [Claim Backups](#claim-backups), [Evidence BackupsEv](#evidence-backupsev), [Claim LoginDisabled](#claim-logindisabled), [Evidence LoginDisabledEv](#evidence-logindisabledev), [Claim QuickRecovery](#claim-quickrecovery), [Evidence QuickRecoveryEv](#evidence-quickrecoveryev), [Claim Timeout](#claim-timeout), [Evidence TimeoutEv](#evidence-timeoutev), [Claim CDNDDoS](#claim-cdnddos), [Evidence FastlyCDNEv](#evidence-fastlycdnev)
+
+Cited by: [Package Requirements](#package-requirements)
 <!-- end verocase -->
 
 ### Overall approach
@@ -1206,19 +1352,23 @@ Each component is argued separately in the following sub-claims.
 <a id="claim-confidentiality"></a>
 ### Claim Confidentiality: Confidentiality is maintained
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Confidentiality](#package-confidentiality)**, [Package Requirements](#package-requirements)
 
 Supported by: **[Claim NonPublicData](#claim-nonpublicdata)**, [Claim UserPrivacy](#claim-userprivacy), [Claim MostDataPublic](#claim-mostdatapublic)
 
-Supports: **[Strategy SecTriad](#strategy-sectriad)**
+Supports: [Strategy SecTriad](#strategy-sectriad)
 <!-- end verocase -->
+
+We maintain confidentiality by limiting what data is publicly visible,
+protecting non-public data in transit and at rest, and preserving
+user privacy. These aspects are argued separately in the sub-claims below.
 
 <!-- verocase-config element_level = 4 -->
 <!-- verocase element UserPrivacy -->
 <a id="claim-userprivacy"></a>
 #### Claim UserPrivacy: User privacy is maintained
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Confidentiality](#package-confidentiality)**
 
 Supported by: **[Claim SelfHostedAssets](#claim-selfhostedassets)**, [Evidence GravatarPrivacyEv](#evidence-gravatarprivacyev)
 
@@ -1418,7 +1568,7 @@ to provide additional privacy when they interact with the BadgeApp.
 <a id="claim-mostdatapublic"></a>
 #### Claim MostDataPublic: Almost all data is not confidential
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Confidentiality](#package-confidentiality)**
 
 Supports: **[Claim Confidentiality](#claim-confidentiality)**
 <!-- end verocase -->
@@ -1451,7 +1601,7 @@ We *do* consider this data higher-value and protect them specially.
 <a id="claim-nonpublicdata"></a>
 #### Claim NonPublicData: Non-public data is kept confidential
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Confidentiality](#package-confidentiality)**
 
 Supported by: **[Claim ConfDataAtRest](#claim-confdataatrest)**, [Claim DataInMotion](#claim-datainmotion)
 
@@ -1466,7 +1616,7 @@ The following sub-claims address each form of confidential data storage.
 <a id="claim-confdataatrest"></a>
 #### Claim ConfDataAtRest: Confidential data at rest is protected
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Confidentiality](#package-confidentiality)**
 
 Supported by: **[Claim Passwords](#claim-passwords)**, [Claim RememberMe](#claim-rememberme), [Claim EmailSecured](#claim-emailsecured)
 
@@ -1481,7 +1631,7 @@ use bcrypt-stored nonces, and email addresses are encrypted at rest.
 <a id="claim-passwords"></a>
 #### Claim Passwords: User passwords stored securely (using bcrypt)
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Confidentiality](#package-confidentiality)**
 
 Supported by: **[Evidence PasswordsEv](#evidence-passwordsev)**
 
@@ -1552,7 +1702,7 @@ while we check them against the bad password list in the database:
 <a id="evidence-passwordsev"></a>
 #### Evidence PasswordsEv: has_secure_password in user model stores passwords via bcrypt
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Confidentiality](#package-confidentiality)**
 
 Supports: **[Claim Passwords](#claim-passwords)**
 <!-- end verocase -->
@@ -1563,7 +1713,7 @@ Supports: **[Claim Passwords](#claim-passwords)**
 <a id="claim-rememberme"></a>
 #### Claim RememberMe: Remember me token is secured
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Confidentiality](#package-confidentiality)**
 
 Supported by: **[Evidence RememberMeEv](#evidence-remembermeev)**
 
@@ -1612,7 +1762,7 @@ password is not stored as cleartext in the user cookie.
 <a id="evidence-remembermeev"></a>
 #### Evidence RememberMeEv: remember method in user model creates bcrypt-stored nonce; sessions controller and helper manage it; login test verifies cleartext not stored in cookie
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Confidentiality](#package-confidentiality)**
 
 Supports: **[Claim RememberMe](#claim-rememberme)**
 <!-- end verocase -->
@@ -1623,7 +1773,7 @@ Supports: **[Claim RememberMe](#claim-rememberme)**
 <a id="claim-emailsecured"></a>
 #### Claim EmailSecured: Email addresses are secured (encrypted and only accessible to admin & owner)
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Confidentiality](#package-confidentiality)**
 
 Supported by: **[Evidence EmailSecuredEv](#evidence-emailsecuredev)**
 
@@ -1748,7 +1898,7 @@ authentication system (countering enumeration or verification attacks):
 <a id="evidence-emailsecuredev"></a>
 #### Evidence EmailSecuredEv: Views, mailers, and controllers restrict email address access to owners and admins; use grep -Ri 'user.*\.email' to verify
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Confidentiality](#package-confidentiality)**
 
 Supports: **[Claim EmailSecured](#claim-emailsecured)**
 <!-- end verocase -->
@@ -1766,7 +1916,7 @@ To verify that email addresses are only accessible to owners and admins:
 <a id="claim-datainmotion"></a>
 #### Claim DataInMotion: Data in motion encrypted with HTTPS
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Confidentiality](#package-confidentiality)**
 
 Supported by: **[Evidence DataInMotionEv](#evidence-datainmotionev)**
 
@@ -1798,7 +1948,7 @@ to verify that our TLS configuration is secure in production.
 <a id="evidence-datainmotionev"></a>
 #### Evidence DataInMotionEv: config.force_ssl = true enforces HTTPS with TLS redirection and secure cookies in production
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Confidentiality](#package-confidentiality)**
 
 Supports: **[Claim DataInMotion](#claim-datainmotion)**
 <!-- end verocase -->
@@ -1959,11 +2109,11 @@ has an authentication and authorization system for this purpose.
 <a id="claim-availability"></a>
 ### Claim Availability: Availability is maintained including limited DDoS resilience
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Availability](#package-availability)**, [Package Requirements](#package-requirements)
 
 Supported by: **[Claim CDNDDoS](#claim-cdnddos)**, [Claim Timeout](#claim-timeout), [Claim QuickRecovery](#claim-quickrecovery), [Claim LoginDisabled](#claim-logindisabled), [Claim Backups](#claim-backups), [Claim ScaleUp](#claim-scaleup)
 
-Supports: **[Strategy SecTriad](#strategy-sectriad)**
+Supports: [Strategy SecTriad](#strategy-sectriad)
 <!-- end verocase -->
 
 As with any publicly-accessible website,
@@ -1980,7 +2130,7 @@ able to reconstitute it (including its data).
 <a id="claim-cdnddos"></a>
 #### Claim CDNDDoS: CDN counters DDoS attacks on specific resources
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Availability](#package-availability)**
 
 Supported by: **[Evidence FastlyCDNEv](#evidence-fastlycdnev)**
 
@@ -1996,7 +2146,7 @@ providing a layer of resilience for high-traffic attacks.
 <a id="claim-scaleup"></a>
 #### Claim ScaleUp: Cloud resources can be rapidly increased
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Availability](#package-availability)**
 
 Supported by: **[Evidence ScaleUpEv](#evidence-scaleupev)**
 
@@ -2011,7 +2161,7 @@ for more about how we handle scaling up.
 <a id="claim-timeout"></a>
 #### Claim Timeout: Timeout limits maximum request time
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Availability](#package-availability)**
 
 Supported by: **[Evidence TimeoutEv](#evidence-timeoutev)**
 
@@ -2027,7 +2177,7 @@ in file `config/environments/production.rb`.
 <a id="evidence-timeoutev"></a>
 #### Evidence TimeoutEv: Rack::Timeout.service_timeout set in production configuration limits all request times
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Availability](#package-availability)**
 
 Supports: **[Claim Timeout](#claim-timeout)**
 <!-- end verocase -->
@@ -2038,7 +2188,7 @@ Supports: **[Claim Timeout](#claim-timeout)**
 <a id="claim-quickrecovery"></a>
 #### Claim QuickRecovery: Can return to operation quickly after DDoS ended
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Availability](#package-availability)**
 
 Supported by: **[Evidence QuickRecoveryEv](#evidence-quickrecoveryev)**
 
@@ -2052,7 +2202,7 @@ a DDoS attack has ended.
 <a id="claim-logindisabled"></a>
 #### Claim LoginDisabled: Logon disabled mode mitigates against some vulnerabilities
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Availability](#package-availability)**
 
 Supported by: **[Evidence LoginDisabledEv](#evidence-logindisabledev)**
 
@@ -2123,7 +2273,7 @@ to help them understand that this special mode has been enabled.
 <a id="evidence-logindisabledev"></a>
 #### Evidence LoginDisabledEv: deny_login initializer reads BADGEAPP_DENY_LOGIN env var to disable all logins
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Availability](#package-availability)**
 
 Supports: **[Claim LoginDisabled](#claim-logindisabled)**
 <!-- end verocase -->
@@ -2134,7 +2284,7 @@ Supports: **[Claim LoginDisabled](#claim-logindisabled)**
 <a id="claim-backups"></a>
 #### Claim Backups: Data corruption and loss are mitigated by multiple backups
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Availability](#package-availability)**
 
 Supported by: **[Evidence BackupsEv](#evidence-backupsev)**
 
@@ -3308,19 +3458,25 @@ we greatly reduce overall security risk.
 <a id="claim-owaspclaim"></a>
 ### Claim OWASPClaim: All of the most common important implementation vulnerability types (weaknesses) countered
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**, [Package Implementation](#package-implementation)
 
 Supported by: **[Strategy OWASPStrat](#strategy-owaspstrat)**
 
-Supports: **[Strategy CommonVulns](#strategy-commonvulns)**
+Supports: [Strategy CommonVulns](#strategy-commonvulns)
 <!-- end verocase -->
+
+The OWASP Top 10 is a broad industry consensus of the most critical
+web application security risks. By systematically addressing each
+category, we achieve comprehensive coverage of the implementation
+attack surface. See the sub-claims below for the argument for each
+OWASP category.
 
 <!-- verocase-config element_level = 4 -->
 <!-- verocase element OWASPStrat -->
 <a id="strategy-owaspstrat"></a>
 #### Strategy OWASPStrat: OWASP top 10 represents a broad consensus of the most critical web application security flaws
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supported by: **[Claim OWASP1013](#claim-owasp1013)**
 
@@ -3335,7 +3491,7 @@ implementation vulnerabilities.
 <a id="claim-owasp1013"></a>
 #### Claim OWASP1013: All OWASP top 10 (2013 & 2017) countered
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supported by: **[Claim OWASP1](#claim-owasp1)**, [Claim OWASP2](#claim-owasp2), [Claim OWASP3](#claim-owasp3), [Claim OWASP4](#claim-owasp4), [Claim OWASP5](#claim-owasp5), [Claim OWASP6](#claim-owasp6), [Claim OWASP7](#claim-owasp7), [Claim OWASP8](#claim-owasp8), [Claim OWASP9](#claim-owasp9), [Claim OWASP10](#claim-owasp10), [Claim OWASP11](#claim-owasp11), [Claim OWASP12](#claim-owasp12), [Claim OWASP13](#claim-owasp13)
 
@@ -3519,7 +3675,7 @@ not listed in the 2017 edition of the OWASP top 10.
 <a id="claim-owasp1"></a>
 #### Claim OWASP1: Injection (including SQL injection) countered
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supported by: **[Evidence OWASP1Ev](#evidence-owasp1ev)**
 
@@ -3534,7 +3690,7 @@ See item 1 in the [OWASP countering discussion](#claim-owaspclaim) above.
 <a id="claim-owasp2"></a>
 #### Claim OWASP2: Broken Authentication and Session Management countered
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supported by: **[Evidence OWASP2Ev](#evidence-owasp2ev)**
 
@@ -3549,7 +3705,7 @@ See item 2 in the [OWASP countering discussion](#claim-owaspclaim) above.
 <a id="claim-owasp3"></a>
 #### Claim OWASP3: Cross-site scripting (XSS) countered
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supported by: **[Evidence OWASP3Ev](#evidence-owasp3ev)**
 
@@ -3564,7 +3720,7 @@ See item 3 in the [OWASP countering discussion](#claim-owaspclaim) above.
 <a id="claim-owasp4"></a>
 #### Claim OWASP4: Insecure Direct Object References countered
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supported by: **[Evidence OWASP4Ev](#evidence-owasp4ev)**
 
@@ -3579,7 +3735,7 @@ See item 4 in the [OWASP countering discussion](#claim-owaspclaim) above.
 <a id="claim-owasp5"></a>
 #### Claim OWASP5: Security Misconfiguration countered
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supported by: **[Evidence OWASP5Ev](#evidence-owasp5ev)**
 
@@ -3595,7 +3751,7 @@ the [MisconfigClaim](#claim-misconfigclaim) section.
 <a id="claim-owasp6"></a>
 #### Claim OWASP6: Sensitive Data Exposure countered
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supported by: **[Evidence OWASP6Ev](#evidence-owasp6ev)**
 
@@ -3611,7 +3767,7 @@ See item 6 in the [OWASP countering discussion](#claim-owaspclaim) above.
 <a id="claim-owasp7"></a>
 #### Claim OWASP7: Missing Access Control countered
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supported by: **[Evidence OWASP7Ev](#evidence-owasp7ev)**
 
@@ -3626,7 +3782,7 @@ See item 7 in the [OWASP countering discussion](#claim-owaspclaim) above.
 <a id="claim-owasp8"></a>
 #### Claim OWASP8: CSRF countered
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supported by: **[Evidence OWASP8Ev](#evidence-owasp8ev)**
 
@@ -3641,7 +3797,7 @@ See item 8 in the [OWASP countering discussion](#claim-owaspclaim) above.
 <a id="claim-owasp9"></a>
 #### Claim OWASP9: Known Vulnerabilities countered
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supported by: **[Evidence OWASP9BundleEv](#evidence-owasp9bundleev)**, [Evidence OWASP9DependabotEv](#evidence-owasp9dependabotev)
 
@@ -3657,7 +3813,7 @@ and the [Maintenance](#claim-maintenance) section.
 <a id="claim-owasp10"></a>
 #### Claim OWASP10: Unvalidated Redirects and Forwards countered
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supported by: **[Evidence OWASP10Ev](#evidence-owasp10ev)**
 
@@ -3672,7 +3828,7 @@ See item 10 in the [OWASP countering discussion](#claim-owaspclaim) above.
 <a id="claim-owasp11"></a>
 #### Claim OWASP11: XXE countered (2017 A4)
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supported by: **[Evidence OWASP11Ev](#evidence-owasp11ev)**
 
@@ -3687,7 +3843,7 @@ See item 11 in the [OWASP countering discussion](#claim-owaspclaim) above.
 <a id="claim-owasp12"></a>
 #### Claim OWASP12: Insecure Deserialization countered (2017 A8)
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supported by: **[Evidence OWASP12Ev](#evidence-owasp12ev)**
 
@@ -3702,7 +3858,7 @@ See item 12 in the [OWASP countering discussion](#claim-owaspclaim) above.
 <a id="claim-owasp13"></a>
 #### Claim OWASP13: Insufficient Logging and Monitoring countered (2017 A10)
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supported by: **[Evidence OWASP13Ev](#evidence-owasp13ev)**
 
@@ -3980,11 +4136,11 @@ providing additional defense in depth.
 <a id="claim-hardening"></a>
 ### Claim Hardening: Hardening is applied
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package Hardening](#package-hardening)**, [Package Implementation](#package-implementation)
 
 Supported by: **[Claim HardenHTTPS](#claim-hardenhttps)**, [Claim HardenCSP](#claim-hardencsp), [Claim HardenCookies](#claim-hardencookies), [Claim HardenCSRF](#claim-hardencsrf), [Claim HardenRateIn](#claim-hardenratein), [Claim HardenRateOut](#claim-hardenrateout), [Claim HardenEmailEnc](#claim-hardenemailenc), [Claim HardenGravatar](#claim-hardengravatar)
 
-Supports: **[Strategy HardeningStrat](#strategy-hardeningstrat)**
+Supports: [Strategy HardeningStrat](#strategy-hardeningstrat)
 <!-- end verocase -->
 
 We also use various mechanisms to harden the system against attack.
@@ -3996,7 +4152,7 @@ not countered by the main approaches described elsewhere in this document.
 <a id="claim-hardenhttps"></a>
 #### Claim HardenHTTPS: HTTPS use enforced (including by HSTS)
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package Hardening](#package-hardening)**
 
 Supported by: **[Evidence HardenHTTPSEv](#evidence-hardenhttpsev)**
 
@@ -4029,7 +4185,7 @@ for more about the impact of `force_ssl`.
 <a id="evidence-hardenhttpsev"></a>
 #### Evidence HardenHTTPSEv: config.force_ssl enables TLS redirection, secure cookies, and HSTS; domain in Chrome HSTS preload list
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package Hardening](#package-hardening)**
 
 Supports: **[Claim HardenHTTPS](#claim-hardenhttps)**
 <!-- end verocase -->
@@ -4040,7 +4196,7 @@ Supports: **[Claim HardenHTTPS](#claim-hardenhttps)**
 <a id="claim-hardencsp"></a>
 #### Claim HardenCSP: Outgoing HTTP headers hardened including restrictive CSP
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package Hardening](#package-hardening)**
 
 Supported by: **[Evidence HardenCSPEv](#evidence-hardencspev)**
 
@@ -4097,7 +4253,7 @@ protection measures (including caching and scaling) still apply.
 <a id="evidence-hardencspev"></a>
 #### Evidence HardenCSPEv: secure_headers gem enforces CSP and security headers; integration test verifies header values
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package Hardening](#package-hardening)**
 
 Supports: **[Claim HardenCSP](#claim-hardencsp)**
 <!-- end verocase -->
@@ -4108,7 +4264,7 @@ Supports: **[Claim HardenCSP](#claim-hardencsp)**
 <a id="claim-hardencookies"></a>
 #### Claim HardenCookies: Cookies limited
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package Hardening](#package-hardening)**
 
 Supported by: **[Evidence HardenCookiesEv](#evidence-hardencookiesev)**
 
@@ -4135,7 +4291,7 @@ See
 <a id="evidence-hardencookiesev"></a>
 #### Evidence HardenCookiesEv: secure_headers gem sets httponly, secure, and SameSite=Lax cookie attributes; session cookies use AES-256-GCM
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package Hardening](#package-hardening)**
 
 Supports: **[Claim HardenCookies](#claim-hardencookies)**
 <!-- end verocase -->
@@ -4146,7 +4302,7 @@ Supports: **[Claim HardenCookies](#claim-hardencookies)**
 <a id="claim-hardencsrf"></a>
 #### Claim HardenCSRF: CSRF tokens hardened
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package Hardening](#package-hardening)**
 
 Supported by: **[Evidence HardenCSRFEv](#evidence-hardencsrfev)**
 
@@ -4172,7 +4328,7 @@ These help counter CSRF, in addition to our other measures.
 <a id="evidence-hardencsrfev"></a>
 #### Evidence HardenCSRFEv: protect_from_forgery with per-form tokens and origin-header check, enabled via load_defaults
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package Hardening](#package-hardening)**
 
 Supports: **[Claim HardenCSRF](#claim-hardencsrf)**
 <!-- end verocase -->
@@ -4183,7 +4339,7 @@ Supports: **[Claim HardenCSRF](#claim-hardencsrf)**
 <a id="claim-hardenratein"></a>
 #### Claim HardenRateIn: Incoming rate limits enforced
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package Hardening](#package-hardening)**
 
 Supported by: **[Evidence HardenRateInEv](#evidence-hardenrateinev)**
 
@@ -4230,7 +4386,7 @@ but those entries are always earlier in the list
 <a id="evidence-hardenrateinev"></a>
 #### Evidence HardenRateInEv: Rack::Attack rate limits on requests, logins, and signups by client IP address
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package Hardening](#package-hardening)**
 
 Supports: **[Claim HardenRateIn](#claim-hardenratein)**
 <!-- end verocase -->
@@ -4241,7 +4397,7 @@ Supports: **[Claim HardenRateIn](#claim-hardenratein)**
 <a id="claim-hardenrateout"></a>
 #### Claim HardenRateOut: Outgoing email rate limits enforced
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package Hardening](#package-hardening)**
 
 Supported by: **[Evidence HardenRateOutEv](#evidence-hardenrateoutev)**
 
@@ -4262,7 +4418,7 @@ time; this keeps us from looking like a spammer.
 <a id="evidence-hardenrateoutev"></a>
 #### Evidence HardenRateOutEv: projects_to_remind class method and hard limit on outgoing reminder email count
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package Hardening](#package-hardening)**
 
 Supports: **[Claim HardenRateOut](#claim-hardenrateout)**
 <!-- end verocase -->
@@ -4273,7 +4429,7 @@ Supports: **[Claim HardenRateOut](#claim-hardenrateout)**
 <a id="claim-hardenemailenc"></a>
 #### Claim HardenEmailEnc: Email addresses encrypted
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package Hardening](#package-hardening)**
 
 Supported by: **[Evidence HardenEmailEncEv](#evidence-hardenemailencev)**
 
@@ -4391,7 +4547,7 @@ to protect email addresses from being revealed.
 <a id="evidence-hardenemailencev"></a>
 #### Evidence HardenEmailEncEv: attr_encrypted and blind_index gems encrypt email addresses with AES-256-GCM and PBKDF2-HMAC-SHA256 index
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package Hardening](#package-hardening)**
 
 Supports: **[Claim HardenEmailEnc](#claim-hardenemailenc)**
 <!-- end verocase -->
@@ -4402,7 +4558,7 @@ Supports: **[Claim HardenEmailEnc](#claim-hardenemailenc)**
 <a id="claim-hardengravatar"></a>
 #### Claim HardenGravatar: Gravatar restricted
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package Hardening](#package-hardening)**
 
 Supported by: **[Evidence HardenGravatarEv](#evidence-hardengravatarev)**
 
@@ -4443,7 +4599,7 @@ and this is one way we do that.
 <a id="evidence-hardengravatarev"></a>
 #### Evidence HardenGravatarEv: use_gravatar boolean controls whether gravatar MD5 hash is revealed for each local user
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package Hardening](#package-hardening)**
 
 Supports: **[Claim HardenGravatar](#claim-hardengravatar)**
 <!-- end verocase -->
@@ -4516,6 +4672,11 @@ Supported by: **[Strategy ReuseStrat](#strategy-reusestrat)**, [Claim KnownVulns
 
 Supports: **[Strategy CommonVulns](#strategy-commonvulns)**
 <!-- end verocase -->
+
+We reuse well-vetted, widely-used components and actively monitor
+for known vulnerabilities in those components. Reusing mature
+libraries reduces the amount of security-sensitive code we must
+write and maintain ourselves.
 
 <!-- verocase-config element_level = 4 -->
 <!-- verocase element ReuseStrat -->
@@ -4634,6 +4795,8 @@ Supports: **[Claim PkgMgr](#claim-pkgmgr)**
 
 Referenced by: **[Package Implementation](#package-implementation)**
 
+Supported by: **[Claim XXESafe](#claim-xxesafe)**, [Claim ErubisSafe](#claim-erubissafe), [Claim LocalSecretSafe](#claim-localsecretsafe), [Claim ActionCableSafe](#claim-actioncablesafe)
+
 Supports: **[Strategy ReuseStrat](#strategy-reusestrat)**
 <!-- end verocase -->
 
@@ -4721,7 +4884,7 @@ We set this file for the following reasons;
    [A race condition results](https://github.com/rails/rails/issues/53661),
    because if tests are running in parallel, other tests may try to load the
    file before it's been created by another process.
-   I've verified in the Rails code that if this file exists,
+   We've verified in the Rails code that if this file exists,
    its content is used.
 
 In the staging and production environments we provide a truly secret value for
@@ -4761,9 +4924,11 @@ obvious gain, so we have not done this.
 <!-- verocase-config element_level = 4 -->
 <!-- verocase element KnownVulns -->
 <a id="claim-knownvulns"></a>
-#### Claim KnownVulns: Known vulnerabilities detected
+#### Claim KnownVulns: Known vulnerabilities in reused components are detected
 
 Referenced by: **[Package Implementation](#package-implementation)**
+
+Supported by: **[Evidence KnownVulnsBundleEv](#evidence-knownvulnsbundleev)**, [Evidence KnownVulnsDependabotEv](#evidence-knownvulnsdependabotev)
 
 Supports: **[Claim ReuseSec](#claim-reusesec)**
 <!-- end verocase -->
@@ -5703,6 +5868,10 @@ Supported by: **[Claim DevEnvSec](#claim-devenvsec)**, [Claim CINoData](#claim-c
 Supports: **[Claim OrgProc](#claim-orgproc)**
 <!-- end verocase -->
 
+A compromised development or CI/CD environment could inject malicious
+code without detection. We protect the development environment and
+ensure the CI/CD pipeline operates on clean, controlled data.
+
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element DevEnvSec -->
 <a id="claim-devenvsec"></a>
@@ -6135,6 +6304,11 @@ Supported by: **[Claim CIIBadge](#claim-ciibadge)**
 
 Supports: [Claim Security](#claim-security)
 <!-- end verocase -->
+
+External certifications and internal controls give us and our users
+confidence that the system meets its security goals. Earning the
+OpenSSF Best Practices Badge itself requires us to satisfy independently
+verified security criteria.
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element CIIBadge -->
@@ -6683,7 +6857,7 @@ See the [parent claim section](#claim-railsguide) for details.
 <a id="evidence-owasp13ev"></a>
 ### Evidence OWASP13Ev: filter_parameter_logging excludes passwords from logs; events stream to stdout per 12-factor app; UptimeRobot monitors availability externally
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supports: **[Claim OWASP13](#claim-owasp13)**
 <!-- end verocase -->
@@ -6694,7 +6868,7 @@ See the [parent claim section](#claim-owasp13) for details.
 <a id="evidence-owasp12ev"></a>
 ### Evidence OWASP12Ev: Rails session data stored in signed encrypted cookies; no untrusted object deserialization; JSON used for API data
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supports: **[Claim OWASP12](#claim-owasp12)**
 <!-- end verocase -->
@@ -6705,7 +6879,7 @@ See the [parent claim section](#claim-owasp12) for details.
 <a id="evidence-owasp11ev"></a>
 ### Evidence OWASP11Ev: Nokogiri configured to disable external entity processing; XML parsing restricted to safe subset; SpecialAnalysis documents this exception
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supports: **[Claim OWASP11](#claim-owasp11)**
 <!-- end verocase -->
@@ -6716,7 +6890,7 @@ See the [parent claim section](#claim-owasp11) for details.
 <a id="evidence-owasp10ev"></a>
 ### Evidence OWASP10Ev: Redirect destinations validated against allowlists; no open redirect vulnerabilities; after-login redirect uses stored path validated server-side
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supports: **[Claim OWASP10](#claim-owasp10)**
 <!-- end verocase -->
@@ -6727,7 +6901,7 @@ See the [parent claim section](#claim-owasp10) for details.
 <a id="evidence-owasp9dependabotev"></a>
 ### Evidence OWASP9DependabotEv: GitHub Dependabot alerts on vulnerable dependencies and opens PRs to update them
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supports: **[Claim OWASP9](#claim-owasp9)**
 <!-- end verocase -->
@@ -6738,7 +6912,7 @@ See the [parent claim section](#claim-owasp9) for details.
 <a id="evidence-owasp9bundleev"></a>
 ### Evidence OWASP9BundleEv: bundle-audit checks all gems against NVD vulnerability database on every rake run
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supports: **[Claim OWASP9](#claim-owasp9)**
 <!-- end verocase -->
@@ -6749,7 +6923,7 @@ See the [parent claim section](#claim-owasp9) for details.
 <a id="evidence-owasp8ev"></a>
 ### Evidence OWASP8Ev: protect_from_forgery with per-form tokens and origin-header check, enabled via load_defaults
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supports: **[Claim OWASP8](#claim-owasp8)**
 <!-- end verocase -->
@@ -6760,7 +6934,7 @@ See the [parent claim section](#claim-owasp8) for details.
 <a id="evidence-owasp7ev"></a>
 ### Evidence OWASP7Ev: can_edit? and can_control? enforced server-side on all mutating actions; no security decisions made client-side
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supports: **[Claim OWASP7](#claim-owasp7)**
 <!-- end verocase -->
@@ -6771,7 +6945,7 @@ See the [parent claim section](#claim-owasp7) for details.
 <a id="evidence-owasp6ev"></a>
 ### Evidence OWASP6Ev: Email encrypted with AES-256-GCM; passwords stored via bcrypt; all data in transit protected by TLS; filter_parameter_logging excludes sensitive fields from logs
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supports: **[Claim OWASP6](#claim-owasp6)**
 <!-- end verocase -->
@@ -6782,7 +6956,7 @@ See the [parent claim section](#claim-owasp6) for details.
 <a id="evidence-owasp5ev"></a>
 ### Evidence OWASP5Ev: secure_headers gem enforces HTTP security headers; Rails secrets managed via environment variables; CI runs security checks on every commit
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supports: **[Claim OWASP5](#claim-owasp5)**
 <!-- end verocase -->
@@ -6793,7 +6967,7 @@ See the [parent claim section](#claim-owasp5) for details.
 <a id="evidence-owasp4ev"></a>
 ### Evidence OWASP4Ev: All project access goes through can_edit? and can_control? authorization checks; no direct object references exposed without authorization
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supports: **[Claim OWASP4](#claim-owasp4)**
 <!-- end verocase -->
@@ -6804,7 +6978,7 @@ See the [parent claim section](#claim-owasp4) for details.
 <a id="evidence-owasp3ev"></a>
 ### Evidence OWASP3Ev: Rails SafeBuffer escapes all template output by default; markdown processing whitelists safe tags and attributes; CSP enforced via secure_headers gem
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supports: **[Claim OWASP3](#claim-owasp3)**
 <!-- end verocase -->
@@ -6815,7 +6989,7 @@ See the [parent claim section](#claim-owasp3) for details.
 <a id="evidence-owasp2ev"></a>
 ### Evidence OWASP2Ev: Sessions use encrypted signed cookies; has_secure_password enforces bcrypt; remember-me uses bcrypt-stored nonce; session_store.rb configures secure cookie settings
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supports: **[Claim OWASP2](#claim-owasp2)**
 <!-- end verocase -->
@@ -6826,7 +7000,7 @@ See the [parent claim section](#claim-owasp2) for details.
 <a id="evidence-owasp1ev"></a>
 ### Evidence OWASP1Ev: ActiveRecord ORM uses parameterized queries by default; direct SQL uses sanitize_sql_like or bound parameters; shell is never used to process untrusted content
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supports: **[Claim OWASP1](#claim-owasp1)**
 <!-- end verocase -->
@@ -7045,7 +7219,7 @@ See the [parent claim section](#claim-localauthn) for details.
 <a id="evidence-scaleupev"></a>
 ### Evidence ScaleUpEv: Heroku cloud platform supports on-demand dyno scaling; Fastly CDN reduces origin load during traffic spikes
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Availability](#package-availability)**
 
 Supports: **[Claim ScaleUp](#claim-scaleup)**
 <!-- end verocase -->
@@ -7056,7 +7230,7 @@ See the [parent claim section](#claim-scaleup) for details.
 <a id="evidence-backupsev"></a>
 ### Evidence BackupsEv: Heroku Postgres automated daily backups retained across multiple snapshots; standard Rails and PostgreSQL restore mechanisms enable database recovery
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Availability](#package-availability)**
 
 Supports: **[Claim Backups](#claim-backups)**
 <!-- end verocase -->
@@ -7067,7 +7241,7 @@ See the [parent claim section](#claim-backups) for details.
 <a id="evidence-quickrecoveryev"></a>
 ### Evidence QuickRecoveryEv: Heroku allows rapid dyno restart and redeploy from last known good git commit, restoring service within minutes of an incident
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Availability](#package-availability)**
 
 Supports: **[Claim QuickRecovery](#claim-quickrecovery)**
 <!-- end verocase -->
@@ -7078,7 +7252,7 @@ See the [parent claim section](#claim-quickrecovery) for details.
 <a id="evidence-fastlycdnev"></a>
 ### Evidence FastlyCDNEv: Fastly CDN configured as reverse proxy; badge image and static asset requests absorbed by CDN before reaching origin application server
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Availability](#package-availability)**
 
 Supports: **[Claim CDNDDoS](#claim-cdnddos)**
 <!-- end verocase -->
@@ -7100,7 +7274,7 @@ See the [parent claim section](#claim-appmodauth) for details.
 <a id="evidence-gravatarprivacyev"></a>
 ### Evidence GravatarPrivacyEv: use_gravatar boolean controls whether any MD5 hash is sent to Gravatar, giving each user control over this external disclosure
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Confidentiality](#package-confidentiality)**
 
 Supports: **[Claim UserPrivacy](#claim-userprivacy)**
 <!-- end verocase -->
@@ -7111,7 +7285,7 @@ See the [parent claim section](#claim-userprivacy) for details.
 <a id="claim-selfhostedassets"></a>
 ### Claim SelfHostedAssets: All web assets are self-hosted; no third-party transclusions reveal user activity to unrelated sites
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Confidentiality](#package-confidentiality)**
 
 Supported by: **[Evidence SelfHostedAssetsEv](#evidence-selfhostedassetsev)**
 
@@ -7133,10 +7307,162 @@ asset silently attacking our users.
 <a id="evidence-selfhostedassetsev"></a>
 ### Evidence SelfHostedAssetsEv: Content-Security-Policy restricts script-src and style-src to self; application layouts contain no external CDN script or font references
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Confidentiality](#package-confidentiality)**
 
 Supports: **[Claim SelfHostedAssets](#claim-selfhostedassets)**
 <!-- end verocase -->
 
 See the [parent claim section](#claim-selfhostedassets) for details.
 
+<!-- verocase element KnownVulnsDependabotEv -->
+<a id="evidence-knownvulnsdependabotev"></a>
+### Evidence KnownVulnsDependabotEv: GitHub Dependabot automatically alerts on vulnerable gem dependencies and opens PRs with updated versions
+
+Referenced by: **[Package Implementation](#package-implementation)**
+
+Supports: **[Claim KnownVulns](#claim-knownvulns)**
+<!-- end verocase -->
+
+We configure GitHub Dependabot to automatically scan our gem dependencies
+for known vulnerabilities and open pull requests with updated versions.
+See [`.github/dependabot.yml`](.github/dependabot.yml).
+
+<!-- verocase element KnownVulnsBundleEv -->
+<a id="evidence-knownvulnsbundleev"></a>
+### Evidence KnownVulnsBundleEv: bundle-audit checks all gem versions against the NVD on every rake run, detecting known CVEs in dependencies
+
+Referenced by: **[Package Implementation](#package-implementation)**
+
+Supports: **[Claim KnownVulns](#claim-knownvulns)**
+<!-- end verocase -->
+
+We run `bundle-audit` as part of every `rake` invocation. It compares
+all gem versions in `Gemfile.lock` against the NVD and upstream advisory
+databases, and fails the build if any known CVE is found.
+See `Gemfile.lock` and `lib/tasks/default.rake`.
+
+<!-- verocase element ActionCableSafe -->
+<a id="claim-actioncablesafe"></a>
+### Claim ActionCableSafe: ActionCable information-exposure risk is mitigated because ActionCable is not used
+
+Referenced by: **[Package Implementation](#package-implementation)**
+
+Supported by: **[Evidence ActionCableSafeEv](#evidence-actioncablesafeev)**
+
+Supports: **[Claim SpecialAnalysis](#claim-specialanalysis)**
+<!-- end verocase -->
+
+ActionCable is a Rails subsystem for WebSocket-based real-time communication.
+A potential vulnerability was identified: ActionCable logs cannot filter
+sensitive data. However, we never configure or invoke ActionCable.
+The `Gemfile` explicitly comments it out
+(`# gem 'actioncable' # Not used. Client/server comm channel.`).
+It appears in `Gemfile.lock` only as a transitive dependency of `rails`,
+but no code paths in `app/` or `config/` ever reference it.
+Since we never use ActionCable, no sensitive data ever flows through it.
+
+<!-- verocase element ActionCableSafeEv -->
+<a id="evidence-actioncablesafeev"></a>
+### Evidence ActionCableSafeEv: ActionCable is a Rails transitive dependency but is never configured or invoked; no sensitive data flows through it
+
+Referenced by: **[Package Implementation](#package-implementation)**
+
+Supports: **[Claim ActionCableSafe](#claim-actioncablesafe)**
+<!-- end verocase -->
+
+See the [parent claim section](#claim-actioncablesafe) for details.
+
+<!-- verocase element LocalSecretSafe -->
+<a id="claim-localsecretsafe"></a>
+### Claim LocalSecretSafe: Checked-in tmp/local_secret.txt secret_key_base value poses no security risk
+
+Referenced by: **[Package Implementation](#package-implementation)**
+
+Supported by: **[Evidence LocalSecretSafeEv](#evidence-localsecretsafeev)**
+
+Supports: **[Claim SpecialAnalysis](#claim-specialanalysis)**
+<!-- end verocase -->
+
+The file `tmp/local_secret.txt` contains the value of `secret_key_base`
+for development and test environments and is checked into the public
+repository. This is intentional and safe: the value is only used in
+development and test, where there are no real secrets to protect.
+In production and staging we set the `SECRET_KEY_BASE` environment
+variable, which takes precedence, and its value is never committed.
+We check in this file to avoid a race condition in parallelized tests
+(Rails recreates the file on demand, causing test failures when
+multiple processes race to read it before it exists) and to make
+development restarts smoother.
+
+<!-- verocase element LocalSecretSafeEv -->
+<a id="evidence-localsecretsafeev"></a>
+### Evidence LocalSecretSafeEv: The file is only used in development and test; production always uses the SECRET_KEY_BASE environment variable; the checked-in value protects no real secrets
+
+Referenced by: **[Package Implementation](#package-implementation)**
+
+Supports: **[Claim LocalSecretSafe](#claim-localsecretsafe)**
+<!-- end verocase -->
+
+See the [parent claim section](#claim-localsecretsafe) for details.
+
+<!-- verocase element ErubisSafe -->
+<a id="claim-erubissafe"></a>
+### Claim ErubisSafe: XSS from erubis via pronto-rails_best_practices poses no production risk
+
+Referenced by: **[Package Implementation](#package-implementation)**
+
+Supported by: **[Evidence ErubisSafeEv](#evidence-erubissafeev)**
+
+Supports: **[Claim SpecialAnalysis](#claim-specialanalysis)**
+<!-- end verocase -->
+
+The `erubis` module was identified as potentially vulnerable to XSS,
+introduced via `pronto-rails_best_practices`.
+However, `rails_best_practices` and `pronto` are declared only in the
+`development` and `test` groups in the `Gemfile` and are never bundled
+into the production environment. They only process trusted developer
+input, not untrusted user data, so this vulnerability has no production
+impact.
+
+<!-- verocase element ErubisSafeEv -->
+<a id="evidence-erubissafeev"></a>
+### Evidence ErubisSafeEv: rails_best_practices and pronto are dev/test-only dependencies; they never execute against untrusted input in production
+
+Referenced by: **[Package Implementation](#package-implementation)**
+
+Supports: **[Claim ErubisSafe](#claim-erubissafe)**
+<!-- end verocase -->
+
+See the [parent claim section](#claim-erubissafe) for details.
+
+<!-- verocase element XXESafe -->
+<a id="claim-xxesafe"></a>
+### Claim XXESafe: Nokogiri/libxml2 XXE exception (CVE-2016-9318) poses no risk in our deployment
+
+Referenced by: **[Package Implementation](#package-implementation)**
+
+Supported by: **[Evidence XXESafeEv](#evidence-xxesafeev)**
+
+Supports: **[Claim SpecialAnalysis](#claim-specialanalysis)**
+<!-- end verocase -->
+
+Nokogiri (via rails-html-sanitizer → loofah) is used in production to
+sanitize untrusted HTML. CVE-2016-9318 is an XXE vulnerability in
+libxml2. However, Nokogiri 1.5.4 and later (which we use) disables DTD
+loading and network access by default, rendering it immune to this CVE
+unless an application explicitly opts into `DTDLOAD` and out of `NONET`.
+We never process incoming XML from untrusted sources in production;
+loofah processes HTML only and never sets `DTDLOAD` or clears `NONET`.
+All other uses of nokogiri in `Gemfile.lock` (capybara, xpath, etc.)
+are test-only, where all input is trusted.
+
+<!-- verocase element XXESafeEv -->
+<a id="evidence-xxesafeev"></a>
+### Evidence XXESafeEv: Nokogiri disables DTD loading and network access by default; we never process incoming XML in production; loofah never opts into DTDLOAD or NONET
+
+Referenced by: **[Package Implementation](#package-implementation)**
+
+Supports: **[Claim XXESafe](#claim-xxesafe)**
+<!-- end verocase -->
+
+See the [parent claim section](#claim-xxesafe) for details.

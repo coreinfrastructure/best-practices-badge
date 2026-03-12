@@ -47,7 +47,7 @@ The figures are simply a summary; the text below provides the details.
 
 ### Assurance case structure
 
-<!-- caseproc package * -->
+<!-- verocase package * -->
 <a id="package-security"></a>
 ### Package Security: The system is adequately secure against moderate threats
 
@@ -698,7 +698,7 @@ flowchart BT
 Defines: **[Claim Controls](#claim-controls)**, [Claim CIIBadge](#claim-ciibadge), [Evidence CIIBadgeEv](#evidence-ciibadgeev)
 
 Cited by: [Package Security](#package-security)
-<!-- end caseproc -->
+<!-- end verocase -->
 
 ### Overall approach
 
@@ -930,22 +930,22 @@ Here are some conventions we use:
   MITRE. This is an improvement; since claims are each true/false statements,
   the relationship between them is usually much clearer doing it this way.
 
-<!-- caseproc-config element_level = 1 -->
-<!-- caseproc element Security -->
+<!-- verocase-config element_level = 1 -->
+<!-- verocase element Security -->
 <a id="claim-security"></a>
 # Claim Security: The system is adequately secure against moderate threats
 
 Referenced by: **[Package Security](#package-security)**
 
 Supported by: **[Strategy Processes](#strategy-processes)**, [Claim Controls](#claim-controls)
-<!-- end caseproc -->
+<!-- end verocase -->
 
 This document explains why the BadgeApp is adequately secure against moderate threats.
 It covers all relevant software lifecycle processes to provide defense-in-breadth.
 The following sections each address a specific lifecycle process or concern.
 
-<!-- caseproc-config element_level = 2 -->
-<!-- caseproc element Processes -->
+<!-- verocase-config element_level = 2 -->
+<!-- verocase element Processes -->
 <a id="strategy-processes"></a>
 ## Strategy Processes: Security is argued by examining all lifecycle processes
 
@@ -954,14 +954,14 @@ Referenced by: **[Package Security](#package-security)**
 Supported by: **[Claim TechProcesses](#claim-techprocesses)**, [Claim NonTechnical](#claim-nontechnical)
 
 Supports: **[Claim Security](#claim-security)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Security is argued by examining all lifecycle processes — both the software lifecycle
 technical processes and the other lifecycle processes.
 This ensures comprehensive coverage across the entire development and operation lifecycle.
 
-<!-- caseproc-config element_level = 2 -->
-<!-- caseproc element TechProcesses -->
+<!-- verocase-config element_level = 2 -->
+<!-- verocase element TechProcesses -->
 <a id="claim-techprocesses"></a>
 ## Claim TechProcesses: Technical lifecycle processes implement security
 
@@ -970,14 +970,14 @@ Referenced by: **[Package Security](#package-security)**
 Supported by: **[Claim Requirements](#claim-requirements)**, [Claim Design](#claim-design), [Claim Implementation](#claim-implementation), [Claim Verification](#claim-verification), [Claim Deployment](#claim-deployment), [Claim Maintenance](#claim-maintenance)
 
 Supports: **[Strategy Processes](#strategy-processes)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 The software lifecycle technical processes (requirements, design, implementation,
 verification, deployment, and maintenance) each implement security measures.
 These are described in the following sections.
 
-<!-- caseproc-config element_level = 2 -->
-<!-- caseproc element Requirements -->
+<!-- verocase-config element_level = 2 -->
+<!-- verocase element Requirements -->
 <a id="claim-requirements"></a>
 ## Claim Requirements: Security requirements are identified and met
 
@@ -986,7 +986,7 @@ Referenced by: **[Package Requirements](#package-requirements)**, [Package Secur
 Supported by: **[Strategy SecTriad](#strategy-sectriad)**, [Claim Assets](#claim-assets)
 
 Supports: [Claim TechProcesses](#claim-techprocesses)
-<!-- end caseproc -->
+<!-- end verocase -->
 
 We believe the basic security requirements have been identified and met,
 as described below.
@@ -1010,8 +1010,8 @@ the assets & threat actors have been identified & addressed.
 See the design section for discussion about why we believe is not possible
 to bypass the mechanisms discussed below.
 
-<!-- caseproc-config element_level = 3 -->
-<!-- caseproc element SecTriad -->
+<!-- verocase-config element_level = 3 -->
+<!-- verocase element SecTriad -->
 <a id="strategy-sectriad"></a>
 ### Strategy SecTriad: Security triad (CIA) and access control address the requirements
 
@@ -1020,14 +1020,14 @@ Referenced by: **[Package Requirements](#package-requirements)**
 Supported by: **[Claim Confidentiality](#claim-confidentiality)**, [Claim Integrity](#claim-integrity), [Claim Availability](#claim-availability), [Claim AccessControl](#claim-accesscontrol)
 
 Supports: **[Claim Requirements](#claim-requirements)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 The security triad (Confidentiality, Integrity, Availability) plus Access Control
 provides a framework for addressing the security requirements.
 Each component is argued separately in the following sub-claims.
 
-<!-- caseproc-config element_level = 3 -->
-<!-- caseproc element Confidentiality -->
+<!-- verocase-config element_level = 3 -->
+<!-- verocase element Confidentiality -->
 <a id="claim-confidentiality"></a>
 ### Claim Confidentiality: Confidentiality is maintained
 
@@ -1036,17 +1036,17 @@ Referenced by: **[Package Requirements](#package-requirements)**
 Supported by: **[Claim NonPublicData](#claim-nonpublicdata)**, [Claim UserPrivacy](#claim-userprivacy), [Claim MostDataPublic](#claim-mostdatapublic)
 
 Supports: **[Strategy SecTriad](#strategy-sectriad)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
-<!-- caseproc-config element_level = 4 -->
-<!-- caseproc element UserPrivacy -->
+<!-- verocase-config element_level = 4 -->
+<!-- verocase element UserPrivacy -->
 <a id="claim-userprivacy"></a>
 #### Claim UserPrivacy: User privacy is maintained
 
 Referenced by: **[Package Requirements](#package-requirements)**
 
 Supports: **[Claim Confidentiality](#claim-confidentiality)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 One of our key requirements is to
 "protect users and their privacy".
@@ -1237,14 +1237,14 @@ could choose to use a network and computer they trust,
 a Virtual Private Network (VPN), or an anonymity network such as Tor
 to provide additional privacy when they interact with the BadgeApp.
 
-<!-- caseproc element MostDataPublic -->
+<!-- verocase element MostDataPublic -->
 <a id="claim-mostdatapublic"></a>
 #### Claim MostDataPublic: Almost all data is not confidential
 
 Referenced by: **[Package Requirements](#package-requirements)**
 
 Supports: **[Claim Confidentiality](#claim-confidentiality)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 We try to store as little confidential information as we reasonably can,
 as this limits the impact of any confidentiality breach.
@@ -1269,8 +1269,8 @@ are the user passwords, the "remember me" token (login nonce)
 if the user has enabled the remember me function, and user email addresses.
 We *do* consider this data higher-value and protect them specially.
 
-<!-- caseproc-config element_level = 4 -->
-<!-- caseproc element NonPublicData -->
+<!-- verocase-config element_level = 4 -->
+<!-- verocase element NonPublicData -->
 <a id="claim-nonpublicdata"></a>
 #### Claim NonPublicData: Non-public data is kept confidential
 
@@ -1279,13 +1279,13 @@ Referenced by: **[Package Requirements](#package-requirements)**
 Supported by: **[Claim ConfDataAtRest](#claim-confdataatrest)**, [Claim DataInMotion](#claim-datainmotion)
 
 Supports: **[Claim Confidentiality](#claim-confidentiality)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Non-public data — specifically user passwords, "remember me" tokens, and
 email addresses — is kept confidential both at rest and in motion.
 The following sub-claims address each form of confidential data storage.
 
-<!-- caseproc element ConfDataAtRest -->
+<!-- verocase element ConfDataAtRest -->
 <a id="claim-confdataatrest"></a>
 #### Claim ConfDataAtRest: Confidential data at rest is protected
 
@@ -1294,13 +1294,13 @@ Referenced by: **[Package Requirements](#package-requirements)**
 Supported by: **[Claim Passwords](#claim-passwords)**, [Claim RememberMe](#claim-rememberme), [Claim EmailSecured](#claim-emailsecured)
 
 Supports: **[Claim NonPublicData](#claim-nonpublicdata)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Confidential data stored on the server is protected from exposure.
 User passwords are stored only as bcrypt hashes, remember-me tokens
 use bcrypt-stored nonces, and email addresses are encrypted at rest.
 
-<!-- caseproc element Passwords -->
+<!-- verocase element Passwords -->
 <a id="claim-passwords"></a>
 #### Claim Passwords: User passwords stored securely (using bcrypt)
 
@@ -1309,7 +1309,7 @@ Referenced by: **[Package Requirements](#package-requirements)**
 Supported by: **[Evidence PasswordsEv](#evidence-passwordsev)**
 
 Supports: **[Claim ConfDataAtRest](#claim-confdataatrest)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 User passwords for local accounts are only stored on the server as
 iterated per-user salted hashes (using bcrypt), and thus cannot
@@ -1371,18 +1371,18 @@ while we check them against the bad password list in the database:
    unlikely that it won't happen, and even if it did, it would just mean
    that the user would have to choose a different password.
 
-<!-- caseproc element PasswordsEv -->
+<!-- verocase element PasswordsEv -->
 <a id="evidence-passwordsev"></a>
 #### Evidence PasswordsEv: has_secure_password in user model stores passwords via bcrypt
 
 Referenced by: **[Package Requirements](#package-requirements)**
 
 Supports: **[Claim Passwords](#claim-passwords)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 `has_secure_password` in user model stores passwords via bcrypt. See [../app/models/user.rb](../app/models/user.rb).
 
-<!-- caseproc element RememberMe -->
+<!-- verocase element RememberMe -->
 <a id="claim-rememberme"></a>
 #### Claim RememberMe: Remember me token is secured
 
@@ -1391,7 +1391,7 @@ Referenced by: **[Package Requirements](#package-requirements)**
 Supported by: **[Evidence RememberMeEv](#evidence-remembermeev)**
 
 Supports: **[Claim ConfDataAtRest](#claim-confdataatrest)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Users may choose to "remember me" to automatically re-login on
 that specific browser if they use a local account.
@@ -1431,18 +1431,18 @@ given user (only its bcrypted form), so the system cannot later reveal the
 In file `test/integration/users_login_test.rb` we verify that the
 password is not stored as cleartext in the user cookie.
 
-<!-- caseproc element RememberMeEv -->
+<!-- verocase element RememberMeEv -->
 <a id="evidence-remembermeev"></a>
 #### Evidence RememberMeEv: remember method in user model creates bcrypt-stored nonce; sessions controller and helper manage it; login test verifies cleartext not stored in cookie
 
 Referenced by: **[Package Requirements](#package-requirements)**
 
 Supports: **[Claim RememberMe](#claim-rememberme)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 `remember` method in user model creates bcrypt-stored nonce; sessions controller and helper manage it; login test verifies cleartext not stored in cookie. See [../app/controllers/sessions_controller.rb](../app/controllers/sessions_controller.rb).
 
-<!-- caseproc element EmailSecured -->
+<!-- verocase element EmailSecured -->
 <a id="claim-emailsecured"></a>
 #### Claim EmailSecured: Email addresses are secured (encrypted and only accessible to admin & owner)
 
@@ -1451,7 +1451,7 @@ Referenced by: **[Package Requirements](#package-requirements)**
 Supported by: **[Evidence EmailSecuredEv](#evidence-emailsecuredev)**
 
 Supports: **[Claim ConfDataAtRest](#claim-confdataatrest)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Email addresses are only revealed to the owner of the email address and to
 administrators.
@@ -1567,14 +1567,14 @@ authentication system (countering enumeration or verification attacks):
 3. Failed login requests for local accounts simply reports that
    the login failed; they do not indicate if the email address is present.
 
-<!-- caseproc element EmailSecuredEv -->
+<!-- verocase element EmailSecuredEv -->
 <a id="evidence-emailsecuredev"></a>
 #### Evidence EmailSecuredEv: Views, mailers, and controllers restrict email address access to owners and admins; use grep -Ri 'user.*\.email' to verify
 
 Referenced by: **[Package Requirements](#package-requirements)**
 
 Supports: **[Claim EmailSecured](#claim-emailsecured)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 To verify that email addresses are only accessible to owners and admins:
 
@@ -1585,7 +1585,7 @@ To verify that email addresses are only accessible to owners and admins:
 - The `app/views/password_resets/edit.html.erb` only exposes an email address after `require_valid_user` and `require_unexpired_reset` checks pass in `app/controllers/password_resets_controller.rb`.
 - Automated tests verify that email addresses are not displayed without authorization; see tests `should NOT show email address when not logged in`, `JSON should NOT show email address when not logged in`, `should NOT show email address when logged in as another user`, and `JSON should NOT show email address when logged in as another user`.
 
-<!-- caseproc element DataInMotion -->
+<!-- verocase element DataInMotion -->
 <a id="claim-datainmotion"></a>
 #### Claim DataInMotion: Data in motion encrypted with HTTPS
 
@@ -1594,7 +1594,7 @@ Referenced by: **[Package Requirements](#package-requirements)**
 Supported by: **[Evidence DataInMotionEv](#evidence-datainmotionev)**
 
 Supports: **[Claim NonPublicData](#claim-nonpublicdata)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 HTTPS (specifically the TLS protocol)
 is used to encrypt all communications between users
@@ -1617,19 +1617,19 @@ additional steps to try to make users always use HTTPS.
 We also use [online checkers](#online-checkers) (discussed below)
 to verify that our TLS configuration is secure in production.
 
-<!-- caseproc element DataInMotionEv -->
+<!-- verocase element DataInMotionEv -->
 <a id="evidence-datainmotionev"></a>
 #### Evidence DataInMotionEv: config.force_ssl = true enforces HTTPS with TLS redirection and secure cookies in production
 
 Referenced by: **[Package Requirements](#package-requirements)**
 
 Supports: **[Claim DataInMotion](#claim-datainmotion)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 `config.force_ssl = true` enforces HTTPS with TLS redirection and secure cookies in production. See [../config/environments/production.rb](../config/environments/production.rb).
 
-<!-- caseproc-config element_level = 3 -->
-<!-- caseproc element Integrity -->
+<!-- verocase-config element_level = 3 -->
+<!-- verocase element Integrity -->
 <a id="claim-integrity"></a>
 ### Claim Integrity: Integrity is maintained
 
@@ -1638,15 +1638,15 @@ Referenced by: **[Package Requirements](#package-requirements)**
 Supported by: **[Claim DataModAuth](#claim-datamodauth)**, [Claim AppModAuth](#claim-appmodauth), [Claim DataInMotion](#claim-datainmotion)
 
 Supports: **[Strategy SecTriad](#strategy-sectriad)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 As noted above,
 HTTPS is used to protect the integrity of all communications between
 users and the application, as well as to authenticate the server
 to the user.
 
-<!-- caseproc-config element_level = 4 -->
-<!-- caseproc element DataModAuth -->
+<!-- verocase-config element_level = 4 -->
+<!-- verocase element DataModAuth -->
 <a id="claim-datamodauth"></a>
 #### Claim DataModAuth: Data modification requires authorization
 
@@ -1655,7 +1655,7 @@ Referenced by: **[Package Requirements](#package-requirements)**
 Supported by: **[Evidence DataModAuthEv](#evidence-datamodauthev)**
 
 Supports: **[Claim Integrity](#claim-integrity)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Data modification requires authorization.
 
@@ -1750,33 +1750,33 @@ with large delays, reduces the administration effort required.
 By doing this, we help protect the integrity of the overall database
 from potentially-malicious authorized users.
 
-<!-- caseproc element DataModAuthEv -->
+<!-- verocase element DataModAuthEv -->
 <a id="evidence-datamodauthev"></a>
 #### Evidence DataModAuthEv: before_action guards can_edit_else_redirect and can_control_else_redirect protect all project modifications
 
 Referenced by: **[Package Requirements](#package-requirements)**
 
 Supports: **[Claim DataModAuth](#claim-datamodauth)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 `before_action` guards `can_edit_else_redirect` and `can_control_else_redirect` protect all project modifications. See [../app/controllers/projects_controller.rb](../app/controllers/projects_controller.rb).
 
-<!-- caseproc element AppModAuth -->
+<!-- verocase element AppModAuth -->
 <a id="claim-appmodauth"></a>
 #### Claim AppModAuth: Application modification requires authorization
 
 Referenced by: **[Package Requirements](#package-requirements)**
 
 Supports: **[Claim Integrity](#claim-integrity)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Modifications to the official BadgeApp application require
 authorization via GitHub.
 We use GitHub for managing the source code and issue tracker; it
 has an authentication and authorization system for this purpose.
 
-<!-- caseproc-config element_level = 3 -->
-<!-- caseproc element Availability -->
+<!-- verocase-config element_level = 3 -->
+<!-- verocase element Availability -->
 <a id="claim-availability"></a>
 ### Claim Availability: Availability is maintained including limited DDoS resilience
 
@@ -1785,7 +1785,7 @@ Referenced by: **[Package Requirements](#package-requirements)**
 Supported by: **[Claim CDNDDoS](#claim-cdnddos)**, [Claim Timeout](#claim-timeout), [Claim QuickRecovery](#claim-quickrecovery), [Claim LoginDisabled](#claim-logindisabled), [Claim Backups](#claim-backups), [Claim ScaleUp](#claim-scaleup)
 
 Supports: **[Strategy SecTriad](#strategy-sectriad)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 As with any publicly-accessible website,
 we cannot prevent an attacker with significant
@@ -1796,35 +1796,35 @@ and use other measures (such as backups) to maximize availability.
 Thus, even if the system is taken down temporarily, we expect to be
 able to reconstitute it (including its data).
 
-<!-- caseproc-config element_level = 4 -->
-<!-- caseproc element CDNDDoS -->
+<!-- verocase-config element_level = 4 -->
+<!-- verocase element CDNDDoS -->
 <a id="claim-cdnddos"></a>
 #### Claim CDNDDoS: CDN counters DDoS attacks on specific resources
 
 Referenced by: **[Package Requirements](#package-requirements)**
 
 Supports: **[Claim Availability](#claim-availability)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 We use the Fastly CDN, which provides some protection against DDoS attacks
 on specific resources such as static assets.
 The CDN absorbs or deflects traffic before it reaches our servers,
 providing a layer of resilience for high-traffic attacks.
 
-<!-- caseproc element ScaleUp -->
+<!-- verocase element ScaleUp -->
 <a id="claim-scaleup"></a>
 #### Claim ScaleUp: Cloud resources can be rapidly increased
 
 Referenced by: **[Package Requirements](#package-requirements)**
 
 Supports: **[Claim Availability](#claim-availability)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 We can quickly add more resources if more requests are made.
 See the design section "availability through scalability" below
 for more about how we handle scaling up.
 
-<!-- caseproc element Timeout -->
+<!-- verocase element Timeout -->
 <a id="claim-timeout"></a>
 #### Claim Timeout: Timeout limits maximum request time
 
@@ -1833,37 +1833,37 @@ Referenced by: **[Package Requirements](#package-requirements)**
 Supported by: **[Evidence TimeoutEv](#evidence-timeoutev)**
 
 Supports: **[Claim Availability](#claim-availability)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 All user requests have a timeout in production.
 That way, the system is not permanently "stuck" on a request.
 This is set by setting `Rack::Timeout.service_timeout`
 in file `config/environments/production.rb`.
 
-<!-- caseproc element TimeoutEv -->
+<!-- verocase element TimeoutEv -->
 <a id="evidence-timeoutev"></a>
 #### Evidence TimeoutEv: Rack::Timeout.service_timeout set in production configuration limits all request times
 
 Referenced by: **[Package Requirements](#package-requirements)**
 
 Supports: **[Claim Timeout](#claim-timeout)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 `Rack::Timeout.service_timeout` set in production configuration limits all request times. See [../config/environments/production.rb](../config/environments/production.rb).
 
-<!-- caseproc element QuickRecovery -->
+<!-- verocase element QuickRecovery -->
 <a id="claim-quickrecovery"></a>
 #### Claim QuickRecovery: Can return to operation quickly after DDoS ended
 
 Referenced by: **[Package Requirements](#package-requirements)**
 
 Supports: **[Claim Availability](#claim-availability)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 The system can return to operation quickly after
 a DDoS attack has ended.
 
-<!-- caseproc element LoginDisabled -->
+<!-- verocase element LoginDisabled -->
 <a id="claim-logindisabled"></a>
 #### Claim LoginDisabled: Logon disabled mode mitigates against some vulnerabilities
 
@@ -1872,7 +1872,7 @@ Referenced by: **[Package Requirements](#package-requirements)**
 Supported by: **[Evidence LoginDisabledEv](#evidence-logindisabledev)**
 
 Supports: **[Claim Availability](#claim-availability)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 We have implemented a "login disabled mode"
 (aka `BADGEAPP_DENY_LOGIN` mode) that we can quickly enable.
@@ -1934,25 +1934,25 @@ These changes are not security-critical.
 Instead, these changes provide users immediate feedback
 to help them understand that this special mode has been enabled.
 
-<!-- caseproc element LoginDisabledEv -->
+<!-- verocase element LoginDisabledEv -->
 <a id="evidence-logindisabledev"></a>
 #### Evidence LoginDisabledEv: deny_login initializer reads BADGEAPP_DENY_LOGIN env var to disable all logins
 
 Referenced by: **[Package Requirements](#package-requirements)**
 
 Supports: **[Claim LoginDisabled](#claim-logindisabled)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 `deny_login` initializer reads `BADGEAPP_DENY_LOGIN` env var to disable all logins. See [../config/initializers/deny_login.rb](../config/initializers/deny_login.rb).
 
-<!-- caseproc element Backups -->
+<!-- verocase element Backups -->
 <a id="claim-backups"></a>
 #### Claim Backups: Data corruption and loss are mitigated by multiple backups
 
 Referenced by: **[Package Requirements](#package-requirements)**
 
 Supports: **[Claim Availability](#claim-availability)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 We routinely backup the database every day
 and retain multiple versions of backups.
@@ -1972,8 +1972,8 @@ capabilities that also aid availability:
 - As noted later in the "Recovery plan including backups",
   we have a recovery plan that builds on our multiple backups.
 
-<!-- caseproc-config element_level = 3 -->
-<!-- caseproc element AccessControl -->
+<!-- verocase-config element_level = 3 -->
+<!-- verocase element AccessControl -->
 <a id="claim-accesscontrol"></a>
 ### Claim AccessControl: Access control is in place
 
@@ -1982,7 +1982,7 @@ Referenced by: **[Package Requirements](#package-requirements)**
 Supported by: **[Claim AuthN](#claim-authn)**, [Claim AuthZ](#claim-authz)
 
 Supports: **[Strategy SecTriad](#strategy-sectriad)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Many of the CIA triad requirements address "authorized" users,
 and that requires knowing what "authorized" means.
@@ -2004,8 +2004,8 @@ authorization to log in there, and those are protected by the
 deployment platform supplier (and thus we do not consider them further here).
 The login credentials in these cases are protected.
 
-<!-- caseproc-config element_level = 4 -->
-<!-- caseproc element AuthN -->
+<!-- verocase-config element_level = 4 -->
+<!-- verocase element AuthN -->
 <a id="claim-authn"></a>
 #### Claim AuthN: Users must identify and authenticate themselves
 
@@ -2014,7 +2014,7 @@ Referenced by: **[Package Requirements](#package-requirements)**
 Supported by: **[Claim LocalAuthN](#claim-localauthn)**, [Claim RemoteAuthN](#claim-remoteauthn)
 
 Supports: **[Claim AccessControl](#claim-accesscontrol)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 As with most systems, it's critically
 important that authentication work correctly.
@@ -2186,15 +2186,15 @@ This architecture provides:
 - **Clear separation**: Session validation in the controller is separated from
   user lookup in the helper, making the code easier to audit and test
 
-<!-- caseproc-config element_level = 5 -->
-<!-- caseproc element LocalAuthN -->
+<!-- verocase-config element_level = 5 -->
+<!-- verocase element LocalAuthN -->
 <a id="claim-localauthn"></a>
 ##### Claim LocalAuthN: Local users must supply a password
 
 Referenced by: **[Package Requirements](#package-requirements)**
 
 Supports: **[Claim AuthN](#claim-authn)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Local users must supply a valid password to log in.
 Passwords are verified by comparing the bcrypt hash stored on the server
@@ -2202,14 +2202,14 @@ against the provided password (see the [initial login](#initial-login) section).
 The system enforces rejection on wrong or blank passwords,
 as verified by the test suite.
 
-<!-- caseproc element RemoteAuthN -->
+<!-- verocase element RemoteAuthN -->
 <a id="claim-remoteauthn"></a>
 ##### Claim RemoteAuthN: Remote users are authenticated by a trusted remote service
 
 Referenced by: **[Package Requirements](#package-requirements)**
 
 Supports: **[Claim AuthN](#claim-authn)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Remote users are authenticated by GitHub via the OAuth protocol.
 When a user clicks "Log in with GitHub", the application redirects to GitHub,
@@ -2217,8 +2217,8 @@ which authenticates the user and returns a callback.
 We trust GitHub's authentication assertion for GitHub accounts,
 using the omniauth-github gem (see the [initial login](#initial-login) section).
 
-<!-- caseproc-config element_level = 4 -->
-<!-- caseproc element AuthZ -->
+<!-- verocase-config element_level = 4 -->
+<!-- verocase element AuthZ -->
 <a id="claim-authz"></a>
 #### Claim AuthZ: Authorization to resources and actions is controlled
 
@@ -2227,7 +2227,7 @@ Referenced by: **[Package Requirements](#package-requirements)**
 Supported by: **[Evidence AuthZEv](#evidence-authzev)**
 
 Supports: **[Claim AccessControl](#claim-accesscontrol)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Users who have not authenticated themselves can only perform
 actions allowed to anyone in the public (e.g., view the home page,
@@ -2316,26 +2316,26 @@ security reasons do indeed fail.
 For more, see the earlier section justifying the claim that
 "Data modification requires authorization".
 
-<!-- caseproc element AuthZEv -->
+<!-- verocase element AuthZEv -->
 <a id="evidence-authzev"></a>
 #### Evidence AuthZEv: can_edit? and can_control? methods implement role-based authorization; all access enforced server-side through controllers
 
 Referenced by: **[Package Requirements](#package-requirements)**
 
 Supports: **[Claim AuthZ](#claim-authz)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 `can_edit?` and `can_control?` methods implement role-based authorization; all access enforced server-side through controllers. See [../app/controllers/application_controller.rb](../app/controllers/application_controller.rb).
 
-<!-- caseproc-config element_level = 3 -->
-<!-- caseproc element Assets -->
+<!-- verocase-config element_level = 3 -->
+<!-- verocase element Assets -->
 <a id="claim-assets"></a>
 ### Claim Assets: Assets & threat actors identified & addressed
 
 Referenced by: **[Package Requirements](#package-requirements)**
 
 Supports: **[Claim Requirements](#claim-requirements)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 #### Assets
 
@@ -2416,8 +2416,8 @@ We also protect our development environment and choose people
 who will help support this.
 The following sections describe how we've managed our security-related risks.
 
-<!-- caseproc-config element_level = 2 -->
-<!-- caseproc element Design -->
+<!-- verocase-config element_level = 2 -->
+<!-- verocase element Design -->
 <a id="claim-design"></a>
 ## Claim Design: Security in design
 
@@ -2426,7 +2426,7 @@ Referenced by: **[Package Design](#package-design)**, [Package Security](#packag
 Supported by: **[Claim SimpleDesign](#claim-simpledesign)**, [Claim STRIDE](#claim-stride), [Claim DesignPrinciples](#claim-designprinciples), [Claim Scalability](#claim-scalability), [Claim MemSafe](#claim-memsafe)
 
 Supports: [Claim TechProcesses](#claim-techprocesses)
-<!-- end caseproc -->
+<!-- end verocase -->
 
 We emphasize security in the architectural design.
 
@@ -2459,15 +2459,15 @@ The following figure shows a high-level design of the implementation:
 See the [implementation](./implementation.md) file to
 see a more detailed discussion of the software design.
 
-<!-- caseproc-config element_level = 3 -->
-<!-- caseproc element STRIDE -->
+<!-- verocase-config element_level = 3 -->
+<!-- verocase element STRIDE -->
 <a id="claim-stride"></a>
 ### Claim STRIDE: STRIDE threat model has been analyzed
 
 Referenced by: **[Package Design](#package-design)**
 
 Supports: **[Claim Design](#claim-design)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 There are many approaches for threat (attack) modeling, e.g., a
 focus on attackers, assets, or the design.
@@ -2643,14 +2643,14 @@ Given these safeguards, here is how we deal with STRIDE:
 *   Elevation of privilege.  A translator cannot edit the source text files
     by this mechanism.  Sanitization checks limit the damage that can be done.
 
-<!-- caseproc element SimpleDesign -->
+<!-- verocase element SimpleDesign -->
 <a id="claim-simpledesign"></a>
 ### Claim SimpleDesign: Economy of mechanism: simple design is used
 
 Referenced by: **[Package Design](#package-design)**
 
 Supports: **[Claim Design](#claim-design)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 This web application has a simple design.
 It is a standard Ruby on Rails design with models, views, and controllers.
@@ -2685,7 +2685,7 @@ and analyze that data; this project data is also untrusted
 (in particular, filenames, file contents, issue tracker information and
 contents, etc., are all untrusted).
 
-<!-- caseproc element DesignPrinciples -->
+<!-- verocase element DesignPrinciples -->
 <a id="claim-designprinciples"></a>
 ### Claim DesignPrinciples: Secure design principles are applied
 
@@ -2694,7 +2694,7 @@ Referenced by: **[Package Design](#package-design)**
 Supported by: **[Claim EconomyMech](#claim-economymech)**, [Claim CompleteMed](#claim-completemed), [Claim FailSafe](#claim-failsafe), [Claim OpenDesign](#claim-opendesign), [Claim SepPriv](#claim-seppriv), [Claim LeastPriv](#claim-leastpriv), [Claim LeastCommon](#claim-leastcommon), [Claim PsychAccept](#claim-psychaccept), [Claim LimitedAttack](#claim-limitedattack), [Claim InputValid](#claim-inputvalid)
 
 Supports: **[Claim Design](#claim-design)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Applying various secure design principles helps us avoid
 security problems in the first place.
@@ -2796,110 +2796,110 @@ including all 8 principles from
   application is just looking for the presence or absence of certain
   data patterns, and never executes data from the project.
 
-<!-- caseproc-config element_level = 4 -->
-<!-- caseproc element EconomyMech -->
+<!-- verocase-config element_level = 4 -->
+<!-- verocase element EconomyMech -->
 <a id="claim-economymech"></a>
 #### Claim EconomyMech: Economy of mechanism
 
 Referenced by: **[Package Design](#package-design)**
 
 Supports: **[Claim DesignPrinciples](#claim-designprinciples)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 We keep the design simple and small to reduce the attack surface.
 See the [Claim SimpleDesign](#claim-simpledesign) section for details;
 the list of secure design principles above elaborates on this.
 
-<!-- caseproc element CompleteMed -->
+<!-- verocase element CompleteMed -->
 <a id="claim-completemed"></a>
 #### Claim CompleteMed: Complete mediation
 
 Referenced by: **[Package Design](#package-design)**
 
 Supports: **[Claim DesignPrinciples](#claim-designprinciples)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Every access to every object is checked for authorization.
 Server-side controllers and routers enforce this — client-side JavaScript
 has no role in access control decisions.
 See the secure design principles discussion above for details.
 
-<!-- caseproc element FailSafe -->
+<!-- verocase element FailSafe -->
 <a id="claim-failsafe"></a>
 #### Claim FailSafe: Fail-safe defaults
 
 Referenced by: **[Package Design](#package-design)**
 
 Supports: **[Claim DesignPrinciples](#claim-designprinciples)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Access decisions default to denial.
 Unauthenticated users can only access publicly available resources.
 All additional permissions must be explicitly granted.
 See the secure design principles discussion above for details.
 
-<!-- caseproc element OpenDesign -->
+<!-- verocase element OpenDesign -->
 <a id="claim-opendesign"></a>
 #### Claim OpenDesign: Open design
 
 Referenced by: **[Package Design](#package-design)**
 
 Supports: **[Claim DesignPrinciples](#claim-designprinciples)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 The application is open source (FLOSS), so the design can be reviewed by anyone.
 We don't rely on security through obscurity.
 See the secure design principles discussion above for details.
 
-<!-- caseproc element SepPriv -->
+<!-- verocase element SepPriv -->
 <a id="claim-seppriv"></a>
 #### Claim SepPriv: Separation of privilege
 
 Referenced by: **[Package Design](#package-design)**
 
 Supports: **[Claim DesignPrinciples](#claim-designprinciples)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 The application separates normal user privileges from admin privileges.
 Admin functions require a separate admin role check.
 See the secure design principles discussion above for details.
 
-<!-- caseproc element LeastPriv -->
+<!-- verocase element LeastPriv -->
 <a id="claim-leastpriv"></a>
 #### Claim LeastPriv: Least privilege
 
 Referenced by: **[Package Design](#package-design)**
 
 Supports: **[Claim DesignPrinciples](#claim-designprinciples)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Users are granted only the permissions they need.
 Normal users can only edit their own projects;
 admin-only functionality is separately restricted.
 See the secure design principles discussion above for details.
 
-<!-- caseproc element LeastCommon -->
+<!-- verocase element LeastCommon -->
 <a id="claim-leastcommon"></a>
 #### Claim LeastCommon: Least common mechanism
 
 Referenced by: **[Package Design](#package-design)**
 
 Supports: **[Claim DesignPrinciples](#claim-designprinciples)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 We minimize shared mechanisms between users.
 Each request is processed independently, and session state is
 stored in per-user encrypted cookies rather than shared server-side sessions.
 See the secure design principles discussion above for details.
 
-<!-- caseproc element PsychAccept -->
+<!-- verocase element PsychAccept -->
 <a id="claim-psychaccept"></a>
 #### Claim PsychAccept: Psychological acceptability
 
 Referenced by: **[Package Design](#package-design)**
 
 Supports: **[Claim DesignPrinciples](#claim-designprinciples)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 The security mechanisms are designed to be user-friendly.
 For example, users can log in via GitHub OAuth to avoid
@@ -2907,28 +2907,28 @@ managing a separate password, and the "remember me" feature
 reduces repeated logins.
 See the secure design principles discussion above for details.
 
-<!-- caseproc element LimitedAttack -->
+<!-- verocase element LimitedAttack -->
 <a id="claim-limitedattack"></a>
 #### Claim LimitedAttack: Limited attack surface
 
 Referenced by: **[Package Design](#package-design)**
 
 Supports: **[Claim DesignPrinciples](#claim-designprinciples)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 We limit the attack surface by restricting input types, using a CDN,
 enforcing HTTPS, and using a routing framework that only exposes
 defined endpoints.
 See the secure design principles and input validation discussion above for details.
 
-<!-- caseproc element InputValid -->
+<!-- verocase element InputValid -->
 <a id="claim-inputvalid"></a>
 #### Claim InputValid: Input validation with whitelists
 
 Referenced by: **[Package Design](#package-design)**
 
 Supports: **[Claim DesignPrinciples](#claim-designprinciples)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 All inputs are validated using allowlists.
 The application validates user-submitted data, including URLs (via allowlisted regex),
@@ -2936,15 +2936,15 @@ project status values (restricted to legal criterion values),
 and HTML content (only safe tags and attributes allowed).
 See the secure design principles discussion above for details.
 
-<!-- caseproc-config element_level = 3 -->
-<!-- caseproc element Scalability -->
+<!-- verocase-config element_level = 3 -->
+<!-- verocase element Scalability -->
 <a id="claim-scalability"></a>
 ### Claim Scalability: Availability through scalability
 
 Referenced by: **[Package Design](#package-design)**
 
 Supports: **[Claim Design](#claim-design)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Availability is, as always, especially challenging.
 Our primary approach is to ensure that the design scales.
@@ -3015,14 +3015,14 @@ attack, and there is not much else we can do to counter DDoS
 by an attacker with significant resources without having
 significant resources ourselves.
 
-<!-- caseproc element MemSafe -->
+<!-- verocase element MemSafe -->
 <a id="claim-memsafe"></a>
 ### Claim MemSafe: Memory-safe languages are used
 
 Referenced by: **[Package Design](#package-design)**
 
 Supports: **[Claim Design](#claim-design)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 All the code we have written (aka the custom code)
 is written in memory-safe languages
@@ -3037,8 +3037,8 @@ good reason to believe that developers are directly working to mitigate
 the problems from memory-unsafe languages.
 See the section below on supply chain (reuse) for more.
 
-<!-- caseproc-config element_level = 2 -->
-<!-- caseproc element Implementation -->
+<!-- verocase-config element_level = 2 -->
+<!-- verocase element Implementation -->
 <a id="claim-implementation"></a>
 ## Claim Implementation: Security in implementation
 
@@ -3047,7 +3047,7 @@ Referenced by: **[Package Implementation](#package-implementation)**, [Package S
 Supported by: **[Strategy CommonVulns](#strategy-commonvulns)**, [Strategy HardeningStrat](#strategy-hardeningstrat), [Claim PubVulns](#claim-pubvulns)
 
 Supports: [Claim TechProcesses](#claim-techprocesses)
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Most implementation vulnerabilities are due to common types
 of implementation errors or common misconfigurations,
@@ -3066,8 +3066,8 @@ Finally, we try to stay vigilant when new kinds of vulnerabilities are
 reported that apply to this application, and make adjustments.
 Below is how we've done each, in turn.
 
-<!-- caseproc-config element_level = 3 -->
-<!-- caseproc element CommonVulns -->
+<!-- verocase-config element_level = 3 -->
+<!-- verocase element CommonVulns -->
 <a id="strategy-commonvulns"></a>
 ### Strategy CommonVulns: Most implementation vulnerabilities are due to common types of implementation errors or common misconfigurations, so countering them greatly reduces security risks
 
@@ -3076,14 +3076,14 @@ Referenced by: **[Package Implementation](#package-implementation)**
 Supported by: **[Claim OWASPClaim](#claim-owaspclaim)**, [Claim MisconfigClaim](#claim-misconfigclaim), [Claim ReuseSec](#claim-reusesec)
 
 Supports: **[Claim Implementation](#claim-implementation)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Most implementation vulnerabilities arise from common types of errors or
 misconfigurations. By systematically countering these common categories,
 we greatly reduce overall security risk.
 
-<!-- caseproc-config element_level = 3 -->
-<!-- caseproc element OWASPClaim -->
+<!-- verocase-config element_level = 3 -->
+<!-- verocase element OWASPClaim -->
 <a id="claim-owaspclaim"></a>
 ### Claim OWASPClaim: All of the most common important implementation vulnerability types (weaknesses) countered
 
@@ -3092,10 +3092,10 @@ Referenced by: **[Package Implementation](#package-implementation)**
 Supported by: **[Strategy OWASPStrat](#strategy-owaspstrat)**
 
 Supports: **[Strategy CommonVulns](#strategy-commonvulns)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
-<!-- caseproc-config element_level = 4 -->
-<!-- caseproc element OWASPStrat -->
+<!-- verocase-config element_level = 4 -->
+<!-- verocase element OWASPStrat -->
 <a id="strategy-owaspstrat"></a>
 #### Strategy OWASPStrat: OWASP top 10 represents a broad consensus of the most critical web application security flaws
 
@@ -3104,13 +3104,13 @@ Referenced by: **[Package Implementation](#package-implementation)**
 Supported by: **[Claim OWASP1013](#claim-owasp1013)**
 
 Supports: **[Claim OWASPClaim](#claim-owaspclaim)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 The OWASP Top 10 represents a broad consensus of the most critical web application
 security flaws, providing a comprehensive baseline for addressing common
 implementation vulnerabilities.
 
-<!-- caseproc element OWASP1013 -->
+<!-- verocase element OWASP1013 -->
 <a id="claim-owasp1013"></a>
 #### Claim OWASP1013: All OWASP top 10 (2013 & 2017) countered
 
@@ -3119,7 +3119,7 @@ Referenced by: **[Package Implementation](#package-implementation)**
 Supported by: **[Claim OWASP1](#claim-owasp1)**, [Claim OWASP2](#claim-owasp2), [Claim OWASP3](#claim-owasp3), [Claim OWASP4](#claim-owasp4), [Claim OWASP5](#claim-owasp5), [Claim OWASP6](#claim-owasp6), [Claim OWASP7](#claim-owasp7), [Claim OWASP8](#claim-owasp8), [Claim OWASP9](#claim-owasp9), [Claim OWASP10](#claim-owasp10), [Claim OWASP11](#claim-owasp11), [Claim OWASP12](#claim-owasp12), [Claim OWASP13](#claim-owasp13)
 
 Supports: **[Strategy OWASPStrat](#strategy-owaspstrat)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 All OWASP Top 10 items from both the 2013 and 2017 lists are addressed.
 The 2017 list adds XXE (A4), Insecure Deserialization (A8), and
@@ -3293,181 +3293,181 @@ We continue to cover the 2013 A8 (Cross-Site Request Forgery (CSRF))
 and 2013 A10 (Unvalidated Redirects and Forwards), even thought they are
 not listed in the 2017 edition of the OWASP top 10.
 
-<!-- caseproc-config element_level = 4 -->
-<!-- caseproc element OWASP1 -->
+<!-- verocase-config element_level = 4 -->
+<!-- verocase element OWASP1 -->
 <a id="claim-owasp1"></a>
 #### Claim OWASP1: Injection (including SQL injection) countered
 
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Claim OWASP1013](#claim-owasp1013)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 SQL injection is countered by Rails' ActiveRecord ORM using parameterized queries.
 Direct SQL is used only with trusted or parameterized inputs.
 See item 1 in the [OWASP countering discussion](#claim-owaspclaim) above.
 
-<!-- caseproc element OWASP2 -->
+<!-- verocase element OWASP2 -->
 <a id="claim-owasp2"></a>
 #### Claim OWASP2: Broken Authentication and Session Management countered
 
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Claim OWASP1013](#claim-owasp1013)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Broken authentication is countered by Rails session management with
 encrypted signed cookies, session timeout, and session fixation protection.
 See item 2 in the [OWASP countering discussion](#claim-owaspclaim) above.
 
-<!-- caseproc element OWASP3 -->
+<!-- verocase element OWASP3 -->
 <a id="claim-owasp3"></a>
 #### Claim OWASP3: Cross-site scripting (XSS) countered
 
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Claim OWASP1013](#claim-owasp1013)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 XSS is countered by Rails' SafeBuffer mechanism (HTML escaping by default),
 a restrictive Content Security Policy, and safe markdown processing.
 See item 3 in the [OWASP countering discussion](#claim-owaspclaim) above.
 
-<!-- caseproc element OWASP4 -->
+<!-- verocase element OWASP4 -->
 <a id="claim-owasp4"></a>
 #### Claim OWASP4: Insecure Direct Object References countered
 
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Claim OWASP1013](#claim-owasp1013)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Insecure direct object references are countered by routing all requests
 through controllers that enforce access control.
 See item 4 in the [OWASP countering discussion](#claim-owaspclaim) above.
 
-<!-- caseproc element OWASP5 -->
+<!-- verocase element OWASP5 -->
 <a id="claim-owasp5"></a>
 #### Claim OWASP5: Security Misconfiguration countered
 
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Claim OWASP1013](#claim-owasp1013)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Security misconfiguration is countered by following the Rails security guide
 and using secure defaults.
 See item 5 in the [OWASP countering discussion](#claim-owaspclaim) above and
 the [MisconfigClaim](#claim-misconfigclaim) section.
 
-<!-- caseproc element OWASP6 -->
+<!-- verocase element OWASP6 -->
 <a id="claim-owasp6"></a>
 #### Claim OWASP6: Sensitive Data Exposure countered
 
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Claim OWASP1013](#claim-owasp1013)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Sensitive data exposure is minimized: most data is public,
 email addresses are encrypted, passwords use bcrypt,
 and HTTPS protects data in motion.
 See item 6 in the [OWASP countering discussion](#claim-owaspclaim) above.
 
-<!-- caseproc element OWASP7 -->
+<!-- verocase element OWASP7 -->
 <a id="claim-owasp7"></a>
 #### Claim OWASP7: Missing Access Control countered
 
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Claim OWASP1013](#claim-owasp1013)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Missing access control is countered by server-side role-based authorization
 checks in all controllers.
 See item 7 in the [OWASP countering discussion](#claim-owaspclaim) above.
 
-<!-- caseproc element OWASP8 -->
+<!-- verocase element OWASP8 -->
 <a id="claim-owasp8"></a>
 #### Claim OWASP8: CSRF countered
 
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Claim OWASP1013](#claim-owasp1013)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 CSRF is countered by per-form CSRF tokens, SameSite=Lax cookies,
 and a restrictive Content Security Policy.
 See item 8 in the [OWASP countering discussion](#claim-owaspclaim) above.
 
-<!-- caseproc element OWASP9 -->
+<!-- verocase element OWASP9 -->
 <a id="claim-owasp9"></a>
 #### Claim OWASP9: Known Vulnerabilities countered
 
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Claim OWASP1013](#claim-owasp1013)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Known vulnerabilities in components are detected by bundle-audit and
 GitHub Dependabot, with rapid update processes in place.
 See item 9 in the [OWASP countering discussion](#claim-owaspclaim) above
 and the [Maintenance](#claim-maintenance) section.
 
-<!-- caseproc element OWASP10 -->
+<!-- verocase element OWASP10 -->
 <a id="claim-owasp10"></a>
 #### Claim OWASP10: Unvalidated Redirects and Forwards countered
 
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Claim OWASP1013](#claim-owasp1013)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Unvalidated redirects and forwards are countered by using them sparingly
 and always validating targets.
 See item 10 in the [OWASP countering discussion](#claim-owaspclaim) above.
 
-<!-- caseproc element OWASP11 -->
+<!-- verocase element OWASP11 -->
 <a id="claim-owasp11"></a>
 #### Claim OWASP11: XXE countered (2017 A4)
 
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Claim OWASP1013](#claim-owasp1013)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 XXE is countered by not accepting XML from untrusted sources;
 the Rails XML parser was removed in Rails 4.0 and is not re-enabled.
 See item 11 in the [OWASP countering discussion](#claim-owaspclaim) above.
 
-<!-- caseproc element OWASP12 -->
+<!-- verocase element OWASP12 -->
 <a id="claim-owasp12"></a>
 #### Claim OWASP12: Insecure Deserialization countered (2017 A8)
 
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Claim OWASP1013](#claim-owasp1013)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Insecure deserialization is countered by only accepting JSON and HTML fields,
 with the JSON parser deserializing only to trusted standard objects.
 See item 12 in the [OWASP countering discussion](#claim-owaspclaim) above.
 
-<!-- caseproc element OWASP13 -->
+<!-- verocase element OWASP13 -->
 <a id="claim-owasp13"></a>
 #### Claim OWASP13: Insufficient Logging and Monitoring countered (2017 A10)
 
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Claim OWASP1013](#claim-owasp1013)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Insufficient logging and monitoring is countered by our internal logging
 and external monitoring (see [Claim Detection](#claim-detection)).
 See item 13 in the [OWASP countering discussion](#claim-owaspclaim) above.
 
-<!-- caseproc-config element_level = 3 -->
-<!-- caseproc element MisconfigClaim -->
+<!-- verocase-config element_level = 3 -->
+<!-- verocase element MisconfigClaim -->
 <a id="claim-misconfigclaim"></a>
 ### Claim MisconfigClaim: All of the most common known security-relevant misconfiguration errors countered
 
@@ -3476,7 +3476,7 @@ Referenced by: **[Package Implementation](#package-implementation)**
 Supported by: **[Claim RailsGuide](#claim-railsguide)**
 
 Supports: **[Strategy CommonVulns](#strategy-commonvulns)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 A common security problem with applications is misconfiguration;
 here is how we reduce the risks from misconfiguration.
@@ -3694,15 +3694,15 @@ and for some reason Heroku allows it to pass through or we
 switch to a different computation engine provider,
 we will not use this value; we will instead use a preset trusted value.
 
-<!-- caseproc-config element_level = 4 -->
-<!-- caseproc element RailsGuide -->
+<!-- verocase-config element_level = 4 -->
+<!-- verocase element RailsGuide -->
 <a id="claim-railsguide"></a>
 #### Claim RailsGuide: Entire most-relevant security guide applied
 
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Claim MisconfigClaim](#claim-misconfigclaim)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 We apply the entire
 [Ruby on Rails Security Guide](https://guides.rubyonrails.org/security.html),
@@ -3710,8 +3710,8 @@ which is the most relevant security guide for this application.
 The misconfiguration discussion above walks through the guide's key sections
 and explains how each is addressed.
 
-<!-- caseproc-config element_level = 3 -->
-<!-- caseproc element HardeningStrat -->
+<!-- verocase-config element_level = 3 -->
+<!-- verocase element HardeningStrat -->
 <a id="strategy-hardeningstrat"></a>
 ### Strategy HardeningStrat: Hardening can reduce or eliminate the impact of defects in some cases
 
@@ -3720,14 +3720,14 @@ Referenced by: **[Package Implementation](#package-implementation)**
 Supported by: **[Claim Hardening](#claim-hardening)**
 
 Supports: **[Claim Implementation](#claim-implementation)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Hardening can reduce or eliminate the impact of defects. Even if the system
 has a vulnerability, hardening measures can thwart or slow attackers,
 providing additional defense in depth.
 
-<!-- caseproc-config element_level = 3 -->
-<!-- caseproc element Hardening -->
+<!-- verocase-config element_level = 3 -->
+<!-- verocase element Hardening -->
 <a id="claim-hardening"></a>
 ### Claim Hardening: Hardening is applied
 
@@ -3736,14 +3736,14 @@ Referenced by: **[Package Implementation](#package-implementation)**
 Supported by: **[Claim HardenHTTPS](#claim-hardenhttps)**, [Claim HardenCSP](#claim-hardencsp), [Claim HardenCookies](#claim-hardencookies), [Claim HardenCSRF](#claim-hardencsrf), [Claim HardenRateIn](#claim-hardenratein), [Claim HardenRateOut](#claim-hardenrateout), [Claim HardenEmailEnc](#claim-hardenemailenc), [Claim HardenGravatar](#claim-hardengravatar)
 
 Supports: **[Strategy HardeningStrat](#strategy-hardeningstrat)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 We also use various mechanisms to harden the system against attack.
 These attempt to thwart or slow attack even if the system has a vulnerability
 not countered by the main approaches described elsewhere in this document.
 
-<!-- caseproc-config element_level = 4 -->
-<!-- caseproc element HardenHTTPS -->
+<!-- verocase-config element_level = 4 -->
+<!-- verocase element HardenHTTPS -->
 <a id="claim-hardenhttps"></a>
 #### Claim HardenHTTPS: HTTPS use enforced (including by HSTS)
 
@@ -3752,7 +3752,7 @@ Referenced by: **[Package Implementation](#package-implementation)**
 Supported by: **[Evidence HardenHTTPSEv](#evidence-hardenhttpsev)**
 
 Supports: **[Claim Hardening](#claim-hardening)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 We take a number of steps to force the use of HTTPS instead of HTTP.
 
@@ -3776,18 +3776,18 @@ See
 ["Rails, Secure Cookies, HSTS and friends" by Ilija Eftimov (2015-12-14)](http://eftimov.net/rails-tls-hsts-cookies)
 for more about the impact of `force_ssl`.
 
-<!-- caseproc element HardenHTTPSEv -->
+<!-- verocase element HardenHTTPSEv -->
 <a id="evidence-hardenhttpsev"></a>
 #### Evidence HardenHTTPSEv: config.force_ssl enables TLS redirection, secure cookies, and HSTS; domain in Chrome HSTS preload list
 
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Claim HardenHTTPS](#claim-hardenhttps)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 `config.force_ssl` enables TLS redirection, secure cookies, and HSTS; domain in Chrome HSTS preload list. See [../config/environments/production.rb](../config/environments/production.rb).
 
-<!-- caseproc element HardenCSP -->
+<!-- verocase element HardenCSP -->
 <a id="claim-hardencsp"></a>
 #### Claim HardenCSP: Outgoing HTTP headers hardened including restrictive CSP
 
@@ -3796,7 +3796,7 @@ Referenced by: **[Package Implementation](#package-implementation)**
 Supported by: **[Evidence HardenCSPEv](#evidence-hardencspev)**
 
 Supports: **[Claim Hardening](#claim-hardening)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 We harden the outgoing HTTP headers, in particular, we use a
 restrictive Content Security Policy (CSP) header with just
@@ -3844,18 +3844,18 @@ a DDoS attack (since JavaScript clients can make excessive data demands),
 but a DDoS attack can be performed without it, and our usual DDoS
 protection measures (including caching and scaling) still apply.
 
-<!-- caseproc element HardenCSPEv -->
+<!-- verocase element HardenCSPEv -->
 <a id="evidence-hardencspev"></a>
 #### Evidence HardenCSPEv: secure_headers gem enforces CSP and security headers; integration test verifies header values
 
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Claim HardenCSP](#claim-hardencsp)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 `secure_headers` gem enforces CSP and security headers; integration test verifies header values. See [../test/integration/project_get_test.rb](../test/integration/project_get_test.rb).
 
-<!-- caseproc element HardenCookies -->
+<!-- verocase element HardenCookies -->
 <a id="claim-hardencookies"></a>
 #### Claim HardenCookies: Cookies limited
 
@@ -3864,7 +3864,7 @@ Referenced by: **[Package Implementation](#package-implementation)**
 Supported by: **[Evidence HardenCookiesEv](#evidence-hardencookiesev)**
 
 Supports: **[Claim Hardening](#claim-hardening)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Cookies have various restrictions (also via the
 [`secure_headers`](https://github.com/twitter/secureheaders) gem).
@@ -3882,18 +3882,18 @@ harder to exploit old or captured cookies.
 See
 [expiry in signed or encrypted cookie is now embedded in the cookies values](https://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html#expiry-in-signed-or-encrypted-cookie-is-now-embedded-in-the-cookies-values).
 
-<!-- caseproc element HardenCookiesEv -->
+<!-- verocase element HardenCookiesEv -->
 <a id="evidence-hardencookiesev"></a>
 #### Evidence HardenCookiesEv: secure_headers gem sets httponly, secure, and SameSite=Lax cookie attributes; session cookies use AES-256-GCM
 
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Claim HardenCookies](#claim-hardencookies)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 `secure_headers` gem sets httponly, secure, and SameSite=Lax cookie attributes; session cookies use AES-256-GCM. See [../Gemfile](../Gemfile).
 
-<!-- caseproc element HardenCSRF -->
+<!-- verocase element HardenCSRF -->
 <a id="claim-hardencsrf"></a>
 #### Claim HardenCSRF: CSRF tokens hardened
 
@@ -3902,7 +3902,7 @@ Referenced by: **[Package Implementation](#package-implementation)**
 Supported by: **[Evidence HardenCSRFEv](#evidence-hardencsrfev)**
 
 Supports: **[Claim Hardening](#claim-hardening)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 We use two additional CSRF token hardening techniques
 to further harden the system against CSRF attacks,
@@ -3919,18 +3919,18 @@ both enabled as framework defaults via `config.load_defaults`:
 
 These help counter CSRF, in addition to our other measures.
 
-<!-- caseproc element HardenCSRFEv -->
+<!-- verocase element HardenCSRFEv -->
 <a id="evidence-hardencsrfev"></a>
 #### Evidence HardenCSRFEv: protect_from_forgery with per-form tokens and origin-header check, enabled via load_defaults
 
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Claim HardenCSRF](#claim-hardencsrf)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 `protect_from_forgery` with per-form tokens and origin-header check, enabled via `load_defaults`. See [../app/controllers/application_controller.rb](../app/controllers/application_controller.rb).
 
-<!-- caseproc element HardenRateIn -->
+<!-- verocase element HardenRateIn -->
 <a id="claim-hardenratein"></a>
 #### Claim HardenRateIn: Incoming rate limits enforced
 
@@ -3939,7 +3939,7 @@ Referenced by: **[Package Implementation](#package-implementation)**
 Supported by: **[Evidence HardenRateInEv](#evidence-hardenrateinev)**
 
 Supports: **[Claim Hardening](#claim-hardening)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Rate limits provide an automated partial
 countermeasure against denial-of-service and password-guessing attacks.
@@ -3977,18 +3977,18 @@ A client can always set X-Forwarded-For and try to spoof something,
 but those entries are always earlier in the list
 (so we can easily ignore them).
 
-<!-- caseproc element HardenRateInEv -->
+<!-- verocase element HardenRateInEv -->
 <a id="evidence-hardenrateinev"></a>
 #### Evidence HardenRateInEv: Rack::Attack rate limits on requests, logins, and signups by client IP address
 
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Claim HardenRateIn](#claim-hardenratein)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 `Rack::Attack` rate limits on requests, logins, and signups by client IP address. See [../config/initializers/rack_attack.rb](../config/initializers/rack_attack.rb).
 
-<!-- caseproc element HardenRateOut -->
+<!-- verocase element HardenRateOut -->
 <a id="claim-hardenrateout"></a>
 #### Claim HardenRateOut: Outgoing email rate limits enforced
 
@@ -3997,7 +3997,7 @@ Referenced by: **[Package Implementation](#package-implementation)**
 Supported by: **[Evidence HardenRateOutEv](#evidence-hardenrateoutev)**
 
 Supports: **[Claim Hardening](#claim-hardening)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 We enable rate limits on outgoing reminder emails.
 We send reminder emails to projects that have not updated their
@@ -4009,18 +4009,18 @@ a previously-reminded project.
 We have a hard rate limit on the number of emails we will send out each
 time; this keeps us from looking like a spammer.
 
-<!-- caseproc element HardenRateOutEv -->
+<!-- verocase element HardenRateOutEv -->
 <a id="evidence-hardenrateoutev"></a>
 #### Evidence HardenRateOutEv: projects_to_remind class method and hard limit on outgoing reminder email count
 
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Claim HardenRateOut](#claim-hardenrateout)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 `projects_to_remind` class method and hard limit on outgoing reminder email count. See [../app/models/project.rb](../app/models/project.rb).
 
-<!-- caseproc element HardenEmailEnc -->
+<!-- verocase element HardenEmailEnc -->
 <a id="claim-hardenemailenc"></a>
 #### Claim HardenEmailEnc: Email addresses encrypted
 
@@ -4029,7 +4029,7 @@ Referenced by: **[Package Implementation](#package-implementation)**
 Supported by: **[Evidence HardenEmailEncEv](#evidence-hardenemailencev)**
 
 Supports: **[Claim Hardening](#claim-hardening)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 We encrypt email addresses within the database, and never
 send the decryption or index keys to the database system.
@@ -4138,18 +4138,18 @@ As a result, email encryption only counters some specific attack methods.
 That said, we believe this encryption adds an additional layer of defense
 to protect email addresses from being revealed.
 
-<!-- caseproc element HardenEmailEncEv -->
+<!-- verocase element HardenEmailEncEv -->
 <a id="evidence-hardenemailencev"></a>
 #### Evidence HardenEmailEncEv: attr_encrypted and blind_index gems encrypt email addresses with AES-256-GCM and PBKDF2-HMAC-SHA256 index
 
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Claim HardenEmailEnc](#claim-hardenemailenc)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 `attr_encrypted` and `blind_index` gems encrypt email addresses with AES-256-GCM and PBKDF2-HMAC-SHA256 index. See [../app/models/user.rb](../app/models/user.rb).
 
-<!-- caseproc element HardenGravatar -->
+<!-- verocase element HardenGravatar -->
 <a id="claim-hardengravatar"></a>
 #### Claim HardenGravatar: Gravatar restricted
 
@@ -4158,7 +4158,7 @@ Referenced by: **[Package Implementation](#package-implementation)**
 Supported by: **[Evidence HardenGravatarEv](#evidence-hardengravatarev)**
 
 Supports: **[Claim Hardening](#claim-hardening)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 We use gravatar to provide user icons for local (custom) accounts.
 Many users have created gravatar icons, and those who have
@@ -4190,25 +4190,25 @@ since without this measure we would only expose MD5s of email addresses,
 and only in certain cases.  But we want to exceed expectations,
 and this is one way we do that.
 
-<!-- caseproc element HardenGravatarEv -->
+<!-- verocase element HardenGravatarEv -->
 <a id="evidence-hardengravatarev"></a>
 #### Evidence HardenGravatarEv: use_gravatar boolean controls whether gravatar MD5 hash is revealed for each local user
 
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Claim HardenGravatar](#claim-hardengravatar)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 `use_gravatar` boolean controls whether gravatar MD5 hash is revealed for each local user. See [../app/models/user.rb](../app/models/user.rb).
 
-<!-- caseproc element PubVulns -->
+<!-- verocase element PubVulns -->
 <a id="claim-pubvulns"></a>
 #### Claim PubVulns: Public vulnerability information monitored
 
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Claim Implementation](#claim-implementation)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 We want to counter all common vulnerabilities, not just those
 listed in the OWASP top 10 or those mentioned in the configuration guide.
@@ -4254,8 +4254,8 @@ To address the `target=` vulnerability, we:
 While this doesn't *guarantee* there is no vulnerability, this certainly
 reduces the risks.
 
-<!-- caseproc-config element_level = 3 -->
-<!-- caseproc element ReuseSec -->
+<!-- verocase-config element_level = 3 -->
+<!-- verocase element ReuseSec -->
 <a id="claim-reusesec"></a>
 ### Claim ReuseSec: Reused software is secure
 
@@ -4264,10 +4264,10 @@ Referenced by: **[Package Implementation](#package-implementation)**
 Supported by: **[Strategy ReuseStrat](#strategy-reusestrat)**, [Claim KnownVulns](#claim-knownvulns)
 
 Supports: **[Strategy CommonVulns](#strategy-commonvulns)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
-<!-- caseproc-config element_level = 4 -->
-<!-- caseproc element ReuseStrat -->
+<!-- verocase-config element_level = 4 -->
+<!-- verocase element ReuseStrat -->
 <a id="strategy-reusestrat"></a>
 #### Strategy ReuseStrat: Reuse is often appropriate and can be done securely
 
@@ -4276,7 +4276,7 @@ Referenced by: **[Package Implementation](#package-implementation)**
 Supported by: **[Claim ReuseReview](#claim-reusereview)**, [Claim ReuseAuth](#claim-reuseauth), [Claim PkgMgr](#claim-pkgmgr), [Claim SpecialAnalysis](#claim-specialanalysis)
 
 Supports: **[Claim ReuseSec](#claim-reusesec)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Reusing well-tested components is often more secure than writing equivalent
 custom code, provided the components are reviewed, authentic, and kept up to date
@@ -4289,15 +4289,15 @@ we would risk creating vulnerabilities in own code.
 See [CONTRIBUTING.md](../CONTRIBUTING.md) for more about how we
 reduce the risks of reused code.
 
-<!-- caseproc-config element_level = 4 -->
-<!-- caseproc element ReuseReview -->
+<!-- verocase-config element_level = 4 -->
+<!-- verocase element ReuseReview -->
 <a id="claim-reusereview"></a>
 #### Claim ReuseReview: Reused software is reviewed before use
 
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Strategy ReuseStrat](#strategy-reusestrat)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 We consider the code we reuse
 (e.g., libraries and frameworks) before adding them, to reduce
@@ -4329,15 +4329,15 @@ We use `license_finder` to ensure that the licenses are what we expect,
 and that the licenses do not change to an unusual license
 in later versions.
 
-<!-- caseproc-config element_level = 3 -->
-<!-- caseproc element ReuseAuth -->
+<!-- verocase-config element_level = 3 -->
+<!-- verocase element ReuseAuth -->
 <a id="claim-reuseauth"></a>
 ### Claim ReuseAuth: Reused software is authentic
 
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Strategy ReuseStrat](#strategy-reusestrat)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 We work to ensure that we are getting the authentic version of the software.
 We counter man-in-the-middle (MITM) attacks when downloading gems
@@ -4346,7 +4346,7 @@ standard place for loading gems (<https://rubygems.org>).
 We double-check names before we add them to the Gemfile to counter
 typosquatting attacks.
 
-<!-- caseproc element PkgMgr -->
+<!-- verocase element PkgMgr -->
 <a id="claim-pkgmgr"></a>
 ### Claim PkgMgr: Package managers used
 
@@ -4355,32 +4355,32 @@ Referenced by: **[Package Implementation](#package-implementation)**
 Supported by: **[Evidence PkgMgrEv](#evidence-pkgmgrev)**
 
 Supports: **[Strategy ReuseStrat](#strategy-reusestrat)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 We use package managers, primarily bundler, to download and track
 software with the correct version numbers.
 This makes it much easier to maintain the software later
 (see the maintenance process discussion).
 
-<!-- caseproc element PkgMgrEv -->
+<!-- verocase element PkgMgrEv -->
 <a id="evidence-pkgmgrev"></a>
 ### Evidence PkgMgrEv: Gemfile and Gemfile.lock manage all gem dependencies via bundler
 
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Claim PkgMgr](#claim-pkgmgr)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 `Gemfile` and `Gemfile.lock` manage all gem dependencies via bundler. See [../Gemfile](../Gemfile).
 
-<!-- caseproc element SpecialAnalysis -->
+<!-- verocase element SpecialAnalysis -->
 <a id="claim-specialanalysis"></a>
 ### Claim SpecialAnalysis: Special analysis justifies exceptions
 
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Strategy ReuseStrat](#strategy-reusestrat)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Sometimes tools or reports suggest we may have vulnerabilities
 in how we reuse components.
@@ -4503,22 +4503,22 @@ the development group could re-require rails.
 This would make later maintenance a little more difficult, with no
 obvious gain, so we have not done this.
 
-<!-- caseproc-config element_level = 4 -->
-<!-- caseproc element KnownVulns -->
+<!-- verocase-config element_level = 4 -->
+<!-- verocase element KnownVulns -->
 <a id="claim-knownvulns"></a>
 #### Claim KnownVulns: Known vulnerabilities detected
 
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Claim ReuseSec](#claim-reusesec)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Known vulnerabilities in reused software are detected using automated tools.
 See the [Maintenance](#claim-maintenance) section for details on bundle-audit
 and GitHub Dependabot, which automatically flag known vulnerabilities.
 
-<!-- caseproc-config element_level = 2 -->
-<!-- caseproc element Verification -->
+<!-- verocase-config element_level = 2 -->
+<!-- verocase element Verification -->
 <a id="claim-verification"></a>
 ## Claim Verification: Security in integration & verification
 
@@ -4527,7 +4527,7 @@ Referenced by: **[Package Verification](#package-verification)**, [Package Secur
 Supported by: **[Strategy VerifStrat](#strategy-verifstrat)**
 
 Supports: [Claim TechProcesses](#claim-techprocesses)
-<!-- end caseproc -->
+<!-- end verocase -->
 
 When software is modified, it is reviewed by the
 'rake' process, which performs a number of checks and tests.
@@ -4650,8 +4650,8 @@ See the [dawnscanner.md](./dawnscanner.md) file for more information.
 These steps cannot *guarantee* that there are no vulnerabilities,
 but we think they greatly reduce the risks.
 
-<!-- caseproc-config element_level = 3 -->
-<!-- caseproc element VerifStrat -->
+<!-- verocase-config element_level = 3 -->
+<!-- verocase element VerifStrat -->
 <a id="strategy-verifstrat"></a>
 ### Strategy VerifStrat: Static & dynamic verifications are performed and enforced on all integrations, reducing risk
 
@@ -4660,14 +4660,14 @@ Referenced by: **[Package Verification](#package-verification)**
 Supported by: **[Claim VerifSteps](#claim-verifsteps)**, [Claim CIRequired](#claim-cirequired)
 
 Supports: **[Claim Verification](#claim-verification)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Static and dynamic verifications are performed and enforced on all integrations.
 By combining multiple verification approaches and requiring CI to pass before
 deployment, we systematically reduce the risk of introducing vulnerabilities.
 
-<!-- caseproc-config element_level = 3 -->
-<!-- caseproc element VerifSteps -->
+<!-- verocase-config element_level = 3 -->
+<!-- verocase element VerifSteps -->
 <a id="claim-verifsteps"></a>
 ### Claim VerifSteps: Verification steps reduce risk
 
@@ -4676,13 +4676,13 @@ Referenced by: **[Package Verification](#package-verification)**
 Supported by: **[Claim StaticVerif](#claim-staticverif)**, [Claim DynamicVerif](#claim-dynamicverif)
 
 Supports: **[Strategy VerifStrat](#strategy-verifstrat)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Multiple verification steps are performed on every change.
 See the [Claim Verification](#claim-verification) section for the full list,
 including static analysis, FLOSS checking, automated testing, and negative testing.
 
-<!-- caseproc element StaticVerif -->
+<!-- verocase element StaticVerif -->
 <a id="claim-staticverif"></a>
 ### Claim StaticVerif: Static verifications are performed
 
@@ -4691,14 +4691,14 @@ Referenced by: **[Package Verification](#package-verification)**
 Supported by: **[Claim StyleChecks](#claim-stylechecks)**, [Claim WeaknessAnalysis](#claim-weaknessanalysis), [Claim FLOSSVerif](#claim-flossverif)
 
 Supports: **[Claim VerifSteps](#claim-verifsteps)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Static verifications — style checks, source code weakness analysis, and FLOSS
 verification — are run on every commit.
 See [Claim Verification](#claim-verification) for details on the specific tools.
 
-<!-- caseproc-config element_level = 4 -->
-<!-- caseproc element StyleChecks -->
+<!-- verocase-config element_level = 4 -->
+<!-- verocase element StyleChecks -->
 <a id="claim-stylechecks"></a>
 #### Claim StyleChecks: Style checks pass
 
@@ -4707,24 +4707,24 @@ Referenced by: **[Package Verification](#package-verification)**
 Supported by: **[Evidence StyleEv](#evidence-styleev)**
 
 Supports: **[Claim StaticVerif](#claim-staticverif)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Style checks (rubocop, rails_best_practices, ESLint) are run to maintain code
 quality, catch problematic constructs, and detect misleading indentation.
 See the style checking bullet in [Claim Verification](#claim-verification).
 
-<!-- caseproc element StyleEv -->
+<!-- verocase element StyleEv -->
 <a id="evidence-styleev"></a>
 #### Evidence StyleEv: Style checkers as pronto runners in Gemfile: eslint, rails_best_practices, rubocop
 
 Referenced by: **[Package Verification](#package-verification)**
 
 Supports: **[Claim StyleChecks](#claim-stylechecks)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Style checkers as pronto runners in Gemfile: eslint, rails_best_practices, rubocop. See [../.circleci/config.yml](../.circleci/config.yml).
 
-<!-- caseproc element WeaknessAnalysis -->
+<!-- verocase element WeaknessAnalysis -->
 <a id="claim-weaknessanalysis"></a>
 #### Claim WeaknessAnalysis: Source code analyzed for weaknesses & all issues resolved
 
@@ -4733,24 +4733,24 @@ Referenced by: **[Package Verification](#package-verification)**
 Supported by: **[Evidence BrakemanEv](#evidence-brakemanev)**
 
 Supports: **[Claim StaticVerif](#claim-staticverif)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Source code weakness analyzers (Brakeman, CodeQL) scan for security
 vulnerabilities in the custom Ruby and JavaScript code.
 See the source code weakness analyzer bullet in [Claim Verification](#claim-verification).
 
-<!-- caseproc element BrakemanEv -->
+<!-- verocase element BrakemanEv -->
 <a id="evidence-brakemanev"></a>
 #### Evidence BrakemanEv: Brakeman source code weakness analyzer
 
 Referenced by: **[Package Verification](#package-verification)**
 
 Supports: **[Claim WeaknessAnalysis](#claim-weaknessanalysis)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Brakeman source code weakness analyzer. See [../.github/workflows/main.yml](../.github/workflows/main.yml).
 
-<!-- caseproc element FLOSSVerif -->
+<!-- verocase element FLOSSVerif -->
 <a id="claim-flossverif"></a>
 #### Claim FLOSSVerif: All reused components are verified as FLOSS
 
@@ -4759,36 +4759,36 @@ Referenced by: **[Package Verification](#package-verification)**
 Supported by: **[Evidence LicenseFinderEv](#evidence-licensefinderev)**, [Evidence FOSSAEv](#evidence-fossaev)
 
 Supports: **[Claim StaticVerif](#claim-staticverif)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 All required reused components are verified as Free/Libre and Open Source Software
 (FLOSS) using license_finder and FOSSA.
 See the FLOSS bullet in [Claim Verification](#claim-verification).
 
-<!-- caseproc element LicenseFinderEv -->
+<!-- verocase element LicenseFinderEv -->
 <a id="evidence-licensefinderev"></a>
 #### Evidence LicenseFinderEv: license_finder
 
 Referenced by: **[Package Verification](#package-verification)**
 
 Supports: **[Claim FLOSSVerif](#claim-flossverif)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 `license_finder`. See [../.circleci/config.yml](../.circleci/config.yml).
 
-<!-- caseproc element FOSSAEv -->
+<!-- verocase element FOSSAEv -->
 <a id="evidence-fossaev"></a>
 #### Evidence FOSSAEv: FOSSA check
 
 Referenced by: **[Package Verification](#package-verification)**
 
 Supports: **[Claim FLOSSVerif](#claim-flossverif)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 FOSSA check. See [https://github.com/coreinfrastructure/best-practices-badge/settings/](https://github.com/coreinfrastructure/best-practices-badge/settings/).
 
-<!-- caseproc-config element_level = 3 -->
-<!-- caseproc element DynamicVerif -->
+<!-- verocase-config element_level = 3 -->
+<!-- verocase element DynamicVerif -->
 <a id="claim-dynamicverif"></a>
 ### Claim DynamicVerif: Dynamic verifications are performed
 
@@ -4797,13 +4797,13 @@ Referenced by: **[Package Verification](#package-verification)**
 Supported by: **[Claim TestCoverage](#claim-testcoverage)**, [Claim NegTests](#claim-negtests)
 
 Supports: **[Claim VerifSteps](#claim-verifsteps)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Dynamic verifications — automated tests and negative testing — are run
 on every commit. See [Claim Verification](#claim-verification) for details.
 
-<!-- caseproc-config element_level = 4 -->
-<!-- caseproc element TestCoverage -->
+<!-- verocase-config element_level = 4 -->
+<!-- verocase element TestCoverage -->
 <a id="claim-testcoverage"></a>
 #### Claim TestCoverage: Automated testing performed with excellent statement coverage
 
@@ -4812,24 +4812,24 @@ Referenced by: **[Package Verification](#package-verification)**
 Supported by: **[Evidence CITestEv](#evidence-citestev)**
 
 Supports: **[Claim DynamicVerif](#claim-dynamicverif)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 The automated test suite achieves 100% statement coverage (policy requires ≥90%).
 This strong coverage makes it easier to update components and detect regressions.
 See the test coverage bullet in [Claim Verification](#claim-verification).
 
-<!-- caseproc element CITestEv -->
+<!-- verocase element CITestEv -->
 <a id="evidence-citestev"></a>
 #### Evidence CITestEv: Automated tests run by CI
 
 Referenced by: **[Package Verification](#package-verification)**
 
 Supports: **[Claim TestCoverage](#claim-testcoverage)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Automated tests run by CI. See [https://codecov.io/gh/coreinfrastructure/best-practices-badge](https://codecov.io/gh/coreinfrastructure/best-practices-badge).
 
-<!-- caseproc element NegTests -->
+<!-- verocase element NegTests -->
 <a id="claim-negtests"></a>
 #### Claim NegTests: Negative tests failed as desired
 
@@ -4838,25 +4838,25 @@ Referenced by: **[Package Verification](#package-verification)**
 Supported by: **[Evidence NegTestsEv](#evidence-negtestsev)**
 
 Supports: **[Claim DynamicVerif](#claim-dynamicverif)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Negative tests verify that unauthorized actions correctly fail,
 covering wrong passwords, unauthorized project edits, and email address leaks.
 See the negative testing bullet in [Claim Verification](#claim-verification).
 
-<!-- caseproc element NegTestsEv -->
+<!-- verocase element NegTestsEv -->
 <a id="evidence-negtestsev"></a>
 #### Evidence NegTestsEv: Negative test suite
 
 Referenced by: **[Package Verification](#package-verification)**
 
 Supports: **[Claim NegTests](#claim-negtests)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Negative test suite. See [../test/](../test/).
 
-<!-- caseproc-config element_level = 3 -->
-<!-- caseproc element CIRequired -->
+<!-- verocase-config element_level = 3 -->
+<!-- verocase element CIRequired -->
 <a id="claim-cirequired"></a>
 ### Claim CIRequired: Successful verification required by continuous integration before deployment
 
@@ -4865,25 +4865,25 @@ Referenced by: **[Package Verification](#package-verification)**
 Supported by: **[Evidence CIConfigEv](#evidence-ciconfigev)**
 
 Supports: **[Strategy VerifStrat](#strategy-verifstrat)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 All changes must pass continuous integration checks before being deployed.
 The CI system runs the full verification suite (static analysis, tests, etc.)
 on every integration to the master branch.
 See the CI configuration file `../.circleci/config.yml`.
 
-<!-- caseproc element CIConfigEv -->
+<!-- verocase element CIConfigEv -->
 <a id="evidence-ciconfigev"></a>
 ### Evidence CIConfigEv: CI configuration
 
 Referenced by: **[Package Verification](#package-verification)**
 
 Supports: **[Claim CIRequired](#claim-cirequired)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 CI configuration. See [../.circleci/config.yml](../.circleci/config.yml).
 
-<!-- caseproc element Deployment -->
+<!-- verocase element Deployment -->
 <a id="claim-deployment"></a>
 ### Claim Deployment: Security in transition & operation
 
@@ -4892,7 +4892,7 @@ Referenced by: **[Package Deployment](#package-deployment)**, [Package Security]
 Supported by: **[Claim DeployProvider](#claim-deployprovider)**, [Claim Detection](#claim-detection), [Claim OnlineCheckers](#claim-onlinecheckers), [Claim RecoveryPlan](#claim-recoveryplan)
 
 Supports: [Claim TechProcesses](#claim-techprocesses)
-<!-- end caseproc -->
+<!-- end verocase -->
 
 To be secure, the software has to be secure as actually transitioned
 (deployed) and operated securely.
@@ -4915,8 +4915,8 @@ a secure site.
 In addition, we have detection and recovery processes
 that help us limit damage.
 
-<!-- caseproc-config element_level = 3 -->
-<!-- caseproc element DeployProvider -->
+<!-- verocase-config element_level = 3 -->
+<!-- verocase element DeployProvider -->
 <a id="claim-deployprovider"></a>
 ### Claim DeployProvider: Deployment provider maintains security
 
@@ -4925,7 +4925,7 @@ Referenced by: **[Package Deployment](#package-deployment)**
 Supported by: **[Evidence HerokuSecEv](#evidence-herokusecev)**
 
 Supports: **[Claim Deployment](#claim-deployment)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 We deploy via a cloud provider who takes a number of steps
 to keep our system secure.
@@ -4943,25 +4943,25 @@ People can log in via GitHub accounts; in those cases we depend
 on GitHub to correctly authenticate users.
 [GitHub takes steps to keep itself secure](https://help.github.com/articles/github-security/).
 
-<!-- caseproc element HerokuSecEv -->
+<!-- verocase element HerokuSecEv -->
 <a id="evidence-herokusecev"></a>
 ### Evidence HerokuSecEv: Heroku security policy describes physical and environmental safeguards
 
 Referenced by: **[Package Deployment](#package-deployment)**
 
 Supports: **[Claim DeployProvider](#claim-deployprovider)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Heroku security policy describes physical and environmental safeguards. See [https://www.heroku.com/policy/security](https://www.heroku.com/policy/security).
 
-<!-- caseproc element OnlineCheckers -->
+<!-- verocase element OnlineCheckers -->
 <a id="claim-onlinecheckers"></a>
 ### Claim OnlineCheckers: Online security checkers are used
 
 Referenced by: **[Package Deployment](#package-deployment)**
 
 Supports: **[Claim Deployment](#claim-deployment)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Various online checkers give us an overall clean bill of health.
 Most of the checkers test our HTTPS (TLS) configuration and
@@ -4997,7 +4997,7 @@ For the main bestpractices.coreinfrastructure.org site we have:
   result in a slower initial connection.  Thus, we don't plan to worry
   about the missing test.
 
-<!-- caseproc element Detection -->
+<!-- verocase element Detection -->
 <a id="claim-detection"></a>
 ### Claim Detection: Threats and anomalies are detected
 
@@ -5006,7 +5006,7 @@ Referenced by: **[Package Deployment](#package-deployment)**
 Supported by: **[Claim ExtMonitor](#claim-extmonitor)**, [Claim IntLogging](#claim-intlogging)
 
 Supports: **[Claim Deployment](#claim-deployment)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 We have various detection mechanisms to detect problems.
 There are two approaches to detection:
@@ -5021,8 +5021,8 @@ The external approaches do not have access
 to as much information, but they see the site as a "typical" user
 would, so combining these approaches has its advantages.
 
-<!-- caseproc-config element_level = 4 -->
-<!-- caseproc element IntLogging -->
+<!-- verocase-config element_level = 4 -->
+<!-- verocase element IntLogging -->
 <a id="claim-intlogging"></a>
 #### Claim IntLogging: Internal logging and anomaly detection is in place
 
@@ -5031,7 +5031,7 @@ Referenced by: **[Package Deployment](#package-deployment)**
 Supported by: **[Evidence IntLoggingEv](#evidence-intloggingev)**
 
 Supports: **[Claim Detection](#claim-detection)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 This is a [12 factor app](https://12factor.net/); as such,
 events are streamed to standard out for logging.
@@ -5066,18 +5066,18 @@ We intentionally omit here, in this public document, details about
 how logs are stored and how anomaly detection is done to
 detect and counter things.
 
-<!-- caseproc element IntLoggingEv -->
+<!-- verocase element IntLoggingEv -->
 <a id="evidence-intloggingev"></a>
 #### Evidence IntLoggingEv: filter_parameter_logging.rb excludes passwords from logs; events stream to stdout per 12-factor app
 
 Referenced by: **[Package Deployment](#package-deployment)**
 
 Supports: **[Claim IntLogging](#claim-intlogging)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 `filter_parameter_logging.rb` excludes passwords from logs; events stream to stdout per 12-factor app. See [../config/initializers/filter_parameter_logging.rb](../config/initializers/filter_parameter_logging.rb).
 
-<!-- caseproc element ExtMonitor -->
+<!-- verocase element ExtMonitor -->
 <a id="claim-extmonitor"></a>
 #### Claim ExtMonitor: External monitoring is in place
 
@@ -5086,33 +5086,33 @@ Referenced by: **[Package Deployment](#package-deployment)**
 Supported by: **[Evidence ExtMonitorEv](#evidence-extmonitorev)**
 
 Supports: **[Claim Detection](#claim-detection)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 We are also alerted if the website goes down.
 
 One of those mechanisms is uptime robot:
 <https://uptimerobot.com/dashboard>
 
-<!-- caseproc element ExtMonitorEv -->
+<!-- verocase element ExtMonitorEv -->
 <a id="evidence-extmonitorev"></a>
 #### Evidence ExtMonitorEv: UptimeRobot provides external alerting when the website goes down
 
 Referenced by: **[Package Deployment](#package-deployment)**
 
 Supports: **[Claim ExtMonitor](#claim-extmonitor)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 UptimeRobot provides external alerting when the website goes down. See [https://uptimerobot.com/dashboard](https://uptimerobot.com/dashboard).
 
-<!-- caseproc-config element_level = 3 -->
-<!-- caseproc element RecoveryPlan -->
+<!-- verocase-config element_level = 3 -->
+<!-- verocase element RecoveryPlan -->
 <a id="claim-recoveryplan"></a>
 ### Claim RecoveryPlan: Recovery plan including backups is in place
 
 Referenced by: **[Package Deployment](#package-deployment)**
 
 Supports: **[Claim Deployment](#claim-deployment)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Once we detect that there is a problem, we have plans
 and mechanisms in place to help us recover,
@@ -5166,8 +5166,8 @@ The update process to the "staging" site backs up the production site
 to the staging site.  This provides an additional backup, and also
 serves as a check to make sure the backup and restore processes are working.
 
-<!-- caseproc-config element_level = 2 -->
-<!-- caseproc element Maintenance -->
+<!-- verocase-config element_level = 2 -->
+<!-- verocase element Maintenance -->
 <a id="claim-maintenance"></a>
 ## Claim Maintenance: Security in maintenance
 
@@ -5176,7 +5176,7 @@ Referenced by: **[Package Maintenance](#package-maintenance)**, [Package Securit
 Supported by: **[Claim AutoDetect](#claim-autodetect)**, [Claim RapidUpdate](#claim-rapidupdate)
 
 Supports: [Claim TechProcesses](#claim-techprocesses)
-<!-- end caseproc -->
+<!-- end verocase -->
 
 What many call the "maintenance" or "sustainment" process is simply
 continuous execution of all our processes.
@@ -5195,8 +5195,8 @@ In some cases a reused component might appear vulnerable but is not;
 for more discussion, including specific examples, see the
 section on [reuse](#reuse).
 
-<!-- caseproc-config element_level = 3 -->
-<!-- caseproc element AutoDetect -->
+<!-- verocase-config element_level = 3 -->
+<!-- verocase element AutoDetect -->
 <a id="claim-autodetect"></a>
 ### Claim AutoDetect: Vulnerabilities are auto-detected when publicly reported
 
@@ -5205,7 +5205,7 @@ Referenced by: **[Package Maintenance](#package-maintenance)**
 Supported by: **[Evidence AutoDetectBundleEv](#evidence-autodetectbundleev)**, [Evidence AutoDetectGitHubEv](#evidence-autodetectgithubev)
 
 Supports: **[Claim Maintenance](#claim-maintenance)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 We use multiple processes for automatically detecting when the components we
 use have publicly known vulnerabilities.
@@ -5268,36 +5268,36 @@ See our commit `ccdd0e007ee7d6aa` for details.
 This is not ideal, but it's a real-world situation, and we believe
 this approach completely counters the vulnerability.
 
-<!-- caseproc element AutoDetectBundleEv -->
+<!-- verocase element AutoDetectBundleEv -->
 <a id="evidence-autodetectbundleev"></a>
 ### Evidence AutoDetectBundleEv: bundle-audit checks all gem versions against NVD vulnerability database on every rake run
 
 Referenced by: **[Package Maintenance](#package-maintenance)**
 
 Supports: **[Claim AutoDetect](#claim-autodetect)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 `bundle-audit` checks all gem versions against NVD vulnerability database on every rake run. See [../Gemfile.lock](../Gemfile.lock).
 
-<!-- caseproc element AutoDetectGitHubEv -->
+<!-- verocase element AutoDetectGitHubEv -->
 <a id="evidence-autodetectgithubev"></a>
 ### Evidence AutoDetectGitHubEv: GitHub Dependabot alerts and automated pull requests for vulnerable dependencies
 
 Referenced by: **[Package Maintenance](#package-maintenance)**
 
 Supports: **[Claim AutoDetect](#claim-autodetect)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 GitHub Dependabot alerts and automated pull requests for vulnerable dependencies. See [../.github/dependabot.yml](../.github/dependabot.yml).
 
-<!-- caseproc element RapidUpdate -->
+<!-- verocase element RapidUpdate -->
 <a id="claim-rapidupdate"></a>
 ### Claim RapidUpdate: Rapid update process is in place
 
 Referenced by: **[Package Maintenance](#package-maintenance)**
 
 Supports: **[Claim Maintenance](#claim-maintenance)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 We also have a process for quickly responding to alerts
 of publicly known vulnerabilities, so that we can quickly update,
@@ -5346,8 +5346,8 @@ to update those components and restart as necessary when
 a vulnerability in those components is discovered
 (that service is one of the key reasons we pay them!).
 
-<!-- caseproc-config element_level = 2 -->
-<!-- caseproc element NonTechnical -->
+<!-- verocase-config element_level = 2 -->
+<!-- verocase element NonTechnical -->
 <a id="claim-nontechnical"></a>
 ## Claim NonTechnical: Security implemented by other life cycle processes
 
@@ -5356,7 +5356,7 @@ Referenced by: **[Package NonTechnical](#package-nontechnical)**, [Package Secur
 Supported by: **[Claim AgreementProc](#claim-agreementproc)**, [Claim OrgProc](#claim-orgproc), [Claim TechMgmt](#claim-techmgmt)
 
 Supports: [Strategy Processes](#strategy-processes)
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Security is also implemented through non-technical lifecycle processes.
 Following ISO/IEC/IEEE 12207, this includes agreement processes
@@ -5364,7 +5364,7 @@ Following ISO/IEC/IEEE 12207, this includes agreement processes
 and human resources), and technical management processes
 (planning, risk, configuration management, and QA).
 
-<!-- caseproc element AgreementProc -->
+<!-- verocase element AgreementProc -->
 <a id="claim-agreementproc"></a>
 ## Claim AgreementProc: Agreement processes implement security
 
@@ -5373,13 +5373,13 @@ Referenced by: **[Package NonTechnical](#package-nontechnical)**
 Supported by: **[Claim Acquisition](#claim-acquisition)**
 
 Supports: **[Claim NonTechnical](#claim-nontechnical)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Agreement processes (contracts with external providers) implement security
 by establishing security responsibilities with our deployment provider (Heroku)
 and CDN (Fastly).
 
-<!-- caseproc element OrgProc -->
+<!-- verocase element OrgProc -->
 <a id="claim-orgproc"></a>
 ## Claim OrgProc: Organizational project-enabling processes implement security
 
@@ -5388,14 +5388,14 @@ Referenced by: **[Package NonTechnical](#package-nontechnical)**
 Supported by: **[Claim Infrastructure](#claim-infrastructure)**, [Claim HumanRes](#claim-humanres)
 
 Supports: **[Claim NonTechnical](#claim-nontechnical)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Organizational project-enabling processes implement security through
 infrastructure management (securing development and test environments)
 and human resource management (ensuring developers have security expertise).
 
-<!-- caseproc-config element_level = 2 -->
-<!-- caseproc element Acquisition -->
+<!-- verocase-config element_level = 2 -->
+<!-- verocase element Acquisition -->
 <a id="claim-acquisition"></a>
 ## Claim Acquisition: Acquisition process implements security
 
@@ -5404,7 +5404,7 @@ Referenced by: **[Package NonTechnical](#package-nontechnical)**
 Supported by: **[Claim Contracts](#claim-contracts)**
 
 Supports: **[Claim AgreementProc](#claim-agreementproc)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 The system depends on a deployment provider (Heroku) and
 content distribution network (CDN) (Fastly).
@@ -5412,15 +5412,15 @@ We have contracts with them, which provide us with some leverage
 should they fail to do what they say and/or don't quickly fix
 security-related problems.
 
-<!-- caseproc-config element_level = 3 -->
-<!-- caseproc element Contracts -->
+<!-- verocase-config element_level = 3 -->
+<!-- verocase element Contracts -->
 <a id="claim-contracts"></a>
 ### Claim Contracts: Contracts with deployment and CDN provider address security
 
 Referenced by: **[Package NonTechnical](#package-nontechnical)**
 
 Supports: **[Claim Acquisition](#claim-acquisition)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 We have contracts with our deployment provider (Heroku) and CDN (Fastly)
 that address security responsibilities.
@@ -5428,8 +5428,8 @@ These contracts include security policy commitments (such as
 [Heroku's security policy](https://www.heroku.com/policy/security))
 and provide us recourse if they fail to address security-related problems promptly.
 
-<!-- caseproc-config element_level = 2 -->
-<!-- caseproc element Infrastructure -->
+<!-- verocase-config element_level = 2 -->
+<!-- verocase element Infrastructure -->
 <a id="claim-infrastructure"></a>
 ## Claim Infrastructure: Infrastructure management implements security
 
@@ -5438,17 +5438,17 @@ Referenced by: **[Package NonTechnical](#package-nontechnical)**
 Supported by: **[Claim DevEnvSec](#claim-devenvsec)**, [Claim CINoData](#claim-cinodata)
 
 Supports: **[Claim OrgProc](#claim-orgproc)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
-<!-- caseproc-config element_level = 3 -->
-<!-- caseproc element DevEnvSec -->
+<!-- verocase-config element_level = 3 -->
+<!-- verocase element DevEnvSec -->
 <a id="claim-devenvsec"></a>
 ### Claim DevEnvSec: Development & test environments are protected from attack
 
 Referenced by: **[Package NonTechnical](#package-nontechnical)**
 
 Supports: **[Claim Infrastructure](#claim-infrastructure)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Subversion of the development environment can easily lead to
 a compromise of the resulting system.
@@ -5478,14 +5478,14 @@ we use the git integrity recommendations from Eric Myhre that check all
 git objects transferred from an external site into our development environment.
 This sets "fsckObjects = true" for transfer (thus also for fetch and receive).
 
-<!-- caseproc element CINoData -->
+<!-- verocase element CINoData -->
 <a id="claim-cinodata"></a>
 ### Claim CINoData: CI automated test environment does not contain protected data
 
 Referenced by: **[Package NonTechnical](#package-nontechnical)**
 
 Supports: **[Claim Infrastructure](#claim-infrastructure)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 The continuous integration (CI) test environment runs on CircleCI,
 and does *not* have direct access to the real-world data.
@@ -5694,8 +5694,8 @@ in the environment of any job that executes unreviewed code, and that
 the configuration enforcing this isolation cannot itself be changed
 without security-focused review.
 
-<!-- caseproc-config element_level = 2 -->
-<!-- caseproc element HumanRes -->
+<!-- verocase-config element_level = 2 -->
+<!-- verocase element HumanRes -->
 <a id="claim-humanres"></a>
 ## Claim HumanRes: Human resource management implements security
 
@@ -5704,7 +5704,7 @@ Referenced by: **[Package NonTechnical](#package-nontechnical)**
 Supported by: **[Claim DevKnowledge](#claim-devknowledge)**
 
 Supports: **[Claim OrgProc](#claim-orgproc)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 ISO/IEC/IEEE 12207 has a "human resource management" process;
 this is the process that focuses on the people involved.
@@ -5744,15 +5744,15 @@ and has been involved in software development for many years.
 He has reviewed and is familiar with the security assurance case
 provided here.
 
-<!-- caseproc-config element_level = 3 -->
-<!-- caseproc element DevKnowledge -->
+<!-- verocase-config element_level = 3 -->
+<!-- verocase element DevKnowledge -->
 <a id="claim-devknowledge"></a>
 ### Claim DevKnowledge: Key developers know how to develop secure software
 
 Referenced by: **[Package NonTechnical](#package-nontechnical)**
 
 Supports: **[Claim HumanRes](#claim-humanres)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 The key developers have relevant qualifications in secure software development,
 as described in the [HumanRes](#claim-humanres) section above.
@@ -5760,8 +5760,8 @@ The lead developer (David A. Wheeler) wrote the book
 [Secure Programming HOWTO](http://www.dwheeler.com/secure-programs/) and
 teaches a graduate course on developing secure software.
 
-<!-- caseproc-config element_level = 2 -->
-<!-- caseproc element TechMgmt -->
+<!-- verocase-config element_level = 2 -->
+<!-- verocase element TechMgmt -->
 <a id="claim-techmgmt"></a>
 ## Claim TechMgmt: Technical management processes implement security
 
@@ -5770,44 +5770,44 @@ Referenced by: **[Package NonTechnical](#package-nontechnical)**
 Supported by: **[Claim ProjectPlanning](#claim-projectplanning)**, [Claim RiskMgmt](#claim-riskmgmt), [Claim ConfigMgmt](#claim-configmgmt), [Claim QA](#claim-qa)
 
 Supports: **[Claim NonTechnical](#claim-nontechnical)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Technical management processes (project planning, risk management, configuration
 management, and quality assurance) implement security at the project level.
 These processes ensure security is planned for, risks are tracked, configuration
 is controlled, and quality is maintained.
 
-<!-- caseproc element ProjectPlanning -->
+<!-- verocase element ProjectPlanning -->
 <a id="claim-projectplanning"></a>
 ## Claim ProjectPlanning: Project planning addresses security
 
 Referenced by: **[Package NonTechnical](#package-nontechnical)**
 
 Supports: **[Claim TechMgmt](#claim-techmgmt)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 We plan development, and always consider security as we develop new plans.
 
-<!-- caseproc element RiskMgmt -->
+<!-- verocase element RiskMgmt -->
 <a id="claim-riskmgmt"></a>
 ## Claim RiskMgmt: Risk management addresses security
 
 Referenced by: **[Package NonTechnical](#package-nontechnical)**
 
 Supports: **[Claim TechMgmt](#claim-techmgmt)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 The primary risk we're concerned about is security, so we have developed
 the assurance case here to determine how to counter that risk.
 
-<!-- caseproc element QA -->
+<!-- verocase element QA -->
 <a id="claim-qa"></a>
 ## Claim QA: Quality assurance addresses security
 
 Referenced by: **[Package NonTechnical](#package-nontechnical)**
 
 Supports: **[Claim TechMgmt](#claim-techmgmt)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 We continuously review our processes and their results to see if there
 are systemic problems, and if so, try to address them.
@@ -5815,7 +5815,7 @@ In particular, we try to maximize automation, including automated tests
 and automated security analysis, to reduce the risk that the deployed
 system will produce incorrect results or will be insecure.
 
-<!-- caseproc element ConfigMgmt -->
+<!-- verocase element ConfigMgmt -->
 <a id="claim-configmgmt"></a>
 ## Claim ConfigMgmt: Configuration management addresses security
 
@@ -5824,7 +5824,7 @@ Referenced by: **[Package NonTechnical](#package-nontechnical)**
 Supported by: **[Evidence ConfigMgmtEv](#evidence-configmgmtev)**
 
 Supports: **[Claim TechMgmt](#claim-techmgmt)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 See the [governance](./governance.md) document
 for information on how the project is governed, including
@@ -5839,18 +5839,18 @@ authentication via GitHub.
 We use GitHub for managing the source code and issue tracker; it
 has an authentication system for this purpose.
 
-<!-- caseproc element ConfigMgmtEv -->
+<!-- verocase element ConfigMgmtEv -->
 <a id="evidence-configmgmtev"></a>
 ## Evidence ConfigMgmtEv: Git version control via GitHub with authenticated access; governance documented
 
 Referenced by: **[Package NonTechnical](#package-nontechnical)**
 
 Supports: **[Claim ConfigMgmt](#claim-configmgmt)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 Git version control via GitHub with authenticated access; governance documented. See [../governance.md](../governance.md).
 
-<!-- caseproc element Controls -->
+<!-- verocase element Controls -->
 <a id="claim-controls"></a>
 ## Claim Controls: Certifications & controls provide confidence in operating results
 
@@ -5859,10 +5859,10 @@ Referenced by: **[Package Controls](#package-controls)**, [Package Security](#pa
 Supported by: **[Claim CIIBadge](#claim-ciibadge)**
 
 Supports: [Claim Security](#claim-security)
-<!-- end caseproc -->
+<!-- end verocase -->
 
-<!-- caseproc-config element_level = 3 -->
-<!-- caseproc element CIIBadge -->
+<!-- verocase-config element_level = 3 -->
+<!-- verocase element CIIBadge -->
 <a id="claim-ciibadge"></a>
 ### Claim CIIBadge: CII Best Practices Badge certification is obtained
 
@@ -5871,7 +5871,7 @@ Referenced by: **[Package Controls](#package-controls)**
 Supported by: **[Evidence CIIBadgeEv](#evidence-ciibadgeev)**
 
 Supports: **[Claim Controls](#claim-controls)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 One way to increase confidence in an application is to pass
 relevant certifcations.  In our case, the BadgeApp is the result
@@ -5888,14 +5888,14 @@ You can see the
 [CII Best Practices Badge entry for the BadgeApp](https://bestpractices.coreinfrastructure.org/en/projects/1/0).
 Note that we achieve a gold badge.
 
-<!-- caseproc element CIIBadgeEv -->
+<!-- verocase element CIIBadgeEv -->
 <a id="evidence-ciibadgeev"></a>
 ### Evidence CIIBadgeEv: BadgeApp achieves gold CII Best Practices Badge
 
 Referenced by: **[Package Controls](#package-controls)**
 
 Supports: **[Claim CIIBadge](#claim-ciibadge)**
-<!-- end caseproc -->
+<!-- end verocase -->
 
 BadgeApp achieves gold CII Best Practices Badge. See [https://bestpractices.coreinfrastructure.org/en/projects/1](https://bestpractices.coreinfrastructure.org/en/projects/1).
 

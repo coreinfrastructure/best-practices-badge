@@ -48,6 +48,8 @@ The figures are simply a summary; the text below provides the details.
 ### Assurance case structure
 
 <!-- verocase package * -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="package-security"></a>
 ### Package Security: The system is adequately secure against moderate threats
 
@@ -1253,6 +1255,8 @@ Here are some conventions we use:
 
 <!-- verocase-config element_level = 1 -->
 <!-- verocase element Security -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-security"></a>
 # Claim Security: The system is adequately secure against moderate threats
 
@@ -1267,6 +1271,8 @@ The following sections each address a specific lifecycle process or concern.
 
 <!-- verocase-config element_level = 2 -->
 <!-- verocase element Processes -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="strategy-processes"></a>
 ## Strategy Processes: Security is argued by examining all lifecycle processes
 
@@ -1283,6 +1289,8 @@ This ensures comprehensive coverage across the entire development and operation 
 
 <!-- verocase-config element_level = 2 -->
 <!-- verocase element TechProcesses -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-techprocesses"></a>
 ## Claim TechProcesses: Technical lifecycle processes implement security
 
@@ -1299,6 +1307,8 @@ These are described in the following sections.
 
 <!-- verocase-config element_level = 2 -->
 <!-- verocase element Requirements -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-requirements"></a>
 ## Claim Requirements: Security requirements are identified and met
 
@@ -1333,6 +1343,8 @@ to bypass the mechanisms discussed below.
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element SecTriad -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="strategy-sectriad"></a>
 ### Strategy SecTriad: Security triad (CIA) and access control address the requirements
 
@@ -1349,6 +1361,8 @@ Each component is argued separately in the following sub-claims.
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element Confidentiality -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-confidentiality"></a>
 ### Claim Confidentiality: Confidentiality is maintained
 
@@ -1365,6 +1379,8 @@ user privacy. These aspects are argued separately in the sub-claims below.
 
 <!-- verocase-config element_level = 4 -->
 <!-- verocase element UserPrivacy -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-userprivacy"></a>
 #### Claim UserPrivacy: User privacy is maintained
 
@@ -1565,6 +1581,8 @@ a Virtual Private Network (VPN), or an anonymity network such as Tor
 to provide additional privacy when they interact with the BadgeApp.
 
 <!-- verocase element MostDataPublic -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-mostdatapublic"></a>
 #### Claim MostDataPublic: Almost all data is not confidential
 
@@ -1598,6 +1616,8 @@ We *do* consider this data higher-value and protect them specially.
 
 <!-- verocase-config element_level = 4 -->
 <!-- verocase element NonPublicData -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-nonpublicdata"></a>
 #### Claim NonPublicData: Non-public data is kept confidential
 
@@ -1613,6 +1633,8 @@ email addresses — is kept confidential both at rest and in motion.
 The following sub-claims address each form of confidential data storage.
 
 <!-- verocase element ConfDataAtRest -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-confdataatrest"></a>
 #### Claim ConfDataAtRest: Confidential data at rest is protected
 
@@ -1628,6 +1650,8 @@ User passwords are stored only as bcrypt hashes, remember-me tokens
 use bcrypt-stored nonces, and email addresses are encrypted at rest.
 
 <!-- verocase element Passwords -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-passwords"></a>
 #### Claim Passwords: User passwords stored securely (using bcrypt)
 
@@ -1699,6 +1723,8 @@ while we check them against the bad password list in the database:
    that the user would have to choose a different password.
 
 <!-- verocase element PasswordsEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-passwordsev"></a>
 #### Evidence PasswordsEv: has_secure_password in user model stores passwords via bcrypt
 
@@ -1710,6 +1736,8 @@ Supports: **[Claim Passwords](#claim-passwords)**
 `has_secure_password` in user model stores passwords via bcrypt. See [../app/models/user.rb](../app/models/user.rb).
 
 <!-- verocase element RememberMe -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-rememberme"></a>
 #### Claim RememberMe: Remember me token is secured
 
@@ -1759,6 +1787,8 @@ In file `test/integration/users_login_test.rb` we verify that the
 password is not stored as cleartext in the user cookie.
 
 <!-- verocase element RememberMeEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-remembermeev"></a>
 #### Evidence RememberMeEv: remember method in user model creates bcrypt-stored nonce; sessions controller and helper manage it; login test verifies cleartext not stored in cookie
 
@@ -1770,6 +1800,8 @@ Supports: **[Claim RememberMe](#claim-rememberme)**
 `remember` method in user model creates bcrypt-stored nonce; sessions controller and helper manage it; login test verifies cleartext not stored in cookie. See [../app/controllers/sessions_controller.rb](../app/controllers/sessions_controller.rb).
 
 <!-- verocase element EmailSecured -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-emailsecured"></a>
 #### Claim EmailSecured: Email addresses are secured (encrypted and only accessible to admin & owner)
 
@@ -1895,6 +1927,8 @@ authentication system (countering enumeration or verification attacks):
    the login failed; they do not indicate if the email address is present.
 
 <!-- verocase element EmailSecuredEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-emailsecuredev"></a>
 #### Evidence EmailSecuredEv: Views, mailers, and controllers restrict email address access to owners and admins; use grep -Ri 'user.*\.email' to verify
 
@@ -1913,6 +1947,8 @@ To verify that email addresses are only accessible to owners and admins:
 - Automated tests verify that email addresses are not displayed without authorization; see tests `should NOT show email address when not logged in`, `JSON should NOT show email address when not logged in`, `should NOT show email address when logged in as another user`, and `JSON should NOT show email address when logged in as another user`.
 
 <!-- verocase element DataInMotion -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-datainmotion"></a>
 #### Claim DataInMotion: Data in motion encrypted with HTTPS
 
@@ -1945,6 +1981,8 @@ We also use [online checkers](#online-checkers) (discussed below)
 to verify that our TLS configuration is secure in production.
 
 <!-- verocase element DataInMotionEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-datainmotionev"></a>
 #### Evidence DataInMotionEv: config.force_ssl = true enforces HTTPS with TLS redirection and secure cookies in production
 
@@ -1957,6 +1995,8 @@ Supports: **[Claim DataInMotion](#claim-datainmotion)**
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element Integrity -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-integrity"></a>
 ### Claim Integrity: Integrity is maintained
 
@@ -1974,6 +2014,8 @@ to the user.
 
 <!-- verocase-config element_level = 4 -->
 <!-- verocase element DataModAuth -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-datamodauth"></a>
 #### Claim DataModAuth: Data modification requires authorization
 
@@ -2078,6 +2120,8 @@ By doing this, we help protect the integrity of the overall database
 from potentially-malicious authorized users.
 
 <!-- verocase element DataModAuthEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-datamodauthev"></a>
 #### Evidence DataModAuthEv: before_action guards can_edit_else_redirect and can_control_else_redirect protect all project modifications
 
@@ -2089,6 +2133,8 @@ Supports: **[Claim DataModAuth](#claim-datamodauth)**
 `before_action` guards `can_edit_else_redirect` and `can_control_else_redirect` protect all project modifications. See [../app/controllers/projects_controller.rb](../app/controllers/projects_controller.rb).
 
 <!-- verocase element AppModAuth -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-appmodauth"></a>
 #### Claim AppModAuth: Application modification requires authorization
 
@@ -2106,6 +2152,8 @@ has an authentication and authorization system for this purpose.
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element Availability -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-availability"></a>
 ### Claim Availability: Availability is maintained including limited DDoS resilience
 
@@ -2127,6 +2175,8 @@ able to reconstitute it (including its data).
 
 <!-- verocase-config element_level = 4 -->
 <!-- verocase element CDNDDoS -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-cdnddos"></a>
 #### Claim CDNDDoS: CDN counters DDoS attacks on specific resources
 
@@ -2143,6 +2193,8 @@ The CDN absorbs or deflects traffic before it reaches our servers,
 providing a layer of resilience for high-traffic attacks.
 
 <!-- verocase element ScaleUp -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-scaleup"></a>
 #### Claim ScaleUp: Cloud resources can be rapidly increased
 
@@ -2158,6 +2210,8 @@ See the design section "availability through scalability" below
 for more about how we handle scaling up.
 
 <!-- verocase element Timeout -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-timeout"></a>
 #### Claim Timeout: Timeout limits maximum request time
 
@@ -2174,6 +2228,8 @@ This is set by setting `Rack::Timeout.service_timeout`
 in file `config/environments/production.rb`.
 
 <!-- verocase element TimeoutEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-timeoutev"></a>
 #### Evidence TimeoutEv: Rack::Timeout.service_timeout set in production configuration limits all request times
 
@@ -2185,6 +2241,8 @@ Supports: **[Claim Timeout](#claim-timeout)**
 `Rack::Timeout.service_timeout` set in production configuration limits all request times. See [../config/environments/production.rb](../config/environments/production.rb).
 
 <!-- verocase element QuickRecovery -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-quickrecovery"></a>
 #### Claim QuickRecovery: Can return to operation quickly after DDoS ended
 
@@ -2199,6 +2257,8 @@ The system can return to operation quickly after
 a DDoS attack has ended.
 
 <!-- verocase element LoginDisabled -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-logindisabled"></a>
 #### Claim LoginDisabled: Logon disabled mode mitigates against some vulnerabilities
 
@@ -2270,6 +2330,8 @@ Instead, these changes provide users immediate feedback
 to help them understand that this special mode has been enabled.
 
 <!-- verocase element LoginDisabledEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-logindisabledev"></a>
 #### Evidence LoginDisabledEv: deny_login initializer reads BADGEAPP_DENY_LOGIN env var to disable all logins
 
@@ -2281,6 +2343,8 @@ Supports: **[Claim LoginDisabled](#claim-logindisabled)**
 `deny_login` initializer reads `BADGEAPP_DENY_LOGIN` env var to disable all logins. See [../config/initializers/deny_login.rb](../config/initializers/deny_login.rb).
 
 <!-- verocase element Backups -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-backups"></a>
 #### Claim Backups: Data corruption and loss are mitigated by multiple backups
 
@@ -2311,6 +2375,8 @@ capabilities that also aid availability:
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element AccessControl -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-accesscontrol"></a>
 ### Claim AccessControl: Access control is in place
 
@@ -2343,6 +2409,8 @@ The login credentials in these cases are protected.
 
 <!-- verocase-config element_level = 4 -->
 <!-- verocase element AuthN -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-authn"></a>
 #### Claim AuthN: Users must identify and authenticate themselves
 
@@ -2525,6 +2593,8 @@ This architecture provides:
 
 <!-- verocase-config element_level = 5 -->
 <!-- verocase element LocalAuthN -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-localauthn"></a>
 ##### Claim LocalAuthN: Local users must supply a password
 
@@ -2542,6 +2612,8 @@ The system enforces rejection on wrong or blank passwords,
 as verified by the test suite.
 
 <!-- verocase element RemoteAuthN -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-remoteauthn"></a>
 ##### Claim RemoteAuthN: Remote users are authenticated by a trusted remote service
 
@@ -2560,6 +2632,8 @@ using the omniauth-github gem (see the [initial login](#initial-login) section).
 
 <!-- verocase-config element_level = 4 -->
 <!-- verocase element AuthZ -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-authz"></a>
 #### Claim AuthZ: Authorization to resources and actions is controlled
 
@@ -2658,6 +2732,8 @@ For more, see the earlier section justifying the claim that
 "Data modification requires authorization".
 
 <!-- verocase element AuthZEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-authzev"></a>
 #### Evidence AuthZEv: can_edit? and can_control? methods implement role-based authorization; all access enforced server-side through controllers
 
@@ -2670,6 +2746,8 @@ Supports: **[Claim AuthZ](#claim-authz)**
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element Assets -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-assets"></a>
 ### Claim Assets: Assets & threat actors identified & addressed
 
@@ -2761,6 +2839,8 @@ The following sections describe how we've managed our security-related risks.
 
 <!-- verocase-config element_level = 2 -->
 <!-- verocase element Design -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-design"></a>
 ## Claim Design: Security in design
 
@@ -2804,6 +2884,8 @@ see a more detailed discussion of the software design.
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element STRIDE -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-stride"></a>
 ### Claim STRIDE: STRIDE threat model has been analyzed
 
@@ -2989,6 +3071,8 @@ Given these safeguards, here is how we deal with STRIDE:
     by this mechanism.  Sanitization checks limit the damage that can be done.
 
 <!-- verocase element SimpleDesign -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-simpledesign"></a>
 ### Claim SimpleDesign: Economy of mechanism: simple design is used
 
@@ -3033,6 +3117,8 @@ and analyze that data; this project data is also untrusted
 contents, etc., are all untrusted).
 
 <!-- verocase element DesignPrinciples -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-designprinciples"></a>
 ### Claim DesignPrinciples: Secure design principles are applied
 
@@ -3145,6 +3231,8 @@ including all 8 principles from
 
 <!-- verocase-config element_level = 4 -->
 <!-- verocase element EconomyMech -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-economymech"></a>
 #### Claim EconomyMech: Economy of mechanism
 
@@ -3160,6 +3248,8 @@ See the [Claim SimpleDesign](#claim-simpledesign) section for details;
 the list of secure design principles above elaborates on this.
 
 <!-- verocase element CompleteMed -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-completemed"></a>
 #### Claim CompleteMed: Complete mediation
 
@@ -3176,6 +3266,8 @@ has no role in access control decisions.
 See the secure design principles discussion above for details.
 
 <!-- verocase element FailSafe -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-failsafe"></a>
 #### Claim FailSafe: Fail-safe defaults
 
@@ -3192,6 +3284,8 @@ All additional permissions must be explicitly granted.
 See the secure design principles discussion above for details.
 
 <!-- verocase element OpenDesign -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-opendesign"></a>
 #### Claim OpenDesign: Open design
 
@@ -3207,6 +3301,8 @@ We don't rely on security through obscurity.
 See the secure design principles discussion above for details.
 
 <!-- verocase element SepPriv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-seppriv"></a>
 #### Claim SepPriv: Separation of privilege
 
@@ -3222,6 +3318,8 @@ Admin functions require a separate admin role check.
 See the secure design principles discussion above for details.
 
 <!-- verocase element LeastPriv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-leastpriv"></a>
 #### Claim LeastPriv: Least privilege
 
@@ -3238,6 +3336,8 @@ admin-only functionality is separately restricted.
 See the secure design principles discussion above for details.
 
 <!-- verocase element LeastCommon -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-leastcommon"></a>
 #### Claim LeastCommon: Least common mechanism
 
@@ -3254,6 +3354,8 @@ stored in per-user encrypted cookies rather than shared server-side sessions.
 See the secure design principles discussion above for details.
 
 <!-- verocase element PsychAccept -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-psychaccept"></a>
 #### Claim PsychAccept: Psychological acceptability
 
@@ -3271,6 +3373,8 @@ reduces repeated logins.
 See the secure design principles discussion above for details.
 
 <!-- verocase element LimitedAttack -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-limitedattack"></a>
 #### Claim LimitedAttack: Limited attack surface
 
@@ -3287,6 +3391,8 @@ defined endpoints.
 See the secure design principles and input validation discussion above for details.
 
 <!-- verocase element InputValid -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-inputvalid"></a>
 #### Claim InputValid: Input validation with whitelists
 
@@ -3305,6 +3411,8 @@ See the secure design principles discussion above for details.
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element Scalability -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-scalability"></a>
 ### Claim Scalability: Availability through scalability
 
@@ -3385,6 +3493,8 @@ by an attacker with significant resources without having
 significant resources ourselves.
 
 <!-- verocase element MemSafe -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-memsafe"></a>
 ### Claim MemSafe: Memory-safe languages are used
 
@@ -3410,6 +3520,8 @@ See the section below on supply chain (reuse) for more.
 
 <!-- verocase-config element_level = 2 -->
 <!-- verocase element Implementation -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-implementation"></a>
 ## Claim Implementation: Security in implementation
 
@@ -3439,6 +3551,8 @@ Below is how we've done each, in turn.
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element CommonVulns -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="strategy-commonvulns"></a>
 ### Strategy CommonVulns: Most implementation vulnerabilities are due to common types of implementation errors or common misconfigurations, so countering them greatly reduces security risks
 
@@ -3455,6 +3569,8 @@ we greatly reduce overall security risk.
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element OWASPClaim -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-owaspclaim"></a>
 ### Claim OWASPClaim: All of the most common important implementation vulnerability types (weaknesses) countered
 
@@ -3473,6 +3589,8 @@ OWASP category.
 
 <!-- verocase-config element_level = 4 -->
 <!-- verocase element OWASPStrat -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="strategy-owaspstrat"></a>
 #### Strategy OWASPStrat: OWASP top 10 represents a broad consensus of the most critical web application security flaws
 
@@ -3488,6 +3606,8 @@ security flaws, providing a comprehensive baseline for addressing common
 implementation vulnerabilities.
 
 <!-- verocase element OWASP1013 -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-owasp1013"></a>
 #### Claim OWASP1013: All OWASP top 10 (2013 & 2017) countered
 
@@ -3672,6 +3792,8 @@ not listed in the 2017 edition of the OWASP top 10.
 
 <!-- verocase-config element_level = 4 -->
 <!-- verocase element OWASP1 -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-owasp1"></a>
 #### Claim OWASP1: Injection (including SQL injection) countered
 
@@ -3687,6 +3809,8 @@ Direct SQL is used only with trusted or parameterized inputs.
 See item 1 in the [OWASP countering discussion](#claim-owaspclaim) above.
 
 <!-- verocase element OWASP2 -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-owasp2"></a>
 #### Claim OWASP2: Broken Authentication and Session Management countered
 
@@ -3702,6 +3826,8 @@ encrypted signed cookies, session timeout, and session fixation protection.
 See item 2 in the [OWASP countering discussion](#claim-owaspclaim) above.
 
 <!-- verocase element OWASP3 -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-owasp3"></a>
 #### Claim OWASP3: Cross-site scripting (XSS) countered
 
@@ -3717,6 +3843,8 @@ a restrictive Content Security Policy, and safe markdown processing.
 See item 3 in the [OWASP countering discussion](#claim-owaspclaim) above.
 
 <!-- verocase element OWASP4 -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-owasp4"></a>
 #### Claim OWASP4: Insecure Direct Object References countered
 
@@ -3732,6 +3860,8 @@ through controllers that enforce access control.
 See item 4 in the [OWASP countering discussion](#claim-owaspclaim) above.
 
 <!-- verocase element OWASP5 -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-owasp5"></a>
 #### Claim OWASP5: Security Misconfiguration countered
 
@@ -3748,6 +3878,8 @@ See item 5 in the [OWASP countering discussion](#claim-owaspclaim) above and
 the [MisconfigClaim](#claim-misconfigclaim) section.
 
 <!-- verocase element OWASP6 -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-owasp6"></a>
 #### Claim OWASP6: Sensitive Data Exposure countered
 
@@ -3764,6 +3896,8 @@ and HTTPS protects data in motion.
 See item 6 in the [OWASP countering discussion](#claim-owaspclaim) above.
 
 <!-- verocase element OWASP7 -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-owasp7"></a>
 #### Claim OWASP7: Missing Access Control countered
 
@@ -3779,6 +3913,8 @@ checks in all controllers.
 See item 7 in the [OWASP countering discussion](#claim-owaspclaim) above.
 
 <!-- verocase element OWASP8 -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-owasp8"></a>
 #### Claim OWASP8: CSRF countered
 
@@ -3794,6 +3930,8 @@ and a restrictive Content Security Policy.
 See item 8 in the [OWASP countering discussion](#claim-owaspclaim) above.
 
 <!-- verocase element OWASP9 -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-owasp9"></a>
 #### Claim OWASP9: Known Vulnerabilities countered
 
@@ -3810,6 +3948,8 @@ See item 9 in the [OWASP countering discussion](#claim-owaspclaim) above
 and the [Maintenance](#claim-maintenance) section.
 
 <!-- verocase element OWASP10 -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-owasp10"></a>
 #### Claim OWASP10: Unvalidated Redirects and Forwards countered
 
@@ -3825,6 +3965,8 @@ and always validating targets.
 See item 10 in the [OWASP countering discussion](#claim-owaspclaim) above.
 
 <!-- verocase element OWASP11 -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-owasp11"></a>
 #### Claim OWASP11: XXE countered (2017 A4)
 
@@ -3840,6 +3982,8 @@ the Rails XML parser was removed in Rails 4.0 and is not re-enabled.
 See item 11 in the [OWASP countering discussion](#claim-owaspclaim) above.
 
 <!-- verocase element OWASP12 -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-owasp12"></a>
 #### Claim OWASP12: Insecure Deserialization countered (2017 A8)
 
@@ -3855,6 +3999,8 @@ with the JSON parser deserializing only to trusted standard objects.
 See item 12 in the [OWASP countering discussion](#claim-owaspclaim) above.
 
 <!-- verocase element OWASP13 -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-owasp13"></a>
 #### Claim OWASP13: Insufficient Logging and Monitoring countered (2017 A10)
 
@@ -3871,6 +4017,8 @@ See item 13 in the [OWASP countering discussion](#claim-owaspclaim) above.
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element MisconfigClaim -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-misconfigclaim"></a>
 ### Claim MisconfigClaim: All of the most common known security-relevant misconfiguration errors countered
 
@@ -4099,6 +4247,8 @@ we will not use this value; we will instead use a preset trusted value.
 
 <!-- verocase-config element_level = 4 -->
 <!-- verocase element RailsGuide -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-railsguide"></a>
 #### Claim RailsGuide: Entire most-relevant security guide applied
 
@@ -4117,6 +4267,8 @@ and explains how each is addressed.
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element HardeningStrat -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="strategy-hardeningstrat"></a>
 ### Strategy HardeningStrat: Hardening can reduce or eliminate the impact of defects in some cases
 
@@ -4133,6 +4285,8 @@ providing additional defense in depth.
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element Hardening -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-hardening"></a>
 ### Claim Hardening: Hardening is applied
 
@@ -4149,6 +4303,8 @@ not countered by the main approaches described elsewhere in this document.
 
 <!-- verocase-config element_level = 4 -->
 <!-- verocase element HardenHTTPS -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-hardenhttps"></a>
 #### Claim HardenHTTPS: HTTPS use enforced (including by HSTS)
 
@@ -4182,6 +4338,8 @@ See
 for more about the impact of `force_ssl`.
 
 <!-- verocase element HardenHTTPSEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-hardenhttpsev"></a>
 #### Evidence HardenHTTPSEv: config.force_ssl enables TLS redirection, secure cookies, and HSTS; domain in Chrome HSTS preload list
 
@@ -4193,6 +4351,8 @@ Supports: **[Claim HardenHTTPS](#claim-hardenhttps)**
 `config.force_ssl` enables TLS redirection, secure cookies, and HSTS; domain in Chrome HSTS preload list. See [../config/environments/production.rb](../config/environments/production.rb).
 
 <!-- verocase element HardenCSP -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-hardencsp"></a>
 #### Claim HardenCSP: Outgoing HTTP headers hardened including restrictive CSP
 
@@ -4250,6 +4410,8 @@ but a DDoS attack can be performed without it, and our usual DDoS
 protection measures (including caching and scaling) still apply.
 
 <!-- verocase element HardenCSPEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-hardencspev"></a>
 #### Evidence HardenCSPEv: secure_headers gem enforces CSP and security headers; integration test verifies header values
 
@@ -4261,6 +4423,8 @@ Supports: **[Claim HardenCSP](#claim-hardencsp)**
 `secure_headers` gem enforces CSP and security headers; integration test verifies header values. See [../test/integration/project_get_test.rb](../test/integration/project_get_test.rb).
 
 <!-- verocase element HardenCookies -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-hardencookies"></a>
 #### Claim HardenCookies: Cookies limited
 
@@ -4288,6 +4452,8 @@ See
 [expiry in signed or encrypted cookie is now embedded in the cookies values](https://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html#expiry-in-signed-or-encrypted-cookie-is-now-embedded-in-the-cookies-values).
 
 <!-- verocase element HardenCookiesEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-hardencookiesev"></a>
 #### Evidence HardenCookiesEv: secure_headers gem sets httponly, secure, and SameSite=Lax cookie attributes; session cookies use AES-256-GCM
 
@@ -4299,6 +4465,8 @@ Supports: **[Claim HardenCookies](#claim-hardencookies)**
 `secure_headers` gem sets httponly, secure, and SameSite=Lax cookie attributes; session cookies use AES-256-GCM. See [../Gemfile](../Gemfile).
 
 <!-- verocase element HardenCSRF -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-hardencsrf"></a>
 #### Claim HardenCSRF: CSRF tokens hardened
 
@@ -4325,6 +4493,8 @@ both enabled as framework defaults via `config.load_defaults`:
 These help counter CSRF, in addition to our other measures.
 
 <!-- verocase element HardenCSRFEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-hardencsrfev"></a>
 #### Evidence HardenCSRFEv: protect_from_forgery with per-form tokens and origin-header check, enabled via load_defaults
 
@@ -4336,6 +4506,8 @@ Supports: **[Claim HardenCSRF](#claim-hardencsrf)**
 `protect_from_forgery` with per-form tokens and origin-header check, enabled via `load_defaults`. See [../app/controllers/application_controller.rb](../app/controllers/application_controller.rb).
 
 <!-- verocase element HardenRateIn -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-hardenratein"></a>
 #### Claim HardenRateIn: Incoming rate limits enforced
 
@@ -4383,6 +4555,8 @@ but those entries are always earlier in the list
 (so we can easily ignore them).
 
 <!-- verocase element HardenRateInEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-hardenrateinev"></a>
 #### Evidence HardenRateInEv: Rack::Attack rate limits on requests, logins, and signups by client IP address
 
@@ -4394,6 +4568,8 @@ Supports: **[Claim HardenRateIn](#claim-hardenratein)**
 `Rack::Attack` rate limits on requests, logins, and signups by client IP address. See [../config/initializers/rack_attack.rb](../config/initializers/rack_attack.rb).
 
 <!-- verocase element HardenRateOut -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-hardenrateout"></a>
 #### Claim HardenRateOut: Outgoing email rate limits enforced
 
@@ -4415,6 +4591,8 @@ We have a hard rate limit on the number of emails we will send out each
 time; this keeps us from looking like a spammer.
 
 <!-- verocase element HardenRateOutEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-hardenrateoutev"></a>
 #### Evidence HardenRateOutEv: projects_to_remind class method and hard limit on outgoing reminder email count
 
@@ -4426,6 +4604,8 @@ Supports: **[Claim HardenRateOut](#claim-hardenrateout)**
 `projects_to_remind` class method and hard limit on outgoing reminder email count. See [../app/models/project.rb](../app/models/project.rb).
 
 <!-- verocase element HardenEmailEnc -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-hardenemailenc"></a>
 #### Claim HardenEmailEnc: Email addresses encrypted
 
@@ -4544,6 +4724,8 @@ That said, we believe this encryption adds an additional layer of defense
 to protect email addresses from being revealed.
 
 <!-- verocase element HardenEmailEncEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-hardenemailencev"></a>
 #### Evidence HardenEmailEncEv: attr_encrypted and blind_index gems encrypt email addresses with AES-256-GCM and PBKDF2-HMAC-SHA256 index
 
@@ -4555,6 +4737,8 @@ Supports: **[Claim HardenEmailEnc](#claim-hardenemailenc)**
 `attr_encrypted` and `blind_index` gems encrypt email addresses with AES-256-GCM and PBKDF2-HMAC-SHA256 index. See [../app/models/user.rb](../app/models/user.rb).
 
 <!-- verocase element HardenGravatar -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-hardengravatar"></a>
 #### Claim HardenGravatar: Gravatar restricted
 
@@ -4596,6 +4780,8 @@ and only in certain cases.  But we want to exceed expectations,
 and this is one way we do that.
 
 <!-- verocase element HardenGravatarEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-hardengravatarev"></a>
 #### Evidence HardenGravatarEv: use_gravatar boolean controls whether gravatar MD5 hash is revealed for each local user
 
@@ -4607,6 +4793,8 @@ Supports: **[Claim HardenGravatar](#claim-hardengravatar)**
 `use_gravatar` boolean controls whether gravatar MD5 hash is revealed for each local user. See [../app/models/user.rb](../app/models/user.rb).
 
 <!-- verocase element PubVulns -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-pubvulns"></a>
 #### Claim PubVulns: Public vulnerability information monitored
 
@@ -4663,6 +4851,8 @@ reduces the risks.
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element ReuseSec -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-reusesec"></a>
 ### Claim ReuseSec: Reused software is secure
 
@@ -4680,6 +4870,8 @@ write and maintain ourselves.
 
 <!-- verocase-config element_level = 4 -->
 <!-- verocase element ReuseStrat -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="strategy-reusestrat"></a>
 #### Strategy ReuseStrat: Reuse is often appropriate and can be done securely
 
@@ -4703,6 +4895,8 @@ reduce the risks of reused code.
 
 <!-- verocase-config element_level = 4 -->
 <!-- verocase element ReuseReview -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-reusereview"></a>
 #### Claim ReuseReview: Reused software is reviewed before use
 
@@ -4745,6 +4939,8 @@ in later versions.
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element ReuseAuth -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-reuseauth"></a>
 ### Claim ReuseAuth: Reused software is authentic
 
@@ -4763,6 +4959,8 @@ We double-check names before we add them to the Gemfile to counter
 typosquatting attacks.
 
 <!-- verocase element PkgMgr -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-pkgmgr"></a>
 ### Claim PkgMgr: Package managers used
 
@@ -4779,6 +4977,8 @@ This makes it much easier to maintain the software later
 (see the maintenance process discussion).
 
 <!-- verocase element PkgMgrEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-pkgmgrev"></a>
 ### Evidence PkgMgrEv: Gemfile and Gemfile.lock manage all gem dependencies via bundler
 
@@ -4790,6 +4990,8 @@ Supports: **[Claim PkgMgr](#claim-pkgmgr)**
 `Gemfile` and `Gemfile.lock` manage all gem dependencies via bundler. See [../Gemfile](../Gemfile).
 
 <!-- verocase element SpecialAnalysis -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-specialanalysis"></a>
 ### Claim SpecialAnalysis: Special analysis justifies exceptions
 
@@ -4923,6 +5125,8 @@ obvious gain, so we have not done this.
 
 <!-- verocase-config element_level = 4 -->
 <!-- verocase element KnownVulns -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-knownvulns"></a>
 #### Claim KnownVulns: Known vulnerabilities in reused components are detected
 
@@ -4939,6 +5143,8 @@ and GitHub Dependabot, which automatically flag known vulnerabilities.
 
 <!-- verocase-config element_level = 2 -->
 <!-- verocase element Verification -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-verification"></a>
 ## Claim Verification: Security in integration & verification
 
@@ -5072,6 +5278,8 @@ but we think they greatly reduce the risks.
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element VerifStrat -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="strategy-verifstrat"></a>
 ### Strategy VerifStrat: Static & dynamic verifications are performed and enforced on all integrations, reducing risk
 
@@ -5088,6 +5296,8 @@ deployment, we systematically reduce the risk of introducing vulnerabilities.
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element VerifSteps -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-verifsteps"></a>
 ### Claim VerifSteps: Verification steps reduce risk
 
@@ -5103,6 +5313,8 @@ See the [Claim Verification](#claim-verification) section for the full list,
 including static analysis, FLOSS checking, automated testing, and negative testing.
 
 <!-- verocase element StaticVerif -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-staticverif"></a>
 ### Claim StaticVerif: Static verifications are performed
 
@@ -5119,6 +5331,8 @@ See [Claim Verification](#claim-verification) for details on the specific tools.
 
 <!-- verocase-config element_level = 4 -->
 <!-- verocase element StyleChecks -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-stylechecks"></a>
 #### Claim StyleChecks: Style checks pass
 
@@ -5134,6 +5348,8 @@ quality, catch problematic constructs, and detect misleading indentation.
 See the style checking bullet in [Claim Verification](#claim-verification).
 
 <!-- verocase element StyleEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-styleev"></a>
 #### Evidence StyleEv: Style checkers as pronto runners in Gemfile: eslint, rails_best_practices, rubocop
 
@@ -5145,6 +5361,8 @@ Supports: **[Claim StyleChecks](#claim-stylechecks)**
 Style checkers as pronto runners in Gemfile: eslint, rails_best_practices, rubocop. See [../.circleci/config.yml](../.circleci/config.yml).
 
 <!-- verocase element WeaknessAnalysis -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-weaknessanalysis"></a>
 #### Claim WeaknessAnalysis: Source code analyzed for weaknesses & all issues resolved
 
@@ -5160,6 +5378,8 @@ vulnerabilities in the custom Ruby and JavaScript code.
 See the source code weakness analyzer bullet in [Claim Verification](#claim-verification).
 
 <!-- verocase element BrakemanEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-brakemanev"></a>
 #### Evidence BrakemanEv: Brakeman source code weakness analyzer
 
@@ -5171,6 +5391,8 @@ Supports: **[Claim WeaknessAnalysis](#claim-weaknessanalysis)**
 Brakeman source code weakness analyzer. See [../.github/workflows/main.yml](../.github/workflows/main.yml).
 
 <!-- verocase element FLOSSVerif -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-flossverif"></a>
 #### Claim FLOSSVerif: All reused components are verified as FLOSS
 
@@ -5186,6 +5408,8 @@ All required reused components are verified as Free/Libre and Open Source Softwa
 See the FLOSS bullet in [Claim Verification](#claim-verification).
 
 <!-- verocase element LicenseFinderEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-licensefinderev"></a>
 #### Evidence LicenseFinderEv: license_finder
 
@@ -5197,6 +5421,8 @@ Supports: **[Claim FLOSSVerif](#claim-flossverif)**
 `license_finder`. See [../.circleci/config.yml](../.circleci/config.yml).
 
 <!-- verocase element FOSSAEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-fossaev"></a>
 #### Evidence FOSSAEv: FOSSA check
 
@@ -5209,6 +5435,8 @@ FOSSA check. See [https://github.com/coreinfrastructure/best-practices-badge/set
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element DynamicVerif -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-dynamicverif"></a>
 ### Claim DynamicVerif: Dynamic verifications are performed
 
@@ -5224,6 +5452,8 @@ on every commit. See [Claim Verification](#claim-verification) for details.
 
 <!-- verocase-config element_level = 4 -->
 <!-- verocase element TestCoverage -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-testcoverage"></a>
 #### Claim TestCoverage: Automated testing performed with excellent statement coverage
 
@@ -5239,6 +5469,8 @@ This strong coverage makes it easier to update components and detect regressions
 See the test coverage bullet in [Claim Verification](#claim-verification).
 
 <!-- verocase element CITestEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-citestev"></a>
 #### Evidence CITestEv: Automated tests run by CI
 
@@ -5250,6 +5482,8 @@ Supports: **[Claim TestCoverage](#claim-testcoverage)**
 Automated tests run by CI. See [https://codecov.io/gh/coreinfrastructure/best-practices-badge](https://codecov.io/gh/coreinfrastructure/best-practices-badge).
 
 <!-- verocase element NegTests -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-negtests"></a>
 #### Claim NegTests: Negative tests failed as desired
 
@@ -5265,6 +5499,8 @@ covering wrong passwords, unauthorized project edits, and email address leaks.
 See the negative testing bullet in [Claim Verification](#claim-verification).
 
 <!-- verocase element NegTestsEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-negtestsev"></a>
 #### Evidence NegTestsEv: Negative test suite
 
@@ -5277,6 +5513,8 @@ Negative test suite. See [../test/](../test/).
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element CIRequired -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-cirequired"></a>
 ### Claim CIRequired: Successful verification required by continuous integration before deployment
 
@@ -5293,6 +5531,8 @@ on every integration to the master branch.
 See the CI configuration file `../.circleci/config.yml`.
 
 <!-- verocase element CIConfigEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-ciconfigev"></a>
 ### Evidence CIConfigEv: CI configuration
 
@@ -5304,6 +5544,8 @@ Supports: **[Claim CIRequired](#claim-cirequired)**
 CI configuration. See [../.circleci/config.yml](../.circleci/config.yml).
 
 <!-- verocase element Deployment -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-deployment"></a>
 ### Claim Deployment: Security in transition & operation
 
@@ -5337,6 +5579,8 @@ that help us limit damage.
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element DeployProvider -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-deployprovider"></a>
 ### Claim DeployProvider: Deployment provider maintains security
 
@@ -5364,6 +5608,8 @@ on GitHub to correctly authenticate users.
 [GitHub takes steps to keep itself secure](https://help.github.com/articles/github-security/).
 
 <!-- verocase element HerokuSecEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-herokusecev"></a>
 ### Evidence HerokuSecEv: Heroku security policy describes physical and environmental safeguards
 
@@ -5375,6 +5621,8 @@ Supports: **[Claim DeployProvider](#claim-deployprovider)**
 Heroku security policy describes physical and environmental safeguards. See [https://www.heroku.com/policy/security](https://www.heroku.com/policy/security).
 
 <!-- verocase element OnlineCheckers -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-onlinecheckers"></a>
 ### Claim OnlineCheckers: Online security checkers are used
 
@@ -5420,6 +5668,8 @@ For the main bestpractices.coreinfrastructure.org site we have:
   about the missing test.
 
 <!-- verocase element Detection -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-detection"></a>
 ### Claim Detection: Threats and anomalies are detected
 
@@ -5445,6 +5695,8 @@ would, so combining these approaches has its advantages.
 
 <!-- verocase-config element_level = 4 -->
 <!-- verocase element IntLogging -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-intlogging"></a>
 #### Claim IntLogging: Internal logging and anomaly detection is in place
 
@@ -5489,6 +5741,8 @@ how logs are stored and how anomaly detection is done to
 detect and counter things.
 
 <!-- verocase element IntLoggingEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-intloggingev"></a>
 #### Evidence IntLoggingEv: filter_parameter_logging.rb excludes passwords from logs; events stream to stdout per 12-factor app
 
@@ -5500,6 +5754,8 @@ Supports: **[Claim IntLogging](#claim-intlogging)**
 `filter_parameter_logging.rb` excludes passwords from logs; events stream to stdout per 12-factor app. See [../config/initializers/filter_parameter_logging.rb](../config/initializers/filter_parameter_logging.rb).
 
 <!-- verocase element ExtMonitor -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-extmonitor"></a>
 #### Claim ExtMonitor: External monitoring is in place
 
@@ -5516,6 +5772,8 @@ One of those mechanisms is uptime robot:
 <https://uptimerobot.com/dashboard>
 
 <!-- verocase element ExtMonitorEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-extmonitorev"></a>
 #### Evidence ExtMonitorEv: UptimeRobot provides external alerting when the website goes down
 
@@ -5528,6 +5786,8 @@ UptimeRobot provides external alerting when the website goes down. See [https://
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element RecoveryPlan -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-recoveryplan"></a>
 ### Claim RecoveryPlan: Recovery plan including backups is in place
 
@@ -5592,6 +5852,8 @@ serves as a check to make sure the backup and restore processes are working.
 
 <!-- verocase-config element_level = 2 -->
 <!-- verocase element Maintenance -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-maintenance"></a>
 ## Claim Maintenance: Security in maintenance
 
@@ -5621,6 +5883,8 @@ section on [reuse](#reuse).
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element AutoDetect -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-autodetect"></a>
 ### Claim AutoDetect: Vulnerabilities are auto-detected when publicly reported
 
@@ -5693,6 +5957,8 @@ This is not ideal, but it's a real-world situation, and we believe
 this approach completely counters the vulnerability.
 
 <!-- verocase element AutoDetectBundleEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-autodetectbundleev"></a>
 ### Evidence AutoDetectBundleEv: bundle-audit checks all gem versions against NVD vulnerability database on every rake run
 
@@ -5704,6 +5970,8 @@ Supports: **[Claim AutoDetect](#claim-autodetect)**
 `bundle-audit` checks all gem versions against NVD vulnerability database on every rake run. See [../Gemfile.lock](../Gemfile.lock).
 
 <!-- verocase element AutoDetectGitHubEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-autodetectgithubev"></a>
 ### Evidence AutoDetectGitHubEv: GitHub Dependabot alerts and automated pull requests for vulnerable dependencies
 
@@ -5715,6 +5983,8 @@ Supports: **[Claim AutoDetect](#claim-autodetect)**
 GitHub Dependabot alerts and automated pull requests for vulnerable dependencies. See [../.github/dependabot.yml](../.github/dependabot.yml).
 
 <!-- verocase element RapidUpdate -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-rapidupdate"></a>
 ### Claim RapidUpdate: Rapid update process is in place
 
@@ -5774,6 +6044,8 @@ a vulnerability in those components is discovered
 
 <!-- verocase-config element_level = 2 -->
 <!-- verocase element NonTechnical -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-nontechnical"></a>
 ## Claim NonTechnical: Security implemented by other life cycle processes
 
@@ -5791,6 +6063,8 @@ and human resources), and technical management processes
 (planning, risk, configuration management, and QA).
 
 <!-- verocase element AgreementProc -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-agreementproc"></a>
 ## Claim AgreementProc: Agreement processes implement security
 
@@ -5806,6 +6080,8 @@ by establishing security responsibilities with our deployment provider (Heroku)
 and CDN (Fastly).
 
 <!-- verocase element OrgProc -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-orgproc"></a>
 ## Claim OrgProc: Organizational project-enabling processes implement security
 
@@ -5822,6 +6098,8 @@ and human resource management (ensuring developers have security expertise).
 
 <!-- verocase-config element_level = 2 -->
 <!-- verocase element Acquisition -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-acquisition"></a>
 ## Claim Acquisition: Acquisition process implements security
 
@@ -5840,6 +6118,8 @@ security-related problems.
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element Contracts -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-contracts"></a>
 ### Claim Contracts: Contracts with deployment and CDN provider address security
 
@@ -5858,6 +6138,8 @@ and provide us recourse if they fail to address security-related problems prompt
 
 <!-- verocase-config element_level = 2 -->
 <!-- verocase element Infrastructure -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-infrastructure"></a>
 ## Claim Infrastructure: Infrastructure management implements security
 
@@ -5874,6 +6156,8 @@ ensure the CI/CD pipeline operates on clean, controlled data.
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element DevEnvSec -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-devenvsec"></a>
 ### Claim DevEnvSec: Development & test environments are protected from attack
 
@@ -5913,6 +6197,8 @@ git objects transferred from an external site into our development environment.
 This sets "fsckObjects = true" for transfer (thus also for fetch and receive).
 
 <!-- verocase element CINoData -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-cinodata"></a>
 ### Claim CINoData: CI automated test environment does not contain protected data
 
@@ -6132,6 +6418,8 @@ without security-focused review.
 
 <!-- verocase-config element_level = 2 -->
 <!-- verocase element HumanRes -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-humanres"></a>
 ## Claim HumanRes: Human resource management implements security
 
@@ -6182,6 +6470,8 @@ provided here.
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element DevKnowledge -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-devknowledge"></a>
 ### Claim DevKnowledge: Key developers know how to develop secure software
 
@@ -6200,6 +6490,8 @@ teaches a graduate course on developing secure software.
 
 <!-- verocase-config element_level = 2 -->
 <!-- verocase element TechMgmt -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-techmgmt"></a>
 ## Claim TechMgmt: Technical management processes implement security
 
@@ -6216,6 +6508,8 @@ These processes ensure security is planned for, risks are tracked, configuration
 is controlled, and quality is maintained.
 
 <!-- verocase element ProjectPlanning -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-projectplanning"></a>
 ## Claim ProjectPlanning: Project planning addresses security
 
@@ -6229,6 +6523,8 @@ Supports: **[Claim TechMgmt](#claim-techmgmt)**
 We plan development, and always consider security as we develop new plans.
 
 <!-- verocase element RiskMgmt -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-riskmgmt"></a>
 ## Claim RiskMgmt: Risk management addresses security
 
@@ -6243,6 +6539,8 @@ The primary risk we're concerned about is security, so we have developed
 the assurance case here to determine how to counter that risk.
 
 <!-- verocase element QA -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-qa"></a>
 ## Claim QA: Quality assurance addresses security
 
@@ -6260,6 +6558,8 @@ and automated security analysis, to reduce the risk that the deployed
 system will produce incorrect results or will be insecure.
 
 <!-- verocase element ConfigMgmt -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-configmgmt"></a>
 ## Claim ConfigMgmt: Configuration management addresses security
 
@@ -6284,6 +6584,8 @@ We use GitHub for managing the source code and issue tracker; it
 has an authentication system for this purpose.
 
 <!-- verocase element ConfigMgmtEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-configmgmtev"></a>
 ## Evidence ConfigMgmtEv: Git version control via GitHub with authenticated access; governance documented
 
@@ -6295,6 +6597,8 @@ Supports: **[Claim ConfigMgmt](#claim-configmgmt)**
 Git version control via GitHub with authenticated access; governance documented. See [../governance.md](../governance.md).
 
 <!-- verocase element Controls -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-controls"></a>
 ## Claim Controls: Certifications & controls provide confidence in operating results
 
@@ -6312,6 +6616,8 @@ verified security criteria.
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element CIIBadge -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-ciibadge"></a>
 ### Claim CIIBadge: CII Best Practices Badge certification is obtained
 
@@ -6338,6 +6644,8 @@ You can see the
 Note that we achieve a gold badge.
 
 <!-- verocase element CIIBadgeEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-ciibadgeev"></a>
 ### Evidence CIIBadgeEv: BadgeApp achieves gold CII Best Practices Badge
 
@@ -6689,6 +6997,8 @@ Development processes and security:
 * [assurance-case.md](assurance-case.md) - Why it's adequately secure (assurance case)
 
 <!-- verocase element QAEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-qaev"></a>
 ### Evidence QAEv: CI pipeline runs rubocop, eslint, rails_best_practices, whitespace checks, and full test suite on every commit, enforcing quality and security standards
 
@@ -6700,6 +7010,8 @@ Supports: **[Claim QA](#claim-qa)**
 See the [parent claim section](#claim-qa) for details.
 
 <!-- verocase element RiskMgmtEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-riskmgmtev"></a>
 ### Evidence RiskMgmtEv: Continuous threat modeling implemented via this assurance case; regular dependency audits, static analysis, and security-focused development practices address identified risks
 
@@ -6711,6 +7023,8 @@ Supports: **[Claim RiskMgmt](#claim-riskmgmt)**
 See the [parent claim section](#claim-riskmgmt) for details.
 
 <!-- verocase element ProjectPlanningEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-projectplanningev"></a>
 ### Evidence ProjectPlanningEv: Project roadmap and governance prioritize security; long-term security maintenance documented as a goal
 
@@ -6722,6 +7036,8 @@ Supports: **[Claim ProjectPlanning](#claim-projectplanning)**
 See the [parent claim section](#claim-projectplanning) for details.
 
 <!-- verocase element DevKnowledgeEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-devknowledgeev"></a>
 ### Evidence DevKnowledgeEv: Key developers have demonstrated expertise in secure software development including creation of OpenSSF Best Practices criteria, academic research on secure programming, and security-focused professional work
 
@@ -6733,6 +7049,8 @@ Supports: **[Claim DevKnowledge](#claim-devknowledge)**
 See the [parent claim section](#claim-devknowledge) for details.
 
 <!-- verocase element CINoDataEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-cinodataev"></a>
 ### Evidence CINoDataEv: CircleCI environment uses separate test database with no production data; production credentials never present in CI context; test database seeded only with synthetic test fixtures
 
@@ -6744,6 +7062,8 @@ Supports: **[Claim CINoData](#claim-cinodata)**
 See the [parent claim section](#claim-cinodata) for details.
 
 <!-- verocase element DevEnvSecEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-devenvsecev"></a>
 ### Evidence DevEnvSecEv: Development uses local git repositories; GitHub requires authenticated access; no production secrets stored in development environments; CI/CD pipeline validates branch names before use
 
@@ -6755,6 +7075,8 @@ Supports: **[Claim DevEnvSec](#claim-devenvsec)**
 See the [parent claim section](#claim-devenvsec) for details.
 
 <!-- verocase element ContractsEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-contractsev"></a>
 ### Evidence ContractsEv: Heroku Data Processing Addendum and security policy cover deployment environment; Fastly service agreement covers CDN security
 
@@ -6766,6 +7088,8 @@ Supports: **[Claim Contracts](#claim-contracts)**
 See the [parent claim section](#claim-contracts) for details.
 
 <!-- verocase element RapidUpdateEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-rapidupdateev"></a>
 ### Evidence RapidUpdateEv: Bundler enables library updates in one command; high test coverage enables rapid verify-and-deploy; CI/CD pipeline deploys to Heroku automatically on passing tests
 
@@ -6777,6 +7101,8 @@ Supports: **[Claim RapidUpdate](#claim-rapidupdate)**
 See the [parent claim section](#claim-rapidupdate) for details.
 
 <!-- verocase element RecoveryPlanEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-recoveryplanev"></a>
 ### Evidence RecoveryPlanEv: Recovery procedures documented including database restoration from Heroku Postgres backups, BADGEAPP_DENY_LOGIN degraded mode, and mass_email and rekey rake tasks
 
@@ -6788,6 +7114,8 @@ Supports: **[Claim RecoveryPlan](#claim-recoveryplan)**
 See the [parent claim section](#claim-recoveryplan) for details.
 
 <!-- verocase element OnlineCheckersEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-onlinecheckersev"></a>
 ### Evidence OnlineCheckersEv: Mozilla Observatory, Security Headers, and similar online tools verify HTTP response headers and flag misconfiguration
 
@@ -6799,6 +7127,8 @@ Supports: **[Claim OnlineCheckers](#claim-onlinecheckers)**
 See the [parent claim section](#claim-onlinecheckers) for details.
 
 <!-- verocase element PubVulnsDependabotEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-pubvulnsdependabotev"></a>
 ### Evidence PubVulnsDependabotEv: GitHub Dependabot alerts and automated pull requests for vulnerable dependencies
 
@@ -6810,6 +7140,8 @@ Supports: **[Claim PubVulns](#claim-pubvulns)**
 See the [parent claim section](#claim-pubvulns) for details.
 
 <!-- verocase element PubVulnsBundleEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-pubvulnsbundleev"></a>
 ### Evidence PubVulnsBundleEv: bundle-audit checks all gem versions against NVD vulnerability database on every rake run
 
@@ -6821,6 +7153,8 @@ Supports: **[Claim PubVulns](#claim-pubvulns)**
 See the [parent claim section](#claim-pubvulns) for details.
 
 <!-- verocase element ReuseAuthEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-reuseauthev"></a>
 ### Evidence ReuseAuthEv: Gemfile.lock records exact versions and SHA-512 checksums for all gems, ensuring reproducible authenticated builds
 
@@ -6832,6 +7166,8 @@ Supports: **[Claim ReuseAuth](#claim-reuseauth)**
 See the [parent claim section](#claim-reuseauth) for details.
 
 <!-- verocase element ReuseReviewEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-reusereviewev"></a>
 ### Evidence ReuseReviewEv: New gem dependencies reviewed for purpose, maintenance, and security before addition; CONTRIBUTING.md documents review expectations
 
@@ -6843,6 +7179,8 @@ Supports: **[Claim ReuseReview](#claim-reusereview)**
 See the [parent claim section](#claim-reusereview) for details.
 
 <!-- verocase element RailsGuideEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-railsguideev"></a>
 ### Evidence RailsGuideEv: Rails security guide reviewed and countermeasures applied for sessions, CSRF, XSS, injection, and other Rails-specific issues
 
@@ -6854,6 +7192,8 @@ Supports: **[Claim RailsGuide](#claim-railsguide)**
 See the [parent claim section](#claim-railsguide) for details.
 
 <!-- verocase element OWASP13Ev -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-owasp13ev"></a>
 ### Evidence OWASP13Ev: filter_parameter_logging excludes passwords from logs; events stream to stdout per 12-factor app; UptimeRobot monitors availability externally
 
@@ -6865,6 +7205,8 @@ Supports: **[Claim OWASP13](#claim-owasp13)**
 See the [parent claim section](#claim-owasp13) for details.
 
 <!-- verocase element OWASP12Ev -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-owasp12ev"></a>
 ### Evidence OWASP12Ev: Rails session data stored in signed encrypted cookies; no untrusted object deserialization; JSON used for API data
 
@@ -6876,6 +7218,8 @@ Supports: **[Claim OWASP12](#claim-owasp12)**
 See the [parent claim section](#claim-owasp12) for details.
 
 <!-- verocase element OWASP11Ev -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-owasp11ev"></a>
 ### Evidence OWASP11Ev: Nokogiri configured to disable external entity processing; XML parsing restricted to safe subset; SpecialAnalysis documents this exception
 
@@ -6887,6 +7231,8 @@ Supports: **[Claim OWASP11](#claim-owasp11)**
 See the [parent claim section](#claim-owasp11) for details.
 
 <!-- verocase element OWASP10Ev -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-owasp10ev"></a>
 ### Evidence OWASP10Ev: Redirect destinations validated against allowlists; no open redirect vulnerabilities; after-login redirect uses stored path validated server-side
 
@@ -6898,6 +7244,8 @@ Supports: **[Claim OWASP10](#claim-owasp10)**
 See the [parent claim section](#claim-owasp10) for details.
 
 <!-- verocase element OWASP9DependabotEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-owasp9dependabotev"></a>
 ### Evidence OWASP9DependabotEv: GitHub Dependabot alerts on vulnerable dependencies and opens PRs to update them
 
@@ -6909,6 +7257,8 @@ Supports: **[Claim OWASP9](#claim-owasp9)**
 See the [parent claim section](#claim-owasp9) for details.
 
 <!-- verocase element OWASP9BundleEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-owasp9bundleev"></a>
 ### Evidence OWASP9BundleEv: bundle-audit checks all gems against NVD vulnerability database on every rake run
 
@@ -6920,6 +7270,8 @@ Supports: **[Claim OWASP9](#claim-owasp9)**
 See the [parent claim section](#claim-owasp9) for details.
 
 <!-- verocase element OWASP8Ev -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-owasp8ev"></a>
 ### Evidence OWASP8Ev: protect_from_forgery with per-form tokens and origin-header check, enabled via load_defaults
 
@@ -6931,6 +7283,8 @@ Supports: **[Claim OWASP8](#claim-owasp8)**
 See the [parent claim section](#claim-owasp8) for details.
 
 <!-- verocase element OWASP7Ev -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-owasp7ev"></a>
 ### Evidence OWASP7Ev: can_edit? and can_control? enforced server-side on all mutating actions; no security decisions made client-side
 
@@ -6942,6 +7296,8 @@ Supports: **[Claim OWASP7](#claim-owasp7)**
 See the [parent claim section](#claim-owasp7) for details.
 
 <!-- verocase element OWASP6Ev -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-owasp6ev"></a>
 ### Evidence OWASP6Ev: Email encrypted with AES-256-GCM; passwords stored via bcrypt; all data in transit protected by TLS; filter_parameter_logging excludes sensitive fields from logs
 
@@ -6953,6 +7309,8 @@ Supports: **[Claim OWASP6](#claim-owasp6)**
 See the [parent claim section](#claim-owasp6) for details.
 
 <!-- verocase element OWASP5Ev -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-owasp5ev"></a>
 ### Evidence OWASP5Ev: secure_headers gem enforces HTTP security headers; Rails secrets managed via environment variables; CI runs security checks on every commit
 
@@ -6964,6 +7322,8 @@ Supports: **[Claim OWASP5](#claim-owasp5)**
 See the [parent claim section](#claim-owasp5) for details.
 
 <!-- verocase element OWASP4Ev -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-owasp4ev"></a>
 ### Evidence OWASP4Ev: All project access goes through can_edit? and can_control? authorization checks; no direct object references exposed without authorization
 
@@ -6975,6 +7335,8 @@ Supports: **[Claim OWASP4](#claim-owasp4)**
 See the [parent claim section](#claim-owasp4) for details.
 
 <!-- verocase element OWASP3Ev -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-owasp3ev"></a>
 ### Evidence OWASP3Ev: Rails SafeBuffer escapes all template output by default; markdown processing whitelists safe tags and attributes; CSP enforced via secure_headers gem
 
@@ -6986,6 +7348,8 @@ Supports: **[Claim OWASP3](#claim-owasp3)**
 See the [parent claim section](#claim-owasp3) for details.
 
 <!-- verocase element OWASP2Ev -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-owasp2ev"></a>
 ### Evidence OWASP2Ev: Sessions use encrypted signed cookies; has_secure_password enforces bcrypt; remember-me uses bcrypt-stored nonce; session_store.rb configures secure cookie settings
 
@@ -6997,6 +7361,8 @@ Supports: **[Claim OWASP2](#claim-owasp2)**
 See the [parent claim section](#claim-owasp2) for details.
 
 <!-- verocase element OWASP1Ev -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-owasp1ev"></a>
 ### Evidence OWASP1Ev: ActiveRecord ORM uses parameterized queries by default; direct SQL uses sanitize_sql_like or bound parameters; shell is never used to process untrusted content
 
@@ -7008,6 +7374,8 @@ Supports: **[Claim OWASP1](#claim-owasp1)**
 See the [parent claim section](#claim-owasp1) for details.
 
 <!-- verocase element MemSafeEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-memsafeev"></a>
 ### Evidence MemSafeEv: All custom application code is written in Ruby and JavaScript, both memory-managed languages; buffer overflows and memory corruption cannot occur in custom code
 
@@ -7019,6 +7387,8 @@ Supports: **[Claim MemSafe](#claim-memsafe)**
 See the [parent claim section](#claim-memsafe) for details.
 
 <!-- verocase element ScalabilityEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-scalabilityev"></a>
 ### Evidence ScalabilityEv: Heroku dyno-based deployment enables horizontal scaling; Fastly CDN offloads static asset and badge requests from origin server
 
@@ -7030,6 +7400,8 @@ Supports: **[Claim Scalability](#claim-scalability)**
 See the [parent claim section](#claim-scalability) for details.
 
 <!-- verocase element InputValidEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-inputvalidev"></a>
 ### Evidence InputValidEv: Project and User models use Rails validators to enforce field constraints; controllers use strong parameters (permit) to whitelist allowed input fields
 
@@ -7041,6 +7413,8 @@ Supports: **[Claim InputValid](#claim-inputvalid)**
 See the [parent claim section](#claim-inputvalid) for details.
 
 <!-- verocase element LimitedAttackEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-limitedattackev"></a>
 ### Evidence LimitedAttackEv: Restrictive CSP limits script execution sources; routes.rb exposes only necessary endpoints; Rack::Attack blocks abusive IPs
 
@@ -7052,6 +7426,8 @@ Supports: **[Claim LimitedAttack](#claim-limitedattack)**
 See the [parent claim section](#claim-limitedattack) for details.
 
 <!-- verocase element PsychAcceptEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-psychacceptev"></a>
 ### Evidence PsychAcceptEv: Standard web authentication UX (email/password or GitHub OAuth login); badge criteria presented in plain language; security controls do not impose undue burden on legitimate use
 
@@ -7063,6 +7439,8 @@ Supports: **[Claim PsychAccept](#claim-psychaccept)**
 See the [parent claim section](#claim-psychaccept) for details.
 
 <!-- verocase element LeastCommonEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-leastcommonev"></a>
 ### Evidence LeastCommonEv: Per-request processing; session state stored in per-user encrypted client-side cookies, not shared server-side sessions
 
@@ -7074,6 +7452,8 @@ Supports: **[Claim LeastCommon](#claim-leastcommon)**
 See the [parent claim section](#claim-leastcommon) for details.
 
 <!-- verocase element LeastPrivEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-leastprivev"></a>
 ### Evidence LeastPrivEv: can_edit? grants edit access only to project owner or admins; additional_rights table enables explicit narrow collaborator grants
 
@@ -7085,6 +7465,8 @@ Supports: **[Claim LeastPriv](#claim-leastpriv)**
 See the [parent claim section](#claim-leastpriv) for details.
 
 <!-- verocase element SepPrivEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-sepprivev"></a>
 ### Evidence SepPrivEv: admin? method in User model separates admin role from normal user; admin-only actions checked explicitly and separately from ownership
 
@@ -7096,6 +7478,8 @@ Supports: **[Claim SepPriv](#claim-seppriv)**
 See the [parent claim section](#claim-seppriv) for details.
 
 <!-- verocase element OpenDesignEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-opendesignev"></a>
 ### Evidence OpenDesignEv: Full source code publicly available; security does not depend on keeping implementation secret
 
@@ -7107,6 +7491,8 @@ Supports: **[Claim OpenDesign](#claim-opendesign)**
 See the [parent claim section](#claim-opendesign) for details.
 
 <!-- verocase element FailSafeEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-failsafeev"></a>
 ### Evidence FailSafeEv: can_edit_else_redirect and can_control_else_redirect redirect unauthenticated or unauthorized requests; default deny enforced server-side
 
@@ -7118,6 +7504,8 @@ Supports: **[Claim FailSafe](#claim-failsafe)**
 See the [parent claim section](#claim-failsafe) for details.
 
 <!-- verocase element CompleteMedEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-completemedev"></a>
 ### Evidence CompleteMedEv: before_action authorization hooks in ApplicationController run on every request; no client-side access control decisions are made
 
@@ -7129,6 +7517,8 @@ Supports: **[Claim CompleteMed](#claim-completemed)**
 See the [parent claim section](#claim-completemed) for details.
 
 <!-- verocase element EconomyMechEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-economymechev"></a>
 ### Evidence EconomyMechEv: Custom code kept minimal and DRY; standard Rails patterns used; Gemfile shows focused, well-scoped dependency set
 
@@ -7140,6 +7530,8 @@ Supports: **[Claim EconomyMech](#claim-economymech)**
 See the [parent claim section](#claim-economymech) for details.
 
 <!-- verocase element STRIDEEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-strideev"></a>
 ### Evidence STRIDEEv: STRIDE threat analysis documented for all major components: web server, controllers/models/views, DBMS, Chief/Detective classes, admin CLI, and i18n service
 
@@ -7151,6 +7543,8 @@ Supports: **[Claim STRIDE](#claim-stride)**
 See the [parent claim section](#claim-stride) for details.
 
 <!-- verocase element SimpleDesignEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-simpledesignev"></a>
 ### Evidence SimpleDesignEv: Standard Rails MVC architecture with models, views, and controllers; no microservices or complex distributed patterns; custom code kept minimal
 
@@ -7162,6 +7556,8 @@ Supports: **[Claim SimpleDesign](#claim-simpledesign)**
 See the [parent claim section](#claim-simpledesign) for details.
 
 <!-- verocase element ThreatsIdentified -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-threatsidentified"></a>
 ### Claim ThreatsIdentified: Key threat actors (external attackers, bots, insiders, nation-states) have been identified and addressed
 
@@ -7178,6 +7574,8 @@ Each threat type is addressed by the countermeasures described throughout
 this assurance case.
 
 <!-- verocase element AssetsIdentified -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-assetsidentified"></a>
 ### Claim AssetsIdentified: Key assets (badge data, user credentials, system availability) have been identified
 
@@ -7194,6 +7592,8 @@ availability itself (the ability of the site to serve badge data on demand).
 The countermeasures throughout this assurance case are designed to protect these assets.
 
 <!-- verocase element OAuthEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-oauthev"></a>
 ### Evidence OAuthEv: OmniAuth-GitHub middleware authenticates remote users via GitHub OAuth 2.0; callback validates identity before creating local session
 
@@ -7205,6 +7605,8 @@ Supports: **[Claim RemoteAuthN](#claim-remoteauthn)**
 See the [parent claim section](#claim-remoteauthn) for details.
 
 <!-- verocase element LocalAuthNEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-localauthnev"></a>
 ### Evidence LocalAuthNEv: sessions_controller create action authenticates local users by verifying email and bcrypt password hash before establishing session
 
@@ -7216,6 +7618,8 @@ Supports: **[Claim LocalAuthN](#claim-localauthn)**
 See the [parent claim section](#claim-localauthn) for details.
 
 <!-- verocase element ScaleUpEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-scaleupev"></a>
 ### Evidence ScaleUpEv: Heroku cloud platform supports on-demand dyno scaling; Fastly CDN reduces origin load during traffic spikes
 
@@ -7227,6 +7631,8 @@ Supports: **[Claim ScaleUp](#claim-scaleup)**
 See the [parent claim section](#claim-scaleup) for details.
 
 <!-- verocase element BackupsEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-backupsev"></a>
 ### Evidence BackupsEv: Heroku Postgres automated daily backups retained across multiple snapshots; standard Rails and PostgreSQL restore mechanisms enable database recovery
 
@@ -7238,6 +7644,8 @@ Supports: **[Claim Backups](#claim-backups)**
 See the [parent claim section](#claim-backups) for details.
 
 <!-- verocase element QuickRecoveryEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-quickrecoveryev"></a>
 ### Evidence QuickRecoveryEv: Heroku allows rapid dyno restart and redeploy from last known good git commit, restoring service within minutes of an incident
 
@@ -7249,6 +7657,8 @@ Supports: **[Claim QuickRecovery](#claim-quickrecovery)**
 See the [parent claim section](#claim-quickrecovery) for details.
 
 <!-- verocase element FastlyCDNEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-fastlycdnev"></a>
 ### Evidence FastlyCDNEv: Fastly CDN configured as reverse proxy; badge image and static asset requests absorbed by CDN before reaching origin application server
 
@@ -7260,6 +7670,8 @@ Supports: **[Claim CDNDDoS](#claim-cdnddos)**
 See the [parent claim section](#claim-cdnddos) for details.
 
 <!-- verocase element AppModAuthEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-appmodauthev"></a>
 ### Evidence AppModAuthEv: GitHub repository requires authenticated access; branch protection rules enforce code review before merging to main; governance.md documents the process
 
@@ -7271,6 +7683,8 @@ Supports: **[Claim AppModAuth](#claim-appmodauth)**
 See the [parent claim section](#claim-appmodauth) for details.
 
 <!-- verocase element GravatarPrivacyEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-gravatarprivacyev"></a>
 ### Evidence GravatarPrivacyEv: use_gravatar boolean controls whether any MD5 hash is sent to Gravatar, giving each user control over this external disclosure
 
@@ -7282,6 +7696,8 @@ Supports: **[Claim UserPrivacy](#claim-userprivacy)**
 See the [parent claim section](#claim-userprivacy) for details.
 
 <!-- verocase element SelfHostedAssets -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-selfhostedassets"></a>
 ### Claim SelfHostedAssets: All web assets are self-hosted; no third-party transclusions reveal user activity to unrelated sites
 
@@ -7304,6 +7720,8 @@ This also improves security by eliminating the risk of a subverted third-party
 asset silently attacking our users.
 
 <!-- verocase element SelfHostedAssetsEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-selfhostedassetsev"></a>
 ### Evidence SelfHostedAssetsEv: Content-Security-Policy restricts script-src and style-src to self; application layouts contain no external CDN script or font references
 
@@ -7315,6 +7733,8 @@ Supports: **[Claim SelfHostedAssets](#claim-selfhostedassets)**
 See the [parent claim section](#claim-selfhostedassets) for details.
 
 <!-- verocase element KnownVulnsDependabotEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-knownvulnsdependabotev"></a>
 ### Evidence KnownVulnsDependabotEv: GitHub Dependabot automatically alerts on vulnerable gem dependencies and opens PRs with updated versions
 
@@ -7328,6 +7748,8 @@ for known vulnerabilities and open pull requests with updated versions.
 See [`.github/dependabot.yml`](.github/dependabot.yml).
 
 <!-- verocase element KnownVulnsBundleEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-knownvulnsbundleev"></a>
 ### Evidence KnownVulnsBundleEv: bundle-audit checks all gem versions against the NVD on every rake run, detecting known CVEs in dependencies
 
@@ -7342,6 +7764,8 @@ databases, and fails the build if any known CVE is found.
 See `Gemfile.lock` and `lib/tasks/default.rake`.
 
 <!-- verocase element ActionCableSafe -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-actioncablesafe"></a>
 ### Claim ActionCableSafe: ActionCable information-exposure risk is mitigated because ActionCable is not used
 
@@ -7362,6 +7786,8 @@ but no code paths in `app/` or `config/` ever reference it.
 Since we never use ActionCable, no sensitive data ever flows through it.
 
 <!-- verocase element ActionCableSafeEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-actioncablesafeev"></a>
 ### Evidence ActionCableSafeEv: ActionCable is a Rails transitive dependency but is never configured or invoked; no sensitive data flows through it
 
@@ -7373,6 +7799,8 @@ Supports: **[Claim ActionCableSafe](#claim-actioncablesafe)**
 See the [parent claim section](#claim-actioncablesafe) for details.
 
 <!-- verocase element LocalSecretSafe -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-localsecretsafe"></a>
 ### Claim LocalSecretSafe: Checked-in tmp/local_secret.txt secret_key_base value poses no security risk
 
@@ -7395,6 +7823,8 @@ multiple processes race to read it before it exists) and to make
 development restarts smoother.
 
 <!-- verocase element LocalSecretSafeEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-localsecretsafeev"></a>
 ### Evidence LocalSecretSafeEv: The file is only used in development and test; production always uses the SECRET_KEY_BASE environment variable; the checked-in value protects no real secrets
 
@@ -7406,6 +7836,8 @@ Supports: **[Claim LocalSecretSafe](#claim-localsecretsafe)**
 See the [parent claim section](#claim-localsecretsafe) for details.
 
 <!-- verocase element ErubisSafe -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-erubissafe"></a>
 ### Claim ErubisSafe: XSS from erubis via pronto-rails_best_practices poses no production risk
 
@@ -7425,6 +7857,8 @@ input, not untrusted user data, so this vulnerability has no production
 impact.
 
 <!-- verocase element ErubisSafeEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-erubissafeev"></a>
 ### Evidence ErubisSafeEv: rails_best_practices and pronto are dev/test-only dependencies; they never execute against untrusted input in production
 
@@ -7436,6 +7870,8 @@ Supports: **[Claim ErubisSafe](#claim-erubissafe)**
 See the [parent claim section](#claim-erubissafe) for details.
 
 <!-- verocase element XXESafe -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-xxesafe"></a>
 ### Claim XXESafe: Nokogiri/libxml2 XXE exception (CVE-2016-9318) poses no risk in our deployment
 
@@ -7457,6 +7893,8 @@ All other uses of nokogiri in `Gemfile.lock` (capybara, xpath, etc.)
 are test-only, where all input is trusted.
 
 <!-- verocase element XXESafeEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-xxesafeev"></a>
 ### Evidence XXESafeEv: Nokogiri disables DTD loading and network access by default; we never process incoming XML in production; loofah never opts into DTDLOAD or NONET
 

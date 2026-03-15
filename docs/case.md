@@ -1,6 +1,7 @@
 # BadgeApp Security: Its Assurance Case
 
 <!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
+<!-- verocase-config base_url https://github.com/coreinfrastructure/best-practices-badge/blob/main/docs/case.md -->
 
 Security is important and challenging.
 This document describes why we think this software (the "BadgeApp")
@@ -82,6 +83,17 @@ flowchart BT
     Maintenance[["<b>Maintenance</b>"]]
     Dot1((" ")):::sacmDot
     Dot2((" ")):::sacmDot
+    click Security "#claim-security"
+    click Processes "#strategy-processes"
+    click Controls "#package-controls"
+    click TechProcesses "#claim-techprocesses"
+    click NonTechnical "#package-nontechnical"
+    click Requirements "#package-requirements"
+    click Design "#package-design"
+    click Implementation "#package-implementation"
+    click Verification "#package-verification"
+    click Deployment "#package-deployment"
+    click Maintenance "#package-maintenance"
 
     BottomPadding[ ]:::invisible ~~~ Requirements
     Requirements --- Dot1
@@ -146,11 +158,26 @@ flowchart BT
     Dot3((" ")):::sacmDot
     Dot4((" ")):::sacmDot
     Dot5((" ")):::sacmDot
-    click DataModAuthEv "../app/controllers/projects_controller.rb"
-    click AppModAuthEv "../governance.md"
-    click AuthZEv "../app/controllers/application_controller.rb"
-    click LocalAuthNEv "../app/controllers/sessions_controller.rb"
-    click OAuthEv "../config/initializers/omniauth.rb"
+    click Requirements "#claim-requirements"
+    click SecTriad "#strategy-sectriad"
+    click Assets "#claim-assets"
+    click Confidentiality "#package-confidentiality"
+    click Integrity "#claim-integrity"
+    click Availability "#package-availability"
+    click AccessControl "#claim-accesscontrol"
+    click AssetsIdentified "#claim-assetsidentified"
+    click ThreatsIdentified "#claim-threatsidentified"
+    click DataModAuth "#claim-datamodauth"
+    click AppModAuth "#claim-appmodauth"
+    click AuthN "#claim-authn"
+    click AuthZ "#claim-authz"
+    click DataModAuthEv "#evidence-datamodauthev"
+    click AppModAuthEv "#evidence-appmodauthev"
+    click LocalAuthN "#claim-localauthn"
+    click RemoteAuthN "#claim-remoteauthn"
+    click AuthZEv "#evidence-authzev"
+    click LocalAuthNEv "#evidence-localauthnev"
+    click OAuthEv "#evidence-oauthev"
 
     BottomPadding[ ]:::invisible ~~~ Confidentiality
     DataModAuthEv --> DataModAuth
@@ -237,20 +264,36 @@ flowchart BT
     LeastCommonEv[("<b>LeastCommonEv</b>&nbsp;↗<br>Per-request processing; session state stored in per-user encrypted client-side cookies, not shared server-side sessions")]
     Dot1((" ")):::sacmDot
     Dot2((" ")):::sacmDot
-    click SimpleDesignEv "../docs/design.md"
-    click STRIDEEv "../docs/case.md"
-    click ScalabilityEv "../Procfile"
-    click MemSafeEv "../Gemfile"
-    click EconomyMechEv "../Gemfile"
-    click CompleteMedEv "../app/controllers/application_controller.rb"
-    click FailSafeEv "../app/controllers/application_controller.rb"
-    click PsychAcceptEv "../app/views/projects/"
-    click LimitedAttackEv "../config/initializers/rack_attack.rb"
-    click InputValidEv "../app/models/project.rb"
-    click OpenDesignEv "https://github.com/coreinfrastructure/best-practices-badge"
-    click SepPrivEv "../app/models/user.rb"
-    click LeastPrivEv "../app/controllers/application_controller.rb"
-    click LeastCommonEv "../config/initializers/session_store.rb"
+    click Design "#claim-design"
+    click SimpleDesign "#claim-simpledesign"
+    click STRIDE "#claim-stride"
+    click DesignPrinciples "#claim-designprinciples"
+    click Scalability "#claim-scalability"
+    click MemSafe "#claim-memsafe"
+    click SimpleDesignEv "#evidence-simpledesignev"
+    click STRIDEEv "#evidence-strideev"
+    click EconomyMech "#claim-economymech"
+    click CompleteMed "#claim-completemed"
+    click FailSafe "#claim-failsafe"
+    click PsychAccept "#claim-psychaccept"
+    click LimitedAttack "#claim-limitedattack"
+    click InputValid "#claim-inputvalid"
+    click ScalabilityEv "#evidence-scalabilityev"
+    click MemSafeEv "#evidence-memsafeev"
+    click EconomyMechEv "#evidence-economymechev"
+    click CompleteMedEv "#evidence-completemedev"
+    click FailSafeEv "#evidence-failsafeev"
+    click OpenDesign "#claim-opendesign"
+    click SepPriv "#claim-seppriv"
+    click LeastPriv "#claim-leastpriv"
+    click LeastCommon "#claim-leastcommon"
+    click PsychAcceptEv "#evidence-psychacceptev"
+    click LimitedAttackEv "#evidence-limitedattackev"
+    click InputValidEv "#evidence-inputvalidev"
+    click OpenDesignEv "#evidence-opendesignev"
+    click SepPrivEv "#evidence-sepprivev"
+    click LeastPrivEv "#evidence-leastprivev"
+    click LeastCommonEv "#evidence-leastcommonev"
 
     BottomPadding[ ]:::invisible ~~~ SimpleDesignEv
     SimpleDesignEv --> SimpleDesign
@@ -346,18 +389,37 @@ flowchart BT
     Dot3((" ")):::sacmDot
     Dot4((" ")):::sacmDot
     Dot5((" ")):::sacmDot
-    click PubVulnsBundleEv "../Gemfile.lock"
-    click PubVulnsDependabotEv "../.github/dependabot.yml"
-    click RailsGuideEv "https://guides.rubyonrails.org/security.html"
-    click KnownVulnsBundleEv "../Gemfile.lock"
-    click KnownVulnsDependabotEv "../.github/dependabot.yml"
-    click ReuseReviewEv "../CONTRIBUTING.md"
-    click ReuseAuthEv "../Gemfile.lock"
-    click PkgMgrEv "../Gemfile"
-    click XXESafeEv "../Gemfile.lock"
-    click ErubisSafeEv "../Gemfile"
-    click LocalSecretSafeEv "../tmp/local_secret.txt"
-    click ActionCableSafeEv "../Gemfile.lock"
+    click Implementation "#claim-implementation"
+    click CommonVulns "#strategy-commonvulns"
+    click HardeningStrat "#strategy-hardeningstrat"
+    click PubVulns "#claim-pubvulns"
+    click OWASPClaim "#package-owaspclaim"
+    click MisconfigClaim "#claim-misconfigclaim"
+    click ReuseSec "#claim-reusesec"
+    click Hardening "#package-hardening"
+    click PubVulnsBundleEv "#evidence-pubvulnsbundleev"
+    click PubVulnsDependabotEv "#evidence-pubvulnsdependabotev"
+    click RailsGuide "#claim-railsguide"
+    click ReuseStrat "#strategy-reusestrat"
+    click KnownVulns "#claim-knownvulns"
+    click RailsGuideEv "#evidence-railsguideev"
+    click ReuseReview "#claim-reusereview"
+    click ReuseAuth "#claim-reuseauth"
+    click PkgMgr "#claim-pkgmgr"
+    click SpecialAnalysis "#claim-specialanalysis"
+    click KnownVulnsBundleEv "#evidence-knownvulnsbundleev"
+    click KnownVulnsDependabotEv "#evidence-knownvulnsdependabotev"
+    click ReuseReviewEv "#evidence-reusereviewev"
+    click ReuseAuthEv "#evidence-reuseauthev"
+    click PkgMgrEv "#evidence-pkgmgrev"
+    click XXESafe "#claim-xxesafe"
+    click ErubisSafe "#claim-erubissafe"
+    click LocalSecretSafe "#claim-localsecretsafe"
+    click ActionCableSafe "#claim-actioncablesafe"
+    click XXESafeEv "#evidence-xxesafeev"
+    click ErubisSafeEv "#evidence-erubissafeev"
+    click LocalSecretSafeEv "#evidence-localsecretsafeev"
+    click ActionCableSafeEv "#evidence-actioncablesafeev"
 
     BottomPadding[ ]:::invisible ~~~ OWASPClaim
     RailsGuideEv --> RailsGuide
@@ -445,13 +507,24 @@ flowchart BT
     Dot3((" ")):::sacmDot
     Dot4((" ")):::sacmDot
     Dot5((" ")):::sacmDot
-    click CIConfigEv "../.circleci/config.yml"
-    click StyleEv "../.circleci/config.yml"
-    click BrakemanEv "../.github/workflows/main.yml"
-    click LicenseFinderEv "../.circleci/config.yml"
-    click FOSSAEv "https://github.com/coreinfrastructure/best-practices-badge/settings/"
-    click CITestEv "https://codecov.io/gh/coreinfrastructure/best-practices-badge"
-    click NegTestsEv "../test/"
+    click Verification "#claim-verification"
+    click VerifStrat "#strategy-verifstrat"
+    click VerifSteps "#claim-verifsteps"
+    click CIRequired "#claim-cirequired"
+    click StaticVerif "#claim-staticverif"
+    click DynamicVerif "#claim-dynamicverif"
+    click CIConfigEv "#evidence-ciconfigev"
+    click StyleChecks "#claim-stylechecks"
+    click WeaknessAnalysis "#claim-weaknessanalysis"
+    click FLOSSVerif "#claim-flossverif"
+    click TestCoverage "#claim-testcoverage"
+    click NegTests "#claim-negtests"
+    click StyleEv "#evidence-styleev"
+    click BrakemanEv "#evidence-brakemanev"
+    click LicenseFinderEv "#evidence-licensefinderev"
+    click FOSSAEv "#evidence-fossaev"
+    click CITestEv "#evidence-citestev"
+    click NegTestsEv "#evidence-negtestsev"
 
     BottomPadding[ ]:::invisible ~~~ StyleEv
     StyleEv --> StyleChecks
@@ -515,11 +588,18 @@ flowchart BT
     IntLoggingEv[("<b>IntLoggingEv</b>&nbsp;↗<br>filter_parameter_logging.rb excludes passwords from logs; events stream to stdout per 12-factor app")]
     Dot1((" ")):::sacmDot
     Dot2((" ")):::sacmDot
-    click HerokuSecEv "https://www.heroku.com/policy/security"
-    click OnlineCheckersEv "https://observatory.mozilla.org/analyze/www.bestpractices.dev"
-    click RecoveryPlanEv "../docs/case.md"
-    click ExtMonitorEv "https://uptimerobot.com/dashboard"
-    click IntLoggingEv "../config/initializers/filter_parameter_logging.rb"
+    click Deployment "#claim-deployment"
+    click DeployProvider "#claim-deployprovider"
+    click Detection "#claim-detection"
+    click OnlineCheckers "#claim-onlinecheckers"
+    click RecoveryPlan "#claim-recoveryplan"
+    click HerokuSecEv "#evidence-herokusecev"
+    click ExtMonitor "#claim-extmonitor"
+    click IntLogging "#claim-intlogging"
+    click OnlineCheckersEv "#evidence-onlinecheckersev"
+    click RecoveryPlanEv "#evidence-recoveryplanev"
+    click ExtMonitorEv "#evidence-extmonitorev"
+    click IntLoggingEv "#evidence-intloggingev"
 
     BottomPadding[ ]:::invisible ~~~ HerokuSecEv
     HerokuSecEv --> DeployProvider
@@ -568,9 +648,12 @@ flowchart BT
     RapidUpdateEv[("<b>RapidUpdateEv</b>&nbsp;↗<br>Bundler enables library updates in one command; high test coverage enables rapid verify-and-deploy; CI/CD pipeline deploys to Heroku automatically on passing tests")]
     Dot1((" ")):::sacmDot
     Dot2((" ")):::sacmDot
-    click AutoDetectBundleEv "../Gemfile.lock"
-    click AutoDetectGitHubEv "../.github/dependabot.yml"
-    click RapidUpdateEv "../.circleci/config.yml"
+    click Maintenance "#claim-maintenance"
+    click AutoDetect "#claim-autodetect"
+    click RapidUpdate "#claim-rapidupdate"
+    click AutoDetectBundleEv "#evidence-autodetectbundleev"
+    click AutoDetectGitHubEv "#evidence-autodetectgithubev"
+    click RapidUpdateEv "#evidence-rapidupdateev"
 
     BottomPadding[ ]:::invisible ~~~ AutoDetectBundleEv
     AutoDetectBundleEv --- Dot1
@@ -632,14 +715,29 @@ flowchart BT
     Dot2((" ")):::sacmDot
     Dot3((" ")):::sacmDot
     Dot4((" ")):::sacmDot
-    click ProjectPlanningEv "../governance.md"
-    click RiskMgmtEv "../docs/case.md"
-    click ConfigMgmtEv "../governance.md"
-    click QAEv "../.circleci/config.yml"
-    click ContractsEv "https://www.heroku.com/policy/security"
-    click DevEnvSecEv "../CONTRIBUTING.md"
-    click CINoDataEv "../.circleci/config.yml"
-    click DevKnowledgeEv "../docs/background.md"
+    click NonTechnical "#claim-nontechnical"
+    click AgreementProc "#claim-agreementproc"
+    click OrgProc "#claim-orgproc"
+    click TechMgmt "#claim-techmgmt"
+    click Acquisition "#claim-acquisition"
+    click Infrastructure "#claim-infrastructure"
+    click HumanRes "#claim-humanres"
+    click ProjectPlanning "#claim-projectplanning"
+    click RiskMgmt "#claim-riskmgmt"
+    click ConfigMgmt "#claim-configmgmt"
+    click QA "#claim-qa"
+    click Contracts "#claim-contracts"
+    click DevEnvSec "#claim-devenvsec"
+    click CINoData "#claim-cinodata"
+    click DevKnowledge "#claim-devknowledge"
+    click ProjectPlanningEv "#evidence-projectplanningev"
+    click RiskMgmtEv "#evidence-riskmgmtev"
+    click ConfigMgmtEv "#evidence-configmgmtev"
+    click QAEv "#evidence-qaev"
+    click ContractsEv "#evidence-contractsev"
+    click DevEnvSecEv "#evidence-devenvsecev"
+    click CINoDataEv "#evidence-cinodataev"
+    click DevKnowledgeEv "#evidence-devknowledgeev"
 
     BottomPadding[ ]:::invisible ~~~ ContractsEv
     ContractsEv --> Contracts
@@ -696,7 +794,9 @@ flowchart BT
     Controls["<b>Controls</b><br>Certifications &amp; controls provide confidence in operating results"]
     CIIBadge["<b>CIIBadge</b><br>CII Best Practices Badge certification is obtained"]
     CIIBadgeEv[("<b>CIIBadgeEv</b>&nbsp;↗<br>BadgeApp achieves gold CII Best Practices Badge")]
-    click CIIBadgeEv "https://bestpractices.coreinfrastructure.org/en/projects/1"
+    click Controls "#claim-controls"
+    click CIIBadge "#claim-ciibadge"
+    click CIIBadgeEv "#evidence-ciibadgeev"
 
     BottomPadding[ ]:::invisible ~~~ CIIBadgeEv
     CIIBadgeEv --> CIIBadge
@@ -760,20 +860,36 @@ flowchart BT
     Dot1((" ")):::sacmDot
     Dot2((" ")):::sacmDot
     Dot3((" ")):::sacmDot
-    click OWASP1Ev "../app/models/project.rb"
-    click OWASP2Ev "../config/initializers/session_store.rb"
-    click OWASP3Ev "../config/initializers/secure_headers.rb"
-    click OWASP11Ev "../docs/case.md"
-    click OWASP12Ev "../config/initializers/session_store.rb"
-    click OWASP13Ev "../config/initializers/filter_parameter_logging.rb"
-    click OWASP4Ev "../app/controllers/projects_controller.rb"
-    click OWASP5Ev "../config/initializers/secure_headers.rb"
-    click OWASP6Ev "../config/initializers/filter_parameter_logging.rb"
-    click OWASP7Ev "../app/controllers/application_controller.rb"
-    click OWASP8Ev "../app/controllers/application_controller.rb"
-    click OWASP9BundleEv "../Gemfile.lock"
-    click OWASP9DependabotEv "../.github/dependabot.yml"
-    click OWASP10Ev "../app/controllers/sessions_controller.rb"
+    click OWASPClaim "#claim-owaspclaim"
+    click OWASPStrat "#strategy-owaspstrat"
+    click OWASP1013 "#claim-owasp1013"
+    click OWASP1 "#claim-owasp1"
+    click OWASP2 "#claim-owasp2"
+    click OWASP3 "#claim-owasp3"
+    click OWASP11 "#claim-owasp11"
+    click OWASP12 "#claim-owasp12"
+    click OWASP13 "#claim-owasp13"
+    click OWASP1Ev "#evidence-owasp1ev"
+    click OWASP2Ev "#evidence-owasp2ev"
+    click OWASP3Ev "#evidence-owasp3ev"
+    click OWASP4 "#claim-owasp4"
+    click OWASP5 "#claim-owasp5"
+    click OWASP6 "#claim-owasp6"
+    click OWASP7 "#claim-owasp7"
+    click OWASP8 "#claim-owasp8"
+    click OWASP9 "#claim-owasp9"
+    click OWASP10 "#claim-owasp10"
+    click OWASP11Ev "#evidence-owasp11ev"
+    click OWASP12Ev "#evidence-owasp12ev"
+    click OWASP13Ev "#evidence-owasp13ev"
+    click OWASP4Ev "#evidence-owasp4ev"
+    click OWASP5Ev "#evidence-owasp5ev"
+    click OWASP6Ev "#evidence-owasp6ev"
+    click OWASP7Ev "#evidence-owasp7ev"
+    click OWASP8Ev "#evidence-owasp8ev"
+    click OWASP9BundleEv "#evidence-owasp9bundleev"
+    click OWASP9DependabotEv "#evidence-owasp9dependabotev"
+    click OWASP10Ev "#evidence-owasp10ev"
 
     BottomPadding[ ]:::invisible ~~~ OWASP1Ev
     OWASP1Ev --> OWASP1
@@ -852,14 +968,23 @@ flowchart BT
     HardenEmailEncEv[("<b>HardenEmailEncEv</b>&nbsp;↗<br>attr_encrypted and blind_index gems encrypt email addresses with AES-256-GCM and PBKDF2-HMAC-SHA256 index")]
     HardenGravatarEv[("<b>HardenGravatarEv</b>&nbsp;↗<br>use_gravatar boolean controls whether gravatar MD5 hash is revealed for each local user")]
     Dot1((" ")):::sacmDot
-    click HardenHTTPSEv "../config/environments/production.rb"
-    click HardenCSPEv "../test/integration/project_get_test.rb"
-    click HardenCookiesEv "../Gemfile"
-    click HardenCSRFEv "../app/controllers/application_controller.rb"
-    click HardenRateInEv "../config/initializers/rack_attack.rb"
-    click HardenRateOutEv "../app/models/project.rb"
-    click HardenEmailEncEv "../app/models/user.rb"
-    click HardenGravatarEv "../app/models/user.rb"
+    click Hardening "#claim-hardening"
+    click HardenHTTPS "#claim-hardenhttps"
+    click HardenCSP "#claim-hardencsp"
+    click HardenCookies "#claim-hardencookies"
+    click HardenCSRF "#claim-hardencsrf"
+    click HardenRateIn "#claim-hardenratein"
+    click HardenRateOut "#claim-hardenrateout"
+    click HardenEmailEnc "#claim-hardenemailenc"
+    click HardenGravatar "#claim-hardengravatar"
+    click HardenHTTPSEv "#evidence-hardenhttpsev"
+    click HardenCSPEv "#evidence-hardencspev"
+    click HardenCookiesEv "#evidence-hardencookiesev"
+    click HardenCSRFEv "#evidence-hardencsrfev"
+    click HardenRateInEv "#evidence-hardenrateinev"
+    click HardenRateOutEv "#evidence-hardenrateoutev"
+    click HardenEmailEncEv "#evidence-hardenemailencev"
+    click HardenGravatarEv "#evidence-hardengravatarev"
 
     BottomPadding[ ]:::invisible ~~~ HardenHTTPSEv
     HardenHTTPSEv --> HardenHTTPS
@@ -924,12 +1049,22 @@ flowchart BT
     Dot2((" ")):::sacmDot
     Dot3((" ")):::sacmDot
     Dot4((" ")):::sacmDot
-    click GravatarPrivacyEv "../app/models/user.rb"
-    click DataInMotionEv "../config/environments/production.rb"
-    click SelfHostedAssetsEv "../config/initializers/secure_headers.rb"
-    click PasswordsEv "../app/models/user.rb"
-    click RememberMeEv "../app/controllers/sessions_controller.rb"
-    click EmailSecuredEv "../app/views/users/"
+    click Confidentiality "#claim-confidentiality"
+    click NonPublicData "#claim-nonpublicdata"
+    click UserPrivacy "#claim-userprivacy"
+    click MostDataPublic "#claim-mostdatapublic"
+    click ConfDataAtRest "#claim-confdataatrest"
+    click DataInMotion "#claim-datainmotion"
+    click SelfHostedAssets "#claim-selfhostedassets"
+    click GravatarPrivacyEv "#evidence-gravatarprivacyev"
+    click Passwords "#claim-passwords"
+    click RememberMe "#claim-rememberme"
+    click EmailSecured "#claim-emailsecured"
+    click DataInMotionEv "#evidence-datainmotionev"
+    click SelfHostedAssetsEv "#evidence-selfhostedassetsev"
+    click PasswordsEv "#evidence-passwordsev"
+    click RememberMeEv "#evidence-remembermeev"
+    click EmailSecuredEv "#evidence-emailsecuredev"
 
     BottomPadding[ ]:::invisible ~~~ PasswordsEv
     PasswordsEv --> Passwords
@@ -990,12 +1125,19 @@ flowchart BT
     BackupsEv[("<b>BackupsEv</b>&nbsp;↗<br>Heroku Postgres automated daily backups retained across multiple snapshots; standard Rails and PostgreSQL restore mechanisms enable database recovery")]
     ScaleUpEv[("<b>ScaleUpEv</b>&nbsp;↗<br>Heroku cloud platform supports on-demand dyno scaling; Fastly CDN reduces origin load during traffic spikes")]
     Dot1((" ")):::sacmDot
-    click FastlyCDNEv "../config/initializers/fastly.rb"
-    click TimeoutEv "../config/environments/production.rb"
-    click QuickRecoveryEv "../Procfile"
-    click LoginDisabledEv "../config/initializers/deny_login.rb"
-    click BackupsEv "https://devcenter.heroku.com/articles/heroku-postgres-backups"
-    click ScaleUpEv "../Procfile"
+    click Availability "#claim-availability"
+    click CDNDDoS "#claim-cdnddos"
+    click Timeout "#claim-timeout"
+    click QuickRecovery "#claim-quickrecovery"
+    click LoginDisabled "#claim-logindisabled"
+    click Backups "#claim-backups"
+    click ScaleUp "#claim-scaleup"
+    click FastlyCDNEv "#evidence-fastlycdnev"
+    click TimeoutEv "#evidence-timeoutev"
+    click QuickRecoveryEv "#evidence-quickrecoveryev"
+    click LoginDisabledEv "#evidence-logindisabledev"
+    click BackupsEv "#evidence-backupsev"
+    click ScaleUpEv "#evidence-scaleupev"
 
     BottomPadding[ ]:::invisible ~~~ FastlyCDNEv
     FastlyCDNEv --> CDNDDoS
@@ -1731,6 +1873,8 @@ while we check them against the bad password list in the database:
 Referenced by: **[Package Confidentiality](#package-confidentiality)**
 
 Supports: **[Claim Passwords](#claim-passwords)**
+
+External Reference: [../app/models/user.rb](../app/models/user.rb)
 <!-- end verocase -->
 
 `has_secure_password` in user model stores passwords via bcrypt. See [../app/models/user.rb](../app/models/user.rb).
@@ -1795,6 +1939,8 @@ password is not stored as cleartext in the user cookie.
 Referenced by: **[Package Confidentiality](#package-confidentiality)**
 
 Supports: **[Claim RememberMe](#claim-rememberme)**
+
+External Reference: [../app/controllers/sessions_controller.rb](../app/controllers/sessions_controller.rb)
 <!-- end verocase -->
 
 `remember` method in user model creates bcrypt-stored nonce; sessions controller and helper manage it; login test verifies cleartext not stored in cookie. See [../app/controllers/sessions_controller.rb](../app/controllers/sessions_controller.rb).
@@ -1935,6 +2081,8 @@ authentication system (countering enumeration or verification attacks):
 Referenced by: **[Package Confidentiality](#package-confidentiality)**
 
 Supports: **[Claim EmailSecured](#claim-emailsecured)**
+
+External Reference: [../app/views/users/](../app/views/users/)
 <!-- end verocase -->
 
 To verify that email addresses are only accessible to owners and admins:
@@ -1989,6 +2137,8 @@ to verify that our TLS configuration is secure in production.
 Referenced by: **[Package Confidentiality](#package-confidentiality)**
 
 Supports: **[Claim DataInMotion](#claim-datainmotion)**
+
+External Reference: [../config/environments/production.rb](../config/environments/production.rb)
 <!-- end verocase -->
 
 `config.force_ssl = true` enforces HTTPS with TLS redirection and secure cookies in production. See [../config/environments/production.rb](../config/environments/production.rb).
@@ -2128,6 +2278,8 @@ from potentially-malicious authorized users.
 Referenced by: **[Package Requirements](#package-requirements)**
 
 Supports: **[Claim DataModAuth](#claim-datamodauth)**
+
+External Reference: [../app/controllers/projects_controller.rb](../app/controllers/projects_controller.rb)
 <!-- end verocase -->
 
 `before_action` guards `can_edit_else_redirect` and `can_control_else_redirect` protect all project modifications. See [../app/controllers/projects_controller.rb](../app/controllers/projects_controller.rb).
@@ -2236,6 +2388,8 @@ in file `config/environments/production.rb`.
 Referenced by: **[Package Availability](#package-availability)**
 
 Supports: **[Claim Timeout](#claim-timeout)**
+
+External Reference: [../config/environments/production.rb](../config/environments/production.rb)
 <!-- end verocase -->
 
 `Rack::Timeout.service_timeout` set in production configuration limits all request times. See [../config/environments/production.rb](../config/environments/production.rb).
@@ -2338,6 +2492,8 @@ to help them understand that this special mode has been enabled.
 Referenced by: **[Package Availability](#package-availability)**
 
 Supports: **[Claim LoginDisabled](#claim-logindisabled)**
+
+External Reference: [../config/initializers/deny_login.rb](../config/initializers/deny_login.rb)
 <!-- end verocase -->
 
 `deny_login` initializer reads `BADGEAPP_DENY_LOGIN` env var to disable all logins. See [../config/initializers/deny_login.rb](../config/initializers/deny_login.rb).
@@ -2740,6 +2896,8 @@ For more, see the earlier section justifying the claim that
 Referenced by: **[Package Requirements](#package-requirements)**
 
 Supports: **[Claim AuthZ](#claim-authz)**
+
+External Reference: [../app/controllers/application_controller.rb](../app/controllers/application_controller.rb)
 <!-- end verocase -->
 
 `can_edit?` and `can_control?` methods implement role-based authorization; all access enforced server-side through controllers. See [../app/controllers/application_controller.rb](../app/controllers/application_controller.rb).
@@ -4346,6 +4504,8 @@ for more about the impact of `force_ssl`.
 Referenced by: **[Package Hardening](#package-hardening)**
 
 Supports: **[Claim HardenHTTPS](#claim-hardenhttps)**
+
+External Reference: [../config/environments/production.rb](../config/environments/production.rb)
 <!-- end verocase -->
 
 `config.force_ssl` enables TLS redirection, secure cookies, and HSTS; domain in Chrome HSTS preload list. See [../config/environments/production.rb](../config/environments/production.rb).
@@ -4418,6 +4578,8 @@ protection measures (including caching and scaling) still apply.
 Referenced by: **[Package Hardening](#package-hardening)**
 
 Supports: **[Claim HardenCSP](#claim-hardencsp)**
+
+External Reference: [../test/integration/project_get_test.rb](../test/integration/project_get_test.rb)
 <!-- end verocase -->
 
 `secure_headers` gem enforces CSP and security headers; integration test verifies header values. See [../test/integration/project_get_test.rb](../test/integration/project_get_test.rb).
@@ -4460,6 +4622,8 @@ See
 Referenced by: **[Package Hardening](#package-hardening)**
 
 Supports: **[Claim HardenCookies](#claim-hardencookies)**
+
+External Reference: [../Gemfile](../Gemfile)
 <!-- end verocase -->
 
 `secure_headers` gem sets httponly, secure, and SameSite=Lax cookie attributes; session cookies use AES-256-GCM. See [../Gemfile](../Gemfile).
@@ -4501,6 +4665,8 @@ These help counter CSRF, in addition to our other measures.
 Referenced by: **[Package Hardening](#package-hardening)**
 
 Supports: **[Claim HardenCSRF](#claim-hardencsrf)**
+
+External Reference: [../app/controllers/application_controller.rb](../app/controllers/application_controller.rb)
 <!-- end verocase -->
 
 `protect_from_forgery` with per-form tokens and origin-header check, enabled via `load_defaults`. See [../app/controllers/application_controller.rb](../app/controllers/application_controller.rb).
@@ -4563,6 +4729,8 @@ but those entries are always earlier in the list
 Referenced by: **[Package Hardening](#package-hardening)**
 
 Supports: **[Claim HardenRateIn](#claim-hardenratein)**
+
+External Reference: [../config/initializers/rack_attack.rb](../config/initializers/rack_attack.rb)
 <!-- end verocase -->
 
 `Rack::Attack` rate limits on requests, logins, and signups by client IP address. See [../config/initializers/rack_attack.rb](../config/initializers/rack_attack.rb).
@@ -4599,6 +4767,8 @@ time; this keeps us from looking like a spammer.
 Referenced by: **[Package Hardening](#package-hardening)**
 
 Supports: **[Claim HardenRateOut](#claim-hardenrateout)**
+
+External Reference: [../app/models/project.rb](../app/models/project.rb)
 <!-- end verocase -->
 
 `projects_to_remind` class method and hard limit on outgoing reminder email count. See [../app/models/project.rb](../app/models/project.rb).
@@ -4732,6 +4902,8 @@ to protect email addresses from being revealed.
 Referenced by: **[Package Hardening](#package-hardening)**
 
 Supports: **[Claim HardenEmailEnc](#claim-hardenemailenc)**
+
+External Reference: [../app/models/user.rb](../app/models/user.rb)
 <!-- end verocase -->
 
 `attr_encrypted` and `blind_index` gems encrypt email addresses with AES-256-GCM and PBKDF2-HMAC-SHA256 index. See [../app/models/user.rb](../app/models/user.rb).
@@ -4788,6 +4960,8 @@ and this is one way we do that.
 Referenced by: **[Package Hardening](#package-hardening)**
 
 Supports: **[Claim HardenGravatar](#claim-hardengravatar)**
+
+External Reference: [../app/models/user.rb](../app/models/user.rb)
 <!-- end verocase -->
 
 `use_gravatar` boolean controls whether gravatar MD5 hash is revealed for each local user. See [../app/models/user.rb](../app/models/user.rb).
@@ -4985,6 +5159,8 @@ This makes it much easier to maintain the software later
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Claim PkgMgr](#claim-pkgmgr)**
+
+External Reference: [../Gemfile](../Gemfile)
 <!-- end verocase -->
 
 `Gemfile` and `Gemfile.lock` manage all gem dependencies via bundler. See [../Gemfile](../Gemfile).
@@ -5356,6 +5532,8 @@ See the style checking bullet in [Claim Verification](#claim-verification).
 Referenced by: **[Package Verification](#package-verification)**
 
 Supports: **[Claim StyleChecks](#claim-stylechecks)**
+
+External Reference: [../.circleci/config.yml](../.circleci/config.yml)
 <!-- end verocase -->
 
 Style checkers as pronto runners in Gemfile: eslint, rails_best_practices, rubocop. See [../.circleci/config.yml](../.circleci/config.yml).
@@ -5386,6 +5564,8 @@ See the source code weakness analyzer bullet in [Claim Verification](#claim-veri
 Referenced by: **[Package Verification](#package-verification)**
 
 Supports: **[Claim WeaknessAnalysis](#claim-weaknessanalysis)**
+
+External Reference: [../.github/workflows/main.yml](../.github/workflows/main.yml)
 <!-- end verocase -->
 
 Brakeman source code weakness analyzer. See [../.github/workflows/main.yml](../.github/workflows/main.yml).
@@ -5416,6 +5596,8 @@ See the FLOSS bullet in [Claim Verification](#claim-verification).
 Referenced by: **[Package Verification](#package-verification)**
 
 Supports: **[Claim FLOSSVerif](#claim-flossverif)**
+
+External Reference: [../.circleci/config.yml](../.circleci/config.yml)
 <!-- end verocase -->
 
 `license_finder`. See [../.circleci/config.yml](../.circleci/config.yml).
@@ -5429,6 +5611,8 @@ Supports: **[Claim FLOSSVerif](#claim-flossverif)**
 Referenced by: **[Package Verification](#package-verification)**
 
 Supports: **[Claim FLOSSVerif](#claim-flossverif)**
+
+External Reference: [https://github.com/coreinfrastructure/best-practices-badge/settings/](https://github.com/coreinfrastructure/best-practices-badge/settings/)
 <!-- end verocase -->
 
 FOSSA check. See [https://github.com/coreinfrastructure/best-practices-badge/settings/](https://github.com/coreinfrastructure/best-practices-badge/settings/).
@@ -5477,6 +5661,8 @@ See the test coverage bullet in [Claim Verification](#claim-verification).
 Referenced by: **[Package Verification](#package-verification)**
 
 Supports: **[Claim TestCoverage](#claim-testcoverage)**
+
+External Reference: [https://codecov.io/gh/coreinfrastructure/best-practices-badge](https://codecov.io/gh/coreinfrastructure/best-practices-badge)
 <!-- end verocase -->
 
 Automated tests run by CI. See [https://codecov.io/gh/coreinfrastructure/best-practices-badge](https://codecov.io/gh/coreinfrastructure/best-practices-badge).
@@ -5507,6 +5693,8 @@ See the negative testing bullet in [Claim Verification](#claim-verification).
 Referenced by: **[Package Verification](#package-verification)**
 
 Supports: **[Claim NegTests](#claim-negtests)**
+
+External Reference: [../test/](../test/)
 <!-- end verocase -->
 
 Negative test suite. See [../test/](../test/).
@@ -5539,6 +5727,8 @@ See the CI configuration file `../.circleci/config.yml`.
 Referenced by: **[Package Verification](#package-verification)**
 
 Supports: **[Claim CIRequired](#claim-cirequired)**
+
+External Reference: [../.circleci/config.yml](../.circleci/config.yml)
 <!-- end verocase -->
 
 CI configuration. See [../.circleci/config.yml](../.circleci/config.yml).
@@ -5616,6 +5806,8 @@ on GitHub to correctly authenticate users.
 Referenced by: **[Package Deployment](#package-deployment)**
 
 Supports: **[Claim DeployProvider](#claim-deployprovider)**
+
+External Reference: [https://www.heroku.com/policy/security](https://www.heroku.com/policy/security)
 <!-- end verocase -->
 
 Heroku security policy describes physical and environmental safeguards. See [https://www.heroku.com/policy/security](https://www.heroku.com/policy/security).
@@ -5749,6 +5941,8 @@ detect and counter things.
 Referenced by: **[Package Deployment](#package-deployment)**
 
 Supports: **[Claim IntLogging](#claim-intlogging)**
+
+External Reference: [../config/initializers/filter_parameter_logging.rb](../config/initializers/filter_parameter_logging.rb)
 <!-- end verocase -->
 
 `filter_parameter_logging.rb` excludes passwords from logs; events stream to stdout per 12-factor app. See [../config/initializers/filter_parameter_logging.rb](../config/initializers/filter_parameter_logging.rb).
@@ -5780,6 +5974,8 @@ One of those mechanisms is uptime robot:
 Referenced by: **[Package Deployment](#package-deployment)**
 
 Supports: **[Claim ExtMonitor](#claim-extmonitor)**
+
+External Reference: [https://uptimerobot.com/dashboard](https://uptimerobot.com/dashboard)
 <!-- end verocase -->
 
 UptimeRobot provides external alerting when the website goes down. See [https://uptimerobot.com/dashboard](https://uptimerobot.com/dashboard).
@@ -5965,6 +6161,8 @@ this approach completely counters the vulnerability.
 Referenced by: **[Package Maintenance](#package-maintenance)**
 
 Supports: **[Claim AutoDetect](#claim-autodetect)**
+
+External Reference: [../Gemfile.lock](../Gemfile.lock)
 <!-- end verocase -->
 
 `bundle-audit` checks all gem versions against NVD vulnerability database on every rake run. See [../Gemfile.lock](../Gemfile.lock).
@@ -5978,6 +6176,8 @@ Supports: **[Claim AutoDetect](#claim-autodetect)**
 Referenced by: **[Package Maintenance](#package-maintenance)**
 
 Supports: **[Claim AutoDetect](#claim-autodetect)**
+
+External Reference: [../.github/dependabot.yml](../.github/dependabot.yml)
 <!-- end verocase -->
 
 GitHub Dependabot alerts and automated pull requests for vulnerable dependencies. See [../.github/dependabot.yml](../.github/dependabot.yml).
@@ -6592,6 +6792,8 @@ has an authentication system for this purpose.
 Referenced by: **[Package NonTechnical](#package-nontechnical)**
 
 Supports: **[Claim ConfigMgmt](#claim-configmgmt)**
+
+External Reference: [../governance.md](../governance.md)
 <!-- end verocase -->
 
 Git version control via GitHub with authenticated access; governance documented. See [../governance.md](../governance.md).
@@ -6652,6 +6854,8 @@ Note that we achieve a gold badge.
 Referenced by: **[Package Controls](#package-controls)**
 
 Supports: **[Claim CIIBadge](#claim-ciibadge)**
+
+External Reference: [https://bestpractices.coreinfrastructure.org/en/projects/1](https://bestpractices.coreinfrastructure.org/en/projects/1)
 <!-- end verocase -->
 
 BadgeApp achieves gold CII Best Practices Badge. See [https://bestpractices.coreinfrastructure.org/en/projects/1](https://bestpractices.coreinfrastructure.org/en/projects/1).
@@ -7005,6 +7209,8 @@ Development processes and security:
 Referenced by: **[Package NonTechnical](#package-nontechnical)**
 
 Supports: **[Claim QA](#claim-qa)**
+
+External Reference: [../.circleci/config.yml](../.circleci/config.yml)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-qa) for details.
@@ -7018,6 +7224,8 @@ See the [parent claim section](#claim-qa) for details.
 Referenced by: **[Package NonTechnical](#package-nontechnical)**
 
 Supports: **[Claim RiskMgmt](#claim-riskmgmt)**
+
+External Reference: [../docs/case.md](../docs/case.md)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-riskmgmt) for details.
@@ -7031,6 +7239,8 @@ See the [parent claim section](#claim-riskmgmt) for details.
 Referenced by: **[Package NonTechnical](#package-nontechnical)**
 
 Supports: **[Claim ProjectPlanning](#claim-projectplanning)**
+
+External Reference: [../governance.md](../governance.md)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-projectplanning) for details.
@@ -7044,6 +7254,8 @@ See the [parent claim section](#claim-projectplanning) for details.
 Referenced by: **[Package NonTechnical](#package-nontechnical)**
 
 Supports: **[Claim DevKnowledge](#claim-devknowledge)**
+
+External Reference: [../docs/background.md](../docs/background.md)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-devknowledge) for details.
@@ -7057,6 +7269,8 @@ See the [parent claim section](#claim-devknowledge) for details.
 Referenced by: **[Package NonTechnical](#package-nontechnical)**
 
 Supports: **[Claim CINoData](#claim-cinodata)**
+
+External Reference: [../.circleci/config.yml](../.circleci/config.yml)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-cinodata) for details.
@@ -7070,6 +7284,8 @@ See the [parent claim section](#claim-cinodata) for details.
 Referenced by: **[Package NonTechnical](#package-nontechnical)**
 
 Supports: **[Claim DevEnvSec](#claim-devenvsec)**
+
+External Reference: [../CONTRIBUTING.md](../CONTRIBUTING.md)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-devenvsec) for details.
@@ -7083,6 +7299,8 @@ See the [parent claim section](#claim-devenvsec) for details.
 Referenced by: **[Package NonTechnical](#package-nontechnical)**
 
 Supports: **[Claim Contracts](#claim-contracts)**
+
+External Reference: [https://www.heroku.com/policy/security](https://www.heroku.com/policy/security)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-contracts) for details.
@@ -7096,6 +7314,8 @@ See the [parent claim section](#claim-contracts) for details.
 Referenced by: **[Package Maintenance](#package-maintenance)**
 
 Supports: **[Claim RapidUpdate](#claim-rapidupdate)**
+
+External Reference: [../.circleci/config.yml](../.circleci/config.yml)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-rapidupdate) for details.
@@ -7109,6 +7329,8 @@ See the [parent claim section](#claim-rapidupdate) for details.
 Referenced by: **[Package Deployment](#package-deployment)**
 
 Supports: **[Claim RecoveryPlan](#claim-recoveryplan)**
+
+External Reference: [../docs/case.md](../docs/case.md)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-recoveryplan) for details.
@@ -7122,6 +7344,8 @@ See the [parent claim section](#claim-recoveryplan) for details.
 Referenced by: **[Package Deployment](#package-deployment)**
 
 Supports: **[Claim OnlineCheckers](#claim-onlinecheckers)**
+
+External Reference: [https://observatory.mozilla.org/analyze/www.bestpractices.dev](https://observatory.mozilla.org/analyze/www.bestpractices.dev)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-onlinecheckers) for details.
@@ -7135,6 +7359,8 @@ See the [parent claim section](#claim-onlinecheckers) for details.
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Claim PubVulns](#claim-pubvulns)**
+
+External Reference: [../.github/dependabot.yml](../.github/dependabot.yml)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-pubvulns) for details.
@@ -7148,6 +7374,8 @@ See the [parent claim section](#claim-pubvulns) for details.
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Claim PubVulns](#claim-pubvulns)**
+
+External Reference: [../Gemfile.lock](../Gemfile.lock)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-pubvulns) for details.
@@ -7161,6 +7389,8 @@ See the [parent claim section](#claim-pubvulns) for details.
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Claim ReuseAuth](#claim-reuseauth)**
+
+External Reference: [../Gemfile.lock](../Gemfile.lock)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-reuseauth) for details.
@@ -7174,6 +7404,8 @@ See the [parent claim section](#claim-reuseauth) for details.
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Claim ReuseReview](#claim-reusereview)**
+
+External Reference: [../CONTRIBUTING.md](../CONTRIBUTING.md)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-reusereview) for details.
@@ -7187,6 +7419,8 @@ See the [parent claim section](#claim-reusereview) for details.
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Claim RailsGuide](#claim-railsguide)**
+
+External Reference: [https://guides.rubyonrails.org/security.html](https://guides.rubyonrails.org/security.html)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-railsguide) for details.
@@ -7200,6 +7434,8 @@ See the [parent claim section](#claim-railsguide) for details.
 Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supports: **[Claim OWASP13](#claim-owasp13)**
+
+External Reference: [../config/initializers/filter_parameter_logging.rb](../config/initializers/filter_parameter_logging.rb)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-owasp13) for details.
@@ -7213,6 +7449,8 @@ See the [parent claim section](#claim-owasp13) for details.
 Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supports: **[Claim OWASP12](#claim-owasp12)**
+
+External Reference: [../config/initializers/session_store.rb](../config/initializers/session_store.rb)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-owasp12) for details.
@@ -7226,6 +7464,8 @@ See the [parent claim section](#claim-owasp12) for details.
 Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supports: **[Claim OWASP11](#claim-owasp11)**
+
+External Reference: [../docs/case.md](../docs/case.md)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-owasp11) for details.
@@ -7239,6 +7479,8 @@ See the [parent claim section](#claim-owasp11) for details.
 Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supports: **[Claim OWASP10](#claim-owasp10)**
+
+External Reference: [../app/controllers/sessions_controller.rb](../app/controllers/sessions_controller.rb)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-owasp10) for details.
@@ -7252,6 +7494,8 @@ See the [parent claim section](#claim-owasp10) for details.
 Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supports: **[Claim OWASP9](#claim-owasp9)**
+
+External Reference: [../.github/dependabot.yml](../.github/dependabot.yml)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-owasp9) for details.
@@ -7265,6 +7509,8 @@ See the [parent claim section](#claim-owasp9) for details.
 Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supports: **[Claim OWASP9](#claim-owasp9)**
+
+External Reference: [../Gemfile.lock](../Gemfile.lock)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-owasp9) for details.
@@ -7278,6 +7524,8 @@ See the [parent claim section](#claim-owasp9) for details.
 Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supports: **[Claim OWASP8](#claim-owasp8)**
+
+External Reference: [../app/controllers/application_controller.rb](../app/controllers/application_controller.rb)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-owasp8) for details.
@@ -7291,6 +7539,8 @@ See the [parent claim section](#claim-owasp8) for details.
 Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supports: **[Claim OWASP7](#claim-owasp7)**
+
+External Reference: [../app/controllers/application_controller.rb](../app/controllers/application_controller.rb)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-owasp7) for details.
@@ -7304,6 +7554,8 @@ See the [parent claim section](#claim-owasp7) for details.
 Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supports: **[Claim OWASP6](#claim-owasp6)**
+
+External Reference: [../config/initializers/filter_parameter_logging.rb](../config/initializers/filter_parameter_logging.rb)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-owasp6) for details.
@@ -7317,6 +7569,8 @@ See the [parent claim section](#claim-owasp6) for details.
 Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supports: **[Claim OWASP5](#claim-owasp5)**
+
+External Reference: [../config/initializers/secure_headers.rb](../config/initializers/secure_headers.rb)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-owasp5) for details.
@@ -7330,6 +7584,8 @@ See the [parent claim section](#claim-owasp5) for details.
 Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supports: **[Claim OWASP4](#claim-owasp4)**
+
+External Reference: [../app/controllers/projects_controller.rb](../app/controllers/projects_controller.rb)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-owasp4) for details.
@@ -7343,6 +7599,8 @@ See the [parent claim section](#claim-owasp4) for details.
 Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supports: **[Claim OWASP3](#claim-owasp3)**
+
+External Reference: [../config/initializers/secure_headers.rb](../config/initializers/secure_headers.rb)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-owasp3) for details.
@@ -7356,6 +7614,8 @@ See the [parent claim section](#claim-owasp3) for details.
 Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supports: **[Claim OWASP2](#claim-owasp2)**
+
+External Reference: [../config/initializers/session_store.rb](../config/initializers/session_store.rb)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-owasp2) for details.
@@ -7369,6 +7629,8 @@ See the [parent claim section](#claim-owasp2) for details.
 Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supports: **[Claim OWASP1](#claim-owasp1)**
+
+External Reference: [../app/models/project.rb](../app/models/project.rb)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-owasp1) for details.
@@ -7382,6 +7644,8 @@ See the [parent claim section](#claim-owasp1) for details.
 Referenced by: **[Package Design](#package-design)**
 
 Supports: **[Claim MemSafe](#claim-memsafe)**
+
+External Reference: [../Gemfile](../Gemfile)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-memsafe) for details.
@@ -7395,6 +7659,8 @@ See the [parent claim section](#claim-memsafe) for details.
 Referenced by: **[Package Design](#package-design)**
 
 Supports: **[Claim Scalability](#claim-scalability)**
+
+External Reference: [../Procfile](../Procfile)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-scalability) for details.
@@ -7408,6 +7674,8 @@ See the [parent claim section](#claim-scalability) for details.
 Referenced by: **[Package Design](#package-design)**
 
 Supports: **[Claim InputValid](#claim-inputvalid)**
+
+External Reference: [../app/models/project.rb](../app/models/project.rb)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-inputvalid) for details.
@@ -7421,6 +7689,8 @@ See the [parent claim section](#claim-inputvalid) for details.
 Referenced by: **[Package Design](#package-design)**
 
 Supports: **[Claim LimitedAttack](#claim-limitedattack)**
+
+External Reference: [../config/initializers/rack_attack.rb](../config/initializers/rack_attack.rb)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-limitedattack) for details.
@@ -7434,6 +7704,8 @@ See the [parent claim section](#claim-limitedattack) for details.
 Referenced by: **[Package Design](#package-design)**
 
 Supports: **[Claim PsychAccept](#claim-psychaccept)**
+
+External Reference: [../app/views/projects/](../app/views/projects/)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-psychaccept) for details.
@@ -7447,6 +7719,8 @@ See the [parent claim section](#claim-psychaccept) for details.
 Referenced by: **[Package Design](#package-design)**
 
 Supports: **[Claim LeastCommon](#claim-leastcommon)**
+
+External Reference: [../config/initializers/session_store.rb](../config/initializers/session_store.rb)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-leastcommon) for details.
@@ -7460,6 +7734,8 @@ See the [parent claim section](#claim-leastcommon) for details.
 Referenced by: **[Package Design](#package-design)**
 
 Supports: **[Claim LeastPriv](#claim-leastpriv)**
+
+External Reference: [../app/controllers/application_controller.rb](../app/controllers/application_controller.rb)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-leastpriv) for details.
@@ -7473,6 +7749,8 @@ See the [parent claim section](#claim-leastpriv) for details.
 Referenced by: **[Package Design](#package-design)**
 
 Supports: **[Claim SepPriv](#claim-seppriv)**
+
+External Reference: [../app/models/user.rb](../app/models/user.rb)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-seppriv) for details.
@@ -7486,6 +7764,8 @@ See the [parent claim section](#claim-seppriv) for details.
 Referenced by: **[Package Design](#package-design)**
 
 Supports: **[Claim OpenDesign](#claim-opendesign)**
+
+External Reference: [https://github.com/coreinfrastructure/best-practices-badge](https://github.com/coreinfrastructure/best-practices-badge)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-opendesign) for details.
@@ -7499,6 +7779,8 @@ See the [parent claim section](#claim-opendesign) for details.
 Referenced by: **[Package Design](#package-design)**
 
 Supports: **[Claim FailSafe](#claim-failsafe)**
+
+External Reference: [../app/controllers/application_controller.rb](../app/controllers/application_controller.rb)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-failsafe) for details.
@@ -7512,6 +7794,8 @@ See the [parent claim section](#claim-failsafe) for details.
 Referenced by: **[Package Design](#package-design)**
 
 Supports: **[Claim CompleteMed](#claim-completemed)**
+
+External Reference: [../app/controllers/application_controller.rb](../app/controllers/application_controller.rb)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-completemed) for details.
@@ -7525,6 +7809,8 @@ See the [parent claim section](#claim-completemed) for details.
 Referenced by: **[Package Design](#package-design)**
 
 Supports: **[Claim EconomyMech](#claim-economymech)**
+
+External Reference: [../Gemfile](../Gemfile)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-economymech) for details.
@@ -7538,6 +7824,8 @@ See the [parent claim section](#claim-economymech) for details.
 Referenced by: **[Package Design](#package-design)**
 
 Supports: **[Claim STRIDE](#claim-stride)**
+
+External Reference: [../docs/case.md](../docs/case.md)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-stride) for details.
@@ -7551,6 +7839,8 @@ See the [parent claim section](#claim-stride) for details.
 Referenced by: **[Package Design](#package-design)**
 
 Supports: **[Claim SimpleDesign](#claim-simpledesign)**
+
+External Reference: [../docs/design.md](../docs/design.md)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-simpledesign) for details.
@@ -7600,6 +7890,8 @@ The countermeasures throughout this assurance case are designed to protect these
 Referenced by: **[Package Requirements](#package-requirements)**
 
 Supports: **[Claim RemoteAuthN](#claim-remoteauthn)**
+
+External Reference: [../config/initializers/omniauth.rb](../config/initializers/omniauth.rb)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-remoteauthn) for details.
@@ -7613,6 +7905,8 @@ See the [parent claim section](#claim-remoteauthn) for details.
 Referenced by: **[Package Requirements](#package-requirements)**
 
 Supports: **[Claim LocalAuthN](#claim-localauthn)**
+
+External Reference: [../app/controllers/sessions_controller.rb](../app/controllers/sessions_controller.rb)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-localauthn) for details.
@@ -7626,6 +7920,8 @@ See the [parent claim section](#claim-localauthn) for details.
 Referenced by: **[Package Availability](#package-availability)**
 
 Supports: **[Claim ScaleUp](#claim-scaleup)**
+
+External Reference: [../Procfile](../Procfile)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-scaleup) for details.
@@ -7639,6 +7935,8 @@ See the [parent claim section](#claim-scaleup) for details.
 Referenced by: **[Package Availability](#package-availability)**
 
 Supports: **[Claim Backups](#claim-backups)**
+
+External Reference: [https://devcenter.heroku.com/articles/heroku-postgres-backups](https://devcenter.heroku.com/articles/heroku-postgres-backups)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-backups) for details.
@@ -7652,6 +7950,8 @@ See the [parent claim section](#claim-backups) for details.
 Referenced by: **[Package Availability](#package-availability)**
 
 Supports: **[Claim QuickRecovery](#claim-quickrecovery)**
+
+External Reference: [../Procfile](../Procfile)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-quickrecovery) for details.
@@ -7665,6 +7965,8 @@ See the [parent claim section](#claim-quickrecovery) for details.
 Referenced by: **[Package Availability](#package-availability)**
 
 Supports: **[Claim CDNDDoS](#claim-cdnddos)**
+
+External Reference: [../config/initializers/fastly.rb](../config/initializers/fastly.rb)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-cdnddos) for details.
@@ -7678,6 +7980,8 @@ See the [parent claim section](#claim-cdnddos) for details.
 Referenced by: **[Package Requirements](#package-requirements)**
 
 Supports: **[Claim AppModAuth](#claim-appmodauth)**
+
+External Reference: [../governance.md](../governance.md)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-appmodauth) for details.
@@ -7691,6 +7995,8 @@ See the [parent claim section](#claim-appmodauth) for details.
 Referenced by: **[Package Confidentiality](#package-confidentiality)**
 
 Supports: **[Claim UserPrivacy](#claim-userprivacy)**
+
+External Reference: [../app/models/user.rb](../app/models/user.rb)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-userprivacy) for details.
@@ -7728,6 +8034,8 @@ asset silently attacking our users.
 Referenced by: **[Package Confidentiality](#package-confidentiality)**
 
 Supports: **[Claim SelfHostedAssets](#claim-selfhostedassets)**
+
+External Reference: [../config/initializers/secure_headers.rb](../config/initializers/secure_headers.rb)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-selfhostedassets) for details.
@@ -7741,6 +8049,8 @@ See the [parent claim section](#claim-selfhostedassets) for details.
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Claim KnownVulns](#claim-knownvulns)**
+
+External Reference: [../.github/dependabot.yml](../.github/dependabot.yml)
 <!-- end verocase -->
 
 We configure GitHub Dependabot to automatically scan our gem dependencies
@@ -7756,6 +8066,8 @@ See [`.github/dependabot.yml`](.github/dependabot.yml).
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Claim KnownVulns](#claim-knownvulns)**
+
+External Reference: [../Gemfile.lock](../Gemfile.lock)
 <!-- end verocase -->
 
 We run `bundle-audit` as part of every `rake` invocation. It compares
@@ -7794,6 +8106,8 @@ Since we never use ActionCable, no sensitive data ever flows through it.
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Claim ActionCableSafe](#claim-actioncablesafe)**
+
+External Reference: [../Gemfile.lock](../Gemfile.lock)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-actioncablesafe) for details.
@@ -7831,6 +8145,8 @@ development restarts smoother.
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Claim LocalSecretSafe](#claim-localsecretsafe)**
+
+External Reference: [../tmp/local_secret.txt](../tmp/local_secret.txt)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-localsecretsafe) for details.
@@ -7865,6 +8181,8 @@ impact.
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Claim ErubisSafe](#claim-erubissafe)**
+
+External Reference: [../Gemfile](../Gemfile)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-erubissafe) for details.
@@ -7901,6 +8219,8 @@ are test-only, where all input is trusted.
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Claim XXESafe](#claim-xxesafe)**
+
+External Reference: [../Gemfile.lock](../Gemfile.lock)
 <!-- end verocase -->
 
 See the [parent claim section](#claim-xxesafe) for details.

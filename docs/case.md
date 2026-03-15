@@ -234,103 +234,41 @@ flowchart BT
     Design["<b>Design</b><br>Security in design"]
     SimpleDesign["<b>SimpleDesign</b><br>Economy of mechanism: simple design is used"]
     STRIDE["<b>STRIDE</b><br>STRIDE threat model has been analyzed"]
-    DesignPrinciples["<b>DesignPrinciples</b><br>Secure design principles are applied"]
+    None[["<b>DesignPrinciples</b><br>Secure design principles are applied"]]
     Scalability["<b>Scalability</b><br>Availability through scalability"]
     MemSafe["<b>MemSafe</b><br>Memory-safe languages are used"]
     SimpleDesignEv[("<b>SimpleDesignEv</b>&nbsp;↗<br>Standard Rails MVC architecture with models, views, and controllers; no microservices or complex distributed patterns; custom code kept minimal")]
     STRIDEEv[("<b>STRIDEEv</b>&nbsp;↗<br>STRIDE threat analysis documented for all major components: web server, controllers/models/views, DBMS, Chief/Detective classes, admin CLI, and i18n service")]
-    EconomyMech["<b>EconomyMech</b><br>Economy of mechanism"]
-    CompleteMed["<b>CompleteMed</b><br>Complete mediation"]
-    FailSafe["<b>FailSafe</b><br>Fail-safe defaults"]
-    SynConnect_00000000((" ")):::connector
-    PsychAccept["<b>PsychAccept</b><br>Psychological acceptability"]
-    LimitedAttack["<b>LimitedAttack</b><br>Limited attack surface"]
-    InputValid["<b>InputValid</b><br>Input validation with whitelists"]
     ScalabilityEv[("<b>ScalabilityEv</b>&nbsp;↗<br>Heroku dyno-based deployment enables horizontal scaling; Fastly CDN offloads static asset and badge requests from origin server")]
     MemSafeEv[("<b>MemSafeEv</b>&nbsp;↗<br>All custom application code is written in Ruby and JavaScript, both memory-managed languages; buffer overflows and memory corruption cannot occur in custom code")]
-    EconomyMechEv[("<b>EconomyMechEv</b>&nbsp;↗<br>Custom code kept minimal and DRY; standard Rails patterns used; Gemfile shows focused, well-scoped dependency set")]
-    CompleteMedEv[("<b>CompleteMedEv</b>&nbsp;↗<br>before_action authorization hooks in ApplicationController run on every request; no client-side access control decisions are made")]
-    FailSafeEv[("<b>FailSafeEv</b>&nbsp;↗<br>can_edit_else_redirect and can_control_else_redirect redirect unauthenticated or unauthorized requests; default deny enforced server-side")]
-    OpenDesign["<b>OpenDesign</b><br>Open design"]
-    SepPriv["<b>SepPriv</b><br>Separation of privilege"]
-    LeastPriv["<b>LeastPriv</b><br>Least privilege"]
-    LeastCommon["<b>LeastCommon</b><br>Least common mechanism"]
-    PsychAcceptEv[("<b>PsychAcceptEv</b>&nbsp;↗<br>Standard web authentication UX (email/password or GitHub OAuth login); badge criteria presented in plain language; security controls do not impose undue burden on legitimate use")]
-    LimitedAttackEv[("<b>LimitedAttackEv</b>&nbsp;↗<br>Restrictive CSP limits script execution sources; routes.rb exposes only necessary endpoints; Rack::Attack blocks abusive IPs")]
-    InputValidEv[("<b>InputValidEv</b>&nbsp;↗<br>Project and User models use Rails validators to enforce field constraints; controllers use strong parameters (permit) to whitelist allowed input fields")]
-    OpenDesignEv[("<b>OpenDesignEv</b>&nbsp;↗<br>Full source code publicly available; security does not depend on keeping implementation secret")]
-    SepPrivEv[("<b>SepPrivEv</b>&nbsp;↗<br>admin? method in User model separates admin role from normal user; admin-only actions checked explicitly and separately from ownership")]
-    LeastPrivEv[("<b>LeastPrivEv</b>&nbsp;↗<br>can_edit? grants edit access only to project owner or admins; additional_rights table enables explicit narrow collaborator grants")]
-    LeastCommonEv[("<b>LeastCommonEv</b>&nbsp;↗<br>Per-request processing; session state stored in per-user encrypted client-side cookies, not shared server-side sessions")]
     Dot1((" ")):::sacmDot
-    Dot2((" ")):::sacmDot
     click Design "#claim-design"
     click SimpleDesign "#claim-simpledesign"
     click STRIDE "#claim-stride"
-    click DesignPrinciples "#claim-designprinciples"
+    click None "#package-designprinciples"
     click Scalability "#claim-scalability"
     click MemSafe "#claim-memsafe"
     click SimpleDesignEv "#evidence-simpledesignev"
     click STRIDEEv "#evidence-strideev"
-    click EconomyMech "#claim-economymech"
-    click CompleteMed "#claim-completemed"
-    click FailSafe "#claim-failsafe"
-    click PsychAccept "#claim-psychaccept"
-    click LimitedAttack "#claim-limitedattack"
-    click InputValid "#claim-inputvalid"
     click ScalabilityEv "#evidence-scalabilityev"
     click MemSafeEv "#evidence-memsafeev"
-    click EconomyMechEv "#evidence-economymechev"
-    click CompleteMedEv "#evidence-completemedev"
-    click FailSafeEv "#evidence-failsafeev"
-    click OpenDesign "#claim-opendesign"
-    click SepPriv "#claim-seppriv"
-    click LeastPriv "#claim-leastpriv"
-    click LeastCommon "#claim-leastcommon"
-    click PsychAcceptEv "#evidence-psychacceptev"
-    click LimitedAttackEv "#evidence-limitedattackev"
-    click InputValidEv "#evidence-inputvalidev"
-    click OpenDesignEv "#evidence-opendesignev"
-    click SepPrivEv "#evidence-sepprivev"
-    click LeastPrivEv "#evidence-leastprivev"
-    click LeastCommonEv "#evidence-leastcommonev"
 
     BottomPadding[ ]:::invisible ~~~ SimpleDesignEv
     SimpleDesignEv --> SimpleDesign
     STRIDEEv --> STRIDE
-    EconomyMechEv --> EconomyMech
-    CompleteMedEv --> CompleteMed
-    FailSafeEv --> FailSafe
-    OpenDesignEv --> OpenDesign
-    SepPrivEv --> SepPriv
-    LeastPrivEv --> LeastPriv
-    LeastCommonEv --> LeastCommon
-    OpenDesign --- SynConnect_00000000
-    SepPriv --- SynConnect_00000000
-    LeastPriv --- SynConnect_00000000
-    LeastCommon --- SynConnect_00000000
-    PsychAcceptEv --> PsychAccept
-    LimitedAttackEv --> LimitedAttack
-    InputValidEv --> InputValid
-    EconomyMech --- Dot1
-    CompleteMed --- Dot1
-    FailSafe --- Dot1
-    SynConnect_00000000 --- Dot1
-    PsychAccept --- Dot1
-    LimitedAttack --- Dot1
-    InputValid --- Dot1
-    Dot1 --> DesignPrinciples
     ScalabilityEv --> Scalability
     MemSafeEv --> MemSafe
-    SimpleDesign --- Dot2
-    STRIDE --- Dot2
-    DesignPrinciples --- Dot2
-    Scalability --- Dot2
-    MemSafe --- Dot2
-    Dot2 --> Design
+    SimpleDesign --- Dot1
+    STRIDE --- Dot1
+    None --- Dot1
+    Scalability --- Dot1
+    MemSafe --- Dot1
+    Dot1 --> Design
 ```
 
-Defines: **[Claim Design](#claim-design)**, [Claim MemSafe](#claim-memsafe), [Evidence MemSafeEv](#evidence-memsafeev), [Claim Scalability](#claim-scalability), [Evidence ScalabilityEv](#evidence-scalabilityev), [Claim DesignPrinciples](#claim-designprinciples), [Claim InputValid](#claim-inputvalid), [Evidence InputValidEv](#evidence-inputvalidev), [Claim LimitedAttack](#claim-limitedattack), [Evidence LimitedAttackEv](#evidence-limitedattackev), [Claim PsychAccept](#claim-psychaccept), [Evidence PsychAcceptEv](#evidence-psychacceptev), [Claim LeastCommon](#claim-leastcommon), [Evidence LeastCommonEv](#evidence-leastcommonev), [Claim LeastPriv](#claim-leastpriv), [Evidence LeastPrivEv](#evidence-leastprivev), [Claim SepPriv](#claim-seppriv), [Evidence SepPrivEv](#evidence-sepprivev), [Claim OpenDesign](#claim-opendesign), [Evidence OpenDesignEv](#evidence-opendesignev), [Claim FailSafe](#claim-failsafe), [Evidence FailSafeEv](#evidence-failsafeev), [Claim CompleteMed](#claim-completemed), [Evidence CompleteMedEv](#evidence-completemedev), [Claim EconomyMech](#claim-economymech), [Evidence EconomyMechEv](#evidence-economymechev), [Claim STRIDE](#claim-stride), [Evidence STRIDEEv](#evidence-strideev), [Claim SimpleDesign](#claim-simpledesign), [Evidence SimpleDesignEv](#evidence-simpledesignev)
+Defines: **[Claim Design](#claim-design)**, [Claim MemSafe](#claim-memsafe), [Evidence MemSafeEv](#evidence-memsafeev), [Claim Scalability](#claim-scalability), [Evidence ScalabilityEv](#evidence-scalabilityev), [Claim STRIDE](#claim-stride), [Evidence STRIDEEv](#evidence-strideev), [Claim SimpleDesign](#claim-simpledesign), [Evidence SimpleDesignEv](#evidence-simpledesignev)
+
+Citing: [Claim DesignPrinciples](#package-designprinciples)
 
 Cited by: [Package Security](#package-security)
 
@@ -1158,6 +1096,99 @@ flowchart BT
 Defines: **[Claim Availability](#claim-availability)**, [Claim ScaleUp](#claim-scaleup), [Evidence ScaleUpEv](#evidence-scaleupev), [Claim Backups](#claim-backups), [Evidence BackupsEv](#evidence-backupsev), [Claim LoginDisabled](#claim-logindisabled), [Evidence LoginDisabledEv](#evidence-logindisabledev), [Claim QuickRecovery](#claim-quickrecovery), [Evidence QuickRecoveryEv](#evidence-quickrecoveryev), [Claim Timeout](#claim-timeout), [Evidence TimeoutEv](#evidence-timeoutev), [Claim CDNDDoS](#claim-cdnddos), [Evidence FastlyCDNEv](#evidence-fastlycdnev)
 
 Cited by: [Package Requirements](#package-requirements)
+
+<a id="package-designprinciples"></a>
+### Package DesignPrinciples: Secure design principles are applied
+
+```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
+flowchart BT
+    classDef invisible opacity:0
+    classDef sacmDot fill:#000,stroke:#000
+    classDef connector fill:none,stroke:#cccccc,stroke-width:1px;
+    classDef abstractClaim stroke-width:2px,stroke-dasharray: 5 5;
+    DesignPrinciples["<b>DesignPrinciples</b><br>Secure design principles are applied"]
+    EconomyMech["<b>EconomyMech</b><br>Economy of mechanism"]
+    CompleteMed["<b>CompleteMed</b><br>Complete mediation"]
+    FailSafe["<b>FailSafe</b><br>Fail-safe defaults"]
+    SynConnect_00000000((" ")):::connector
+    PsychAccept["<b>PsychAccept</b><br>Psychological acceptability"]
+    LimitedAttack["<b>LimitedAttack</b><br>Limited attack surface"]
+    InputValid["<b>InputValid</b><br>Input validation with whitelists"]
+    EconomyMechEv[("<b>EconomyMechEv</b>&nbsp;↗<br>Custom code kept minimal and DRY; standard Rails patterns used; Gemfile shows focused, well-scoped dependency set")]
+    CompleteMedEv[("<b>CompleteMedEv</b>&nbsp;↗<br>before_action authorization hooks in ApplicationController run on every request; no client-side access control decisions are made")]
+    FailSafeEv[("<b>FailSafeEv</b>&nbsp;↗<br>can_edit_else_redirect and can_control_else_redirect redirect unauthenticated or unauthorized requests; default deny enforced server-side")]
+    OpenDesign["<b>OpenDesign</b><br>Open design"]
+    SepPriv["<b>SepPriv</b><br>Separation of privilege"]
+    LeastPriv["<b>LeastPriv</b><br>Least privilege"]
+    LeastCommon["<b>LeastCommon</b><br>Least common mechanism"]
+    PsychAcceptEv[("<b>PsychAcceptEv</b>&nbsp;↗<br>Standard web authentication UX (email/password or GitHub OAuth login); badge criteria presented in plain language; security controls do not impose undue burden on legitimate use")]
+    LimitedAttackEv[("<b>LimitedAttackEv</b>&nbsp;↗<br>Restrictive CSP limits script execution sources; routes.rb exposes only necessary endpoints; Rack::Attack blocks abusive IPs")]
+    InputValidEv[("<b>InputValidEv</b>&nbsp;↗<br>Project and User models use Rails validators to enforce field constraints; controllers use strong parameters (permit) to whitelist allowed input fields")]
+    OpenDesignEv[("<b>OpenDesignEv</b>&nbsp;↗<br>Full source code publicly available; security does not depend on keeping implementation secret")]
+    SepPrivEv[("<b>SepPrivEv</b>&nbsp;↗<br>admin? method in User model separates admin role from normal user; admin-only actions checked explicitly and separately from ownership")]
+    LeastPrivEv[("<b>LeastPrivEv</b>&nbsp;↗<br>can_edit? grants edit access only to project owner or admins; additional_rights table enables explicit narrow collaborator grants")]
+    LeastCommonEv[("<b>LeastCommonEv</b>&nbsp;↗<br>Per-request processing; session state stored in per-user encrypted client-side cookies, not shared server-side sessions")]
+    Dot1((" ")):::sacmDot
+    click DesignPrinciples "#claim-designprinciples"
+    click EconomyMech "#claim-economymech"
+    click CompleteMed "#claim-completemed"
+    click FailSafe "#claim-failsafe"
+    click PsychAccept "#claim-psychaccept"
+    click LimitedAttack "#claim-limitedattack"
+    click InputValid "#claim-inputvalid"
+    click EconomyMechEv "#evidence-economymechev"
+    click CompleteMedEv "#evidence-completemedev"
+    click FailSafeEv "#evidence-failsafeev"
+    click OpenDesign "#claim-opendesign"
+    click SepPriv "#claim-seppriv"
+    click LeastPriv "#claim-leastpriv"
+    click LeastCommon "#claim-leastcommon"
+    click PsychAcceptEv "#evidence-psychacceptev"
+    click LimitedAttackEv "#evidence-limitedattackev"
+    click InputValidEv "#evidence-inputvalidev"
+    click OpenDesignEv "#evidence-opendesignev"
+    click SepPrivEv "#evidence-sepprivev"
+    click LeastPrivEv "#evidence-leastprivev"
+    click LeastCommonEv "#evidence-leastcommonev"
+
+    BottomPadding[ ]:::invisible ~~~ EconomyMechEv
+    EconomyMechEv --> EconomyMech
+    CompleteMedEv --> CompleteMed
+    FailSafeEv --> FailSafe
+    OpenDesignEv --> OpenDesign
+    SepPrivEv --> SepPriv
+    LeastPrivEv --> LeastPriv
+    LeastCommonEv --> LeastCommon
+    OpenDesign --- SynConnect_00000000
+    SepPriv --- SynConnect_00000000
+    LeastPriv --- SynConnect_00000000
+    LeastCommon --- SynConnect_00000000
+    PsychAcceptEv --> PsychAccept
+    LimitedAttackEv --> LimitedAttack
+    InputValidEv --> InputValid
+    EconomyMech --- Dot1
+    CompleteMed --- Dot1
+    FailSafe --- Dot1
+    SynConnect_00000000 --- Dot1
+    PsychAccept --- Dot1
+    LimitedAttack --- Dot1
+    InputValid --- Dot1
+    Dot1 --> DesignPrinciples
+```
+
+Defines: **[Claim DesignPrinciples](#claim-designprinciples)**, [Claim InputValid](#claim-inputvalid), [Evidence InputValidEv](#evidence-inputvalidev), [Claim LimitedAttack](#claim-limitedattack), [Evidence LimitedAttackEv](#evidence-limitedattackev), [Claim PsychAccept](#claim-psychaccept), [Evidence PsychAcceptEv](#evidence-psychacceptev), [Claim LeastCommon](#claim-leastcommon), [Evidence LeastCommonEv](#evidence-leastcommonev), [Claim LeastPriv](#claim-leastpriv), [Evidence LeastPrivEv](#evidence-leastprivev), [Claim SepPriv](#claim-seppriv), [Evidence SepPrivEv](#evidence-sepprivev), [Claim OpenDesign](#claim-opendesign), [Evidence OpenDesignEv](#evidence-opendesignev), [Claim FailSafe](#claim-failsafe), [Evidence FailSafeEv](#evidence-failsafeev), [Claim CompleteMed](#claim-completemed), [Evidence CompleteMedEv](#evidence-completemedev), [Claim EconomyMech](#claim-economymech), [Evidence EconomyMechEv](#evidence-economymechev)
+
+Cited by: [Package Design](#package-design)
 <!-- end verocase -->
 
 ### Overall approach
@@ -3280,11 +3311,11 @@ contents, etc., are all untrusted).
 <a id="claim-designprinciples"></a>
 ### Claim DesignPrinciples: Secure design principles are applied
 
-Referenced by: **[Package Design](#package-design)**
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**, [Package Design](#package-design)
 
 Supported by: **[Claim EconomyMech](#claim-economymech)**, [Claim CompleteMed](#claim-completemed), [Claim FailSafe](#claim-failsafe), [Claim OpenDesign](#claim-opendesign), [Claim SepPriv](#claim-seppriv), [Claim LeastPriv](#claim-leastpriv), [Claim LeastCommon](#claim-leastcommon), [Claim PsychAccept](#claim-psychaccept), [Claim LimitedAttack](#claim-limitedattack), [Claim InputValid](#claim-inputvalid)
 
-Supports: **[Claim Design](#claim-design)**
+Supports: [Claim Design](#claim-design)
 <!-- end verocase -->
 
 Applying various secure design principles helps us avoid
@@ -3394,7 +3425,7 @@ including all 8 principles from
 <a id="claim-economymech"></a>
 #### Claim EconomyMech: Economy of mechanism
 
-Referenced by: **[Package Design](#package-design)**
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
 
 Supported by: **[Evidence EconomyMechEv](#evidence-economymechev)**
 
@@ -3411,7 +3442,7 @@ the list of secure design principles above elaborates on this.
 <a id="claim-completemed"></a>
 #### Claim CompleteMed: Complete mediation
 
-Referenced by: **[Package Design](#package-design)**
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
 
 Supported by: **[Evidence CompleteMedEv](#evidence-completemedev)**
 
@@ -3429,7 +3460,7 @@ See the secure design principles discussion above for details.
 <a id="claim-failsafe"></a>
 #### Claim FailSafe: Fail-safe defaults
 
-Referenced by: **[Package Design](#package-design)**
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
 
 Supported by: **[Evidence FailSafeEv](#evidence-failsafeev)**
 
@@ -3447,7 +3478,7 @@ See the secure design principles discussion above for details.
 <a id="claim-opendesign"></a>
 #### Claim OpenDesign: Open design
 
-Referenced by: **[Package Design](#package-design)**
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
 
 Supported by: **[Evidence OpenDesignEv](#evidence-opendesignev)**
 
@@ -3464,7 +3495,7 @@ See the secure design principles discussion above for details.
 <a id="claim-seppriv"></a>
 #### Claim SepPriv: Separation of privilege
 
-Referenced by: **[Package Design](#package-design)**
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
 
 Supported by: **[Evidence SepPrivEv](#evidence-sepprivev)**
 
@@ -3481,7 +3512,7 @@ See the secure design principles discussion above for details.
 <a id="claim-leastpriv"></a>
 #### Claim LeastPriv: Least privilege
 
-Referenced by: **[Package Design](#package-design)**
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
 
 Supported by: **[Evidence LeastPrivEv](#evidence-leastprivev)**
 
@@ -3499,7 +3530,7 @@ See the secure design principles discussion above for details.
 <a id="claim-leastcommon"></a>
 #### Claim LeastCommon: Least common mechanism
 
-Referenced by: **[Package Design](#package-design)**
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
 
 Supported by: **[Evidence LeastCommonEv](#evidence-leastcommonev)**
 
@@ -3517,7 +3548,7 @@ See the secure design principles discussion above for details.
 <a id="claim-psychaccept"></a>
 #### Claim PsychAccept: Psychological acceptability
 
-Referenced by: **[Package Design](#package-design)**
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
 
 Supported by: **[Evidence PsychAcceptEv](#evidence-psychacceptev)**
 
@@ -3536,7 +3567,7 @@ See the secure design principles discussion above for details.
 <a id="claim-limitedattack"></a>
 #### Claim LimitedAttack: Limited attack surface
 
-Referenced by: **[Package Design](#package-design)**
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
 
 Supported by: **[Evidence LimitedAttackEv](#evidence-limitedattackev)**
 
@@ -3554,7 +3585,7 @@ See the secure design principles and input validation discussion above for detai
 <a id="claim-inputvalid"></a>
 #### Claim InputValid: Input validation with whitelists
 
-Referenced by: **[Package Design](#package-design)**
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
 
 Supported by: **[Evidence InputValidEv](#evidence-inputvalidev)**
 
@@ -7671,7 +7702,7 @@ See the [parent claim section](#claim-scalability) for details.
 <a id="evidence-inputvalidev"></a>
 ### Evidence InputValidEv: Project and User models use Rails validators to enforce field constraints; controllers use strong parameters (permit) to whitelist allowed input fields
 
-Referenced by: **[Package Design](#package-design)**
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
 
 Supports: **[Claim InputValid](#claim-inputvalid)**
 
@@ -7686,7 +7717,7 @@ See the [parent claim section](#claim-inputvalid) for details.
 <a id="evidence-limitedattackev"></a>
 ### Evidence LimitedAttackEv: Restrictive CSP limits script execution sources; routes.rb exposes only necessary endpoints; Rack::Attack blocks abusive IPs
 
-Referenced by: **[Package Design](#package-design)**
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
 
 Supports: **[Claim LimitedAttack](#claim-limitedattack)**
 
@@ -7701,7 +7732,7 @@ See the [parent claim section](#claim-limitedattack) for details.
 <a id="evidence-psychacceptev"></a>
 ### Evidence PsychAcceptEv: Standard web authentication UX (email/password or GitHub OAuth login); badge criteria presented in plain language; security controls do not impose undue burden on legitimate use
 
-Referenced by: **[Package Design](#package-design)**
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
 
 Supports: **[Claim PsychAccept](#claim-psychaccept)**
 
@@ -7716,7 +7747,7 @@ See the [parent claim section](#claim-psychaccept) for details.
 <a id="evidence-leastcommonev"></a>
 ### Evidence LeastCommonEv: Per-request processing; session state stored in per-user encrypted client-side cookies, not shared server-side sessions
 
-Referenced by: **[Package Design](#package-design)**
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
 
 Supports: **[Claim LeastCommon](#claim-leastcommon)**
 
@@ -7731,7 +7762,7 @@ See the [parent claim section](#claim-leastcommon) for details.
 <a id="evidence-leastprivev"></a>
 ### Evidence LeastPrivEv: can_edit? grants edit access only to project owner or admins; additional_rights table enables explicit narrow collaborator grants
 
-Referenced by: **[Package Design](#package-design)**
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
 
 Supports: **[Claim LeastPriv](#claim-leastpriv)**
 
@@ -7746,7 +7777,7 @@ See the [parent claim section](#claim-leastpriv) for details.
 <a id="evidence-sepprivev"></a>
 ### Evidence SepPrivEv: admin? method in User model separates admin role from normal user; admin-only actions checked explicitly and separately from ownership
 
-Referenced by: **[Package Design](#package-design)**
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
 
 Supports: **[Claim SepPriv](#claim-seppriv)**
 
@@ -7761,7 +7792,7 @@ See the [parent claim section](#claim-seppriv) for details.
 <a id="evidence-opendesignev"></a>
 ### Evidence OpenDesignEv: Full source code publicly available; security does not depend on keeping implementation secret
 
-Referenced by: **[Package Design](#package-design)**
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
 
 Supports: **[Claim OpenDesign](#claim-opendesign)**
 
@@ -7776,7 +7807,7 @@ See the [parent claim section](#claim-opendesign) for details.
 <a id="evidence-failsafeev"></a>
 ### Evidence FailSafeEv: can_edit_else_redirect and can_control_else_redirect redirect unauthenticated or unauthorized requests; default deny enforced server-side
 
-Referenced by: **[Package Design](#package-design)**
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
 
 Supports: **[Claim FailSafe](#claim-failsafe)**
 
@@ -7791,7 +7822,7 @@ See the [parent claim section](#claim-failsafe) for details.
 <a id="evidence-completemedev"></a>
 ### Evidence CompleteMedEv: before_action authorization hooks in ApplicationController run on every request; no client-side access control decisions are made
 
-Referenced by: **[Package Design](#package-design)**
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
 
 Supports: **[Claim CompleteMed](#claim-completemed)**
 
@@ -7806,7 +7837,7 @@ See the [parent claim section](#claim-completemed) for details.
 <a id="evidence-economymechev"></a>
 ### Evidence EconomyMechEv: Custom code kept minimal and DRY; standard Rails patterns used; Gemfile shows focused, well-scoped dependency set
 
-Referenced by: **[Package Design](#package-design)**
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
 
 Supports: **[Claim EconomyMech](#claim-economymech)**
 

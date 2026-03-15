@@ -1,6 +1,7 @@
 # BadgeApp Security: Its Assurance Case
 
 <!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
+<!-- verocase-config base_url https://github.com/coreinfrastructure/best-practices-badge/blob/main/docs/case.md -->
 
 Security is important and challenging.
 This document describes why we think this software (the "BadgeApp")
@@ -48,6 +49,8 @@ The figures are simply a summary; the text below provides the details.
 ### Assurance case structure
 
 <!-- verocase package * -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="package-security"></a>
 ### Package Security: The system is adequately secure against moderate threats
 
@@ -80,6 +83,17 @@ flowchart BT
     Maintenance[["<b>Maintenance</b>"]]
     Dot1((" ")):::sacmDot
     Dot2((" ")):::sacmDot
+    click Security "#claim-security"
+    click Processes "#strategy-processes"
+    click Controls "#package-controls"
+    click TechProcesses "#claim-techprocesses"
+    click NonTechnical "#package-nontechnical"
+    click Requirements "#package-requirements"
+    click Design "#package-design"
+    click Implementation "#package-implementation"
+    click Verification "#package-verification"
+    click Deployment "#package-deployment"
+    click Maintenance "#package-maintenance"
 
     BottomPadding[ ]:::invisible ~~~ Requirements
     Requirements --- Dot1
@@ -122,101 +136,79 @@ flowchart BT
     Requirements["<b>Requirements</b><br>Security requirements are identified and met"]
     SecTriad[/"<b>SecTriad</b><br>Security triad (CIA) and access control address the requirements"/]
     Assets["<b>Assets</b><br>Assets &amp; threat actors identified &amp; addressed"]
-    Confidentiality["<b>Confidentiality</b><br>Confidentiality is maintained"]
+    Confidentiality[["<b>Confidentiality</b><br>Confidentiality is maintained"]]
     Integrity["<b>Integrity</b><br>Integrity is maintained"]
-    Availability["<b>Availability</b><br>Availability is maintained including limited DDoS resilience"]
+    Availability[["<b>Availability</b><br>Availability is maintained including limited DDoS resilience"]]
     AccessControl["<b>AccessControl</b><br>Access control is in place"]
-    NonPublicData["<b>NonPublicData</b><br>Non-public data is kept confidential"]
-    UserPrivacy["<b>UserPrivacy</b><br>User privacy is maintained"]
-    MostDataPublic["<b>MostDataPublic</b><br>Almost all data is not confidential"]
+    AssetsIdentified["<b>AssetsIdentified</b><br>Key assets (badge data, user credentials, system availability) have been identified<br>..."]
+    ThreatsIdentified["<b>ThreatsIdentified</b><br>Key threat actors (external attackers, bots, insiders, nation-states) have been identified and addressed<br>..."]
     DataModAuth["<b>DataModAuth</b><br>Data modification requires authorization"]
     AppModAuth["<b>AppModAuth</b><br>Application modification requires authorization"]
-    CDNDDoS["<b>CDNDDoS</b><br>CDN counters DDoS attacks on specific resources"]
-    Timeout["<b>Timeout</b><br>Timeout limits maximum request time"]
-    QuickRecovery["<b>QuickRecovery</b><br>Can return to operation quickly after DDoS ended"]
-    LoginDisabled["<b>LoginDisabled</b><br>Logon disabled mode mitigates against some vulnerabilities"]
-    Backups["<b>Backups</b><br>Data corruption and loss are mitigated by multiple backups"]
-    ScaleUp["<b>ScaleUp</b><br>Cloud resources can be rapidly increased"]
     AuthN["<b>AuthN</b><br>Users must identify and authenticate themselves"]
     AuthZ["<b>AuthZ</b><br>Authorization to resources and actions is controlled"]
-    ConfDataAtRest["<b>ConfDataAtRest</b><br>Confidential data at rest is protected"]
-    DataInMotion["<b>DataInMotion</b><br>Data in motion encrypted with HTTPS"]
     DataModAuthEv[("<b>DataModAuthEv</b>&nbsp;↗<br>before_action guards can_edit_else_redirect and can_control_else_redirect protect all project modifications")]
-    TimeoutEv[("<b>TimeoutEv</b>&nbsp;↗<br>Rack::Timeout.service_timeout set in production configuration limits all request times")]
-    LoginDisabledEv[("<b>LoginDisabledEv</b>&nbsp;↗<br>deny_login initializer reads BADGEAPP_DENY_LOGIN env var to disable all logins")]
+    AppModAuthEv[("<b>AppModAuthEv</b>&nbsp;↗<br>GitHub repository requires authenticated access; branch protection rules enforce code review before merging to main; governance.md documents the process")]
     LocalAuthN["<b>LocalAuthN</b><br>Local users must supply a password"]
     RemoteAuthN["<b>RemoteAuthN</b><br>Remote users are authenticated by a trusted remote service"]
     AuthZEv[("<b>AuthZEv</b>&nbsp;↗<br>can_edit? and can_control? methods implement role-based authorization; all access enforced server-side through controllers")]
-    Passwords["<b>Passwords</b><br>User passwords stored securely (using bcrypt)"]
-    RememberMe["<b>RememberMe</b><br>Remember me token is secured"]
-    EmailSecured["<b>EmailSecured</b><br>Email addresses are secured (encrypted and only accessible to admin &amp; owner)"]
-    DataInMotionEv[("<b>DataInMotionEv</b>&nbsp;↗<br>config.force_ssl = true enforces HTTPS with TLS redirection and secure cookies in production")]
-    PasswordsEv[("<b>PasswordsEv</b>&nbsp;↗<br>has_secure_password in user model stores passwords via bcrypt")]
-    RememberMeEv[("<b>RememberMeEv</b>&nbsp;↗<br>remember method in user model creates bcrypt-stored nonce; sessions controller and helper manage it; login test verifies cleartext not stored in cookie")]
-    EmailSecuredEv[("<b>EmailSecuredEv</b>&nbsp;↗<br>Views, mailers, and controllers restrict email address access to owners and admins; use grep -Ri 'user.*\.email' to verify")]
+    LocalAuthNEv[("<b>LocalAuthNEv</b>&nbsp;↗<br>sessions_controller create action authenticates local users by verifying email and bcrypt password hash before establishing session")]
+    OAuthEv[("<b>OAuthEv</b>&nbsp;↗<br>OmniAuth-GitHub middleware authenticates remote users via GitHub OAuth 2.0; callback validates identity before creating local session")]
     Dot1((" ")):::sacmDot
     Dot2((" ")):::sacmDot
     Dot3((" ")):::sacmDot
     Dot4((" ")):::sacmDot
     Dot5((" ")):::sacmDot
-    Dot6((" ")):::sacmDot
-    Dot7((" ")):::sacmDot
-    Dot8((" ")):::sacmDot
-    click DataModAuthEv "../app/controllers/projects_controller.rb"
-    click TimeoutEv "../config/environments/production.rb"
-    click LoginDisabledEv "../config/initializers/deny_login.rb"
-    click AuthZEv "../app/controllers/application_controller.rb"
-    click DataInMotionEv "../config/environments/production.rb"
-    click PasswordsEv "../app/models/user.rb"
-    click RememberMeEv "../app/controllers/sessions_controller.rb"
-    click EmailSecuredEv "../app/views/users/"
+    click Requirements "#claim-requirements"
+    click SecTriad "#strategy-sectriad"
+    click Assets "#claim-assets"
+    click Confidentiality "#package-confidentiality"
+    click Integrity "#claim-integrity"
+    click Availability "#package-availability"
+    click AccessControl "#claim-accesscontrol"
+    click AssetsIdentified "#claim-assetsidentified"
+    click ThreatsIdentified "#claim-threatsidentified"
+    click DataModAuth "#claim-datamodauth"
+    click AppModAuth "#claim-appmodauth"
+    click AuthN "#claim-authn"
+    click AuthZ "#claim-authz"
+    click DataModAuthEv "#evidence-datamodauthev"
+    click AppModAuthEv "#evidence-appmodauthev"
+    click LocalAuthN "#claim-localauthn"
+    click RemoteAuthN "#claim-remoteauthn"
+    click AuthZEv "#evidence-authzev"
+    click LocalAuthNEv "#evidence-localauthnev"
+    click OAuthEv "#evidence-oauthev"
 
-    BottomPadding[ ]:::invisible ~~~ PasswordsEv
-    PasswordsEv --> Passwords
-    RememberMeEv --> RememberMe
-    EmailSecuredEv --> EmailSecured
-    Passwords --- Dot1
-    RememberMe --- Dot1
-    EmailSecured --- Dot1
-    Dot1 --> ConfDataAtRest
-    DataInMotionEv --> DataInMotion
-    ConfDataAtRest --- Dot2
-    DataInMotion --- Dot2
-    Dot2 --> NonPublicData
-    NonPublicData --- Dot3
-    UserPrivacy --- Dot3
-    MostDataPublic --- Dot3
-    Dot3 --> Confidentiality
+    BottomPadding[ ]:::invisible ~~~ Confidentiality
     DataModAuthEv --> DataModAuth
-    DataModAuth --- Dot4
-    AppModAuth --- Dot4
-    Dot4 --> Integrity
-    TimeoutEv --> Timeout
-    LoginDisabledEv --> LoginDisabled
-    CDNDDoS --- Dot5
-    Timeout --- Dot5
-    QuickRecovery --- Dot5
-    LoginDisabled --- Dot5
-    Backups --- Dot5
-    ScaleUp --- Dot5
-    Dot5 --> Availability
-    LocalAuthN --- Dot6
-    RemoteAuthN --- Dot6
-    Dot6 --> AuthN
+    AppModAuthEv --> AppModAuth
+    DataModAuth --- Dot1
+    AppModAuth --- Dot1
+    Dot1 --> Integrity
+    LocalAuthNEv --> LocalAuthN
+    OAuthEv --> RemoteAuthN
+    LocalAuthN --- Dot2
+    RemoteAuthN --- Dot2
+    Dot2 --> AuthN
     AuthZEv --> AuthZ
-    AuthN --- Dot7
-    AuthZ --- Dot7
-    Dot7 --> AccessControl
-    Confidentiality --- Dot8
-    Integrity --- Dot8
-    Availability --- Dot8
-    AccessControl --- Dot8
-    SecTriad --- Dot8
-    Assets --- Dot8
-    Dot8 --> Requirements
+    AuthN --- Dot3
+    AuthZ --- Dot3
+    Dot3 --> AccessControl
+    AssetsIdentified --- Dot4
+    ThreatsIdentified --- Dot4
+    Dot4 --> Assets
+    Confidentiality --- Dot5
+    Integrity --- Dot5
+    Availability --- Dot5
+    AccessControl --- Dot5
+    SecTriad --- Dot5
+    Assets --- Dot5
+    Dot5 --> Requirements
 ```
 
-Defines: **[Claim Requirements](#claim-requirements)**, [Claim Assets](#claim-assets), [Strategy SecTriad](#strategy-sectriad), [Claim AccessControl](#claim-accesscontrol), [Claim AuthZ](#claim-authz), [Evidence AuthZEv](#evidence-authzev), [Claim AuthN](#claim-authn), [Claim RemoteAuthN](#claim-remoteauthn), [Claim LocalAuthN](#claim-localauthn), [Claim Availability](#claim-availability), [Claim ScaleUp](#claim-scaleup), [Claim Backups](#claim-backups), [Claim LoginDisabled](#claim-logindisabled), [Evidence LoginDisabledEv](#evidence-logindisabledev), [Claim QuickRecovery](#claim-quickrecovery), [Claim Timeout](#claim-timeout), [Evidence TimeoutEv](#evidence-timeoutev), [Claim CDNDDoS](#claim-cdnddos), [Claim Integrity](#claim-integrity), [Link DataInMotion](#link-datainmotion), [Claim AppModAuth](#claim-appmodauth), [Claim DataModAuth](#claim-datamodauth), [Evidence DataModAuthEv](#evidence-datamodauthev), [Claim Confidentiality](#claim-confidentiality), [Claim MostDataPublic](#claim-mostdatapublic), [Claim UserPrivacy](#claim-userprivacy), [Claim NonPublicData](#claim-nonpublicdata), [Claim DataInMotion](#claim-datainmotion), [Evidence DataInMotionEv](#evidence-datainmotionev), [Claim ConfDataAtRest](#claim-confdataatrest), [Claim EmailSecured](#claim-emailsecured), [Evidence EmailSecuredEv](#evidence-emailsecuredev), [Claim RememberMe](#claim-rememberme), [Evidence RememberMeEv](#evidence-remembermeev), [Claim Passwords](#claim-passwords), [Evidence PasswordsEv](#evidence-passwordsev)
+Defines: **[Claim Requirements](#claim-requirements)**, [Claim Assets](#claim-assets), [Claim ThreatsIdentified](#claim-threatsidentified), [Claim AssetsIdentified](#claim-assetsidentified), [Strategy SecTriad](#strategy-sectriad), [Claim AccessControl](#claim-accesscontrol), [Claim AuthZ](#claim-authz), [Evidence AuthZEv](#evidence-authzev), [Claim AuthN](#claim-authn), [Claim RemoteAuthN](#claim-remoteauthn), [Evidence OAuthEv](#evidence-oauthev), [Claim LocalAuthN](#claim-localauthn), [Evidence LocalAuthNEv](#evidence-localauthnev), [Claim Integrity](#claim-integrity), [Claim AppModAuth](#claim-appmodauth), [Evidence AppModAuthEv](#evidence-appmodauthev), [Claim DataModAuth](#claim-datamodauth), [Evidence DataModAuthEv](#evidence-datamodauthev)
+
+Citing: [Claim Availability](#package-availability), [Claim Confidentiality](#package-confidentiality)
 
 Cited by: [Package Security](#package-security)
 
@@ -242,45 +234,41 @@ flowchart BT
     Design["<b>Design</b><br>Security in design"]
     SimpleDesign["<b>SimpleDesign</b><br>Economy of mechanism: simple design is used"]
     STRIDE["<b>STRIDE</b><br>STRIDE threat model has been analyzed"]
-    DesignPrinciples["<b>DesignPrinciples</b><br>Secure design principles are applied"]
+    None[["<b>DesignPrinciples</b><br>Secure design principles are applied"]]
     Scalability["<b>Scalability</b><br>Availability through scalability"]
     MemSafe["<b>MemSafe</b><br>Memory-safe languages are used"]
-    EconomyMech["<b>EconomyMech</b><br>Economy of mechanism"]
-    CompleteMed["<b>CompleteMed</b><br>Complete mediation"]
-    FailSafe["<b>FailSafe</b><br>Fail-safe defaults"]
-    SynConnect_00000000((" ")):::connector
-    PsychAccept["<b>PsychAccept</b><br>Psychological acceptability"]
-    LimitedAttack["<b>LimitedAttack</b><br>Limited attack surface"]
-    InputValid["<b>InputValid</b><br>Input validation with whitelists"]
-    OpenDesign["<b>OpenDesign</b><br>Open design"]
-    SepPriv["<b>SepPriv</b><br>Separation of privilege"]
-    LeastPriv["<b>LeastPriv</b><br>Least privilege"]
-    LeastCommon["<b>LeastCommon</b><br>Least common mechanism"]
+    SimpleDesignEv[("<b>SimpleDesignEv</b>&nbsp;↗<br>Standard Rails MVC architecture with models, views, and controllers; no microservices or complex distributed patterns; custom code kept minimal")]
+    STRIDEEv[("<b>STRIDEEv</b>&nbsp;↗<br>STRIDE threat analysis documented for all major components: web server, controllers/models/views, DBMS, Chief/Detective classes, admin CLI, and i18n service")]
+    ScalabilityEv[("<b>ScalabilityEv</b>&nbsp;↗<br>Heroku dyno-based deployment enables horizontal scaling; Fastly CDN offloads static asset and badge requests from origin server")]
+    MemSafeEv[("<b>MemSafeEv</b>&nbsp;↗<br>All custom application code is written in Ruby and JavaScript, both memory-managed languages; buffer overflows and memory corruption cannot occur in custom code")]
     Dot1((" ")):::sacmDot
-    Dot2((" ")):::sacmDot
+    click Design "#claim-design"
+    click SimpleDesign "#claim-simpledesign"
+    click STRIDE "#claim-stride"
+    click None "#package-designprinciples"
+    click Scalability "#claim-scalability"
+    click MemSafe "#claim-memsafe"
+    click SimpleDesignEv "#evidence-simpledesignev"
+    click STRIDEEv "#evidence-strideev"
+    click ScalabilityEv "#evidence-scalabilityev"
+    click MemSafeEv "#evidence-memsafeev"
 
-    BottomPadding[ ]:::invisible ~~~ SimpleDesign
-    OpenDesign --- SynConnect_00000000
-    SepPriv --- SynConnect_00000000
-    LeastPriv --- SynConnect_00000000
-    LeastCommon --- SynConnect_00000000
-    EconomyMech --- Dot1
-    CompleteMed --- Dot1
-    FailSafe --- Dot1
-    SynConnect_00000000 --- Dot1
-    PsychAccept --- Dot1
-    LimitedAttack --- Dot1
-    InputValid --- Dot1
-    Dot1 --> DesignPrinciples
-    SimpleDesign --- Dot2
-    STRIDE --- Dot2
-    DesignPrinciples --- Dot2
-    Scalability --- Dot2
-    MemSafe --- Dot2
-    Dot2 --> Design
+    BottomPadding[ ]:::invisible ~~~ SimpleDesignEv
+    SimpleDesignEv --> SimpleDesign
+    STRIDEEv --> STRIDE
+    ScalabilityEv --> Scalability
+    MemSafeEv --> MemSafe
+    SimpleDesign --- Dot1
+    STRIDE --- Dot1
+    None --- Dot1
+    Scalability --- Dot1
+    MemSafe --- Dot1
+    Dot1 --> Design
 ```
 
-Defines: **[Claim Design](#claim-design)**, [Claim MemSafe](#claim-memsafe), [Claim Scalability](#claim-scalability), [Claim DesignPrinciples](#claim-designprinciples), [Claim InputValid](#claim-inputvalid), [Claim LimitedAttack](#claim-limitedattack), [Claim PsychAccept](#claim-psychaccept), [Claim LeastCommon](#claim-leastcommon), [Claim LeastPriv](#claim-leastpriv), [Claim SepPriv](#claim-seppriv), [Claim OpenDesign](#claim-opendesign), [Claim FailSafe](#claim-failsafe), [Claim CompleteMed](#claim-completemed), [Claim EconomyMech](#claim-economymech), [Claim STRIDE](#claim-stride), [Claim SimpleDesign](#claim-simpledesign)
+Defines: **[Claim Design](#claim-design)**, [Claim MemSafe](#claim-memsafe), [Evidence MemSafeEv](#evidence-memsafeev), [Claim Scalability](#claim-scalability), [Evidence ScalabilityEv](#evidence-scalabilityev), [Claim STRIDE](#claim-stride), [Evidence STRIDEEv](#evidence-strideev), [Claim SimpleDesign](#claim-simpledesign), [Evidence SimpleDesignEv](#evidence-simpledesignev)
+
+Citing: [Claim DesignPrinciples](#package-designprinciples)
 
 Cited by: [Package Security](#package-security)
 
@@ -307,86 +295,88 @@ flowchart BT
     CommonVulns[/"<b>CommonVulns</b><br>Most implementation vulnerabilities are due to common types of implementation errors or common misconfigurations, so countering them greatly reduces security risks"/]
     HardeningStrat[/"<b>HardeningStrat</b><br>Hardening can reduce or eliminate the impact of defects in some cases"/]
     PubVulns["<b>PubVulns</b><br>Public vulnerability information monitored"]
-    OWASPClaim["<b>OWASPClaim</b><br>All of the most common important implementation vulnerability types (weaknesses) countered"]
+    OWASPClaim[["<b>OWASPClaim</b><br>All of the most common important implementation vulnerability types (weaknesses) countered"]]
     MisconfigClaim["<b>MisconfigClaim</b><br>All of the most common known security-relevant misconfiguration errors countered"]
     ReuseSec["<b>ReuseSec</b><br>Reused software is secure"]
-    Hardening["<b>Hardening</b><br>Hardening is applied"]
-    OWASPStrat[/"<b>OWASPStrat</b><br>OWASP top 10 represents a broad consensus of the most critical web application security flaws"/]
+    Hardening[["<b>Hardening</b><br>Hardening is applied"]]
+    PubVulnsBundleEv[("<b>PubVulnsBundleEv</b>&nbsp;↗<br>bundle-audit checks all gem versions against NVD vulnerability database on every rake run")]
+    PubVulnsDependabotEv[("<b>PubVulnsDependabotEv</b>&nbsp;↗<br>GitHub Dependabot alerts and automated pull requests for vulnerable dependencies")]
     RailsGuide["<b>RailsGuide</b><br>Entire most-relevant security guide applied"]
     ReuseStrat[/"<b>ReuseStrat</b><br>Reuse is often appropriate and can be done securely"/]
-    KnownVulns["<b>KnownVulns</b><br>Known vulnerabilities detected"]
-    HardenHTTPS["<b>HardenHTTPS</b><br>HTTPS use enforced (including by HSTS)"]
-    HardenCSP["<b>HardenCSP</b><br>Outgoing HTTP headers hardened including restrictive CSP"]
-    HardenCookies["<b>HardenCookies</b><br>Cookies limited"]
-    HardenCSRF["<b>HardenCSRF</b><br>CSRF tokens hardened"]
-    HardenRateIn["<b>HardenRateIn</b><br>Incoming rate limits enforced"]
-    HardenRateOut["<b>HardenRateOut</b><br>Outgoing email rate limits enforced"]
-    HardenEmailEnc["<b>HardenEmailEnc</b><br>Email addresses encrypted"]
-    HardenGravatar["<b>HardenGravatar</b><br>Gravatar restricted"]
-    OWASP1013["<b>OWASP1013</b><br>All OWASP top 10 (2013 &amp; 2017) countered"]
+    KnownVulns["<b>KnownVulns</b><br>Known vulnerabilities in reused components are detected"]
+    RailsGuideEv[("<b>RailsGuideEv</b>&nbsp;↗<br>Rails security guide reviewed and countermeasures applied for sessions, CSRF, XSS, injection, and other Rails-specific issues")]
     ReuseReview["<b>ReuseReview</b><br>Reused software is reviewed before use"]
     ReuseAuth["<b>ReuseAuth</b><br>Reused software is authentic"]
     PkgMgr["<b>PkgMgr</b><br>Package managers used"]
     SpecialAnalysis["<b>SpecialAnalysis</b><br>Special analysis justifies exceptions"]
-    HardenHTTPSEv[("<b>HardenHTTPSEv</b>&nbsp;↗<br>config.force_ssl enables TLS redirection, secure cookies, and HSTS; domain in Chrome HSTS preload list")]
-    HardenCSPEv[("<b>HardenCSPEv</b>&nbsp;↗<br>secure_headers gem enforces CSP and security headers; integration test verifies header values")]
-    HardenCookiesEv[("<b>HardenCookiesEv</b>&nbsp;↗<br>secure_headers gem sets httponly, secure, and SameSite=Lax cookie attributes; session cookies use AES-256-GCM")]
-    HardenCSRFEv[("<b>HardenCSRFEv</b>&nbsp;↗<br>protect_from_forgery with per-form tokens and origin-header check, enabled via load_defaults")]
-    HardenRateInEv[("<b>HardenRateInEv</b>&nbsp;↗<br>Rack::Attack rate limits on requests, logins, and signups by client IP address")]
-    HardenRateOutEv[("<b>HardenRateOutEv</b>&nbsp;↗<br>projects_to_remind class method and hard limit on outgoing reminder email count")]
-    HardenEmailEncEv[("<b>HardenEmailEncEv</b>&nbsp;↗<br>attr_encrypted and blind_index gems encrypt email addresses with AES-256-GCM and PBKDF2-HMAC-SHA256 index")]
-    HardenGravatarEv[("<b>HardenGravatarEv</b>&nbsp;↗<br>use_gravatar boolean controls whether gravatar MD5 hash is revealed for each local user")]
-    OWASP1["<b>OWASP1</b><br>Injection (including SQL injection) countered"]
-    OWASP2["<b>OWASP2</b><br>Broken Authentication and Session Management countered"]
-    OWASP3["<b>OWASP3</b><br>Cross-site scripting (XSS) countered"]
-    SynConnect_00000000((" ")):::connector
-    OWASP11["<b>OWASP11</b><br>XXE countered (2017 A4)"]
-    OWASP12["<b>OWASP12</b><br>Insecure Deserialization countered (2017 A8)"]
-    OWASP13["<b>OWASP13</b><br>Insufficient Logging and Monitoring countered (2017 A10)"]
+    KnownVulnsBundleEv[("<b>KnownVulnsBundleEv</b>&nbsp;↗<br>bundle-audit checks all gem versions against the NVD on every rake run, detecting known CVEs in dependencies")]
+    KnownVulnsDependabotEv[("<b>KnownVulnsDependabotEv</b>&nbsp;↗<br>GitHub Dependabot automatically alerts on vulnerable gem dependencies and opens PRs with updated versions")]
+    ReuseReviewEv[("<b>ReuseReviewEv</b>&nbsp;↗<br>New gem dependencies reviewed for purpose, maintenance, and security before addition; CONTRIBUTING.md documents review expectations")]
+    ReuseAuthEv[("<b>ReuseAuthEv</b>&nbsp;↗<br>Gemfile.lock records exact versions and SHA-512 checksums for all gems, ensuring reproducible authenticated builds")]
     PkgMgrEv[("<b>PkgMgrEv</b>&nbsp;↗<br>Gemfile and Gemfile.lock manage all gem dependencies via bundler")]
-    OWASP4["<b>OWASP4</b><br>Insecure Direct Object References countered"]
-    OWASP5["<b>OWASP5</b><br>Security Misconfiguration countered"]
-    OWASP6["<b>OWASP6</b><br>Sensitive Data Exposure countered"]
-    OWASP7["<b>OWASP7</b><br>Missing Access Control countered"]
-    OWASP8["<b>OWASP8</b><br>CSRF countered"]
-    OWASP9["<b>OWASP9</b><br>Known Vulnerabilities countered"]
-    OWASP10["<b>OWASP10</b><br>Unvalidated Redirects and Forwards countered"]
+    XXESafe["<b>XXESafe</b><br>Nokogiri/libxml2 XXE exception (CVE-2016-9318) poses no risk in our deployment"]
+    ErubisSafe["<b>ErubisSafe</b><br>XSS from erubis via pronto-rails_best_practices poses no production risk"]
+    LocalSecretSafe["<b>LocalSecretSafe</b><br>Checked-in tmp/local_secret.txt secret_key_base value poses no security risk"]
+    ActionCableSafe["<b>ActionCableSafe</b><br>ActionCable information-exposure risk is mitigated because ActionCable is not used"]
+    XXESafeEv[("<b>XXESafeEv</b>&nbsp;↗<br>Nokogiri disables DTD loading and network access by default; we never process incoming XML in production; loofah never opts into DTDLOAD or NONET")]
+    ErubisSafeEv[("<b>ErubisSafeEv</b>&nbsp;↗<br>rails_best_practices and pronto are dev/test-only dependencies; they never execute against untrusted input in production")]
+    LocalSecretSafeEv[("<b>LocalSecretSafeEv</b>&nbsp;↗<br>The file is only used in development and test; production always uses the SECRET_KEY_BASE environment variable; the checked-in value protects no real secrets")]
+    ActionCableSafeEv[("<b>ActionCableSafeEv</b>&nbsp;↗<br>ActionCable is a Rails transitive dependency but is never configured or invoked; no sensitive data flows through it")]
     Dot1((" ")):::sacmDot
     Dot2((" ")):::sacmDot
     Dot3((" ")):::sacmDot
     Dot4((" ")):::sacmDot
     Dot5((" ")):::sacmDot
-    click HardenHTTPSEv "../config/environments/production.rb"
-    click HardenCSPEv "../test/integration/project_get_test.rb"
-    click HardenCookiesEv "../Gemfile"
-    click HardenCSRFEv "../app/controllers/application_controller.rb"
-    click HardenRateInEv "../config/initializers/rack_attack.rb"
-    click HardenRateOutEv "../app/models/project.rb"
-    click HardenEmailEncEv "../app/models/user.rb"
-    click HardenGravatarEv "../app/models/user.rb"
-    click PkgMgrEv "../Gemfile"
+    click Implementation "#claim-implementation"
+    click CommonVulns "#strategy-commonvulns"
+    click HardeningStrat "#strategy-hardeningstrat"
+    click PubVulns "#claim-pubvulns"
+    click OWASPClaim "#package-owaspclaim"
+    click MisconfigClaim "#claim-misconfigclaim"
+    click ReuseSec "#claim-reusesec"
+    click Hardening "#package-hardening"
+    click PubVulnsBundleEv "#evidence-pubvulnsbundleev"
+    click PubVulnsDependabotEv "#evidence-pubvulnsdependabotev"
+    click RailsGuide "#claim-railsguide"
+    click ReuseStrat "#strategy-reusestrat"
+    click KnownVulns "#claim-knownvulns"
+    click RailsGuideEv "#evidence-railsguideev"
+    click ReuseReview "#claim-reusereview"
+    click ReuseAuth "#claim-reuseauth"
+    click PkgMgr "#claim-pkgmgr"
+    click SpecialAnalysis "#claim-specialanalysis"
+    click KnownVulnsBundleEv "#evidence-knownvulnsbundleev"
+    click KnownVulnsDependabotEv "#evidence-knownvulnsdependabotev"
+    click ReuseReviewEv "#evidence-reusereviewev"
+    click ReuseAuthEv "#evidence-reuseauthev"
+    click PkgMgrEv "#evidence-pkgmgrev"
+    click XXESafe "#claim-xxesafe"
+    click ErubisSafe "#claim-erubissafe"
+    click LocalSecretSafe "#claim-localsecretsafe"
+    click ActionCableSafe "#claim-actioncablesafe"
+    click XXESafeEv "#evidence-xxesafeev"
+    click ErubisSafeEv "#evidence-erubissafeev"
+    click LocalSecretSafeEv "#evidence-localsecretsafeev"
+    click ActionCableSafeEv "#evidence-actioncablesafeev"
 
-    BottomPadding[ ]:::invisible ~~~ OWASP1
-    OWASP4 --- SynConnect_00000000
-    OWASP5 --- SynConnect_00000000
-    OWASP6 --- SynConnect_00000000
-    OWASP7 --- SynConnect_00000000
-    OWASP8 --- SynConnect_00000000
-    OWASP9 --- SynConnect_00000000
-    OWASP10 --- SynConnect_00000000
-    OWASP1 --- Dot1
-    OWASP2 --- Dot1
-    OWASP3 --- Dot1
-    SynConnect_00000000 --- Dot1
-    OWASP11 --- Dot1
-    OWASP12 --- Dot1
-    OWASP13 --- Dot1
-    Dot1 --> OWASP1013
-    OWASP1013 --- Dot2
-    OWASPStrat --- Dot2
-    Dot2 --> OWASPClaim
+    BottomPadding[ ]:::invisible ~~~ OWASPClaim
+    RailsGuideEv --> RailsGuide
     RailsGuide --> MisconfigClaim
+    ReuseReviewEv --> ReuseReview
+    ReuseAuthEv --> ReuseAuth
     PkgMgrEv --> PkgMgr
+    XXESafeEv --> XXESafe
+    ErubisSafeEv --> ErubisSafe
+    LocalSecretSafeEv --> LocalSecretSafe
+    ActionCableSafeEv --> ActionCableSafe
+    XXESafe --- Dot1
+    ErubisSafe --- Dot1
+    LocalSecretSafe --- Dot1
+    ActionCableSafe --- Dot1
+    Dot1 --> SpecialAnalysis
+    KnownVulnsBundleEv --- Dot2
+    KnownVulnsDependabotEv --- Dot2
+    Dot2 --> KnownVulns
     ReuseReview --- Dot3
     ReuseAuth --- Dot3
     PkgMgr --- Dot3
@@ -394,23 +384,9 @@ flowchart BT
     ReuseStrat --- Dot3
     KnownVulns --- Dot3
     Dot3 --> ReuseSec
-    HardenHTTPSEv --> HardenHTTPS
-    HardenCSPEv --> HardenCSP
-    HardenCookiesEv --> HardenCookies
-    HardenCSRFEv --> HardenCSRF
-    HardenRateInEv --> HardenRateIn
-    HardenRateOutEv --> HardenRateOut
-    HardenEmailEncEv --> HardenEmailEnc
-    HardenGravatarEv --> HardenGravatar
-    HardenHTTPS --- Dot4
-    HardenCSP --- Dot4
-    HardenCookies --- Dot4
-    HardenCSRF --- Dot4
-    HardenRateIn --- Dot4
-    HardenRateOut --- Dot4
-    HardenEmailEnc --- Dot4
-    HardenGravatar --- Dot4
-    Dot4 --> Hardening
+    PubVulnsBundleEv --- Dot4
+    PubVulnsDependabotEv --- Dot4
+    Dot4 --> PubVulns
     OWASPClaim --- Dot5
     MisconfigClaim --- Dot5
     ReuseSec --- Dot5
@@ -421,7 +397,9 @@ flowchart BT
     Dot5 --> Implementation
 ```
 
-Defines: **[Claim Implementation](#claim-implementation)**, [Claim PubVulns](#claim-pubvulns), [Strategy HardeningStrat](#strategy-hardeningstrat), [Claim Hardening](#claim-hardening), [Claim HardenGravatar](#claim-hardengravatar), [Evidence HardenGravatarEv](#evidence-hardengravatarev), [Claim HardenEmailEnc](#claim-hardenemailenc), [Evidence HardenEmailEncEv](#evidence-hardenemailencev), [Claim HardenRateOut](#claim-hardenrateout), [Evidence HardenRateOutEv](#evidence-hardenrateoutev), [Claim HardenRateIn](#claim-hardenratein), [Evidence HardenRateInEv](#evidence-hardenrateinev), [Claim HardenCSRF](#claim-hardencsrf), [Evidence HardenCSRFEv](#evidence-hardencsrfev), [Claim HardenCookies](#claim-hardencookies), [Evidence HardenCookiesEv](#evidence-hardencookiesev), [Claim HardenCSP](#claim-hardencsp), [Evidence HardenCSPEv](#evidence-hardencspev), [Claim HardenHTTPS](#claim-hardenhttps), [Evidence HardenHTTPSEv](#evidence-hardenhttpsev), [Strategy CommonVulns](#strategy-commonvulns), [Claim ReuseSec](#claim-reusesec), [Claim KnownVulns](#claim-knownvulns), [Strategy ReuseStrat](#strategy-reusestrat), [Claim SpecialAnalysis](#claim-specialanalysis), [Claim PkgMgr](#claim-pkgmgr), [Evidence PkgMgrEv](#evidence-pkgmgrev), [Claim ReuseAuth](#claim-reuseauth), [Claim ReuseReview](#claim-reusereview), [Claim MisconfigClaim](#claim-misconfigclaim), [Claim RailsGuide](#claim-railsguide), [Claim OWASPClaim](#claim-owaspclaim), [Strategy OWASPStrat](#strategy-owaspstrat), [Claim OWASP1013](#claim-owasp1013), [Claim OWASP13](#claim-owasp13), [Claim OWASP12](#claim-owasp12), [Claim OWASP11](#claim-owasp11), [Claim OWASP10](#claim-owasp10), [Claim OWASP9](#claim-owasp9), [Claim OWASP8](#claim-owasp8), [Claim OWASP7](#claim-owasp7), [Claim OWASP6](#claim-owasp6), [Claim OWASP5](#claim-owasp5), [Claim OWASP4](#claim-owasp4), [Claim OWASP3](#claim-owasp3), [Claim OWASP2](#claim-owasp2), [Claim OWASP1](#claim-owasp1)
+Defines: **[Claim Implementation](#claim-implementation)**, [Claim PubVulns](#claim-pubvulns), [Evidence PubVulnsDependabotEv](#evidence-pubvulnsdependabotev), [Evidence PubVulnsBundleEv](#evidence-pubvulnsbundleev), [Strategy HardeningStrat](#strategy-hardeningstrat), [Strategy CommonVulns](#strategy-commonvulns), [Claim ReuseSec](#claim-reusesec), [Claim KnownVulns](#claim-knownvulns), [Evidence KnownVulnsDependabotEv](#evidence-knownvulnsdependabotev), [Evidence KnownVulnsBundleEv](#evidence-knownvulnsbundleev), [Strategy ReuseStrat](#strategy-reusestrat), [Claim SpecialAnalysis](#claim-specialanalysis), [Claim ActionCableSafe](#claim-actioncablesafe), [Evidence ActionCableSafeEv](#evidence-actioncablesafeev), [Claim LocalSecretSafe](#claim-localsecretsafe), [Evidence LocalSecretSafeEv](#evidence-localsecretsafeev), [Claim ErubisSafe](#claim-erubissafe), [Evidence ErubisSafeEv](#evidence-erubissafeev), [Claim XXESafe](#claim-xxesafe), [Evidence XXESafeEv](#evidence-xxesafeev), [Claim PkgMgr](#claim-pkgmgr), [Evidence PkgMgrEv](#evidence-pkgmgrev), [Claim ReuseAuth](#claim-reuseauth), [Evidence ReuseAuthEv](#evidence-reuseauthev), [Claim ReuseReview](#claim-reusereview), [Evidence ReuseReviewEv](#evidence-reusereviewev), [Claim MisconfigClaim](#claim-misconfigclaim), [Claim RailsGuide](#claim-railsguide), [Evidence RailsGuideEv](#evidence-railsguideev)
+
+Citing: [Claim Hardening](#package-hardening), [Claim OWASPClaim](#package-owaspclaim)
 
 Cited by: [Package Security](#package-security)
 
@@ -467,13 +445,24 @@ flowchart BT
     Dot3((" ")):::sacmDot
     Dot4((" ")):::sacmDot
     Dot5((" ")):::sacmDot
-    click CIConfigEv "../.circleci/config.yml"
-    click StyleEv "../.circleci/config.yml"
-    click BrakemanEv "../.github/workflows/main.yml"
-    click LicenseFinderEv "../.circleci/config.yml"
-    click FOSSAEv "https://github.com/coreinfrastructure/best-practices-badge/settings/"
-    click CITestEv "https://codecov.io/gh/coreinfrastructure/best-practices-badge"
-    click NegTestsEv "../test/"
+    click Verification "#claim-verification"
+    click VerifStrat "#strategy-verifstrat"
+    click VerifSteps "#claim-verifsteps"
+    click CIRequired "#claim-cirequired"
+    click StaticVerif "#claim-staticverif"
+    click DynamicVerif "#claim-dynamicverif"
+    click CIConfigEv "#evidence-ciconfigev"
+    click StyleChecks "#claim-stylechecks"
+    click WeaknessAnalysis "#claim-weaknessanalysis"
+    click FLOSSVerif "#claim-flossverif"
+    click TestCoverage "#claim-testcoverage"
+    click NegTests "#claim-negtests"
+    click StyleEv "#evidence-styleev"
+    click BrakemanEv "#evidence-brakemanev"
+    click LicenseFinderEv "#evidence-licensefinderev"
+    click FOSSAEv "#evidence-fossaev"
+    click CITestEv "#evidence-citestev"
+    click NegTestsEv "#evidence-negtestsev"
 
     BottomPadding[ ]:::invisible ~~~ StyleEv
     StyleEv --> StyleChecks
@@ -531,13 +520,24 @@ flowchart BT
     HerokuSecEv[("<b>HerokuSecEv</b>&nbsp;↗<br>Heroku security policy describes physical and environmental safeguards")]
     ExtMonitor["<b>ExtMonitor</b><br>External monitoring is in place"]
     IntLogging["<b>IntLogging</b><br>Internal logging and anomaly detection is in place"]
+    OnlineCheckersEv[("<b>OnlineCheckersEv</b>&nbsp;↗<br>Mozilla Observatory, Security Headers, and similar online tools verify HTTP response headers and flag misconfiguration")]
+    RecoveryPlanEv[("<b>RecoveryPlanEv</b>&nbsp;↗<br>Recovery procedures documented including database restoration from Heroku Postgres backups, BADGEAPP_DENY_LOGIN degraded mode, and mass_email and rekey rake tasks")]
     ExtMonitorEv[("<b>ExtMonitorEv</b>&nbsp;↗<br>UptimeRobot provides external alerting when the website goes down")]
     IntLoggingEv[("<b>IntLoggingEv</b>&nbsp;↗<br>filter_parameter_logging.rb excludes passwords from logs; events stream to stdout per 12-factor app")]
     Dot1((" ")):::sacmDot
     Dot2((" ")):::sacmDot
-    click HerokuSecEv "https://www.heroku.com/policy/security"
-    click ExtMonitorEv "https://uptimerobot.com/dashboard"
-    click IntLoggingEv "../config/initializers/filter_parameter_logging.rb"
+    click Deployment "#claim-deployment"
+    click DeployProvider "#claim-deployprovider"
+    click Detection "#claim-detection"
+    click OnlineCheckers "#claim-onlinecheckers"
+    click RecoveryPlan "#claim-recoveryplan"
+    click HerokuSecEv "#evidence-herokusecev"
+    click ExtMonitor "#claim-extmonitor"
+    click IntLogging "#claim-intlogging"
+    click OnlineCheckersEv "#evidence-onlinecheckersev"
+    click RecoveryPlanEv "#evidence-recoveryplanev"
+    click ExtMonitorEv "#evidence-extmonitorev"
+    click IntLoggingEv "#evidence-intloggingev"
 
     BottomPadding[ ]:::invisible ~~~ HerokuSecEv
     HerokuSecEv --> DeployProvider
@@ -546,6 +546,8 @@ flowchart BT
     ExtMonitor --- Dot1
     IntLogging --- Dot1
     Dot1 --> Detection
+    OnlineCheckersEv --> OnlineCheckers
+    RecoveryPlanEv --> RecoveryPlan
     DeployProvider --- Dot2
     Detection --- Dot2
     OnlineCheckers --- Dot2
@@ -553,7 +555,7 @@ flowchart BT
     Dot2 --> Deployment
 ```
 
-Defines: **[Claim Deployment](#claim-deployment)**, [Claim RecoveryPlan](#claim-recoveryplan), [Claim OnlineCheckers](#claim-onlinecheckers), [Claim Detection](#claim-detection), [Claim IntLogging](#claim-intlogging), [Evidence IntLoggingEv](#evidence-intloggingev), [Claim ExtMonitor](#claim-extmonitor), [Evidence ExtMonitorEv](#evidence-extmonitorev), [Claim DeployProvider](#claim-deployprovider), [Evidence HerokuSecEv](#evidence-herokusecev)
+Defines: **[Claim Deployment](#claim-deployment)**, [Claim RecoveryPlan](#claim-recoveryplan), [Evidence RecoveryPlanEv](#evidence-recoveryplanev), [Claim OnlineCheckers](#claim-onlinecheckers), [Evidence OnlineCheckersEv](#evidence-onlinecheckersev), [Claim Detection](#claim-detection), [Claim IntLogging](#claim-intlogging), [Evidence IntLoggingEv](#evidence-intloggingev), [Claim ExtMonitor](#claim-extmonitor), [Evidence ExtMonitorEv](#evidence-extmonitorev), [Claim DeployProvider](#claim-deployprovider), [Evidence HerokuSecEv](#evidence-herokusecev)
 
 Cited by: [Package Security](#package-security)
 
@@ -581,21 +583,27 @@ flowchart BT
     RapidUpdate["<b>RapidUpdate</b><br>Rapid update process is in place"]
     AutoDetectBundleEv[("<b>AutoDetectBundleEv</b>&nbsp;↗<br>bundle-audit checks all gem versions against NVD vulnerability database on every rake run")]
     AutoDetectGitHubEv[("<b>AutoDetectGitHubEv</b>&nbsp;↗<br>GitHub Dependabot alerts and automated pull requests for vulnerable dependencies")]
+    RapidUpdateEv[("<b>RapidUpdateEv</b>&nbsp;↗<br>Bundler enables library updates in one command; high test coverage enables rapid verify-and-deploy; CI/CD pipeline deploys to Heroku automatically on passing tests")]
     Dot1((" ")):::sacmDot
     Dot2((" ")):::sacmDot
-    click AutoDetectBundleEv "../Gemfile.lock"
-    click AutoDetectGitHubEv "../.github/dependabot.yml"
+    click Maintenance "#claim-maintenance"
+    click AutoDetect "#claim-autodetect"
+    click RapidUpdate "#claim-rapidupdate"
+    click AutoDetectBundleEv "#evidence-autodetectbundleev"
+    click AutoDetectGitHubEv "#evidence-autodetectgithubev"
+    click RapidUpdateEv "#evidence-rapidupdateev"
 
     BottomPadding[ ]:::invisible ~~~ AutoDetectBundleEv
     AutoDetectBundleEv --- Dot1
     AutoDetectGitHubEv --- Dot1
     Dot1 --> AutoDetect
+    RapidUpdateEv --> RapidUpdate
     AutoDetect --- Dot2
     RapidUpdate --- Dot2
     Dot2 --> Maintenance
 ```
 
-Defines: **[Claim Maintenance](#claim-maintenance)**, [Claim RapidUpdate](#claim-rapidupdate), [Claim AutoDetect](#claim-autodetect), [Evidence AutoDetectGitHubEv](#evidence-autodetectgithubev), [Evidence AutoDetectBundleEv](#evidence-autodetectbundleev)
+Defines: **[Claim Maintenance](#claim-maintenance)**, [Claim RapidUpdate](#claim-rapidupdate), [Evidence RapidUpdateEv](#evidence-rapidupdateev), [Claim AutoDetect](#claim-autodetect), [Evidence AutoDetectGitHubEv](#evidence-autodetectgithubev), [Evidence AutoDetectBundleEv](#evidence-autodetectbundleev)
 
 Cited by: [Package Security](#package-security)
 
@@ -633,24 +641,60 @@ flowchart BT
     DevEnvSec["<b>DevEnvSec</b><br>Development &amp; test environments are protected from attack"]
     CINoData["<b>CINoData</b><br>CI automated test environment does not contain protected data"]
     DevKnowledge["<b>DevKnowledge</b><br>Key developers know how to develop secure software"]
+    ProjectPlanningEv[("<b>ProjectPlanningEv</b>&nbsp;↗<br>Project roadmap and governance prioritize security; long-term security maintenance documented as a goal")]
+    RiskMgmtEv[("<b>RiskMgmtEv</b>&nbsp;↗<br>Continuous threat modeling implemented via this assurance case; regular dependency audits, static analysis, and security-focused development practices address identified risks")]
     ConfigMgmtEv[("<b>ConfigMgmtEv</b>&nbsp;↗<br>Git version control via GitHub with authenticated access; governance documented")]
+    QAEv[("<b>QAEv</b>&nbsp;↗<br>CI pipeline runs rubocop, eslint, rails_best_practices, whitespace checks, and full test suite on every commit, enforcing quality and security standards")]
+    ContractsEv[("<b>ContractsEv</b>&nbsp;↗<br>Heroku Data Processing Addendum and security policy cover deployment environment; Fastly service agreement covers CDN security")]
+    DevEnvSecEv[("<b>DevEnvSecEv</b>&nbsp;↗<br>Development uses local git repositories; GitHub requires authenticated access; no production secrets stored in development environments; CI/CD pipeline validates branch names before use")]
+    CINoDataEv[("<b>CINoDataEv</b>&nbsp;↗<br>CircleCI environment uses separate test database with no production data; production credentials never present in CI context; test database seeded only with synthetic test fixtures")]
+    DevKnowledgeEv[("<b>DevKnowledgeEv</b>&nbsp;↗<br>Key developers have demonstrated expertise in secure software development including creation of OpenSSF Best Practices criteria, academic research on secure programming, and security-focused professional work")]
     Dot1((" ")):::sacmDot
     Dot2((" ")):::sacmDot
     Dot3((" ")):::sacmDot
     Dot4((" ")):::sacmDot
-    click ConfigMgmtEv "../governance.md"
+    click NonTechnical "#claim-nontechnical"
+    click AgreementProc "#claim-agreementproc"
+    click OrgProc "#claim-orgproc"
+    click TechMgmt "#claim-techmgmt"
+    click Acquisition "#claim-acquisition"
+    click Infrastructure "#claim-infrastructure"
+    click HumanRes "#claim-humanres"
+    click ProjectPlanning "#claim-projectplanning"
+    click RiskMgmt "#claim-riskmgmt"
+    click ConfigMgmt "#claim-configmgmt"
+    click QA "#claim-qa"
+    click Contracts "#claim-contracts"
+    click DevEnvSec "#claim-devenvsec"
+    click CINoData "#claim-cinodata"
+    click DevKnowledge "#claim-devknowledge"
+    click ProjectPlanningEv "#evidence-projectplanningev"
+    click RiskMgmtEv "#evidence-riskmgmtev"
+    click ConfigMgmtEv "#evidence-configmgmtev"
+    click QAEv "#evidence-qaev"
+    click ContractsEv "#evidence-contractsev"
+    click DevEnvSecEv "#evidence-devenvsecev"
+    click CINoDataEv "#evidence-cinodataev"
+    click DevKnowledgeEv "#evidence-devknowledgeev"
 
-    BottomPadding[ ]:::invisible ~~~ Contracts
+    BottomPadding[ ]:::invisible ~~~ ContractsEv
+    ContractsEv --> Contracts
     Contracts --> Acquisition
     Acquisition --> AgreementProc
+    DevEnvSecEv --> DevEnvSec
+    CINoDataEv --> CINoData
     DevEnvSec --- Dot1
     CINoData --- Dot1
     Dot1 --> Infrastructure
+    DevKnowledgeEv --> DevKnowledge
     DevKnowledge --> HumanRes
     Infrastructure --- Dot2
     HumanRes --- Dot2
     Dot2 --> OrgProc
+    ProjectPlanningEv --> ProjectPlanning
+    RiskMgmtEv --> RiskMgmt
     ConfigMgmtEv --> ConfigMgmt
+    QAEv --> QA
     ProjectPlanning --- Dot3
     RiskMgmt --- Dot3
     ConfigMgmt --- Dot3
@@ -662,7 +706,7 @@ flowchart BT
     Dot4 --> NonTechnical
 ```
 
-Defines: **[Claim NonTechnical](#claim-nontechnical)**, [Claim TechMgmt](#claim-techmgmt), [Claim QA](#claim-qa), [Claim ConfigMgmt](#claim-configmgmt), [Evidence ConfigMgmtEv](#evidence-configmgmtev), [Claim RiskMgmt](#claim-riskmgmt), [Claim ProjectPlanning](#claim-projectplanning), [Claim OrgProc](#claim-orgproc), [Claim HumanRes](#claim-humanres), [Claim DevKnowledge](#claim-devknowledge), [Claim Infrastructure](#claim-infrastructure), [Claim CINoData](#claim-cinodata), [Claim DevEnvSec](#claim-devenvsec), [Claim AgreementProc](#claim-agreementproc), [Claim Acquisition](#claim-acquisition), [Claim Contracts](#claim-contracts)
+Defines: **[Claim NonTechnical](#claim-nontechnical)**, [Claim TechMgmt](#claim-techmgmt), [Claim QA](#claim-qa), [Evidence QAEv](#evidence-qaev), [Claim ConfigMgmt](#claim-configmgmt), [Evidence ConfigMgmtEv](#evidence-configmgmtev), [Claim RiskMgmt](#claim-riskmgmt), [Evidence RiskMgmtEv](#evidence-riskmgmtev), [Claim ProjectPlanning](#claim-projectplanning), [Evidence ProjectPlanningEv](#evidence-projectplanningev), [Claim OrgProc](#claim-orgproc), [Claim HumanRes](#claim-humanres), [Claim DevKnowledge](#claim-devknowledge), [Evidence DevKnowledgeEv](#evidence-devknowledgeev), [Claim Infrastructure](#claim-infrastructure), [Claim CINoData](#claim-cinodata), [Evidence CINoDataEv](#evidence-cinodataev), [Claim DevEnvSec](#claim-devenvsec), [Evidence DevEnvSecEv](#evidence-devenvsecev), [Claim AgreementProc](#claim-agreementproc), [Claim Acquisition](#claim-acquisition), [Claim Contracts](#claim-contracts), [Evidence ContractsEv](#evidence-contractsev)
 
 Cited by: [Package Security](#package-security)
 
@@ -688,7 +732,9 @@ flowchart BT
     Controls["<b>Controls</b><br>Certifications &amp; controls provide confidence in operating results"]
     CIIBadge["<b>CIIBadge</b><br>CII Best Practices Badge certification is obtained"]
     CIIBadgeEv[("<b>CIIBadgeEv</b>&nbsp;↗<br>BadgeApp achieves gold CII Best Practices Badge")]
-    click CIIBadgeEv "https://bestpractices.coreinfrastructure.org/en/projects/1"
+    click Controls "#claim-controls"
+    click CIIBadge "#claim-ciibadge"
+    click CIIBadgeEv "#evidence-ciibadgeev"
 
     BottomPadding[ ]:::invisible ~~~ CIIBadgeEv
     CIIBadgeEv --> CIIBadge
@@ -698,6 +744,451 @@ flowchart BT
 Defines: **[Claim Controls](#claim-controls)**, [Claim CIIBadge](#claim-ciibadge), [Evidence CIIBadgeEv](#evidence-ciibadgeev)
 
 Cited by: [Package Security](#package-security)
+
+<a id="package-owaspclaim"></a>
+### Package OWASPClaim: All of the most common important implementation vulnerability types (weaknesses) countered
+
+```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
+flowchart BT
+    classDef invisible opacity:0
+    classDef sacmDot fill:#000,stroke:#000
+    classDef connector fill:none,stroke:#cccccc,stroke-width:1px;
+    classDef abstractClaim stroke-width:2px,stroke-dasharray: 5 5;
+    OWASPClaim["<b>OWASPClaim</b><br>All of the most common important implementation vulnerability types (weaknesses) countered"]
+    OWASPStrat[/"<b>OWASPStrat</b><br>OWASP top 10 represents a broad consensus of the most critical web application security flaws"/]
+    OWASP1013["<b>OWASP1013</b><br>All OWASP top 10 (2013 &amp; 2017) countered"]
+    OWASP1["<b>OWASP1</b><br>Injection (including SQL injection) countered"]
+    OWASP2["<b>OWASP2</b><br>Broken Authentication and Session Management countered"]
+    OWASP3["<b>OWASP3</b><br>Cross-site scripting (XSS) countered"]
+    SynConnect_00000000((" ")):::connector
+    OWASP11["<b>OWASP11</b><br>XXE countered (2017 A4)"]
+    OWASP12["<b>OWASP12</b><br>Insecure Deserialization countered (2017 A8)"]
+    OWASP13["<b>OWASP13</b><br>Insufficient Logging and Monitoring countered (2017 A10)"]
+    OWASP1Ev[("<b>OWASP1Ev</b>&nbsp;↗<br>ActiveRecord ORM uses parameterized queries by default; direct SQL uses sanitize_sql_like or bound parameters; shell is never used to process untrusted content")]
+    OWASP2Ev[("<b>OWASP2Ev</b>&nbsp;↗<br>Sessions use encrypted signed cookies; has_secure_password enforces bcrypt; remember-me uses bcrypt-stored nonce; session_store.rb configures secure cookie settings")]
+    OWASP3Ev[("<b>OWASP3Ev</b>&nbsp;↗<br>Rails SafeBuffer escapes all template output by default; markdown processing whitelists safe tags and attributes; CSP enforced via secure_headers gem")]
+    OWASP4["<b>OWASP4</b><br>Insecure Direct Object References countered"]
+    OWASP5["<b>OWASP5</b><br>Security Misconfiguration countered"]
+    OWASP6["<b>OWASP6</b><br>Sensitive Data Exposure countered"]
+    OWASP7["<b>OWASP7</b><br>Missing Access Control countered"]
+    OWASP8["<b>OWASP8</b><br>CSRF countered"]
+    OWASP9["<b>OWASP9</b><br>Known Vulnerabilities countered"]
+    OWASP10["<b>OWASP10</b><br>Unvalidated Redirects and Forwards countered"]
+    OWASP11Ev[("<b>OWASP11Ev</b>&nbsp;↗<br>Nokogiri configured to disable external entity processing; XML parsing restricted to safe subset; SpecialAnalysis documents this exception")]
+    OWASP12Ev[("<b>OWASP12Ev</b>&nbsp;↗<br>Rails session data stored in signed encrypted cookies; no untrusted object deserialization; JSON used for API data")]
+    OWASP13Ev[("<b>OWASP13Ev</b>&nbsp;↗<br>filter_parameter_logging excludes passwords from logs; events stream to stdout per 12-factor app; UptimeRobot monitors availability externally")]
+    OWASP4Ev[("<b>OWASP4Ev</b>&nbsp;↗<br>All project access goes through can_edit? and can_control? authorization checks; no direct object references exposed without authorization")]
+    OWASP5Ev[("<b>OWASP5Ev</b>&nbsp;↗<br>secure_headers gem enforces HTTP security headers; Rails secrets managed via environment variables; CI runs security checks on every commit")]
+    OWASP6Ev[("<b>OWASP6Ev</b>&nbsp;↗<br>Email encrypted with AES-256-GCM; passwords stored via bcrypt; all data in transit protected by TLS; filter_parameter_logging excludes sensitive fields from logs")]
+    OWASP7Ev[("<b>OWASP7Ev</b>&nbsp;↗<br>can_edit? and can_control? enforced server-side on all mutating actions; no security decisions made client-side")]
+    OWASP8Ev[("<b>OWASP8Ev</b>&nbsp;↗<br>protect_from_forgery with per-form tokens and origin-header check, enabled via load_defaults")]
+    OWASP9BundleEv[("<b>OWASP9BundleEv</b>&nbsp;↗<br>bundle-audit checks all gems against NVD vulnerability database on every rake run")]
+    OWASP9DependabotEv[("<b>OWASP9DependabotEv</b>&nbsp;↗<br>GitHub Dependabot alerts on vulnerable dependencies and opens PRs to update them")]
+    OWASP10Ev[("<b>OWASP10Ev</b>&nbsp;↗<br>Redirect destinations validated against allowlists; no open redirect vulnerabilities; after-login redirect uses stored path validated server-side")]
+    Dot1((" ")):::sacmDot
+    Dot2((" ")):::sacmDot
+    Dot3((" ")):::sacmDot
+    click OWASPClaim "#claim-owaspclaim"
+    click OWASPStrat "#strategy-owaspstrat"
+    click OWASP1013 "#claim-owasp1013"
+    click OWASP1 "#claim-owasp1"
+    click OWASP2 "#claim-owasp2"
+    click OWASP3 "#claim-owasp3"
+    click OWASP11 "#claim-owasp11"
+    click OWASP12 "#claim-owasp12"
+    click OWASP13 "#claim-owasp13"
+    click OWASP1Ev "#evidence-owasp1ev"
+    click OWASP2Ev "#evidence-owasp2ev"
+    click OWASP3Ev "#evidence-owasp3ev"
+    click OWASP4 "#claim-owasp4"
+    click OWASP5 "#claim-owasp5"
+    click OWASP6 "#claim-owasp6"
+    click OWASP7 "#claim-owasp7"
+    click OWASP8 "#claim-owasp8"
+    click OWASP9 "#claim-owasp9"
+    click OWASP10 "#claim-owasp10"
+    click OWASP11Ev "#evidence-owasp11ev"
+    click OWASP12Ev "#evidence-owasp12ev"
+    click OWASP13Ev "#evidence-owasp13ev"
+    click OWASP4Ev "#evidence-owasp4ev"
+    click OWASP5Ev "#evidence-owasp5ev"
+    click OWASP6Ev "#evidence-owasp6ev"
+    click OWASP7Ev "#evidence-owasp7ev"
+    click OWASP8Ev "#evidence-owasp8ev"
+    click OWASP9BundleEv "#evidence-owasp9bundleev"
+    click OWASP9DependabotEv "#evidence-owasp9dependabotev"
+    click OWASP10Ev "#evidence-owasp10ev"
+
+    BottomPadding[ ]:::invisible ~~~ OWASP1Ev
+    OWASP1Ev --> OWASP1
+    OWASP2Ev --> OWASP2
+    OWASP3Ev --> OWASP3
+    OWASP4Ev --> OWASP4
+    OWASP5Ev --> OWASP5
+    OWASP6Ev --> OWASP6
+    OWASP7Ev --> OWASP7
+    OWASP8Ev --> OWASP8
+    OWASP9BundleEv --- Dot1
+    OWASP9DependabotEv --- Dot1
+    Dot1 --> OWASP9
+    OWASP10Ev --> OWASP10
+    OWASP4 --- SynConnect_00000000
+    OWASP5 --- SynConnect_00000000
+    OWASP6 --- SynConnect_00000000
+    OWASP7 --- SynConnect_00000000
+    OWASP8 --- SynConnect_00000000
+    OWASP9 --- SynConnect_00000000
+    OWASP10 --- SynConnect_00000000
+    OWASP11Ev --> OWASP11
+    OWASP12Ev --> OWASP12
+    OWASP13Ev --> OWASP13
+    OWASP1 --- Dot2
+    OWASP2 --- Dot2
+    OWASP3 --- Dot2
+    SynConnect_00000000 --- Dot2
+    OWASP11 --- Dot2
+    OWASP12 --- Dot2
+    OWASP13 --- Dot2
+    Dot2 --> OWASP1013
+    OWASP1013 --- Dot3
+    OWASPStrat --- Dot3
+    Dot3 --> OWASPClaim
+```
+
+Defines: **[Claim OWASPClaim](#claim-owaspclaim)**, [Strategy OWASPStrat](#strategy-owaspstrat), [Claim OWASP1013](#claim-owasp1013), [Claim OWASP13](#claim-owasp13), [Evidence OWASP13Ev](#evidence-owasp13ev), [Claim OWASP12](#claim-owasp12), [Evidence OWASP12Ev](#evidence-owasp12ev), [Claim OWASP11](#claim-owasp11), [Evidence OWASP11Ev](#evidence-owasp11ev), [Claim OWASP10](#claim-owasp10), [Evidence OWASP10Ev](#evidence-owasp10ev), [Claim OWASP9](#claim-owasp9), [Evidence OWASP9DependabotEv](#evidence-owasp9dependabotev), [Evidence OWASP9BundleEv](#evidence-owasp9bundleev), [Claim OWASP8](#claim-owasp8), [Evidence OWASP8Ev](#evidence-owasp8ev), [Claim OWASP7](#claim-owasp7), [Evidence OWASP7Ev](#evidence-owasp7ev), [Claim OWASP6](#claim-owasp6), [Evidence OWASP6Ev](#evidence-owasp6ev), [Claim OWASP5](#claim-owasp5), [Evidence OWASP5Ev](#evidence-owasp5ev), [Claim OWASP4](#claim-owasp4), [Evidence OWASP4Ev](#evidence-owasp4ev), [Claim OWASP3](#claim-owasp3), [Evidence OWASP3Ev](#evidence-owasp3ev), [Claim OWASP2](#claim-owasp2), [Evidence OWASP2Ev](#evidence-owasp2ev), [Claim OWASP1](#claim-owasp1), [Evidence OWASP1Ev](#evidence-owasp1ev)
+
+Cited by: [Package Implementation](#package-implementation)
+
+<a id="package-hardening"></a>
+### Package Hardening: Hardening is applied
+
+```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
+flowchart BT
+    classDef invisible opacity:0
+    classDef sacmDot fill:#000,stroke:#000
+    classDef connector fill:none,stroke:#cccccc,stroke-width:1px;
+    classDef abstractClaim stroke-width:2px,stroke-dasharray: 5 5;
+    Hardening["<b>Hardening</b><br>Hardening is applied"]
+    HardenHTTPS["<b>HardenHTTPS</b><br>HTTPS use enforced (including by HSTS)"]
+    HardenCSP["<b>HardenCSP</b><br>Outgoing HTTP headers hardened including restrictive CSP"]
+    HardenCookies["<b>HardenCookies</b><br>Cookies limited"]
+    HardenCSRF["<b>HardenCSRF</b><br>CSRF tokens hardened"]
+    HardenRateIn["<b>HardenRateIn</b><br>Incoming rate limits enforced"]
+    HardenRateOut["<b>HardenRateOut</b><br>Outgoing email rate limits enforced"]
+    HardenEmailEnc["<b>HardenEmailEnc</b><br>Email addresses encrypted"]
+    HardenGravatar["<b>HardenGravatar</b><br>Gravatar restricted"]
+    HardenHTTPSEv[("<b>HardenHTTPSEv</b>&nbsp;↗<br>config.force_ssl enables TLS redirection, secure cookies, and HSTS; domain in Chrome HSTS preload list")]
+    HardenCSPEv[("<b>HardenCSPEv</b>&nbsp;↗<br>secure_headers gem enforces CSP and security headers; integration test verifies header values")]
+    HardenCookiesEv[("<b>HardenCookiesEv</b>&nbsp;↗<br>secure_headers gem sets httponly, secure, and SameSite=Lax cookie attributes; session cookies use AES-256-GCM")]
+    HardenCSRFEv[("<b>HardenCSRFEv</b>&nbsp;↗<br>protect_from_forgery with per-form tokens and origin-header check, enabled via load_defaults")]
+    HardenRateInEv[("<b>HardenRateInEv</b>&nbsp;↗<br>Rack::Attack rate limits on requests, logins, and signups by client IP address")]
+    HardenRateOutEv[("<b>HardenRateOutEv</b>&nbsp;↗<br>projects_to_remind class method and hard limit on outgoing reminder email count")]
+    HardenEmailEncEv[("<b>HardenEmailEncEv</b>&nbsp;↗<br>attr_encrypted and blind_index gems encrypt email addresses with AES-256-GCM and PBKDF2-HMAC-SHA256 index")]
+    HardenGravatarEv[("<b>HardenGravatarEv</b>&nbsp;↗<br>use_gravatar boolean controls whether gravatar MD5 hash is revealed for each local user")]
+    Dot1((" ")):::sacmDot
+    click Hardening "#claim-hardening"
+    click HardenHTTPS "#claim-hardenhttps"
+    click HardenCSP "#claim-hardencsp"
+    click HardenCookies "#claim-hardencookies"
+    click HardenCSRF "#claim-hardencsrf"
+    click HardenRateIn "#claim-hardenratein"
+    click HardenRateOut "#claim-hardenrateout"
+    click HardenEmailEnc "#claim-hardenemailenc"
+    click HardenGravatar "#claim-hardengravatar"
+    click HardenHTTPSEv "#evidence-hardenhttpsev"
+    click HardenCSPEv "#evidence-hardencspev"
+    click HardenCookiesEv "#evidence-hardencookiesev"
+    click HardenCSRFEv "#evidence-hardencsrfev"
+    click HardenRateInEv "#evidence-hardenrateinev"
+    click HardenRateOutEv "#evidence-hardenrateoutev"
+    click HardenEmailEncEv "#evidence-hardenemailencev"
+    click HardenGravatarEv "#evidence-hardengravatarev"
+
+    BottomPadding[ ]:::invisible ~~~ HardenHTTPSEv
+    HardenHTTPSEv --> HardenHTTPS
+    HardenCSPEv --> HardenCSP
+    HardenCookiesEv --> HardenCookies
+    HardenCSRFEv --> HardenCSRF
+    HardenRateInEv --> HardenRateIn
+    HardenRateOutEv --> HardenRateOut
+    HardenEmailEncEv --> HardenEmailEnc
+    HardenGravatarEv --> HardenGravatar
+    HardenHTTPS --- Dot1
+    HardenCSP --- Dot1
+    HardenCookies --- Dot1
+    HardenCSRF --- Dot1
+    HardenRateIn --- Dot1
+    HardenRateOut --- Dot1
+    HardenEmailEnc --- Dot1
+    HardenGravatar --- Dot1
+    Dot1 --> Hardening
+```
+
+Defines: **[Claim Hardening](#claim-hardening)**, [Claim HardenGravatar](#claim-hardengravatar), [Evidence HardenGravatarEv](#evidence-hardengravatarev), [Claim HardenEmailEnc](#claim-hardenemailenc), [Evidence HardenEmailEncEv](#evidence-hardenemailencev), [Claim HardenRateOut](#claim-hardenrateout), [Evidence HardenRateOutEv](#evidence-hardenrateoutev), [Claim HardenRateIn](#claim-hardenratein), [Evidence HardenRateInEv](#evidence-hardenrateinev), [Claim HardenCSRF](#claim-hardencsrf), [Evidence HardenCSRFEv](#evidence-hardencsrfev), [Claim HardenCookies](#claim-hardencookies), [Evidence HardenCookiesEv](#evidence-hardencookiesev), [Claim HardenCSP](#claim-hardencsp), [Evidence HardenCSPEv](#evidence-hardencspev), [Claim HardenHTTPS](#claim-hardenhttps), [Evidence HardenHTTPSEv](#evidence-hardenhttpsev)
+
+Cited by: [Package Implementation](#package-implementation)
+
+<a id="package-confidentiality"></a>
+### Package Confidentiality: Confidentiality is maintained
+
+```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
+flowchart BT
+    classDef invisible opacity:0
+    classDef sacmDot fill:#000,stroke:#000
+    classDef connector fill:none,stroke:#cccccc,stroke-width:1px;
+    classDef abstractClaim stroke-width:2px,stroke-dasharray: 5 5;
+    Confidentiality["<b>Confidentiality</b><br>Confidentiality is maintained"]
+    NonPublicData["<b>NonPublicData</b><br>Non-public data is kept confidential"]
+    UserPrivacy["<b>UserPrivacy</b><br>User privacy is maintained"]
+    MostDataPublic["<b>MostDataPublic</b><br>Almost all data is not confidential<br>━━━"]
+    ConfDataAtRest["<b>ConfDataAtRest</b><br>Confidential data at rest is protected"]
+    DataInMotion["<b>DataInMotion</b><br>Data in motion encrypted with HTTPS"]
+    SelfHostedAssets["<b>SelfHostedAssets</b><br>All web assets are self-hosted; no third-party transclusions reveal user activity to unrelated sites"]
+    GravatarPrivacyEv[("<b>GravatarPrivacyEv</b>&nbsp;↗<br>use_gravatar boolean controls whether any MD5 hash is sent to Gravatar, giving each user control over this external disclosure")]
+    Passwords["<b>Passwords</b><br>User passwords stored securely (using bcrypt)"]
+    RememberMe["<b>RememberMe</b><br>Remember me token is secured"]
+    EmailSecured["<b>EmailSecured</b><br>Email addresses are secured (encrypted and only accessible to admin &amp; owner)"]
+    DataInMotionEv[("<b>DataInMotionEv</b>&nbsp;↗<br>config.force_ssl = true enforces HTTPS with TLS redirection and secure cookies in production")]
+    SelfHostedAssetsEv[("<b>SelfHostedAssetsEv</b>&nbsp;↗<br>Content-Security-Policy restricts script-src and style-src to self; application layouts contain no external CDN script or font references")]
+    PasswordsEv[("<b>PasswordsEv</b>&nbsp;↗<br>has_secure_password in user model stores passwords via bcrypt")]
+    RememberMeEv[("<b>RememberMeEv</b>&nbsp;↗<br>remember method in user model creates bcrypt-stored nonce; sessions controller and helper manage it; login test verifies cleartext not stored in cookie")]
+    EmailSecuredEv[("<b>EmailSecuredEv</b>&nbsp;↗<br>Views, mailers, and controllers restrict email address access to owners and admins; use grep -Ri 'user.*\.email' to verify")]
+    Dot1((" ")):::sacmDot
+    Dot2((" ")):::sacmDot
+    Dot3((" ")):::sacmDot
+    Dot4((" ")):::sacmDot
+    click Confidentiality "#claim-confidentiality"
+    click NonPublicData "#claim-nonpublicdata"
+    click UserPrivacy "#claim-userprivacy"
+    click MostDataPublic "#claim-mostdatapublic"
+    click ConfDataAtRest "#claim-confdataatrest"
+    click DataInMotion "#claim-datainmotion"
+    click SelfHostedAssets "#claim-selfhostedassets"
+    click GravatarPrivacyEv "#evidence-gravatarprivacyev"
+    click Passwords "#claim-passwords"
+    click RememberMe "#claim-rememberme"
+    click EmailSecured "#claim-emailsecured"
+    click DataInMotionEv "#evidence-datainmotionev"
+    click SelfHostedAssetsEv "#evidence-selfhostedassetsev"
+    click PasswordsEv "#evidence-passwordsev"
+    click RememberMeEv "#evidence-remembermeev"
+    click EmailSecuredEv "#evidence-emailsecuredev"
+
+    BottomPadding[ ]:::invisible ~~~ PasswordsEv
+    PasswordsEv --> Passwords
+    RememberMeEv --> RememberMe
+    EmailSecuredEv --> EmailSecured
+    Passwords --- Dot1
+    RememberMe --- Dot1
+    EmailSecured --- Dot1
+    Dot1 --> ConfDataAtRest
+    DataInMotionEv --> DataInMotion
+    ConfDataAtRest --- Dot2
+    DataInMotion --- Dot2
+    Dot2 --> NonPublicData
+    SelfHostedAssetsEv --> SelfHostedAssets
+    SelfHostedAssets --- Dot3
+    GravatarPrivacyEv --- Dot3
+    Dot3 --> UserPrivacy
+    NonPublicData --- Dot4
+    UserPrivacy --- Dot4
+    MostDataPublic --- Dot4
+    Dot4 --> Confidentiality
+```
+
+Defines: **[Claim Confidentiality](#claim-confidentiality)**, [Claim MostDataPublic](#claim-mostdatapublic), [Claim UserPrivacy](#claim-userprivacy), [Evidence GravatarPrivacyEv](#evidence-gravatarprivacyev), [Claim SelfHostedAssets](#claim-selfhostedassets), [Evidence SelfHostedAssetsEv](#evidence-selfhostedassetsev), [Claim NonPublicData](#claim-nonpublicdata), [Claim DataInMotion](#claim-datainmotion), [Evidence DataInMotionEv](#evidence-datainmotionev), [Claim ConfDataAtRest](#claim-confdataatrest), [Claim EmailSecured](#claim-emailsecured), [Evidence EmailSecuredEv](#evidence-emailsecuredev), [Claim RememberMe](#claim-rememberme), [Evidence RememberMeEv](#evidence-remembermeev), [Claim Passwords](#claim-passwords), [Evidence PasswordsEv](#evidence-passwordsev)
+
+Cited by: [Package Requirements](#package-requirements)
+
+<a id="package-availability"></a>
+### Package Availability: Availability is maintained including limited DDoS resilience
+
+```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
+flowchart BT
+    classDef invisible opacity:0
+    classDef sacmDot fill:#000,stroke:#000
+    classDef connector fill:none,stroke:#cccccc,stroke-width:1px;
+    classDef abstractClaim stroke-width:2px,stroke-dasharray: 5 5;
+    Availability["<b>Availability</b><br>Availability is maintained including limited DDoS resilience"]
+    CDNDDoS["<b>CDNDDoS</b><br>CDN counters DDoS attacks on specific resources"]
+    Timeout["<b>Timeout</b><br>Timeout limits maximum request time"]
+    QuickRecovery["<b>QuickRecovery</b><br>Can return to operation quickly after DDoS ended"]
+    LoginDisabled["<b>LoginDisabled</b><br>Logon disabled mode mitigates against some vulnerabilities"]
+    Backups["<b>Backups</b><br>Data corruption and loss are mitigated by multiple backups"]
+    ScaleUp["<b>ScaleUp</b><br>Cloud resources can be rapidly increased"]
+    FastlyCDNEv[("<b>FastlyCDNEv</b>&nbsp;↗<br>Fastly CDN configured as reverse proxy; badge image and static asset requests absorbed by CDN before reaching origin application server")]
+    TimeoutEv[("<b>TimeoutEv</b>&nbsp;↗<br>Rack::Timeout.service_timeout set in production configuration limits all request times")]
+    QuickRecoveryEv[("<b>QuickRecoveryEv</b>&nbsp;↗<br>Heroku allows rapid dyno restart and redeploy from last known good git commit, restoring service within minutes of an incident")]
+    LoginDisabledEv[("<b>LoginDisabledEv</b>&nbsp;↗<br>deny_login initializer reads BADGEAPP_DENY_LOGIN env var to disable all logins")]
+    BackupsEv[("<b>BackupsEv</b>&nbsp;↗<br>Heroku Postgres automated daily backups retained across multiple snapshots; standard Rails and PostgreSQL restore mechanisms enable database recovery")]
+    ScaleUpEv[("<b>ScaleUpEv</b>&nbsp;↗<br>Heroku cloud platform supports on-demand dyno scaling; Fastly CDN reduces origin load during traffic spikes")]
+    Dot1((" ")):::sacmDot
+    click Availability "#claim-availability"
+    click CDNDDoS "#claim-cdnddos"
+    click Timeout "#claim-timeout"
+    click QuickRecovery "#claim-quickrecovery"
+    click LoginDisabled "#claim-logindisabled"
+    click Backups "#claim-backups"
+    click ScaleUp "#claim-scaleup"
+    click FastlyCDNEv "#evidence-fastlycdnev"
+    click TimeoutEv "#evidence-timeoutev"
+    click QuickRecoveryEv "#evidence-quickrecoveryev"
+    click LoginDisabledEv "#evidence-logindisabledev"
+    click BackupsEv "#evidence-backupsev"
+    click ScaleUpEv "#evidence-scaleupev"
+
+    BottomPadding[ ]:::invisible ~~~ FastlyCDNEv
+    FastlyCDNEv --> CDNDDoS
+    TimeoutEv --> Timeout
+    QuickRecoveryEv --> QuickRecovery
+    LoginDisabledEv --> LoginDisabled
+    BackupsEv --> Backups
+    ScaleUpEv --> ScaleUp
+    CDNDDoS --- Dot1
+    Timeout --- Dot1
+    QuickRecovery --- Dot1
+    LoginDisabled --- Dot1
+    Backups --- Dot1
+    ScaleUp --- Dot1
+    Dot1 --> Availability
+```
+
+Defines: **[Claim Availability](#claim-availability)**, [Claim ScaleUp](#claim-scaleup), [Evidence ScaleUpEv](#evidence-scaleupev), [Claim Backups](#claim-backups), [Evidence BackupsEv](#evidence-backupsev), [Claim LoginDisabled](#claim-logindisabled), [Evidence LoginDisabledEv](#evidence-logindisabledev), [Claim QuickRecovery](#claim-quickrecovery), [Evidence QuickRecoveryEv](#evidence-quickrecoveryev), [Claim Timeout](#claim-timeout), [Evidence TimeoutEv](#evidence-timeoutev), [Claim CDNDDoS](#claim-cdnddos), [Evidence FastlyCDNEv](#evidence-fastlycdnev)
+
+Cited by: [Package Requirements](#package-requirements)
+
+<a id="package-designprinciples"></a>
+### Package DesignPrinciples: Secure design principles are applied
+
+```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
+flowchart BT
+    classDef invisible opacity:0
+    classDef sacmDot fill:#000,stroke:#000
+    classDef connector fill:none,stroke:#cccccc,stroke-width:1px;
+    classDef abstractClaim stroke-width:2px,stroke-dasharray: 5 5;
+    DesignPrinciples["<b>DesignPrinciples</b><br>Secure design principles are applied"]
+    EconomyMech["<b>EconomyMech</b><br>Economy of mechanism"]
+    CompleteMed["<b>CompleteMed</b><br>Complete mediation"]
+    FailSafe["<b>FailSafe</b><br>Fail-safe defaults"]
+    SynConnect_00000000((" ")):::connector
+    PsychAccept["<b>PsychAccept</b><br>Psychological acceptability"]
+    LimitedAttack["<b>LimitedAttack</b><br>Limited attack surface"]
+    InputValid["<b>InputValid</b><br>Input validation with whitelists"]
+    EconomyMechEv[("<b>EconomyMechEv</b>&nbsp;↗<br>Custom code kept minimal and DRY; standard Rails patterns used; Gemfile shows focused, well-scoped dependency set")]
+    CompleteMedEv[("<b>CompleteMedEv</b>&nbsp;↗<br>before_action authorization hooks in ApplicationController run on every request; no client-side access control decisions are made")]
+    FailSafeEv[("<b>FailSafeEv</b>&nbsp;↗<br>can_edit_else_redirect and can_control_else_redirect redirect unauthenticated or unauthorized requests; default deny enforced server-side")]
+    OpenDesign["<b>OpenDesign</b><br>Open design"]
+    SepPriv["<b>SepPriv</b><br>Separation of privilege"]
+    LeastPriv["<b>LeastPriv</b><br>Least privilege"]
+    LeastCommon["<b>LeastCommon</b><br>Least common mechanism"]
+    PsychAcceptEv[("<b>PsychAcceptEv</b>&nbsp;↗<br>Standard web authentication UX (email/password or GitHub OAuth login); badge criteria presented in plain language; security controls do not impose undue burden on legitimate use")]
+    LimitedAttackEv[("<b>LimitedAttackEv</b>&nbsp;↗<br>Restrictive CSP limits script execution sources; routes.rb exposes only necessary endpoints; Rack::Attack blocks abusive IPs")]
+    InputValidEv[("<b>InputValidEv</b>&nbsp;↗<br>Project and User models use Rails validators to enforce field constraints; controllers use strong parameters (permit) to whitelist allowed input fields")]
+    OpenDesignEv[("<b>OpenDesignEv</b>&nbsp;↗<br>Full source code publicly available; security does not depend on keeping implementation secret")]
+    SepPrivEv[("<b>SepPrivEv</b>&nbsp;↗<br>admin? method in User model separates admin role from normal user; admin-only actions checked explicitly and separately from ownership")]
+    LeastPrivEv[("<b>LeastPrivEv</b>&nbsp;↗<br>can_edit? grants edit access only to project owner or admins; additional_rights table enables explicit narrow collaborator grants")]
+    LeastCommonEv[("<b>LeastCommonEv</b>&nbsp;↗<br>Per-request processing; session state stored in per-user encrypted client-side cookies, not shared server-side sessions")]
+    Dot1((" ")):::sacmDot
+    click DesignPrinciples "#claim-designprinciples"
+    click EconomyMech "#claim-economymech"
+    click CompleteMed "#claim-completemed"
+    click FailSafe "#claim-failsafe"
+    click PsychAccept "#claim-psychaccept"
+    click LimitedAttack "#claim-limitedattack"
+    click InputValid "#claim-inputvalid"
+    click EconomyMechEv "#evidence-economymechev"
+    click CompleteMedEv "#evidence-completemedev"
+    click FailSafeEv "#evidence-failsafeev"
+    click OpenDesign "#claim-opendesign"
+    click SepPriv "#claim-seppriv"
+    click LeastPriv "#claim-leastpriv"
+    click LeastCommon "#claim-leastcommon"
+    click PsychAcceptEv "#evidence-psychacceptev"
+    click LimitedAttackEv "#evidence-limitedattackev"
+    click InputValidEv "#evidence-inputvalidev"
+    click OpenDesignEv "#evidence-opendesignev"
+    click SepPrivEv "#evidence-sepprivev"
+    click LeastPrivEv "#evidence-leastprivev"
+    click LeastCommonEv "#evidence-leastcommonev"
+
+    BottomPadding[ ]:::invisible ~~~ EconomyMechEv
+    EconomyMechEv --> EconomyMech
+    CompleteMedEv --> CompleteMed
+    FailSafeEv --> FailSafe
+    OpenDesignEv --> OpenDesign
+    SepPrivEv --> SepPriv
+    LeastPrivEv --> LeastPriv
+    LeastCommonEv --> LeastCommon
+    OpenDesign --- SynConnect_00000000
+    SepPriv --- SynConnect_00000000
+    LeastPriv --- SynConnect_00000000
+    LeastCommon --- SynConnect_00000000
+    PsychAcceptEv --> PsychAccept
+    LimitedAttackEv --> LimitedAttack
+    InputValidEv --> InputValid
+    EconomyMech --- Dot1
+    CompleteMed --- Dot1
+    FailSafe --- Dot1
+    SynConnect_00000000 --- Dot1
+    PsychAccept --- Dot1
+    LimitedAttack --- Dot1
+    InputValid --- Dot1
+    Dot1 --> DesignPrinciples
+```
+
+Defines: **[Claim DesignPrinciples](#claim-designprinciples)**, [Claim InputValid](#claim-inputvalid), [Evidence InputValidEv](#evidence-inputvalidev), [Claim LimitedAttack](#claim-limitedattack), [Evidence LimitedAttackEv](#evidence-limitedattackev), [Claim PsychAccept](#claim-psychaccept), [Evidence PsychAcceptEv](#evidence-psychacceptev), [Claim LeastCommon](#claim-leastcommon), [Evidence LeastCommonEv](#evidence-leastcommonev), [Claim LeastPriv](#claim-leastpriv), [Evidence LeastPrivEv](#evidence-leastprivev), [Claim SepPriv](#claim-seppriv), [Evidence SepPrivEv](#evidence-sepprivev), [Claim OpenDesign](#claim-opendesign), [Evidence OpenDesignEv](#evidence-opendesignev), [Claim FailSafe](#claim-failsafe), [Evidence FailSafeEv](#evidence-failsafeev), [Claim CompleteMed](#claim-completemed), [Evidence CompleteMedEv](#evidence-completemedev), [Claim EconomyMech](#claim-economymech), [Evidence EconomyMechEv](#evidence-economymechev)
+
+Cited by: [Package Design](#package-design)
 <!-- end verocase -->
 
 ### Overall approach
@@ -813,24 +1304,27 @@ That said, the test results for the master branch
 are available if desired at:
 https://app.circleci.com/pipelines/github/coreinfrastructure/best-practices-badge?branch=master
 
-(Note to editors: to edit the figures above, edit the .odg file, then
-export to .png so that it can viewed on GitHub.)
+## Assurance case tooling and notation
 
-## CAE notation
+This assurance case is maintained using the LTAC (Linked Text Assurance Case)
+format with the `verocase` tool.
+The LTAC source file (`docs/case.ltac`) contains the argument skeleton —
+packages, claims, strategies, evidence identifiers, and their relationships.
+The `verocase` tool validates the argument structure (checking for
+circular reasoning, missing elements, and consistency) and automatically
+regenerates the Mermaid diagrams in this document from that skeleton.
 
-Our full assurance case is currently described in CAE notation.
+The diagrams follow the SACM (Structured Assurance Case Metamodel) graphical
+notation, explained in the next section.
+We do not show most evidence in the diagrams; instead, we provide evidence in
+the supporting text below, because the text is far easier to keep current than
+large diagrams.
 
-Claims, Arguments and Evidence (CAE) notation
-is a simple notation often used for assurance cases.
-In CAE notation,
-Ovals are claims or sub-claims, while rounded rectangles are the supporting
-arguments justifying the claims.
-Evidence, where shown, are in rectangles.
-
-We do not show most evidence in the figures, but provide the evidence in
-the supporting text below instead, because large figures are time-consuming
-to edit and for our purposes providing most evidence only in the supporting
-test is adequate.
+For the history of how we previously managed this assurance case using
+LibreOffice Draw with CAE and SACM notation, and why we chose SACM over
+CAE, see the
+[History: Previous LibreOffice-based approach](#history-previous-libreoffice-based-approach)
+section near the end of this document.
 
 ## Structured Assurance Case Metamodel (SACM) Graphical Notation
 
@@ -856,7 +1350,7 @@ Here is the subset of the SACM graphical notation that we use:
 
 1. *Claim*.
    A claim is a statement that can be either true or false (not both).
-   A claim is represented as a rectangle (we fill them with light blue 3),
+   A claim is represented as a rectangle (filled, in the verocase Mermaid output),
    A claim that supports another claim is also called a subclaim.
    It is equivalent to the CAE Claim and GSN Goal.
 2. *ArtifactReference*, which is used for  *evidence*.
@@ -871,7 +1365,7 @@ Here is the subset of the SACM graphical notation that we use:
    An argument explains why the supporting claims and evidence justify
    the claim.
    It is represented as a half-open rectangle
-   (we fill them with light magenta 4).
+   (rendered as a parallelogram in the verocase Mermaid output).
 4. *AssertedInference* and *AssertedEvidence*, aka kinds of *relationships*.
    SACM terminology is that an AssertedInference shows that a claim supports
    another claim, and an AssertedEvidence shows that an ArtifactReference
@@ -894,7 +1388,9 @@ Here is the subset of the SACM graphical notation that we use:
    claim id in square brackets.
    This is represented as a bracketed rectangle.
 
-![SACM notation summary](./sacm.svg)
+The file `docs/sacm.svg` contains an older illustration of the SACM notation
+drawn in LibreOffice; the verocase-generated Mermaid diagrams in this document
+use the same logical notation with slightly different visual rendering.
 
 The text shows an ID and colon (in bold), followed by whitespace and
 its description.
@@ -932,6 +1428,8 @@ Here are some conventions we use:
 
 <!-- verocase-config element_level = 1 -->
 <!-- verocase element Security -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-security"></a>
 # Claim Security: The system is adequately secure against moderate threats
 
@@ -946,6 +1444,8 @@ The following sections each address a specific lifecycle process or concern.
 
 <!-- verocase-config element_level = 2 -->
 <!-- verocase element Processes -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="strategy-processes"></a>
 ## Strategy Processes: Security is argued by examining all lifecycle processes
 
@@ -962,6 +1462,8 @@ This ensures comprehensive coverage across the entire development and operation 
 
 <!-- verocase-config element_level = 2 -->
 <!-- verocase element TechProcesses -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-techprocesses"></a>
 ## Claim TechProcesses: Technical lifecycle processes implement security
 
@@ -978,6 +1480,8 @@ These are described in the following sections.
 
 <!-- verocase-config element_level = 2 -->
 <!-- verocase element Requirements -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-requirements"></a>
 ## Claim Requirements: Security requirements are identified and met
 
@@ -1012,6 +1516,8 @@ to bypass the mechanisms discussed below.
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element SecTriad -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="strategy-sectriad"></a>
 ### Strategy SecTriad: Security triad (CIA) and access control address the requirements
 
@@ -1028,22 +1534,32 @@ Each component is argued separately in the following sub-claims.
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element Confidentiality -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-confidentiality"></a>
 ### Claim Confidentiality: Confidentiality is maintained
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Confidentiality](#package-confidentiality)**, [Package Requirements](#package-requirements)
 
 Supported by: **[Claim NonPublicData](#claim-nonpublicdata)**, [Claim UserPrivacy](#claim-userprivacy), [Claim MostDataPublic](#claim-mostdatapublic)
 
-Supports: **[Strategy SecTriad](#strategy-sectriad)**
+Supports: [Strategy SecTriad](#strategy-sectriad)
 <!-- end verocase -->
+
+We maintain confidentiality by limiting what data is publicly visible,
+protecting non-public data in transit and at rest, and preserving
+user privacy. These aspects are argued separately in the sub-claims below.
 
 <!-- verocase-config element_level = 4 -->
 <!-- verocase element UserPrivacy -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-userprivacy"></a>
 #### Claim UserPrivacy: User privacy is maintained
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Confidentiality](#package-confidentiality)**
+
+Supported by: **[Claim SelfHostedAssets](#claim-selfhostedassets)**, [Evidence GravatarPrivacyEv](#evidence-gravatarprivacyev)
 
 Supports: **[Claim Confidentiality](#claim-confidentiality)**
 <!-- end verocase -->
@@ -1238,10 +1754,12 @@ a Virtual Private Network (VPN), or an anonymity network such as Tor
 to provide additional privacy when they interact with the BadgeApp.
 
 <!-- verocase element MostDataPublic -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-mostdatapublic"></a>
 #### Claim MostDataPublic: Almost all data is not confidential
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Confidentiality](#package-confidentiality)**
 
 Supports: **[Claim Confidentiality](#claim-confidentiality)**
 <!-- end verocase -->
@@ -1271,10 +1789,12 @@ We *do* consider this data higher-value and protect them specially.
 
 <!-- verocase-config element_level = 4 -->
 <!-- verocase element NonPublicData -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-nonpublicdata"></a>
 #### Claim NonPublicData: Non-public data is kept confidential
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Confidentiality](#package-confidentiality)**
 
 Supported by: **[Claim ConfDataAtRest](#claim-confdataatrest)**, [Claim DataInMotion](#claim-datainmotion)
 
@@ -1286,10 +1806,12 @@ email addresses — is kept confidential both at rest and in motion.
 The following sub-claims address each form of confidential data storage.
 
 <!-- verocase element ConfDataAtRest -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-confdataatrest"></a>
 #### Claim ConfDataAtRest: Confidential data at rest is protected
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Confidentiality](#package-confidentiality)**
 
 Supported by: **[Claim Passwords](#claim-passwords)**, [Claim RememberMe](#claim-rememberme), [Claim EmailSecured](#claim-emailsecured)
 
@@ -1301,10 +1823,12 @@ User passwords are stored only as bcrypt hashes, remember-me tokens
 use bcrypt-stored nonces, and email addresses are encrypted at rest.
 
 <!-- verocase element Passwords -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-passwords"></a>
 #### Claim Passwords: User passwords stored securely (using bcrypt)
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Confidentiality](#package-confidentiality)**
 
 Supported by: **[Evidence PasswordsEv](#evidence-passwordsev)**
 
@@ -1372,21 +1896,27 @@ while we check them against the bad password list in the database:
    that the user would have to choose a different password.
 
 <!-- verocase element PasswordsEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-passwordsev"></a>
 #### Evidence PasswordsEv: has_secure_password in user model stores passwords via bcrypt
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Confidentiality](#package-confidentiality)**
 
 Supports: **[Claim Passwords](#claim-passwords)**
+
+External Reference: [../app/models/user.rb](../app/models/user.rb)
 <!-- end verocase -->
 
 `has_secure_password` in user model stores passwords via bcrypt. See [../app/models/user.rb](../app/models/user.rb).
 
 <!-- verocase element RememberMe -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-rememberme"></a>
 #### Claim RememberMe: Remember me token is secured
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Confidentiality](#package-confidentiality)**
 
 Supported by: **[Evidence RememberMeEv](#evidence-remembermeev)**
 
@@ -1432,21 +1962,27 @@ In file `test/integration/users_login_test.rb` we verify that the
 password is not stored as cleartext in the user cookie.
 
 <!-- verocase element RememberMeEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-remembermeev"></a>
 #### Evidence RememberMeEv: remember method in user model creates bcrypt-stored nonce; sessions controller and helper manage it; login test verifies cleartext not stored in cookie
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Confidentiality](#package-confidentiality)**
 
 Supports: **[Claim RememberMe](#claim-rememberme)**
+
+External Reference: [../app/controllers/sessions_controller.rb](../app/controllers/sessions_controller.rb)
 <!-- end verocase -->
 
 `remember` method in user model creates bcrypt-stored nonce; sessions controller and helper manage it; login test verifies cleartext not stored in cookie. See [../app/controllers/sessions_controller.rb](../app/controllers/sessions_controller.rb).
 
 <!-- verocase element EmailSecured -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-emailsecured"></a>
 #### Claim EmailSecured: Email addresses are secured (encrypted and only accessible to admin & owner)
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Confidentiality](#package-confidentiality)**
 
 Supported by: **[Evidence EmailSecuredEv](#evidence-emailsecuredev)**
 
@@ -1568,12 +2104,16 @@ authentication system (countering enumeration or verification attacks):
    the login failed; they do not indicate if the email address is present.
 
 <!-- verocase element EmailSecuredEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-emailsecuredev"></a>
 #### Evidence EmailSecuredEv: Views, mailers, and controllers restrict email address access to owners and admins; use grep -Ri 'user.*\.email' to verify
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Confidentiality](#package-confidentiality)**
 
 Supports: **[Claim EmailSecured](#claim-emailsecured)**
+
+External Reference: [../app/views/users/](../app/views/users/)
 <!-- end verocase -->
 
 To verify that email addresses are only accessible to owners and admins:
@@ -1586,10 +2126,12 @@ To verify that email addresses are only accessible to owners and admins:
 - Automated tests verify that email addresses are not displayed without authorization; see tests `should NOT show email address when not logged in`, `JSON should NOT show email address when not logged in`, `should NOT show email address when logged in as another user`, and `JSON should NOT show email address when logged in as another user`.
 
 <!-- verocase element DataInMotion -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-datainmotion"></a>
 #### Claim DataInMotion: Data in motion encrypted with HTTPS
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Confidentiality](#package-confidentiality)**
 
 Supported by: **[Evidence DataInMotionEv](#evidence-datainmotionev)**
 
@@ -1618,18 +2160,24 @@ We also use [online checkers](#online-checkers) (discussed below)
 to verify that our TLS configuration is secure in production.
 
 <!-- verocase element DataInMotionEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-datainmotionev"></a>
 #### Evidence DataInMotionEv: config.force_ssl = true enforces HTTPS with TLS redirection and secure cookies in production
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Confidentiality](#package-confidentiality)**
 
 Supports: **[Claim DataInMotion](#claim-datainmotion)**
+
+External Reference: [../config/environments/production.rb](../config/environments/production.rb)
 <!-- end verocase -->
 
 `config.force_ssl = true` enforces HTTPS with TLS redirection and secure cookies in production. See [../config/environments/production.rb](../config/environments/production.rb).
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element Integrity -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-integrity"></a>
 ### Claim Integrity: Integrity is maintained
 
@@ -1647,6 +2195,8 @@ to the user.
 
 <!-- verocase-config element_level = 4 -->
 <!-- verocase element DataModAuth -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-datamodauth"></a>
 #### Claim DataModAuth: Data modification requires authorization
 
@@ -1751,21 +2301,29 @@ By doing this, we help protect the integrity of the overall database
 from potentially-malicious authorized users.
 
 <!-- verocase element DataModAuthEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-datamodauthev"></a>
 #### Evidence DataModAuthEv: before_action guards can_edit_else_redirect and can_control_else_redirect protect all project modifications
 
 Referenced by: **[Package Requirements](#package-requirements)**
 
 Supports: **[Claim DataModAuth](#claim-datamodauth)**
+
+External Reference: [../app/controllers/projects_controller.rb](../app/controllers/projects_controller.rb)
 <!-- end verocase -->
 
 `before_action` guards `can_edit_else_redirect` and `can_control_else_redirect` protect all project modifications. See [../app/controllers/projects_controller.rb](../app/controllers/projects_controller.rb).
 
 <!-- verocase element AppModAuth -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-appmodauth"></a>
 #### Claim AppModAuth: Application modification requires authorization
 
 Referenced by: **[Package Requirements](#package-requirements)**
+
+Supported by: **[Evidence AppModAuthEv](#evidence-appmodauthev)**
 
 Supports: **[Claim Integrity](#claim-integrity)**
 <!-- end verocase -->
@@ -1777,14 +2335,16 @@ has an authentication and authorization system for this purpose.
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element Availability -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-availability"></a>
 ### Claim Availability: Availability is maintained including limited DDoS resilience
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Availability](#package-availability)**, [Package Requirements](#package-requirements)
 
 Supported by: **[Claim CDNDDoS](#claim-cdnddos)**, [Claim Timeout](#claim-timeout), [Claim QuickRecovery](#claim-quickrecovery), [Claim LoginDisabled](#claim-logindisabled), [Claim Backups](#claim-backups), [Claim ScaleUp](#claim-scaleup)
 
-Supports: **[Strategy SecTriad](#strategy-sectriad)**
+Supports: [Strategy SecTriad](#strategy-sectriad)
 <!-- end verocase -->
 
 As with any publicly-accessible website,
@@ -1798,10 +2358,14 @@ able to reconstitute it (including its data).
 
 <!-- verocase-config element_level = 4 -->
 <!-- verocase element CDNDDoS -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-cdnddos"></a>
 #### Claim CDNDDoS: CDN counters DDoS attacks on specific resources
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Availability](#package-availability)**
+
+Supported by: **[Evidence FastlyCDNEv](#evidence-fastlycdnev)**
 
 Supports: **[Claim Availability](#claim-availability)**
 <!-- end verocase -->
@@ -1812,10 +2376,14 @@ The CDN absorbs or deflects traffic before it reaches our servers,
 providing a layer of resilience for high-traffic attacks.
 
 <!-- verocase element ScaleUp -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-scaleup"></a>
 #### Claim ScaleUp: Cloud resources can be rapidly increased
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Availability](#package-availability)**
+
+Supported by: **[Evidence ScaleUpEv](#evidence-scaleupev)**
 
 Supports: **[Claim Availability](#claim-availability)**
 <!-- end verocase -->
@@ -1825,10 +2393,12 @@ See the design section "availability through scalability" below
 for more about how we handle scaling up.
 
 <!-- verocase element Timeout -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-timeout"></a>
 #### Claim Timeout: Timeout limits maximum request time
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Availability](#package-availability)**
 
 Supported by: **[Evidence TimeoutEv](#evidence-timeoutev)**
 
@@ -1841,21 +2411,29 @@ This is set by setting `Rack::Timeout.service_timeout`
 in file `config/environments/production.rb`.
 
 <!-- verocase element TimeoutEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-timeoutev"></a>
 #### Evidence TimeoutEv: Rack::Timeout.service_timeout set in production configuration limits all request times
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Availability](#package-availability)**
 
 Supports: **[Claim Timeout](#claim-timeout)**
+
+External Reference: [../config/environments/production.rb](../config/environments/production.rb)
 <!-- end verocase -->
 
 `Rack::Timeout.service_timeout` set in production configuration limits all request times. See [../config/environments/production.rb](../config/environments/production.rb).
 
 <!-- verocase element QuickRecovery -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-quickrecovery"></a>
 #### Claim QuickRecovery: Can return to operation quickly after DDoS ended
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Availability](#package-availability)**
+
+Supported by: **[Evidence QuickRecoveryEv](#evidence-quickrecoveryev)**
 
 Supports: **[Claim Availability](#claim-availability)**
 <!-- end verocase -->
@@ -1864,10 +2442,12 @@ The system can return to operation quickly after
 a DDoS attack has ended.
 
 <!-- verocase element LoginDisabled -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-logindisabled"></a>
 #### Claim LoginDisabled: Logon disabled mode mitigates against some vulnerabilities
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Availability](#package-availability)**
 
 Supported by: **[Evidence LoginDisabledEv](#evidence-logindisabledev)**
 
@@ -1935,21 +2515,29 @@ Instead, these changes provide users immediate feedback
 to help them understand that this special mode has been enabled.
 
 <!-- verocase element LoginDisabledEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-logindisabledev"></a>
 #### Evidence LoginDisabledEv: deny_login initializer reads BADGEAPP_DENY_LOGIN env var to disable all logins
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Availability](#package-availability)**
 
 Supports: **[Claim LoginDisabled](#claim-logindisabled)**
+
+External Reference: [../config/initializers/deny_login.rb](../config/initializers/deny_login.rb)
 <!-- end verocase -->
 
 `deny_login` initializer reads `BADGEAPP_DENY_LOGIN` env var to disable all logins. See [../config/initializers/deny_login.rb](../config/initializers/deny_login.rb).
 
 <!-- verocase element Backups -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-backups"></a>
 #### Claim Backups: Data corruption and loss are mitigated by multiple backups
 
-Referenced by: **[Package Requirements](#package-requirements)**
+Referenced by: **[Package Availability](#package-availability)**
+
+Supported by: **[Evidence BackupsEv](#evidence-backupsev)**
 
 Supports: **[Claim Availability](#claim-availability)**
 <!-- end verocase -->
@@ -1974,6 +2562,8 @@ capabilities that also aid availability:
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element AccessControl -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-accesscontrol"></a>
 ### Claim AccessControl: Access control is in place
 
@@ -2006,6 +2596,8 @@ The login credentials in these cases are protected.
 
 <!-- verocase-config element_level = 4 -->
 <!-- verocase element AuthN -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-authn"></a>
 #### Claim AuthN: Users must identify and authenticate themselves
 
@@ -2188,10 +2780,14 @@ This architecture provides:
 
 <!-- verocase-config element_level = 5 -->
 <!-- verocase element LocalAuthN -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-localauthn"></a>
 ##### Claim LocalAuthN: Local users must supply a password
 
 Referenced by: **[Package Requirements](#package-requirements)**
+
+Supported by: **[Evidence LocalAuthNEv](#evidence-localauthnev)**
 
 Supports: **[Claim AuthN](#claim-authn)**
 <!-- end verocase -->
@@ -2203,10 +2799,14 @@ The system enforces rejection on wrong or blank passwords,
 as verified by the test suite.
 
 <!-- verocase element RemoteAuthN -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-remoteauthn"></a>
 ##### Claim RemoteAuthN: Remote users are authenticated by a trusted remote service
 
 Referenced by: **[Package Requirements](#package-requirements)**
+
+Supported by: **[Evidence OAuthEv](#evidence-oauthev)**
 
 Supports: **[Claim AuthN](#claim-authn)**
 <!-- end verocase -->
@@ -2219,6 +2819,8 @@ using the omniauth-github gem (see the [initial login](#initial-login) section).
 
 <!-- verocase-config element_level = 4 -->
 <!-- verocase element AuthZ -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-authz"></a>
 #### Claim AuthZ: Authorization to resources and actions is controlled
 
@@ -2317,22 +2919,30 @@ For more, see the earlier section justifying the claim that
 "Data modification requires authorization".
 
 <!-- verocase element AuthZEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-authzev"></a>
 #### Evidence AuthZEv: can_edit? and can_control? methods implement role-based authorization; all access enforced server-side through controllers
 
 Referenced by: **[Package Requirements](#package-requirements)**
 
 Supports: **[Claim AuthZ](#claim-authz)**
+
+External Reference: [../app/controllers/application_controller.rb](../app/controllers/application_controller.rb)
 <!-- end verocase -->
 
 `can_edit?` and `can_control?` methods implement role-based authorization; all access enforced server-side through controllers. See [../app/controllers/application_controller.rb](../app/controllers/application_controller.rb).
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element Assets -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-assets"></a>
 ### Claim Assets: Assets & threat actors identified & addressed
 
 Referenced by: **[Package Requirements](#package-requirements)**
+
+Supported by: **[Claim AssetsIdentified](#claim-assetsidentified)**, [Claim ThreatsIdentified](#claim-threatsidentified)
 
 Supports: **[Claim Requirements](#claim-requirements)**
 <!-- end verocase -->
@@ -2418,6 +3028,8 @@ The following sections describe how we've managed our security-related risks.
 
 <!-- verocase-config element_level = 2 -->
 <!-- verocase element Design -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-design"></a>
 ## Claim Design: Security in design
 
@@ -2461,10 +3073,14 @@ see a more detailed discussion of the software design.
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element STRIDE -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-stride"></a>
 ### Claim STRIDE: STRIDE threat model has been analyzed
 
 Referenced by: **[Package Design](#package-design)**
+
+Supported by: **[Evidence STRIDEEv](#evidence-strideev)**
 
 Supports: **[Claim Design](#claim-design)**
 <!-- end verocase -->
@@ -2644,10 +3260,14 @@ Given these safeguards, here is how we deal with STRIDE:
     by this mechanism.  Sanitization checks limit the damage that can be done.
 
 <!-- verocase element SimpleDesign -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-simpledesign"></a>
 ### Claim SimpleDesign: Economy of mechanism: simple design is used
 
 Referenced by: **[Package Design](#package-design)**
+
+Supported by: **[Evidence SimpleDesignEv](#evidence-simpledesignev)**
 
 Supports: **[Claim Design](#claim-design)**
 <!-- end verocase -->
@@ -2686,14 +3306,16 @@ and analyze that data; this project data is also untrusted
 contents, etc., are all untrusted).
 
 <!-- verocase element DesignPrinciples -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-designprinciples"></a>
 ### Claim DesignPrinciples: Secure design principles are applied
 
-Referenced by: **[Package Design](#package-design)**
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**, [Package Design](#package-design)
 
 Supported by: **[Claim EconomyMech](#claim-economymech)**, [Claim CompleteMed](#claim-completemed), [Claim FailSafe](#claim-failsafe), [Claim OpenDesign](#claim-opendesign), [Claim SepPriv](#claim-seppriv), [Claim LeastPriv](#claim-leastpriv), [Claim LeastCommon](#claim-leastcommon), [Claim PsychAccept](#claim-psychaccept), [Claim LimitedAttack](#claim-limitedattack), [Claim InputValid](#claim-inputvalid)
 
-Supports: **[Claim Design](#claim-design)**
+Supports: [Claim Design](#claim-design)
 <!-- end verocase -->
 
 Applying various secure design principles helps us avoid
@@ -2798,10 +3420,14 @@ including all 8 principles from
 
 <!-- verocase-config element_level = 4 -->
 <!-- verocase element EconomyMech -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-economymech"></a>
 #### Claim EconomyMech: Economy of mechanism
 
-Referenced by: **[Package Design](#package-design)**
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
+
+Supported by: **[Evidence EconomyMechEv](#evidence-economymechev)**
 
 Supports: **[Claim DesignPrinciples](#claim-designprinciples)**
 <!-- end verocase -->
@@ -2811,10 +3437,14 @@ See the [Claim SimpleDesign](#claim-simpledesign) section for details;
 the list of secure design principles above elaborates on this.
 
 <!-- verocase element CompleteMed -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-completemed"></a>
 #### Claim CompleteMed: Complete mediation
 
-Referenced by: **[Package Design](#package-design)**
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
+
+Supported by: **[Evidence CompleteMedEv](#evidence-completemedev)**
 
 Supports: **[Claim DesignPrinciples](#claim-designprinciples)**
 <!-- end verocase -->
@@ -2825,10 +3455,14 @@ has no role in access control decisions.
 See the secure design principles discussion above for details.
 
 <!-- verocase element FailSafe -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-failsafe"></a>
 #### Claim FailSafe: Fail-safe defaults
 
-Referenced by: **[Package Design](#package-design)**
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
+
+Supported by: **[Evidence FailSafeEv](#evidence-failsafeev)**
 
 Supports: **[Claim DesignPrinciples](#claim-designprinciples)**
 <!-- end verocase -->
@@ -2839,10 +3473,14 @@ All additional permissions must be explicitly granted.
 See the secure design principles discussion above for details.
 
 <!-- verocase element OpenDesign -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-opendesign"></a>
 #### Claim OpenDesign: Open design
 
-Referenced by: **[Package Design](#package-design)**
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
+
+Supported by: **[Evidence OpenDesignEv](#evidence-opendesignev)**
 
 Supports: **[Claim DesignPrinciples](#claim-designprinciples)**
 <!-- end verocase -->
@@ -2852,10 +3490,14 @@ We don't rely on security through obscurity.
 See the secure design principles discussion above for details.
 
 <!-- verocase element SepPriv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-seppriv"></a>
 #### Claim SepPriv: Separation of privilege
 
-Referenced by: **[Package Design](#package-design)**
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
+
+Supported by: **[Evidence SepPrivEv](#evidence-sepprivev)**
 
 Supports: **[Claim DesignPrinciples](#claim-designprinciples)**
 <!-- end verocase -->
@@ -2865,10 +3507,14 @@ Admin functions require a separate admin role check.
 See the secure design principles discussion above for details.
 
 <!-- verocase element LeastPriv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-leastpriv"></a>
 #### Claim LeastPriv: Least privilege
 
-Referenced by: **[Package Design](#package-design)**
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
+
+Supported by: **[Evidence LeastPrivEv](#evidence-leastprivev)**
 
 Supports: **[Claim DesignPrinciples](#claim-designprinciples)**
 <!-- end verocase -->
@@ -2879,10 +3525,14 @@ admin-only functionality is separately restricted.
 See the secure design principles discussion above for details.
 
 <!-- verocase element LeastCommon -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-leastcommon"></a>
 #### Claim LeastCommon: Least common mechanism
 
-Referenced by: **[Package Design](#package-design)**
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
+
+Supported by: **[Evidence LeastCommonEv](#evidence-leastcommonev)**
 
 Supports: **[Claim DesignPrinciples](#claim-designprinciples)**
 <!-- end verocase -->
@@ -2893,10 +3543,14 @@ stored in per-user encrypted cookies rather than shared server-side sessions.
 See the secure design principles discussion above for details.
 
 <!-- verocase element PsychAccept -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-psychaccept"></a>
 #### Claim PsychAccept: Psychological acceptability
 
-Referenced by: **[Package Design](#package-design)**
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
+
+Supported by: **[Evidence PsychAcceptEv](#evidence-psychacceptev)**
 
 Supports: **[Claim DesignPrinciples](#claim-designprinciples)**
 <!-- end verocase -->
@@ -2908,10 +3562,14 @@ reduces repeated logins.
 See the secure design principles discussion above for details.
 
 <!-- verocase element LimitedAttack -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-limitedattack"></a>
 #### Claim LimitedAttack: Limited attack surface
 
-Referenced by: **[Package Design](#package-design)**
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
+
+Supported by: **[Evidence LimitedAttackEv](#evidence-limitedattackev)**
 
 Supports: **[Claim DesignPrinciples](#claim-designprinciples)**
 <!-- end verocase -->
@@ -2922,10 +3580,14 @@ defined endpoints.
 See the secure design principles and input validation discussion above for details.
 
 <!-- verocase element InputValid -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-inputvalid"></a>
 #### Claim InputValid: Input validation with whitelists
 
-Referenced by: **[Package Design](#package-design)**
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
+
+Supported by: **[Evidence InputValidEv](#evidence-inputvalidev)**
 
 Supports: **[Claim DesignPrinciples](#claim-designprinciples)**
 <!-- end verocase -->
@@ -2938,10 +3600,14 @@ See the secure design principles discussion above for details.
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element Scalability -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-scalability"></a>
 ### Claim Scalability: Availability through scalability
 
 Referenced by: **[Package Design](#package-design)**
+
+Supported by: **[Evidence ScalabilityEv](#evidence-scalabilityev)**
 
 Supports: **[Claim Design](#claim-design)**
 <!-- end verocase -->
@@ -3016,10 +3682,14 @@ by an attacker with significant resources without having
 significant resources ourselves.
 
 <!-- verocase element MemSafe -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-memsafe"></a>
 ### Claim MemSafe: Memory-safe languages are used
 
 Referenced by: **[Package Design](#package-design)**
+
+Supported by: **[Evidence MemSafeEv](#evidence-memsafeev)**
 
 Supports: **[Claim Design](#claim-design)**
 <!-- end verocase -->
@@ -3039,6 +3709,8 @@ See the section below on supply chain (reuse) for more.
 
 <!-- verocase-config element_level = 2 -->
 <!-- verocase element Implementation -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-implementation"></a>
 ## Claim Implementation: Security in implementation
 
@@ -3068,6 +3740,8 @@ Below is how we've done each, in turn.
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element CommonVulns -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="strategy-commonvulns"></a>
 ### Strategy CommonVulns: Most implementation vulnerabilities are due to common types of implementation errors or common misconfigurations, so countering them greatly reduces security risks
 
@@ -3084,22 +3758,32 @@ we greatly reduce overall security risk.
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element OWASPClaim -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-owaspclaim"></a>
 ### Claim OWASPClaim: All of the most common important implementation vulnerability types (weaknesses) countered
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**, [Package Implementation](#package-implementation)
 
 Supported by: **[Strategy OWASPStrat](#strategy-owaspstrat)**
 
-Supports: **[Strategy CommonVulns](#strategy-commonvulns)**
+Supports: [Strategy CommonVulns](#strategy-commonvulns)
 <!-- end verocase -->
+
+The OWASP Top 10 is a broad industry consensus of the most critical
+web application security risks. By systematically addressing each
+category, we achieve comprehensive coverage of the implementation
+attack surface. See the sub-claims below for the argument for each
+OWASP category.
 
 <!-- verocase-config element_level = 4 -->
 <!-- verocase element OWASPStrat -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="strategy-owaspstrat"></a>
 #### Strategy OWASPStrat: OWASP top 10 represents a broad consensus of the most critical web application security flaws
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supported by: **[Claim OWASP1013](#claim-owasp1013)**
 
@@ -3111,10 +3795,12 @@ security flaws, providing a comprehensive baseline for addressing common
 implementation vulnerabilities.
 
 <!-- verocase element OWASP1013 -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-owasp1013"></a>
 #### Claim OWASP1013: All OWASP top 10 (2013 & 2017) countered
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
 
 Supported by: **[Claim OWASP1](#claim-owasp1)**, [Claim OWASP2](#claim-owasp2), [Claim OWASP3](#claim-owasp3), [Claim OWASP4](#claim-owasp4), [Claim OWASP5](#claim-owasp5), [Claim OWASP6](#claim-owasp6), [Claim OWASP7](#claim-owasp7), [Claim OWASP8](#claim-owasp8), [Claim OWASP9](#claim-owasp9), [Claim OWASP10](#claim-owasp10), [Claim OWASP11](#claim-owasp11), [Claim OWASP12](#claim-owasp12), [Claim OWASP13](#claim-owasp13)
 
@@ -3295,10 +3981,14 @@ not listed in the 2017 edition of the OWASP top 10.
 
 <!-- verocase-config element_level = 4 -->
 <!-- verocase element OWASP1 -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-owasp1"></a>
 #### Claim OWASP1: Injection (including SQL injection) countered
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
+
+Supported by: **[Evidence OWASP1Ev](#evidence-owasp1ev)**
 
 Supports: **[Claim OWASP1013](#claim-owasp1013)**
 <!-- end verocase -->
@@ -3308,10 +3998,14 @@ Direct SQL is used only with trusted or parameterized inputs.
 See item 1 in the [OWASP countering discussion](#claim-owaspclaim) above.
 
 <!-- verocase element OWASP2 -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-owasp2"></a>
 #### Claim OWASP2: Broken Authentication and Session Management countered
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
+
+Supported by: **[Evidence OWASP2Ev](#evidence-owasp2ev)**
 
 Supports: **[Claim OWASP1013](#claim-owasp1013)**
 <!-- end verocase -->
@@ -3321,10 +4015,14 @@ encrypted signed cookies, session timeout, and session fixation protection.
 See item 2 in the [OWASP countering discussion](#claim-owaspclaim) above.
 
 <!-- verocase element OWASP3 -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-owasp3"></a>
 #### Claim OWASP3: Cross-site scripting (XSS) countered
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
+
+Supported by: **[Evidence OWASP3Ev](#evidence-owasp3ev)**
 
 Supports: **[Claim OWASP1013](#claim-owasp1013)**
 <!-- end verocase -->
@@ -3334,10 +4032,14 @@ a restrictive Content Security Policy, and safe markdown processing.
 See item 3 in the [OWASP countering discussion](#claim-owaspclaim) above.
 
 <!-- verocase element OWASP4 -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-owasp4"></a>
 #### Claim OWASP4: Insecure Direct Object References countered
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
+
+Supported by: **[Evidence OWASP4Ev](#evidence-owasp4ev)**
 
 Supports: **[Claim OWASP1013](#claim-owasp1013)**
 <!-- end verocase -->
@@ -3347,10 +4049,14 @@ through controllers that enforce access control.
 See item 4 in the [OWASP countering discussion](#claim-owaspclaim) above.
 
 <!-- verocase element OWASP5 -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-owasp5"></a>
 #### Claim OWASP5: Security Misconfiguration countered
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
+
+Supported by: **[Evidence OWASP5Ev](#evidence-owasp5ev)**
 
 Supports: **[Claim OWASP1013](#claim-owasp1013)**
 <!-- end verocase -->
@@ -3361,10 +4067,14 @@ See item 5 in the [OWASP countering discussion](#claim-owaspclaim) above and
 the [MisconfigClaim](#claim-misconfigclaim) section.
 
 <!-- verocase element OWASP6 -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-owasp6"></a>
 #### Claim OWASP6: Sensitive Data Exposure countered
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
+
+Supported by: **[Evidence OWASP6Ev](#evidence-owasp6ev)**
 
 Supports: **[Claim OWASP1013](#claim-owasp1013)**
 <!-- end verocase -->
@@ -3375,10 +4085,14 @@ and HTTPS protects data in motion.
 See item 6 in the [OWASP countering discussion](#claim-owaspclaim) above.
 
 <!-- verocase element OWASP7 -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-owasp7"></a>
 #### Claim OWASP7: Missing Access Control countered
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
+
+Supported by: **[Evidence OWASP7Ev](#evidence-owasp7ev)**
 
 Supports: **[Claim OWASP1013](#claim-owasp1013)**
 <!-- end verocase -->
@@ -3388,10 +4102,14 @@ checks in all controllers.
 See item 7 in the [OWASP countering discussion](#claim-owaspclaim) above.
 
 <!-- verocase element OWASP8 -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-owasp8"></a>
 #### Claim OWASP8: CSRF countered
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
+
+Supported by: **[Evidence OWASP8Ev](#evidence-owasp8ev)**
 
 Supports: **[Claim OWASP1013](#claim-owasp1013)**
 <!-- end verocase -->
@@ -3401,10 +4119,14 @@ and a restrictive Content Security Policy.
 See item 8 in the [OWASP countering discussion](#claim-owaspclaim) above.
 
 <!-- verocase element OWASP9 -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-owasp9"></a>
 #### Claim OWASP9: Known Vulnerabilities countered
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
+
+Supported by: **[Evidence OWASP9BundleEv](#evidence-owasp9bundleev)**, [Evidence OWASP9DependabotEv](#evidence-owasp9dependabotev)
 
 Supports: **[Claim OWASP1013](#claim-owasp1013)**
 <!-- end verocase -->
@@ -3415,10 +4137,14 @@ See item 9 in the [OWASP countering discussion](#claim-owaspclaim) above
 and the [Maintenance](#claim-maintenance) section.
 
 <!-- verocase element OWASP10 -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-owasp10"></a>
 #### Claim OWASP10: Unvalidated Redirects and Forwards countered
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
+
+Supported by: **[Evidence OWASP10Ev](#evidence-owasp10ev)**
 
 Supports: **[Claim OWASP1013](#claim-owasp1013)**
 <!-- end verocase -->
@@ -3428,10 +4154,14 @@ and always validating targets.
 See item 10 in the [OWASP countering discussion](#claim-owaspclaim) above.
 
 <!-- verocase element OWASP11 -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-owasp11"></a>
 #### Claim OWASP11: XXE countered (2017 A4)
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
+
+Supported by: **[Evidence OWASP11Ev](#evidence-owasp11ev)**
 
 Supports: **[Claim OWASP1013](#claim-owasp1013)**
 <!-- end verocase -->
@@ -3441,10 +4171,14 @@ the Rails XML parser was removed in Rails 4.0 and is not re-enabled.
 See item 11 in the [OWASP countering discussion](#claim-owaspclaim) above.
 
 <!-- verocase element OWASP12 -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-owasp12"></a>
 #### Claim OWASP12: Insecure Deserialization countered (2017 A8)
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
+
+Supported by: **[Evidence OWASP12Ev](#evidence-owasp12ev)**
 
 Supports: **[Claim OWASP1013](#claim-owasp1013)**
 <!-- end verocase -->
@@ -3454,10 +4188,14 @@ with the JSON parser deserializing only to trusted standard objects.
 See item 12 in the [OWASP countering discussion](#claim-owaspclaim) above.
 
 <!-- verocase element OWASP13 -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-owasp13"></a>
 #### Claim OWASP13: Insufficient Logging and Monitoring countered (2017 A10)
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
+
+Supported by: **[Evidence OWASP13Ev](#evidence-owasp13ev)**
 
 Supports: **[Claim OWASP1013](#claim-owasp1013)**
 <!-- end verocase -->
@@ -3468,6 +4206,8 @@ See item 13 in the [OWASP countering discussion](#claim-owaspclaim) above.
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element MisconfigClaim -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-misconfigclaim"></a>
 ### Claim MisconfigClaim: All of the most common known security-relevant misconfiguration errors countered
 
@@ -3696,10 +4436,14 @@ we will not use this value; we will instead use a preset trusted value.
 
 <!-- verocase-config element_level = 4 -->
 <!-- verocase element RailsGuide -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-railsguide"></a>
 #### Claim RailsGuide: Entire most-relevant security guide applied
 
 Referenced by: **[Package Implementation](#package-implementation)**
+
+Supported by: **[Evidence RailsGuideEv](#evidence-railsguideev)**
 
 Supports: **[Claim MisconfigClaim](#claim-misconfigclaim)**
 <!-- end verocase -->
@@ -3712,6 +4456,8 @@ and explains how each is addressed.
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element HardeningStrat -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="strategy-hardeningstrat"></a>
 ### Strategy HardeningStrat: Hardening can reduce or eliminate the impact of defects in some cases
 
@@ -3728,14 +4474,16 @@ providing additional defense in depth.
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element Hardening -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-hardening"></a>
 ### Claim Hardening: Hardening is applied
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package Hardening](#package-hardening)**, [Package Implementation](#package-implementation)
 
 Supported by: **[Claim HardenHTTPS](#claim-hardenhttps)**, [Claim HardenCSP](#claim-hardencsp), [Claim HardenCookies](#claim-hardencookies), [Claim HardenCSRF](#claim-hardencsrf), [Claim HardenRateIn](#claim-hardenratein), [Claim HardenRateOut](#claim-hardenrateout), [Claim HardenEmailEnc](#claim-hardenemailenc), [Claim HardenGravatar](#claim-hardengravatar)
 
-Supports: **[Strategy HardeningStrat](#strategy-hardeningstrat)**
+Supports: [Strategy HardeningStrat](#strategy-hardeningstrat)
 <!-- end verocase -->
 
 We also use various mechanisms to harden the system against attack.
@@ -3744,10 +4492,12 @@ not countered by the main approaches described elsewhere in this document.
 
 <!-- verocase-config element_level = 4 -->
 <!-- verocase element HardenHTTPS -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-hardenhttps"></a>
 #### Claim HardenHTTPS: HTTPS use enforced (including by HSTS)
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package Hardening](#package-hardening)**
 
 Supported by: **[Evidence HardenHTTPSEv](#evidence-hardenhttpsev)**
 
@@ -3777,21 +4527,27 @@ See
 for more about the impact of `force_ssl`.
 
 <!-- verocase element HardenHTTPSEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-hardenhttpsev"></a>
 #### Evidence HardenHTTPSEv: config.force_ssl enables TLS redirection, secure cookies, and HSTS; domain in Chrome HSTS preload list
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package Hardening](#package-hardening)**
 
 Supports: **[Claim HardenHTTPS](#claim-hardenhttps)**
+
+External Reference: [../config/environments/production.rb](../config/environments/production.rb)
 <!-- end verocase -->
 
 `config.force_ssl` enables TLS redirection, secure cookies, and HSTS; domain in Chrome HSTS preload list. See [../config/environments/production.rb](../config/environments/production.rb).
 
 <!-- verocase element HardenCSP -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-hardencsp"></a>
 #### Claim HardenCSP: Outgoing HTTP headers hardened including restrictive CSP
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package Hardening](#package-hardening)**
 
 Supported by: **[Evidence HardenCSPEv](#evidence-hardencspev)**
 
@@ -3845,21 +4601,27 @@ but a DDoS attack can be performed without it, and our usual DDoS
 protection measures (including caching and scaling) still apply.
 
 <!-- verocase element HardenCSPEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-hardencspev"></a>
 #### Evidence HardenCSPEv: secure_headers gem enforces CSP and security headers; integration test verifies header values
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package Hardening](#package-hardening)**
 
 Supports: **[Claim HardenCSP](#claim-hardencsp)**
+
+External Reference: [../test/integration/project_get_test.rb](../test/integration/project_get_test.rb)
 <!-- end verocase -->
 
 `secure_headers` gem enforces CSP and security headers; integration test verifies header values. See [../test/integration/project_get_test.rb](../test/integration/project_get_test.rb).
 
 <!-- verocase element HardenCookies -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-hardencookies"></a>
 #### Claim HardenCookies: Cookies limited
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package Hardening](#package-hardening)**
 
 Supported by: **[Evidence HardenCookiesEv](#evidence-hardencookiesev)**
 
@@ -3883,21 +4645,27 @@ See
 [expiry in signed or encrypted cookie is now embedded in the cookies values](https://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html#expiry-in-signed-or-encrypted-cookie-is-now-embedded-in-the-cookies-values).
 
 <!-- verocase element HardenCookiesEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-hardencookiesev"></a>
 #### Evidence HardenCookiesEv: secure_headers gem sets httponly, secure, and SameSite=Lax cookie attributes; session cookies use AES-256-GCM
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package Hardening](#package-hardening)**
 
 Supports: **[Claim HardenCookies](#claim-hardencookies)**
+
+External Reference: [../Gemfile](../Gemfile)
 <!-- end verocase -->
 
 `secure_headers` gem sets httponly, secure, and SameSite=Lax cookie attributes; session cookies use AES-256-GCM. See [../Gemfile](../Gemfile).
 
 <!-- verocase element HardenCSRF -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-hardencsrf"></a>
 #### Claim HardenCSRF: CSRF tokens hardened
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package Hardening](#package-hardening)**
 
 Supported by: **[Evidence HardenCSRFEv](#evidence-hardencsrfev)**
 
@@ -3920,21 +4688,27 @@ both enabled as framework defaults via `config.load_defaults`:
 These help counter CSRF, in addition to our other measures.
 
 <!-- verocase element HardenCSRFEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-hardencsrfev"></a>
 #### Evidence HardenCSRFEv: protect_from_forgery with per-form tokens and origin-header check, enabled via load_defaults
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package Hardening](#package-hardening)**
 
 Supports: **[Claim HardenCSRF](#claim-hardencsrf)**
+
+External Reference: [../app/controllers/application_controller.rb](../app/controllers/application_controller.rb)
 <!-- end verocase -->
 
 `protect_from_forgery` with per-form tokens and origin-header check, enabled via `load_defaults`. See [../app/controllers/application_controller.rb](../app/controllers/application_controller.rb).
 
 <!-- verocase element HardenRateIn -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-hardenratein"></a>
 #### Claim HardenRateIn: Incoming rate limits enforced
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package Hardening](#package-hardening)**
 
 Supported by: **[Evidence HardenRateInEv](#evidence-hardenrateinev)**
 
@@ -3978,21 +4752,27 @@ but those entries are always earlier in the list
 (so we can easily ignore them).
 
 <!-- verocase element HardenRateInEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-hardenrateinev"></a>
 #### Evidence HardenRateInEv: Rack::Attack rate limits on requests, logins, and signups by client IP address
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package Hardening](#package-hardening)**
 
 Supports: **[Claim HardenRateIn](#claim-hardenratein)**
+
+External Reference: [../config/initializers/rack_attack.rb](../config/initializers/rack_attack.rb)
 <!-- end verocase -->
 
 `Rack::Attack` rate limits on requests, logins, and signups by client IP address. See [../config/initializers/rack_attack.rb](../config/initializers/rack_attack.rb).
 
 <!-- verocase element HardenRateOut -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-hardenrateout"></a>
 #### Claim HardenRateOut: Outgoing email rate limits enforced
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package Hardening](#package-hardening)**
 
 Supported by: **[Evidence HardenRateOutEv](#evidence-hardenrateoutev)**
 
@@ -4010,21 +4790,27 @@ We have a hard rate limit on the number of emails we will send out each
 time; this keeps us from looking like a spammer.
 
 <!-- verocase element HardenRateOutEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-hardenrateoutev"></a>
 #### Evidence HardenRateOutEv: projects_to_remind class method and hard limit on outgoing reminder email count
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package Hardening](#package-hardening)**
 
 Supports: **[Claim HardenRateOut](#claim-hardenrateout)**
+
+External Reference: [../app/models/project.rb](../app/models/project.rb)
 <!-- end verocase -->
 
 `projects_to_remind` class method and hard limit on outgoing reminder email count. See [../app/models/project.rb](../app/models/project.rb).
 
 <!-- verocase element HardenEmailEnc -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-hardenemailenc"></a>
 #### Claim HardenEmailEnc: Email addresses encrypted
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package Hardening](#package-hardening)**
 
 Supported by: **[Evidence HardenEmailEncEv](#evidence-hardenemailencev)**
 
@@ -4139,21 +4925,27 @@ That said, we believe this encryption adds an additional layer of defense
 to protect email addresses from being revealed.
 
 <!-- verocase element HardenEmailEncEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-hardenemailencev"></a>
 #### Evidence HardenEmailEncEv: attr_encrypted and blind_index gems encrypt email addresses with AES-256-GCM and PBKDF2-HMAC-SHA256 index
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package Hardening](#package-hardening)**
 
 Supports: **[Claim HardenEmailEnc](#claim-hardenemailenc)**
+
+External Reference: [../app/models/user.rb](../app/models/user.rb)
 <!-- end verocase -->
 
 `attr_encrypted` and `blind_index` gems encrypt email addresses with AES-256-GCM and PBKDF2-HMAC-SHA256 index. See [../app/models/user.rb](../app/models/user.rb).
 
 <!-- verocase element HardenGravatar -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-hardengravatar"></a>
 #### Claim HardenGravatar: Gravatar restricted
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package Hardening](#package-hardening)**
 
 Supported by: **[Evidence HardenGravatarEv](#evidence-hardengravatarev)**
 
@@ -4191,21 +4983,29 @@ and only in certain cases.  But we want to exceed expectations,
 and this is one way we do that.
 
 <!-- verocase element HardenGravatarEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-hardengravatarev"></a>
 #### Evidence HardenGravatarEv: use_gravatar boolean controls whether gravatar MD5 hash is revealed for each local user
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package Hardening](#package-hardening)**
 
 Supports: **[Claim HardenGravatar](#claim-hardengravatar)**
+
+External Reference: [../app/models/user.rb](../app/models/user.rb)
 <!-- end verocase -->
 
 `use_gravatar` boolean controls whether gravatar MD5 hash is revealed for each local user. See [../app/models/user.rb](../app/models/user.rb).
 
 <!-- verocase element PubVulns -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-pubvulns"></a>
 #### Claim PubVulns: Public vulnerability information monitored
 
 Referenced by: **[Package Implementation](#package-implementation)**
+
+Supported by: **[Evidence PubVulnsBundleEv](#evidence-pubvulnsbundleev)**, [Evidence PubVulnsDependabotEv](#evidence-pubvulnsdependabotev)
 
 Supports: **[Claim Implementation](#claim-implementation)**
 <!-- end verocase -->
@@ -4256,6 +5056,8 @@ reduces the risks.
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element ReuseSec -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-reusesec"></a>
 ### Claim ReuseSec: Reused software is secure
 
@@ -4266,8 +5068,15 @@ Supported by: **[Strategy ReuseStrat](#strategy-reusestrat)**, [Claim KnownVulns
 Supports: **[Strategy CommonVulns](#strategy-commonvulns)**
 <!-- end verocase -->
 
+We reuse well-vetted, widely-used components and actively monitor
+for known vulnerabilities in those components. Reusing mature
+libraries reduces the amount of security-sensitive code we must
+write and maintain ourselves.
+
 <!-- verocase-config element_level = 4 -->
 <!-- verocase element ReuseStrat -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="strategy-reusestrat"></a>
 #### Strategy ReuseStrat: Reuse is often appropriate and can be done securely
 
@@ -4291,10 +5100,14 @@ reduce the risks of reused code.
 
 <!-- verocase-config element_level = 4 -->
 <!-- verocase element ReuseReview -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-reusereview"></a>
 #### Claim ReuseReview: Reused software is reviewed before use
 
 Referenced by: **[Package Implementation](#package-implementation)**
+
+Supported by: **[Evidence ReuseReviewEv](#evidence-reusereviewev)**
 
 Supports: **[Strategy ReuseStrat](#strategy-reusestrat)**
 <!-- end verocase -->
@@ -4331,10 +5144,14 @@ in later versions.
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element ReuseAuth -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-reuseauth"></a>
 ### Claim ReuseAuth: Reused software is authentic
 
 Referenced by: **[Package Implementation](#package-implementation)**
+
+Supported by: **[Evidence ReuseAuthEv](#evidence-reuseauthev)**
 
 Supports: **[Strategy ReuseStrat](#strategy-reusestrat)**
 <!-- end verocase -->
@@ -4347,6 +5164,8 @@ We double-check names before we add them to the Gemfile to counter
 typosquatting attacks.
 
 <!-- verocase element PkgMgr -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-pkgmgr"></a>
 ### Claim PkgMgr: Package managers used
 
@@ -4363,21 +5182,29 @@ This makes it much easier to maintain the software later
 (see the maintenance process discussion).
 
 <!-- verocase element PkgMgrEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-pkgmgrev"></a>
 ### Evidence PkgMgrEv: Gemfile and Gemfile.lock manage all gem dependencies via bundler
 
 Referenced by: **[Package Implementation](#package-implementation)**
 
 Supports: **[Claim PkgMgr](#claim-pkgmgr)**
+
+External Reference: [../Gemfile](../Gemfile)
 <!-- end verocase -->
 
 `Gemfile` and `Gemfile.lock` manage all gem dependencies via bundler. See [../Gemfile](../Gemfile).
 
 <!-- verocase element SpecialAnalysis -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-specialanalysis"></a>
 ### Claim SpecialAnalysis: Special analysis justifies exceptions
 
 Referenced by: **[Package Implementation](#package-implementation)**
+
+Supported by: **[Claim XXESafe](#claim-xxesafe)**, [Claim ErubisSafe](#claim-erubissafe), [Claim LocalSecretSafe](#claim-localsecretsafe), [Claim ActionCableSafe](#claim-actioncablesafe)
 
 Supports: **[Strategy ReuseStrat](#strategy-reusestrat)**
 <!-- end verocase -->
@@ -4466,7 +5293,7 @@ We set this file for the following reasons;
    [A race condition results](https://github.com/rails/rails/issues/53661),
    because if tests are running in parallel, other tests may try to load the
    file before it's been created by another process.
-   I've verified in the Rails code that if this file exists,
+   We've verified in the Rails code that if this file exists,
    its content is used.
 
 In the staging and production environments we provide a truly secret value for
@@ -4505,10 +5332,14 @@ obvious gain, so we have not done this.
 
 <!-- verocase-config element_level = 4 -->
 <!-- verocase element KnownVulns -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-knownvulns"></a>
-#### Claim KnownVulns: Known vulnerabilities detected
+#### Claim KnownVulns: Known vulnerabilities in reused components are detected
 
 Referenced by: **[Package Implementation](#package-implementation)**
+
+Supported by: **[Evidence KnownVulnsBundleEv](#evidence-knownvulnsbundleev)**, [Evidence KnownVulnsDependabotEv](#evidence-knownvulnsdependabotev)
 
 Supports: **[Claim ReuseSec](#claim-reusesec)**
 <!-- end verocase -->
@@ -4519,6 +5350,8 @@ and GitHub Dependabot, which automatically flag known vulnerabilities.
 
 <!-- verocase-config element_level = 2 -->
 <!-- verocase element Verification -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-verification"></a>
 ## Claim Verification: Security in integration & verification
 
@@ -4652,6 +5485,8 @@ but we think they greatly reduce the risks.
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element VerifStrat -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="strategy-verifstrat"></a>
 ### Strategy VerifStrat: Static & dynamic verifications are performed and enforced on all integrations, reducing risk
 
@@ -4668,6 +5503,8 @@ deployment, we systematically reduce the risk of introducing vulnerabilities.
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element VerifSteps -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-verifsteps"></a>
 ### Claim VerifSteps: Verification steps reduce risk
 
@@ -4683,6 +5520,8 @@ See the [Claim Verification](#claim-verification) section for the full list,
 including static analysis, FLOSS checking, automated testing, and negative testing.
 
 <!-- verocase element StaticVerif -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-staticverif"></a>
 ### Claim StaticVerif: Static verifications are performed
 
@@ -4699,6 +5538,8 @@ See [Claim Verification](#claim-verification) for details on the specific tools.
 
 <!-- verocase-config element_level = 4 -->
 <!-- verocase element StyleChecks -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-stylechecks"></a>
 #### Claim StyleChecks: Style checks pass
 
@@ -4714,17 +5555,23 @@ quality, catch problematic constructs, and detect misleading indentation.
 See the style checking bullet in [Claim Verification](#claim-verification).
 
 <!-- verocase element StyleEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-styleev"></a>
 #### Evidence StyleEv: Style checkers as pronto runners in Gemfile: eslint, rails_best_practices, rubocop
 
 Referenced by: **[Package Verification](#package-verification)**
 
 Supports: **[Claim StyleChecks](#claim-stylechecks)**
+
+External Reference: [../.circleci/config.yml](../.circleci/config.yml)
 <!-- end verocase -->
 
 Style checkers as pronto runners in Gemfile: eslint, rails_best_practices, rubocop. See [../.circleci/config.yml](../.circleci/config.yml).
 
 <!-- verocase element WeaknessAnalysis -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-weaknessanalysis"></a>
 #### Claim WeaknessAnalysis: Source code analyzed for weaknesses & all issues resolved
 
@@ -4740,17 +5587,23 @@ vulnerabilities in the custom Ruby and JavaScript code.
 See the source code weakness analyzer bullet in [Claim Verification](#claim-verification).
 
 <!-- verocase element BrakemanEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-brakemanev"></a>
 #### Evidence BrakemanEv: Brakeman source code weakness analyzer
 
 Referenced by: **[Package Verification](#package-verification)**
 
 Supports: **[Claim WeaknessAnalysis](#claim-weaknessanalysis)**
+
+External Reference: [../.github/workflows/main.yml](../.github/workflows/main.yml)
 <!-- end verocase -->
 
 Brakeman source code weakness analyzer. See [../.github/workflows/main.yml](../.github/workflows/main.yml).
 
 <!-- verocase element FLOSSVerif -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-flossverif"></a>
 #### Claim FLOSSVerif: All reused components are verified as FLOSS
 
@@ -4766,29 +5619,39 @@ All required reused components are verified as Free/Libre and Open Source Softwa
 See the FLOSS bullet in [Claim Verification](#claim-verification).
 
 <!-- verocase element LicenseFinderEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-licensefinderev"></a>
 #### Evidence LicenseFinderEv: license_finder
 
 Referenced by: **[Package Verification](#package-verification)**
 
 Supports: **[Claim FLOSSVerif](#claim-flossverif)**
+
+External Reference: [../.circleci/config.yml](../.circleci/config.yml)
 <!-- end verocase -->
 
 `license_finder`. See [../.circleci/config.yml](../.circleci/config.yml).
 
 <!-- verocase element FOSSAEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-fossaev"></a>
 #### Evidence FOSSAEv: FOSSA check
 
 Referenced by: **[Package Verification](#package-verification)**
 
 Supports: **[Claim FLOSSVerif](#claim-flossverif)**
+
+External Reference: [https://github.com/coreinfrastructure/best-practices-badge/settings/](https://github.com/coreinfrastructure/best-practices-badge/settings/)
 <!-- end verocase -->
 
 FOSSA check. See [https://github.com/coreinfrastructure/best-practices-badge/settings/](https://github.com/coreinfrastructure/best-practices-badge/settings/).
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element DynamicVerif -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-dynamicverif"></a>
 ### Claim DynamicVerif: Dynamic verifications are performed
 
@@ -4804,6 +5667,8 @@ on every commit. See [Claim Verification](#claim-verification) for details.
 
 <!-- verocase-config element_level = 4 -->
 <!-- verocase element TestCoverage -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-testcoverage"></a>
 #### Claim TestCoverage: Automated testing performed with excellent statement coverage
 
@@ -4819,17 +5684,23 @@ This strong coverage makes it easier to update components and detect regressions
 See the test coverage bullet in [Claim Verification](#claim-verification).
 
 <!-- verocase element CITestEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-citestev"></a>
 #### Evidence CITestEv: Automated tests run by CI
 
 Referenced by: **[Package Verification](#package-verification)**
 
 Supports: **[Claim TestCoverage](#claim-testcoverage)**
+
+External Reference: [https://codecov.io/gh/coreinfrastructure/best-practices-badge](https://codecov.io/gh/coreinfrastructure/best-practices-badge)
 <!-- end verocase -->
 
 Automated tests run by CI. See [https://codecov.io/gh/coreinfrastructure/best-practices-badge](https://codecov.io/gh/coreinfrastructure/best-practices-badge).
 
 <!-- verocase element NegTests -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-negtests"></a>
 #### Claim NegTests: Negative tests failed as desired
 
@@ -4845,18 +5716,24 @@ covering wrong passwords, unauthorized project edits, and email address leaks.
 See the negative testing bullet in [Claim Verification](#claim-verification).
 
 <!-- verocase element NegTestsEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-negtestsev"></a>
 #### Evidence NegTestsEv: Negative test suite
 
 Referenced by: **[Package Verification](#package-verification)**
 
 Supports: **[Claim NegTests](#claim-negtests)**
+
+External Reference: [../test/](../test/)
 <!-- end verocase -->
 
 Negative test suite. See [../test/](../test/).
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element CIRequired -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-cirequired"></a>
 ### Claim CIRequired: Successful verification required by continuous integration before deployment
 
@@ -4873,17 +5750,23 @@ on every integration to the master branch.
 See the CI configuration file `../.circleci/config.yml`.
 
 <!-- verocase element CIConfigEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-ciconfigev"></a>
 ### Evidence CIConfigEv: CI configuration
 
 Referenced by: **[Package Verification](#package-verification)**
 
 Supports: **[Claim CIRequired](#claim-cirequired)**
+
+External Reference: [../.circleci/config.yml](../.circleci/config.yml)
 <!-- end verocase -->
 
 CI configuration. See [../.circleci/config.yml](../.circleci/config.yml).
 
 <!-- verocase element Deployment -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-deployment"></a>
 ### Claim Deployment: Security in transition & operation
 
@@ -4917,6 +5800,8 @@ that help us limit damage.
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element DeployProvider -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-deployprovider"></a>
 ### Claim DeployProvider: Deployment provider maintains security
 
@@ -4944,21 +5829,29 @@ on GitHub to correctly authenticate users.
 [GitHub takes steps to keep itself secure](https://help.github.com/articles/github-security/).
 
 <!-- verocase element HerokuSecEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-herokusecev"></a>
 ### Evidence HerokuSecEv: Heroku security policy describes physical and environmental safeguards
 
 Referenced by: **[Package Deployment](#package-deployment)**
 
 Supports: **[Claim DeployProvider](#claim-deployprovider)**
+
+External Reference: [https://www.heroku.com/policy/security](https://www.heroku.com/policy/security)
 <!-- end verocase -->
 
 Heroku security policy describes physical and environmental safeguards. See [https://www.heroku.com/policy/security](https://www.heroku.com/policy/security).
 
 <!-- verocase element OnlineCheckers -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-onlinecheckers"></a>
 ### Claim OnlineCheckers: Online security checkers are used
 
 Referenced by: **[Package Deployment](#package-deployment)**
+
+Supported by: **[Evidence OnlineCheckersEv](#evidence-onlinecheckersev)**
 
 Supports: **[Claim Deployment](#claim-deployment)**
 <!-- end verocase -->
@@ -4998,6 +5891,8 @@ For the main bestpractices.coreinfrastructure.org site we have:
   about the missing test.
 
 <!-- verocase element Detection -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-detection"></a>
 ### Claim Detection: Threats and anomalies are detected
 
@@ -5023,6 +5918,8 @@ would, so combining these approaches has its advantages.
 
 <!-- verocase-config element_level = 4 -->
 <!-- verocase element IntLogging -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-intlogging"></a>
 #### Claim IntLogging: Internal logging and anomaly detection is in place
 
@@ -5067,17 +5964,23 @@ how logs are stored and how anomaly detection is done to
 detect and counter things.
 
 <!-- verocase element IntLoggingEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-intloggingev"></a>
 #### Evidence IntLoggingEv: filter_parameter_logging.rb excludes passwords from logs; events stream to stdout per 12-factor app
 
 Referenced by: **[Package Deployment](#package-deployment)**
 
 Supports: **[Claim IntLogging](#claim-intlogging)**
+
+External Reference: [../config/initializers/filter_parameter_logging.rb](../config/initializers/filter_parameter_logging.rb)
 <!-- end verocase -->
 
 `filter_parameter_logging.rb` excludes passwords from logs; events stream to stdout per 12-factor app. See [../config/initializers/filter_parameter_logging.rb](../config/initializers/filter_parameter_logging.rb).
 
 <!-- verocase element ExtMonitor -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-extmonitor"></a>
 #### Claim ExtMonitor: External monitoring is in place
 
@@ -5094,22 +5997,30 @@ One of those mechanisms is uptime robot:
 <https://uptimerobot.com/dashboard>
 
 <!-- verocase element ExtMonitorEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-extmonitorev"></a>
 #### Evidence ExtMonitorEv: UptimeRobot provides external alerting when the website goes down
 
 Referenced by: **[Package Deployment](#package-deployment)**
 
 Supports: **[Claim ExtMonitor](#claim-extmonitor)**
+
+External Reference: [https://uptimerobot.com/dashboard](https://uptimerobot.com/dashboard)
 <!-- end verocase -->
 
 UptimeRobot provides external alerting when the website goes down. See [https://uptimerobot.com/dashboard](https://uptimerobot.com/dashboard).
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element RecoveryPlan -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-recoveryplan"></a>
 ### Claim RecoveryPlan: Recovery plan including backups is in place
 
 Referenced by: **[Package Deployment](#package-deployment)**
+
+Supported by: **[Evidence RecoveryPlanEv](#evidence-recoveryplanev)**
 
 Supports: **[Claim Deployment](#claim-deployment)**
 <!-- end verocase -->
@@ -5168,6 +6079,8 @@ serves as a check to make sure the backup and restore processes are working.
 
 <!-- verocase-config element_level = 2 -->
 <!-- verocase element Maintenance -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-maintenance"></a>
 ## Claim Maintenance: Security in maintenance
 
@@ -5197,6 +6110,8 @@ section on [reuse](#reuse).
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element AutoDetect -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-autodetect"></a>
 ### Claim AutoDetect: Vulnerabilities are auto-detected when publicly reported
 
@@ -5269,32 +6184,44 @@ This is not ideal, but it's a real-world situation, and we believe
 this approach completely counters the vulnerability.
 
 <!-- verocase element AutoDetectBundleEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-autodetectbundleev"></a>
 ### Evidence AutoDetectBundleEv: bundle-audit checks all gem versions against NVD vulnerability database on every rake run
 
 Referenced by: **[Package Maintenance](#package-maintenance)**
 
 Supports: **[Claim AutoDetect](#claim-autodetect)**
+
+External Reference: [../Gemfile.lock](../Gemfile.lock)
 <!-- end verocase -->
 
 `bundle-audit` checks all gem versions against NVD vulnerability database on every rake run. See [../Gemfile.lock](../Gemfile.lock).
 
 <!-- verocase element AutoDetectGitHubEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-autodetectgithubev"></a>
 ### Evidence AutoDetectGitHubEv: GitHub Dependabot alerts and automated pull requests for vulnerable dependencies
 
 Referenced by: **[Package Maintenance](#package-maintenance)**
 
 Supports: **[Claim AutoDetect](#claim-autodetect)**
+
+External Reference: [../.github/dependabot.yml](../.github/dependabot.yml)
 <!-- end verocase -->
 
 GitHub Dependabot alerts and automated pull requests for vulnerable dependencies. See [../.github/dependabot.yml](../.github/dependabot.yml).
 
 <!-- verocase element RapidUpdate -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-rapidupdate"></a>
 ### Claim RapidUpdate: Rapid update process is in place
 
 Referenced by: **[Package Maintenance](#package-maintenance)**
+
+Supported by: **[Evidence RapidUpdateEv](#evidence-rapidupdateev)**
 
 Supports: **[Claim Maintenance](#claim-maintenance)**
 <!-- end verocase -->
@@ -5348,6 +6275,8 @@ a vulnerability in those components is discovered
 
 <!-- verocase-config element_level = 2 -->
 <!-- verocase element NonTechnical -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-nontechnical"></a>
 ## Claim NonTechnical: Security implemented by other life cycle processes
 
@@ -5365,6 +6294,8 @@ and human resources), and technical management processes
 (planning, risk, configuration management, and QA).
 
 <!-- verocase element AgreementProc -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-agreementproc"></a>
 ## Claim AgreementProc: Agreement processes implement security
 
@@ -5380,6 +6311,8 @@ by establishing security responsibilities with our deployment provider (Heroku)
 and CDN (Fastly).
 
 <!-- verocase element OrgProc -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-orgproc"></a>
 ## Claim OrgProc: Organizational project-enabling processes implement security
 
@@ -5396,6 +6329,8 @@ and human resource management (ensuring developers have security expertise).
 
 <!-- verocase-config element_level = 2 -->
 <!-- verocase element Acquisition -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-acquisition"></a>
 ## Claim Acquisition: Acquisition process implements security
 
@@ -5414,10 +6349,14 @@ security-related problems.
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element Contracts -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-contracts"></a>
 ### Claim Contracts: Contracts with deployment and CDN provider address security
 
 Referenced by: **[Package NonTechnical](#package-nontechnical)**
+
+Supported by: **[Evidence ContractsEv](#evidence-contractsev)**
 
 Supports: **[Claim Acquisition](#claim-acquisition)**
 <!-- end verocase -->
@@ -5430,6 +6369,8 @@ and provide us recourse if they fail to address security-related problems prompt
 
 <!-- verocase-config element_level = 2 -->
 <!-- verocase element Infrastructure -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-infrastructure"></a>
 ## Claim Infrastructure: Infrastructure management implements security
 
@@ -5440,12 +6381,20 @@ Supported by: **[Claim DevEnvSec](#claim-devenvsec)**, [Claim CINoData](#claim-c
 Supports: **[Claim OrgProc](#claim-orgproc)**
 <!-- end verocase -->
 
+A compromised development or CI/CD environment could inject malicious
+code without detection. We protect the development environment and
+ensure the CI/CD pipeline operates on clean, controlled data.
+
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element DevEnvSec -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-devenvsec"></a>
 ### Claim DevEnvSec: Development & test environments are protected from attack
 
 Referenced by: **[Package NonTechnical](#package-nontechnical)**
+
+Supported by: **[Evidence DevEnvSecEv](#evidence-devenvsecev)**
 
 Supports: **[Claim Infrastructure](#claim-infrastructure)**
 <!-- end verocase -->
@@ -5479,10 +6428,14 @@ git objects transferred from an external site into our development environment.
 This sets "fsckObjects = true" for transfer (thus also for fetch and receive).
 
 <!-- verocase element CINoData -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-cinodata"></a>
 ### Claim CINoData: CI automated test environment does not contain protected data
 
 Referenced by: **[Package NonTechnical](#package-nontechnical)**
+
+Supported by: **[Evidence CINoDataEv](#evidence-cinodataev)**
 
 Supports: **[Claim Infrastructure](#claim-infrastructure)**
 <!-- end verocase -->
@@ -5696,6 +6649,8 @@ without security-focused review.
 
 <!-- verocase-config element_level = 2 -->
 <!-- verocase element HumanRes -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-humanres"></a>
 ## Claim HumanRes: Human resource management implements security
 
@@ -5746,10 +6701,14 @@ provided here.
 
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element DevKnowledge -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-devknowledge"></a>
 ### Claim DevKnowledge: Key developers know how to develop secure software
 
 Referenced by: **[Package NonTechnical](#package-nontechnical)**
+
+Supported by: **[Evidence DevKnowledgeEv](#evidence-devknowledgeev)**
 
 Supports: **[Claim HumanRes](#claim-humanres)**
 <!-- end verocase -->
@@ -5762,6 +6721,8 @@ teaches a graduate course on developing secure software.
 
 <!-- verocase-config element_level = 2 -->
 <!-- verocase element TechMgmt -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-techmgmt"></a>
 ## Claim TechMgmt: Technical management processes implement security
 
@@ -5778,10 +6739,14 @@ These processes ensure security is planned for, risks are tracked, configuration
 is controlled, and quality is maintained.
 
 <!-- verocase element ProjectPlanning -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-projectplanning"></a>
 ## Claim ProjectPlanning: Project planning addresses security
 
 Referenced by: **[Package NonTechnical](#package-nontechnical)**
+
+Supported by: **[Evidence ProjectPlanningEv](#evidence-projectplanningev)**
 
 Supports: **[Claim TechMgmt](#claim-techmgmt)**
 <!-- end verocase -->
@@ -5789,10 +6754,14 @@ Supports: **[Claim TechMgmt](#claim-techmgmt)**
 We plan development, and always consider security as we develop new plans.
 
 <!-- verocase element RiskMgmt -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-riskmgmt"></a>
 ## Claim RiskMgmt: Risk management addresses security
 
 Referenced by: **[Package NonTechnical](#package-nontechnical)**
+
+Supported by: **[Evidence RiskMgmtEv](#evidence-riskmgmtev)**
 
 Supports: **[Claim TechMgmt](#claim-techmgmt)**
 <!-- end verocase -->
@@ -5801,10 +6770,14 @@ The primary risk we're concerned about is security, so we have developed
 the assurance case here to determine how to counter that risk.
 
 <!-- verocase element QA -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-qa"></a>
 ## Claim QA: Quality assurance addresses security
 
 Referenced by: **[Package NonTechnical](#package-nontechnical)**
+
+Supported by: **[Evidence QAEv](#evidence-qaev)**
 
 Supports: **[Claim TechMgmt](#claim-techmgmt)**
 <!-- end verocase -->
@@ -5816,6 +6789,8 @@ and automated security analysis, to reduce the risk that the deployed
 system will produce incorrect results or will be insecure.
 
 <!-- verocase element ConfigMgmt -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-configmgmt"></a>
 ## Claim ConfigMgmt: Configuration management addresses security
 
@@ -5840,17 +6815,23 @@ We use GitHub for managing the source code and issue tracker; it
 has an authentication system for this purpose.
 
 <!-- verocase element ConfigMgmtEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-configmgmtev"></a>
 ## Evidence ConfigMgmtEv: Git version control via GitHub with authenticated access; governance documented
 
 Referenced by: **[Package NonTechnical](#package-nontechnical)**
 
 Supports: **[Claim ConfigMgmt](#claim-configmgmt)**
+
+External Reference: [../governance.md](../governance.md)
 <!-- end verocase -->
 
 Git version control via GitHub with authenticated access; governance documented. See [../governance.md](../governance.md).
 
 <!-- verocase element Controls -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-controls"></a>
 ## Claim Controls: Certifications & controls provide confidence in operating results
 
@@ -5861,8 +6842,15 @@ Supported by: **[Claim CIIBadge](#claim-ciibadge)**
 Supports: [Claim Security](#claim-security)
 <!-- end verocase -->
 
+External certifications and internal controls give us and our users
+confidence that the system meets its security goals. Earning the
+OpenSSF Best Practices Badge itself requires us to satisfy independently
+verified security criteria.
+
 <!-- verocase-config element_level = 3 -->
 <!-- verocase element CIIBadge -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="claim-ciibadge"></a>
 ### Claim CIIBadge: CII Best Practices Badge certification is obtained
 
@@ -5889,12 +6877,16 @@ You can see the
 Note that we achieve a gold badge.
 
 <!-- verocase element CIIBadgeEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
 <a id="evidence-ciibadgeev"></a>
 ### Evidence CIIBadgeEv: BadgeApp achieves gold CII Best Practices Badge
 
 Referenced by: **[Package Controls](#package-controls)**
 
 Supports: **[Claim CIIBadge](#claim-ciibadge)**
+
+External Reference: [https://bestpractices.coreinfrastructure.org/en/projects/1](https://bestpractices.coreinfrastructure.org/en/projects/1)
 <!-- end verocase -->
 
 BadgeApp achieves gold CII Best Practices Badge. See [https://bestpractices.coreinfrastructure.org/en/projects/1](https://bestpractices.coreinfrastructure.org/en/projects/1).
@@ -6076,9 +7068,9 @@ Once the fix is in the final production system, credit will be
 publicly given to the vulnerability reporter (unless the reporter
 requested otherwise).
 
-## Why are we using SACM graphical notation?
+## History: Previous LibreOffice-based approach
 
-Historically we used
+Originally we used
 [Claims- Arguments- Evidence (CAE) notation](https://www.adelard.com/asce/choosing-asce/cae.html),
 CAE notation is wonderfully simple:
 Claims (including subclaims) are ovals,
@@ -6120,30 +7112,30 @@ graphical notation has many advantages over CAE graphical notation:
    CAE’s rounded rectangles are not very distinct from its evidence
    rectangles, which is a minor negative for the CAE notation. SACM
    initially presented some challenges when using our drawing tool
-   (LIbreOffice Draw), but I overcame them:
-  - SACM’s half-rectangle initially presented me with a problem:
-    that is *NOT* a built-in shape for the drawing tool I’m using
-    (LIbreOffice Draw). I suspect it’s not a built-in symbol in many
-    tools. I was able to work around this by creating a polygon (many
+   (LibreOffice Draw), but we overcame them:
+  - SACM’s half-rectangle initially presented a problem:
+    that is *NOT* a built-in shape for the drawing tool we were using
+    (LibreOffice Draw). We suspect it’s not a built-in symbol in many
+    tools. We worked around this by creating a polygon (many
     drawing tools support this, and this is a very easy polygon to
-    make). It took a little tweaking, but I managed to create a simple
+    make). It took a little tweaking, but we created a simple
     polygon with embedded text. In the longer term, the SACM community
     should work to get this easy icon into other drawing tools, to
     simplify its use.
   - SACM’s half-rectangle is VERY hard to visually distinguish
-    if both it & claims are filled with color. I use color fills
-    to help the eye notice type differences. My solution was simple:
+    if both it and claims are filled with color. We use color fills
+    to help the eye notice type differences. Our solution was simple:
     color fill everything *except* the half-rectangle; this makes
     them all visually distinct.
 3. CAE Evidence vs. SACM ArtifactReference.
    In CAE this is a simple rectangle. In SACM this is a shadowed
    rectangle with an arrow; the arrow is hard to add with simple
    drawing tools, but the shadow is trivial to add with a “shadow”
-   property in LibreOffice (and many other drawing tools), and I
+   property in LibreOffice (and many other drawing tools), and we
    think just the shadow is adequate. The shadow adds slightly more
    space (but MUCH less than ovals), and it takes a moment to draw
-   by hand, but I think that’s a reasonable trade-off to ensure
-   that they are visually distinct. In addition: I tend to record
+   by hand, but we think that’s a reasonable trade-off to ensure
+   that they are visually distinct. In addition: we tend to record
    evidence / ArtifactReferences in *only* text, not in the diagrams,
    because diagrams are time-consuming to maintain. So making
    *claims* simple to draw, and making evidence/ArtifactReferences
@@ -6161,7 +7153,7 @@ graphical notation has many advantages over CAE graphical notation:
    and that merging makes combinations easier to follow.
    You could also informally do that with CAE, but it’s clearly a part of SACM.
 6. It has an asCited notation that a claim in one location is described
-   elsewhere, a rectangle in another (an asCited Claim). I've been using "See..."
+   elsewhere, a rectangle in another (an asCited Claim). We previously used "See..."
    as text instead.
 
 In our SACM diagrams we've sometimes omitted the bigdot when there is a
@@ -6238,3 +7230,1028 @@ Development processes and security:
 * [implementation.md](implementation.md) - Implementation notes
 * [testing.md](testing.md) - Information on testing
 * [assurance-case.md](assurance-case.md) - Why it's adequately secure (assurance case)
+
+<!-- verocase element QAEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-qaev"></a>
+### Evidence QAEv: CI pipeline runs rubocop, eslint, rails_best_practices, whitespace checks, and full test suite on every commit, enforcing quality and security standards
+
+Referenced by: **[Package NonTechnical](#package-nontechnical)**
+
+Supports: **[Claim QA](#claim-qa)**
+
+External Reference: [../.circleci/config.yml](../.circleci/config.yml)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-qa) for details.
+
+<!-- verocase element RiskMgmtEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-riskmgmtev"></a>
+### Evidence RiskMgmtEv: Continuous threat modeling implemented via this assurance case; regular dependency audits, static analysis, and security-focused development practices address identified risks
+
+Referenced by: **[Package NonTechnical](#package-nontechnical)**
+
+Supports: **[Claim RiskMgmt](#claim-riskmgmt)**
+
+External Reference: [../docs/case.md](../docs/case.md)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-riskmgmt) for details.
+
+<!-- verocase element ProjectPlanningEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-projectplanningev"></a>
+### Evidence ProjectPlanningEv: Project roadmap and governance prioritize security; long-term security maintenance documented as a goal
+
+Referenced by: **[Package NonTechnical](#package-nontechnical)**
+
+Supports: **[Claim ProjectPlanning](#claim-projectplanning)**
+
+External Reference: [../governance.md](../governance.md)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-projectplanning) for details.
+
+<!-- verocase element DevKnowledgeEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-devknowledgeev"></a>
+### Evidence DevKnowledgeEv: Key developers have demonstrated expertise in secure software development including creation of OpenSSF Best Practices criteria, academic research on secure programming, and security-focused professional work
+
+Referenced by: **[Package NonTechnical](#package-nontechnical)**
+
+Supports: **[Claim DevKnowledge](#claim-devknowledge)**
+
+External Reference: [../docs/background.md](../docs/background.md)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-devknowledge) for details.
+
+<!-- verocase element CINoDataEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-cinodataev"></a>
+### Evidence CINoDataEv: CircleCI environment uses separate test database with no production data; production credentials never present in CI context; test database seeded only with synthetic test fixtures
+
+Referenced by: **[Package NonTechnical](#package-nontechnical)**
+
+Supports: **[Claim CINoData](#claim-cinodata)**
+
+External Reference: [../.circleci/config.yml](../.circleci/config.yml)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-cinodata) for details.
+
+<!-- verocase element DevEnvSecEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-devenvsecev"></a>
+### Evidence DevEnvSecEv: Development uses local git repositories; GitHub requires authenticated access; no production secrets stored in development environments; CI/CD pipeline validates branch names before use
+
+Referenced by: **[Package NonTechnical](#package-nontechnical)**
+
+Supports: **[Claim DevEnvSec](#claim-devenvsec)**
+
+External Reference: [../CONTRIBUTING.md](../CONTRIBUTING.md)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-devenvsec) for details.
+
+<!-- verocase element ContractsEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-contractsev"></a>
+### Evidence ContractsEv: Heroku Data Processing Addendum and security policy cover deployment environment; Fastly service agreement covers CDN security
+
+Referenced by: **[Package NonTechnical](#package-nontechnical)**
+
+Supports: **[Claim Contracts](#claim-contracts)**
+
+External Reference: [https://www.heroku.com/policy/security](https://www.heroku.com/policy/security)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-contracts) for details.
+
+<!-- verocase element RapidUpdateEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-rapidupdateev"></a>
+### Evidence RapidUpdateEv: Bundler enables library updates in one command; high test coverage enables rapid verify-and-deploy; CI/CD pipeline deploys to Heroku automatically on passing tests
+
+Referenced by: **[Package Maintenance](#package-maintenance)**
+
+Supports: **[Claim RapidUpdate](#claim-rapidupdate)**
+
+External Reference: [../.circleci/config.yml](../.circleci/config.yml)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-rapidupdate) for details.
+
+<!-- verocase element RecoveryPlanEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-recoveryplanev"></a>
+### Evidence RecoveryPlanEv: Recovery procedures documented including database restoration from Heroku Postgres backups, BADGEAPP_DENY_LOGIN degraded mode, and mass_email and rekey rake tasks
+
+Referenced by: **[Package Deployment](#package-deployment)**
+
+Supports: **[Claim RecoveryPlan](#claim-recoveryplan)**
+
+External Reference: [../docs/case.md](../docs/case.md)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-recoveryplan) for details.
+
+<!-- verocase element OnlineCheckersEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-onlinecheckersev"></a>
+### Evidence OnlineCheckersEv: Mozilla Observatory, Security Headers, and similar online tools verify HTTP response headers and flag misconfiguration
+
+Referenced by: **[Package Deployment](#package-deployment)**
+
+Supports: **[Claim OnlineCheckers](#claim-onlinecheckers)**
+
+External Reference: [https://observatory.mozilla.org/analyze/www.bestpractices.dev](https://observatory.mozilla.org/analyze/www.bestpractices.dev)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-onlinecheckers) for details.
+
+<!-- verocase element PubVulnsDependabotEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-pubvulnsdependabotev"></a>
+### Evidence PubVulnsDependabotEv: GitHub Dependabot alerts and automated pull requests for vulnerable dependencies
+
+Referenced by: **[Package Implementation](#package-implementation)**
+
+Supports: **[Claim PubVulns](#claim-pubvulns)**
+
+External Reference: [../.github/dependabot.yml](../.github/dependabot.yml)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-pubvulns) for details.
+
+<!-- verocase element PubVulnsBundleEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-pubvulnsbundleev"></a>
+### Evidence PubVulnsBundleEv: bundle-audit checks all gem versions against NVD vulnerability database on every rake run
+
+Referenced by: **[Package Implementation](#package-implementation)**
+
+Supports: **[Claim PubVulns](#claim-pubvulns)**
+
+External Reference: [../Gemfile.lock](../Gemfile.lock)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-pubvulns) for details.
+
+<!-- verocase element ReuseAuthEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-reuseauthev"></a>
+### Evidence ReuseAuthEv: Gemfile.lock records exact versions and SHA-512 checksums for all gems, ensuring reproducible authenticated builds
+
+Referenced by: **[Package Implementation](#package-implementation)**
+
+Supports: **[Claim ReuseAuth](#claim-reuseauth)**
+
+External Reference: [../Gemfile.lock](../Gemfile.lock)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-reuseauth) for details.
+
+<!-- verocase element ReuseReviewEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-reusereviewev"></a>
+### Evidence ReuseReviewEv: New gem dependencies reviewed for purpose, maintenance, and security before addition; CONTRIBUTING.md documents review expectations
+
+Referenced by: **[Package Implementation](#package-implementation)**
+
+Supports: **[Claim ReuseReview](#claim-reusereview)**
+
+External Reference: [../CONTRIBUTING.md](../CONTRIBUTING.md)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-reusereview) for details.
+
+<!-- verocase element RailsGuideEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-railsguideev"></a>
+### Evidence RailsGuideEv: Rails security guide reviewed and countermeasures applied for sessions, CSRF, XSS, injection, and other Rails-specific issues
+
+Referenced by: **[Package Implementation](#package-implementation)**
+
+Supports: **[Claim RailsGuide](#claim-railsguide)**
+
+External Reference: [https://guides.rubyonrails.org/security.html](https://guides.rubyonrails.org/security.html)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-railsguide) for details.
+
+<!-- verocase element OWASP13Ev -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-owasp13ev"></a>
+### Evidence OWASP13Ev: filter_parameter_logging excludes passwords from logs; events stream to stdout per 12-factor app; UptimeRobot monitors availability externally
+
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
+
+Supports: **[Claim OWASP13](#claim-owasp13)**
+
+External Reference: [../config/initializers/filter_parameter_logging.rb](../config/initializers/filter_parameter_logging.rb)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-owasp13) for details.
+
+<!-- verocase element OWASP12Ev -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-owasp12ev"></a>
+### Evidence OWASP12Ev: Rails session data stored in signed encrypted cookies; no untrusted object deserialization; JSON used for API data
+
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
+
+Supports: **[Claim OWASP12](#claim-owasp12)**
+
+External Reference: [../config/initializers/session_store.rb](../config/initializers/session_store.rb)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-owasp12) for details.
+
+<!-- verocase element OWASP11Ev -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-owasp11ev"></a>
+### Evidence OWASP11Ev: Nokogiri configured to disable external entity processing; XML parsing restricted to safe subset; SpecialAnalysis documents this exception
+
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
+
+Supports: **[Claim OWASP11](#claim-owasp11)**
+
+External Reference: [../docs/case.md](../docs/case.md)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-owasp11) for details.
+
+<!-- verocase element OWASP10Ev -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-owasp10ev"></a>
+### Evidence OWASP10Ev: Redirect destinations validated against allowlists; no open redirect vulnerabilities; after-login redirect uses stored path validated server-side
+
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
+
+Supports: **[Claim OWASP10](#claim-owasp10)**
+
+External Reference: [../app/controllers/sessions_controller.rb](../app/controllers/sessions_controller.rb)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-owasp10) for details.
+
+<!-- verocase element OWASP9DependabotEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-owasp9dependabotev"></a>
+### Evidence OWASP9DependabotEv: GitHub Dependabot alerts on vulnerable dependencies and opens PRs to update them
+
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
+
+Supports: **[Claim OWASP9](#claim-owasp9)**
+
+External Reference: [../.github/dependabot.yml](../.github/dependabot.yml)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-owasp9) for details.
+
+<!-- verocase element OWASP9BundleEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-owasp9bundleev"></a>
+### Evidence OWASP9BundleEv: bundle-audit checks all gems against NVD vulnerability database on every rake run
+
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
+
+Supports: **[Claim OWASP9](#claim-owasp9)**
+
+External Reference: [../Gemfile.lock](../Gemfile.lock)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-owasp9) for details.
+
+<!-- verocase element OWASP8Ev -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-owasp8ev"></a>
+### Evidence OWASP8Ev: protect_from_forgery with per-form tokens and origin-header check, enabled via load_defaults
+
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
+
+Supports: **[Claim OWASP8](#claim-owasp8)**
+
+External Reference: [../app/controllers/application_controller.rb](../app/controllers/application_controller.rb)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-owasp8) for details.
+
+<!-- verocase element OWASP7Ev -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-owasp7ev"></a>
+### Evidence OWASP7Ev: can_edit? and can_control? enforced server-side on all mutating actions; no security decisions made client-side
+
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
+
+Supports: **[Claim OWASP7](#claim-owasp7)**
+
+External Reference: [../app/controllers/application_controller.rb](../app/controllers/application_controller.rb)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-owasp7) for details.
+
+<!-- verocase element OWASP6Ev -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-owasp6ev"></a>
+### Evidence OWASP6Ev: Email encrypted with AES-256-GCM; passwords stored via bcrypt; all data in transit protected by TLS; filter_parameter_logging excludes sensitive fields from logs
+
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
+
+Supports: **[Claim OWASP6](#claim-owasp6)**
+
+External Reference: [../config/initializers/filter_parameter_logging.rb](../config/initializers/filter_parameter_logging.rb)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-owasp6) for details.
+
+<!-- verocase element OWASP5Ev -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-owasp5ev"></a>
+### Evidence OWASP5Ev: secure_headers gem enforces HTTP security headers; Rails secrets managed via environment variables; CI runs security checks on every commit
+
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
+
+Supports: **[Claim OWASP5](#claim-owasp5)**
+
+External Reference: [../config/initializers/secure_headers.rb](../config/initializers/secure_headers.rb)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-owasp5) for details.
+
+<!-- verocase element OWASP4Ev -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-owasp4ev"></a>
+### Evidence OWASP4Ev: All project access goes through can_edit? and can_control? authorization checks; no direct object references exposed without authorization
+
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
+
+Supports: **[Claim OWASP4](#claim-owasp4)**
+
+External Reference: [../app/controllers/projects_controller.rb](../app/controllers/projects_controller.rb)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-owasp4) for details.
+
+<!-- verocase element OWASP3Ev -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-owasp3ev"></a>
+### Evidence OWASP3Ev: Rails SafeBuffer escapes all template output by default; markdown processing whitelists safe tags and attributes; CSP enforced via secure_headers gem
+
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
+
+Supports: **[Claim OWASP3](#claim-owasp3)**
+
+External Reference: [../config/initializers/secure_headers.rb](../config/initializers/secure_headers.rb)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-owasp3) for details.
+
+<!-- verocase element OWASP2Ev -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-owasp2ev"></a>
+### Evidence OWASP2Ev: Sessions use encrypted signed cookies; has_secure_password enforces bcrypt; remember-me uses bcrypt-stored nonce; session_store.rb configures secure cookie settings
+
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
+
+Supports: **[Claim OWASP2](#claim-owasp2)**
+
+External Reference: [../config/initializers/session_store.rb](../config/initializers/session_store.rb)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-owasp2) for details.
+
+<!-- verocase element OWASP1Ev -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-owasp1ev"></a>
+### Evidence OWASP1Ev: ActiveRecord ORM uses parameterized queries by default; direct SQL uses sanitize_sql_like or bound parameters; shell is never used to process untrusted content
+
+Referenced by: **[Package OWASPClaim](#package-owaspclaim)**
+
+Supports: **[Claim OWASP1](#claim-owasp1)**
+
+External Reference: [../app/models/project.rb](../app/models/project.rb)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-owasp1) for details.
+
+<!-- verocase element MemSafeEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-memsafeev"></a>
+### Evidence MemSafeEv: All custom application code is written in Ruby and JavaScript, both memory-managed languages; buffer overflows and memory corruption cannot occur in custom code
+
+Referenced by: **[Package Design](#package-design)**
+
+Supports: **[Claim MemSafe](#claim-memsafe)**
+
+External Reference: [../Gemfile](../Gemfile)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-memsafe) for details.
+
+<!-- verocase element ScalabilityEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-scalabilityev"></a>
+### Evidence ScalabilityEv: Heroku dyno-based deployment enables horizontal scaling; Fastly CDN offloads static asset and badge requests from origin server
+
+Referenced by: **[Package Design](#package-design)**
+
+Supports: **[Claim Scalability](#claim-scalability)**
+
+External Reference: [../Procfile](../Procfile)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-scalability) for details.
+
+<!-- verocase element InputValidEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-inputvalidev"></a>
+### Evidence InputValidEv: Project and User models use Rails validators to enforce field constraints; controllers use strong parameters (permit) to whitelist allowed input fields
+
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
+
+Supports: **[Claim InputValid](#claim-inputvalid)**
+
+External Reference: [../app/models/project.rb](../app/models/project.rb)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-inputvalid) for details.
+
+<!-- verocase element LimitedAttackEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-limitedattackev"></a>
+### Evidence LimitedAttackEv: Restrictive CSP limits script execution sources; routes.rb exposes only necessary endpoints; Rack::Attack blocks abusive IPs
+
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
+
+Supports: **[Claim LimitedAttack](#claim-limitedattack)**
+
+External Reference: [../config/initializers/rack_attack.rb](../config/initializers/rack_attack.rb)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-limitedattack) for details.
+
+<!-- verocase element PsychAcceptEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-psychacceptev"></a>
+### Evidence PsychAcceptEv: Standard web authentication UX (email/password or GitHub OAuth login); badge criteria presented in plain language; security controls do not impose undue burden on legitimate use
+
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
+
+Supports: **[Claim PsychAccept](#claim-psychaccept)**
+
+External Reference: [../app/views/projects/](../app/views/projects/)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-psychaccept) for details.
+
+<!-- verocase element LeastCommonEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-leastcommonev"></a>
+### Evidence LeastCommonEv: Per-request processing; session state stored in per-user encrypted client-side cookies, not shared server-side sessions
+
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
+
+Supports: **[Claim LeastCommon](#claim-leastcommon)**
+
+External Reference: [../config/initializers/session_store.rb](../config/initializers/session_store.rb)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-leastcommon) for details.
+
+<!-- verocase element LeastPrivEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-leastprivev"></a>
+### Evidence LeastPrivEv: can_edit? grants edit access only to project owner or admins; additional_rights table enables explicit narrow collaborator grants
+
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
+
+Supports: **[Claim LeastPriv](#claim-leastpriv)**
+
+External Reference: [../app/controllers/application_controller.rb](../app/controllers/application_controller.rb)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-leastpriv) for details.
+
+<!-- verocase element SepPrivEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-sepprivev"></a>
+### Evidence SepPrivEv: admin? method in User model separates admin role from normal user; admin-only actions checked explicitly and separately from ownership
+
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
+
+Supports: **[Claim SepPriv](#claim-seppriv)**
+
+External Reference: [../app/models/user.rb](../app/models/user.rb)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-seppriv) for details.
+
+<!-- verocase element OpenDesignEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-opendesignev"></a>
+### Evidence OpenDesignEv: Full source code publicly available; security does not depend on keeping implementation secret
+
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
+
+Supports: **[Claim OpenDesign](#claim-opendesign)**
+
+External Reference: [https://github.com/coreinfrastructure/best-practices-badge](https://github.com/coreinfrastructure/best-practices-badge)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-opendesign) for details.
+
+<!-- verocase element FailSafeEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-failsafeev"></a>
+### Evidence FailSafeEv: can_edit_else_redirect and can_control_else_redirect redirect unauthenticated or unauthorized requests; default deny enforced server-side
+
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
+
+Supports: **[Claim FailSafe](#claim-failsafe)**
+
+External Reference: [../app/controllers/application_controller.rb](../app/controllers/application_controller.rb)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-failsafe) for details.
+
+<!-- verocase element CompleteMedEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-completemedev"></a>
+### Evidence CompleteMedEv: before_action authorization hooks in ApplicationController run on every request; no client-side access control decisions are made
+
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
+
+Supports: **[Claim CompleteMed](#claim-completemed)**
+
+External Reference: [../app/controllers/application_controller.rb](../app/controllers/application_controller.rb)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-completemed) for details.
+
+<!-- verocase element EconomyMechEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-economymechev"></a>
+### Evidence EconomyMechEv: Custom code kept minimal and DRY; standard Rails patterns used; Gemfile shows focused, well-scoped dependency set
+
+Referenced by: **[Package DesignPrinciples](#package-designprinciples)**
+
+Supports: **[Claim EconomyMech](#claim-economymech)**
+
+External Reference: [../Gemfile](../Gemfile)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-economymech) for details.
+
+<!-- verocase element STRIDEEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-strideev"></a>
+### Evidence STRIDEEv: STRIDE threat analysis documented for all major components: web server, controllers/models/views, DBMS, Chief/Detective classes, admin CLI, and i18n service
+
+Referenced by: **[Package Design](#package-design)**
+
+Supports: **[Claim STRIDE](#claim-stride)**
+
+External Reference: [../docs/case.md](../docs/case.md)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-stride) for details.
+
+<!-- verocase element SimpleDesignEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-simpledesignev"></a>
+### Evidence SimpleDesignEv: Standard Rails MVC architecture with models, views, and controllers; no microservices or complex distributed patterns; custom code kept minimal
+
+Referenced by: **[Package Design](#package-design)**
+
+Supports: **[Claim SimpleDesign](#claim-simpledesign)**
+
+External Reference: [../docs/design.md](../docs/design.md)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-simpledesign) for details.
+
+<!-- verocase element ThreatsIdentified -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="claim-threatsidentified"></a>
+### Claim ThreatsIdentified: Key threat actors (external attackers, bots, insiders, nation-states) have been identified and addressed
+
+Referenced by: **[Package Requirements](#package-requirements)**
+
+Supports: **[Claim Assets](#claim-assets)**
+<!-- end verocase -->
+
+We have identified the key threat actors who might attack the BadgeApp.
+External attackers (including automated bots and nation-state actors) may attempt
+to exploit vulnerabilities or overwhelm the system.
+Insiders (developers with repository access) represent a supply-chain threat.
+Each threat type is addressed by the countermeasures described throughout
+this assurance case.
+
+<!-- verocase element AssetsIdentified -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="claim-assetsidentified"></a>
+### Claim AssetsIdentified: Key assets (badge data, user credentials, system availability) have been identified
+
+Referenced by: **[Package Requirements](#package-requirements)**
+
+Supports: **[Claim Assets](#claim-assets)**
+<!-- end verocase -->
+
+We have identified the key assets that must be protected.
+The primary assets are: badge award data (the self-assessments and resulting badge
+levels that projects have earned), user credentials (passwords, remember-me tokens,
+and OAuth tokens), user contact information (email addresses), and system
+availability itself (the ability of the site to serve badge data on demand).
+The countermeasures throughout this assurance case are designed to protect these assets.
+
+<!-- verocase element OAuthEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-oauthev"></a>
+### Evidence OAuthEv: OmniAuth-GitHub middleware authenticates remote users via GitHub OAuth 2.0; callback validates identity before creating local session
+
+Referenced by: **[Package Requirements](#package-requirements)**
+
+Supports: **[Claim RemoteAuthN](#claim-remoteauthn)**
+
+External Reference: [../config/initializers/omniauth.rb](../config/initializers/omniauth.rb)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-remoteauthn) for details.
+
+<!-- verocase element LocalAuthNEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-localauthnev"></a>
+### Evidence LocalAuthNEv: sessions_controller create action authenticates local users by verifying email and bcrypt password hash before establishing session
+
+Referenced by: **[Package Requirements](#package-requirements)**
+
+Supports: **[Claim LocalAuthN](#claim-localauthn)**
+
+External Reference: [../app/controllers/sessions_controller.rb](../app/controllers/sessions_controller.rb)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-localauthn) for details.
+
+<!-- verocase element ScaleUpEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-scaleupev"></a>
+### Evidence ScaleUpEv: Heroku cloud platform supports on-demand dyno scaling; Fastly CDN reduces origin load during traffic spikes
+
+Referenced by: **[Package Availability](#package-availability)**
+
+Supports: **[Claim ScaleUp](#claim-scaleup)**
+
+External Reference: [../Procfile](../Procfile)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-scaleup) for details.
+
+<!-- verocase element BackupsEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-backupsev"></a>
+### Evidence BackupsEv: Heroku Postgres automated daily backups retained across multiple snapshots; standard Rails and PostgreSQL restore mechanisms enable database recovery
+
+Referenced by: **[Package Availability](#package-availability)**
+
+Supports: **[Claim Backups](#claim-backups)**
+
+External Reference: [https://devcenter.heroku.com/articles/heroku-postgres-backups](https://devcenter.heroku.com/articles/heroku-postgres-backups)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-backups) for details.
+
+<!-- verocase element QuickRecoveryEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-quickrecoveryev"></a>
+### Evidence QuickRecoveryEv: Heroku allows rapid dyno restart and redeploy from last known good git commit, restoring service within minutes of an incident
+
+Referenced by: **[Package Availability](#package-availability)**
+
+Supports: **[Claim QuickRecovery](#claim-quickrecovery)**
+
+External Reference: [../Procfile](../Procfile)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-quickrecovery) for details.
+
+<!-- verocase element FastlyCDNEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-fastlycdnev"></a>
+### Evidence FastlyCDNEv: Fastly CDN configured as reverse proxy; badge image and static asset requests absorbed by CDN before reaching origin application server
+
+Referenced by: **[Package Availability](#package-availability)**
+
+Supports: **[Claim CDNDDoS](#claim-cdnddos)**
+
+External Reference: [../config/initializers/fastly.rb](../config/initializers/fastly.rb)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-cdnddos) for details.
+
+<!-- verocase element AppModAuthEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-appmodauthev"></a>
+### Evidence AppModAuthEv: GitHub repository requires authenticated access; branch protection rules enforce code review before merging to main; governance.md documents the process
+
+Referenced by: **[Package Requirements](#package-requirements)**
+
+Supports: **[Claim AppModAuth](#claim-appmodauth)**
+
+External Reference: [../governance.md](../governance.md)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-appmodauth) for details.
+
+<!-- verocase element GravatarPrivacyEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-gravatarprivacyev"></a>
+### Evidence GravatarPrivacyEv: use_gravatar boolean controls whether any MD5 hash is sent to Gravatar, giving each user control over this external disclosure
+
+Referenced by: **[Package Confidentiality](#package-confidentiality)**
+
+Supports: **[Claim UserPrivacy](#claim-userprivacy)**
+
+External Reference: [../app/models/user.rb](../app/models/user.rb)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-userprivacy) for details.
+
+<!-- verocase element SelfHostedAssets -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="claim-selfhostedassets"></a>
+### Claim SelfHostedAssets: All web assets are self-hosted; no third-party transclusions reveal user activity to unrelated sites
+
+Referenced by: **[Package Confidentiality](#package-confidentiality)**
+
+Supported by: **[Evidence SelfHostedAssetsEv](#evidence-selfhostedassetsev)**
+
+Supports: **[Claim UserPrivacy](#claim-userprivacy)**
+<!-- end verocase -->
+
+We serve all JavaScript, CSS, images, and fonts directly from our own origin,
+with no embedded references to external CDNs, social-media widgets, or
+analytics scripts.
+This matters for privacy: if we embedded a third-party script tag, the
+third-party server would receive the user's IP address and browsing context
+every time a page loaded, even for anonymous visitors.
+By self-hosting, we ensure that unrelated sites learn nothing about our users'
+page-view activity.
+This also improves security by eliminating the risk of a subverted third-party
+asset silently attacking our users.
+
+<!-- verocase element SelfHostedAssetsEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-selfhostedassetsev"></a>
+### Evidence SelfHostedAssetsEv: Content-Security-Policy restricts script-src and style-src to self; application layouts contain no external CDN script or font references
+
+Referenced by: **[Package Confidentiality](#package-confidentiality)**
+
+Supports: **[Claim SelfHostedAssets](#claim-selfhostedassets)**
+
+External Reference: [../config/initializers/secure_headers.rb](../config/initializers/secure_headers.rb)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-selfhostedassets) for details.
+
+<!-- verocase element KnownVulnsDependabotEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-knownvulnsdependabotev"></a>
+### Evidence KnownVulnsDependabotEv: GitHub Dependabot automatically alerts on vulnerable gem dependencies and opens PRs with updated versions
+
+Referenced by: **[Package Implementation](#package-implementation)**
+
+Supports: **[Claim KnownVulns](#claim-knownvulns)**
+
+External Reference: [../.github/dependabot.yml](../.github/dependabot.yml)
+<!-- end verocase -->
+
+We configure GitHub Dependabot to automatically scan our gem dependencies
+for known vulnerabilities and open pull requests with updated versions.
+See [`.github/dependabot.yml`](.github/dependabot.yml).
+
+<!-- verocase element KnownVulnsBundleEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-knownvulnsbundleev"></a>
+### Evidence KnownVulnsBundleEv: bundle-audit checks all gem versions against the NVD on every rake run, detecting known CVEs in dependencies
+
+Referenced by: **[Package Implementation](#package-implementation)**
+
+Supports: **[Claim KnownVulns](#claim-knownvulns)**
+
+External Reference: [../Gemfile.lock](../Gemfile.lock)
+<!-- end verocase -->
+
+We run `bundle-audit` as part of every `rake` invocation. It compares
+all gem versions in `Gemfile.lock` against the NVD and upstream advisory
+databases, and fails the build if any known CVE is found.
+See `Gemfile.lock` and `lib/tasks/default.rake`.
+
+<!-- verocase element ActionCableSafe -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="claim-actioncablesafe"></a>
+### Claim ActionCableSafe: ActionCable information-exposure risk is mitigated because ActionCable is not used
+
+Referenced by: **[Package Implementation](#package-implementation)**
+
+Supported by: **[Evidence ActionCableSafeEv](#evidence-actioncablesafeev)**
+
+Supports: **[Claim SpecialAnalysis](#claim-specialanalysis)**
+<!-- end verocase -->
+
+ActionCable is a Rails subsystem for WebSocket-based real-time communication.
+A potential vulnerability was identified: ActionCable logs cannot filter
+sensitive data. However, we never configure or invoke ActionCable.
+The `Gemfile` explicitly comments it out
+(`# gem 'actioncable' # Not used. Client/server comm channel.`).
+It appears in `Gemfile.lock` only as a transitive dependency of `rails`,
+but no code paths in `app/` or `config/` ever reference it.
+Since we never use ActionCable, no sensitive data ever flows through it.
+
+<!-- verocase element ActionCableSafeEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-actioncablesafeev"></a>
+### Evidence ActionCableSafeEv: ActionCable is a Rails transitive dependency but is never configured or invoked; no sensitive data flows through it
+
+Referenced by: **[Package Implementation](#package-implementation)**
+
+Supports: **[Claim ActionCableSafe](#claim-actioncablesafe)**
+
+External Reference: [../Gemfile.lock](../Gemfile.lock)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-actioncablesafe) for details.
+
+<!-- verocase element LocalSecretSafe -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="claim-localsecretsafe"></a>
+### Claim LocalSecretSafe: Checked-in tmp/local_secret.txt secret_key_base value poses no security risk
+
+Referenced by: **[Package Implementation](#package-implementation)**
+
+Supported by: **[Evidence LocalSecretSafeEv](#evidence-localsecretsafeev)**
+
+Supports: **[Claim SpecialAnalysis](#claim-specialanalysis)**
+<!-- end verocase -->
+
+The file `tmp/local_secret.txt` contains the value of `secret_key_base`
+for development and test environments and is checked into the public
+repository. This is intentional and safe: the value is only used in
+development and test, where there are no real secrets to protect.
+In production and staging we set the `SECRET_KEY_BASE` environment
+variable, which takes precedence, and its value is never committed.
+We check in this file to avoid a race condition in parallelized tests
+(Rails recreates the file on demand, causing test failures when
+multiple processes race to read it before it exists) and to make
+development restarts smoother.
+
+<!-- verocase element LocalSecretSafeEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-localsecretsafeev"></a>
+### Evidence LocalSecretSafeEv: The file is only used in development and test; production always uses the SECRET_KEY_BASE environment variable; the checked-in value protects no real secrets
+
+Referenced by: **[Package Implementation](#package-implementation)**
+
+Supports: **[Claim LocalSecretSafe](#claim-localsecretsafe)**
+
+External Reference: [../tmp/local_secret.txt](../tmp/local_secret.txt)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-localsecretsafe) for details.
+
+<!-- verocase element ErubisSafe -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="claim-erubissafe"></a>
+### Claim ErubisSafe: XSS from erubis via pronto-rails_best_practices poses no production risk
+
+Referenced by: **[Package Implementation](#package-implementation)**
+
+Supported by: **[Evidence ErubisSafeEv](#evidence-erubissafeev)**
+
+Supports: **[Claim SpecialAnalysis](#claim-specialanalysis)**
+<!-- end verocase -->
+
+The `erubis` module was identified as potentially vulnerable to XSS,
+introduced via `pronto-rails_best_practices`.
+However, `rails_best_practices` and `pronto` are declared only in the
+`development` and `test` groups in the `Gemfile` and are never bundled
+into the production environment. They only process trusted developer
+input, not untrusted user data, so this vulnerability has no production
+impact.
+
+<!-- verocase element ErubisSafeEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-erubissafeev"></a>
+### Evidence ErubisSafeEv: rails_best_practices and pronto are dev/test-only dependencies; they never execute against untrusted input in production
+
+Referenced by: **[Package Implementation](#package-implementation)**
+
+Supports: **[Claim ErubisSafe](#claim-erubissafe)**
+
+External Reference: [../Gemfile](../Gemfile)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-erubissafe) for details.
+
+<!-- verocase element XXESafe -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="claim-xxesafe"></a>
+### Claim XXESafe: Nokogiri/libxml2 XXE exception (CVE-2016-9318) poses no risk in our deployment
+
+Referenced by: **[Package Implementation](#package-implementation)**
+
+Supported by: **[Evidence XXESafeEv](#evidence-xxesafeev)**
+
+Supports: **[Claim SpecialAnalysis](#claim-specialanalysis)**
+<!-- end verocase -->
+
+Nokogiri (via rails-html-sanitizer → loofah) is used in production to
+sanitize untrusted HTML. CVE-2016-9318 is an XXE vulnerability in
+libxml2. However, Nokogiri 1.5.4 and later (which we use) disables DTD
+loading and network access by default, rendering it immune to this CVE
+unless an application explicitly opts into `DTDLOAD` and out of `NONET`.
+We never process incoming XML from untrusted sources in production;
+loofah processes HTML only and never sets `DTDLOAD` or clears `NONET`.
+All other uses of nokogiri in `Gemfile.lock` (capybara, xpath, etc.)
+are test-only, where all input is trusted.
+
+<!-- verocase element XXESafeEv -->
+<!-- DO NOT EDIT text from here until "end verocase" -->
+
+<a id="evidence-xxesafeev"></a>
+### Evidence XXESafeEv: Nokogiri disables DTD loading and network access by default; we never process incoming XML in production; loofah never opts into DTDLOAD or NONET
+
+Referenced by: **[Package Implementation](#package-implementation)**
+
+Supports: **[Claim XXESafe](#claim-xxesafe)**
+
+External Reference: [../Gemfile.lock](../Gemfile.lock)
+<!-- end verocase -->
+
+See the [parent claim section](#claim-xxesafe) for details.

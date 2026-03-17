@@ -234,7 +234,7 @@ flowchart BT
     Design["<b>Design</b><br>Security in design"]
     SimpleDesign["<b>SimpleDesign</b><br>Economy of mechanism: simple design is used"]
     STRIDE["<b>STRIDE</b><br>STRIDE threat model has been analyzed"]
-    None[["<b>DesignPrinciples</b><br>Secure design principles are applied"]]
+    DesignPrinciples[["<b>DesignPrinciples</b><br>Secure design principles are applied"]]
     Scalability["<b>Scalability</b><br>Availability through scalability"]
     MemSafe["<b>MemSafe</b><br>Memory-safe languages are used"]
     SimpleDesignEv[("<b>SimpleDesignEv</b>&nbsp;↗<br>Standard Rails MVC architecture with models, views, and controllers; no microservices or complex distributed patterns; custom code kept minimal")]
@@ -245,7 +245,7 @@ flowchart BT
     click Design "#claim-design"
     click SimpleDesign "#claim-simpledesign"
     click STRIDE "#claim-stride"
-    click None "#package-designprinciples"
+    click DesignPrinciples "#package-designprinciples"
     click Scalability "#claim-scalability"
     click MemSafe "#claim-memsafe"
     click SimpleDesignEv "#evidence-simpledesignev"
@@ -260,7 +260,7 @@ flowchart BT
     MemSafeEv --> MemSafe
     SimpleDesign --- Dot1
     STRIDE --- Dot1
-    None --- Dot1
+    DesignPrinciples --- Dot1
     Scalability --- Dot1
     MemSafe --- Dot1
     Dot1 --> Design
@@ -297,109 +297,46 @@ flowchart BT
     PubVulns["<b>PubVulns</b><br>Public vulnerability information monitored"]
     OWASPClaim[["<b>OWASPClaim</b><br>All of the most common important implementation vulnerability types (weaknesses) countered"]]
     MisconfigClaim["<b>MisconfigClaim</b><br>All of the most common known security-relevant misconfiguration errors countered"]
-    ReuseSec["<b>ReuseSec</b><br>Reused software is secure"]
+    ReuseSec[["<b>ReuseSec</b><br>Reused software is secure"]]
     Hardening[["<b>Hardening</b><br>Hardening is applied"]]
     PubVulnsBundleEv[("<b>PubVulnsBundleEv</b>&nbsp;↗<br>bundle-audit checks all gem versions against NVD vulnerability database on every rake run")]
     PubVulnsDependabotEv[("<b>PubVulnsDependabotEv</b>&nbsp;↗<br>GitHub Dependabot alerts and automated pull requests for vulnerable dependencies")]
     RailsGuide["<b>RailsGuide</b><br>Entire most-relevant security guide applied"]
-    ReuseStrat[/"<b>ReuseStrat</b><br>Reuse is often appropriate and can be done securely"/]
-    KnownVulns["<b>KnownVulns</b><br>Known vulnerabilities in reused components are detected"]
     RailsGuideEv[("<b>RailsGuideEv</b>&nbsp;↗<br>Rails security guide reviewed and countermeasures applied for sessions, CSRF, XSS, injection, and other Rails-specific issues")]
-    ReuseReview["<b>ReuseReview</b><br>Reused software is reviewed before use"]
-    ReuseAuth["<b>ReuseAuth</b><br>Reused software is authentic"]
-    PkgMgr["<b>PkgMgr</b><br>Package managers used"]
-    SpecialAnalysis["<b>SpecialAnalysis</b><br>Special analysis justifies exceptions"]
-    KnownVulnsBundleEv[("<b>KnownVulnsBundleEv</b>&nbsp;↗<br>bundle-audit checks all gem versions against the NVD on every rake run, detecting known CVEs in dependencies")]
-    KnownVulnsDependabotEv[("<b>KnownVulnsDependabotEv</b>&nbsp;↗<br>GitHub Dependabot automatically alerts on vulnerable gem dependencies and opens PRs with updated versions")]
-    ReuseReviewEv[("<b>ReuseReviewEv</b>&nbsp;↗<br>New gem dependencies reviewed for purpose, maintenance, and security before addition; CONTRIBUTING.md documents review expectations")]
-    ReuseAuthEv[("<b>ReuseAuthEv</b>&nbsp;↗<br>Gemfile.lock records exact versions and SHA-512 checksums for all gems, ensuring reproducible authenticated builds")]
-    PkgMgrEv[("<b>PkgMgrEv</b>&nbsp;↗<br>Gemfile and Gemfile.lock manage all gem dependencies via bundler")]
-    XXESafe["<b>XXESafe</b><br>Nokogiri/libxml2 XXE exception (CVE-2016-9318) poses no risk in our deployment"]
-    ErubisSafe["<b>ErubisSafe</b><br>XSS from erubis via pronto-rails_best_practices poses no production risk"]
-    LocalSecretSafe["<b>LocalSecretSafe</b><br>Checked-in tmp/local_secret.txt secret_key_base value poses no security risk"]
-    ActionCableSafe["<b>ActionCableSafe</b><br>ActionCable information-exposure risk is mitigated because ActionCable is not used"]
-    XXESafeEv[("<b>XXESafeEv</b>&nbsp;↗<br>Nokogiri disables DTD loading and network access by default; we never process incoming XML in production; loofah never opts into DTDLOAD or NONET")]
-    ErubisSafeEv[("<b>ErubisSafeEv</b>&nbsp;↗<br>rails_best_practices and pronto are dev/test-only dependencies; they never execute against untrusted input in production")]
-    LocalSecretSafeEv[("<b>LocalSecretSafeEv</b>&nbsp;↗<br>The file is only used in development and test; production always uses the SECRET_KEY_BASE environment variable; the checked-in value protects no real secrets")]
-    ActionCableSafeEv[("<b>ActionCableSafeEv</b>&nbsp;↗<br>ActionCable is a Rails transitive dependency but is never configured or invoked; no sensitive data flows through it")]
     Dot1((" ")):::sacmDot
     Dot2((" ")):::sacmDot
-    Dot3((" ")):::sacmDot
-    Dot4((" ")):::sacmDot
-    Dot5((" ")):::sacmDot
     click Implementation "#claim-implementation"
     click CommonVulns "#strategy-commonvulns"
     click HardeningStrat "#strategy-hardeningstrat"
     click PubVulns "#claim-pubvulns"
     click OWASPClaim "#package-owaspclaim"
     click MisconfigClaim "#claim-misconfigclaim"
-    click ReuseSec "#claim-reusesec"
+    click ReuseSec "#package-reusesec"
     click Hardening "#package-hardening"
     click PubVulnsBundleEv "#evidence-pubvulnsbundleev"
     click PubVulnsDependabotEv "#evidence-pubvulnsdependabotev"
     click RailsGuide "#claim-railsguide"
-    click ReuseStrat "#strategy-reusestrat"
-    click KnownVulns "#claim-knownvulns"
     click RailsGuideEv "#evidence-railsguideev"
-    click ReuseReview "#claim-reusereview"
-    click ReuseAuth "#claim-reuseauth"
-    click PkgMgr "#claim-pkgmgr"
-    click SpecialAnalysis "#claim-specialanalysis"
-    click KnownVulnsBundleEv "#evidence-knownvulnsbundleev"
-    click KnownVulnsDependabotEv "#evidence-knownvulnsdependabotev"
-    click ReuseReviewEv "#evidence-reusereviewev"
-    click ReuseAuthEv "#evidence-reuseauthev"
-    click PkgMgrEv "#evidence-pkgmgrev"
-    click XXESafe "#claim-xxesafe"
-    click ErubisSafe "#claim-erubissafe"
-    click LocalSecretSafe "#claim-localsecretsafe"
-    click ActionCableSafe "#claim-actioncablesafe"
-    click XXESafeEv "#evidence-xxesafeev"
-    click ErubisSafeEv "#evidence-erubissafeev"
-    click LocalSecretSafeEv "#evidence-localsecretsafeev"
-    click ActionCableSafeEv "#evidence-actioncablesafeev"
 
     BottomPadding[ ]:::invisible ~~~ OWASPClaim
     RailsGuideEv --> RailsGuide
     RailsGuide --> MisconfigClaim
-    ReuseReviewEv --> ReuseReview
-    ReuseAuthEv --> ReuseAuth
-    PkgMgrEv --> PkgMgr
-    XXESafeEv --> XXESafe
-    ErubisSafeEv --> ErubisSafe
-    LocalSecretSafeEv --> LocalSecretSafe
-    ActionCableSafeEv --> ActionCableSafe
-    XXESafe --- Dot1
-    ErubisSafe --- Dot1
-    LocalSecretSafe --- Dot1
-    ActionCableSafe --- Dot1
-    Dot1 --> SpecialAnalysis
-    KnownVulnsBundleEv --- Dot2
-    KnownVulnsDependabotEv --- Dot2
-    Dot2 --> KnownVulns
-    ReuseReview --- Dot3
-    ReuseAuth --- Dot3
-    PkgMgr --- Dot3
-    SpecialAnalysis --- Dot3
-    ReuseStrat --- Dot3
-    KnownVulns --- Dot3
-    Dot3 --> ReuseSec
-    PubVulnsBundleEv --- Dot4
-    PubVulnsDependabotEv --- Dot4
-    Dot4 --> PubVulns
-    OWASPClaim --- Dot5
-    MisconfigClaim --- Dot5
-    ReuseSec --- Dot5
-    CommonVulns --- Dot5
-    Hardening --- Dot5
-    HardeningStrat --- Dot5
-    PubVulns --- Dot5
-    Dot5 --> Implementation
+    PubVulnsBundleEv --- Dot1
+    PubVulnsDependabotEv --- Dot1
+    Dot1 --> PubVulns
+    OWASPClaim --- Dot2
+    MisconfigClaim --- Dot2
+    ReuseSec --- Dot2
+    CommonVulns --- Dot2
+    Hardening --- Dot2
+    HardeningStrat --- Dot2
+    PubVulns --- Dot2
+    Dot2 --> Implementation
 ```
 
-Defines: **[Claim Implementation](#claim-implementation)**, [Claim PubVulns](#claim-pubvulns), [Evidence PubVulnsDependabotEv](#evidence-pubvulnsdependabotev), [Evidence PubVulnsBundleEv](#evidence-pubvulnsbundleev), [Strategy HardeningStrat](#strategy-hardeningstrat), [Strategy CommonVulns](#strategy-commonvulns), [Claim ReuseSec](#claim-reusesec), [Claim KnownVulns](#claim-knownvulns), [Evidence KnownVulnsDependabotEv](#evidence-knownvulnsdependabotev), [Evidence KnownVulnsBundleEv](#evidence-knownvulnsbundleev), [Strategy ReuseStrat](#strategy-reusestrat), [Claim SpecialAnalysis](#claim-specialanalysis), [Claim ActionCableSafe](#claim-actioncablesafe), [Evidence ActionCableSafeEv](#evidence-actioncablesafeev), [Claim LocalSecretSafe](#claim-localsecretsafe), [Evidence LocalSecretSafeEv](#evidence-localsecretsafeev), [Claim ErubisSafe](#claim-erubissafe), [Evidence ErubisSafeEv](#evidence-erubissafeev), [Claim XXESafe](#claim-xxesafe), [Evidence XXESafeEv](#evidence-xxesafeev), [Claim PkgMgr](#claim-pkgmgr), [Evidence PkgMgrEv](#evidence-pkgmgrev), [Claim ReuseAuth](#claim-reuseauth), [Evidence ReuseAuthEv](#evidence-reuseauthev), [Claim ReuseReview](#claim-reusereview), [Evidence ReuseReviewEv](#evidence-reusereviewev), [Claim MisconfigClaim](#claim-misconfigclaim), [Claim RailsGuide](#claim-railsguide), [Evidence RailsGuideEv](#evidence-railsguideev)
+Defines: **[Claim Implementation](#claim-implementation)**, [Claim PubVulns](#claim-pubvulns), [Evidence PubVulnsDependabotEv](#evidence-pubvulnsdependabotev), [Evidence PubVulnsBundleEv](#evidence-pubvulnsbundleev), [Strategy HardeningStrat](#strategy-hardeningstrat), [Strategy CommonVulns](#strategy-commonvulns), [Claim MisconfigClaim](#claim-misconfigclaim), [Claim RailsGuide](#claim-railsguide), [Evidence RailsGuideEv](#evidence-railsguideev)
 
-Citing: [Claim Hardening](#package-hardening), [Claim OWASPClaim](#package-owaspclaim)
+Citing: [Claim Hardening](#package-hardening), [Claim ReuseSec](#package-reusesec), [Claim OWASPClaim](#package-owaspclaim)
 
 Cited by: [Package Security](#package-security)
 
@@ -770,7 +707,7 @@ flowchart BT
     OWASP1["<b>OWASP1</b><br>Injection (including SQL injection) countered"]
     OWASP2["<b>OWASP2</b><br>Broken Authentication and Session Management countered"]
     OWASP3["<b>OWASP3</b><br>Cross-site scripting (XSS) countered"]
-    SynConnect_00000000((" ")):::connector
+    _Connector_00000000((" ")):::connector
     OWASP11["<b>OWASP11</b><br>XXE countered (2017 A4)"]
     OWASP12["<b>OWASP12</b><br>Insecure Deserialization countered (2017 A8)"]
     OWASP13["<b>OWASP13</b><br>Insufficient Logging and Monitoring countered (2017 A10)"]
@@ -804,6 +741,7 @@ flowchart BT
     click OWASP1 "#claim-owasp1"
     click OWASP2 "#claim-owasp2"
     click OWASP3 "#claim-owasp3"
+    click _Connector_00000000 "#connector-_connector_00000000"
     click OWASP11 "#claim-owasp11"
     click OWASP12 "#claim-owasp12"
     click OWASP13 "#claim-owasp13"
@@ -842,20 +780,20 @@ flowchart BT
     OWASP9DependabotEv --- Dot1
     Dot1 --> OWASP9
     OWASP10Ev --> OWASP10
-    OWASP4 --- SynConnect_00000000
-    OWASP5 --- SynConnect_00000000
-    OWASP6 --- SynConnect_00000000
-    OWASP7 --- SynConnect_00000000
-    OWASP8 --- SynConnect_00000000
-    OWASP9 --- SynConnect_00000000
-    OWASP10 --- SynConnect_00000000
+    OWASP4 --- _Connector_00000000
+    OWASP5 --- _Connector_00000000
+    OWASP6 --- _Connector_00000000
+    OWASP7 --- _Connector_00000000
+    OWASP8 --- _Connector_00000000
+    OWASP9 --- _Connector_00000000
+    OWASP10 --- _Connector_00000000
     OWASP11Ev --> OWASP11
     OWASP12Ev --> OWASP12
     OWASP13Ev --> OWASP13
     OWASP1 --- Dot2
     OWASP2 --- Dot2
     OWASP3 --- Dot2
-    SynConnect_00000000 --- Dot2
+    _Connector_00000000 --- Dot2
     OWASP11 --- Dot2
     OWASP12 --- Dot2
     OWASP13 --- Dot2
@@ -1120,7 +1058,7 @@ flowchart BT
     EconomyMech["<b>EconomyMech</b><br>Economy of mechanism"]
     CompleteMed["<b>CompleteMed</b><br>Complete mediation"]
     FailSafe["<b>FailSafe</b><br>Fail-safe defaults"]
-    SynConnect_00000000((" ")):::connector
+    _Connector_00000000((" ")):::connector
     PsychAccept["<b>PsychAccept</b><br>Psychological acceptability"]
     LimitedAttack["<b>LimitedAttack</b><br>Limited attack surface"]
     InputValid["<b>InputValid</b><br>Input validation with whitelists"]
@@ -1143,6 +1081,7 @@ flowchart BT
     click EconomyMech "#claim-economymech"
     click CompleteMed "#claim-completemed"
     click FailSafe "#claim-failsafe"
+    click _Connector_00000000 "#connector-_connector_00000000"
     click PsychAccept "#claim-psychaccept"
     click LimitedAttack "#claim-limitedattack"
     click InputValid "#claim-inputvalid"
@@ -1169,17 +1108,17 @@ flowchart BT
     SepPrivEv --> SepPriv
     LeastPrivEv --> LeastPriv
     LeastCommonEv --> LeastCommon
-    OpenDesign --- SynConnect_00000000
-    SepPriv --- SynConnect_00000000
-    LeastPriv --- SynConnect_00000000
-    LeastCommon --- SynConnect_00000000
+    OpenDesign --- _Connector_00000000
+    SepPriv --- _Connector_00000000
+    LeastPriv --- _Connector_00000000
+    LeastCommon --- _Connector_00000000
     PsychAcceptEv --> PsychAccept
     LimitedAttackEv --> LimitedAttack
     InputValidEv --> InputValid
     EconomyMech --- Dot1
     CompleteMed --- Dot1
     FailSafe --- Dot1
-    SynConnect_00000000 --- Dot1
+    _Connector_00000000 --- Dot1
     PsychAccept --- Dot1
     LimitedAttack --- Dot1
     InputValid --- Dot1
@@ -1189,6 +1128,98 @@ flowchart BT
 Defines: **[Claim DesignPrinciples](#claim-designprinciples)**, [Claim InputValid](#claim-inputvalid), [Evidence InputValidEv](#evidence-inputvalidev), [Claim LimitedAttack](#claim-limitedattack), [Evidence LimitedAttackEv](#evidence-limitedattackev), [Claim PsychAccept](#claim-psychaccept), [Evidence PsychAcceptEv](#evidence-psychacceptev), [Claim LeastCommon](#claim-leastcommon), [Evidence LeastCommonEv](#evidence-leastcommonev), [Claim LeastPriv](#claim-leastpriv), [Evidence LeastPrivEv](#evidence-leastprivev), [Claim SepPriv](#claim-seppriv), [Evidence SepPrivEv](#evidence-sepprivev), [Claim OpenDesign](#claim-opendesign), [Evidence OpenDesignEv](#evidence-opendesignev), [Claim FailSafe](#claim-failsafe), [Evidence FailSafeEv](#evidence-failsafeev), [Claim CompleteMed](#claim-completemed), [Evidence CompleteMedEv](#evidence-completemedev), [Claim EconomyMech](#claim-economymech), [Evidence EconomyMechEv](#evidence-economymechev)
 
 Cited by: [Package Design](#package-design)
+
+<a id="package-reusesec"></a>
+### Package ReuseSec: Reused software is secure
+
+```mermaid
+---
+config:
+  theme: neutral
+  flowchart:
+    curve: linear
+    htmlLabels: true
+    rankSpacing: 60
+    nodeSpacing: 45
+    padding: 15
+---
+flowchart BT
+    classDef invisible opacity:0
+    classDef sacmDot fill:#000,stroke:#000
+    classDef connector fill:none,stroke:#cccccc,stroke-width:1px;
+    classDef abstractClaim stroke-width:2px,stroke-dasharray: 5 5;
+    ReuseSec["<b>ReuseSec</b><br>Reused software is secure"]
+    ReuseStrat[/"<b>ReuseStrat</b><br>Reuse is often appropriate and can be done securely"/]
+    KnownVulns["<b>KnownVulns</b><br>Known vulnerabilities in reused components are detected"]
+    ReuseReview["<b>ReuseReview</b><br>Reused software is reviewed before use"]
+    ReuseAuth["<b>ReuseAuth</b><br>Reused software is authentic"]
+    PkgMgr["<b>PkgMgr</b><br>Package managers used"]
+    SpecialAnalysis["<b>SpecialAnalysis</b><br>Special analysis justifies exceptions"]
+    KnownVulnsBundleEv[("<b>KnownVulnsBundleEv</b>&nbsp;↗<br>bundle-audit checks all gem versions against the NVD on every rake run, detecting known CVEs in dependencies")]
+    KnownVulnsDependabotEv[("<b>KnownVulnsDependabotEv</b>&nbsp;↗<br>GitHub Dependabot automatically alerts on vulnerable gem dependencies and opens PRs with updated versions")]
+    ReuseReviewEv[("<b>ReuseReviewEv</b>&nbsp;↗<br>New gem dependencies reviewed for purpose, maintenance, and security before addition; CONTRIBUTING.md documents review expectations")]
+    ReuseAuthEv[("<b>ReuseAuthEv</b>&nbsp;↗<br>Gemfile.lock records exact versions and SHA-512 checksums for all gems, ensuring reproducible authenticated builds")]
+    PkgMgrEv[("<b>PkgMgrEv</b>&nbsp;↗<br>Gemfile and Gemfile.lock manage all gem dependencies via bundler")]
+    XXESafe["<b>XXESafe</b><br>Nokogiri/libxml2 XXE exception (CVE-2016-9318) poses no risk in our deployment"]
+    ErubisSafe["<b>ErubisSafe</b><br>XSS from erubis via pronto-rails_best_practices poses no production risk"]
+    LocalSecretSafe["<b>LocalSecretSafe</b><br>Checked-in tmp/local_secret.txt secret_key_base value poses no security risk"]
+    ActionCableSafe["<b>ActionCableSafe</b><br>ActionCable information-exposure risk is mitigated because ActionCable is not used"]
+    XXESafeEv[("<b>XXESafeEv</b>&nbsp;↗<br>Nokogiri disables DTD loading and network access by default; we never process incoming XML in production; loofah never opts into DTDLOAD or NONET")]
+    ErubisSafeEv[("<b>ErubisSafeEv</b>&nbsp;↗<br>rails_best_practices and pronto are dev/test-only dependencies; they never execute against untrusted input in production")]
+    LocalSecretSafeEv[("<b>LocalSecretSafeEv</b>&nbsp;↗<br>The file is only used in development and test; production always uses the SECRET_KEY_BASE environment variable; the checked-in value protects no real secrets")]
+    ActionCableSafeEv[("<b>ActionCableSafeEv</b>&nbsp;↗<br>ActionCable is a Rails transitive dependency but is never configured or invoked; no sensitive data flows through it")]
+    Dot1((" ")):::sacmDot
+    Dot2((" ")):::sacmDot
+    Dot3((" ")):::sacmDot
+    click ReuseSec "#claim-reusesec"
+    click ReuseStrat "#strategy-reusestrat"
+    click KnownVulns "#claim-knownvulns"
+    click ReuseReview "#claim-reusereview"
+    click ReuseAuth "#claim-reuseauth"
+    click PkgMgr "#claim-pkgmgr"
+    click SpecialAnalysis "#claim-specialanalysis"
+    click KnownVulnsBundleEv "#evidence-knownvulnsbundleev"
+    click KnownVulnsDependabotEv "#evidence-knownvulnsdependabotev"
+    click ReuseReviewEv "#evidence-reusereviewev"
+    click ReuseAuthEv "#evidence-reuseauthev"
+    click PkgMgrEv "#evidence-pkgmgrev"
+    click XXESafe "#claim-xxesafe"
+    click ErubisSafe "#claim-erubissafe"
+    click LocalSecretSafe "#claim-localsecretsafe"
+    click ActionCableSafe "#claim-actioncablesafe"
+    click XXESafeEv "#evidence-xxesafeev"
+    click ErubisSafeEv "#evidence-erubissafeev"
+    click LocalSecretSafeEv "#evidence-localsecretsafeev"
+    click ActionCableSafeEv "#evidence-actioncablesafeev"
+
+    BottomPadding[ ]:::invisible ~~~ ReuseReviewEv
+    ReuseReviewEv --> ReuseReview
+    ReuseAuthEv --> ReuseAuth
+    PkgMgrEv --> PkgMgr
+    XXESafeEv --> XXESafe
+    ErubisSafeEv --> ErubisSafe
+    LocalSecretSafeEv --> LocalSecretSafe
+    ActionCableSafeEv --> ActionCableSafe
+    XXESafe --- Dot1
+    ErubisSafe --- Dot1
+    LocalSecretSafe --- Dot1
+    ActionCableSafe --- Dot1
+    Dot1 --> SpecialAnalysis
+    KnownVulnsBundleEv --- Dot2
+    KnownVulnsDependabotEv --- Dot2
+    Dot2 --> KnownVulns
+    ReuseReview --- Dot3
+    ReuseAuth --- Dot3
+    PkgMgr --- Dot3
+    SpecialAnalysis --- Dot3
+    ReuseStrat --- Dot3
+    KnownVulns --- Dot3
+    Dot3 --> ReuseSec
+```
+
+Defines: **[Claim ReuseSec](#claim-reusesec)**, [Claim KnownVulns](#claim-knownvulns), [Evidence KnownVulnsDependabotEv](#evidence-knownvulnsdependabotev), [Evidence KnownVulnsBundleEv](#evidence-knownvulnsbundleev), [Strategy ReuseStrat](#strategy-reusestrat), [Claim SpecialAnalysis](#claim-specialanalysis), [Claim ActionCableSafe](#claim-actioncablesafe), [Evidence ActionCableSafeEv](#evidence-actioncablesafeev), [Claim LocalSecretSafe](#claim-localsecretsafe), [Evidence LocalSecretSafeEv](#evidence-localsecretsafeev), [Claim ErubisSafe](#claim-erubissafe), [Evidence ErubisSafeEv](#evidence-erubissafeev), [Claim XXESafe](#claim-xxesafe), [Evidence XXESafeEv](#evidence-xxesafeev), [Claim PkgMgr](#claim-pkgmgr), [Evidence PkgMgrEv](#evidence-pkgmgrev), [Claim ReuseAuth](#claim-reuseauth), [Evidence ReuseAuthEv](#evidence-reuseauthev), [Claim ReuseReview](#claim-reusereview), [Evidence ReuseReviewEv](#evidence-reusereviewev)
+
+Cited by: [Package Implementation](#package-implementation)
 <!-- end verocase -->
 
 ### Overall approach
@@ -2135,7 +2166,7 @@ Referenced by: **[Package Confidentiality](#package-confidentiality)**
 
 Supported by: **[Evidence DataInMotionEv](#evidence-datainmotionev)**
 
-Supports: **[Claim NonPublicData](#claim-nonpublicdata)**
+Supports: **[Claim NonPublicData](#claim-nonpublicdata)**, [Claim Integrity](#claim-integrity)
 <!-- end verocase -->
 
 HTTPS (specifically the TLS protocol)
@@ -5061,11 +5092,11 @@ reduces the risks.
 <a id="claim-reusesec"></a>
 ### Claim ReuseSec: Reused software is secure
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package ReuseSec](#package-reusesec)**, [Package Implementation](#package-implementation)
 
 Supported by: **[Strategy ReuseStrat](#strategy-reusestrat)**, [Claim KnownVulns](#claim-knownvulns)
 
-Supports: **[Strategy CommonVulns](#strategy-commonvulns)**
+Supports: [Strategy CommonVulns](#strategy-commonvulns)
 <!-- end verocase -->
 
 We reuse well-vetted, widely-used components and actively monitor
@@ -5080,7 +5111,7 @@ write and maintain ourselves.
 <a id="strategy-reusestrat"></a>
 #### Strategy ReuseStrat: Reuse is often appropriate and can be done securely
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package ReuseSec](#package-reusesec)**
 
 Supported by: **[Claim ReuseReview](#claim-reusereview)**, [Claim ReuseAuth](#claim-reuseauth), [Claim PkgMgr](#claim-pkgmgr), [Claim SpecialAnalysis](#claim-specialanalysis)
 
@@ -5105,7 +5136,7 @@ reduce the risks of reused code.
 <a id="claim-reusereview"></a>
 #### Claim ReuseReview: Reused software is reviewed before use
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package ReuseSec](#package-reusesec)**
 
 Supported by: **[Evidence ReuseReviewEv](#evidence-reusereviewev)**
 
@@ -5149,7 +5180,7 @@ in later versions.
 <a id="claim-reuseauth"></a>
 ### Claim ReuseAuth: Reused software is authentic
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package ReuseSec](#package-reusesec)**
 
 Supported by: **[Evidence ReuseAuthEv](#evidence-reuseauthev)**
 
@@ -5169,7 +5200,7 @@ typosquatting attacks.
 <a id="claim-pkgmgr"></a>
 ### Claim PkgMgr: Package managers used
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package ReuseSec](#package-reusesec)**
 
 Supported by: **[Evidence PkgMgrEv](#evidence-pkgmgrev)**
 
@@ -5187,7 +5218,7 @@ This makes it much easier to maintain the software later
 <a id="evidence-pkgmgrev"></a>
 ### Evidence PkgMgrEv: Gemfile and Gemfile.lock manage all gem dependencies via bundler
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package ReuseSec](#package-reusesec)**
 
 Supports: **[Claim PkgMgr](#claim-pkgmgr)**
 
@@ -5202,7 +5233,7 @@ External Reference: [../Gemfile](../Gemfile)
 <a id="claim-specialanalysis"></a>
 ### Claim SpecialAnalysis: Special analysis justifies exceptions
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package ReuseSec](#package-reusesec)**
 
 Supported by: **[Claim XXESafe](#claim-xxesafe)**, [Claim ErubisSafe](#claim-erubissafe), [Claim LocalSecretSafe](#claim-localsecretsafe), [Claim ActionCableSafe](#claim-actioncablesafe)
 
@@ -5337,7 +5368,7 @@ obvious gain, so we have not done this.
 <a id="claim-knownvulns"></a>
 #### Claim KnownVulns: Known vulnerabilities in reused components are detected
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package ReuseSec](#package-reusesec)**
 
 Supported by: **[Evidence KnownVulnsBundleEv](#evidence-knownvulnsbundleev)**, [Evidence KnownVulnsDependabotEv](#evidence-knownvulnsdependabotev)
 
@@ -7417,7 +7448,7 @@ See the [parent claim section](#claim-pubvulns) for details.
 <a id="evidence-reuseauthev"></a>
 ### Evidence ReuseAuthEv: Gemfile.lock records exact versions and SHA-512 checksums for all gems, ensuring reproducible authenticated builds
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package ReuseSec](#package-reusesec)**
 
 Supports: **[Claim ReuseAuth](#claim-reuseauth)**
 
@@ -7432,7 +7463,7 @@ See the [parent claim section](#claim-reuseauth) for details.
 <a id="evidence-reusereviewev"></a>
 ### Evidence ReuseReviewEv: New gem dependencies reviewed for purpose, maintenance, and security before addition; CONTRIBUTING.md documents review expectations
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package ReuseSec](#package-reusesec)**
 
 Supports: **[Claim ReuseReview](#claim-reusereview)**
 
@@ -8077,7 +8108,7 @@ See the [parent claim section](#claim-selfhostedassets) for details.
 <a id="evidence-knownvulnsdependabotev"></a>
 ### Evidence KnownVulnsDependabotEv: GitHub Dependabot automatically alerts on vulnerable gem dependencies and opens PRs with updated versions
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package ReuseSec](#package-reusesec)**
 
 Supports: **[Claim KnownVulns](#claim-knownvulns)**
 
@@ -8094,7 +8125,7 @@ See [`.github/dependabot.yml`](.github/dependabot.yml).
 <a id="evidence-knownvulnsbundleev"></a>
 ### Evidence KnownVulnsBundleEv: bundle-audit checks all gem versions against the NVD on every rake run, detecting known CVEs in dependencies
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package ReuseSec](#package-reusesec)**
 
 Supports: **[Claim KnownVulns](#claim-knownvulns)**
 
@@ -8112,7 +8143,7 @@ See `Gemfile.lock` and `lib/tasks/default.rake`.
 <a id="claim-actioncablesafe"></a>
 ### Claim ActionCableSafe: ActionCable information-exposure risk is mitigated because ActionCable is not used
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package ReuseSec](#package-reusesec)**
 
 Supported by: **[Evidence ActionCableSafeEv](#evidence-actioncablesafeev)**
 
@@ -8134,7 +8165,7 @@ Since we never use ActionCable, no sensitive data ever flows through it.
 <a id="evidence-actioncablesafeev"></a>
 ### Evidence ActionCableSafeEv: ActionCable is a Rails transitive dependency but is never configured or invoked; no sensitive data flows through it
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package ReuseSec](#package-reusesec)**
 
 Supports: **[Claim ActionCableSafe](#claim-actioncablesafe)**
 
@@ -8149,7 +8180,7 @@ See the [parent claim section](#claim-actioncablesafe) for details.
 <a id="claim-localsecretsafe"></a>
 ### Claim LocalSecretSafe: Checked-in tmp/local_secret.txt secret_key_base value poses no security risk
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package ReuseSec](#package-reusesec)**
 
 Supported by: **[Evidence LocalSecretSafeEv](#evidence-localsecretsafeev)**
 
@@ -8173,7 +8204,7 @@ development restarts smoother.
 <a id="evidence-localsecretsafeev"></a>
 ### Evidence LocalSecretSafeEv: The file is only used in development and test; production always uses the SECRET_KEY_BASE environment variable; the checked-in value protects no real secrets
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package ReuseSec](#package-reusesec)**
 
 Supports: **[Claim LocalSecretSafe](#claim-localsecretsafe)**
 
@@ -8188,7 +8219,7 @@ See the [parent claim section](#claim-localsecretsafe) for details.
 <a id="claim-erubissafe"></a>
 ### Claim ErubisSafe: XSS from erubis via pronto-rails_best_practices poses no production risk
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package ReuseSec](#package-reusesec)**
 
 Supported by: **[Evidence ErubisSafeEv](#evidence-erubissafeev)**
 
@@ -8209,7 +8240,7 @@ impact.
 <a id="evidence-erubissafeev"></a>
 ### Evidence ErubisSafeEv: rails_best_practices and pronto are dev/test-only dependencies; they never execute against untrusted input in production
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package ReuseSec](#package-reusesec)**
 
 Supports: **[Claim ErubisSafe](#claim-erubissafe)**
 
@@ -8224,7 +8255,7 @@ See the [parent claim section](#claim-erubissafe) for details.
 <a id="claim-xxesafe"></a>
 ### Claim XXESafe: Nokogiri/libxml2 XXE exception (CVE-2016-9318) poses no risk in our deployment
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package ReuseSec](#package-reusesec)**
 
 Supported by: **[Evidence XXESafeEv](#evidence-xxesafeev)**
 
@@ -8247,7 +8278,7 @@ are test-only, where all input is trusted.
 <a id="evidence-xxesafeev"></a>
 ### Evidence XXESafeEv: Nokogiri disables DTD loading and network access by default; we never process incoming XML in production; loofah never opts into DTDLOAD or NONET
 
-Referenced by: **[Package Implementation](#package-implementation)**
+Referenced by: **[Package ReuseSec](#package-reusesec)**
 
 Supports: **[Claim XXESafe](#claim-xxesafe)**
 

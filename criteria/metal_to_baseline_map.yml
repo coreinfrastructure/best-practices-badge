@@ -109,7 +109,7 @@ mappings:
     #   user to complete a multi-factor authentication process."
     confidence_met: 3     # 2FA for developers directly satisfies MFA on sensitive resources
     confidence_unmet: 3   # No 2FA requirement directly means MFA requirement is unmet
-    confidence_na: 0      # Applicability conditions differ; metal N/A is unusual here
+    confidence_na: 1      # Applicability conditions differ; metal N/A is unusual here
 
   # ---------------------------------------------------------------------------
   # Build & Release (osps_br_*)

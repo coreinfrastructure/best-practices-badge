@@ -31,40 +31,9 @@ class GithubBasicDetective < Detective
     repo_track_status repo_distributed_status
   ].freeze
 
-  # These are the 'correct' display case for SPDX for OSI-approved licenses.
-  LICENSE_CORRECT_CASE = {
-    'APACHE-2.0' => 'Apache-2.0',
-    'ARTISTIC-2.0' => 'Artistic-2.0',
-    'BSD-3-CLAUSE' => 'BSD-3-Clause',
-    'BSD-2-CLAUSE' => 'BSD-2-Clause',
-    'EUDATAGRID' => 'EUDatagrid',
-    'ENTESSA' => 'Entessa',
-    'FAIR' => 'Fair',
-    'FRAMEWORX-1.0' => 'Frameworx-1.0',
-    'MIROS' => 'MirOS',
-    'MOTOSOTO' => 'Motosoto',
-    'MULTICS' => 'Multics',
-    'NAUMEN' => 'Naumen',
-    'NOKIA' => 'Nokia',
-    'POSTGRESQL' => 'PostgreSQL',
-    'PYTHON-2.0' => 'Python-2.0',
-    'CNRI-PYTHON' => 'CNRI-Python',
-    'SIMPL-2.0' => 'SimPL-2.0',
-    'SLEEPYCAT' => 'Sleepycat',
-    'WATCOM-1.0' => 'Watcom-1.0',
-    'WXWINDOWS' => 'WXwindows',
-    'XNET' => 'Xnet',
-    'ZLIB' => 'Zlib'
-  }.freeze
-
   EXCLUDE_IMPLEMENTATION_LANGUAGES = [
     :HTML, :CSS, :Roff, :'DIGITAL Command Language'
   ].freeze
-
-  # Clean up name of license to be like the SPDX display.
-  def cleanup_license(license)
-    LICENSE_CORRECT_CASE[license.upcase] || license.upcase
-  end
 
   # Take JSON data of form {:language => lines_of_code, ...}
   # and return a cleaned-up string representing it.  We forcibly sort
@@ -152,10 +121,7 @@ class GithubBasicDetective < Detective
       client = Octokit::Client.new
       return results unless client
 
-      # The special 'accept' value is required to get the GitHub-provided
-      # license analysis
-      accept_beta = 'application/vnd.github.drax-preview+json'
-      basic_repo_data = client.repository fullname, accept: accept_beta
+      basic_repo_data = client.repository fullname
 
       return results unless basic_repo_data
 
@@ -175,18 +141,13 @@ class GithubBasicDetective < Detective
       end
       # rubocop:enable Metrics/BlockLength
 
-      # We'll ask GitHub what the license is.  This is a "preview"
-      # API subject to change without notice, and doesn't do much analysis,
-      # but it's a quick win to figure it out.
-      license_data_raw = basic_repo_data[:license]
-      if license_data_raw && license_data_raw[:key].present?
-        # TODO: GitHub doesn't reply with the expected upper/lower case
-        # for SPDX; see:
-        # https://github.com/benbalter/licensee/issues/72
-        # For now, we'll upcase and then fix common cases.
-        license = cleanup_license(license_data_raw[:key])
+      # Ask GitHub what the license is. GitHub uses the licensee gem and
+      # returns the SPDX identifier in spdx_id with correct case.
+      # NOASSERTION means GitHub could not identify the license; skip it.
+      license_spdx_id = basic_repo_data[:license]&.dig(:spdx_id)
+      if license_spdx_id.present? && license_spdx_id != 'NOASSERTION'
         results[:license] = {
-          value: license,
+          value: license_spdx_id,
           confidence: 3, explanation: I18n.t('detectives.github.license')
         }
       end

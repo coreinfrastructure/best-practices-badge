@@ -332,7 +332,7 @@ mappings:
     # Target: "The project documentation MUST include instructions on how to
     #   build the software, including required libraries, frameworks, SDKs,
     #   and dependencies."
-    confidence_met: 2     # Quick developer install implicitly requires build instructions
+    confidence_met: 0     # Quick developer install implicitly requires build instructions
                           # and dependency information; some overlap with baseline requirement
     confidence_unmet: 1   # No developer installation path weakly suggests no build docs
     confidence_na: 0      # Metal N/A is unusual here; applicability conditions differ
@@ -353,7 +353,7 @@ mappings:
     #   public discussions about proposed changes and usage obstacles."
     confidence_met: 3     # A searchable public discussion mechanism directly satisfies this
     confidence_unmet: 3   # No discussion mechanism means this requirement is unmet
-    confidence_na: 0      # Metal N/A is unusual; baseline "while active" always applies
+    confidence_na: 2      # Metal N/A is unusual; baseline "while active" always applies
 
   - source_criterion: contribution
     # source_level: 0
@@ -380,7 +380,7 @@ mappings:
     #   contributions."
     confidence_met: 3     # Documenting contribution requirements directly satisfies this
     confidence_unmet: 3   # No contribution requirements means this is unmet
-    confidence_na: 0      # Applicability conditions differ; metal N/A is unusual here
+    confidence_na: 2      # Applicability conditions differ; metal N/A is unusual here
 
   - source_criterion: roles_responsibilities
     # source_level: 1
@@ -393,7 +393,7 @@ mappings:
     #   project."
     confidence_met: 3     # Documenting key roles and responsibilities directly satisfies this
     confidence_unmet: 3   # No such documentation means this requirement is unmet
-    confidence_na: 0      # Applicability conditions differ; metal N/A is unusual here
+    confidence_na: 2      # Applicability conditions differ; metal N/A is unusual here
 
   # ---------------------------------------------------------------------------
   # Legal (osps_le_*)
@@ -427,7 +427,7 @@ mappings:
     confidence_met: 3     # FLOSS license (OSI/FSF/Debian/Fedora) directly satisfies OSI/FSF
                           # requirement; all acceptable metal licenses also satisfy baseline
     confidence_unmet: 3   # Non-FLOSS license means the OSI/FSF requirement is not met
-    confidence_na: 0      # Metal N/A is unusual; "while active" baseline always applies
+    confidence_na: 3      # Metal N/A is unusual; "while active" baseline always applies
 
   - source_criterion: floss_license
     # source_level: 0
@@ -452,7 +452,7 @@ mappings:
     #   file, or LICENSE/ directory."
     confidence_met: 3     # License in standard repository location directly satisfies this
     confidence_unmet: 3   # No license in standard location means this requirement is unmet
-    confidence_na: 0      # Metal N/A is unusual; applicability conditions differ
+    confidence_na: 3      # Metal N/A is unusual; applicability conditions differ
 
   - source_criterion: license_location
     # source_level: 0
@@ -464,10 +464,12 @@ mappings:
     #   MUST be included in the released source code, or in a LICENSE file,
     #   COPYING file, or LICENSE/ directory alongside the corresponding
     #   release assets."
+    # NOTE: Subdirectory name differs
     confidence_met: 2     # Metal only requires the license in the source repository; baseline
                           # also requires it alongside release assets, which is a distinct
-                          # concern — license in source repo is partial but not complete evidence
-    confidence_unmet: 2   # No license in the source repo strongly suggests it is also absent
+                          # concern — license in source repo is partial but not complete evidence. USUALLY the
+                          # release asset gets it from the source repo, but not necessarily
+    confidence_unmet: 3   # No license in the source repo strongly suggests it is also absent
                           # from release assets
     confidence_na: 0      # Applicability conditions differ; metal N/A is unusual here
 
@@ -496,7 +498,7 @@ mappings:
     #   changes were made."
     confidence_met: 2     # Metal requires tracking capability; baseline also requires it be
                           # publicly readable — if repo_public is also Met the inference
-                          # strengthens, but from this criterion alone it is moderate
+                          # strengthens, but from this criterion alone it is moderate. If there's no stronger signal it'll still be presented
     confidence_unmet: 3   # No change tracking at all means the public record cannot exist
     confidence_na: 0      # Applicability conditions differ; metal N/A is unusual here
 
@@ -525,7 +527,7 @@ mappings:
                           # the "status checks" concept; however, metal does not require
                           # that the checks *gate* merges to the primary branch specifically
     confidence_unmet: 3   # No automated testing on check-ins means no status checks exist
-    confidence_na: 0      # Applicability conditions differ significantly
+    confidence_na: 2      # Applicability conditions differ significantly
 
   - source_criterion: test_continuous_integration
     # source_level: 2
@@ -539,7 +541,7 @@ mappings:
     #   status checks for commits MUST pass or be manually bypassed."
     confidence_met: 2     # CI with automated tests satisfies the "status checks" concept;
                           # metal does not explicitly require pass/bypass enforcement
-    confidence_unmet: 2   # No CI means no automated status checks on check-ins
+    confidence_unmet: 3   # No CI means no automated status checks on check-ins
     confidence_na: 0      # Applicability conditions differ
 
   - source_criterion: test
@@ -630,7 +632,7 @@ mappings:
     #   policy that all major changes to the software produced by the project
     #   should add or update tests of the functionality in an automated test
     #   suite."
-    confidence_met: 3     # Documented test policy in contribution instructions directly satisfies
+    confidence_met: 2     # Documented test policy in contribution instructions directly satisfies
     confidence_unmet: 2   # Not documenting the policy weakly implies no formal policy; however,
                           # an informal policy could still exist (hence 2, not 3)
     confidence_na: 0      # Applicability conditions differ
@@ -704,7 +706,7 @@ mappings:
     #   potential security problems that could occur within the software."
     confidence_met: 3     # An assurance case with threat model and trust boundaries
                           # constitutes a security assessment as required by baseline
-    confidence_unmet: 2   # No assurance case strongly suggests no security assessment;
+    confidence_unmet: 1   # No assurance case strongly suggests no security assessment;
                           # however, an informal review might still satisfy baseline
     confidence_na: 1      # Metal N/A is unusual; baseline N/A requires "no release made"
                           # which is a different condition
@@ -773,7 +775,7 @@ mappings:
     confidence_met: 2     # A published reporting process is a component of CVD; however,
                           # a full CVD policy with an explicit response timeframe is more
                           # specific than merely publishing the reporting process
-    confidence_unmet: 1   # No reporting process weakly suggests no CVD policy either
+    confidence_unmet: 2   # No reporting process weakly suggests no CVD policy either
     confidence_na: 0      # Applicability conditions differ; metal N/A is unusual here
 
   - source_criterion: vulnerability_report_response
@@ -927,7 +929,7 @@ mappings:
     target_criterion: osps_vm_06_01
     # Target: "While active, the project documentation MUST include a policy
     #   that defines a threshold for remediation of SAST findings."
-    confidence_met: 2     # Fixing medium+ severity findings implies a de facto threshold
+    confidence_met: 3     # Fixing medium+ severity findings implies a de facto threshold
                           # policy (medium severity = the threshold); a formally documented
                           # policy is a separate but related requirement
     confidence_unmet: 1   # Not fixing findings does not directly imply no policy document

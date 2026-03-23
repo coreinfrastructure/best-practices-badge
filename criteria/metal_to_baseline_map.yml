@@ -128,7 +128,8 @@ mappings:
 
   - source_criterion: version_unique
     # source_level: 0
-    # Source: (same as above)
+    # Source: "The project results MUST have a unique version identifier for
+    #   each release intended to be used by users."
     target_criterion: osps_br_02_02
     # Target: "When an official release is created, all assets within that
     #   release MUST be clearly associated with the release identifier or
@@ -286,7 +287,13 @@ mappings:
 
   - source_criterion: signed_releases
     # source_level: 1
-    # Source: (same as above)
+    # Source: "The project MUST cryptographically sign releases of the project
+    #   results intended for widespread use, and there MUST be a documented
+    #   process explaining to users how they can obtain the public signing keys
+    #   and verify the signature(s). The private key for these signature(s)
+    #   MUST NOT be on site(s) used to directly distribute the software to
+    #   the public. If releases are not intended for widespread use, select
+    #   'not applicable' (N/A)."
     target_criterion: osps_do_03_02
     # Target: "When the project has made a release, the project documentation
     #   MUST contain instructions to verify the expected identity of the person
@@ -304,7 +311,8 @@ mappings:
 
   - source_criterion: external_dependencies
     # source_level: 1
-    # Source: (same as above)
+    # Source: "The project MUST list external dependencies in a
+    #   computer-processable way."
     target_criterion: osps_do_06_01
     # Target: "When the project has made a release, the project documentation
     #   MUST include a description of how the project selects, obtains, and
@@ -423,7 +431,8 @@ mappings:
 
   - source_criterion: floss_license
     # source_level: 0
-    # Source: (same as above)
+    # Source: "The software produced by the project MUST be released as FLOSS."
+    #   (OSI-approved, FSF-approved, Debian-main, or Fedora "good" license)
     target_criterion: osps_le_02_02
     # Target: "While active, the license for the released software assets
     #   MUST meet the OSI Open Source Definition or the FSF Free Software
@@ -447,7 +456,9 @@ mappings:
 
   - source_criterion: license_location
     # source_level: 0
-    # Source: (same as above)
+    # Source: "The project MUST post the license(s) of its results in a
+    #   standard location in their source repository (e.g., LICENSE or COPYING
+    #   file, or LICENSES/ directory)."
     target_criterion: osps_le_03_02
     # Target: "While active, the license for the released software assets
     #   MUST be included in the released source code, or in a LICENSE file,
@@ -491,7 +502,8 @@ mappings:
 
   - source_criterion: external_dependencies
     # source_level: 1
-    # Source: (same as above)
+    # Source: "The project MUST list external dependencies in a
+    #   computer-processable way."
     target_criterion: osps_qa_02_01
     # Target: "When the package management system supports it, the source
     #   code repository MUST contain a dependency list that accounts for the
@@ -523,7 +535,8 @@ mappings:
     #   NOTE: At passing (L0) this is SUGGESTED; at gold (L2) it is a MUST.
     #   Both levels share the same field name. Use the L2 MUST confidence here.
     target_criterion: osps_qa_03_01
-    # Target: (same as above)
+    # Target: "When a commit is made to the primary branch, any automated
+    #   status checks for commits MUST pass or be manually bypassed."
     confidence_met: 2     # CI with automated tests satisfies the "status checks" concept;
                           # metal does not explicitly require pass/bypass enforcement
     confidence_unmet: 2   # No CI means no automated status checks on check-ins
@@ -548,9 +561,13 @@ mappings:
 
   - source_criterion: automated_integration_testing
     # source_level: 1
-    # Source: (same as above)
+    # Source: "An automated test suite MUST be applied on each check-in to a
+    #   shared repository for at least one branch. This test suite MUST
+    #   produce a report on test success or failure."
     target_criterion: osps_qa_06_01
-    # Target: (same as above)
+    # Target: "Prior to a commit being accepted, the project's CI/CD pipelines
+    #   MUST run at least one automated test suite to ensure the changes meet
+    #   expectations."
     confidence_met: 2     # Tests on each check-in closely matches "run before accepting";
                           # metal does not explicitly require tests to *block* acceptance
     confidence_unmet: 3   # No automated testing on check-ins means CI/CD gates are absent
@@ -558,9 +575,15 @@ mappings:
 
   - source_criterion: test_continuous_integration
     # source_level: 2
-    # Source: (same as above — L2 MUST version)
+    # Source (L2 MUST): "The project MUST implement continuous integration,
+    #   where new or changed code is frequently integrated into a central code
+    #   repository and automated tests are run on the result."
+    #   NOTE: At passing (L0) this is SUGGESTED; at gold (L2) it is a MUST.
+    #   Both levels share the same field name. Use the L2 MUST confidence here.
     target_criterion: osps_qa_06_01
-    # Target: (same as above)
+    # Target: "Prior to a commit being accepted, the project's CI/CD pipelines
+    #   MUST run at least one automated test suite to ensure the changes meet
+    #   expectations."
     confidence_met: 2     # CI tests on new code closely matches "run before accepting";
                           # metal does not explicitly require tests to block acceptance
     confidence_unmet: 2   # No CI means tests do not run before integration
@@ -568,8 +591,10 @@ mappings:
 
   - source_criterion: test
     # source_level: 0
-    # Source: (same as above — note the metal text explicitly requires the
-    #   project to "clearly show or document how to run the test suite(s)")
+    # Source: "The project MUST use at least one automated test suite that is
+    #   publicly released as FLOSS. The project MUST clearly show or document
+    #   how to run the test suite(s) (e.g., via a CI script or via
+    #   documentation in files such as BUILD.md, README.md, or CONTRIBUTING.md)."
     target_criterion: osps_qa_06_02
     # Target: "While active, project's documentation MUST clearly document
     #   when and how tests are run."
@@ -601,7 +626,10 @@ mappings:
     #   NOTE: At passing (L0) this is SUGGESTED; at silver (L1) it is a MUST.
     #   Both share the same field name. Use L1 MUST confidence here.
     target_criterion: osps_qa_06_03
-    # Target: (same as above)
+    # Target: "While active, the project's documentation MUST include a
+    #   policy that all major changes to the software produced by the project
+    #   should add or update tests of the functionality in an automated test
+    #   suite."
     confidence_met: 3     # Documented test policy in contribution instructions directly satisfies
     confidence_unmet: 2   # Not documenting the policy weakly implies no formal policy; however,
                           # an informal policy could still exist (hence 2, not 3)
@@ -687,7 +715,9 @@ mappings:
     #   last 5 years. This review MUST consider the security requirements and
     #   security boundary."
     target_criterion: osps_sa_03_01
-    # Target: (same as above)
+    # Target: "When the project has made a release, the project MUST perform
+    #   a security assessment to understand the most likely and impactful
+    #   potential security problems that could occur within the software."
     confidence_met: 3     # A security review considering requirements and boundaries
                           # directly constitutes a security assessment
     confidence_unmet: 2   # No security review strongly suggests no security assessment;
@@ -696,7 +726,12 @@ mappings:
 
   - source_criterion: assurance_case
     # source_level: 1
-    # Source: (same as above — assurance case includes threat model)
+    # Source: "The project MUST provide an assurance case that justifies why
+    #   its security requirements are met. The assurance case MUST include: a
+    #   description of the threat model, clear identification of trust
+    #   boundaries, an argument that secure design principles have been
+    #   applied, and an argument that common implementation security weaknesses
+    #   have been countered."
     target_criterion: osps_sa_03_02
     # Target: "When the project has made a release, the project MUST perform
     #   a threat modeling and attack surface analysis to understand and protect
@@ -710,9 +745,14 @@ mappings:
 
   - source_criterion: security_review
     # source_level: 2
-    # Source: (same as above)
+    # Source: "The project MUST have performed a security review within the
+    #   last 5 years. This review MUST consider the security requirements and
+    #   security boundary."
     target_criterion: osps_sa_03_02
-    # Target: (same as above)
+    # Target: "When the project has made a release, the project MUST perform
+    #   a threat modeling and attack surface analysis to understand and protect
+    #   against attacks on critical code paths, functions, and interactions
+    #   within the system."
     confidence_met: 2     # Security review considering boundaries covers attack surface
                           # analysis partially; "threat modeling" per se may not be explicit
     confidence_unmet: 2   # No security review strongly suggests no threat modeling
@@ -742,7 +782,9 @@ mappings:
     #   received in the last 6 months MUST be less than or equal to 14 days."
     #   N/A if no vulnerability reports have been received in the last 6 months.
     target_criterion: osps_vm_01_01
-    # Target: (same as above)
+    # Target: "While active, the project documentation MUST include a policy
+    #   for coordinated vulnerability disclosure (CVD), with a clear timeframe
+    #   for response."
     confidence_met: 2     # Responding within 14 days demonstrates a response practice, which
                           # is part of CVD; but a *documented policy with timeframe* is a
                           # separate documentation requirement
@@ -755,7 +797,9 @@ mappings:
     # Source: "The project MUST have a documented process for responding to
     #   vulnerability reports."
     target_criterion: osps_vm_01_01
-    # Target: (same as above)
+    # Target: "While active, the project documentation MUST include a policy
+    #   for coordinated vulnerability disclosure (CVD), with a clear timeframe
+    #   for response."
     confidence_met: 2     # A documented response process is essentially a CVD policy; baseline
                           # additionally requires an explicit timeframe, which may be implicit
     confidence_unmet: 2   # No documented response process means no CVD policy
@@ -763,7 +807,8 @@ mappings:
 
   - source_criterion: vulnerability_report_process
     # source_level: 0
-    # Source: (same as above — process for reporting vulnerabilities)
+    # Source: "The project MUST publish the process for reporting
+    #   vulnerabilities on the project site."
     target_criterion: osps_vm_02_01
     # Target: "While active, the project documentation MUST contain security
     #   contacts."
@@ -827,7 +872,10 @@ mappings:
 
   - source_criterion: dependency_monitoring
     # source_level: 1
-    # Source: (same as above)
+    # Source: "Projects MUST monitor or periodically check their external
+    #   dependencies (including convenience copies) to detect known
+    #   vulnerabilities, and fix exploitable vulnerabilities or verify them
+    #   as unexploitable."
     target_criterion: osps_vm_05_02
     # Target: "While active, the project documentation MUST include a policy
     #   to address SCA violations prior to any release."
@@ -838,7 +886,10 @@ mappings:
 
   - source_criterion: dependency_monitoring
     # source_level: 1
-    # Source: (same as above)
+    # Source: "Projects MUST monitor or periodically check their external
+    #   dependencies (including convenience copies) to detect known
+    #   vulnerabilities, and fix exploitable vulnerabilities or verify them
+    #   as unexploitable."
     target_criterion: osps_vm_05_03
     # Target: "While active, all changes to the project's codebase MUST be
     #   automatically evaluated against a documented policy for malicious
@@ -874,7 +925,8 @@ mappings:
     #   discovered with static code analysis MUST be fixed in a timely way
     #   after they are confirmed."
     target_criterion: osps_vm_06_01
-    # Target: (same as above)
+    # Target: "While active, the project documentation MUST include a policy
+    #   that defines a threshold for remediation of SAST findings."
     confidence_met: 2     # Fixing medium+ severity findings implies a de facto threshold
                           # policy (medium severity = the threshold); a formally documented
                           # policy is a separate but related requirement
@@ -883,7 +935,11 @@ mappings:
 
   - source_criterion: static_analysis
     # source_level: 0
-    # Source: (same as above)
+    # Source: "At least one static code analysis tool (beyond compiler
+    #   warnings) MUST be applied to any proposed major production release of
+    #   the software before its release, if there is at least one FLOSS tool
+    #   that implements this criterion in the selected language."
+    #   N/A if no FLOSS static analysis tools exist for the language used.
     target_criterion: osps_vm_06_02
     # Target: "While active, all changes to the project's codebase MUST be
     #   automatically evaluated against a documented policy for security

@@ -186,8 +186,8 @@ mappings:
     target_criterion: osps_br_05_01
     # Target: "When a build and release pipeline ingests dependencies, it
     #   MUST use standardized tooling where available."
-    confidence_met: 2     # A machine-readable dependency list strongly implies standardized
-                          # tooling is in use, but "standardized tooling" is broader
+    confidence_met: 0     # A machine-readable dependency list might imply standardized
+                          # tooling is in use, but it's too disconnected
     confidence_unmet: 2   # No machine-readable list suggests non-standard or manual approach
     confidence_na: 2      # Metal N/A (no package manager convention) aligns well with
                           # baseline N/A (no standardized tooling available)
@@ -251,21 +251,37 @@ mappings:
     #   MUST include a guide for reporting defects."
     confidence_met: 3     # A publicly documented bug report process directly satisfies this
     confidence_unmet: 3   # No public bug report process means no guide for reporting defects
-    confidence_na: 0      # Applicability conditions differ; metal N/A is unusual here
+    confidence_na: 2      # Applicability conditions differ; metal N/A is unusual here
 
   - source_criterion: signed_releases
     # source_level: 1
-    # Source: (same as above — note the metal text *requires* a documented
-    #   process for obtaining signing keys and verifying signatures)
+    # description: >-
+    #   The project MUST cryptographically sign releases of
+    #   the project results intended for widespread use, and
+    #   there MUST be a documented process explaining to users
+    #   how they can obtain the public signing keys and verify
+    #   the signature(s). The private key for these signature(s)
+    #   MUST NOT be on site(s) used to directly distribute the
+    #   software to the public. If releases are not intended
+    #   for widespread use, select "not applicable" (N/A).
+    # details: >-
+    #   The project results include both source code and any
+    #   generated deliverables where applicable (e.g., executables,
+    #   packages, and containers). Generated deliverables MAY
+    #   be signed separately from source code. These MAY be
+    #   implemented as signed git tags (using cryptographic
+    #   digital signatures). Projects MAY provide generated
+    #   results separately from tools like git, but in those
+    #   cases, the separate results MUST be separately signed.
     target_criterion: osps_do_03_01
     # Target: "When the project has made a release, the project documentation
     #   MUST contain instructions to verify the integrity and authenticity of
     #   the release assets."
     confidence_met: 3     # Metal explicitly requires a documented verification process,
                           # directly satisfying this requirement
-    confidence_unmet: 1   # Unsigned releases make verification instructions less likely,
+    confidence_unmet: 2   # Unsigned releases make verification instructions less likely,
                           # but separate integrity documentation could still exist
-    confidence_na: 1      # Metal N/A = not for widespread use; baseline applies to any
+    confidence_na: 2      # Metal N/A = not for widespread use; baseline applies to any
                           # release; applicability conditions differ
 
   - source_criterion: signed_releases
@@ -277,38 +293,14 @@ mappings:
     #   or process authoring the software release."
     confidence_met: 3     # Documenting how to obtain public signing keys and verify
                           # signatures covers identity verification of the release author
-    confidence_unmet: 1   # Unsigned releases make identity verification instructions less likely
-    confidence_na: 1      # Same reasoning as osps_do_03_01 above
+    confidence_unmet: 3   # Unsigned releases make identity verification instructions less likely
+    confidence_na: 2      # Same reasoning as osps_do_03_01 above
 
-  - source_criterion: maintenance_or_update
-    # source_level: 1
-    # Source: "The project MUST maintain the most often used older versions
-    #   of the product OR provide an upgrade path to newer versions. If the
-    #   upgrade path is difficult, the project MUST document how to perform
-    #   the upgrade."
-    target_criterion: osps_do_04_01
-    # Target: "When the project has made a release, the project documentation
-    #   MUST include a descriptive statement about the scope and duration of
-    #   support for each release."
-    confidence_met: 1     # Active maintenance implies some support, but documenting the
-                          # explicit scope and duration per release is a separate requirement
-    confidence_unmet: 1   # Not maintaining and not documenting upgrades weakly suggests
-                          # no formal support statement exists
-    confidence_na: 1      # Metal N/A (project is truly unmaintained) weakly suggests
-                          # no support statement, but applicability conditions differ
-
-  - source_criterion: maintenance_or_update
-    # source_level: 1
-    # Source: (same as above)
-    target_criterion: osps_do_05_01
-    # Target: "When the project has made a release, the project documentation
-    #   MUST provide a descriptive statement when releases or versions will no
-    #   longer receive security updates."
-    confidence_met: 1     # Maintaining updates is related but does not guarantee a documented
-                          # statement about when security updates will end
-    confidence_unmet: 1   # No maintenance weakly implies no security update end-of-life statement
-    confidence_na: 1      # Metal N/A (unmaintained) weakly implies security updates have ended,
-                          # but baseline requires a *documented statement*, not just the fact
+  # maintenance_or_update -> osps_do_04_01 and osps_do_05_01 intentionally omitted.
+  # The mapping is too tenuous: "maintain or document upgrade path" does not
+  # reliably imply "document support scope/duration per release" or
+  # "document when security updates end."  All confidences would be 0.
+  # Kept as a comment to prevent re-adding these entries inadvertently.
 
   - source_criterion: external_dependencies
     # source_level: 1
@@ -317,10 +309,10 @@ mappings:
     # Target: "When the project has made a release, the project documentation
     #   MUST include a description of how the project selects, obtains, and
     #   tracks its dependencies."
-    confidence_met: 1     # Having a dependency list implies tracking exists, but documenting
-                          # the selection and tracking *process* is a separate requirement
+    confidence_met: 0     # Having a dependency list does not imply the selection and
+                          # tracking *process* is documented; too indirect
     confidence_unmet: 0   # No dependency list says nothing about process documentation
-    confidence_na: 2      # Metal N/A (no package manager) reasonably aligns with baseline
+    confidence_na: 2      # Metal N/A (no releases or dependencies) reasonably aligns with baseline
                           # N/A (no releases / no dependency process to document)
 
   - source_criterion: installation_development_quick

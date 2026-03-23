@@ -1,0 +1,906 @@
+# criteria/metal_to_baseline_map.yml
+#
+# Mapping from metal (passing/silver/gold) criteria answers to implied
+# OSPS Baseline criteria answers, to enable automation.
+#
+# Each entry maps one source (metal) criterion to one target (baseline)
+# criterion. A single source may appear in multiple entries (one per target);
+# a single target may appear in multiple entries (one per source). The
+# detective takes the highest-confidence proposal for each target.
+#
+# source_level: 0 = passing, 1 = silver, 2 = gold
+# These are really just to help in finding the criterion and give a notion
+# of difficulty. Some criteria have more than 1 source_level and it doesn't
+# matter for the criterion itself.
+#
+# Confidence values (0-3; always < Chief::CONFIDENCE_OVERRIDE of 4):
+#   0 = no inference; skip this entry
+#   1 = weak signal; worth surfacing but treat with caution
+#   2 = moderate confidence; partial or related requirement
+#   3 = strong confidence; essentially the same requirement
+#
+# Three confidence fields per entry, one per possible source status:
+#   confidence_met:   inference when source criterion status is "Met"
+#   confidence_unmet: inference when source criterion status is "Unmet"
+#   confidence_na:    inference when source criterion status is "N/A"
+#
+# Each field is either:
+#   - An integer (0-3): shorthand for a same-status inference.
+#       confidence_met: 3    means Met   → Met,   confidence 3
+#       confidence_unmet: 2  means Unmet → Unmet, confidence 2
+#       confidence_na: 1     means N/A   → N/A,   confidence 1
+#   - A [confidence, "TargetStatus"] array: a cross-status inference, where
+#     the source status implies a *different* target status.
+#       confidence_na: [2, "Unmet"]  means N/A → Unmet, confidence 2
+#     Any source/target status combination is valid; in practice the only
+#     cross-status case currently present is N/A → Unmet (see below).
+#     The Ruby parser should handle both forms:
+#       val.is_a?(Array) ? [val[0], val[1]] : [val, same_status_as_source]
+#
+# Each value encodes BOTH the semantic closeness of the two criteria (mapping
+# strength) AND how reliably that particular status transfers.  They cannot
+# be separated: a strong mapping with a poorly-transferable status yields the
+# same result as a weak mapping with a highly-transferable status.
+#
+# Notable asymmetries
+# -------------------
+# The three per-status confidence values for a given entry are often NOT
+# symmetric, and intentionally so. Three recurring patterns:
+#
+# 1. "Necessary but not sufficient" (low Met, high Unmet):
+#    Some metal criteria establish a *prerequisite* for a baseline criterion
+#    without fully satisfying it.  Met in metal means the prerequisite is in
+#    place — useful, but the baseline may require more.  Unmet in metal,
+#    however, makes the baseline impossible to satisfy, so Unmet carries much
+#    higher confidence.
+#    Examples:
+#      test -> osps_qa_06_01              (Met:1, Unmet:3)
+#      two_person_review -> osps_qa_07_01 (Met:1, Unmet:3)
+#      static_analysis -> osps_vm_06_02   (Met:1, Unmet:2)
+#      dependency_monitoring -> osps_vm_05_03 (Met:1, Unmet:2)
+#
+# 2. "Broader scope" (moderate Met, high Unmet):
+#    The metal criterion is narrower than the baseline criterion.  Met in
+#    metal covers the overlapping portion well, but leaves the broader
+#    baseline requirement only partially addressed.  Unmet in metal, however,
+#    violates even the narrower requirement and thus makes the baseline
+#    requirement very likely also unmet.
+#    Examples:
+#      no_leaked_credentials -> osps_br_07_01 (Met:2, Unmet:3)
+#      repo_track -> osps_qa_01_02            (Met:2, Unmet:3)
+#
+# 3. "Cross-status" (array form, N/A → Unmet):
+#    When metal N/A means the source feature is *absent* and baseline
+#    *requires* that feature, the correct inference is N/A → Unmet rather
+#    than N/A → N/A.  Use the array form: confidence_na: [n, "Unmet"].
+#    Example:
+#      vulnerability_report_private -> osps_vm_03_01
+#        confidence_na: [2, "Unmet"]
+#        (metal N/A = private reporting is absent; baseline requires it)
+#
+# Key N/A guidance:
+#   - When both criteria share the same applicability clause (e.g. "when an
+#     official release is created"), N/A transfers at full mapping strength
+#     using the plain integer form.
+#   - When the applicability clauses differ, N/A confidence is usually 0-1.
+#   - When metal N/A implies baseline *Unmet* (not baseline N/A), use the
+#     array form: confidence_na: [n, "Unmet"].
+#
+# HTML is stripped from criterion descriptions in comments below.
+# Source descriptions are from config/locales/en.yml (extracted to ,metal.yml).
+# Target descriptions are from config/locales/en.yml (extracted to ,baseline.yml).
+#
+# Entries are grouped by target criterion section for ease of review.
+
+mappings:
+
+  # ---------------------------------------------------------------------------
+  # Access Control (osps_ac_*)
+  # ---------------------------------------------------------------------------
+
+  - source_criterion: require_2FA
+    # source_level: 2
+    # Source: "The project MUST require two-factor authentication (2FA) for
+    #   developers for changing a central repository or accessing sensitive
+    #   data (such as private vulnerability reports)."
+    target_criterion: osps_ac_01_01
+    # Target: "When a user attempts to read or modify a sensitive resource in
+    #   the project's authoritative repository, the system MUST require the
+    #   user to complete a multi-factor authentication process."
+    confidence_met: 3     # 2FA for developers directly satisfies MFA on sensitive resources
+    confidence_unmet: 3   # No 2FA requirement directly means MFA requirement is unmet
+    confidence_na: 0      # Applicability conditions differ; metal N/A is unusual here
+
+  # ---------------------------------------------------------------------------
+  # Build & Release (osps_br_*)
+  # ---------------------------------------------------------------------------
+
+  - source_criterion: version_unique
+    # source_level: 0
+    # Source: "The project results MUST have a unique version identifier for
+    #   each release intended to be used by users."
+    target_criterion: osps_br_02_01
+    # Target: "When an official release is created, that release MUST be
+    #   assigned a unique version identifier."
+    confidence_met: 3     # Unique version identifiers per release directly satisfies this
+    confidence_unmet: 3   # No unique identifiers means this requirement is unmet
+    confidence_na: 3      # Both apply only when a release is created; N/A transfers strongly
+
+  - source_criterion: version_unique
+    # source_level: 0
+    # Source: (same as above)
+    target_criterion: osps_br_02_02
+    # Target: "When an official release is created, all assets within that
+    #   release MUST be clearly associated with the release identifier or
+    #   another unique identifier for the asset."
+    confidence_met: 2     # Having unique release IDs is necessary but not sufficient;
+                          # individual assets may not all be explicitly labeled with the ID
+    confidence_unmet: 3   # Without unique IDs, assets cannot be associated with them
+    confidence_na: 3      # Same applicability clause as above; N/A transfers strongly
+
+  - source_criterion: sites_https
+    # source_level: 0
+    # Source: "The project sites (website, repository, and download URLs)
+    #   MUST support HTTPS using TLS."
+    target_criterion: osps_br_03_01
+    # Target: "When the project lists a URI as an official project channel,
+    #   that URI MUST be exclusively delivered using encrypted channels."
+    confidence_met: 3     # HTTPS/TLS directly satisfies the encrypted channel requirement
+    confidence_unmet: 3   # No HTTPS means the encrypted channel requirement is unmet
+    confidence_na: 2      # Metal N/A (no project sites) aligns well with baseline N/A
+                          # (no official URIs to protect), though exact conditions differ
+
+  - source_criterion: delivery_mitm
+    # source_level: 0
+    # Source: "The project MUST use a delivery mechanism that counters MITM
+    #   attacks. Using https or ssh+scp is acceptable."
+    target_criterion: osps_br_03_02
+    # Target: "When the project lists a URI as an official distribution
+    #   channel, that channel MUST be protected from adversary-in-the-middle
+    #   attacks using cryptographically authenticated channels."
+    confidence_met: 3     # MITM-resistant delivery directly satisfies this requirement
+    confidence_unmet: 3   # No MITM protection means the distribution channel is unprotected
+    confidence_na: 2      # Metal N/A (no direct delivery to users) aligns well with no
+                          # official distribution channel, though exact conditions differ
+
+  - source_criterion: release_notes
+    # source_level: 0
+    # Source: "The project MUST provide, in each release, release notes that
+    #   are a human-readable summary of major changes in that release to help
+    #   users determine if they should upgrade and what the upgrade impact
+    #   will be. The release notes MUST NOT be the raw output of a VCS log."
+    #   N/A allowed for single-service projects using continuous delivery.
+    target_criterion: osps_br_04_01
+    # Target: "When an official release is created, that release MUST contain
+    #   a descriptive log of functional and security modifications."
+    confidence_met: 3     # Human-readable release notes directly satisfy this requirement
+    confidence_unmet: 3   # No release notes means this requirement is unmet
+    confidence_na: 2      # Metal N/A (continuous delivery / single service) partially aligns
+                          # with baseline N/A (no official releases), but conditions differ
+                          # because continuous delivery may still have informal "releases"
+
+  - source_criterion: external_dependencies
+    # source_level: 1
+    # Source: "The project MUST list external dependencies in a
+    #   computer-processable way."
+    target_criterion: osps_br_05_01
+    # Target: "When a build and release pipeline ingests dependencies, it
+    #   MUST use standardized tooling where available."
+    confidence_met: 2     # A machine-readable dependency list strongly implies standardized
+                          # tooling is in use, but "standardized tooling" is broader
+    confidence_unmet: 2   # No machine-readable list suggests non-standard or manual approach
+    confidence_na: 2      # Metal N/A (no package manager convention) aligns well with
+                          # baseline N/A (no standardized tooling available)
+
+  - source_criterion: signed_releases
+    # source_level: 1
+    # Source: "The project MUST cryptographically sign releases of the project
+    #   results intended for widespread use, and there MUST be a documented
+    #   process explaining to users how they can obtain the public signing keys
+    #   and verify the signature(s)."
+    #   N/A if releases are not intended for widespread use.
+    target_criterion: osps_br_06_01
+    # Target: "When an official release is created, that release MUST be
+    #   signed or accounted for in a signed manifest including each asset's
+    #   cryptographic hashes."
+    confidence_met: 3     # Cryptographic signing of releases directly satisfies this
+    confidence_unmet: 2   # Unsigned releases likely means this is unmet; however, a signed
+                          # manifest (without individual release signing) could still satisfy
+                          # baseline even if metal is Unmet for a different reason
+    confidence_na: 1      # Metal N/A = "not for widespread use"; baseline applies to any
+                          # official release regardless of distribution intent; conditions differ
+
+  - source_criterion: no_leaked_credentials
+    # source_level: 0
+    # Source: "The public repositories MUST NOT leak a valid private
+    #   credential (e.g., a working password or private key) that is
+    #   intended to limit public access."
+    target_criterion: osps_br_07_01
+    # Target: "The project MUST prevent the unintentional storage of
+    #   unencrypted sensitive data, such as secrets and credentials, in
+    #   the version control system."
+    confidence_met: 2     # No leaked valid credentials satisfies the credential aspect;
+                          # baseline is broader (all sensitive data, not just valid credentials)
+    confidence_unmet: 3   # Leaked valid credentials is a direct and serious violation of this
+    confidence_na: 0      # Metal N/A is unusual; no clear applicability overlap
+
+  # ---------------------------------------------------------------------------
+  # Documentation (osps_do_*)
+  # ---------------------------------------------------------------------------
+
+  - source_criterion: documentation_basics
+    # source_level: 0
+    # Source: "The project MUST provide basic documentation for the software
+    #   produced by the project." (install, start, use, use securely)
+    #   N/A if the project does not produce software.
+    target_criterion: osps_do_01_01
+    # Target: "When the project has made a release, the project documentation
+    #   MUST include user guides for all basic functionality."
+    confidence_met: 2     # Basic documentation likely covers user guides, but metal does not
+                          # require coverage of *all* basic functionality explicitly
+    confidence_unmet: 2   # No basic documentation means user guides are absent
+    confidence_na: 2      # Metal N/A (no software produced) strongly implies no releases,
+                          # aligning well with baseline N/A; conditions differ slightly
+
+  - source_criterion: report_process
+    # source_level: 0
+    # Source: "The project MUST provide a process for users to submit bug
+    #   reports (e.g., using an issue tracker or a mailing list)."
+    target_criterion: osps_do_02_01
+    # Target: "When the project has made a release, the project documentation
+    #   MUST include a guide for reporting defects."
+    confidence_met: 3     # A publicly documented bug report process directly satisfies this
+    confidence_unmet: 3   # No public bug report process means no guide for reporting defects
+    confidence_na: 0      # Applicability conditions differ; metal N/A is unusual here
+
+  - source_criterion: signed_releases
+    # source_level: 1
+    # Source: (same as above — note the metal text *requires* a documented
+    #   process for obtaining signing keys and verifying signatures)
+    target_criterion: osps_do_03_01
+    # Target: "When the project has made a release, the project documentation
+    #   MUST contain instructions to verify the integrity and authenticity of
+    #   the release assets."
+    confidence_met: 3     # Metal explicitly requires a documented verification process,
+                          # directly satisfying this requirement
+    confidence_unmet: 1   # Unsigned releases make verification instructions less likely,
+                          # but separate integrity documentation could still exist
+    confidence_na: 1      # Metal N/A = not for widespread use; baseline applies to any
+                          # release; applicability conditions differ
+
+  - source_criterion: signed_releases
+    # source_level: 1
+    # Source: (same as above)
+    target_criterion: osps_do_03_02
+    # Target: "When the project has made a release, the project documentation
+    #   MUST contain instructions to verify the expected identity of the person
+    #   or process authoring the software release."
+    confidence_met: 3     # Documenting how to obtain public signing keys and verify
+                          # signatures covers identity verification of the release author
+    confidence_unmet: 1   # Unsigned releases make identity verification instructions less likely
+    confidence_na: 1      # Same reasoning as osps_do_03_01 above
+
+  - source_criterion: maintenance_or_update
+    # source_level: 1
+    # Source: "The project MUST maintain the most often used older versions
+    #   of the product OR provide an upgrade path to newer versions. If the
+    #   upgrade path is difficult, the project MUST document how to perform
+    #   the upgrade."
+    target_criterion: osps_do_04_01
+    # Target: "When the project has made a release, the project documentation
+    #   MUST include a descriptive statement about the scope and duration of
+    #   support for each release."
+    confidence_met: 1     # Active maintenance implies some support, but documenting the
+                          # explicit scope and duration per release is a separate requirement
+    confidence_unmet: 1   # Not maintaining and not documenting upgrades weakly suggests
+                          # no formal support statement exists
+    confidence_na: 1      # Metal N/A (project is truly unmaintained) weakly suggests
+                          # no support statement, but applicability conditions differ
+
+  - source_criterion: maintenance_or_update
+    # source_level: 1
+    # Source: (same as above)
+    target_criterion: osps_do_05_01
+    # Target: "When the project has made a release, the project documentation
+    #   MUST provide a descriptive statement when releases or versions will no
+    #   longer receive security updates."
+    confidence_met: 1     # Maintaining updates is related but does not guarantee a documented
+                          # statement about when security updates will end
+    confidence_unmet: 1   # No maintenance weakly implies no security update end-of-life statement
+    confidence_na: 1      # Metal N/A (unmaintained) weakly implies security updates have ended,
+                          # but baseline requires a *documented statement*, not just the fact
+
+  - source_criterion: external_dependencies
+    # source_level: 1
+    # Source: (same as above)
+    target_criterion: osps_do_06_01
+    # Target: "When the project has made a release, the project documentation
+    #   MUST include a description of how the project selects, obtains, and
+    #   tracks its dependencies."
+    confidence_met: 1     # Having a dependency list implies tracking exists, but documenting
+                          # the selection and tracking *process* is a separate requirement
+    confidence_unmet: 0   # No dependency list says nothing about process documentation
+    confidence_na: 2      # Metal N/A (no package manager) reasonably aligns with baseline
+                          # N/A (no releases / no dependency process to document)
+
+  - source_criterion: installation_development_quick
+    # source_level: 1
+    # Source: "The project MUST provide a way for potential developers to
+    #   quickly install all the project results and support environment
+    #   necessary to make changes, including the tests and test environment."
+    target_criterion: osps_do_07_01
+    # Target: "The project documentation MUST include instructions on how to
+    #   build the software, including required libraries, frameworks, SDKs,
+    #   and dependencies."
+    confidence_met: 2     # Quick developer install implicitly requires build instructions
+                          # and dependency information; some overlap with baseline requirement
+    confidence_unmet: 1   # No developer installation path weakly suggests no build docs
+    confidence_na: 0      # Metal N/A is unusual here; applicability conditions differ
+
+  # ---------------------------------------------------------------------------
+  # Governance (osps_gv_*)
+  # ---------------------------------------------------------------------------
+
+  - source_criterion: discussion
+    # source_level: 0
+    # Source: "The project MUST have one or more mechanisms for discussion
+    #   (including proposed changes and issues) that are searchable, allow
+    #   messages and topics to be addressed by URL, enable new people to
+    #   participate, and do not require client-side installation of proprietary
+    #   software."
+    target_criterion: osps_gv_02_01
+    # Target: "While active, the project MUST have one or more mechanisms for
+    #   public discussions about proposed changes and usage obstacles."
+    confidence_met: 3     # A searchable public discussion mechanism directly satisfies this
+    confidence_unmet: 3   # No discussion mechanism means this requirement is unmet
+    confidence_na: 0      # Metal N/A is unusual; baseline "while active" always applies
+
+  - source_criterion: contribution
+    # source_level: 0
+    # Source: "The information on how to contribute MUST explain the
+    #   contribution process (e.g., are pull requests used?)"
+    target_criterion: osps_gv_03_01
+    # Target: "While active, the project documentation MUST include an
+    #   explanation of the contribution process."
+    confidence_met: 3     # Explaining the contribution process directly satisfies this
+    confidence_unmet: 3   # No explanation of contribution process means this is unmet
+    confidence_na: 0      # Metal N/A is unusual; applicability conditions differ
+
+  - source_criterion: contribution_requirements
+    # source_level: 1
+    # Source (L1 MUST): "The information on how to contribute MUST include the
+    #   requirements for acceptable contributions (e.g., a reference to any
+    #   required coding standard)."
+    #   NOTE: At passing (L0) this is a SHOULD; at silver (L1) it is a MUST.
+    #   Both levels share the same field name. Use the L1 MUST confidence here;
+    #   a project that has Met this criterion is satisfying the stronger form.
+    target_criterion: osps_gv_03_02
+    # Target: "While active, the project documentation MUST include a guide
+    #   for code contributors that includes requirements for acceptable
+    #   contributions."
+    confidence_met: 3     # Documenting contribution requirements directly satisfies this
+    confidence_unmet: 3   # No contribution requirements means this is unmet
+    confidence_na: 0      # Applicability conditions differ; metal N/A is unusual here
+
+  - source_criterion: roles_responsibilities
+    # source_level: 1
+    # Source: "The project MUST clearly define and publicly document the key
+    #   roles in the project and their responsibilities, including any tasks
+    #   those roles must perform."
+    target_criterion: osps_gv_01_02
+    # Target: "While active, the project documentation MUST include
+    #   descriptions of the roles and responsibilities for members of the
+    #   project."
+    confidence_met: 3     # Documenting key roles and responsibilities directly satisfies this
+    confidence_unmet: 3   # No such documentation means this requirement is unmet
+    confidence_na: 0      # Applicability conditions differ; metal N/A is unusual here
+
+  # ---------------------------------------------------------------------------
+  # Legal (osps_le_*)
+  # ---------------------------------------------------------------------------
+
+  - source_criterion: dco
+    # source_level: 1
+    # Source (L1 SHOULD): "The project SHOULD have a legal mechanism where all
+    #   developers of non-trivial amounts of project software assert that they
+    #   are legally authorized to make these contributions. The most common
+    #   approach is a Developer Certificate of Origin (DCO); a CLA also meets
+    #   this requirement."
+    #   NOTE: This is a SHOULD at L1, not a MUST. Met still means the mechanism
+    #   exists and is in use.
+    target_criterion: osps_le_01_01
+    # Target: "While active, the version control system MUST require all code
+    #   contributors to assert that they are legally authorized to make the
+    #   associated contributions on every commit."
+    confidence_met: 3     # DCO or CLA in use directly satisfies the legal assertion requirement
+    confidence_unmet: 2   # SHOULD being Unmet is less definitive than a MUST being Unmet;
+                          # there may be an informal mechanism that still satisfies baseline
+    confidence_na: 0      # Applicability conditions differ; metal N/A is unusual here
+
+  - source_criterion: floss_license
+    # source_level: 0
+    # Source: "The software produced by the project MUST be released as FLOSS."
+    #   (OSI-approved, FSF-approved, Debian-main, or Fedora "good" license)
+    target_criterion: osps_le_02_01
+    # Target: "While active, the license for the source code MUST meet the
+    #   OSI Open Source Definition or the FSF Free Software Definition."
+    confidence_met: 3     # FLOSS license (OSI/FSF/Debian/Fedora) directly satisfies OSI/FSF
+                          # requirement; all acceptable metal licenses also satisfy baseline
+    confidence_unmet: 3   # Non-FLOSS license means the OSI/FSF requirement is not met
+    confidence_na: 0      # Metal N/A is unusual; "while active" baseline always applies
+
+  - source_criterion: floss_license
+    # source_level: 0
+    # Source: (same as above)
+    target_criterion: osps_le_02_02
+    # Target: "While active, the license for the released software assets
+    #   MUST meet the OSI Open Source Definition or the FSF Free Software
+    #   Definition."
+    confidence_met: 3     # Same reasoning as osps_le_02_01; metal covers released software
+    confidence_unmet: 3   # Same reasoning as osps_le_02_01
+    confidence_na: 0      # Same reasoning as osps_le_02_01
+
+  - source_criterion: license_location
+    # source_level: 0
+    # Source: "The project MUST post the license(s) of its results in a
+    #   standard location in their source repository (e.g., LICENSE or COPYING
+    #   file, or LICENSES/ directory)."
+    target_criterion: osps_le_03_01
+    # Target: "While active, the license for the source code MUST be
+    #   maintained in the corresponding repository's LICENSE file, COPYING
+    #   file, or LICENSE/ directory."
+    confidence_met: 3     # License in standard repository location directly satisfies this
+    confidence_unmet: 3   # No license in standard location means this requirement is unmet
+    confidence_na: 0      # Metal N/A is unusual; applicability conditions differ
+
+  - source_criterion: license_location
+    # source_level: 0
+    # Source: (same as above)
+    target_criterion: osps_le_03_02
+    # Target: "While active, the license for the released software assets
+    #   MUST be included in the released source code, or in a LICENSE file,
+    #   COPYING file, or LICENSE/ directory alongside the corresponding
+    #   release assets."
+    confidence_met: 2     # Metal only requires the license in the source repository; baseline
+                          # also requires it alongside release assets, which is a distinct
+                          # concern — license in source repo is partial but not complete evidence
+    confidence_unmet: 2   # No license in the source repo strongly suggests it is also absent
+                          # from release assets
+    confidence_na: 0      # Applicability conditions differ; metal N/A is unusual here
+
+  # ---------------------------------------------------------------------------
+  # Quality Assurance (osps_qa_*)
+  # ---------------------------------------------------------------------------
+
+  - source_criterion: repo_public
+    # source_level: 0
+    # Source: "The project MUST have a version-controlled source repository
+    #   that is publicly readable and has a URL."
+    target_criterion: osps_qa_01_01
+    # Target: "While active, the project's source code repository MUST be
+    #   publicly readable at a static URL."
+    confidence_met: 3     # Publicly readable repository with URL directly satisfies this
+    confidence_unmet: 3   # Private or URL-less repository means this requirement is unmet
+    confidence_na: 0      # Metal N/A is unusual; "while active" baseline always applies
+
+  - source_criterion: repo_track
+    # source_level: 0
+    # Source: "The project's source repository MUST track what changes were
+    #   made, who made the changes, and when the changes were made."
+    target_criterion: osps_qa_01_02
+    # Target: "The version control system MUST contain a publicly readable
+    #   record of all changes made, who made the changes, and when the
+    #   changes were made."
+    confidence_met: 2     # Metal requires tracking capability; baseline also requires it be
+                          # publicly readable — if repo_public is also Met the inference
+                          # strengthens, but from this criterion alone it is moderate
+    confidence_unmet: 3   # No change tracking at all means the public record cannot exist
+    confidence_na: 0      # Applicability conditions differ; metal N/A is unusual here
+
+  - source_criterion: external_dependencies
+    # source_level: 1
+    # Source: (same as above)
+    target_criterion: osps_qa_02_01
+    # Target: "When the package management system supports it, the source
+    #   code repository MUST contain a dependency list that accounts for the
+    #   direct language dependencies."
+    confidence_met: 3     # Computer-processable dependency list directly satisfies this
+    confidence_unmet: 3   # No machine-readable list means this requirement is unmet
+    confidence_na: 3      # Both conditioned on package management system support;
+                          # N/A transfers at full strength
+
+  - source_criterion: automated_integration_testing
+    # source_level: 1
+    # Source: "An automated test suite MUST be applied on each check-in to a
+    #   shared repository for at least one branch. This test suite MUST
+    #   produce a report on test success or failure."
+    target_criterion: osps_qa_03_01
+    # Target: "When a commit is made to the primary branch, any automated
+    #   status checks for commits MUST pass or be manually bypassed."
+    confidence_met: 2     # Tests running on check-ins produce status reports, satisfying
+                          # the "status checks" concept; however, metal does not require
+                          # that the checks *gate* merges to the primary branch specifically
+    confidence_unmet: 3   # No automated testing on check-ins means no status checks exist
+    confidence_na: 0      # Applicability conditions differ significantly
+
+  - source_criterion: test_continuous_integration
+    # source_level: 2
+    # Source (L2 MUST): "The project MUST implement continuous integration,
+    #   where new or changed code is frequently integrated into a central code
+    #   repository and automated tests are run on the result."
+    #   NOTE: At passing (L0) this is SUGGESTED; at gold (L2) it is a MUST.
+    #   Both levels share the same field name. Use the L2 MUST confidence here.
+    target_criterion: osps_qa_03_01
+    # Target: (same as above)
+    confidence_met: 2     # CI with automated tests satisfies the "status checks" concept;
+                          # metal does not explicitly require pass/bypass enforcement
+    confidence_unmet: 2   # No CI means no automated status checks on check-ins
+    confidence_na: 0      # Applicability conditions differ
+
+  - source_criterion: test
+    # source_level: 0
+    # Source: "The project MUST use at least one automated test suite that is
+    #   publicly released as FLOSS. The project MUST clearly show or document
+    #   how to run the test suite(s) (e.g., via a CI script or via
+    #   documentation in files such as BUILD.md, README.md, or CONTRIBUTING.md)."
+    target_criterion: osps_qa_06_01
+    # Target: "Prior to a commit being accepted, the project's CI/CD pipelines
+    #   MUST run at least one automated test suite to ensure the changes meet
+    #   expectations."
+    confidence_met: 1     # Having a test suite is necessary but not sufficient; baseline
+                          # requires CI/CD *enforcement* (tests gate commit acceptance),
+                          # which metal does not require
+    confidence_unmet: 3   # No automated test suite at all means CI/CD test gates are
+                          # certainly absent
+    confidence_na: 0      # Applicability conditions differ significantly
+
+  - source_criterion: automated_integration_testing
+    # source_level: 1
+    # Source: (same as above)
+    target_criterion: osps_qa_06_01
+    # Target: (same as above)
+    confidence_met: 2     # Tests on each check-in closely matches "run before accepting";
+                          # metal does not explicitly require tests to *block* acceptance
+    confidence_unmet: 3   # No automated testing on check-ins means CI/CD gates are absent
+    confidence_na: 0      # Applicability conditions differ
+
+  - source_criterion: test_continuous_integration
+    # source_level: 2
+    # Source: (same as above — L2 MUST version)
+    target_criterion: osps_qa_06_01
+    # Target: (same as above)
+    confidence_met: 2     # CI tests on new code closely matches "run before accepting";
+                          # metal does not explicitly require tests to block acceptance
+    confidence_unmet: 2   # No CI means tests do not run before integration
+    confidence_na: 0      # Applicability conditions differ
+
+  - source_criterion: test
+    # source_level: 0
+    # Source: (same as above — note the metal text explicitly requires the
+    #   project to "clearly show or document how to run the test suite(s)")
+    target_criterion: osps_qa_06_02
+    # Target: "While active, project's documentation MUST clearly document
+    #   when and how tests are run."
+    confidence_met: 2     # Metal explicitly requires documenting how to run the test suite,
+                          # which directly overlaps; baseline adds "when" as well
+    confidence_unmet: 2   # If tests are not documented/shown, baseline documentation
+                          # requirement is also not met
+    confidence_na: 0      # Applicability conditions differ; metal N/A is unusual here
+
+  - source_criterion: test_policy_mandated
+    # source_level: 1
+    # Source: "The project MUST have a formal written policy that as major
+    #   new functionality is added, tests for the new functionality MUST be
+    #   added to an automated test suite."
+    target_criterion: osps_qa_06_03
+    # Target: "While active, the project's documentation MUST include a
+    #   policy that all major changes to the software produced by the project
+    #   should add or update tests of the functionality in an automated test
+    #   suite."
+    confidence_met: 3     # Formal written test policy for new functionality directly satisfies
+    confidence_unmet: 3   # No such policy means this requirement is unmet
+    confidence_na: 0      # Applicability conditions differ; metal N/A is unusual here
+
+  - source_criterion: tests_documented_added
+    # source_level: 1
+    # Source (L1 MUST): "The project MUST include, in its documented
+    #   instructions for change proposals, the policy that tests are to be
+    #   added for major new functionality."
+    #   NOTE: At passing (L0) this is SUGGESTED; at silver (L1) it is a MUST.
+    #   Both share the same field name. Use L1 MUST confidence here.
+    target_criterion: osps_qa_06_03
+    # Target: (same as above)
+    confidence_met: 3     # Documented test policy in contribution instructions directly satisfies
+    confidence_unmet: 2   # Not documenting the policy weakly implies no formal policy; however,
+                          # an informal policy could still exist (hence 2, not 3)
+    confidence_na: 0      # Applicability conditions differ
+
+  - source_criterion: two_person_review
+    # source_level: 2
+    # Source: "The project MUST have at least 50% of all proposed
+    #   modifications reviewed before release by a person other than the
+    #   author, to determine if it is a worthwhile modification and free of
+    #   known issues which would argue against its inclusion."
+    target_criterion: osps_qa_07_01
+    # Target: "When a commit is made to the primary branch, the project's
+    #   version control system MUST require at least one non-author human
+    #   approval of the changes before merging."
+    confidence_met: 1     # Metal requires 50% reviewed "before release" (not necessarily
+                          # enforced in VCS before every merge); baseline requires 100% of
+                          # commits to have VCS-enforced approval before merging — the
+                          # requirements differ significantly in both threshold and mechanism
+    confidence_unmet: 3   # If even 50% pre-release review is unmet, 100% VCS-enforced
+                          # approval before merge is certainly not in place
+    confidence_na: 0      # Applicability conditions differ; metal N/A is unusual here
+
+  # ---------------------------------------------------------------------------
+  # Security Analysis (osps_sa_*)
+  # ---------------------------------------------------------------------------
+
+  - source_criterion: documentation_architecture
+    # source_level: 1
+    # Source: "The project MUST include documentation of the architecture
+    #   (aka high-level design) of the software produced by the project.
+    #   If the project does not produce software, select N/A."
+    target_criterion: osps_sa_01_01
+    # Target: "When the project has made a release, the project documentation
+    #   MUST include design documentation demonstrating all actions and actors
+    #   within the system."
+    confidence_met: 2     # Architecture documentation covers design; however, baseline
+                          # specifically requires "all actions and actors" which is more
+                          # structured than a general architecture description
+    confidence_unmet: 2   # No architecture documentation means design requirements are unmet
+    confidence_na: 3      # Metal N/A (no software produced) directly implies no releases,
+                          # which is exactly the baseline N/A condition; transfers strongly
+
+  - source_criterion: documentation_interface
+    # source_level: 0
+    # Source: "The project MUST provide reference documentation that describes
+    #   the external interface (both input and output) of the software produced
+    #   by the project."
+    #   N/A if the project does not produce software.
+    target_criterion: osps_sa_02_01
+    # Target: "When the project has made a release, the project documentation
+    #   MUST include descriptions of all external software interfaces of the
+    #   released software assets."
+    confidence_met: 2     # External interface reference documentation directly addresses this;
+                          # baseline requires "all" interfaces for released assets specifically,
+                          # which is slightly more restrictive
+    confidence_unmet: 2   # No external interface docs means baseline is likely unmet
+    confidence_na: 2      # Metal N/A (no software produced) strongly implies no releases,
+                          # aligning well with baseline N/A; conditions differ slightly
+
+  - source_criterion: assurance_case
+    # source_level: 1
+    # Source: "The project MUST provide an assurance case that justifies why
+    #   its security requirements are met. The assurance case MUST include: a
+    #   description of the threat model, clear identification of trust
+    #   boundaries, an argument that secure design principles have been
+    #   applied, and an argument that common implementation security weaknesses
+    #   have been countered."
+    target_criterion: osps_sa_03_01
+    # Target: "When the project has made a release, the project MUST perform
+    #   a security assessment to understand the most likely and impactful
+    #   potential security problems that could occur within the software."
+    confidence_met: 3     # An assurance case with threat model and trust boundaries
+                          # constitutes a security assessment as required by baseline
+    confidence_unmet: 2   # No assurance case strongly suggests no security assessment;
+                          # however, an informal review might still satisfy baseline
+    confidence_na: 1      # Metal N/A is unusual; baseline N/A requires "no release made"
+                          # which is a different condition
+
+  - source_criterion: security_review
+    # source_level: 2
+    # Source: "The project MUST have performed a security review within the
+    #   last 5 years. This review MUST consider the security requirements and
+    #   security boundary."
+    target_criterion: osps_sa_03_01
+    # Target: (same as above)
+    confidence_met: 3     # A security review considering requirements and boundaries
+                          # directly constitutes a security assessment
+    confidence_unmet: 2   # No security review strongly suggests no security assessment;
+                          # an informal review might still satisfy baseline
+    confidence_na: 1      # Metal N/A is unusual at L2; baseline N/A is "no release made"
+
+  - source_criterion: assurance_case
+    # source_level: 1
+    # Source: (same as above — assurance case includes threat model)
+    target_criterion: osps_sa_03_02
+    # Target: "When the project has made a release, the project MUST perform
+    #   a threat modeling and attack surface analysis to understand and protect
+    #   against attacks on critical code paths, functions, and interactions
+    #   within the system."
+    confidence_met: 2     # Assurance case includes threat model and trust boundaries, which
+                          # partially satisfies threat modeling; "attack surface analysis"
+                          # as specifically described in baseline may not be fully covered
+    confidence_unmet: 2   # No assurance case strongly suggests no threat modeling
+    confidence_na: 1      # Same reasoning as osps_sa_03_01 above
+
+  - source_criterion: security_review
+    # source_level: 2
+    # Source: (same as above)
+    target_criterion: osps_sa_03_02
+    # Target: (same as above)
+    confidence_met: 2     # Security review considering boundaries covers attack surface
+                          # analysis partially; "threat modeling" per se may not be explicit
+    confidence_unmet: 2   # No security review strongly suggests no threat modeling
+    confidence_na: 1      # Same reasoning as above
+
+  # ---------------------------------------------------------------------------
+  # Vulnerability Management (osps_vm_*)
+  # ---------------------------------------------------------------------------
+
+  - source_criterion: vulnerability_report_process
+    # source_level: 0
+    # Source: "The project MUST publish the process for reporting
+    #   vulnerabilities on the project site."
+    target_criterion: osps_vm_01_01
+    # Target: "While active, the project documentation MUST include a policy
+    #   for coordinated vulnerability disclosure (CVD), with a clear timeframe
+    #   for response."
+    confidence_met: 2     # A published reporting process is a component of CVD; however,
+                          # a full CVD policy with an explicit response timeframe is more
+                          # specific than merely publishing the reporting process
+    confidence_unmet: 1   # No reporting process weakly suggests no CVD policy either
+    confidence_na: 0      # Applicability conditions differ; metal N/A is unusual here
+
+  - source_criterion: vulnerability_report_response
+    # source_level: 0
+    # Source: "The project's initial response time for any vulnerability report
+    #   received in the last 6 months MUST be less than or equal to 14 days."
+    #   N/A if no vulnerability reports have been received in the last 6 months.
+    target_criterion: osps_vm_01_01
+    # Target: (same as above)
+    confidence_met: 2     # Responding within 14 days demonstrates a response practice, which
+                          # is part of CVD; but a *documented policy with timeframe* is a
+                          # separate documentation requirement
+    confidence_unmet: 1   # Slow response does not directly imply no CVD policy
+    confidence_na: 0      # Metal N/A = no reports received; baseline requires the policy
+                          # regardless of whether reports have been received; no transfer
+
+  - source_criterion: vulnerability_response_process
+    # source_level: 1
+    # Source: "The project MUST have a documented process for responding to
+    #   vulnerability reports."
+    target_criterion: osps_vm_01_01
+    # Target: (same as above)
+    confidence_met: 2     # A documented response process is essentially a CVD policy; baseline
+                          # additionally requires an explicit timeframe, which may be implicit
+    confidence_unmet: 2   # No documented response process means no CVD policy
+    confidence_na: 0      # Metal N/A is unusual; applicability conditions differ
+
+  - source_criterion: vulnerability_report_process
+    # source_level: 0
+    # Source: (same as above — process for reporting vulnerabilities)
+    target_criterion: osps_vm_02_01
+    # Target: "While active, the project documentation MUST contain security
+    #   contacts."
+    confidence_met: 2     # A published vulnerability reporting process implies security
+                          # contacts exist, but they may not be named explicitly
+    confidence_unmet: 1   # No reporting process weakly suggests no security contacts either
+    confidence_na: 0      # Applicability conditions differ; metal N/A is unusual here
+
+  - source_criterion: vulnerability_report_private
+    # source_level: 0
+    # Source: "If private vulnerability reports are supported, the project
+    #   MUST include how to send the information in a way that is kept
+    #   private."
+    #   N/A if vulnerability reports are always public (never private).
+    target_criterion: osps_vm_03_01
+    # Target: "While active, the project documentation MUST provide a means
+    #   for private vulnerability reporting directly to the security contacts
+    #   within the project."
+    confidence_met: 3     # Documented private reporting channel directly satisfies this
+    confidence_unmet: 2   # Private reporting is claimed but undocumented; the mechanism
+                          # may still exist (hence 2, not 3); baseline requires documentation
+    confidence_na: [2, "Unmet"]
+                          # Cross-status: metal N/A = "reports are always public, so private
+                          # reporting is absent"; baseline *requires* a private reporting
+                          # mechanism, so the correct inference is N/A → Unmet, not N/A → N/A
+
+  - source_criterion: release_notes_vulns
+    # source_level: 0
+    # Source: "The release notes MUST identify every publicly known run-time
+    #   vulnerability fixed in this release that already had a CVE assignment
+    #   or similar when the release was created."
+    #   N/A if no release notes, no publicly known vulnerabilities, or users
+    #   typically cannot practically update the software themselves.
+    target_criterion: osps_vm_04_01
+    # Target: "While active, the project documentation MUST publicly publish
+    #   data about discovered vulnerabilities."
+    confidence_met: 2     # Identifying CVE fixes in release notes is one way to publish
+                          # vulnerability data; baseline is broader and includes all
+                          # discovered vulnerabilities, not just those fixed in a release
+    confidence_unmet: 1   # Not identifying vulns in releases does not mean vulnerability
+                          # data is unpublished — other channels (CVEs, advisories) could
+                          # still satisfy baseline
+    confidence_na: 0      # Metal N/A has multiple distinct causes (no releases, no known
+                          # vulns, non-updatable software) that do not cleanly map to
+                          # baseline N/A; applicability conditions are too different
+
+  - source_criterion: dependency_monitoring
+    # source_level: 1
+    # Source: "Projects MUST monitor or periodically check their external
+    #   dependencies (including convenience copies) to detect known
+    #   vulnerabilities, and fix exploitable vulnerabilities or verify them
+    #   as unexploitable."
+    target_criterion: osps_vm_05_01
+    # Target: "While active, the project documentation MUST include a policy
+    #   that defines a threshold for remediation of SCA findings related to
+    #   vulnerabilities and licenses."
+    confidence_met: 2     # Monitoring and fixing implies a de facto remediation threshold;
+                          # a formally *documented* policy is a separate requirement
+    confidence_unmet: 1   # Not monitoring does not directly imply no policy documentation
+    confidence_na: 0      # Applicability conditions differ; metal N/A is unusual here
+
+  - source_criterion: dependency_monitoring
+    # source_level: 1
+    # Source: (same as above)
+    target_criterion: osps_vm_05_02
+    # Target: "While active, the project documentation MUST include a policy
+    #   to address SCA violations prior to any release."
+    confidence_met: 2     # Fixing exploitable vulnerabilities implies addressing them before
+                          # release; a formally documented *policy* is a separate requirement
+    confidence_unmet: 1   # Not monitoring does not directly imply no policy document
+    confidence_na: 0      # Applicability conditions differ
+
+  - source_criterion: dependency_monitoring
+    # source_level: 1
+    # Source: (same as above)
+    target_criterion: osps_vm_05_03
+    # Target: "While active, all changes to the project's codebase MUST be
+    #   automatically evaluated against a documented policy for malicious
+    #   dependencies and known vulnerabilities in dependencies, then blocked
+    #   in the event of violations, except when declared and suppressed as
+    #   non-exploitable."
+    confidence_met: 1     # Periodic monitoring is necessary but far weaker than automatic
+                          # per-change evaluation with blocking; metal does not require
+                          # per-change automation or merge blocking
+    confidence_unmet: 2   # Not even monitoring periodically means automatic per-change
+                          # evaluation is certainly also absent
+    confidence_na: 0      # Applicability conditions differ
+
+  - source_criterion: static_analysis
+    # source_level: 0
+    # Source: "At least one static code analysis tool (beyond compiler
+    #   warnings) MUST be applied to any proposed major production release of
+    #   the software before its release, if there is at least one FLOSS tool
+    #   that implements this criterion in the selected language."
+    #   N/A if no FLOSS static analysis tools exist for the language used.
+    target_criterion: osps_vm_06_01
+    # Target: "While active, the project documentation MUST include a policy
+    #   that defines a threshold for remediation of SAST findings."
+    confidence_met: 1     # Running SAST demonstrates awareness of findings but a formally
+                          # *documented remediation threshold policy* is a separate requirement
+    confidence_unmet: 1   # Not running SAST weakly suggests no remediation policy either
+    confidence_na: 1      # Metal N/A (no FLOSS SAST for this language) plausibly suggests
+                          # the project cannot meaningfully define a SAST threshold; weak signal
+
+  - source_criterion: static_analysis_fixed
+    # source_level: 0
+    # Source: "All medium and higher severity exploitable vulnerabilities
+    #   discovered with static code analysis MUST be fixed in a timely way
+    #   after they are confirmed."
+    target_criterion: osps_vm_06_01
+    # Target: (same as above)
+    confidence_met: 2     # Fixing medium+ severity findings implies a de facto threshold
+                          # policy (medium severity = the threshold); a formally documented
+                          # policy is a separate but related requirement
+    confidence_unmet: 1   # Not fixing findings does not directly imply no policy document
+    confidence_na: 0      # Metal N/A is unusual; applicability conditions differ
+
+  - source_criterion: static_analysis
+    # source_level: 0
+    # Source: (same as above)
+    target_criterion: osps_vm_06_02
+    # Target: "While active, all changes to the project's codebase MUST be
+    #   automatically evaluated against a documented policy for security
+    #   weaknesses and blocked in the event of violations except when
+    #   declared and suppressed as non-exploitable."
+    confidence_met: 1     # Running SAST on major releases is much weaker than automatic
+                          # evaluation of all changes with blocking; metal does not require
+                          # per-change automation or merge blocking
+    confidence_unmet: 2   # Not running any SAST at all means automatic per-change evaluation
+                          # is certainly also absent
+    confidence_na: 1      # Metal N/A (no FLOSS SAST for this language) plausibly suggests
+                          # that automated per-change SAST evaluation is also not applicable

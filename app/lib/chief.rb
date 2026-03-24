@@ -15,9 +15,10 @@
 
 # rubocop:disable Metrics/ClassLength
 class Chief
-  # Confidence level (1..5) where automation result will *override*
-  # the status value provided by humans.
-  # If the confidence is lower than this, we'll only override status '?'.
+  # Confidence scale: integers in 1..MAX_CONFIDENCE.
+  # At CONFIDENCE_OVERRIDE or above, automation overrides human-entered values.
+  # Below CONFIDENCE_OVERRIDE, automation only fills blank/unknown fields.
+  MAX_CONFIDENCE = 5
   CONFIDENCE_OVERRIDE = 4
 
   # TODO: Identify classes automatically and do topological sort.
@@ -161,10 +162,11 @@ class Chief
   # Determine which detectives are needed to produce the requested outputs.
   # Uses backward search from needed_outputs through detective dependency graph.
   # @param needed_outputs [Set] Set of field symbols we want to produce
+  # @param pool [Array<Class>] Detective classes to search (default ALL_DETECTIVES)
   # @return [Array<Class>] Array of detective classes needed
   # rubocop:disable Metrics/MethodLength
-  def filter_needed_detectives(needed_outputs)
-    return ALL_DETECTIVES if needed_outputs.blank?
+  def filter_needed_detectives(needed_outputs, pool = ALL_DETECTIVES)
+    return pool if needed_outputs.blank?
 
     required_detectives = Set.new
     required_outputs = needed_outputs.dup
@@ -173,7 +175,7 @@ class Chief
     # Backward search: keep adding detectives whose outputs we need
     while changed
       changed = false
-      ALL_DETECTIVES.each do |detective_class|
+      pool.each do |detective_class|
         next if required_detectives.include?(detective_class)
 
         # If this detective provides any output we need, include it
@@ -277,7 +279,7 @@ class Chief
   # @param only_consider_overrides [Boolean] Whether to only run detectives that
   #   can force overrides (confidence >= CONFIDENCE_OVERRIDE). Default false.
   #   Set to true for "save and exit" to skip unnecessary work.
-  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def propose_changes(needed_fields: nil, changed_fields: nil, only_consider_overrides: false)
     with_project_locale do
       current_proposal = {} # Current best changeset.
@@ -285,8 +287,21 @@ class Chief
       # Determine what outputs we need
       needed = needed_outputs(needed_fields, changed_fields)
 
+      # Partition MappingDetective subclasses out of the normal pool and select
+      # exactly one based on direction (metal→baseline or baseline→metal).
+      # This prevents a dependency cycle in the backward search: if both were
+      # in the pool, each one's INPUTS would pull the other in transitively.
+      pool, mapping_detective_class = partition_mapping_detective(needed)
+
+      # If a mapping detective was selected, add its INPUTS to the needed set
+      # so the backward search in filter_needed_detectives pulls in any
+      # detectives that produce those source fields (e.g. SubdirFileContentsDetective
+      # produces documentation_basics_status, which would otherwise be missed on
+      # a baseline-only page since it outputs no baseline fields directly).
+      needed.merge(mapping_detective_class::INPUTS) if mapping_detective_class
+
       # Filter to only needed detectives (subset varies per request)
-      detectives_to_run = filter_needed_detectives(needed)
+      detectives_to_run = filter_needed_detectives(needed, pool)
 
       # Sort that specific subset in dependency order
       detectives_to_run = topological_sort_detectives(detectives_to_run)
@@ -296,6 +311,16 @@ class Chief
         detective = detective_class.new
         detective.octokit_client_factory = @client_factory
         current_proposal = propose_one_change(detective, current_proposal)
+      end
+
+      # Run the selected mapping detective after the normal pipeline so it sees
+      # all accumulated proposals (auto-detected values from prior detectives).
+      # Skip on save-exit (only_consider_overrides) since mapping confidence is
+      # always <= 3 and can never force an override.
+      if !only_consider_overrides && mapping_detective_class
+        mapping_detective = mapping_detective_class.new
+        mapping_detective.octokit_client_factory = @client_factory
+        current_proposal = propose_one_change(mapping_detective, current_proposal)
       end
 
       # Run RepoJsonDetective last as a final overlay of project
@@ -312,7 +337,7 @@ class Chief
       current_proposal
     end
   end
-  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   # Given project data, return it with the proposed changeset applied.
   # Note: This should probably be class-level
@@ -361,6 +386,32 @@ class Chief
   end
 
   private
+
+  # Partition MappingDetective subclasses out of the normal detective pool
+  # and select exactly one based on the direction needed.
+  # This prevents circularity: if both mapping detectives were in the pool,
+  # each one's INPUTS would pull the other in transitively during the
+  # backward search in filter_needed_detectives.
+  # @param needed [Set<Symbol>] output fields needed (nil means all)
+  # @return [Array(Array<Class>, Class, nil)] [pool, selected_mapping_class]
+  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/MethodLength
+  def partition_mapping_detective(needed)
+    pool = []
+    candidates = []
+    ALL_DETECTIVES.each do |d|
+      (d < MappingDetective && d::OUTPUTS.any? ? candidates : pool) << d
+    end
+    return [pool, nil] if candidates.empty?
+
+    filling_baseline = needed.nil? ||
+                       needed.any? { |f| f.to_s.start_with?('osps_') }
+    selected =
+      candidates.find do |d|
+        d::OUTPUTS.any? { |f| f.to_s.start_with?('osps_') } == filling_baseline
+      end
+    [pool, selected]
+  end
+  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/MethodLength
 
   # Check if repo_files is available (HowAccessRepoFilesDetective ran)
   def repo_files_available?

@@ -149,4 +149,23 @@ class MappingDetectiveTest < ActiveSupport::TestCase
 
     assert_equal({}, results)
   end
+
+  test 'explanation is bracketed source name when justification not loaded (partial AR select)' do
+    # Simulates a Project loaded via a partial SELECT (e.g., set_project_for_section
+    # only loads the current section's columns). The project responds to
+    # has_attribute? but returns false for the source justification field,
+    # mimicking AR behaviour when a column exists in the schema but was
+    # not included in the SELECT clause.
+    stub_project = Object.new
+    stub_project.define_singleton_method(:[]) { |_key| raise ActiveModel::MissingAttributeError }
+    stub_project.define_singleton_method(:attribute_present?) { |_key| false }
+    stub_project.define_singleton_method(:has_attribute?) { |_key| false }
+    evidence = Object.new
+    evidence.define_singleton_method(:project) { stub_project }
+
+    results = MetalToBaselineDetective.new.analyze(evidence, SOURCE => CriterionStatus::MET)
+
+    assert results.key?(TARGET)
+    assert_equal '[require_2FA]', results[TARGET][:explanation]
+  end
 end

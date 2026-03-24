@@ -1607,6 +1607,16 @@ class ProjectsController < ApplicationController
   def run_first_edit_automation_if_needed
     return if level_already_saved?
 
+    # Reload with ALL columns before running automation.
+    # set_project_for_section loads only the current section's fields for
+    # performance, but mapping detectives read cross-section INPUTS —
+    # e.g., BaselineToMetalDetective needs osps_* status values when
+    # proposing metal answers on a passing-level edit page, and
+    # MetalToBaselineDetective needs metal status values when proposing
+    # baseline answers on a baseline-level edit page.
+    # This one-time reload only runs on the first edit of each section.
+    @project = Project.find(@project.id)
+
     # Capture original values before automation
     original_values = capture_original_values
 

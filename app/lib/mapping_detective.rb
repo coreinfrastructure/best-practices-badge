@@ -131,11 +131,23 @@ class MappingDetective < Detective
   # Carries over the source criterion's justification text (if any),
   # appending the source criterion name in brackets as attribution.
   #
+  # Uses has_attribute? to guard against source justification fields that
+  # were not included in a partial SELECT query (e.g., when editing a
+  # metal-level page, baseline justification columns are not loaded).
+  # Test stubs that lack has_attribute? use [] directly (returns nil
+  # for missing keys, which .to_s.strip safely converts to '').
+  #
   # @param project [Project] the ActiveRecord project
   # @param source_criterion [String] source criterion name
   # @return [String] explanation text
   def build_explanation(project, source_criterion)
-    existing = project[:"#{source_criterion}_justification"].to_s.strip
+    justification_key = :"#{source_criterion}_justification"
+    existing =
+      if project.respond_to?(:has_attribute?) && !project.has_attribute?(justification_key)
+        ''
+      else
+        project[justification_key].to_s.strip
+      end
     existing.empty? ? "[#{source_criterion}]" : "#{existing} [#{source_criterion}]"
   end
 end

@@ -6,6 +6,7 @@ edit URL. When a user (or tool) visits such a URL, and the user is
 authorized to make changes to the project entry, the edit form
 displays the proposed values with visual highlighting so the
 (authorized) user can review and accept or modify them before saving.
+The user can also simply choose to *not* save them, their choice.
 
 This is not the *only* way an automated tool can retrieve or edit project
 badge entry data; we also provide an API to read or change the project
@@ -14,7 +15,45 @@ described here provides a user-friendly way for applications to
 propose changes where the authorized human has a chance to review and
 approve those changes.
 
-## URL Format
+## TL;DR
+
+You can provide proposed values using this URL format:
+(line breaks added for clarity, don't include them in the real URL):
+
+```text
+https://www.bestpractices.dev/projects?as=edit&url=ENCODED_URL&
+KEY=VALUE&KEY=VALUE&...
+```
+
+The URL is the project's repository or home page URL.
+The KEY is the criterion (append `_status` for its status and
+`_justification` for its justification), and the VALUE is what its value
+should be (status can be '?', 'Unmet', 'N/A', or 'Met').
+
+Here's an example which proposes setting the status and justification
+for two baseline criteria:
+
+```text
+https://www.bestpractices.dev/projects?as=edit&
+url=https%3A%2F%2Fgithub.com%2Fcurl%2Fcurl&
+osps_ac_01_01_status=Met&
+osps_ac_01_01_justification=GitHub+org+enforces+2FA&
+osps_ac_03_01_status=Met&
+osps_ac_03_01_justification=Branch+protection+enabled+on+main
+```
+
+When a user clicks on this, the system will switch to the user's prefered
+locale and let the user select the section (format) to use.
+On selection, relevant changes are highlighted and shown with a
+"robot" symbol, which the user can accept, modify, or ignore.
+
+There are many more options. If you know the project number, you can use
+that directly. If you know the form you want to redirect to, you
+can directly express that using `section=`. Below are some highlights.
+For brevity, from now on we'll omit the prefix
+`https://www.bestpractices.dev`.
+
+## URL Format when Project ID is known
 
 ```text
 (/:locale)/projects/:id/:section/edit?KEY=VALUE&KEY=VALUE&...
@@ -314,33 +353,27 @@ External tools that want to propose changes should:
 ## Looking Up Projects by URL (`as=edit`)
 
 If an external tool knows a project's repository URL or home page URL
-but not its numeric ID, it can use the `as=edit` query on the
-projects index to look up and redirect to the edit page:
+but not its numeric ID, it can construct an automation proposal URL
+without knowing the numeric ID:
 
 ```text
-/en/projects?as=edit&url=ENCODED_URL
-/en/projects?as=edit&section=SECTION&url=ENCODED_URL
+/en/projects?as=edit&url=ENCODED_URL&KEY=VALUE&KEY=VALUE&...
 ```
 
-The `section` parameter selects the badge level to edit
-(e.g., `passing`, `silver`, `baseline-1`); it defaults to `passing`.
-Any additional query parameters (automation proposals) are forwarded
-to the edit page with the consumed parameters (`as`, `url`, `section`,
-`pq`, `q`) stripped.
+The application looks up the project by URL and redirects to its edit
+page with the automation proposal parameters forwarded.
+If the section is omitted (the common case for tools), the user lands
+on a section-chooser page and picks which section to review the
+proposals in.
 
-For example, to propose license detection results for a project
-known only by its repository URL:
+For example:
 
 ```text
 /en/projects?as=edit&floss_license_status=Met&url=https%3A%2F%2Fgithub.com%2FORG%2FPROJECT
 ```
 
-If the URL matches exactly one project, the user is redirected
-(HTTP 302) to its edit page. If there are zero or multiple matches,
-the normal project list is shown instead.
-
-See [api.md](api.md) for full details on the `as=edit` query
-parameter and the redirect behavior.
+See [api.md](api.md) for full details on the `as=edit` lookup,
+including the `section` parameter and redirect behavior.
 
 ## Related Documentation
 

@@ -530,6 +530,13 @@ en:
       sign_in_first: Please sign in to add a project!
       original_repos: "=> Original GitHub Repos"
       fork_repos: "=> Forked GitHub Repos"
+    choose_edit:
+      title: Choose a Section to Edit
+      instructions: Select a section to edit.
+      proposals_note: Any proposed changes will be applied to the selected section.
+    choose_show:
+      title: Choose a Section to View
+      instructions: Select a section to view.
     delete_form:
       info_html: >-
         <b>Warning</b> - you are about to <b>permanently delete</b>

@@ -204,41 +204,33 @@ might request.
     [automation-proposals.md](automation-proposals.md) for details
     on the automation proposals mechanism).
 
-    If a single project matches, the user is redirected (HTTP 302) to:
+    If a single project matches, the redirect target depends on `section`:
 
-    ```text
-    /projects/:id/:section/edit?PROPOSAL_PARAMS
-    ```
+    - If `section` is omitted or `choose`, the user is sent to the
+      section-chooser page so they can pick which section to edit.
+      The redirect target is `/projects/:id/choose/edit?PROPOSAL_PARAMS`.
+    - If `section` names a specific badge level (e.g., `passing`, `silver`,
+      `gold`, `baseline-1`), the user is sent directly to that section.
+      The redirect target is `/projects/:id/:section/edit?PROPOSAL_PARAMS`.
 
-    Where `:section` is taken from the `section` query parameter
-    (e.g., `passing`, `silver`, `gold`, `baseline-1`),
-    defaulting to `passing` if not provided or invalid.
-    Only the automation-proposal query parameters are forwarded;
+    Only automation-proposal query parameters are forwarded;
     the consumed parameters (`as`, `url`, `section`, `pq`, `q`) are
     stripped from the redirect URL.
-
-    The redirect URL intentionally omits the locale prefix, so the
-    application will determine the user's preferred locale and
-    redirect accordingly.
-    If the user is not logged in, they will be prompted to log in
-    (the original URL with all proposal parameters is preserved).
-    If the user is logged in and authorized to edit, they will see
-    the edit form with the proposed values highlighted for review.
+    The redirect URL intentionally omits the locale prefix so the
+    application selects the user's preferred locale.
+    If the user is not logged in, they are prompted to log in and then
+    returned to the original URL with all proposal parameters intact.
 
     If no project matches, or if multiple projects match, the normal
-    project list is shown instead (same behavior as `as=entry`).
+    project list is shown instead.
 
-    This returns status 404 (not found) for zero matches
-    only when using `as=badge`; with `as=edit` zero or multiple
-    matches simply fall back to the project list.
-
-    Example proposing that a project's `floss_license` criterion is Met:
+    Example letting the user choose which section to edit:
 
     ```text
     /en/projects?as=edit&floss_license_status=Met&url=https%3A%2F%2Fgithub.com%2FORG%2FPROJECT
     ```
 
-    Example proposing changes to a specific section (silver):
+    Example sending the user directly to a specific section (silver):
 
     ```text
     /en/projects?as=edit&section=silver&url=https%3A%2F%2Fgithub.com%2FORG%2FPROJECT
@@ -351,6 +343,9 @@ list of projects in the requested format. The "as" parameter changes this:
 *   as=entry : Display the project badge *entry* for the resulting project.
     If no or multiple projects match, the normal project display
     is shown instead.
+    If `section=choose` is also provided, the user is redirected to the
+    section-chooser page (`/projects/:id/choose`) so they can pick which
+    section to view.
 
 See
 [app/controllers/projects\_controller.rb](https://github.com/coreinfrastructure/best-practices-badge/blob/main/app/controllers/projects_controller.rb)

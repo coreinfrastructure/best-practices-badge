@@ -87,9 +87,10 @@ class ProjectsController < ApplicationController
   before_action :set_project_all_values, only: %i[update show_json]
   before_action :set_criteria_level, only: %i[show edit update]
   before_action :set_project_for_section, only: %i[show edit]
-  before_action :set_project_for_limited_fields, only: %i[delete_form destroy]
+  before_action :set_project_for_limited_fields,
+                only: %i[delete_form destroy choose_edit choose_show]
   before_action :require_logged_in, only: :create
-  before_action :can_edit_else_redirect, only: %i[edit update]
+  before_action :can_edit_else_redirect, only: %i[edit update choose_edit]
   before_action :can_control_else_redirect, only: %i[destroy delete_form]
   before_action :require_adequate_deletion_rationale, only: :destroy
   before_action :cleanup_input_params, only: %i[create update]
@@ -324,9 +325,14 @@ class ProjectsController < ApplicationController
       elsif params[:as] == 'entry' # Redirect to entry view
         ids = @projects.limit(2).ids
         if ids.size == 1
-          suffix = request&.format&.symbol == :json ? '.json' : ''
-          redirect_to "/#{locale}/projects/#{ids.first}#{suffix}",
-                      status: :moved_permanently
+          path =
+            if params[:section] == 'choose'
+              "/#{locale}/projects/#{ids.first}/choose"
+            else
+              suffix = request&.format&.symbol == :json ? '.json' : ''
+              "/#{locale}/projects/#{ids.first}#{suffix}"
+            end
+          redirect_to path, status: :moved_permanently
         else
           # If there's not one entry, show the project index instead.
           show_normal_index
@@ -375,6 +381,8 @@ class ProjectsController < ApplicationController
   # Build the redirect URL for as=edit, pointing to the project edit page.
   # Validates the section parameter and strips consumed query parameters,
   # forwarding only the automation-proposal parameters.
+  # When section is blank or 'choose', redirects to the section-chooser page
+  # so the user can pick which section to edit.
   # @param project_id [Integer] The project ID to edit
   # @return [String] The edit URL with proposal query string
   def redir_to_edit_url(project_id)
@@ -386,12 +394,14 @@ class ProjectsController < ApplicationController
   end
 
   # Validate the section parameter for as=edit redirect.
-  # @return [String] A valid primary section name, or the default
+  # Returns 'choose' when section is blank or explicitly 'choose',
+  # so the user can select which section to edit.
+  # @return [String] A valid primary section name, 'choose', or the default
   def validated_edit_section
     section = params[:section]
-    return Sections::DEFAULT_SECTION if section.blank?
+    return 'choose' if section.blank? || section == 'choose'
 
-    if Sections::PRIMARY_SECTION_REGEX.match?(section)
+    if Sections::ALL_CANONICAL_NAMES.include?(section)
       section
     else
       Sections::DEFAULT_SECTION
@@ -582,6 +592,26 @@ class ProjectsController < ApplicationController
     session.delete(:user_token) if params[:clear_token]
     @project = Project.new
   end
+
+  # Display section chooser for editing.
+  # Shows the project name and a list of hyperlinked sections to edit.
+  # Any query parameters (automation proposals) are forwarded to the
+  # section-specific edit page when the user picks a section.
+  # The section= parameter is stripped so it cannot cause redirect cycles
+  # back to the chooser (section must appear in the path, not in query params).
+  # Supports `GET /projects/:id/choose/edit`.
+  # @return [void]
+  def choose_edit
+    @proposal_query_string = request.query_parameters
+                                    .except(*AS_EDIT_CONSUMED_PARAMS)
+                                    .to_query
+  end
+
+  # Display section chooser for read-only viewing.
+  # Shows the project name and a list of hyperlinked sections to view.
+  # Supports `GET /projects/:id/choose`.
+  # @return [void]
+  def choose_show; end
 
   # Display project edit form.
   # Supports `GET /projects/:id/edit(.:format)`.
@@ -1037,7 +1067,8 @@ class ProjectsController < ApplicationController
     end
 
     flash[:danger] = t('projects.edit.not_authorized')
-    redirect_to project_section_path(@project, @criteria_level)
+    redirect_to project_section_path(@project,
+                                     @criteria_level || Sections::DEFAULT_SECTION)
   end
 
   # Verifies that the current user can control the project or redirects to root.

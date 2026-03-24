@@ -156,6 +156,18 @@ Rails.application.routes.draw do
         constraints: CONSTRAINTS_ID,
         as: :delete_form_project
 
+    # Choose section to edit (let user pick which section to edit)
+    # GET (/:locale)/projects/:id/choose/edit
+    get 'projects/:id/choose/edit' => 'projects#choose_edit',
+        constraints: CONSTRAINTS_ID,
+        as: :choose_edit_project
+
+    # Choose section to view (let user pick which section to view)
+    # GET (/:locale)/projects/:id/choose
+    get 'projects/:id/choose' => 'projects#choose_show',
+        constraints: CONSTRAINTS_ID,
+        as: :choose_project_show
+
     # Edit with section (before show to avoid conflicts)
     # GET (/:locale)/projects/:id/:section/edit
     # Use PRIMARY_SECTION_REGEX to reject obsolete sections in edit URLs

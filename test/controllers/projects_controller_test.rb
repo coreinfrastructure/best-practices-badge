@@ -1561,18 +1561,35 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to "/en/projects/#{expected_id}"
   end
 
+  test 'as=entry with section=choose redirects to choose show page' do
+    expected_id = projects(:perfect).id
+    get '/en/projects?as=entry&' \
+        'section=choose&' \
+        'url=https%3A%2F%2Fgithub.com%2Fbestpracticestest%2Ftest-repo-shared'
+    assert_redirected_to "/en/projects/#{expected_id}/choose"
+  end
+
   test 'as=entry quietly returns project list if >1 match' do
     get '/en/projects?as=entry&pq=https%3A%2F%2F'
     assert_response :success
     assert_includes @response.body, 'Projects'
   end
 
-  test 'as=edit redirects to edit page (single result, default section)' do
+  test 'as=edit redirects to choose/edit when no section given' do
     expected_id = projects(:perfect).id
     get '/en/projects?as=edit&' \
         'url=https%3A%2F%2Fgithub.com%2Fbestpracticestest%2Ftest-repo-shared'
     assert_response :found # 302
-    assert_redirected_to "/projects/#{expected_id}/passing/edit"
+    assert_redirected_to "/projects/#{expected_id}/choose/edit"
+  end
+
+  test 'as=edit redirects to choose/edit when section=choose' do
+    expected_id = projects(:perfect).id
+    get '/en/projects?as=edit&' \
+        'section=choose&' \
+        'url=https%3A%2F%2Fgithub.com%2Fbestpracticestest%2Ftest-repo-shared'
+    assert_response :found # 302
+    assert_redirected_to "/projects/#{expected_id}/choose/edit"
   end
 
   test 'as=edit redirects to edit page with explicit section' do
@@ -1594,7 +1611,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to "/projects/#{expected_id}/passing/edit"
   end
 
-  test 'as=edit forwards proposal params and strips consumed params' do
+  test 'as=edit forwards proposal params to choose/edit when no section given' do
     expected_id = projects(:perfect).id
     # Params in alphabetical order, %20 for spaces (not +) to match
     # Addressable::URI normalization and avoid a reorder redirect.
@@ -1605,12 +1622,76 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
         'url=https%3A%2F%2Fgithub.com%2Fbestpracticestest%2Ftest-repo-shared'
     assert_response :found
     location = response.headers['Location']
-    assert_includes location,
-                    "/projects/#{expected_id}/passing/edit?"
+    assert_includes location, "/projects/#{expected_id}/choose/edit?"
     assert_includes location, 'floss_license_status=Met'
     assert_includes location, 'floss_license_justification=MIT'
     assert_not_includes location, 'as=edit'
     assert_not_includes location, 'url='
+  end
+
+  test 'as=edit forwards proposal params to section/edit when section given' do
+    expected_id = projects(:perfect).id
+    # Params in alphabetical order, %20 for spaces (not +) to match
+    # Addressable::URI normalization and avoid a reorder redirect.
+    get '/en/projects?' \
+        'as=edit&' \
+        'floss_license_justification=MIT%20license&' \
+        'floss_license_status=Met&' \
+        'section=passing&' \
+        'url=https%3A%2F%2Fgithub.com%2Fbestpracticestest%2Ftest-repo-shared'
+    assert_response :found
+    location = response.headers['Location']
+    assert_includes location, "/projects/#{expected_id}/passing/edit?"
+    assert_includes location, 'floss_license_status=Met'
+    assert_includes location, 'floss_license_justification=MIT'
+    assert_not_includes location, 'as=edit'
+    assert_not_includes location, 'url='
+  end
+
+  test 'choose_edit shows section list and forwards proposal params' do
+    project = projects(:perfect)
+    log_in_as(project.user)
+    get "/en/projects/#{project.id}/choose/edit?" \
+        'floss_license_status=Met&floss_license_justification=MIT+license'
+    assert_response :success
+    body = response.body
+    # Each section edit link should include the proposal params
+    assert_includes body, '/passing/edit?'
+    assert_includes body, 'floss_license_status=Met'
+    # section= must not appear in the edit links' query strings
+    assert_not_includes body, '/edit?section='
+  end
+
+  test 'choose_edit strips section= from forwarded edit link params' do
+    project = projects(:perfect)
+    log_in_as(project.user)
+    # If someone visits choose/edit with section= in query string,
+    # it must be stripped from the section edit links to prevent cycles.
+    # (section appears in the URL path, not the query string)
+    get "/en/projects/#{project.id}/choose/edit?section=choose&floss_license_status=Met"
+    assert_response :success
+    body = response.body
+    # The hreflang links in <head> legitimately echo the current URL (pointing
+    # to choose/edit with section=choose), which is fine - no cycle.
+    # What matters: the section-specific edit links must NOT carry section=.
+    Sections::ALL_CANONICAL_NAMES.each do |section_name|
+      assert_not_includes body, "/#{section_name}/edit?section="
+    end
+  end
+
+  test 'choose_edit redirects unauthenticated user to login' do
+    project = projects(:perfect)
+    get "/en/projects/#{project.id}/choose/edit"
+    assert_response :found
+    assert_redirected_to '/en/login'
+  end
+
+  test 'choose_show shows section list for read-only viewing' do
+    project = projects(:perfect)
+    get "/en/projects/#{project.id}/choose"
+    assert_response :success
+    # Should show links to section show pages (not edit)
+    assert_includes response.body, "/projects/#{project.id}/passing"
   end
 
   test 'as=edit quietly returns project list if >1 match' do

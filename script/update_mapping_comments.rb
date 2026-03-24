@@ -21,6 +21,7 @@
 # This script is standalone Ruby (no Rails required).
 # rubocop:disable Rails/Blank, Rails/Present
 
+require 'cgi'
 require 'yaml'
 
 RAILS_ROOT = File.expand_path('..', __dir__)
@@ -33,19 +34,21 @@ MAPPING_FILES = [
 # Target width for comment lines (characters)
 MAX_LINE_WIDTH = 79
 
-# Remove HTML tags and common entities; collapse whitespace.
+# Remove HTML tags and entities from criterion text; collapse whitespace.
+#
+# SECURITY NOTE: This method processes ONLY trusted, developer-controlled
+# content read from config/locales/en.yml.  The output is written into YAML
+# comment blocks — it is never rendered as HTML, inserted into a database, or
+# returned in an HTTP response.  This is NOT a security boundary; there is no
+# untrusted input and no injection risk.
+#
+# CGI.unescapeHTML decodes all HTML entities in one call (far more complete
+# than a hand-rolled list), and decoding happens before tag-stripping so any
+# entity-encoded tags (e.g. &lt;b&gt;) are also removed.
 def strip_html(text)
   return '' if text.nil? || text.empty?
 
-  text
-    .gsub(/<[^>]+>/, '')
-    .gsub('&amp;', '&')
-    .gsub('&lt;', '<')
-    .gsub('&gt;', '>')
-    .gsub('&quot;', '"')
-    .gsub('&#39;', "'")
-    .gsub(/\s+/, ' ')
-    .strip
+  CGI.unescapeHTML(text).gsub(/<[^>]+>/, '').gsub(/\s+/, ' ').strip
 end
 
 # Build a lookup hash: criterion_id => { description:, details: }

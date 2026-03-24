@@ -11,6 +11,9 @@
 # GithubBasicDetective, ProjectSitesHttpsDetective) to output both metal
 # and baseline fields from a single analysis.
 #
+# Metal→baseline criterion translation is handled by MetalToBaselineDetective
+# (a MappingDetective subclass), which reads criteria/metal_to_baseline_map.yml.
+#
 # This detective is kept as a placeholder for future baseline-unique checks.
 class BaselineDetective < Detective
   INPUTS = [].freeze

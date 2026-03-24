@@ -268,8 +268,9 @@ mappings:
     #     build time. This may include using a dependency file, lock file, or
     #     manifest to specify the required dependencies, which are then pulled
     #     in by the build system."
-    confidence_met: 0     # A machine-readable dependency list might imply standardized
-                          # tooling is in use, but it's too disconnected
+    confidence_met: 1     # A machine-readable list is "typically" done via package manager
+                          # conventions (per source details), which IS standardized tooling,
+                          # but manual or custom formats are possible; weak signal only
     confidence_unmet: 2   # No machine-readable list suggests non-standard or manual approach
     confidence_na: 2      # Metal N/A (no package manager convention) aligns well with
                           # baseline N/A (no standardized tooling available)
@@ -516,8 +517,9 @@ mappings:
     #     project's contributor documentation, such as in CONTRIBUTING.md or
     #     other developer task documentation. This may also be documented using
     #     Makefile targets or other automation scripts."
-    confidence_met: 0     # Quick developer install implicitly requires build instructions
-                          # and dependency information; some overlap with baseline requirement
+    confidence_met: 1     # Quick-install mechanism for developers implies some documentation
+                          # of build steps/dependencies, but source is about providing a
+                          # working mechanism, not explicit documentation; weak signal
     confidence_unmet: 1   # No developer installation path weakly suggests no build docs
     confidence_na: 0      # Metal N/A is unusual here; applicability conditions differ
 
@@ -1265,9 +1267,9 @@ mappings:
     #     the project can then think about how to proactively avoid or close
     #     off any gaps/vulnerabilities that could arise. Ensure this is updated
     #     for new features or breaking changes."
-    confidence_met: 2     # Assurance case includes threat model and trust boundaries, which
-                          # partially satisfies threat modeling; "attack surface analysis"
-                          # as specifically described in baseline may not be fully covered
+    confidence_met: 3     # Assurance case REQUIRES a threat model AND trust boundary
+                          # identification, which directly IS threat modeling and attack
+                          # surface analysis; the source requirement is more demanding
     confidence_unmet: 2   # No assurance case strongly suggests no threat modeling
     confidence_na: 1      # Same reasoning as osps_sa_03_01 above
 
@@ -1329,7 +1331,8 @@ mappings:
     confidence_met: 2     # A published reporting process is a component of CVD; however,
                           # a full CVD policy with an explicit response timeframe is more
                           # specific than merely publishing the reporting process
-    confidence_unmet: 2   # No reporting process weakly suggests no CVD policy either
+    confidence_unmet: 3   # No published reporting process makes a formal CVD policy with
+                          # explicit timeframes very unlikely
     confidence_na: 0      # Applicability conditions differ; metal N/A is unusual here
 
   - source_criterion: vulnerability_report_response

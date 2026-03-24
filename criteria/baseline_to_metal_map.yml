@@ -578,7 +578,8 @@ mappings:
     confidence_met: 2     # Build instructions with library/SDK dependencies directly overlap
                           # with the developer-setup requirement; both are developer-facing
                           # documentation for getting the project running locally
-    confidence_unmet: 0   # Absence of build instructions doesn't imply absence of dev-setup docs
+    confidence_unmet: 1   # Absence of build instructions weakly suggests absence of a
+                          # quick developer-setup mechanism too; some overlap in purpose
     confidence_na: 0      # Applicability conditions differ; N/A doesn't transfer reliably
 
   # ---------------------------------------------------------------------------

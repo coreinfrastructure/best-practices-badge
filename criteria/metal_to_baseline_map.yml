@@ -256,6 +256,7 @@ mappings:
 
   - source_criterion: signed_releases
     # source_level: 1
+    # Source:
     # description: >-
     #   The project MUST cryptographically sign releases of
     #   the project results intended for widespread use, and

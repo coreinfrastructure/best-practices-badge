@@ -112,12 +112,13 @@ mappings:
     #   applied."
     target_criterion: two_person_review
     # target_level: 2
-    # Target: "The project MUST require at least 40% of all proposed
-    #   modifications to its primary repositories to be reviewed by someone
-    #   other than the author before being merged into a release branch."
+    # Target: "The project MUST have at least 50% of all proposed
+    #   modifications reviewed before release by a person other than the
+    #   author, to determine if it is a worthwhile modification and free of
+    #   known issues which would argue against its inclusion."
     confidence_met: 1     # Blocking direct commits forces PR workflow — a prerequisite for
                           # enforced review, but doesn't itself require a non-author review
-    confidence_unmet: 2   # If direct commits are allowed, enforced 40% review is very unlikely
+    confidence_unmet: 2   # If direct commits are allowed, enforced 50% review is very unlikely
     confidence_na: 0      # Applicability clauses differ too much for N/A to transfer
 
   # ---------------------------------------------------------------------------
@@ -245,9 +246,9 @@ mappings:
     #   version control system."
     target_criterion: no_leaked_credentials
     # target_level: 0
-    # Target: "The project MUST have no unintentional exposure of sensitive
-    #   credential data (e.g., API tokens, passwords, or cryptographic
-    #   key material) to the public."
+    # Target: "The public repositories MUST NOT leak a valid private
+    #   credential (e.g., a working password or private key) that is
+    #   intended to limit public access."
     confidence_met: 3     # Preventing credential storage in VCS directly satisfies the
                           # no-leaked-credentials requirement
     confidence_unmet: 3   # Allowing credential storage in VCS means leakage is very likely
@@ -260,9 +261,9 @@ mappings:
     #   for storing, accessing, and rotating secrets and credentials."
     target_criterion: no_leaked_credentials
     # target_level: 0
-    # Target: "The project MUST have no unintentional exposure of sensitive
-    #   credential data (e.g., API tokens, passwords, or cryptographic
-    #   key material) to the public."
+    # Target: "The public repositories MUST NOT leak a valid private
+    #   credential (e.g., a working password or private key) that is
+    #   intended to limit public access."
     confidence_met: 2     # A credential management policy reduces leakage risk, but a policy
                           # alone does not guarantee credentials are never exposed
     confidence_unmet: 1   # No credential management policy doesn't mean credentials are leaked;
@@ -355,13 +356,14 @@ mappings:
     #   and dependencies."
     target_criterion: installation_development_quick
     # target_level: 1
-    # Target: "The project MUST include documentation of the preferred
-    #   method(s) to quickly install, upgrade, and uninstall the software
-    #   produced by the project (e.g. a README or install.md)."
-    confidence_met: 1     # Build instructions overlap with install documentation, but metal
-                          # requires install/upgrade/uninstall guidance (user-facing), while
-                          # baseline focuses on build instructions (developer-facing)
-    confidence_unmet: 0   # Absence of build instructions doesn't imply absence of install docs
+    # Target: "The project MUST provide a way for potential developers to
+    #   quickly install all the project results and support environment
+    #   necessary to make changes, including the tests and test environment.
+    #   This MUST be performed with a commonly-used convention."
+    confidence_met: 2     # Build instructions with library/SDK dependencies directly overlap
+                          # with the developer-setup requirement; both are developer-facing
+                          # documentation for getting the project running locally
+    confidence_unmet: 0   # Absence of build instructions doesn't imply absence of dev-setup docs
     confidence_na: 0      # Applicability conditions differ; N/A doesn't transfer reliably
 
   # ---------------------------------------------------------------------------
@@ -405,10 +407,11 @@ mappings:
     #   public discussions about proposed changes and usage obstacles."
     target_criterion: discussion
     # target_level: 0
-    # Target: "The project MUST have one or more mechanisms for public
-    #   discussions about proposed changes and usage, and the discussions
-    #   MUST be searchable, allow users to post at any URL, and the
-    #   project MUST NOT require users to download software to participate."
+    # Target: "The project MUST have one or more mechanisms for discussion
+    #   (including proposed changes and issues) that are searchable,
+    #   allow messages and topics to be addressed by URL, enable new
+    #   people to participate in some of the discussions, and do not
+    #   require client-side installation of proprietary software."
     confidence_met: 2     # Baseline requires public discussions; metal adds searchability,
                           # URL-addressability, and no-proprietary-software requirements
     confidence_unmet: 3   # No public discussions directly means the metal requirement is unmet
@@ -435,9 +438,9 @@ mappings:
     #   contributions."
     target_criterion: contribution_requirements
     # target_level: 1
-    # Target: "The information on how to contribute MUST include the
-    #   requirements for acceptable contributions (e.g., a reference to any
-    #   required coding standard)."
+    # Target: "The information on how to contribute SHOULD include
+    #   the requirements for acceptable contributions (e.g., a reference
+    #   to any required coding standard)."
     confidence_met: 3     # A contributor guide with acceptance requirements directly satisfies
                           # the metal requirement to document contribution requirements
     confidence_unmet: 3   # No acceptance requirements guide means the metal requirement is unmet
@@ -470,9 +473,8 @@ mappings:
     #   OSI Open Source Definition or the FSF Free Software Definition."
     target_criterion: floss_license
     # target_level: 0
-    # Target: "The software produced by the project MUST be released as FLOSS
-    #   (Free/Libre and Open Source Software), using at least one license
-    #   that is OSI-approved or FSF-approved."
+    # Target: "The software produced by the project MUST be released
+    #   as FLOSS."
     confidence_met: 3     # OSI- or FSF-approved source license directly satisfies the metal
                           # FLOSS license requirement
     confidence_unmet: 3   # Not using an OSI/FSF-approved license means the metal requirement
@@ -499,9 +501,8 @@ mappings:
     #   Definition."
     target_criterion: floss_license
     # target_level: 0
-    # Target: "The software produced by the project MUST be released as FLOSS
-    #   (Free/Libre and Open Source Software), using at least one license
-    #   that is OSI-approved or FSF-approved."
+    # Target: "The software produced by the project MUST be released
+    #   as FLOSS."
     confidence_met: 3     # OSI- or FSF-approved release license directly satisfies the metal
                           # FLOSS license requirement
     confidence_unmet: 3   # Not using an OSI/FSF-approved license means the metal requirement
@@ -548,8 +549,8 @@ mappings:
     #   publicly readable at a static URL."
     target_criterion: repo_public
     # target_level: 0
-    # Target: "The project's source code MUST be publicly available (e.g., as
-    #   a publicly accessible repository)."
+    # Target: "The project MUST have a version-controlled source repository
+    #   that is publicly readable and has a URL."
     confidence_met: 3     # Publicly readable source at a static URL directly satisfies the
                           # metal public repository requirement
     confidence_unmet: 3   # Non-public source code means the metal requirement is also unmet
@@ -562,8 +563,8 @@ mappings:
     #   changes were made."
     target_criterion: repo_track
     # target_level: 0
-    # Target: "The project's source code MUST be stored in a repository
-    #   that tracks changes."
+    # Target: "The project's source repository MUST track what changes
+    #   were made, who made the changes, and when the changes were made."
     confidence_met: 3     # A public record of all changes, authors, and dates IS a
                           # change-tracking repository
     confidence_unmet: 3   # No change-tracking record means the metal requirement is also unmet
@@ -592,10 +593,10 @@ mappings:
     #   direct language dependencies."
     target_criterion: updateable_reused_components
     # target_level: 1
-    # Target: "The project SHOULD identify each externally-maintained
-    #   component it uses, and specifically identify the version(s) in use,
-    #   and in a way that enables a third party to easily determine which
-    #   version is in use."
+    # Target: "The project MUST either: (1) make it easy to identify
+    #   and update reused externally-maintained components; or (2) use
+    #   the standard components provided by the system or programming
+    #   language."
     confidence_met: 2     # A repo dependency list is consistent with the metal SHOULD for
                           # third-party-visible component identification with versions
     confidence_unmet: 2   # No dependency list makes metal component identification unlikely
@@ -729,12 +730,13 @@ mappings:
     #   approval of the changes before merging."
     target_criterion: two_person_review
     # target_level: 2
-    # Target: "The project MUST require at least 40% of all proposed
-    #   modifications to its primary repositories to be reviewed by someone
-    #   other than the author before being merged into a release branch."
+    # Target: "The project MUST have at least 50% of all proposed
+    #   modifications reviewed before release by a person other than the
+    #   author, to determine if it is a worthwhile modification and free of
+    #   known issues which would argue against its inclusion."
     confidence_met: 3     # Baseline requires 100% of primary-branch commits to have non-author
-                          # approval; since 100% ≥ 40%, Met baseline directly implies Met metal
-    confidence_unmet: 3   # No required non-author approval makes the 40% review threshold
+                          # approval; since 100% ≥ 50%, Met baseline directly implies Met metal
+    confidence_unmet: 3   # No required non-author approval makes the 50% review threshold
                           # impossible to enforce
     confidence_na: 0      # Applicability conditions differ; N/A doesn't transfer
 
@@ -779,12 +781,17 @@ mappings:
     #   potential security problems that could occur within the software."
     target_criterion: assurance_case
     # target_level: 1
-    # Target: "The project MUST document what the project must and must not
-    #   do to meet the relevant threat model."
-    confidence_met: 2     # A security assessment identifying likely problems is related to
-                          # an assurance case, but the latter specifically requires documenting
-                          # the threat-model scope in terms of must/must-not requirements
-    confidence_unmet: 2   # No security assessment makes an assurance case very unlikely
+    # Target: "The project MUST provide an assurance case that justifies why
+    #   its security requirements are met. The assurance case MUST include:
+    #   a description of the threat model, clear identification of trust
+    #   boundaries, an argument that secure design principles have been
+    #   applied, and an argument that common implementation security
+    #   weaknesses have been countered."
+    confidence_met: 2     # A security assessment covers the threat model component of an
+                          # assurance case, but doesn't fully address trust boundaries, secure
+                          # design principles, or common weakness mitigations required by metal
+    confidence_unmet: 2   # No security assessment makes the comprehensive assurance case
+                          # very unlikely
     confidence_na: 2      # Both apply when a release is made for the project
 
   - source_criterion: osps_sa_03_01
@@ -794,12 +801,13 @@ mappings:
     #   potential security problems that could occur within the software."
     target_criterion: security_review
     # target_level: 2
-    # Target: "The project MUST have had a security review within the last
-    #   5 years, performed by a knowledgeable person independent of the
-    #   project."
-    confidence_met: 2     # A project security assessment is evidence of security work,
-                          # but the gold criterion requires an *independent* external reviewer
-    confidence_unmet: 2   # No security assessment makes an independent review very unlikely
+    # Target: "The project MUST have performed a security review within the
+    #   last 5 years. This review MUST consider the security requirements
+    #   and security boundary."
+    confidence_met: 3     # A security assessment to understand security problems IS a security
+                          # review considering requirements and boundaries; metal allows project
+                          # members (not only independent reviewers) to conduct the review
+    confidence_unmet: 2   # No security assessment makes a security review very unlikely
     confidence_na: 1      # N/A applicability conditions differ between the two criteria
 
   - source_criterion: osps_sa_03_02
@@ -810,12 +818,16 @@ mappings:
     #   within the system."
     target_criterion: assurance_case
     # target_level: 1
-    # Target: "The project MUST document what the project must and must not
-    #   do to meet the relevant threat model."
-    confidence_met: 2     # Threat modeling and attack surface analysis directly informs an
-                          # assurance case, but the latter specifically requires documenting
-                          # the threat-model scope as must/must-not constraints
-    confidence_unmet: 2   # No threat modeling makes an assurance case very unlikely
+    # Target: "The project MUST provide an assurance case that justifies why
+    #   its security requirements are met. The assurance case MUST include:
+    #   a description of the threat model, clear identification of trust
+    #   boundaries, an argument that secure design principles have been
+    #   applied, and an argument that common implementation security
+    #   weaknesses have been countered."
+    confidence_met: 2     # Threat modeling and attack surface analysis covers the threat-model
+                          # and trust-boundaries components, but the metal assurance case also
+                          # requires secure design principles and common weakness arguments
+    confidence_unmet: 2   # No threat modeling makes the comprehensive assurance case very unlikely
     confidence_na: 1      # N/A applicability conditions differ; threat modeling is broadly expected
 
   - source_criterion: osps_sa_03_02
@@ -826,12 +838,13 @@ mappings:
     #   within the system."
     target_criterion: security_review
     # target_level: 2
-    # Target: "The project MUST have had a security review within the last
-    #   5 years, performed by a knowledgeable person independent of the
-    #   project."
-    confidence_met: 1     # Project threat modeling is evidence of security awareness but is
-                          # not an *independent* review by an external person
-    confidence_unmet: 2   # No threat modeling makes an independent security review very unlikely
+    # Target: "The project MUST have performed a security review within the
+    #   last 5 years. This review MUST consider the security requirements
+    #   and security boundary."
+    confidence_met: 2     # Threat modeling and attack surface analysis constitutes a form of
+                          # security review; the metal criterion allows project members to conduct
+                          # the review, and threat modeling considers the security boundary
+    confidence_unmet: 2   # No threat modeling makes a security review very unlikely
     confidence_na: 1      # N/A applicability conditions differ; threat modeling is broadly expected
 
   # ---------------------------------------------------------------------------
@@ -845,12 +858,11 @@ mappings:
     #   for response."
     target_criterion: vulnerability_report_process
     # target_level: 0
-    # Target: "The project MUST have a process for reporting vulnerabilities
-    #   that is documented in the project."
-    confidence_met: 2     # A CVD policy covers both reporting and response; the reporting part
-                          # directly satisfies the metal requirement, but CVD is broader
-    confidence_unmet: 3   # No CVD policy means there is no documented vulnerability reporting
-                          # process either
+    # Target: "The project MUST publish the process for reporting
+    #   vulnerabilities on the project site."
+    confidence_met: 2     # A CVD policy is published on the project site and covers the
+                          # reporting process, but CVD is broader than just the reporting step
+    confidence_unmet: 3   # No CVD policy means no published vulnerability reporting process
     confidence_na: 0      # N/A is not applicable for established software projects
 
   - source_criterion: osps_vm_01_01
@@ -861,11 +873,10 @@ mappings:
     target_criterion: vulnerability_response_process
     # target_level: 1
     # Target: "The project MUST have a documented process for responding to
-    #   vulnerabilities, and this process MUST clearly define the response
-    #   period for different severity levels."
+    #   vulnerability reports."
     confidence_met: 3     # A CVD policy with a clear response timeframe directly satisfies
-                          # the metal requirement for a documented process with response periods
-    confidence_unmet: 3   # No CVD policy means no documented response process with timeframes
+                          # the metal requirement for a documented vulnerability response process
+    confidence_unmet: 3   # No CVD policy means no documented response process
     confidence_na: 0      # N/A is not applicable for established software projects
 
   - source_criterion: osps_vm_02_01
@@ -874,10 +885,10 @@ mappings:
     #   contacts."
     target_criterion: vulnerability_report_process
     # target_level: 0
-    # Target: "The project MUST have a process for reporting vulnerabilities
-    #   that is documented in the project."
-    confidence_met: 1     # Security contacts provide a mechanism for reporting, but a contact
-                          # alone is weaker than a documented reporting process
+    # Target: "The project MUST publish the process for reporting
+    #   vulnerabilities on the project site."
+    confidence_met: 1     # Security contacts published on the project site provide a reporting
+                          # mechanism, but a contact alone is weaker than a full published process
     confidence_unmet: 1   # No security contacts is weak evidence; a process may exist but
                           # not list specific contacts
     confidence_na: 0      # N/A is not applicable for established software projects
@@ -889,13 +900,14 @@ mappings:
     #   within the project."
     target_criterion: vulnerability_report_private
     # target_level: 0
-    # Target: "The project MUST provide a mechanism for private vulnerability
-    #   reporting, or MUST indicate that this is not needed."
-    confidence_met: 3     # Providing a means for private vulnerability reporting to security
-                          # contacts directly satisfies the metal private reporting requirement
-    confidence_unmet: 2   # No private reporting mechanism likely means the metal requirement
-                          # is unmet, unless the "not needed" exception applies
-    confidence_na: 0      # N/A is not applicable; private reporting is broadly expected
+    # Target: "If private vulnerability reports are supported, the project
+    #   MUST include how to send the information in a way that is kept
+    #   private. If vulnerability reports are always public, select N/A."
+    confidence_met: 3     # Providing a means for private vulnerability reporting directly
+                          # satisfies the metal requirement to document how to send private reports
+    confidence_unmet: 1   # No means for private reporting may mean the metal criterion is
+                          # N/A (if project only accepts public reports), not Unmet
+    confidence_na: 0      # Baseline N/A is inapplicable; private reporting is broadly expected
 
   - source_criterion: osps_vm_05_01
     # source_level: 3
@@ -904,8 +916,10 @@ mappings:
     #   vulnerabilities and licenses."
     target_criterion: dependency_monitoring
     # target_level: 1
-    # Target: "The project MUST monitor and regularly update the dependencies
-    #   it uses, and MUST NOT use dependencies with known vulnerabilities."
+    # Target: "Projects MUST monitor or periodically check their external
+    #   dependencies (including convenience copies) to detect known
+    #   vulnerabilities, and fix exploitable vulnerabilities or verify them
+    #   as unexploitable."
     confidence_met: 2     # A policy with remediation thresholds implies SCA scanning is in use,
                           # which in turn implies active dependency vulnerability monitoring
     confidence_unmet: 1   # No remediation threshold policy is weak evidence; monitoring may
@@ -918,8 +932,10 @@ mappings:
     #   to address SCA violations prior to any release."
     target_criterion: dependency_monitoring
     # target_level: 1
-    # Target: "The project MUST monitor and regularly update the dependencies
-    #   it uses, and MUST NOT use dependencies with known vulnerabilities."
+    # Target: "Projects MUST monitor or periodically check their external
+    #   dependencies (including convenience copies) to detect known
+    #   vulnerabilities, and fix exploitable vulnerabilities or verify them
+    #   as unexploitable."
     confidence_met: 2     # A pre-release SCA violation policy implies active scanning and
                           # remediation — consistent with the dependency monitoring requirement
     confidence_unmet: 1   # No pre-release SCA policy is weak evidence; monitoring may exist
@@ -935,8 +951,10 @@ mappings:
     #   non-exploitable."
     target_criterion: dependency_monitoring
     # target_level: 1
-    # Target: "The project MUST monitor and regularly update the dependencies
-    #   it uses, and MUST NOT use dependencies with known vulnerabilities."
+    # Target: "Projects MUST monitor or periodically check their external
+    #   dependencies (including convenience copies) to detect known
+    #   vulnerabilities, and fix exploitable vulnerabilities or verify them
+    #   as unexploitable."
     confidence_met: 3     # Automatically blocking known-vulnerable dependencies on every change
                           # directly satisfies "MUST NOT use dependencies with known vulnerabilities"
     confidence_unmet: 2   # No automated blocking doesn't mean no monitoring, but makes the
@@ -949,14 +967,15 @@ mappings:
     #   that defines a threshold for remediation of SAST findings."
     target_criterion: static_analysis
     # target_level: 0
-    # Target: "The project MUST use at least one static analysis tool with
-    #   security rules (if any SAST tool is available for the chosen
-    #   language(s))."
+    # Target: "At least one static code analysis tool MUST be applied to
+    #   any proposed major production release before its release, if
+    #   there is at least one FLOSS tool that implements this criterion
+    #   in the selected language."
     confidence_met: 2     # A SAST remediation threshold policy implies SAST tools are in use,
-                          # which directly implies using a static analysis tool with security rules
+                          # which directly implies static analysis tools are applied to releases
     confidence_unmet: 1   # No SAST policy is weak evidence; tools may be used informally
                           # without a documented policy
-    confidence_na: 1      # Both may be N/A if no suitable tools exist for the language
+    confidence_na: 1      # Both may be N/A if no suitable FLOSS tools exist for the language
 
   - source_criterion: osps_vm_06_01
     # source_level: 3
@@ -964,9 +983,9 @@ mappings:
     #   that defines a threshold for remediation of SAST findings."
     target_criterion: static_analysis_fixed
     # target_level: 0
-    # Target: "All medium- and higher-severity exploitable vulnerabilities
-    #   discovered with static analysis MUST be fixed in a timely way after
-    #   discovery."
+    # Target: "All medium and higher severity exploitable vulnerabilities
+    #   discovered with static code analysis MUST be fixed in a timely
+    #   way after they are confirmed."
     confidence_met: 2     # A remediation threshold policy implies findings are being addressed;
                           # consistent with the metal requirement to fix discovered vulnerabilities
     confidence_unmet: 1   # No remediation policy doesn't mean findings aren't fixed; informal
@@ -981,11 +1000,12 @@ mappings:
     #   and suppressed as non-exploitable."
     target_criterion: static_analysis
     # target_level: 0
-    # Target: "The project MUST use at least one static analysis tool with
-    #   security rules (if any SAST tool is available for the chosen
-    #   language(s))."
+    # Target: "At least one static code analysis tool MUST be applied to
+    #   any proposed major production release before its release, if
+    #   there is at least one FLOSS tool that implements this criterion
+    #   in the selected language."
     confidence_met: 3     # Automatically evaluating all changes against a security-weakness
-                          # policy directly implies using static analysis tools with security rules
+                          # policy directly implies static analysis tools are applied to releases
     confidence_unmet: 2   # No automated SAST blocking doesn't mean no static analysis tools,
                           # but makes their consistent use very unlikely
-    confidence_na: 1      # Both may be N/A if no suitable SAST tools exist for the language
+    confidence_na: 1      # Both may be N/A if no suitable FLOSS tools exist for the language

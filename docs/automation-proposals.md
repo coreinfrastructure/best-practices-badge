@@ -42,7 +42,7 @@ osps_ac_03_01_status=Met&
 osps_ac_03_01_justification=Branch+protection+enabled+on+main
 ```
 
-When a user clicks on this, the system will switch to the user's prefered
+When a user clicks on this, the system will switch to the user's preferred
 locale and let the user select the section (format) to use.
 On selection, relevant changes are highlighted and shown with a
 "robot" symbol, which the user can accept, modify, or ignore.

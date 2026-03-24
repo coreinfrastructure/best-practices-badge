@@ -144,6 +144,36 @@ class ChiefTest < ActiveSupport::TestCase
     end
   end
 
+  # Create special exception that happens nowhere else.
+  class WeirdException3 < StandardError
+  end
+
+  # Mapping detective that always raises from analyze
+  class BadMappingDetective < MetalToBaselineDetective
+    def analyze(_evidence, _current, _source_proposals = {})
+      raise WeirdException3, 'Exception of BadMappingDetective', caller
+    end
+  end
+
+  test 'Fatal exceptions in propose_mapping_change will not crash production system' do
+    old_environment = ENV.fetch('RAILS_ENV', nil)
+    ENV['RAILS_ENV'] = 'production'
+
+    new_chief = Chief.new(@sample_project, proc { Octokit::Client.new })
+    detective  = BadMappingDetective.new
+    original   = { osps_ac_01_01_status: { value: 1, confidence: 2, explanation: 'x' } }
+
+    my_results = new_chief.propose_mapping_change(detective, original)
+
+    if old_environment
+      ENV['RAILS_ENV'] = old_environment
+    else
+      ENV.delete('RAILS_ENV')
+    end
+    # Exception was rescued: proposal is unchanged
+    assert_equal original, my_results
+  end
+
   # Tests for Phase 1: Topological Sort and Filtering
 
   test 'filter_needed_detectives returns all when needed_outputs is nil' do

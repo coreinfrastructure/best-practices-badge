@@ -159,6 +159,25 @@ class Chief
   end
   # rubocop:enable Metrics/MethodLength
 
+  # Like propose_one_change but for MappingDetective subclasses.
+  # Passes the full current_proposal as a third argument to analyze so the
+  # detective can distinguish user-entered source values (YAML confidence used
+  # as-is) from auto-detected ones (confidence scaled by source confidence).
+  def propose_mapping_change(detective, current_proposal)
+    begin
+      current_data = compute_current(
+        detective.class::INPUTS, @evidence.project, current_proposal
+      )
+      result = detective.analyze(@evidence, current_data, current_proposal)
+      current_proposal = merge_changeset(current_proposal, result)
+    rescue @intercept_exception => e
+      log_detective_failure(
+        'propose_mapping_change', e, detective, current_proposal, current_data
+      )
+    end
+    current_proposal
+  end
+
   # Determine which detectives are needed to produce the requested outputs.
   # Uses backward search from needed_outputs through detective dependency graph.
   # @param needed_outputs [Set] Set of field symbols we want to produce
@@ -315,12 +334,15 @@ class Chief
 
       # Run the selected mapping detective after the normal pipeline so it sees
       # all accumulated proposals (auto-detected values from prior detectives).
+      # Uses propose_mapping_change (not propose_one_change) so the full
+      # current_proposal is passed to analyze for confidence scaling and
+      # explanation text when the source value came from a prior detective.
       # Skip on save-exit (only_consider_overrides) since mapping confidence is
       # always <= 3 and can never force an override.
       if !only_consider_overrides && mapping_detective_class
         mapping_detective = mapping_detective_class.new
         mapping_detective.octokit_client_factory = @client_factory
-        current_proposal = propose_one_change(mapping_detective, current_proposal)
+        current_proposal = propose_mapping_change(mapping_detective, current_proposal)
       end
 
       # Run RepoJsonDetective last as a final overlay of project

@@ -16,7 +16,9 @@
 # MappingDetective subclasses are treated specially by Chief: they are
 # partitioned out of the normal detective pool (see Chief#partition_mapping_detective)
 # and exactly one is selected and run explicitly late, after all other detectives,
-# so it benefits from fully-accumulated proposals in the current_proposal hash.
+# via Chief#propose_mapping_change (not the standard propose_one_change), so it
+# receives the fully-accumulated current_proposal for confidence scaling and
+# explanation text.
 class MappingDetective < Detective
   INPUTS = [].freeze
   OUTPUTS = [].freeze
@@ -36,30 +38,31 @@ class MappingDetective < Detective
   end
 
   # Translate source criterion answers to target criterion proposals.
-  # Source values are read from +current+, which Chief populates via
-  # compute_current(INPUTS, project, current_proposal) — providing the
-  # best available value for each source field (accumulated proposal or
-  # original project value). Justification text is read from evidence.project.
   #
-  # FUTURE ENHANCEMENT — confidence scaling for auto-detected source values:
-  # When a source field was auto-detected by a prior detective at confidence C,
-  # the mapping confidence should arguably be scaled down: C * (mapping_conf / 5).
-  # This prevents a low-confidence detection from being promoted to a higher
-  # mapping confidence. For user-entered values (read from evidence.project
-  # directly) the source confidence would be treated as 5 (authoritative).
-  # Currently, compute_current strips confidence and passes only the value, so
-  # this class has no access to source confidence.
-  # To implement: pass current_proposal (or its confidence slice) as a third
-  # argument to analyze, look up source confidence in resolve_confidence, and
-  # multiply: scaled = (source_conf * mapping_conf / Chief::MAX_CONFIDENCE).round
-  # The change stays entirely within MappingDetective and Chief#propose_one_change
-  # (or a dedicated MappingDetective override); no other detective class is affected.
+  # Source values come from two possible origins:
+  #   (1) The project's own badge data (user-entered). Detected by checking
+  #       whether the project has a real, non-UNKNOWN value for the source field.
+  #       In this case the YAML confidence is used as-is, and any justification
+  #       text the user wrote for the source criterion is carried forward.
+  #   (2) A proposal from a prior detective (auto-detected value). Detected when
+  #       the project value is blank/UNKNOWN but source_proposals contains an
+  #       entry for the field.
+  #       In this case the confidence is scaled:
+  #         scaled = source_conf * yaml_conf / Chief::MAX_CONFIDENCE
+  #       If scaled < 0.5 the result is treated as confidence 0 and dropped.
+  #       Otherwise the fractional value is kept and the prior detective's
+  #       explanation text is carried forward (with the source criterion name
+  #       appended in brackets).
+  #
+  # Chief calls this via propose_mapping_change, which passes the full
+  # current_proposal as source_proposals so origin and confidence are available.
   #
   # @param evidence [Evidence] project evidence wrapper; used for justification
-  # @param current [Hash] current best estimates for INPUTS fields
+  # @param current [Hash] current best status values for INPUTS fields
+  # @param source_proposals [Hash] full current_proposal from Chief (may be empty)
   # @return [Hash] proposed target criterion _status values
-  # rubocop:disable Metrics/MethodLength
-  def analyze(evidence, current)
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def analyze(evidence, current, source_proposals = {})
     return {} if evidence.nil?
 
     project = evidence.project
@@ -68,10 +71,30 @@ class MappingDetective < Detective
     self.class::MAPPINGS.each do |mapping|
       source_criterion = mapping['source_criterion']
       target_criterion = mapping['target_criterion']
+      source_field     = :"#{source_criterion}_status"
 
-      source_status = current[:"#{source_criterion}_status"]
-      confidence, target_status = resolve_confidence(mapping, source_status)
-      next if confidence.zero?
+      source_status = current[source_field]
+      yaml_conf, target_status = resolve_confidence(mapping, source_status)
+      next if yaml_conf.zero?
+
+      from_project = project_has_value?(project, source_field)
+      proposal     = source_proposals[source_field]
+      confidence, explanation =
+        if from_project || proposal.nil?
+          # Case 1: value is from the project's own badge data (user-entered),
+          # OR no proposal metadata is available.  The latter is unreachable in
+          # production (compute_current only surfaces a value when it came from
+          # the project or a prior proposal), but occurs in tests that pass
+          # `current` directly without source_proposals.  Use YAML confidence.
+          [yaml_conf, build_explanation(project, source_criterion)]
+        else
+          # Case 2: value came from a prior detective proposal.  Scale confidence
+          # and carry the prior detective's explanation forward.
+          scaled = scale_confidence(proposal[:confidence], yaml_conf)
+          next if scaled.zero?
+
+          [scaled, build_proposal_explanation(proposal, source_criterion)]
+        end
 
       target_field = :"#{target_criterion}_status"
       next if results.key?(target_field) &&
@@ -80,13 +103,13 @@ class MappingDetective < Detective
       results[target_field] = {
         value: target_status,
         confidence: confidence,
-        explanation: build_explanation(project, source_criterion)
+        explanation: explanation
       }
     end
 
     results
   end
-  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
   private
 
@@ -99,7 +122,7 @@ class MappingDetective < Detective
   #
   # @param mapping [Hash] a single mapping entry from the YAML
   # @param source_status [Integer, nil] source criterion status integer
-  # @return [Array(Integer, Integer)] [confidence (0-3), target_status integer]
+  # @return [Array(Integer, Integer)] [yaml_confidence (0-3), target_status integer]
   #   confidence 0 means "no inference; skip this entry"
   # rubocop:disable Metrics/MethodLength
   def resolve_confidence(mapping, source_status)
@@ -127,15 +150,46 @@ class MappingDetective < Detective
   end
   # rubocop:enable Metrics/MethodLength
 
-  # Build the explanation string for a proposed target criterion.
-  # Carries over the source criterion's justification text (if any),
-  # appending the source criterion name in brackets as attribution.
+  # Scale a YAML confidence value by a prior detective's source confidence.
+  # Returns the fractional product if >= 0.5, or 0 (meaning "drop this result").
   #
-  # Uses has_attribute? to guard against source justification fields that
-  # were not included in a partial SELECT query (e.g., when editing a
-  # metal-level page, baseline justification columns are not loaded).
-  # Test stubs that lack has_attribute? use [] directly (returns nil
-  # for missing keys, which .to_s.strip safely converts to '').
+  # Formula: source_conf * yaml_conf / Chief::MAX_CONFIDENCE
+  #
+  # @param source_conf [Numeric, nil] confidence of the prior detective's proposal
+  # @param yaml_conf [Integer] raw YAML confidence for this mapping (1-3)
+  # @return [Numeric] scaled confidence (>= 0.5) or 0
+  def scale_confidence(source_conf, yaml_conf)
+    return 0 if source_conf.nil? || source_conf.zero?
+
+    scaled = source_conf * yaml_conf.to_f / Chief::MAX_CONFIDENCE
+    scaled < 0.5 ? 0 : scaled
+  end
+
+  # True if the project has a real, non-UNKNOWN, non-blank value for +field+.
+  # Guards against partial SELECT (has_attribute? returns false when a column
+  # was not loaded) and test stubs (which may not implement has_attribute?).
+  #
+  # @param project [Project] the ActiveRecord project (or test stub)
+  # @param field [Symbol] the _status field to check
+  # @return [Boolean]
+  def project_has_value?(project, field)
+    if project.respond_to?(:has_attribute?) && !project.has_attribute?(field)
+      return false
+    end
+    return false unless project.respond_to?(:attribute_present?) &&
+                        project.attribute_present?(field)
+
+    v = project[field]
+    v.present? && v != CriterionStatus::UNKNOWN
+  rescue ActiveModel::MissingAttributeError
+    false
+  end
+
+  # Build the explanation string when the source value came from the project's
+  # own badge data (user-entered). Carries over any justification text the user
+  # wrote for the source criterion, appending the source name in brackets.
+  #
+  # Uses has_attribute? to guard against partial SELECT queries.
   #
   # @param project [Project] the ActiveRecord project
   # @param source_criterion [String] source criterion name
@@ -149,5 +203,17 @@ class MappingDetective < Detective
         project[justification_key].to_s.strip
       end
     existing.empty? ? "[#{source_criterion}]" : "#{existing} [#{source_criterion}]"
+  end
+
+  # Build the explanation string when the source value came from a prior
+  # detective's proposal. Carries the prior detective's explanation text
+  # forward, appending the source criterion name in brackets.
+  #
+  # @param proposal [Hash, nil] prior detective proposal ({value:, confidence:, explanation:})
+  # @param source_criterion [String] source criterion name
+  # @return [String] explanation text
+  def build_proposal_explanation(proposal, source_criterion)
+    prior = proposal&.dig(:explanation).to_s.strip
+    prior.empty? ? "[#{source_criterion}]" : "#{prior} [#{source_criterion}]"
   end
 end

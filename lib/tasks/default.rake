@@ -866,6 +866,32 @@ end
 
 Rake::Task['test:run'].enhance ['test:features']
 
+# Ensure assets are precompiled before running any test task.
+# Outside CI: auto-recompiles if stale (avoids hours of debugging cache bugs).
+# In CI: fails fast to catch missing precompilation in the pipeline.
+# NOTE: Added as a test-task prereq rather than in an initializer,
+# to avoid the startup-time interference described in
+# lib/asset_staleness_middleware.rb (e.g., assets:precompile itself
+# starts with stale assets — checking at startup would spuriously fail it).
+%w[test test:all test:system].each do |t|
+  Rake::Task[t].enhance(['test:ensure_assets']) if Rake::Task.task_defined?(t)
+end
+
+desc 'Ensure precompiled assets are current before running tests'
+task 'test:ensure_assets' => :environment do
+  # require_relative path from lib/tasks/ up to project root then into lib/
+  require_relative '../../lib/asset_staleness_checker'
+  checker = AssetStalenessChecker.from_rails_config(Rails.application)
+  next unless checker&.assets_stale?
+
+  if ENV['CI']
+    abort 'ERROR: Stale precompiled assets detected. Run: rake assets:precompile'
+  else
+    warn 'WARNING: Stale assets detected, auto-recompiling...'
+    Rake::Task['assets:precompile'].invoke
+  end
+end
+
 # Clear test coverage results to start fresh.
 # SimpleCov merges results from previous runs, which can be misleading
 # if there's "old" information present.
@@ -885,7 +911,7 @@ end
 # SimpleCov automatically merges coverage from all parallel workers.
 # Clears coverage first to avoid merging stale results from previous runs.
 desc 'Run ALL tests: regular tests parallelized, system tests serial'
-task 'test:optimized' do
+task 'test:optimized' => 'test:ensure_assets' do
   puts 'To see test names, set env var SLOW=true' if ENV['SLOW'].to_s.empty?
 
   require 'simplecov'

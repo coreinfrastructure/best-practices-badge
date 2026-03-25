@@ -2394,8 +2394,10 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     controller.instance_variable_set(:@overridden_fields, {})
     controller.instance_variable_set(:@divergent_fields, {})
     proposals = {
-      contribution_status: { value: CriterionStatus::MET,
-                             explanation: 'GitHub uses issues/PRs', forced: true }
+      contribution_status: {
+        value: CriterionStatus::MET,
+        explanation: 'GitHub uses issues/PRs', forced: true
+      }
     }
     original_values = { contribution_status: CriterionStatus::UNKNOWN }
     controller.send(:classify_chief_proposals, proposals, original_values, track_automated: true)
@@ -2416,8 +2418,10 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     controller.instance_variable_set(:@overridden_fields, {})
     controller.instance_variable_set(:@divergent_fields, {})
     proposals = {
-      contribution_status: { value: CriterionStatus::MET,
-                             explanation: 'Has CONTRIBUTING.md', forced: false }
+      contribution_status: {
+        value: CriterionStatus::MET,
+        explanation: 'Has CONTRIBUTING.md', forced: false
+      }
     }
     original_values = { contribution_status: CriterionStatus::UNKNOWN }
     controller.send(:classify_chief_proposals, proposals, original_values, track_automated: true)
@@ -2436,8 +2440,10 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     controller.instance_variable_set(:@overridden_fields, {})
     controller.instance_variable_set(:@divergent_fields, {})
     proposals = {
-      contribution_status: { value: CriterionStatus::UNMET,
-                             explanation: 'No CONTRIBUTING.md', forced: true }
+      contribution_status: {
+        value: CriterionStatus::UNMET,
+        explanation: 'No CONTRIBUTING.md', forced: true
+      }
     }
     original_values = { contribution_status: CriterionStatus::MET }
     controller.send(:classify_chief_proposals, proposals, original_values, track_automated: true)
@@ -2461,8 +2467,10 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     controller.instance_variable_set(:@overridden_fields, {})
     controller.instance_variable_set(:@divergent_fields, {})
     proposals = {
-      contribution_status: { value: CriterionStatus::UNMET,
-                             explanation: 'No CONTRIBUTING.md', forced: false }
+      contribution_status: {
+        value: CriterionStatus::UNMET,
+        explanation: 'No CONTRIBUTING.md', forced: false
+      }
     }
     original_values = { contribution_status: CriterionStatus::MET }
     controller.send(:classify_chief_proposals, proposals, original_values, track_automated: true)
@@ -2484,8 +2492,10 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     controller.instance_variable_set(:@overridden_fields, {})
     controller.instance_variable_set(:@divergent_fields, {})
     proposals = {
-      contribution_status: { value: CriterionStatus::UNMET,
-                             explanation: 'No CONTRIBUTING.md', forced: false }
+      contribution_status: {
+        value: CriterionStatus::UNMET,
+        explanation: 'No CONTRIBUTING.md', forced: false
+      }
     }
     original_values = { contribution_status: CriterionStatus::MET }
     controller.send(:classify_chief_proposals, proposals, original_values, track_automated: false)
@@ -2505,8 +2515,12 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     controller.instance_variable_set(:@divergent_fields, {})
     # Chief disagrees on status (non-forced) AND proposes a justification
     proposals = {
-      contribution_status:       { value: CriterionStatus::UNMET, explanation: 'reason', forced: false },
-      contribution_justification: { value: 'Chief justification', explanation: nil,     forced: false }
+      contribution_status: {
+        value: CriterionStatus::UNMET, explanation: 'reason', forced: false
+      },
+      contribution_justification: {
+        value: 'Chief justification', explanation: nil, forced: false
+      }
     }
     original_values = {
       contribution_status:       CriterionStatus::MET,

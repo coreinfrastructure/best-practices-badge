@@ -3142,6 +3142,183 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
                'proposed_status must be nil for justification-only divergence'
   end
 
+  # -----------------------------------------------------------------------
+  # Consolidated decision-matrix tests for apply_query_string_automation.
+  #
+  # Each test exercises all rows for one field type (_status / _justification /
+  # other) in a single run_automation call so the interaction between rows
+  # can be verified together.  These are the integration-level counterparts
+  # to the per-pass unit tests below.
+  # -----------------------------------------------------------------------
+
+  # rubocop:disable Metrics/BlockLength
+  test 'integration decision matrix: _status fields — all 6 rows' do
+    # Row 1 (unparseable proposed): field has real value, proposed is garbage → Skip (none)
+    # Row 2 (proposed '?', even forced): field has real value → Skip (pre-screen)
+    # Row 3 (blank/UNKNOWN → Yellow): current is UNKNOWN → Apply
+    # Row 4 (no-op → Skip): proposed == current → Skip (none)
+    # Row 5 (real, differs, not forced → ≠): stays unchanged, goes divergent
+    # Row 6 (real, differs, forced → Orange): overwritten, old value recorded
+    @project.license_location_status = CriterionStatus::UNMET  # row 1: bogus
+    @project.english_status          = CriterionStatus::UNMET  # row 2: forced '?'
+    @project.contribution_status     = CriterionStatus::UNKNOWN # row 3: blank
+    @project.description_good_status = CriterionStatus::MET    # row 4: no-op
+    @project.interact_status         = CriterionStatus::UNMET  # row 5: divergent
+    @project.floss_license_status    = CriterionStatus::UNMET  # row 6: forced orange
+    controller = setup_automation_controller
+    run_automation(controller,
+                   'license_location_status' => 'bogus',
+                   'english_status'          => '?',
+                   'contribution_status'     => 'Met',
+                   'description_good_status' => 'Met',
+                   'interact_status'         => 'Met',
+                   'floss_license_status'    => 'Met',
+                   'floss_license_justification' => 'OSI-approved license',
+                   'overrides' => 'english_*,floss_*')
+    automated  = controller.instance_variable_get(:@automated_fields)
+    overridden = controller.instance_variable_get(:@overridden_fields)
+    divergent  = controller.instance_variable_get(:@divergent_fields) || {}
+
+    # Row 1: bogus proposed → no change, not recorded anywhere
+    assert_equal CriterionStatus::UNMET, @project.license_location_status,
+                 'row1: unparseable must not change'
+    assert_not automated.key?(:license_location_status)
+    assert_not divergent.key?(:license_location_status)
+    assert_not overridden.key?(:license_location_status)
+
+    # Row 2: proposed '?' on real value (even with overrides) → no change
+    assert_equal CriterionStatus::UNMET, @project.english_status, 'row2: forced ? must not change'
+    assert_not overridden.key?(:english_status), 'row2: forced ? must not be orange'
+    assert_not divergent.key?(:english_status), 'row2: forced ? must not be divergent'
+
+    # Row 3: current UNKNOWN → applied, yellow
+    assert_equal CriterionStatus::MET, @project.contribution_status, 'row3: blank must be filled'
+    assert automated.key?(:contribution_status), 'row3: blank fill must be yellow'
+    assert_not overridden.key?(:contribution_status)
+
+    # Row 4: no-op → not recorded anywhere
+    assert_not automated.key?(:description_good_status), 'row4: no-op must not appear in automated'
+    assert_not divergent.key?(:description_good_status), 'row4: no-op must not appear in divergent'
+
+    # Row 5: real, differs, not forced → unchanged, in divergent
+    assert_equal CriterionStatus::UNMET, @project.interact_status, 'row5: must not change'
+    assert divergent.key?(:interact_status), 'row5: must be in divergent_fields'
+    assert_equal CriterionStatus::MET, divergent[:interact_status][:proposed_status]
+    assert_not overridden.key?(:interact_status)
+
+    # Row 6: real, differs, forced → applied, orange with old_value and explanation
+    assert_equal CriterionStatus::MET, @project.floss_license_status, 'row6: must be overridden'
+    assert overridden.key?(:floss_license_status), 'row6: must be orange'
+    assert_equal CriterionStatus::UNMET, overridden[:floss_license_status][:old_value]
+    assert_equal 'OSI-approved license', overridden[:floss_license_status][:explanation]
+    assert_not divergent.key?(:floss_license_status)
+  end
+  # rubocop:enable Metrics/BlockLength
+
+  test 'integration decision matrix: _justification fields — coupling rule + all 4 rows' do
+    # Coupling rule: if paired status is divergent, justification is blocked always
+    # Row 8 (blank → Yellow): current blank → applied yellow under paired status symbol
+    # Row 9 (no-op → Skip): proposed == current → Skip (none)
+    # Row 10 (differs, not forced → ≠): stays unchanged, keyed on status symbol
+    # Row 11 (differs, forced → Orange): applied, old_value is Integer status
+    #
+    # Coupling rule: interact_status = UNMET, propose 'Met' (not forced) → divergent.
+    # Then interact_justification is blocked even with overrides.
+    @project.interact_status              = CriterionStatus::UNMET # goes divergent
+    @project.interact_justification       = ''
+    # Row 8: blank justification, paired status not divergent (blank)
+    @project.contribution_status         = CriterionStatus::UNKNOWN
+    @project.contribution_justification  = ''
+    # Row 9: same-value no-op
+    @project.description_good_justification = 'no change'
+    # Row 10: present, differs, not forced → ≠
+    @project.english_justification       = 'old justification'
+    # Row 11: present, differs, forced → Orange (floss_license_status not divergent)
+    @project.floss_license_status        = CriterionStatus::MET
+    @project.floss_license_justification = 'old floss text'
+    controller = setup_automation_controller
+    run_automation(controller,
+                   'interact_status'                => 'Met',       # makes interact divergent
+                   'interact_justification'         => 'blocked',   # coupling rule
+                   'contribution_justification'     => 'Has CONTRIBUTING.md', # row 8
+                   'description_good_justification' => 'no change', # row 9 (same value)
+                   'english_justification'          => 'new justification',   # row 10
+                   'floss_license_justification'    => 'new floss text',      # row 11
+                   'overrides' => 'floss_*')
+    automated  = controller.instance_variable_get(:@automated_fields)
+    overridden = controller.instance_variable_get(:@overridden_fields)
+    divergent  = controller.instance_variable_get(:@divergent_fields) || {}
+
+    # Coupling rule: interact_status is divergent, so interact_justification is blocked
+    assert_equal '', @project.interact_justification, 'coupling rule: justification must not change'
+    assert_not automated.key?(:interact_status), 'coupling rule: no yellow for blocked justification'
+
+    # Row 8: blank justification → applied, yellow under paired status symbol
+    assert_equal 'Has CONTRIBUTING.md', @project.contribution_justification, 'row8: must be applied'
+    assert automated.key?(:contribution_status), 'row8: blank justification → yellow under status sym'
+
+    # Row 9: no-op → not recorded anywhere
+    assert_equal 'no change', @project.description_good_justification, 'row9: must not change'
+    assert_not automated.key?(:description_good_status), 'row9: no-op must not be yellow'
+    assert_not divergent.key?(:description_good_status), 'row9: no-op must not be divergent'
+
+    # Row 10: present, differs, not forced → unchanged, divergent keyed on status sym
+    assert_equal 'old justification', @project.english_justification, 'row10: must not change'
+    assert divergent.key?(:english_status), 'row10: must record ≠ keyed on status symbol'
+    assert_nil divergent[:english_status][:proposed_status], 'row10: proposed_status nil for just-only'
+    assert_equal 'new justification', divergent[:english_status][:proposed_justification]
+
+    # Row 11: present, differs, forced → applied, orange under status symbol, Integer old_value
+    assert_equal 'new floss text', @project.floss_license_justification, 'row11: must be applied'
+    assert overridden.key?(:floss_license_status), 'row11: must be orange keyed on status symbol'
+    assert_kind_of Integer, overridden[:floss_license_status][:old_value],
+                   'row11: old_value must be Integer for CriterionStatus.canonical'
+    assert_equal CriterionStatus::MET, overridden[:floss_license_status][:old_value]
+  end
+
+  test 'integration decision matrix: Other (non-criteria) fields — all 4 rows' do
+    # Row 12 (blank → Yellow): current blank → Apply Yellow
+    # Row 13 (no-op → Skip): proposed == current → Skip (none)
+    # Row 14 (differs, not forced → ≠): unchanged, keyed on own field symbol
+    # Row 15 (differs, forced → Orange): applied, keyed on own field symbol
+    #
+    # Only ALWAYS_AUTOMATABLE fields (name, license, description, etc.) are
+    # valid for non-criteria automation; url fields like homepage_url are excluded.
+    @project.name        = ''              # row 12: blank
+    @project.description = 'existing desc' # row 13: no-op
+    @project.license     = 'MIT'           # row 14: differs, not forced (overrides=cpe)
+    @project.cpe         = 'cpe:/old'      # row 15: differs, forced
+    controller = setup_automation_controller
+    run_automation(controller,
+                   'name'        => 'My Project',
+                   'description' => 'existing desc', # same value
+                   'license'     => 'Apache-2.0',    # not forced
+                   'cpe'         => 'cpe:/new',      # forced
+                   'overrides' => 'cpe')
+    automated  = controller.instance_variable_get(:@automated_fields)
+    overridden = controller.instance_variable_get(:@overridden_fields)
+    divergent  = controller.instance_variable_get(:@divergent_fields) || {}
+
+    # Row 12: blank → applied, yellow, keyed on own field symbol
+    assert_equal 'My Project', @project.name, 'row12: blank field must be filled'
+    assert automated.key?(:name), 'row12: blank fill must be yellow'
+
+    # Row 13: no-op → not recorded anywhere
+    assert_equal 'existing desc', @project.description, 'row13: no-op must not change'
+    assert_not automated.key?(:description), 'row13: no-op must not appear in automated'
+    assert_not divergent.key?(:description), 'row13: no-op must not appear in divergent'
+
+    # Row 14: present, differs, not forced → unchanged, divergent icon with proposed_value
+    assert_equal 'MIT', @project.license, 'row14: must not change'
+    assert divergent.key?(:license), 'row14: must record ≠ icon keyed on own field'
+    assert_equal 'Apache-2.0', divergent[:license][:proposed_value]
+
+    # Row 15: present, differs, forced → applied, orange keyed on own field, old_value stored
+    assert_equal 'cpe:/new', @project.cpe, 'row15: must be applied'
+    assert overridden.key?(:cpe), 'row15: must be orange'
+    assert_equal 'cpe:/old', overridden[:cpe][:old_value]
+  end
+
   test 'overrides and reanalyze are not in AS_EDIT_CONSUMED_PARAMS' do
     assert_not ProjectsController::AS_EDIT_CONSUMED_PARAMS.include?('overrides'),
                'overrides must not be consumed so it forwards through choose/edit'

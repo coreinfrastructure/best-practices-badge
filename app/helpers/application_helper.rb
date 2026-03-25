@@ -16,8 +16,9 @@ module ApplicationHelper
   ROBOT_EMOJI_SAFE = ROBOT_EMOJI.html_safe.freeze
   # rubocop:enable Rails/OutputSafety
 
-  # Frozen string constant for automation highlight CSS class (memory optimization)
+  # Frozen string constants for automation highlight CSS classes (memory optimization)
   HIGHLIGHT_AUTOMATED_CLASS = 'highlight-automated'
+  HIGHLIGHT_OVERRIDDEN_CLASS = 'highlight-overridden'
 
   # Pre-computed section dropdown data for project show navigation.
   # Lazy-initialized (memoized) to avoid I18n initialization order issues.

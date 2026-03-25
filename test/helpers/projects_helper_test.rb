@@ -811,5 +811,50 @@ class ProjectsHelperTest < ActionView::TestCase
     assert_equal [], result
   end
   # rubocop:enable Metrics/BlockLength
+
+  # --- non_criteria_automation_display ---
+
+  test 'non_criteria_automation_display returns nil pair when field untouched' do
+    @automated_fields  = {}
+    @overridden_fields = {}
+    css, icon = non_criteria_automation_display(:name)
+    assert_nil css
+    assert_nil icon
+  end
+
+  test 'non_criteria_automation_display returns yellow class for automated field' do
+    @automated_fields  = { name: { new_value: 'My Project', explanation: nil } }
+    @overridden_fields = {}
+    css, icon = non_criteria_automation_display(:name)
+    assert_equal ApplicationHelper::HIGHLIGHT_AUTOMATED_CLASS, css
+    assert_equal ApplicationHelper::ROBOT_EMOJI_SAFE, icon
+  end
+
+  test 'non_criteria_automation_display returns orange class and details icon for overridden field' do
+    @automated_fields  = {}
+    @overridden_fields = { name: { old_value: 'old name', new_value: 'new name', explanation: nil } }
+    css, icon = non_criteria_automation_display(:name)
+    assert_equal ApplicationHelper::HIGHLIGHT_OVERRIDDEN_CLASS, css
+    assert_match(/<details/, icon)
+    assert_match(/⚠/, icon)
+  end
+
+  test 'non_criteria_automation_display includes explanation text when provided' do
+    @automated_fields  = {}
+    @overridden_fields = {
+      name: { old_value: 'old', new_value: 'new', explanation: 'tool detected it' }
+    }
+    css, icon = non_criteria_automation_display(:name)
+    assert_equal ApplicationHelper::HIGHLIGHT_OVERRIDDEN_CLASS, css
+    assert_match(/tool detected it/, icon)
+  end
+
+  test 'non_criteria_automation_display omits explanation text when absent' do
+    @automated_fields  = {}
+    @overridden_fields = { name: { old_value: 'old', new_value: 'new', explanation: nil } }
+    _css, icon = non_criteria_automation_display(:name)
+    # explanation_part should be empty string → no stray "Justification:" label
+    assert_no_match(/Justification/, icon)
+  end
 end
 # rubocop:enable Metrics/ClassLength

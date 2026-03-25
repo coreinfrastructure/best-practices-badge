@@ -190,3 +190,23 @@ td.project_name {
   opacity: 0.7; // 🤖 more subtle
 }
 
+// Expandable detail disclosures for automation icons (orange override + divergent ≠)
+// Closed: icon sits inline with the criterion label
+details.automation-detail {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+details.automation-detail > summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+details.automation-detail > summary::-webkit-details-marker {
+  display: none;
+}
+
+// Open: force content onto its own line — prevents word-wrap issues
+details.automation-detail[open] {
+  display: block;
+}

@@ -5,17 +5,20 @@
     - FEED_DISPLAY_FIELDS (for Atom feeds)
     If you add a new field to this view, ensure it's in the appropriate list! %>
             <%
-              # Check if name or description were automated (for highlighting)
-              name_automated = automated_field_set.include?(:name)
-              description_automated = automated_field_set.include?(:description)
-              license_automated = automated_field_set.include?(:license)
-              implementation_languages_automated = automated_field_set.include?(:implementation_languages)
-              cpe_automated = automated_field_set.include?(:cpe)
-              general_comments_automated = automated_field_set.include?(:general_comments)
+              # Compute highlight class and icon for each non-criteria field.
+              # Returns [css_class, icon_html]: orange (overridden), yellow (automated), or nil.
+              name_class, name_icon = non_criteria_automation_display(:name)
+              description_class, description_icon = non_criteria_automation_display(:description)
+              license_class, license_icon = non_criteria_automation_display(:license)
+              implementation_languages_class, implementation_languages_icon =
+                non_criteria_automation_display(:implementation_languages)
+              cpe_class, cpe_icon = non_criteria_automation_display(:cpe)
+              general_comments_class, general_comments_icon =
+                non_criteria_automation_display(:general_comments)
             %>
-            <div class="hidable-text-entry <%= ApplicationHelper::HIGHLIGHT_AUTOMATED_CLASS if name_automated %>">
+            <div class="hidable-text-entry <%= name_class %>">
             <span><%= f.label :name, t('projects.form_basics.project_name.description') %></span>
-            <%= ApplicationHelper::ROBOT_EMOJI_SAFE if name_automated %>
+            <%= name_icon %>
             <%= render(partial: "details", locals: {
                        criterion: "project_name",
                        details: t('projects.form_basics.project_name.details')
@@ -27,9 +30,9 @@
                              disabled: view_only %>
             </div>
 
-            <div class="hidable-text-entry <%= ApplicationHelper::HIGHLIGHT_AUTOMATED_CLASS if description_automated %>">
+            <div class="hidable-text-entry <%= description_class %>">
             <span><%= f.label :description, t('projects.form_basics.description.description') %></span>
-            <%= ApplicationHelper::ROBOT_EMOJI_SAFE if description_automated %>
+            <%= description_icon %>
             <% if view_only %>
               <div class="discussion-markdown" id="project_description" lang="<%= project.entry_locale %>">
                 <%= markdown(project[:description]) %>
@@ -87,9 +90,9 @@
             <% end %>
             </div>
 
-            <div class="hidable-text-entry <%= ApplicationHelper::HIGHLIGHT_AUTOMATED_CLASS if license_automated %>">
+            <div class="hidable-text-entry <%= license_class %>">
             <span><%= f.label :license, t('projects.form_basics.license.description_html') %></span>
-            <%= ApplicationHelper::ROBOT_EMOJI_SAFE if license_automated %>
+            <%= license_icon %>
             <%= render(partial: 'details',
                        locals: {
                          criterion: 'license',
@@ -167,9 +170,9 @@
            </datalist>
             </div>
 
-            <div class="hidable-text-entry <%= ApplicationHelper::HIGHLIGHT_AUTOMATED_CLASS if implementation_languages_automated %>">
+            <div class="hidable-text-entry <%= implementation_languages_class %>">
             <span><%= f.label :implementation_languages, t('projects.form_basics.implementation_languages.description') %></span>
-            <%= ApplicationHelper::ROBOT_EMOJI_SAFE if implementation_languages_automated %>
+            <%= implementation_languages_icon %>
             <%= render(partial: "details", locals: {
               criterion: "implementation_languages",
               details:
@@ -289,9 +292,9 @@
            </datalist>
             </div>
 
-            <div class="hidable-text-entry <%= ApplicationHelper::HIGHLIGHT_AUTOMATED_CLASS if cpe_automated %>">
+            <div class="hidable-text-entry <%= cpe_class %>">
             <span><%= f.label :cpe, t('projects.form_basics.cpe.description_html') %></span>
-            <%= ApplicationHelper::ROBOT_EMOJI_SAFE if cpe_automated %>
+            <%= cpe_icon %>
             <%= render(partial: "details",
                        locals: {
                          criterion: "cpe",
@@ -303,9 +306,9 @@
                   spellcheck: false, disabled: view_only %>
             </div>
 
-            <div class="hidable-text-entry <%= ApplicationHelper::HIGHLIGHT_AUTOMATED_CLASS if general_comments_automated %>">
+            <div class="hidable-text-entry <%= general_comments_class %>">
             <span><%= f.label :general_comments, t('projects.misc.general_comments.description') %></span>
-            <%= ApplicationHelper::ROBOT_EMOJI_SAFE if general_comments_automated %>
+            <%= general_comments_icon %>
             <% if view_only %>
               <div class="discussion-markdown" id="project_general_comments">
                 <%= markdown(project[:general_comments]) %>

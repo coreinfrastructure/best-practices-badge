@@ -296,6 +296,54 @@ proposals:
    they are redirected to the project's show page with a flash
    message.
 
+## Default Behaviour: Proposals Only Fill Blank Fields
+
+By default, automation proposals only modify fields whose current value
+is unknown (`?`). If a field already has a non-unknown value, the
+proposal is **not applied**; instead the system shows a divergent
+indicator (see below) so the user can see what automation found.
+
+This is intentional: it prevents automation from silently overwriting
+answers a human has already reviewed.
+
+## The `overrides` Parameter
+
+To allow automation to **force** changes to fields that already have
+values, append an `overrides` query parameter containing
+comma-separated glob patterns:
+
+```text
+/en/projects/42/passing/edit?contribution_status=Met&overrides=contribution_status
+```
+
+Glob syntax follows Ruby's `File.fnmatch` rules.
+`*` matches any sequence of characters (but not `/`).
+Use `*` to force all matching fields:
+
+```text
+/en/projects/42/passing/edit?contribution_status=Met&overrides=*
+```
+
+**Justification–Status Coupling rule:** when a status field is
+forced via `overrides`, its paired justification field is also forced
+automatically (if provided). Conversely, if a status field is
+*divergent* (not applied), its paired justification is also blocked —
+a justification written for the wrong status answer would mislead the user.
+
+**Safety limits:** the `overrides` value is ignored if it is longer
+than 10,000 characters or contains more than 1,000 comma-separated
+patterns.
+
+## The `reanalyze` Parameter
+
+Normally, first-edit automation (Chief analysis) only runs once per
+badge level. Passing `reanalyze=1` forces it to run again even if
+the level has already been saved:
+
+```text
+/en/projects/42/passing/edit?reanalyze=1
+```
+
 ## Visual Highlighting
 
 When automation proposals (or internal Chief automation) modify
@@ -305,9 +353,15 @@ fields, the edit form highlights them to draw the user's attention:
   previously unknown (`?`) and has been filled in with a proposed
   value. This is a helpful suggestion.
 - **Orange highlight** (`.highlight-overridden`): A field that
-  already had a non-unknown value and has had a forced change, typically
-  because a claimed value was manifestly false.
+  already had a non-unknown value and has been forcibly changed via
+  the `overrides` parameter. The previous value and justification
+  are shown in an expandable disclosure so the user can compare.
   This needs attention and review.
+- **Divergent indicator** (`≠`): A field that already had a
+  non-unknown value and the automation proposed a *different* answer,
+  but the proposal was **not applied** (no matching `overrides`
+  pattern). The user can click the `≠` icon to see what automation
+  found. The user's existing answer remains unchanged.
 
 Highlighting is preserved across "save and continue" operations via
 hidden form fields, in case a user decides to review parts of a form.

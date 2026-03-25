@@ -14,14 +14,42 @@
 
  # Automation highlighting (transient per-request state, never cached).
  # Uses precomputed Sets from ProjectsHelper for O(1) lookup.
+ # Yellow: automated_field_set — uses .include? (no data needed from inner hash)
+ # Orange: overridden_field_set — uses [] assign-in-condition (needs old_value+explanation)
+ # Divergent: divergent_field_set — uses [] assign-in-condition (needs proposed_status+justification)
  highlight_class = ''
  automation_icon = ''
  if automated_field_set.include?(status_symbol)
    highlight_class = " #{ApplicationHelper::HIGHLIGHT_AUTOMATED_CLASS}"
    automation_icon = %(<span class="automation-icon" title="#{t('projects.edit.automation.automated_tooltip')}" aria-hidden="true">#{ApplicationHelper::ROBOT_EMOJI_SAFE}</span>).html_safe
- elsif overridden_field_set.include?(status_symbol)
-   highlight_class = ' highlight-overridden'
-   automation_icon = %(<span class="override-icon" title="#{t('projects.edit.automation.overridden_tooltip')}" aria-hidden="true">⚠️</span>).html_safe
+ elsif (override_data = overridden_field_set[status_symbol])
+   highlight_class = " #{ApplicationHelper::HIGHLIGHT_OVERRIDDEN_CLASS}"
+   old_status_str = CriterionStatus.canonical(override_data[:old_value]) || '?'
+   explanation_part = override_data[:explanation].present? ?
+     t('projects.edit.automation.overridden_explanation_part',
+       explanation: override_data[:explanation]) : ''
+   detail_body = t('projects.edit.automation.overridden_detail',
+                   old_status: old_status_str, explanation_part: explanation_part)
+   automation_icon = content_tag(:details, class: 'automation-detail') do
+     content_tag(:summary,
+                 '⚠️'.html_safe,
+                 title: t('projects.edit.automation.overridden_tooltip'),
+                 'aria-label': t('projects.edit.automation.aria_overridden')) +
+       content_tag(:span, detail_body, class: 'automation-detail-body')
+   end
+ elsif (divergent_data = divergent_field_set[status_symbol])
+   status_str = CriterionStatus.canonical(divergent_data[:proposed_status]) || '?'
+   justification_part = divergent_data[:proposed_justification].present? ?
+     t('projects.edit.automation.divergent_justification_part',
+       justification: divergent_data[:proposed_justification]) : ''
+   detail_body = t('projects.edit.automation.divergent_detail',
+                   status: status_str, justification_part: justification_part)
+   automation_icon = content_tag(:details, class: 'automation-detail') do
+     content_tag(:summary,
+                 '≠'.html_safe,
+                 'aria-label': t('projects.edit.automation.aria_divergent')) +
+       content_tag(:span, detail_body, class: 'automation-detail-body')
+   end
  end
 
  is_crypto = criterion_str.start_with?('crypto_')

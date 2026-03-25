@@ -3153,7 +3153,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
   # rubocop:disable Metrics/BlockLength
   test 'integration decision matrix: _status fields — all 6 rows' do
-    # Row 1 (unparseable proposed): field has real value, proposed is garbage → Skip (none)
+    # Row 1 (unparsable proposed): field has real value, proposed is garbage → Skip (none)
     # Row 2 (proposed '?', even forced): field has real value → Skip (pre-screen)
     # Row 3 (blank/UNKNOWN → Yellow): current is UNKNOWN → Apply
     # Row 4 (no-op → Skip): proposed == current → Skip (none)
@@ -3181,7 +3181,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     # Row 1: bogus proposed → no change, not recorded anywhere
     assert_equal CriterionStatus::UNMET, @project.license_location_status,
-                 'row1: unparseable must not change'
+                 'row1: unparsable must not change'
     assert_not automated.key?(:license_location_status)
     assert_not divergent.key?(:license_location_status)
     assert_not overridden.key?(:license_location_status)

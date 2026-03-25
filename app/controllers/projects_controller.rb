@@ -1748,7 +1748,7 @@ class ProjectsController < ApplicationController
   #   (none)    = no highlight, no icon, field unchanged
   #
   # _status fields
-  #   proposed value unparseable                          → Skip     (none)  [pre-screen]
+  #   proposed value unparsable                           → Skip     (none)  [pre-screen]
   #   proposed is '?' (UNKNOWN)                           → Skip     (none)  [pre-screen, any forced]
   #   current blank/UNKNOWN                               → Apply    Yellow
   #   current real, no-op (proposed == current)           → Skip     (none)
@@ -1811,7 +1811,7 @@ class ProjectsController < ApplicationController
       next unless field_sym.to_s.end_with?('_status')
 
       original = original_values[field_sym]
-      # Pre-screen: unparseable or '?' proposals are never applied or flagged.
+      # Pre-screen: unparsable or '?' proposals are never applied or flagged.
       # '?' ("I don't know") is not meaningful — not as a fill, not as a force.
       proposed = parse_status_value(value)
       next if proposed.nil? || proposed == CriterionStatus::UNKNOWN

@@ -1728,9 +1728,46 @@ class ProjectsController < ApplicationController
   #   @overridden_fields — fields force-applied over a real value  (orange highlight)
   #   @divergent_fields  — fields automation proposed but skipped  (≠ icon, no highlight)
   #
+  # All criterion-field highlights (@automated, @overridden, @divergent) are keyed
+  # on the _status symbol even for justification fields, so they map to the correct
+  # criterion row in the view.
+  #
   # Justification–Status Coupling rule: if a status field is divergent (not
   # applied), its paired justification must also be skipped — a justification
   # written for the wrong status answer would actively mislead the user.
+  #
+  # ── Full decision matrix ────────────────────────────────────────────────
+  #
+  # Legend:
+  #   forced    = field name matches a glob in the `overrides` URL param
+  #   real      = current value is present? and (for status) not UNKNOWN
+  #   no-op     = proposed value equals current value (nothing would change)
+  #   Yellow    = @automated_fields  (automation filled a blank slot)
+  #   Orange    = @overridden_fields (automation replaced an existing answer)
+  #   ≠         = @divergent_fields  (automation disagreed; your answer kept)
+  #   (none)    = no highlight, no icon, field unchanged
+  #
+  # _status fields
+  #   proposed value unparseable                          → Skip     (none)  [pre-screen]
+  #   proposed is '?' (UNKNOWN)                           → Skip     (none)  [pre-screen, any forced]
+  #   current blank/UNKNOWN                               → Apply    Yellow
+  #   current real, no-op (proposed == current)           → Skip     (none)
+  #   current real, proposed differs, NOT forced          → Keep     ≠
+  #   current real, proposed differs, forced              → Apply    Orange
+  #
+  # _justification fields
+  #   [Coupling rule: if paired _status is ≠, skip entirely — always]
+  #   current blank                                       → Apply    Yellow
+  #   current present, no-op (proposed == current)        → Skip     (none)
+  #   current present, proposed differs, NOT forced       → Keep     ≠ (proposed_status: nil)
+  #   current present, proposed differs, forced           → Apply    Orange
+  #
+  # Other fields (name, description, license, etc.)
+  #   current blank?                                      → Apply    Yellow
+  #   current present, no-op (proposed == current)        → Skip     (none)
+  #   current present, proposed differs, NOT forced       → Keep     (none — no ≠ for prose)
+  #   current present, proposed differs, forced           → Apply    Orange
+  #
   def apply_query_string_automation
     valid_fields = fields_for_current_section
     return if valid_fields.nil?
@@ -1800,13 +1837,17 @@ class ProjectsController < ApplicationController
       # nil and empty string are both blank? and go to outcome C like UNKNOWN.
       field_has_real_value = original.present? && original != CriterionStatus::UNKNOWN
 
+      # Parse and pre-screen the proposed value before branching.
+      # Invalid strings and '?' proposals are always skipped regardless of forcing:
+      # an unparseable value cannot be applied, and '?' ("I don't know") is never a
+      # meaningful replacement for any field value — real or blank.
+      proposed = parse_status_value(value)
+      next if proposed.nil? || proposed == CriterionStatus::UNKNOWN
+
       if field_has_real_value && !forced
         # Outcome A: real value, not forced → divergent (do not apply)
-        proposed = parse_status_value(value)
-        next if proposed.nil? # invalid string → skip entirely, not even divergent
-        # No divergence if proposed == current (no conflict) or proposed is '?'
-        # (automation saying "I don't know" is not a meaningful disagreement).
-        next if proposed == original || proposed == CriterionStatus::UNKNOWN
+        # No divergence if proposed == current (already the same, no conflict).
+        next if proposed == original
 
         # Capture the paired justification from params so the ≠ disclosure can
         # show it even though we never apply it.

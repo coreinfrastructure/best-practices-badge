@@ -3238,6 +3238,19 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_empty controller.instance_variable_get(:@divergent_fields)
   end
 
+  test 'pass1: forced ? with real value → not applied, not orange (pre-screen)' do
+    # Regression: before the pre-screen fix, forced '?' on a real value was applied
+    # as Orange because the UNKNOWN guard only lived inside the !forced branch.
+    @project.contribution_status = CriterionStatus::UNMET
+    controller, vf, ff, ov = prepare_pass('contribution_status' => '?', 'overrides' => '*')
+    divergent_set = controller.send(:apply_status_proposals, vf, ff, ov)
+    assert_equal CriterionStatus::UNMET, @project.contribution_status,
+                 'forced ? must not override a real status value'
+    assert_empty controller.instance_variable_get(:@overridden_fields),
+                 'forced ? must not produce an orange highlight'
+    assert_not divergent_set.include?(:contribution_status)
+  end
+
   test 'pass1: invalid proposed status → skipped entirely, not divergent' do
     @project.contribution_status = CriterionStatus::UNMET
     controller, vf, ff, ov = prepare_pass('contribution_status' => 'bogus')

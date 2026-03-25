@@ -2349,28 +2349,26 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_match(/license/i, details.downcase)
   end
 
-  test 'save with overrides redirects to edit with warning' do
+  test 'classify_chief_proposals: forced override of real value → orange' do
     log_in_as(@user)
     controller = ProjectsController.new
-
-    # Set up controller state to test categorize_chief_proposal
     controller.instance_variable_set(:@project, @project)
     controller.instance_variable_set(:@criteria_level, 'passing')
-    controller.instance_variable_set(:@overridden_fields, {})
     controller.instance_variable_set(:@automated_fields, {})
-
-    # Test categorizing a forced override
-    controller.send(:categorize_chief_proposal,
-                    :license,
-                    { value: 'Apache-2.0', explanation: 'Detected Apache', forced: true },
-                    'MIT') # User had set MIT
-
-    # Should be categorized as override (not automation)
+    controller.instance_variable_set(:@overridden_fields, {})
+    controller.instance_variable_set(:@divergent_fields, {})
+    proposals = {
+      license: { value: 'Apache-2.0', explanation: 'Detected Apache', forced: true }
+    }
+    original_values = { license: 'MIT' }
+    controller.send(:classify_chief_proposals, proposals, original_values, track_automated: true)
     overrides = controller.instance_variable_get(:@overridden_fields)
     assert_equal 1, overrides.size
     assert overrides.key?(:license)
-    assert_equal 'MIT', overrides[:license][:old_value]
+    assert_equal 'MIT',        overrides[:license][:old_value]
     assert_equal 'Apache-2.0', overrides[:license][:new_value]
+    assert_empty controller.instance_variable_get(:@automated_fields)
+    assert_empty controller.instance_variable_get(:@divergent_fields)
   end
 
   test 'JSON update includes automation metadata' do
@@ -2387,85 +2385,159 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'updated', json['status']
   end
 
-  test 'chief fills in unknown values as automated not overridden' do
+  test 'classify_chief_proposals: blank status → yellow (not orange, even if forced)' do
     log_in_as(@user)
     controller = ProjectsController.new
-
-    # Set up controller state
     controller.instance_variable_set(:@project, @project)
     controller.instance_variable_set(:@criteria_level, 'passing')
-    controller.instance_variable_set(:@overridden_fields, {})
     controller.instance_variable_set(:@automated_fields, {})
-
-    # Test categorizing automation (filling in Unknown status)
-    controller.send(:categorize_chief_proposal,
-                    :contribution_status,
-                    { value: CriterionStatus::MET, explanation: 'GitHub uses issues/PRs', forced: true },
-                    CriterionStatus::UNKNOWN) # User left as Unknown
-
-    # Should be categorized as automation (not override)
+    controller.instance_variable_set(:@overridden_fields, {})
+    controller.instance_variable_set(:@divergent_fields, {})
+    proposals = {
+      contribution_status: { value: CriterionStatus::MET,
+                             explanation: 'GitHub uses issues/PRs', forced: true }
+    }
+    original_values = { contribution_status: CriterionStatus::UNKNOWN }
+    controller.send(:classify_chief_proposals, proposals, original_values, track_automated: true)
     automated = controller.instance_variable_get(:@automated_fields)
-    overrides = controller.instance_variable_get(:@overridden_fields)
-
     assert_equal 1, automated.size
     assert automated.key?(:contribution_status)
     assert_equal CriterionStatus::MET, automated[:contribution_status][:new_value]
-    assert_empty overrides
+    assert_empty controller.instance_variable_get(:@overridden_fields)
+    assert_empty controller.instance_variable_get(:@divergent_fields)
   end
 
-  test 'categorize_automation_changes detects filled in unknowns' do
+  test 'classify_chief_proposals: blank status → yellow (first-edit style)' do
     log_in_as(@user)
     controller = ProjectsController.new
-
-    # Set up project with Unknown status value
-    @project.contribution_status = CriterionStatus::UNKNOWN
-    @project.save!
-
     controller.instance_variable_set(:@project, @project)
     controller.instance_variable_set(:@criteria_level, 'passing')
-
-    # Capture original values
-    original = { contribution_status: CriterionStatus::UNKNOWN }
-
-    # Change to Met (simulating Chief fill-in)
-    @project.contribution_status = CriterionStatus::MET
-
-    # Categorize automation changes
-    controller.send(:categorize_automation_changes, original)
-
+    controller.instance_variable_set(:@automated_fields, {})
+    controller.instance_variable_set(:@overridden_fields, {})
+    controller.instance_variable_set(:@divergent_fields, {})
+    proposals = {
+      contribution_status: { value: CriterionStatus::MET,
+                             explanation: 'Has CONTRIBUTING.md', forced: false }
+    }
+    original_values = { contribution_status: CriterionStatus::UNKNOWN }
+    controller.send(:classify_chief_proposals, proposals, original_values, track_automated: true)
     automated = controller.instance_variable_get(:@automated_fields)
-    overridden = controller.instance_variable_get(:@overridden_fields)
     assert automated.key?(:contribution_status)
-    assert_empty overridden
+    assert_empty controller.instance_variable_get(:@overridden_fields)
+    assert_empty controller.instance_variable_get(:@divergent_fields)
   end
 
-  test 'categorize_automation_changes detects overrides on initial edit' do
+  test 'classify_chief_proposals: forced real-value → orange (first-edit style)' do
     log_in_as(@user)
     controller = ProjectsController.new
-
-    # Set up project with a real (non-Unknown) status value
-    @project.contribution_status = CriterionStatus::MET
-    @project.save!
-
     controller.instance_variable_set(:@project, @project)
     controller.instance_variable_set(:@criteria_level, 'passing')
-
-    # Capture original values with a real value
-    original = { contribution_status: CriterionStatus::MET }
-
-    # Chief overrides Met -> Unmet (simulating forced override)
-    @project.contribution_status = CriterionStatus::UNMET
-
-    # Categorize automation changes
-    controller.send(:categorize_automation_changes, original)
-
-    automated = controller.instance_variable_get(:@automated_fields)
+    controller.instance_variable_set(:@automated_fields, {})
+    controller.instance_variable_set(:@overridden_fields, {})
+    controller.instance_variable_set(:@divergent_fields, {})
+    proposals = {
+      contribution_status: { value: CriterionStatus::UNMET,
+                             explanation: 'No CONTRIBUTING.md', forced: true }
+    }
+    original_values = { contribution_status: CriterionStatus::MET }
+    controller.send(:classify_chief_proposals, proposals, original_values, track_automated: true)
+    automated  = controller.instance_variable_get(:@automated_fields)
     overridden = controller.instance_variable_get(:@overridden_fields)
     assert_empty automated
     assert_equal 1, overridden.size
     assert overridden.key?(:contribution_status)
-    assert_equal CriterionStatus::MET, overridden[:contribution_status][:old_value]
+    assert_equal CriterionStatus::MET,   overridden[:contribution_status][:old_value]
     assert_equal CriterionStatus::UNMET, overridden[:contribution_status][:new_value]
+    assert_empty controller.instance_variable_get(:@divergent_fields)
+  end
+
+  test 'classify_chief_proposals: non-forced real-value → divergent ≠' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    @project.contribution_status = CriterionStatus::MET
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+    controller.instance_variable_set(:@automated_fields, {})
+    controller.instance_variable_set(:@overridden_fields, {})
+    controller.instance_variable_set(:@divergent_fields, {})
+    proposals = {
+      contribution_status: { value: CriterionStatus::UNMET,
+                             explanation: 'No CONTRIBUTING.md', forced: false }
+    }
+    original_values = { contribution_status: CriterionStatus::MET }
+    controller.send(:classify_chief_proposals, proposals, original_values, track_automated: true)
+    assert_equal CriterionStatus::MET, @project.contribution_status,
+                 'classify must not change the project value'
+    divergent = controller.instance_variable_get(:@divergent_fields)
+    assert divergent.key?(:contribution_status), 'non-forced disagreement must show ≠'
+    assert_equal CriterionStatus::UNMET, divergent[:contribution_status][:proposed_status]
+    assert_empty controller.instance_variable_get(:@automated_fields)
+    assert_empty controller.instance_variable_get(:@overridden_fields)
+  end
+
+  test 'classify_chief_proposals: non-forced real-value suppressed when track_automated false' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+    controller.instance_variable_set(:@automated_fields, {})
+    controller.instance_variable_set(:@overridden_fields, {})
+    controller.instance_variable_set(:@divergent_fields, {})
+    proposals = {
+      contribution_status: { value: CriterionStatus::UNMET,
+                             explanation: 'No CONTRIBUTING.md', forced: false }
+    }
+    original_values = { contribution_status: CriterionStatus::MET }
+    controller.send(:classify_chief_proposals, proposals, original_values, track_automated: false)
+    assert_empty controller.instance_variable_get(:@divergent_fields),
+                 '≠ must be suppressed on save-and-exit (track_automated: false)'
+    assert_empty controller.instance_variable_get(:@automated_fields)
+    assert_empty controller.instance_variable_get(:@overridden_fields)
+  end
+
+  test 'classify_chief_proposals: coupling rule — divergent status blocks justification ≠' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+    controller.instance_variable_set(:@automated_fields, {})
+    controller.instance_variable_set(:@overridden_fields, {})
+    controller.instance_variable_set(:@divergent_fields, {})
+    # Chief disagrees on status (non-forced) AND proposes a justification
+    proposals = {
+      contribution_status: { value: CriterionStatus::UNMET, explanation: 'reason', forced: false },
+      contribution_justification: { value: 'Chief justification', explanation: nil, forced: false }
+    }
+    original_values = {
+      contribution_status: CriterionStatus::MET,
+      contribution_justification: 'user justification'
+    }
+    controller.send(:classify_chief_proposals, proposals, original_values, track_automated: true)
+    divergent = controller.instance_variable_get(:@divergent_fields)
+    # Status goes divergent
+    assert divergent.key?(:contribution_status), 'divergent status must be recorded'
+    # Justification is blocked by coupling rule — should NOT add a second divergent entry
+    assert_equal 1, divergent.size, 'coupling rule must block justification from also recording ≠'
+    assert_nil divergent[:contribution_status][:proposed_justification],
+               'justification is blocked, so proposed_justification stays nil'
+  end
+
+  test 'classify_chief_proposals: no-op proposal → not recorded anywhere' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+    controller.instance_variable_set(:@automated_fields, {})
+    controller.instance_variable_set(:@overridden_fields, {})
+    controller.instance_variable_set(:@divergent_fields, {})
+    proposals = {
+      contribution_status: { value: CriterionStatus::MET, explanation: 'same', forced: false }
+    }
+    original_values = { contribution_status: CriterionStatus::MET }
+    controller.send(:classify_chief_proposals, proposals, original_values, track_automated: true)
+    assert_empty controller.instance_variable_get(:@automated_fields),  'no-op must not be yellow'
+    assert_empty controller.instance_variable_get(:@overridden_fields), 'no-op must not be orange'
+    assert_empty controller.instance_variable_get(:@divergent_fields),  'no-op must not be divergent'
   end
 
   test 'run_save_automation catches chief exceptions' do

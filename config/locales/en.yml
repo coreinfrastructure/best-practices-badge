@@ -622,7 +622,6 @@ en:
         overridden_detail: "Previous value: %{old_status}.%{explanation_part}"
         overridden_explanation_part: " Justification: %{explanation}"
         divergent_detail: "Automation instead determined %{status}%{justification_part}."
-        divergent_justification_only: "Automation had a different justification%{justification_part}."
         divergent_justification_part: " for: %{justification}"
         divergent_proposed_value: "Automation suggested: %{proposed_value}"
         chief_overrode:

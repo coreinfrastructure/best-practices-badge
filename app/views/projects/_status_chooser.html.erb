@@ -41,16 +41,9 @@
    justification_part = divergent_data[:proposed_justification].present? ?
      t('projects.edit.automation.divergent_justification_part',
        justification: divergent_data[:proposed_justification]) : ''
-   detail_body =
-     if divergent_data[:proposed_status].nil?
-       # Justification-only divergence: automation had different wording, same status.
-       t('projects.edit.automation.divergent_justification_only',
-         justification_part: justification_part)
-     else
-       status_str = CriterionStatus.canonical(divergent_data[:proposed_status]) || '?'
-       t('projects.edit.automation.divergent_detail',
-         status: status_str, justification_part: justification_part)
-     end
+   status_str = CriterionStatus.canonical(divergent_data[:proposed_status]) || '?'
+   detail_body = t('projects.edit.automation.divergent_detail',
+                   status: status_str, justification_part: justification_part)
    automation_icon = content_tag(:details, class: 'automation-detail') do
      content_tag(:summary,
                  '≠'.html_safe,

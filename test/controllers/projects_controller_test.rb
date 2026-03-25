@@ -2495,7 +2495,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_empty controller.instance_variable_get(:@overridden_fields)
   end
 
-  test 'classify_chief_proposals: coupling rule — divergent status blocks justification ≠' do
+  test 'classify_chief_proposals: coupling rule — divergent status blocks justification' do
     log_in_as(@user)
     controller = ProjectsController.new
     controller.instance_variable_set(:@project, @project)
@@ -2505,21 +2505,21 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     controller.instance_variable_set(:@divergent_fields, {})
     # Chief disagrees on status (non-forced) AND proposes a justification
     proposals = {
-      contribution_status: { value: CriterionStatus::UNMET, explanation: 'reason', forced: false },
-      contribution_justification: { value: 'Chief justification', explanation: nil, forced: false }
+      contribution_status:       { value: CriterionStatus::UNMET, explanation: 'reason', forced: false },
+      contribution_justification: { value: 'Chief justification', explanation: nil,     forced: false }
     }
     original_values = {
-      contribution_status: CriterionStatus::MET,
+      contribution_status:       CriterionStatus::MET,
       contribution_justification: 'user justification'
     }
     controller.send(:classify_chief_proposals, proposals, original_values, track_automated: true)
     divergent = controller.instance_variable_get(:@divergent_fields)
-    # Status goes divergent
+    # Status goes divergent; explanation from Chief becomes proposed_justification
     assert divergent.key?(:contribution_status), 'divergent status must be recorded'
-    # Justification is blocked by coupling rule — should NOT add a second divergent entry
-    assert_equal 1, divergent.size, 'coupling rule must block justification from also recording ≠'
-    assert_nil divergent[:contribution_status][:proposed_justification],
-               'justification is blocked, so proposed_justification stays nil'
+    assert_equal 'reason', divergent[:contribution_status][:proposed_justification],
+                 'Chief explanation must be stored as proposed_justification in status entry'
+    # Coupling rule blocks the justification proposal (regardless of no ≠ for justifications)
+    assert_equal 1, divergent.size, 'coupling rule must block justification entry entirely'
   end
 
   test 'classify_chief_proposals: no-op proposal → not recorded anywhere' do
@@ -3103,10 +3103,12 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal CriterionStatus::UNMET, @project.contribution_status
     assert_equal 'existing justification', @project.contribution_justification,
                  'justification must not change when status is divergent'
+    # The proposed justification is stored in the STATUS divergent entry so
+    # the ≠ popover can display "Automation instead determined Met for: <reason>".
     divergent = controller.instance_variable_get(:@divergent_fields)
     assert_equal 'New justification',
                  divergent[:contribution_status][:proposed_justification],
-                 'proposed justification should be stored in divergent_fields for display'
+                 'proposed justification must be stored in status divergent entry for popover display'
   end
 
   test 'apply_query_string_automation: divergent justification blocked even if overrides glob matches it' do
@@ -3201,17 +3203,18 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
            'non-matching glob should leave field divergent, not applied'
   end
 
-  test 'apply_query_string_automation: non-blank justification without overrides not applied, shows divergent icon' do
+  test 'apply_query_string_automation: non-blank justification without overrides not applied, no icon' do
+    # Justification differences are silently ignored when not forced — there are
+    # many valid ways to justify a status, so automation disagreeing on wording
+    # is not worth surfacing when the status itself is not being contested.
     controller = setup_automation_controller
     @project.contribution_justification = 'existing justification'
     run_automation(controller, 'contribution_justification' => 'new justification')
     assert_equal 'existing justification', @project.contribution_justification,
                  'non-blank justification must not change without overrides'
     divergent = controller.instance_variable_get(:@divergent_fields) || {}
-    assert divergent.key?(:contribution_status),
-           'justification-only divergence must show ≠ icon keyed on status symbol'
-    assert_nil divergent[:contribution_status][:proposed_status],
-               'proposed_status must be nil for justification-only divergence'
+    assert_not divergent.key?(:contribution_status),
+               'justification-only difference must not show a ≠ icon'
   end
 
   # -----------------------------------------------------------------------
@@ -3287,11 +3290,13 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
   # rubocop:enable Metrics/BlockLength
 
-  test 'integration decision matrix: _justification fields — coupling rule + all 4 rows' do
+  test 'integration decision matrix: _justification fields — coupling rule + all 3 rows' do
     # Coupling rule: if paired status is divergent, justification is blocked always
     # Row 8 (blank → Yellow): current blank → applied yellow under paired status symbol
     # Row 9 (no-op → Skip): proposed == current → Skip (none)
-    # Row 10 (differs, not forced → ≠): stays unchanged, keyed on status symbol
+    # Row 10 (differs, not forced → Skip): justification differences are silent —
+    #   there are many ways to justify a conclusion, so automation disagreeing on
+    #   wording alone is not meaningful when the status is not being contested.
     # Row 11 (differs, forced → Orange): applied, old_value is Integer status
     #
     # Coupling rule: interact_status = UNMET, propose 'Met' (not forced) → divergent.
@@ -3303,7 +3308,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     @project.contribution_justification  = ''
     # Row 9: same-value no-op
     @project.description_good_justification = 'no change'
-    # Row 10: present, differs, not forced → ≠
+    # Row 10: present, differs, not forced → silent (no ≠)
     @project.english_justification       = 'old justification'
     # Row 11: present, differs, forced → Orange (floss_license_status not divergent)
     @project.floss_license_status        = CriterionStatus::MET
@@ -3334,11 +3339,9 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_not automated.key?(:description_good_status), 'row9: no-op must not be yellow'
     assert_not divergent.key?(:description_good_status), 'row9: no-op must not be divergent'
 
-    # Row 10: present, differs, not forced → unchanged, divergent keyed on status sym
+    # Row 10: present, differs, not forced → unchanged, NO ≠ (silently skipped)
     assert_equal 'old justification', @project.english_justification, 'row10: must not change'
-    assert divergent.key?(:english_status), 'row10: must record ≠ keyed on status symbol'
-    assert_nil divergent[:english_status][:proposed_status], 'row10: proposed_status nil for just-only'
-    assert_equal 'new justification', divergent[:english_status][:proposed_justification]
+    assert_not divergent.key?(:english_status), 'row10: justification-only difference must not show ≠'
 
     # Row 11: present, differs, forced → applied, orange under status symbol, Integer old_value
     assert_equal 'new floss text', @project.floss_license_justification, 'row11: must be applied'
@@ -3558,19 +3561,15 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert automated.key?(:contribution_status), 'justification highlights under status symbol'
   end
 
-  test 'pass2: non-blank justification without forcing → not applied, divergent icon' do
+  test 'pass2: non-blank justification without forcing → not applied, no icon' do
     @project.contribution_justification = 'existing'
     controller, vf, ff, ov = prepare_pass('contribution_justification' => 'new text')
     controller.send(:apply_non_status_proposals, vf, ff, ov, Set.new)
     assert_equal 'existing', @project.contribution_justification
     assert_empty controller.instance_variable_get(:@automated_fields)
     assert_empty controller.instance_variable_get(:@overridden_fields)
-    divergent = controller.instance_variable_get(:@divergent_fields)
-    assert divergent.key?(:contribution_status),
-           'justification-only divergence must be keyed on the status symbol'
-    assert_nil divergent[:contribution_status][:proposed_status],
-               'proposed_status must be nil for justification-only divergence'
-    assert_equal 'new text', divergent[:contribution_status][:proposed_justification]
+    assert_empty controller.instance_variable_get(:@divergent_fields),
+                 'justification-only difference must not show any ≠ icon'
   end
 
   test 'pass2: non-blank justification without forcing, same value → no divergent icon' do

@@ -1762,7 +1762,7 @@ class ProjectsController < ApplicationController
   #   [Coupling rule: if paired _status is ≠, skip entirely — always]
   #   current blank                                       → Apply    Yellow
   #   current present, no-op (proposed == current)        → Skip     (none)
-  #   current present, proposed differs, NOT forced       → Keep     ≠ (proposed_status: nil)
+  #   current present, proposed differs, NOT forced       → Skip     (none)
   #   current present, proposed differs, forced           → Apply    Orange
   #
   # Other fields (name, description, license, etc.)
@@ -1929,15 +1929,11 @@ class ProjectsController < ApplicationController
       next if value == original # no-op: proposed already matches current
 
       unless forced
-        # Current present, differs, NOT forced → keep value, record ≠.
-        if status_sym
-          # Justification: key on paired status symbol; ||= avoids overwriting a
-          # status-level divergence entry from Pass 1.
-          @divergent_fields[status_sym] ||= { proposed_status: nil, proposed_justification: value.presence }
-        else
-          # Non-criteria field (name, description, license, etc.): key on own symbol.
-          @divergent_fields[field_sym] = { proposed_value: value.presence }
-        end
+        # Justification fields: silently skip — there are many valid ways to
+        # justify a conclusion, so a different wording from automation is not
+        # meaningful when the *status* is not being contested.
+        # Non-criteria fields (name, description, license, etc.): record ≠.
+        @divergent_fields[field_sym] = { proposed_value: value.presence } unless status_sym
         next
       end
 
@@ -2103,7 +2099,7 @@ class ProjectsController < ApplicationController
   #   _justification fields  [Coupling: skip if paired status is ≠]
   #     no-op                                     → Skip   (none)
   #     current blank                             → Apply  Yellow
-  #     current present, NOT forced               → Keep   ≠  (proposed_status: nil)
+  #     current present, NOT forced               → Skip   (none)
   #     current present, forced                   → Apply  Orange
   #
   #   Other fields (name, description, license, etc.)
@@ -2153,9 +2149,14 @@ class ProjectsController < ApplicationController
 
       # Real value, proposed differs
       unless forced
-        # Not forced → ≠ (only on save-and-continue / first-edit)
+        # Not forced → ≠ (only on save-and-continue / first-edit).
+        # Include Chief's explanation as the proposed justification so the
+        # popover can show both the proposed status and the reason.
         if track_automated
-          @divergent_fields[field] = { proposed_status: chief_value, proposed_justification: nil }
+          @divergent_fields[field] = {
+            proposed_status: chief_value,
+            proposed_justification: data[:explanation].presence
+          }
           divergent_status_fields << field
         end
         next
@@ -2197,14 +2198,9 @@ class ProjectsController < ApplicationController
 
       # Real value, differs
       unless forced
-        # Not forced → ≠
-        if track_automated
-          if is_justification
-            @divergent_fields[status_sym] ||= { proposed_status: nil, proposed_justification: chief_value }
-          else
-            @divergent_fields[field] = { proposed_value: chief_value }
-          end
-        end
+        # Justification fields: silently skip — same reasoning as URL automation.
+        # Non-criteria fields: record ≠.
+        @divergent_fields[field] = { proposed_value: chief_value } if track_automated && !is_justification
         next
       end
 

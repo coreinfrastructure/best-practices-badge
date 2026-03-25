@@ -4,6 +4,10 @@
 # or operating system, you probably want to add a global ignore instead:
 #   git config --global core.excludesfile '~/.gitignore_global'
 
+# Ignore local environment overrides (contain dev-only secrets like encryption keys).
+.env.local
+.env.*.local
+
 # Ignore bundler config.
 /.bundle
 

@@ -1874,7 +1874,7 @@ class ProjectsController < ApplicationController
   # @param forced_fields [Set<Symbol>]
   # @param original_values [Hash{Symbol => Object}] pre-change project values
   # @param divergent_status_fields [Set<Symbol>] status fields from Pass 1 not applied
-  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/BlockLength
   # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def apply_non_status_proposals(valid_fields, forced_fields, original_values, divergent_status_fields)
     params.each do |key, value|
@@ -1883,12 +1883,17 @@ class ProjectsController < ApplicationController
       next if field_sym.to_s.end_with?('_status') # _status fields handled in Pass 1
 
       field_name = field_sym.to_s
+      # Pre-compute the paired status symbol for justification fields; nil for others.
+      # Used for both the Coupling rule check and justification-only divergence recording.
+      status_sym =
+        if field_name.end_with?('_justification')
+          field_name.sub('_justification', '_status').to_sym
+        end
 
-      if field_name.end_with?('_justification')
+      if status_sym
         # Coupling rule: block the justification if its paired status was divergent.
         # This check uses the divergent_status_fields Set produced by Pass 1, which is
         # why two passes are required — we need status outcomes before processing justifications.
-        status_sym = field_name.sub('_justification', '_status').to_sym
         next if divergent_status_fields.include?(status_sym)
       end
 
@@ -1897,7 +1902,18 @@ class ProjectsController < ApplicationController
       # For justification and non-criteria fields, "real value" means any non-blank string.
       # Unlike status fields, there is no UNKNOWN integer sentinel; blank means blank.
       field_has_real_value = original.present?
-      next if field_has_real_value && !forced # non-blank + not forced → skip silently
+
+      if field_has_real_value && !forced
+        # Non-blank, not forced → do not apply.
+        # For justification fields, record a justification-only divergence (proposed_status nil)
+        # so the ≠ icon appears on the criterion row — but only if the proposed value
+        # actually differs; no icon for a no-op proposal.
+        # Use ||= to avoid overwriting a status-level divergence entry from Pass 1.
+        if status_sym && value != original
+          @divergent_fields[status_sym] ||= { proposed_status: nil, proposed_justification: value.presence }
+        end
+        next
+      end
 
       next unless apply_proposal_value_to_project(@project, field_sym, value)
 
@@ -1922,9 +1938,22 @@ class ProjectsController < ApplicationController
       end
 
       if field_has_real_value && forced
-        # Non-blank value replaced by force → orange
+        # Non-blank value replaced by force → orange.
+        # For justification fields, old_value must be the Integer status so the view can
+        # call CriterionStatus.canonical(old_value) correctly.  Using the old justification
+        # String would corrupt the type and show '?' in the disclosure.
+        # original_values only contains params keys, so the status may not be there (it
+        # wasn't in params).  Read from the project directly: Pass 1 only mutates the
+        # status when the proposed value differs, so the project still holds the original.
+        # For non-criteria fields, old_value is simply the old string value of that field.
+        old_val =
+          if field_name.end_with?('_justification')
+            @project.public_send(highlight_field) # Integer status, not justification String
+          else
+            original_values[field_sym]
+          end
         @overridden_fields[highlight_field] = {
-          old_value: original_values[field_sym],
+          old_value: old_val,
           new_value: new_value,
           explanation: nil # no further paired explanation for justification/non-criteria
         }
@@ -1934,7 +1963,7 @@ class ProjectsController < ApplicationController
       end
     end
   end
-  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize, Metrics/BlockLength
   # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   # Check if current badge level has already been saved/edited

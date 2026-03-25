@@ -38,12 +38,19 @@
        content_tag(:span, detail_body, class: 'automation-detail-body')
    end
  elsif (divergent_data = divergent_field_set[status_symbol])
-   status_str = CriterionStatus.canonical(divergent_data[:proposed_status]) || '?'
    justification_part = divergent_data[:proposed_justification].present? ?
      t('projects.edit.automation.divergent_justification_part',
        justification: divergent_data[:proposed_justification]) : ''
-   detail_body = t('projects.edit.automation.divergent_detail',
-                   status: status_str, justification_part: justification_part)
+   detail_body =
+     if divergent_data[:proposed_status].nil?
+       # Justification-only divergence: automation had different wording, same status.
+       t('projects.edit.automation.divergent_justification_only',
+         justification_part: justification_part)
+     else
+       status_str = CriterionStatus.canonical(divergent_data[:proposed_status]) || '?'
+       t('projects.edit.automation.divergent_detail',
+         status: status_str, justification_part: justification_part)
+     end
    automation_icon = content_tag(:details, class: 'automation-detail') do
      content_tag(:summary,
                  '≠'.html_safe,

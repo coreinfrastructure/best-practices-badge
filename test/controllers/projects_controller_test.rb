@@ -3128,15 +3128,17 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
            'non-matching glob should leave field divergent, not applied'
   end
 
-  test 'apply_query_string_automation: non-blank justification without overrides silently skipped' do
+  test 'apply_query_string_automation: non-blank justification without overrides not applied, shows divergent icon' do
     controller = setup_automation_controller
     @project.contribution_justification = 'existing justification'
     run_automation(controller, 'contribution_justification' => 'new justification')
     assert_equal 'existing justification', @project.contribution_justification,
                  'non-blank justification must not change without overrides'
     divergent = controller.instance_variable_get(:@divergent_fields) || {}
-    assert_not divergent.key?(:contribution_status),
-               'no divergent icon for justification-only skip'
+    assert divergent.key?(:contribution_status),
+           'justification-only divergence must show ≠ icon keyed on status symbol'
+    assert_nil divergent[:contribution_status][:proposed_status],
+               'proposed_status must be nil for justification-only divergence'
   end
 
   test 'overrides and reanalyze are not in AS_EDIT_CONSUMED_PARAMS' do
@@ -3293,16 +3295,34 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert automated.key?(:contribution_status), 'justification highlights under status symbol'
   end
 
-  test 'pass2: non-blank justification without forcing → silently skipped' do
+  test 'pass2: non-blank justification without forcing → not applied, divergent icon' do
     @project.contribution_justification = 'existing'
     controller, vf, ff, ov = prepare_pass('contribution_justification' => 'new text')
     controller.send(:apply_non_status_proposals, vf, ff, ov, Set.new)
     assert_equal 'existing', @project.contribution_justification
     assert_empty controller.instance_variable_get(:@automated_fields)
     assert_empty controller.instance_variable_get(:@overridden_fields)
+    divergent = controller.instance_variable_get(:@divergent_fields)
+    assert divergent.key?(:contribution_status),
+           'justification-only divergence must be keyed on the status symbol'
+    assert_nil divergent[:contribution_status][:proposed_status],
+               'proposed_status must be nil for justification-only divergence'
+    assert_equal 'new text', divergent[:contribution_status][:proposed_justification]
+  end
+
+  test 'pass2: non-blank justification without forcing, same value → no divergent icon' do
+    @project.contribution_justification = 'same text'
+    controller, vf, ff, ov = prepare_pass('contribution_justification' => 'same text')
+    controller.send(:apply_non_status_proposals, vf, ff, ov, Set.new)
+    assert_equal 'same text', @project.contribution_justification
+    assert_empty controller.instance_variable_get(:@automated_fields)
+    assert_empty controller.instance_variable_get(:@overridden_fields)
+    assert_empty controller.instance_variable_get(:@divergent_fields),
+                 'no-op proposal must not show divergent icon'
   end
 
   test 'pass2: non-blank justification forced → applied orange under paired status symbol' do
+    @project.contribution_status = CriterionStatus::UNMET
     @project.contribution_justification = 'old text'
     controller, vf, ff, ov = prepare_pass('contribution_justification' => 'new text',
                                           'overrides' => '*')
@@ -3311,7 +3331,26 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     overridden = controller.instance_variable_get(:@overridden_fields)
     assert overridden.key?(:contribution_status),
            'forced justification override highlights under status symbol'
-    assert_equal 'old text', overridden[:contribution_status][:old_value]
+    # old_value must be the Integer status so CriterionStatus.canonical works in the view
+    assert_equal CriterionStatus::UNMET, overridden[:contribution_status][:old_value],
+                 'old_value must be Integer status, not old justification String'
+  end
+
+  test 'pass2: justification-only forced override (status unchanged) stores Integer old_value' do
+    # Regression: when a justification changes but the status proposal is absent or same,
+    # Pass 2 must store the current status Integer as old_value — not the old justification
+    # String — so CriterionStatus.canonical(old_value) works correctly in the view.
+    @project.contribution_status = CriterionStatus::MET
+    @project.contribution_justification = 'old justification'
+    controller, vf, ff, ov = prepare_pass('contribution_justification' => 'new justification',
+                                          'overrides' => '*')
+    controller.send(:apply_non_status_proposals, vf, ff, ov, Set.new)
+    assert_equal 'new justification', @project.contribution_justification
+    overridden = controller.instance_variable_get(:@overridden_fields)
+    assert overridden.key?(:contribution_status)
+    assert_kind_of Integer, overridden[:contribution_status][:old_value],
+                   'old_value must be Integer for CriterionStatus.canonical'
+    assert_equal CriterionStatus::MET, overridden[:contribution_status][:old_value]
   end
 
   test 'pass2: justification with divergent paired status → blocked even when forced' do

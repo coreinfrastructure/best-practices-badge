@@ -856,5 +856,16 @@ class ProjectsHelperTest < ActionView::TestCase
     # explanation_part should be empty string → no stray "Justification:" label
     assert_no_match(/Justification/, icon)
   end
+
+  test 'non_criteria_automation_display returns divergent icon with no highlight class' do
+    @automated_fields  = {}
+    @overridden_fields = {}
+    @divergent_fields  = { name: { proposed_value: 'suggested name' } }
+    css, icon = non_criteria_automation_display(:name)
+    assert_nil css, 'divergent field must not add a highlight class (value unchanged)'
+    assert_match(/<details/, icon)
+    assert_match(/≠/, icon)
+    assert_match(/suggested name/, icon)
+  end
 end
 # rubocop:enable Metrics/ClassLength

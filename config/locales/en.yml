@@ -624,6 +624,7 @@ en:
         divergent_detail: "Automation instead determined %{status}%{justification_part}."
         divergent_justification_only: "Automation had a different justification%{justification_part}."
         divergent_justification_part: " for: %{justification}"
+        divergent_proposed_value: "Automation suggested: %{proposed_value}"
         chief_overrode:
           one: "We corrected 1 field based on project analysis:"
           other: "We corrected %{count} fields based on project analysis:"

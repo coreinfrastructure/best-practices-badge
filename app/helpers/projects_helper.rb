@@ -41,12 +41,11 @@ module ProjectsHelper
   end
 
   # Returns [highlight_css_class, icon_html] for a non-criteria field.
-  # Used by _form_basics to show yellow (automated) or orange (overridden) highlighting.
-  # For orange, old_value is the previous text value (not a status integer).
+  # Used by _form_basics to show yellow (automated), orange (overridden), or ≠ (divergent).
   # Returns [nil, nil] when the field was not touched by automation.
   # @param field_sym [Symbol] Non-criteria field symbol (e.g., :name, :license)
   # @return [Array(String?, ActiveSupport::SafeBuffer?)] [css_class, icon_html]
-  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def non_criteria_automation_display(field_sym)
     if (override_data = overridden_field_set[field_sym])
       explanation_part =
@@ -72,11 +71,24 @@ module ProjectsHelper
       [ApplicationHelper::HIGHLIGHT_OVERRIDDEN_CLASS, icon]
     elsif automated_field_set.include?(field_sym)
       [ApplicationHelper::HIGHLIGHT_AUTOMATED_CLASS, ApplicationHelper::ROBOT_EMOJI_SAFE]
+    elsif (divergent_data = divergent_field_set[field_sym])
+      detail_body = t('projects.edit.automation.divergent_proposed_value',
+                      proposed_value: divergent_data[:proposed_value].to_s)
+      # rubocop:disable Rails/OutputSafety
+      icon =
+        content_tag(:details, class: 'automation-detail') do
+          content_tag(:summary,
+                      '≠'.html_safe,
+                      'aria-label': t('projects.edit.automation.aria_divergent')) +
+            content_tag(:span, detail_body, class: 'automation-detail-body')
+        end
+      # rubocop:enable Rails/OutputSafety
+      [nil, icon]
     else
       [nil, nil]
     end
   end
-  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   # Convert a status integer value to its string representation.
   # @param value [Integer] Status value (0-3)

@@ -3070,13 +3070,14 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert automated.key?(:name), 'non-criteria blank field should be yellow'
   end
 
-  test 'apply_query_string_automation: non-criteria non-blank field skipped silently' do
+  test 'apply_query_string_automation: non-criteria non-blank field not applied, shows divergent icon' do
     controller = setup_automation_controller
     @project.name = 'existing name'
     run_automation(controller, 'name' => 'new name')
     assert_equal 'existing name', @project.name, 'non-blank non-criteria field must not change'
     divergent = controller.instance_variable_get(:@divergent_fields) || {}
-    assert_not divergent.key?(:name), 'non-criteria fields never get divergent icon'
+    assert divergent.key?(:name), 'non-criteria divergent proposal must record ≠ icon'
+    assert_equal 'new name', divergent[:name][:proposed_value]
   end
 
   test 'apply_query_string_automation: non-criteria non-blank field forced orange' do
@@ -3387,13 +3388,15 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert automated.key?(:name)
   end
 
-  test 'pass2: non-blank non-criteria field without forcing → silently skipped' do
+  test 'pass2: non-blank non-criteria field without forcing → not applied, divergent icon' do
     @project.name = 'existing'
     controller, vf, ff, ov = prepare_pass('name' => 'new name')
     controller.send(:apply_non_status_proposals, vf, ff, ov, Set.new)
     assert_equal 'existing', @project.name
     assert_empty controller.instance_variable_get(:@automated_fields)
-    assert_empty controller.instance_variable_get(:@divergent_fields)
+    divergent = controller.instance_variable_get(:@divergent_fields)
+    assert divergent.key?(:name), 'non-criteria divergent must be keyed on own field symbol'
+    assert_equal 'new name', divergent[:name][:proposed_value]
   end
 
   test 'pass2: non-blank non-criteria field forced → applied orange' do

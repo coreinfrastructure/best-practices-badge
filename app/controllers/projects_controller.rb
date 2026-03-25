@@ -1765,7 +1765,7 @@ class ProjectsController < ApplicationController
   # Other fields (name, description, license, etc.)
   #   current blank?                                      → Apply    Yellow
   #   current present, no-op (proposed == current)        → Skip     (none)
-  #   current present, proposed differs, NOT forced       → Keep     (none — no ≠ for prose)
+  #   current present, proposed differs, NOT forced       → Keep     ≠ (proposed_value:)
   #   current present, proposed differs, forced           → Apply    Orange
   #
   def apply_query_string_automation
@@ -1926,11 +1926,15 @@ class ProjectsController < ApplicationController
       next if value == original # no-op: proposed already matches current
 
       unless forced
-        # Current present, differs, NOT forced → keep value.
-        # For justifications, record ≠ so the user sees the disagreement.
-        # Non-criteria fields have no ≠ icon ("different wording" is not meaningful).
-        # ||= avoids overwriting a status-level divergence entry from Pass 1.
-        @divergent_fields[status_sym] ||= { proposed_status: nil, proposed_justification: value.presence } if status_sym
+        # Current present, differs, NOT forced → keep value, record ≠.
+        if status_sym
+          # Justification: key on paired status symbol; ||= avoids overwriting a
+          # status-level divergence entry from Pass 1.
+          @divergent_fields[status_sym] ||= { proposed_status: nil, proposed_justification: value.presence }
+        else
+          # Non-criteria field (name, description, license, etc.): key on own symbol.
+          @divergent_fields[field_sym] = { proposed_value: value.presence }
+        end
         next
       end
 

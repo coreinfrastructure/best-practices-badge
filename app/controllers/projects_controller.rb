@@ -1794,217 +1794,160 @@ class ProjectsController < ApplicationController
     apply_non_status_proposals(valid_fields, forced_fields, original_values, divergent_status_fields)
   end
 
-  # Pass 1: process _status fields only.
-  #
-  # For each status field in params, one of three outcomes applies:
-  #
-  #   A. Field has a real value (non-blank, non-?) AND is NOT forced:
-  #      → Do NOT apply. If the proposal differs from current and is not '?',
-  #        record in @divergent_fields so the view can show the ≠ icon.
-  #        '?' proposals are silently ignored — "automation doesn't know" is
-  #        not a meaningful disagreement. Record in divergent_status_fields Set
-  #        so Pass 2 can block the paired justification (Coupling rule).
-  #
-  #   B. Field has a real value AND IS forced (overrides glob matched):
-  #      → Apply. Record in @overridden_fields (orange highlight) with the
-  #        previous Integer status as old_value and the proposed justification
-  #        (if any) as explanation so the view can show what changed and why.
-  #
-  #   C. Field is blank? (nil, empty string) or UNKNOWN (integer 0):
-  #      → Apply regardless of forcing — there is nothing to override.
-  #        Record in @automated_fields (yellow highlight).
-  #        Note: forced-blank is still yellow, not orange, because orange means
-  #        "we replaced your answer", but there was no answer to replace.
-  #
-  # Returns the divergent_status_fields Set for Pass 2.
+  # Pass 1: process _status fields only, following the decision matrix top-to-bottom.
+  # Returns the set of status fields that were divergent (not applied) for Pass 2.
   #
   # @param valid_fields [Set<Symbol>]
   # @param forced_fields [Set<Symbol>]
   # @param original_values [Hash{Symbol => Object}] pre-change project values
-  # @return [Set<Symbol>] status fields that were divergent (outcome A)
+  # @return [Set<Symbol>] status fields recorded as divergent
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def apply_status_proposals(valid_fields, forced_fields, original_values)
     divergent_status_fields = Set.new
     params.each do |key, value|
       field_sym = key.to_sym
-      next if valid_fields.exclude?(field_sym) # ignore params not valid for this section
-      next unless field_sym.to_s.end_with?('_status') # Pass 1 handles only _status fields
+      next if valid_fields.exclude?(field_sym)
+      next unless field_sym.to_s.end_with?('_status')
 
       original = original_values[field_sym]
-      forced = forced_fields.include?(field_sym)
-      # A real value is non-blank? AND non-? (stored as non-UNKNOWN integer).
-      # nil and empty string are both blank? and go to outcome C like UNKNOWN.
-      field_has_real_value = original.present? && original != CriterionStatus::UNKNOWN
-
-      # Parse and pre-screen the proposed value before branching.
-      # Invalid strings and '?' proposals are always skipped regardless of forcing:
-      # an unparseable value cannot be applied, and '?' ("I don't know") is never a
-      # meaningful replacement for any field value — real or blank.
+      # Pre-screen: unparseable or '?' proposals are never applied or flagged.
+      # '?' ("I don't know") is not meaningful — not as a fill, not as a force.
       proposed = parse_status_value(value)
       next if proposed.nil? || proposed == CriterionStatus::UNKNOWN
 
-      if field_has_real_value && !forced
-        # Outcome A: real value, not forced → divergent (do not apply)
-        # No divergence if proposed == current (already the same, no conflict).
-        next if proposed == original
+      # A real value is non-blank? AND non-UNKNOWN (stored as a non-zero integer).
+      field_has_real_value = original.present? && original != CriterionStatus::UNKNOWN
 
-        # Capture the paired justification from params so the ≠ disclosure can
-        # show it even though we never apply it.
-        justification_key = field_sym.to_s.sub('_status', '_justification')
+      unless field_has_real_value
+        # Current blank/UNKNOWN → apply, yellow (forced or not — nothing to override)
+        next unless apply_proposal_value_to_project(@project, field_sym, value)
+
+        new_value = @project.public_send(field_sym)
+        next if new_value == original # no-op after apply
+
+        @automated_fields[field_sym] = { new_value: new_value, explanation: nil }
+        next
+      end
+
+      # Current has a real value from here on.
+      next if proposed == original # no-op: proposed already matches current
+
+      # justification_key is needed in both the divergent and forced branches below.
+      justification_key = field_sym.to_s.sub('_status', '_justification')
+      forced = forced_fields.include?(field_sym)
+
+      unless forced
+        # Current real, differs, NOT forced → keep, record ≠
         @divergent_fields[field_sym] = {
           proposed_status: proposed,
           proposed_justification: params[justification_key].presence
         }
         divergent_status_fields << field_sym
-      else
-        # Outcome B or C: apply the proposal (forced, or blank/?)
-        next unless apply_proposal_value_to_project(@project, field_sym, value)
-
-        new_value = @project.public_send(field_sym)
-        next if original_values[field_sym] == new_value # nothing actually changed
-
-        if field_has_real_value && forced
-          # Outcome B: real value was replaced by force → orange
-          # old_value is the previous Integer status (CriterionStatus constant).
-          # explanation is the automation's justification for the new value.
-          justification_key = field_sym.to_s.sub('_status', '_justification')
-          @overridden_fields[field_sym] = {
-            old_value: original_values[field_sym],
-            new_value: new_value,
-            explanation: params[justification_key].presence
-          }
-        else
-          # Outcome C: blank/? was filled in → yellow
-          @automated_fields[field_sym] = { new_value: new_value, explanation: nil }
-        end
+        next
       end
+
+      # Current real, differs, forced → apply, orange
+      next unless apply_proposal_value_to_project(@project, field_sym, value)
+
+      new_value = @project.public_send(field_sym)
+      next if new_value == original # no-op after apply (e.g. validation clamped it)
+
+      @overridden_fields[field_sym] = {
+        old_value: original,
+        new_value: new_value,
+        explanation: params[justification_key].presence
+      }
     end
     divergent_status_fields
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
   # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
-  # Pass 2: process _justification and non-criteria (ALWAYS_AUTOMATABLE) fields.
+  # Pass 2: process _justification and non-criteria fields, following the matrix.
   #
-  # Two kinds of fields are handled here:
-  #
-  #   Justification fields (_justification suffix):
-  #     — Justification–Status Coupling rule: if the paired status field is in
-  #       divergent_status_fields (Pass 1 declined to apply it), block this
-  #       justification unconditionally — even if the overrides glob matches it.
-  #       A justification for the wrong status answer actively misleads the user.
-  #     — Otherwise: blank → apply (yellow); non-blank + not forced → skip silently;
-  #       non-blank + forced → apply (orange).
-  #     — Highlight key is the paired STATUS symbol, not the justification symbol,
-  #       because the criterion row in the UI is keyed on the status field.
-  #     — If Pass 1 already set a highlight for that status symbol (orange or yellow),
-  #       do not overwrite it. Pass 1's entry has old_value as the previous Integer
-  #       status; overwriting with the old justification String would corrupt the
-  #       type and show the wrong previous value in the orange disclosure.
-  #
-  #   Non-criteria fields (name, description, license, cpe, etc.):
-  #     — No divergent tracking: "automation had different wording" is not meaningful
-  #       to show in the UI, unlike a status disagreement.
-  #     — field_has_real_value uses plain .present? (no UNKNOWN integer check —
-  #       these are Strings, not status integers).
-  #     — Same blank/forced logic as justification, but highlight key is the field
-  #       itself (handled separately in _form_basics.html.erb, not _status_chooser).
+  # Key design notes:
+  #   - Coupling rule: if Pass 1 left a status divergent, its paired justification
+  #     is blocked entirely — even when forced — because applying a justification for
+  #     the wrong status answer actively misleads the user.
+  #   - Highlights are keyed on the STATUS symbol (not justification symbol) so they
+  #     appear on the correct criterion row in the view.
+  #   - When Pass 1 already recorded an orange entry for a status symbol, Pass 2 must
+  #     not overwrite it: Pass 1's old_value is an Integer (needed by
+  #     CriterionStatus.canonical in the view); the justification's old value is a
+  #     String, and overwriting would corrupt the type and show '?' in the disclosure.
+  #   - For justification orange old_value, read the current status from the project
+  #     rather than original_values: original_values only covers params keys, and Pass 1
+  #     only mutates a status when the value actually changes, so the project holds the
+  #     correct original status at this point.
   #
   # @param valid_fields [Set<Symbol>]
   # @param forced_fields [Set<Symbol>]
   # @param original_values [Hash{Symbol => Object}] pre-change project values
   # @param divergent_status_fields [Set<Symbol>] status fields from Pass 1 not applied
-  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Metrics/BlockLength
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def apply_non_status_proposals(valid_fields, forced_fields, original_values, divergent_status_fields)
     params.each do |key, value|
       field_sym = key.to_sym
-      next if valid_fields.exclude?(field_sym) # ignore params not valid for this section
-      next if field_sym.to_s.end_with?('_status') # _status fields handled in Pass 1
+      next if valid_fields.exclude?(field_sym)
+      next if field_sym.to_s.end_with?('_status')
 
       field_name = field_sym.to_s
-      # Pre-compute the paired status symbol for justification fields; nil for others.
-      # Used for both the Coupling rule check and justification-only divergence recording.
+      # status_sym is the paired status field for justifications; nil for other fields.
+      # It doubles as the highlight key and the coupling-rule lookup.
       status_sym =
         if field_name.end_with?('_justification')
           field_name.sub('_justification', '_status').to_sym
         end
 
-      if status_sym
-        # Coupling rule: block the justification if its paired status was divergent.
-        # This check uses the divergent_status_fields Set produced by Pass 1, which is
-        # why two passes are required — we need status outcomes before processing justifications.
-        next if divergent_status_fields.include?(status_sym)
-      end
+      # Coupling rule: never apply a justification whose paired status was not applied.
+      next if status_sym && divergent_status_fields.include?(status_sym)
 
       original = original_values[field_sym]
       forced = forced_fields.include?(field_sym)
-      # For justification and non-criteria fields, "real value" means any non-blank string.
-      # Unlike status fields, there is no UNKNOWN integer sentinel; blank means blank.
+      # "Real value" for strings is simply present? — no UNKNOWN sentinel here.
       field_has_real_value = original.present?
+      # Highlights on criterion rows key to the status symbol; other fields key to themselves.
+      highlight_field = status_sym || field_sym
 
-      if field_has_real_value && !forced
-        # Non-blank, not forced → do not apply.
-        # For justification fields, record a justification-only divergence (proposed_status nil)
-        # so the ≠ icon appears on the criterion row — but only if the proposed value
-        # actually differs; no icon for a no-op proposal.
-        # Use ||= to avoid overwriting a status-level divergence entry from Pass 1.
-        if status_sym && value != original
-          @divergent_fields[status_sym] ||= { proposed_status: nil, proposed_justification: value.presence }
-        end
+      unless field_has_real_value
+        # Current blank → apply, yellow (forced or not — nothing to override)
+        next unless apply_proposal_value_to_project(@project, field_sym, value)
+
+        new_value = @project.public_send(field_sym)
+        next if new_value == original # no-op after apply
+
+        @automated_fields[highlight_field] = { new_value: new_value, explanation: nil }
         next
       end
 
+      # Current has a real value from here on.
+      next if value == original # no-op: proposed already matches current
+
+      unless forced
+        # Current present, differs, NOT forced → keep value.
+        # For justifications, record ≠ so the user sees the disagreement.
+        # Non-criteria fields have no ≠ icon ("different wording" is not meaningful).
+        # ||= avoids overwriting a status-level divergence entry from Pass 1.
+        @divergent_fields[status_sym] ||= { proposed_status: nil, proposed_justification: value.presence } if status_sym
+        next
+      end
+
+      # Current present, differs, forced → apply, orange.
       next unless apply_proposal_value_to_project(@project, field_sym, value)
 
       new_value = @project.public_send(field_sym)
-      next if original_values[field_sym] == new_value # nothing actually changed
+      next if new_value == original # no-op after apply (e.g. validation clamped it)
+      # Guard: if Pass 1 already set an orange entry for this status symbol, keep it.
+      # Pass 1's old_value is the previous Integer status; don't overwrite with a String.
+      next if status_sym && @overridden_fields.key?(status_sym)
 
-      # Justification highlights are attributed to the paired status symbol so they
-      # appear on the correct criterion row in _status_chooser.html.erb.
-      # Non-criteria fields are their own highlight key (_form_basics.html.erb).
-      highlight_field =
-        if field_name.end_with?('_justification')
-          field_name.sub('_justification', '_status').to_sym
-        else
-          field_sym
-        end
-
-      if field_name.end_with?('_justification') && @overridden_fields.key?(highlight_field)
-        # Pass 1 already recorded an orange entry for this status symbol with old_value
-        # as the previous Integer status. Do not overwrite it with the justification's
-        # old_value (a String) — that would corrupt the type and display '?' in the view.
-        next
-      end
-
-      if field_has_real_value && forced
-        # Non-blank value replaced by force → orange.
-        # For justification fields, old_value must be the Integer status so the view can
-        # call CriterionStatus.canonical(old_value) correctly.  Using the old justification
-        # String would corrupt the type and show '?' in the disclosure.
-        # original_values only contains params keys, so the status may not be there (it
-        # wasn't in params).  Read from the project directly: Pass 1 only mutates the
-        # status when the proposed value differs, so the project still holds the original.
-        # For non-criteria fields, old_value is simply the old string value of that field.
-        old_val =
-          if field_name.end_with?('_justification')
-            @project.public_send(highlight_field) # Integer status, not justification String
-          else
-            original_values[field_sym]
-          end
-        @overridden_fields[highlight_field] = {
-          old_value: old_val,
-          new_value: new_value,
-          explanation: nil # no further paired explanation for justification/non-criteria
-        }
-      else
-        # Blank value filled in → yellow
-        @automated_fields[highlight_field] = { new_value: new_value, explanation: nil }
-      end
+      old_val = status_sym ? @project.public_send(status_sym) : original_values[field_sym]
+      @overridden_fields[highlight_field] = { old_value: old_val, new_value: new_value, explanation: nil }
     end
   end
-  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize, Metrics/BlockLength
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
   # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   # Check if current badge level has already been saved/edited

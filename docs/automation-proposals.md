@@ -75,6 +75,12 @@ See [The `overrides` Parameter](#the-overrides-parameter) below.
 | Real value | Different, Unforced | Not applied | ≠, Click to see what automation found |
 | Real value | Different, Forced | Proposal applied; old value replaced | ⚠️ Orange highlight, click to see previous value |
 
+A `_status` that is unchanged, but has a different justification,
+is considered "same as current".
+There are an infinite number of ways to justify a claim and to express that
+justification. Generally people simply want to know if something is true;
+one good justification is enough.
+
 ## URL Format when Project ID is known
 
 ```text

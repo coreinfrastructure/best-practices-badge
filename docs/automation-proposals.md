@@ -60,28 +60,26 @@ For brevity, from now on we'll omit the prefix
 
 ### What Happens to Each Proposed Field
 
-The outcome for each field depends on whether it is *forced*
-(matched by an `overrides` glob pattern) and on the field's current value.
+The outcome for each field depends on the field's current value and
+whether the new automation proposals *overrides* the current value
+(aka is *forced*).
+By default, proposals are unforced.
 To force proposals, add `overrides=*` (force all fields) or a more
 specific glob such as `overrides=osps_ac_*` to the URL.
 See [The `overrides` Parameter](#the-overrides-parameter) below.
-By default, proposals are unforced.
-
-**Case A — Unforced (default, no `overrides` match):**
 
 | Current value | Proposed value | Result | Visual indicator |
 |---------------|---------------|--------|-----------------|
 | Any | Same as current | No change | None |
 | Blank/Unknown (`?`) | Different | Proposal applied | 🤖 Yellow highlight |
-| Real value | Different | Not applied | ≠, Click to see what automation found |
+| Real value | Different, Unforced | Not applied | ≠, Click to see what automation found |
+| Real value | Different, Forced | Proposal applied; old value replaced | ⚠️ Orange highlight, click to see previous value |
 
-**Case B — Forced (`overrides` pattern matches this field):**
-
-| Current value | Proposed value | Result | Visual indicator |
-|---------------|---------------|--------|-----------------|
-| Any | Same as current | No change | None |
-| Blank/Unknown (`?`) | Different | Proposal applied | 🤖 Yellow highlight |
-| Real value | Different | Proposal applied; old value replaced | ⚠️ Orange highlight, click to see previous value |
+A `_status` that is unchanged, but has a different justification,
+is considered "same as current".
+There are an infinite number of ways to justify a claim and to express that
+justification. Generally people simply want to know if something is true;
+one good justification is enough.
 
 ## URL Format when Project ID is known
 

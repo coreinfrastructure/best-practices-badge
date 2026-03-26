@@ -667,8 +667,11 @@ class ProjectsController < ApplicationController
       if Project.exists?(repo_url: project_repo_url)
         flash[:info] = t('projects.new.project_already_exists')
         existing_project = Project.select(:id).find_by(repo_url: project_repo_url)
-        return redirect_to project_section_path(existing_project,
-                                                validated_starting_section)
+        # Redirect to edit so the user can continue filling in the project.
+        # If the current user doesn't own it, can_edit_else_redirect (a
+        # before_action on edit) will redirect them to the show page instead.
+        return redirect_to edit_project_section_path(existing_project,
+                                                     validated_starting_section)
       end
     end
 
@@ -1644,6 +1647,7 @@ class ProjectsController < ApplicationController
   # That flag is only set when the user actually clicks save, so that
   # re-opening the form without saving always re-runs automation and shows
   # fresh highlighting.
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def run_first_edit_automation_if_needed
     return if level_already_saved? && !params.key?(:reanalyze)
 
@@ -1671,7 +1675,16 @@ class ProjectsController < ApplicationController
     @divergent_fields  = {}
     classify_chief_proposals(proposals, original_values, track_automated: true)
     chief.apply_changes(@project, proposals)
+  rescue StandardError => e
+    # Network errors (e.g. 404 from GitHub), timeouts, or detective bugs must
+    # not crash the edit page — the user should still be able to fill in the
+    # form manually.  Clear all highlighting so the view renders cleanly.
+    Rails.logger.error("Chief first-edit analysis failed: #{e.class} #{e.message}")
+    @automated_fields = {}
+    @overridden_fields = {}
+    @divergent_fields  = {}
   end
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   # Compute the set of field symbols that are "forced" by the `overrides`
   # URL param.  A forced field will overwrite an existing real value;

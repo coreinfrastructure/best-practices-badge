@@ -130,6 +130,32 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
         }
       }
     end
+    # Owner should be redirected to the edit page, not the show page,
+    # so they can continue filling in the project they already created.
+    assert_redirected_to edit_project_section_path(@project, 'passing')
+  end
+
+  test 'duplicate repo owned by another user redirects to show page' do
+    # @project_two is owned by @user2; @user tries to submit the same repo URL
+    log_in_as(@user)
+    stub_request(:get, 'https://api.github.com/user/repos')
+      .to_return(status: 200, body: '', headers: {})
+    assert_no_difference ['Project.count'] do
+      post '/en/projects', params: {
+        project: {
+          description: 'Trying to duplicate',
+          license: @project_two.license,
+          name: @project_two.name,
+          repo_url: @project_two.repo_url,
+          homepage_url: @project_two.homepage_url
+        }
+      }
+    end
+    # Non-owner reaches the edit path, where can_edit_else_redirect
+    # redirects them to the show page.
+    follow_redirect!
+    assert_response :redirect
+    assert_redirected_to project_section_path(@project_two, 'passing')
   end
 
   test 'should fail to create project as blocked user' do
@@ -260,7 +286,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
         starting_section: 'baseline-1'
       }
     end
-    assert_redirected_to project_section_path(@project, 'baseline-1')
+    assert_redirected_to edit_project_section_path(@project, 'baseline-1')
   end
 
   test 'new project form contains badge series radio buttons' do
@@ -1362,7 +1388,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
         project: { repo_url: @project.repo_url }
       }
     end
-    assert_redirected_to project_section_path(@project, 'passing', locale: :en)
+    assert_redirected_to edit_project_section_path(@project, 'passing', locale: :en)
   end
 
   test 'should succeed and then fail to change non-blank repo_url' do

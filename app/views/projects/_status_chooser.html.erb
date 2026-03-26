@@ -161,7 +161,7 @@
       <sup>[<%= baseline_id_to_display(criterion) %>]</sup>
       <%= if criterion.details
             render(partial: "details",
-              locals: {f: f, criterion: criterion,
+              locals: {criterion: criterion,
                        details: criterion.details.html_safe})
           end %>
     <% end # cache 'desc' %>

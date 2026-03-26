@@ -136,7 +136,7 @@ td.project_name {
 // Orange: Chief overrode a non-'?' value (needs attention)
 .highlight-overridden {
   border-left: 6px solid #e65c00 !important; // Strong orange
-  background-color: #fff4e6; // Light orange background
+  background-color: #ffe0b2; // Clearly orange background (Material Orange 100)
   padding-left: 16px;
   padding-top: 8px;
   padding-bottom: 8px;
@@ -145,17 +145,17 @@ td.project_name {
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #ffe6cc; // Slightly darker on hover
+    background-color: #ffcc80; // Darker orange on hover (Material Orange 200)
   }
 }
 
 @keyframes pulse-orange {
   0%, 100% {
-    background-color: #fff4e6;
+    background-color: #ffe0b2;
     border-left-width: 6px;
   }
   50% {
-    background-color: #ffe6cc;
+    background-color: #ffcc80;
     border-left-width: 8px;
   }
 }
@@ -171,6 +171,20 @@ td.project_name {
 
   &:hover {
     background-color: #ffffcc; // Slightly darker on hover
+  }
+}
+
+// Blue: automation disagreed with the user's answer (informational, non-alarming)
+.highlight-divergent {
+  border-left: 4px solid #5b9bd5; // Muted blue
+  background-color: #f0f6ff; // Very light blue
+  padding-left: 14px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  margin-bottom: 6px;
+
+  &:hover {
+    background-color: #e0edff; // Slightly darker on hover
   }
 }
 
@@ -190,3 +204,93 @@ td.project_name {
   opacity: 0.7; // 🤖 more subtle
 }
 
+// Expandable detail disclosures for automation icons (orange override)
+// Closed: icon sits inline with the criterion label
+details.automation-detail {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+details.automation-detail > summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+details.automation-detail > summary::-webkit-details-marker {
+  display: none;
+}
+
+// Open: force content onto its own line — prevents word-wrap issues
+details.automation-detail[open] {
+  display: block;
+}
+
+// Full-width divergent detail block — col-xs-12 sibling at top of criterion row.
+// Summary shows ≠ with a ▾/▴ chevron; body reveals automation's proposed answer.
+// Full-width override (⚠️) detail block — col-xs-12 sibling at top of criterion row.
+details.override-detail-block {
+  margin-bottom: 4px;
+}
+
+details.override-detail-block > summary {
+  list-style: none;
+  cursor: pointer;
+  font-size: 1.1em;
+}
+
+details.override-detail-block > summary::-webkit-details-marker {
+  display: none;
+}
+
+details.override-detail-block > summary::after {
+  content: ' \25BE'; // ▾ small down-pointing triangle
+  font-size: 0.75em;
+  vertical-align: middle;
+}
+
+details.override-detail-block[open] > summary::after {
+  content: ' \25B4'; // ▴ small up-pointing triangle
+}
+
+.override-detail-body {
+  padding: 6px 8px;
+  background-color: #ffe0b2;
+  border-left: 3px solid #e65c00;
+  border-radius: 2px;
+  margin-top: 4px;
+}
+
+// Full-width divergent (≠) detail block — col-xs-12 sibling at top of criterion row.
+details.divergent-detail-block {
+  margin-bottom: 4px;
+}
+
+details.divergent-detail-block > summary {
+  list-style: none;
+  cursor: pointer;
+  color: #1a5fa8; // Medium blue
+  font-size: 1.3em;
+  font-weight: bold;
+}
+
+details.divergent-detail-block > summary::-webkit-details-marker {
+  display: none;
+}
+
+details.divergent-detail-block > summary::after {
+  content: ' \25BE'; // ▾ small down-pointing triangle
+  font-size: 0.75em;
+  vertical-align: middle;
+}
+
+details.divergent-detail-block[open] > summary::after {
+  content: ' \25B4'; // ▴ small up-pointing triangle
+}
+
+.divergent-detail-body {
+  padding: 6px 8px;
+  background-color: #e8f0fa;
+  border-left: 3px solid #5b9bd5;
+  border-radius: 2px;
+  margin-top: 4px;
+}

@@ -14,6 +14,9 @@ class ProjectsController < ApplicationController
   # Fields that can always be automated regardless of section being edited.
   # These are non-criteria fields that detectives can fill in (from their OUTPUTS).
   # Based on detective analysis: name, license, description, implementation_languages, cpe, general_comments
+  # Shared empty frozen Set — reused to avoid repeated allocations in hot paths.
+  EMPTY_FROZEN_SET = Set.new.freeze
+
   ALWAYS_AUTOMATABLE = %i[
     name
     license
@@ -62,11 +65,13 @@ class ProjectsController < ApplicationController
   #   Values: { new_value:, explanation: }
   # - @overridden_fields (orange highlight): fields that had a real user
   #   value (not '?' or blank) and were forcibly changed by Chief.
-  #   Values: { old_value:, new_value:, explanation: }
+  #   Values: { old_value:, new_value:, old_justification:, explanation: }
+  #   old_justification is the user's previous justification text (may be nil).
+  #   explanation is the automation's reason for the override (Chief only; nil for URL).
   #
-  # They are populated by categorize_automation_changes (first-edit),
-  # apply_query_string_automation (URL proposals), run_save_automation
-  # (save-time Chief), and parse_and_validate_field_list (redirect params).
+  # They are populated by classify_chief_proposals (first-edit and save-time Chief),
+  # apply_query_string_automation (URL proposals),
+  # and parse_and_validate_field_list (redirect params).
   # Consumed by the edit view (via projects_helper automated_field_set /
   # overridden_field_set), format_override_details, and
   # build_automation_metadata (JSON API).
@@ -641,6 +646,8 @@ class ProjectsController < ApplicationController
       merge_field_lists(params[:overridden_fields_list], @overridden_fields)
     @automated_fields =
       merge_field_lists(params[:automated_fields_list], @automated_fields)
+    @divergent_fields =
+      parse_divergent_fields_list(params[:divergent_fields_list], @divergent_fields)
 
     return unless @project.notify_for_static_analysis?('0')
 
@@ -664,8 +671,11 @@ class ProjectsController < ApplicationController
       if Project.exists?(repo_url: project_repo_url)
         flash[:info] = t('projects.new.project_already_exists')
         existing_project = Project.select(:id).find_by(repo_url: project_repo_url)
-        return redirect_to project_section_path(existing_project,
-                                                validated_starting_section)
+        # Redirect to edit so the user can continue filling in the project.
+        # If the current user doesn't own it, can_edit_else_redirect (a
+        # before_action on edit) will redirect them to the show page instead.
+        return redirect_to edit_project_section_path(existing_project,
+                                                     validated_starting_section)
       end
     end
 
@@ -737,8 +747,11 @@ class ProjectsController < ApplicationController
 
       # Run Chief analysis with level and changed_fields for targeted validation
       # Pass user_set_values so we can detect overrides
-      # Only track automated fields if continuing to edit (for highlighting)
-      track_automated = params[:continue].present?
+      # Track all automation results (yellow + orange + ≠) when:
+      #   - user clicked "Save and Continue" (they want to keep editing), OR
+      #   - user changed the repo URL (full re-analysis of the new repo is needed;
+      #     redirect to edit so they can review all new proposals)
+      track_automated = params[:continue].present? || @project.repo_url_changed?
       run_save_automation(changed_fields, user_set_values, track_automated: track_automated)
 
       @project.repo_url_updated_at = Time.now.utc if @project.repo_url_changed?
@@ -1630,13 +1643,20 @@ class ProjectsController < ApplicationController
     url
   end
 
-  # Run first-edit automation if this badge level hasn't been saved yet.
-  # Tracks which fields were filled (for highlighting in view).
-  # Fields that were '?' and got filled are @automated_fields (yellow).
-  # Fields that had a real value and got overridden are @overridden_fields
-  # (orange).
+  # Apply automation proposals on the first edit of a badge level, or when
+  # :reanalyze is requested.  Populates three instance variables used by
+  # the view to highlight criterion rows:
+  #   @automated_fields  — blank/UNKNOWN fields that were filled    (yellow)
+  #   @overridden_fields — real values overridden by forced proposals (orange)
+  #   @divergent_fields  — real values where proposal was not forced  (≠ icon)
+  #
+  # Unlike run_save_automation, this method does NOT set level_saved_flag.
+  # That flag is only set when the user actually clicks save, so that
+  # re-opening the form without saving always re-runs automation and shows
+  # fresh highlighting.
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def run_first_edit_automation_if_needed
-    return if level_already_saved?
+    return if level_already_saved? && !params.key?(:reanalyze)
 
     # Reload with ALL columns before running automation.
     # set_project_for_section loads only the current section's fields for
@@ -1648,66 +1668,81 @@ class ProjectsController < ApplicationController
     # This one-time reload only runs on the first edit of each section.
     @project = Project.find(@project.id)
 
-    # Capture original values before automation
     original_values = capture_original_values
-
-    # Run Chief analysis for this specific level
     chief = Chief.new(@project, client_factory, entry_locale: @project.entry_locale)
-    chief.autofill(needed_fields: fields_for_current_section)
 
-    # Categorize changes into automated (yellow) and overridden (orange)
-    categorize_automation_changes(original_values)
-
-    # NOTE: We do NOT set level_saved_flag here. That should only happen
-    # when the user actually clicks save. The automated/overridden fields
-    # are stored in hidden form fields to preserve highlighting across
-    # "save and continue".
+    # Separate propose_changes from apply_changes so we can inspect every
+    # proposal before it is applied.  If we used autofill() instead, it
+    # would wrap both steps and discard the proposal data, making it
+    # impossible to detect non-forced proposals for real-value fields (which
+    # should show ≠ rather than being silently skipped).
+    proposals = chief.propose_changes(needed_fields: fields_for_current_section)
+    @automated_fields = {}
+    @overridden_fields = {}
+    @divergent_fields  = {}
+    classify_chief_proposals(proposals, original_values, track_automated: true)
+    chief.apply_changes(@project, proposals)
+  rescue StandardError => e
+    # Network errors (e.g. 404 from GitHub), timeouts, or detective bugs must
+    # not crash the edit page — the user should still be able to fill in the
+    # form manually.  Clear all highlighting so the view renders cleanly.
+    Rails.logger.error("Chief first-edit analysis failed: #{e.class} #{e.message}")
+    @automated_fields = {}
+    @overridden_fields = {}
+    @divergent_fields  = {}
   end
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
-  # Apply field value proposals from query string parameters to a project.
-  # Standalone method that can be tested without HTTP requests.
-  # External tools can propose values via URL like:
-  #   /projects/123/passing/edit?contribution_status=Met&name=MyProject
-  # Blank values are accepted for non-status fields (e.g., ?description=&name=foo)
-  # @param project [Project] The project to modify
-  # @param params_hash [Hash] Query parameters (ActionController::Parameters or Hash)
-  # @param section_level [String] Internal section key (e.g., '0', 'baseline-1')
-  # @return [Array<Symbol>] List of field names that were modified
-  def apply_query_string_proposals_to_project(project, params_hash, section_level)
-    modified_fields = []
+  # Compute the set of field symbols that are "forced" by the `overrides`
+  # URL param.  A forced field will overwrite an existing real value;
+  # an unforced field only fills blank/unknown slots.
+  #
+  # `overrides` is a comma-separated list of File.fnmatch glob patterns
+  # matched against field name strings.  Examples:
+  #   overrides=*            — force every proposed field
+  #   overrides=osps_ac_*   — force only the access-control group
+  #
+  # When a _status field is forced, its paired _justification is also forced
+  # (when present in params) — because an old justification written for the
+  # previous status answer would be semantically wrong under the new one.
+  #
+  # Length limits exist to prevent DoS via pathologically large input;
+  # inputs exceeding them are treated as "no overrides" rather than an error.
+  #
+  # @param valid_fields [Set<Symbol>] Fields valid for the current section
+  # @return [Set<Symbol>] Frozen set of forced field symbols
+  # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/MethodLength, Metrics/PerceivedComplexity
+  def compute_forced_fields(valid_fields)
+    overrides = params[:overrides].to_s
+    return EMPTY_FROZEN_SET if overrides.blank?
+    return EMPTY_FROZEN_SET if overrides.length > 10_000
 
-    # Get valid fields for this section
-    valid_fields = FIELDS_BY_SECTION[section_level]
-    return modified_fields if valid_fields.nil?
+    patterns = overrides.split(',').map(&:strip).reject(&:empty?)
+    return EMPTY_FROZEN_SET if patterns.length > 1_000
 
-    # Check each query parameter
-    params_hash.each do |param_name, param_value|
-      field_sym = param_name.to_sym
+    forced = Set.new
+    valid_fields.each do |field_sym|
+      field_str = field_sym.to_s
+      next unless patterns.any? { |pattern| File.fnmatch(pattern, field_str) }
 
-      # Skip if not a valid field for this section
-      next if valid_fields.exclude?(field_sym)
+      forced << field_sym
+      # Propagate forcing to the paired justification (if provided).
+      next unless field_str.end_with?('_status')
 
-      # Apply the value and track if successful
-      # Note: Blank values are allowed for non-status fields
-      if apply_proposal_value_to_project(project, field_sym, param_value)
-        modified_fields << field_sym
-      end
+      just_sym = field_str.sub('_status', '_justification').to_sym
+      forced << just_sym if params.key?(just_sym.to_s)
     end
-
-    modified_fields
+    forced.freeze
   end
+  # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/MethodLength, Metrics/PerceivedComplexity
 
-  # Apply query string proposals and track them as automated fields.
-  # Called unconditionally from edit (Rule 3: always consume proposals).
-  # Snapshots values before applying, then marks changed fields as
-  # automated (yellow highlighting).
-  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-  # rubocop:disable Metrics/CyclomaticComplexity
-  def apply_query_string_automation
-    valid_fields = fields_for_current_section
-    return if valid_fields.nil?
-
-    # Snapshot only the fields that appear in the query string
+  # Snapshot the current project values for all params that are valid fields.
+  # Called before any proposals are applied so both passes can compare against originals.
+  # @param valid_fields [Set<Symbol>]
+  # @return [Hash{Symbol => Object}]
+  def snapshot_original_values(valid_fields)
     original_values = {}
     params.each_key do |key|
       field_sym = key.to_sym
@@ -1715,34 +1750,258 @@ class ProjectsController < ApplicationController
 
       original_values[field_sym] = @project.public_send(field_sym)
     end
+    original_values
+  end
 
-    internal_level = criteria_level_to_internal(@criteria_level)
-    modified = apply_query_string_proposals_to_project(
-      @project, params, internal_level
-    )
-    return if modified.empty?
+  # Read URL query-string params and apply them as automation proposals to
+  # @project for the current criteria section.  Params that name valid fields
+  # for the section are candidates; all others are ignored.
+  #
+  # The `overrides` param (comma-separated glob patterns) controls forcing:
+  # a field whose name matches any pattern is "forced" and will overwrite an
+  # existing real value; an unforced field is only applied when blank/unknown.
+  #
+  # Side effects — populates three instance variables used by the view:
+  #   @automated_fields  — fields applied to a blank slot          (yellow highlight)
+  #   @overridden_fields — fields force-applied over a real value  (orange highlight)
+  #   @divergent_fields  — fields automation proposed but skipped  (≠ icon, no highlight)
+  #
+  # All criterion-field highlights (@automated, @overridden, @divergent) are keyed
+  # on the _status symbol even for justification fields, so they map to the correct
+  # criterion row in the view.
+  #
+  # Justification–Status Coupling rule: if a status field is divergent (not
+  # applied), its paired justification must also be skipped — a justification
+  # written for the wrong status answer would actively mislead the user.
+  #
+  # ── Full decision matrix ────────────────────────────────────────────────
+  #
+  # Legend:
+  #   forced    = field name matches a glob in the `overrides` URL param
+  #   real      = current value is present? and (for status) not UNKNOWN
+  #   no-op     = proposed value equals current value (nothing would change)
+  #   Yellow    = @automated_fields  (automation filled a blank slot)
+  #   Orange    = @overridden_fields (automation replaced an existing answer)
+  #   ≠         = @divergent_fields  (automation disagreed; your answer kept)
+  #   (none)    = no highlight, no icon, field unchanged
+  #
+  # _status fields
+  #   proposed value unparsable                           → Skip     (none)  [pre-screen]
+  #   proposed is '?' (UNKNOWN)                           → Skip     (none)  [pre-screen, any forced]
+  #   current blank/UNKNOWN                               → Apply    Yellow
+  #   current real, no-op (proposed == current)           → Skip     (none)
+  #   current real, proposed differs, NOT forced          → Keep     ≠
+  #   current real, proposed differs, forced              → Apply    Orange
+  #
+  # _justification fields
+  #   [Coupling rule: if paired _status is ≠, skip entirely — always]
+  #   current blank                                       → Apply    Yellow
+  #   current present, no-op (proposed == current)        → Skip     (none)
+  #   current present, proposed differs, NOT forced       → Skip     (none)
+  #   current present, proposed differs, forced           → Apply    Orange
+  #
+  # Other fields (name, description, license, etc.)
+  #   current blank?                                      → Apply    Yellow
+  #   current present, no-op (proposed == current)        → Skip     (none)
+  #   current present, proposed differs, NOT forced       → Keep     ≠ (proposed_value:)
+  #   current present, proposed differs, forced           → Apply    Orange
+  #
+  def apply_query_string_automation
+    valid_fields = fields_for_current_section
+    return if valid_fields.nil?
 
-    # Track which proposals actually changed values.
-    # Map _justification fields to their _status counterpart so the
-    # view (which highlights by status symbol) can find them.
+    forced_fields = compute_forced_fields(valid_fields)
+    original_values = snapshot_original_values(valid_fields)
+
     @automated_fields ||= {}
-    modified.each do |field_name|
-      new_value = @project.public_send(field_name)
-      next if original_values[field_name] == new_value
+    @overridden_fields ||= {}
+    @divergent_fields  ||= {}
 
-      highlight_field =
-        if field_name.to_s.end_with?('_justification')
-          field_name.to_s.sub('_justification', '_status').to_sym
-        else
-          field_name
-        end
-      @automated_fields[highlight_field] = {
-        new_value: new_value, explanation: nil
+    # Pass 1 must run first: it classifies every status field and returns the
+    # set of divergent ones.  Pass 2 needs that set to enforce the Coupling
+    # rule — without it, a blocked status's justification could slip through
+    # and mislead the user about a value that was never actually changed.
+    divergent_status_fields = apply_status_proposals(valid_fields, forced_fields, original_values)
+
+    # Pass 2 processes everything else (justifications + non-criteria fields).
+    # Running it after Pass 1 also means that when both a status and its
+    # justification are forced, Pass 1's Integer old_value entry for the
+    # status symbol is already in @overridden_fields before Pass 2 sees the
+    # justification, letting Pass 2's guard skip the write and preserve the
+    # correct type expected by the view.
+    apply_non_status_proposals(valid_fields, forced_fields, original_values, divergent_status_fields)
+  end
+
+  # Pass 1: process _status fields only, following the decision matrix top-to-bottom.
+  # Returns the set of status fields that were divergent (not applied) for Pass 2.
+  #
+  # @param valid_fields [Set<Symbol>]
+  # @param forced_fields [Set<Symbol>]
+  # @param original_values [Hash{Symbol => Object}] pre-change project values
+  # @return [Set<Symbol>] status fields recorded as divergent
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def apply_status_proposals(valid_fields, forced_fields, original_values)
+    divergent_status_fields = Set.new
+    params.each do |key, value|
+      field_sym = key.to_sym
+      next if valid_fields.exclude?(field_sym)
+      next unless field_sym.to_s.end_with?('_status')
+
+      original = original_values[field_sym]
+      # Pre-screen: unparsable or '?' proposals are never applied or flagged.
+      # '?' ("I don't know") is not meaningful — not as a fill, not as a force.
+      proposed = parse_status_value(value)
+      next if proposed.nil? || proposed == CriterionStatus::UNKNOWN
+
+      # A real value is non-blank? AND non-UNKNOWN (stored as a non-zero integer).
+      field_has_real_value = original.present? && original != CriterionStatus::UNKNOWN
+
+      unless field_has_real_value
+        # Current blank/UNKNOWN → apply, yellow (forced or not — nothing to override)
+        next unless apply_proposal_value_to_project(@project, field_sym, value)
+
+        new_value = @project.public_send(field_sym)
+        next if new_value == original # no-op after apply
+
+        # URL params carry no accompanying explanation (unlike Chief detectives),
+        # so explanation is always nil here.
+        @automated_fields[field_sym] = { new_value: new_value, explanation: nil }
+        next
+      end
+
+      # Current has a real value from here on.
+      next if proposed == original # no-op: proposed already matches current
+
+      # justification_key is needed in both the divergent and forced branches:
+      # divergent stores proposed_justification; orange stores explanation.
+      justification_key = field_sym.to_s.sub('_status', '_justification')
+      forced = forced_fields.include?(field_sym)
+
+      unless forced
+        # Current real, differs, NOT forced → keep, record ≠
+        @divergent_fields[field_sym] = {
+          proposed_status: proposed,
+          proposed_justification: params[justification_key].presence
+        }
+        divergent_status_fields << field_sym
+        next
+      end
+
+      # Current real, differs, forced → apply, orange
+      next unless apply_proposal_value_to_project(@project, field_sym, value)
+
+      new_value = @project.public_send(field_sym)
+      next if new_value == original # no-op after apply (e.g. validation clamped it)
+
+      @overridden_fields[field_sym] = {
+        old_value: original,
+        new_value: new_value,
+        old_justification: original_values[justification_key.to_sym],
+        explanation: nil # URL proposals have no separate automation reason
       }
+    end
+    divergent_status_fields
+  end
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+
+  # Pass 2: process _justification and non-criteria fields, following the matrix.
+  #
+  # Key design notes:
+  #   - Coupling rule: if Pass 1 left a status divergent (kept user's value), its
+  #     paired justification is blocked entirely — even when forced — because
+  #     applying a justification for the wrong status answer actively misleads.
+  #   - Highlights are keyed on the STATUS symbol (not justification symbol) so they
+  #     appear on the correct criterion row in the view.
+  #   - When Pass 1 already recorded an orange entry for a status symbol, Pass 2 must
+  #     not overwrite it: Pass 1's old_value is an Integer (needed by
+  #     CriterionStatus.canonical in the view); replacing it with a String would
+  #     corrupt the type and show '?' in the disclosure popover.
+  #   - For the orange old_value of a forced justification, original_values is
+  #     preferred over @project because Pass 1 may have already changed the project's
+  #     status (e.g., blank→yellow).  original_values holds the true pre-automation
+  #     status.  When the status was not in the URL params (and thus not in
+  #     original_values), we fall back to the project value, which is unchanged.
+  #
+  # @param valid_fields [Set<Symbol>]
+  # @param forced_fields [Set<Symbol>]
+  # @param original_values [Hash{Symbol => Object}] pre-change project values
+  # @param divergent_status_fields [Set<Symbol>] status fields from Pass 1 not applied
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def apply_non_status_proposals(valid_fields, forced_fields, original_values, divergent_status_fields)
+    params.each do |key, value|
+      field_sym = key.to_sym
+      next if valid_fields.exclude?(field_sym)
+      next if field_sym.to_s.end_with?('_status')
+
+      field_name = field_sym.to_s
+      # status_sym is the paired status field for justifications; nil for other fields.
+      # It doubles as the highlight key and the coupling-rule lookup.
+      status_sym =
+        if field_name.end_with?('_justification')
+          field_name.sub('_justification', '_status').to_sym
+        end
+
+      # Coupling rule: never apply a justification whose paired status was not applied.
+      next if status_sym && divergent_status_fields.include?(status_sym)
+
+      original = original_values[field_sym]
+      forced = forced_fields.include?(field_sym)
+      # "Real value" for strings is simply present? — no UNKNOWN sentinel here.
+      field_has_real_value = original.present?
+      # Highlights on criterion rows key to the status symbol; other fields key to themselves.
+      highlight_field = status_sym || field_sym
+
+      unless field_has_real_value
+        # Current blank → apply, yellow (forced or not — nothing to override)
+        next unless apply_proposal_value_to_project(@project, field_sym, value)
+
+        new_value = @project.public_send(field_sym)
+        next if new_value == original # no-op after apply
+
+        @automated_fields[highlight_field] = { new_value: new_value, explanation: nil }
+        next
+      end
+
+      # Current has a real value from here on.
+      next if value == original # no-op: proposed already matches current
+
+      unless forced
+        # Justification fields: silently skip — there are many valid ways to
+        # justify a conclusion, so a different wording from automation is not
+        # meaningful when the *status* is not being contested.
+        # Non-criteria fields (name, description, license, etc.): record ≠.
+        @divergent_fields[field_sym] = { proposed_value: value.presence } unless status_sym
+        next
+      end
+
+      # Current present, differs, forced → apply, orange.
+      next unless apply_proposal_value_to_project(@project, field_sym, value)
+
+      new_value = @project.public_send(field_sym)
+      next if new_value == original # no-op after apply (e.g. validation clamped it)
+      # Guard: if Pass 1 already stored an orange entry for this status symbol, keep it.
+      # Pass 1's old_value is the pre-automation Integer status; overwriting it with the
+      # justification's old String value would corrupt the type read by the view.
+      next if status_sym && @overridden_fields.key?(status_sym)
+
+      # Prefer original_values for the status old_value: it holds the pre-automation
+      # snapshot, whereas @project may already reflect Pass 1's yellow-fill of the
+      # status.  Fall back to @project when the status was not in the URL params
+      # (and thus not snapshotted), which means Pass 1 left it unchanged.
+      old_val =
+        if status_sym
+          original_values.fetch(status_sym) { @project.public_send(status_sym) }
+        else
+          original_values[field_sym]
+        end
+      @overridden_fields[highlight_field] = { old_value: old_val, new_value: new_value, explanation: nil }
     end
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
-  # rubocop:enable Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   # Check if current badge level has already been saved/edited
   # @return [Boolean]
@@ -1797,71 +2056,6 @@ class ProjectsController < ApplicationController
 
     original
   end
-
-  # Categorize automation changes into @automated_fields and
-  # @overridden_fields based on old vs new values.
-  # - Status changed from '?' to a real value: automated (yellow)
-  # - Status changed from a real value to another: overridden (orange)
-  # - Justification changed: automated (attributed to its status field)
-  # - Non-criteria field filled from blank: automated
-  # Both lists are filtered to the current section.
-  # @param original_values [Hash] Field name => value before automation
-  # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/AbcSize
-  def categorize_automation_changes(original_values)
-    automated = {}
-    overridden = {}
-
-    original_values.each do |field_name, old_value|
-      new_value = @project.public_send(field_name)
-      next if old_value == new_value
-
-      field_str = field_name.to_s
-      if field_str.end_with?('_status')
-        categorize_status_automation(
-          field_name, old_value, new_value, automated, overridden
-        )
-      elsif field_str.end_with?('_justification')
-        status_field = field_str.sub('_justification', '_status').to_sym
-        automated[status_field] = {
-          new_value: new_value, explanation: new_value
-        }
-      elsif ALWAYS_AUTOMATABLE.include?(field_name) &&
-            old_value.blank? && new_value.present?
-        automated[field_name] = {
-          new_value: new_value, explanation: nil
-        }
-      end
-    end
-
-    @automated_fields = filter_to_current_section(automated)
-    @overridden_fields = filter_to_current_section(overridden)
-  end
-  # rubocop:enable Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/AbcSize
-
-  # Categorize a status field change as automated or overridden.
-  # Unknown -> real value is automated (yellow); real -> real is
-  # overridden (orange).
-  # rubocop:disable Metrics/MethodLength
-  def categorize_status_automation(
-    field_name, old_value, new_value, automated, overridden
-  )
-    justification_field = field_name.to_s
-                                    .sub('_status', '_justification').to_sym
-    explanation =
-      if @project.respond_to?(justification_field)
-        @project.public_send(justification_field)
-      end
-    if old_value == CriterionStatus::UNKNOWN
-      automated[field_name] = {
-        new_value: new_value, explanation: explanation
-      }
-    else
-      overridden[field_name] = {
-        old_value: old_value, new_value: new_value, explanation: explanation
-      }
-    end
-  end
-  # rubocop:enable Metrics/MethodLength
 
   # Apply a single proposal value to a project (helper for apply_query_string_proposals_to_project)
   # @param project [Project] The project to modify
@@ -1942,44 +2136,239 @@ class ProjectsController < ApplicationController
     validated
   end
 
-  # Categorize a single Chief proposal (override vs automated)
-  # @param field [Symbol] Field name
-  # @param data [Hash] Chief proposal with :value, :explanation, :forced
-  # @param user_value [Object] Value user set
-  # @param track_automated [Boolean] Whether to track automated fills (optimization)
+  # Build query-parameter hash for divergent fields to carry through a redirect.
+  # Convention: _status keys hold Integers internally; convert to canonical String
+  # at the URL boundary.  _value keys hold Strings; pass through unchanged.
+  # Params produced:
+  #   divergent_fields_list=field1,field2,...
+  #   div__field1=Met            (canonical string for _status fields, raw for others)
+  #   div__field1_justification=...  (omitted when blank)
+  # @return [Hash] Params to merge into redirect_to path options
+  # rubocop:disable Metrics/MethodLength
+  def divergent_url_params
+    return {} unless @divergent_fields&.any?
+
+    result = { divergent_fields_list: @divergent_fields.keys.join(',') }
+    @divergent_fields.each do |field, data|
+      val =
+        if data.key?(:proposed_status)
+          CriterionStatus.canonical(data[:proposed_status]) # Integer → String
+        else
+          data[:proposed_value].presence
+        end
+      result[:"div__#{field}"] = val if val.present?
+      justification = data[:proposed_justification]
+      result[:"div__#{field}_justification"] = justification if justification.present?
+    end
+    result
+  end
+  # rubocop:enable Metrics/MethodLength
+
+  # Parse divergent_fields_list + div__* redirect params back into @divergent_fields.
+  # Convention mirrors divergent_url_params: _status fields use CriterionStatus.parse
+  # to restore the Integer; other fields store the String as :proposed_value.
+  # Existing rich data (from Chief running in this same request) takes priority
+  # over URL values, which lack proposed_justification.
+  # @param field_string [String, nil] divergent_fields_list param value
+  # @param existing_fields [Hash, nil] @divergent_fields already set this request
+  # @return [Hash{Symbol => Hash}]
   # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity
-  def categorize_chief_proposal(field, data, user_value, track_automated = true)
-    chief_value = data[:value]
+  # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity
+  # rubocop:disable Layout/FirstHashElementLineBreak
+  def parse_divergent_fields_list(field_string, existing_fields)
+    return existing_fields || {} if field_string.blank?
 
-    # Only track if Chief is changing what the user set
-    return if user_value == chief_value
+    valid_fields = fields_for_current_section
+    return existing_fields || {} if valid_fields.nil?
 
-    if data[:forced] && user_value.present? && user_value != CriterionStatus::UNKNOWN
-      # Forced Chief override of user's real value - ORANGE
-      # Always track overrides (needed for warning messages on any save)
+    url_fields = {}
+    field_string.split(',').each do |field_name|
+      field_name = field_name.strip
+      next if field_name.blank?
+
+      field_sym = field_name.to_sym
+      next if valid_fields.exclude?(field_sym)
+
+      raw_val = params[:"div__#{field_sym}"].presence
+      justif  = params[:"div__#{field_sym}_justification"].presence
+
+      # _status fields store Integer internally; restore via CriterionStatus.parse.
+      # All other fields store the raw String as :proposed_value.
+      url_fields[field_sym] =
+        if field_name.end_with?('_status')
+          { proposed_status:       CriterionStatus.parse(raw_val),
+            proposed_justification: justif }
+        else
+          { proposed_value:        raw_val,
+            proposed_justification: justif }
+        end
+    end
+
+    return url_fields if existing_fields.blank?
+
+    # Existing data (has proposed_justification from Chief) takes priority
+    url_fields.merge(existing_fields)
+  end
+  # rubocop:enable Layout/FirstHashElementLineBreak
+  # rubocop:enable Metrics/AbcSize, Metrics/PerceivedComplexity
+  # rubocop:enable Metrics/MethodLength, Metrics/CyclomaticComplexity
+
+  # Classify Chief proposals into @automated_fields, @overridden_fields,
+  # and @divergent_fields following the same decision matrix as URL-based
+  # automation (apply_query_string_automation):
+  #
+  #   _status fields
+  #     current blank/UNKNOWN                     → Apply  Yellow
+  #     current real, no-op (proposed == current) → Skip   (none)
+  #     current real, NOT forced                  → Keep   ≠
+  #     current real, forced                      → Apply  Orange
+  #
+  #   _justification fields  [Coupling: skip if paired status is ≠]
+  #     current blank                             → Apply  Yellow
+  #     current present, no-op                    → Skip   (none)
+  #     current present, NOT forced               → Skip   (none)
+  #     current present, forced                   → Apply  Orange
+  #
+  #   Other fields (name, description, license, etc.)
+  #     current blank?                            → Apply  Yellow
+  #     current present, no-op                    → Skip   (none)
+  #     current present, NOT forced               → Keep   ≠  (proposed_value:)
+  #     current present, forced                   → Apply  Orange
+  #
+  # When track_automated is false (save-and-exit), only Orange is recorded.
+  # Yellow and ≠ are suppressed because on save-and-exit the user has
+  # already reviewed (or chosen not to review) the current values.
+  #
+  # This method classifies only — it does NOT apply proposals to @project.
+  # Callers must invoke chief.apply_changes separately after this method,
+  # which keeps the before/after snapshot meaningful for classification.
+  #
+  # @param proposals [Hash] Chief proposal map:
+  #   field_sym => { value:, forced:, explanation: }
+  # @param original_values [Hash] Field values captured before Chief ran
+  # @param track_automated [Boolean] true = save-and-continue / first-edit;
+  #   false = save-and-exit (only forced overrides tracked)
+  # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/AbcSize
+  # rubocop:disable Metrics/PerceivedComplexity, Style/CombinableLoops
+  def classify_chief_proposals(proposals, original_values, track_automated:)
+    divergent_status_fields = Set.new
+
+    # Pass 1: _status fields only.  Must run first so that divergent_status_fields
+    # is populated before Pass 2 enforces the Coupling rule (block justifications
+    # whose paired status disagreed but was not forced).
+    proposals.each do |field, data|
+      next unless field.to_s.end_with?('_status')
+
+      original    = original_values[field]
+      chief_value = data[:value]
+      forced      = data[:forced]
+
+      next if chief_value == original # no-op
+
+      field_has_real_value = original.present? && original != CriterionStatus::UNKNOWN
+
+      unless field_has_real_value
+        # Blank/UNKNOWN → Yellow
+        if track_automated
+          @automated_fields[field] = { new_value: chief_value, explanation: data[:explanation] }
+        end
+        next
+      end
+
+      # Real value, proposed differs
+      unless forced
+        # Not forced → ≠ (only on save-and-continue / first-edit).
+        # Include Chief's explanation as the proposed justification so the
+        # popover can show both the proposed status and the reason.
+        if track_automated
+          @divergent_fields[field] = {
+            proposed_status: chief_value,
+            proposed_justification: data[:explanation].presence
+          }
+          divergent_status_fields << field
+        end
+        next
+      end
+
+      # Forced → Orange
+      justification_sym = field.to_s.sub('_status', '_justification').to_sym
       @overridden_fields[field] = {
-        old_value: user_value,
+        old_value: original,
         new_value: chief_value,
+        old_justification: original_values[justification_sym],
         explanation: data[:explanation]
       }
-    elsif (user_value == CriterionStatus::UNKNOWN || user_value.blank?) && track_automated
-      # Chief filling an unknown value - YELLOW
-      # Only track on save-and-continue so user reviews before accepting
-      @automated_fields[field] = {
+    end
+
+    # Pass 2: _justification and other non-_status fields.
+    proposals.each do |field, data|
+      field_str = field.to_s
+      next if field_str.end_with?('_status')
+
+      is_justification = field_str.end_with?('_justification')
+      status_sym       = is_justification ? field_str.sub('_justification', '_status').to_sym : nil
+      highlight_field  = status_sym || field
+
+      # Coupling rule: skip if paired status is divergent
+      next if status_sym && divergent_status_fields.include?(status_sym)
+
+      original    = original_values[field]
+      chief_value = data[:value]
+      forced      = data[:forced]
+
+      next if chief_value == original # no-op
+
+      field_has_real_value = original.present?
+
+      unless field_has_real_value
+        # Blank → Yellow
+        if track_automated
+          @automated_fields[highlight_field] = { new_value: chief_value, explanation: data[:explanation] }
+        end
+        next
+      end
+
+      # Real value, differs
+      unless forced
+        # Justification fields: silently skip — same reasoning as URL automation.
+        # Non-criteria fields: record ≠.
+        @divergent_fields[field] = { proposed_value: chief_value } if track_automated && !is_justification
+        next
+      end
+
+      # Forced → Orange.  If Pass 1 already stored an orange entry for this
+      # status symbol (i.e., both status and justification were forced), keep
+      # Pass 1's entry: it holds the Integer old_value that the view expects
+      # for CriterionStatus.canonical; the justification's old_value is a String
+      # and would corrupt the type.
+      next if @overridden_fields.key?(highlight_field)
+
+      # For justification fields, the orange entry is keyed on the status symbol,
+      # so old_value must be the original *status* (an Integer), not the old
+      # justification text.  original_values is the full pre-Chief snapshot, so
+      # original_values[status_sym] is always the correct pre-automation value.
+      old_val = is_justification ? original_values[status_sym] : original
+      @overridden_fields[highlight_field] = {
+        old_value: old_val,
         new_value: chief_value,
+        old_justification: is_justification ? original_values[field] : nil,
         explanation: data[:explanation]
       }
     end
   end
-  # rubocop:enable Metrics/MethodLength, Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/MethodLength, Metrics/CyclomaticComplexity, Metrics/AbcSize
+  # rubocop:enable Metrics/PerceivedComplexity, Style/CombinableLoops
 
   # Run Chief automation during save with override detection
   # @param changed_fields [Array<Symbol>] Fields that user modified
   # @param user_set_values [Hash] Values that user just set (before Chief)
   # @param chief_instance [Chief, nil] Optional Chief instance for testing
-  # @param track_automated [Boolean] Whether to track automated fills (for highlighting)
-  #   true = save-and-continue (apply all proposals including non-forced)
-  #   false = save-and-exit (apply only forced overrides for speed)
+  # @param track_automated [Boolean] Whether to show all automation results
+  #   true  = save-and-continue: apply all proposals (blank→fill AND forced),
+  #            record yellow + orange + ≠ highlights so the user can review them
+  #   false = save-and-exit: apply ONLY forced proposals, record only orange —
+  #            non-forced blank→fills are silently skipped so nothing lands
+  #            in the database without user awareness
   # rubocop:disable Metrics/MethodLength
   def run_save_automation(changed_fields, user_set_values, chief_instance: nil, track_automated: true)
     chief = chief_instance || Chief.new(@project, client_factory, entry_locale: @project.entry_locale)
@@ -1989,28 +2378,36 @@ class ProjectsController < ApplicationController
       only_consider_overrides: !track_automated # Skip non-overridable work on save-and-exit
     )
 
-    # Filter proposed changes to only fields in the current section
+    # Detectives may propose cross-section fields (e.g., BaselineToMetalDetective
+    # proposes passing-level fields while editing a baseline section).  Restrict to
+    # the current section so we only highlight and apply what is visible on the form.
     current_section_changes = filter_to_current_section(proposed_changes)
 
-    # Categorize all proposals BEFORE applying changes.
-    # Forced overrides of real user values are always tracked (for warnings).
-    # Non-forced fills are tracked only on save-and-continue (for highlighting).
+    # Classify all proposals into @automated_fields (yellow), @overridden_fields
+    # (orange), and @divergent_fields (≠) BEFORE applying changes.
+    # track_automated controls whether yellow and ≠ are recorded (suppressed on
+    # save-and-exit since non-forced results haven't been reviewed by the user).
     @overridden_fields = {}
-    @automated_fields = {}
+    @automated_fields  = {}
+    @divergent_fields  = {}
+    classify_chief_proposals(current_section_changes, user_set_values,
+                             track_automated: track_automated)
 
-    current_section_changes.each do |field, data|
-      categorize_chief_proposal(field, data, user_set_values[field], track_automated)
-    end
-
-    # For save-and-exit, only apply forced changes — non-forced proposals
-    # haven't been reviewed by the user and must not be persisted.
-    # For save-and-continue, apply everything; the edit form highlights
-    # unreviewed automation for the user to accept or change.
+    # On save-and-exit (track_automated: false), only apply FORCED proposals.
+    # Non-forced proposals fill blank fields silently — the user never sees them
+    # and cannot review them before they land in the database.
+    # classify_chief_proposals has already recorded forced proposals in
+    # @overridden_fields, so perform_html_redirect_after_save will redirect back
+    # to edit with orange highlighting whenever any forced changes were applied.
+    #
+    # Note: only_consider_overrides: true (above) skips mapping detectives and
+    # RepoJsonDetective, but base detectives still run and can return blank→fill
+    # proposals.  We must filter here — not rely on Chief's internal filter.
     changes_to_apply =
       if track_automated
         current_section_changes
       else
-        current_section_changes.select { |_, d| d[:forced] }
+        current_section_changes.select { |_, data| data[:forced] }
       end
     chief.apply_changes(@project, changes_to_apply)
 
@@ -2125,7 +2522,8 @@ class ProjectsController < ApplicationController
       locale: params[:locale],
       anchor: first_overridden,
       overridden_fields_list: overridden_field_names.join(','),
-      automated_fields_list: automated_field_names.join(',')
+      automated_fields_list: automated_field_names.join(','),
+      **divergent_url_params
     )
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
@@ -2152,6 +2550,7 @@ class ProjectsController < ApplicationController
         redirect_params[:automated_fields_list] =
           @automated_fields.keys.join(',')
       end
+      redirect_params.merge!(divergent_url_params)
       redirect_to edit_project_section_path(@project, section,
                                             **redirect_params) + url_anchor
     else

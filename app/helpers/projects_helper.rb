@@ -26,11 +26,86 @@ module ProjectsHelper
     @automated_fields || {}
   end
 
-  # Hash of overridden fields for O(1) lookup via Hash#include?.
+  # Hash of overridden fields for O(1) lookup via Hash#[].
   # Returns empty hash when @overridden_fields is nil.
+  # Values are { old_value:, new_value:, explanation: }.
   def overridden_field_set
     @overridden_fields || {}
   end
+
+  # Hash of divergent fields for O(1) lookup via Hash#[].
+  # Returns empty hash when @divergent_fields is nil.
+  # Values are { proposed_status: Integer, proposed_justification: String|nil }.
+  def divergent_field_set
+    @divergent_fields || {}
+  end
+
+  # Returns [highlight_css_class, icon_html] for a non-criteria field.
+  # Used by _form_basics to show yellow (automated), orange (overridden), or ≠ (divergent).
+  # Returns [nil, nil] when the field was not touched by automation.
+  # @param field_sym [Symbol] Non-criteria field symbol (e.g., :name, :license)
+  # @return [Array(String?, ActiveSupport::SafeBuffer?)] [css_class, icon_html]
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  def non_criteria_automation_display(field_sym)
+    if (override_data = overridden_field_set[field_sym])
+      old_justification_part =
+        if override_data[:old_justification].present?
+          t('projects.edit.automation.overridden_old_justification_part',
+            old_justification: override_data[:old_justification])
+        else
+          ''
+        end
+      explanation_part =
+        if override_data[:explanation].present?
+          t('projects.edit.automation.overridden_explanation_part',
+            explanation: override_data[:explanation])
+        else
+          ''
+        end
+      detail_body = t('projects.edit.automation.overridden_detail',
+                      old_status: override_data[:old_value].to_s,
+                      old_justification_part: old_justification_part,
+                      explanation_part: explanation_part)
+      # rubocop:disable Rails/OutputSafety
+      icon =
+        content_tag(:details, class: 'automation-detail') do
+          content_tag(:summary,
+                      '⚠️'.html_safe,
+                      title: t('projects.edit.automation.overridden_tooltip'),
+                      'aria-label': t('projects.edit.automation.aria_overridden')) +
+            content_tag(:span, detail_body, class: 'automation-detail-body')
+        end
+      # rubocop:enable Rails/OutputSafety
+      [ApplicationHelper::HIGHLIGHT_OVERRIDDEN_CLASS, icon]
+    elsif automated_field_set.include?(field_sym)
+      [ApplicationHelper::HIGHLIGHT_AUTOMATED_CLASS, ApplicationHelper::ROBOT_EMOJI_SAFE]
+    elsif (divergent_data = divergent_field_set[field_sym])
+      justification_part =
+        if divergent_data[:proposed_justification].present?
+          t('projects.edit.automation.divergent_justification_part',
+            justification: divergent_data[:proposed_justification])
+        else
+          ''
+        end
+      detail_body = t('projects.edit.automation.divergent_detail',
+                      status: divergent_data[:proposed_value].to_s,
+                      justification_part: justification_part)
+      # rubocop:disable Rails/OutputSafety
+      icon =
+        content_tag(:details, class: 'automation-detail divergent-detail') do
+          content_tag(:summary,
+                      '≠'.html_safe,
+                      title: t('projects.edit.automation.aria_divergent'),
+                      'aria-label': t('projects.edit.automation.aria_divergent')) +
+            content_tag(:span, detail_body, class: 'automation-detail-body')
+        end
+      # rubocop:enable Rails/OutputSafety
+      [nil, icon]
+    else
+      [nil, nil]
+    end
+  end
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   # Convert a status integer value to its string representation.
   # @param value [Integer] Status value (0-3)

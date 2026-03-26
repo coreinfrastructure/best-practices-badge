@@ -130,6 +130,32 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
         }
       }
     end
+    # Owner should be redirected to the edit page, not the show page,
+    # so they can continue filling in the project they already created.
+    assert_redirected_to edit_project_section_path(@project, 'passing')
+  end
+
+  test 'duplicate repo owned by another user redirects to show page' do
+    # @project_two is owned by @user2; @user tries to submit the same repo URL
+    log_in_as(@user)
+    stub_request(:get, 'https://api.github.com/user/repos')
+      .to_return(status: 200, body: '', headers: {})
+    assert_no_difference ['Project.count'] do
+      post '/en/projects', params: {
+        project: {
+          description: 'Trying to duplicate',
+          license: @project_two.license,
+          name: @project_two.name,
+          repo_url: @project_two.repo_url,
+          homepage_url: @project_two.homepage_url
+        }
+      }
+    end
+    # Non-owner reaches the edit path, where can_edit_else_redirect
+    # redirects them to the show page.
+    follow_redirect!
+    assert_response :redirect
+    assert_redirected_to project_section_path(@project_two, 'passing')
   end
 
   test 'should fail to create project as blocked user' do
@@ -260,7 +286,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
         starting_section: 'baseline-1'
       }
     end
-    assert_redirected_to project_section_path(@project, 'baseline-1')
+    assert_redirected_to edit_project_section_path(@project, 'baseline-1')
   end
 
   test 'new project form contains badge series radio buttons' do
@@ -1362,7 +1388,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
         project: { repo_url: @project.repo_url }
       }
     end
-    assert_redirected_to project_section_path(@project, 'passing', locale: :en)
+    assert_redirected_to edit_project_section_path(@project, 'passing', locale: :en)
   end
 
   test 'should succeed and then fail to change non-blank repo_url' do
@@ -2349,28 +2375,26 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_match(/license/i, details.downcase)
   end
 
-  test 'save with overrides redirects to edit with warning' do
+  test 'classify_chief_proposals: forced override of real value → orange' do
     log_in_as(@user)
     controller = ProjectsController.new
-
-    # Set up controller state to test categorize_chief_proposal
     controller.instance_variable_set(:@project, @project)
     controller.instance_variable_set(:@criteria_level, 'passing')
-    controller.instance_variable_set(:@overridden_fields, {})
     controller.instance_variable_set(:@automated_fields, {})
-
-    # Test categorizing a forced override
-    controller.send(:categorize_chief_proposal,
-                    :license,
-                    { value: 'Apache-2.0', explanation: 'Detected Apache', forced: true },
-                    'MIT') # User had set MIT
-
-    # Should be categorized as override (not automation)
+    controller.instance_variable_set(:@overridden_fields, {})
+    controller.instance_variable_set(:@divergent_fields, {})
+    proposals = {
+      license: { value: 'Apache-2.0', explanation: 'Detected Apache', forced: true }
+    }
+    original_values = { license: 'MIT' }
+    controller.send(:classify_chief_proposals, proposals, original_values, track_automated: true)
     overrides = controller.instance_variable_get(:@overridden_fields)
     assert_equal 1, overrides.size
     assert overrides.key?(:license)
-    assert_equal 'MIT', overrides[:license][:old_value]
+    assert_equal 'MIT',        overrides[:license][:old_value]
     assert_equal 'Apache-2.0', overrides[:license][:new_value]
+    assert_empty controller.instance_variable_get(:@automated_fields)
+    assert_empty controller.instance_variable_get(:@divergent_fields)
   end
 
   test 'JSON update includes automation metadata' do
@@ -2387,85 +2411,328 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'updated', json['status']
   end
 
-  test 'chief fills in unknown values as automated not overridden' do
+  test 'classify_chief_proposals: blank status → yellow (not orange, even if forced)' do
     log_in_as(@user)
     controller = ProjectsController.new
-
-    # Set up controller state
     controller.instance_variable_set(:@project, @project)
     controller.instance_variable_set(:@criteria_level, 'passing')
-    controller.instance_variable_set(:@overridden_fields, {})
     controller.instance_variable_set(:@automated_fields, {})
-
-    # Test categorizing automation (filling in Unknown status)
-    controller.send(:categorize_chief_proposal,
-                    :contribution_status,
-                    { value: CriterionStatus::MET, explanation: 'GitHub uses issues/PRs', forced: true },
-                    CriterionStatus::UNKNOWN) # User left as Unknown
-
-    # Should be categorized as automation (not override)
+    controller.instance_variable_set(:@overridden_fields, {})
+    controller.instance_variable_set(:@divergent_fields, {})
+    proposals = {
+      contribution_status: {
+        value: CriterionStatus::MET,
+        explanation: 'GitHub uses issues/PRs', forced: true
+      }
+    }
+    original_values = { contribution_status: CriterionStatus::UNKNOWN }
+    controller.send(:classify_chief_proposals, proposals, original_values, track_automated: true)
     automated = controller.instance_variable_get(:@automated_fields)
-    overrides = controller.instance_variable_get(:@overridden_fields)
-
     assert_equal 1, automated.size
     assert automated.key?(:contribution_status)
     assert_equal CriterionStatus::MET, automated[:contribution_status][:new_value]
-    assert_empty overrides
+    assert_empty controller.instance_variable_get(:@overridden_fields)
+    assert_empty controller.instance_variable_get(:@divergent_fields)
   end
 
-  test 'categorize_automation_changes detects filled in unknowns' do
+  test 'classify_chief_proposals: blank status → yellow (first-edit style)' do
     log_in_as(@user)
     controller = ProjectsController.new
-
-    # Set up project with Unknown status value
-    @project.contribution_status = CriterionStatus::UNKNOWN
-    @project.save!
-
     controller.instance_variable_set(:@project, @project)
     controller.instance_variable_set(:@criteria_level, 'passing')
-
-    # Capture original values
-    original = { contribution_status: CriterionStatus::UNKNOWN }
-
-    # Change to Met (simulating Chief fill-in)
-    @project.contribution_status = CriterionStatus::MET
-
-    # Categorize automation changes
-    controller.send(:categorize_automation_changes, original)
-
+    controller.instance_variable_set(:@automated_fields, {})
+    controller.instance_variable_set(:@overridden_fields, {})
+    controller.instance_variable_set(:@divergent_fields, {})
+    proposals = {
+      contribution_status: {
+        value: CriterionStatus::MET,
+        explanation: 'Has CONTRIBUTING.md', forced: false
+      }
+    }
+    original_values = { contribution_status: CriterionStatus::UNKNOWN }
+    controller.send(:classify_chief_proposals, proposals, original_values, track_automated: true)
     automated = controller.instance_variable_get(:@automated_fields)
-    overridden = controller.instance_variable_get(:@overridden_fields)
     assert automated.key?(:contribution_status)
-    assert_empty overridden
+    assert_empty controller.instance_variable_get(:@overridden_fields)
+    assert_empty controller.instance_variable_get(:@divergent_fields)
   end
 
-  test 'categorize_automation_changes detects overrides on initial edit' do
+  test 'classify_chief_proposals: forced real-value → orange (first-edit style)' do
     log_in_as(@user)
     controller = ProjectsController.new
-
-    # Set up project with a real (non-Unknown) status value
-    @project.contribution_status = CriterionStatus::MET
-    @project.save!
-
     controller.instance_variable_set(:@project, @project)
     controller.instance_variable_set(:@criteria_level, 'passing')
-
-    # Capture original values with a real value
-    original = { contribution_status: CriterionStatus::MET }
-
-    # Chief overrides Met -> Unmet (simulating forced override)
-    @project.contribution_status = CriterionStatus::UNMET
-
-    # Categorize automation changes
-    controller.send(:categorize_automation_changes, original)
-
-    automated = controller.instance_variable_get(:@automated_fields)
+    controller.instance_variable_set(:@automated_fields, {})
+    controller.instance_variable_set(:@overridden_fields, {})
+    controller.instance_variable_set(:@divergent_fields, {})
+    proposals = {
+      contribution_status: {
+        value: CriterionStatus::UNMET,
+        explanation: 'No CONTRIBUTING.md', forced: true
+      }
+    }
+    original_values = { contribution_status: CriterionStatus::MET }
+    controller.send(:classify_chief_proposals, proposals, original_values, track_automated: true)
+    automated  = controller.instance_variable_get(:@automated_fields)
     overridden = controller.instance_variable_get(:@overridden_fields)
     assert_empty automated
     assert_equal 1, overridden.size
     assert overridden.key?(:contribution_status)
-    assert_equal CriterionStatus::MET, overridden[:contribution_status][:old_value]
+    assert_equal CriterionStatus::MET,   overridden[:contribution_status][:old_value]
     assert_equal CriterionStatus::UNMET, overridden[:contribution_status][:new_value]
+    assert_empty controller.instance_variable_get(:@divergent_fields)
+  end
+
+  test 'classify_chief_proposals: non-forced real-value → divergent ≠' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    @project.contribution_status = CriterionStatus::MET
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+    controller.instance_variable_set(:@automated_fields, {})
+    controller.instance_variable_set(:@overridden_fields, {})
+    controller.instance_variable_set(:@divergent_fields, {})
+    proposals = {
+      contribution_status: {
+        value: CriterionStatus::UNMET,
+        explanation: 'No CONTRIBUTING.md', forced: false
+      }
+    }
+    original_values = { contribution_status: CriterionStatus::MET }
+    controller.send(:classify_chief_proposals, proposals, original_values, track_automated: true)
+    assert_equal CriterionStatus::MET, @project.contribution_status,
+                 'classify must not change the project value'
+    divergent = controller.instance_variable_get(:@divergent_fields)
+    assert divergent.key?(:contribution_status), 'non-forced disagreement must show ≠'
+    assert_equal CriterionStatus::UNMET, divergent[:contribution_status][:proposed_status]
+    assert_empty controller.instance_variable_get(:@automated_fields)
+    assert_empty controller.instance_variable_get(:@overridden_fields)
+  end
+
+  test 'classify_chief_proposals: non-forced real-value suppressed when track_automated false' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+    controller.instance_variable_set(:@automated_fields, {})
+    controller.instance_variable_set(:@overridden_fields, {})
+    controller.instance_variable_set(:@divergent_fields, {})
+    proposals = {
+      contribution_status: {
+        value: CriterionStatus::UNMET,
+        explanation: 'No CONTRIBUTING.md', forced: false
+      }
+    }
+    original_values = { contribution_status: CriterionStatus::MET }
+    controller.send(:classify_chief_proposals, proposals, original_values, track_automated: false)
+    assert_empty controller.instance_variable_get(:@divergent_fields),
+                 '≠ must be suppressed on save-and-exit (track_automated: false)'
+    assert_empty controller.instance_variable_get(:@automated_fields)
+    assert_empty controller.instance_variable_get(:@overridden_fields)
+  end
+
+  test 'classify_chief_proposals: coupling rule — divergent status blocks justification' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+    controller.instance_variable_set(:@automated_fields, {})
+    controller.instance_variable_set(:@overridden_fields, {})
+    controller.instance_variable_set(:@divergent_fields, {})
+    # Chief disagrees on status (non-forced) AND proposes a justification
+    proposals = {
+      contribution_status: {
+        value: CriterionStatus::UNMET, explanation: 'reason', forced: false
+      },
+      contribution_justification: {
+        value: 'Chief justification', explanation: nil, forced: false
+      }
+    }
+    original_values = {
+      contribution_status:       CriterionStatus::MET,
+      contribution_justification: 'user justification'
+    }
+    controller.send(:classify_chief_proposals, proposals, original_values, track_automated: true)
+    divergent = controller.instance_variable_get(:@divergent_fields)
+    # Status goes divergent; explanation from Chief becomes proposed_justification
+    assert divergent.key?(:contribution_status), 'divergent status must be recorded'
+    assert_equal 'reason', divergent[:contribution_status][:proposed_justification],
+                 'Chief explanation must be stored as proposed_justification in status entry'
+    # Coupling rule blocks the justification proposal (regardless of no ≠ for justifications)
+    assert_equal 1, divergent.size, 'coupling rule must block justification entry entirely'
+  end
+
+  test 'classify_chief_proposals: no-op proposal → not recorded anywhere' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+    controller.instance_variable_set(:@automated_fields, {})
+    controller.instance_variable_set(:@overridden_fields, {})
+    controller.instance_variable_set(:@divergent_fields, {})
+    proposals = {
+      contribution_status: { value: CriterionStatus::MET, explanation: 'same', forced: false }
+    }
+    original_values = { contribution_status: CriterionStatus::MET }
+    controller.send(:classify_chief_proposals, proposals, original_values, track_automated: true)
+    assert_empty controller.instance_variable_get(:@automated_fields),  'no-op must not be yellow'
+    assert_empty controller.instance_variable_get(:@overridden_fields), 'no-op must not be orange'
+    assert_empty controller.instance_variable_get(:@divergent_fields),  'no-op must not be divergent'
+  end
+
+  test 'run_save_automation: non-forced blank→fill NOT applied on save-and-exit' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+
+    # Blank field — a non-forced proposal would normally fill it on save-and-continue
+    @project.contribution_status = CriterionStatus::UNKNOWN
+    non_forced_proposal = CriterionStatus::MET
+
+    mock_chief = Object.new
+    mock_chief.define_singleton_method(:propose_changes) do |**_kwargs|
+      {
+        contribution_status: {
+          value: non_forced_proposal,
+                  explanation: 'Has CONTRIBUTING.md',
+                  forced: false
+        }
+      }
+    end
+    mock_chief.define_singleton_method(:apply_changes) do |project, changes|
+      changes.each { |key, data| project[key] = data[:value] }
+    end
+
+    changed_fields = [:contribution_status]
+    user_set_values = { contribution_status: CriterionStatus::UNKNOWN }
+
+    # save-and-exit: track_animated is false
+    controller.send(:run_save_automation, changed_fields, user_set_values,
+                    chief_instance: mock_chief, track_automated: false)
+
+    assert_equal CriterionStatus::UNKNOWN, @project.contribution_status,
+                 'non-forced blank→fill must NOT be applied on save-and-exit'
+    assert_empty controller.instance_variable_get(:@overridden_fields)
+    assert_empty controller.instance_variable_get(:@automated_fields)
+  end
+
+  test 'run_save_automation: forced proposal IS applied on save-and-exit' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+
+    @project.contribution_status = CriterionStatus::MET
+
+    mock_chief = Object.new
+    mock_chief.define_singleton_method(:propose_changes) do |**_kwargs|
+      {
+        contribution_status: {
+          value: CriterionStatus::UNMET,
+                  explanation: 'No CONTRIBUTING.md',
+                  forced: true
+        }
+      }
+    end
+    mock_chief.define_singleton_method(:apply_changes) do |project, changes|
+      changes.each { |key, data| project[key] = data[:value] }
+    end
+
+    changed_fields = [:contribution_status]
+    user_set_values = { contribution_status: CriterionStatus::MET }
+
+    controller.send(:run_save_automation, changed_fields, user_set_values,
+                    chief_instance: mock_chief, track_automated: false)
+
+    assert_equal CriterionStatus::UNMET, @project.contribution_status,
+                 'forced proposal must still be applied on save-and-exit'
+    assert_equal 1, controller.instance_variable_get(:@overridden_fields).size
+  end
+
+  test 'divergent_url_params encodes proposed_status as canonical string' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(
+      :@divergent_fields,
+      {
+        contribution_status: {
+          proposed_status: CriterionStatus::MET,
+                  proposed_justification: 'Has CONTRIBUTING.md'
+        }
+      }
+    )
+    params = controller.send(:divergent_url_params)
+    assert_equal 'contribution_status', params[:divergent_fields_list]
+    assert_equal 'Met', params[:div__contribution_status],
+                 'proposed_status Integer must be encoded as canonical string'
+    assert_equal 'Has CONTRIBUTING.md', params[:div__contribution_status_justification]
+  end
+
+  test 'parse_divergent_fields_list decodes _status field as Integer' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+    allow_params = ActionController::Parameters.new(
+      div__contribution_status: 'Met',
+      div__contribution_status_justification: 'Has CONTRIBUTING.md'
+    )
+    controller.instance_variable_set(:@_params, allow_params)
+    result = controller.send(
+      :parse_divergent_fields_list, 'contribution_status', nil
+    )
+    assert_equal CriterionStatus::MET, result[:contribution_status][:proposed_status],
+                 'canonical string must be parsed back to Integer'
+    assert_equal 'Has CONTRIBUTING.md', result[:contribution_status][:proposed_justification]
+  end
+
+  test 'parse_divergent_fields_list merges url and existing fields' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+    allow_params = ActionController::Parameters.new(
+      div__contribution_status: 'Met'
+    )
+    controller.instance_variable_set(:@_params, allow_params)
+    existing = { floss_license_status: { proposed_status: CriterionStatus::UNMET } }
+    result = controller.send(
+      :parse_divergent_fields_list, 'contribution_status', existing
+    )
+    assert result.key?(:contribution_status), 'URL field must be present'
+    assert result.key?(:floss_license_status), 'existing field must be preserved'
+  end
+
+  test 'run_first_edit_automation_if_needed rescues chief errors' do
+    log_in_as(@user)
+    # Project with passing_saved=false so automation runs
+    @project.passing_saved = false
+    @project.save!
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+    controller.instance_variable_set(:@automated_fields, {})
+    controller.instance_variable_set(:@overridden_fields, {})
+    controller.instance_variable_set(:@divergent_fields, {})
+
+    # Stub client_factory to raise
+    controller.define_singleton_method(:client_factory) do
+      raise StandardError, 'simulated network error'
+    end
+    controller.define_singleton_method(:level_already_saved?) { false }
+    controller.define_singleton_method(:fields_for_current_section) { nil }
+    controller.define_singleton_method(:capture_original_values) { {} }
+    controller.define_singleton_method(:params) do
+      ActionController::Parameters.new({})
+    end
+
+    # Should not raise; rescue block sets fields to {}
+    assert_nothing_raised { controller.send(:run_first_edit_automation_if_needed) }
+    assert_equal({}, controller.instance_variable_get(:@automated_fields))
+    assert_equal({}, controller.instance_variable_get(:@overridden_fields))
+    assert_equal({}, controller.instance_variable_get(:@divergent_fields))
   end
 
   test 'run_save_automation catches chief exceptions' do
@@ -2841,278 +3108,6 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal existing, result
   end
 
-  # Test apply_query_string_proposals_to_project method directly
-  # This method applies external automation proposals from URL parameters
-  test 'apply_query_string_proposals accepts valid status strings' do
-    project = projects(:perfect)
-    controller = ProjectsController.new
-    controller.instance_variable_set(:@project, project)
-
-    # Test valid status strings (external representation)
-    test_cases = {
-      'Met' => CriterionStatus::MET,
-      'met' => CriterionStatus::MET,
-      'MET' => CriterionStatus::MET,
-      'Unmet' => CriterionStatus::UNMET,
-      'unmet' => CriterionStatus::UNMET,
-      '?' => CriterionStatus::UNKNOWN,
-      'N/A' => CriterionStatus::NA,
-      'n/a' => CriterionStatus::NA,
-      'NA' => CriterionStatus::NA,
-      'na' => CriterionStatus::NA
-    }
-
-    test_cases.each do |input, expected|
-      project.contribution_status = CriterionStatus::UNKNOWN
-      params = { 'contribution_status' => input }
-      modified = controller.send(:apply_query_string_proposals_to_project,
-                                 project, params, '0')
-
-      assert_includes modified, :contribution_status,
-                      "Status '#{input}' should be accepted"
-      assert_equal expected, project.contribution_status,
-                   "Status '#{input}' should convert to #{expected}"
-    end
-  end
-
-  test 'apply_query_string_proposals rejects invalid status values' do
-    project = projects(:perfect)
-    controller = ProjectsController.new
-    controller.instance_variable_set(:@project, project)
-
-    # Test invalid status values
-    invalid_values = %w[0 1 2 3 invalid true false 99 yes no]
-
-    invalid_values.each do |invalid_value|
-      project.contribution_status = CriterionStatus::UNKNOWN
-      params = { 'contribution_status' => invalid_value }
-      modified = controller.send(:apply_query_string_proposals_to_project,
-                                 project, params, '0')
-
-      assert_not_includes modified, :contribution_status,
-                          "Invalid status '#{invalid_value}' should be rejected"
-      assert_equal CriterionStatus::UNKNOWN, project.contribution_status,
-                   "Project should remain unchanged after invalid status '#{invalid_value}'"
-    end
-  end
-
-  test 'apply_query_string_proposals accepts justification strings' do
-    project = projects(:perfect)
-    controller = ProjectsController.new
-    controller.instance_variable_set(:@project, project)
-
-    justifications = [
-      'Found CONTRIBUTING.md file',
-      'See section 3.2 of documentation',
-      'UTF-8: ñoño café 中文',
-      '  whitespace should be stripped  '
-    ]
-
-    justifications.each do |just|
-      project.contribution_justification = ''
-      params = { 'contribution_justification' => just }
-      modified = controller.send(:apply_query_string_proposals_to_project,
-                                 project, params, '0')
-
-      assert_includes modified, :contribution_justification,
-                      "Justification should be accepted: #{just[0..30]}"
-      assert_equal just.strip, project.contribution_justification,
-                   'Whitespace should be stripped'
-    end
-  end
-
-  test 'apply_query_string_proposals accepts non-criteria fields' do
-    project = projects(:perfect)
-    controller = ProjectsController.new
-    controller.instance_variable_set(:@project, project)
-
-    params = {
-      'name' => 'New Project Name',
-      'license' => 'MIT',
-      'description' => 'A test project'
-    }
-
-    modified = controller.send(:apply_query_string_proposals_to_project,
-                               project, params, '0')
-
-    assert_includes modified, :name
-    assert_includes modified, :license
-    assert_includes modified, :description
-    assert_equal 'New Project Name', project.name
-    assert_equal 'MIT', project.license
-    assert_equal 'A test project', project.description
-  end
-
-  test 'apply_query_string_proposals rejects fields not in section' do
-    project = projects(:perfect)
-    controller = ProjectsController.new
-    controller.instance_variable_set(:@project, project)
-
-    # Silver (level '1') should not accept passing (level '0') criteria
-    params = {
-      'contribution_status' => 'Met', # This is in passing, not silver
-      'name' => 'New Name' # Always automatable
-    }
-
-    modified = controller.send(:apply_query_string_proposals_to_project,
-                               project, params, '1')
-
-    # name should be accepted (always automatable)
-    assert_includes modified, :name
-    # contribution_status should be rejected (not in silver section)
-    assert_not_includes modified, :contribution_status
-    assert_equal 'New Name', project.name
-  end
-
-  test 'apply_query_string_proposals ignores unrelated params' do
-    project = projects(:perfect)
-    controller = ProjectsController.new
-    controller.instance_variable_set(:@project, project)
-
-    # Mix valid fields with unrelated params
-    params = {
-      'name' => 'Valid Name',
-      'not_a_field' => 'Should be ignored',
-      'random_key' => 'Also ignored',
-      'controller' => 'projects', # Rails internal param
-      'action' => 'edit' # Rails internal param
-    }
-
-    modified = controller.send(:apply_query_string_proposals_to_project,
-                               project, params, '0')
-
-    # Only 'name' should be accepted
-    assert_equal 1, modified.length
-    assert_includes modified, :name
-    assert_equal 'Valid Name', project.name
-  end
-
-  test 'apply_query_string_proposals handles mixed valid and invalid fields' do
-    project = projects(:perfect)
-    controller = ProjectsController.new
-    controller.instance_variable_set(:@project, project)
-
-    # Set up project state
-    project.contribution_status = CriterionStatus::UNKNOWN
-
-    params = {
-      'name' => 'Good Name',
-      'contribution_status' => '99', # Invalid status (numeric string)
-      'license' => 'MIT'
-    }
-
-    modified = controller.send(:apply_query_string_proposals_to_project,
-                               project, params, '0')
-
-    # Valid fields should be accepted
-    assert_includes modified, :name
-    assert_includes modified, :license
-    # Invalid status should be rejected
-    assert_not_includes modified, :contribution_status
-
-    assert_equal 'Good Name', project.name
-    assert_equal 'MIT', project.license
-    assert_equal CriterionStatus::UNKNOWN, project.contribution_status
-  end
-
-  test 'apply_query_string_proposals accepts blank values for non-status fields' do
-    project = projects(:perfect)
-    controller = ProjectsController.new
-    controller.instance_variable_set(:@project, project)
-
-    original_status = project.contribution_status
-
-    params = {
-      'name' => '',
-      'license' => '   ',
-      'description' => nil,
-      'contribution_status' => '' # Blank status should be rejected
-    }
-
-    modified = controller.send(:apply_query_string_proposals_to_project,
-                               project, params, '0')
-
-    # Non-status blank values should be accepted
-    assert_includes modified, :name
-    assert_includes modified, :license
-    assert_includes modified, :description
-    # Blank status should be rejected
-    assert_not_includes modified, :contribution_status
-
-    assert_equal '', project.name
-    assert_equal '', project.license
-    assert_equal '', project.description
-    assert_equal original_status, project.contribution_status
-  end
-
-  test 'apply_query_string_proposals can reset status to UNKNOWN' do
-    # Query strings must allow users to explicitly reset status to '?'
-    project = projects(:perfect)
-    controller = ProjectsController.new
-    controller.instance_variable_set(:@project, project)
-
-    # Set a status value
-    project.contribution_status = CriterionStatus::MET
-
-    # User explicitly sets it to '?' to reset/clear
-    params = { 'contribution_status' => '?' }
-    modified = controller.send(:apply_query_string_proposals_to_project,
-                               project, params, '0')
-
-    assert_includes modified, :contribution_status,
-                    'Query string should accept ? to reset status'
-    assert_equal CriterionStatus::UNKNOWN, project.contribution_status,
-                 'Status should be reset to UNKNOWN'
-
-    # Also test 'unknown' alias
-    project.contribution_status = CriterionStatus::MET
-    params = { 'contribution_status' => 'unknown' }
-    modified = controller.send(:apply_query_string_proposals_to_project,
-                               project, params, '0')
-
-    assert_includes modified, :contribution_status
-    assert_equal CriterionStatus::UNKNOWN, project.contribution_status
-  end
-
-  test 'apply_query_string_proposals returns list of modified fields' do
-    project = projects(:perfect)
-    controller = ProjectsController.new
-    controller.instance_variable_set(:@project, project)
-
-    params = {
-      'name' => 'New Name',
-      'license' => 'Apache-2.0',
-      'contribution_status' => 'Met'
-    }
-
-    modified = controller.send(:apply_query_string_proposals_to_project,
-                               project, params, '0')
-
-    assert_equal 3, modified.length
-    assert_includes modified, :name
-    assert_includes modified, :license
-    assert_includes modified, :contribution_status
-  end
-
-  test 'apply_query_string_proposals handles baseline sections' do
-    project = projects(:perfect)
-    controller = ProjectsController.new
-    controller.instance_variable_set(:@project, project)
-
-    # Test baseline-1 section - use a field that actually exists in baseline-1
-    params = {
-      'osps_ac_01_01_status' => 'Met',
-      'name' => 'Baseline Project'
-    }
-
-    modified = controller.send(:apply_query_string_proposals_to_project,
-                               project, params, 'baseline-1')
-
-    # Both should be accepted for baseline-1
-    assert_includes modified, :osps_ac_01_01_status
-    assert_includes modified, :name
-  end
-
   test 'apply_query_string_automation works on revisit (section saved)' do
     log_in_as(@user)
     controller = ProjectsController.new
@@ -3204,6 +3199,705 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, automated.size
     assert automated.key?(:contribution_status)
     assert_equal 'Automated justification text', automated[:contribution_status][:new_value]
+  end
+
+  # Helper to set up a controller for apply_query_string_automation tests
+  def setup_automation_controller(criteria_level: 'passing')
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, criteria_level)
+    controller
+  end
+
+  def run_automation(controller, param_hash)
+    fake_params = ActionController::Parameters.new(
+      param_hash.merge('controller' => 'projects', 'action' => 'edit')
+    )
+    controller.define_singleton_method(:params) { fake_params }
+    controller.send(:apply_query_string_automation)
+  end
+
+  test 'apply_query_string_automation: blank field applied as yellow' do
+    controller = setup_automation_controller
+    @project.contribution_status = CriterionStatus::UNKNOWN
+    run_automation(controller, 'contribution_status' => 'Met')
+    assert_equal CriterionStatus::MET, @project.contribution_status
+    automated = controller.instance_variable_get(:@automated_fields)
+    assert automated.key?(:contribution_status), 'blank→filled goes yellow'
+    assert_nil controller.instance_variable_get(:@divergent_fields)&.fetch(:contribution_status, nil)
+  end
+
+  test 'apply_query_string_automation: real-value field without overrides goes divergent' do
+    controller = setup_automation_controller
+    @project.contribution_status = CriterionStatus::UNMET
+    run_automation(controller, 'contribution_status' => 'Met')
+    assert_equal CriterionStatus::UNMET, @project.contribution_status, 'field must not change'
+    divergent = controller.instance_variable_get(:@divergent_fields)
+    assert divergent.key?(:contribution_status), 'should be in divergent_fields'
+    assert_equal CriterionStatus::MET, divergent[:contribution_status][:proposed_status]
+  end
+
+  test 'apply_query_string_automation: proposed equals current not divergent' do
+    controller = setup_automation_controller
+    @project.contribution_status = CriterionStatus::MET
+    run_automation(controller, 'contribution_status' => 'Met')
+    assert_nil controller.instance_variable_get(:@divergent_fields)&.fetch(:contribution_status, nil)
+  end
+
+  test 'apply_query_string_automation: proposed ? not divergent' do
+    controller = setup_automation_controller
+    @project.contribution_status = CriterionStatus::UNMET
+    run_automation(controller, 'contribution_status' => '?')
+    divergent = controller.instance_variable_get(:@divergent_fields) || {}
+    assert_not divergent.key?(:contribution_status), 'proposed ? should not be divergent'
+  end
+
+  test 'apply_query_string_automation: invalid proposed status skipped entirely' do
+    controller = setup_automation_controller
+    @project.contribution_status = CriterionStatus::UNMET
+    run_automation(controller, 'contribution_status' => 'invalid_value')
+    assert_equal CriterionStatus::UNMET, @project.contribution_status
+    divergent = controller.instance_variable_get(:@divergent_fields) || {}
+    assert_not divergent.key?(:contribution_status)
+  end
+
+  test 'apply_query_string_automation: overrides=* forces real-value field as orange' do
+    controller = setup_automation_controller
+    @project.contribution_status = CriterionStatus::UNMET
+    run_automation(controller,
+                   'contribution_status' => 'Met',
+                   'contribution_justification' => 'Has CONTRIBUTING.md',
+                   'overrides' => '*')
+    assert_equal CriterionStatus::MET, @project.contribution_status
+    overridden = controller.instance_variable_get(:@overridden_fields)
+    assert overridden.key?(:contribution_status), 'should be in overridden_fields'
+    assert_equal CriterionStatus::UNMET, overridden[:contribution_status][:old_value]
+    assert_nil overridden[:contribution_status][:explanation], 'URL overrides have no explanation'
+    assert_equal 'Has CONTRIBUTING.md', @project.contribution_justification,
+                 'proposed justification must be applied to project'
+  end
+
+  test 'apply_query_string_automation: overrides too long returns no forcing' do
+    controller = setup_automation_controller
+    @project.contribution_status = CriterionStatus::UNMET
+    long_overrides = 'contribution_*,' * 5000
+    run_automation(controller,
+                   'contribution_status' => 'Met',
+                   'overrides' => long_overrides)
+    assert_equal CriterionStatus::UNMET, @project.contribution_status
+    divergent = controller.instance_variable_get(:@divergent_fields)
+    assert divergent.key?(:contribution_status), 'should be divergent when overrides rejected'
+  end
+
+  test 'apply_query_string_automation: divergent status blocks paired justification' do
+    controller = setup_automation_controller
+    @project.contribution_status = CriterionStatus::UNMET
+    @project.contribution_justification = 'existing justification'
+    run_automation(controller,
+                   'contribution_status' => 'Met',
+                   'contribution_justification' => 'New justification')
+    assert_equal CriterionStatus::UNMET, @project.contribution_status
+    assert_equal 'existing justification', @project.contribution_justification,
+                 'justification must not change when status is divergent'
+    # The proposed justification is stored in the STATUS divergent entry so
+    # the ≠ popover can display "Automation instead determined Met for: <reason>".
+    divergent = controller.instance_variable_get(:@divergent_fields)
+    assert_equal 'New justification',
+                 divergent[:contribution_status][:proposed_justification],
+                 'proposed justification must be stored in status divergent entry for popover display'
+  end
+
+  test 'apply_query_string_automation: divergent justification blocked even if overrides glob matches it' do
+    controller = setup_automation_controller
+    @project.contribution_status = CriterionStatus::UNMET
+    @project.contribution_justification = 'existing justification'
+    run_automation(controller,
+                   'contribution_status' => 'Met',
+                   'contribution_justification' => 'New justification',
+                   'overrides' => 'contribution_justification')
+    assert_equal CriterionStatus::UNMET, @project.contribution_status
+    assert_equal 'existing justification', @project.contribution_justification,
+                 'justification must not apply when paired status is divergent'
+  end
+
+  test 'apply_query_string_automation: blank justification applied when status blank' do
+    controller = setup_automation_controller
+    @project.contribution_status = CriterionStatus::UNKNOWN
+    @project.contribution_justification = ''
+    run_automation(controller,
+                   'contribution_status' => 'Met',
+                   'contribution_justification' => 'Has CONTRIBUTING.md')
+    assert_equal CriterionStatus::MET, @project.contribution_status
+    assert_equal 'Has CONTRIBUTING.md', @project.contribution_justification
+  end
+
+  test 'apply_query_string_automation: non-criteria blank field applied yellow' do
+    controller = setup_automation_controller
+    @project.name = ''
+    run_automation(controller, 'name' => 'curl')
+    assert_equal 'curl', @project.name
+    automated = controller.instance_variable_get(:@automated_fields)
+    assert automated.key?(:name), 'non-criteria blank field should be yellow'
+  end
+
+  test 'apply_query_string_automation: non-criteria non-blank field not applied, shows divergent icon' do
+    controller = setup_automation_controller
+    @project.name = 'existing name'
+    run_automation(controller, 'name' => 'new name')
+    assert_equal 'existing name', @project.name, 'non-blank non-criteria field must not change'
+    divergent = controller.instance_variable_get(:@divergent_fields) || {}
+    assert divergent.key?(:name), 'non-criteria divergent proposal must record ≠ icon'
+    assert_equal 'new name', divergent[:name][:proposed_value]
+  end
+
+  test 'apply_query_string_automation: non-criteria non-blank field forced orange' do
+    controller = setup_automation_controller
+    @project.name = 'existing name'
+    run_automation(controller, 'name' => 'new name', 'overrides' => '*')
+    assert_equal 'new name', @project.name
+    overridden = controller.instance_variable_get(:@overridden_fields) || {}
+    # non-criteria fields map to themselves (not to a status field)
+    assert overridden.key?(:name), 'non-criteria forced field should be orange'
+  end
+
+  test 'apply_query_string_automation: reanalyze key present in params is accessible' do
+    # Just verify the params.key?(:reanalyze) check works — full reanalyze
+    # behavior is tested via run_first_edit_automation_if_needed tests
+    controller = setup_automation_controller
+    fake_params = ActionController::Parameters.new(
+      'reanalyze' => '1', 'controller' => 'projects', 'action' => 'edit'
+    )
+    controller.define_singleton_method(:params) { fake_params }
+    assert controller.send(:params).key?(:reanalyze)
+  end
+
+  test 'run_first_edit_automation_if_needed skips when saved and no reanalyze' do
+    controller = setup_automation_controller
+    @project.update_column(:passing_saved, true)
+    fake_params = ActionController::Parameters.new(
+      'controller' => 'projects', 'action' => 'edit'
+    )
+    controller.define_singleton_method(:params) { fake_params }
+    # Should return early (level_already_saved? && !params.key?(:reanalyze))
+    # We test this by confirming no Chief reload happens (no DB find called)
+    # Simplest: just confirm no exception is raised and @project stays the same id
+    original_id = @project.id
+    controller.send(:run_first_edit_automation_if_needed)
+    assert_equal original_id, @project.id
+  end
+
+  test 'apply_query_string_automation: non-matching overrides glob leaves field divergent' do
+    controller = setup_automation_controller
+    @project.contribution_status = CriterionStatus::UNMET
+    run_automation(controller,
+                   'contribution_status' => 'Met',
+                   'overrides' => 'floss_*') # glob matches floss_* not contribution_*
+    assert_equal CriterionStatus::UNMET, @project.contribution_status,
+                 'non-matching glob must not apply the proposal'
+    divergent = controller.instance_variable_get(:@divergent_fields)
+    assert divergent.key?(:contribution_status),
+           'non-matching glob should leave field divergent, not applied'
+  end
+
+  test 'apply_query_string_automation: non-blank justification without overrides not applied, no icon' do
+    # Justification differences are silently ignored when not forced — there are
+    # many valid ways to justify a status, so automation disagreeing on wording
+    # is not worth surfacing when the status itself is not being contested.
+    controller = setup_automation_controller
+    @project.contribution_justification = 'existing justification'
+    run_automation(controller, 'contribution_justification' => 'new justification')
+    assert_equal 'existing justification', @project.contribution_justification,
+                 'non-blank justification must not change without overrides'
+    divergent = controller.instance_variable_get(:@divergent_fields) || {}
+    assert_not divergent.key?(:contribution_status),
+               'justification-only difference must not show a ≠ icon'
+  end
+
+  # -----------------------------------------------------------------------
+  # Consolidated decision-matrix tests for apply_query_string_automation.
+  #
+  # Each test exercises all rows for one field type (_status / _justification /
+  # other) in a single run_automation call so the interaction between rows
+  # can be verified together.  These are the integration-level counterparts
+  # to the per-pass unit tests below.
+  # -----------------------------------------------------------------------
+
+  # rubocop:disable Metrics/BlockLength
+  test 'integration decision matrix: _status fields — all 6 rows' do
+    # Row 1 (unparsable proposed): field has real value, proposed is garbage → Skip (none)
+    # Row 2 (proposed '?', even forced): field has real value → Skip (pre-screen)
+    # Row 3 (blank/UNKNOWN → Yellow): current is UNKNOWN → Apply
+    # Row 4 (no-op → Skip): proposed == current → Skip (none)
+    # Row 5 (real, differs, not forced → ≠): stays unchanged, goes divergent
+    # Row 6 (real, differs, forced → Orange): overwritten, old value recorded
+    @project.license_location_status = CriterionStatus::UNMET  # row 1: bogus
+    @project.english_status          = CriterionStatus::UNMET  # row 2: forced '?'
+    @project.contribution_status     = CriterionStatus::UNKNOWN # row 3: blank
+    @project.description_good_status = CriterionStatus::MET    # row 4: no-op
+    @project.interact_status         = CriterionStatus::UNMET  # row 5: divergent
+    @project.floss_license_status    = CriterionStatus::UNMET  # row 6: forced orange
+    controller = setup_automation_controller
+    run_automation(controller,
+                   'license_location_status' => 'bogus',
+                   'english_status'          => '?',
+                   'contribution_status'     => 'Met',
+                   'description_good_status' => 'Met',
+                   'interact_status'         => 'Met',
+                   'floss_license_status'    => 'Met',
+                   'floss_license_justification' => 'OSI-approved license',
+                   'overrides' => 'english_*,floss_*')
+    automated  = controller.instance_variable_get(:@automated_fields)
+    overridden = controller.instance_variable_get(:@overridden_fields)
+    divergent  = controller.instance_variable_get(:@divergent_fields) || {}
+
+    # Row 1: bogus proposed → no change, not recorded anywhere
+    assert_equal CriterionStatus::UNMET, @project.license_location_status,
+                 'row1: unparsable must not change'
+    assert_not automated.key?(:license_location_status)
+    assert_not divergent.key?(:license_location_status)
+    assert_not overridden.key?(:license_location_status)
+
+    # Row 2: proposed '?' on real value (even with overrides) → no change
+    assert_equal CriterionStatus::UNMET, @project.english_status, 'row2: forced ? must not change'
+    assert_not overridden.key?(:english_status), 'row2: forced ? must not be orange'
+    assert_not divergent.key?(:english_status), 'row2: forced ? must not be divergent'
+
+    # Row 3: current UNKNOWN → applied, yellow
+    assert_equal CriterionStatus::MET, @project.contribution_status, 'row3: blank must be filled'
+    assert automated.key?(:contribution_status), 'row3: blank fill must be yellow'
+    assert_not overridden.key?(:contribution_status)
+
+    # Row 4: no-op → not recorded anywhere
+    assert_not automated.key?(:description_good_status), 'row4: no-op must not appear in automated'
+    assert_not divergent.key?(:description_good_status), 'row4: no-op must not appear in divergent'
+
+    # Row 5: real, differs, not forced → unchanged, in divergent
+    assert_equal CriterionStatus::UNMET, @project.interact_status, 'row5: must not change'
+    assert divergent.key?(:interact_status), 'row5: must be in divergent_fields'
+    assert_equal CriterionStatus::MET, divergent[:interact_status][:proposed_status]
+    assert_not overridden.key?(:interact_status)
+
+    # Row 6: real, differs, forced → applied, orange with old_value; URL overrides have
+    # no separate explanation (proposed justification is applied to the project instead)
+    assert_equal CriterionStatus::MET, @project.floss_license_status, 'row6: must be overridden'
+    assert overridden.key?(:floss_license_status), 'row6: must be orange'
+    assert_equal CriterionStatus::UNMET, overridden[:floss_license_status][:old_value]
+    assert_nil overridden[:floss_license_status][:explanation], 'URL overrides have no explanation'
+    assert_equal 'OSI-approved license', @project.floss_license_justification,
+                 'row6: proposed justification must be applied to project'
+    assert_not divergent.key?(:floss_license_status)
+  end
+  # rubocop:enable Metrics/BlockLength
+
+  test 'integration decision matrix: _justification fields — coupling rule + all 3 rows' do
+    # Coupling rule: if paired status is divergent, justification is blocked always
+    # Row 8 (blank → Yellow): current blank → applied yellow under paired status symbol
+    # Row 9 (no-op → Skip): proposed == current → Skip (none)
+    # Row 10 (differs, not forced → Skip): justification differences are silent —
+    #   there are many ways to justify a conclusion, so automation disagreeing on
+    #   wording alone is not meaningful when the status is not being contested.
+    # Row 11 (differs, forced → Orange): applied, old_value is Integer status
+    #
+    # Coupling rule: interact_status = UNMET, propose 'Met' (not forced) → divergent.
+    # Then interact_justification is blocked even with overrides.
+    @project.interact_status              = CriterionStatus::UNMET # goes divergent
+    @project.interact_justification       = ''
+    # Row 8: blank justification, paired status not divergent (blank)
+    @project.contribution_status         = CriterionStatus::UNKNOWN
+    @project.contribution_justification  = ''
+    # Row 9: same-value no-op
+    @project.description_good_justification = 'no change'
+    # Row 10: present, differs, not forced → silent (no ≠)
+    @project.english_justification       = 'old justification'
+    # Row 11: present, differs, forced → Orange (floss_license_status not divergent)
+    @project.floss_license_status        = CriterionStatus::MET
+    @project.floss_license_justification = 'old floss text'
+    controller = setup_automation_controller
+    run_automation(controller,
+                   'interact_status'                => 'Met',       # makes interact divergent
+                   'interact_justification'         => 'blocked',   # coupling rule
+                   'contribution_justification'     => 'Has CONTRIBUTING.md', # row 8
+                   'description_good_justification' => 'no change', # row 9 (same value)
+                   'english_justification'          => 'new justification',   # row 10
+                   'floss_license_justification'    => 'new floss text',      # row 11
+                   'overrides' => 'floss_*')
+    automated  = controller.instance_variable_get(:@automated_fields)
+    overridden = controller.instance_variable_get(:@overridden_fields)
+    divergent  = controller.instance_variable_get(:@divergent_fields) || {}
+
+    # Coupling rule: interact_status is divergent, so interact_justification is blocked
+    assert_equal '', @project.interact_justification, 'coupling rule: justification must not change'
+    assert_not automated.key?(:interact_status), 'coupling rule: no yellow for blocked justification'
+
+    # Row 8: blank justification → applied, yellow under paired status symbol
+    assert_equal 'Has CONTRIBUTING.md', @project.contribution_justification, 'row8: must be applied'
+    assert automated.key?(:contribution_status), 'row8: blank justification → yellow under status sym'
+
+    # Row 9: no-op → not recorded anywhere
+    assert_equal 'no change', @project.description_good_justification, 'row9: must not change'
+    assert_not automated.key?(:description_good_status), 'row9: no-op must not be yellow'
+    assert_not divergent.key?(:description_good_status), 'row9: no-op must not be divergent'
+
+    # Row 10: present, differs, not forced → unchanged, NO ≠ (silently skipped)
+    assert_equal 'old justification', @project.english_justification, 'row10: must not change'
+    assert_not divergent.key?(:english_status), 'row10: justification-only difference must not show ≠'
+
+    # Row 11: present, differs, forced → applied, orange under status symbol, Integer old_value
+    assert_equal 'new floss text', @project.floss_license_justification, 'row11: must be applied'
+    assert overridden.key?(:floss_license_status), 'row11: must be orange keyed on status symbol'
+    assert_kind_of Integer, overridden[:floss_license_status][:old_value],
+                   'row11: old_value must be Integer for CriterionStatus.canonical'
+    assert_equal CriterionStatus::MET, overridden[:floss_license_status][:old_value]
+  end
+
+  test 'integration decision matrix: Other (non-criteria) fields — all 4 rows' do
+    # Row 12 (blank → Yellow): current blank → Apply Yellow
+    # Row 13 (no-op → Skip): proposed == current → Skip (none)
+    # Row 14 (differs, not forced → ≠): unchanged, keyed on own field symbol
+    # Row 15 (differs, forced → Orange): applied, keyed on own field symbol
+    #
+    # Only ALWAYS_AUTOMATABLE fields (name, license, description, etc.) are
+    # valid for non-criteria automation; url fields like homepage_url are excluded.
+    @project.name        = ''              # row 12: blank
+    @project.description = 'existing desc' # row 13: no-op
+    @project.license     = 'MIT'           # row 14: differs, not forced (overrides=cpe)
+    @project.cpe         = 'cpe:/old'      # row 15: differs, forced
+    controller = setup_automation_controller
+    run_automation(controller,
+                   'name'        => 'My Project',
+                   'description' => 'existing desc', # same value
+                   'license'     => 'Apache-2.0',    # not forced
+                   'cpe'         => 'cpe:/new',      # forced
+                   'overrides' => 'cpe')
+    automated  = controller.instance_variable_get(:@automated_fields)
+    overridden = controller.instance_variable_get(:@overridden_fields)
+    divergent  = controller.instance_variable_get(:@divergent_fields) || {}
+
+    # Row 12: blank → applied, yellow, keyed on own field symbol
+    assert_equal 'My Project', @project.name, 'row12: blank field must be filled'
+    assert automated.key?(:name), 'row12: blank fill must be yellow'
+
+    # Row 13: no-op → not recorded anywhere
+    assert_equal 'existing desc', @project.description, 'row13: no-op must not change'
+    assert_not automated.key?(:description), 'row13: no-op must not appear in automated'
+    assert_not divergent.key?(:description), 'row13: no-op must not appear in divergent'
+
+    # Row 14: present, differs, not forced → unchanged, divergent icon with proposed_value
+    assert_equal 'MIT', @project.license, 'row14: must not change'
+    assert divergent.key?(:license), 'row14: must record ≠ icon keyed on own field'
+    assert_equal 'Apache-2.0', divergent[:license][:proposed_value]
+
+    # Row 15: present, differs, forced → applied, orange keyed on own field, old_value stored
+    assert_equal 'cpe:/new', @project.cpe, 'row15: must be applied'
+    assert overridden.key?(:cpe), 'row15: must be orange'
+    assert_equal 'cpe:/old', overridden[:cpe][:old_value]
+  end
+
+  test 'overrides and reanalyze are not in AS_EDIT_CONSUMED_PARAMS' do
+    assert_not ProjectsController::AS_EDIT_CONSUMED_PARAMS.include?('overrides'),
+               'overrides must not be consumed so it forwards through choose/edit'
+    assert_not ProjectsController::AS_EDIT_CONSUMED_PARAMS.include?('reanalyze'),
+               'reanalyze must not be consumed so it forwards through choose/edit'
+  end
+
+  # -----------------------------------------------------------------------
+  # Direct unit tests for apply_status_proposals (Pass 1)
+  # and apply_non_status_proposals (Pass 2).
+  #
+  # These call the private methods directly so each pass can be verified in
+  # isolation — bugs in one pass cannot mask bugs in the other.
+  # -----------------------------------------------------------------------
+
+  # Builds a bare ProjectsController wired up with @project and param_hash.
+  # @return [ProjectsController]
+  def build_pass_controller(param_hash)
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+    fake_params = ActionController::Parameters.new(
+      param_hash.merge('controller' => 'projects', 'action' => 'edit')
+    )
+    controller.define_singleton_method(:params) { fake_params }
+    controller.instance_variable_set(:@automated_fields, {})
+    controller.instance_variable_set(:@overridden_fields, {})
+    controller.instance_variable_set(:@divergent_fields, {})
+    controller
+  end
+
+  # Sets up a controller with the given params and snapshots valid_fields,
+  # forced_fields, and original_values so callers can invoke each pass directly.
+  # @return [Array] [controller, valid_fields, forced_fields, original_values]
+  def prepare_pass(param_hash)
+    controller = build_pass_controller(param_hash)
+    valid_fields    = controller.send(:fields_for_current_section)
+    forced_fields   = controller.send(:compute_forced_fields, valid_fields)
+    original_values = controller.send(:snapshot_original_values, valid_fields)
+    [controller, valid_fields, forced_fields, original_values]
+  end
+
+  # --- Pass 1: apply_status_proposals ---
+
+  test 'pass1: blank status proposal → applied yellow, not in returned divergent Set' do
+    @project.contribution_status = CriterionStatus::UNKNOWN
+    controller, vf, ff, ov = prepare_pass('contribution_status' => 'Met')
+    divergent_set = controller.send(:apply_status_proposals, vf, ff, ov)
+    assert_equal CriterionStatus::MET, @project.contribution_status
+    automated = controller.instance_variable_get(:@automated_fields)
+    assert automated.key?(:contribution_status), 'blank→filled should be yellow'
+    assert_not divergent_set.include?(:contribution_status)
+    assert_empty controller.instance_variable_get(:@overridden_fields)
+  end
+
+  test 'pass1: real-value proposal without forcing → divergent, not applied, in returned Set' do
+    @project.contribution_status = CriterionStatus::UNMET
+    controller, vf, ff, ov = prepare_pass('contribution_status' => 'Met')
+    divergent_set = controller.send(:apply_status_proposals, vf, ff, ov)
+    assert_equal CriterionStatus::UNMET, @project.contribution_status, 'must not change'
+    divergent = controller.instance_variable_get(:@divergent_fields)
+    assert divergent.key?(:contribution_status)
+    assert_equal CriterionStatus::MET, divergent[:contribution_status][:proposed_status]
+    assert divergent_set.include?(:contribution_status), 'must be in returned Set'
+    assert_empty controller.instance_variable_get(:@automated_fields)
+    assert_empty controller.instance_variable_get(:@overridden_fields)
+  end
+
+  test 'pass1: divergent entry stores proposed_justification from params' do
+    @project.contribution_status = CriterionStatus::UNMET
+    controller, vf, ff, ov = prepare_pass('contribution_status' => 'Met',
+                                          'contribution_justification' => 'Has CONTRIBUTING.md')
+    controller.send(:apply_status_proposals, vf, ff, ov)
+    divergent = controller.instance_variable_get(:@divergent_fields)
+    assert_equal 'Has CONTRIBUTING.md',
+                 divergent[:contribution_status][:proposed_justification]
+  end
+
+  test 'pass1: proposed equals current → not recorded anywhere, not in divergent Set' do
+    @project.contribution_status = CriterionStatus::MET
+    controller, vf, ff, ov = prepare_pass('contribution_status' => 'Met')
+    divergent_set = controller.send(:apply_status_proposals, vf, ff, ov)
+    assert_not divergent_set.include?(:contribution_status)
+    assert_empty controller.instance_variable_get(:@automated_fields)
+    assert_empty controller.instance_variable_get(:@divergent_fields)
+  end
+
+  test 'pass1: proposed ? with real value → not divergent, not applied' do
+    @project.contribution_status = CriterionStatus::UNMET
+    controller, vf, ff, ov = prepare_pass('contribution_status' => '?')
+    divergent_set = controller.send(:apply_status_proposals, vf, ff, ov)
+    assert_equal CriterionStatus::UNMET, @project.contribution_status
+    assert_not divergent_set.include?(:contribution_status)
+    assert_empty controller.instance_variable_get(:@divergent_fields)
+  end
+
+  test 'pass1: forced ? with real value → not applied, not orange (pre-screen)' do
+    # Regression: before the pre-screen fix, forced '?' on a real value was applied
+    # as Orange because the UNKNOWN guard only lived inside the !forced branch.
+    @project.contribution_status = CriterionStatus::UNMET
+    controller, vf, ff, ov = prepare_pass('contribution_status' => '?', 'overrides' => '*')
+    divergent_set = controller.send(:apply_status_proposals, vf, ff, ov)
+    assert_equal CriterionStatus::UNMET, @project.contribution_status,
+                 'forced ? must not override a real status value'
+    assert_empty controller.instance_variable_get(:@overridden_fields),
+                 'forced ? must not produce an orange highlight'
+    assert_not divergent_set.include?(:contribution_status)
+  end
+
+  test 'pass1: invalid proposed status → skipped entirely, not divergent' do
+    @project.contribution_status = CriterionStatus::UNMET
+    controller, vf, ff, ov = prepare_pass('contribution_status' => 'bogus')
+    divergent_set = controller.send(:apply_status_proposals, vf, ff, ov)
+    assert_equal CriterionStatus::UNMET, @project.contribution_status
+    assert_not divergent_set.include?(:contribution_status)
+    assert_empty controller.instance_variable_get(:@divergent_fields)
+  end
+
+  test 'pass1: forced real-value → applied orange with old_value; URL has no explanation' do
+    @project.contribution_status = CriterionStatus::UNMET
+    controller, vf, ff, ov = prepare_pass('contribution_status' => 'Met',
+                                          'contribution_justification' => 'Reason',
+                                          'overrides' => '*')
+    divergent_set = controller.send(:apply_status_proposals, vf, ff, ov)
+    assert_equal CriterionStatus::MET, @project.contribution_status
+    overridden = controller.instance_variable_get(:@overridden_fields)
+    assert overridden.key?(:contribution_status)
+    assert_equal CriterionStatus::UNMET, overridden[:contribution_status][:old_value]
+    assert_nil overridden[:contribution_status][:explanation], 'URL overrides have no explanation'
+    assert_nil overridden[:contribution_status][:old_justification],
+               'no prior justification was set, so old_justification must be nil'
+    assert_not divergent_set.include?(:contribution_status)
+    assert_empty controller.instance_variable_get(:@automated_fields)
+  end
+
+  test 'pass1: forced blank value → applied yellow, not orange' do
+    @project.contribution_status = CriterionStatus::UNKNOWN
+    controller, vf, ff, ov = prepare_pass('contribution_status' => 'Met',
+                                          'overrides' => '*')
+    controller.send(:apply_status_proposals, vf, ff, ov)
+    assert_equal CriterionStatus::MET, @project.contribution_status
+    automated = controller.instance_variable_get(:@automated_fields)
+    assert automated.key?(:contribution_status), 'forced blank fill is still yellow'
+    assert_empty controller.instance_variable_get(:@overridden_fields)
+  end
+
+  test 'pass1: two fields — one divergent, one applied — returned Set has only divergent' do
+    @project.contribution_status = CriterionStatus::UNMET # will be divergent
+    @project.description_good_status = CriterionStatus::UNKNOWN # will be yellow
+    controller, vf, ff, ov = prepare_pass('contribution_status' => 'Met',
+                                          'description_good_status' => 'Met')
+    divergent_set = controller.send(:apply_status_proposals, vf, ff, ov)
+    assert divergent_set.include?(:contribution_status)
+    assert_not divergent_set.include?(:description_good_status)
+    assert_equal CriterionStatus::MET, @project.description_good_status
+  end
+
+  # --- Pass 2: apply_non_status_proposals ---
+
+  test 'pass2: blank justification → applied yellow under paired status symbol' do
+    @project.contribution_justification = ''
+    controller, vf, ff, ov = prepare_pass('contribution_justification' => 'New text')
+    controller.send(:apply_non_status_proposals, vf, ff, ov, Set.new)
+    assert_equal 'New text', @project.contribution_justification
+    automated = controller.instance_variable_get(:@automated_fields)
+    assert automated.key?(:contribution_status), 'justification highlights under status symbol'
+  end
+
+  test 'pass2: non-blank justification without forcing → not applied, no icon' do
+    @project.contribution_justification = 'existing'
+    controller, vf, ff, ov = prepare_pass('contribution_justification' => 'new text')
+    controller.send(:apply_non_status_proposals, vf, ff, ov, Set.new)
+    assert_equal 'existing', @project.contribution_justification
+    assert_empty controller.instance_variable_get(:@automated_fields)
+    assert_empty controller.instance_variable_get(:@overridden_fields)
+    assert_empty controller.instance_variable_get(:@divergent_fields),
+                 'justification-only difference must not show any ≠ icon'
+  end
+
+  test 'pass2: non-blank justification without forcing, same value → no divergent icon' do
+    @project.contribution_justification = 'same text'
+    controller, vf, ff, ov = prepare_pass('contribution_justification' => 'same text')
+    controller.send(:apply_non_status_proposals, vf, ff, ov, Set.new)
+    assert_equal 'same text', @project.contribution_justification
+    assert_empty controller.instance_variable_get(:@automated_fields)
+    assert_empty controller.instance_variable_get(:@overridden_fields)
+    assert_empty controller.instance_variable_get(:@divergent_fields),
+                 'no-op proposal must not show divergent icon'
+  end
+
+  test 'pass2: non-blank justification forced → applied orange under paired status symbol' do
+    @project.contribution_status = CriterionStatus::UNMET
+    @project.contribution_justification = 'old text'
+    controller, vf, ff, ov = prepare_pass('contribution_justification' => 'new text',
+                                          'overrides' => '*')
+    controller.send(:apply_non_status_proposals, vf, ff, ov, Set.new)
+    assert_equal 'new text', @project.contribution_justification
+    overridden = controller.instance_variable_get(:@overridden_fields)
+    assert overridden.key?(:contribution_status),
+           'forced justification override highlights under status symbol'
+    # old_value must be the Integer status so CriterionStatus.canonical works in the view
+    assert_equal CriterionStatus::UNMET, overridden[:contribution_status][:old_value],
+                 'old_value must be Integer status, not old justification String'
+  end
+
+  test 'pass2: justification-only forced override (status unchanged) stores Integer old_value' do
+    # Regression: when a justification changes but the status proposal is absent or same,
+    # Pass 2 must store the current status Integer as old_value — not the old justification
+    # String — so CriterionStatus.canonical(old_value) works correctly in the view.
+    @project.contribution_status = CriterionStatus::MET
+    @project.contribution_justification = 'old justification'
+    controller, vf, ff, ov = prepare_pass('contribution_justification' => 'new justification',
+                                          'overrides' => '*')
+    controller.send(:apply_non_status_proposals, vf, ff, ov, Set.new)
+    assert_equal 'new justification', @project.contribution_justification
+    overridden = controller.instance_variable_get(:@overridden_fields)
+    assert overridden.key?(:contribution_status)
+    assert_kind_of Integer, overridden[:contribution_status][:old_value],
+                   'old_value must be Integer for CriterionStatus.canonical'
+    assert_equal CriterionStatus::MET, overridden[:contribution_status][:old_value]
+  end
+
+  test 'pass2: justification with divergent paired status → blocked even when forced' do
+    @project.contribution_justification = 'existing'
+    controller, vf, ff, ov = prepare_pass('contribution_justification' => 'new text',
+                                          'overrides' => '*')
+    divergent_set = Set.new([:contribution_status])
+    controller.send(:apply_non_status_proposals, vf, ff, ov, divergent_set)
+    assert_equal 'existing', @project.contribution_justification,
+                 'coupling rule: divergent status must block justification even if forced'
+    assert_empty controller.instance_variable_get(:@automated_fields)
+    assert_empty controller.instance_variable_get(:@overridden_fields)
+  end
+
+  test 'pass2: blank non-criteria field → applied yellow' do
+    @project.name = ''
+    controller, vf, ff, ov = prepare_pass('name' => 'My Project')
+    controller.send(:apply_non_status_proposals, vf, ff, ov, Set.new)
+    assert_equal 'My Project', @project.name
+    automated = controller.instance_variable_get(:@automated_fields)
+    assert automated.key?(:name)
+  end
+
+  test 'pass2: non-blank non-criteria field without forcing → not applied, divergent icon' do
+    @project.name = 'existing'
+    controller, vf, ff, ov = prepare_pass('name' => 'new name')
+    controller.send(:apply_non_status_proposals, vf, ff, ov, Set.new)
+    assert_equal 'existing', @project.name
+    assert_empty controller.instance_variable_get(:@automated_fields)
+    divergent = controller.instance_variable_get(:@divergent_fields)
+    assert divergent.key?(:name), 'non-criteria divergent must be keyed on own field symbol'
+    assert_equal 'new name', divergent[:name][:proposed_value]
+  end
+
+  test 'pass2: non-blank non-criteria field forced → applied orange' do
+    @project.name = 'old name'
+    controller, vf, ff, ov = prepare_pass('name' => 'new name', 'overrides' => '*')
+    controller.send(:apply_non_status_proposals, vf, ff, ov, Set.new)
+    assert_equal 'new name', @project.name
+    overridden = controller.instance_variable_get(:@overridden_fields)
+    assert overridden.key?(:name)
+    assert_equal 'old name', overridden[:name][:old_value]
+  end
+
+  test 'pass2: _status fields in params are ignored (belong to pass 1)' do
+    @project.contribution_status = CriterionStatus::UNKNOWN
+    controller, vf, ff, ov = prepare_pass('contribution_status' => 'Met')
+    controller.send(:apply_non_status_proposals, vf, ff, ov, Set.new)
+    assert_equal CriterionStatus::UNKNOWN, @project.contribution_status,
+                 'pass 2 must not process _status fields'
+    assert_empty controller.instance_variable_get(:@automated_fields)
+  end
+
+  test 'pass2: forced justification does not corrupt Integer old_value set by pass 1' do
+    # Regression test for type-corruption bug:
+    # When Pass 1 stores @overridden_fields[:contribution_status] = { old_value: Integer, ... }
+    # and Pass 2 processes contribution_justification (also forced), Pass 2 must not
+    # overwrite the status entry — the view calls CriterionStatus.canonical(old_value)
+    # and requires an Integer; a String old_value produces nil and displays '?'.
+    @project.contribution_status = CriterionStatus::UNMET
+    @project.contribution_justification = 'old justification'
+    controller, vf, ff, ov = prepare_pass(
+      'contribution_status' => 'Met',
+      'contribution_justification' => 'new justification',
+      'overrides' => '*'
+    )
+    # Run Pass 1 first, which should populate @overridden_fields[:contribution_status]
+    # with old_value = CriterionStatus::UNMET (an Integer).
+    controller.send(:apply_status_proposals, vf, ff, ov)
+    overridden = controller.instance_variable_get(:@overridden_fields)
+    assert overridden.key?(:contribution_status), 'pass 1 must set orange for forced real status'
+    assert_kind_of Integer, overridden[:contribution_status][:old_value],
+                   'pass 1 must store old_value as Integer for CriterionStatus.canonical'
+
+    # Run Pass 2; contribution_justification is forced and has a real value.
+    # The guard must prevent it from overwriting the status entry.
+    divergent_set = Set.new # status was forced so not divergent
+    controller.send(:apply_non_status_proposals, vf, ff, ov, divergent_set)
+    overridden_after = controller.instance_variable_get(:@overridden_fields)
+    assert_kind_of Integer, overridden_after[:contribution_status][:old_value],
+                   'pass 2 must not overwrite Integer old_value with String justification'
+    assert_equal CriterionStatus::UNMET, overridden_after[:contribution_status][:old_value],
+                 'old_value must still be the original status integer after pass 2'
   end
 
   test 'save and continue passes automated fields in redirect URL' do

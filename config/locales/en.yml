@@ -618,6 +618,13 @@ en:
         aria_overridden: This field value was corrected by automation
         automated_tooltip: We filled this in using automated project analysis
         overridden_tooltip: We corrected this value using automated project analysis
+        aria_divergent: "Automation had a different answer"
+        overridden_detail: "Previous value: %{old_status}.%{old_justification_part}%{explanation_part}"
+        overridden_old_justification_part: " Previous justification: %{old_justification}"
+        overridden_explanation_part: " Automation reason: %{explanation}"
+        divergent_detail: "Automation instead determined %{status}.%{justification_part}"
+        divergent_justification_part: " %{justification}"
+        divergent_proposed_value: "Automation suggested: %{proposed_value}"
         chief_overrode:
           one: "We corrected 1 field based on project analysis:"
           other: "We corrected %{count} fields based on project analysis:"

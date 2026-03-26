@@ -14,14 +14,38 @@
 
  # Automation highlighting (transient per-request state, never cached).
  # Uses precomputed Sets from ProjectsHelper for O(1) lookup.
+ # Yellow: automated_field_set — uses .include? (no data needed from inner hash)
+ # Orange: overridden_field_set — full-width <details> at top of row (col-xs-12 before col-md-3)
+ # Divergent: divergent_field_set — same full-width <details> pattern
+ #   Both override and divergent leave automation_icon empty; their <details> renders above the row.
  highlight_class = ''
  automation_icon = ''
+ override_detail_body = nil
+ divergent_detail_body = nil
  if automated_field_set.include?(status_symbol)
    highlight_class = " #{ApplicationHelper::HIGHLIGHT_AUTOMATED_CLASS}"
    automation_icon = %(<span class="automation-icon" title="#{t('projects.edit.automation.automated_tooltip')}" aria-hidden="true">#{ApplicationHelper::ROBOT_EMOJI_SAFE}</span>).html_safe
- elsif overridden_field_set.include?(status_symbol)
-   highlight_class = ' highlight-overridden'
-   automation_icon = %(<span class="override-icon" title="#{t('projects.edit.automation.overridden_tooltip')}" aria-hidden="true">⚠️</span>).html_safe
+ elsif (override_data = overridden_field_set[status_symbol])
+   highlight_class = " #{ApplicationHelper::HIGHLIGHT_OVERRIDDEN_CLASS}"
+   old_status_str = CriterionStatus.canonical(override_data[:old_value]) || '?'
+   old_justification_part = override_data[:old_justification].present? ?
+     t('projects.edit.automation.overridden_old_justification_part',
+       old_justification: override_data[:old_justification]) : ''
+   explanation_part = override_data[:explanation].present? ?
+     t('projects.edit.automation.overridden_explanation_part',
+       explanation: override_data[:explanation]) : ''
+   override_detail_body = t('projects.edit.automation.overridden_detail',
+                             old_status: old_status_str,
+                             old_justification_part: old_justification_part,
+                             explanation_part: explanation_part)
+ elsif (divergent_data = divergent_field_set[status_symbol])
+   highlight_class = " #{ApplicationHelper::HIGHLIGHT_DIVERGENT_CLASS}"
+   justification_part = divergent_data[:proposed_justification].present? ?
+     t('projects.edit.automation.divergent_justification_part',
+       justification: divergent_data[:proposed_justification]) : ''
+   status_str = CriterionStatus.canonical(divergent_data[:proposed_status]) || '?'
+   divergent_detail_body = t('projects.edit.automation.divergent_detail',
+                              status: status_str, justification_part: justification_part)
  end
 
  is_crypto = criterion_str.start_with?('crypto_')
@@ -31,9 +55,25 @@
        data-status="<%= status_to_string(project_criterion_status) %>"
        data-justification="<%= h(project_criterion_justification) %>"
        <% if highlight_class.present? %>
-       aria-label="<%= highlight_class.include?('automated') ? t('projects.edit.automation.aria_automated') : t('projects.edit.automation.aria_overridden') %>"
+       aria-label="<%= if highlight_class.include?('automated') then t('projects.edit.automation.aria_automated')
+                        elsif highlight_class.include?('divergent') then t('projects.edit.automation.aria_divergent')
+                        else t('projects.edit.automation.aria_overridden') end %>"
        role="status"
        <% end %>>
+    <% if override_detail_body %>
+    <details class="col-xs-12 override-detail-block">
+      <summary title="<%= t('projects.edit.automation.overridden_tooltip') %>"
+               aria-label="<%= t('projects.edit.automation.aria_overridden') %>">&#x26A0;&#xFE0F;</summary>
+      <div class="override-detail-body"><%= override_detail_body %></div>
+    </details>
+    <% end %>
+    <% if divergent_detail_body %>
+    <details class="col-xs-12 divergent-detail-block">
+      <summary title="<%= t('projects.edit.automation.aria_divergent') %>"
+               aria-label="<%= t('projects.edit.automation.aria_divergent') %>">&#x2260;</summary>
+      <div class="divergent-detail-body"><%= divergent_detail_body %></div>
+    </details>
+    <% end %>
     <div class="col-md-3 col-sm-4 col-xs-4 criteria-radio<%= crypto_class %>">
       <%= automation_icon.html_safe if automation_icon.present? %>
       <div class="status-chooser">

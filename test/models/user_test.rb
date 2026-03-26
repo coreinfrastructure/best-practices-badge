@@ -280,5 +280,53 @@ class UserTest < ActiveSupport::TestCase
     assert_equal 'GitHub users cannot use remember tokens', error.message
     assert_nil github_user.reload.remember_digest
   end
+
+  # email_encryption_key_hex / email_blind_index_key_hex
+  # These private class methods have a production branch (env_test: false) that
+  # is never reached during normal test runs; we exercise it explicitly here.
+
+  test 'email_encryption_key_hex returns test key in test mode' do
+    assert_equal User::TEST_EMAIL_ENCRYPTION_KEY,
+                 User.send(:email_encryption_key_hex)
+  end
+
+  test 'email_encryption_key_hex falls back to test key when env var absent' do
+    saved = ENV.delete('EMAIL_ENCRYPTION_KEY')
+    assert_equal User::TEST_EMAIL_ENCRYPTION_KEY,
+                 User.send(:email_encryption_key_hex, env_test: false)
+  ensure
+    ENV['EMAIL_ENCRYPTION_KEY'] = saved if saved
+  end
+
+  test 'email_encryption_key_hex uses EMAIL_ENCRYPTION_KEY env var when set' do
+    fake_key = 'a' * User::DIGITS_OF_EMAIL_ENCRYPTION_KEY
+    saved = ENV.fetch('EMAIL_ENCRYPTION_KEY', nil)
+    ENV['EMAIL_ENCRYPTION_KEY'] = fake_key
+    assert_equal fake_key, User.send(:email_encryption_key_hex, env_test: false)
+  ensure
+    ENV['EMAIL_ENCRYPTION_KEY'] = saved
+  end
+
+  test 'email_blind_index_key_hex returns test key in test mode' do
+    assert_equal User::TEST_EMAIL_BLIND_INDEX_KEY,
+                 User.send(:email_blind_index_key_hex)
+  end
+
+  test 'email_blind_index_key_hex falls back to test key when env var absent' do
+    saved = ENV.delete('EMAIL_BLIND_INDEX_KEY')
+    assert_equal User::TEST_EMAIL_BLIND_INDEX_KEY,
+                 User.send(:email_blind_index_key_hex, env_test: false)
+  ensure
+    ENV['EMAIL_BLIND_INDEX_KEY'] = saved if saved
+  end
+
+  test 'email_blind_index_key_hex uses EMAIL_BLIND_INDEX_KEY env var when set' do
+    fake_key = 'b' * User::DIGITS_OF_EMAIL_BLIND_INDEX_KEY
+    saved = ENV.fetch('EMAIL_BLIND_INDEX_KEY', nil)
+    ENV['EMAIL_BLIND_INDEX_KEY'] = fake_key
+    assert_equal fake_key, User.send(:email_blind_index_key_hex, env_test: false)
+  ensure
+    ENV['EMAIL_BLIND_INDEX_KEY'] = saved
+  end
 end
 # rubocop:enable Metrics/ClassLength

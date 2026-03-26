@@ -743,8 +743,11 @@ class ProjectsController < ApplicationController
 
       # Run Chief analysis with level and changed_fields for targeted validation
       # Pass user_set_values so we can detect overrides
-      # Only track automated fields if continuing to edit (for highlighting)
-      track_automated = params[:continue].present?
+      # Track all automation results (yellow + orange + ≠) when:
+      #   - user clicked "Save and Continue" (they want to keep editing), OR
+      #   - user changed the repo URL (full re-analysis of the new repo is needed;
+      #     redirect to edit so they can review all new proposals)
+      track_automated = params[:continue].present? || @project.repo_url_changed?
       run_save_automation(changed_fields, user_set_values, track_automated: track_automated)
 
       @project.repo_url_updated_at = Time.now.utc if @project.repo_url_changed?
@@ -2271,9 +2274,12 @@ class ProjectsController < ApplicationController
   # @param changed_fields [Array<Symbol>] Fields that user modified
   # @param user_set_values [Hash] Values that user just set (before Chief)
   # @param chief_instance [Chief, nil] Optional Chief instance for testing
-  # @param track_automated [Boolean] Whether to track automated fills (for highlighting)
-  #   true = save-and-continue (apply all proposals including non-forced)
-  #   false = save-and-exit (apply only forced overrides for speed)
+  # @param track_automated [Boolean] Whether to show all automation results
+  #   true  = save-and-continue: apply all proposals (blank→fill AND forced),
+  #            record yellow + orange + ≠ highlights so the user can review them
+  #   false = save-and-exit: apply ONLY forced proposals, record only orange —
+  #            non-forced blank→fills are silently skipped so nothing lands
+  #            in the database without user awareness
   # rubocop:disable Metrics/MethodLength
   def run_save_automation(changed_fields, user_set_values, chief_instance: nil, track_automated: true)
     chief = chief_instance || Chief.new(@project, client_factory, entry_locale: @project.entry_locale)
@@ -2298,12 +2304,23 @@ class ProjectsController < ApplicationController
     classify_chief_proposals(current_section_changes, user_set_values,
                              track_automated: track_automated)
 
-    # chief.apply_changes filters internally via update_value?: non-forced
-    # proposals are only applied to blank/UNKNOWN fields, and forced proposals
-    # can override any value.  On save-and-exit, only_consider_overrides: true
-    # means non-forced detectives didn't run, so current_section_changes
-    # already contains only forced proposals.
-    chief.apply_changes(@project, current_section_changes)
+    # On save-and-exit (track_automated: false), only apply FORCED proposals.
+    # Non-forced proposals fill blank fields silently — the user never sees them
+    # and cannot review them before they land in the database.
+    # classify_chief_proposals has already recorded forced proposals in
+    # @overridden_fields, so perform_html_redirect_after_save will redirect back
+    # to edit with orange highlighting whenever any forced changes were applied.
+    #
+    # Note: only_consider_overrides: true (above) skips mapping detectives and
+    # RepoJsonDetective, but base detectives still run and can return blank→fill
+    # proposals.  We must filter here — not rely on Chief's internal filter.
+    changes_to_apply =
+      if track_automated
+        current_section_changes
+      else
+        current_section_changes.select { |_, data| data[:forced] }
+      end
+    chief.apply_changes(@project, changes_to_apply)
 
     # Mark level as saved (automation ran)
     set_level_saved_flag(true)

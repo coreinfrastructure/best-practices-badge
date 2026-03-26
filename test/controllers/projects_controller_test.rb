@@ -2580,6 +2580,68 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_empty controller.instance_variable_get(:@divergent_fields),  'no-op must not be divergent'
   end
 
+  test 'run_save_automation: non-forced blank→fill NOT applied on save-and-exit' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+
+    # Blank field — a non-forced proposal would normally fill it on save-and-continue
+    @project.contribution_status = CriterionStatus::UNKNOWN
+    non_forced_proposal = CriterionStatus::MET
+
+    mock_chief = Object.new
+    mock_chief.define_singleton_method(:propose_changes) do |**_kwargs|
+      { contribution_status: { value: non_forced_proposal,
+                               explanation: 'Has CONTRIBUTING.md',
+                               forced: false } }
+    end
+    mock_chief.define_singleton_method(:apply_changes) do |project, changes|
+      changes.each { |key, data| project[key] = data[:value] }
+    end
+
+    changed_fields = [:contribution_status]
+    user_set_values = { contribution_status: CriterionStatus::UNKNOWN }
+
+    # save-and-exit: track_animated is false
+    controller.send(:run_save_automation, changed_fields, user_set_values,
+                    chief_instance: mock_chief, track_automated: false)
+
+    assert_equal CriterionStatus::UNKNOWN, @project.contribution_status,
+                 'non-forced blank→fill must NOT be applied on save-and-exit'
+    assert_empty controller.instance_variable_get(:@overridden_fields)
+    assert_empty controller.instance_variable_get(:@automated_fields)
+  end
+
+  test 'run_save_automation: forced proposal IS applied on save-and-exit' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+
+    @project.contribution_status = CriterionStatus::MET
+
+    mock_chief = Object.new
+    mock_chief.define_singleton_method(:propose_changes) do |**_kwargs|
+      { contribution_status: { value: CriterionStatus::UNMET,
+                               explanation: 'No CONTRIBUTING.md',
+                               forced: true } }
+    end
+    mock_chief.define_singleton_method(:apply_changes) do |project, changes|
+      changes.each { |key, data| project[key] = data[:value] }
+    end
+
+    changed_fields = [:contribution_status]
+    user_set_values = { contribution_status: CriterionStatus::MET }
+
+    controller.send(:run_save_automation, changed_fields, user_set_values,
+                    chief_instance: mock_chief, track_automated: false)
+
+    assert_equal CriterionStatus::UNMET, @project.contribution_status,
+                 'forced proposal must still be applied on save-and-exit'
+    assert_equal 1, controller.instance_variable_get(:@overridden_fields).size
+  end
+
   test 'run_save_automation catches chief exceptions' do
     log_in_as(@user)
     controller = ProjectsController.new

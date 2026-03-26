@@ -26,8 +26,10 @@ KEY=VALUE&KEY=VALUE&...
 ```
 
 The URL is the project's repository or home page URL.
-The KEY is the criterion (append `_status` for its status and
-`_justification` for its justification), and the VALUE is what its value
+The KEY is the criterion (lowercased, change `.` and `-` to `_`,
+append `_status` for its status and
+`_justification` for its justification).
+The VALUE is what its value
 should be (status can be '?', 'Unmet', 'N/A', or 'Met').
 
 Here's an example which proposes setting the status and justification
@@ -52,6 +54,31 @@ that directly. If you know the form you want to redirect to, you
 can directly express that using `section=`. Below are some highlights.
 For brevity, from now on we'll omit the prefix
 `https://www.bestpractices.dev`.
+
+### What Happens to Each Proposed Field
+
+The outcome for each field depends on whether it is *forced*
+(matched by an `overrides` glob pattern) and on the field's current value.
+To force proposals, add `overrides=*` (force all fields) or a more
+specific glob such as `overrides=osps_ac_*` to the URL.
+See [The `overrides` Parameter](#the-overrides-parameter) below.
+By default, proposals are unforced.
+
+**Case A — Unforced (default, no `overrides` match):**
+
+| Current value | Proposed value | Result | Visual indicator |
+|---------------|---------------|--------|-----------------|
+| Any | Same as current | No change | None |
+| Blank/Unknown (`?`) | Different | Proposal applied | 🤖 Yellow highlight |
+| Real value | Different | Not applied | ≠, Click to see what automation found |
+
+**Case B — Forced (`overrides` pattern matches this field):**
+
+| Current value | Proposed value | Result | Visual indicator |
+|---------------|---------------|--------|-----------------|
+| Any | Same as current | No change | None |
+| Blank/Unknown (`?`) | Different | Proposal applied | 🤖 Yellow highlight |
+| Real value | Different | Proposal applied; old value replaced | ⚠️ Orange highlight, click to see previous value |
 
 ## URL Format when Project ID is known
 

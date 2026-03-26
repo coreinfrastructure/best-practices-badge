@@ -40,19 +40,39 @@ class User < ApplicationRecord
   TEST_EMAIL_ENCRYPTION_KEY = '1' * DIGITS_OF_EMAIL_ENCRYPTION_KEY
   TEST_EMAIL_BLIND_INDEX_KEY = '2' * DIGITS_OF_EMAIL_BLIND_INDEX_KEY
 
-  # Email addresses are stored as encrypted values.
-  # If a key isn't provided, use a bogus one to make testing easy.
-  attr_encrypted :email, algorithm: 'aes-256-gcm', key: [
+  # Returns the hex key for email encryption.
+  # In test mode (the default), always returns TEST_EMAIL_ENCRYPTION_KEY so that
+  # tests are self-contained regardless of shell/CI environment variables.
+  # Pass env_test: false to exercise the production path (used in tests for
+  # coverage and to verify ENV fallback behaviour).
+  def self.email_encryption_key_hex(env_test: Rails.env.test?)
+    return TEST_EMAIL_ENCRYPTION_KEY if env_test
+
     ENV['EMAIL_ENCRYPTION_KEY'] || TEST_EMAIL_ENCRYPTION_KEY
-  ].pack('H*')
+  end
+  private_class_method :email_encryption_key_hex
+
+  # Returns the hex key for the email blind index.  Same test/production
+  # split as email_encryption_key_hex.
+  def self.email_blind_index_key_hex(env_test: Rails.env.test?)
+    return TEST_EMAIL_BLIND_INDEX_KEY if env_test
+
+    ENV['EMAIL_BLIND_INDEX_KEY'] || TEST_EMAIL_BLIND_INDEX_KEY
+  end
+  private_class_method :email_blind_index_key_hex
+
+  # Email addresses are stored as encrypted values.
+  # Fixtures are encrypted with TEST_EMAIL_ENCRYPTION_KEY; the method above
+  # ensures that key is always used during tests.
+  attr_encrypted :email, algorithm: 'aes-256-gcm',
+                         key: [email_encryption_key_hex].pack('H*')
 
   # Email addresses are indexed as blind indexes of downcased email addresses,
   # so we can efficiently search for them while keeping them encrypted.
   # Usage: User.where(email: 'test@example.org')
   # or:    User.where(email: 'test@example.org', provider: 'local')
-  blind_index :email, key: [
-    ENV['EMAIL_BLIND_INDEX_KEY'] || TEST_EMAIL_BLIND_INDEX_KEY
-  ].pack('H*'), expression: ->(v) { v.try(:downcase) }
+  blind_index :email, key: [email_blind_index_key_hex].pack('H*'),
+                      expression: ->(v) { v.try(:downcase) }
 
   scope :created_since, (
     lambda do |time|

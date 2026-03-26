@@ -72,13 +72,22 @@ module ProjectsHelper
     elsif automated_field_set.include?(field_sym)
       [ApplicationHelper::HIGHLIGHT_AUTOMATED_CLASS, ApplicationHelper::ROBOT_EMOJI_SAFE]
     elsif (divergent_data = divergent_field_set[field_sym])
-      detail_body = t('projects.edit.automation.divergent_proposed_value',
-                      proposed_value: divergent_data[:proposed_value].to_s)
+      justification_part =
+        if divergent_data[:proposed_justification].present?
+          t('projects.edit.automation.divergent_justification_part',
+            justification: divergent_data[:proposed_justification])
+        else
+          ''
+        end
+      detail_body = t('projects.edit.automation.divergent_detail',
+                      status: divergent_data[:proposed_value].to_s,
+                      justification_part: justification_part)
       # rubocop:disable Rails/OutputSafety
       icon =
-        content_tag(:details, class: 'automation-detail') do
+        content_tag(:details, class: 'automation-detail divergent-detail') do
           content_tag(:summary,
                       '≠'.html_safe,
+                      title: t('projects.edit.automation.aria_divergent'),
                       'aria-label': t('projects.edit.automation.aria_divergent')) +
             content_tag(:span, detail_body, class: 'automation-detail-body')
         end

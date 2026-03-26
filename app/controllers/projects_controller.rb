@@ -644,6 +644,8 @@ class ProjectsController < ApplicationController
       merge_field_lists(params[:overridden_fields_list], @overridden_fields)
     @automated_fields =
       merge_field_lists(params[:automated_fields_list], @automated_fields)
+    @divergent_fields =
+      parse_divergent_fields_list(params[:divergent_fields_list], @divergent_fields)
 
     return unless @project.notify_for_static_analysis?('0')
 
@@ -2131,6 +2133,83 @@ class ProjectsController < ApplicationController
     validated
   end
 
+  # Build query-parameter hash for divergent fields to carry through a redirect.
+  # Convention: _status keys hold Integers internally; convert to canonical String
+  # at the URL boundary.  _value keys hold Strings; pass through unchanged.
+  # Params produced:
+  #   divergent_fields_list=field1,field2,...
+  #   div__field1=Met            (canonical string for _status fields, raw for others)
+  #   div__field1_justification=...  (omitted when blank)
+  # @return [Hash] Params to merge into redirect_to path options
+  # rubocop:disable Metrics/MethodLength
+  def divergent_url_params
+    return {} unless @divergent_fields&.any?
+
+    result = { divergent_fields_list: @divergent_fields.keys.join(',') }
+    @divergent_fields.each do |field, data|
+      val =
+        if data.key?(:proposed_status)
+          CriterionStatus.canonical(data[:proposed_status]) # Integer → String
+        else
+          data[:proposed_value].presence
+        end
+      result[:"div__#{field}"] = val if val.present?
+      justification = data[:proposed_justification]
+      result[:"div__#{field}_justification"] = justification if justification.present?
+    end
+    result
+  end
+  # rubocop:enable Metrics/MethodLength
+
+  # Parse divergent_fields_list + div__* redirect params back into @divergent_fields.
+  # Convention mirrors divergent_url_params: _status fields use CriterionStatus.parse
+  # to restore the Integer; other fields store the String as :proposed_value.
+  # Existing rich data (from Chief running in this same request) takes priority
+  # over URL values, which lack proposed_justification.
+  # @param field_string [String, nil] divergent_fields_list param value
+  # @param existing_fields [Hash, nil] @divergent_fields already set this request
+  # @return [Hash{Symbol => Hash}]
+  # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity
+  # rubocop:disable Layout/FirstHashElementLineBreak
+  def parse_divergent_fields_list(field_string, existing_fields)
+    return existing_fields || {} if field_string.blank?
+
+    valid_fields = fields_for_current_section
+    return existing_fields || {} if valid_fields.nil?
+
+    url_fields = {}
+    field_string.split(',').each do |field_name|
+      field_name = field_name.strip
+      next if field_name.blank?
+
+      field_sym = field_name.to_sym
+      next if valid_fields.exclude?(field_sym)
+
+      raw_val = params[:"div__#{field_sym}"].presence
+      justif  = params[:"div__#{field_sym}_justification"].presence
+
+      # _status fields store Integer internally; restore via CriterionStatus.parse.
+      # All other fields store the raw String as :proposed_value.
+      url_fields[field_sym] =
+        if field_name.end_with?('_status')
+          { proposed_status:       CriterionStatus.parse(raw_val),
+            proposed_justification: justif }
+        else
+          { proposed_value:        raw_val,
+            proposed_justification: justif }
+        end
+    end
+
+    return url_fields if existing_fields.blank?
+
+    # Existing data (has proposed_justification from Chief) takes priority
+    url_fields.merge(existing_fields)
+  end
+  # rubocop:enable Layout/FirstHashElementLineBreak
+  # rubocop:enable Metrics/AbcSize, Metrics/PerceivedComplexity
+  # rubocop:enable Metrics/MethodLength, Metrics/CyclomaticComplexity
+
   # Classify Chief proposals into @automated_fields, @overridden_fields,
   # and @divergent_fields following the same decision matrix as URL-based
   # automation (apply_query_string_automation):
@@ -2433,7 +2512,8 @@ class ProjectsController < ApplicationController
       locale: params[:locale],
       anchor: first_overridden,
       overridden_fields_list: overridden_field_names.join(','),
-      automated_fields_list: automated_field_names.join(',')
+      automated_fields_list: automated_field_names.join(','),
+      **divergent_url_params
     )
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
@@ -2460,6 +2540,7 @@ class ProjectsController < ApplicationController
         redirect_params[:automated_fields_list] =
           @automated_fields.keys.join(',')
       end
+      redirect_params.merge!(divergent_url_params)
       redirect_to edit_project_section_path(@project, section,
                                             **redirect_params) + url_anchor
     else

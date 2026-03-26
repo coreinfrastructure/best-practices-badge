@@ -17,8 +17,9 @@ module ApplicationHelper
   # rubocop:enable Rails/OutputSafety
 
   # Frozen string constants for automation highlight CSS classes (memory optimization)
-  HIGHLIGHT_AUTOMATED_CLASS = 'highlight-automated'
+  HIGHLIGHT_AUTOMATED_CLASS  = 'highlight-automated'
   HIGHLIGHT_OVERRIDDEN_CLASS = 'highlight-overridden'
+  HIGHLIGHT_DIVERGENT_CLASS  = 'highlight-divergent'
 
   # Pre-computed section dropdown data for project show navigation.
   # Lazy-initialized (memoized) to avoid I18n initialization order issues.

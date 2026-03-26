@@ -867,5 +867,18 @@ class ProjectsHelperTest < ActionView::TestCase
     assert_match(/≠/, icon)
     assert_match(/suggested name/, icon)
   end
+
+  test 'non_criteria_automation_display includes justification in divergent icon' do
+    @automated_fields  = {}
+    @overridden_fields = {}
+    @divergent_fields  = {
+      name: {
+        proposed_value: 'suggested name',
+        proposed_justification: 'detected from repo'
+      }
+    }
+    _css, icon = non_criteria_automation_display(:name)
+    assert_match(/detected from repo/, icon)
+  end
 end
 # rubocop:enable Metrics/ClassLength

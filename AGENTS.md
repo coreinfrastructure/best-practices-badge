@@ -32,6 +32,10 @@ However, documentation is often unnoticed and too much can obscure what's import
 - `rails test test/features/can_access_home_test.rb:4` - Run a test at line 4 of the specified test file.
 - `MINITEST_REPORTER="SpecReporter" rails test test/controllers/projects_controller_test.rb` - show the file and name of each test
 
+We require 100% statement coverage. We avoid using :nocov: because Ruby
+only does dynamic type-checking. Lines of code that are *never*
+tested have an increased risk of causing production failures.
+
 ### Code Quality & Linting
 
 - `rake default` - Run local CI/CD pipeline (linting, tests, etc.).

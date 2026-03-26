@@ -2592,9 +2592,13 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     mock_chief = Object.new
     mock_chief.define_singleton_method(:propose_changes) do |**_kwargs|
-      { contribution_status: { value: non_forced_proposal,
-                               explanation: 'Has CONTRIBUTING.md',
-                               forced: false } }
+      {
+        contribution_status: {
+          value: non_forced_proposal,
+                  explanation: 'Has CONTRIBUTING.md',
+                  forced: false
+        }
+      }
     end
     mock_chief.define_singleton_method(:apply_changes) do |project, changes|
       changes.each { |key, data| project[key] = data[:value] }
@@ -2623,9 +2627,13 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     mock_chief = Object.new
     mock_chief.define_singleton_method(:propose_changes) do |**_kwargs|
-      { contribution_status: { value: CriterionStatus::UNMET,
-                               explanation: 'No CONTRIBUTING.md',
-                               forced: true } }
+      {
+        contribution_status: {
+          value: CriterionStatus::UNMET,
+                  explanation: 'No CONTRIBUTING.md',
+                  forced: true
+        }
+      }
     end
     mock_chief.define_singleton_method(:apply_changes) do |project, changes|
       changes.each { |key, data| project[key] = data[:value] }
@@ -2640,6 +2648,91 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal CriterionStatus::UNMET, @project.contribution_status,
                  'forced proposal must still be applied on save-and-exit'
     assert_equal 1, controller.instance_variable_get(:@overridden_fields).size
+  end
+
+  test 'divergent_url_params encodes proposed_status as canonical string' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(
+      :@divergent_fields,
+      {
+        contribution_status: {
+          proposed_status: CriterionStatus::MET,
+                  proposed_justification: 'Has CONTRIBUTING.md'
+        }
+      }
+    )
+    params = controller.send(:divergent_url_params)
+    assert_equal 'contribution_status', params[:divergent_fields_list]
+    assert_equal 'Met', params[:div__contribution_status],
+                 'proposed_status Integer must be encoded as canonical string'
+    assert_equal 'Has CONTRIBUTING.md', params[:div__contribution_status_justification]
+  end
+
+  test 'parse_divergent_fields_list decodes _status field as Integer' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+    allow_params = ActionController::Parameters.new(
+      div__contribution_status: 'Met',
+      div__contribution_status_justification: 'Has CONTRIBUTING.md'
+    )
+    controller.instance_variable_set(:@_params, allow_params)
+    result = controller.send(
+      :parse_divergent_fields_list, 'contribution_status', nil
+    )
+    assert_equal CriterionStatus::MET, result[:contribution_status][:proposed_status],
+                 'canonical string must be parsed back to Integer'
+    assert_equal 'Has CONTRIBUTING.md', result[:contribution_status][:proposed_justification]
+  end
+
+  test 'parse_divergent_fields_list merges url and existing fields' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+    allow_params = ActionController::Parameters.new(
+      div__contribution_status: 'Met'
+    )
+    controller.instance_variable_set(:@_params, allow_params)
+    existing = { floss_license_status: { proposed_status: CriterionStatus::UNMET } }
+    result = controller.send(
+      :parse_divergent_fields_list, 'contribution_status', existing
+    )
+    assert result.key?(:contribution_status), 'URL field must be present'
+    assert result.key?(:floss_license_status), 'existing field must be preserved'
+  end
+
+  test 'run_first_edit_automation_if_needed rescues chief errors' do
+    log_in_as(@user)
+    # Project with passing_saved=false so automation runs
+    @project.passing_saved = false
+    @project.save!
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+    controller.instance_variable_set(:@automated_fields, {})
+    controller.instance_variable_set(:@overridden_fields, {})
+    controller.instance_variable_set(:@divergent_fields, {})
+
+    # Stub client_factory to raise
+    controller.define_singleton_method(:client_factory) do
+      raise StandardError, 'simulated network error'
+    end
+    controller.define_singleton_method(:level_already_saved?) { false }
+    controller.define_singleton_method(:fields_for_current_section) { nil }
+    controller.define_singleton_method(:capture_original_values) { {} }
+    controller.define_singleton_method(:params) do
+      ActionController::Parameters.new({})
+    end
+
+    # Should not raise; rescue block sets fields to {}
+    assert_nothing_raised { controller.send(:run_first_edit_automation_if_needed) }
+    assert_equal({}, controller.instance_variable_get(:@automated_fields))
+    assert_equal({}, controller.instance_variable_get(:@overridden_fields))
+    assert_equal({}, controller.instance_variable_get(:@divergent_fields))
   end
 
   test 'run_save_automation catches chief exceptions' do

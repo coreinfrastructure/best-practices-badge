@@ -228,12 +228,19 @@ module SessionsHelper
     redirect_to(forwarding_url || force_locale_url(default, I18n.locale))
   end
 
-  # Stores the URL trying to be accessed (if its a new project) or a referer
+  # Stores the URL trying to be accessed (if its a new project) or a referer.
+  # Preserves any forwarding_url already set (e.g., by can_edit_else_redirect),
+  # so that query parameters (such as automation proposals) are not lost when
+  # the login page involves a locale redirect chain (/login -> /en/login).
   def store_location_and_locale
-    session.delete(:forwarding_url)
     session.delete(:locale)
     session[:locale] = I18n.locale
     return unless request.get?
+    # If a forwarding_url was already set (e.g., by can_edit_else_redirect
+    # before redirecting here), preserve it rather than overwriting with the
+    # HTTP Referer header, which may be an intermediate locale-redirect URL
+    # that does not carry the original query parameters.
+    return if session[:forwarding_url].present?
 
     if request.url == new_project_url
       session[:forwarding_url] = new_project_url
@@ -257,12 +264,20 @@ module SessionsHelper
   end
 
   # Check if referring url is internal, if so, save it.
+  # Excludes login and signup URLs regardless of locale prefix, so that an
+  # intermediate locale redirect (/login -> /en/login) is never stored as
+  # the forwarding destination.
   def store_internal_referer
     return if request.referer.nil?
 
     ref_url = request.referer
-    return unless URI.parse(ref_url).host == request.host
-    return if [login_url, signup_url].include? ref_url
+    ref_uri = URI.parse(ref_url)
+    return unless ref_uri.host == request.host
+
+    # Strip locale prefix from path before comparing to exclude /login and
+    # /signup both with and without locale (e.g., /en/login and /login).
+    normalized_path = ref_uri.path.gsub(LocaleUtils::LOCALE_PATH_REGEX, '/')
+    return if %w[/login /signup].include?(normalized_path)
 
     session[:forwarding_url] = ref_url
   end

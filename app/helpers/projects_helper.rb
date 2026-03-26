@@ -48,6 +48,13 @@ module ProjectsHelper
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def non_criteria_automation_display(field_sym)
     if (override_data = overridden_field_set[field_sym])
+      old_justification_part =
+        if override_data[:old_justification].present?
+          t('projects.edit.automation.overridden_old_justification_part',
+            old_justification: override_data[:old_justification])
+        else
+          ''
+        end
       explanation_part =
         if override_data[:explanation].present?
           t('projects.edit.automation.overridden_explanation_part',
@@ -57,6 +64,7 @@ module ProjectsHelper
         end
       detail_body = t('projects.edit.automation.overridden_detail',
                       old_status: override_data[:old_value].to_s,
+                      old_justification_part: old_justification_part,
                       explanation_part: explanation_part)
       # rubocop:disable Rails/OutputSafety
       icon =

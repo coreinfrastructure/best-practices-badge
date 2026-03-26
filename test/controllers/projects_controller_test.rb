@@ -3273,7 +3273,9 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     overridden = controller.instance_variable_get(:@overridden_fields)
     assert overridden.key?(:contribution_status), 'should be in overridden_fields'
     assert_equal CriterionStatus::UNMET, overridden[:contribution_status][:old_value]
-    assert_equal 'Has CONTRIBUTING.md', overridden[:contribution_status][:explanation]
+    assert_nil overridden[:contribution_status][:explanation], 'URL overrides have no explanation'
+    assert_equal 'Has CONTRIBUTING.md', @project.contribution_justification,
+                 'proposed justification must be applied to project'
   end
 
   test 'apply_query_string_automation: overrides too long returns no forcing' do
@@ -3476,11 +3478,14 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal CriterionStatus::MET, divergent[:interact_status][:proposed_status]
     assert_not overridden.key?(:interact_status)
 
-    # Row 6: real, differs, forced → applied, orange with old_value and explanation
+    # Row 6: real, differs, forced → applied, orange with old_value; URL overrides have
+    # no separate explanation (proposed justification is applied to the project instead)
     assert_equal CriterionStatus::MET, @project.floss_license_status, 'row6: must be overridden'
     assert overridden.key?(:floss_license_status), 'row6: must be orange'
     assert_equal CriterionStatus::UNMET, overridden[:floss_license_status][:old_value]
-    assert_equal 'OSI-approved license', overridden[:floss_license_status][:explanation]
+    assert_nil overridden[:floss_license_status][:explanation], 'URL overrides have no explanation'
+    assert_equal 'OSI-approved license', @project.floss_license_justification,
+                 'row6: proposed justification must be applied to project'
     assert_not divergent.key?(:floss_license_status)
   end
   # rubocop:enable Metrics/BlockLength
@@ -3708,7 +3713,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_empty controller.instance_variable_get(:@divergent_fields)
   end
 
-  test 'pass1: forced real-value → applied orange with old_value and explanation' do
+  test 'pass1: forced real-value → applied orange with old_value; URL has no explanation' do
     @project.contribution_status = CriterionStatus::UNMET
     controller, vf, ff, ov = prepare_pass('contribution_status' => 'Met',
                                           'contribution_justification' => 'Reason',
@@ -3718,7 +3723,9 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     overridden = controller.instance_variable_get(:@overridden_fields)
     assert overridden.key?(:contribution_status)
     assert_equal CriterionStatus::UNMET, overridden[:contribution_status][:old_value]
-    assert_equal 'Reason', overridden[:contribution_status][:explanation]
+    assert_nil overridden[:contribution_status][:explanation], 'URL overrides have no explanation'
+    assert_nil overridden[:contribution_status][:old_justification],
+               'no prior justification was set, so old_justification must be nil'
     assert_not divergent_set.include?(:contribution_status)
     assert_empty controller.instance_variable_get(:@automated_fields)
   end

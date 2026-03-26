@@ -65,7 +65,9 @@ class ProjectsController < ApplicationController
   #   Values: { new_value:, explanation: }
   # - @overridden_fields (orange highlight): fields that had a real user
   #   value (not '?' or blank) and were forcibly changed by Chief.
-  #   Values: { old_value:, new_value:, explanation: }
+  #   Values: { old_value:, new_value:, old_justification:, explanation: }
+  #   old_justification is the user's previous justification text (may be nil).
+  #   explanation is the automation's reason for the override (Chief only; nil for URL).
   #
   # They are populated by classify_chief_proposals (first-edit and save-time Chief),
   # apply_query_string_automation (URL proposals),
@@ -1895,7 +1897,8 @@ class ProjectsController < ApplicationController
       @overridden_fields[field_sym] = {
         old_value: original,
         new_value: new_value,
-        explanation: params[justification_key].presence
+        old_justification: original_values[justification_key.to_sym],
+        explanation: nil # URL proposals have no separate automation reason
       }
     end
     divergent_status_fields
@@ -2288,8 +2291,12 @@ class ProjectsController < ApplicationController
       end
 
       # Forced → Orange
+      justification_sym = field.to_s.sub('_status', '_justification').to_sym
       @overridden_fields[field] = {
-        old_value: original, new_value: chief_value, explanation: data[:explanation]
+        old_value: original,
+        new_value: chief_value,
+        old_justification: original_values[justification_sym],
+        explanation: data[:explanation]
       }
     end
 
@@ -2342,7 +2349,10 @@ class ProjectsController < ApplicationController
       # original_values[status_sym] is always the correct pre-automation value.
       old_val = is_justification ? original_values[status_sym] : original
       @overridden_fields[highlight_field] = {
-        old_value: old_val, new_value: chief_value, explanation: data[:explanation]
+        old_value: old_val,
+        new_value: chief_value,
+        old_justification: is_justification ? original_values[field] : nil,
+        explanation: data[:explanation]
       }
     end
   end

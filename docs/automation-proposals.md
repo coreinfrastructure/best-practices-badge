@@ -8,6 +8,9 @@ displays the proposed values with visual highlighting so the
 (authorized) user can review and accept or modify them before saving.
 The user can also simply choose to *not* save them, their choice.
 
+The *user* is always the final arbiter. They can easily see
+the proposals in context with other answers, and decide what to do.
+
 This is not the *only* way an automated tool can retrieve or edit project
 badge entry data; we also provide an API to read or change the project
 data using JSON. However, the "automation proposals" interface
@@ -51,7 +54,7 @@ On selection, relevant changes are highlighted and shown with a
 
 There are many more options. If you know the project number, you can use
 that directly. If you know the form you want to redirect to, you
-can directly express that using `section=`. Below are some highlights.
+can directly express that using the key `section=`. Below are some highlights.
 For brevity, from now on we'll omit the prefix
 `https://www.bestpractices.dev`.
 

@@ -19,6 +19,8 @@ The real goal of this project is to encourage projects to
 apply best practices, and to help users determine which FLOSS projects do so.
 We believe that FLOSS projects that implement best practices are more likely
 to produce better software, including more secure software.
+We support both its original "metal" badge criteria and the
+OpenSSF Baseline criteria.
 
 See the
 *[OpenSSF Best Practices badge website](https://bestpractices.coreinfrastructure.org/)* if you want to try to actually get a badge.
@@ -59,6 +61,21 @@ Interesting pages include:
 * **[Installation](./docs/INSTALL.md)**  - Installation and quick start
 * **[Vetting](./docs/vetting.md)**  - More about our vetting approach
 * **[Roadmap](./docs/roadmap.md)**  - Roadmap (future plans)
+* **[Automation proposals](docs/automation-proposals.md)** - a mechanism for external tools to easily propose changes (this is our recommended integration mechanism)
+
+## Baseline and Metal series
+
+The best practices badge site supports both the
+[OpenSSF Baseline](https://baseline.openssf.org/) criteria
+(baseline-1,2,3) and its own "Metal series" of criteria
+(passing, silver, gold).
+
+The baseline series is a more minimal checklist focusing only on MUST
+security requirements and is derived in part from global cybersecurity
+regulations and frameworks. The metal series is a larger set of criteria that
+includes suggestions and quality issues that impact security, and is derived
+in part from experiences of secure FLOSS projects. Both focus on security.
+We encourage projects to eventually do both; you choose where to start.
 
 ## Summary of Best Practices Criteria "passing" level
 

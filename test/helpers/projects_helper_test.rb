@@ -857,6 +857,18 @@ class ProjectsHelperTest < ActionView::TestCase
     assert_no_match(/Justification/, icon)
   end
 
+  test 'non_criteria_automation_display includes old justification when present' do
+    @automated_fields  = {}
+    @overridden_fields = {
+      name: {
+        old_value: 'old name', new_value: 'new name',
+        old_justification: 'user wrote this', explanation: nil
+      }
+    }
+    _css, icon = non_criteria_automation_display(:name)
+    assert_match(/user wrote this/, icon)
+  end
+
   test 'non_criteria_automation_display returns divergent icon with no highlight class' do
     @automated_fields  = {}
     @overridden_fields = {}

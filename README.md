@@ -19,7 +19,7 @@ The real goal of this project is to encourage projects to
 apply best practices, and to help users determine which FLOSS projects do so.
 We believe that FLOSS projects that implement best practices are more likely
 to produce better software, including more secure software.
-We support both its original "metal" badge criteria and the
+We support both our original "metal" badge criteria and the
 OpenSSF Baseline criteria.
 
 See the
@@ -37,8 +37,10 @@ This project was originally developed under the CII, but it
 is now part of the
 [Open Source Security Foundation (OpenSSF)](https://openssf.org/)
 [Best Practices Working Group (WG)](https://github.com/ossf/wg-best-practices-os-developers).
-The original name of the project was the CII Best Practices badge, but
-it is now the OpenSSF Best Practices badge project.
+Its formal name is the OpenSSF Best Practices badge project, formerly named
+the CII Best Practices badge.
+
+## Interesting pages
 
 Interesting pages include:
 
@@ -61,7 +63,7 @@ Interesting pages include:
 * **[Installation](./docs/INSTALL.md)**  - Installation and quick start
 * **[Vetting](./docs/vetting.md)**  - More about our vetting approach
 * **[Roadmap](./docs/roadmap.md)**  - Roadmap (future plans)
-* **[Automation proposals](docs/automation-proposals.md)** - a mechanism for external tools to easily propose changes (this is our recommended integration mechanism)
+* **[Automation proposals](./docs/automation-proposals.md)** - a mechanism for external tools to easily propose changes (this is our recommended integration mechanism)
 
 ## Baseline and Metal series
 
@@ -75,7 +77,9 @@ security requirements and is derived in part from global cybersecurity
 regulations and frameworks. The metal series is a larger set of criteria that
 includes suggestions and quality issues that impact security, and is derived
 in part from experiences of secure FLOSS projects. Both focus on security.
-We encourage projects to eventually do both; you choose where to start.
+
+We encourage projects to eventually do both. You choose where to start.
+Once you do one series, it's much easier to do the other.
 
 ## Summary of Best Practices Criteria "passing" level
 
@@ -195,14 +199,13 @@ subdirectory for documentation. We have renamed that to a `docs` subdirectory.
 
 ## Main site
 
-We have recently moved to the new main site
+Years ago we moved our main site to
 <https://www.bestpractices.dev>.
-For many years the main site was at
+
+For many years the main site previously was at
 <https://bestpractices.coreinfrastructure.org>.
-However, the Core Infrastructure Initiative (CII) has ended, and we have
-become part of the Open Source Security Foundation (OpenSSF).
-Therefore, it made sense to change the domain name so it's no longer tied
-to the CII. The domain name is much shorter, too.
+However, the Core Infrastructure Initiative (CII) ended and we
+became part of the Open Source Security Foundation (OpenSSF).
 We use the "www" subdomain because there are technical challenges using
 a top-level domain with our CDN; it's more efficient to use the subdomain.
 

@@ -61,11 +61,12 @@ For brevity, from now on we'll omit the prefix
 ### What Happens to Each Proposed Field
 
 The outcome for each field depends on the field's current value and
-whether the new automation proposals *overrides* the current value
+whether the new automation proposal *overrides* the current value
 (aka is *forced*).
 By default, proposals are unforced.
 To force proposals, add `overrides=*` (force all fields) or a more
-specific glob such as `overrides=osps_ac_*` to the URL.
+specific comma-separated sequence of globs
+such as `overrides=osps_ac_*` to the URL.
 See [The `overrides` Parameter](#the-overrides-parameter) below.
 
 | Current value | Proposed value | Result | Visual indicator |
@@ -299,8 +300,8 @@ Automation proposals are validated in several ways:
    different section than the one being edited are ignored.
    For example, proposing `osps_ac_01_01_status=Met` while editing
    the `passing` section will have no effect.
-   That's necessary because that ensure that the human user will have
-   chance to review the proposal in its proper context.
+   That approach is necessary because it ensures that the human user will have
+   a chance to review the proposal in its proper context.
 
 4. **No direct writes**: Proposed values are loaded into the
    in-memory project object for display in the edit form.
@@ -338,12 +339,13 @@ answers a human has already reviewed.
 
 To allow automation to **force** changes to fields that already have
 values, append an `overrides` query parameter containing
-comma-separated glob patterns:
+comma-separated glob patterns. For example:
 
 ```text
 /en/projects/42/passing/edit?contribution_status=Met&overrides=contribution_status
 ```
 
+Use `%2C` to represent the comma separator if you use more than one glob.
 Glob syntax follows Ruby's `File.fnmatch` rules.
 `*` matches any sequence of characters (but not `/`).
 Use `*` to force all matching fields:
@@ -352,15 +354,17 @@ Use `*` to force all matching fields:
 /en/projects/42/passing/edit?contribution_status=Met&overrides=*
 ```
 
-**Justification–Status Coupling rule:** when a status field is
+**Justification–Status Coupling rule:** Justifications and their associated
+status values are linked. When a status field is
 forced via `overrides`, its paired justification field is also forced
-automatically (if provided). Conversely, if a status field is
-*divergent* (not applied), its paired justification is also blocked —
+automatically (if provided). If a status field is
+*divergent* (not applied) because it is not forced,
+then its paired justification is also blocked, because
 a justification written for the wrong status answer would mislead the user.
 
 **Safety limits:** the `overrides` value is ignored if it is longer
 than 10,000 characters or contains more than 1,000 comma-separated
-patterns.
+patterns. We don't expect this to cause a problem for non-attackers.
 
 ## The `reanalyze` Parameter
 

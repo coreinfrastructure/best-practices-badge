@@ -2705,6 +2705,84 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert result.key?(:floss_license_status), 'existing field must be preserved'
   end
 
+  test 'overridden_url_params encodes old_value as canonical string' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(
+      :@overridden_fields,
+      {
+        contribution_status: {
+          old_value:         CriterionStatus::MET,
+          new_value:         CriterionStatus::UNMET,
+          old_justification: 'Old reason',
+          explanation:       'No CONTRIBUTING.md'
+        }
+      }
+    )
+    result = controller.send(:overridden_url_params)
+    assert_equal 'Met', result[:ovr__contribution_status],
+                 'Integer old_value must be encoded as canonical string'
+    assert_equal 'Old reason', result[:ovr__contribution_status_justification]
+    assert_equal 'No CONTRIBUTING.md', result[:ovr__contribution_status_explanation]
+  end
+
+  test 'parse_overridden_fields_list decodes _status field as Integer' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+    allow_params = ActionController::Parameters.new(
+      ovr__contribution_status: 'Met',
+      ovr__contribution_status_justification: 'Old reason',
+      ovr__contribution_status_explanation: 'No CONTRIBUTING.md'
+    )
+    controller.instance_variable_set(:@_params, allow_params)
+    result = controller.send(
+      :parse_overridden_fields_list, 'contribution_status', nil
+    )
+    assert_equal CriterionStatus::MET, result[:contribution_status][:old_value],
+                 'canonical string must be parsed back to Integer'
+    assert_equal 'Old reason', result[:contribution_status][:old_justification]
+    assert_equal 'No CONTRIBUTING.md', result[:contribution_status][:explanation]
+  end
+
+  test 'parse_overridden_fields_list merges url and existing fields' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+    allow_params = ActionController::Parameters.new(
+      ovr__contribution_status: 'Met'
+    )
+    controller.instance_variable_set(:@_params, allow_params)
+    existing = {
+      floss_license_status: {
+        old_value: CriterionStatus::UNMET, old_justification: nil, explanation: nil
+      }
+    }
+    result = controller.send(
+      :parse_overridden_fields_list, 'contribution_status', existing
+    )
+    assert result.key?(:contribution_status), 'URL field must be present'
+    assert result.key?(:floss_license_status), 'existing field must be preserved'
+  end
+
+  test 'ovr__ params restore old_value metadata in overridden popover' do
+    log_in_as(@project.user)
+    get "/en/projects/#{@project.id}/passing/edit",
+        params: {
+          overridden_fields_list: 'contribution_status',
+          ovr__contribution_status: 'Met',
+          ovr__contribution_status_explanation: 'No CONTRIBUTING.md'
+        }
+    assert_response :success
+    # The popover shows "Previous value: Met" — verify the canonical string
+    # appears in the body (as text, not HTML attribute)
+    assert_includes @response.body, 'Met'
+    assert_includes @response.body, 'highlight-overridden'
+  end
+
   test 'run_first_edit_automation_if_needed rescues chief errors' do
     log_in_as(@user)
     # Project with passing_saved=false so automation runs

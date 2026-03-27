@@ -67,18 +67,20 @@ class ProjectsController < ApplicationController
   #   value (not '?' or blank) and were forcibly changed by Chief.
   #   Values: { old_value:, new_value:, old_justification:, explanation: }
   #   old_justification is the user's previous justification text (may be nil).
-  #   explanation is the automation's reason for the override (Chief only; nil for URL).
+  #   explanation is the automation's reason for the override; nil when unavailable
+  #   (e.g. URL-based proposals without ovr__*_explanation params).
   #
   # They are populated by classify_chief_proposals (first-edit and save-time Chief),
   # apply_query_string_automation (URL proposals),
-  # and parse_and_validate_field_list (redirect params).
+  # and parse_overridden_fields_list (redirect params with ovr__ metadata).
   # Consumed by the edit view (via projects_helper automated_field_set /
   # overridden_field_set), format_override_details, and
   # build_automation_metadata (JSON API).
   #
   # The external query parameters automated_fields_list and
-  # overridden_fields_list will set the keys, with the value {} if
-  # there is nothing more specific, to highlight those fields.
+  # overridden_fields_list highlight those fields.  For overridden_fields_list,
+  # ovr__field, ovr__field_justification, and ovr__field_explanation params
+  # carry the metadata; omitting them leaves old_value/explanation nil (shown as '?').
 
   # The 'badge', 'baseline_badge', and 'show_json' actions are special and
   # do NOT take a locale.
@@ -643,7 +645,7 @@ class ProjectsController < ApplicationController
     # (handle_overridden_fields_redirect passes overridden_fields_list= and automated_fields_list=)
     # Existing entries (from automation) take priority over URL params.
     @overridden_fields =
-      merge_field_lists(params[:overridden_fields_list], @overridden_fields)
+      parse_overridden_fields_list(params[:overridden_fields_list], @overridden_fields)
     @automated_fields =
       merge_field_lists(params[:automated_fields_list], @automated_fields)
     @divergent_fields =
@@ -2213,6 +2215,93 @@ class ProjectsController < ApplicationController
   # rubocop:enable Metrics/AbcSize, Metrics/PerceivedComplexity
   # rubocop:enable Metrics/MethodLength, Metrics/CyclomaticComplexity
 
+  # Build query-parameter hash for overridden fields to carry through a redirect.
+  # Convention mirrors divergent_url_params: _status fields convert Integer
+  # old_value → canonical String via CriterionStatus.canonical.
+  # Params produced:
+  #   ovr__field1=Unmet              (canonical string for _status old_value, raw for others)
+  #   ovr__field1_justification=...  (omitted when blank)
+  #   ovr__field1_explanation=...    (omitted when blank)
+  # Note: overridden_fields_list itself is added by handle_overridden_fields_redirect.
+  # Note: new_value is NOT carried — it is the current DB value, already visible
+  #   in the form fields directly.
+  # @return [Hash] Params to merge into redirect_to path options
+  # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity
+  def overridden_url_params
+    return {} unless @overridden_fields&.any?
+
+    result = {}
+    @overridden_fields.each do |field, data|
+      old_val = data[:old_value]
+      val =
+        if field.to_s.end_with?('_status')
+          CriterionStatus.canonical(old_val)
+        else
+          old_val.presence
+        end
+      result[:"ovr__#{field}"] = val if val.present?
+      old_just = data[:old_justification]
+      result[:"ovr__#{field}_justification"] = old_just if old_just.present?
+      explanation = data[:explanation]
+      result[:"ovr__#{field}_explanation"] = explanation if explanation.present?
+    end
+    result
+  end
+  # rubocop:enable Metrics/MethodLength, Metrics/CyclomaticComplexity
+
+  # Parse overridden_fields_list + ovr__* redirect params back into @overridden_fields.
+  # Convention mirrors parse_divergent_fields_list: _status fields use
+  # CriterionStatus.parse to restore the Integer old_value.
+  # Existing rich data (from Chief running in this same request) takes priority
+  # over URL values, which are provided only by the redirect.
+  # @param field_string [String, nil] overridden_fields_list param value
+  # @param existing_fields [Hash, nil] @overridden_fields already set this request
+  # @return [Hash{Symbol => Hash}]
+  # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity
+  # rubocop:disable Layout/FirstHashElementLineBreak
+  def parse_overridden_fields_list(field_string, existing_fields)
+    return existing_fields || {} if field_string.blank?
+
+    valid_fields = fields_for_current_section
+    return existing_fields || {} if valid_fields.nil?
+
+    url_fields = {}
+    field_string.split(',').each do |field_name|
+      field_name = field_name.strip
+      next if field_name.blank?
+
+      field_sym = field_name.to_sym
+      next if valid_fields.exclude?(field_sym)
+
+      raw_val = params[:"ovr__#{field_sym}"].presence
+      justif  = params[:"ovr__#{field_sym}_justification"].presence
+      expl    = params[:"ovr__#{field_sym}_explanation"].presence
+
+      old_value =
+        if field_name.end_with?('_status')
+          CriterionStatus.parse(raw_val)
+        else
+          raw_val
+        end
+
+      url_fields[field_sym] = {
+        old_value:         old_value,
+        old_justification: justif,
+        explanation:       expl
+      }
+    end
+
+    return url_fields if existing_fields.blank?
+
+    # Existing data (from Chief running this request) takes priority.
+    # Same convention as parse_divergent_fields_list line 2209-2210.
+    url_fields.merge(existing_fields)
+  end
+  # rubocop:enable Layout/FirstHashElementLineBreak
+  # rubocop:enable Metrics/AbcSize, Metrics/PerceivedComplexity
+  # rubocop:enable Metrics/MethodLength, Metrics/CyclomaticComplexity
+
   # Classify Chief proposals into @automated_fields, @overridden_fields,
   # and @divergent_fields following the same decision matrix as URL-based
   # automation (apply_query_string_automation):
@@ -2523,7 +2612,8 @@ class ProjectsController < ApplicationController
       anchor: first_overridden,
       overridden_fields_list: overridden_field_names.join(','),
       automated_fields_list: automated_field_names.join(','),
-      **divergent_url_params
+      **divergent_url_params,
+      **overridden_url_params
     )
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength

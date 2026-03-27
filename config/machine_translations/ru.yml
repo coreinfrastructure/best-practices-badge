@@ -72,6 +72,13 @@ ru:
         analysis_failed:
           one: 'Предупреждение: Автоматический анализ не удался для 1 поля (%{fields}). Ваши остальные изменения были сохранены.'
           other: 'Предупреждение: Автоматический анализ не удался для %{count} полей (%{fields}). Ваши остальные изменения были сохранены.'
+        aria_divergent: Автоматизация дала другой ответ
+        overridden_detail: 'Предыдущее значение: %{old_status}.%{old_justification_part}%{explanation_part}'
+        overridden_old_justification_part: " Предыдущее обоснование: %{old_justification}"
+        overridden_explanation_part: " Причина автоматизации: %{explanation}"
+        divergent_detail: Автоматизация определила %{status}.%{justification_part}
+        divergent_justification_part: " %{justification}"
+        divergent_proposed_value: 'Предложение автоматизации: %{proposed_value}'
       save_and_continue_tooltip: Запускает автоматизацию для заполнения неизвестных значений
     show:
       section_selector: Раздел
@@ -104,6 +111,13 @@ ru:
     baseline_version_notice:
       current: Это критерии версии %{version}.
       transition: Эти критерии относятся к базовой версии %{current_version} с обновлённым текстом критериев из версии %{new_version}. Критерии, новые в версии %{new_version}, помечены как «будущие» и начнут применяться с %{enforce_date}. Пожалуйста, предоставьте ответы на «будущие» критерии до этой даты.
+    choose_edit:
+      title: Выберите раздел для редактирования
+      instructions: Выберите раздел для редактирования.
+      proposals_note: Все предложенные изменения будут применены к выбранному разделу.
+    choose_show:
+      title: Выберите раздел для просмотра
+      instructions: Выберите раздел для просмотра.
   report_mailer:
     unsubscribe_notice_html: 'Чтобы отписаться от этих уведомлений по электронной почте, пожалуйста, посетите: <a href="%{unsubscribe_url}">%{unsubscribe_url}</a>'
     unsubscribe_notice_text: 'Чтобы отписаться от этих уведомлений по электронной почте, пожалуйста, посетите: %{unsubscribe_url}'

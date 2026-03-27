@@ -39,6 +39,13 @@ ja:
         analysis_failed:
           one: 警告：1個のフィールド（%{fields}）の自動分析に失敗しました。その他の変更は保存されました。
           other: 警告：%{count}個のフィールド（%{fields}）の自動分析に失敗しました。その他の変更は保存されました。
+        aria_divergent: 自動化が異なる回答をしました
+        overridden_detail: '前の値: %{old_status}.%{old_justification_part}%{explanation_part}'
+        overridden_old_justification_part: " 前の正当化の理由: %{old_justification}"
+        overridden_explanation_part: " 自動化の理由: %{explanation}"
+        divergent_detail: 自動化はその代わりに %{status} と判断しました。%{justification_part}
+        divergent_justification_part: " %{justification}"
+        divergent_proposed_value: '自動化の提案: %{proposed_value}'
       save_and_continue_tooltip: 自動化を実行して不明な値を入力します
     show:
       section_selector: セクション
@@ -79,6 +86,13 @@ ja:
     baseline_version_notice:
       current: これらは基準バージョン %{version} の評価項目です。
       transition: これらの基準はベースラインバージョン %{current_version} のものであり、バージョン %{new_version} の更新された基準テキストが含まれています。バージョン %{new_version} で新たに追加された基準は「future」とラベル付けされており、%{enforce_date} から適用が開始されます。その日までに「future」基準への回答を提供してください。
+    choose_edit:
+      title: 編集するセクションを選択
+      instructions: 編集するセクションを選択してください。
+      proposals_note: 提案された変更は選択したセクションに適用されます。
+    choose_show:
+      title: 表示するセクションを選択
+      instructions: 表示するセクションを選択してください。
   report_mailer:
     unsubscribe_notice_html: これらのメール通知の登録を解除するには、次のURLにアクセスしてください：<a href="%{unsubscribe_url}">%{unsubscribe_url}</a>
     unsubscribe_notice_text: これらのメール通知の登録を解除するには、次のURLにアクセスしてください：%{unsubscribe_url}

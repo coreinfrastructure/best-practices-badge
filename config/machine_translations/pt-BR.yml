@@ -321,6 +321,13 @@ pt-BR:
         analysis_failed:
           one: 'Aviso: A análise automatizada falhou para 1 campo (%{fields}). Suas outras alterações foram salvas.'
           other: 'Aviso: A análise automatizada falhou para %{count} campos (%{fields}). Suas outras alterações foram salvas.'
+        aria_divergent: A automação teve uma resposta diferente
+        overridden_detail: 'Valor anterior: %{old_status}.%{old_justification_part}%{explanation_part}'
+        overridden_old_justification_part: " Justificativa anterior: %{old_justification}"
+        overridden_explanation_part: " Motivo da automação: %{explanation}"
+        divergent_detail: A automação determinou %{status}.%{justification_part}
+        divergent_justification_part: " %{justification}"
+        divergent_proposed_value: 'Sugestão da automação: %{proposed_value}'
       save_and_continue_tooltip: Executa automação para preencher valores desconhecidos
     show:
       section_selector: Seção
@@ -450,6 +457,13 @@ pt-BR:
       current: Estes são critérios da versão %{version}.
       transition_html: Estes critérios são da versão de base %{current_version} com texto de critérios atualizado da versão %{new_version}. Os critérios novos na versão %{new_version} estão rotulados como &ldquo;futuros&rdquo; e começarão a ser aplicados a partir de %{enforce_date}. Por favor, forneça respostas para os critérios &ldquo;futuros&rdquo; antes dessa data.
       transition: Estes critérios são da versão de referência %{current_version} com texto de critérios atualizado da versão %{new_version}. Os critérios novos na versão %{new_version} são rotulados como "futuros" e começarão a ser aplicados a partir de %{enforce_date}. Por favor, forneça respostas para os critérios "futuros" antes dessa data.
+    choose_edit:
+      title: Escolha uma Seção para Editar
+      instructions: Selecione uma seção para editar.
+      proposals_note: Quaisquer alterações propostas serão aplicadas à seção selecionada.
+    choose_show:
+      title: Escolha uma Seção para Visualizar
+      instructions: Selecione uma seção para visualizar.
   report_mailer:
     subject_achieved_passing: PARABÉNS por alcançar um selo de melhores práticas %{new_level}!
     subject_no_longer_passing: Seu selo de melhores práticas não está mais %{old_level}

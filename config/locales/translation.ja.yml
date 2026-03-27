@@ -222,7 +222,6 @@ ja:
         GitHubリポジトリの1つを選択する、<em>または</em>他のプロジェクトの情報を提供することができます。プロジェクトが合格バッジを獲得しておらず、30日以上編集を行っていない場合は、リマインダー
         メールが送信されます（必要に応じていつでもリマインダーを無効にできます）。
       select_one_github: GitHub リポジトリを選択してください
-      submit_github: GitHubリポジトリを送信する
       url_of_homepage: >-
         プロジェクトのホームページ（プロジェクト全体のURL）のURLは何ですか？ http（s）：//で始まります（「？」を含め、多くの使用できない文字があります）。
       placeholder_of_homepage: http(s)://... プロジェクトのホームページのURLには、できるだけ
@@ -230,18 +229,25 @@ ja:
       url_of_repo: バージョン管理リポジトリのURLは何ですか（プロジェクトURLと同じでもかまいません）。
       placeholder_of_repo: http(s)://... プロジェクト リポジトリのURLには、できるだけ
         https:// を使用してください
-      submit_urls: URLを送信する
       sign_in_first: プロジェクトを追加するにはログインしてください！
       thanks_adding: プロジェクトを追加していただきありがとうございます！バッジを取得するには、残りの情報を入力してください。
       project_already_exists: このプロジェクトは既に存在します！
       final_text_html: >-
         注 - リポジトリURLがGitHub上にある場合、リポジトリにコミットできる人は誰でもバッジ情報を編集できるようになるでしょう。
-      new_badge_or: または
       original_repos: "=>オリジナルのGitHubリポジトリ"
       fork_repos: "=>フォークされたGitHub リポジトリ"
       tell_us: >-
         あなたのfree / libre / open source software（FLOSS）プロジェクトについて教えてください。これはFLOSSプロジェクトで<b>なければなりません</b>
         。他のものは許可されていません。サイトの検索エンジン最適化（SEO）を改善するために、無関係なサイトを追加<b>しない</b>でください。このスパムは、ユーザーに害を与えるため禁止されていますし、SEOには役に立ちません（すべてのハイパーリンクには<tt>ugc</tt>と<tt>nofollow</tt>のマークが付いています）。
+      reminder_email_html:
+      github_repo_label:
+      github_reconnect_html:
+      github_reconnect_link:
+      submit:
+      badge_series:
+      badge_series_description:
+      badge_series_metal:
+      badge_series_baseline:
     show:
       edit: 編集
       delete: 削除
@@ -291,6 +297,27 @@ ja:
       new_owner_repeat:
       current_owner:
       ownership_edit_hint:
+      not_authorized:
+      save_and_continue_tooltip:
+      automation:
+        aria_automated:
+        aria_overridden:
+        automated_tooltip:
+        overridden_tooltip:
+        aria_divergent:
+        overridden_detail:
+        overridden_old_justification_part:
+        overridden_explanation_part:
+        divergent_detail:
+        divergent_justification_part:
+        divergent_proposed_value:
+        chief_overrode:
+          one:
+          other:
+        override_detail:
+        analysis_failed:
+          one:
+          other:
     form_basics:
       project_name:
         description: プロジェクトの名前は何ですか？
@@ -340,6 +367,9 @@ ja:
           エントリを編集できるようになります。あなたがバッジ エントリのオーナーまたはBadgeApp管理者である場合は、"-"と入力した後にカンマで区切られた整数ユーザーIDのリストを入力すれば、このリストからユーザーを削除できます。通常、特定のバッジエントリを一度に編集するのは1人だけであると予想されます。複数のユーザーが同時に編集しようとすると、このアプリケーションはオプティミスティック
           ロック機能を使用して古いデータを保存しないようにします。複数の編集者がいる場合は、バッジ エントリ データを段階的かつ頻繁に保存することをお勧めします（いずれにしてもこれは賢明な方法です）。
         placeholder:  "+"または"-"の後にコンマで区切られたユーザーIDのリストを入力して変更する
+      entry_locale:
+        description:
+        details:
     form_early:
       badge_intro:
         description: >-
@@ -435,6 +465,8 @@ ja:
       reminder_notification_note:
         title:
         description_html:
+      obsolete_header_html:
+      obsolete_criterion:
     delete:
       done: プロジェクトは正常に削除されました
     delete_form:
@@ -445,6 +477,16 @@ ja:
       delete_action: このプロジェクトバッジのエントリーを永久に削除してください！
       too_short: 少なくとも20文字以上必要です。
       more_non_whitespace: 少なくとも15文字の空白以外の文字が必要です。
+    choose_edit:
+      title:
+      instructions:
+      proposals_note:
+    choose_show:
+      title:
+      instructions:
+    baseline_version_notice:
+      current:
+      transition:
   report_mailer:
     new_project_heading: ベストプラクティス バッジ プログラムにプロジェクトを追加してくださり、ありがとうございます
     new_project_part1: |-
@@ -1541,6 +1583,7 @@ ja:
         details:
       osps_br_01_01:
         description:
+        details:
       osps_br_01_02:
         description:
       osps_br_03_01:
@@ -1597,6 +1640,9 @@ ja:
       osps_vm_02_01:
         description:
         details:
+      osps_br_01_03:
+        description:
+        details:
     baseline-2:
       osps_ac_04_01:
         description:
@@ -1650,6 +1696,9 @@ ja:
         description:
         details:
       osps_vm_04_01:
+        description:
+        details:
+      osps_do_07_01:
         description:
         details:
     baseline-3:
@@ -1711,6 +1760,9 @@ ja:
         description:
         details:
       osps_vm_06_02:
+        description:
+        details:
+      osps_br_01_04:
         description:
         details:
   static_pages:
@@ -1790,6 +1842,7 @@ ja:
       met_justification_required: 適合の正当な理由が必要
       met_justification_or_url_required: 適合の正当な理由またはURLが必要
       see_actual_criteria: 実際の基準はこちらで確認できます。
+      obsolete:
     error_409:
       heading: エラー409：競合
       conflict: 申し訳ありませんが、複数のエントリがリクエストに一致し、競合が発生しています。
@@ -1833,6 +1886,7 @@ ja:
     FLOSS license: FLOSSライセンス
     Controls:
     General:
+    General_project_info:
   last_entry: 最後の翻訳エントリ
   admin_only: 管理者のみ。
   criterion_status:
@@ -1884,6 +1938,7 @@ ja:
     na_justification_required: "{N/A justification}"
     met_justification_required: "{Met justification}"
     met_url_required: "{Met URL}"
+    obsolete:
   criteria_discussion:
     intro_p01_html: "<h1 id='criteria_discussion'>基準の説明</h1>"
     intro_p02_html: >-
@@ -2045,3 +2100,50 @@ ja:
   do_not_translate_this:
   test_pluralization_only_one:
     one:
+  detectives:
+    github:
+      repo_public:
+      repo_track:
+      repo_distributed:
+      contribution:
+      discussion:
+      osps_gv_02_01:
+      osps_do_02_01:
+      osps_ac_01_01:
+      osps_qa_01_01:
+      osps_qa_01_02:
+      name:
+      description:
+      license:
+      implementation_languages:
+    floss_license:
+      osi_approved:
+      osi_approved_repository:
+      not_in_osi_list:
+    hardened_sites:
+      all_headers_found:
+      headers_missing:
+    name_from_url:
+      domain_suggests:
+      tail_suggests:
+      repo_tail_suggests:
+    project_sites_https:
+      given_http:
+      official_http:
+      url_uses_http:
+      given_https:
+    repo_files:
+      no_file_found:
+      file_found:
+      contribution_documented:
+      license_found:
+      license_not_found:
+      license_not_in_releases:
+    subdir_files:
+      no_files_found:
+      no_folder_found:
+      some_contents_found:
+    test_forced:
+      test_automation:
+    repo_json:
+      field_from_file:

@@ -42,6 +42,13 @@ de:
         analysis_failed:
           one: 'Warnung: Automatisierte Analyse für 1 Feld fehlgeschlagen (%{fields}). Ihre anderen Änderungen wurden gespeichert.'
           other: 'Warnung: Automatisierte Analyse für %{count} Felder fehlgeschlagen (%{fields}). Ihre anderen Änderungen wurden gespeichert.'
+        aria_divergent: Automatisierung hatte eine andere Antwort
+        overridden_detail: 'Vorheriger Wert: %{old_status}.%{old_justification_part}%{explanation_part}'
+        overridden_old_justification_part: " Vorherige Begründung: %{old_justification}"
+        overridden_explanation_part: " Automatisierungsgrund: %{explanation}"
+        divergent_detail: Automatisierung hat stattdessen %{status}.%{justification_part} ermittelt
+        divergent_justification_part: " %{justification}"
+        divergent_proposed_value: 'Automatisierungsvorschlag: %{proposed_value}'
       save_and_continue_tooltip: Führt Automatisierung aus, um unbekannte Werte zu füllen
     show:
       section_selector: Abschnitt
@@ -82,6 +89,13 @@ de:
     baseline_version_notice:
       current: Dies sind Kriterienversion %{version}.
       transition: Diese Kriterien stammen aus der Basisversion %{current_version} mit aktualisierten Kriterientexten aus Version %{new_version}. Kriterien, die in Version %{new_version} neu sind, sind als "zukünftig" gekennzeichnet und werden ab dem %{enforce_date} durchgesetzt. Bitte beantworten Sie die "zukünftigen" Kriterien vor diesem Datum.
+    choose_edit:
+      title: Einen Abschnitt zum Bearbeiten auswählen
+      instructions: Wählen Sie einen Abschnitt zum Bearbeiten aus.
+      proposals_note: Alle vorgeschlagenen Änderungen werden auf den ausgewählten Abschnitt angewendet.
+    choose_show:
+      title: Einen Abschnitt zum Anzeigen auswählen
+      instructions: Wählen Sie einen Abschnitt zum Anzeigen aus.
   report_mailer:
     unsubscribe_notice_html: 'Um sich von diesen E-Mail-Benachrichtigungen abzumelden, besuchen Sie bitte: <a href="%{unsubscribe_url}">%{unsubscribe_url}</a>'
     unsubscribe_notice_text: 'Um sich von diesen E-Mail-Benachrichtigungen abzumelden, besuchen Sie bitte: %{unsubscribe_url}'

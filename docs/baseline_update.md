@@ -234,43 +234,65 @@ A passing run prints:
 
 Fix any reported errors before continuing.
 
-## Step 8: Update the Version Notice Partial
+## Step 8: Update the Baseline Version Constants
 
-Edit `app/views/projects/_form_baseline_version_notice.html.erb` to
-reflect the transition. During the transition period (after the new criteria
-are deployed but before they are enforced), set `baseline_in_transition` to
-`true` and fill in all three version variables:
+Edit `app/lib/baseline_config.rb` to reflect the transition. During the
+transition period (after the new criteria are deployed but before they are
+enforced), set `IN_TRANSITION` to `true` and fill in all four constants:
 
-```erb
-<%
-  baseline_in_transition   = true
-  baseline_current_version = 'v2025.10.10'
-  baseline_new_version     = 'v2026.02.19'
-  baseline_enforce_date    = '2026-04-01'
-%>
+```ruby
+module BaselineConfig
+  CURRENT_VERSION = 'v2025.10.10'
+  IN_TRANSITION   = true
+  NEW_VERSION     = 'v2026.02.19'  # used only during transition
+  ENFORCE_DATE    = '2026-06-01'   # used only during transition
+end
 ```
 
-- `baseline_current_version` is the version whose criteria are currently
-  active (the old version, until the enforce date).
-- `baseline_new_version` is the version being adopted (criteria shown as
-  "upcoming").
-- `baseline_enforce_date` is the date (YYYY-MM-DD) when new criteria start
-  counting toward the badge.
+- `CURRENT_VERSION` is the version whose criteria are currently active
+  (the old version, until the enforce date). It also appears in badge
+  text: `"openssf baseline CURRENT_VERSION"`.
+- `NEW_VERSION` is the version being adopted (criteria shown as "upcoming").
+- `ENFORCE_DATE` is the date (YYYY-MM-DD) when new criteria start counting
+  toward the badge.
 
-When not in transition (steady state), set `baseline_in_transition = false`
-and update `baseline_current_version` to the new version string:
+When not in transition (steady state), set `IN_TRANSITION = false` and
+update `CURRENT_VERSION` to the new version string:
 
-```erb
-<%
-  baseline_in_transition   = false
-  baseline_current_version = 'v2026.02.19'
-  baseline_new_version     = ''
-  baseline_enforce_date    = ''
-%>
+```ruby
+module BaselineConfig
+  CURRENT_VERSION = 'v2026.02.19'
+  IN_TRANSITION   = false
+  NEW_VERSION     = ''  # unused when not in transition
+  ENFORCE_DATE    = ''  # unused when not in transition
+end
 ```
 
-The `baseline_new_version` and `baseline_enforce_date` variables are
-ignored when `baseline_in_transition` is `false`.
+The version notice partial (`app/views/projects/_form_baseline_version_notice.html.erb`)
+reads from `BaselineConfig` automatically — no changes needed there.
+
+## Step 8a: Regenerate Baseline Badge Images
+
+Because `CURRENT_VERSION` appears in the badge text
+(`"openssf baseline v2025.10.10"`), changing it changes the text width
+and therefore the badge dimensions. Run the generator to produce correct
+badge images:
+
+```bash
+ruby script/generate_baseline_badges.rb
+```
+
+The script measures text widths from the actual Verdana font using Python
+and Pillow, then computes correct badge dimensions automatically. It prints
+which measurement method it used. If Python or Verdana are not available it
+falls back to a built-in character-width table and prints installation
+instructions.
+
+After the script completes, update the asset pipeline:
+
+```bash
+rake assets:precompile
+```
 
 ## Step 9: Restart the Application
 
@@ -395,19 +417,25 @@ criteria from display, and close out the version notice.
    rake baseline:validate
    ```
 
-4. **Update the version notice.** Edit
-   `app/views/projects/_form_baseline_version_notice.html.erb` to
-   reflect that the transition period has ended (see Step 8).
-   Set `baseline_in_transition = false` and update
-   `baseline_current_version` to the now-fully-active version string:
+4. **Update the version constants.** Edit `app/lib/baseline_config.rb`
+   to reflect that the transition period has ended (see Step 8).
+   Set `IN_TRANSITION = false` and update `CURRENT_VERSION` to the
+   now-fully-active version string:
 
-   ```erb
-   <%
-     baseline_in_transition   = false
-     baseline_current_version = 'vYYYY.MM.DD'
-     baseline_new_version     = ''
-     baseline_enforce_date    = ''
-   %>
+   ```ruby
+   module BaselineConfig
+     CURRENT_VERSION = 'vYYYY.MM.DD'
+     IN_TRANSITION   = false
+     NEW_VERSION     = ''
+     ENFORCE_DATE    = ''
+   end
+   ```
+
+   Then regenerate badge images (see Step 8a):
+
+   ```bash
+   ruby script/generate_baseline_badges.rb
+   rake assets:precompile
    ```
 
 5. **Restart the application.** The newly activated criteria will be

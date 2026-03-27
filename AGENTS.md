@@ -30,7 +30,9 @@ However, documentation is often unnoticed and too much can obscure what's import
 - `rake test:optimized` - Run all tests (unit and system). Takes a long time.
 - `rails test test/integration/project_list_test.rb` - Run specified test file
 - `rails test test/features/can_access_home_test.rb:4` - Run a test at line 4 of the specified test file.
-- `MINITEST_REPORTER="SpecReporter" rails test test/controllers/projects_controller_test.rb` - show the file and name of each test
+
+To see test names, set environment variable SLOW=true e.g.,
+`SLOW=true rake test:optimized`.
 
 We require 100% statement coverage. We avoid using :nocov: because Ruby
 only does dynamic type-checking. Lines of code that are *never*

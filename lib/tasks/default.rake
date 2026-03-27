@@ -328,6 +328,7 @@ task :whitespace_check do
       ! -path './log/*' ! -path './test/vcr_cassettes/*' \
       ! -path './license_finder_report.html' \
       ! -path './coverage/index.html' \
+      ! -path './test/html_reports/*' \
       ! -path './public/assets/*' \
       -print0 | \
     xargs -0 file | \

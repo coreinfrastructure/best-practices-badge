@@ -256,7 +256,7 @@ When run, copilot only has read/write access to a `tmp` directory.
 Run `translation:all` to repeatedly call this, with breaks in between.
 The goal is to slowly fill in
 translations *without* significantly burdening the AI system.
-, 
+
 ## Adding a New Language
 
 To add support for a new language:

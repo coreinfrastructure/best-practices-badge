@@ -2727,6 +2727,32 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'No CONTRIBUTING.md', result[:ovr__contribution_status_explanation]
   end
 
+  test 'overridden_url_params encodes non-status field as raw string' do
+    # Covers the else branch (line 2240): non-_status fields use old_val.presence
+    # not CriterionStatus.canonical. Chief can override non-criteria fields like
+    # :description (in ALWAYS_AUTOMATABLE) with confidence >= CONFIDENCE_OVERRIDE.
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(
+      :@overridden_fields,
+      {
+        description: {
+          old_value:         'Old description text',
+          new_value:         'New description text',
+          old_justification: nil,
+          explanation:       'Chief detected better description'
+        }
+      }
+    )
+    result = controller.send(:overridden_url_params)
+    assert_equal 'Old description text', result[:ovr__description],
+                 'Non-status old_value must be encoded as raw string, not via canonical'
+    assert_nil result[:ovr__description_justification],
+               'Nil old_justification must not appear in params'
+    assert_equal 'Chief detected better description', result[:ovr__description_explanation]
+  end
+
   test 'parse_overridden_fields_list decodes _status field as Integer' do
     log_in_as(@user)
     controller = ProjectsController.new
@@ -2745,6 +2771,29 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
                  'canonical string must be parsed back to Integer'
     assert_equal 'Old reason', result[:contribution_status][:old_justification]
     assert_equal 'No CONTRIBUTING.md', result[:contribution_status][:explanation]
+  end
+
+  test 'parse_overridden_fields_list returns raw string for non-status field' do
+    # Covers the else branch (line 2285): non-_status fields use raw_val directly,
+    # not CriterionStatus.parse. :description is in ALWAYS_AUTOMATABLE so it is
+    # present in every section's FIELDS_BY_SECTION set.
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+    allow_params = ActionController::Parameters.new(
+      ovr__description:             'Old description text',
+      ovr__description_explanation: 'Chief detected better description'
+    )
+    controller.instance_variable_set(:@_params, allow_params)
+    result = controller.send(
+      :parse_overridden_fields_list, 'description', nil
+    )
+    assert_equal 'Old description text', result[:description][:old_value],
+                 'Non-status old_value must be the raw URL string, not parsed as Integer'
+    assert_nil result[:description][:old_justification],
+               'Absent justification param must yield nil old_justification'
+    assert_equal 'Chief detected better description', result[:description][:explanation]
   end
 
   test 'parse_overridden_fields_list merges url and existing fields' do

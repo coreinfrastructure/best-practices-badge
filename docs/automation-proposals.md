@@ -385,18 +385,32 @@ fields, the edit form highlights them to draw the user's attention:
   previously unknown (`?`) and has been filled in with a proposed
   value. This is a helpful suggestion.
 - **Orange highlight** (`.highlight-overridden`): A field that
-  already had a non-unknown value and has been forcibly changed via
-  the `overrides` parameter. The previous value and justification
-  are shown in an expandable disclosure so the user can compare.
+  already had a non-unknown value and has been forcibly changed,
+  either via the `overrides` URL parameter (external automation) or
+  by internal Chief automation when it has high confidence (≥ 4 on
+  a 1–5 scale). The previous value and justification are shown in
+  an expandable disclosure so the user can compare.
   This needs attention and review.
+  Note: when Chief forces a field on every save, a user cannot
+  persistently store a conflicting value. Chief re-applies its
+  determination each time the form is saved if the criterion
+  objectively cannot be met with high confidence
+  (e.g., a repo with no CONTRIBUTING.md
+  cannot have `contribution` marked "Met").
 - **Divergent indicator** (`≠`): A field that already had a
   non-unknown value and the automation proposed a *different* answer,
   but the proposal was **not applied** (no matching `overrides`
   pattern). The user can click the `≠` icon to see what automation
   found. The user's existing answer remains unchanged.
 
-Highlighting is preserved across "save and continue" operations via
-hidden form fields, in case a user decides to review parts of a form.
+Chief automation runs on every save. With "Save and continue",
+all proposal types (yellow, orange, ≠) are tracked and displayed.
+With "Save and exit", only forced (orange) changes are applied and
+shown; non-forced fill-in proposals are silently skipped so unreviewed
+changes never land in the database.
+External URL automation proposals are not re-applied on subsequent
+saves; only their visual indicators (orange/≠) are preserved across
+the redirect.
 
 ## Interaction with First-Edit Automation
 

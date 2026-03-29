@@ -2705,6 +2705,133 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert result.key?(:floss_license_status), 'existing field must be preserved'
   end
 
+  test 'overridden_url_params encodes old_value as canonical string' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(
+      :@overridden_fields,
+      {
+        contribution_status: {
+          old_value:         CriterionStatus::MET,
+          new_value:         CriterionStatus::UNMET,
+          old_justification: 'Old reason',
+          explanation:       'No CONTRIBUTING.md'
+        }
+      }
+    )
+    result = controller.send(:overridden_url_params)
+    assert_equal 'Met', result[:ovr__contribution_status],
+                 'Integer old_value must be encoded as canonical string'
+    assert_equal 'Old reason', result[:ovr__contribution_status_justification]
+    assert_equal 'No CONTRIBUTING.md', result[:ovr__contribution_status_explanation]
+  end
+
+  test 'overridden_url_params encodes non-status field as raw string' do
+    # Covers the else branch (line 2240): non-_status fields use old_val.presence
+    # not CriterionStatus.canonical. Chief can override non-criteria fields like
+    # :description (in ALWAYS_AUTOMATABLE) with confidence >= CONFIDENCE_OVERRIDE.
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(
+      :@overridden_fields,
+      {
+        description: {
+          old_value:         'Old description text',
+          new_value:         'New description text',
+          old_justification: nil,
+          explanation:       'Chief detected better description'
+        }
+      }
+    )
+    result = controller.send(:overridden_url_params)
+    assert_equal 'Old description text', result[:ovr__description],
+                 'Non-status old_value must be encoded as raw string, not via canonical'
+    assert_nil result[:ovr__description_justification],
+               'Nil old_justification must not appear in params'
+    assert_equal 'Chief detected better description', result[:ovr__description_explanation]
+  end
+
+  test 'parse_overridden_fields_list decodes _status field as Integer' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+    allow_params = ActionController::Parameters.new(
+      ovr__contribution_status: 'Met',
+      ovr__contribution_status_justification: 'Old reason',
+      ovr__contribution_status_explanation: 'No CONTRIBUTING.md'
+    )
+    controller.instance_variable_set(:@_params, allow_params)
+    result = controller.send(
+      :parse_overridden_fields_list, 'contribution_status', nil
+    )
+    assert_equal CriterionStatus::MET, result[:contribution_status][:old_value],
+                 'canonical string must be parsed back to Integer'
+    assert_equal 'Old reason', result[:contribution_status][:old_justification]
+    assert_equal 'No CONTRIBUTING.md', result[:contribution_status][:explanation]
+  end
+
+  test 'parse_overridden_fields_list returns raw string for non-status field' do
+    # Covers the else branch (line 2285): non-_status fields use raw_val directly,
+    # not CriterionStatus.parse. :description is in ALWAYS_AUTOMATABLE so it is
+    # present in every section's FIELDS_BY_SECTION set.
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+    allow_params = ActionController::Parameters.new(
+      ovr__description:             'Old description text',
+      ovr__description_explanation: 'Chief detected better description'
+    )
+    controller.instance_variable_set(:@_params, allow_params)
+    result = controller.send(
+      :parse_overridden_fields_list, 'description', nil
+    )
+    assert_equal 'Old description text', result[:description][:old_value],
+                 'Non-status old_value must be the raw URL string, not parsed as Integer'
+    assert_nil result[:description][:old_justification],
+               'Absent justification param must yield nil old_justification'
+    assert_equal 'Chief detected better description', result[:description][:explanation]
+  end
+
+  test 'parse_overridden_fields_list merges url and existing fields' do
+    log_in_as(@user)
+    controller = ProjectsController.new
+    controller.instance_variable_set(:@project, @project)
+    controller.instance_variable_set(:@criteria_level, 'passing')
+    allow_params = ActionController::Parameters.new(
+      ovr__contribution_status: 'Met'
+    )
+    controller.instance_variable_set(:@_params, allow_params)
+    existing = {
+      floss_license_status: {
+        old_value: CriterionStatus::UNMET, old_justification: nil, explanation: nil
+      }
+    }
+    result = controller.send(
+      :parse_overridden_fields_list, 'contribution_status', existing
+    )
+    assert result.key?(:contribution_status), 'URL field must be present'
+    assert result.key?(:floss_license_status), 'existing field must be preserved'
+  end
+
+  test 'ovr__ params restore old_value metadata in overridden popover' do
+    log_in_as(@project.user)
+    get "/en/projects/#{@project.id}/passing/edit",
+        params: {
+          overridden_fields_list: 'contribution_status',
+          ovr__contribution_status: 'Met',
+          ovr__contribution_status_explanation: 'No CONTRIBUTING.md'
+        }
+    assert_response :success
+    # The popover shows "Previous value: Met" — verify the canonical string
+    # appears in the body (as text, not HTML attribute)
+    assert_includes @response.body, 'Met'
+    assert_includes @response.body, 'highlight-overridden'
+  end
+
   test 'run_first_edit_automation_if_needed rescues chief errors' do
     log_in_as(@user)
     # Project with passing_saved=false so automation runs

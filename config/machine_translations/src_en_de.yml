@@ -42,6 +42,13 @@ en:
         analysis_failed:
           one: 'Warning: Automated analysis failed for 1 field (%{fields}). Your other changes were saved.'
           other: 'Warning: Automated analysis failed for %{count} fields (%{fields}). Your other changes were saved.'
+        aria_divergent: Automation had a different answer
+        overridden_detail: 'Previous value: %{old_status}.%{old_justification_part}%{explanation_part}'
+        overridden_old_justification_part: " Previous justification: %{old_justification}"
+        overridden_explanation_part: " Automation reason: %{explanation}"
+        divergent_detail: Automation instead determined %{status}.%{justification_part}
+        divergent_justification_part: " %{justification}"
+        divergent_proposed_value: 'Automation suggested: %{proposed_value}'
       save_and_continue_tooltip: Runs automation to fill unknown values
     show:
       section_selector: Section
@@ -83,6 +90,13 @@ en:
       current: These are criteria version %{version}.
       transition_html: These criteria are from baseline version %{current_version} with updated criteria text from version %{new_version}. Criteria that are new in version %{new_version} are labeled &ldquo;future&rdquo; and will begin to be enforced starting %{enforce_date}. Please provide answers to the &ldquo;future&rdquo; criteria before that date.
       transition: These criteria are from baseline version %{current_version} with updated criteria text from version %{new_version}. Criteria that are new in version %{new_version} are labeled "future" and will begin to be enforced starting %{enforce_date}. Please provide answers to the "future" criteria before that date.
+    choose_edit:
+      title: Choose a Section to Edit
+      instructions: Select a section to edit.
+      proposals_note: Any proposed changes will be applied to the selected section.
+    choose_show:
+      title: Choose a Section to View
+      instructions: Select a section to view.
   report_mailer:
     unsubscribe_notice_html: 'To unsubscribe from these email notifications, please visit: <a href="%{unsubscribe_url}">%{unsubscribe_url}</a>'
     unsubscribe_notice_text: 'To unsubscribe from these email notifications, please visit: %{unsubscribe_url}'

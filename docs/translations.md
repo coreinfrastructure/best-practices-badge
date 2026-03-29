@@ -11,6 +11,22 @@ human-generated translations.
 For details on that, see the document on
 [machine-generated translations](./machine-translations.md).
 
+## TL;DR
+
+If you *maintain* this system's translations:
+
+* `git checkout main` - start in the main branch
+* `git pull` - make sure you're current
+* `rake translation:sync` to get human translations and let the humans know
+  what's new to be translated
+* `translation:all` to create machine translations of everything not already
+  translated by humans, using the existing human translations as a
+  template/model. The machine translations will be used when we don't have
+  human translations.
+* `git checkout -b update_YYYY_MM_DD` - create a new branch
+* `git commit -asv` - Record all changes
+* `git push` - push translations, if they work, merge them in
+
 ## Overview
 
 The application supports multiple languages. English (`en`) is the source
@@ -237,7 +253,8 @@ Run `translation:copilot` to automatically call GitHub pilot to
 perform translations of what needs translating and add them.
 When run, copilot only has read/write access to a `tmp` directory.
 
-The plan is to repeatedly run this as a cron job to slowly fill in
+Run `translation:all` to repeatedly call this, with breaks in between.
+The goal is to slowly fill in
 translations *without* significantly burdening the AI system.
 
 ## Adding a New Language

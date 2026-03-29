@@ -172,6 +172,13 @@ sw:
         analysis_failed:
           one: 'Onyo: Uchambuzi wa kiatomati ulishindwa kwa sehemu 1 (%{fields}). Mabadiliko yako mengine yalihifadhiwa.'
           other: 'Onyo: Uchambuzi wa kiatomati ulishindwa kwa sehemu %{count} (%{fields}). Mabadiliko yako mengine yalihifadhiwa.'
+        aria_divergent: Otomatiki ilikuwa na jibu tofauti
+        overridden_detail: 'Thamani ya awali: %{old_status}.%{old_justification_part}%{explanation_part}'
+        overridden_old_justification_part: " Sababu ya awali: %{old_justification}"
+        overridden_explanation_part: " Sababu ya otomatiki: %{explanation}"
+        divergent_detail: Otomatiki badala yake iliamua %{status}.%{justification_part}
+        divergent_justification_part: " %{justification}"
+        divergent_proposed_value: 'Otomatiki ilipendekeza: %{proposed_value}'
       save_and_continue_tooltip: Inaendesha automation kujaza thamani zisizojulikana
     show:
       section_selector: Sehemu
@@ -300,6 +307,13 @@ sw:
     baseline_version_notice:
       current: Hizi ni vigezo vya toleo %{version}.
       transition: Vigezo hivi vinatoka toleo la msingi %{current_version} na maandishi ya vigezo yaliyosasishwa kutoka toleo %{new_version}. Vigezo vipya katika toleo %{new_version} vimewekwa alama "mustakabali" na vitaanza kutekelezwa kuanzia %{enforce_date}. Tafadhali toa majibu kwa vigezo vya "mustakabali" kabla ya tarehe hiyo.
+    choose_edit:
+      title: Chagua Sehemu ya Kuhariri
+      instructions: Chagua sehemu ya kuhariri.
+      proposals_note: Mabadiliko yoyote yaliyopendekezwa yatatumika kwenye sehemu iliyochaguliwa.
+    choose_show:
+      title: Chagua Sehemu ya Kutazama
+      instructions: Chagua sehemu ya kutazama.
   report_mailer:
     new_project_heading: Asante kwa kuongeza mradi wako kwenye Programu ya Nishani za Mazoea Bora
     new_project_part1: |-

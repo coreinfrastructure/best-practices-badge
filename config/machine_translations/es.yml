@@ -287,6 +287,13 @@ es:
         analysis_failed:
           one: 'Advertencia: El análisis automatizado falló para 1 campo (%{fields}). Sus otros cambios se guardaron.'
           other: 'Advertencia: El análisis automatizado falló para %{count} campos (%{fields}). Sus otros cambios se guardaron.'
+        aria_divergent: La automatización tuvo una respuesta diferente
+        overridden_detail: 'Valor anterior: %{old_status}.%{old_justification_part}%{explanation_part}'
+        overridden_old_justification_part: " Justificación anterior: %{old_justification}"
+        overridden_explanation_part: " Razón de automatización: %{explanation}"
+        divergent_detail: La automatización determinó en cambio %{status}.%{justification_part}
+        divergent_justification_part: " %{justification}"
+        divergent_proposed_value: 'Automatización sugerida: %{proposed_value}'
       save_and_continue_tooltip: Ejecuta la automatización para llenar valores desconocidos
     show:
       section_selector: Sección
@@ -414,6 +421,13 @@ es:
     baseline_version_notice:
       current: Estos son los criterios de la versión %{version}.
       transition: Estos criterios son de la versión base %{current_version} con texto de criterios actualizado de la versión %{new_version}. Los criterios que son nuevos en la versión %{new_version} están etiquetados como "futuros" y comenzarán a aplicarse a partir del %{enforce_date}. Por favor, proporcione respuestas a los criterios "futuros" antes de esa fecha.
+    choose_edit:
+      title: Elegir una sección para editar
+      instructions: Seleccione una sección para editar.
+      proposals_note: Cualquier cambio propuesto se aplicará a la sección seleccionada.
+    choose_show:
+      title: Elegir una sección para ver
+      instructions: Seleccione una sección para ver.
   report_mailer:
     subject_achieved_passing: "¡FELICITACIONES por alcanzar una insignia de mejores prácticas de nivel %{new_level}!"
     subject_no_longer_passing: Su insignia de mejores prácticas ya no es de nivel %{old_level}

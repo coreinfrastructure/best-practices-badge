@@ -183,24 +183,30 @@ zh-CN:
       new_badge: 新徽章
       may_select_html: 您可以从GitHub仓库中选择<em>或</em>提供其他有关项目的信息。
       select_one_github: 从GitHub仓库中选择
-      submit_github: 提交GitHub仓库
       url_of_homepage: 项目主页的URL （项目整体的）？以 http(s):// 开头 （很多字符不允许，包含
         "?"）
       placeholder_of_homepage: http(s)://... 项目主页 URL
       url_of_repo: 版本控制仓库的URL （可以和项目主页相同）？ 以 http(s):// 开头（很多字符不允许，包含
         "?"）
       placeholder_of_repo: http(s)://... 项目仓库 URL
-      submit_urls: 提交网址
       sign_in_first: 请登录以添加项目！
       thanks_adding: 感谢您添加项目！请填写其余信息以获取徽章。
       project_already_exists: 这个项目已经存在！
       final_text_html: 注意 - 如果您的存储库URL位于GitHub上，则任何可以提交到存储库的人都可以编辑徽章信息。
-      new_badge_or: 或
       original_repos: "=>原始GitHub仓库"
       fork_repos: "=> 分支GitHub仓库"
       tell_us: >-
         请告诉我们您的自由/自由/开源软件（FLOSS）项目。这<b>必须</b>是FLOSS项目；别无其他。请<b>不要</b>添加无关的网站，试图提高网站的搜索引擎优化（SEO）。禁止这种垃圾邮件发送是因为它危害用户，并且无论如何都不会帮助SEO（所有超链接都标记为<tt>ugc</tt>和<tt>nofollow</tt>
         ）。
+      reminder_email_html:
+      github_repo_label:
+      github_reconnect_html:
+      github_reconnect_link:
+      submit:
+      badge_series:
+      badge_series_description:
+      badge_series_metal:
+      badge_series_baseline:
     show:
       edit: 编辑
       delete: 删除
@@ -247,6 +253,27 @@ zh-CN:
       new_owner_repeat:
       current_owner:
       ownership_edit_hint:
+      not_authorized:
+      save_and_continue_tooltip:
+      automation:
+        aria_automated:
+        aria_overridden:
+        automated_tooltip:
+        overridden_tooltip:
+        aria_divergent:
+        overridden_detail:
+        overridden_old_justification_part:
+        overridden_explanation_part:
+        divergent_detail:
+        divergent_justification_part:
+        divergent_proposed_value:
+        chief_overrode:
+          one:
+          other:
+        override_detail:
+        analysis_failed:
+          one:
+          other:
     form_basics:
       project_name:
         description: 项目的人类可读的名称是什么？
@@ -287,6 +314,9 @@ zh-CN:
           大多数项目应忽略此字段。项目徽章条目可以由徽章条目所有者（创建者），BadgeApp管理员以及任何可以提交给GitHub存储库（如果在GitHub上）的人员进行编辑。如果您希望其他人能够编辑此徽章条目，并且您已具有此项目徽章条目的编辑权限，则可以为其他用户提供编辑权限。只需输入“+”，后跟一个逗号分隔的整数用户ID列表。那么这些用户也将被允许编辑此项目条目。如果您是徽章条目的所有者或BadgeApp管理员，则可以通过输入“
           - ”，后跟逗号分隔的整数用户ID列表，从该列表中删除用户。如果多个用户尝试同时编辑，此应用程序使用乐观锁定机制来防止保存过期数据。只有此项目条目的所有者和BadgeApp管理员才能更改此字段。
         placeholder: 更改使用+或 - 后跟逗号分隔的用户标识列表
+      entry_locale:
+        description:
+        details:
     form_early:
       badge_intro:
         description: 遵循以下最佳实践的项目将能够自愿的自我认证，并显示他们已经实现了核心基础设施计划（OpenSSF）徽章。
@@ -370,6 +400,8 @@ zh-CN:
       reminder_notification_note:
         title:
         description_html:
+      obsolete_header_html:
+      obsolete_criterion:
     delete:
       done: 项目已成功删除。
     delete_form:
@@ -379,6 +411,16 @@ zh-CN:
       delete_action: 永久性删除该项目的徽章项！
       too_short: 必须至少有20个字符。
       more_non_whitespace: 必须至少有15个非空白字符。
+    choose_edit:
+      title:
+      instructions:
+      proposals_note:
+    choose_show:
+      title:
+      instructions:
+    baseline_version_notice:
+      current:
+      transition:
   user_mailer:
     account_activation:
       before_html: |-
@@ -1288,6 +1330,7 @@ zh-CN:
         details:
       osps_br_01_01:
         description:
+        details:
       osps_br_01_02:
         description:
       osps_br_03_01:
@@ -1344,6 +1387,9 @@ zh-CN:
       osps_vm_02_01:
         description:
         details:
+      osps_br_01_03:
+        description:
+        details:
     baseline-2:
       osps_ac_04_01:
         description:
@@ -1397,6 +1443,9 @@ zh-CN:
         description:
         details:
       osps_vm_04_01:
+        description:
+        details:
+      osps_do_07_01:
         description:
         details:
     baseline-3:
@@ -1458,6 +1507,9 @@ zh-CN:
         description:
         details:
       osps_vm_06_02:
+        description:
+        details:
+      osps_br_01_04:
         description:
         details:
   static_pages:
@@ -1539,6 +1591,7 @@ zh-CN:
       met_justification_required: 需要满足理由
       met_justification_or_url_required: 满足理由或需要URL
       see_actual_criteria: 您可能还会看到实际标准。
+      obsolete:
     error_409:
       heading: 错误409：冲突
       conflict: 抱歉，多个条目与请求匹配，从而导致冲突。
@@ -1582,6 +1635,7 @@ zh-CN:
     FLOSS license: FLOSS许可证
     Controls:
     General:
+    General_project_info:
   last_entry: 最后翻译条目
   admin_only: 仅限管理员。
   criterion_status:
@@ -1631,6 +1685,7 @@ zh-CN:
     na_justification_required:
     met_justification_required:
     met_url_required:
+    obsolete:
   criteria_discussion:
     intro_p01_html:
     intro_p02_html:
@@ -1716,3 +1771,50 @@ zh-CN:
   do_not_translate_this:
   test_pluralization_only_one:
     one:
+  detectives:
+    github:
+      repo_public:
+      repo_track:
+      repo_distributed:
+      contribution:
+      discussion:
+      osps_gv_02_01:
+      osps_do_02_01:
+      osps_ac_01_01:
+      osps_qa_01_01:
+      osps_qa_01_02:
+      name:
+      description:
+      license:
+      implementation_languages:
+    floss_license:
+      osi_approved:
+      osi_approved_repository:
+      not_in_osi_list:
+    hardened_sites:
+      all_headers_found:
+      headers_missing:
+    name_from_url:
+      domain_suggests:
+      tail_suggests:
+      repo_tail_suggests:
+    project_sites_https:
+      given_http:
+      official_http:
+      url_uses_http:
+      given_https:
+    repo_files:
+      no_file_found:
+      file_found:
+      contribution_documented:
+      license_found:
+      license_not_found:
+      license_not_in_releases:
+    subdir_files:
+      no_files_found:
+      no_folder_found:
+      some_contents_found:
+    test_forced:
+      test_automation:
+    repo_json:
+      field_from_file:

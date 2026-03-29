@@ -291,7 +291,6 @@ fr:
         un rappel par email (vous pouvez désactiver les rappels
         à tout moment si vous le souhaitez).
       select_one_github: Sélectionnez l'un de vos dépôts GitHub
-      submit_github: Soumettre le dépôt GitHub
       url_of_homepage: >-
         Quelle est l'URL de la page d'accueil du projet (l'URL
         pour le projet dans son ensemble) ? Commencez par http(s)://
@@ -308,7 +307,6 @@ fr:
       placeholder_of_repo: >-
         http(s)://... pour l'URL du dépôt du projet, utilisez
         https:// si vous le pouvez
-      submit_urls: Envoyer l'URL
       sign_in_first: Connectez-vous pour ajouter un projet !
       thanks_adding: >-
         Merci d'avoir ajouté le projet ! Remplissez le reste des
@@ -318,7 +316,6 @@ fr:
         Remarque : si votre URL de dépôt est sur GitHub, toute
         personne qui a les droits de commit dans le dépôt pourra
         éditer les informations du badge.
-      new_badge_or: OU
       original_repos: "=> Dépôts GitHub Originaux"
       fork_repos: "=> Dépôts GitHub Dupliqués"
       tell_us: >-
@@ -330,6 +327,15 @@ fr:
         spam est interdit car il nuit aux utilisateurs et n'aidera
         en rien le référencement (tous les hyperliens sont marqués
         avec <tt>ugc</tt> et <tt>nofollow</tt>).
+      reminder_email_html:
+      github_repo_label:
+      github_reconnect_html:
+      github_reconnect_link:
+      submit:
+      badge_series:
+      badge_series_description:
+      badge_series_metal:
+      badge_series_baseline:
     show:
       edit: Modifier
       delete: Supprimer
@@ -405,6 +411,27 @@ fr:
       new_owner_repeat:
       current_owner:
       ownership_edit_hint:
+      not_authorized:
+      save_and_continue_tooltip:
+      automation:
+        aria_automated:
+        aria_overridden:
+        automated_tooltip:
+        overridden_tooltip:
+        aria_divergent:
+        overridden_detail:
+        overridden_old_justification_part:
+        overridden_explanation_part:
+        divergent_detail:
+        divergent_justification_part:
+        divergent_proposed_value:
+        chief_overrode:
+          one:
+          other:
+        override_detail:
+        analysis_failed:
+          one:
+          other:
     form_basics:
       project_name:
         description: Quel est le nom intelligible du projet ?
@@ -509,6 +536,9 @@ fr:
         placeholder: >-
           Changer avec + ou - suivi d'une liste d'identifiants
           utilisateur séparés par des virgules
+      entry_locale:
+        description:
+        details:
     form_early:
       badge_intro:
         description: >-
@@ -682,6 +712,8 @@ fr:
       reminder_notification_note:
         title:
         description_html:
+      obsolete_header_html:
+      obsolete_criterion:
     delete:
       done: Le projet a été supprimé avec succès.
     delete_form:
@@ -717,6 +749,16 @@ fr:
       too_short: Doit avoir au moins 20 caractères.
       more_non_whitespace: Doit avoir au moins 15 caractères non
         blancs.
+    choose_edit:
+      title:
+      instructions:
+      proposals_note:
+    choose_show:
+      title:
+      instructions:
+    baseline_version_notice:
+      current:
+      transition:
   user_mailer:
     account_activation:
       before_html: |-
@@ -3122,6 +3164,7 @@ fr:
         details:
       osps_br_01_01:
         description:
+        details:
       osps_br_01_02:
         description:
       osps_br_03_01:
@@ -3178,6 +3221,9 @@ fr:
       osps_vm_02_01:
         description:
         details:
+      osps_br_01_03:
+        description:
+        details:
     baseline-2:
       osps_ac_04_01:
         description:
@@ -3231,6 +3277,9 @@ fr:
         description:
         details:
       osps_vm_04_01:
+        description:
+        details:
+      osps_do_07_01:
         description:
         details:
     baseline-3:
@@ -3292,6 +3341,9 @@ fr:
         description:
         details:
       osps_vm_06_02:
+        description:
+        details:
+      osps_br_01_04:
         description:
         details:
   static_pages:
@@ -3417,6 +3469,7 @@ fr:
         requise
       see_actual_criteria: Vous pouvez également voir les critères
         réels.
+      obsolete:
     error_409:
       heading: 'Erreur 409 : conflit'
       conflict: >-
@@ -3470,6 +3523,7 @@ fr:
     FLOSS license: Licence FLOSS
     Controls:
     General:
+    General_project_info:
   last_entry: Dernière entrée de traduction
   admin_only: Admin seulement.
   criterion_status:
@@ -3551,6 +3605,7 @@ fr:
     na_justification_required: "{N/A justification}"
     met_justification_required: "{Atteint justification}"
     met_url_required: "{Atteint URL}"
+    obsolete:
   criteria_discussion:
     intro_p01_html: >-
       <h1 id='criteria_discussion'>Discussion sur les critères</h1>
@@ -3908,3 +3963,50 @@ fr:
   do_not_translate_this:
   test_pluralization_only_one:
     one:
+  detectives:
+    github:
+      repo_public:
+      repo_track:
+      repo_distributed:
+      contribution:
+      discussion:
+      osps_gv_02_01:
+      osps_do_02_01:
+      osps_ac_01_01:
+      osps_qa_01_01:
+      osps_qa_01_02:
+      name:
+      description:
+      license:
+      implementation_languages:
+    floss_license:
+      osi_approved:
+      osi_approved_repository:
+      not_in_osi_list:
+    hardened_sites:
+      all_headers_found:
+      headers_missing:
+    name_from_url:
+      domain_suggests:
+      tail_suggests:
+      repo_tail_suggests:
+    project_sites_https:
+      given_http:
+      official_http:
+      url_uses_http:
+      given_https:
+    repo_files:
+      no_file_found:
+      file_found:
+      contribution_documented:
+      license_found:
+      license_not_found:
+      license_not_in_releases:
+    subdir_files:
+      no_files_found:
+      no_folder_found:
+      some_contents_found:
+    test_forced:
+      test_automation:
+    repo_json:
+      field_from_file:

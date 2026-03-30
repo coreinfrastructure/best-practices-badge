@@ -29,7 +29,7 @@
 <div class="row">
   <div class="col-md-12">
  <div>
-  <%= bootstrap_form_for project, url: update_project_path(project, section: criteria_level) do |f| %>
+  <%= bootstrap_form_for project, url: edit_project_section_path(project, criteria_level) do |f| %>
     <%= render 'shared/error_messages', object: f.object %>
     <%= f.hidden_field :lock_version %>
 

@@ -409,8 +409,8 @@ With "Save and exit", only forced (orange) changes are applied and
 shown; non-forced fill-in proposals are silently skipped so unreviewed
 changes never land in the database.
 External URL automation proposals are not re-applied on subsequent
-saves; only their visual indicators (orange/≠) are preserved across
-the redirect.
+saves. Their visual indicators (orange/≠) remain visible because
+Chief re-evaluates the same data and produces the same highlights.
 
 ## Interaction with First-Edit Automation
 

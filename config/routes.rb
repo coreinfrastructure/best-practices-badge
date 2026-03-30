@@ -175,6 +175,12 @@ Rails.application.routes.draw do
         constraints: CONSTRAINTS_ID_PRIMARY_SECTION,
         as: :edit_project_section
 
+    # Accept PATCH/PUT at the /edit URL so forms can submit here and the
+    # address bar stays at /edit when the server renders edit directly.
+    match 'projects/:id/:section/edit' => 'projects#update',
+          via: %i[put patch],
+          constraints: CONSTRAINTS_ID_PRIMARY_SECTION
+
     # Show section with format (HTML or Markdown)
     # GET (/:locale)/projects/:id/:section(.:format)
     # Use VALID_SECTION_REGEX to accept obsolete sections (controller will redirect)

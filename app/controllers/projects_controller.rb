@@ -52,7 +52,7 @@ class ProjectsController < ApplicationController
       fields_map.freeze
     end
 
-  # When editing a specific project there are two instance variables to track
+  # When editing a specific project there are instance variables to track
   # automation highlights: @automated_fields and @overridden_fields.
   # These instance variables track which project fields were changed by
   # automation (Chief or query-string proposals) so the edit form can
@@ -61,26 +61,17 @@ class ProjectsController < ApplicationController
   # Both are Hash{Symbol => Hash} keyed by field symbol
   # (e.g. :contribution_status):
   # - @automated_fields (yellow highlight): fields that were unknown/blank
-  #   (as old values) and then got filled in by automation.
+  #   and then got filled in by automation.
   #   Values: { new_value:, explanation: }
   # - @overridden_fields (orange highlight): fields that had a real user
-  #   value (not '?' or blank) and were forcibly changed by Chief.
+  #   value and were forcibly changed by Chief.
   #   Values: { old_value:, new_value:, old_justification:, explanation: }
-  #   old_justification is the user's previous justification text (may be nil).
-  #   explanation is the automation's reason for the override; nil when unavailable
-  #   (e.g. URL-based proposals without ovr__*_explanation params).
   #
-  # They are populated by classify_chief_proposals (first-edit and save-time Chief),
-  # apply_query_string_automation (URL proposals),
-  # and parse_overridden_fields_list (redirect params with ovr__ metadata).
+  # They are populated by classify_chief_proposals (first-edit and save-time
+  # Chief) and apply_query_string_automation (URL proposals).
   # Consumed by the edit view (via projects_helper automated_field_set /
   # overridden_field_set), format_override_details, and
   # build_automation_metadata (JSON API).
-  #
-  # The external query parameters automated_fields_list and
-  # overridden_fields_list highlight those fields.  For overridden_fields_list,
-  # ovr__field, ovr__field_justification, and ovr__field_explanation params
-  # carry the metadata; omitting them leaves old_value/explanation nil (shown as '?').
 
   # The 'badge', 'baseline_badge', and 'show_json' actions are special and
   # do NOT take a locale.
@@ -640,16 +631,6 @@ class ProjectsController < ApplicationController
     # (Chief implements the built-in automation).
     # Results merge into @automated_fields for highlighting.
     apply_query_string_automation
-
-    # Merge override/automated highlighting from redirect query params.
-    # (handle_overridden_fields_redirect passes overridden_fields_list= and automated_fields_list=)
-    # Existing entries (from automation) take priority over URL params.
-    @overridden_fields =
-      parse_overridden_fields_list(params[:overridden_fields_list], @overridden_fields)
-    @automated_fields =
-      merge_field_lists(params[:automated_fields_list], @automated_fields)
-    @divergent_fields =
-      parse_divergent_fields_list(params[:divergent_fields_list], @divergent_fields)
 
     return unless @project.notify_for_static_analysis?('0')
 
@@ -1571,12 +1552,17 @@ class ProjectsController < ApplicationController
     ReportMailer.project_status_change(
       @project, old_badge_level, new_badge_level
     ).deliver_now
-    # Determine if this represents a gain or loss of badge status
+    # Determine if this represents a gain or loss of badge status.
+    # Use flash.now when the response will be a render (override/continue/failure),
+    # flash when the response will be a redirect (clean save-and-exit).
+    # This mirrors the branch logic in perform_html_redirect_after_save.
     lost_level = badge_level_lost?(old_badge_level, new_badge_level)
+    will_render = @chief_failed || @overridden_fields&.any? || params[:continue]
+    badge_flash = will_render ? flash.now : flash
     if lost_level
-      flash[:danger] = t('projects.edit.lost_badge')
+      badge_flash[:danger] = t('projects.edit.lost_badge')
     else
-      flash[:success] = t(
+      badge_flash[:success] = t(
         'projects.edit.congrats_new',
         new_badge_level: new_badge_level
       )
@@ -1587,25 +1573,6 @@ class ProjectsController < ApplicationController
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
   # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-
-  # Generates URL anchor fragment for form navigation.
-  # Creates anchor tag for specific form sections, excluding the generic "Save".
-  # SECURITY: Strictly validates input to prevent URL injection attacks.
-  # Only accepts alphanumeric, underscore, hyphen, and dot characters.
-  # @return [String] URL anchor fragment (e.g., "#section_name") or empty string
-  def url_anchor
-    return '' if params[:continue].blank? || params[:continue] == 'Save'
-
-    # Sanitize: only allow safe characters for URL fragment identifiers
-    # Allow letters, digits, underscores, hyphens, and dots (for OSPS IDs like OSPS-AC-03.01)
-    raw_anchor = params[:continue].to_s
-    safe_anchor = raw_anchor.gsub(/[^A-Za-z0-9_.-]/, '_')
-
-    # Return empty if sanitization produced nothing useful
-    return '' if safe_anchor.empty?
-
-    "##{safe_anchor}"
-  end
 
   # Determines the current working level based on criteria level or badge level.
   # For baseline levels, returns the criteria level being edited.
@@ -2096,212 +2063,6 @@ class ProjectsController < ApplicationController
     CriterionStatus.parse(value)
   end
 
-  # Merge field list from URL params with existing field data.
-  # URL params provide field names (for highlighting), while existing_fields
-  # may have rich metadata (old_value, new_value, explanation).
-  # Rich metadata always takes priority over empty {} from URL params.
-  # If we're just highlighting we don't *need* the rich metadata
-  # (mere presence is enough), but we don't want to lose the rich metadata,
-  # in case later changes to our code use the rich metadata.
-  # @param field_list_param [String, nil] Comma-separated field names from URL
-  # @param existing_fields [Hash, nil] Existing field data with metadata
-  # @return [Hash{Symbol => Hash}] Merged fields preserving rich data
-  def merge_field_lists(field_list_param, existing_fields)
-    url_fields = parse_and_validate_field_list(field_list_param)
-    return existing_fields || {} if url_fields.empty?
-    return url_fields if existing_fields.blank?
-
-    # Merge: existing rich data takes priority over URL's empty {} values
-    url_fields.merge(existing_fields)
-  end
-
-  # Parse comma-separated field list and validate field names.
-  # Only accepts fields valid for the current section being edited.
-  # @param field_string [String, nil] Comma-separated field names
-  # @return [Hash{Symbol => Hash}] Validated fields keyed by field symbol
-  def parse_and_validate_field_list(field_string)
-    return {} if field_string.blank?
-
-    # Split by comma, strip whitespace, remove empty strings
-    field_names = field_string.split(',').map(&:strip).compact_blank
-
-    # Get valid fields for current section
-    valid_fields = fields_for_current_section
-    return {} if valid_fields.nil? # Invalid section level
-
-    # Validate each field name; silently skip invalid ones
-    validated = {}
-    field_names.each do |field_name|
-      field_sym = field_name.to_sym
-      validated[field_sym] = {} if valid_fields.include?(field_sym)
-    end
-    validated
-  end
-
-  # Build query-parameter hash for divergent fields to carry through a redirect.
-  # Convention: _status keys hold Integers internally; convert to canonical String
-  # at the URL boundary.  _value keys hold Strings; pass through unchanged.
-  # Params produced:
-  #   divergent_fields_list=field1,field2,...
-  #   div__field1=Met            (canonical string for _status fields, raw for others)
-  #   div__field1_justification=...  (omitted when blank)
-  # @return [Hash] Params to merge into redirect_to path options
-  # rubocop:disable Metrics/MethodLength
-  def divergent_url_params
-    return {} unless @divergent_fields&.any?
-
-    result = { divergent_fields_list: @divergent_fields.keys.join(',') }
-    @divergent_fields.each do |field, data|
-      val =
-        if data.key?(:proposed_status)
-          CriterionStatus.canonical(data[:proposed_status]) # Integer → String
-        else
-          data[:proposed_value].presence
-        end
-      result[:"div__#{field}"] = val if val.present?
-      justification = data[:proposed_justification]
-      result[:"div__#{field}_justification"] = justification if justification.present?
-    end
-    result
-  end
-  # rubocop:enable Metrics/MethodLength
-
-  # Parse divergent_fields_list + div__* redirect params back into @divergent_fields.
-  # Convention mirrors divergent_url_params: _status fields use CriterionStatus.parse
-  # to restore the Integer; other fields store the String as :proposed_value.
-  # Existing rich data (from Chief running in this same request) takes priority
-  # over URL values, which lack proposed_justification.
-  # @param field_string [String, nil] divergent_fields_list param value
-  # @param existing_fields [Hash, nil] @divergent_fields already set this request
-  # @return [Hash{Symbol => Hash}]
-  # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity
-  # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity
-  # rubocop:disable Layout/FirstHashElementLineBreak
-  def parse_divergent_fields_list(field_string, existing_fields)
-    return existing_fields || {} if field_string.blank?
-
-    valid_fields = fields_for_current_section
-    return existing_fields || {} if valid_fields.nil?
-
-    url_fields = {}
-    field_string.split(',').each do |field_name|
-      field_name = field_name.strip
-      next if field_name.blank?
-
-      field_sym = field_name.to_sym
-      next if valid_fields.exclude?(field_sym)
-
-      raw_val = params[:"div__#{field_sym}"].presence
-      justif  = params[:"div__#{field_sym}_justification"].presence
-
-      # _status fields store Integer internally; restore via CriterionStatus.parse.
-      # All other fields store the raw String as :proposed_value.
-      url_fields[field_sym] =
-        if field_name.end_with?('_status')
-          { proposed_status:       CriterionStatus.parse(raw_val),
-            proposed_justification: justif }
-        else
-          { proposed_value:        raw_val,
-            proposed_justification: justif }
-        end
-    end
-
-    return url_fields if existing_fields.blank?
-
-    # Existing data (has proposed_justification from Chief) takes priority
-    url_fields.merge(existing_fields)
-  end
-  # rubocop:enable Layout/FirstHashElementLineBreak
-  # rubocop:enable Metrics/AbcSize, Metrics/PerceivedComplexity
-  # rubocop:enable Metrics/MethodLength, Metrics/CyclomaticComplexity
-
-  # Build query-parameter hash for overridden fields to carry through a redirect.
-  # Convention mirrors divergent_url_params: _status fields convert Integer
-  # old_value → canonical String via CriterionStatus.canonical.
-  # Params produced:
-  #   ovr__field1=Unmet              (canonical string for _status old_value, raw for others)
-  #   ovr__field1_justification=...  (omitted when blank)
-  #   ovr__field1_explanation=...    (omitted when blank)
-  # Note: overridden_fields_list itself is added by handle_overridden_fields_redirect.
-  # Note: new_value is NOT carried — it is the current DB value, already visible
-  #   in the form fields directly.
-  # @return [Hash] Params to merge into redirect_to path options
-  # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity
-  def overridden_url_params
-    return {} unless @overridden_fields&.any?
-
-    result = {}
-    @overridden_fields.each do |field, data|
-      old_val = data[:old_value]
-      val =
-        if field.to_s.end_with?('_status')
-          CriterionStatus.canonical(old_val)
-        else
-          old_val.presence
-        end
-      result[:"ovr__#{field}"] = val if val.present?
-      old_just = data[:old_justification]
-      result[:"ovr__#{field}_justification"] = old_just if old_just.present?
-      explanation = data[:explanation]
-      result[:"ovr__#{field}_explanation"] = explanation if explanation.present?
-    end
-    result
-  end
-  # rubocop:enable Metrics/MethodLength, Metrics/CyclomaticComplexity
-
-  # Parse overridden_fields_list + ovr__* redirect params back into @overridden_fields.
-  # Convention mirrors parse_divergent_fields_list: _status fields use
-  # CriterionStatus.parse to restore the Integer old_value.
-  # Existing rich data (from Chief running in this same request) takes priority
-  # over URL values, which are provided only by the redirect.
-  # @param field_string [String, nil] overridden_fields_list param value
-  # @param existing_fields [Hash, nil] @overridden_fields already set this request
-  # @return [Hash{Symbol => Hash}]
-  # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity
-  # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity
-  # rubocop:disable Layout/FirstHashElementLineBreak
-  def parse_overridden_fields_list(field_string, existing_fields)
-    return existing_fields || {} if field_string.blank?
-
-    valid_fields = fields_for_current_section
-    return existing_fields || {} if valid_fields.nil?
-
-    url_fields = {}
-    field_string.split(',').each do |field_name|
-      field_name = field_name.strip
-      next if field_name.blank?
-
-      field_sym = field_name.to_sym
-      next if valid_fields.exclude?(field_sym)
-
-      raw_val = params[:"ovr__#{field_sym}"].presence
-      justif  = params[:"ovr__#{field_sym}_justification"].presence
-      expl    = params[:"ovr__#{field_sym}_explanation"].presence
-
-      old_value =
-        if field_name.end_with?('_status')
-          CriterionStatus.parse(raw_val)
-        else
-          raw_val
-        end
-
-      url_fields[field_sym] = {
-        old_value:         old_value,
-        old_justification: justif,
-        explanation:       expl
-      }
-    end
-
-    return url_fields if existing_fields.blank?
-
-    # Existing data (from Chief running this request) takes priority.
-    # Same convention as parse_divergent_fields_list line 2209-2210.
-    url_fields.merge(existing_fields)
-  end
-  # rubocop:enable Layout/FirstHashElementLineBreak
-  # rubocop:enable Metrics/AbcSize, Metrics/PerceivedComplexity
-  # rubocop:enable Metrics/MethodLength, Metrics/CyclomaticComplexity
-
   # Classify Chief proposals into @automated_fields, @overridden_fields,
   # and @divergent_fields following the same decision matrix as URL-based
   # automation (apply_query_string_automation):
@@ -2584,73 +2345,42 @@ class ProjectsController < ApplicationController
     details.join("\n")
   end
 
-  # Handle redirect to edit form with overridden fields highlighted
-  # @param section [String] The section/level being edited
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-  def handle_overridden_fields_redirect(section)
-    # Build detailed flash message
-    override_details = format_override_details
-
-    flash[:warning] = t('projects.edit.automation.chief_overrode',
-                        count: @overridden_fields.size) + "\n" + override_details
-
-    # Log overrides for monitoring
-    Rails.logger.info(
-      "Chief override: project=#{@project.id} user=#{current_user&.id} " \
-      "fields=#{@overridden_fields.keys.join(',')}"
-    )
-
-    # Redirect with highlight parameters
-    overridden_field_names = @overridden_fields.keys.map(&:to_s)
-    automated_field_names = @automated_fields.keys.map(&:to_s)
-    first_overridden = overridden_field_names.first
-
-    redirect_to edit_project_section_path(
-      @project,
-      section,
-      locale: params[:locale],
-      anchor: first_overridden,
-      overridden_fields_list: overridden_field_names.join(','),
-      automated_fields_list: automated_field_names.join(','),
-      **divergent_url_params,
-      **overridden_url_params
-    )
-  end
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
-
-  # Perform HTML redirect after save based on automation state
+  # Render or redirect after a successful save based on automation state.
+  # Only the clean "save and exit" path redirects (to the show page, a clean GET).
+  # All paths that need to show the edit form render it directly so that
+  # @overridden_fields / @divergent_fields / @automated_fields are available
+  # without URL-param serialisation.
   # @param section [String] The section/level being edited
   # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  # rubocop:disable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
   def perform_html_redirect_after_save(section)
-    # Check if Chief failed during save
     if @chief_failed
-      flash[:warning] = t('projects.edit.automation.analysis_failed',
-                          count: @chief_failed_fields&.size || 0,
-                          fields: @chief_failed_fields&.join(', ') || '')
-      redirect_to edit_project_section_path(@project, section, locale: params[:locale])
-    # Forced overrides changed user values - redirect to edit with warning
+      flash.now[:warning] = t(
+        'projects.edit.automation.analysis_failed',
+        count: @chief_failed_fields&.size || 0,
+        fields: @chief_failed_fields&.join(', ') || ''
+      )
+      render :edit
     elsif @overridden_fields&.any?
-      handle_overridden_fields_redirect(section)
-    # "Save and Continue" - go back to edit
+      flash.now[:warning] =
+        t('projects.edit.automation.chief_overrode', count: @overridden_fields.size) +
+        "\n" + format_override_details
+      Rails.logger.info(
+        "Chief override: project=#{@project.id} user=#{current_user&.id} " \
+        "fields=#{@overridden_fields.keys.join(',')}"
+      )
+      render :edit
     elsif params[:continue]
-      flash[:info] = t('projects.edit.successfully_updated')
-      redirect_params = { locale: params[:locale] }
-      if @automated_fields&.any?
-        redirect_params[:automated_fields_list] =
-          @automated_fields.keys.join(',')
-      end
-      redirect_params.merge!(divergent_url_params)
-      redirect_to edit_project_section_path(@project, section,
-                                            **redirect_params) + url_anchor
+      flash.now[:info] = t('projects.edit.successfully_updated')
+      render :edit
     else
-      # Normal "Save and Exit" - go to show page
+      # Clean save-and-exit: the only remaining redirect.
       redirect_to project_section_path(@project, section, locale: params[:locale]),
                   success: t('projects.edit.successfully_updated')
     end
   end
+  # rubocop:enable Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
-  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   # Build automation metadata for JSON response
   # @return [Hash] Automation details (overridden and automated fields)

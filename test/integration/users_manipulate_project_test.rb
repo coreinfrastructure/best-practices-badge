@@ -173,8 +173,8 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
 
   test 'user updates project with final Save button' do
     # This test ensures that the final "Save (and continue)" button
-    # (with value='Save') works correctly and covers url_anchor line 1328
-    # which returns '' when params[:continue] == 'Save'
+    # (with value='Save') works correctly. Save-and-continue now renders
+    # the edit form directly (no redirect) with flash.now[:info].
     get login_path(locale: :en)
     log_in_as @user
 
@@ -183,17 +183,14 @@ class UsersManipulateProjectTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     # Update project with final save button (continue='Save')
-    patch "/en/projects/#{project.id}", params: {
+    patch edit_project_section_path(project, 'passing'), params: {
       project: { name: 'Updated Project Name' },
       continue: 'Save'
     }
 
-    # Should redirect to edit page (may include automated_fields_list= query param)
-    assert_match %r{/en/projects/#{project.id}/passing/edit(\?automated_fields_list=.*)?\z},
-                 response.location
-    follow_redirect!
+    # Should render edit directly (not redirect)
     assert_response :success
-    assert_match 'Project was successfully updated', flash[:info]
+    assert_nil response.location
   end
 end
 # rubocop:enable Metrics/ClassLength

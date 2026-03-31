@@ -17,8 +17,8 @@
                 non_criteria_automation_display(:general_comments)
             %>
             <div class="hidable-text-entry <%= name_class %>">
-            <span><%= f.label :name, t('projects.form_basics.project_name.description') %></span>
             <%= name_icon %>
+            <span><%= f.label :name, t('projects.form_basics.project_name.description') %></span>
             <%= render(partial: "details", locals: {
                        criterion: "project_name",
                        details: t('projects.form_basics.project_name.details')
@@ -31,8 +31,8 @@
             </div>
 
             <div class="hidable-text-entry <%= description_class %>">
-            <span><%= f.label :description, t('projects.form_basics.description.description') %></span>
             <%= description_icon %>
+            <span><%= f.label :description, t('projects.form_basics.description.description') %></span>
             <% if view_only %>
               <div class="discussion-markdown" id="project_description" lang="<%= project.entry_locale %>">
                 <%= markdown(project[:description]) %>
@@ -91,8 +91,8 @@
             </div>
 
             <div class="hidable-text-entry <%= license_class %>">
-            <span><%= f.label :license, t('projects.form_basics.license.description_html') %></span>
             <%= license_icon %>
+            <span><%= f.label :license, t('projects.form_basics.license.description_html') %></span>
             <%= render(partial: 'details',
                        locals: {
                          criterion: 'license',
@@ -171,8 +171,8 @@
             </div>
 
             <div class="hidable-text-entry <%= implementation_languages_class %>">
-            <span><%= f.label :implementation_languages, t('projects.form_basics.implementation_languages.description') %></span>
             <%= implementation_languages_icon %>
+            <span><%= f.label :implementation_languages, t('projects.form_basics.implementation_languages.description') %></span>
             <%= render(partial: "details", locals: {
               criterion: "implementation_languages",
               details:
@@ -293,8 +293,8 @@
             </div>
 
             <div class="hidable-text-entry <%= cpe_class %>">
-            <span><%= f.label :cpe, t('projects.form_basics.cpe.description_html') %></span>
             <%= cpe_icon %>
+            <span><%= f.label :cpe, t('projects.form_basics.cpe.description_html') %></span>
             <%= render(partial: "details",
                        locals: {
                          criterion: "cpe",
@@ -307,8 +307,8 @@
             </div>
 
             <div class="hidable-text-entry <%= general_comments_class %>">
-            <span><%= f.label :general_comments, t('projects.misc.general_comments.description') %></span>
             <%= general_comments_icon %>
+            <span><%= f.label :general_comments, t('projects.misc.general_comments.description') %></span>
             <% if view_only %>
               <div class="discussion-markdown" id="project_general_comments">
                 <%= markdown(project[:general_comments]) %>

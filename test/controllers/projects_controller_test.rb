@@ -3326,8 +3326,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   # -----------------------------------------------------------------------
-  # Direct unit tests for apply_status_proposals (Pass 1)
-  # and apply_non_status_proposals (Pass 2).
+  # Direct unit tests for classify_status_pass (Pass 1)
+  # and classify_non_status_pass (Pass 2).
   #
   # These call the private methods directly so each pass can be verified in
   # isolation — bugs in one pass cannot mask bugs in the other.
@@ -3350,23 +3350,26 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     controller
   end
 
-  # Sets up a controller with the given params and snapshots valid_fields,
-  # forced_fields, and original_values so callers can invoke each pass directly.
-  # @return [Array] [controller, valid_fields, forced_fields, original_values]
+  # Sets up a controller with the given params and builds the proposals hash
+  # plus snapshots valid_fields, forced_fields, and original_values so callers
+  # can invoke each classify pass directly.
+  # @return [Array] [controller, valid_fields, forced_fields, original_values, proposals]
   def prepare_pass(param_hash)
     controller = build_pass_controller(param_hash)
     valid_fields    = controller.send(:fields_for_current_section)
     forced_fields   = controller.send(:compute_forced_fields, valid_fields)
     original_values = controller.send(:snapshot_original_values, valid_fields)
-    [controller, valid_fields, forced_fields, original_values]
+    proposals       = controller.send(:build_url_proposals, valid_fields, forced_fields)
+    [controller, valid_fields, forced_fields, original_values, proposals]
   end
 
-  # --- Pass 1: apply_status_proposals ---
+  # --- Pass 1: classify_status_pass ---
 
   test 'pass1: blank status proposal → applied yellow, not in returned divergent Set' do
     @project.contribution_status = CriterionStatus::UNKNOWN
-    controller, vf, ff, ov = prepare_pass('contribution_status' => 'Met')
-    divergent_set = controller.send(:apply_status_proposals, vf, ff, ov)
+    controller, _, _, ov, proposals = prepare_pass('contribution_status' => 'Met')
+    divergent_set = controller.send(:classify_status_pass, proposals, ov, track_automated: true)
+    controller.send(:apply_url_proposals, proposals, ov, divergent_set)
     assert_equal CriterionStatus::MET, @project.contribution_status
     automated = controller.instance_variable_get(:@automated_fields)
     assert automated.key?(:contribution_status), 'blank→filled should be yellow'
@@ -3376,8 +3379,9 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
   test 'pass1: real-value proposal without forcing → divergent, not applied, in returned Set' do
     @project.contribution_status = CriterionStatus::UNMET
-    controller, vf, ff, ov = prepare_pass('contribution_status' => 'Met')
-    divergent_set = controller.send(:apply_status_proposals, vf, ff, ov)
+    controller, _, _, ov, proposals = prepare_pass('contribution_status' => 'Met')
+    divergent_set = controller.send(:classify_status_pass, proposals, ov, track_automated: true)
+    controller.send(:apply_url_proposals, proposals, ov, divergent_set)
     assert_equal CriterionStatus::UNMET, @project.contribution_status, 'must not change'
     divergent = controller.instance_variable_get(:@divergent_fields)
     assert divergent.key?(:contribution_status)
@@ -3389,9 +3393,9 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
   test 'pass1: divergent entry stores proposed_justification from params' do
     @project.contribution_status = CriterionStatus::UNMET
-    controller, vf, ff, ov = prepare_pass('contribution_status' => 'Met',
-                                          'contribution_justification' => 'Has CONTRIBUTING.md')
-    controller.send(:apply_status_proposals, vf, ff, ov)
+    controller, _, _, ov, proposals = prepare_pass('contribution_status' => 'Met',
+                                                   'contribution_justification' => 'Has CONTRIBUTING.md')
+    controller.send(:classify_status_pass, proposals, ov, track_automated: true)
     divergent = controller.instance_variable_get(:@divergent_fields)
     assert_equal 'Has CONTRIBUTING.md',
                  divergent[:contribution_status][:proposed_justification]
@@ -3399,8 +3403,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
   test 'pass1: proposed equals current → not recorded anywhere, not in divergent Set' do
     @project.contribution_status = CriterionStatus::MET
-    controller, vf, ff, ov = prepare_pass('contribution_status' => 'Met')
-    divergent_set = controller.send(:apply_status_proposals, vf, ff, ov)
+    controller, _, _, ov, proposals = prepare_pass('contribution_status' => 'Met')
+    divergent_set = controller.send(:classify_status_pass, proposals, ov, track_automated: true)
     assert_not divergent_set.include?(:contribution_status)
     assert_empty controller.instance_variable_get(:@automated_fields)
     assert_empty controller.instance_variable_get(:@divergent_fields)
@@ -3408,8 +3412,9 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
   test 'pass1: proposed ? with real value → not divergent, not applied' do
     @project.contribution_status = CriterionStatus::UNMET
-    controller, vf, ff, ov = prepare_pass('contribution_status' => '?')
-    divergent_set = controller.send(:apply_status_proposals, vf, ff, ov)
+    controller, _, _, ov, proposals = prepare_pass('contribution_status' => '?')
+    divergent_set = controller.send(:classify_status_pass, proposals, ov, track_automated: true)
+    controller.send(:apply_url_proposals, proposals, ov, divergent_set)
     assert_equal CriterionStatus::UNMET, @project.contribution_status
     assert_not divergent_set.include?(:contribution_status)
     assert_empty controller.instance_variable_get(:@divergent_fields)
@@ -3419,8 +3424,9 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     # Regression: before the pre-screen fix, forced '?' on a real value was applied
     # as Orange because the UNKNOWN guard only lived inside the !forced branch.
     @project.contribution_status = CriterionStatus::UNMET
-    controller, vf, ff, ov = prepare_pass('contribution_status' => '?', 'overrides' => '*')
-    divergent_set = controller.send(:apply_status_proposals, vf, ff, ov)
+    controller, _, _, ov, proposals = prepare_pass('contribution_status' => '?', 'overrides' => '*')
+    divergent_set = controller.send(:classify_status_pass, proposals, ov, track_automated: true)
+    controller.send(:apply_url_proposals, proposals, ov, divergent_set)
     assert_equal CriterionStatus::UNMET, @project.contribution_status,
                  'forced ? must not override a real status value'
     assert_empty controller.instance_variable_get(:@overridden_fields),
@@ -3430,8 +3436,9 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
   test 'pass1: invalid proposed status → skipped entirely, not divergent' do
     @project.contribution_status = CriterionStatus::UNMET
-    controller, vf, ff, ov = prepare_pass('contribution_status' => 'bogus')
-    divergent_set = controller.send(:apply_status_proposals, vf, ff, ov)
+    controller, _, _, ov, proposals = prepare_pass('contribution_status' => 'bogus')
+    divergent_set = controller.send(:classify_status_pass, proposals, ov, track_automated: true)
+    controller.send(:apply_url_proposals, proposals, ov, divergent_set)
     assert_equal CriterionStatus::UNMET, @project.contribution_status
     assert_not divergent_set.include?(:contribution_status)
     assert_empty controller.instance_variable_get(:@divergent_fields)
@@ -3439,10 +3446,11 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
   test 'pass1: forced real-value → applied orange with old_value; URL has no explanation' do
     @project.contribution_status = CriterionStatus::UNMET
-    controller, vf, ff, ov = prepare_pass('contribution_status' => 'Met',
-                                          'contribution_justification' => 'Reason',
-                                          'overrides' => '*')
-    divergent_set = controller.send(:apply_status_proposals, vf, ff, ov)
+    controller, _, _, ov, proposals = prepare_pass('contribution_status' => 'Met',
+                                                   'contribution_justification' => 'Reason',
+                                                   'overrides' => '*')
+    divergent_set = controller.send(:classify_status_pass, proposals, ov, track_automated: true)
+    controller.send(:apply_url_proposals, proposals, ov, divergent_set)
     assert_equal CriterionStatus::MET, @project.contribution_status
     overridden = controller.instance_variable_get(:@overridden_fields)
     assert overridden.key?(:contribution_status)
@@ -3456,9 +3464,10 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
   test 'pass1: forced blank value → applied yellow, not orange' do
     @project.contribution_status = CriterionStatus::UNKNOWN
-    controller, vf, ff, ov = prepare_pass('contribution_status' => 'Met',
-                                          'overrides' => '*')
-    controller.send(:apply_status_proposals, vf, ff, ov)
+    controller, _, _, ov, proposals = prepare_pass('contribution_status' => 'Met',
+                                                   'overrides' => '*')
+    divergent_set = controller.send(:classify_status_pass, proposals, ov, track_automated: true)
+    controller.send(:apply_url_proposals, proposals, ov, divergent_set)
     assert_equal CriterionStatus::MET, @project.contribution_status
     automated = controller.instance_variable_get(:@automated_fields)
     assert automated.key?(:contribution_status), 'forced blank fill is still yellow'
@@ -3468,20 +3477,22 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test 'pass1: two fields — one divergent, one applied — returned Set has only divergent' do
     @project.contribution_status = CriterionStatus::UNMET # will be divergent
     @project.description_good_status = CriterionStatus::UNKNOWN # will be yellow
-    controller, vf, ff, ov = prepare_pass('contribution_status' => 'Met',
-                                          'description_good_status' => 'Met')
-    divergent_set = controller.send(:apply_status_proposals, vf, ff, ov)
+    controller, _, _, ov, proposals = prepare_pass('contribution_status' => 'Met',
+                                                   'description_good_status' => 'Met')
+    divergent_set = controller.send(:classify_status_pass, proposals, ov, track_automated: true)
+    controller.send(:apply_url_proposals, proposals, ov, divergent_set)
     assert divergent_set.include?(:contribution_status)
     assert_not divergent_set.include?(:description_good_status)
     assert_equal CriterionStatus::MET, @project.description_good_status
   end
 
-  # --- Pass 2: apply_non_status_proposals ---
+  # --- Pass 2: classify_non_status_pass ---
 
   test 'pass2: blank justification → applied yellow under paired status symbol' do
     @project.contribution_justification = ''
-    controller, vf, ff, ov = prepare_pass('contribution_justification' => 'New text')
-    controller.send(:apply_non_status_proposals, vf, ff, ov, Set.new)
+    controller, _, _, ov, proposals = prepare_pass('contribution_justification' => 'New text')
+    controller.send(:classify_non_status_pass, proposals, ov, Set.new, track_automated: true)
+    controller.send(:apply_url_proposals, proposals, ov, Set.new)
     assert_equal 'New text', @project.contribution_justification
     automated = controller.instance_variable_get(:@automated_fields)
     assert automated.key?(:contribution_status), 'justification highlights under status symbol'
@@ -3489,8 +3500,9 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
   test 'pass2: non-blank justification without forcing → not applied, no icon' do
     @project.contribution_justification = 'existing'
-    controller, vf, ff, ov = prepare_pass('contribution_justification' => 'new text')
-    controller.send(:apply_non_status_proposals, vf, ff, ov, Set.new)
+    controller, _, _, ov, proposals = prepare_pass('contribution_justification' => 'new text')
+    controller.send(:classify_non_status_pass, proposals, ov, Set.new, track_automated: true)
+    controller.send(:apply_url_proposals, proposals, ov, Set.new)
     assert_equal 'existing', @project.contribution_justification
     assert_empty controller.instance_variable_get(:@automated_fields)
     assert_empty controller.instance_variable_get(:@overridden_fields)
@@ -3500,8 +3512,9 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
   test 'pass2: non-blank justification without forcing, same value → no divergent icon' do
     @project.contribution_justification = 'same text'
-    controller, vf, ff, ov = prepare_pass('contribution_justification' => 'same text')
-    controller.send(:apply_non_status_proposals, vf, ff, ov, Set.new)
+    controller, _, _, ov, proposals = prepare_pass('contribution_justification' => 'same text')
+    controller.send(:classify_non_status_pass, proposals, ov, Set.new, track_automated: true)
+    controller.send(:apply_url_proposals, proposals, ov, Set.new)
     assert_equal 'same text', @project.contribution_justification
     assert_empty controller.instance_variable_get(:@automated_fields)
     assert_empty controller.instance_variable_get(:@overridden_fields)
@@ -3512,9 +3525,10 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test 'pass2: non-blank justification forced → applied orange under paired status symbol' do
     @project.contribution_status = CriterionStatus::UNMET
     @project.contribution_justification = 'old text'
-    controller, vf, ff, ov = prepare_pass('contribution_justification' => 'new text',
-                                          'overrides' => '*')
-    controller.send(:apply_non_status_proposals, vf, ff, ov, Set.new)
+    controller, _, _, ov, proposals = prepare_pass('contribution_justification' => 'new text',
+                                                   'overrides' => '*')
+    controller.send(:classify_non_status_pass, proposals, ov, Set.new, track_automated: true)
+    controller.send(:apply_url_proposals, proposals, ov, Set.new)
     assert_equal 'new text', @project.contribution_justification
     overridden = controller.instance_variable_get(:@overridden_fields)
     assert overridden.key?(:contribution_status),
@@ -3530,9 +3544,10 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     # String — so CriterionStatus.canonical(old_value) works correctly in the view.
     @project.contribution_status = CriterionStatus::MET
     @project.contribution_justification = 'old justification'
-    controller, vf, ff, ov = prepare_pass('contribution_justification' => 'new justification',
-                                          'overrides' => '*')
-    controller.send(:apply_non_status_proposals, vf, ff, ov, Set.new)
+    controller, _, _, ov, proposals = prepare_pass('contribution_justification' => 'new justification',
+                                                   'overrides' => '*')
+    controller.send(:classify_non_status_pass, proposals, ov, Set.new, track_automated: true)
+    controller.send(:apply_url_proposals, proposals, ov, Set.new)
     assert_equal 'new justification', @project.contribution_justification
     overridden = controller.instance_variable_get(:@overridden_fields)
     assert overridden.key?(:contribution_status)
@@ -3543,10 +3558,11 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
   test 'pass2: justification with divergent paired status → blocked even when forced' do
     @project.contribution_justification = 'existing'
-    controller, vf, ff, ov = prepare_pass('contribution_justification' => 'new text',
-                                          'overrides' => '*')
+    controller, _, _, ov, proposals = prepare_pass('contribution_justification' => 'new text',
+                                                   'overrides' => '*')
     divergent_set = Set.new([:contribution_status])
-    controller.send(:apply_non_status_proposals, vf, ff, ov, divergent_set)
+    controller.send(:classify_non_status_pass, proposals, ov, divergent_set, track_automated: true)
+    controller.send(:apply_url_proposals, proposals, ov, divergent_set)
     assert_equal 'existing', @project.contribution_justification,
                  'coupling rule: divergent status must block justification even if forced'
     assert_empty controller.instance_variable_get(:@automated_fields)
@@ -3555,8 +3571,9 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
   test 'pass2: blank non-criteria field → applied yellow' do
     @project.name = ''
-    controller, vf, ff, ov = prepare_pass('name' => 'My Project')
-    controller.send(:apply_non_status_proposals, vf, ff, ov, Set.new)
+    controller, _, _, ov, proposals = prepare_pass('name' => 'My Project')
+    controller.send(:classify_non_status_pass, proposals, ov, Set.new, track_automated: true)
+    controller.send(:apply_url_proposals, proposals, ov, Set.new)
     assert_equal 'My Project', @project.name
     automated = controller.instance_variable_get(:@automated_fields)
     assert automated.key?(:name)
@@ -3564,8 +3581,9 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
   test 'pass2: non-blank non-criteria field without forcing → not applied, divergent icon' do
     @project.name = 'existing'
-    controller, vf, ff, ov = prepare_pass('name' => 'new name')
-    controller.send(:apply_non_status_proposals, vf, ff, ov, Set.new)
+    controller, _, _, ov, proposals = prepare_pass('name' => 'new name')
+    controller.send(:classify_non_status_pass, proposals, ov, Set.new, track_automated: true)
+    controller.send(:apply_url_proposals, proposals, ov, Set.new)
     assert_equal 'existing', @project.name
     assert_empty controller.instance_variable_get(:@automated_fields)
     divergent = controller.instance_variable_get(:@divergent_fields)
@@ -3575,8 +3593,9 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
   test 'pass2: non-blank non-criteria field forced → applied orange' do
     @project.name = 'old name'
-    controller, vf, ff, ov = prepare_pass('name' => 'new name', 'overrides' => '*')
-    controller.send(:apply_non_status_proposals, vf, ff, ov, Set.new)
+    controller, _, _, ov, proposals = prepare_pass('name' => 'new name', 'overrides' => '*')
+    controller.send(:classify_non_status_pass, proposals, ov, Set.new, track_automated: true)
+    controller.send(:apply_url_proposals, proposals, ov, Set.new)
     assert_equal 'new name', @project.name
     overridden = controller.instance_variable_get(:@overridden_fields)
     assert overridden.key?(:name)
@@ -3584,12 +3603,13 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'pass2: _status fields in params are ignored (belong to pass 1)' do
+    # classify_non_status_pass must not record any highlight for _status fields;
+    # application is not tested here because apply_url_proposals handles all fields.
     @project.contribution_status = CriterionStatus::UNKNOWN
-    controller, vf, ff, ov = prepare_pass('contribution_status' => 'Met')
-    controller.send(:apply_non_status_proposals, vf, ff, ov, Set.new)
-    assert_equal CriterionStatus::UNKNOWN, @project.contribution_status,
-                 'pass 2 must not process _status fields'
-    assert_empty controller.instance_variable_get(:@automated_fields)
+    controller, _, _, ov, proposals = prepare_pass('contribution_status' => 'Met')
+    controller.send(:classify_non_status_pass, proposals, ov, Set.new, track_automated: true)
+    assert_empty controller.instance_variable_get(:@automated_fields),
+                 'classify_non_status_pass must not record yellow for _status fields'
   end
 
   test 'pass2: forced justification does not corrupt Integer old_value set by pass 1' do
@@ -3600,14 +3620,14 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     # and requires an Integer; a String old_value produces nil and displays '?'.
     @project.contribution_status = CriterionStatus::UNMET
     @project.contribution_justification = 'old justification'
-    controller, vf, ff, ov = prepare_pass(
+    controller, _, _, ov, proposals = prepare_pass(
       'contribution_status' => 'Met',
       'contribution_justification' => 'new justification',
       'overrides' => '*'
     )
     # Run Pass 1 first, which should populate @overridden_fields[:contribution_status]
     # with old_value = CriterionStatus::UNMET (an Integer).
-    controller.send(:apply_status_proposals, vf, ff, ov)
+    divergent_set = controller.send(:classify_status_pass, proposals, ov, track_automated: true)
     overridden = controller.instance_variable_get(:@overridden_fields)
     assert overridden.key?(:contribution_status), 'pass 1 must set orange for forced real status'
     assert_kind_of Integer, overridden[:contribution_status][:old_value],
@@ -3615,8 +3635,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
 
     # Run Pass 2; contribution_justification is forced and has a real value.
     # The guard must prevent it from overwriting the status entry.
-    divergent_set = Set.new # status was forced so not divergent
-    controller.send(:apply_non_status_proposals, vf, ff, ov, divergent_set)
+    controller.send(:classify_non_status_pass, proposals, ov, divergent_set, track_automated: true)
     overridden_after = controller.instance_variable_get(:@overridden_fields)
     assert_kind_of Integer, overridden_after[:contribution_status][:old_value],
                    'pass 2 must not overwrite Integer old_value with String justification'

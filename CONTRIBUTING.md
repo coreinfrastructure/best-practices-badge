@@ -39,7 +39,9 @@ with the current branch).
 The "docs/" directory has information you may find helpful, for example:
 
 -   [governance.md](docs/governance.md) describes our governance model
-    (how we decide things)
+    (how we decide things), including the
+    [escalated permissions policy](docs/governance.md#escalated-permissions-policy)
+    covering commit rights and admin access
 -   [implementation.md](docs/implementation.md) provides implementation details
 -   [background.md](docs/background.md) provides background info on criteria
 

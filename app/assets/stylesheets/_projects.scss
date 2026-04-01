@@ -176,15 +176,15 @@ td.project_name {
 
 // Blue: automation disagreed with the user's answer (informational, non-alarming)
 .highlight-divergent {
-  border-left: 4px solid #5b9bd5; // Muted blue
-  background-color: #f0f6ff; // Very light blue
-  padding-left: 14px;
-  padding-top: 6px;
-  padding-bottom: 6px;
-  margin-bottom: 6px;
+  border-left: 6px solid #1a5fa8 !important; // Strong blue
+  background-color: #cce0f5; // Clear light blue (was nearly white)
+  padding-left: 16px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  margin-bottom: 8px;
 
   &:hover {
-    background-color: #e0edff; // Slightly darker on hover
+    background-color: #b8d4ee; // Slightly darker on hover
   }
 }
 
@@ -204,52 +204,30 @@ td.project_name {
   opacity: 0.7; // 🤖 more subtle
 }
 
-// Expandable detail disclosures for automation icons (orange override)
-// Closed: icon sits inline with the criterion label
-details.automation-detail {
-  display: inline-block;
-  vertical-align: middle;
-}
 
-details.automation-detail > summary {
-  list-style: none;
-  cursor: pointer;
-}
-
-details.automation-detail > summary::-webkit-details-marker {
-  display: none;
-}
-
-// Open: force content onto its own line — prevents word-wrap issues
-details.automation-detail[open] {
-  display: block;
-}
-
-// Full-width divergent detail block — col-xs-12 sibling at top of criterion row.
-// Summary shows ≠ with a ▾/▴ chevron; body reveals automation's proposed answer.
-// Full-width override (⚠️) detail block — col-xs-12 sibling at top of criterion row.
-details.override-detail-block {
+// Full-width automation detail blocks (override ⚠️ and divergent ≠).
+// Used as col-xs-12 siblings in criterion rows and as block elements in _form_basics.
+details.override-detail-block,
+details.divergent-detail-block {
   margin-bottom: 4px;
+
+  > summary {
+    list-style: none;
+    cursor: pointer;
+
+    &::-webkit-details-marker { display: none; }
+    &::after { content: ' \25BE'; vertical-align: middle; } // ▾ closed
+  }
+
+  &[open] > summary::after { content: ' \25B4'; vertical-align: middle; } // ▴ open
 }
 
-details.override-detail-block > summary {
-  list-style: none;
-  cursor: pointer;
-  font-size: 1.1em;
-}
+details.override-detail-block > summary { font-size: 1.1em; }
 
-details.override-detail-block > summary::-webkit-details-marker {
-  display: none;
-}
-
-details.override-detail-block > summary::after {
-  content: ' \25BE'; // ▾ small down-pointing triangle
-  font-size: 0.75em;
-  vertical-align: middle;
-}
-
-details.override-detail-block[open] > summary::after {
-  content: ' \25B4'; // ▴ small up-pointing triangle
+details.divergent-detail-block > summary {
+  color: #1a5fa8;
+  font-size: 1.3em;
+  font-weight: bold;
 }
 
 .override-detail-body {
@@ -258,33 +236,6 @@ details.override-detail-block[open] > summary::after {
   border-left: 3px solid #e65c00;
   border-radius: 2px;
   margin-top: 4px;
-}
-
-// Full-width divergent (≠) detail block — col-xs-12 sibling at top of criterion row.
-details.divergent-detail-block {
-  margin-bottom: 4px;
-}
-
-details.divergent-detail-block > summary {
-  list-style: none;
-  cursor: pointer;
-  color: #1a5fa8; // Medium blue
-  font-size: 1.3em;
-  font-weight: bold;
-}
-
-details.divergent-detail-block > summary::-webkit-details-marker {
-  display: none;
-}
-
-details.divergent-detail-block > summary::after {
-  content: ' \25BE'; // ▾ small down-pointing triangle
-  font-size: 0.75em;
-  vertical-align: middle;
-}
-
-details.divergent-detail-block[open] > summary::after {
-  content: ' \25B4'; // ▴ small up-pointing triangle
 }
 
 .divergent-detail-body {

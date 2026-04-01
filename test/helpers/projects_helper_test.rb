@@ -869,12 +869,13 @@ class ProjectsHelperTest < ActionView::TestCase
     assert_match(/user wrote this/, icon)
   end
 
-  test 'non_criteria_automation_display returns divergent icon with no highlight class' do
+  test 'non_criteria_automation_display returns divergent icon with highlight class' do
     @automated_fields  = {}
     @overridden_fields = {}
     @divergent_fields  = { name: { proposed_value: 'suggested name' } }
     css, icon = non_criteria_automation_display(:name)
-    assert_nil css, 'divergent field must not add a highlight class (value unchanged)'
+    assert_equal ApplicationHelper::HIGHLIGHT_DIVERGENT_CLASS, css,
+                 'divergent field must highlight the row so the difference is visible'
     assert_match(/<details/, icon)
     assert_match(/≠/, icon)
     assert_match(/suggested name/, icon)

@@ -40,6 +40,40 @@ module ProjectsHelper
     @divergent_fields || {}
   end
 
+  # Builds a full-width ⚠️ override disclosure block.
+  # Used by non_criteria_automation_display and _status_chooser.html.erb.
+  # @param detail_body [String] Translated body text
+  # @param extra_class [String, nil] Additional CSS class (e.g. 'col-xs-12' in grid rows)
+  # rubocop:disable Rails/OutputSafety
+  def override_detail_block(detail_body, extra_class: nil)
+    css = ['override-detail-block', extra_class].compact.join(' ')
+    content_tag(:details, class: css) do
+      content_tag(:summary,
+                  '⚠️'.html_safe,
+                  title: t('projects.edit.automation.overridden_tooltip'),
+                  'aria-label': t('projects.edit.automation.aria_overridden')) +
+        content_tag(:div, detail_body, class: 'override-detail-body')
+    end
+  end
+  # rubocop:enable Rails/OutputSafety
+
+  # Builds a full-width ≠ divergent disclosure block.
+  # Used by non_criteria_automation_display and _status_chooser.html.erb.
+  # @param detail_body [String] Translated body text
+  # @param extra_class [String, nil] Additional CSS class (e.g. 'col-xs-12' in grid rows)
+  # rubocop:disable Rails/OutputSafety
+  def divergent_detail_block(detail_body, extra_class: nil)
+    css = ['divergent-detail-block', extra_class].compact.join(' ')
+    content_tag(:details, class: css) do
+      content_tag(:summary,
+                  '≠'.html_safe,
+                  title: t('projects.edit.automation.aria_divergent'),
+                  'aria-label': t('projects.edit.automation.aria_divergent')) +
+        content_tag(:div, detail_body, class: 'divergent-detail-body')
+    end
+  end
+  # rubocop:enable Rails/OutputSafety
+
   # Returns [highlight_css_class, icon_html] for a non-criteria field.
   # Used by _form_basics to show yellow (automated), orange (overridden), or ≠ (divergent).
   # Returns [nil, nil] when the field was not touched by automation.
@@ -66,17 +100,7 @@ module ProjectsHelper
                       old_status: override_data[:old_value].to_s,
                       old_justification_part: old_justification_part,
                       explanation_part: explanation_part)
-      # rubocop:disable Rails/OutputSafety
-      icon =
-        content_tag(:details, class: 'automation-detail') do
-          content_tag(:summary,
-                      '⚠️'.html_safe,
-                      title: t('projects.edit.automation.overridden_tooltip'),
-                      'aria-label': t('projects.edit.automation.aria_overridden')) +
-            content_tag(:span, detail_body, class: 'automation-detail-body')
-        end
-      # rubocop:enable Rails/OutputSafety
-      [ApplicationHelper::HIGHLIGHT_OVERRIDDEN_CLASS, icon]
+      [ApplicationHelper::HIGHLIGHT_OVERRIDDEN_CLASS, override_detail_block(detail_body)]
     elsif automated_field_set.include?(field_sym)
       [ApplicationHelper::HIGHLIGHT_AUTOMATED_CLASS, ApplicationHelper::ROBOT_EMOJI_SAFE]
     elsif (divergent_data = divergent_field_set[field_sym])
@@ -90,17 +114,7 @@ module ProjectsHelper
       detail_body = t('projects.edit.automation.divergent_detail',
                       status: divergent_data[:proposed_value].to_s,
                       justification_part: justification_part)
-      # rubocop:disable Rails/OutputSafety
-      icon =
-        content_tag(:details, class: 'automation-detail divergent-detail') do
-          content_tag(:summary,
-                      '≠'.html_safe,
-                      title: t('projects.edit.automation.aria_divergent'),
-                      'aria-label': t('projects.edit.automation.aria_divergent')) +
-            content_tag(:span, detail_body, class: 'automation-detail-body')
-        end
-      # rubocop:enable Rails/OutputSafety
-      [nil, icon]
+      [ApplicationHelper::HIGHLIGHT_DIVERGENT_CLASS, divergent_detail_block(detail_body)]
     else
       [nil, nil]
     end

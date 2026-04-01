@@ -2772,29 +2772,11 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'apply_query_string_automation works on revisit (section saved)' do
-    log_in_as(@user)
-    controller = ProjectsController.new
-
-    controller.instance_variable_set(:@project, @project)
-    controller.instance_variable_set(:@criteria_level, 'passing')
-
-    # Simulate a revisit: set the saved flag so level_already_saved? is true
     @project.update_column(:passing_saved, true)
-
-    # Original contribution_status is Unknown
     @project.contribution_status = CriterionStatus::UNKNOWN
     @project.save!
-
-    # Simulate query string params with a proposal
-    fake_params = ActionController::Parameters.new(
-      'contribution_status' => 'Met',
-      'controller' => 'projects', 'action' => 'edit'
-    )
-    controller.define_singleton_method(:params) { fake_params }
-
-    controller.send(:apply_query_string_automation)
-
-    # Field should be set and tracked as automated
+    controller = setup_automation_controller
+    run_automation(controller, 'contribution_status' => 'Met')
     assert_equal CriterionStatus::MET, @project.contribution_status
     automated = controller.instance_variable_get(:@automated_fields)
     assert_equal 1, automated.size
@@ -2802,29 +2784,11 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'apply_query_string_automation works on first edit (section not saved)' do
-    log_in_as(@user)
-    controller = ProjectsController.new
-
-    controller.instance_variable_set(:@project, @project)
-    controller.instance_variable_set(:@criteria_level, 'passing')
-
-    # Ensure saved flag is false (first edit)
     @project.update_column(:passing_saved, false)
-
-    # Original contribution_status is Unknown
     @project.contribution_status = CriterionStatus::UNKNOWN
     @project.save!
-
-    # Simulate query string params with a proposal
-    fake_params = ActionController::Parameters.new(
-      'contribution_status' => 'Met',
-      'controller' => 'projects', 'action' => 'edit'
-    )
-    controller.define_singleton_method(:params) { fake_params }
-
-    controller.send(:apply_query_string_automation)
-
-    # Field should be set and tracked as automated
+    controller = setup_automation_controller
+    run_automation(controller, 'contribution_status' => 'Met')
     assert_equal CriterionStatus::MET, @project.contribution_status
     automated = controller.instance_variable_get(:@automated_fields)
     assert_equal 1, automated.size
@@ -2832,26 +2796,11 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'apply_query_string_automation maps justification to status field' do
-    log_in_as(@user)
-    controller = ProjectsController.new
-
-    controller.instance_variable_set(:@project, @project)
-    controller.instance_variable_set(:@criteria_level, 'passing')
-
     @project.update_column(:passing_saved, true)
-
-    # Clear justification so the proposal is a real change
     @project.contribution_justification = ''
     @project.save!
-
-    # Simulate query string with a _justification field
-    fake_params = ActionController::Parameters.new(
-      'contribution_justification' => 'Automated justification text',
-      'controller' => 'projects', 'action' => 'edit'
-    )
-    controller.define_singleton_method(:params) { fake_params }
-
-    controller.send(:apply_query_string_automation)
+    controller = setup_automation_controller
+    run_automation(controller, 'contribution_justification' => 'Automated justification text')
 
     # The justification value should be applied
     assert_equal 'Automated justification text',
@@ -2878,6 +2827,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       param_hash.merge('controller' => 'projects', 'action' => 'edit')
     )
     controller.define_singleton_method(:params) { fake_params }
+    controller.send(:init_automation_fields)
     controller.send(:apply_query_string_automation)
   end
 

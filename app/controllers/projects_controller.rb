@@ -619,6 +619,8 @@ class ProjectsController < ApplicationController
     # Permissions section doesn't load criteria fields
     return if @criteria_level == 'permissions'
 
+    init_automation_fields
+
     # Run first-edit automation if this level hasn't been edited yet
     # (`SECTION_saved` is false). Only do this on "first edit of this section"
     # because automation *can* take a while or the remote system could
@@ -1646,9 +1648,6 @@ class ProjectsController < ApplicationController
     # impossible to detect non-forced proposals for real-value fields (which
     # should show ≠ rather than being silently skipped).
     proposals = chief.propose_changes(needed_fields: fields_for_current_section)
-    @automated_fields = {}
-    @overridden_fields = {}
-    @divergent_fields  = {}
     classify_chief_proposals(proposals, original_values, track_automated: true)
     chief.apply_changes(@project, proposals)
   rescue StandardError => e
@@ -1656,9 +1655,7 @@ class ProjectsController < ApplicationController
     # not crash the edit page — the user should still be able to fill in the
     # form manually.  Clear all highlighting so the view renders cleanly.
     Rails.logger.error("Chief first-edit analysis failed: #{e.class} #{e.message}")
-    @automated_fields = {}
-    @overridden_fields = {}
-    @divergent_fields  = {}
+    init_automation_fields
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
@@ -1768,9 +1765,9 @@ class ProjectsController < ApplicationController
     forced_fields   = compute_forced_fields(valid_fields)
     original_values = snapshot_original_values(valid_fields)
 
-    @automated_fields  ||= {}
-    @overridden_fields ||= {}
-    @divergent_fields  ||= {}
+    # @automated_fields, @overridden_fields, @divergent_fields are initialized
+    # by the before_action init_automation_fields; results accumulate here on
+    # top of any Chief results already recorded by run_first_edit_automation_if_needed.
 
     proposals = build_url_proposals(valid_fields, forced_fields)
     divergent = classify_status_pass(proposals, original_values, track_automated: true)
@@ -1975,6 +1972,17 @@ class ProjectsController < ApplicationController
   end
   # rubocop:enable Naming/AccessorMethodName, Rails/SkipsModelValidations
 
+  # Initialize (or reset) the three automation highlight hashes.
+  # Called as a before_action for edit and update, and in the rescue block of
+  # run_first_edit_automation_if_needed to discard partial results from a
+  # failed Chief run.  run_save_automation also calls it to reset before
+  # each save, since save does not accumulate across multiple sources.
+  def init_automation_fields
+    @automated_fields  = {}
+    @overridden_fields = {}
+    @divergent_fields  = {}
+  end
+
   # Capture original field values for this level before automation
   # @return [Hash] Field name => current value
   def capture_original_values
@@ -2052,9 +2060,7 @@ class ProjectsController < ApplicationController
     # (orange), and @divergent_fields (≠) BEFORE applying changes.
     # track_automated controls whether yellow and ≠ are recorded (suppressed on
     # save-and-exit since non-forced results haven't been reviewed by the user).
-    @overridden_fields = {}
-    @automated_fields  = {}
-    @divergent_fields  = {}
+    init_automation_fields
     classify_chief_proposals(current_section_changes, user_set_values,
                              track_automated: track_automated)
 

@@ -83,13 +83,19 @@ module ProjectsHelper
   def non_criteria_automation_display(field_sym)
     if (override_data = overridden_field_set[field_sym])
       old_justification_part =
-        override_data[:old_justification].present? ?
+        if override_data[:old_justification].present?
           t('projects.edit.automation.overridden_old_justification_part',
-            old_justification: override_data[:old_justification]) : ''
+            old_justification: override_data[:old_justification])
+        else
+          ''
+        end
       explanation_part =
-        override_data[:explanation].present? ?
+        if override_data[:explanation].present?
           t('projects.edit.automation.overridden_explanation_part',
-            explanation: override_data[:explanation]) : ''
+            explanation: override_data[:explanation])
+        else
+          ''
+        end
       detail_body = t('projects.edit.automation.overridden_detail',
                       old_status: override_data[:old_value].to_s,
                       old_justification_part: old_justification_part,
@@ -99,9 +105,12 @@ module ProjectsHelper
       [ApplicationHelper::HIGHLIGHT_AUTOMATED_CLASS, ApplicationHelper::ROBOT_EMOJI_SAFE]
     elsif (divergent_data = divergent_field_set[field_sym])
       justification_part =
-        divergent_data[:proposed_justification].present? ?
+        if divergent_data[:proposed_justification].present?
           t('projects.edit.automation.divergent_justification_part',
-            justification: divergent_data[:proposed_justification]) : ''
+            justification: divergent_data[:proposed_justification])
+        else
+          ''
+        end
       detail_body = t('projects.edit.automation.divergent_detail',
                       status: divergent_data[:proposed_value].to_s,
                       justification_part: justification_part)

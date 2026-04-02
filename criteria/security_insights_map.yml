@@ -346,6 +346,30 @@ mappings:
     inferred_status: Met
     confidence: 1
 
+  # repository.documentation.code-of-conduct
+  # Type: URL (optional)
+  # URL of the project's code of conduct document.
+
+  - si_path: repository.documentation.code-of-conduct
+    si_condition: "present"
+    target_criterion: code_of_conduct
+    # Target:
+    #   description: "The project MUST adopt a code of conduct and post it in a
+    #     standard location."
+    #   details: "Projects may be able to improve the civility of their
+    #     community and to set expectations about acceptable conduct by
+    #     adopting a code of conduct. This can help avoid problems before they
+    #     occur and make the project a more welcoming place to encourage
+    #     contributions. This should focus only on behavior within the
+    #     community/workplace of the project. Example codes of conduct are the
+    #     Linux kernel code of conduct, the Contributor Covenant Code of
+    #     Conduct, the Debian Code of Conduct, the Ubuntu Code of Conduct, the
+    #     Fedora Code of Conduct, the GNOME Code Of Conduct, the KDE Community
+    #     Code of Conduct, the Python Community Code of Conduct, The Ruby
+    #     Community Conduct Guideline, and The Rust Code of Conduct."
+    inferred_status: Met
+    confidence: 2
+
   # ---------------------------------------------------------------------------
   # Repository Status (repository.status)
   # ---------------------------------------------------------------------------
@@ -574,6 +598,59 @@ mappings:
     inferred_status: Met
     confidence: 2
 
+  # repository.security.tools[type=DAST]
+  # SecurityTool with type "DAST" (Dynamic Application Security Testing).
+
+  - si_path: repository.security.tools
+    si_condition: has_tool_type
+    si_value: DAST
+    target_criterion: dynamic_analysis
+    # Target:
+    #   description: "The project MUST apply at least one dynamic analysis tool
+    #     to any proposed major production release of the software produced by
+    #     the project before its release."
+    inferred_status: Met
+    confidence: 2
+
+  # repository.security.tools[type=pentest]
+  # SecurityTool with type "pentest" (penetration test).
+  # A pentest is a structured security assessment; maps to security_review and
+  # osps_sa_03_01 (security assessment before/after release).
+
+  - si_path: repository.security.tools
+    si_condition: has_tool_type
+    si_value: pentest
+    target_criterion: security_review
+    # Target:
+    #   description: "The project MUST have performed a security review within
+    #     the last 5 years. This review MUST consider the security requirements
+    #     and security boundary."
+    #   details: "This MAY be done by the project members and/or an independent
+    #     evaluation. This evaluation MAY be supported by static and dynamic
+    #     analysis tools, but there also must be human review to identify
+    #     problems (particularly in design) that tools cannot detect."
+    inferred_status: Met
+    confidence: 2
+
+  - si_path: repository.security.tools
+    si_condition: has_tool_type
+    si_value: pentest
+    target_criterion: osps_sa_03_01
+    # Target:
+    #   description: "When the project has made a release, the project MUST
+    #     perform a security assessment to understand the most likely and
+    #     impactful potential security problems that could occur within the
+    #     software."
+    #   details: "Performing a security assessment informs both project members
+    #     as well as downstream consumers that the project understands what
+    #     problems could arise within the software. Understanding what threats
+    #     could be realized helps the project manage and address risk. This
+    #     information is useful to downstream consumers to demonstrate the
+    #     security acumen and practices of the project. Ensure this is updated
+    #     for new features or breaking changes."
+    inferred_status: Met
+    confidence: 2
+
   # repository.security.tools[type=secret]
   # SecurityTool with type "secret" (secret/credential scanning).
 
@@ -590,6 +667,28 @@ mappings:
     #     public access."
     inferred_status: Met
     confidence: 1
+
+  # ---------------------------------------------------------------------------
+  # Project Security Contacts (project.security.security-contacts)
+  # ---------------------------------------------------------------------------
+
+  # project.security.security-contacts
+  # Type: Array of SecurityContact objects (optional)
+  # Each object may have: name, primary-contact, affiliation, social,
+  #   email, phone, pgp-key, response-time, role fields.
+  # Presence of a non-empty array means the project has documented security
+  # contacts, directly satisfying osps_vm_02_01.
+
+  - si_path: project.security.security-contacts
+    si_condition: present
+    target_criterion: osps_vm_02_01
+    # Target:
+    #   description: "While active, the project documentation MUST contain
+    #     security contacts."
+    #   details: "Create a security.md (or similarly-named) file that contains
+    #     security contacts for the project."
+    inferred_status: Met
+    confidence: 2
 
   # ---------------------------------------------------------------------------
   # Security Assessments (repository.security.assessments)

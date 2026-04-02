@@ -48,6 +48,16 @@ class SecurityInsightsDetectiveTest < ActiveSupport::TestCase
   # Edge cases
   # ---------------------------------------------------------------------------
 
+  test 'unknown si_condition returns false (fail-safe)' do
+    detective = SecurityInsightsDetective.new
+    mapping = {
+      'si_condition' => 'unknown_condition_xyz',
+      'si_value' => nil,
+      'si_values' => nil
+    }
+    assert_equal false, detective.send(:condition_met?, mapping, 'any value')
+  end
+
   test 'returns empty hash when repo_files is blank' do
     # A blank repo_files (no GitHub URL resolved) produces nothing.
     results = SecurityInsightsDetective.new.analyze(nil, repo_files: nil)
@@ -164,18 +174,17 @@ class SecurityInsightsDetectiveTest < ActiveSupport::TestCase
     assert_equal 2, results[:vulnerability_report_process_status][:confidence]
   end
 
-  test 'reports-accepted true infers osps_vm_03_01 Met at confidence 1 only' do
-    # reports-accepted=true doesn't confirm a *private* channel exists (could be
-    # public issue tracker only), so confidence is 1, not 2.
+  test 'reports-accepted true does NOT infer osps_vm_03_01 (confidence 0)' do
+    # reports-accepted=true says nothing about whether the reporting channel is
+    # *private*, so this mapping is disabled (confidence: 0).
     yaml = <<~YAML
       project:
         vulnerability-reporting:
           reports-accepted: true
-          bug-bounty-available: false
     YAML
     results = run_detective(MockRepoFiles.new('security-insights.yml', yaml))
-    assert_equal CriterionStatus::MET, results[:osps_vm_03_01_status][:value]
-    assert_equal 1, results[:osps_vm_03_01_status][:confidence]
+    assert_not results.key?(:osps_vm_03_01_status),
+               'reports-accepted=true must not propose osps_vm_03_01 (conf 0)'
   end
 
   test 'reports-accepted false infers osps_vm_03_01 Unmet with confidence 3' do

@@ -841,14 +841,10 @@ task backfill_baseline_tiered_percentage: :environment do
   puts "Done. Updated #{count} projects."
 end
 
-# To change the email encryption keys:
-# Set EMAIL_ENCRYPTION_KEY_OLD to old key,
-# set EMAIL_ENCRYPTION_KEY and EMAIL_BLIND_INDEX_KEY to new key, and run this.
-# THIS ASSUMES THAT THE DATABASE IS QUIESCENT (e.g., it's temporarily
-# unavailable to users).  If you don't like that assumption, put this
-# within a transaction, but you'll pay a performance price.
-# Note: You *CAN* re-invoke this if a previous pass only went partway;
-# we loop over all users, but ignore users where the rekey doesn't work.
+# Rekeys all stored user email addresses after an EMAIL_ENCRYPTION_KEY rotation.
+# See docs/secrets-policy.md for the full rotation procedure (including
+# how to use BADGEAPP_DENY_LOGIN to quiesce the database first).
+# Safe to re-run if interrupted; users that fail to rekey are skipped.
 desc 'Rekey (change keys) of email addresses'
 task rekey: :environment do
   old_key = [ENV.fetch('EMAIL_ENCRYPTION_KEY_OLD', nil)].pack('H*')

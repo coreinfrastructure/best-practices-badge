@@ -1060,6 +1060,32 @@ warning: please see https://github.com/whitequark/parser#compatibility-with-ruby
 Once the component update has been verified,
 it can be checked in as a new commit.
 
+### Getting an SPDX Software Bill of Materials (SBOM)
+
+You can get a Software Bill of Materials (SBOM) in SPDX 2.3 format
+with the following command:
+
+~~~~sh
+curl -L \
+  -H "Accept: application/vnd.github+json" \
+  -H "X-GitHub-Api-Version: 2026-03-10" \
+  https://api.github.com/repos/coreinfrastructure/best-practices-badge/dependency-graph/sbom
+~~~~
+
+You don't need to provide `-H "Authorization: Bearer <YOUR-TOKEN>"`
+because this is based entirely on public information.
+The result is a "source SBOM" (it's derived entirely from the source code),
+not a "build SBOM" for the current ("main") state of the repository.
+
+See
+[GitHub for more information](https://docs.github.com/en/rest/dependency-graph/sboms?apiVersion=2026-03-10#export-a-software-bill-of-materials-sbom-for-a-repository).
+
+We use package managers, primarily bundler, to manage our packages,
+and their input data is checked in to the repository.
+For bundler we use the `Gemfile.lock` file to determine what to load.
+If you want to know exactly what's in the SBOM for any
+specific version, you can look at the package management inputs.
+
 ## Keeping up with the main branch
 
 The installer adds a git remote named 'upstream'.

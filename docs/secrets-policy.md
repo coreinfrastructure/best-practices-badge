@@ -141,7 +141,7 @@ heroku config:set \
   --app $APP
 
 # Re-encrypt all user email addresses (takes a few minutes; safe to re-run).
-# This processes every email address in turn, decrypting the email addresses 
+# This processes every email address in turn, decrypting the email addresses
 # using the old key EMAIL_ENCRYPTION_KEY_OLD, then
 # encrypting using the new key EMAIL_ENCRYPTION_KEY. It
 # noisily skips those addresses that failed to decrypt.

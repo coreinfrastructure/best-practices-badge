@@ -32,7 +32,9 @@
 #
 # target_criterion: badge field name (metal or baseline)
 # inferred_status: Met | Unmet | N/A
-# confidence: 1-3 (always < Chief::CONFIDENCE_OVERRIDE of 4)
+# confidence: 0-3 (always < Chief::CONFIDENCE_OVERRIDE of 4)
+#   0 = intentionally disabled; documents an understood situation we have
+#       deliberately decided not to act on (skipped by the detective)
 #   1 = weak signal; worth surfacing but treat with caution
 #   2 = moderate confidence; partial or related requirement
 #   3 = strong confidence; essentially the same requirement
@@ -101,9 +103,11 @@ mappings:
     #   details: "If there have been no vulnerabilities reported in the last 6
     #     months, choose "not applicable" (N/A)."
     # Note: Accepting reports is a necessary condition for responding to them,
-    # but says nothing about actual response speed.  Confidence 1 (weak signal).
+    # but says nothing about actual response speed.  A confidence-1 signal was
+    # considered but rejected: the criterion requires a specific ≤14-day SLA,
+    # which cannot be inferred from a boolean flag.  Confidence 0 = disabled.
     inferred_status: Met
-    confidence: 1
+    confidence: 0
 
   - si_path: project.vulnerability-reporting.reports-accepted
     si_condition: "true"

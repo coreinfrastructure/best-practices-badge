@@ -721,6 +721,20 @@ class SecurityInsightsDetectiveTest < ActiveSupport::TestCase
     assert_includes explanation, '...'
   end
 
+  test 'mapping with confidence 0 is skipped even when condition matches' do
+    # The reports-accepted=true → vulnerability_report_response entry has
+    # confidence: 0 in the map file (deliberate no-op).  Even though the YAML
+    # satisfies the condition, the detective must not propose that criterion.
+    yaml = <<~YAML
+      project:
+        vulnerability-reporting:
+          reports-accepted: true
+    YAML
+    results = run_detective(MockRepoFiles.new('security-insights.yml', yaml))
+    assert_not results.key?(:vulnerability_report_response_status),
+               'confidence-0 mapping must not produce a proposal'
+  end
+
   test 'explanation uses basename of .github path' do
     yaml = <<~YAML
       repository:

@@ -13,16 +13,41 @@
 # To refresh the # Target: criterion-text comments in that file, run:
 #   ruby script/update_security_insights_comments.rb
 #
-# SECURITY: The security-insights.yml file is untrusted data.
-# - File size is capped at MAX_SI_SIZE bytes before fetching.  GithubContentAccess
-#   checks GitHub's reported file size first and skips the content fetch entirely
-#   if it exceeds the limit (early stop), then verifies actual size after fetch.
-# - YAML is loaded with safe_load (no Ruby objects) and aliases disabled
-#   (prevents YAML alias/anchor bombs).
-# - All path navigation and condition evaluation defensively checks types.
-# - No regex is applied to untrusted data (no ReDoS risk).
-# - Comment strings from SI data are truncated to MAX_SI_COMMENT_SIZE characters
-#   before being included in justification text.
+# SECURITY: The security-insights.yml file is untrusted data.  Here is a
+# summary of how each threat category is mitigated:
+#
+# DoS / oversized file:
+#   GithubContentAccess#get_content checks GitHub's *reported* file size first
+#   and skips the content-fetch API call entirely if it exceeds MAX_SI_SIZE
+#   (early stop — we never ask GitHub to send the bytes at all).  After the
+#   fetch, actual bytesize is re-checked as defense in depth.  The Octokit gem
+#   buffers the full response before returning, so true streaming early-stop is
+#   not possible at this layer; the metadata pre-check is the primary control.
+#
+# YAML injection / object deserialization:
+#   YAML.safe_load is called with permitted_classes: [] (no Ruby objects) and
+#   aliases: false (prevents YAML anchor/alias bombs).
+#
+# ReDoS (regular-expression denial of service):
+#   No regex is applied to untrusted data anywhere in this class.
+#   The has_attestation_predicate condition uses String#include?, which is a
+#   plain linear substring search — not a regex — so ReDoS is not possible.
+#
+# Type-confusion / unexpected exceptions from untrusted values:
+#   Every untrusted value is guarded with is_a? before calling type-specific
+#   methods.  String comparisons always call .to_s first (handles nil, Integer,
+#   Array, Hash, etc. without raising).  No exceptions are possible from
+#   malformed field values.
+#
+# Oversized comment injection:
+#   Comment strings extracted from SI data are truncated to MAX_SI_COMMENT_SIZE
+#   before being embedded in justification text, preventing a malicious file
+#   from bloating stored justifications up to the 50 KB file cap.
+#
+# SQL / XSS injection:
+#   No SQL is constructed from SI data.  The explanation/justification string is
+#   stored in a plain text column and rendered through Rails ERB templates, which
+#   auto-escape HTML by default.
 # rubocop:disable Metrics/ClassLength
 class SecurityInsightsDetective < Detective
   # Maximum size of a security-insights file we will fetch and parse.
@@ -32,7 +57,7 @@ class SecurityInsightsDetective < Detective
   # Maximum length of a comment string extracted from the SI file to include
   # in a justification.  Prevents a malicious file from injecting an
   # arbitrarily long string into the stored criterion justification text.
-  MAX_SI_COMMENT_SIZE = 500
+  MAX_SI_COMMENT_SIZE = 2048
 
   # Candidate file paths to check, in priority order.
   SI_CANDIDATE_PATHS = %w[
@@ -100,12 +125,17 @@ class SecurityInsightsDetective < Detective
 
   # Walk the MAPPINGS array, evaluate each condition, and collect proposals.
   # When multiple entries target the same criterion, keep the highest confidence.
+  # Entries with confidence 0 are intentionally skipped — this lets the map file
+  # document an understood situation that we are deliberately not acting on
+  # (set confidence: 0 instead of commenting out the entry entirely).
   # @param si_data [Hash] parsed security-insights YAML
   # @param location [String] file path (for explanation text)
   # @return [Hash] proposed criterion status changes
   def evaluate_mappings(si_data, location)
     results = {}
     MAPPINGS.each do |mapping|
+      next if mapping['confidence'].to_i.zero?
+
       value = dig_path(si_data, mapping['si_path'])
       next unless condition_met?(mapping, value)
 

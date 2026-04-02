@@ -99,7 +99,7 @@ class SecurityInsightsDetective < Detective
       value = dig_path(si_data, mapping['si_path'])
       next unless condition_met?(mapping, value)
 
-      apply_mapping(results, mapping, location, value)
+      apply_mapping(results, mapping, location, value, si_data)
     end
     results
   end
@@ -109,7 +109,8 @@ class SecurityInsightsDetective < Detective
   # @param mapping [Hash] one MAPPINGS entry
   # @param location [String] file path (for explanation text)
   # @param value [Object] resolved value at si_path
-  def apply_mapping(results, mapping, location, value)
+  # @param si_data [Hash] full parsed security-insights YAML (for comment extraction)
+  def apply_mapping(results, mapping, location, value, si_data)
     target_field = :"#{mapping['target_criterion']}_status"
     confidence   = mapping['confidence']
     return if results.key?(target_field) && confidence <= results[target_field][:confidence]
@@ -117,7 +118,7 @@ class SecurityInsightsDetective < Detective
     results[target_field] = {
       value:       CriterionStatus.parse(mapping['inferred_status']),
       confidence:  confidence,
-      explanation: build_explanation(location, mapping, value)
+      explanation: build_explanation(location, mapping, value, si_data)
     }
   end
 
@@ -182,19 +183,36 @@ class SecurityInsightsDetective < Detective
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   # Build a human-readable explanation string for a proposal.
-  # Uses i18n so the message can be translated.
+  # Appends any comment found in the security-insights data for this field.
+  # Uses i18n so the base message can be translated; the comment itself is not
+  # translated (it is a verbatim quote from the project's own documentation).
   # @param location [String] file path where the data was found
   # @param mapping [Hash] mapping entry (for condition type and si_value)
   # @param value [Object] resolved value used in the condition
+  # @param si_data [Hash] full parsed security-insights YAML
   # @return [String]
-  def build_explanation(location, mapping, value)
-    basename   = File.basename(location)
-    match_desc = array_match_description(mapping)
-    return array_match_explanation(basename, mapping['si_path'], match_desc) if match_desc
+  def build_explanation(location, mapping, value, si_data)
+    base    = base_explanation(File.basename(location), mapping, value)
+    comment = extract_si_comment(si_data, mapping, value)
+    return base unless comment
 
-    display_value = value.is_a?(String) ? value : value.to_s
-    I18n.t('detectives.security_insights.field_value',
-           location: basename, field: mapping['si_path'], value: display_value)
+    "#{base} #{I18n.t('detectives.security_insights.comment_suffix', comment: comment)}"
+  end
+
+  # Build the base explanation before any comment suffix.
+  # @param basename [String] file basename
+  # @param mapping [Hash] mapping entry
+  # @param value [Object] resolved value
+  # @return [String]
+  def base_explanation(basename, mapping, value)
+    match_desc = array_match_description(mapping)
+    if match_desc
+      array_match_explanation(basename, mapping['si_path'], match_desc)
+    else
+      display_value = value.is_a?(String) ? value : value.to_s
+      I18n.t('detectives.security_insights.field_value',
+             location: basename, field: mapping['si_path'], value: display_value)
+    end
   end
 
   # Return a match description string for array-type conditions, or nil.
@@ -217,6 +235,73 @@ class SecurityInsightsDetective < Detective
   def array_match_explanation(basename, si_path, match_desc)
     I18n.t('detectives.security_insights.array_match',
            location: basename, field: si_path, match: match_desc)
+  end
+
+  # Extract an optional comment string from the security-insights data
+  # relevant to this mapping's condition.
+  # - Scalar conditions: looks for a "comment" key in the parent object
+  #   (the object that contains the checked field).
+  # - Array conditions: looks for a "comment" key in the first matching element.
+  # Returns nil if no non-empty comment is found.
+  # @param si_data [Hash] full parsed security-insights YAML
+  # @param mapping [Hash] one MAPPINGS entry
+  # @param value [Object] resolved value at si_path
+  # @return [String, nil]
+  def extract_si_comment(si_data, mapping, value)
+    raw =
+      case mapping['si_condition']
+      when 'has_tool_type'
+        find_tool(value, mapping['si_value'])&.dig('comment')
+      when 'has_tool_type_in_ci'
+        find_tool_in_ci(value, mapping['si_value'])&.dig('comment')
+      when 'has_attestation_predicate'
+        find_attestation(value, mapping['si_value'])&.dig('comment')
+      else
+        si_parent_comment(si_data, mapping['si_path'])
+      end
+    raw.is_a?(String) && !raw.strip.empty? ? raw.strip : nil
+  end
+
+  # Return the "comment" key of the parent object of si_path, or nil.
+  # @param si_data [Hash] full parsed security-insights YAML
+  # @param si_path [String] dot-notation path to the checked field
+  # @return [Object, nil]
+  def si_parent_comment(si_data, si_path)
+    parts = si_path.split('.')
+    return if parts.length < 2
+
+    parent = dig_path(si_data, parts[0..-2].join('.'))
+    parent.is_a?(Hash) ? parent['comment'] : nil
+  end
+
+  # Return the first tool in the array whose type matches, or nil.
+  # @param tools [Array, Object] value at the tools si_path
+  # @param type [String] tool type to match
+  # @return [Hash, nil]
+  def find_tool(tools, type)
+    return unless tools.is_a?(Array)
+
+    tools.find { |t| t.is_a?(Hash) && t['type'] == type }
+  end
+
+  # Return the first CI tool in the array whose type matches, or nil.
+  # @param tools [Array, Object] value at the tools si_path
+  # @param type [String] tool type to match
+  # @return [Hash, nil]
+  def find_tool_in_ci(tools, type)
+    return unless tools.is_a?(Array)
+
+    tools.find { |t| t.is_a?(Hash) && t['type'] == type && t.dig('integration', 'ci') == true }
+  end
+
+  # Return the first attestation whose predicate-uri contains the substring, or nil.
+  # @param attestations [Array, Object] value at the attestations si_path
+  # @param predicate_substr [String] substring to find in predicate-uri
+  # @return [Hash, nil]
+  def find_attestation(attestations, predicate_substr)
+    return unless attestations.is_a?(Array)
+
+    attestations.find { |a| a.is_a?(Hash) && a['predicate-uri'].to_s.include?(predicate_substr.to_s) }
   end
 end
 # rubocop:enable Metrics/ClassLength

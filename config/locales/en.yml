@@ -3896,4 +3896,5 @@ en:
     security_insights:
       field_value: "Per %{location}: %{field}=%{value}"
       array_match: "Per %{location}: %{field} %{match}"
+      comment_suffix: "Comment says: \"%{comment}\"."
   last_entry: Last translation entry

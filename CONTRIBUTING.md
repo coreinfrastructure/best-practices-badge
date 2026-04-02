@@ -1062,6 +1062,12 @@ warning: please see https://github.com/whitequark/parser#compatibility-with-ruby
 Once the component update has been verified,
 it can be checked in as a new commit.
 
+### Getting a Software Bill of Materials (SBOM)
+
+For more information on getting a
+Software Bill of Materials (SBOM) in SPDX format, see
+[docs/sbom.md](docs/sbom.md).
+
 ## Keeping up with the main branch
 
 The installer adds a git remote named 'upstream'.

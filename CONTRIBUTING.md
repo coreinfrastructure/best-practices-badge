@@ -1062,41 +1062,9 @@ it can be checked in as a new commit.
 
 ### Getting a Software Bill of Materials (SBOM)
 
-You can get a Software Bill of Materials (SBOM) in SPDX 2.3 format
-with the following command:
-
-~~~~sh
-curl -L \
-  -H "Accept: application/vnd.github+json" \
-  -H "X-GitHub-Api-Version: 2026-03-10" \
-  https://api.github.com/repos/coreinfrastructure/best-practices-badge/dependency-graph/sbom
-~~~~
-
-You don't need to provide `-H "Authorization: Bearer <YOUR-TOKEN>"`
-to this command because the analysis only needs public information.
-The result is a "source SBOM" (it's derived entirely from the source code),
-not a "build SBOM", for the current ("main") state of the repository.
-
-See
-[GitHub for more information](https://docs.github.com/en/rest/dependency-graph/sboms?apiVersion=2026-03-10#export-a-software-bill-of-materials-sbom-for-a-repository).
-
-We use package managers, primarily bundler, to manage our packages,
-and their input data is checked in to the repository.
-For bundler we use the `Gemfile.lock` file to determine what to load.
-If you want to know the exact SBOM for any
-specific version, look at the package management inputs, especially
-their lock files.
-
-We don't "release" software intended for wide deployment.
-Others are welcome to use the software, and we'll help when someone asks
-questions.
-However, we primarily focus on developing the software so the single
-site we deploy to.
-Therefore, we don't really have "releases" as we would if there were many
-systems installing and running the software.
-This makes the question of "the SBOM for a release" something of an unusual
-request, but we *do* provide public information on what we use for those
-who wish to know.
+For more information on getting a
+Software Bill of Materials (SBOM) in SPDX format, see
+[docs/sbom.md](docs/sbom.md).
 
 ## Keeping up with the main branch
 

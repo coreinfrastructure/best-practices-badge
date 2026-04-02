@@ -1,0 +1,86 @@
+# Copyright the Linux Foundation and the CII Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+
+name: Generate SBOM
+
+# Generate an SPDX SBOM on every push to staging or production and store it
+# as a GitHub Release asset for long-term compliance auditing.
+
+on:
+  push:
+    branches: [staging, production]
+
+# Deny all permissions by default; grant only what's needed per job.
+# Note: contents: write (granted below) also allows branch pushes —
+# there is no finer-grained "releases only" permission in GitHub Actions.
+# Mitigations: harden-runner, all actions pinned to SHAs,
+# persist-credentials: false on checkout.
+permissions:
+  contents: none
+
+jobs:
+  sbom:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Required to create GitHub Releases and upload assets
+
+    steps:
+      # Harden the runner to log egress
+      # (consistent with main.yml / scorecard.yml).
+      # anchore/sbom-action downloads Syft at runtime;
+      # that network access is logged here.
+      - uses: step-security/harden-runner@95d9a5deda9de15063e7595e9719c11c38c90ae2 # v2.13.2
+        with:
+          egress-policy: audit
+
+      # persist-credentials: false ensures git credentials are not stored in
+      # the workspace, so a compromised downstream step cannot push code.
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
+
+      # OSPS-BR-01.02: Validate branch name before use in pipeline.
+      # GITHUB_REF_NAME feeds into the release tag; validate it first.
+      - name: Validate branch name
+        run: script/validate_branch_name "$GITHUB_REF_NAME"
+
+      # Pre-compute all tag/filename components so shell expansions are not
+      # needed inside 'with:' blocks (which don't support $(…) syntax).
+      # Use UTC date to avoid timezone ambiguity across CI runners.
+      - name: Set SBOM filename and release tag
+        id: vars
+        run: |
+          SHA_SHORT="${GITHUB_SHA::8}"
+          DATE="$(date -u +%Y%m%d)"
+          BRANCH="$GITHUB_REF_NAME"
+          echo "sha_short=${SHA_SHORT}" >> "$GITHUB_OUTPUT"
+          echo "date=${DATE}" >> "$GITHUB_OUTPUT"
+          echo "sbom_filename=sbom-${BRANCH}-${DATE}-${SHA_SHORT}.spdx.json" >> "$GITHUB_OUTPUT"
+          echo "release_tag=sbom-${BRANCH}-${DATE}-${SHA_SHORT}" >> "$GITHUB_OUTPUT"
+
+      # Generate the SBOM from the checked-out source tree.
+      # Syft parses Gemfile.lock, package-lock.json, etc. directly —
+      # no 'bundle install' needed for a source-based SBOM.
+      # upload-artifact and upload-release-assets are disabled because
+      # we control the release tag ourselves in the next step.
+      - name: Generate SBOM with Syft
+        uses: anchore/sbom-action@e22c389904149dbc22b58101806040fa8d37a610 # v0.24.0
+        with:
+          format: spdx-json
+          output-file: ${{ steps.vars.outputs.sbom_filename }}
+          upload-artifact: false
+          upload-release-assets: false
+
+      # Create a GitHub Release and attach the SBOM as a release asset.
+      # Release tags use the form: sbom-<branch>-<YYYYMMDD>-<8-hex-SHA>
+      # e.g.: sbom-production-20260402-a1b2c3d4
+      # GH_TOKEN is the automatically provisioned github.token (repo-scoped,
+      # expires at job end — no long-lived PAT required).
+      - name: Create GitHub Release and upload SBOM
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ steps.vars.outputs.release_tag }}" \
+            --title "SBOM ${{ github.ref_name }} ${{ steps.vars.outputs.date }} (${{ steps.vars.outputs.sha_short }})" \
+            --notes "Auto-generated SBOM for commit ${{ github.sha }} on branch ${{ github.ref_name }}" \
+            "${{ steps.vars.outputs.sbom_filename }}"

@@ -1087,6 +1087,17 @@ If you want to know the exact SBOM for any
 specific version, look at the package management inputs, especially
 their lock files.
 
+We don't "release" software intended for wide deployment.
+Others are welcome to use the software, and we'll help when someone asks
+questions.
+However, we primarily focus on developing the software so the single
+site we deploy to.
+Therefore, we don't really have "releases" as we would if there were many
+systems installing and running the software.
+This makes the question of "the SBOM for a release" something of an unusual
+request, but we *do* provide public information on what we use for those
+who wish to know.
+
 ## Keeping up with the main branch
 
 The installer adds a git remote named 'upstream'.

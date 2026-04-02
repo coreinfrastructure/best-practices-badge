@@ -156,8 +156,10 @@ are described in the sections below.
 Committers are those with authority to directly make changes
 to the main branch of the code.
 Commit privilege is only granted after review and approval by the
-TSC or technical lead (the TSC overrides the technical lead in case
-of a conflict); it is never granted without prior review.
+TSC or technical lead.
+The TSC overrides the technical lead in case of a conflict.
+This privilege is never granted without prior review.
+
 The TSC and technical lead can also revoke commit privilege
 (again, the TSC can override the technical lead).
 Committers can accept contributions from contributors.
@@ -190,7 +192,7 @@ in the badges or users.
 We recommend that admins fix projects so that
 individual projects can fix their own problems in the future.
 
-This position also enable us to fulfill
+This position also enables us to fulfill
 GDPR requests about accounts (e.g., to determine if an account exists,
 fix data about it, or delete it).
 
@@ -214,8 +216,9 @@ these rights, but at least one person in Linux Foundation IT must have these
 privileges so that they can implement the will of the TSC.
 
 These privileges are necessary to fix problems in
-these areas. Like web admin, these are positions of high trust, and
-these privileges are only granted to a few.
+these areas. Like web admin, people with these permissions
+are in positions of high trust, and
+so these privileges are only granted to a few.
 
 ## Process
 

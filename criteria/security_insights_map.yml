@@ -84,6 +84,10 @@ mappings:
     #     This vulnerability reporting process MAY be the same as its bug
     #     reporting process. Vulnerability reports MAY always be public, but
     #     many projects have a private vulnerability reporting mechanism."
+    # Note: false means the project actively states it does not accept reports,
+    # which makes it very likely no reporting process has been published.
+    # A project could theoretically publish a process that says "we don't accept
+    # reports," but this is unusual; confidence 2 (not 3) reflects that edge case.
     inferred_status: Unmet
     confidence: 2
 
@@ -96,6 +100,8 @@ mappings:
     #     days."
     #   details: "If there have been no vulnerabilities reported in the last 6
     #     months, choose "not applicable" (N/A)."
+    # Note: Accepting reports is a necessary condition for responding to them,
+    # but says nothing about actual response speed.  Confidence 1 (weak signal).
     inferred_status: Met
     confidence: 1
 
@@ -110,8 +116,12 @@ mappings:
     #     vulnerabilities privately to the project. This may be a dedicated
     #     email address, a web form, VCS specialized tools, email addresses for
     #     security contacts, or other methods."
+    # Note: reports-accepted=true means reports are accepted, but says nothing
+    # about whether the channel is *private*.  A project that accepts only public
+    # issue reports satisfies reports-accepted but not osps_vm_03_01.  Confidence
+    # 1 (weak signal); a stronger signal is pgp-key or contact email being present.
     inferred_status: Met
-    confidence: 2
+    confidence: 1
 
   - si_path: project.vulnerability-reporting.reports-accepted
     si_condition: "false"
@@ -244,20 +254,12 @@ mappings:
     inferred_status: Met
     confidence: 2
 
-  - si_path: repository.documentation.security-policy
-    si_condition: "present"
-    target_criterion: osps_do_02_01
-    # Target:
-    #   description: "When the project has made a release, the project
-    #     documentation MUST include a guide for reporting defects."
-    #   details: "It is recommended that projects use their VCS default issue
-    #     tracker. If an external source is used, ensure that the project
-    #     documentation and contributing guide clearly and visibly explain how
-    #     to use the reporting system. It is recommended that project
-    #     documentation also sets expectations for how defects will be triaged
-    #     and resolved."
-    inferred_status: Met
-    confidence: 1
+  # Considered and excluded: security-policy → osps_do_02_01
+  # osps_do_02_01 requires a guide for reporting *defects* (general bugs).
+  # The SI security-policy field is specifically a *security* vulnerability
+  # disclosure policy, which is a distinct document from a defect-reporting
+  # guide.  The overlap is too weak to infer Met, so this mapping is omitted.
+  # (osps_do_02_01 is already detected by RepoFilesExamineDetective via SECURITY.md)
 
   # repository.documentation.governance
   # Type: URL (optional)
@@ -306,6 +308,9 @@ mappings:
     #     the release or primary branch. This can be achieved by requiring a
     #     pull request to be reviewed and approved by at least one other
     #     collaborator before it can be merged."
+    # Note: osps_qa_07_01 requires VCS *enforcement*, not just a written policy.
+    # A review-policy URL shows the policy exists; enforcement is inferred at
+    # confidence 1 only.
     inferred_status: Met
     confidence: 1
 
@@ -590,11 +595,15 @@ mappings:
   # Security Assessments (repository.security.assessments)
   # ---------------------------------------------------------------------------
 
-  # repository.security.assessments.self
-  # Type: Assessment object (required in SecurityPosture)
-  # Evidence of a self-conducted security assessment of the project.
+  # repository.security.assessments.self.evidence
+  # Type: URL (optional within the required Assessment object)
+  # IMPORTANT: repository.security.assessments.self is a *required* field in
+  # the SI spec, so it is present in every valid security-insights file.
+  # Checking "self present" would always fire, providing no information.
+  # Instead we check self.evidence (optional URL) — its presence means the
+  # project has linked to evidence that a self-assessment was actually performed.
 
-  - si_path: repository.security.assessments.self
+  - si_path: repository.security.assessments.self.evidence
     si_condition: present
     target_criterion: security_review
     # Target:
@@ -608,7 +617,7 @@ mappings:
     inferred_status: Met
     confidence: 2
 
-  - si_path: repository.security.assessments.self
+  - si_path: repository.security.assessments.self.evidence
     si_condition: present
     target_criterion: osps_sa_03_01
     # Target:

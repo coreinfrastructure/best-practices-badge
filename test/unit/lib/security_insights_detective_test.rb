@@ -54,6 +54,32 @@ class SecurityInsightsDetectiveTest < ActiveSupport::TestCase
     assert_equal({}, results)
   end
 
+  test 'assessments.self.evidence (not self) drives security_review proposal' do
+    # assessments.self is required in the SI spec, so "present" would always
+    # fire.  Only the optional evidence URL indicates an actual assessment.
+    yaml_with_evidence = <<~YAML
+      repository:
+        security:
+          assessments:
+            self:
+              comment: done
+              evidence: https://example.com/assessment-report
+    YAML
+    yaml_without_evidence = <<~YAML
+      repository:
+        security:
+          assessments:
+            self:
+              comment: not done yet
+    YAML
+    with_ev    = run_detective(MockRepoFiles.new('security-insights.yml', yaml_with_evidence))
+    without_ev = run_detective(MockRepoFiles.new('security-insights.yml', yaml_without_evidence))
+
+    assert_equal CriterionStatus::MET, with_ev[:security_review_status][:value]
+    assert_not without_ev.key?(:security_review_status),
+               'self.evidence absent must not produce a security_review proposal'
+  end
+
   test 'returns empty hash when no security-insights file found' do
     results = run_detective(MockRepoFilesEmpty.new)
     assert_equal({}, results)
@@ -136,6 +162,20 @@ class SecurityInsightsDetectiveTest < ActiveSupport::TestCase
     results = run_detective(MockRepoFiles.new('security-insights.yml', yaml))
     assert_equal CriterionStatus::UNMET, results[:vulnerability_report_process_status][:value]
     assert_equal 2, results[:vulnerability_report_process_status][:confidence]
+  end
+
+  test 'reports-accepted true infers osps_vm_03_01 Met at confidence 1 only' do
+    # reports-accepted=true doesn't confirm a *private* channel exists (could be
+    # public issue tracker only), so confidence is 1, not 2.
+    yaml = <<~YAML
+      project:
+        vulnerability-reporting:
+          reports-accepted: true
+          bug-bounty-available: false
+    YAML
+    results = run_detective(MockRepoFiles.new('security-insights.yml', yaml))
+    assert_equal CriterionStatus::MET, results[:osps_vm_03_01_status][:value]
+    assert_equal 1, results[:osps_vm_03_01_status][:confidence]
   end
 
   test 'reports-accepted false infers osps_vm_03_01 Unmet with confidence 3' do

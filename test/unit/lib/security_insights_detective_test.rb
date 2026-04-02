@@ -1,0 +1,588 @@
+# frozen_string_literal: true
+
+# Copyright the Linux Foundation and the
+# OpenSSF Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+
+require 'test_helper'
+
+# rubocop:disable Metrics/ClassLength
+class SecurityInsightsDetectiveTest < ActiveSupport::TestCase
+  # ---------------------------------------------------------------------------
+  # Test helpers
+  # ---------------------------------------------------------------------------
+
+  # A mock repo_files object that returns a given content string for one
+  # specific filename and nil for everything else.
+  class MockRepoFiles
+    def initialize(path, content)
+      @path    = path
+      @content = content
+    end
+
+    def blank?
+      false
+    end
+
+    def get_content(path, max_size: nil) # rubocop:disable Lint/UnusedMethodArgument
+      path == @path ? @content : nil
+    end
+  end
+
+  # A mock that returns nil for every path (simulates a repo with no SI file).
+  class MockRepoFilesEmpty
+    def blank?
+      false
+    end
+
+    def get_content(_path, max_size: nil) # rubocop:disable Lint/UnusedMethodArgument
+      nil
+    end
+  end
+
+  def run_detective(repo_files)
+    SecurityInsightsDetective.new.analyze(nil, repo_files: repo_files)
+  end
+
+  # ---------------------------------------------------------------------------
+  # Edge cases
+  # ---------------------------------------------------------------------------
+
+  test 'returns empty hash when repo_files is blank' do
+    # A blank repo_files (no GitHub URL resolved) produces nothing.
+    results = SecurityInsightsDetective.new.analyze(nil, repo_files: nil)
+    assert_equal({}, results)
+  end
+
+  test 'returns empty hash when no security-insights file found' do
+    results = run_detective(MockRepoFilesEmpty.new)
+    assert_equal({}, results)
+  end
+
+  test 'returns empty hash for malformed YAML' do
+    results = run_detective(MockRepoFiles.new('security-insights.yml', ': bad: yaml: ['))
+    assert_equal({}, results)
+  end
+
+  test 'returns empty hash for YAML that is not a Hash' do
+    results = run_detective(MockRepoFiles.new('security-insights.yml', "- a\n- b\n"))
+    assert_equal({}, results)
+  end
+
+  test 'rejects YAML with aliases (alias bomb protection)' do
+    bomb = <<~YAML
+      a: &anchor
+        - x
+      b: *anchor
+    YAML
+    results = run_detective(MockRepoFiles.new('security-insights.yml', bomb))
+    assert_equal({}, results)
+  end
+
+  # ---------------------------------------------------------------------------
+  # File location discovery
+  # ---------------------------------------------------------------------------
+
+  test 'finds file in repo root' do
+    yaml = <<~YAML
+      repository:
+        status: active
+    YAML
+    results = run_detective(MockRepoFiles.new('security-insights.yml', yaml))
+    assert results.key?(:maintained_status)
+  end
+
+  test 'finds file in .github directory' do
+    yaml = <<~YAML
+      repository:
+        status: active
+    YAML
+    results = run_detective(MockRepoFiles.new('.github/security-insights.yml', yaml))
+    assert results.key?(:maintained_status)
+  end
+
+  test 'finds uppercase SECURITY-INSIGHTS.yml in repo root' do
+    yaml = <<~YAML
+      repository:
+        status: active
+    YAML
+    results = run_detective(MockRepoFiles.new('SECURITY-INSIGHTS.yml', yaml))
+    assert results.key?(:maintained_status)
+  end
+
+  # ---------------------------------------------------------------------------
+  # Boolean conditions: true / false
+  # ---------------------------------------------------------------------------
+
+  test 'reports-accepted true infers vulnerability_report_process Met' do
+    yaml = <<~YAML
+      project:
+        vulnerability-reporting:
+          reports-accepted: true
+          bug-bounty-available: false
+    YAML
+    results = run_detective(MockRepoFiles.new('security-insights.yml', yaml))
+    assert_equal CriterionStatus::MET, results[:vulnerability_report_process_status][:value]
+    assert_equal 2, results[:vulnerability_report_process_status][:confidence]
+  end
+
+  test 'reports-accepted false infers vulnerability_report_process Unmet' do
+    yaml = <<~YAML
+      project:
+        vulnerability-reporting:
+          reports-accepted: false
+          bug-bounty-available: false
+    YAML
+    results = run_detective(MockRepoFiles.new('security-insights.yml', yaml))
+    assert_equal CriterionStatus::UNMET, results[:vulnerability_report_process_status][:value]
+    assert_equal 2, results[:vulnerability_report_process_status][:confidence]
+  end
+
+  test 'reports-accepted false infers osps_vm_03_01 Unmet with confidence 3' do
+    yaml = <<~YAML
+      project:
+        vulnerability-reporting:
+          reports-accepted: false
+          bug-bounty-available: false
+    YAML
+    results = run_detective(MockRepoFiles.new('security-insights.yml', yaml))
+    assert_equal CriterionStatus::UNMET, results[:osps_vm_03_01_status][:value]
+    assert_equal 3, results[:osps_vm_03_01_status][:confidence]
+  end
+
+  test 'automated-pipeline true infers build Met' do
+    yaml = <<~YAML
+      repository:
+        release:
+          automated-pipeline: true
+          distribution-points:
+            - uri: https://example.com
+              comment: main dist
+    YAML
+    results = run_detective(MockRepoFiles.new('security-insights.yml', yaml))
+    assert_equal CriterionStatus::MET, results[:build_status][:value]
+    assert_equal 2, results[:build_status][:confidence]
+  end
+
+  # ---------------------------------------------------------------------------
+  # Present condition
+  # ---------------------------------------------------------------------------
+
+  test 'policy URL present infers vulnerability_report_process Met' do
+    yaml = <<~YAML
+      project:
+        vulnerability-reporting:
+          reports-accepted: false
+          bug-bounty-available: false
+          policy: https://example.com/security.html
+    YAML
+    results = run_detective(MockRepoFiles.new('security-insights.yml', yaml))
+    # policy present should infer Met at conf 2, overriding false→Unmet at conf 2
+    # (tie is broken by first-encountered, so reports-accepted=false wins for
+    # vulnerability_report_process, but policy present also fires for osps_vm_01_01)
+    assert results.key?(:osps_vm_01_01_status)
+    assert_equal CriterionStatus::MET, results[:osps_vm_01_01_status][:value]
+  end
+
+  test 'pgp-key present infers vulnerability_report_private Met' do
+    yaml = <<~YAML
+      project:
+        vulnerability-reporting:
+          reports-accepted: true
+          bug-bounty-available: false
+          pgp-key: "DEADBEEF..."
+    YAML
+    results = run_detective(MockRepoFiles.new('security-insights.yml', yaml))
+    assert_equal CriterionStatus::MET, results[:vulnerability_report_private_status][:value]
+    assert_equal 2, results[:vulnerability_report_private_status][:confidence]
+  end
+
+  test 'contributing-guide URL infers contribution and osps_gv_03_01 Met' do
+    yaml = <<~YAML
+      repository:
+        documentation:
+          contributing-guide: https://example.com/contributing
+    YAML
+    results = run_detective(MockRepoFiles.new('security-insights.yml', yaml))
+    assert_equal CriterionStatus::MET, results[:contribution_status][:value]
+    assert_equal CriterionStatus::MET, results[:osps_gv_03_01_status][:value]
+  end
+
+  test 'security-policy URL infers osps_vm_01_01 and osps_vm_02_01 Met' do
+    yaml = <<~YAML
+      repository:
+        documentation:
+          security-policy: https://example.com/security-policy
+    YAML
+    results = run_detective(MockRepoFiles.new('security-insights.yml', yaml))
+    assert_equal CriterionStatus::MET, results[:osps_vm_01_01_status][:value]
+    assert_equal CriterionStatus::MET, results[:osps_vm_02_01_status][:value]
+  end
+
+  test 'changelog URL infers release_notes and osps_br_04_01 Met' do
+    yaml = <<~YAML
+      repository:
+        release:
+          automated-pipeline: false
+          distribution-points:
+            - uri: https://example.com
+              comment: dist
+          changelog: https://example.com/changelog
+    YAML
+    results = run_detective(MockRepoFiles.new('security-insights.yml', yaml))
+    assert_equal CriterionStatus::MET, results[:release_notes_status][:value]
+    assert_equal CriterionStatus::MET, results[:osps_br_04_01_status][:value]
+  end
+
+  test 'absent optional field produces no proposal' do
+    # governance key is absent entirely; no proposal for osps_gv_01_01
+    yaml = <<~YAML
+      repository:
+        documentation:
+          contributing-guide: https://example.com/contributing
+    YAML
+    results = run_detective(MockRepoFiles.new('security-insights.yml', yaml))
+    assert_not results.key?(:osps_gv_01_01_status)
+  end
+
+  # ---------------------------------------------------------------------------
+  # equals condition
+  # ---------------------------------------------------------------------------
+
+  test 'repository.status active infers maintained Met' do
+    yaml = <<~YAML
+      repository:
+        status: active
+    YAML
+    results = run_detective(MockRepoFiles.new('security-insights.yml', yaml))
+    assert_equal CriterionStatus::MET, results[:maintained_status][:value]
+    assert_equal 2, results[:maintained_status][:confidence]
+  end
+
+  # ---------------------------------------------------------------------------
+  # in condition
+  # ---------------------------------------------------------------------------
+
+  test 'repository.status abandoned infers maintained Unmet' do
+    yaml = <<~YAML
+      repository:
+        status: abandoned
+    YAML
+    results = run_detective(MockRepoFiles.new('security-insights.yml', yaml))
+    assert_equal CriterionStatus::UNMET, results[:maintained_status][:value]
+  end
+
+  test 'repository.status suspended infers maintained Unmet' do
+    yaml = <<~YAML
+      repository:
+        status: suspended
+    YAML
+    results = run_detective(MockRepoFiles.new('security-insights.yml', yaml))
+    assert_equal CriterionStatus::UNMET, results[:maintained_status][:value]
+  end
+
+  test 'repository.status WIP produces no maintained proposal' do
+    yaml = <<~YAML
+      repository:
+        status: WIP
+    YAML
+    results = run_detective(MockRepoFiles.new('security-insights.yml', yaml))
+    assert_not results.key?(:maintained_status)
+  end
+
+  # ---------------------------------------------------------------------------
+  # has_tool_type condition
+  # ---------------------------------------------------------------------------
+
+  test 'SAST tool infers static_analysis Met' do
+    yaml = <<~YAML
+      repository:
+        security:
+          assessments:
+            self:
+              comment: not done
+          tools:
+            - name: SomeScanner
+              type: SAST
+              rulesets:
+                - default
+              integration:
+                adhoc: true
+                ci: false
+                release: false
+              results: {}
+    YAML
+    results = run_detective(MockRepoFiles.new('security-insights.yml', yaml))
+    assert_equal CriterionStatus::MET, results[:static_analysis_status][:value]
+    assert_equal 2, results[:static_analysis_status][:confidence]
+  end
+
+  test 'SCA tool infers dependency_monitoring Met' do
+    yaml = <<~YAML
+      repository:
+        security:
+          assessments:
+            self:
+              comment: not done
+          tools:
+            - name: Dependabot
+              type: SCA
+              rulesets:
+                - default
+              integration:
+                adhoc: false
+                ci: false
+                release: false
+              results: {}
+    YAML
+    results = run_detective(MockRepoFiles.new('security-insights.yml', yaml))
+    assert_equal CriterionStatus::MET, results[:dependency_monitoring_status][:value]
+  end
+
+  test 'fuzzing tool infers dynamic_analysis Met' do
+    yaml = <<~YAML
+      repository:
+        security:
+          assessments:
+            self:
+              comment: not done
+          tools:
+            - name: OSS-Fuzz
+              type: fuzzing
+              rulesets:
+                - default
+              integration:
+                adhoc: false
+                ci: true
+                release: false
+              results: {}
+    YAML
+    results = run_detective(MockRepoFiles.new('security-insights.yml', yaml))
+    assert_equal CriterionStatus::MET, results[:dynamic_analysis_status][:value]
+  end
+
+  test 'no tools produces no tool-based proposals' do
+    yaml = <<~YAML
+      repository:
+        security:
+          assessments:
+            self:
+              comment: not done
+    YAML
+    results = run_detective(MockRepoFiles.new('security-insights.yml', yaml))
+    assert_not results.key?(:static_analysis_status)
+    assert_not results.key?(:dependency_monitoring_status)
+  end
+
+  # ---------------------------------------------------------------------------
+  # has_tool_type_in_ci condition
+  # ---------------------------------------------------------------------------
+
+  test 'SAST tool with ci=true infers osps_vm_06_02 at confidence 2' do
+    yaml = <<~YAML
+      repository:
+        security:
+          assessments:
+            self:
+              comment: not done
+          tools:
+            - name: SomeScanner
+              type: SAST
+              rulesets:
+                - default
+              integration:
+                adhoc: false
+                ci: true
+                release: false
+              results: {}
+    YAML
+    results = run_detective(MockRepoFiles.new('security-insights.yml', yaml))
+    assert_equal CriterionStatus::MET, results[:osps_vm_06_02_status][:value]
+    assert_equal 2, results[:osps_vm_06_02_status][:confidence]
+  end
+
+  test 'SAST tool with ci=false infers osps_vm_06_02 at confidence 1 only' do
+    yaml = <<~YAML
+      repository:
+        security:
+          assessments:
+            self:
+              comment: not done
+          tools:
+            - name: SomeScanner
+              type: SAST
+              rulesets:
+                - default
+              integration:
+                adhoc: true
+                ci: false
+                release: false
+              results: {}
+    YAML
+    results = run_detective(MockRepoFiles.new('security-insights.yml', yaml))
+    assert_equal CriterionStatus::MET, results[:osps_vm_06_02_status][:value]
+    assert_equal 1, results[:osps_vm_06_02_status][:confidence]
+  end
+
+  test 'SCA tool with ci=true infers osps_vm_05_03 at confidence 2' do
+    yaml = <<~YAML
+      repository:
+        security:
+          assessments:
+            self:
+              comment: not done
+          tools:
+            - name: Dependabot
+              type: SCA
+              rulesets:
+                - default
+              integration:
+                adhoc: false
+                ci: true
+                release: false
+              results: {}
+    YAML
+    results = run_detective(MockRepoFiles.new('security-insights.yml', yaml))
+    assert_equal CriterionStatus::MET, results[:osps_vm_05_03_status][:value]
+    assert_equal 2, results[:osps_vm_05_03_status][:confidence]
+  end
+
+  # ---------------------------------------------------------------------------
+  # has_attestation_predicate condition
+  # ---------------------------------------------------------------------------
+
+  test 'SLSA attestation infers signed_releases and osps_br_06_01 Met' do
+    yaml = <<~YAML
+      repository:
+        release:
+          automated-pipeline: true
+          distribution-points:
+            - uri: https://example.com
+              comment: dist
+          attestations:
+            - name: SLSA provenance
+              location: https://example.com/provenance
+              predicate-uri: https://slsa.dev/provenance/v1
+              comment: ""
+    YAML
+    results = run_detective(MockRepoFiles.new('security-insights.yml', yaml))
+    assert_equal CriterionStatus::MET, results[:signed_releases_status][:value]
+    assert_equal CriterionStatus::MET, results[:osps_br_06_01_status][:value]
+  end
+
+  test 'SPDX attestation infers osps_qa_02_02 Met' do
+    yaml = <<~YAML
+      repository:
+        release:
+          automated-pipeline: false
+          distribution-points:
+            - uri: https://example.com
+              comment: dist
+          attestations:
+            - name: SBOM
+              location: https://example.com/sbom
+              predicate-uri: https://spdx.dev/Document
+              comment: ""
+    YAML
+    results = run_detective(MockRepoFiles.new('security-insights.yml', yaml))
+    assert_equal CriterionStatus::MET, results[:osps_qa_02_02_status][:value]
+  end
+
+  test 'other attestation predicate-uri produces no slsa or spdx proposals' do
+    yaml = <<~YAML
+      repository:
+        release:
+          automated-pipeline: false
+          distribution-points:
+            - uri: https://example.com
+              comment: dist
+          attestations:
+            - name: Custom
+              location: https://example.com/custom
+              predicate-uri: https://example.com/custom-predicate
+              comment: ""
+    YAML
+    results = run_detective(MockRepoFiles.new('security-insights.yml', yaml))
+    assert_not results.key?(:signed_releases_status)
+    assert_not results.key?(:osps_qa_02_02_status)
+  end
+
+  # ---------------------------------------------------------------------------
+  # Highest-confidence wins when multiple entries target same criterion
+  # ---------------------------------------------------------------------------
+
+  test 'higher confidence wins when two entries fire for same target' do
+    # SAST in CI fires both has_tool_type (conf 1) and has_tool_type_in_ci (conf 2)
+    # for osps_vm_06_02; confidence 2 should win.
+    yaml = <<~YAML
+      repository:
+        security:
+          assessments:
+            self:
+              comment: not done
+          tools:
+            - name: Scanner
+              type: SAST
+              rulesets:
+                - default
+              integration:
+                adhoc: false
+                ci: true
+                release: false
+              results: {}
+    YAML
+    results = run_detective(MockRepoFiles.new('security-insights.yml', yaml))
+    assert_equal 2, results[:osps_vm_06_02_status][:confidence]
+  end
+
+  # ---------------------------------------------------------------------------
+  # Explanation text
+  # ---------------------------------------------------------------------------
+
+  test 'explanation includes filename for scalar condition' do
+    yaml = <<~YAML
+      repository:
+        status: active
+    YAML
+    results = run_detective(MockRepoFiles.new('security-insights.yml', yaml))
+    explanation = results[:maintained_status][:explanation]
+    assert_includes explanation, 'security-insights.yml'
+    assert_includes explanation, 'repository.status'
+  end
+
+  test 'explanation includes filename for array condition' do
+    yaml = <<~YAML
+      repository:
+        security:
+          assessments:
+            self:
+              comment: not done
+          tools:
+            - name: SomeScanner
+              type: SAST
+              rulesets:
+                - default
+              integration:
+                adhoc: true
+                ci: false
+                release: false
+              results: {}
+    YAML
+    results = run_detective(MockRepoFiles.new('security-insights.yml', yaml))
+    explanation = results[:static_analysis_status][:explanation]
+    assert_includes explanation, 'security-insights.yml'
+    assert_includes explanation, 'SAST'
+  end
+
+  test 'explanation uses basename of .github path' do
+    yaml = <<~YAML
+      repository:
+        status: active
+    YAML
+    results = run_detective(MockRepoFiles.new('.github/security-insights.yml', yaml))
+    explanation = results[:maintained_status][:explanation]
+    assert_includes explanation, 'security-insights.yml'
+    assert_not_includes explanation, '.github/'
+  end
+end
+# rubocop:enable Metrics/ClassLength

@@ -14,15 +14,25 @@
 #   ruby script/update_security_insights_comments.rb
 #
 # SECURITY: The security-insights.yml file is untrusted data.
-# - File size is capped at MAX_SI_SIZE bytes before fetching.
+# - File size is capped at MAX_SI_SIZE bytes before fetching.  GithubContentAccess
+#   checks GitHub's reported file size first and skips the content fetch entirely
+#   if it exceeds the limit (early stop), then verifies actual size after fetch.
 # - YAML is loaded with safe_load (no Ruby objects) and aliases disabled
 #   (prevents YAML alias/anchor bombs).
 # - All path navigation and condition evaluation defensively checks types.
+# - No regex is applied to untrusted data (no ReDoS risk).
+# - Comment strings from SI data are truncated to MAX_SI_COMMENT_SIZE characters
+#   before being included in justification text.
 # rubocop:disable Metrics/ClassLength
 class SecurityInsightsDetective < Detective
   # Maximum size of a security-insights file we will fetch and parse.
   # 50 KB is generous; real files are typically a few kilobytes.
   MAX_SI_SIZE = 50_000
+
+  # Maximum length of a comment string extracted from the SI file to include
+  # in a justification.  Prevents a malicious file from injecting an
+  # arbitrarily long string into the stored criterion justification text.
+  MAX_SI_COMMENT_SIZE = 500
 
   # Candidate file paths to check, in priority order.
   SI_CANDIDATE_PATHS = %w[
@@ -248,18 +258,34 @@ class SecurityInsightsDetective < Detective
   # @param value [Object] resolved value at si_path
   # @return [String, nil]
   def extract_si_comment(si_data, mapping, value)
-    raw =
-      case mapping['si_condition']
-      when 'has_tool_type'
-        find_tool(value, mapping['si_value'])&.dig('comment')
-      when 'has_tool_type_in_ci'
-        find_tool_in_ci(value, mapping['si_value'])&.dig('comment')
-      when 'has_attestation_predicate'
-        find_attestation(value, mapping['si_value'])&.dig('comment')
-      else
-        si_parent_comment(si_data, mapping['si_path'])
-      end
-    raw.is_a?(String) && !raw.strip.empty? ? raw.strip : nil
+    raw = raw_si_comment(si_data, mapping, value)
+    truncate_si_comment(raw)
+  end
+
+  # Locate the raw comment value for a mapping; returns nil if none.
+  def raw_si_comment(si_data, mapping, value)
+    case mapping['si_condition']
+    when 'has_tool_type'
+      find_tool(value, mapping['si_value'])&.dig('comment')
+    when 'has_tool_type_in_ci'
+      find_tool_in_ci(value, mapping['si_value'])&.dig('comment')
+    when 'has_attestation_predicate'
+      find_attestation(value, mapping['si_value'])&.dig('comment')
+    else
+      si_parent_comment(si_data, mapping['si_path'])
+    end
+  end
+
+  # Validate and truncate a raw comment from untrusted SI data.
+  # Returns nil if the value is not a non-empty String.
+  # Truncates to MAX_SI_COMMENT_SIZE to prevent oversized justification text.
+  def truncate_si_comment(raw)
+    return unless raw.is_a?(String)
+
+    stripped = raw.strip
+    return if stripped.empty?
+
+    stripped.length <= MAX_SI_COMMENT_SIZE ? stripped : "#{stripped[0, MAX_SI_COMMENT_SIZE]}..."
   end
 
   # Return the "comment" key of the parent object of si_path, or nil.

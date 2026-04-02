@@ -704,6 +704,23 @@ class SecurityInsightsDetectiveTest < ActiveSupport::TestCase
     assert_includes explanation, 'SAST'
   end
 
+  test 'oversized comment is truncated to MAX_SI_COMMENT_SIZE' do
+    long_comment = 'x' * (SecurityInsightsDetective::MAX_SI_COMMENT_SIZE + 100)
+    yaml = <<~YAML
+      repository:
+        status: active
+        comment: "#{long_comment}"
+    YAML
+    results = run_detective(MockRepoFiles.new('security-insights.yml', yaml))
+    explanation = results[:maintained_status][:explanation]
+    assert_includes explanation, 'Comment says:'
+    # The comment in the explanation must not exceed MAX_SI_COMMENT_SIZE chars
+    # (plus the "..." truncation suffix).
+    assert explanation.length < long_comment.length + 200,
+           'Oversized SI comment was not truncated'
+    assert_includes explanation, '...'
+  end
+
   test 'explanation uses basename of .github path' do
     yaml = <<~YAML
       repository:

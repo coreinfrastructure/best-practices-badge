@@ -11,25 +11,12 @@
 # the differences are printed.
 
 TEST_REPOS = [
-  { name: 'openfga/openfga', url: 'https://github.com/openfga/openfga' },
+  { name: 'openfga/openfga',        url: 'https://github.com/openfga/openfga' },
   { name: 'dragonflyoss/Dragonfly', url: 'https://github.com/dragonflyoss/Dragonfly' },
   { name: 'ossf/alpha-omega',       url: 'https://github.com/ossf/alpha-omega' }
 ].freeze
 
 client_factory = ->(token = nil) { Octokit::Client.new(access_token: token) }
-
-# Temporarily remove SecurityInsightsDetective from Chief's pool for the
-# duration of the block, then restore it.
-def without_si_detective
-  original = Chief::ALL_DETECTIVES.dup
-  pool = original.reject { |d| d == SecurityInsightsDetective }
-  Chief.__send__(:remove_const, :ALL_DETECTIVES) # rubocop:disable Style/Send
-  Chief.const_set(:ALL_DETECTIVES, pool.freeze)
-  yield
-ensure
-  Chief.__send__(:remove_const, :ALL_DETECTIVES) rescue nil # rubocop:disable Style/RescueModifier,Style/Send
-  Chief.const_set(:ALL_DETECTIVES, original.freeze)
-end
 
 def status_label(val)
   {
@@ -82,16 +69,17 @@ def print_comparison(repo_name, with_si, without_si)
 end
 # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
+pool_without_si = Chief::ALL_DETECTIVES.reject { |d| d == SecurityInsightsDetective }
+
 TEST_REPOS.each do |repo|
   print "\nTesting #{repo[:name]}... "
   project = Project.new(repo_url: repo[:url])
-  chief = Chief.new(project, client_factory)
 
   begin
-    with_si = chief.propose_changes
+    with_si = Chief.new(project, client_factory).propose_changes
     print "with SI: #{with_si.size} proposals. "
 
-    without_si = without_si_detective { Chief.new(project, client_factory).propose_changes }
+    without_si = Chief.new(project, client_factory, detectives: pool_without_si).propose_changes
     puts "without SI: #{without_si.size} proposals."
 
     print_comparison(repo[:name], with_si, without_si)

@@ -26,19 +26,6 @@ puts
 
 client_factory = ->(token = nil) { Octokit::Client.new(access_token: token) }
 
-def run_chief(project, client_factory, pool)
-  chief = Chief.new(project, client_factory)
-  # Temporarily swap ALL_DETECTIVES so Chief uses our custom pool
-  Chief.__send__(:remove_const, :ALL_DETECTIVES) # rubocop:disable Style/Send
-  Chief.const_set(:ALL_DETECTIVES, pool.freeze)
-  chief.propose_changes
-ensure
-  # Always restore the original constant
-  Chief.__send__(:remove_const, :ALL_DETECTIVES) rescue nil # rubocop:disable Style/RescueModifier,Style/Send
-  restored = pool.include?(SecurityInsightsDetective) ? pool : pool + [SecurityInsightsDetective]
-  Chief.const_set(:ALL_DETECTIVES, restored.freeze)
-end
-
 def status_label(val)
   {
     CriterionStatus::MET => 'Met', CriterionStatus::UNMET => 'Unmet',
@@ -46,24 +33,15 @@ def status_label(val)
   }[val] || val.to_s
 end
 
-original_pool = Chief::ALL_DETECTIVES.dup
-pool_without_si = original_pool.reject { |d| d == SecurityInsightsDetective }
+pool_without_si = Chief::ALL_DETECTIVES.reject { |d| d == SecurityInsightsDetective }
 
 puts '--- Running Chief WITHOUT SecurityInsightsDetective ---'
-without_si = run_chief(project, client_factory, pool_without_si)
+without_si = Chief.new(project, client_factory, detectives: pool_without_si).propose_changes
 puts "  #{without_si.size} proposals"
 
-# Restore properly before second run
-Chief.__send__(:remove_const, :ALL_DETECTIVES) rescue nil # rubocop:disable Style/RescueModifier,Style/Send
-Chief.const_set(:ALL_DETECTIVES, original_pool.freeze)
-
 puts '--- Running Chief WITH SecurityInsightsDetective ---'
-with_si = run_chief(project, client_factory, original_pool)
+with_si = Chief.new(project, client_factory).propose_changes
 puts "  #{with_si.size} proposals"
-
-# Restore for real
-Chief.__send__(:remove_const, :ALL_DETECTIVES) rescue nil # rubocop:disable Style/RescueModifier,Style/Send
-Chief.const_set(:ALL_DETECTIVES, original_pool.freeze)
 
 puts
 puts '=' * 60

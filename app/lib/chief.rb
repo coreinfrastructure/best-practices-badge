@@ -55,10 +55,11 @@ class Chief
   ALLOWED_FIELDS = Project::PROJECT_PERMITTED_FIELDS.to_set.freeze
 
   # rubocop:disable Style/ConditionalAssignment
-  def initialize(project, client_factory, entry_locale: nil)
+  def initialize(project, client_factory, entry_locale: nil, detectives: ALL_DETECTIVES)
     @evidence = Evidence.new(project)
     @client_factory = client_factory
     @entry_locale = entry_locale || project.entry_locale
+    @detectives = detectives
 
     # Determine what exceptions to intercept - if we're in
     # test or development, we will only intercept an exception we don't use.
@@ -272,10 +273,10 @@ class Chief
 
     if needed_fields.nil?
       # nil means "everything" (cron job / full-autofill scenario)
-      ALL_DETECTIVES.each { |d| needed.merge(d::OUTPUTS) }
+      @detectives.each { |d| needed.merge(d::OUTPUTS) }
     else
       # Keep only detective outputs that the caller actually wants
-      ALL_DETECTIVES.each do |detective_class|
+      @detectives.each do |detective_class|
         detective_class::OUTPUTS.each do |output|
           needed.add(output) if needed_fields.include?(output)
         end
@@ -420,7 +421,7 @@ class Chief
   def partition_mapping_detective(needed)
     pool = []
     candidates = []
-    ALL_DETECTIVES.each do |d|
+    @detectives.each do |d|
       (d < MappingDetective && d::OUTPUTS.any? ? candidates : pool) << d
     end
     return [pool, nil] if candidates.empty?

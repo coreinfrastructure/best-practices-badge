@@ -69,13 +69,31 @@ class SecurityInsightsDetective < Detective
     .github/SECURITY-INSIGHTS.yml
   ].freeze
 
+  # Valid values for the si_condition field in security_insights_map.yml.
+  # Using is_true/is_false (not "true"/"false") avoids confusion with YAML
+  # boolean literals and makes it obvious these are symbolic condition names.
+  KNOWN_CONDITIONS = %w[
+    is_true is_false present equals in
+    has_tool_type has_tool_type_in_ci has_attestation_predicate
+  ].to_set.freeze
+
   # Load the mappings from security-insights to our criteria.
-  # This screens out confidence=0 since they don't help.
-  MAPPINGS = YAML.safe_load_file(
-    Rails.root.join('criteria/security_insights_map.yml'),
-    permitted_classes: [],
-    aliases: false
-  )['mappings'].reject { |m| m['confidence'].to_i.zero? }.freeze
+  # Screens out confidence=0 entries (documented no-ops) at load time so they
+  # never appear in OUTPUTS or any detective logic.
+  # Also validates that every entry uses a known si_condition — unknown
+  # conditions would silently produce zero proposals, so we fail fast at boot.
+  MAPPINGS =
+    begin
+      raw = YAML.safe_load_file(
+        Rails.root.join('criteria/security_insights_map.yml'),
+        permitted_classes: [],
+        aliases: false
+      )['mappings'].reject { |m| m['confidence'].to_i.zero? }
+      unknown = raw.map { |m| m['si_condition'] }.uniq.reject { |c| KNOWN_CONDITIONS.include?(c) }
+      raise ArgumentError, "Unknown si_condition(s) in security_insights_map.yml: #{unknown}" if unknown.any?
+
+      raw.freeze
+    end
 
   INPUTS  = [:repo_files].freeze
   OUTPUTS = MAPPINGS.map { |m| :"#{m['target_criterion']}_status" }.uniq.freeze
@@ -187,7 +205,9 @@ class SecurityInsightsDetective < Detective
   end
 
   # Evaluate the mapping's si_condition against the resolved value.
-  # Returns false for any unknown condition type (fail-safe).
+  # Raises ArgumentError for any unknown condition — MAPPINGS is validated at
+  # load time (see KNOWN_CONDITIONS check above), so reaching here with an
+  # unknown condition means a programming error, not bad untrusted input.
   # @param mapping [Hash] one entry from MAPPINGS
   # @param value [Object] resolved value at si_path
   # @return [Boolean]
@@ -198,11 +218,11 @@ class SecurityInsightsDetective < Detective
     si_values = mapping['si_values']
 
     case condition
-    when 'true'    then value == true
-    when 'false'   then value == false
-    when 'present' then value_present?(value)
-    when 'equals'  then value.to_s == si_value.to_s
-    when 'in'      then Array(si_values).include?(value.to_s)
+    when 'is_true'  then value == true
+    when 'is_false' then value == false
+    when 'present'  then value_present?(value)
+    when 'equals'   then value.to_s == si_value.to_s
+    when 'in'       then Array(si_values).include?(value.to_s)
     when 'has_tool_type'
       value.is_a?(Array) &&
         value.any? { |t| t.is_a?(Hash) && t['type'] == si_value }
@@ -216,7 +236,7 @@ class SecurityInsightsDetective < Detective
       value.is_a?(Array) &&
         value.any? { |a| a.is_a?(Hash) && a['predicate-uri'].to_s.include?(si_value.to_s) }
     else
-      false
+      raise ArgumentError, "Unknown si_condition: #{condition.inspect}"
     end
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize

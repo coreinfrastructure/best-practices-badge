@@ -48,14 +48,14 @@ class SecurityInsightsDetectiveTest < ActiveSupport::TestCase
   # Edge cases
   # ---------------------------------------------------------------------------
 
-  test 'unknown si_condition returns false (fail-safe)' do
+  test 'unknown si_condition raises ArgumentError' do
     detective = SecurityInsightsDetective.new
     mapping = {
       'si_condition' => 'unknown_condition_xyz',
       'si_value' => nil,
       'si_values' => nil
     }
-    assert_equal false, detective.send(:condition_met?, mapping, 'any value')
+    assert_raises(ArgumentError) { detective.send(:condition_met?, mapping, 'any value') }
   end
 
   test 'returns empty hash when repo_files is blank' do

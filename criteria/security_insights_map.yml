@@ -57,7 +57,7 @@ mappings:
   # Whether the project accepts vulnerability reports from external parties.
 
   - si_path: project.vulnerability-reporting.reports-accepted
-    si_condition: "true"
+    si_condition: is_true
     target_criterion: vulnerability_report_process
     # Target:
     #   description: "The project MUST publish the process for reporting
@@ -74,7 +74,7 @@ mappings:
     confidence: 2
 
   - si_path: project.vulnerability-reporting.reports-accepted
-    si_condition: "false"
+    si_condition: is_false
     target_criterion: vulnerability_report_process
     # Target:
     #   description: "The project MUST publish the process for reporting
@@ -95,7 +95,7 @@ mappings:
     confidence: 2
 
   - si_path: project.vulnerability-reporting.reports-accepted
-    si_condition: "true"
+    si_condition: is_true
     target_criterion: vulnerability_report_response
     # Target:
     #   description: "The project's initial response time for any vulnerability
@@ -111,7 +111,7 @@ mappings:
     confidence: 0
 
   - si_path: project.vulnerability-reporting.reports-accepted
-    si_condition: "true"
+    si_condition: is_true
     target_criterion: osps_vm_03_01
     # Target:
     #   description: "While active, the project documentation MUST provide a
@@ -129,7 +129,7 @@ mappings:
     confidence: 0
 
   - si_path: project.vulnerability-reporting.reports-accepted
-    si_condition: "false"
+    si_condition: is_false
     target_criterion: osps_vm_03_01
     # Target:
     #   description: "While active, the project documentation MUST provide a
@@ -797,7 +797,7 @@ mappings:
   # Whether the project uses an automated pipeline to produce releases.
 
   - si_path: repository.release.automated-pipeline
-    si_condition: "true"
+    si_condition: is_true
     target_criterion: build
     # Target:
     #   description: "If the software produced by the project requires building
@@ -917,5 +917,138 @@ mappings:
     #     a tool that has been vetted for accuracy. This enables users to
     #     ingest this data in a standardized approach alongside other projects
     #     in their environment."
+    inferred_status: Met
+    confidence: 2
+
+  # ---------------------------------------------------------------------------
+  # Security Insights schema v1.0.0 fields  [v1.0.0 ONLY]
+  #
+  # The v1.0.0 schema uses a completely different top-level structure from
+  # v2.x.  These paths will return nil on v2.x files (so the rules never
+  # fire there), and vice versa for the v2.x rules above.  We support a
+  # small subset of v1.0.0 fields to provide some value for projects that
+  # haven’t yet migrated to the current schema.
+  #
+  # Each entry below is tagged [v1.0.0] so it is easy to identify.
+  # ---------------------------------------------------------------------------
+
+  # [v1.0.0] project-lifecycle.stage
+  # Type: String; v1.0.0 equivalent of repository.status in v2.x.
+  # Known values: active, inactive, concept, archived, unsupported.
+
+  - si_path: project-lifecycle.stage
+    si_condition: equals
+    si_value: active
+    target_criterion: maintained
+    # [v1.0.0] Source: project-lifecycle.stage = “active”
+    # Target:
+    #   description: "The project MUST be maintained."
+    #   details: "As a minimum, the project should attempt to respond to
+    #     significant problem and vulnerability reports. A project that is
+    #     actively pursuing a badge is probably maintained. All projects and
+    #     people have limited resources, and typical projects must reject some
+    #     proposed changes, so limited resources and proposal rejections do not
+    #     by themselves indicate an unmaintained project. When a project knows
+    #     that it will no longer be maintained, it should set this criterion to
+    #     "Unmet" and use the appropriate mechanism(s) to indicate to others
+    #     that it is not being maintained. For example, use “DEPRECATED” as the
+    #     first heading of its README, add “DEPRECATED” near the beginning of
+    #     its home page, add “DEPRECATED” to the beginning of its code
+    #     repository project description, add a no-maintenance-intended badge
+    #     in its README and/or home page, mark it as deprecated in any package
+    #     repositories (e.g., npm deprecate), and/or use the code repository's
+    #     marking system to archive it (e.g., GitHub's "archive" setting,
+    #     GitLab’s "archived" marking, Gerrit's "readonly" status, or
+    #     SourceForge’s "abandoned" project status). Additional discussion can
+    #     be found here."
+    inferred_status: Met
+    confidence: 2
+
+  - si_path: project-lifecycle.stage
+    si_condition: in
+    si_values: [inactive, archived, unsupported, concept]
+    target_criterion: maintained
+    # [v1.0.0] Source: project-lifecycle.stage in [inactive, archived,
+    #   unsupported, concept]
+    # Target:
+    #   description: "The project MUST be maintained."
+    #   details: "As a minimum, the project should attempt to respond to
+    #     significant problem and vulnerability reports. A project that is
+    #     actively pursuing a badge is probably maintained. All projects and
+    #     people have limited resources, and typical projects must reject some
+    #     proposed changes, so limited resources and proposal rejections do not
+    #     by themselves indicate an unmaintained project. When a project knows
+    #     that it will no longer be maintained, it should set this criterion to
+    #     "Unmet" and use the appropriate mechanism(s) to indicate to others
+    #     that it is not being maintained. For example, use “DEPRECATED” as the
+    #     first heading of its README, add “DEPRECATED” near the beginning of
+    #     its home page, add “DEPRECATED” to the beginning of its code
+    #     repository project description, add a no-maintenance-intended badge
+    #     in its README and/or home page, mark it as deprecated in any package
+    #     repositories (e.g., npm deprecate), and/or use the code repository's
+    #     marking system to archive it (e.g., GitHub's "archive" setting,
+    #     GitLab’s "archived" marking, Gerrit's "readonly" status, or
+    #     SourceForge’s "abandoned" project status). Additional discussion can
+    #     be found here."
+    inferred_status: Unmet
+    confidence: 2
+
+  # [v1.0.0] vulnerability-reporting.accepts-vulnerability-reports
+  # Type: Boolean; v1.0.0 equivalent of
+  #   project.vulnerability-reporting.reports-accepted in v2.x.
+
+  - si_path: vulnerability-reporting.accepts-vulnerability-reports
+    si_condition: is_true
+    target_criterion: vulnerability_report_process
+    # [v1.0.0] Source: vulnerability-reporting.accepts-vulnerability-reports
+    #   = true
+    # Target:
+    #   description: "The project MUST publish the process for reporting
+    #     vulnerabilities on the project site."
+    #   details: "Projects hosted on GitHub SHOULD consider enabling privately
+    #     reporting a security vulnerability. Projects on GitLab SHOULD
+    #     consider using its ability for privately reporting a vulnerability.
+    #     Projects MAY identify a mailing address on
+    #     https://PROJECTSITE/security, often in the form security@example.org.
+    #     This vulnerability reporting process MAY be the same as its bug
+    #     reporting process. Vulnerability reports MAY always be public, but
+    #     many projects have a private vulnerability reporting mechanism."
+    inferred_status: Met
+    confidence: 2
+
+  - si_path: vulnerability-reporting.accepts-vulnerability-reports
+    si_condition: is_false
+    target_criterion: vulnerability_report_process
+    # [v1.0.0] Source: vulnerability-reporting.accepts-vulnerability-reports
+    #   = false
+    # Target:
+    #   description: "The project MUST publish the process for reporting
+    #     vulnerabilities on the project site."
+    #   details: "Projects hosted on GitHub SHOULD consider enabling privately
+    #     reporting a security vulnerability. Projects on GitLab SHOULD
+    #     consider using its ability for privately reporting a vulnerability.
+    #     Projects MAY identify a mailing address on
+    #     https://PROJECTSITE/security, often in the form security@example.org.
+    #     This vulnerability reporting process MAY be the same as its bug
+    #     reporting process. Vulnerability reports MAY always be public, but
+    #     many projects have a private vulnerability reporting mechanism."
+    inferred_status: Unmet
+    confidence: 2
+
+  # [v1.0.0] security-contacts
+  # Type: Array of {type, value} objects at the top level; v1.0.0 equivalent
+  # of project.security.security-contacts in v2.x.
+  # No Unmet rule: absence of the field says nothing (project may have
+  # contacts documented elsewhere), consistent with v2.x treatment.
+
+  - si_path: security-contacts
+    si_condition: present
+    target_criterion: osps_vm_02_01
+    # [v1.0.0] Source: security-contacts (non-empty array)
+    # Target:
+    #   description: "While active, the project documentation MUST contain
+    #     security contacts."
+    #   details: "Create a security.md (or similarly-named) file that contains
+    #     security contacts for the project."
     inferred_status: Met
     confidence: 2

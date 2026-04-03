@@ -11,9 +11,9 @@
 # the differences are printed.
 
 TEST_REPOS = [
-  { name: 'openfga/openfga',         url: 'https://github.com/openfga/openfga' },
-  { name: 'dragonflyoss/Dragonfly',   url: 'https://github.com/dragonflyoss/Dragonfly' },
-  { name: 'ossf/alpha-omega',         url: 'https://github.com/ossf/alpha-omega' }
+  { name: 'openfga/openfga', url: 'https://github.com/openfga/openfga' },
+  { name: 'dragonflyoss/Dragonfly', url: 'https://github.com/dragonflyoss/Dragonfly' },
+  { name: 'ossf/alpha-omega',       url: 'https://github.com/ossf/alpha-omega' }
 ].freeze
 
 client_factory = ->(token = nil) { Octokit::Client.new(access_token: token) }
@@ -23,29 +23,34 @@ client_factory = ->(token = nil) { Octokit::Client.new(access_token: token) }
 def without_si_detective
   original = Chief::ALL_DETECTIVES.dup
   pool = original.reject { |d| d == SecurityInsightsDetective }
-  Chief.send(:remove_const, :ALL_DETECTIVES)
+  Chief.__send__(:remove_const, :ALL_DETECTIVES) # rubocop:disable Style/Send
   Chief.const_set(:ALL_DETECTIVES, pool.freeze)
   yield
 ensure
-  Chief.send(:remove_const, :ALL_DETECTIVES) rescue nil # rubocop:disable Style/RescueModifier
+  Chief.__send__(:remove_const, :ALL_DETECTIVES) rescue nil # rubocop:disable Style/RescueModifier,Style/Send
   Chief.const_set(:ALL_DETECTIVES, original.freeze)
 end
 
 def status_label(val)
-  { CriterionStatus::MET => 'Met', CriterionStatus::UNMET => 'Unmet',
-    CriterionStatus::NA => 'N/A', CriterionStatus::UNKNOWN => '?' }[val] || val.to_s
+  {
+    CriterionStatus::MET => 'Met', CriterionStatus::UNMET => 'Unmet',
+    CriterionStatus::NA => 'N/A', CriterionStatus::UNKNOWN => '?'
+  }[val] || val.to_s
 end
 
+# rubocop:disable Metrics/MethodLength, Metrics/AbcSize
 def print_comparison(repo_name, with_si, without_si)
   si_outputs = SecurityInsightsDetective::OUTPUTS.to_set
 
-  only_with = with_si.reject { |k, _| without_si.key?(k) }
-                     .select { |k, v| si_outputs.include?(k) && v[:confidence].to_f > 0 }
+  only_with =
+    with_si.reject { |k, _| without_si.key?(k) }
+           .select { |k, v| si_outputs.include?(k) && v[:confidence].to_f > 0 }
   only_without = without_si.reject { |k, _| with_si.key?(k) }
-  changed = with_si.select do |k, v|
-    si_outputs.include?(k) && v[:confidence].to_f > 0 &&
-      without_si.key?(k) && v[:confidence] != without_si[k][:confidence]
-  end
+  changed =
+    with_si.select do |k, v|
+      si_outputs.include?(k) && v[:confidence].to_f > 0 &&
+        without_si.key?(k) && v[:confidence] != without_si[k][:confidence]
+    end
 
   puts "\n#{'=' * 70}"
   puts "REPO: #{repo_name}"
@@ -54,7 +59,8 @@ def print_comparison(repo_name, with_si, without_si)
   if only_with.any?
     puts "\n  NEW proposals from SI detective (#{only_with.size}):"
     only_with.sort_by { |k, v| [-v[:confidence], k.to_s] }.each do |k, v|
-      puts format('    conf %-4s  %-8s  %s', v[:confidence], status_label(v[:value]), k)
+      puts format('    conf %<conf>-4s  %<status>-8s  %<key>s',
+                  conf: v[:confidence], status: status_label(v[:value]), key: k)
     end
   else
     puts "\n  NEW proposals from SI detective: (none)"
@@ -69,19 +75,20 @@ def print_comparison(repo_name, with_si, without_si)
     puts "\n  CONFIDENCE RAISED by SI detective: (none)"
   end
 
-  if only_without.any?
-    puts "\n  LOST when SI enabled — sanity check, should be empty (#{only_without.size}):"
-    only_without.each { |k, _| puts "    #{k}" }
-  end
+  return if only_without.none?
+
+  puts "\n  LOST when SI enabled — sanity check, should be empty (#{only_without.size}):"
+  only_without.each_key { |k| puts "    #{k}" }
 end
+# rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
 TEST_REPOS.each do |repo|
   print "\nTesting #{repo[:name]}... "
   project = Project.new(repo_url: repo[:url])
-  chief   = Chief.new(project, client_factory)
+  chief = Chief.new(project, client_factory)
 
   begin
-    with_si    = chief.propose_changes
+    with_si = chief.propose_changes
     print "with SI: #{with_si.size} proposals. "
 
     without_si = without_si_detective { Chief.new(project, client_factory).propose_changes }

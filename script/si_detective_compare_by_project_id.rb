@@ -14,7 +14,7 @@
 #   CHANGED BY SI  - criteria proposed by both, but SI produces higher confidence
 #   ONLY WITHOUT   - criteria proposed only when SI detective is absent (sanity check)
 
-project_id = ARGV[0]&.to_i
+project_id = ARGV.first&.to_i
 unless project_id&.positive?
   warn 'Usage: rails runner script/si_detective_compare_by_project_id.rb PROJECT_ID'
   exit 1
@@ -29,19 +29,21 @@ client_factory = ->(token = nil) { Octokit::Client.new(access_token: token) }
 def run_chief(project, client_factory, pool)
   chief = Chief.new(project, client_factory)
   # Temporarily swap ALL_DETECTIVES so Chief uses our custom pool
-  Chief.send(:remove_const, :ALL_DETECTIVES)
+  Chief.__send__(:remove_const, :ALL_DETECTIVES) # rubocop:disable Style/Send
   Chief.const_set(:ALL_DETECTIVES, pool.freeze)
   chief.propose_changes
 ensure
   # Always restore the original constant
-  Chief.send(:remove_const, :ALL_DETECTIVES) rescue nil # rubocop:disable Style/RescueModifier
-  Chief.const_set(:ALL_DETECTIVES, (pool.include?(SecurityInsightsDetective) ?
-    pool : pool + [SecurityInsightsDetective]).freeze)
+  Chief.__send__(:remove_const, :ALL_DETECTIVES) rescue nil # rubocop:disable Style/RescueModifier,Style/Send
+  restored = pool.include?(SecurityInsightsDetective) ? pool : pool + [SecurityInsightsDetective]
+  Chief.const_set(:ALL_DETECTIVES, restored.freeze)
 end
 
 def status_label(val)
-  { CriterionStatus::MET => 'Met', CriterionStatus::UNMET => 'Unmet',
-    CriterionStatus::NA => 'N/A', CriterionStatus::UNKNOWN => '?' }[val] || val.to_s
+  {
+    CriterionStatus::MET => 'Met', CriterionStatus::UNMET => 'Unmet',
+    CriterionStatus::NA => 'N/A', CriterionStatus::UNKNOWN => '?'
+  }[val] || val.to_s
 end
 
 original_pool = Chief::ALL_DETECTIVES.dup
@@ -52,7 +54,7 @@ without_si = run_chief(project, client_factory, pool_without_si)
 puts "  #{without_si.size} proposals"
 
 # Restore properly before second run
-Chief.send(:remove_const, :ALL_DETECTIVES) rescue nil # rubocop:disable Style/RescueModifier
+Chief.__send__(:remove_const, :ALL_DETECTIVES) rescue nil # rubocop:disable Style/RescueModifier,Style/Send
 Chief.const_set(:ALL_DETECTIVES, original_pool.freeze)
 
 puts '--- Running Chief WITH SecurityInsightsDetective ---'
@@ -60,7 +62,7 @@ with_si = run_chief(project, client_factory, original_pool)
 puts "  #{with_si.size} proposals"
 
 # Restore for real
-Chief.send(:remove_const, :ALL_DETECTIVES) rescue nil # rubocop:disable Style/RescueModifier
+Chief.__send__(:remove_const, :ALL_DETECTIVES) rescue nil # rubocop:disable Style/RescueModifier,Style/Send
 Chief.const_set(:ALL_DETECTIVES, original_pool.freeze)
 
 puts
@@ -68,14 +70,16 @@ puts '=' * 60
 
 only_with = with_si.reject { |k, _| without_si.key?(k) }
 only_without = without_si.reject { |k, _| with_si.key?(k) }
-changed = with_si.select do |k, v|
-  without_si.key?(k) && v[:confidence] != without_si[k][:confidence]
-end
+changed =
+  with_si.select do |k, v|
+    without_si.key?(k) && v[:confidence] != without_si[k][:confidence]
+  end
 
 if only_with.any?
   puts "\nONLY WITH SI (#{only_with.size} new proposals):"
   only_with.sort_by { |k, v| [-v[:confidence], k.to_s] }.each do |k, v|
-    puts format('  conf %-4s  %-8s  %s', v[:confidence], status_label(v[:value]), k)
+    puts format('  conf %<conf>-4s  %<status>-8s  %<key>s',
+                conf: v[:confidence], status: status_label(v[:value]), key: k)
     puts "         #{v[:explanation]}" if v[:explanation].present?
   end
 else
@@ -93,7 +97,7 @@ end
 
 if only_without.any?
   puts "\nONLY WITHOUT SI (#{only_without.size} — sanity check, should be empty):"
-  only_without.each { |k, _| puts "  #{k}" }
+  only_without.each_key { |k| puts "  #{k}" }
 else
   puts "\nONLY WITHOUT SI: (none — good)"
 end

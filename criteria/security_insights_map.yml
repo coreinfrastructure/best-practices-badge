@@ -16,15 +16,15 @@
 #   Hyphens in key names are allowed (e.g. "vulnerability-reporting").
 #
 # si_condition: how to evaluate the value at si_path:
-#   "true"                      - boolean field equals true
-#   "false"                     - boolean field equals false
-#   "present"                   - field exists with a non-nil/non-empty value
-#   "equals"                    - string field equals si_value
-#   "in"                        - string field value is listed in si_values
-#   "has_tool_type"             - security.tools[] contains type == si_value
-#   "has_tool_type_in_ci"       - security.tools[] contains type == si_value
+#   is_true                     - boolean field equals true
+#   is_false                    - boolean field equals false
+#   present                     - field exists with a non-nil/non-empty value
+#   equals                      - string field equals si_value
+#   in                          - string field value is listed in si_values
+#   has_tool_type               - security.tools[] contains type == si_value
+#   has_tool_type_in_ci         - security.tools[] contains type == si_value
 #                                 AND integration.ci == true
-#   "has_attestation_predicate" - release.attestations[] has predicate-uri
+#   has_attestation_predicate   - release.attestations[] has predicate-uri
 #                                 containing si_value as a substring
 #
 # si_value: string value for equals / has_* conditions
@@ -147,7 +147,7 @@ mappings:
   # URL of the project's coordinated vulnerability disclosure (CVD) policy.
 
   - si_path: project.vulnerability-reporting.policy
-    si_condition: "present"
+    si_condition: present
     target_criterion: vulnerability_report_process
     # Target:
     #   description: "The project MUST publish the process for reporting
@@ -164,7 +164,7 @@ mappings:
     confidence: 2
 
   - si_path: project.vulnerability-reporting.policy
-    si_condition: "present"
+    si_condition: present
     target_criterion: osps_vm_01_01
     # Target:
     #   description: "While active, the project documentation MUST include a
@@ -183,7 +183,7 @@ mappings:
   # PGP key (or fingerprint/URL) for encrypted vulnerability report submission.
 
   - si_path: project.vulnerability-reporting.pgp-key
-    si_condition: "present"
+    si_condition: present
     target_criterion: vulnerability_report_private
     # Target:
     #   description: "If private vulnerability reports are supported, the
@@ -205,7 +205,7 @@ mappings:
   # URL of a guide explaining how to contribute to the project.
 
   - si_path: repository.documentation.contributing-guide
-    si_condition: "present"
+    si_condition: present
     target_criterion: contribution
     # Target:
     #   description: "The information on how to contribute MUST explain the
@@ -218,7 +218,7 @@ mappings:
     confidence: 2
 
   - si_path: repository.documentation.contributing-guide
-    si_condition: "present"
+    si_condition: present
     target_criterion: osps_gv_03_01
     # Target:
     #   description: "While active, the project documentation MUST include an
@@ -234,7 +234,7 @@ mappings:
   # URL of the project's security policy document (e.g. SECURITY.md).
 
   - si_path: repository.documentation.security-policy
-    si_condition: "present"
+    si_condition: present
     target_criterion: osps_vm_01_01
     # Target:
     #   description: "While active, the project documentation MUST include a
@@ -249,7 +249,7 @@ mappings:
     confidence: 2
 
   - si_path: repository.documentation.security-policy
-    si_condition: "present"
+    si_condition: present
     target_criterion: osps_vm_02_01
     # Target:
     #   description: "While active, the project documentation MUST contain
@@ -271,7 +271,7 @@ mappings:
   # URL of a governance document describing project roles and responsibilities.
 
   - si_path: repository.documentation.governance
-    si_condition: "present"
+    si_condition: present
     target_criterion: osps_gv_01_01
     # Target:
     #   description: "While active, the project documentation MUST include a
@@ -285,7 +285,7 @@ mappings:
     confidence: 1
 
   - si_path: repository.documentation.governance
-    si_condition: "present"
+    si_condition: present
     target_criterion: osps_gv_01_02
     # Target:
     #   description: "While active, the project documentation MUST include
@@ -302,7 +302,7 @@ mappings:
   # URL of a documented code review policy for the repository.
 
   - si_path: repository.documentation.review-policy
-    si_condition: "present"
+    si_condition: present
     target_criterion: osps_qa_07_01
     # Target:
     #   description: "When a commit is made to the primary branch, the
@@ -323,7 +323,7 @@ mappings:
   # URL of a policy describing how dependencies are selected, obtained, and tracked.
 
   - si_path: repository.documentation.dependency-management-policy
-    si_condition: "present"
+    si_condition: present
     target_criterion: osps_do_06_01
     # Target:
     #   description: "When the project has made a release, the project
@@ -337,7 +337,7 @@ mappings:
     confidence: 2
 
   - si_path: repository.documentation.dependency-management-policy
-    si_condition: "present"
+    si_condition: present
     target_criterion: osps_vm_05_01
     # Target:
     #   description: "While active, the project documentation MUST include a
@@ -355,7 +355,7 @@ mappings:
   # URL of the project's code of conduct document.
 
   - si_path: repository.documentation.code-of-conduct
-    si_condition: "present"
+    si_condition: present
     target_criterion: code_of_conduct
     # Target:
     #   description: "The project MUST adopt a code of conduct and post it in a

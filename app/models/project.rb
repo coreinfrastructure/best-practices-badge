@@ -706,8 +706,10 @@ class Project < ApplicationRecord
   def self.notify_loss_if_needed(project, old_level, new_level, badge_suffix)
     return unless Sections.badge_level_lost?(old_level, new_level)
 
+    # deliver_later queues via solid_queue so the DB row lock is released
+    # before the mail server is contacted.
     ReportMailer.email_owner(project, old_level, new_level, true,
-                             badge_suffix).deliver_now
+                             badge_suffix).deliver_later
   end
   private_class_method :notify_loss_if_needed
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize

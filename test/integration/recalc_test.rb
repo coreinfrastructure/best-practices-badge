@@ -6,7 +6,10 @@
 
 require 'test_helper'
 
+# rubocop:disable Metrics/ClassLength
 class RecalcTest < ActionDispatch::IntegrationTest
+  include ActionMailer::TestHelper
+
   test 'Make sure recalc percentages only updates levels specified' do
     project = projects(:one)
     old_percentage = project.badge_percentage_1
@@ -92,17 +95,17 @@ class RecalcTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test 'notify_loss_if_needed sends email when metal badge is lost' do
+  test 'notify_loss_if_needed enqueues email when metal badge is lost' do
     project = projects(:perfect_passing)
-    assert_difference 'ActionMailer::Base.deliveries.size', 1 do
+    assert_enqueued_emails(1) do
       Project.send(:notify_loss_if_needed, project, 'passing', 'in_progress',
                    'badge')
     end
   end
 
-  test 'notify_loss_if_needed sends email when baseline badge is lost' do
+  test 'notify_loss_if_needed enqueues email when baseline badge is lost' do
     project = projects(:perfect_passing)
-    assert_difference 'ActionMailer::Base.deliveries.size', 1 do
+    assert_enqueued_emails(1) do
       Project.send(:notify_loss_if_needed, project, 'baseline-1', 'in_progress',
                    'baseline')
     end
@@ -121,4 +124,30 @@ class RecalcTest < ActionDispatch::IntegrationTest
       Project.update_all_badge_percentages(Criteria.keys, notify_losses: false)
     end
   end
+
+  # End-to-end: verify the snapshot-compare-notify wiring inside find_each.
+  # We simulate an earned badge by setting the relevant DB columns directly,
+  # then recalculate — the project's actual answers are far below 100%, so
+  # the recalc produces a lower level and a loss email is sent.
+  test 'update_all_badge_percentages enqueues email when metal badge is lost' do
+    project = projects(:one)
+    # projects(:one) has badge_percentage_0 ≈ 1%, well below passing.
+    # Fake an earned passing badge so the snapshot sees 'passing'.
+    project.update_column(:badge_percentage_0, 100)
+    project.update_column(:tiered_percentage, 100)
+    assert_enqueued_emails(1) do
+      Project.update_all_badge_percentages(['0'])
+    end
+  end
+
+  test 'update_all_badge_percentages enqueues email when baseline badge is lost' do
+    project = projects(:one)
+    # Fake an earned baseline-1 badge so the snapshot sees 'baseline-1'.
+    # projects(:one) criteria answers will recompute to < 100%, causing loss.
+    project.update_column(:badge_percentage_baseline_1, 100)
+    assert_enqueued_emails(1) do
+      Project.update_all_badge_percentages(['baseline-1'])
+    end
+  end
 end
+# rubocop:enable Metrics/ClassLength

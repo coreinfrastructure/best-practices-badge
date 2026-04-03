@@ -159,4 +159,20 @@ module Sections
   def self.section_type(section)
     SECTION_TYPE_MAP[section.to_s]
   end
+
+  # Authoritative mapping from badge series type to its badge image URL suffix.
+  # This is the single source of truth for badge URL path endings
+  # (e.g., /projects/1/badge vs /projects/1/baseline).
+  # Add an entry here when introducing a new badge series.
+  BADGE_URL_SUFFIX = {
+    metal: 'badge',
+    baseline: 'baseline'
+  }.freeze
+
+  # Returns the badge image URL suffix for the given section.
+  # @param section [String] the section name (canonical, obsolete, or internal)
+  # @return [String] the URL suffix, e.g. 'badge' or 'baseline'
+  def self.badge_url_suffix(section)
+    BADGE_URL_SUFFIX.fetch(section_type(section), 'badge')
+  end
 end

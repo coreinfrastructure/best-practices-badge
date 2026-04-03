@@ -26,6 +26,24 @@ class ReportMailerTest < ActionMailer::TestCase
     assert_predicate email.subject, :present?
   end
 
+  test 'email_owner gained metal badge uses /badge suffix' do
+    email = ReportMailer.email_owner(
+      @perfect_project, 'in_progress', 'passing', false, 'badge'
+    ).deliver_now
+    assert_not ActionMailer::Base.deliveries.empty?
+    assert_includes email.body.to_s, '/badge'
+    assert_not_includes email.body.to_s, '/baseline'
+  end
+
+  test 'email_owner gained baseline badge uses /baseline suffix' do
+    email = ReportMailer.email_owner(
+      @perfect_project, 'in_progress', 'baseline-1', false, 'baseline'
+    ).deliver_now
+    assert_not ActionMailer::Base.deliveries.empty?
+    assert_includes email.body.to_s, '/baseline'
+    assert_not_includes email.body.to_s, '/badge'
+  end
+
   test 'Does the monthly announcement run?' do
     # This is a quick sanity test, not an in-depth test.
     # Use 'example.org' per RFC 2606

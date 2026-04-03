@@ -24,7 +24,7 @@
     badge_img_src = is_baseline ? project.baseline_badge_src_url : project.badge_src_url
     badge_value = is_baseline ? project.baseline_badge_value : project.badge_level
     badge_level = is_baseline ? project.baseline_badge_level : project.badge_level
-    badge_url_suffix = is_baseline ? 'baseline' : 'badge'
+    badge_url_suffix = Sections.badge_url_suffix(criteria_level)
     badge_alt_text = is_baseline ? 'OpenSSF Baseline' : 'OpenSSF Best Practices'
   %>
   <%= t("projects.form_early.#{badge_i18n_key}.description_1") %>

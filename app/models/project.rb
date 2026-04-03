@@ -682,6 +682,12 @@ class Project < ApplicationRecord
       end
     end
     Project.skip_callbacks = false
+    # Purge the entire CDN cache because badge levels may have changed for
+    # many projects, and we have no cheap way to know which ones changed.
+    # This method is run rarely (only when criteria rules change), so a
+    # full purge is acceptable. It is a no-op in test/development where
+    # Fastly credentials are absent.
+    FastlyRails.purge_all
   end
   # rubocop:enable Metrics/MethodLength
 

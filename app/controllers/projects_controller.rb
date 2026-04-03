@@ -1569,22 +1569,24 @@ class ProjectsController < ApplicationController
         new_badge_level: new_badge_level
       )
     end
+    badge_suffix = Sections.badge_url_suffix(criteria_level)
     ReportMailer.email_owner(
-      @project, old_badge_level, new_badge_level, lost_level
+      @project, old_badge_level, new_badge_level, lost_level, badge_suffix
     ).deliver_now
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
   # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   # Determines the current working level based on criteria level or badge level.
-  # For baseline levels, returns the criteria level being edited.
+  # For baseline levels, returns the project's actual achieved baseline badge level
+  # so that gains/losses are detected correctly (e.g., 'in_progress' -> 'baseline-2').
   # For traditional badge levels, returns the project's actual badge level.
   # @param criteria_level [String, nil] The criteria level being edited
   # @param project [Project] The project whose badge level to check
   # @return [String] The current working level
   def current_working_level(criteria_level, project)
-    if Project::CRITERIA_SERIES[:baseline].include?(criteria_level)
-      criteria_level
+    if Sections.section_type(criteria_level) == :baseline
+      project.baseline_badge_level
     else
       project.badge_level
     end

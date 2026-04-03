@@ -439,10 +439,52 @@ criteria from display, and close out the version notice.
    ```
 
 5. **Restart the application.** The newly activated criteria will be
-   included in `Criteria.active(level)` and will count toward badge
-   percentages. Obsolete criteria will no longer appear on the form.
+   included in `Criteria.active(level)`. Obsolete criteria will no
+   longer appear on the form.
 
-6. **Verify** from the Rails console:
+6. **Recalculate badge percentages and purge the CDN.** After the
+   application restarts, the stored `badge_percentage_baseline_*`
+   values in the database are stale — they were computed under the old
+   set of active criteria. Projects will be corrected one-by-one as
+   their owners save changes, but you must force an immediate bulk
+   recalculation so that every project's badge reflects the new active
+   criteria right away.
+
+   Create a migration:
+
+   ```bash
+   rails generate migration RecalcBaselineBadgePercentages
+   ```
+
+   Edit the generated file (in `db/migrate/`) to contain:
+
+   ```ruby
+   # frozen_string_literal: true
+
+   class RecalcBaselineBadgePercentages < ActiveRecord::Migration[8.0]
+     def change
+       # Baseline criteria set has changed (futures activated, obsoletes
+       # removed), so stored badge_percentage_baseline_* values are stale.
+       # Recalculate for all projects at all baseline levels.
+       # update_all_badge_percentages also calls FastlyRails.purge_all,
+       # so the CDN cache is cleared and badges update immediately.
+       Project.update_all_badge_percentages(Sections::BASELINE_LEVEL_NAMES)
+     end
+   end
+   ```
+
+   Apply the migration:
+
+   ```bash
+   rails db:migrate
+   ```
+
+   `update_all_badge_percentages` calls `FastlyRails.purge_all` on
+   completion, so the CDN badge cache is purged automatically — no
+   manual cache invalidation is needed. The next request for any
+   project's `/baseline` badge will fetch the freshly computed value.
+
+7. **Verify** from the Rails console:
 
    ```ruby
    # Previously-future criteria should now be active:

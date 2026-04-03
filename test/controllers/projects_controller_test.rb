@@ -2064,11 +2064,20 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   # Unit tests for private helper methods
-  test 'current_working_level returns criteria_level for baseline levels' do
+  test 'current_working_level returns baseline_badge_level for baseline levels' do
     controller = ProjectsController.new
     project = projects(:perfect_passing)
     result = controller.send(:current_working_level, 'baseline-1', project)
-    assert_equal 'baseline-1', result
+    assert_equal project.baseline_badge_level, result
+  end
+
+  test 'current_working_level returns in_progress for baseline when no baseline earned' do
+    # Ensures in_progress is returned for baseline series (not just metal),
+    # so earning baseline-1 from scratch is detected as a level change.
+    controller = ProjectsController.new
+    project = projects(:perfect_passing) # no badge_percentage_baseline_* set
+    result = controller.send(:current_working_level, 'baseline-1', project)
+    assert_equal 'in_progress', result
   end
 
   test 'current_working_level returns project badge_level for non-baseline' do

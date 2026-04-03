@@ -70,9 +70,10 @@ class ReportMailer < ApplicationMailer
   # @param old_badge_level [String] The previous badge level
   # @param new_badge_level [String] The new badge level
   # @param lost_level [Boolean] True if the project lost badge status
+  # @param badge_suffix [String] URL suffix for badge image ('badge' or 'baseline')
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
   # rubocop:disable Metrics/PerceivedComplexity
-  def email_owner(project, old_badge_level, new_badge_level, lost_level)
+  def email_owner(project, old_badge_level, new_badge_level, lost_level, badge_suffix)
     return if project.nil? || project.id.nil? || project.user_id.nil?
 
     @project = project
@@ -89,6 +90,7 @@ class ReportMailer < ApplicationMailer
     @email_destination = user.email
     @new_level = new_badge_level
     @old_level = old_badge_level
+    @badge_suffix = badge_suffix
     @hostname = ENV.fetch('PUBLIC_HOSTNAME', 'localhost')
     set_standard_headers
     I18n.with_locale(user.preferred_locale.to_sym) do

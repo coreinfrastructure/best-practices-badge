@@ -160,6 +160,31 @@ module Sections
     SECTION_TYPE_MAP[section.to_s]
   end
 
+  # Rank of each badge level for comparison purposes (higher = better).
+  # Shared by the controller (gain/loss detection on save) and the model
+  # (loss notification in update_all_badge_percentages).
+  BADGE_LEVEL_RANK = {
+    'in_progress' => 0,
+    # Metal series
+    'passing' => 1,
+    'silver' => 2,
+    'gold' => 3,
+    # Baseline series
+    'baseline-1' => 1,
+    'baseline-2' => 2,
+    'baseline-3' => 3
+  }.freeze
+
+  # Returns true if the change from old_level to new_level is a loss of status.
+  # Unknown levels default to rank 0. Cross-series comparisons (e.g. metal to
+  # baseline) return false since they are different badge types, not a downgrade.
+  # @param old_level [String] previous badge level
+  # @param new_level [String] new badge level
+  # @return [Boolean]
+  def self.badge_level_lost?(old_level, new_level)
+    (BADGE_LEVEL_RANK[new_level] || 0) < (BADGE_LEVEL_RANK[old_level] || 0)
+  end
+
   # Authoritative mapping from badge series type to its badge image URL suffix.
   # This is the single source of truth for badge URL path endings
   # (e.g., /projects/1/badge vs /projects/1/baseline).

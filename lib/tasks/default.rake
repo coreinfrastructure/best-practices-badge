@@ -814,7 +814,7 @@ task change_owner: :environment do
 end
 
 # Use this if the badge rules change.  This will email those who
-# gain/lose a badge because of the changes.
+# lose a badge because of the changes (gains are not emailed here).
 desc 'Run to recalculate all badge percentages for all projects'
 task update_all_badge_percentages: :environment do
   Project.update_all_badge_percentages(Criteria.keys)

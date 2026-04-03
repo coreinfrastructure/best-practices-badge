@@ -652,17 +652,18 @@ class Project < ApplicationRecord
     user_name || user_nickname
   end
 
-  # Updates badge percentages for all project entries and sends emails
-  # for any project where this causes loss or gain of a badge.
+  # Updates badge percentages for all project entries.
   # Use this after badging rules have changed. We precalculate and store
   # percentages in the database for speed, but rule changes don't automatically
   # update the precalculated values.
+  # NOTE: No emails are sent to badge losers or gainers — email notification
+  # only happens through the controller's normal save flow.
   # @param levels [Array<String>] array of levels to update
   # @raise [TypeError] if levels is not an Array
   # @raise [ArgumentError] if any level is invalid
   # @return [void]
-  # rubocop:disable Metrics/MethodLength
-  def self.update_all_badge_percentages(levels)
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  def self.update_all_badge_percentages(levels, notify_losses: true)
     raise TypeError, 'levels must be an Array' unless levels.is_a?(Array)
 
     levels.each do |l|
@@ -671,6 +672,10 @@ class Project < ApplicationRecord
     Project.skip_callbacks = true
     Project.find_each do |project|
       project.with_lock do
+        # Snapshot current badge levels before recalculation so we can
+        # detect any losses and notify the project owner.
+        old_metal_level = project.badge_level
+        old_baseline_level = project.baseline_badge_level
         # Create a single datetime value so that they are consistent
         current_time = Time.now.utc
         levels.each do |level|
@@ -679,6 +684,12 @@ class Project < ApplicationRecord
         project.update_tiered_percentage
         project.update_baseline_tiered_percentage
         project.save!(touch: false)
+        if notify_losses
+          notify_loss_if_needed(project, old_metal_level, project.badge_level,
+                                'badge')
+          notify_loss_if_needed(project, old_baseline_level,
+                                project.baseline_badge_level, 'baseline')
+        end
       end
     end
     Project.skip_callbacks = false
@@ -689,7 +700,17 @@ class Project < ApplicationRecord
     # Fastly credentials are absent.
     FastlyRails.purge_all
   end
-  # rubocop:enable Metrics/MethodLength
+
+  # Send a loss-notification email if old_level > new_level.
+  # Called only from update_all_badge_percentages.
+  def self.notify_loss_if_needed(project, old_level, new_level, badge_suffix)
+    return unless Sections.badge_level_lost?(old_level, new_level)
+
+    ReportMailer.email_owner(project, old_level, new_level, true,
+                             badge_suffix).deliver_now
+  end
+  private_class_method :notify_loss_if_needed
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   # The following configuration options are trusted.  Set them to
   # reasonable numbers or accept the defaults.

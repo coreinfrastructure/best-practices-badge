@@ -91,4 +91,34 @@ class RecalcTest < ActionDispatch::IntegrationTest
       Project.update_all_badge_percentages(['3'])
     end
   end
+
+  test 'notify_loss_if_needed sends email when metal badge is lost' do
+    project = projects(:perfect_passing)
+    assert_difference 'ActionMailer::Base.deliveries.size', 1 do
+      Project.send(:notify_loss_if_needed, project, 'passing', 'in_progress',
+                   'badge')
+    end
+  end
+
+  test 'notify_loss_if_needed sends email when baseline badge is lost' do
+    project = projects(:perfect_passing)
+    assert_difference 'ActionMailer::Base.deliveries.size', 1 do
+      Project.send(:notify_loss_if_needed, project, 'baseline-1', 'in_progress',
+                   'baseline')
+    end
+  end
+
+  test 'notify_loss_if_needed does not send email when no badge is lost' do
+    project = projects(:perfect_passing)
+    assert_no_difference 'ActionMailer::Base.deliveries.size' do
+      Project.send(:notify_loss_if_needed, project, 'in_progress', 'passing',
+                   'badge')
+    end
+  end
+
+  test 'notify_losses: false suppresses loss emails during recalc' do
+    assert_no_difference 'ActionMailer::Base.deliveries.size' do
+      Project.update_all_badge_percentages(Criteria.keys, notify_losses: false)
+    end
+  end
 end

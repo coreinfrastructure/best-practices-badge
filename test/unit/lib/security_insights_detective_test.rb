@@ -48,6 +48,16 @@ class SecurityInsightsDetectiveTest < ActiveSupport::TestCase
   # Edge cases
   # ---------------------------------------------------------------------------
 
+  test 'value_present? returns false for array of empty strings' do
+    detective = SecurityInsightsDetective.new
+    assert_equal false, detective.send(:value_present?, [''])
+    assert_equal false, detective.send(:value_present?, ['', ''])
+    assert_equal false, detective.send(:value_present?, [nil])
+    assert_equal false, detective.send(:value_present?, [nil, ''])
+    assert_equal true,  detective.send(:value_present?, ['x'])
+    assert_equal true,  detective.send(:value_present?, ['', 'x'])
+  end
+
   test 'unknown si_condition raises ArgumentError' do
     detective = SecurityInsightsDetective.new
     mapping = {

@@ -195,11 +195,15 @@ class SecurityInsightsDetective < Detective
   end
 
   # True if a non-nil, non-empty value is present.
+  # Arrays must contain at least one element that is itself non-nil/non-empty
+  # so that [""] or [nil] does not count as present.
   # @param value [Object] value to test
   # @return [Boolean]
   def value_present?(value)
     return false if value.nil?
     return false if value.respond_to?(:empty?) && value.empty?
+    return false if value.is_a?(Array) &&
+                    value.all? { |e| e.nil? || (e.respond_to?(:empty?) && e.empty?) }
 
     true
   end

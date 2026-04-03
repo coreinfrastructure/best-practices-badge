@@ -38,7 +38,14 @@
 #       time — never reaches any detective logic or OUTPUTS.
 #   1 = weak signal; worth surfacing but treat with caution
 #   2 = moderate confidence; partial or related requirement
-#   3 = strong confidence; essentially the same requirement
+#   2.5 = strong confidence; essentially the same requirement.
+#       We don't use the more obvious "3" because we also look at
+#       *other* data that might more *directly* justify the claim.
+#       In those cases we want to point directly to that claim.
+#       While having a security-insights value is nice, they often don't
+#       include comments, and so all we can record is that
+#       the security-insights file made a claim. If we can record the
+#       more direct evidence justifying the claim, we should do that.
 #
 # Target criterion descriptions (from config/locales/en.yml) appear as
 # # Target: comment blocks below each target_criterion line.
@@ -140,7 +147,7 @@ mappings:
     #     email address, a web form, VCS specialized tools, email addresses for
     #     security contacts, or other methods."
     inferred_status: Unmet
-    confidence: 3
+    confidence: 2.5
 
   # project.vulnerability-reporting.policy
   # Type: URL (optional)
@@ -786,7 +793,7 @@ mappings:
     #     security acumen and practices of the project. Ensure this is updated
     #     for new features or breaking changes."
     inferred_status: Met
-    confidence: 3
+    confidence: 2.5
 
   # ---------------------------------------------------------------------------
   # Release Details (repository.release)

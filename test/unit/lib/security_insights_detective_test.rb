@@ -197,7 +197,7 @@ class SecurityInsightsDetectiveTest < ActiveSupport::TestCase
                'reports-accepted=true must not propose osps_vm_03_01 (conf 0)'
   end
 
-  test 'reports-accepted false infers osps_vm_03_01 Unmet with confidence 3' do
+  test 'reports-accepted false infers osps_vm_03_01 Unmet with confidence 2.5' do
     yaml = <<~YAML
       project:
         vulnerability-reporting:
@@ -206,7 +206,7 @@ class SecurityInsightsDetectiveTest < ActiveSupport::TestCase
     YAML
     results = run_detective(MockRepoFiles.new('security-insights.yml', yaml))
     assert_equal CriterionStatus::UNMET, results[:osps_vm_03_01_status][:value]
-    assert_equal 3, results[:osps_vm_03_01_status][:confidence]
+    assert_equal 2.5, results[:osps_vm_03_01_status][:confidence]
   end
 
   test 'automated-pipeline true infers build Met' do

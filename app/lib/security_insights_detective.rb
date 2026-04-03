@@ -88,7 +88,7 @@ class SecurityInsightsDetective < Detective
         Rails.root.join('criteria/security_insights_map.yml'),
         permitted_classes: [],
         aliases: false
-      )['mappings'].reject { |m| m['confidence'].to_i.zero? }
+      )['mappings'].reject { |m| m['confidence'].to_f.zero? }
       unknown = raw.map { |m| m['si_condition'] }.uniq.reject { |c| KNOWN_CONDITIONS.include?(c) }
       raise ArgumentError, "Unknown si_condition(s) in security_insights_map.yml: #{unknown}" if unknown.any?
 

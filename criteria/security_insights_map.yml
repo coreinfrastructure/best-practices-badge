@@ -34,7 +34,8 @@
 # inferred_status: Met | Unmet | N/A
 # confidence: 0-3 (always < Chief::CONFIDENCE_OVERRIDE of 4)
 #   0 = intentionally disabled; documents an understood situation we have
-#       deliberately decided not to act on (skipped by the detective)
+#       deliberately decided not to act on.  Stripped from MAPPINGS at load
+#       time — never reaches any detective logic or OUTPUTS.
 #   1 = weak signal; worth surfacing but treat with caution
 #   2 = moderate confidence; partial or related requirement
 #   3 = strong confidence; essentially the same requirement

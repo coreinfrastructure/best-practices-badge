@@ -9,8 +9,10 @@
 #
 # The file is looked up in the repository root and .github/ directory.
 # Mappings from security-insights fields to badge criteria are defined in
-# criteria/security_insights_map.yml.
-# To refresh the # Target: criterion-text comments in that file, run:
+# criteria/security_insights_map.yml.  Entries with confidence: 0 are stripped
+# at load time and never evaluated — they exist only as documentation of
+# understood situations we deliberately do not act on.
+# To refresh the # Target: criterion-text comments in that map file, run:
 #   ruby script/update_security_insights_comments.rb
 #
 # SECURITY: The security-insights.yml file is untrusted data.  Here is a
@@ -67,11 +69,13 @@ class SecurityInsightsDetective < Detective
     .github/SECURITY-INSIGHTS.yml
   ].freeze
 
+  # Load the mappings from security-insights to our criteria.
+  # This screens out confidence=0 since they don't help.
   MAPPINGS = YAML.safe_load_file(
     Rails.root.join('criteria/security_insights_map.yml'),
     permitted_classes: [],
     aliases: false
-  )['mappings'].freeze
+  )['mappings'].reject { |m| m['confidence'].to_i.zero? }.freeze
 
   INPUTS  = [:repo_files].freeze
   OUTPUTS = MAPPINGS.map { |m| :"#{m['target_criterion']}_status" }.uniq.freeze
@@ -125,17 +129,12 @@ class SecurityInsightsDetective < Detective
 
   # Walk the MAPPINGS array, evaluate each condition, and collect proposals.
   # When multiple entries target the same criterion, keep the highest confidence.
-  # Entries with confidence 0 are intentionally skipped — this lets the map file
-  # document an understood situation that we are deliberately not acting on
-  # (set confidence: 0 instead of commenting out the entry entirely).
   # @param si_data [Hash] parsed security-insights YAML
   # @param location [String] file path (for explanation text)
   # @return [Hash] proposed criterion status changes
   def evaluate_mappings(si_data, location)
     results = {}
     MAPPINGS.each do |mapping|
-      next if mapping['confidence'].to_i.zero?
-
       value = dig_path(si_data, mapping['si_path'])
       next unless condition_met?(mapping, value)
 

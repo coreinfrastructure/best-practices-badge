@@ -337,6 +337,10 @@ en:
       inadequate_privileges: Sorry, you are not allowed to do that.
       notification_emails: Email notifications
       notification_emails_help: Receive email notifications about your projects
+      important_notifications: Important notifications
+      important_notifications_help: >-
+        Receive important notifications such as loss of a badge due to
+        changed requirements
     update:
       profile_updated: Profile updated
     show:

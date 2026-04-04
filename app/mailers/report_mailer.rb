@@ -65,7 +65,9 @@ class ReportMailer < ApplicationMailer
     end
   end
 
-  # Create email to badge entry owner about their new badge status
+  # Create email to badge entry owner about their new badge status.
+  # Looks up the owner from the database; prefer email_owner_with_user
+  # when the caller already has the user to avoid an extra DB query.
   # @param project [Project] The project whose badge status changed
   # @param old_badge_level [String] The previous badge level
   # @param new_badge_level [String] The new badge level
@@ -76,8 +78,30 @@ class ReportMailer < ApplicationMailer
   def email_owner(project, old_badge_level, new_badge_level, lost_level, badge_suffix)
     return if project.nil? || project.id.nil? || project.user_id.nil?
 
-    @project = project
     user = User.find(project.user_id)
+    return if user.nil?
+
+    email_owner_with_user(project, user, old_badge_level, new_badge_level,
+                          lost_level, badge_suffix)
+  end
+  # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/PerceivedComplexity
+
+  # Create email to badge entry owner using a pre-fetched user object.
+  # Used by the daily loss-notification task to avoid an extra DB query
+  # (the user is already loaded with a tight SELECT).
+  # @param project [Project] The project whose badge status changed
+  # @param user [User] The project owner (already loaded)
+  # @param old_badge_level [String] The previous badge level
+  # @param new_badge_level [String] The new badge level
+  # @param lost_level [Boolean] True if the project lost badge status
+  # @param badge_suffix [String] URL suffix for badge image ('badge' or 'baseline')
+  # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/PerceivedComplexity, Metrics/ParameterLists
+  def email_owner_with_user( # rubocop:disable Metrics/ParameterLists
+    project, user, old_badge_level, new_badge_level, lost_level, badge_suffix
+  )
+    return if project.nil? || project.id.nil?
     return if user.nil?
 
     email = user.email_if_decryptable
@@ -85,6 +109,7 @@ class ReportMailer < ApplicationMailer
     return unless user.email?
     return if email.exclude?('@')
 
+    @project = project
     @project_info_url =
       project_url(@project, locale: user.preferred_locale.to_sym)
     @email_destination = user.email
@@ -104,7 +129,7 @@ class ReportMailer < ApplicationMailer
     end
   end
   # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
-  # rubocop:enable Metrics/PerceivedComplexity
+  # rubocop:enable Metrics/PerceivedComplexity, Metrics/ParameterLists
 
   # Create reminder email to inactive badge entry owner
   # @param project [Project] The project for which to send a reminder

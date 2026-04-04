@@ -993,6 +993,20 @@ task reminders: :environment do
 end
 # rubocop:enable Style/Send
 
+# Run this task daily to send rate-limited badge-loss notifications.
+# Only notifies owners whose badge was lost due to criteria changes
+# (set by update_all_badge_percentages). Respects user important_notifications
+# preference and caps at BADGEAPP_MAX_BADGE_LOSS_NOTIFICATIONS (default 10).
+# Configure your system (e.g., Heroku) to run this daily.
+# rubocop:disable Style/Send
+desc 'Send badge-loss notifications (rate-limited, daily).'
+task badge_loss_notifications: :environment do
+  puts 'Sending badge-loss notifications. Emails sent:'
+  p Project.send :send_loss_notifications
+  true
+end
+# rubocop:enable Style/Send
+
 # rubocop:disable Style/Send
 desc 'Send monthly announcement of passing projects'
 task monthly_announcement: :environment do

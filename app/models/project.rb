@@ -59,6 +59,12 @@ class Project < ApplicationRecord
   # NOTE: If you add a new level, modify compute_tiered_percentage
   BADGE_LEVELS = (['in_progress'] + Sections::METAL_LEVEL_NAMES).freeze
 
+  # Baseline badge level names indexed by rank (same pattern as BADGE_LEVELS).
+  # BADGE_LEVEL_RANK maps level names to rank integers; these arrays invert
+  # that mapping so rank -> name lookups are O(1).
+  # Index 0 = 'in_progress' (rank 0 = no badge), 1 = 'baseline-1', etc.
+  BASELINE_BADGE_LEVELS = (['in_progress'] + Sections::BASELINE_LEVEL_NAMES).freeze
+
   # All criteria series (metal and baseline)
   CRITERIA_SERIES = {
     metal: Sections::METAL_LEVEL_NAMES,
@@ -673,7 +679,7 @@ class Project < ApplicationRecord
     Project.find_each do |project|
       project.with_lock do
         # Snapshot current badge levels before recalculation so we can
-        # detect any losses and notify the project owner.
+        # record any losses for later notification.
         old_metal_level = project.badge_level
         old_baseline_level = project.baseline_badge_level
         # Create a single datetime value so that they are consistent
@@ -683,13 +689,21 @@ class Project < ApplicationRecord
         end
         project.update_tiered_percentage
         project.update_baseline_tiered_percentage
-        project.save!(touch: false)
         if notify_losses
-          notify_loss_if_needed(project, old_metal_level, project.badge_level,
-                                'badge')
-          notify_loss_if_needed(project, old_baseline_level,
-                                project.baseline_badge_level, 'baseline')
+          # Store the rank of each lost level so the daily notification task
+          # can send emails in a rate-limited batch.  We always overwrite with
+          # the most recent loss; the daily task handles clearing.
+          if Sections.badge_level_lost?(old_metal_level, project.badge_level)
+            project.unreported_badge_loss =
+              Sections::BADGE_LEVEL_RANK[old_metal_level]
+          end
+          if Sections.badge_level_lost?(old_baseline_level,
+                                        project.baseline_badge_level)
+            project.unreported_baseline_badge_loss =
+              Sections::BADGE_LEVEL_RANK[old_baseline_level]
+          end
         end
+        project.save!(touch: false)
       end
     end
     Project.skip_callbacks = false
@@ -700,22 +714,32 @@ class Project < ApplicationRecord
     # Fastly credentials are absent.
     FastlyRails.purge_all
   end
-
-  # Send a loss-notification email if old_level > new_level.
-  # Called only from update_all_badge_percentages.
-  def self.notify_loss_if_needed(project, old_level, new_level, badge_suffix)
-    return unless Sections.badge_level_lost?(old_level, new_level)
-
-    # deliver_later queues via solid_queue so the DB row lock is released
-    # before the mail server is contacted.
-    ReportMailer.email_owner(project, old_level, new_level, true,
-                             badge_suffix).deliver_later
-  end
-  private_class_method :notify_loss_if_needed
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
   # The following configuration options are trusted.  Set them to
   # reasonable numbers or accept the defaults.
+
+  # Maximum number of loss-notification emails to send per day.
+  # Start small until we are confident the code is correct; the pending
+  # queue will drain over subsequent days even with a small cap.
+  MAX_BADGE_LOSS_NOTIFICATIONS =
+    (ENV['BADGEAPP_MAX_BADGE_LOSS_NOTIFICATIONS'] || 10).to_i
+
+  # Columns selected for the loss-notification project query.  Tight list so
+  # we avoid pulling criteria status/justification data into memory.
+  # tiered_percentage and badge_percentage_baseline_* are small integers
+  # needed to compute the current badge level for the "now at X" email line.
+  LOSS_NOTIFY_PROJECT_FIELDS =
+    'id, user_id, updated_at, unreported_badge_loss, ' \
+    'unreported_baseline_badge_loss, tiered_percentage, ' \
+    'badge_percentage_baseline_1, badge_percentage_baseline_2, ' \
+    'badge_percentage_baseline_3'
+
+  # Columns selected when loading a user for loss-notification sending.
+  # Tight list; the loop loads at most MAX_BADGE_LOSS_NOTIFICATIONS users.
+  LOSS_NOTIFY_USER_FIELDS =
+    'id, important_notifications, encrypted_email, encrypted_email_iv, ' \
+    'preferred_locale'
 
   # Maximum number of reminders to send by email at one time.
   # We want a rate limit to avoid being misinterpreted as a spammer,
@@ -817,6 +841,87 @@ class Project < ApplicationRecord
       .first(MAX_REMINDERS)
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+
+  # Returns projects with a pending badge-loss notification (either series).
+  # Selects only the columns needed for notification — no criteria data.
+  # Ordered by updated_at DESC so recently-active projects are notified first.
+  # @return [ActiveRecord::Relation]
+  def self.projects_with_pending_loss_notifications
+    Project
+      .select(LOSS_NOTIFY_PROJECT_FIELDS)
+      .where('unreported_badge_loss > 0 OR unreported_baseline_badge_loss > 0')
+      .reorder('updated_at DESC')
+  end
+  private_class_method :projects_with_pending_loss_notifications
+
+  # Send badge-loss notification emails in a rate-limited daily batch.
+  # Each email counts toward MAX_BADGE_LOSS_NOTIFICATIONS; silently-drained
+  # notifications (user opted out) do not.  Stops as soon as the cap is hit.
+  # Returns the number of emails actually sent.
+  # @return [Integer] number of emails sent
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:disable Rails/SkipsModelValidations
+  def self.send_loss_notifications
+    emails_sent = 0
+    projects_with_pending_loss_notifications.each do |project|
+      break if emails_sent >= MAX_BADGE_LOSS_NOTIFICATIONS
+
+      # Tight SELECT — only the fields needed for sending or skipping.
+      # Bounded by MAX_BADGE_LOSS_NOTIFICATIONS so N+1 cost is minimal.
+      user = User.select(LOSS_NOTIFY_USER_FIELDS).find(project.user_id)
+      can_email = user.important_notifications? &&
+                  user.encrypted_email.present?
+      now = Time.now.utc
+
+      if project.unreported_badge_loss > 0
+        if can_email
+          send_loss_email(project, user, BADGE_LEVELS[project.unreported_badge_loss],
+                          'badge')
+          emails_sent += 1
+        end
+        # update_columns intentional: only tracking fields, skip validations
+        project.update_columns(unreported_badge_loss: 0, last_loss_sent_at: now)
+      end
+
+      break if emails_sent >= MAX_BADGE_LOSS_NOTIFICATIONS
+
+      next if project.unreported_baseline_badge_loss <= 0
+
+      if can_email
+        send_loss_email(project, user,
+                        BASELINE_BADGE_LEVELS[project.unreported_baseline_badge_loss],
+                        'baseline')
+        emails_sent += 1
+      end
+      # update_columns intentional: only tracking fields, skip validations
+      project.update_columns(unreported_baseline_badge_loss: 0,
+                             last_loss_sent_at: now)
+    end
+    emails_sent
+  end
+  private_class_method :send_loss_notifications
+  # rubocop:enable Rails/SkipsModelValidations
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+
+  # Deliver one loss-notification email if the loss is still current.
+  # Skips silently if the project has since regained the lost level.
+  # @param project [Project] the project whose badge was lost
+  # @param user [User] the project owner (pre-fetched, avoids N+1)
+  # @param old_level [String] the badge level that was lost
+  # @param badge_suffix [String] 'badge' or 'baseline'
+  def self.send_loss_email(project, user, old_level, badge_suffix)
+    new_level =
+      if badge_suffix == 'baseline'
+        project.baseline_badge_level
+      else
+        project.badge_level
+      end
+    return unless Sections.badge_level_lost?(old_level, new_level)
+
+    ReportMailer.email_owner_with_user(project, user, old_level, new_level,
+                                       true, badge_suffix).deliver_later
+  end
+  private_class_method :send_loss_email
 
   # Return which projects should be announced as getting badges in the
   # month target_month with level (as a number, 0=passing)

@@ -981,31 +981,74 @@ task daily: :environment do
 end
 
 # Run this task to email a limited set of reminders to inactive projects
-# that do not have a badge.
+# and to drain any pending badge-loss or badge-warning notification queues.
 # Configure your system (e.g., Heroku) to run this daily.  If you're using
 # Heroku, see: https://devcenter.heroku.com/articles/scheduler
 # rubocop:disable Style/Send
-desc 'Send reminders to the oldest inactive project badge entries.'
+desc 'Send daily reminder and badge-notification emails (rate-limited).'
 task reminders: :environment do
   puts 'Sending inactive project reminders. List of reminded project ids:'
   p ProjectsController.send :send_reminders
+  puts 'Sending badge-loss notifications. Emails sent:'
+  p Project.send_loss_notifications
+  puts 'Sending badge-warning notifications. Emails sent:'
+  p Project.send_warning_notifications
   true
 end
 # rubocop:enable Style/Send
 
-# Run this task daily to send rate-limited badge-loss notifications.
+# Send badge-loss notifications as a standalone task.
+# Normally this is called automatically by the 'reminders' task.
 # Only notifies owners whose badge was lost due to criteria changes
 # (set by update_all_badge_percentages). Respects user important_notifications
 # preference and caps at BADGEAPP_MAX_BADGE_LOSS_NOTIFICATIONS (default 10).
-# Configure your system (e.g., Heroku) to run this daily.
-# rubocop:disable Style/Send
-desc 'Send badge-loss notifications (rate-limited, daily).'
+desc 'Send badge-loss notifications (rate-limited); also runs via reminders.'
 task badge_loss_notifications: :environment do
   puts 'Sending badge-loss notifications. Emails sent:'
-  p Project.send :send_loss_notifications
+  p Project.send_loss_notifications
   true
 end
-# rubocop:enable Style/Send
+
+# Run this task to preview which projects would lose a badge when criteria
+# change.  No database writes are made; results are printed to stdout.
+# Provide the date the criteria change takes effect via EFFECTIVE_DATE.
+# Example: rake badge_warning_report EFFECTIVE_DATE=2026-05-01
+desc 'Print projects that would lose a badge when criteria change (no DB writes).'
+task badge_warning_report: :environment do
+  date_str =
+    ENV.fetch('EFFECTIVE_DATE') do
+      raise ArgumentError, 'Set EFFECTIVE_DATE=YYYY-MM-DD'
+    end
+  Project.update_all_badge_warnings(
+    Criteria.keys, effective_date: Date.parse(date_str), report: true
+  )
+end
+
+# Run this task once after reviewing badge_warning_report to set the warning
+# flags so that badge_warning_notifications can send emails.
+# Example: rake update_badge_warnings EFFECTIVE_DATE=2026-05-01
+desc 'Set badge-warning flags for projects that will lose a badge.'
+task update_badge_warnings: :environment do
+  date_str =
+    ENV.fetch('EFFECTIVE_DATE') do
+      raise ArgumentError, 'Set EFFECTIVE_DATE=YYYY-MM-DD'
+    end
+  Project.update_all_badge_warnings(
+    Criteria.keys, effective_date: Date.parse(date_str)
+  )
+end
+
+# Send badge-warning notifications as a standalone task.
+# Normally this is called automatically by the 'reminders' task.
+# Only notifies owners whose badge WILL BE lost due to upcoming criteria
+# changes (set by update_badge_warnings). Respects user important_notifications
+# preference and caps at BADGEAPP_MAX_BADGE_WARNING_NOTIFICATIONS (default 10).
+desc 'Send badge-warning notifications (rate-limited); also runs via reminders.'
+task badge_warning_notifications: :environment do
+  puts 'Sending badge-warning notifications. Emails sent:'
+  p Project.send_warning_notifications
+  true
+end
 
 # rubocop:disable Style/Send
 desc 'Send monthly announcement of passing projects'

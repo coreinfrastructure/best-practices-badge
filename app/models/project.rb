@@ -716,6 +716,133 @@ class Project < ApplicationRecord
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
+  # Preview or record which projects will lose a badge when criteria change.
+  #
+  # Call this BEFORE running update_all_badge_percentages so that owners can
+  # be warned in advance.  The method recalculates badge levels in memory
+  # (same logic as update_all_badge_percentages) but never writes the new
+  # percentages back — only the warning columns are touched.
+  #
+  # @param levels [Array<String>] criteria level keys to recalculate
+  # @param effective_date [Date] date the criteria change takes effect
+  # @param report [Boolean] when true, print a human-readable report to
+  #   stdout instead of writing to the database (default: false)
+  # @return [void]
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  def self.update_all_badge_warnings(levels, effective_date:, report: false)
+    raise TypeError, 'levels must be an Array' unless levels.is_a?(Array)
+
+    levels.each do |l|
+      raise ArgumentError, "Invalid level: #{l}" unless l.in? Criteria.keys
+    end
+    # No skip_callbacks here: we never call project.save!, so the
+    # before_save callback cannot fire.  update_columns bypasses callbacks
+    # unconditionally, making skip_callbacks both unnecessary and risky
+    # (an exception would leave it true for the process lifetime).
+    Project.find_each do |project|
+      apply_badge_warning_for_project(project, levels,
+                                      effective_date: effective_date,
+                                      report: report)
+    end
+  end
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+
+  # Recalculates badge levels for one project and either prints a warning
+  # report line (report: true) or writes warning columns to the DB.
+  # Private helper for update_all_badge_warnings.
+  # @param project [Project] the project to check
+  # @param levels [Array<String>] criteria level keys to recalculate
+  # @param effective_date [Date] date the criteria change takes effect
+  # @param report [Boolean] print instead of writing to DB
+  # @return [void]
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  def self.apply_badge_warning_for_project(
+    project,
+    levels,
+    effective_date:,
+    report:
+  )
+    old_metal_level    = project.badge_level
+    old_baseline_level = project.baseline_badge_level
+    current_time = Time.now.utc
+    levels.each { |level| project.update_badge_percentage(level, current_time) }
+    project.update_tiered_percentage
+    project.update_baseline_tiered_percentage
+    new_metal_level    = project.badge_level
+    new_baseline_level = project.baseline_badge_level
+
+    metal_lost    = Sections.badge_level_lost?(old_metal_level, new_metal_level)
+    baseline_lost = Sections.badge_level_lost?(old_baseline_level,
+                                               new_baseline_level)
+    return unless metal_lost || baseline_lost
+
+    if report
+      print_warning_report_lines(project, metal_lost, baseline_lost,
+                                 old_metal_level, new_metal_level,
+                                 old_baseline_level, new_baseline_level)
+    else
+      save_warning_columns(project, effective_date, metal_lost, baseline_lost,
+                           old_metal_level, old_baseline_level)
+    end
+  end
+  private_class_method :apply_badge_warning_for_project
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+
+  # Prints admin report lines for one project's pending badge warning.
+  # @param project [Project] the project (full object needed for name)
+  # rubocop:disable Metrics/ParameterLists
+  def self.print_warning_report_lines(
+    project,
+    metal_lost,
+    baseline_lost,
+    old_metal_level,
+    new_metal_level,
+    old_baseline_level,
+    new_baseline_level
+  )
+    user = User.select('id, name, encrypted_email, encrypted_email_iv')
+               .find(project.user_id)
+    email = user.email_if_decryptable
+    prefix = "Project #{project.id} \"#{project.name}\" | " \
+             "User #{user.id} #{user.name} <#{email}>"
+    # rubocop:disable Rails/Output
+    if metal_lost
+      $stdout.puts "#{prefix} | #{old_metal_level} -> #{new_metal_level}"
+    end
+    return unless baseline_lost
+
+    $stdout.puts "#{prefix} | " \
+                 "#{old_baseline_level} -> #{new_baseline_level} (baseline)"
+
+    # rubocop:enable Rails/Output
+  end
+  private_class_method :print_warning_report_lines
+  # rubocop:enable Metrics/ParameterLists
+
+  # Writes warning columns to the DB for one project.
+  # rubocop:disable Rails/SkipsModelValidations, Metrics/ParameterLists
+  def self.save_warning_columns(
+    project,
+    effective_date,
+    metal_lost,
+    baseline_lost,
+    old_metal_level,
+    old_baseline_level
+  )
+    cols = { badge_warning_effective_date: effective_date }
+    if metal_lost
+      cols[:unreported_badge_warning] =
+        Sections::BADGE_LEVEL_RANK[old_metal_level]
+    end
+    if baseline_lost
+      cols[:unreported_baseline_badge_warning] =
+        Sections::BADGE_LEVEL_RANK[old_baseline_level]
+    end
+    project.update_columns(cols)
+  end
+  private_class_method :save_warning_columns
+  # rubocop:enable Rails/SkipsModelValidations, Metrics/ParameterLists
+
   # The following configuration options are trusted.  Set them to
   # reasonable numbers or accept the defaults.
 
@@ -724,6 +851,10 @@ class Project < ApplicationRecord
   # queue will drain over subsequent days even with a small cap.
   MAX_BADGE_LOSS_NOTIFICATIONS =
     (ENV['BADGEAPP_MAX_BADGE_LOSS_NOTIFICATIONS'] || 10).to_i
+
+  # Maximum number of warning-notification emails to send per day.
+  MAX_BADGE_WARNING_NOTIFICATIONS =
+    (ENV['BADGEAPP_MAX_BADGE_WARNING_NOTIFICATIONS'] || 10).to_i
 
   # Columns selected for the loss-notification project query.  Tight list so
   # we avoid pulling criteria status/justification data into memory.
@@ -735,8 +866,16 @@ class Project < ApplicationRecord
     'badge_percentage_baseline_1, badge_percentage_baseline_2, ' \
     'badge_percentage_baseline_3'
 
-  # Columns selected when loading a user for loss-notification sending.
-  # Tight list; the loop loads at most MAX_BADGE_LOSS_NOTIFICATIONS users.
+  # Columns selected for the warning-notification project query.
+  # Includes badge_warning_effective_date so the email can state the deadline.
+  WARN_NOTIFY_PROJECT_FIELDS =
+    'id, user_id, updated_at, unreported_badge_warning, ' \
+    'unreported_baseline_badge_warning, badge_warning_effective_date, ' \
+    'tiered_percentage, badge_percentage_baseline_1, ' \
+    'badge_percentage_baseline_2, badge_percentage_baseline_3'
+
+  # Columns selected when loading a user for loss/warning notification sending.
+  # Tight list; the loop loads at most MAX_BADGE_*_NOTIFICATIONS users.
   LOSS_NOTIFY_USER_FIELDS =
     'id, important_notifications, encrypted_email, encrypted_email_iv, ' \
     'preferred_locale'
@@ -899,7 +1038,6 @@ class Project < ApplicationRecord
     end
     emails_sent
   end
-  private_class_method :send_loss_notifications
   # rubocop:enable Rails/SkipsModelValidations
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
@@ -922,6 +1060,85 @@ class Project < ApplicationRecord
                                        true, badge_suffix).deliver_later
   end
   private_class_method :send_loss_email
+
+  # Returns projects with a pending badge-warning notification (either series).
+  # Selects only the columns needed for notification — no criteria data.
+  # Ordered by updated_at DESC so recently-active projects are warned first.
+  # @return [ActiveRecord::Relation]
+  def self.projects_with_pending_warning_notifications
+    Project
+      .select(WARN_NOTIFY_PROJECT_FIELDS)
+      .where('unreported_badge_warning > 0 OR ' \
+             'unreported_baseline_badge_warning > 0')
+      .reorder('updated_at DESC')
+  end
+  private_class_method :projects_with_pending_warning_notifications
+
+  # Send badge-warning notification emails in a rate-limited daily batch.
+  # Each email counts toward MAX_BADGE_WARNING_NOTIFICATIONS; silently-drained
+  # notifications (user opted out) do not.  Stops as soon as the cap is hit.
+  # Returns the number of emails actually sent.
+  # @return [Integer] number of emails sent
+  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:disable Rails/SkipsModelValidations
+  def self.send_warning_notifications
+    emails_sent = 0
+    projects_with_pending_warning_notifications.each do |project|
+      break if emails_sent >= MAX_BADGE_WARNING_NOTIFICATIONS
+
+      # Tight SELECT — only the fields needed for sending or skipping.
+      # Bounded by MAX_BADGE_WARNING_NOTIFICATIONS so N+1 cost is minimal.
+      user = User.select(LOSS_NOTIFY_USER_FIELDS).find(project.user_id)
+      can_email = user.important_notifications? &&
+                  user.encrypted_email.present?
+      now = Time.now.utc
+
+      if project.unreported_badge_warning > 0
+        if can_email
+          send_warning_email(
+            project, user,
+            BADGE_LEVELS[project.unreported_badge_warning], 'badge'
+          )
+          emails_sent += 1
+        end
+        # update_columns intentional: only tracking fields, skip validations
+        project.update_columns(unreported_badge_warning: 0,
+                               last_warning_sent_at: now)
+      end
+
+      break if emails_sent >= MAX_BADGE_WARNING_NOTIFICATIONS
+
+      next if project.unreported_baseline_badge_warning <= 0
+
+      if can_email
+        send_warning_email(
+          project, user,
+          BASELINE_BADGE_LEVELS[project.unreported_baseline_badge_warning],
+          'baseline'
+        )
+        emails_sent += 1
+      end
+      # update_columns intentional: only tracking fields, skip validations
+      project.update_columns(unreported_baseline_badge_warning: 0,
+                             last_warning_sent_at: now)
+    end
+    emails_sent
+  end
+  # rubocop:enable Rails/SkipsModelValidations
+  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+
+  # Deliver one warning-notification email.
+  # Unlike send_loss_email, there is no "already-regained" check — the badge
+  # has not been lost yet, so the warning is always valid at send time.
+  # @param project [Project] the project at risk of losing its badge
+  # @param user [User] the project owner (pre-fetched, avoids N+1)
+  # @param old_level [String] the badge level that will be lost
+  # @param badge_suffix [String] 'badge' or 'baseline'
+  def self.send_warning_email(project, user, old_level, badge_suffix)
+    ReportMailer.warn_owner_with_user(project, user, old_level,
+                                      badge_suffix).deliver_later
+  end
+  private_class_method :send_warning_email
 
   # Return which projects should be announced as getting badges in the
   # month target_month with level (as a number, 0=passing)

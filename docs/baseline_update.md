@@ -367,6 +367,68 @@ You can check translation status before and after with:
 rake translation:status
 ```
 
+## Sending advance warnings (before the enforce date)
+
+Before the enforce date arrives, you can preview which projects will lose a
+badge, send them advance notice, and verify the count is manageable. None of
+these steps are required, but they are strongly recommended.
+
+### Step A: Preview affected projects
+
+Run a dry-run report that shows every project which would lose a badge under
+the new criteria. No database writes occur.
+
+```bash
+rake badge_warning_report EFFECTIVE_DATE=YYYY-MM-DD
+```
+
+Replace `YYYY-MM-DD` with the enforce date set in `BaselineConfig::ENFORCE_DATE`.
+Each line of output shows:
+
+```
+Project 42 "My Project" | User 7 Alice <alice@example.com> | baseline-1 -> in_progress (baseline)
+```
+
+Review the list. If the count looks unexpectedly large, re-check the criteria
+changes before proceeding — a very large loss count may indicate an import
+error.
+
+### Step B: Set warning flags
+
+Once you are satisfied with the report, record the warning in the database so
+that the daily notification job can start sending emails:
+
+```bash
+rake update_badge_warnings EFFECTIVE_DATE=YYYY-MM-DD
+```
+
+This writes `unreported_badge_warning` / `unreported_baseline_badge_warning`
+and `badge_warning_effective_date` to each affected project row.
+
+To verify how many projects have pending warnings:
+
+```ruby
+# Rails console
+Project.where('unreported_badge_warning > 0 OR unreported_baseline_badge_warning > 0').count
+```
+
+### Step C: Warning emails drain automatically
+
+The `reminders` rake task (already configured on the scheduler) calls
+`badge_warning_notifications` every day as part of its normal run. Each
+invocation sends at most `BADGEAPP_MAX_BADGE_WARNING_NOTIFICATIONS` emails
+(default: 10) and clears the flags for the projects it contacts. The queue
+drains over successive days until all affected owners have been notified.
+
+You can also trigger a manual drain at any time:
+
+```bash
+rake badge_warning_notifications
+```
+
+See [Email notification rate configuration](#email-notification-rate-configuration)
+below for how to adjust the daily cap and check remaining counts.
+
 ## Completing the baseline update transition
 
 When the enforce date arrives (the date set in `baseline_enforce_date`),
@@ -484,6 +546,23 @@ criteria from display, and close out the version notice.
    manual cache invalidation is needed. The next request for any
    project's `/baseline` badge will fetch the freshly computed value.
 
+   **Badge-loss notifications are sent automatically.** For each project
+   whose badge level dropped, `update_all_badge_percentages` records the
+   loss in `unreported_badge_loss` / `unreported_baseline_badge_loss`. The
+   `reminders` rake task (already running daily on the scheduler) calls
+   `badge_loss_notifications` every day, which sends at most
+   `BADGEAPP_MAX_BADGE_LOSS_NOTIFICATIONS` emails (default: 10) and clears
+   the flags. The queue drains over successive days with no further action
+   required. To check how many loss notifications remain:
+
+   ```ruby
+   # Rails console
+   Project.where('unreported_badge_loss > 0 OR unreported_baseline_badge_loss > 0').count
+   ```
+
+   See [Email notification rate configuration](#email-notification-rate-configuration)
+   for how to adjust the daily cap if the default is too slow or too fast.
+
 7. **Verify** from the Rails console:
 
    ```ruby
@@ -497,3 +576,57 @@ criteria from display, and close out the version notice.
    ```
 
    Replace `osps_xx_nn_nn` and `osps_yy_nn_nn` with the actual keys.
+
+## Email notification rate configuration
+
+Two environment variables cap how many badge emails the daily job sends each
+day. The caps exist to avoid being flagged as a spammer and to limit blast
+radius if there is a bug.
+
+| Variable | Default | Controls |
+|---|---|---|
+| `BADGEAPP_MAX_BADGE_WARNING_NOTIFICATIONS` | 10 | Advance-warning emails per day |
+| `BADGEAPP_MAX_BADGE_LOSS_NOTIFICATIONS` | 10 | Badge-loss notification emails per day |
+
+Set them in your hosting environment (e.g., on Heroku:
+`heroku config:set BADGEAPP_MAX_BADGE_LOSS_NOTIFICATIONS=50`).
+
+### Estimating days to drain the queue
+
+Before changing a cap, check how many notifications are pending:
+
+```ruby
+# Rails console — pending loss notifications
+Project.where('unreported_badge_loss > 0 OR unreported_baseline_badge_loss > 0').count
+
+# Rails console — pending warning notifications
+Project.where('unreported_badge_warning > 0 OR unreported_baseline_badge_warning > 0').count
+```
+
+Divide the count by the daily cap to get the approximate number of days
+to drain the queue. For example, 50 pending loss notifications with the
+default cap of 10 will drain in about 5 days. Raise the cap if you need
+faster delivery; lower it if you want a slower rollout.
+
+Note that silently-drained notifications (owners who have opted out of
+important notifications) do not count toward the cap, so the actual
+email count may be lower than the pending-row count.
+
+### How the daily email task works
+
+The `reminders` rake task (already run once per day by the Heroku Scheduler
+or equivalent) automatically includes both notification drains alongside the
+regular inactive-project reminders:
+
+```
+rake reminders
+```
+
+No separate scheduler entry is required for either notification type.
+The tasks are also available as standalone commands if you need to trigger
+a manual drain:
+
+```bash
+rake badge_loss_notifications
+rake badge_warning_notifications
+```

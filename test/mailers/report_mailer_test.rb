@@ -44,6 +44,57 @@ class ReportMailerTest < ActionMailer::TestCase
     assert_not_includes email.body.to_s, '/badge'
   end
 
+  test 'warn_owner_with_user sends warning email' do
+    project = projects(:one)
+    project.update_column(:badge_warning_effective_date, Time.zone.today + 30)
+    user = project.user
+    email = ReportMailer.warn_owner_with_user(
+      project, user, 'passing', 'badge'
+    ).deliver_now
+    assert_not ActionMailer::Base.deliveries.empty?
+    assert_predicate email.from, :present?
+    assert_predicate email.to, :present?
+    assert_predicate email.subject, :present?
+  end
+
+  test 'warn_owner_with_user sends no email for nil project' do
+    before = ActionMailer::Base.deliveries.count
+    ReportMailer.warn_owner_with_user(nil, users(:test_user), 'passing', 'badge').deliver_now
+    assert_equal before, ActionMailer::Base.deliveries.count
+  end
+
+  test 'warn_owner_with_user sends no email for project with nil id' do
+    project = Project.new
+    before = ActionMailer::Base.deliveries.count
+    ReportMailer.warn_owner_with_user(project, users(:test_user), 'passing', 'badge').deliver_now
+    assert_equal before, ActionMailer::Base.deliveries.count
+  end
+
+  test 'warn_owner_with_user sends no email for nil user' do
+    before = ActionMailer::Base.deliveries.count
+    ReportMailer.warn_owner_with_user(projects(:one), nil, 'passing', 'badge').deliver_now
+    assert_equal before, ActionMailer::Base.deliveries.count
+  end
+
+  test 'warn_owner_with_user sends no email when email cannot be decrypted' do
+    project = projects(:one)
+    user = project.user
+    def user.email_if_decryptable = 'CANNOT_DECRYPT'
+    before = ActionMailer::Base.deliveries.count
+    ReportMailer.warn_owner_with_user(project, user, 'passing', 'badge').deliver_now
+    assert_equal before, ActionMailer::Base.deliveries.count
+  end
+
+  test 'warn_owner_with_user sends no email when email lacks @' do
+    project = projects(:one)
+    user = project.user
+    def user.email_if_decryptable = 'noemail'
+    def user.email? = true
+    before = ActionMailer::Base.deliveries.count
+    ReportMailer.warn_owner_with_user(project, user, 'passing', 'badge').deliver_now
+    assert_equal before, ActionMailer::Base.deliveries.count
+  end
+
   test 'Does the monthly announcement run?' do
     # This is a quick sanity test, not an in-depth test.
     # Use 'example.org' per RFC 2606

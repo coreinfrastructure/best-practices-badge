@@ -226,6 +226,18 @@ class RecalcTest < ActionDispatch::IntegrationTest
     assert_equal 0, Project.find(project.id).unreported_badge_warning
   end
 
+  test 'update_all_badge_warnings report: true prints baseline info' do
+    project = projects(:one)
+    project.update_column(:badge_percentage_baseline_1, 100)
+    assert_output(/\(baseline\)/) do
+      Project.update_all_badge_warnings(['baseline-1'],
+                                        effective_date: Time.zone.today + 30,
+                                        report: true)
+    end
+    # Must not write warning columns in report mode
+    assert_equal 0, Project.find(project.id).unreported_baseline_badge_warning
+  end
+
   # --- send_warning_notifications tests ---
 
   test 'send_warning_notifications enqueues email and clears column' do

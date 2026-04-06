@@ -216,6 +216,11 @@ See [governance](docs/governance.md) for how this project is governed,
 project technical steering committee (TSC) members, and
 [admin](docs/admin.md) for information to web site application administrators.
 
+## Software Bill of Materials (SBOM)
+
+We generate an Software Bill of Materials (SBOM) in SPDX format.
+[Here is more information how to get our SPDX SBOMs](docs/sbom.md).
+
 ## License
 
 All material in this repository is released under the [MIT license](./LICENSE).

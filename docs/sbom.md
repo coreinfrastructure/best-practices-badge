@@ -1,7 +1,7 @@
 # Getting a Software Bill of Materials (SBOM)
 
-If you want our Software Bill of Materials (SBOM) in SPDX format,
-here is how to get that information.
+We generate an Software Bill of Materials (SBOM) in SPDX format.
+If you want our SPDX SBOM, here is how to get that information.
 
 ## Production and staging SBOMs (per deployment)
 

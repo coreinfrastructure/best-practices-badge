@@ -42,6 +42,8 @@ sw:
     edit:
       notification_emails: Arifa za barua pepe
       notification_emails_help: Pokea arifa za barua pepe kuhusu miradi yako
+      important_notifications: Arifa muhimu
+      important_notifications_help: Pokea arifa muhimu kama vile kupoteza nishani kwa sababu ya mahitaji yaliyobadilishwa
   project_stats:
     index:
       project_stats_header: Takwimu za Miradi
@@ -496,6 +498,11 @@ sw:
     ending: "--- David A. Wheeler, Kiongozi wa Nishani ya Mazoea Bora ya OpenSSF"
     unsubscribe_notice_html: 'Ili kujiondoa kutoka kwa arifa hizi za barua pepe, tafadhali tembelea: <a href="%{unsubscribe_url}">%{unsubscribe_url}</a>'
     unsubscribe_notice_text: 'Ili kujiondoa kutoka kwa arifa hizi za barua pepe, tafadhali tembelea: %{unsubscribe_url}'
+    subject_warned_level: Nishani yako ya mazoea bora inaweza kupoteza hali ya "%{old_level}"
+    warned_level_message: |-
+      Hii ni taarifa ya mapema kwamba nishani ya "%{old_level}" ya mradi wako inaweza
+      kupotea tarehe %{effective_date} wakati vigezo vilivyosasishwa vitakapoanza kutumika.
+      Tafadhali kagua ingizo lako la nishani kwenye URL ifuatayo kabla ya tarehe hiyo:
   criteria:
     '0':
       description_good:
@@ -1273,3 +1280,7 @@ sw:
       test_automation: Utomatiaji wa majaribio (kujiamini %{confidence})
     repo_json:
       field_from_file: Thamani kutoka faili ya JSON ya bestpractices ya mradi
+    security_insights:
+      field_value: 'Kulingana na %{location}: %{field}=%{value}'
+      array_match: 'Kulingana na %{location}: %{field} %{match}'
+      comment_suffix: 'Maoni yanasema: "%{comment}".'

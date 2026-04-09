@@ -19,6 +19,8 @@ fr:
     edit:
       notification_emails: Notifications par courriel
       notification_emails_help: Recevoir des notifications par courriel concernant vos projets
+      important_notifications: Notifications importantes
+      important_notifications_help: Recevoir des notifications importantes telles que la perte d'un badge en raison de critères modifiés
   projects:
     edit:
       new_owner: Identifiant du propriétaire (un entier positif), modifier pour changer la propriété
@@ -96,6 +98,10 @@ fr:
   report_mailer:
     unsubscribe_notice_html: 'Pour vous désabonner de ces notifications par email, veuillez visiter : <a href="%{unsubscribe_url}">%{unsubscribe_url}</a>'
     unsubscribe_notice_text: 'Pour vous désabonner de ces notifications par email, veuillez visiter : %{unsubscribe_url}'
+    subject_warned_level: Votre badge de bonnes pratiques pourrait perdre le statut "%{old_level}"
+    warned_level_message: |-
+      Ceci est un avis préalable que le badge "%{old_level}" de votre projet pourrait être perdu le %{effective_date} lors de l'entrée en vigueur des critères mis à jour.
+      Veuillez consulter votre entrée de badge à l'URL suivante avant cette date :
   criteria:
     baseline-1:
       osps_ac_01_01:
@@ -356,6 +362,10 @@ fr:
       test_automation: Automatisation des tests (confiance %{confidence})
     repo_json:
       field_from_file: Valeur provenant du fichier JSON bestpractices du projet
+    security_insights:
+      field_value: 'Selon %{location} : %{field}=%{value}'
+      array_match: 'Selon %{location} : %{field} %{match}'
+      comment_suffix: 'Le commentaire indique : "%{comment}".'
   static_pages:
     criteria_stats:
       obsolete: Obsolète

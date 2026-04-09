@@ -157,6 +157,8 @@ fr:
         à faire cela.
       notification_emails:
       notification_emails_help:
+      important_notifications:
+      important_notifications_help:
   project_stats:
     index:
       project_stats_header: Statistiques du projet
@@ -999,6 +1001,8 @@ fr:
       Merci pour votre attention.
     unsubscribe_notice_html:
     unsubscribe_notice_text:
+    subject_warned_level:
+    warned_level_message:
   project_name_unknown: "(Nom inconnu)"
   locale_name:
     en: Anglais
@@ -4010,3 +4014,7 @@ fr:
       test_automation:
     repo_json:
       field_from_file:
+    security_insights:
+      field_value:
+      array_match:
+      comment_suffix:

@@ -19,6 +19,8 @@ ja:
     edit:
       notification_emails: メール通知
       notification_emails_help: プロジェクトに関するメール通知を受信する
+      important_notifications: 重要な通知
+      important_notifications_help: 要件変更によるバッジ失効など、重要な通知を受け取ります
   projects:
     edit:
       new_owner: 所有者ID（正の整数）、所有権を変更するには変更してください
@@ -96,6 +98,11 @@ ja:
   report_mailer:
     unsubscribe_notice_html: これらのメール通知の登録を解除するには、次のURLにアクセスしてください：<a href="%{unsubscribe_url}">%{unsubscribe_url}</a>
     unsubscribe_notice_text: これらのメール通知の登録を解除するには、次のURLにアクセスしてください：%{unsubscribe_url}
+    subject_warned_level: あなたのベストプラクティスバッジの "%{old_level}" ステータスが失われる可能性があります
+    warned_level_message: |-
+      これは、あなたのプロジェクトの "%{old_level}" バッジが
+      更新された基準が有効となる %{effective_date} に失われる可能性があることを事前にお知らせするものです。
+      その日付より前に、以下のURLでバッジエントリをご確認ください：
   criteria:
     baseline-1:
       osps_ac_01_01:
@@ -356,6 +363,10 @@ ja:
       test_automation: テスト自動化（確信度 %{confidence}）
     repo_json:
       field_from_file: プロジェクトのbestpractices JSONファイルからの値
+    security_insights:
+      field_value: "%{location} の情報：%{field}=%{value}"
+      array_match: "%{location} の情報：%{field} %{match}"
+      comment_suffix: コメント："%{comment}"。
   static_pages:
     criteria_stats:
       obsolete: 廃止

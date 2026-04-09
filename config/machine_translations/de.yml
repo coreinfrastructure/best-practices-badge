@@ -22,6 +22,8 @@ de:
     edit:
       notification_emails: E-Mail-Benachrichtigungen
       notification_emails_help: E-Mail-Benachrichtigungen über Ihre Projekte erhalten
+      important_notifications: Wichtige Benachrichtigungen
+      important_notifications_help: Erhalten Sie wichtige Benachrichtigungen, z. B. den Verlust eines Abzeichens aufgrund geänderter Anforderungen
   projects:
     edit:
       new_owner: Eigentümer-ID (eine positive ganze Zahl), ändern um Eigentümerschaft zu ändern
@@ -99,6 +101,11 @@ de:
   report_mailer:
     unsubscribe_notice_html: 'Um sich von diesen E-Mail-Benachrichtigungen abzumelden, besuchen Sie bitte: <a href="%{unsubscribe_url}">%{unsubscribe_url}</a>'
     unsubscribe_notice_text: 'Um sich von diesen E-Mail-Benachrichtigungen abzumelden, besuchen Sie bitte: %{unsubscribe_url}'
+    subject_warned_level: Ihr Best-Practices-Abzeichen könnte den "%{old_level}"-Status verlieren
+    warned_level_message: |-
+      Dies ist eine Vorankündigung, dass das "%{old_level}"-Abzeichen Ihres Projekts
+      am %{effective_date} verloren gehen könnte, wenn aktualisierte Kriterien in Kraft treten.
+      Bitte überprüfen Sie Ihren Abzeichen-Eintrag unter der folgenden URL vor diesem Datum:
   criteria:
     '0':
       maintained:
@@ -427,6 +434,10 @@ de:
       test_automation: Testautomatisierung (Vertrauen %{confidence})
     repo_json:
       field_from_file: Wert aus der bestpractices JSON-Datei des Projekts
+    security_insights:
+      field_value: 'Gemäß %{location}: %{field}=%{value}'
+      array_match: 'Gemäß %{location}: %{field} %{match}'
+      comment_suffix: 'Kommentar lautet: "%{comment}".'
   static_pages:
     criteria_stats:
       obsolete: Veraltet

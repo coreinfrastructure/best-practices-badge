@@ -35,6 +35,8 @@ en:
       inadequate_privileges: Sorry, you are not allowed to do that.
       notification_emails: Email notifications
       notification_emails_help: Receive email notifications about your projects
+      important_notifications: Important notifications
+      important_notifications_help: Receive important notifications such as loss of a badge due to changed requirements
   projects:
     index:
       silver_in_progress_variable: Passing, partial silver (%{percent}%+ tiered)
@@ -126,6 +128,11 @@ en:
   report_mailer:
     unsubscribe_notice_html: 'To unsubscribe from these email notifications, please visit: <a href="%{unsubscribe_url}">%{unsubscribe_url}</a>'
     unsubscribe_notice_text: 'To unsubscribe from these email notifications, please visit: %{unsubscribe_url}'
+    subject_warned_level: Your best practices badge may lose "%{old_level}" status
+    warned_level_message: |-
+      This is an advance notice that your project's "%{old_level}" badge may be
+      lost on %{effective_date} when updated criteria take effect.
+      Please review your badge entry at the following URL before that date:
   criteria:
     baseline-1:
       osps_ac_01_01:
@@ -444,3 +451,7 @@ en:
       test_automation: Test automation (confidence %{confidence})
     repo_json:
       field_from_file: Value from project's bestpractices JSON file
+    security_insights:
+      field_value: 'Per %{location}: %{field}=%{value}'
+      array_match: 'Per %{location}: %{field} %{match}'
+      comment_suffix: 'Comment says: "%{comment}".'

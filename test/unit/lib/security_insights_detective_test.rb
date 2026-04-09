@@ -58,14 +58,26 @@ class SecurityInsightsDetectiveTest < ActiveSupport::TestCase
     assert_equal true,  detective.send(:value_present?, ['', 'x'])
   end
 
-  test 'unknown si_condition raises ArgumentError' do
+  test 'si_item_field with si_alternatives produces correct array_match_description' do
     detective = SecurityInsightsDetective.new
     mapping = {
-      'si_condition' => 'unknown_condition_xyz',
-      'si_value' => nil,
-      'si_values' => nil
+      'si_path'         => 'repository.security.tools',
+      'si_item_field'   => 'type',
+      'si_alternatives' => %w[SAST DAST]
     }
-    assert_raises(ArgumentError) { detective.send(:condition_met?, mapping, 'any value') }
+    assert_equal 'type=SAST|DAST', detective.send(:array_match_description, mapping)
+  end
+
+  test 'si_value and si_alternatives together raises ArgumentError' do
+    detective = SecurityInsightsDetective.new
+    mapping = { 'si_value' => 'x', 'si_alternatives' => %w[a b] }
+    assert_raises(ArgumentError) { detective.send(:condition_met?, mapping, 'x') }
+  end
+
+  test 'also without si_item_field raises ArgumentError' do
+    detective = SecurityInsightsDetective.new
+    mapping = { 'also' => 'integration.ci' }
+    assert_raises(ArgumentError) { detective.send(:condition_met?, mapping, true) }
   end
 
   test 'returns empty hash when repo_files is blank' do
@@ -157,7 +169,7 @@ class SecurityInsightsDetectiveTest < ActiveSupport::TestCase
   end
 
   # ---------------------------------------------------------------------------
-  # Boolean conditions: true / false
+  # si_value matching (booleans and strings)
   # ---------------------------------------------------------------------------
 
   test 'reports-accepted true infers vulnerability_report_process Met' do
@@ -224,7 +236,7 @@ class SecurityInsightsDetectiveTest < ActiveSupport::TestCase
   end
 
   # ---------------------------------------------------------------------------
-  # Present condition
+  # Presence check (no match fields)
   # ---------------------------------------------------------------------------
 
   test 'policy URL present infers vulnerability_report_process Met' do
@@ -305,7 +317,7 @@ class SecurityInsightsDetectiveTest < ActiveSupport::TestCase
   end
 
   # ---------------------------------------------------------------------------
-  # equals condition
+  # si_value string matching
   # ---------------------------------------------------------------------------
 
   test 'repository.status active infers maintained Met' do
@@ -319,7 +331,7 @@ class SecurityInsightsDetectiveTest < ActiveSupport::TestCase
   end
 
   # ---------------------------------------------------------------------------
-  # in condition
+  # si_alternatives matching
   # ---------------------------------------------------------------------------
 
   test 'repository.status abandoned infers maintained Unmet' do
@@ -350,7 +362,7 @@ class SecurityInsightsDetectiveTest < ActiveSupport::TestCase
   end
 
   # ---------------------------------------------------------------------------
-  # has_tool_type condition
+  # si_item_field matching
   # ---------------------------------------------------------------------------
 
   test 'SAST tool infers static_analysis Met' do
@@ -434,7 +446,7 @@ class SecurityInsightsDetectiveTest < ActiveSupport::TestCase
   end
 
   # ---------------------------------------------------------------------------
-  # has_tool_type_in_ci condition
+  # si_item_field with also
   # ---------------------------------------------------------------------------
 
   test 'SAST tool with ci=true infers osps_vm_06_02 at confidence 2' do
@@ -507,7 +519,7 @@ class SecurityInsightsDetectiveTest < ActiveSupport::TestCase
   end
 
   # ---------------------------------------------------------------------------
-  # has_attestation_predicate condition
+  # si_item_field with substring
   # ---------------------------------------------------------------------------
 
   test 'SLSA attestation infers signed_releases and osps_br_06_01 Met' do
@@ -571,7 +583,7 @@ class SecurityInsightsDetectiveTest < ActiveSupport::TestCase
   # ---------------------------------------------------------------------------
 
   test 'higher confidence wins when two entries fire for same target' do
-    # SAST in CI fires both has_tool_type (conf 1) and has_tool_type_in_ci (conf 2)
+    # SAST tool fires si_item_field:type (conf 1) and si_item_field:type+also (conf 2)
     # for osps_vm_06_02; confidence 2 should win.
     yaml = <<~YAML
       repository:
@@ -612,7 +624,7 @@ class SecurityInsightsDetectiveTest < ActiveSupport::TestCase
     assert_includes explanation, 'HackerOne program'
   end
 
-  test 'tool comment is included in explanation for has_tool_type' do
+  test 'tool comment is included in explanation for si_item_field match' do
     yaml = <<~YAML
       repository:
         security:
@@ -637,7 +649,7 @@ class SecurityInsightsDetectiveTest < ActiveSupport::TestCase
     assert_includes explanation, 'GitHub Actions'
   end
 
-  test 'attestation comment is included in explanation for has_attestation_predicate' do
+  test 'attestation comment is included in explanation for si_item_field substring match' do
     yaml = <<~YAML
       repository:
         release:
@@ -763,6 +775,72 @@ class SecurityInsightsDetectiveTest < ActiveSupport::TestCase
     explanation = results[:maintained_status][:explanation]
     assert_includes explanation, 'security-insights.yml'
     assert_not_includes explanation, '.github/'
+  end
+
+  # ---------------------------------------------------------------------------
+  # Map file structural validation
+  # ---------------------------------------------------------------------------
+
+  SI_MAP_ALLOWED_KEYS = %w[
+    si_path si_value si_alternatives si_item_field substring also
+    target_criterion inferred_status confidence
+  ].to_set.freeze
+  SI_MAP_REQUIRED_KEYS = %w[si_path target_criterion inferred_status confidence].freeze
+  SI_MAP_VALID_STATUSES = %w[Met Unmet N/A].freeze
+
+  test 'security_insights_map.yml entries are structurally valid and target known criteria' do
+    raw = YAML.safe_load_file(
+      Rails.root.join('criteria/security_insights_map.yml'),
+      permitted_classes: [],
+      aliases: false
+    )
+    mappings = raw['mappings']
+    assert mappings.is_a?(Array), 'mappings must be an Array'
+
+    mappings.each_with_index { |m, i| assert_valid_si_map_entry(m, i) }
+
+    # OUTPUTS (derived from confidence>0 entries) must all be known criteria status fields
+    unknown_outputs = SecurityInsightsDetective::OUTPUTS - Project::ALL_CRITERIA_STATUS
+    assert unknown_outputs.empty?,
+           "OUTPUTS contains unknown criterion fields: #{unknown_outputs.inspect}"
+  end
+
+  private
+
+  def assert_valid_si_map_entry(m, i)
+    label = "entry #{i} (target: #{m['target_criterion']})"
+    assert_si_map_keys(m, label)
+    assert_si_map_rules(m, label)
+  end
+
+  def assert_si_map_keys(m, label)
+    unknown = m.keys.to_set - SI_MAP_ALLOWED_KEYS
+    assert unknown.empty?, "#{label}: unknown fields: #{unknown.to_a.sort.join(', ')}"
+    SI_MAP_REQUIRED_KEYS.each do |field|
+      assert m.key?(field), "#{label}: missing required field '#{field}'"
+    end
+  end
+
+  def assert_si_map_rules(m, label) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+    assert SI_MAP_VALID_STATUSES.include?(m['inferred_status']),
+           "#{label}: invalid inferred_status '#{m['inferred_status']}'"
+    conf = m['confidence'].to_f
+    assert conf.between?(0, 3), "#{label}: confidence #{conf} out of range 0..3"
+    assert_not (m.key?('si_value') && m.key?('si_alternatives')),
+               "#{label}: si_value and si_alternatives are mutually exclusive"
+    if m.key?('also')
+      assert m.key?('si_item_field'), "#{label}: 'also' requires 'si_item_field'"
+    end
+    has_match_value = m.key?('si_value') || m.key?('si_alternatives')
+    if m.key?('si_item_field')
+      assert has_match_value, "#{label}: 'si_item_field' requires 'si_value' or 'si_alternatives'"
+    end
+    if m['substring']
+      assert has_match_value, "#{label}: 'substring: true' requires 'si_value' or 'si_alternatives'"
+    end
+    target_status = :"#{m['target_criterion']}_status"
+    assert Project::ALL_CRITERIA_STATUS.include?(target_status),
+           "#{label}: '#{m['target_criterion']}' is not a known criterion"
   end
 end
 # rubocop:enable Metrics/ClassLength

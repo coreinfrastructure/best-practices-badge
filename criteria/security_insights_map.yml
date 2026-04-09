@@ -15,20 +15,18 @@
 # si_path: dot-notation path into the parsed security-insights YAML.
 #   Hyphens in key names are allowed (e.g. "vulnerability-reporting").
 #
-# si_condition: how to evaluate the value at si_path:
-#   is_true                     - boolean field equals true
-#   is_false                    - boolean field equals false
-#   present                     - field exists with a non-nil/non-empty value
-#   equals                      - string field equals si_value
-#   in                          - string field value is listed in si_values
-#   has_tool_type               - security.tools[] contains type == si_value
-#   has_tool_type_in_ci         - security.tools[] contains type == si_value
-#                                 AND integration.ci == true
-#   has_attestation_predicate   - release.attestations[] has predicate-uri
-#                                 containing si_value as a substring
-#
-# si_value: string value for equals / has_* conditions
-# si_values: list of strings for the "in" condition
+# The condition is matched based on which optional fields are present:
+#   si_value        - case-insensitive .to_s equality (or substring) match
+#   si_alternatives - case-insenstiive match against any item in the list
+#   si_item_field   - array-of-objects scan: The si_path is expected to
+#                     contain a list of objects. In each object, inspect
+#                     the named sub-field (e.g., `type`) in each object.
+#                     This matches if any of those objects match
+#   also            - sub-path within the matched object that must also equal
+#                     boolean true (only valid with si_item_field)
+#   substring: true - use "contains" rather than equality for comparisons
+# If none of these are present, then this is just a presence check
+# (the rule matches if the field is non-nil and non-empty).
 #
 # target_criterion: badge field name (metal or baseline)
 # inferred_status: Met | Unmet | N/A
@@ -41,11 +39,14 @@
 #   2.5 = strong confidence; essentially the same requirement.
 #       We don't use the more obvious "3" because we also look at
 #       *other* data that might more *directly* justify the claim.
-#       In those cases we want to point directly to that claim.
-#       While having a security-insights value is nice, they often don't
-#       include comments, and so all we can record is that
+#       In those cases we want to point to that more direct evidence.
+#       While having a security-insights value is nice, they don't
+#       necessarily include comments, in which case all we can record is that
 #       the security-insights file made a claim. If we can record the
 #       more direct evidence justifying the claim, we should do that.
+#       (An alternative would be to add 0.25 or 0.05 confidence if there
+#       is a comment. We don't do that, because we don't know how valueable
+#       the comment is, but maybe we should!)
 #
 # Target criterion descriptions (from config/locales/en.yml) appear as
 # # Target: comment blocks below each target_criterion line.
@@ -64,7 +65,7 @@ mappings:
   # Whether the project accepts vulnerability reports from external parties.
 
   - si_path: project.vulnerability-reporting.reports-accepted
-    si_condition: is_true
+    si_value: true
     target_criterion: vulnerability_report_process
     # Target:
     #   description: "The project MUST publish the process for reporting
@@ -81,7 +82,7 @@ mappings:
     confidence: 2
 
   - si_path: project.vulnerability-reporting.reports-accepted
-    si_condition: is_false
+    si_value: false
     target_criterion: vulnerability_report_process
     # Target:
     #   description: "The project MUST publish the process for reporting
@@ -102,7 +103,7 @@ mappings:
     confidence: 2
 
   - si_path: project.vulnerability-reporting.reports-accepted
-    si_condition: is_true
+    si_value: true
     target_criterion: vulnerability_report_response
     # Target:
     #   description: "The project's initial response time for any vulnerability
@@ -118,7 +119,7 @@ mappings:
     confidence: 0
 
   - si_path: project.vulnerability-reporting.reports-accepted
-    si_condition: is_true
+    si_value: true
     target_criterion: osps_vm_03_01
     # Target:
     #   description: "While active, the project documentation MUST provide a
@@ -136,7 +137,7 @@ mappings:
     confidence: 0
 
   - si_path: project.vulnerability-reporting.reports-accepted
-    si_condition: is_false
+    si_value: false
     target_criterion: osps_vm_03_01
     # Target:
     #   description: "While active, the project documentation MUST provide a
@@ -154,7 +155,6 @@ mappings:
   # URL of the project's coordinated vulnerability disclosure (CVD) policy.
 
   - si_path: project.vulnerability-reporting.policy
-    si_condition: present
     target_criterion: vulnerability_report_process
     # Target:
     #   description: "The project MUST publish the process for reporting
@@ -171,7 +171,6 @@ mappings:
     confidence: 2
 
   - si_path: project.vulnerability-reporting.policy
-    si_condition: present
     target_criterion: osps_vm_01_01
     # Target:
     #   description: "While active, the project documentation MUST include a
@@ -190,7 +189,6 @@ mappings:
   # PGP key (or fingerprint/URL) for encrypted vulnerability report submission.
 
   - si_path: project.vulnerability-reporting.pgp-key
-    si_condition: present
     target_criterion: vulnerability_report_private
     # Target:
     #   description: "If private vulnerability reports are supported, the
@@ -212,7 +210,6 @@ mappings:
   # URL of a guide explaining how to contribute to the project.
 
   - si_path: repository.documentation.contributing-guide
-    si_condition: present
     target_criterion: contribution
     # Target:
     #   description: "The information on how to contribute MUST explain the
@@ -225,7 +222,6 @@ mappings:
     confidence: 2
 
   - si_path: repository.documentation.contributing-guide
-    si_condition: present
     target_criterion: osps_gv_03_01
     # Target:
     #   description: "While active, the project documentation MUST include an
@@ -241,7 +237,6 @@ mappings:
   # URL of the project's security policy document (e.g. SECURITY.md).
 
   - si_path: repository.documentation.security-policy
-    si_condition: present
     target_criterion: osps_vm_01_01
     # Target:
     #   description: "While active, the project documentation MUST include a
@@ -256,7 +251,6 @@ mappings:
     confidence: 2
 
   - si_path: repository.documentation.security-policy
-    si_condition: present
     target_criterion: osps_vm_02_01
     # Target:
     #   description: "While active, the project documentation MUST contain
@@ -278,7 +272,6 @@ mappings:
   # URL of a governance document describing project roles and responsibilities.
 
   - si_path: repository.documentation.governance
-    si_condition: present
     target_criterion: osps_gv_01_01
     # Target:
     #   description: "While active, the project documentation MUST include a
@@ -292,7 +285,6 @@ mappings:
     confidence: 1
 
   - si_path: repository.documentation.governance
-    si_condition: present
     target_criterion: osps_gv_01_02
     # Target:
     #   description: "While active, the project documentation MUST include
@@ -309,7 +301,6 @@ mappings:
   # URL of a documented code review policy for the repository.
 
   - si_path: repository.documentation.review-policy
-    si_condition: present
     target_criterion: osps_qa_07_01
     # Target:
     #   description: "When a commit is made to the primary branch, the
@@ -330,7 +321,6 @@ mappings:
   # URL of a policy describing how dependencies are selected, obtained, and tracked.
 
   - si_path: repository.documentation.dependency-management-policy
-    si_condition: present
     target_criterion: osps_do_06_01
     # Target:
     #   description: "When the project has made a release, the project
@@ -344,7 +334,6 @@ mappings:
     confidence: 2
 
   - si_path: repository.documentation.dependency-management-policy
-    si_condition: present
     target_criterion: osps_vm_05_01
     # Target:
     #   description: "While active, the project documentation MUST include a
@@ -362,7 +351,6 @@ mappings:
   # URL of the project's code of conduct document.
 
   - si_path: repository.documentation.code-of-conduct
-    si_condition: present
     target_criterion: code_of_conduct
     # Target:
     #   description: "The project MUST adopt a code of conduct and post it in a
@@ -391,7 +379,6 @@ mappings:
   # Lifecycle state of the repository.
 
   - si_path: repository.status
-    si_condition: equals
     si_value: active
     target_criterion: maintained
     # Target:
@@ -418,8 +405,7 @@ mappings:
     confidence: 2
 
   - si_path: repository.status
-    si_condition: in
-    si_values: [abandoned, inactive, suspended, unsupported]
+    si_alternatives: [abandoned, inactive, suspended, unsupported]
     target_criterion: maintained
     # Target:
     #   description: "The project MUST be maintained."
@@ -453,7 +439,7 @@ mappings:
   # integration.ci: true means the tool runs in the CI/CD pipeline.
 
   - si_path: repository.security.tools
-    si_condition: has_tool_type
+    si_item_field: type
     si_value: SAST
     target_criterion: static_analysis
     # Target:
@@ -484,7 +470,8 @@ mappings:
     confidence: 2
 
   - si_path: repository.security.tools
-    si_condition: has_tool_type_in_ci
+    si_item_field: type
+    also: integration.ci
     si_value: SAST
     target_criterion: static_analysis_fixed
     # Target:
@@ -511,7 +498,7 @@ mappings:
     confidence: 0
 
   - si_path: repository.security.tools
-    si_condition: has_tool_type
+    si_item_field: type
     si_value: SAST
     target_criterion: osps_vm_06_02
     # Target:
@@ -527,7 +514,8 @@ mappings:
     confidence: 1
 
   - si_path: repository.security.tools
-    si_condition: has_tool_type_in_ci
+    si_item_field: type
+    also: integration.ci
     si_value: SAST
     target_criterion: osps_vm_06_02
     # Target:
@@ -546,7 +534,7 @@ mappings:
   # SecurityTool with type "SCA" (Software Composition Analysis / dependency scanning).
 
   - si_path: repository.security.tools
-    si_condition: has_tool_type
+    si_item_field: type
     si_value: SCA
     target_criterion: dependency_monitoring
     # Target:
@@ -566,7 +554,7 @@ mappings:
     confidence: 2
 
   - si_path: repository.security.tools
-    si_condition: has_tool_type
+    si_item_field: type
     si_value: SCA
     target_criterion: osps_vm_05_03
     # Target:
@@ -585,7 +573,8 @@ mappings:
     confidence: 0
 
   - si_path: repository.security.tools
-    si_condition: has_tool_type_in_ci
+    si_item_field: type
+    also: integration.ci
     si_value: SCA
     target_criterion: osps_vm_05_03
     # Target:
@@ -599,7 +588,7 @@ mappings:
     #     codebase. Require that the status check passes before changes can be
     #     merged."
     # SCA (Software Composition Analysis) is precisely dependency scanning, and
-    # has_tool_type_in_ci requires integration.ci=true, matching "automatically
+    # also: integration.ci requires ci=true, matching "automatically
     # evaluated on all changes".  Confidence 2.
     inferred_status: Met
     confidence: 2
@@ -608,7 +597,7 @@ mappings:
   # SecurityTool with type "fuzzing".
 
   - si_path: repository.security.tools
-    si_condition: has_tool_type
+    si_item_field: type
     si_value: fuzzing
     target_criterion: dynamic_analysis
     # Target:
@@ -622,7 +611,7 @@ mappings:
   # SecurityTool with type "DAST" (Dynamic Application Security Testing).
 
   - si_path: repository.security.tools
-    si_condition: has_tool_type
+    si_item_field: type
     si_value: DAST
     target_criterion: dynamic_analysis
     # Target:
@@ -638,7 +627,7 @@ mappings:
   # osps_sa_03_01 (security assessment before/after release).
 
   - si_path: repository.security.tools
-    si_condition: has_tool_type
+    si_item_field: type
     si_value: pentest
     target_criterion: security_review
     # Target:
@@ -654,7 +643,7 @@ mappings:
     confidence: 2
 
   - si_path: repository.security.tools
-    si_condition: has_tool_type
+    si_item_field: type
     si_value: pentest
     target_criterion: osps_sa_03_01
     # Target:
@@ -676,7 +665,7 @@ mappings:
   # SecurityTool with type "secret" (secret/credential scanning).
 
   - si_path: repository.security.tools
-    si_condition: has_tool_type
+    si_item_field: type
     si_value: secret
     target_criterion: no_leaked_credentials
     # Target:
@@ -701,7 +690,6 @@ mappings:
   # contacts, directly satisfying osps_vm_02_01.
 
   - si_path: project.security.security-contacts
-    si_condition: present
     target_criterion: osps_vm_02_01
     # Target:
     #   description: "While active, the project documentation MUST contain
@@ -724,7 +712,6 @@ mappings:
   # project has linked to evidence that a self-assessment was actually performed.
 
   - si_path: repository.security.assessments.self.evidence
-    si_condition: present
     target_criterion: security_review
     # Target:
     #   description: "The project MUST have performed a security review within
@@ -740,7 +727,6 @@ mappings:
     confidence: 1
 
   - si_path: repository.security.assessments.self.evidence
-    si_condition: present
     target_criterion: osps_sa_03_01
     # Target:
     #   description: "When the project has made a release, the project MUST
@@ -762,7 +748,6 @@ mappings:
   # Evidence of one or more third-party security assessments.
 
   - si_path: repository.security.assessments.third-party
-    si_condition: present
     target_criterion: security_review
     # Target:
     #   description: "The project MUST have performed a security review within
@@ -778,7 +763,6 @@ mappings:
     confidence: 2
 
   - si_path: repository.security.assessments.third-party
-    si_condition: present
     target_criterion: osps_sa_03_01
     # Target:
     #   description: "When the project has made a release, the project MUST
@@ -804,7 +788,7 @@ mappings:
   # Whether the project uses an automated pipeline to produce releases.
 
   - si_path: repository.release.automated-pipeline
-    si_condition: is_true
+    si_value: true
     target_criterion: build
     # Target:
     #   description: "If the software produced by the project requires building
@@ -828,7 +812,6 @@ mappings:
   # URL pointing to the project's changelog.
 
   - si_path: repository.release.changelog
-    si_condition: present
     target_criterion: release_notes
     # Target:
     #   description: "The project MUST provide, in each release, release notes
@@ -852,7 +835,6 @@ mappings:
     confidence: 2
 
   - si_path: repository.release.changelog
-    si_condition: present
     target_criterion: osps_br_04_01
     # Target:
     #   description: "When an official release is created, that release MUST
@@ -871,7 +853,8 @@ mappings:
   # verification-summary specification, indicating signed/attested releases.
 
   - si_path: repository.release.attestations
-    si_condition: has_attestation_predicate
+    si_item_field: predicate-uri
+    substring: true
     si_value: slsa
     target_criterion: signed_releases
     # Target:
@@ -893,7 +876,8 @@ mappings:
     confidence: 2
 
   - si_path: repository.release.attestations
-    si_condition: has_attestation_predicate
+    si_item_field: predicate-uri
+    substring: true
     si_value: slsa
     target_criterion: osps_br_06_01
     # Target:
@@ -913,7 +897,8 @@ mappings:
   # indicating a software bill of materials accompanies the release.
 
   - si_path: repository.release.attestations
-    si_condition: has_attestation_predicate
+    si_item_field: predicate-uri
+    substring: true
     si_value: spdx
     target_criterion: osps_qa_02_02
     # Target:
@@ -944,7 +929,6 @@ mappings:
   # Known values: active, inactive, concept, archived, unsupported.
 
   - si_path: project-lifecycle.stage
-    si_condition: equals
     si_value: active
     target_criterion: maintained
     # [v1.0.0] Source: project-lifecycle.stage = “active”
@@ -972,8 +956,7 @@ mappings:
     confidence: 2
 
   - si_path: project-lifecycle.stage
-    si_condition: in
-    si_values: [inactive, archived, unsupported, concept]
+    si_alternatives: [inactive, archived, unsupported, concept]
     target_criterion: maintained
     # [v1.0.0] Source: project-lifecycle.stage in [inactive, archived,
     #   unsupported, concept]
@@ -1005,7 +988,7 @@ mappings:
   #   project.vulnerability-reporting.reports-accepted in v2.x.
 
   - si_path: vulnerability-reporting.accepts-vulnerability-reports
-    si_condition: is_true
+    si_value: true
     target_criterion: vulnerability_report_process
     # [v1.0.0] Source: vulnerability-reporting.accepts-vulnerability-reports
     #   = true
@@ -1024,7 +1007,7 @@ mappings:
     confidence: 2
 
   - si_path: vulnerability-reporting.accepts-vulnerability-reports
-    si_condition: is_false
+    si_value: false
     target_criterion: vulnerability_report_process
     # [v1.0.0] Source: vulnerability-reporting.accepts-vulnerability-reports
     #   = false
@@ -1049,7 +1032,6 @@ mappings:
   # contacts documented elsewhere), consistent with v2.x treatment.
 
   - si_path: security-contacts
-    si_condition: present
     target_criterion: osps_vm_02_01
     # [v1.0.0] Source: security-contacts (non-empty array)
     # Target:

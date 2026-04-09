@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: MIT
 
 # SecurityInsightsDetective - infers badge criteria answers from a project's
-# security-insights.yml file (OSSF Security Insights spec).
+# security-insights.yml file (OpenSSF Security Insights spec).
 #
 # The file is looked up in the repository root and .github/ directory.
 # Mappings from security-insights fields to badge criteria are defined in
@@ -32,14 +32,20 @@
 #
 # ReDoS (regular-expression denial of service):
 #   No regex is applied to untrusted data anywhere in this class.
-#   The has_attestation_predicate condition uses String#include?, which is a
-#   plain linear substring search — not a regex — so ReDoS is not possible.
+#   The substring: true mapping flag uses String#include?, which is a plain
+#   linear substring search — not a regex — so ReDoS is not possible.
 #
 # Type-confusion / unexpected exceptions from untrusted values:
 #   Every untrusted value is guarded with is_a? before calling type-specific
-#   methods.  String comparisons always call .to_s first (handles nil, Integer,
-#   Array, Hash, etc. without raising).  No exceptions are possible from
-#   malformed field values.
+#   methods.  Comparisons call .to_s first (handles nil, Integer, Array, Hash,
+#   etc. without raising).  No exceptions are possible from malformed values.
+#
+# Trust boundary in value_matches? and find_matching_element:
+#   All mapping fields that control matching behaviour (si_item_field, also,
+#   substring, si_value, si_alternatives) come from the trusted MAPPINGS
+#   constant loaded from the project's own map file.  Only the +value+ /
+#   +element+ arguments carry untrusted SI data; they only ever reach
+#   .to_s.downcase and String#== or String#include?, both of which are safe.
 #
 # Oversized comment injection:
 #   Comment strings extracted from SI data are truncated to MAX_SI_COMMENT_SIZE
@@ -47,9 +53,9 @@
 #   from bloating stored justifications up to the 50 KB file cap.
 #
 # SQL / XSS injection:
-#   No SQL is constructed from SI data.  The explanation/justification string is
-#   stored in a plain text column and rendered through Rails ERB templates, which
-#   auto-escape HTML by default.
+#   No SQL is constructed from SI data. The explanation/justification string
+#   is stored in a plain text column and rendered through Rails ERB templates,
+#   which auto-escape HTML by default.
 # rubocop:disable Metrics/ClassLength
 class SecurityInsightsDetective < Detective
   # Maximum size of a security-insights file we will fetch and parse.
@@ -69,37 +75,23 @@ class SecurityInsightsDetective < Detective
     .github/SECURITY-INSIGHTS.yml
   ].freeze
 
-  # Valid values for the si_condition field in security_insights_map.yml.
-  # Using is_true/is_false (not "true"/"false") avoids confusion with YAML
-  # boolean literals and makes it obvious these are symbolic condition names.
-  KNOWN_CONDITIONS = %w[
-    is_true is_false present equals in
-    has_tool_type has_tool_type_in_ci has_attestation_predicate
-  ].to_set.freeze
-
   # Load the mappings from security-insights to our criteria.
   # Screens out confidence=0 entries (documented no-ops) at load time so they
   # never appear in OUTPUTS or any detective logic.
-  # Also validates that every entry uses a known si_condition — unknown
-  # conditions would silently produce zero proposals, so we fail fast at boot.
+  # Field-combination validation is performed at evaluation time by
+  # validate_condition_fields!, which is called from condition_met?.
   MAPPINGS =
-    begin
-      raw = YAML.safe_load_file(
-        Rails.root.join('criteria/security_insights_map.yml'),
-        permitted_classes: [],
-        aliases: false
-      )['mappings'].reject { |m| m['confidence'].to_f.zero? }
-      unknown = raw.map { |m| m['si_condition'] }.uniq.reject { |c| KNOWN_CONDITIONS.include?(c) }
-      raise ArgumentError, "Unknown si_condition(s) in security_insights_map.yml: #{unknown}" if unknown.any?
-
-      raw.freeze
-    end
+    YAML.safe_load_file(
+      Rails.root.join('criteria/security_insights_map.yml'),
+      permitted_classes: [],
+      aliases: false
+    )['mappings'].reject { |m| m['confidence'].to_f.zero? }.freeze
 
   INPUTS  = [:repo_files].freeze
   OUTPUTS = MAPPINGS.map { |m| :"#{m['target_criterion']}_status" }.uniq.freeze
   OVERRIDABLE_OUTPUTS = [].freeze
 
-  # Analyze the project's security-insights.yml file and propose criterion values.
+  # Analyze project's security-insights.yml file and propose criterion values.
   # @param _evidence [Evidence] unused
   # @param current [Hash] must contain :repo_files
   # @return [Hash] proposed criterion status changes
@@ -208,42 +200,83 @@ class SecurityInsightsDetective < Detective
     true
   end
 
-  # Evaluate the mapping's si_condition against the resolved value.
-  # Raises ArgumentError for any unknown condition — MAPPINGS is validated at
-  # load time (see KNOWN_CONDITIONS check above), so reaching here with an
-  # unknown condition means a programming error, not bad untrusted input.
+  # Evaluate the mapping's condition against the resolved value.
+  # The condition is inferred from which fields are present in the mapping:
+  #   si_item_field present  — array-of-objects scan via find_matching_element
+  #   no si_value/si_alternatives — presence check via value_present?
+  #   otherwise              — scalar/list value match via value_matches?
+  #
+  # Raises ArgumentError for invalid field combinations (si_value +
+  # si_alternatives together, or also without si_item_field).
   # @param mapping [Hash] one entry from MAPPINGS
   # @param value [Object] resolved value at si_path
   # @return [Boolean]
-  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def condition_met?(mapping, value)
-    condition = mapping['si_condition']
-    si_value  = mapping['si_value']
-    si_values = mapping['si_values']
-
-    case condition
-    when 'is_true'  then value == true
-    when 'is_false' then value == false
-    when 'present'  then value_present?(value)
-    when 'equals'   then value.to_s == si_value.to_s
-    when 'in'       then Array(si_values).include?(value.to_s)
-    when 'has_tool_type'
-      value.is_a?(Array) &&
-        value.any? { |t| t.is_a?(Hash) && t['type'] == si_value }
-    when 'has_tool_type_in_ci'
-      value.is_a?(Array) &&
-        value.any? do |t|
-          t.is_a?(Hash) && t['type'] == si_value &&
-            t.dig('integration', 'ci') == true
-        end
-    when 'has_attestation_predicate'
-      value.is_a?(Array) &&
-        value.any? { |a| a.is_a?(Hash) && a['predicate-uri'].to_s.include?(si_value.to_s) }
+    validate_condition_fields!(mapping)
+    if mapping['si_item_field']
+      !find_matching_element(value, mapping).nil?
+    elsif mapping['si_value'].nil? && mapping['si_alternatives'].nil?
+      value_present?(value)
     else
-      raise ArgumentError, "Unknown si_condition: #{condition.inspect}"
+      value_matches?(value, mapping)
     end
   end
-  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+
+  # Raise ArgumentError for invalid field combinations.
+  # Called by condition_met? on every evaluation.
+  # @param mapping [Hash] one entry from MAPPINGS
+  def validate_condition_fields!(mapping)
+    if mapping.key?('si_value') && mapping.key?('si_alternatives')
+      raise ArgumentError, 'si_value and si_alternatives are mutually exclusive'
+    end
+    return unless mapping.key?('also') && !mapping.key?('si_item_field')
+
+    raise ArgumentError, "'also' requires 'si_item_field'"
+  end
+
+  # True if +value+ satisfies the si_value / si_alternatives / substring match
+  # expressed in +mapping+.  Uses case-insensitive .to_s comparison throughout.
+  # +value+ is untrusted SI data; mapping fields are from the trusted MAPPINGS
+  # constant.
+  # @param value [Object] untrusted value to test (from SI file)
+  # @param mapping [Hash] mapping entry supplying si_value/si_alternatives/substring
+  # @return [Boolean]
+  def value_matches?(value, mapping)
+    # Use key? rather than truthiness so si_value: false is handled correctly.
+    candidates =
+      if mapping.key?('si_value')
+        [mapping['si_value']]
+      else
+        Array(mapping['si_alternatives'])
+      end
+    str = value.to_s.downcase
+    if mapping['substring']
+      candidates.any? { |c| str.include?(c.to_s.downcase) }
+    else
+      candidates.any? { |c| str == c.to_s.downcase }
+    end
+  end
+
+  # Return the first element in +value+ (an array of objects) for which
+  # si_item_field satisfies the value/substring match and, when +also+ is
+  # present, the sub-path within the element equals true.
+  # Returns nil if no element matches or if +value+ is not an Array.
+  # si_item_field and also come from the trusted MAPPINGS constant; only the
+  # array elements themselves are untrusted SI data.
+  # @param value [Array, Object] value at si_path (untrusted)
+  # @param mapping [Hash] mapping entry
+  # @return [Hash, nil] first matching element, or nil
+  def find_matching_element(value, mapping)
+    return unless value.is_a?(Array)
+
+    also_path = mapping['also']
+    value.find do |element|
+      next false unless element.is_a?(Hash)
+
+      value_matches?(element[mapping['si_item_field']], mapping) &&
+        (also_path.nil? || dig_path(element, also_path) == true)
+    end
+  end
 
   # Build a human-readable explanation string for a proposal.
   # Appends any comment found in the security-insights data for this field.
@@ -278,16 +311,23 @@ class SecurityInsightsDetective < Detective
     end
   end
 
-  # Return a match description string for array-type conditions, or nil.
+  # Return a human-readable match description string for si_item_field entries,
+  # or nil for scalar/presence entries.
   # @param mapping [Hash] mapping entry
   # @return [String, nil]
   def array_match_description(mapping)
-    si_value = mapping['si_value']
-    case mapping['si_condition']
-    when 'has_tool_type'             then "type=#{si_value}"
-    when 'has_tool_type_in_ci'       then "type=#{si_value} with ci=true"
-    when 'has_attestation_predicate' then "predicate-uri includes #{si_value}"
-    end
+    return unless mapping['si_item_field']
+
+    # Use key? so a hypothetical boolean si_value is rendered correctly.
+    val  =
+      if mapping.key?('si_value')
+        mapping['si_value'].to_s
+      else
+        Array(mapping['si_alternatives']).join('|')
+      end
+    op   = mapping['substring'] ? ' includes ' : '='
+    desc = "#{mapping['si_item_field']}#{op}#{val}"
+    mapping['also'] ? "#{desc} with #{mapping['also']}=true" : desc
   end
 
   # Build the i18n explanation string for an array-match condition.
@@ -302,9 +342,9 @@ class SecurityInsightsDetective < Detective
 
   # Extract an optional comment string from the security-insights data
   # relevant to this mapping's condition.
-  # - Scalar conditions: looks for a "comment" key in the parent object
-  #   (the object that contains the checked field).
-  # - Array conditions: looks for a "comment" key in the first matching element.
+  # - Scalar/presence entries: looks for a "comment" key in the parent object.
+  # - Array entries (si_item_field present): looks for a "comment" key in the
+  #   first matching element.
   # Returns nil if no non-empty comment is found.
   # @param si_data [Hash] full parsed security-insights YAML
   # @param mapping [Hash] one MAPPINGS entry
@@ -316,14 +356,13 @@ class SecurityInsightsDetective < Detective
   end
 
   # Locate the raw comment value for a mapping; returns nil if none.
+  # @param si_data [Hash] full parsed security-insights YAML
+  # @param mapping [Hash] one MAPPINGS entry
+  # @param value [Object] resolved value at si_path
+  # @return [Object, nil]
   def raw_si_comment(si_data, mapping, value)
-    case mapping['si_condition']
-    when 'has_tool_type'
-      find_tool(value, mapping['si_value'])&.dig('comment')
-    when 'has_tool_type_in_ci'
-      find_tool_in_ci(value, mapping['si_value'])&.dig('comment')
-    when 'has_attestation_predicate'
-      find_attestation(value, mapping['si_value'])&.dig('comment')
+    if mapping['si_item_field']
+      find_matching_element(value, mapping)&.dig('comment')
     else
       si_parent_comment(si_data, mapping['si_path'])
     end
@@ -351,36 +390,6 @@ class SecurityInsightsDetective < Detective
 
     parent = dig_path(si_data, parts[0..-2].join('.'))
     parent.is_a?(Hash) ? parent['comment'] : nil
-  end
-
-  # Return the first tool in the array whose type matches, or nil.
-  # @param tools [Array, Object] value at the tools si_path
-  # @param type [String] tool type to match
-  # @return [Hash, nil]
-  def find_tool(tools, type)
-    return unless tools.is_a?(Array)
-
-    tools.find { |t| t.is_a?(Hash) && t['type'] == type }
-  end
-
-  # Return the first CI tool in the array whose type matches, or nil.
-  # @param tools [Array, Object] value at the tools si_path
-  # @param type [String] tool type to match
-  # @return [Hash, nil]
-  def find_tool_in_ci(tools, type)
-    return unless tools.is_a?(Array)
-
-    tools.find { |t| t.is_a?(Hash) && t['type'] == type && t.dig('integration', 'ci') == true }
-  end
-
-  # Return the first attestation whose predicate-uri contains the substring, or nil.
-  # @param attestations [Array, Object] value at the attestations si_path
-  # @param predicate_substr [String] substring to find in predicate-uri
-  # @return [Hash, nil]
-  def find_attestation(attestations, predicate_substr)
-    return unless attestations.is_a?(Array)
-
-    attestations.find { |a| a.is_a?(Hash) && a['predicate-uri'].to_s.include?(predicate_substr.to_s) }
   end
 end
 # rubocop:enable Metrics/ClassLength

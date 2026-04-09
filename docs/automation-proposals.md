@@ -23,11 +23,12 @@ badge entry data:
   doesn't let the user use the UI to review the changes.
   That said, see [api](./api) if you want more information.
 * Our automation systems examine the project repo for information.
-  This includes looking for a [`.bestpractices.json`](bestpractices-json)
+  This includes looking for a [`.bestpractices.json`](./bestpractices-json.md)
   file which stores
   proposed answers; you can even get the JSON results from another repository
   and use that as a starting point. We also examine the
-  `security-insights.yml` file to determine proposed answers.
+  [`security-insights.yml`](https://security-insights.openssf.org/) file,
+  if present, to determine proposed answers.
   However, these approaches require that you put information into the
   project repository.
 

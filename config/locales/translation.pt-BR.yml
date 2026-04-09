@@ -183,6 +183,8 @@ pt-BR:
       inadequate_privileges:
       notification_emails:
       notification_emails_help:
+      important_notifications:
+      important_notifications_help:
     update:
       profile_updated:
     show:
@@ -505,6 +507,8 @@ pt-BR:
     ending:
     unsubscribe_notice_html:
     unsubscribe_notice_text:
+    subject_warned_level:
+    warned_level_message:
   user_mailer:
     account_activation:
       before_html: Olá
@@ -1326,3 +1330,7 @@ pt-BR:
       test_automation:
     repo_json:
       field_from_file:
+    security_insights:
+      field_value:
+      array_match:
+      comment_suffix:

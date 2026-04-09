@@ -101,6 +101,8 @@ zh-CN:
       inadequate_privileges: 抱歉，您不能这样做。
       notification_emails:
       notification_emails_help:
+      important_notifications:
+      important_notifications_help:
   project_stats:
     index:
       project_stats_header: 项目统计
@@ -637,6 +639,8 @@ zh-CN:
       感谢您的时间。
     unsubscribe_notice_html:
     unsubscribe_notice_text:
+    subject_warned_level:
+    warned_level_message:
   project_name_unknown: "(未知名称)"
   locale_name:
     en: 英文
@@ -1818,3 +1822,7 @@ zh-CN:
       test_automation:
     repo_json:
       field_from_file:
+    security_insights:
+      field_value:
+      array_match:
+      comment_suffix:

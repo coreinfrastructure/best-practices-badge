@@ -33,6 +33,8 @@ ru:
       inadequate_privileges: К сожалению, у вас недостаточно прав, чтобы это сделать.
       notification_emails: Уведомления по электронной почте
       notification_emails_help: Получать уведомления по электронной почте о ваших проектах
+      important_notifications: Важные уведомления
+      important_notifications_help: Получать важные уведомления, например об утрате значка из-за изменённых требований
   projects:
     index:
       silver_in_progress_variable: Passing, частично silver (%{percent}%+ через уровни)
@@ -121,6 +123,8 @@ ru:
   report_mailer:
     unsubscribe_notice_html: 'Чтобы отписаться от этих уведомлений по электронной почте, пожалуйста, посетите: <a href="%{unsubscribe_url}">%{unsubscribe_url}</a>'
     unsubscribe_notice_text: 'Чтобы отписаться от этих уведомлений по электронной почте, пожалуйста, посетите: %{unsubscribe_url}'
+    subject_warned_level: Ваш значок лучших практик может утратить статус "%{old_level}"
+    warned_level_message: 'Это предварительное уведомление о том, что значок "%{old_level}" вашего проекта может быть утрачен %{effective_date} после вступления в силу обновлённых критериев. Пожалуйста, проверьте запись о вашем значке по следующему URL до этой даты:'
   criteria:
     baseline-1:
       osps_ac_01_01:
@@ -437,3 +441,7 @@ ru:
       test_automation: Автоматизация тестирования (уверенность %{confidence})
     repo_json:
       field_from_file: Значение из JSON-файла bestpractices проекта
+    security_insights:
+      field_value: 'Согласно %{location}: %{field}=%{value}'
+      array_match: 'Согласно %{location}: %{field} %{match}'
+      comment_suffix: 'Комментарий гласит: "%{comment}".'

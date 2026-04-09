@@ -160,6 +160,8 @@ pt-BR:
       inadequate_privileges: Desculpe, você não tem permissão para fazer isso.
       notification_emails: Notificações por e-mail
       notification_emails_help: Receber notificações por e-mail sobre seus projetos
+      important_notifications: Notificações importantes
+      important_notifications_help: Receba notificações importantes, como a perda de um emblema devido a requisitos alterados
     update:
       profile_updated: Perfil atualizado
     show:
@@ -651,6 +653,11 @@ pt-BR:
     ending: "--- David A. Wheeler, Líder do Selo de Melhores Práticas do OpenSSF"
     unsubscribe_notice_html: 'Para cancelar a inscrição dessas notificações por e-mail, por favor visite: <a href="%{unsubscribe_url}">%{unsubscribe_url}</a>'
     unsubscribe_notice_text: 'Para cancelar a inscrição dessas notificações por e-mail, por favor visite: %{unsubscribe_url}'
+    subject_warned_level: Seu emblema de boas práticas pode perder o status "%{old_level}"
+    warned_level_message: |-
+      Este é um aviso antecipado de que o emblema "%{old_level}" do seu projeto pode ser
+      perdido em %{effective_date} quando os critérios atualizados entrarem em vigor.
+      Por favor, revise a entrada do seu emblema na URL a seguir antes dessa data:
   user_mailer:
     account_activation:
       activate: Ativar
@@ -1477,3 +1484,7 @@ pt-BR:
       test_automation: Automação de testes (confiança %{confidence})
     repo_json:
       field_from_file: Valor do arquivo JSON bestpractices do projeto
+    security_insights:
+      field_value: 'Por %{location}: %{field}=%{value}'
+      array_match: 'Por %{location}: %{field} %{match}'
+      comment_suffix: 'O comentário diz: "%{comment}".'

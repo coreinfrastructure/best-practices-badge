@@ -124,6 +124,8 @@ es:
       inadequate_privileges: Lo sentimos, no tiene permiso para hacer eso.
       notification_emails: Notificaciones por correo electrónico
       notification_emails_help: Recibir notificaciones por correo electrónico sobre sus proyectos
+      important_notifications: Notificaciones importantes
+      important_notifications_help: Recibir notificaciones importantes, como la pérdida de una insignia debido a cambios en los requisitos
     update:
       profile_updated: Perfil actualizado
     show:
@@ -615,6 +617,11 @@ es:
     ending: "--- David A. Wheeler, Líder de Insignias de Mejores Prácticas de OpenSSF"
     unsubscribe_notice_html: 'Para cancelar la suscripción a estas notificaciones por correo electrónico, visite: <a href="%{unsubscribe_url}">%{unsubscribe_url}</a>'
     unsubscribe_notice_text: 'Para darse de baja de estas notificaciones por correo electrónico, por favor visite: %{unsubscribe_url}'
+    subject_warned_level: Su insignia de buenas prácticas puede perder el estado "%{old_level}"
+    warned_level_message: |-
+      Este es un aviso previo de que la insignia \"%{old_level}\" de su proyecto puede
+      perderse el %{effective_date} cuando entren en vigor los criterios actualizados.
+      Por favor, revise su entrada de insignia en la siguiente URL antes de esa fecha:
   user_mailer:
     account_activation:
       before_html: |
@@ -1416,3 +1423,7 @@ es:
       test_automation: Automatización de pruebas (confianza %{confidence})
     repo_json:
       field_from_file: Valor del archivo JSON de bestpractices del proyecto
+    security_insights:
+      field_value: 'Según %{location}: %{field}=%{value}'
+      array_match: 'Según %{location}: %{field} %{match}'
+      comment_suffix: 'El comentario dice: "%{comment}".'

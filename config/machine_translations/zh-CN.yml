@@ -19,6 +19,8 @@ zh-CN:
     edit:
       notification_emails: 电子邮件通知
       notification_emails_help: 接收有关您项目的电子邮件通知
+      important_notifications: 重要通知
+      important_notifications_help: 接收重要通知，例如因要求变更而失去徽章
   projects:
     edit:
       new_owner: 所有者ID（一个正整数），更改以更改所有权
@@ -96,6 +98,11 @@ zh-CN:
   report_mailer:
     unsubscribe_notice_html: 要取消订阅这些电子邮件通知，请访问：<a href="%{unsubscribe_url}">%{unsubscribe_url}</a>
     unsubscribe_notice_text: 要取消订阅这些电子邮件通知，请访问：%{unsubscribe_url}
+    subject_warned_level: 您的最佳实践徽章可能失去"%{old_level}"状态
+    warned_level_message: |-
+      这是一个提前通知，说明您的项目"%{old_level}"徽章可能在
+      %{effective_date}更新标准生效时失去。
+      请在该日期之前查看以下网址上的徽章条目：
   criteria:
     baseline-1:
       osps_ac_01_01:
@@ -405,6 +412,10 @@ zh-CN:
       test_automation: 测试自动化（置信度 %{confidence}）
     repo_json:
       field_from_file: 来自项目的 bestpractices JSON 文件的值
+    security_insights:
+      field_value: 根据%{location}：%{field}=%{value}
+      array_match: 根据%{location}：%{field} %{match}
+      comment_suffix: 备注说明："%{comment}"。
   static_pages:
     criteria_stats:
       obsolete: 已废弃

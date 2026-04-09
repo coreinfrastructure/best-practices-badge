@@ -45,7 +45,7 @@
 #       the security-insights file made a claim. If we can record the
 #       more direct evidence justifying the claim, we should do that.
 #       (An alternative would be to add 0.25 or 0.05 confidence if there
-#       is a comment. We don't do that, because we don't know how valueable
+#       is a comment. We don't do that, because we don't know how valuable
 #       the comment is, but maybe we should!)
 #
 # Target criterion descriptions (from config/locales/en.yml) appear as

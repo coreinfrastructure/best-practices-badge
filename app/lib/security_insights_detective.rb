@@ -341,37 +341,21 @@ class SecurityInsightsDetective < Detective
   end
 
   # Extract an optional comment string from the security-insights data
-  # relevant to this mapping's condition.
-  # - Scalar/presence entries: looks for a "comment" key in the parent object.
-  # - Array entries (si_item_field present): looks for a "comment" key in the
-  #   first matching element.
-  # Returns nil if no non-empty comment is found.
+  # relevant to this mapping's condition, truncated to MAX_SI_COMMENT_SIZE.
+  # - Array entries (si_item_field present): comment from the matching element.
+  # - Scalar/presence entries: comment from the parent object of si_path.
+  # Returns nil if no non-empty String comment is found.
   # @param si_data [Hash] full parsed security-insights YAML
   # @param mapping [Hash] one MAPPINGS entry
   # @param value [Object] resolved value at si_path
   # @return [String, nil]
   def extract_si_comment(si_data, mapping, value)
-    raw = raw_si_comment(si_data, mapping, value)
-    truncate_si_comment(raw)
-  end
-
-  # Locate the raw comment value for a mapping; returns nil if none.
-  # @param si_data [Hash] full parsed security-insights YAML
-  # @param mapping [Hash] one MAPPINGS entry
-  # @param value [Object] resolved value at si_path
-  # @return [Object, nil]
-  def raw_si_comment(si_data, mapping, value)
-    if mapping['si_item_field']
-      find_matching_element(value, mapping)&.dig('comment')
-    else
-      si_parent_comment(si_data, mapping['si_path'])
-    end
-  end
-
-  # Validate and truncate a raw comment from untrusted SI data.
-  # Returns nil if the value is not a non-empty String.
-  # Truncates to MAX_SI_COMMENT_SIZE to prevent oversized justification text.
-  def truncate_si_comment(raw)
+    raw =
+      if mapping['si_item_field']
+        find_matching_element(value, mapping)&.dig('comment')
+      else
+        si_parent_comment(si_data, mapping['si_path'])
+      end
     return unless raw.is_a?(String)
 
     stripped = raw.strip

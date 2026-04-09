@@ -10,6 +10,11 @@ module ApplicationHelper
   # Frozen string constant for unknown project names (memory optimization)
   NAME_UNKNOWN = '(Name Unknown)'
 
+  # URL for the automation proposals documentation page.
+  # Update this if the documentation moves to a new location.
+  AUTOMATION_PROPOSALS_URL =
+    'https://github.com/coreinfrastructure/best-practices-badge/blob/main/docs/automation-proposals.md'
+
   # Frozen string constant for robot emoji indicating automation (memory optimization)
   ROBOT_EMOJI = '🤖 '
   # rubocop:disable Rails/OutputSafety

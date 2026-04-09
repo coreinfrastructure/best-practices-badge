@@ -617,6 +617,12 @@ en:
         with respect to the use, modification, or sharing of Results.
         You retain copyright (if any), and
         the project license is unaffected.<br><br>
+      automation_hint_html: >-
+        You can use tools and AI systems to propose changes
+        via a simple URL, such as
+        <tt>https://%{badge_hostname}/%{app_locale}/projects/%{project_id}/choose/edit?osps_ac_01_01_status=Met&amp;osps_ac_01_01_justification=GitHub+enforced</tt>.
+        See our <a href="%{automation_proposals_url}">automation proposals
+        system</a> for how to do that.
       automation:
         aria_automated: This field was automatically filled
         aria_overridden: This field value was corrected by automation

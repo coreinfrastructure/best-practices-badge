@@ -55,6 +55,14 @@ The application is configured by various environment variables:
   to inactive projects when running "rake reminders".
   This rate limit is best set low to start,
   and relatively low afterwards, to limit impact if there's an error.
+* BADGEAPP_MAX_BADGE_LOSS_NOTIFICATIONS (default 10): Maximum number of
+  badge-loss notification emails to send per "rake reminders" run.
+  These notify owners whose badge was lost due to a criteria change.
+  Set higher to drain the queue faster after a criteria update.
+* BADGEAPP_MAX_BADGE_WARNING_NOTIFICATIONS (default 10): Maximum number of
+  advance-warning emails to send per "rake reminders" run.
+  These warn owners that their badge will be lost when updated criteria
+  take effect. See docs/baseline_update.md for the full workflow.
 * LOST_PASSING_REMINDER (default 30): Minimum number of days since
   last lost a badge before sending reminder
 * LAST_UPDATED_REMINDER (default 30): Minimum number of days

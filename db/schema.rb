@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_27_180019) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_03_000001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -125,6 +125,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_27_180019) do
     t.integer "badge_percentage_baseline_1"
     t.integer "badge_percentage_baseline_2"
     t.integer "badge_percentage_baseline_3"
+    t.date "badge_warning_effective_date"
     t.boolean "baseline_1_saved", default: false, null: false
     t.boolean "baseline_2_saved", default: false, null: false
     t.boolean "baseline_3_saved", default: false, null: false
@@ -282,7 +283,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_27_180019) do
     t.integer "know_common_errors_status", limit: 2, default: 0, null: false
     t.text "know_secure_design_justification"
     t.integer "know_secure_design_status", limit: 2, default: 0, null: false
+    t.datetime "last_loss_sent_at"
     t.datetime "last_reminder_at", precision: nil
+    t.datetime "last_warning_sent_at"
     t.string "license"
     t.text "license_location_justification"
     t.integer "license_location_status", limit: 2, default: 0, null: false
@@ -509,6 +512,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_27_180019) do
     t.integer "tiered_percentage"
     t.text "two_person_review_justification"
     t.integer "two_person_review_status", limit: 2, default: 0, null: false
+    t.integer "unreported_badge_loss", default: 0, null: false
+    t.integer "unreported_badge_warning", default: 0, null: false
+    t.integer "unreported_baseline_badge_loss", default: 0, null: false
+    t.integer "unreported_baseline_badge_warning", default: 0, null: false
     t.text "updateable_reused_components_justification"
     t.integer "updateable_reused_components_status", limit: 2, default: 0, null: false
     t.datetime "updated_at", precision: nil, null: false
@@ -558,6 +565,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_27_180019) do
     t.index ["repo_url"], name: "index_projects_on_repo_url"
     t.index ["repo_url"], name: "nonempty_repo_urls", unique: true, where: "((repo_url IS NOT NULL) AND ((repo_url)::text <> ''::text))"
     t.index ["tiered_percentage"], name: "index_projects_on_tiered_percentage"
+    t.index ["unreported_badge_loss"], name: "index_projects_on_unreported_badge_loss", where: "(unreported_badge_loss > 0)"
+    t.index ["unreported_badge_warning"], name: "index_projects_on_unreported_badge_warning", where: "(unreported_badge_warning > 0)"
+    t.index ["unreported_baseline_badge_loss"], name: "index_projects_on_unreported_baseline_badge_loss", where: "(unreported_baseline_badge_loss > 0)"
+    t.index ["unreported_baseline_badge_warning"], name: "index_projects_on_unreported_baseline_badge_warning", where: "(unreported_baseline_badge_warning > 0)"
     t.index ["updated_at"], name: "index_projects_on_updated_at"
     t.index ["user_id", "created_at"], name: "index_projects_on_user_id_and_created_at"
     t.index ["user_id"], name: "index_projects_on_user_id"
@@ -887,6 +898,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_27_180019) do
     t.string "email_bidx"
     t.string "encrypted_email"
     t.string "encrypted_email_iv"
+    t.boolean "important_notifications", default: true, null: false
     t.datetime "last_login_at", precision: nil
     t.string "name"
     t.string "nickname"

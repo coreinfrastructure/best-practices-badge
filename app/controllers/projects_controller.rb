@@ -146,18 +146,6 @@ class ProjectsController < ApplicationController
   # when a project drops from a higher level to a lower one.
   # Metal and baseline are separate series; cross-series comparison returns
   # no loss (rank 0 for unknown levels).
-  BADGE_LEVEL_RANK = {
-    'in_progress' => 0,
-    # Metal series
-    'passing' => 1,
-    'silver' => 2,
-    'gold' => 3,
-    # Baseline series
-    'baseline-1' => 1,
-    'baseline-2' => 2,
-    'baseline-3' => 3
-  }.freeze
-
   # Frozen regex for URL scheme extraction (memory optimization)
   URL_SCHEME_REGEX = %r{\A[^:]*://}
 
@@ -1593,14 +1581,12 @@ class ProjectsController < ApplicationController
   end
 
   # Determines if a badge level change represents a loss of status.
-  # Compares ranks within BADGE_LEVEL_RANK; unknown levels default to 0.
-  # Cross-series comparisons (e.g., metal to baseline) return false since
-  # they represent different badge types, not a downgrade.
+  # Delegates to Sections.badge_level_lost? which is the single source of truth.
   # @param old_level [String] Previous badge level
   # @param new_level [String] New badge level
   # @return [Boolean] True if the change represents a loss of badge status
   def badge_level_lost?(old_level, new_level)
-    (BADGE_LEVEL_RANK[new_level] || 0) < (BADGE_LEVEL_RANK[old_level] || 0)
+    Sections.badge_level_lost?(old_level, new_level)
   end
 
   # Normalizes URLs by removing trailing slashes.

@@ -23,6 +23,10 @@
        <%= f.check_box :notification_emails, class: "form-check-input" %>
        <small class="form-text text-muted"><%= t('users.edit.notification_emails_help') %></small>
 
+       <%= f.label :important_notifications, t('users.edit.important_notifications') %>
+       <%= f.check_box :important_notifications, class: "form-check-input" %>
+       <small class="form-text text-muted"><%= t('users.edit.important_notifications_help') %></small>
+
        <% if @user.provider == 'local' %>
          <%= f.label :password, t('users.new.password') %>
          <%= f.password_field :password, autocomplete: "off", class:"form-control" %>

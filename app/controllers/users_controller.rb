@@ -21,7 +21,7 @@ class UsersController < ApplicationController
   # These are the permitted parameters in compute_user_params.
   PERMITTED_PARAMS = %i[
     name email password password_confirmation
-    preferred_locale notification_emails
+    preferred_locale notification_emails important_notifications
   ].freeze
 
   # Maximum number of user search results to prevent system overwhelm

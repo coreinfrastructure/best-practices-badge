@@ -8,15 +8,36 @@ displays the proposed values with visual highlighting so the
 (authorized) user can review and accept or modify them before saving.
 The user can also simply choose to *not* save them, their choice.
 
-The *user* is always the final arbiter. They can easily see
+The *user* is always the final arbiter about data from external
+automation proposals. Users can easily see
 the proposals in context with other answers, and decide what to do.
 
 This is not the *only* way an automated tool can retrieve or edit project
-badge entry data; we also provide an API to read or change the project
-data using JSON. However, the "automation proposals" interface
+badge entry data:
+
+* Tools can GET and PUT project data using REST. Just use resource
+  <https://bestpractices.dev/projects/NUMBER.json>. We encourage this approach
+  for *getting* data, but no longer encourage using it for changes.
+  This mechanism requires authentication and authorization
+  (which is an extra step) and writing with REST
+  doesn't let the user use the UI to review the changes.
+  That said, see [api](./api) if you want more information.
+* Our automation systems examine the project repo for information.
+  This includes looking for a [`.bestpractices.json`](bestpractices-json)
+  file which stores
+  proposed answers; you can even get the JSON results from another repository
+  and use that as a starting point. We also examine the
+  `security-insights.yml` file to determine proposed answers.
+  However, these approaches require that you put information into the
+  project repository.
+
+The "automation proposals" interface
 described here provides a user-friendly way for applications to
-propose changes where the authorized human has a chance to review and
-approve those changes.
+propose arbitrary changes where:
+
+1. the authorized human has a chance to review and approve those changes,
+2. tools don't have to add code to authentication, and
+2. information does not need to *first* be put into the project repository.
 
 ## TL;DR
 
@@ -49,12 +70,12 @@ osps_ac_03_01_justification=Branch+protection+enabled+on+main
 
 When a user clicks on this, the system will switch to the user's preferred
 locale and let the user select the section (format) to use.
-On selection, relevant changes are highlighted and shown with a
-"robot" symbol, which the user can accept, modify, or ignore.
+On selection, relevant changes are highlighted
+which the user can accept, modify, or ignore.
 
 There are many more options. If you know the project number, you can use
 that directly. If you know the form you want to redirect to, you
-can directly express that using the key `section=`. Below are some highlights.
+can directly express that using the key `section=`. Below are the detail.
 For brevity, from now on we'll omit the prefix
 `https://www.bestpractices.dev`.
 
@@ -98,6 +119,7 @@ Where:
   For the Metal badge series this is `passing`, `silver`, or `gold`.
   For the Baseline badge series this is `baseline-1`, `baseline-2`,
   or `baseline-3`.
+  Use `choose` to let the user choose the section (level) to edit.
 - **`KEY=VALUE`** pairs are `&`-separated query parameters, where
   `KEY` is a field name and `VALUE` is the proposed new value.
   Values must be URL-encoded (spaces as `+` or `%20`, etc.).
@@ -378,30 +400,31 @@ the level has already been saved:
 
 ## Visual Highlighting
 
-When automation proposals (or internal Chief automation) modify
+When automation proposals (or internal Chief automation) potentially modify
 fields, the edit form highlights them to draw the user's attention:
 
-- **Yellow highlight** (`.highlight-automated`): A field that was
+- **Yellow highlight** (`.highlight-automated`) with 🤖 robot: A field that was
   previously unknown (`?`) and has been filled in with a proposed
   value. This is a helpful suggestion.
-- **Orange highlight** (`.highlight-overridden`): A field that
+- **Orange highlight** (`.highlight-overridden`) with ⚠️  caution: A field that
   already had a non-unknown value and has been forcibly changed,
   either via the `overrides` URL parameter (external automation) or
   by internal Chief automation when it has high confidence (≥ 4 on
   a 1–5 scale). The previous value and justification are shown in
   an expandable disclosure so the user can compare.
   This needs attention and review.
+  The user can click on ⚠️  caution to see what the old value was.
   Note: when Chief forces a field on every save, a user cannot
   persistently store a conflicting value. Chief re-applies its
   determination each time the form is saved if the criterion
   objectively cannot be met with high confidence
   (e.g., a repo with no CONTRIBUTING.md
   cannot have `contribution` marked "Met").
-- **Divergent indicator** (`≠`): A field that already had a
+- **Blue highlight** with `≠` not-equal: A field that already had a
   non-unknown value and the automation proposed a *different* answer,
   but the proposal was **not applied** (no matching `overrides`
-  pattern). The user can click the `≠` icon to see what automation
-  found. The user's existing answer remains unchanged.
+  pattern). The user can click the `≠` icon to see what the automation
+  proposed. The user's existing answer remains unchanged.
 
 Chief automation runs on every save. With "Save and continue",
 all proposal types (yellow, orange, ≠) are tracked and displayed.
@@ -432,6 +455,8 @@ the same field.
 External tools that want to propose changes should:
 
 1. Know the project's numeric ID (or its URL) and the section to edit.
+   If you don't know the project's numeric ID, use its URL.
+   Section "choose" lets users choose.
 2. Construct the URL with the appropriate field names and values.
 3. URL-encode all values (especially spaces, ampersands, and
    special characters).

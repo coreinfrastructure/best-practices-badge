@@ -74,7 +74,7 @@
 
       <% unless view_only %>
         <div class="panel-footer text-center">
-          <%= t 'projects.edit.submit_cdla_permissive_20_html' %>
+          <%= render 'form_submit_notice', project: project %>
           <%= f.button "#{t('projects.edit.save_and_continue')} #{ApplicationHelper::ROBOT_EMOJI_SAFE}".html_safe, type: 'submit', name: 'continue',
               value: 'changecontrol', class:"btn btn-success btn-submit",
               title: t('projects.edit.save_and_continue_tooltip') %>
@@ -103,7 +103,7 @@
         </ul>
         <% unless view_only %>
           <div class="panel-footer text-center">
-            <%= t 'projects.edit.submit_cdla_permissive_20_html' %>
+            <%= render 'form_submit_notice', project: project %>
             <%= f.button "#{t('projects.edit.save_and_continue')} #{ApplicationHelper::ROBOT_EMOJI_SAFE}".html_safe, type: 'submit', name: 'continue',
               value: 'reporting', class:"btn btn-success btn-submit",
               title: t('projects.edit.save_and_continue_tooltip') %>
@@ -135,7 +135,7 @@
         </ul>
         <% unless view_only %>
           <div class="panel-footer text-center">
-            <%= t 'projects.edit.submit_cdla_permissive_20_html' %>
+            <%= render 'form_submit_notice', project: project %>
             <%= f.button "#{t('projects.edit.save_and_continue')} #{ApplicationHelper::ROBOT_EMOJI_SAFE}".html_safe, type: 'submit', name: 'continue',
               value: 'quality', class:"btn btn-success btn-submit",
               title: t('projects.edit.save_and_continue_tooltip') %>
@@ -185,7 +185,7 @@
         </ul>
         <% unless view_only %>
           <div class="panel-footer text-center">
-            <%= t 'projects.edit.submit_cdla_permissive_20_html' %>
+            <%= render 'form_submit_notice', project: project %>
             <%= f.button "#{t('projects.edit.save_and_continue')} #{ApplicationHelper::ROBOT_EMOJI_SAFE}".html_safe, type: 'submit', name: 'continue',
               value: 'security', class:"btn btn-success btn-submit",
               title: t('projects.edit.save_and_continue_tooltip') %>
@@ -244,7 +244,7 @@
         </ul>
         <% unless view_only %>
           <div class="panel-footer text-center">
-            <%= t 'projects.edit.submit_cdla_permissive_20_html' %>
+            <%= render 'form_submit_notice', project: project %>
             <%= f.button "#{t('projects.edit.save_and_continue')} #{ApplicationHelper::ROBOT_EMOJI_SAFE}".html_safe, type: 'submit', name: 'continue',
               value: 'analysis', class:"btn btn-success btn-submit",
               title: t('projects.edit.save_and_continue_tooltip') %>
@@ -276,7 +276,7 @@
         </ul>
         <% unless view_only %>
           <div class="panel-footer text-center">
-            <%= t 'projects.edit.submit_cdla_permissive_20_html' %>
+            <%= render 'form_submit_notice', project: project %>
             <%= f.button "#{t('projects.edit.save_and_continue')} #{ApplicationHelper::ROBOT_EMOJI_SAFE}".html_safe, type: 'submit', name: 'continue',
               value: 'future', class:"btn btn-success btn-submit",
               title: t('projects.edit.save_and_continue_tooltip') %>
@@ -293,7 +293,7 @@
         <%= t "projects.show.#{project.data_license_field}",
               user: project.user_display_name %>
       <% else %>
-        <%= t 'projects.edit.submit_cdla_permissive_20_html' %>
+        <%= render 'form_submit_notice', project: project %>
         <%= f.button "#{t('projects.edit.save_and_continue')} #{ApplicationHelper::ROBOT_EMOJI_SAFE}".html_safe, type: 'submit', name: 'continue',
               value: 'Save', class:"btn btn-success btn-submit",
               title: t('projects.edit.save_and_continue_tooltip') %>

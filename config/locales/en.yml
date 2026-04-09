@@ -3893,4 +3893,8 @@ en:
       test_automation: "Test automation (confidence %{confidence})"
     repo_json:
       field_from_file: "Value from project's bestpractices JSON file"
+    security_insights:
+      field_value: "Per %{location}: %{field}=%{value}"
+      array_match: "Per %{location}: %{field} %{match}"
+      comment_suffix: "Comment says: \"%{comment}\"."
   last_entry: Last translation entry

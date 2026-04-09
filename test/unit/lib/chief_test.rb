@@ -361,6 +361,43 @@ class ChiefTest < ActiveSupport::TestCase
     assert_equal "https://github.com/#{@full_name}", @sample_project[:repo_url]
   end
 
+  # Stub that provides a fixed security-insights.yml to the detective pipeline
+  # without hitting GitHub, so we can test SecurityInsightsDetective via Chief.
+  class FakeSiRepoFiles
+    def blank? = false
+
+    def get_content(path, max_size: nil) # rubocop:disable Lint/UnusedMethodArgument
+      return unless path == 'security-insights.yml'
+
+      <<~YAML
+        project:
+          vulnerability-reporting:
+            reports-accepted: true
+      YAML
+    end
+  end
+
+  class FakeRepoFilesDetective < Detective
+    INPUTS              = [].freeze
+    OUTPUTS             = [:repo_files].freeze
+    OVERRIDABLE_OUTPUTS = [].freeze
+
+    def analyze(_evidence, _current)
+      { repo_files: { value: FakeSiRepoFiles.new, confidence: 3, explanation: '' } }
+    end
+  end
+
+  test 'SecurityInsightsDetective produces correct proposals through Chief pipeline' do
+    # Project with no repo_url avoids triggering RepoJsonDetective's GitHub call.
+    project = Project.new
+    chief = Chief.new(project, proc { Octokit::Client.new },
+                      detectives: [FakeRepoFilesDetective, SecurityInsightsDetective])
+    result = chief.propose_changes
+    assert_equal CriterionStatus::MET,
+                 result[:vulnerability_report_process_status][:value],
+                 'reports-accepted: true should infer vulnerability_report_process Met'
+  end
+
   test 'autofill with needed_fields produces same results for overlapping criteria' do
     # Create two identical projects
     project1 = Project.new

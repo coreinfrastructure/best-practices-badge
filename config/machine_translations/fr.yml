@@ -49,6 +49,7 @@ fr:
         divergent_justification_part: " %{justification}"
         divergent_proposed_value: 'Suggestion de l''automatisation : %{proposed_value}'
       save_and_continue_tooltip: Exécute l'automatisation pour remplir les valeurs inconnues
+      automation_hint_html: Vous pouvez utiliser des outils et des systèmes d'IA pour proposer des modifications via une URL simple, par exemple <tt>https://%{badge_hostname}/%{app_locale}/projects/%{project_id}/choose/edit?osps_ac_01_01_status=Met&amp;osps_ac_01_01_justification=GitHub+enforced</tt>. Consultez notre <a href="%{automation_proposals_url}">système de propositions d'automatisation</a> pour savoir comment procéder.
     show:
       section_selector: Section
       cdla_permissive_20_html: Ces données sont disponibles sous la licence <a href="https://cdla.dev/permissive-2-0/" >Community Data License Agreement – Permissive, Version 2.0 (CDLA-Permissive-2.0)</a>. Cela signifie qu'un destinataire de données peut partager les données, avec ou sans modifications, à condition que le destinataire de données rende disponible le texte de cet accord avec les données partagées. Veuillez créditer %{user} et les contributeurs du badge des meilleures pratiques de la OpenSSF.<br><br>

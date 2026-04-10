@@ -52,6 +52,7 @@ de:
         divergent_justification_part: " %{justification}"
         divergent_proposed_value: 'Automatisierungsvorschlag: %{proposed_value}'
       save_and_continue_tooltip: Führt Automatisierung aus, um unbekannte Werte zu füllen
+      automation_hint_html: Sie können Tools und KI-Systeme nutzen, um Änderungen über eine einfache URL vorzuschlagen, z. B. <tt>https://%{badge_hostname}/%{app_locale}/projects/%{project_id}/choose/edit?osps_ac_01_01_status=Met&amp;osps_ac_01_01_justification=GitHub+enforced</tt>. Wie das geht, erfahren Sie in unserem <a href="%{automation_proposals_url}">Automatisierungsvorschlagssystem</a>.
     show:
       section_selector: Abschnitt
       cdla_permissive_20_html: Diese Daten sind unter der <a href="https://cdla.dev/permissive-2-0/" >Community Data License Agreement – Permissive, Version 2.0 (CDLA-Permissive-2.0)</a> verfügbar. Dies bedeutet, dass ein Datenempfänger die Daten mit oder ohne Änderungen weitergeben darf, solange der Datenempfänger den Text dieser Vereinbarung mit den weitergegebenen Daten zur Verfügung stellt. Bitte nennen Sie %{user} und die OpenSSF Best Practices Badge-Mitwirkenden als Urheber.<br><br>

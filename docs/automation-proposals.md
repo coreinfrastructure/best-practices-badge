@@ -37,8 +37,8 @@ described here provides a user-friendly way for applications to
 propose arbitrary changes where:
 
 1. the authorized human has a chance to review and approve those changes,
-2. tools don't have to add code to authentication, and
-2. information does not need to *first* be put into the project repository.
+2. tools don't have to add code for authentication, and
+3. information does not need to *first* be put into the project repository.
 
 ## TL;DR
 
@@ -74,9 +74,25 @@ locale and let the user select the section (format) to use.
 On selection, relevant changes are highlighted
 which the user can accept, modify, or ignore.
 
-There are many more options. If you know the project number, you can use
-that directly. If you know the form you want to redirect to, you
-can directly express that using the key `section=`. Below are the detail.
+If you know the form you want to redirect to (e.g., `baseline-1`), you
+can directly express that using the key `section=`
+(section defaults to `choose`).
+To use a specific natural language, add a slash and its code
+after the domain name (e.g., `/en` for English).
+
+If you know the project number, you can use the form
+```text
+https://www.bestpractices.dev/projects/NUMBER/choose/edit?
+KEY=VALUE&KEY=VALUE&...
+```
+
+Proposals normally only set answers when there is no current value
+(they are "unforced").
+To force proposals, add [`overrides=`](#the-overrides-parameter)
+followed by a comma-separated sequence of globs to force. E.g.,
+`overrides=osps_ac_*,osps_vm_02_01_status`.
+
+There are many more options. Below are the details.
 For brevity, from now on we'll omit the prefix
 `https://www.bestpractices.dev`.
 
@@ -95,7 +111,7 @@ See [The `overrides` Parameter](#the-overrides-parameter) below.
 |---------------|---------------|--------|-----------------|
 | Any | Same as current | No change | None |
 | Blank/Unknown (`?`) | Different | Proposal applied | 🤖 Yellow highlight |
-| Real value | Different, Unforced | Not applied | ≠, Click to see what automation found |
+| Real value | Different, Unforced | Not applied | ≠, click to see what automation found |
 | Real value | Different, Forced | Proposal applied; old value replaced | ⚠️ Orange highlight, click to see previous value |
 
 A `_status` that is unchanged, but has a different justification,
@@ -323,7 +339,7 @@ Automation proposals are validated in several ways:
    different section than the one being edited are ignored.
    For example, proposing `osps_ac_01_01_status=Met` while editing
    the `passing` section will have no effect.
-   That approach is necessary because it ensures that the human user will have
+   This is necessary because it ensures that the human user will have
    a chance to review the proposal in its proper context.
 
 4. **No direct writes**: Proposed values are loaded into the
@@ -401,7 +417,8 @@ the level has already been saved:
 
 ## Visual Highlighting
 
-When automation proposals (or internal Chief automation) potentially modify
+When automation proposals and internal Chief automation (which
+loads files from the repository) potentially modify
 fields, the edit form highlights them to draw the user's attention:
 
 - **Yellow highlight** (`.highlight-automated`) with 🤖 robot: A field that was
@@ -427,14 +444,15 @@ fields, the edit form highlights them to draw the user's attention:
   pattern). The user can click the `≠` icon to see what the automation
   proposed. The user's existing answer remains unchanged.
 
-Chief automation runs on every save. With "Save and continue",
-all proposal types (yellow, orange, ≠) are tracked and displayed.
-With "Save and exit", only forced (orange) changes are applied and
+When a user does "Save and exit", internal automations
+(managed by the "chief") run, but only forced (orange) changes are applied and
 shown; non-forced fill-in proposals are silently skipped so unreviewed
 changes never land in the database.
+
+When a user runs "Save and continue", all internal automations are re-run.
+Proposal types (yellow, orange, ≠) are tracked and displayed.
 External URL automation proposals are not re-applied on subsequent
-saves. Their visual indicators (orange/≠) remain visible because
-Chief re-evaluates the same data and produces the same highlights.
+saves, because their URL query parameters go away (their job is done).
 
 ## Interaction with First-Edit Automation
 

@@ -313,7 +313,7 @@ would be cleared the next time the `.bestpractices.json` file was read.
 Justification fields (`*_justification`) accept any text string.
 Blank values are accepted and result in an empty justification.
 Values are stripped of leading and trailing whitespace.
-In some cases *satisifying* a criteria requires that a URL be included
+In some cases *satisfying* a criteria requires that a URL be included
 in the justification (this URL should point to evidence supporting the
 justification).
 

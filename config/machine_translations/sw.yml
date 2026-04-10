@@ -182,6 +182,7 @@ sw:
         divergent_justification_part: " %{justification}"
         divergent_proposed_value: 'Otomatiki ilipendekeza: %{proposed_value}'
       save_and_continue_tooltip: Inaendesha automation kujaza thamani zisizojulikana
+      automation_hint_html: Unaweza kutumia zana na mifumo ya AI kupendekeza mabadiliko kupitia URL rahisi, kama vile <tt>https://%{badge_hostname}/%{app_locale}/projects/%{project_id}/choose/edit?osps_ac_01_01_status=Met&amp;osps_ac_01_01_justification=GitHub+enforced</tt>. Angalia <a href="%{automation_proposals_url}">mfumo wetu wa mapendekezo ya otomatiki</a> kwa jinsi ya kufanya hivyo.
     show:
       section_selector: Sehemu
       edit: Hariri

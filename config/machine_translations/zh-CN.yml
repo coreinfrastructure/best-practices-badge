@@ -49,6 +49,7 @@ zh-CN:
         divergent_justification_part: " %{justification}"
         divergent_proposed_value: 自动化建议：%{proposed_value}
       save_and_continue_tooltip: 运行自动化以填充未知值
+      automation_hint_html: 您可以使用工具和AI系统通过简单的URL提交变更建议，例如 <tt>https://%{badge_hostname}/%{app_locale}/projects/%{project_id}/choose/edit?osps_ac_01_01_status=Met&amp;osps_ac_01_01_justification=GitHub+enforced</tt>。请参阅我们的<a href="%{automation_proposals_url}">自动化提案系统</a>，了解具体操作方法。
     show:
       section_selector: 部分
       cdla_permissive_20_html: 该数据可在<a href="https://cdla.dev/permissive-2-0/" >社区数据许可协议 – 许可性，版本 2.0 (CDLA-Permissive-2.0)</a>下获取。这意味着数据接收方可以共享数据，无论是否经过修改，只要数据接收方在共享数据时提供本协议文本。请注明%{user}和OpenSSF最佳实践徽章贡献者。<br><br>

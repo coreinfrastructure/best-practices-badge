@@ -49,6 +49,7 @@ ja:
         divergent_justification_part: " %{justification}"
         divergent_proposed_value: '自動化の提案: %{proposed_value}'
       save_and_continue_tooltip: 自動化を実行して不明な値を入力します
+      automation_hint_html: ツールやAIシステムを使って、<tt>https://%{badge_hostname}/%{app_locale}/projects/%{project_id}/choose/edit?osps_ac_01_01_status=Met&amp;osps_ac_01_01_justification=GitHub+enforced</tt>のような簡単なURLで変更を提案できます。その方法については、<a href="%{automation_proposals_url}">自動化提案システム</a>をご覧ください。
     show:
       section_selector: セクション
       cdla_permissive_20_html: このデータは、<a href="https://cdla.dev/permissive-2-0/" >Community Data License Agreement – Permissive, Version 2.0 (CDLA-Permissive-2.0)</a>のもとで利用可能です。これは、データ受領者が、データ受領者がこの契約のテキストを共有データとともに利用可能にする限り、変更の有無にかかわらずデータを共有できることを意味します。%{user}およびOpenSSFベストプラクティスバッジのコントリビューターにクレジットを表示してください。<br><br>

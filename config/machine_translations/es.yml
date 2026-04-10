@@ -297,6 +297,7 @@ es:
         divergent_justification_part: " %{justification}"
         divergent_proposed_value: 'Automatización sugerida: %{proposed_value}'
       save_and_continue_tooltip: Ejecuta la automatización para llenar valores desconocidos
+      automation_hint_html: Puede utilizar herramientas y sistemas de IA para proponer cambios a través de una URL simple, como <tt>https://%{badge_hostname}/%{app_locale}/projects/%{project_id}/choose/edit?osps_ac_01_01_status=Met&amp;osps_ac_01_01_justification=GitHub+enforced</tt>. Consulte nuestro <a href="%{automation_proposals_url}">sistema de propuestas de automatización</a> para saber cómo hacerlo.
     show:
       section_selector: Sección
       edit: Editar

@@ -81,6 +81,7 @@ To use a specific natural language, add a slash and its code
 after the domain name (e.g., `/en` for English).
 
 If you know the project number, you can use the form
+
 ```text
 https://www.bestpractices.dev/projects/NUMBER/choose/edit?
 KEY=VALUE&KEY=VALUE&...
@@ -96,22 +97,19 @@ There are many more options. Below are the details.
 For brevity, from now on we'll omit the prefix
 `https://www.bestpractices.dev`.
 
-### What Happens to Each Proposed Field
+### Visual highlight results
 
 The outcome for each field depends on the field's current value and
-whether the new automation proposal *overrides* the current value
+whether the new proposal *overrides* the current value
 (aka is *forced*).
-By default, proposals are unforced.
-To force proposals, add `overrides=*` (force all fields) or a more
-specific comma-separated sequence of globs
-such as `overrides=osps_ac_*` to the URL.
-See [The `overrides` Parameter](#the-overrides-parameter) below.
+Proposals are unforced unless they match the comma-separated globs in the
+[`overrides` parameter](#the-overrides-parameter):
 
 | Current value | Proposed value | Result | Visual indicator |
 |---------------|---------------|--------|-----------------|
 | Any | Same as current | No change | None |
 | Blank/Unknown (`?`) | Different | Proposal applied | 🤖 Yellow highlight |
-| Real value | Different, Unforced | Not applied | ≠, click to see what automation found |
+| Real value | Different, Unforced | Not applied | ≠ Blue highlight, click to see what automation found |
 | Real value | Different, Forced | Proposal applied; old value replaced | ⚠️ Orange highlight, click to see previous value |
 
 A `_status` that is unchanged, but has a different justification,
@@ -233,25 +231,21 @@ Where:
 - **`NUMBER`** is a two-digit requirement number (e.g., `01`, `02`).
 - **`SECTION`** is a two-digit sub-section number (e.g., `01`, `02`).
 
-Note that OSPS field names are always *lowercase* and never use
-dashes or periods (they are replaced with `_`).
+OSPS field names are always *lowercase* and never use
+dashes or periods (both are replaced with `_`).
 
 **OSPS category codes:**
 
 | Code | Category |
 |------|----------|
 | `ac` | Access Control |
-| `br` | Build & Release |
-| `ca` | Change Auditing |
-| `cm` | Change Management |
+| `br` | Build and Release |
 | `do` | Documentation |
 | `gv` | Governance |
-| `le` | Legal / Licensing |
-| `pm` | Project Maintenance |
-| `ps` | Project Security |
-| `rp` | Reporting |
+| `le` | Legal |
+| `qa` | Quality |
 | `sa` | Security Assessment |
-| `ur` | User Relations |
+| `vm` | Vulnerability Management |
 
 Each OSPS criterion also has an `original_id` in the format
 `OSPS-XX-NN.SS` (e.g., `OSPS-AC-01.01`).
@@ -265,9 +259,6 @@ Each OSPS criterion also has an `original_id` in the format
 | `osps_br_01_01` | OSPS-BR-01.01 | Use a build system |
 | `osps_le_02_01` | OSPS-LE-02.01 | License clearly defined |
 | `osps_do_01_01` | OSPS-DO-01.01 | Provide project documentation |
-
-The full list of baseline criteria is defined in
-`criteria/baseline_criteria.yml`.
 
 ## Status Values
 
@@ -291,14 +282,15 @@ a criterion accepts `N/A` as a valid status.
 ### Status Value Semantics: Query Strings vs JSON
 
 There's an important distinction between query string proposals and
-JSON file automation (see [.bestpractices.json](bestpractices-json.md)):
+JSON file automation from a project's `.bestpractices.json` file
+(see [.bestpractices.json](bestpractices-json.md)):
 
 **Query String Proposals (this mechanism):**
 
 - `?` means **"explicitly reset this field to unknown"**
 - Users can clear a previously-set status by passing `?` in the URL
 - Example: `...edit?contribution_status=?` resets the status to unknown
-- This is intentional - humans can use URLs to reset fields
+- This is intentional - AIs and humans can use URLs to reset fields
 
 **JSON File Automation (`.bestpractices.json`):**
 
@@ -313,13 +305,17 @@ through a URL. JSON files represent automated tool outputs where `?` means
 
 This design allows projects to copy `.bestpractices.json` files from templates
 or other projects that are filled with `?` placeholders without accidentally
-clearing their existing answers.
+clearing their existing answers. Otherwise, any answer a user *did* give
+would be cleared the next time the `.bestpractices.json` file was read.
 
 ## Justification Values
 
 Justification fields (`*_justification`) accept any text string.
 Blank values are accepted and result in an empty justification.
 Values are stripped of leading and trailing whitespace.
+In some cases *satisifying* a criteria requires that a URL be included
+in the justification (this URL should point to evidence supporting the
+justification).
 
 ## Security and Validation
 
@@ -342,7 +338,7 @@ Automation proposals are validated in several ways:
    This is necessary because it ensures that the human user will have
    a chance to review the proposal in its proper context.
 
-4. **No direct writes**: Proposed values are loaded into the
+4. **No direct writes**: Automation proposal values are loaded into the
    in-memory project object for display in the edit form.
    They are **not** saved to the database until the user explicitly
    submits the form. The user always has the opportunity to review,
@@ -415,11 +411,13 @@ the level has already been saved:
 /en/projects/42/passing/edit?reanalyze=1
 ```
 
-## Visual Highlighting
+## Details on Visual Highlighting
 
 When automation proposals and internal Chief automation (which
 loads files from the repository) potentially modify
-fields, the edit form highlights them to draw the user's attention:
+fields, the edit form highlights them to draw the user's attention.
+We've summarized them earlier; here's more detail that also shows
+how we handle internal automations:
 
 - **Yellow highlight** (`.highlight-automated`) with 🤖 robot: A field that was
   previously unknown (`?`) and has been filled in with a proposed
@@ -444,12 +442,12 @@ fields, the edit form highlights them to draw the user's attention:
   pattern). The user can click the `≠` icon to see what the automation
   proposed. The user's existing answer remains unchanged.
 
-When a user does "Save and exit", internal automations
+When a user selects "Save and exit", internal automations
 (managed by the "chief") run, but only forced (orange) changes are applied and
 shown; non-forced fill-in proposals are silently skipped so unreviewed
 changes never land in the database.
 
-When a user runs "Save and continue", all internal automations are re-run.
+When a user selects "Save and continue", all internal automations are re-run.
 Proposal types (yellow, orange, ≠) are tracked and displayed.
 External URL automation proposals are not re-applied on subsequent
 saves, because their URL query parameters go away (their job is done).

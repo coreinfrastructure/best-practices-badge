@@ -84,7 +84,7 @@ GEM
       uri (>= 0.13.1)
     addressable (2.9.0)
       public_suffix (>= 2.0.2, < 8.0)
-    ansi (1.5.0)
+    ansi (1.6.0)
     argon2-kdf (0.3.1)
       fiddle
     ast (2.4.3)
@@ -166,7 +166,7 @@ GEM
       rake
     et-orbi (1.4.0)
       tzinfo
-    execjs (2.10.0)
+    execjs (2.10.1)
     faraday (2.14.1)
       faraday-net_http (>= 2.0, < 3.5)
       json
@@ -286,7 +286,7 @@ GEM
     mixlib-shellout (3.4.10)
       chef-utils
     msgpack (1.8.0)
-    multi_json (1.19.1)
+    multi_json (1.20.1)
     multi_xml (0.8.1)
       bigdecimal (>= 3.1, < 5)
     net-http (0.9.1)
@@ -351,7 +351,7 @@ GEM
     paper_trail (17.0.0)
       activerecord (>= 7.1)
       request_store (~> 1.4)
-    parallel (1.27.0)
+    parallel (1.28.0)
     parser (3.3.10.2)
       ast (~> 2.4.1)
       racc

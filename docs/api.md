@@ -11,8 +11,7 @@ We *want* people to use our data; please do so!
 However, please don't overwhelm us.
 
 This document provides a quickstart,
-legal information (the data is released under at least the
-[Creative Commons Attribution License version 3.0 (CC-BY-3.0)](https://creativecommons.org/licenses/by/3.0/)),
+legal information,
 a discussion of the most common requests,
 a pointer to a sample analysis program,
 how to query, how to download the database,
@@ -28,17 +27,35 @@ badge images you'll be fine. Badge image rates can be much higher
 Like any RESTful API, use an HTTP verb (like GET) on a resource.
 
 For example, you can get the JSON data for project #1 from the
-real production site (<https://bestpractices.coreinfrastructure.org>)
+real production site (<https://www.bestpractices.dev>)
 by retrieving (a GET) data from this URL:
 
 ```
-https://bestpractices.coreinfrastructure.org/projects/1.json
+https://www.bestpractices.dev/projects/1.json
 ```
 
-Note that you can ask for a particular result data format (where
+You can ask for a particular result data format (where
 supported) by adding a period and its format (e.g., ".json", ".csv",
 and ".svg") to the URL before the parameters (if any).
 When using "." + format, the format name must be all lowercase.
+
+If want the JSON data for a specific project (or projects) and want to
+search for it by URL, you can use a URL search and request for that data
+in JSON format like this (you'll get an array of matches):
+
+```
+https://www.bestpractices.dev/projects.json?url=URL
+```
+
+A GET just retrieves information, and since most information is public,
+in most cases you don't need to log in for a GET.
+Other operations, like POST or DELETE, require logging in first
+(as is typical, cookies are used to track logged-in sessions).
+
+We *do* support POST for changing project data,
+but we generally recommend using
+[automation proposals](automation-proposals.md) URLs or the
+[.bestpractices.json](basepractices-json.md) file instead.
 
 WARNING: Do *not* use the HTTP header "Accept" to select a format;
 that *no longer works* (it was previously deprecated).
@@ -48,11 +65,6 @@ At one time we allowed this, but that interferes with CDN caching.
 Caches normally just use the URL to determine
 what to cache, and caches work much less well if they have to use other
 parameters to examine the cache.
-
-A GET just retrieves information, and since most information is public,
-in most cases you don't need to log in for a GET.
-Other operations, like POST or DELETE, require logging in first
-(as is typical, cookies are used to track logged-in sessions).
 
 From here on we'll omit the scheme (https) and hostname, and
 we'll indicate variables by beginning their name with ":" (colon).
@@ -115,13 +127,13 @@ might request.
     in an HTML document with:
 
     ```
-    <a href="https://bestpractices.coreinfrastructure.org/projects/NNN">
-      <img src="https://bestpractices.coreinfrastructure.org/projects/NNN/badge">
+    <a href="https://www.bestpractices.dev/projects/NNN">
+      <img src="https://www.bestpractices.dev/projects/NNN/badge">
     </a>
     ```
 
     You can also embed the badge status of project NNN in a markdown file with:
-    `[![OpenSSF Best Practices](https://bestpractices.coreinfrastructure.org/projects/NNN/badge)](https://bestpractices.coreinfrastructure.org/projects/NNN)`
+    `[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/NNN/badge)](https://www.bestpractices.dev/projects/NNN)`
 
 *   `GET /(:locale/)projects(.:format)(?:query)`
 
@@ -170,8 +182,8 @@ might request.
     links and the "alt" tag like this, where `MY_URL` is the URL to be used:
 
     ```
-    <a href="https://bestpractices.coreinfrastructure.org/projects?as=entry&url=MY_URL">
-      <img src="https://bestpractices.coreinfrastructure.org/projects?as=badge&url=MY_URL" alt="OpenSSF N/A">
+    <a href="https://www.bestpractices.dev/projects?as=entry&url=MY_URL">
+      <img src="https://www.bestpractices.dev/projects?as=badge&url=MY_URL" alt="OpenSSF N/A">
     </a>
     ```
 
@@ -191,7 +203,7 @@ might request.
     project id reference instead, e.g., generate this instead (where you
     found NUMBER earlier):
 
-    <img src="https://bestpractices.coreinfrastructure.org/projects/NUMBER/badge" alt="OpenSSF N/A">
+    <img src="https://www.bestpractices.dev/projects/NUMBER/badge" alt="OpenSSF N/A">
 
 *   `GET /en/projects?as=edit&url=MY_URL`
     `GET /en/projects?as=edit&section=SECTION&url=MY_URL`
@@ -242,7 +254,7 @@ The `tiered_percentage` field of a project
 (shown as the "tiered %" column on the projects page)
 is a number that should be interpreted as a percentage.
 As also explained at the bottom of the
-[projects page](https://bestpractices.coreinfrastructure.org/en/projects),
+[projects page](https://www.bestpractices.dev/en/projects),
 this field is 300% (represented as 300) for gold,
 200% (represented as 200) for silver, and
 100% (represented as 100) for passing, plus any
@@ -378,11 +390,11 @@ complications in its implementation, so we just haven't implemented it yet.
 So you can download the projects by repeatedly requesting this
 (changing "1" into 2, 3, etc. until all is loaded):
 
-> https://bestpractices.coreinfrastructure.org/projects.json?page=1
+> https://www.bestpractices.dev/projects.json?page=1
 
 You can similarly load the user data starting from here:
 
-> https://bestpractices.coreinfrastructure.org/users.json?page=1
+> https://www.bestpractices.dev/users.json?page=1
 
 To directly download the user list you must be logged in, and we
 intentionally restrict the information we share about users.
@@ -403,7 +415,7 @@ If referencing collectively or
 not otherwise noted, please credit the
 "OpenSSF Best Practices badge contributors" and note the license.
 You should also note the website URL as the data source, which is
-<https://bestpractices.coreinfrastructure.org>.
+<https://www.bestpractices.dev>.
 
 If you are doing research, we urge you do to it responsibly and reproducibly.
 Please be sure to capture the date and time when you began and completed
@@ -507,12 +519,12 @@ Users indicate their locale via the URL.
 We use one of the standard approaches, where the locale is the first
 part of the path.
 For example,
-<https://bestpractices.coreinfrastructure.org/fr/projects>
+<https://www.bestpractices.dev/fr/projects>
 selects the locale "fr" (French) when displaying "/projects".
 This even works at the top page, e.g.,
-<https://bestpractices.coreinfrastructure.org/fr>.
+<https://www.bestpractices.dev/fr>.
 The application also supports the locale as a query parameter, e.g.,
-<https://bestpractices.coreinfrastructure.org/projects?locale=fr>,
+<https://www.bestpractices.dev/projects?locale=fr>,
 though that is not the canonical URL format.
 
 At one time, when a locale was not provided, English (en) was assumed.
@@ -554,8 +566,8 @@ Project participation and interface:
 
 Criteria:
 
-* [Criteria for passing badge](https://bestpractices.coreinfrastructure.org/criteria/0)
-* [Criteria for all badge levels](https://bestpractices.coreinfrastructure.org/criteria)
+* [Criteria for passing badge](https://www.bestpractices.dev/criteria/0)
+* [Criteria for all badge levels](https://www.bestpractices.dev/criteria)
 
 Development processes and security:
 

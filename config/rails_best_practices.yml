@@ -2,11 +2,12 @@
 # Note: Inside { } you can use "except_methods:" and "ignored_files:" to omit
 # some checks.
 
-# Equivalent to : --features --spec --without-color --exclude railroader/ tmp/ temp/
+# Equivalent to : --features --spec --without-color --exclude railroader/ ,* tmp/ temp/
+# Note: exclude patterns are matched against absolute paths, so ^ anchors don't work.
 features: true
 spec: true
 without_color: true
-exclude: ["railroader/", "^,.*", "^tmp/", "^temp/"]
+exclude: ["railroader/", "/,", "tmp/", "temp/"]
 
 AddModelVirtualAttributeCheck: { }
 AlwaysAddDbIndexCheck: { }

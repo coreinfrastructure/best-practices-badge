@@ -60,6 +60,13 @@ jobs:
       CIRCLE_TEST_REPORTS: /tmp/circleci-test-results
     steps:
     - checkout
+    # Refresh apt package lists before any apt-based installs.
+    # Ubuntu mirrors occasionally return 404 for stale package versions
+    # that have been replaced by a newer release; apt-get update fetches
+    # current metadata so subsequent installs find the right URLs.
+    - run:
+        name: Update apt package lists
+        command: sudo apt-get update
     # For more on browser-tools integration with the main image, see:
     # https://circleci.com/developer/images/image/cimg/ruby
     # https://circleci.com/developer/orbs/orb/circleci/browser-tools

@@ -6,6 +6,7 @@
 
 require 'test_helper'
 
+# rubocop:disable Metrics/ClassLength
 class SessionsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @user = users(:test_user_melissa)
@@ -64,6 +65,82 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert flash[:success].include?('Logged in!')
   end
 
+  test 'local login with return_to redirects to destination' do
+    destination = '/en/projects/1/passing/edit'
+    post '/en/login', params: {
+      session: {
+        provider: 'local', email: 'test@example.org', password: 'password',
+        return_to: destination
+      }
+    }
+    assert_response :redirect
+    assert_redirected_to destination
+  end
+
+  test 'local login with protocol-relative return_to is rejected' do
+    post '/en/login', params: {
+      session: {
+        provider: 'local', email: 'test@example.org', password: 'password',
+        return_to: '//evil.example.org/steal'
+      }
+    }
+    assert_response :redirect
+    assert_redirected_to root_url
+  end
+
+  test 'local login with non-path return_to is rejected' do
+    post '/en/login', params: {
+      session: {
+        provider: 'local', email: 'test@example.org', password: 'password',
+        return_to: 'javascript:alert(1)'
+      }
+    }
+    assert_response :redirect
+    assert_redirected_to root_url
+  end
+
+  test 'local login with return_to of /en/login is rejected (loop prevention)' do
+    post '/en/login', params: {
+      session: {
+        provider: 'local', email: 'test@example.org', password: 'password',
+        return_to: '/en/login'
+      }
+    }
+    assert_response :redirect
+    assert_redirected_to root_url
+  end
+
+  test 'local login with return_to of /en/login/ is rejected' do
+    post '/en/login', params: {
+      session: {
+        provider: 'local', email: 'test@example.org', password: 'password',
+        return_to: '/en/login/'
+      }
+    }
+    assert_response :redirect
+    assert_redirected_to root_url
+  end
+
+  test 'local login with return_to of /en/login?x is rejected' do
+    post '/en/login', params: {
+      session: {
+        provider: 'local', email: 'test@example.org', password: 'password',
+        return_to: '/en/login?x=1'
+      }
+    }
+    assert_response :redirect
+    assert_redirected_to root_url
+  end
+
+  test 'login page with return_to includes it in github auth link and form' do
+    destination = '/en/projects/1/passing/edit'
+    get '/en/login', params: { return_to: destination }
+    assert_response :success
+    encoded = ERB::Util.url_encode(destination)
+    assert_select "a[data-method='post'][href='/auth/github?locale=en&return_to=#{encoded}']"
+    assert_select "input[type='hidden'][name='session[return_to]'][value='#{destination}']"
+  end
+
   test 'local login fails if deny_login' do
     # WARNING: This test manipulates a global setting, namely
     # Rails.application.config.deny_login. Parallel testing with *processes*
@@ -84,3 +161,4 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 end
+# rubocop:enable Metrics/ClassLength

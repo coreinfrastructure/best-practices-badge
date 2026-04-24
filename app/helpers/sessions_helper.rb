@@ -10,6 +10,14 @@ require_relative '../../lib/locale_utils'
 module SessionsHelper
   SESSION_TTL = 48.hours # Automatically log off session if inactive this long
   RESET_SESSION_TIMER = 1.hour # Active sessions older than this reset timer
+
+  # Matches /login or /signup, optionally preceded by a locale prefix of the
+  # form /LL or /LL-RR (2 lowercase language letters, optional hyphen + 2
+  # uppercase region letters, per BCP 47). Rejects if login/signup is followed
+  # by '/', '?', or end of string, so /en/login/, /en/login?x, and /en/login
+  # are all matched (blocked), but /en/loginpage is not.
+  LOGIN_SIGNUP_PATH_REGEX = %r{\A(?:/[a-z]{2}(?:-[A-Z]{2})?)?/(?:login|signup)(?:[/?]|\z)}
+
   GITHUB_PATTERN = %r{
     \Ahttps://github.com/([A-Za-z0-9_.-]+)/([A-Za-z0-9_.-]+)/?\Z
   }x
@@ -263,6 +271,20 @@ module SessionsHelper
     url.match(GITHUB_PATTERN).captures.join('/')
   end
 
+  # Returns true iff path is safe to use as a post-login redirect destination.
+  # Accepts only server-relative paths (starting with '/' but not '//';
+  # '//' is treated as a protocol-relative URL by browsers and must be
+  # rejected). Also rejects login/signup paths to prevent redirect loops.
+  # @param path [String, nil]
+  # @return [Boolean]
+  def valid_return_path?(path)
+    return false if path.blank?
+    return false unless path.start_with?('/')
+    return false if path.start_with?('//')
+
+    !path.match?(LOGIN_SIGNUP_PATH_REGEX)
+  end
+
   # Check if referring url is internal, if so, save it.
   # Excludes login and signup URLs regardless of locale prefix, so that an
   # intermediate locale redirect (/login -> /en/login) is never stored as
@@ -273,11 +295,7 @@ module SessionsHelper
     ref_url = request.referer
     ref_uri = URI.parse(ref_url)
     return unless ref_uri.host == request.host
-
-    # Strip locale prefix from path before comparing to exclude /login and
-    # /signup both with and without locale (e.g., /en/login and /login).
-    normalized_path = ref_uri.path.gsub(LocaleUtils::LOCALE_PATH_REGEX, '/')
-    return if %w[/login /signup].include?(normalized_path)
+    return if ref_uri.path.match?(LOGIN_SIGNUP_PATH_REGEX)
 
     session[:forwarding_url] = ref_url
   end

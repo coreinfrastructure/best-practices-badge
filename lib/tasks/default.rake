@@ -256,7 +256,7 @@ desc 'Run markdownlint (mdl) - check for markdown problems on **.md files'
 task :markdownlint do
   # The default configuration is in .mdlrc + style config/markdown_style.rb
   # Exclude temporary files beginning with comma
-  sh 'find . -name "*.md" ! -name ",*" -print0 | xargs -0 bundle exec mdl'
+  sh 'find . -name "*.md" ! -name ",*" ! -path "./tmp/*" ! -path "./temp/*" -print0 | xargs -0 bundle exec mdl'
 end
 
 # Apply JSCS to look for issues in JavaScript files.
@@ -324,7 +324,8 @@ task :whitespace_check do
   cmd = <<~SHELL
     find . -type f ! -name ',*' \
       ! -path './vendor/*' ! -path './node_modules/*' \
-      ! -path './railroader/*' ! -path './tmp/*' ! -path './.git/*' \
+      ! -path './railroader/*' ! -path './tmp/*' ! -path './temp/*' \
+      ! -path './.git/*' \
       ! -path './log/*' ! -path './test/vcr_cassettes/*' \
       ! -path './license_finder_report.html' \
       ! -path './coverage/index.html' \

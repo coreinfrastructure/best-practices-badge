@@ -71,12 +71,19 @@ class SessionsController < ApplicationController
 
   # Performs post-login setup for authenticated users.
   # Records login time, displays welcome message, and redirects appropriately.
+  # If return_to_path is given (already validated), redirects there;
+  # otherwise falls back to the session-stored forwarding URL or root.
   #
   # @param user [User] The authenticated user
+  # @param return_to_path [String, nil] A pre-validated server-relative path
   # @return [void]
-  def successful_login(user)
+  def successful_login(user, return_to_path = nil)
     log_in user
-    redirect_back_or root_url
+    if return_to_path.present? && valid_return_path?(return_to_path)
+      redirect_to return_to_path, allow_other_host: false
+    else
+      redirect_back_or root_url
+    end
 
     # Report last login time (this can help users detect problems)
     last_login = user.last_login_at
@@ -129,7 +136,9 @@ class SessionsController < ApplicationController
     session[:user_token] = auth['credentials']['token']
     session[:github_name] = auth['info']['nickname']
     user.name ||= user.nickname
-    successful_login(user)
+    return_to = request.env['omniauth.params']&.dig('return_to')
+    return_to = nil unless valid_return_path?(return_to)
+    successful_login(user, return_to)
   end
   # rubocop:enable Metrics/AbcSize
 
@@ -147,7 +156,9 @@ class SessionsController < ApplicationController
       flash.now[:danger] = t('sessions.cannot_login_yet')
       render 'new', status: :forbidden
     else
-      successful_login(user)
+      return_to = params.dig(:session, :return_to)
+      return_to = nil unless valid_return_path?(return_to)
+      successful_login(user, return_to)
       params[:session][:remember_me] == '1' ? remember(user) : forget(user)
     end
   end

@@ -155,6 +155,30 @@ class SessionsHelperTest < ActionView::TestCase
     assert_nil get_github_path('http://githubs.com/asdf/1234')
   end
 
+  test 'valid_return_path? rejects invalid inputs' do
+    assert_not valid_return_path?(nil)
+    assert_not valid_return_path?('')
+    assert_not valid_return_path?('http://evil.com/steal')   # absolute URL
+    assert_not valid_return_path?('javascript:alert(1)')     # JS scheme
+    assert_not valid_return_path?('//evil.com/steal')        # protocol-relative
+    assert_not valid_return_path?('/login')                  # bare login
+    assert_not valid_return_path?('/signup')                 # bare signup
+    assert_not valid_return_path?('/en/login')               # locale + login
+    assert_not valid_return_path?('/fr/login')
+    assert_not valid_return_path?('/zh-CN/login')            # BCP 47 region variant
+    assert_not valid_return_path?('/en/signup')
+    assert_not valid_return_path?('/en/login/')              # trailing slash
+    assert_not valid_return_path?('/en/login?x=1')           # with query string
+  end
+
+  test 'valid_return_path? accepts valid paths' do
+    assert valid_return_path?('/')
+    assert valid_return_path?('/en/projects/1/passing/edit')
+    assert valid_return_path?('/en/projects/1/passing/edit?description=foo')
+    assert valid_return_path?('/loginpage')    # login not at path boundary
+    assert valid_return_path?('/en/loginpage') # same with locale
+  end
+
   test 'unit test of valid_github_url' do
     assert valid_github_url? 'https://github.com/asdf/1234/'
     assert valid_github_url? 'https://github.com/asdf-123_/1234as-/'

@@ -80,7 +80,7 @@ class SessionsController < ApplicationController
   def successful_login(user, return_to_path = nil)
     log_in user
     if return_to_path.present? && valid_return_path?(return_to_path)
-      redirect_to return_to_path
+      redirect_to return_to_path, allow_other_host: false
     else
       redirect_back_or root_url
     end

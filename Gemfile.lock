@@ -157,7 +157,7 @@ GEM
     dotenv (3.2.0)
     drb (2.2.3)
     encryptor (3.0.0)
-    erb (6.0.2)
+    erb (6.0.4)
     erubi (1.13.1)
     erubis (2.7.0)
     eslintrb (2.1.0)

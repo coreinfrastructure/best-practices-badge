@@ -1664,11 +1664,11 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test 'choose_edit redirects unauthenticated user to login' do
+  test 'choose_edit redirects unauthenticated user to login with return_to' do
     project = projects(:perfect)
     get "/en/projects/#{project.id}/choose/edit"
     assert_response :found
-    assert_redirected_to '/en/login'
+    assert_match %r{/en/login\?return_to=}, response.location
   end
 
   test 'choose_show shows section list for read-only viewing' do

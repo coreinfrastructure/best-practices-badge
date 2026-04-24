@@ -19,8 +19,10 @@
     <br>
     <br>
     <br>
+    <% github_auth_url = "/auth/github?locale=#{locale}" %>
+    <% github_auth_url += "&return_to=#{ERB::Util.url_encode(params[:return_to])}" if params[:return_to].present? %>
     <%= link_to Icon[:'fa-github'] + t('sessions.login_with_github_html'),
-                "/auth/github?locale=#{locale}",
+                github_auth_url,
                 class: 'btn btn-lg btn-social btn-github btn-block',
                 method: 'post' %>
     <br><br>
@@ -51,6 +53,7 @@
       <% end %>
 
       <%= f.hidden_field :provider, value: "local" %>
+      <%= f.hidden_field :return_to, value: params[:return_to] if params[:return_to].present? %>
       <%= f.submit t('sessions.login_custom'), class: "btn btn-lg btn-primary" %>
     <% end %>
 

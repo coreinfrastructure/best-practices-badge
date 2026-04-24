@@ -1048,8 +1048,7 @@ class ProjectsController < ApplicationController
     return true if can_edit?
 
     if !logged_in? && request.get?
-      session[:forwarding_url] = request.original_url
-      return redirect_to login_path
+      return redirect_to login_path(return_to: request.original_fullpath)
     end
 
     flash[:danger] = t('projects.edit.not_authorized')

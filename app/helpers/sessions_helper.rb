@@ -11,12 +11,15 @@ module SessionsHelper
   SESSION_TTL = 48.hours # Automatically log off session if inactive this long
   RESET_SESSION_TIMER = 1.hour # Active sessions older than this reset timer
 
-  # Matches /login or /signup, optionally preceded by a locale prefix of the
-  # form /LL or /LL-RR (2 lowercase language letters, optional hyphen + 2
-  # uppercase region letters, per BCP 47). Rejects if login/signup is followed
-  # by '/', '?', or end of string, so /en/login/, /en/login?x, and /en/login
-  # are all matched (blocked), but /en/loginpage is not.
-  LOGIN_SIGNUP_PATH_REGEX = %r{\A(?:/[a-z]{2}(?:-[A-Z]{2})?)?/(?:login|signup)(?:[/?]|\z)}
+  # Matches paths that must not be used as post-login redirect destinations.
+  # Covers /login and /signup (would create redirect loops) and /signout
+  # (GET /signout destroys the session, so redirecting there would immediately
+  # log the user back out). Each keyword may be optionally preceded by a
+  # locale prefix /LL or /LL-RR (BCP 47: 2 lowercase letters + optional
+  # hyphen + 2 uppercase letters). The keyword must be followed by '/', '?',
+  # or end of string — so /en/login, /en/login/, /en/login?x are all blocked,
+  # but /en/loginpage is not.
+  INVALID_RETURN_TO_PATH_REGEX = %r{\A(?:/[a-z]{2}(?:-[A-Z]{2})?)?/(?:login|signup|signout)(?:[/?]|\z)}
 
   GITHUB_PATTERN = %r{
     \Ahttps://github.com/([A-Za-z0-9_.-]+)/([A-Za-z0-9_.-]+)/?\Z
@@ -278,11 +281,12 @@ module SessionsHelper
   # @param path [String, nil]
   # @return [Boolean]
   def valid_return_path?(path)
+    return false unless path.is_a?(String)
     return false if path.blank?
     return false unless path.start_with?('/')
     return false if path.start_with?('//')
 
-    !path.match?(LOGIN_SIGNUP_PATH_REGEX)
+    !path.match?(INVALID_RETURN_TO_PATH_REGEX)
   end
 
   # Check if referring url is internal, if so, save it.
@@ -295,7 +299,7 @@ module SessionsHelper
     ref_url = request.referer
     ref_uri = URI.parse(ref_url)
     return unless ref_uri.host == request.host
-    return if ref_uri.path.match?(LOGIN_SIGNUP_PATH_REGEX)
+    return if ref_uri.path.match?(INVALID_RETURN_TO_PATH_REGEX)
 
     session[:forwarding_url] = ref_url
   end

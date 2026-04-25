@@ -1,3 +1,6 @@
+<% content_for :special_head_values do %>
+  <meta name="referrer" content="no-referrer">
+<% end %>
 <br>
 <h1 class='center'><%= t('sessions.login_header') %></h1>
 
@@ -24,8 +27,7 @@
     <%= link_to Icon[:'fa-github'] + t('sessions.login_with_github_html'),
                 github_auth_url,
                 class: 'btn btn-lg btn-social btn-github btn-block',
-                method: 'post',
-                referrerpolicy: 'no-referrer' %>
+                method: 'post' %>
     <br><br>
     <%= t('sessions.login_automatic_signup') %>
     <br><br>

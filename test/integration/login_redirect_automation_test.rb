@@ -173,5 +173,46 @@ class LoginRedirectAutomationTest < ActionDispatch::IntegrationTest
     assert_includes redirect_location, 'description=Full+flow+desc',
                     'query params must be preserved through full login flow'
   end
+
+  # Regression test: the original bug was a CookieOverflow 500 error when a
+  # non-logged-in user visited an automation-proposal URL long enough (~2000+
+  # chars) to overflow the 4KB cookie-based session after encryption. The
+  # return_to query-parameter approach avoids the session entirely, so there
+  # is no size limit on the destination URL.
+  test 'very long automation proposal URL survives login redirect without error' do
+    # Build a URL representative of a real automation proposal: many
+    # criteria status + justification params, totalling well over 2000 chars.
+    many_params = (1..30).map do |i|
+      "criterion_#{i}_status=Met&criterion_#{i}_justification=#{'x' * 40}"
+    end.join('&')
+    long_edit_path = "/en/projects/#{@project.id}/passing/edit?#{many_params}"
+    assert long_edit_path.length > 2000, 'test URL must be > 2000 chars to be meaningful'
+
+    # Step 1: Unauthenticated visit must redirect to login (not 500) and
+    #         preserve the full path+query in the return_to param.
+    get long_edit_path
+    assert_response :redirect
+    assert_match %r{/en/login\?return_to=}, response.location,
+                 'must redirect to login with return_to, not crash'
+    return_to = CGI.unescape(URI.parse(response.location).query.split('return_to=').last)
+    assert return_to.length > 2000, 'full long path must be preserved in return_to'
+
+    # Step 2: Log in with the return_to param (as the hidden form field would send).
+    post login_path, params: {
+      session: {
+        email: @user.email, password: 'password',
+        provider: 'local', remember_me: '0',
+        return_to: return_to
+      }
+    }
+    assert_response :redirect
+
+    # Step 3: Redirect must go back to the original long URL, not root.
+    redirect_location = response.location
+    assert_includes redirect_location, "projects/#{@project.id}/passing/edit",
+                    'must redirect back to edit page, not root'
+    assert_includes redirect_location, 'criterion_1_status=Met',
+                    'automation params must be preserved through login'
+  end
 end
 # rubocop:enable Metrics/ClassLength

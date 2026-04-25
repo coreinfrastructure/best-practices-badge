@@ -99,8 +99,13 @@ end
 
 desc 'Run rails_best_practices with options'
 task :rails_best_practices do
-  # The default configuration is in config/rails_best_practices.yml
-  sh 'bundle exec rails_best_practices'
+  # The config file (config/rails_best_practices.yml) controls which checks
+  # are enabled/disabled. File-exclusion and mode flags must be passed on
+  # the command line — the YAML 'exclude:' key is silently ignored by the gem.
+  # tmp/ is excluded by the gem's built-in defaults; the others are not.
+  sh 'bundle exec rails_best_practices ' \
+     '--features --spec --without-color ' \
+     '--exclude "temp/,railroader/,/,"'
 end
 
 desc 'Setup railroader if needed'

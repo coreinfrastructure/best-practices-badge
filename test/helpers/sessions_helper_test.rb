@@ -158,15 +158,19 @@ class SessionsHelperTest < ActionView::TestCase
   test 'valid_return_path? rejects invalid inputs' do
     assert_not valid_return_path?(nil)
     assert_not valid_return_path?('')
+    assert_not valid_return_path?({})              # non-string: would crash without is_a? check
+    assert_not valid_return_path?(['/good'])       # non-string array
     assert_not valid_return_path?('http://evil.com/steal')   # absolute URL
     assert_not valid_return_path?('javascript:alert(1)')     # JS scheme
     assert_not valid_return_path?('//evil.com/steal')        # protocol-relative
     assert_not valid_return_path?('/login')                  # bare login
     assert_not valid_return_path?('/signup')                 # bare signup
+    assert_not valid_return_path?('/signout')                # bare signout (GET destroys session)
     assert_not valid_return_path?('/en/login')               # locale + login
     assert_not valid_return_path?('/fr/login')
     assert_not valid_return_path?('/zh-CN/login')            # BCP 47 region variant
     assert_not valid_return_path?('/en/signup')
+    assert_not valid_return_path?('/en/signout')
     assert_not valid_return_path?('/en/login/')              # trailing slash
     assert_not valid_return_path?('/en/login?x=1')           # with query string
   end

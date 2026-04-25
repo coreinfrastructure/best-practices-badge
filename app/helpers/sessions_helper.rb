@@ -11,12 +11,14 @@ module SessionsHelper
   SESSION_TTL = 48.hours # Automatically log off session if inactive this long
   RESET_SESSION_TIMER = 1.hour # Active sessions older than this reset timer
 
-  # Matches /login or /signup, optionally preceded by a locale prefix of the
-  # form /LL or /LL-RR (2 lowercase language letters, optional hyphen + 2
-  # uppercase region letters, per BCP 47). Rejects if login/signup is followed
-  # by '/', '?', or end of string, so /en/login/, /en/login?x, and /en/login
-  # are all matched (blocked), but /en/loginpage is not.
-  LOGIN_SIGNUP_PATH_REGEX = %r{\A(?:/[a-z]{2}(?:-[A-Z]{2})?)?/(?:login|signup)(?:[/?]|\z)}
+  # Matches /login, /signup, or /signout, optionally preceded by a locale
+  # prefix of the form /LL or /LL-RR (2 lowercase language letters, optional
+  # hyphen + 2 uppercase region letters, per BCP 47). Rejects if the keyword
+  # is followed by '/', '?', or end of string, so /en/login/, /en/login?x,
+  # and /en/login are all matched (blocked), but /en/loginpage is not.
+  # /signout is included because GET /signout destroys the session, so
+  # redirecting there after login would immediately log the user out.
+  LOGIN_SIGNUP_PATH_REGEX = %r{\A(?:/[a-z]{2}(?:-[A-Z]{2})?)?/(?:login|signup|signout)(?:[/?]|\z)}
 
   GITHUB_PATTERN = %r{
     \Ahttps://github.com/([A-Za-z0-9_.-]+)/([A-Za-z0-9_.-]+)/?\Z
@@ -278,6 +280,7 @@ module SessionsHelper
   # @param path [String, nil]
   # @return [Boolean]
   def valid_return_path?(path)
+    return false unless path.is_a?(String)
     return false if path.blank?
     return false unless path.start_with?('/')
     return false if path.start_with?('//')

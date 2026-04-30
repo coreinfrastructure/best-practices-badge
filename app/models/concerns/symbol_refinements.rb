@@ -6,10 +6,14 @@
 
 module SymbolRefinements
   refine Symbol do
+    # Returns the status field symbol for this criterion name.
+    # @return [Symbol] e.g. :description_good_status
     def status
       :"#{self}_status"
     end
 
+    # Returns the justification field symbol for this criterion name.
+    # @return [Symbol] e.g. :description_good_justification
     def justification
       :"#{self}_justification"
     end

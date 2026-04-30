@@ -19,7 +19,10 @@ module SessionsHelper
   # hyphen + 2 uppercase letters). The keyword must be followed by '/', '?',
   # or end of string — so /en/login, /en/login/, /en/login?x are all blocked,
   # but /en/loginpage is not.
-  INVALID_RETURN_TO_PATH_REGEX = %r{\A(?:/[a-z]{2}(?:-[A-Z]{2})?)?/(?:login|signup|signout)(?:[/?]|\z)}
+  INVALID_RETURN_TO_PATH_REGEX = %r{
+    \A(?:/[a-z]{2}(?:-[A-Z]{2})?)?
+    /(?:login|signup|signout)(?:[/?]|\z)
+  }x
 
   GITHUB_PATTERN = %r{
     \Ahttps://github.com/([A-Za-z0-9_.-]+)/([A-Za-z0-9_.-]+)/?\Z
@@ -38,6 +41,8 @@ module SessionsHelper
 
   # Low-level route to set user as being logged in.
   # This doesn't set the last_login_at or forward elsewhere.
+  # @param user [User] the user to log in
+  # @return [void]
   # rubocop:disable Metrics/AbcSize
   def log_in(user)
     session[:user_id] = user.id
@@ -77,6 +82,8 @@ module SessionsHelper
     @session_user_id.present?
   end
 
+  # Throws :abort to halt the callback chain if no user is logged in.
+  # @return [void]
   def require_logged_in
     throw(:abort) unless logged_in?
   end
@@ -98,6 +105,8 @@ module SessionsHelper
   # that is the *point* of the remember token, and this only occurs when
   # a user specifically requests it. We could try to add device fingerprinting,
   # but an attacker could forge that.
+  # @param user [User] the user to persist in a permanent cookie
+  # @return [void]
   def remember(user)
     user.remember
     cookies.permanent.signed[:user_id] = user.id
@@ -105,6 +114,8 @@ module SessionsHelper
   end
 
   # Forgets a persistent session
+  # @param user [User] the user whose persistent session to clear
+  # @return [void]
   def forget(user)
     user.forget
     cookies.delete(:user_id)
@@ -127,6 +138,9 @@ module SessionsHelper
   # https://api.github.com/:owner/:repo) with a users OAuth token will include
   # a field `permissions`.  We consider a user with `push` permissions an
   # editor and check for that.
+  # @param url [String] GitHub repository URL
+  # @param client [Class] Octokit client class (default Octokit::Client)
+  # @return [Boolean, nil] true if user has push access, false/nil otherwise
   def github_user_can_push?(url, client = Octokit::Client)
     return false unless @session_user_token
 
@@ -135,7 +149,8 @@ module SessionsHelper
 
     github = client.new access_token: @session_user_token
     begin
-      github.repo(github_path).permissions.presence && github.repo(github_path).permissions[:push]
+      perms = github.repo(github_path).permissions
+      perms.presence && perms[:push]
     # If you suddenly get a lot of 503's most likely github has changed
     # its API, make this a generic rescue
     # Disable rubocop - Style/RescueStandardError if that is needed
@@ -144,6 +159,8 @@ module SessionsHelper
     end
   end
 
+  # @param url [String] GitHub repository URL
+  # @return [Boolean] true if the current user owns the GitHub repo
   def current_user_is_github_owner?(url)
     logged_in? && current_user.present? && current_user.provider == 'github' &&
       @session_github_name == get_github_owner(url)
@@ -156,6 +173,9 @@ module SessionsHelper
   # We don't retrieve *all* of them, because for some users that would
   # produce an overwhelming number.
   # Returns empty array on error to prevent 500 errors.
+  # @param client [Class] Octokit client class (default Octokit::Client)
+  # @return [Array<String>] list of public GitHub repo HTML URLs,
+  #   empty on API error
   def github_user_projects(client = Octokit::Client)
     return [] unless @session_user_token
 
@@ -170,6 +190,7 @@ module SessionsHelper
   end
 
   # Logs out the current user.
+  # @return [void]
   def log_out
     forget(current_user)
     reset_session
@@ -218,6 +239,8 @@ module SessionsHelper
   # Returns true iff the current_user can push to the @project repo
   # according to GitHub.  We try to avoid calling GitHub if it is
   # is obviously unnecessary.
+  # @param url [String] the project repository URL
+  # @return [Boolean] true if the current user can push to the GitHub repo
   def can_current_user_edit_on_github?(url)
     return false unless current_user.provider == 'github' &&
                         valid_github_url?(url)
@@ -228,11 +251,15 @@ module SessionsHelper
   # Returns true iff this is not the REAL final production system,
   # including the master/main and staging systems.
   # It only returns false if we are "truly in production"
+  # @param is_real [String, nil] value of BADGEAPP_REAL_PRODUCTION env var
+  # @return [Boolean] true if not running as the real production site
   def in_development?(is_real = ENV.fetch('BADGEAPP_REAL_PRODUCTION', nil))
     return is_real.nil?
   end
 
   # Redirects to stored location (or to the default)
+  # @param default [String] URL to redirect to if no forwarding URL stored
+  # @return [void]
   def redirect_back_or(default)
     forwarding_url = session[:forwarding_url]
     session.delete(:forwarding_url)
@@ -243,6 +270,7 @@ module SessionsHelper
   # Preserves any forwarding_url already set (e.g., by can_edit_else_redirect),
   # so that query parameters (such as automation proposals) are not lost when
   # the login page involves a locale redirect chain (/login -> /en/login).
+  # @return [void]
   def store_location_and_locale
     session.delete(:locale)
     session[:locale] = I18n.locale

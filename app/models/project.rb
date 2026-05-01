@@ -210,6 +210,7 @@ class Project < ApplicationRecord
   # Convenience method to set badge percentage for a level
   # @param level [String] criteria level name
   # @param value [Integer] percentage value
+  # @return [void]
   def set_badge_percentage(level, value)
     self[badge_percentage_field_name(level)] = value
   end
@@ -790,6 +791,7 @@ class Project < ApplicationRecord
 
   # Prints admin report lines for one project's pending badge warning.
   # @param project [Project] the project (full object needed for name)
+  # @return [void]
   # rubocop:disable Metrics/ParameterLists
   def self.print_warning_report_lines(
     project,
@@ -820,6 +822,7 @@ class Project < ApplicationRecord
   # rubocop:enable Metrics/ParameterLists
 
   # Writes warning columns to the DB for one project.
+  # @return [void]
   # rubocop:disable Rails/SkipsModelValidations, Metrics/ParameterLists
   def self.save_warning_columns(
     project,
@@ -1047,6 +1050,7 @@ class Project < ApplicationRecord
   # @param user [User] the project owner (pre-fetched, avoids N+1)
   # @param old_level [String] the badge level that was lost
   # @param badge_suffix [String] 'badge' or 'baseline'
+  # @return [void]
   def self.send_loss_email(project, user, old_level, badge_suffix)
     new_level =
       if badge_suffix == 'baseline'
@@ -1134,14 +1138,18 @@ class Project < ApplicationRecord
   # @param user [User] the project owner (pre-fetched, avoids N+1)
   # @param old_level [String] the badge level that will be lost
   # @param badge_suffix [String] 'badge' or 'baseline'
+  # @return [void]
   def self.send_warning_email(project, user, old_level, badge_suffix)
     ReportMailer.warn_owner_with_user(project, user, old_level,
                                       badge_suffix).deliver_later
   end
   private_class_method :send_warning_email
 
-  # Return which projects should be announced as getting badges in the
-  # month target_month with level (as a number, 0=passing)
+  # Returns projects that first achieved +level+ during +target_month+.
+  # @param level [Integer] badge level number (0=passing, 1=silver, 2=gold)
+  # @param target_month [Date] any date within the target calendar month
+  # @return [ActiveRecord::Relation, nil] projects ordered by achievement date,
+  #   or nil if level is not a valid LEVEL_ID_NUMBER
   def self.projects_first_in(level, target_month)
     # Defense-in-depth: ensure 'level' is a valid value.
     return unless LEVEL_ID_NUMBERS.member?(level)
@@ -1162,6 +1170,10 @@ class Project < ApplicationRecord
       .reorder("achieved_#{name}_at")
   end
 
+  # Returns projects that received a reminder within the past 14 days.
+  # Joins users so the caller can access the encrypted email without an N+1.
+  # @return [ActiveRecord::Relation] projects with last_reminder_at set
+  #   in the past 14 days, ordered by reminder date ascending
   def self.recently_reminded
     Project
       .select('projects.*, users.encrypted_email as user_encrypted_email')

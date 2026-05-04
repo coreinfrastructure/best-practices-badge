@@ -144,6 +144,7 @@ class ApplicationController < ActionController::Base
   # Set default cache control - don't externally cache.
   # This is the safe behavior, so we make it the default.
   # This is NOT called for static images which are handled separately.
+  # @return [void]
   def set_default_cache_control
     # Override Rails default behavior by setting stricter cache control
     # This will be our baseline, and if CSRF protection overrides it,
@@ -249,20 +250,26 @@ class ApplicationController < ActionController::Base
   # JSON and CSV are locale-independent, so don't redirect to add locale.
   DO_NOT_REDIRECT_LOCALE = %w[json csv].freeze
 
-  # Normalize criteria level/section to canonical URL-friendly form
-  # Handles 'passing', 'silver', 'gold', and common mistake 'bronze' (treated as 'passing')
-  # Converts numeric forms (0, 1, 2) to human-readable names for URL generation
-  # Returns: 'passing', 'silver', 'gold', 'permissions', or baseline levels
-  # Note: Most routes have constraints, but some don't, so we validate here
+  # Normalizes a criteria level/section string to canonical URL form.
+  # Handles numeric aliases ('0'→'passing', '1'→'silver', '2'→'gold'),
+  # the common mistake 'bronze' (treated as 'passing'), and baseline
+  # level names. Falls back to DEFAULT_SECTION for unknown inputs.
+  # Note: most routes have constraints, but some don't, so we validate here.
+  # @param level [String] raw level string from URL params or form input
+  # @return [String] canonical level name ('passing', 'silver', 'gold',
+  #   'permissions', 'baseline-1', etc.)
   def normalize_criteria_level(level)
     # Single hash lookup with default - O(1) performance
     Sections::INPUT_TO_CANONICAL[level] || Sections::DEFAULT_SECTION
   end
 
-  # Convert URL-friendly criteria level to internal numeric form
-  # Used for rendering partials (e.g., _form_0, _form_1, _form_2)
-  # Returns: '0', '1', '2', 'permissions', or baseline levels
-  # Note: Most routes have constraints, but some don't, so we validate here
+  # Converts a URL-friendly criteria level to the internal numeric form
+  # used to select rendered partials (_form_0, _form_1, _form_2).
+  # Falls back to '0' for unknown inputs.
+  # Note: most routes have constraints, but some don't, so we validate here.
+  # @param level [String] canonical or raw level string
+  # @return [String] internal form: '0', '1', '2', 'permissions',
+  #   or a baseline level string
   def criteria_level_to_internal(level)
     # Single hash lookup with default - O(1) performance
     Sections::INPUT_TO_INTERNAL[level] || '0'
@@ -313,6 +320,7 @@ class ApplicationController < ActionController::Base
   # Redirect http: to https: in normal production use.
   # See: http://stackoverflow.com/questions/4329176/
   #   rails-how-to-redirect-from-http-example-com-to-https-www-example-com
+  # @return [void]
   def redirect_https?
     if Rails.application.config.force_ssl && !request.ssl?
       redirect_to protocol: 'https://', status: :moved_permanently
@@ -337,6 +345,7 @@ class ApplicationController < ActionController::Base
   # online services that would leak user IP addresses to those services.
   # Browsers often provide ACCEPT_LANGUAGE (which in turn is often provided
   # by the operating system), so we should not need geolocation anyway.
+  # @return [Symbol] best-matching locale
   def find_best_locale
     LocaleUtils.find_best_locale(request)
   end
@@ -344,6 +353,7 @@ class ApplicationController < ActionController::Base
   # If locale is not provided in the URL, redirect to best option.
   # NOTE: This is intentionally skipped by some calls, e.g., session create.
   # See <http://guides.rubyonrails.org/i18n.html>.
+  # @return [void]
   def redir_missing_locale
     explicit_locale = params[:locale]
     return if explicit_locale.present?
@@ -375,6 +385,7 @@ class ApplicationController < ActionController::Base
 
   # Set the locale, based on best available information.
   # See <http://guides.rubyonrails.org/i18n.html>.
+  # @return [void]
   def set_locale_to_best_available
     best_locale = params[:locale] # Locale in URL always takes precedent
     best_locale = find_best_locale if best_locale.blank?
@@ -392,6 +403,7 @@ class ApplicationController < ActionController::Base
   # Validate client IP address if Rails.configuration.valid_client_ips
   # and header value X-Forwarded-For.
   # This can provide a defense against cloud piercing.
+  # @return [void]
   def validate_client_ip_address
     return unless Rails.configuration.valid_client_ips
 
@@ -407,6 +419,7 @@ class ApplicationController < ActionController::Base
   # https://scotthelme.co.uk/a-new-security-header-feature-policy/
   # Note that this *gives up* fullscreen & sync-xhr; if we need it later,
   # change the policy.
+  # @return [void]
   def add_http_permissions_policy
     response.set_header('Permissions-Policy', PERMISSIONS_POLICY_VALUE)
     # Include the older Feature-Policy header, for older browser versions.

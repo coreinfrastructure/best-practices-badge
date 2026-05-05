@@ -290,7 +290,7 @@ class ProjectsController < ApplicationController
   # rubocop:disable Metrics/PerceivedComplexity, Metrics/BlockNesting
   def index
     validated_url = set_valid_query_url
-    if validated_url == request.original_url
+    if validated_url == request.original_fullpath
       retrieve_projects
 
       if params[:as] == 'badge' # Redirect to badge view
@@ -1483,7 +1483,7 @@ class ProjectsController < ApplicationController
   # @return [String] Cleaned URL with valid query parameters only
   def set_valid_query_url
     # Rewrites /projects?q=&status=failing to /projects?status=failing
-    original = request.original_url
+    original = request.original_fullpath
     parsed = Addressable::URI.parse(original)
     return original if parsed.query_values.blank?
 

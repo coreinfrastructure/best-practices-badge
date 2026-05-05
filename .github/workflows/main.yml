@@ -4,11 +4,9 @@ name: CI
 # Limit permissions. See:
 # https://github.com/ossf/scorecard/blob/main/docs/checks.md#token-permissions
 # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#permissions
-# https://github.com/actions/first-interaction/issues/10#issuecomment-1041402989
 # Since we set "permissions", anything unset has access "none".
 permissions:
   contents: read
-  checks: write
 
 # Controls when the action will run. Triggers the workflow on push or pull
 # request events but only for the main branch (formerly the master branch)

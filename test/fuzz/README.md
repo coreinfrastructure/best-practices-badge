@@ -29,8 +29,8 @@ the `base-builder-ruby` OSS-Fuzz base image.
 
 ### fuzz\_url\_validator
 
-Targets `app/validators/url_validator.rb`.  The validator logic is inlined
-(no Rails/ActiveModel required) to keep the harness simple.
+Targets `app/validators/url_validator.rb`.  The harness loads the real
+`UrlValidator` class via ActiveModel (no database required).
 
 Security properties checked:
 
@@ -122,3 +122,84 @@ so the harnesses stay in sync automatically once the PR is merged.
 3. Optionally add seed corpus entries in the corresponding `mkdir`/`zip` block
    in `build.sh` to help the fuzzer find interesting paths faster.
 4. Run locally to confirm it works before committing.
+
+## Candidate future targets
+
+These are high-priority targets for future harnesses, listed with enough detail
+to implement them when the time comes.
+
+### fuzz\_project\_validators (full model validation pipeline)
+
+**Goal:** exercise the full set of validators that run when a `Project` record
+is created or updated, using real ActiveRecord/ActiveModel validation but
+without a live database.
+
+**Relevant code:**
+
+- `app/models/project.rb` (all `validates` and `validate` declarations)
+- `app/validators/` (custom validators: `UrlValidator`, `MinLengthValidator`,
+  `RepoValidator`, and others)
+
+**Approach:** instantiate a `Project` in isolation using
+`ActiveModel::Validations` (or a lightweight in-memory ActiveRecord model)
+and call `project.valid?` with fuzz-generated attribute values.
+The tricky part is loading enough of Rails that ActiveRecord validators run
+without requiring a PostgreSQL connection; the standard pattern is to use
+`ActiveModel::Model` as a mix-in on a plain Ruby struct that mirrors the
+relevant string attributes.  Seed the corpus with known-good and known-bad
+values from `test/fixtures/projects.yml`.
+
+**Security properties checked:**
+
+- ReDoS in any validator regex not already covered by `fuzz_url_validator`
+- Unexpected exceptions from malformed input reaching deep validation logic
+- Interaction effects between validators (e.g., conditional validators that
+  change behavior based on other field values)
+
+### fuzz\_project\_update\_params (JSON API update path)
+
+**Goal:** exercise `ProjectsController#update` via the JSON API path, which
+is the primary automation surface used by bots and CI integrations.
+
+**Relevant code:**
+
+- `app/controllers/projects_controller.rb`: the `update` action and the
+  `project_params` strong-parameter filter
+- `app/models/project.rb`: `assign_attributes` and the validation chain
+
+**Approach:** build a minimal Rack environment (using `Rack::MockRequest`)
+that posts JSON to `/en/projects/:id.json` with fuzz-generated bodies; run
+it through the controller stack up to (but not including) the database write
+by stubbing `project.save`.  This exercises JSON parsing, strong-parameter
+filtering, and the full validation pipeline in one shot.  The harness needs
+a pre-seeded in-memory `Project` instance as the target record.
+
+**Security properties checked:**
+
+- Mass-assignment bypass attempts via unexpected parameter keys
+- ReDoS and encoding attacks on any field accepted by `project_params`
+- Exception-safety of the JSON deserialization path under malformed input
+
+### fuzz\_cleanup\_input\_params (controller before-filter)
+
+**Goal:** exercise the `cleanup_input_params` before-action in
+`ProjectsController`, which runs on every create and update and rewrites
+user-supplied parameters before they reach the model.
+
+**Relevant code:**
+
+- `app/controllers/projects_controller.rb`: the `cleanup_input_params`
+  method (called via `before_action` on `create` and `update`)
+
+**Approach:** call `cleanup_input_params` directly on a controller instance
+initialized with a fuzz-generated `params` hash.  No database or full
+request cycle is needed; instantiate the controller, set `params` from the
+fuzz input (parsed as a flat string-to-string hash), and invoke the method.
+Check that it does not raise and that the resulting params satisfy expected
+invariants (e.g., no unexpected keys survive).
+
+**Security properties checked:**
+
+- Input that causes unexpected mutation or deletion of other parameter keys
+- Strings that survive cleanup but trigger downstream failures in validators
+  or the model (latent injection surface)

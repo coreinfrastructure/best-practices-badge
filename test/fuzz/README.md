@@ -2,9 +2,10 @@
 
 This directory contains the configuration files needed to add this project to
 [Google OSS-Fuzz](https://github.com/google/oss-fuzz), Google's continuous
-fuzzing service for open-source software.  The fuzz harnesses themselves live
-in `script/fuzz_*.rb` so they are maintained alongside the rest of the project
-code.
+fuzzing service for open source software (OSS).
+The fuzz harnesses themselves live in `script/fuzz_*.rb` so they are
+maintained alongside the rest of the project code.
+Much of this can be reused by other fuzzing frameworks.
 
 ## Directory layout
 
@@ -99,11 +100,15 @@ python3 infra/helper.py run_fuzzer best-practices-badge fuzz_markdown_processor
 
 1. Fork <https://github.com/google/oss-fuzz>.
 2. Create `projects/best-practices-badge/` in your fork.
-3. Copy `test/fuzz/project.yaml`, `test/fuzz/Dockerfile`, and
-   `test/fuzz/build.sh` into that directory.
-4. Verify `primary_contact` in `project.yaml` is a Google-account-linked
+3. Copy these four files into that directory:
+   - `test/fuzz/project.yaml`
+   - `test/fuzz/Dockerfile`
+   - `test/fuzz/build.sh`
+   - `test/fuzz/oss-fuzz-README.md` → rename to `README.md`
+4. Use `test/fuzz/oss-fuzz-pr-body.md` as the body of the pull request.
+5. Verify `primary_contact` in `project.yaml` is a Google-account-linked
    address (required by OSS-Fuzz for ClusterFuzz dashboard access).
-5. Open a pull request against `google/oss-fuzz` following the guidance at
+6. Open a pull request against `google/oss-fuzz` following the guidance at
    <https://google.github.io/oss-fuzz/getting-started/accepting-new-projects/>.
 
 The `build.sh` references `script/fuzz_*.rb` via the git clone of this repo,

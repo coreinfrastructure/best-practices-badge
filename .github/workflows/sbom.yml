@@ -76,6 +76,28 @@ jobs:
       # e.g.: sbom-production-20260402-a1b2c3d4
       # GH_TOKEN is the automatically provisioned github.token (repo-scoped,
       # expires at job end — no long-lived PAT required).
+      #
+      # We use gh CLI, and do NOT use a third-party release action.
+      # Here is why:
+      # The OpenSSF Scorecard Token-Permissions check scores this job 9/10
+      # because contents: write at job level is a sensitive permission.
+      # Scorecard would waive that deduction only if the job uses
+      # a "recognized packaging action" but its recognized list covers
+      # package publishers (npm, docker, cargo, gem, etc.)
+      # and does NOT include GitHub Release creation, regardless
+      # of how the release is created. Switching to a third-party action
+      # such as softprops/action-gh-release would leave the
+      # Scorecard score unchanged at 9/10 while
+      # adding a supply chain dependency (and thus a supply chain risk)
+      # on an individual maintainer. The official
+      # actions/create-release was archived by GitHub in 2021
+      # and is unmaintained, so that would not help.
+      # The gh CLI is GitHub's own tool, pre-installed on every Actions runner,
+      # and more trustworthy than any third-party release action.
+      # As a result, 9/10 is the
+      # ceiling for any workflow that creates GitHub Releases.
+      # Do not change this step in pursuit of a higher Scorecard score
+      # unless you find a better resolution for the issue described here.
       - name: Create GitHub Release and upload SBOM
         env:
           GH_TOKEN: ${{ github.token }}

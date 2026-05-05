@@ -64,6 +64,17 @@ gem 'jquery-rails', '~> 4.4' # JavaScript jQuery library (for Rails)
 # for jquery-ui/autocomplete (a polyfill for missing functionality in Safari).
 gem 'lograge', '~> 0.12' # Simplify logs
 gem 'mail', '~> 2.7' # Ruby mail handler
+#
+# Specially pin multi_json because of an incompatibility with sawyer.
+# multi_json 1.21.0 renamed MultiJson into MultiJSON. The old MultiJson stub
+# uses method_missing but Sawyer calls MultiJson.method(:load), which
+# bypasses method_missing and resolves to Kernel#load.
+# As a result, sawyer calls Kernel#load (the file-loader)
+# instead of MultiJSON.load (the JSON parser).
+# Every GitHub API response body then gets passed to Kernel.load as a Ruby file
+# path, causing LoadError due to corrupted JSON deserialization.
+# Fix: Limit update until sawyer or multi_json releases a compatible fix.
+gem 'multi_json', '< 1.21.0'
 gem 'octokit', '~> 7' # GitHub's official Ruby API
 gem 'omniauth-github', '~> 2.0' # Authentication to GitHub (get project info)
 #
@@ -154,7 +165,7 @@ group :fake_production, :development, :test do
 end
 
 group :development do
-  gem 'bootsnap' # Speed up boot via caches
+  gem 'bootsnap', '< 1.24.0' # Speed up boot via caches; 1.24.x breaks VCR tests
   gem 'memory_profiler', '~> 1.1.0' # Memory profiling to debug memory leaks
   # gem 'fasterer', '0.3.2' # Provide speed recommendations - run 'fasterer'
   # Waiting for Ruby 2.4 support:
@@ -178,7 +189,7 @@ group :test do
   # minitest-reporters releases a version compatible with minitest >= 6.0.
   # See: https://github.com/minitest-reporters/minitest-reporters/issues/336
   gem 'minitest', '< 6.0'
-  gem 'minitest-reporters', require: false # Improve minitest output format
+  gem 'minitest-reporters', '< 1.8.0', require: false # Improve minitest output format
   gem 'minitest-retry', require: false # Retry- avoid Capybara false failures
   gem 'ostruct' # OpenStruct; future-proof for Ruby 3.5+
   # Note: Updating 'rails-controller-testing' to '1.0.5' causes failures

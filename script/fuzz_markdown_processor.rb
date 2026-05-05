@@ -38,14 +38,15 @@ $LOAD_PATH.unshift(File.join(__dir__, '..', 'app', 'lib'))
 require 'invoke_commonmarker'
 require 'markdown_processor'
 
-test_one_input = lambda do |data|
-  input = data.dup.force_encoding('UTF-8')
-  begin
-    MarkdownProcessor.render(input)
-  rescue StandardError
-    # Seeking crashes and security bugs, not Ruby-level exceptions.
+test_one_input =
+  lambda do |data|
+    input = data.dup.force_encoding('UTF-8')
+    begin
+      MarkdownProcessor.render(input)
+    rescue StandardError
+      # Seeking crashes and security bugs, not Ruby-level exceptions.
+    end
+    0
   end
-  0
-end
 
 Ruzzy.fuzz(test_one_input)

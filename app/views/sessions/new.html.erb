@@ -1,5 +1,13 @@
 <% content_for :special_head_values do %>
-  <meta name="referrer" content="no-referrer">
+  <%# same-origin (must NOT be no-referrer):
+      Cross-origin requests (e.g. the OmniAuth redirect to github.com) carry no
+      Referer, so the return_to value never leaks to GitHub — the privacy goal.
+      Same-origin requests (the form POST to /auth/github) still send the real
+      Origin header, so Rails CSRF protection passes — the correctness goal.
+      no-referrer would suppress Origin too, causing browsers to send
+      "Origin: null"; Rails rejects that and OAuth fails with a 404.
+      See test/integration/users_login_test.rb for the full step-by-step. %>
+  <meta name="referrer" content="same-origin">
 <% end %>
 <br>
 <h1 class='center'><%= t('sessions.login_header') %></h1>

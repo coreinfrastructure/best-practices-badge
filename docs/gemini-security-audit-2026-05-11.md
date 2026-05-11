@@ -197,15 +197,34 @@ review time focusing on other areas where there might be a vulnerability.
 
 ## Identified Risks and Recommendations
 
-### VULN-001: Potential Timing Attack on Account Activation
+### VULN-001: Potential Timing Attack on Local Account Activation
 
-- **Severity:** Low
+- **Severity:** Very Low (practical impact very narrow — see scope note below)
 - **Vulnerability Type:** Security (Account Enumeration)
 - **Description:** `AccountActivationsController` finds users by email before checking the
   activation token. Because Ruby's `&&` operator short-circuits, a request for a non-existent
-  email returns almost instantly (~5ms), while a request for a valid email performs a slow BCrypt
-  comparison (~100ms+). This allows an attacker to enumerate valid account emails via timing
-  analysis.
+  email returns almost instantly (~5ms), while a request for a valid email with an unactivated
+  account performs a slow BCrypt comparison (~100ms+). This timing difference could allow an
+  attacker to enumerate email addresses via timing analysis.
+- **Scope:**
+  This timing attack can only confirm to an attacker who *already* knows
+  a given email address, and wants to confirm whether or not that given email
+  address is present in our database.
+  What's more, cases where this confirmation *can* leak are extremely narrow.
+  The slow path (BCrypt) was only reached when
+  the email belonged to a user who was
+  present in the database **and** local (not GitHub) **and**
+  not yet activated. Specifically:
+    - Emails not in the database → fast (short-circuit on nil user)
+    - Emails belonging to already-activated users → fast (short-circuit on `!user.activated?`)
+    - GitHub OAuth users → always created as activated, so always fast
+    - Only emails belonging to **local users who have registered but not yet clicked the
+      activation link** → slow (BCrypt runs)
+  The practical window of exposure is extremely narrow: most users activate their account
+  within minutes of receiving the email, so the population of exploitable addresses at any
+  given moment is very small.
+  Nevertheless, the fix is straightforward and eliminates the
+  leak entirely.
 - **Reference Pattern:** A secure version of this logic already exists in `app/models/user.rb`
   within the `authenticate_local_user` method, which uses `DUMMY_HASH` to ensure a BCrypt
   operation occurs even when no user is found.
@@ -253,7 +272,7 @@ review time focusing on other areas where there might be a vulnerability.
       ```
 
 > **[Amendment, 2026-05-11]:** The original proposed fix was functionally correct but was
-> revised for two reasons:
+> revised for three reasons:
 >
 > 1. **Comment style:** The original used a numbered multi-line comment block. The project's
 >    coding guidelines say "default to writing no comments" and "never write multi-line comment
@@ -266,6 +285,21 @@ review time focusing on other areas where there might be a vulnerability.
 >    valid. Both go through the same `BCrypt::Password#is_password?` path, so timing is
 >    identical. This is documented here rather than in a code comment because it belongs in the
 >    rationale, not cluttering the implementation.
+>
+> 3. **Scope of the original vulnerability clarified:** The original description said "a request
+>    for a valid email performs a slow BCrypt comparison," implying any email in the database was
+>    exposed. In fact, BCrypt only ran for emails belonging to **unactivated local users** — the
+>    `&&` short-circuit meant GitHub OAuth users (always activated) and already-activated local
+>    users both returned fast. The exploitable population at any moment is very small, since
+>    users typically activate within minutes of receiving the email. Severity remains Low, but
+>    the practical impact is even narrower than the original description suggested.
+>
+> 4. **Further refactoring in implementation:** The fix as implemented went beyond the proposed
+>    fix above. The timing-safe logic was extracted into a new `User.find_unactivated_by_valid_token(email, token)`
+>    class method (parallel to the existing `User.authenticate_local_user`), leaving the
+>    controller a simple `if user / else` branch. This makes the logic unit-testable in
+>    isolation and keeps the timing-safety concern in the model where it belongs. Four unit
+>    tests were added to `test/models/user_test.rb` covering all branches of the new method.
 
 ---
 
@@ -296,3 +330,5 @@ rationale. Each item is cross-referenced to the finding it affects.
 | **VULN-001** | Replaced multi-line comment block with single-line comment | Project guidelines: "never write multi-line comment blocks — one short line max." |
 | **VULN-001** | Expanded fix to include actual success/failure logic | The original left `# ... rest of success logic ...` placeholders, making the fix incomplete as a direct implementation guide. |
 | **VULN-001** | Added note clarifying `DUMMY_HASH` reuse | The conceptual mismatch (password digest vs. activation token) could cause a reviewer to question the fix. The explanation belongs in the rationale, not the code. |
+| **VULN-001** | Corrected and narrowed the vulnerability scope | The original said "a request for a valid email performs a slow BCrypt comparison" — overstated. BCrypt only ran for unactivated local users; already-activated users and GitHub OAuth users always returned fast. The exploitable window is very small since users activate quickly. |
+| **VULN-001** | Documented further refactoring to `User.find_unactivated_by_valid_token` | The timing-safe logic was extracted into a new `User` class method parallel to `authenticate_local_user`, making it unit-testable. Four unit tests were added covering all branches. |

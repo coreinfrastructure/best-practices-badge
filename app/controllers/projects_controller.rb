@@ -795,6 +795,8 @@ class ProjectsController < ApplicationController
   def destroy
     @project.destroy!
     ReportMailer.report_project_deleted(
+      # deletion_rationale is a plain string that is informational only and
+      # is never used in DB queries
       @project, current_user, params[:deletion_rationale]
     ).deliver_now
     # @project.purge

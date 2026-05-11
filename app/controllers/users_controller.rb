@@ -40,6 +40,11 @@ class UsersController < ApplicationController
   # @param limit [Integer] Maximum number of IDs to return
   # @return [Array<Integer>] Array of user IDs matching the name
   def search_name(desired_name, limit = MAX_USER_SEARCH_RESULTS + 1)
+    # We *only* allow search of names and/or email by admins.
+    # Email search reveals confidential info; name search would permit
+    # possibly-excessive load by untrusted users.
+    return [] unless current_user&.admin?
+
     # To maximize finding, use a case-insensitive "find anywhere" search.
     # An exact case-sensitive search would for names look like this:
     # result = result.where(name: params[:name])
@@ -59,6 +64,11 @@ class UsersController < ApplicationController
   # @param limit [Integer] Maximum number of IDs to return
   # @return [Array<Integer>] Array of user IDs matching the email
   def search_email(desired_email, limit = MAX_USER_SEARCH_RESULTS + 1)
+    # We *only* allow search of names and/or email by admins.
+    # Email search reveals confidential info; name search would permit
+    # possibly-excessive load by untrusted users.
+    return [] unless current_user&.admin?
+
     # Handle "Fullname <email@domain>" format
     email_to_search = desired_email.strip
     # Check if '>' is the last non-space character
@@ -97,7 +107,12 @@ class UsersController < ApplicationController
     search_emails_list,
     max_num_results = MAX_USER_SEARCH_RESULTS
   )
-    # Validate UTF-8 encoding - check this before .present? to avoid ArgumentError
+    # We *only* allow search of names and/or email by admins.
+    # Email search reveals confidential info; name search would permit
+    # possibly-excessive load by untrusted users.
+    return { user_ids: [], error: nil } unless current_user&.admin?
+
+    # Validate UTF-8 encoding; check before .present? to avoid ArgumentError
     if search_names_list && !search_names_list.valid_encoding?
       return { user_ids: [], error: 'Invalid UTF-8 in name search' }
     end
@@ -182,6 +197,9 @@ class UsersController < ApplicationController
     result
   end
   # rubocop: enable Metrics/AbcSize
+
+  private :search_name, :search_email, :valid_email_format?,
+          :search_users_by_lists, :search_users
 
   # rubocop: disable Metrics/MethodLength, Metrics/AbcSize
   def show

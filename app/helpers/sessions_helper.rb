@@ -263,7 +263,12 @@ module SessionsHelper
   def redirect_back_or(default)
     forwarding_url = session[:forwarding_url]
     session.delete(:forwarding_url)
-    redirect_to(forwarding_url || force_locale_url(default, I18n.locale))
+
+    # The forwarding_url stored in session is already validated as same-host
+    # by store_internal_referer. However, for defense-in-depth, add
+    # allow_other_host: false to *ensure* redirect is only to same-host.
+    redirect_to(forwarding_url || force_locale_url(default, I18n.locale),
+                allow_other_host: false)
   end
 
   # Stores the URL trying to be accessed (if its a new project) or a referer.

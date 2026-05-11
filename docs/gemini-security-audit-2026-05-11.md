@@ -5,7 +5,6 @@
 
 ## Executive Summary
 The OpenSSF Best Practices Badge application demonstrates a mature security posture. The codebase implements advanced defensive patterns, including email encryption, blind indexing, constant-time authentication, and strict input validation. 
-
 Our audit found **no critical vulnerabilities** (such as RCE or SQL injection). We identified several areas that initially appeared suspicious but were determined to be safe upon deeper investigation due to existing defensive layers.
 
 ---
@@ -49,6 +48,7 @@ Our audit found **no critical vulnerabilities** (such as RCE or SQL injection). 
 - **Vulnerability Type:** Security/Logic
 - **Description:** `Project#contains_url?` uses a very loose regex: `%r{https?://[^ ]{5}}`. While intended to be non-strict (as documented), it could be bypassed by a user to satisfy "URL required" criteria without providing a valid, reachable URL.
 - **Recommendation:** The current "soft" approach is documented as intentional to avoid breaking legitimate but unusual URLs, but a slightly more robust check (e.g., requiring at least one dot after the scheme) would improve data quality without significantly increasing the attack surface.
+- **Decision:** This is *not* a vulnerability, as the URL is used as data. However, requiring at least one period in the URL is a reasonble measure. So we'll add that, but not consider it as a vulnerability.
 
 ---
 

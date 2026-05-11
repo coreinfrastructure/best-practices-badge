@@ -23,6 +23,18 @@ Our audit found **no critical vulnerabilities** (such as RCE or SQL injection). 
 several areas that initially appeared suspicious but were determined to be safe upon deeper
 investigation due to existing defensive layers.
 
+In short, there is only 1 extremely minor vulnerability, VULN-001.
+This is a timing vulnerability that might allow an attacker to determine
+if an email address that the attacker already knows is in use.
+
+The other findings aren't really vulnerabilities.
+However, we try to make adjustments so that it is *really* obvious
+that something is (or is not) a vulnerability. This
+(1) hardens the system so changes are unlikely to become vulnerabilities, and
+(2) makes future reviews more effective because they can
+quickly determine "there is no problem" and thus spend more
+review time focusing on other areas where there might be a vulnerability.
+
 ---
 
 ## Findings

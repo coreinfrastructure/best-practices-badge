@@ -2175,7 +2175,7 @@ class ProjectsController < ApplicationController
       flash.now[:warning] =
         t('projects.edit.automation.chief_overrode', count: @overridden_fields.size) +
         "\n" + format_override_details
-      Rails.logger.info(
+      Rails.logger.info( # integer IDs and field names only — no PII
         "Chief override: project=#{@project.id} user=#{current_user&.id} " \
         "fields=#{@overridden_fields.keys.join(',')}"
       )

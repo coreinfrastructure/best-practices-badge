@@ -121,7 +121,13 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
       # )
       user.create_activation_digest
       user.save!
+      # GET shows confirmation page but does NOT activate (prevents auto-click)
       get "/en/account_activations/#{user.activation_token}/edit?email=#{user.email}"
+      assert_template 'account_activations/edit'
+      assert_not user.reload.activated?
+      # PATCH actually activates
+      patch "/en/account_activations/#{user.activation_token}",
+            params: { email: user.email }
       follow_redirect!
       assert user.reload.activated?
       assert_template 'sessions/new'
@@ -174,7 +180,13 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
       # token and use it instead.
       user.create_activation_digest
       user.save!
+      # GET shows confirmation page but does NOT activate
       get "/en/account_activations/#{user.activation_token}/edit?email=#{user.email}"
+      assert_template 'account_activations/edit'
+      assert_not user.reload.activated?
+      # PATCH actually activates
+      patch "/en/account_activations/#{user.activation_token}",
+            params: { email: user.email }
       # Now it's activated. We must reload to see the new user value.
       assert user.reload.activated?
       follow_redirect!

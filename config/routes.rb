@@ -246,7 +246,7 @@ Rails.application.routes.draw do
     get 'feed' => 'projects#feed', defaults: FORMAT_ATOM
     get 'reminders' => 'projects#reminders_summary'
 
-    resources :account_activations, only: [:edit]
+    resources :account_activations, only: %i[edit update]
     resources :password_resets,     only: %i[new create edit update]
 
     get 'login' => 'sessions#new'

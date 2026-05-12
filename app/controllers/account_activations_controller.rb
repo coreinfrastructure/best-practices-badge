@@ -9,15 +9,25 @@ class AccountActivationsController < ApplicationController
   LOCAL_LOGIN_COOLOFF_TIME =
     Integer(ENV['LOCAL_LOGIN_COOLOFF_TIME'] || '3600', 10)
 
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  # Show the activation confirmation page. We do NOT activate here so that
+  # email clients that auto-fetch URLs cannot activate accounts on behalf of
+  # users who never saw the email.
   def edit
-    # We use a GET request for one-click activation. This is safe because:
-    # 1. The token is a single-use secret that is invalidated upon use.
-    # 2. find_unactivated_by_valid_token uses constant-time comparison.
-    # 3. email and token are filtered from Rails logs.
-    # This does mean that if a user's email system (and/or email monitor)
-    # auto-clicks on all incoming URLs, the user will automatically
-    # approve and activate the account.
+    activation_params = params.permit(:email, :id)
+    user = User.find_unactivated_by_valid_token(
+      activation_params[:email], activation_params[:id]
+    )
+    if user
+      @token = activation_params[:id]
+      @email = activation_params[:email]
+    else
+      flash[:danger] = t('account_activations.failed_activation')
+      redirect_to root_url
+    end
+  end
+
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def update
     activation_params = params.permit(:email, :id)
     user = User.find_unactivated_by_valid_token(
       activation_params[:email], activation_params[:id]

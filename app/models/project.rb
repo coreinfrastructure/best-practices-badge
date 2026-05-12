@@ -413,7 +413,7 @@ class Project < ApplicationRecord
   def contains_url?(text)
     return false if !text || text.start_with?('// ')
 
-    text =~ %r{https?://[^ ]{5}}
+    text =~ %r{https?://[^/. ]+\.[^ ]}
   end
 
   # Returns symbol indicating the status of a particular criterion in this project.

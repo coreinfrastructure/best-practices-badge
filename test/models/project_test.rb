@@ -40,6 +40,8 @@ class ProjectTest < ActiveSupport::TestCase
       Project.new.contains_url?('See also http://x for more information.')
     )
     assert_not Project.new.contains_url? 'www.google.com'
+    # New regex requires a dot in the hostname to reject obvious nonsense
+    assert_not Project.new.contains_url? 'http://nodothost'
   end
 
   # rubocop:disable Metrics/BlockLength

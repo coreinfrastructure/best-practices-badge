@@ -95,7 +95,7 @@ function containsURL(justification) {
   if (!justification || (!!possibleComment && possibleComment.index === 0)) {
     return false;
   } else {
-    return !!justification.match(/https?:\/\/[^ ]{5}/);
+    return !!justification.match(/https?:\/\/[^\/. ]+\.[^ ]/);
   }
 }
 

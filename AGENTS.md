@@ -192,6 +192,11 @@ has many configuration files.
   - `@raise [ExceptionClass] description` - documents exceptions
   - Focus on non-obvious methods; private helpers don't always need documentation
 
+- **Inline Comments**: Use multi-line comment blocks when they are helpful,
+  especially to explain non-obvious WHY (hidden constraints, subtle invariants,
+  security rationale, workarounds for specific bugs). Do not limit comments to
+  one line when more context aids understanding.
+
 ### Testing Strategy
 
 - **Minitest**: Uses Rails' default Minitest framework

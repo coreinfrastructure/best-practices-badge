@@ -86,7 +86,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
       follow_redirect!
       assert_not user_logged_in?
       # Ensure invalid activation token won't work (PATCH).
-      patch "/en/account_activations/0000", params: { email: user.email }
+      patch '/en/account_activations/0000', params: { email: user.email }
       follow_redirect!
       assert_not user.reload.activated?
       assert_not user_logged_in?

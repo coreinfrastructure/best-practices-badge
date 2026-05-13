@@ -80,14 +80,20 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
       # Try to log in before activation - shouldn't work.
       log_in_as(user)
       assert_not user_logged_in?
-      # Ensure invalid activation token won't work (GET).
-      # get edit_account_activation_path('invalid_token', locale: :en)
+      # Missing params on GET redirects to root (can't render the form).
+      get '/en/account_activations/0000/edit'
+      assert_redirected_to root_url(locale: :en)
+      # Valid-looking token on GET shows the confirmation page (not an error);
+      # the PATCH is what validates and rejects it.
       get "/en/account_activations/0000/edit?email=#{user.email}"
-      follow_redirect!
+      assert_response :ok
+      assert_template 'account_activations/edit'
       assert_not user_logged_in?
-      # Ensure invalid activation token won't work (PATCH).
+      # Ensure invalid activation token won't work (PATCH); redirects to login.
       patch '/en/account_activations/0000', params: { email: user.email }
+      assert_redirected_to login_path(locale: :en)
       follow_redirect!
+      assert_template 'sessions/new'
       assert_not user.reload.activated?
       assert_not user_logged_in?
       #       # Valid token, wrong email

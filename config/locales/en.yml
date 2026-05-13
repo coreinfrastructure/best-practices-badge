@@ -73,6 +73,8 @@ en:
         As an anti-spam measure, you must wait %{count} hours after activation
         before you can log in.
     failed_activation: Invalid activation link
+    link_invalid_or_used: >
+      Activation failed. If your account is already activated, please log in.
     confirm_heading: Activate Your Account
     confirm_prompt: >
       Click the button below to confirm and activate your account.

@@ -14,16 +14,12 @@ class AccountActivationsController < ApplicationController
   # users who never saw the email.
   def edit
     activation_params = params.permit(:email, :id)
-    user = User.find_unactivated_by_valid_token(
-      activation_params[:email], activation_params[:id]
-    )
-    if user
-      @token = activation_params[:id]
-      @email = activation_params[:email]
-    else
-      flash[:danger] = t('account_activations.failed_activation')
-      redirect_to root_url
-    end
+    @token = activation_params[:id]
+    @email = activation_params[:email]
+    return if @token.present? && @email.present?
+
+    flash[:danger] = t('account_activations.failed_activation')
+    redirect_to root_url
   end
 
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
@@ -43,11 +39,10 @@ class AccountActivationsController < ApplicationController
       # We do *not* log in user. This reduces the number of paths that
       # automatically log in, and increases the likelihood
       # that a user's password manager will see the password.
-      redirect_to login_path
     else
-      flash[:danger] = t('account_activations.failed_activation')
-      redirect_to root_url
+      flash[:danger] = t('account_activations.link_invalid_or_used')
     end
+    redirect_to login_path
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 end

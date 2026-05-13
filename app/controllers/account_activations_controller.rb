@@ -25,6 +25,10 @@ class AccountActivationsController < ApplicationController
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def update
     activation_params = params.permit(:email, :id)
+    if activation_params[:email].blank? || activation_params[:id].blank?
+      flash[:danger] = t('account_activations.link_invalid_or_used')
+      return redirect_to login_path
+    end
     user = User.find_unactivated_by_valid_token(
       activation_params[:email], activation_params[:id]
     )

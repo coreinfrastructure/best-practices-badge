@@ -89,6 +89,10 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
       assert_response :ok
       assert_template 'account_activations/edit'
       assert_not user_logged_in?
+      # Missing params on PATCH redirects to login without hitting BCrypt.
+      patch '/en/account_activations/0000'
+      assert_redirected_to login_path(locale: :en)
+      assert_not user.reload.activated?
       # Ensure invalid activation token won't work (PATCH); redirects to login.
       patch '/en/account_activations/0000', params: { email: user.email }
       assert_redirected_to login_path(locale: :en)

@@ -258,6 +258,32 @@ class UserTest < ActiveSupport::TestCase
            "Nonexistent avg: #{nonexistent_avg.round(6)}s"
   end
 
+  test 'find_unactivated_by_valid_token returns user with valid token' do
+    user = users(:test_user_not_active)
+    user.create_activation_digest
+    user.save!
+    assert_equal user, User.find_unactivated_by_valid_token(user.email, user.activation_token)
+  end
+
+  test 'find_unactivated_by_valid_token returns nil with invalid token' do
+    user = users(:test_user_not_active)
+    user.create_activation_digest
+    user.save!
+    assert_nil User.find_unactivated_by_valid_token(user.email, 'invalid_token')
+  end
+
+  test 'find_unactivated_by_valid_token returns nil for non-existent email' do
+    assert_nil User.find_unactivated_by_valid_token('nobody@example.com', 'any_token')
+  end
+
+  test 'find_unactivated_by_valid_token returns nil for already-activated user' do
+    user = users(:test_user)
+    assert user.activated?
+    user.create_activation_digest
+    user.save!
+    assert_nil User.find_unactivated_by_valid_token(user.email, user.activation_token)
+  end
+
   test 'local users can create remember tokens' do
     user = users(:test_user) # Local user
     assert_equal 'local', user.provider

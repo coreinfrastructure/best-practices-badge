@@ -80,10 +80,15 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
       # Try to log in before activation - shouldn't work.
       log_in_as(user)
       assert_not user_logged_in?
-      # Ensure invalid activation token won't work.
+      # Ensure invalid activation token won't work (GET).
       # get edit_account_activation_path('invalid_token', locale: :en)
       get "/en/account_activations/0000/edit?email=#{user.email}"
       follow_redirect!
+      assert_not user_logged_in?
+      # Ensure invalid activation token won't work (PATCH).
+      patch '/en/account_activations/0000', params: { email: user.email }
+      follow_redirect!
+      assert_not user.reload.activated?
       assert_not user_logged_in?
       #       # Valid token, wrong email
       #       get edit_account_activation_path(
@@ -121,7 +126,13 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
       # )
       user.create_activation_digest
       user.save!
+      # GET shows confirmation page but does NOT activate (prevents auto-click)
       get "/en/account_activations/#{user.activation_token}/edit?email=#{user.email}"
+      assert_template 'account_activations/edit'
+      assert_not user.reload.activated?
+      # PATCH actually activates
+      patch "/en/account_activations/#{user.activation_token}",
+            params: { email: user.email }
       follow_redirect!
       assert user.reload.activated?
       assert_template 'sessions/new'
@@ -174,7 +185,13 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
       # token and use it instead.
       user.create_activation_digest
       user.save!
+      # GET shows confirmation page but does NOT activate
       get "/en/account_activations/#{user.activation_token}/edit?email=#{user.email}"
+      assert_template 'account_activations/edit'
+      assert_not user.reload.activated?
+      # PATCH actually activates
+      patch "/en/account_activations/#{user.activation_token}",
+            params: { email: user.email }
       # Now it's activated. We must reload to see the new user value.
       assert user.reload.activated?
       follow_redirect!

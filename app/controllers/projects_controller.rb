@@ -795,6 +795,8 @@ class ProjectsController < ApplicationController
   def destroy
     @project.destroy!
     ReportMailer.report_project_deleted(
+      # deletion_rationale is a plain string that is informational only and
+      # is never used in DB queries
       @project, current_user, params[:deletion_rationale]
     ).deliver_now
     # @project.purge
@@ -2173,7 +2175,7 @@ class ProjectsController < ApplicationController
       flash.now[:warning] =
         t('projects.edit.automation.chief_overrode', count: @overridden_fields.size) +
         "\n" + format_override_details
-      Rails.logger.info(
+      Rails.logger.info( # integer IDs and field names only — no PII
         "Chief override: project=#{@project.id} user=#{current_user&.id} " \
         "fields=#{@overridden_fields.keys.join(',')}"
       )

@@ -200,6 +200,25 @@ class User < ApplicationRecord
     user if user && authenticated
   end
 
+  # Finds an unactivated user by email and validates their activation token in constant time.
+  # Prevents timing attacks from enumerating email addresses during account activation.
+  #
+  # @param email [String] The user's email address
+  # @param token [String] The activation token to verify
+  # @return [User, nil] The unactivated user if valid, nil otherwise
+  def self.find_unactivated_by_valid_token(email, token)
+    user = find_by(email: email)
+    unactivated = user && !user.activated?
+    if unactivated
+      token_valid = user.authenticated?(:activation, token)
+    else
+      # Always perform BCrypt to prevent timing-based user enumeration
+      verify_password_against_hash?(DUMMY_HASH, token)
+      token_valid = false
+    end
+    user if unactivated && token_valid
+  end
+
   # Creates a new user from OAuth authentication data.
   # Sets the user as activated and sends a welcome email if email is provided.
   # @param auth [Hash] OAuth authentication hash containing provider, uid, info

@@ -9,11 +9,30 @@ class AccountActivationsController < ApplicationController
   LOCAL_LOGIN_COOLOFF_TIME =
     Integer(ENV['LOCAL_LOGIN_COOLOFF_TIME'] || '3600', 10)
 
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  # Show the activation confirmation page. We do NOT activate here so that
+  # email clients that auto-fetch URLs cannot activate accounts on behalf of
+  # users who never saw the email.
   def edit
-    user = User.find_by(email: params[:email])
-    if user && !user.activated? && user.authenticated?(:activation,
-                                                       params[:id])
+    activation_params = params.permit(:email, :id)
+    user = User.find_unactivated_by_valid_token(
+      activation_params[:email], activation_params[:id]
+    )
+    if user
+      @token = activation_params[:id]
+      @email = activation_params[:email]
+    else
+      flash[:danger] = t('account_activations.failed_activation')
+      redirect_to root_url
+    end
+  end
+
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def update
+    activation_params = params.permit(:email, :id)
+    user = User.find_unactivated_by_valid_token(
+      activation_params[:email], activation_params[:id]
+    )
+    if user
       user.can_login_starting_at = Time.zone.now + LOCAL_LOGIN_COOLOFF_TIME
       user.activate # This saves our result
       flash[:success] = t('account_activations.activated') + ' ' +

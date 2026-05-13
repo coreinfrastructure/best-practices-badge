@@ -1495,7 +1495,15 @@ class ProjectsController < ApplicationController
     else
       parsed.query_values = valid_queries
     end
-    parsed.to_s
+    # Generate URL from path+query (no scheme/host) to prevent open redirect
+    # to an arbitrary host.
+    # Rails routing normally rejects paths like //evil.com before the
+    # controller runs. However, by ensuring we *cannot* return
+    # constructs like that, we remove the possibility of problems if there's
+    # an error elsewhere. We *also* ensure that SAST tools can verify
+    # that there is no vulnerability.
+    query = parsed.query
+    query.blank? ? parsed.path : "#{parsed.path}?#{query}"
   end
 
   # Applies sorting to the projects collection based on URL parameters.

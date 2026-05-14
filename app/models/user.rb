@@ -337,18 +337,25 @@ class User < ApplicationRecord
     SecureRandom.urlsafe_base64
   end
 
-  # Delete local accounts that were never activated and have existed longer
-  # than UNACTIVATED_ACCOUNT_LIFETIME. Accounts that own a project or hold
-  # additional rights on any project are preserved regardless of age.
+  # Returns a scope of local accounts eligible for purging: never activated,
+  # older than UNACTIVATED_ACCOUNT_LIFETIME, and owning no projects or
+  # additional rights.
+  #
+  # @return [ActiveRecord::Relation]
+  def self.purgeable_unactivated_accounts
+    cutoff = UNACTIVATED_ACCOUNT_LIFETIME.ago
+    where(provider: 'local', activated: false)
+      .where(users: { created_at: ...cutoff })
+      .where.missing(:projects)
+      .where.missing(:additional_rights)
+  end
+
+  # Delete all accounts returned by purgeable_unactivated_accounts.
   # Returns the count of deleted users.
   #
   # @return [Integer] number of accounts deleted
   def self.purge_unactivated_accounts
-    cutoff = UNACTIVATED_ACCOUNT_LIFETIME.ago
-    scope = where(provider: 'local', activated: false)
-            .where(users: { created_at: ...cutoff })
-            .where.missing(:projects)
-            .where.missing(:additional_rights)
+    scope = purgeable_unactivated_accounts
     count = scope.count
     scope.find_each(&:destroy)
     count

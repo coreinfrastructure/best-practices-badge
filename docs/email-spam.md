@@ -325,3 +325,7 @@ In rough priority order:
  created at the time tests run and will be *newer* than the cutoff —
  it should survive the purge, which the second test above also
  implicitly verifies.
+
+### Mitigation 2 and 3
+
+We may implement these later, we're discussing options with IT.

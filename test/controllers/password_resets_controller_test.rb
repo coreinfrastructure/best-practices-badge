@@ -143,6 +143,16 @@ class PasswordResetsControllerTest < ActionDispatch::IntegrationTest
   end
   # rubocop:enable Metrics/BlockLength
 
+  test 'password reset silently skipped for unactivated account' do
+    unactivated = users(:test_user_not_active)
+    post '/en/password_resets',
+         params: { password_reset: { email: unactivated.email } }
+    assert_equal 0, ActionMailer::Base.deliveries.size
+    assert_redirected_to root_url
+    follow_redirect!
+    assert_includes @response.body, 'Email sent with password reset'
+  end
+
   test 'expired token' do
     get '/en/password_resets/new'
     assert_response :success

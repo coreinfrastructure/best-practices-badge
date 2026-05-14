@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_26_000000) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_14_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -915,6 +915,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_26_000000) do
     t.datetime "updated_at", precision: nil, null: false
     t.boolean "use_gravatar", default: false, null: false
     t.string "validation_code"
+    t.index ["created_at"], name: "index_users_on_created_at_local", where: "((provider)::text = 'local'::text)"
     t.index ["email_bidx"], name: "email_local_unique_bidx", unique: true, where: "((provider)::text = 'local'::text)"
     t.index ["email_bidx"], name: "index_users_on_email_bidx"
     t.index ["last_login_at"], name: "index_users_on_last_login_at"

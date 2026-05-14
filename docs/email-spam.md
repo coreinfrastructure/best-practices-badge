@@ -236,7 +236,6 @@ In rough priority order:
  Then add the class method (public, so the rake task can call it
  directly without `send`, consistent with `Project.send_loss_notifications`):
 
-
  NOTE: This code would even destroy accounts that own or have
  additional rights to a project.
  MODIFY this code, before inclusion, to exclude user accounts that

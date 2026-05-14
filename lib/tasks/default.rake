@@ -261,7 +261,7 @@ desc 'Run markdownlint (mdl) - check for markdown problems on **.md files'
 task :markdownlint do
   # The default configuration is in .mdlrc + style config/markdown_style.rb
   # Exclude temporary files beginning with comma
-  sh 'find . -name "*.md" ! -name ",*" ! -path "./tmp/*" ! -path "./temp/*" -print0 | xargs -0 bundle exec mdl'
+  sh 'find . -name "*.md" ! -name ",*" ! -path "./tmp/*" ! -path "./temp/*" ! -path "*/.*" -print0 | xargs -0 bundle exec mdl'
 end
 
 # Apply JSCS to look for issues in JavaScript files.
@@ -982,6 +982,9 @@ end
 desc 'Run daily tasks used in any tier, e.g., record daily statistics'
 task daily: :environment do
   ProjectStat.create!
+  puts 'Purging never-activated local accounts older than ' \
+       "#{User::UNACTIVATED_ACCOUNT_LIFETIME.inspect}."
+  puts "Purged #{User.purge_unactivated_accounts} never-activated account(s)."
   day_for_monthly = (ENV['BADGEAPP_DAY_FOR_MONTHLY'] || '5').to_i
   Rake::Task['monthly'].invoke if Time.now.utc.day == day_for_monthly
 end

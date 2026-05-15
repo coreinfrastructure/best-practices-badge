@@ -75,9 +75,11 @@ Following the preliminary audit, a detailed investigation was performed on the f
 - **Approach & Justification**:
     - **Step 1: Data Flow Tracing**: We traced `params[:pq]` from `ProjectsController#retrieve_projects` (line 1313) to the `Project.text_search` scope.
     - **Step 2: Empirical SQL Verification**: We ran the following command to inspect the generated SQL for a malicious payload:
+
       ```bash
       bundle exec rails runner "puts Project.text_search(\"test' OR 1=1 --\").to_sql"
       ```
+
 - **Detailed Findings**:
     - **ActiveRecord/Arel Logic**: The scope uses `Project.arel_table[:name].matches(start_text)`. Arel's `matches` method is database-aware; for PostgreSQL, it generates an `ILIKE` clause and automatically handles the escaping of the single quote (`'`).
     - **Evidence**: The command output was: `SELECT "projects".* FROM "projects" WHERE (("projects"."name" ILIKE 'test'' OR 1=1 --%' OR ...`. The presence of the double single-quote (`''`) confirms that the database driver treated the payload as a literal string.
@@ -115,6 +117,44 @@ Following the preliminary audit, a detailed investigation was performed on the f
     - *Relying only on Rails*: While `allow_other_host: false` is strong, the additional `valid_return_path?` check provides better error handling and prevents internal redirect loops (e.g., redirecting back to the login page).
 - **Final Conclusion**: **VERIFIED SAFE**. The combination of strict path-prefix validation and Rails-native host enforcement provides a highly secure redirection model.
 
+## Future Improvements
+
+To simplify future security analyses and make the system's safety properties more "discoverable" and "self-verifying," the following improvements are recommended. These changes focus on enhancing auditability without significantly impacting runtime performance.
+
+### 1. Architectural Self-Documentation
+
+The security rationale for optimizations should be made explicit in the code to assist future auditors.
+
+- **Markdown Processor**: Add a comment directly above the `MARKDOWN_UNNECESSARY` regex (line 177) explicitly stating: `SECURITY: This regex MUST NOT match '<' or '&' (outside of valid entities) because the result is marked .html_safe.`
+- **Search Scopes**: Add a comment above the `text_search` scope (line 255) noting: `SECURITY: We use Arel .matches here specifically to ensure DB-level parameterization of user input.`
+
+### 2. Startup "Self-Tests" (Smoke Tests)
+
+Implement a few "smoke tests" that run once during the application's startup sequence. These tests would provide immediate, automated evidence of safety.
+
+- **Regex Integrity Check**: Test `MARKDOWN_UNNECESSARY` against known malicious strings (like `<script>`). If the regex incorrectly returns `true`, the application should fail to start with a descriptive error message.
+- **Redirect Guard Validation**: A similar check for `valid_return_path?` to ensure it continues to block protocol-relative URLs (`//`).
+
+These checks should be *very* close to the items they address, so that AI systems and humans can easily see that they are checked. E.g., immediately after their declaration.
+
+#### Rationale for "Fail-Fast" Direct Assertions
+
+The preferred implementation for these tests is the "Direct Assertion" approach (e.g., `raise "Security Bypass!" if ...`) placed immediately following the constant or method definition. This is considered the "most honest" and effective method for several reasons:
+
+- **Prevention Over Detection**: By running during the class-loading phase, these checks ensure the application **fails to boot** if a security invariant is violated. This prevents a vulnerability from ever reaching a running environment.
+- **Locality of Context**: Keeping the verification logic adjacent to the security-critical code ensures that both humans and AI models are immediately alerted to the security constraints whenever the code is modified. It serves as "executable documentation."
+- **Negligible Performance Cost**: Since these checks run only once during the boot sequence (or during a code reload in development), their impact on per-request performance is zero, and their impact on startup time is sub-millisecond.
+- **Linter Justification**: While side effects in class bodies are generally discouraged, security invariants are a valid exception. Using `# rubocop:disable` with a clear explanation is the correct way to handle linter warnings in this context.
+
+### 3. Explicit Security Wrappers and Naming
+
+Using named methods that imply security would make auditing trivial by signaling intent.
+
+- **Descriptive Naming**: Rename the helper `force_locale_url` to `safe_internal_locale_url`. This signals to an auditor that host-enforcement logic is expected to be present within the method.
+- **Standardized Utilities**: Abstract the "prefix search" logic into a shared utility or concern that is verified to be safe. This allows an auditor to verify the pattern once rather than auditing every individual model scope.
+
 ## Final Summary of Audit
 
-All four high-priority investigation tasks have been completed. In each case, the codebase was found to have robust, multi-layered protections that mitigated the theoretical risks identified in the preliminary audit. No code changes are recommended for these specific items.
+All four high-priority investigation tasks have been completed. In each case, the codebase was found to have robust, multi-layered protections that mitigated the theoretical risks identified in the preliminary audit. No code changes are necessary to fix security vulnerabilities.
+
+However, a few potential future improvements were identified to make it easier to make this determination in the future. Those changes would make it easier to resolve these issues, and let analysis tools focus on other issues.

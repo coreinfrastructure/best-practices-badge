@@ -58,7 +58,7 @@ requested-paths-*.txt
 # Ignore railroader directory
 /railroader/
 
-# Ignore rake and byebug files
+# Ignore rake and byebug files especially
 .byebug_history
 .rake_tasks~
 
@@ -66,3 +66,5 @@ requested-paths-*.txt
 tmp/baseline_cache/
 .baseline_sync_metadata.json
 
+# Let's just ignore .files in general
+.*

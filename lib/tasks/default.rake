@@ -261,7 +261,7 @@ desc 'Run markdownlint (mdl) - check for markdown problems on **.md files'
 task :markdownlint do
   # The default configuration is in .mdlrc + style config/markdown_style.rb
   # Exclude temporary files beginning with comma
-  sh 'find . -name "*.md" ! -name ",*" ! -path "./tmp/*" ! -path "./temp/*" -print0 | xargs -0 bundle exec mdl'
+  sh 'find . -name "*.md" ! -name ",*" ! -path "./tmp/*" ! -path "./temp/*" ! -path "*/.*" -print0 | xargs -0 bundle exec mdl'
 end
 
 # Apply JSCS to look for issues in JavaScript files.
@@ -982,8 +982,150 @@ end
 desc 'Run daily tasks used in any tier, e.g., record daily statistics'
 task daily: :environment do
   ProjectStat.create!
+  puts 'Purging never-activated local accounts older than ' \
+       "#{User::UNACTIVATED_ACCOUNT_LIFETIME.inspect}."
+  puts "Purged #{User.purge_unactivated_accounts} never-activated account(s)."
   day_for_monthly = (ENV['BADGEAPP_DAY_FOR_MONTHLY'] || '5').to_i
   Rake::Task['monthly'].invoke if Time.now.utc.day == day_for_monthly
+end
+
+# List purgeable users (never-activated local accounts older than
+# UNACTIVATED_ACCOUNT_LIFETIME that have no project or additional rights)
+# to stdout as CSV, one per line: name, email, created_at.
+# Requires EMAIL_ENCRYPTION_KEY and EMAIL_BLIND_INDEX_KEY to decrypt emails.
+# Example: EMAIL_ENCRYPTION_KEY=... EMAIL_BLIND_INDEX_KEY=... rake list_purgeable_unactivated_users
+desc 'Print purgeable never-activated local accounts to stdout as CSV.'
+task list_purgeable_unactivated_users: :environment do
+  require 'csv'
+  csv = CSV.new($stdout)
+  csv << %w[name email created_at]
+  User.purgeable_unactivated_accounts.find_each do |user|
+    csv << [user.name, user.email_if_decryptable, user.created_at.iso8601]
+  end
+end
+
+# Identify activated local accounts that look like bot/spam registrations.
+# Used by list_suspicious_activated_users and purge_suspicious_activated_users.
+# Each yields/lists only accounts that:
+#   - are local (password-based), activated, own no projects, have no
+#     additional_rights, have not logged in for over a year (or never), and
+#     were created more than a year ago.
+#
+# Heuristics (reasons) reported per account:
+#
+#   random_email   - the local part has 4+ dot-separated segments of 1-3 chars,
+#                    matching the fragmented pattern bots use to register many
+#                    accounts from one Gmail address (Gmail ignores dots in the
+#                    local part, so a.b.c.d@gmail.com and abcd@gmail.com
+#                    deliver to the same inbox). Note: some privacy-conscious
+#                    users deliberately dot their own address as a
+#                    spam-tracking alias per service, but such users typically
+#                    log in and own projects (both filtered out above).
+#
+# The following name heuristics apply only to Latin-script names (names
+# containing characters outside U+0000-U+024F are skipped — they may be
+# Chinese, Arabic, Cyrillic, etc. and require different analysis):
+#
+#   low_vowels     - fewer than 15% of letters are vowels (aeiou/y plus common
+#                    accented Latin vowels). All human languages use vowels;
+#                    a very low ratio strongly suggests a random string.
+#
+#   consonant_run  - 5 or more consecutive consonants within a single word.
+#                    Even the most consonant-heavy natural languages rarely
+#                    exceed 4 in a row.
+#
+#   rare_letters   - more than 35% of inner-word letters (excluding capitalised
+#                    first letters, which are conventional in proper names) are
+#                    from {q, x, z, j} — uncommon in nearly all Latin-script
+#                    languages.
+#
+# Requires EMAIL_ENCRYPTION_KEY and EMAIL_BLIND_INDEX_KEY to decrypt emails.
+
+# Vowels including common accented Latin forms (U+0000-U+024F range).
+LATIN_VOWELS = /[aeiouyáéíóúàèìòùâêîôûäëïöüãõåæœ]/i
+# Characters outside Basic Latin + Latin Extended-A/B: flag as non-Latin script.
+NON_LATIN_SCRIPT = /[^ -ɏ]/
+
+def suspicious_activated_email?(email)
+  return false if email == 'CANNOT_DECRYPT'
+
+  local = email.split('@').first.to_s
+  local.split('.').count { |seg| seg.length <= 3 } >= 4
+end
+
+# rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+def suspicious_activated_name_reasons(name)
+  return [] if name.match?(NON_LATIN_SCRIPT)
+
+  letters = name.downcase.gsub(/[^a-záéíóúàèìòùâêîôûäëïöüãõåæœ]/, '')
+  return [] if letters.length <= 6
+
+  reasons = []
+  vowels = letters.scan(LATIN_VOWELS).length
+  reasons << 'low_vowels' if vowels.to_f / letters.length < 0.15
+
+  # Check each word separately so spaces don't create artificial consonant
+  # runs across word boundaries (e.g. "Scott R. Shinn" → "ttrsh").
+  consonant_run =
+    name.downcase.split.any? do |word|
+      word.gsub(/[^a-záéíóúàèìòùâêîôûäëïöüãõåæœ]/i, '')
+          .match?(/[^aeiouyáéíóúàèìòùâêîôûäëïöüãõåæœ]{5}/i)
+    end
+  reasons << 'consonant_run' if consonant_run
+
+  # Skip capitalised first letters before checking rare letters — they are
+  # conventional in proper names (Javier, Vázquez) and not a randomness signal.
+  inner = name.split
+              .map { |w| w.match?(/\A[[:upper:]]/) ? w[1..] : w }
+              .join.downcase.gsub(/[^a-záéíóúàèìòùâêîôûäëïöüãõåæœ]/, '')
+  rare = inner.scan(/[qxzj]/).length
+  reasons << 'rare_letters' if inner.length >= 4 &&
+                               rare.to_f / inner.length >= 0.35
+  reasons
+end
+# rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+
+# Yields each suspicious activated user with their decrypted email and reasons.
+# rubocop:disable Metrics/MethodLength
+def each_suspicious_activated_user
+  one_year_ago = 1.year.ago
+  User.where(provider: 'local', activated: true)
+      .where('last_login_at < ? OR last_login_at IS NULL', one_year_ago)
+      .where(created_at: ...one_year_ago)
+      .where.missing(:projects)
+      .where.missing(:additional_rights)
+      .find_each do |user|
+    email = user.email_if_decryptable
+    reasons = suspicious_activated_name_reasons(user.name.to_s)
+    reasons << 'random_email' if suspicious_activated_email?(email)
+    next if reasons.empty?
+
+    yield user, email, reasons
+  end
+end
+# rubocop:enable Metrics/MethodLength
+
+desc 'Print suspicious activated local accounts to stdout as CSV.'
+task list_suspicious_activated_users: :environment do
+  require 'csv'
+  csv = CSV.new($stdout)
+  csv << %w[name email created_at last_login_at reasons]
+  each_suspicious_activated_user do |user, email, reasons|
+    csv << [
+      user.name, email, user.created_at.iso8601,
+      user.last_login_at&.iso8601, reasons.join(';')
+    ]
+  end
+end
+
+desc 'Destroy suspicious activated local accounts (see list_suspicious_activated_users).'
+task purge_suspicious_activated_users: :environment do
+  count = 0
+  each_suspicious_activated_user do |user, _email, _reasons|
+    user.destroy
+    count += 1
+  end
+  puts "Purged #{count} suspicious activated account(s)."
 end
 
 # Run this task to email a limited set of reminders to inactive projects

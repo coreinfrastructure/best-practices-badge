@@ -36,6 +36,12 @@ class User < ApplicationRecord
   DIGITS_OF_EMAIL_ENCRYPTION_KEY = 256 / 8 * 2 # 256-bit AES key in hex
   DIGITS_OF_EMAIL_BLIND_INDEX_KEY = 256 / 8 * 2 # 256-bit HMAC key in hex
 
+  # Age after which a never-activated local account is considered abandoned
+  # and eligible for purging by the daily task. Configurable via env var.
+  UNACTIVATED_ACCOUNT_LIFETIME = Integer(
+    ENV['BADGEAPP_UNACTIVATED_USER_DAYS'] || '7', 10
+  ).days
+
   # For tests
   TEST_EMAIL_ENCRYPTION_KEY = '1' * DIGITS_OF_EMAIL_ENCRYPTION_KEY
   TEST_EMAIL_BLIND_INDEX_KEY = '2' * DIGITS_OF_EMAIL_BLIND_INDEX_KEY
@@ -329,6 +335,30 @@ class User < ApplicationRecord
   # @return [String] a random URL-safe base64 encoded token
   def self.new_token
     SecureRandom.urlsafe_base64
+  end
+
+  # Returns a scope of local accounts eligible for purging: never activated,
+  # older than UNACTIVATED_ACCOUNT_LIFETIME, and owning no projects or
+  # additional rights.
+  #
+  # @return [ActiveRecord::Relation]
+  def self.purgeable_unactivated_accounts
+    cutoff = UNACTIVATED_ACCOUNT_LIFETIME.ago
+    where(provider: 'local', activated: false)
+      .where(users: { created_at: ...cutoff })
+      .where.missing(:projects)
+      .where.missing(:additional_rights)
+  end
+
+  # Delete all accounts returned by purgeable_unactivated_accounts.
+  # Returns the count of deleted users.
+  #
+  # @return [Integer] number of accounts deleted
+  def self.purge_unactivated_accounts
+    scope = purgeable_unactivated_accounts
+    count = scope.count
+    scope.find_each(&:destroy)
+    count
   end
 
   # Creates a remember token for persistent login sessions.

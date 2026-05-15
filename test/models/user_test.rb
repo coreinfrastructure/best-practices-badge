@@ -354,5 +354,70 @@ class UserTest < ActiveSupport::TestCase
   ensure
     ENV['EMAIL_BLIND_INDEX_KEY'] = saved
   end
+
+  # --- purge_unactivated_accounts ---
+
+  # Build an old never-activated local user and return it after saving.
+  # Bypasses the auto-timestamp so created_at is in the purgeable past.
+  def old_unactivated_user(email)
+    u = User.new(
+      name: 'Test Bot', email: email,
+      password: 'p@$$w0rd', password_confirmation: 'p@$$w0rd',
+      provider: 'local', activated: false, preferred_locale: 'en'
+    )
+    u.save!
+    u.update_column(:created_at,
+                    (User::UNACTIVATED_ACCOUNT_LIFETIME + 1.day).ago)
+    u
+  end
+
+  test 'purge_unactivated_accounts deletes old unactivated local accounts' do
+    u = old_unactivated_user('purge-old@example.com')
+    User.purge_unactivated_accounts
+    assert_not User.exists?(u.id)
+  end
+
+  test 'purge_unactivated_accounts keeps recently created unactivated accounts' do
+    u = User.create!(
+      name: 'New Bot', email: 'purge-new@example.com',
+      password: 'p@$$w0rd', password_confirmation: 'p@$$w0rd',
+      provider: 'local', activated: false, preferred_locale: 'en'
+    )
+    User.purge_unactivated_accounts
+    assert User.exists?(u.id)
+  end
+
+  test 'purge_unactivated_accounts keeps activated local accounts' do
+    User.purge_unactivated_accounts
+    assert User.exists?(users(:test_user).id)
+  end
+
+  test 'purge_unactivated_accounts keeps old unactivated accounts that own a project' do
+    u = old_unactivated_user('purge-with-project@example.com')
+    project = u.projects.build(
+      name: 'Purge Test Project',
+      description: 'Temporary project for purge test',
+      license: 'MIT',
+      homepage_url: 'https://example.com',
+      repo_url: 'https://example.com/repo',
+      entry_locale: 'en'
+    )
+    project.save!(validate: false)
+    User.purge_unactivated_accounts
+    assert User.exists?(u.id)
+  end
+
+  test 'purge_unactivated_accounts keeps old unactivated accounts with additional rights' do
+    u = old_unactivated_user('purge-with-rights@example.com')
+    AdditionalRight.create!(user_id: u.id, project_id: projects(:one).id)
+    User.purge_unactivated_accounts
+    assert User.exists?(u.id)
+  end
+
+  test 'purge_unactivated_accounts does not touch github accounts' do
+    u = users(:github_user)
+    User.purge_unactivated_accounts
+    assert User.exists?(u.id)
+  end
 end
 # rubocop:enable Metrics/ClassLength

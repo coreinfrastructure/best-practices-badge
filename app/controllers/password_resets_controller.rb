@@ -85,6 +85,11 @@ class PasswordResetsController < ApplicationController
     # Local password resets only make sense for local users
     return unless user.provider == 'local'
 
+    # Don't send resets to unactivated accounts. If they were
+    # created by a bot using someone else's email address, sending a
+    # reset would generate a second unsolicited email to that address.
+    return unless user.activated?
+
     # Once a password reset has been sent, wait at least
     # DELAY_BETWEEN_RESET_PASSWORDS before sending another so attackers
     # can't badger our users with password reset requests.

@@ -151,7 +151,76 @@ The preferred implementation for these tests is the "Direct Assertion" approach 
 Using named methods that imply security would make auditing trivial by signaling intent.
 
 - **Descriptive Naming**: Rename the helper `force_locale_url` to `safe_internal_locale_url`. This signals to an auditor that host-enforcement logic is expected to be present within the method.
-- **Standardized Utilities**: Abstract the "prefix search" logic into a shared utility or concern that is verified to be safe. This allows an auditor to verify the pattern once rather than auditing every individual model scope.
+- **Standardized Utilities ("Safe by Construction")**: 
+    To eliminate the risk of developers (human or AI) forgetting to sanitize user input when creating new search scopes, the complex logic currently in `Project.text_search` should be abstracted into a shared ActiveRecord Concern. Currently, this pattern is used in exactly one location, but abstracting it ensures that future additions to other models (e.g., `User`, `ProjectStat`) follow the same hardened standard.
+
+    #### Current State (The "Before"):
+    **File**: `app/models/project.rb` (Lines 255-266)
+    ```ruby
+    scope :text_search, (
+      lambda do |text|
+        start_text = "#{sanitize_sql_like(text)}%"
+        where(
+          Project.arel_table[:name].matches(start_text).or(
+            Project.arel_table[:homepage_url].matches(start_text)
+          ).or(
+            Project.arel_table[:repo_url].matches(start_text)
+          )
+        )
+      end
+    )
+    ```
+    *Risk*: If another developer adds a search scope to a different model, they must remember to manually call `sanitize_sql_like` and manually construct the Arel `matches` call with the `%` suffix. Failure to do so could lead to SQL Injection or DoS via wildcard manipulation.
+
+    #### Proposed Implementation (The "After"):
+    1. **Create the Concern**: `app/models/concerns/secure_searchable.rb`
+    ```ruby
+    module SecureSearchable
+      extend ActiveSupport::Concern
+
+      class_methods do
+        # Hardened prefix matching logic
+        # @param column_name [Symbol] The database column to search
+        # @param text [String] The user-supplied prefix text
+        # @return [Arel::Nodes::Matches] A safe Arel match node
+        def prefix_match(column_name, text)
+          # 1. Sanitize wildcards (%) and (_) to prevent DoS
+          # 2. Append the prefix wildcard (%)
+          # 3. Return Arel node for DB-aware parameterization
+          safe_text = "#{sanitize_sql_like(text)}%"
+          arel_table[column_name].matches(safe_text)
+        end
+      end
+    end
+    ```
+
+    2. **Refactor the Model**: `app/models/project.rb`
+    ```ruby
+    class Project < ApplicationRecord
+      include SecureSearchable
+      # ...
+      scope :text_search, (
+        lambda do |text|
+          where(
+            prefix_match(:name, text).or(
+              prefix_match(:homepage_url, text)
+            ).or(
+              prefix_match(:repo_url, text)
+            )
+          )
+        end
+      )
+    end
+    ```
+
+    #### Verification and Testing Strategy:
+    - **Unit Testing**: Create `test/models/concerns/secure_searchable_test.rb`. Test the `prefix_match` method directly with payloads containing SQL injection attempts (`test' OR 1=1`) and wildcard characters (`test%`).
+    - **SQL Inspection**: Use the `to_sql` method in a test or console: `Project.text_search("test%").to_sql`. Verify that the resulting SQL contains `LIKE 'test\%'` (the backslash confirms successful sanitization by `sanitize_sql_like`) and that single quotes are correctly escaped as `''`.
+
+    #### Benefits for AI and Human Reviewers:
+    - **Discovery**: An AI performing a security audit will find the `SecureSearchable` concern and immediately identify the project's hardened standard for searching.
+    - **Uniformity**: Future search implementations across any model will follow a single, verified pattern.
+    - **Audit Efficiency**: Reviewers only need to verify the core utility once; subsequent uses can be checked for adherence to the pattern rather than re-audited for injection risks.
 
 ## Final Summary of Audit
 

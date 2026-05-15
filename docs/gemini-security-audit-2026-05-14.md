@@ -61,7 +61,7 @@ Following the preliminary audit, a detailed investigation was performed on the f
 - **Detailed Findings**:
     - **Safety Logic**: The regex uses possessive quantifiers (`++`) to prevent catastrophic backtracking and ensures that if a `<` is present anywhere in the line, the entire regex fails to match.
     - **HTML Entities**: The regex explicitly allows valid HTML entities (lines 167-170). While these render as special characters (e.g., `&lt;` as `<`), they are **rendered** by the browser but not **executed** as tags. This is a crucial distinction that maintains security.
-    - **URL Path**: The `PREFIXED_URL_REGEX` handles cases where a user provides a single URL. Crucially, the code at lines 335-336 calls `CGI.escapeHTML` on all user-supplied components before concatenation. This provides a second layer of defense-in-depth.
+    - **URL Path**: The `PREFIXED_URL_REGEX` handles cases where a user provides a single URL. Crucially, the code at lines 333-334 calls `CGI.escapeHTML` on all user-supplied components before concatenation. This provides a second layer of defense-in-depth.
 - **Alternatives Considered**:
     - *Always escape*: We considered always calling `html_escape` on the result. However, the performance stats show that this would add unnecessary string allocations and processing for millions of safe strings.
     - *Removing optimization*: This would increase server load significantly during bulk project listings.
@@ -93,7 +93,8 @@ Following the preliminary audit, a detailed investigation was performed on the f
 - **Analysis Method**: Audit of the URL parsing and reconstruction logic to detect open-redirect or host-header injection risks.
 - **Approach & Justification**:
     - **Step 1: URI Parsing Analysis**: We audited how `force_locale_url` manipulates URLs at line 65 using `URI.parse`.
-    - **Step 2: Host Enforcement Check**: We analyzed the code at line 79: `url.host = ENV.fetch('PUBLIC_HOSTNAME', url.host)`.
+    - **Step 2: Host Enforcement Check**: We analyzed the code at line 66: `url.host = ENV.fetch('PUBLIC_HOSTNAME', url.host)`.
+
 - **Detailed Findings**:
     - **Security Invariant**: By explicitly setting `url.host`, the application ensures that even if an attacker manages to pass an external URL as the "original URL," the resulting redirect will be forced back to the project's official `PUBLIC_HOSTNAME`.
     - **Redirection Logic**: In `ApplicationController#redir_missing_locale` (line 371), the method uses `request.original_url`. Since this value is derived from the server's own environment and verified against the `Host` header (which Rails validates against an allow-list if configured), it is a safe source for redirection.

@@ -5,6 +5,7 @@
 # SPDX-License-Identifier: MIT
 
 require_relative '../../lib/locale_utils'
+require 'security_utils'
 
 # rubocop:disable Metrics/ModuleLength
 module SessionsHelper
@@ -324,11 +325,12 @@ module SessionsHelper
 
   # SECURITY: Fail-fast smoke test to ensure redirection guards are active.
   # This runs once when the class is loaded.
-  # We use module_function to make it callable here.
+  # We use module_function to make valid_return_path? callable here.
   module_function :valid_return_path?
-  if valid_return_path?('//evil.com')
-    raise 'Security Critical: valid_return_path? has an open-redirect bypass!'
-  end
+  SecurityUtils.security_assertion(
+    !valid_return_path?('//evil.com'),
+    'valid_return_path? has an open-redirect bypass!'
+  )
 
   # Check if referring url is internal, if so, save it.
   # Excludes login and signup URLs regardless of locale prefix, so that an

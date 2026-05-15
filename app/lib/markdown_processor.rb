@@ -8,6 +8,8 @@
 # This tries to *avoid* the more costly process of invoking the
 # markdown processor, then calls the real markdown processor where necessary.
 
+require 'security_utils'
+
 # rubocop:disable Metrics/ModuleLength
 module MarkdownProcessor
   # Try to avoid calling markdown processor, then call if necessary.

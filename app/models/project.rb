@@ -4,6 +4,8 @@
 # OpenSSF Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
+require 'security_utils'
+
 # rubocop:disable Metrics/ClassLength
 class Project < ApplicationRecord
   has_many :additional_rights, dependent: :destroy

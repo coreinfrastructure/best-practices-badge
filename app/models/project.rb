@@ -100,6 +100,13 @@ class Project < ApplicationRecord
     'gold' => '2'
   }.freeze
 
+  # SECURITY: Helper to bundle sanitization and parameterization.
+  # Defined early so it is available to scopes.
+  def self.prefix_match(column_name, text)
+    safe_text = "#{sanitize_sql_like(text)}%"
+    arel_table[column_name].matches(safe_text)
+  end
+
   # Reverse mapping: internal level ID to URL-friendly name
   LEVEL_NUMBER_TO_NAME = {
     '0' => 'passing',
@@ -252,17 +259,26 @@ class Project < ApplicationRecord
   )
 
   # prefix query (old search system)
+  # SECURITY: We use Arel .matches here specifically to ensure DB-level
+  # parameterization of user input.
   scope :text_search, (
     lambda do |text|
-      start_text = "#{sanitize_sql_like(text)}%"
       where(
-        Project.arel_table[:name].matches(start_text).or(
-          Project.arel_table[:homepage_url].matches(start_text)
+        Project.prefix_match(:name, text).or(
+          Project.prefix_match(:homepage_url, text)
         ).or(
-          Project.arel_table[:repo_url].matches(start_text)
+          Project.prefix_match(:repo_url, text)
         )
       )
     end
+  )
+
+  # SECURITY: Fail-fast smoke test to ensure SQL parameterization.
+  # This runs once when the class is loaded.
+  # Note: .to_sql is a read-only metadata operation, no DB is called.
+  SecurityUtils.security_assertion(
+    text_search("test' OR 1=1").to_sql.include?("''"),
+    'text_search scope has an SQL injection bypass!'
   )
 
   # Search for exact match on URL

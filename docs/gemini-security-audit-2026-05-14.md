@@ -31,7 +31,7 @@ This report documents the preliminary findings of a security audit performed by 
 - **Location**: `app/controllers/application_controller.rb` (`redir_missing_locale`) and `SessionsController`.
 - **Description**: Redirections are performed based on `request.original_url` or `params[:return_to]`.
 - **Risk**: Medium. If these redirects do not strictly enforce same-origin or an allow-list, they could be used for phishing attacks.
-- **Investigation Plan**: Verify the implementation of `force_locale_url` and `valid_return_path?` (if it exists) to ensure they prevent off-site redirects.
+- **Investigation Plan**: Verify the implementation of `safe_internal_url` and `valid_return_path?` (if it exists) to ensure they prevent off-site redirects.
 
 ### 4. DoS/SSRF Vulnerability in GitHub Content Access
 
@@ -91,10 +91,10 @@ Following the preliminary audit, a detailed investigation was performed on the f
 ### 3. Locale Redirection and Host Security
 
 - **Primary Files**: `lib/locale_utils.rb` (lines 64-85), `app/controllers/application_controller.rb` (line 371).
-- **Key Symbols**: `LocaleUtils.force_locale_url`.
+- **Key Symbols**: `LocaleUtils.safe_internal_url`.
 - **Analysis Method**: Audit of the URL parsing and reconstruction logic to detect open-redirect or host-header injection risks.
 - **Approach & Justification**:
-    - **Step 1: URI Parsing Analysis**: We audited how `force_locale_url` manipulates URLs at line 65 using `URI.parse`.
+    - **Step 1: URI Parsing Analysis**: We audited how `safe_internal_url` manipulates URLs at line 65 using `URI.parse`.
     - **Step 2: Host Enforcement Check**: We analyzed the code at line 66: `url.host = ENV.fetch('PUBLIC_HOSTNAME', url.host)`.
 
 - **Detailed Findings**:
@@ -137,6 +137,102 @@ Implement a few "smoke tests" that run once during the application's startup seq
 
 These checks should be *very* close to the items they address, so that AI systems and humans can easily see that they are checked. E.g., immediately after their declaration.
 
+We require 100% statement coverage, so an in-line `if...` check that raises on problem" could be a problem (the `raise` would never run and could not be tested). We can use an inline "unless" trick, but fooling the test coverage system isn't really the goal. Instead, let's create a special security assertion, which we can also test. Something like this:
+
+File `security_utils.rb`:
+
+~~~~ruby
+# frozen_string_literal: true
+
+# Copyright the Linux Foundation and the
+# OpenSSF Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+
+# Security utility methods
+module SecurityUtils
+  class SecurityAssertionError < StandardError; end
+
+  # This method is used to enforce security invariants at load time.
+  # It is intended as a "fail-fast" mechanism to prevent the application from
+  # booting if a security check fails.
+  # By using a method for this, we can test the error-raising branch
+  # in unit tests to satisfy 100% statement coverage requirements.
+  def self.security_assertion(condition, message)
+    if !condition
+      raise SecurityAssertionError, "SECURITY CRITICAL: #{message}"
+    end
+  end
+end
+~~~~
+
+  ✓  WriteFile  security_utils_test.rb → Accepted (+22, -0)
+
+~~~~ruby
+# frozen_string_literal: true
+
+# Copyright the Linux Foundation and the
+# OpenSSF Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+
+require 'test_helper'
+require 'security_utils'
+
+class SecurityUtilsTest < ActiveSupport::TestCase
+  test 'security_assertion does nothing if condition is true' do
+    # This should pass without error
+    SecurityUtils.security_assertion(true, 'Should not raise')
+  end
+
+  test 'security_assertion raises SecurityAssertionError if
+condition is false' do
+    err = assert_raises(SecurityUtils::SecurityAssertionError) do
+      SecurityUtils.security_assertion(false, 'My error message')
+    end
+    assert_match(/SECURITY CRITICAL: My error message/, err.message)
+  end
+end
+~~~~
+
+Thiw will modify markdown_processor.rb as follows:
+
+~~~~
+      185
+      186  # SECURITY: Fail-fast smoke test to ensure regex rejects
+           dangerous tags.
+      187   # This runs once when the class is loaded.
+      188 - if '<script>'.match?(MARKDOWN_UNNECESSARY)
+      189 -   raise 'Security Critical: MARKDOWN_UNNECESSARY regex has a
+          bypass!'
+      190 - end
+      188 + SecurityUtils.security_assertion(
+      189 +   !'<script>'.match?(MARKDOWN_UNNECESSARY),
+      190 +   'MARKDOWN_UNNECESSARY regex has a bypass!'
+      191 + )
+      192
+      193  # The following pattern *only* matches simple bare URLs,
+           optionally
+      194   # prefixed with "simple" text, so that
+~~~~
+
+and modify project.rb as:
+
+~~~~
+      276   # SECURITY: Fail-fast smoke test to ensure SQL parameterization.
+      277   # This runs once when the class is loaded.
+      278   # Note: .to_sql is a read-only metadata operation.
+      279 - unless text_search("test' OR 1=1").to_sql.include?("''")
+      280 -   raise 'Security Critical: text_search scope has an SQLi
+          bypass!'
+      281 - end
+      279 + SecurityUtils.security_assertion(
+      280 +   text_search("test' OR 1=1").to_sql.include?("''"),
+      281 +   'text_search scope has an SQLi bypass!'
+      282 + )
+      283
+      284   # Search for exact match on URL
+      285   # (home page, repo, and maybe package URL someday)
+~~~~
+
 #### Rationale for "Fail-Fast" Direct Assertions
 
 The preferred implementation for these tests is the "Direct Assertion" approach (e.g., `raise "Security Bypass!" if ...`) placed immediately following the constant or method definition. This is considered the "most honest" and effective method for several reasons:
@@ -150,7 +246,7 @@ The preferred implementation for these tests is the "Direct Assertion" approach 
 
 Using named methods that imply security would make auditing trivial by signaling intent.
 
-- **Descriptive Naming**: Rename the helper `force_locale_url` to `safe_internal_locale_url`. This signals to an auditor that host-enforcement logic is expected to be present within the method.
+- **Descriptive Naming**: Rename the helper formerly known as `force_locale_url`, and then known as `safe_internal_url` to `safe_localized_internal_url`. This signals to an auditor that host-enforcement logic is expected to be present within the method.
 - **Standardized Utilities ("Safe by Construction")**:
     To eliminate the risk of the complex search logic being accidentally corrupted during future edits to `Project.rb`, the logic should be abstracted into a localized helper method within the `Project` class. This ensures the security-critical sanitization steps are "bundled" together and not spread across multiple lines in a lambda.
 

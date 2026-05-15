@@ -151,11 +151,12 @@ The preferred implementation for these tests is the "Direct Assertion" approach 
 Using named methods that imply security would make auditing trivial by signaling intent.
 
 - **Descriptive Naming**: Rename the helper `force_locale_url` to `safe_internal_locale_url`. This signals to an auditor that host-enforcement logic is expected to be present within the method.
-- **Standardized Utilities ("Safe by Construction")**: 
-    To eliminate the risk of developers (human or AI) forgetting to sanitize user input when creating new search scopes, the complex logic currently in `Project.text_search` should be abstracted into a shared ActiveRecord Concern. Currently, this pattern is used in exactly one location, but abstracting it ensures that future additions to other models (e.g., `User`, `ProjectStat`) follow the same hardened standard.
+- **Standardized Utilities ("Safe by Construction")**:
+    To eliminate the risk of the complex search logic being accidentally corrupted during future edits to `Project.rb`, the logic should be abstracted into a localized helper method within the `Project` class. This ensures the security-critical sanitization steps are "bundled" together and not spread across multiple lines in a lambda.
 
     #### Current State (The "Before"):
     **File**: `app/models/project.rb` (Lines 255-266)
+
     ```ruby
     scope :text_search, (
       lambda do |text|
@@ -170,34 +171,14 @@ Using named methods that imply security would make auditing trivial by signaling
       end
     )
     ```
-    *Risk*: If another developer adds a search scope to a different model, they must remember to manually call `sanitize_sql_like` and manually construct the Arel `matches` call with the `%` suffix. Failure to do so could lead to SQL Injection or DoS via wildcard manipulation.
+
+    *Risk*: The sanitization of `text` is decoupled from the `matches` calls. A developer modifying this scope might accidentally remove the `sanitize_sql_like` call or change how `start_text` is constructed without realizing they've broken a security invariant.
 
     #### Proposed Implementation (The "After"):
-    1. **Create the Concern**: `app/models/concerns/secure_searchable.rb`
-    ```ruby
-    module SecureSearchable
-      extend ActiveSupport::Concern
+    **File**: `app/models/project.rb`
 
-      class_methods do
-        # Hardened prefix matching logic
-        # @param column_name [Symbol] The database column to search
-        # @param text [String] The user-supplied prefix text
-        # @return [Arel::Nodes::Matches] A safe Arel match node
-        def prefix_match(column_name, text)
-          # 1. Sanitize wildcards (%) and (_) to prevent DoS
-          # 2. Append the prefix wildcard (%)
-          # 3. Return Arel node for DB-aware parameterization
-          safe_text = "#{sanitize_sql_like(text)}%"
-          arel_table[column_name].matches(safe_text)
-        end
-      end
-    end
-    ```
-
-    2. **Refactor the Model**: `app/models/project.rb`
     ```ruby
     class Project < ApplicationRecord
-      include SecureSearchable
       # ...
       scope :text_search, (
         lambda do |text|
@@ -210,17 +191,23 @@ Using named methods that imply security would make auditing trivial by signaling
           )
         end
       )
+
+      # ... (in private or protected class methods)
+      def self.prefix_match(column_name, text)
+        # Bundles sanitization and parameterization into a single, trusted call.
+        safe_text = "#{sanitize_sql_like(text)}%"
+        arel_table[column_name].matches(safe_text)
+      end
     end
     ```
 
     #### Verification and Testing Strategy:
-    - **Unit Testing**: Create `test/models/concerns/secure_searchable_test.rb`. Test the `prefix_match` method directly with payloads containing SQL injection attempts (`test' OR 1=1`) and wildcard characters (`test%`).
-    - **SQL Inspection**: Use the `to_sql` method in a test or console: `Project.text_search("test%").to_sql`. Verify that the resulting SQL contains `LIKE 'test\%'` (the backslash confirms successful sanitization by `sanitize_sql_like`) and that single quotes are correctly escaped as `''`.
+    - **Unit Testing**: Add a test case to `test/models/project_test.rb` that calls `Project.prefix_match(:name, "test%").to_sql` and verifies that the output correctly escapes the wildcard (`\%`).
+    - **SQL Inspection**: Verify that `Project.text_search("test'").to_sql` results in properly escaped single quotes (`''`).
 
     #### Benefits for AI and Human Reviewers:
-    - **Discovery**: An AI performing a security audit will find the `SecureSearchable` concern and immediately identify the project's hardened standard for searching.
-    - **Uniformity**: Future search implementations across any model will follow a single, verified pattern.
-    - **Audit Efficiency**: Reviewers only need to verify the core utility once; subsequent uses can be checked for adherence to the pattern rather than re-audited for injection risks.
+    - **Atomicity**: The security logic (sanitization + parameterization) is now atomic; you cannot call `prefix_match` without getting both.
+    - **Clarity**: Future auditors can verify the `prefix_match` method once and then simply ensure the `text_search` scope uses it correctly.
 
 ## Final Summary of Audit
 

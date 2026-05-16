@@ -365,7 +365,8 @@ class ApplicationController < ActionController::Base
     # No locale, determine the best locale and redirect.
     #
     best_locale = find_best_locale
-    preferred_url = force_locale_url(request.original_url, best_locale)
+    preferred_url =
+      LocaleUtils.safe_localized_internal_url(request.original_url, best_locale)
 
     # Where we go varies by browser, so we can't cache this redirect
     disable_cache

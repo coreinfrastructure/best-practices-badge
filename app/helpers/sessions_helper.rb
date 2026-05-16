@@ -5,6 +5,7 @@
 # SPDX-License-Identifier: MIT
 
 require_relative '../../lib/locale_utils'
+require 'security_utils'
 
 # rubocop:disable Metrics/ModuleLength
 module SessionsHelper
@@ -37,7 +38,7 @@ module SessionsHelper
   # The rootmost path always has a trailing slash ("http://a.b.c/").
   # Otherwise, there is never a trailing slash.
   # Delegates to LocaleUtils for implementation
-  delegate :force_locale_url, to: :LocaleUtils
+  delegate :safe_localized_internal_url, to: :LocaleUtils
 
   # Low-level route to set user as being logged in.
   # This doesn't set the last_login_at or forward elsewhere.
@@ -51,7 +52,7 @@ module SessionsHelper
     I18n.locale = user.preferred_locale.to_sym
     return unless session[:forwarding_url]
 
-    session[:forwarding_url] = force_locale_url(
+    session[:forwarding_url] = safe_localized_internal_url(
       session[:forwarding_url], I18n.locale
     )
   end
@@ -267,7 +268,7 @@ module SessionsHelper
     # The forwarding_url stored in session is already validated as same-host
     # by store_internal_referer. However, for defense-in-depth, add
     # allow_other_host: false to *ensure* redirect is only to same-host.
-    redirect_to(forwarding_url || force_locale_url(default, I18n.locale),
+    redirect_to(forwarding_url || safe_localized_internal_url(default, I18n.locale),
                 allow_other_host: false)
   end
 
@@ -321,6 +322,15 @@ module SessionsHelper
 
     !path.match?(INVALID_RETURN_TO_PATH_REGEX)
   end
+
+  # SECURITY: Fail-fast smoke test to ensure redirection guards are active.
+  # This runs once when the class is loaded.
+  # We use module_function to make valid_return_path? callable here.
+  module_function :valid_return_path?
+  SecurityUtils.security_assertion(
+    !valid_return_path?('//evil.com'),
+    'valid_return_path? has an open-redirect bypass!'
+  )
 
   # Check if referring url is internal, if so, save it.
   # Excludes login and signup URLs regardless of locale prefix, so that an

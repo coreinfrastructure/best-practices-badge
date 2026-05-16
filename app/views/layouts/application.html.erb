@@ -38,10 +38,10 @@
 <%# We use original_fullpath so that query strings are included. -%>
 <%   I18n.available_locales.each do |loc| -%>
        <link rel="alternate" hreflang="<%= loc %>" href="<%=
-             force_locale_url(request.original_url, loc) %>" />
+             safe_localized_internal_url(request.original_url, loc) %>" />
 <%   end # each locale -%>
        <link rel="alternate" hreflang="x-default" href="<%=
-             force_locale_url(request.original_url, nil) %>" />
+             safe_localized_internal_url(request.original_url, nil) %>" />
 </head>
 <body>
 <%= render 'layouts/header' -%>

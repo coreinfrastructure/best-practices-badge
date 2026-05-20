@@ -1192,6 +1192,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     get "/en/projects/#{@project.id}/badge.json",
         headers: { Origin: 'example.com' }
     assert_equal 'Accept-Encoding', @response.headers['Vary']
+    assert_equal '*', @response.headers['Access-Control-Allow-Origin']
   end
 
   test 'A perfect silver project should have the silver badge' do

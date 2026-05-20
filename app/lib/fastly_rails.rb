@@ -106,4 +106,23 @@ class FastlyRails
     end
   end
   # rubocop:enable Metrics/MethodLength
+
+  # Log the Fastly service name returned at startup.
+  # If expected_name is set (via FASTLY_SERVICE_NAME_EXPECTED), logs an error
+  # when the name does not match, making wrong-service misconfiguration visible.
+  # Extracted into a method so it can be unit-tested with arbitrary inputs;
+  # called from config/initializers/fastly.rb after the credential check.
+  # @param actual_name [String] service name from the Fastly API response
+  # @param expected_name [String, nil] expected value of FASTLY_SERVICE_NAME_EXPECTED
+  # @param service_id [String] included in log messages for context
+  def self.log_service_name(actual_name, expected_name, service_id)
+    Rails.logger.info("Fastly service name: '#{actual_name}' (#{service_id})")
+    return if expected_name.blank? || actual_name == expected_name
+
+    Rails.logger.error(
+      "FASTLY CONFIG ERROR: Service name '#{actual_name}' does not match " \
+      "expected '#{expected_name}' (FASTLY_SERVICE_NAME_EXPECTED). " \
+      'CDN purges may be targeting the wrong service.'
+    )
+  end
 end

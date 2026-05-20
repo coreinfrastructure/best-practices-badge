@@ -41,7 +41,16 @@ if !Rails.env.test? && fastly_api_key.present? && fastly_service_id.present?
       headers: { 'Fastly-Key': fastly_api_key },
       timeout: 5
     )
-    unless response.success?
+    if response.success?
+      # FastlyRails is Zeitwerk-autoloaded (app/lib/), but calling it here is
+      # acceptable: initializers run after the autoloader is active, and we are
+      # not caching the constant for use after a potential reload.
+      FastlyRails.log_service_name(
+        response['name'],
+        ENV.fetch('FASTLY_SERVICE_NAME_EXPECTED', nil),
+        fastly_service_id
+      )
+    else
       Rails.logger.error(
         "FASTLY CONFIG ERROR: Cannot access service #{fastly_service_id} " \
         "(HTTP #{response.code}: #{response.body}). " \

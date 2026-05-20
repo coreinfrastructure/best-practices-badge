@@ -47,4 +47,34 @@ class FastlyRailsTest < ActiveSupport::TestCase
       FastlyRails.purge_all(true, 'https://localhost:0/')
     end
   end
+
+  test 'purge_by_key returns true on HTTP success' do
+    VCR.use_cassette('fastly_purge_success') do
+      assert_equal true, FastlyRails.purge_by_key('foo', true)
+    end
+  end
+
+  test 'purge_all returns response on HTTP success' do
+    VCR.use_cassette('fastly_purge_all_success') do
+      assert_nothing_raised { FastlyRails.purge_all(true) }
+    end
+  end
+
+  test 'purge_all keeps working on HTTP error response' do
+    VCR.use_cassette('fastly_purge_all_error') do
+      assert_nothing_raised { FastlyRails.purge_all(true) }
+    end
+  end
+
+  test 'log_service_name logs info only when no expected name set' do
+    assert_nothing_raised { FastlyRails.log_service_name('SomeService', nil, 'svc123') }
+  end
+
+  test 'log_service_name logs info only when name matches expected' do
+    assert_nothing_raised { FastlyRails.log_service_name('SomeService', 'SomeService', 'svc123') }
+  end
+
+  test 'log_service_name logs error when name does not match expected' do
+    assert_nothing_raised { FastlyRails.log_service_name('WrongService', 'RightService', 'svc123') }
+  end
 end

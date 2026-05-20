@@ -532,9 +532,7 @@ class ProjectsController < ApplicationController
         send_data Badge[@project.badge_value],
                   type: 'image/svg+xml', disposition: 'inline'
       end
-      format.json do
-        format.json { render :badge, status: :ok, location: @project }
-      end
+      format.json { render :badge, status: :ok }
     end
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize

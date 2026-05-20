@@ -120,8 +120,9 @@ class ApplicationController < ActionController::Base
   # the CDN will keep serving *some* data for a while.
   # 864000 = 10 days, 1728000 = 20 days, 8640000 = 100 days
   # We force it to be at least twice the BADGE_CACHE_MAX_AGE.
+  # Override with BADGEAPP_BADGE_CACHE_STALE_AGE env var.
   BADGE_CACHE_STALE_AGE = [
-    (ENV['BADGEAPP_BADGE_CACHE_MAX_AGE'] || '8640000').to_i,
+    (ENV['BADGEAPP_BADGE_CACHE_STALE_AGE'] || '8640000').to_i,
     2 * BADGE_CACHE_MAX_AGE
   ].max
 

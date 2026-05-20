@@ -21,6 +21,42 @@ if !Rails.env.test?
   Rails.logger.warn 'FASTLY_SERVICE_ID not set.' unless ENV['FASTLY_SERVICE_ID']
 end
 
+# Verify Fastly credentials are valid at boot time so misconfiguration is
+# caught immediately on deploy rather than silently corrupting CDN state.
+# A wrong FASTLY_SERVICE_ID or FASTLY_API_KEY causes purge calls to
+# succeed at the HTTP level while targeting the wrong service, making the
+# failure invisible to the StandardError rescue in fastly_rails.rb.
+# Non-fatal: a transient Fastly outage at boot must not prevent startup.
+#
+# We read ENV directly here rather than reusing FastlyRails::FASTLY_API_KEY
+# and FastlyRails::FASTLY_SERVICE_ID because Rails discourages referencing
+# Zeitwerk-autoloaded constants (app/lib/) inside initializers: in development
+# mode constants can be reloaded but initializers only run once at boot.
+fastly_api_key = ENV.fetch('FASTLY_API_KEY', nil)
+fastly_service_id = ENV.fetch('FASTLY_SERVICE_ID', nil)
+if !Rails.env.test? && fastly_api_key.present? && fastly_service_id.present?
+  begin
+    response = HTTParty.get(
+      "https://api.fastly.com/service/#{fastly_service_id}",
+      headers: { 'Fastly-Key': fastly_api_key },
+      timeout: 5
+    )
+    unless response.success?
+      Rails.logger.error(
+        "FASTLY CONFIG ERROR: Cannot access service #{fastly_service_id} " \
+        "(HTTP #{response.code}: #{response.body}). " \
+        'Check FASTLY_SERVICE_ID and FASTLY_API_KEY — ' \
+        'CDN purges will fail silently until this is resolved.'
+      )
+    end
+  rescue StandardError => e
+    Rails.logger.warn(
+      "FASTLY WARNING: Cannot reach Fastly API at startup (#{e.class}: #{e}). " \
+      'This may be a transient network issue; CDN purge ability is unconfirmed.'
+    )
+  end
+end
+
 # FastlyRails.configure do |c|
 #   c.api_key = ENV['FASTLY_API_KEY'] # Fastly api key, required for it to work
 #   c.max_age = 86_400 # time in seconds, optional, default 2592000 (30 days)

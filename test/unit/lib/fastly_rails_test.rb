@@ -15,10 +15,12 @@ class FastlyRailsTest < ActiveSupport::TestCase
   # include a valid Fastly key in the test data
   test 'purge_by_key fails on bad key' do
     VCR.use_cassette('fastly_no_key') do
+      result = nil
       assert_nothing_raised do
         # *Force* use of the key
-        FastlyRails.purge_by_key('foo', true)
+        result = FastlyRails.purge_by_key('foo', true)
       end
+      assert_equal false, result
     end
   end
 

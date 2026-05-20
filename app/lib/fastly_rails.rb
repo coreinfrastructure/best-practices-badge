@@ -28,21 +28,34 @@ class FastlyRails
   }.freeze
   FASTLY_SERVICE_ID = ENV['FASTLY_SERVICE_ID'].to_s
 
-  # Purge the CDN resources associated with this key
+  # Purge the CDN resources associated with this key.
   # Use "force" to force a post even when we have no key or service id
   # (this is used for testing).
-  # We'll squelch exceptions, we'd rather keep going than fail if the
-  # cache fails.
+  # Returns true if the purge succeeded or was skipped (no credentials),
+  # false if the purge failed (HTTP error or network exception).
+  # Does not raise — callers that need to retry on failure should check
+  # the return value and raise themselves (see PurgeCdnProjectJob).
   # rubocop:disable Metrics/MethodLength
   def self.purge_by_key(key, force = false, base = FASTLY_BASE)
-    return if !force && (FASTLY_API_KEY.blank? || FASTLY_SERVICE_ID.blank?)
+    return true if !force && (FASTLY_API_KEY.blank? || FASTLY_SERVICE_ID.blank?)
 
     begin
-      # We'll return the result, but normally that will be ignored.
-      HTTParty.post(
+      response = HTTParty.post(
         "#{base}/service/#{FASTLY_SERVICE_ID}/purge/#{key}",
         FASTLY_OPTIONS
       )
+      if response.success?
+        true
+      else
+        # HTTParty does not raise on HTTP error status codes, so we must
+        # check explicitly. A 403/404 here typically means the API key or
+        # service ID is misconfigured — not a network error, so StandardError
+        # rescue below would not catch it.
+        Rails.logger.error do
+          "ERROR:: PURGE #{key} returned HTTP #{response.code}: #{response.body}"
+        end
+        false
+      end
     rescue StandardError => e
       # I hate catching StandardError, ideally we'd be more specific.
       # However, there doesn't seem to be a safe way to identify
@@ -54,6 +67,7 @@ class FastlyRails
       Rails.logger.error do
         "ERROR:: FAILED TO PURGE #{key} , #{e.class}: #{e}"
       end
+      false
     end
   end
   # rubocop:enable Metrics/MethodLength
@@ -63,13 +77,21 @@ class FastlyRails
     return if !force && (FASTLY_API_KEY.blank? || FASTLY_SERVICE_ID.blank?)
 
     begin
-      # We'll return the result, but normally that will be ignored.
       # https://developer.fastly.com/reference/api/purging/
       # We won't ask for a "soft purge" because purge-all doesn't support it.
-      HTTParty.post(
+      response = HTTParty.post(
         "#{base}/service/#{FASTLY_SERVICE_ID}/purge_all",
         FASTLY_OPTIONS
       )
+      unless response.success?
+        # HTTParty does not raise on HTTP error status codes, so we must
+        # check explicitly. A 403/404 here typically means the API key or
+        # service ID is misconfigured.
+        Rails.logger.error do
+          "ERROR:: PURGE_ALL returned HTTP #{response.code}: #{response.body}"
+        end
+      end
+      response
     rescue StandardError => e
       # I hate catching StandardError, ideally we'd be more specific.
       # However, there doesn't seem to be a safe way to identify

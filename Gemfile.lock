@@ -8,7 +8,7 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    action_text-trix (2.1.18)
+    action_text-trix (2.1.19)
       railties
     actioncable (8.1.3)
       actionpack (= 8.1.3)
@@ -130,7 +130,7 @@ GEM
       capybara (~> 3.0)
     cgi (0.5.1)
     chartkick (5.2.1)
-    chef-utils (19.2.110)
+    chef-utils (19.3.15)
       concurrent-ruby
     code_analyzer (0.5.5)
       sexp_processor
@@ -219,7 +219,7 @@ GEM
       prism (>= 1.3.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
-    jbuilder (2.14.1)
+    jbuilder (2.15.0)
       actionview (>= 7.0.0)
       activesupport (>= 7.0.0)
     jquery-rails (4.6.1)
@@ -260,7 +260,7 @@ GEM
       net-imap
       net-pop
       net-smtp
-    marcel (1.1.0)
+    marcel (1.2.1)
     matrix (0.4.3)
     mdl (0.13.0)
       kramdown (~> 2.3)
@@ -287,7 +287,7 @@ GEM
       chef-utils
     msgpack (1.8.0)
     multi_json (1.20.1)
-    multi_xml (0.9.0)
+    multi_xml (0.9.1)
       bigdecimal (>= 3.1, < 5)
     net-http (0.9.1)
       uri (>= 0.11.1)
@@ -455,7 +455,7 @@ GEM
     rainbow (3.1.1)
     rake (13.4.2)
     rake-compiler-dock (1.12.0)
-    rb_sys (0.9.127)
+    rb_sys (0.9.128)
       rake-compiler-dock (= 1.12.0)
     rdoc (7.2.0)
       erb
@@ -512,7 +512,7 @@ GEM
     secure_headers (7.2.0)
       cgi (>= 0.1)
     securerandom (0.4.1)
-    selenium-webdriver (4.43.0)
+    selenium-webdriver (4.44.0)
       base64 (~> 0.2)
       logger (~> 1.4)
       rexml (~> 3.2, >= 3.2.5)
@@ -533,7 +533,7 @@ GEM
     simplecov-html (0.13.2)
     simplecov_json_formatter (0.1.4)
     singleton (0.3.0)
-    snaky_hash (2.0.3)
+    snaky_hash (2.0.4)
       hashie (>= 0.1.0, < 6)
       version_gem (>= 1.1.8, < 3)
     solid_queue (1.4.0)
@@ -592,7 +592,7 @@ GEM
     xpath (3.2.0)
       nokogiri (~> 1.8)
     yaml-lint (0.1.2)
-    zeitwerk (2.7.5)
+    zeitwerk (2.8.2)
 
 PLATFORMS
   aarch64-linux

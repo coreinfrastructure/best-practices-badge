@@ -83,11 +83,11 @@ end
 # Do a quick check of Ruby syntax, takes only ~2 sec in most cases
 desc 'Check for ruby syntax problems on **.rb files modified last 7 days'
 task :ruby_syntax do
-  # Exclude temporary files beginning with comma.
+  # Exclude temporary files beginning with comma and files under temp/.
   # The `ruby -c` command only checks one file, so re-invoke for each file.
   # Do checks in parallel to speed results.
   puts 'Checking ruby syntax in files modified in the last 7 days...'
-  sh 'find . -name "*.rb" ! -name ",*" -mtime -7 -print0 | ' \
+  sh 'find . -name "*.rb" ! -name ",*" ! -path "./temp/*" -mtime -7 -print0 | ' \
      'xargs -0 -L 1 -P $(nproc) ruby -c > /dev/null'
 end
 

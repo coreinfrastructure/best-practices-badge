@@ -21,19 +21,27 @@ class GithubContentAccess
   # linuxfoundation/cii-best-practices-badge/contents
   # We use the Octokit gem to simplify access.
 
+  EMPTY = [].freeze
+
   # Given a filename, reply with information about it.
   # - For files (type='file') this is a hash of data
   #   Fields include: name, path, size, html_url.
   # - For directories (type='dir') this is an iterable set of hashes;
   #   each hash represents a filesystem object (see above)
-  def get_info(filename)
+  # The GitHub contents API returns 404 in several situations:
+  # private repos accessed without auth (GitHub returns 404, not 403, to
+  # avoid revealing that the repo exists), deleted repos, and occasionally
+  # transient errors. Note: empty repos return 409 Conflict, not 404.
+  #
+  # @param not_found_result [Object] value to return when the GitHub API
+  #   returns 404. Defaults to EMPTY (a frozen []) so callers can iterate
+  #   safely. Pass nil when the caller needs to distinguish a successful
+  #   (possibly empty) scan from an inaccessible repo.
+  def get_info(filename, not_found_result: EMPTY)
     @octokit_client = @octokit_client_factory.call if @octokit_client.nil?
     @octokit_client.contents @fullname, path: filename
   rescue Octokit::NotFound
-    # Empty repositories return 404 from the GitHub contents API.
-    # Return an empty array so callers iterate over zero entries
-    # instead of crashing.
-    []
+    not_found_result
   end
 
   # Get the actual content of a file (not just metadata).

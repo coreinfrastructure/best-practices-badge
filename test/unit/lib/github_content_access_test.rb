@@ -26,13 +26,18 @@ class GithubContentAccessTest < ActiveSupport::TestCase
     end
   end
 
-  test 'get_info returns empty array when repo is empty (Octokit::NotFound)' do
+  test 'get_info returns empty array by default when repo returns NotFound' do
     access = GithubContentAccess.new(
       'owner/empty-repo', proc { MockOctokitEmpty.new }
     )
-    result = access.get_info('/')
+    assert_equal [], access.get_info('/')
+  end
 
-    assert_equal [], result
+  test 'get_info returns nil when not_found_result: nil and repo returns NotFound' do
+    access = GithubContentAccess.new(
+      'owner/empty-repo', proc { MockOctokitEmpty.new }
+    )
+    assert_nil access.get_info('/', not_found_result: nil)
   end
 
   test 'get_info returns contents normally for non-empty repo' do

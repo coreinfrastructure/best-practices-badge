@@ -77,7 +77,13 @@ class GithubContentAccess
     return if file_info['type'] != 'file'
 
     # Trust but verify: Check GitHub's reported size before fetching
-    return if file_info['size'] > max_size
+    if file_info['size'] > max_size
+      Rails.logger.info(
+        "GithubContentAccess: #{filename} exceeds max_size " \
+        "(#{file_info['size']} bytes > #{max_size}); skipping fetch"
+      )
+      return
+    end
 
     # Now fetch raw content. GitHub already told us the size is OK.
     # Use raw API to get unencoded content (avoids base64 overhead).
@@ -89,7 +95,14 @@ class GithubContentAccess
     )
 
     # Defense in depth: Verify actual size matches GitHub's claim
-    return if content.bytesize > max_size
+    if content.bytesize > max_size
+      Rails.logger.warn(
+        "GithubContentAccess: #{filename} actual size #{content.bytesize} " \
+        "bytes exceeds reported #{file_info['size']} and max_size #{max_size}; " \
+        'rejecting (possible GitHub size misreport or MITM)'
+      )
+      return
+    end
 
     content
   rescue StandardError

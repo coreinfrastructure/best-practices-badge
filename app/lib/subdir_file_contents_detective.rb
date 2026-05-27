@@ -56,15 +56,23 @@ class SubdirFileContentsDetective < Detective
     nil
   end
 
+  # Fetch and decode the content of a single file entry.
+  # Returns nil when get_info returns 404 ([] or nil) or the entry has no content.
+  def fetch_file_content(repo_files, fso)
+    file_entry = repo_files.get_info(fso['path'])
+    return if file_entry.blank? || file_entry.is_a?(Array)
+    return if file_entry['content'].blank?
+
+    Base64.decode64(file_entry['content'])
+  end
+
   def match_file_content(repo_files, folder, patterns, description)
     files = repo_files.get_info(folder)
     files = files.select { |f| match_fso?(f, 'file', patterns[:file]) }
-    files.select do |fso|
-      patterns[:contents].each do |pattern|
-        file_entry = repo_files.get_info(fso['path'])
-        content = Base64.decode64(file_entry['content'])
-        return met_result description if content.match?(pattern)
-      end
+    files.each do |fso|
+      content = fetch_file_content(repo_files, fso)
+      next if content.nil?
+      return met_result description if patterns[:contents].any? { |p| content.match?(p) }
     end
     unmet_result description
   end

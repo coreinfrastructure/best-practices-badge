@@ -141,6 +141,27 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_select "input[type='hidden'][name='session[return_to]'][value='#{destination}']"
   end
 
+  test 'github auth request phase rejects missing csrf token' do
+    old_forgery_protection = ActionController::Base.allow_forgery_protection
+    old_omniauth_test_mode = OmniAuth.config.test_mode
+    ActionController::Base.allow_forgery_protection = true
+    OmniAuth.config.test_mode = false
+
+    post '/auth/github', headers: {
+      'HTTPS' => 'on',
+      'HTTP_ORIGIN' => 'https://www.example.com'
+    }
+
+    assert_response :redirect
+    assert_match %r{/auth/failure\?}, response.location
+    assert_includes response.location, 'InvalidAuthenticityToken'
+    assert_no_match %r{\Ahttps://github.com/login/oauth/authorize},
+                    response.location
+  ensure
+    ActionController::Base.allow_forgery_protection = old_forgery_protection
+    OmniAuth.config.test_mode = old_omniauth_test_mode
+  end
+
   test 'local login fails if deny_login' do
     # WARNING: This test manipulates a global setting, namely
     # Rails.application.config.deny_login. Parallel testing with *processes*

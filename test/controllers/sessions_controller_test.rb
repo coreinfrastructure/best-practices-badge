@@ -150,16 +150,18 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     ActionController::Base.allow_forgery_protection = true
     OmniAuth.config.test_mode = false
 
+    https!
     post '/auth/github', headers: {
-      'HTTPS' => 'on',
       'HTTP_ORIGIN' => 'https://www.example.com'
     }
 
     assert_response :redirect
-    assert_match %r{/auth/failure\?}, response.location
-    assert_includes response.location, 'InvalidAuthenticityToken'
-    assert_no_match %r{\Ahttps://github.com/login/oauth/authorize},
-                    response.location
+    failure_uri = URI.parse(response.location)
+    failure_params = Rack::Utils.parse_nested_query(failure_uri.query)
+    assert_equal '/auth/failure', failure_uri.path
+    assert_equal 'github', failure_params['strategy']
+    assert_match(/csrf|InvalidAuthenticityToken/i,
+                 failure_params['message'].to_s)
   ensure
     ActionController::Base.allow_forgery_protection = old_forgery_protection
     OmniAuth.config.test_mode = old_omniauth_test_mode

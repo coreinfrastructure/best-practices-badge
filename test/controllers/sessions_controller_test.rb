@@ -142,6 +142,9 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'github auth request phase rejects missing csrf token' do
+    # WARNING: This test manipulates global OmniAuth/Rails settings.
+    # Parallel testing with *processes* is fine, parallel testing with
+    # *threads* would need suite-wide locking for OmniAuth config changes.
     old_forgery_protection = ActionController::Base.allow_forgery_protection
     old_omniauth_test_mode = OmniAuth.config.test_mode
     ActionController::Base.allow_forgery_protection = true

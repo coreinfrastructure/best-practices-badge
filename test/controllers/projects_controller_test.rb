@@ -819,9 +819,9 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
                  @project.osps_ac_01_01_justification
   end
 
-  test 'should update and show future baseline-1 criterion (osps_br_01_03)' do
+  test 'should update and show active baseline-1 criterion (osps_br_01_03)' do
     log_in_as(@project.user)
-    # Future criterion must appear on the edit page (view and edit, just not counted)
+    # Active criterion must appear on the edit page (view and edit)
     get "/en/projects/#{@project.id}/baseline-1/edit"
     assert_response :success
     assert_select '#osps_br_01_03'

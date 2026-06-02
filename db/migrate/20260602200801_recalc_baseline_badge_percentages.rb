@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
-class RecalcBaselineBadgePercentages < ActiveRecord::Migration[8.0]
+# Copyright the Linux Foundation and the
+# OpenSSF Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+
+class RecalcBaselineBadgePercentages < ActiveRecord::Migration[8.1]
   def change
     # Baseline criteria set has changed (futures activated, obsoletes
     # removed), so stored badge_percentage_baseline_* values are stale.

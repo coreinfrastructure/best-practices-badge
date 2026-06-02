@@ -13,7 +13,9 @@
       <a href="https://scorecard.dev/viewer/?uri=github.com/coreinfrastructure/best-practices-badge"><img src="https://api.scorecard.dev/projects/github.com/coreinfrastructure/best-practices-badge/badge" alt="OpenSSF Scorecard" align="middle"></a>
     </td>
     <td align="left" border="0" valign="middle">
-      <a href="https://github.com/ossf/tac/blob/main/process/project-lifecycle-documents/best_practices_badge_graduation_stage.md"><img src="docs/graduated.svg" alt="OpenSSF graduated project" height="80" align="middle"></a>
+      <a href="https://github.com/ossf/tac/blob/main/process/project-lifecycle-documents/best_practices_badge_graduation_stage.md">
+        <img src="https://raw.githubusercontent.com/coreinfrastructure/best-practices-badge/main/docs/graduated.svg" alt="OpenSSF graduated project" height="80">
+      </a>
     </td>
   </tr>
 </table>

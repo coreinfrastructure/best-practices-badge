@@ -2,29 +2,21 @@
 
 <!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
 
-<p align="left">
-  <a href="https://bestpractices.coreinfrastructure.org/projects/1">
-    <img src="https://bestpractices.coreinfrastructure.org/projects/1/badge" alt="OpenSSF Best Practices" align="middle">
-  </a>
-  <a href="https://www.bestpractices.dev/projects/1">
-    <img src="https://www.bestpractices.dev/projects/1/baseline" alt="OpenSSF Baseline" align="middle">
-  </a>
-  <a href="https://app.circleci.com/pipelines/github/coreinfrastructure/best-practices-badge">
-    <img src="https://circleci.com/gh/coreinfrastructure/best-practices-badge.svg?&style=shield" alt="CircleCI Build Status" align="middle">
-  </a>
-  <a href="https://codecov.io/gh/coreinfrastructure/best-practices-badge">
-    <img src="https://codecov.io/gh/coreinfrastructure/best-practices-badge/branch/master/graph/badge.svg" alt="codecov" align="middle">
-  </a>
-  <a href="https://badges.mit-license.org">
-    <img src="https://img.shields.io/:license-mit-blue.svg" alt="License" align="middle">
-  </a>
-  <a href="https://scorecard.dev/viewer/?uri=github.com/coreinfrastructure/best-practices-badge">
-    <img src="https://api.scorecard.dev/projects/github.com/coreinfrastructure/best-practices-badge/badge" alt="OpenSSF Scorecard" align="middle">
-  </a>
-  <a href="https://github.com/ossf/tac/blob/main/process/project-lifecycle-documents/best_practices_badge_graduation_stage.md">
-    <img src="docs/graduated.svg" alt="OpenSSF graduated project" height="80" align="middle">
-  </a>
-</p>
+<table border="0">
+  <tr>
+    <td align="left" border="0" valign="middle">
+      <a href="https://bestpractices.coreinfrastructure.org/projects/1"><img src="https://bestpractices.coreinfrastructure.org/projects/1/badge" alt="OpenSSF Best Practices" align="middle"></a>&nbsp;
+      <a href="https://www.bestpractices.dev/projects/1"><img src="https://www.bestpractices.dev/projects/1/baseline" alt="OpenSSF Baseline" align="middle"></a>&nbsp;
+      <a href="https://app.circleci.com/pipelines/github/coreinfrastructure/best-practices-badge"><img src="https://circleci.com/gh/coreinfrastructure/best-practices-badge.svg?&style=shield" alt="CircleCI Build Status" align="middle"></a>&nbsp;
+      <a href="https://codecov.io/gh/coreinfrastructure/best-practices-badge"><img src="https://codecov.io/gh/coreinfrastructure/best-practices-badge/branch/master/graph/badge.svg" alt="codecov" align="middle"></a>&nbsp;
+      <a href="https://badges.mit-license.org"><img src="https://img.shields.io/:license-mit-blue.svg" alt="License" align="middle"></a>&nbsp;
+      <a href="https://scorecard.dev/viewer/?uri=github.com/coreinfrastructure/best-practices-badge"><img src="https://api.scorecard.dev/projects/github.com/coreinfrastructure/best-practices-badge/badge" alt="OpenSSF Scorecard" align="middle"></a>
+    </td>
+    <td align="left" border="0" valign="middle">
+      <a href="https://github.com/ossf/tac/blob/main/process/project-lifecycle-documents/best_practices_badge_graduation_stage.md"><img src="docs/graduated.svg" alt="OpenSSF graduated project" height="80" align="middle"></a>
+    </td>
+  </tr>
+</table>
 
 This project identifies best practices for
 Free/Libre and Open Source Software (FLOSS)

@@ -253,12 +253,21 @@ module ActiveSupport
     # Click a radio button and verify it becomes checked.
     # Scrolls into view first to avoid fixed headers intercepting the click.
     # Retries if the click doesn't take (a known Capybara/Selenium issue).
-    def ensure_choice(radio_button_id)
-      Timeout.timeout(Capybara.default_max_wait_time) do
+    # rubocop:disable Metrics/MethodLength
+    def ensure_choice(radio_button_id, wait_time: Capybara.default_max_wait_time)
+      Timeout.timeout(wait_time) do
         loop do
           scroll_to_see(radio_button_id)
-          choose radio_button_id
-          break if find("##{radio_button_id}")['checked']
+          begin
+            choose radio_button_id
+          rescue Selenium::WebDriver::Error::ElementClickInterceptedError,
+                 Capybara::ElementNotFound
+            # If intercepted or not found by Capybara (e.g. hidden), try JS click
+            execute_script("document.getElementById('#{radio_button_id}').click();")
+          end
+          # Use find with visible: :all to ensure we can check the state
+          # even if the element is technically hidden (bootstrap style)
+          break if find("##{radio_button_id}", visible: :all)['checked']
 
           sleep 0.1
         end
@@ -267,6 +276,7 @@ module ActiveSupport
       raise Timeout::Error,
             "Timeout: radio button '#{radio_button_id}' never became checked"
     end
+    # rubocop:enable Metrics/MethodLength
 
     def user_logged_in?
       # Returns true if a test user is logged in.

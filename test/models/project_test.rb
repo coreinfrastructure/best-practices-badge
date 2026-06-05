@@ -29,6 +29,17 @@ class ProjectTest < ActiveSupport::TestCase
     assert_not @project_built.valid?
   end
 
+  test 'invalid URLs should be rejected' do
+    @project_built.homepage_url = 'http://127.0.0.1'
+    assert_not @project_built.valid?
+    assert @project_built.errors[:homepage_url].any?
+
+    @project_built.homepage_url = 'https://www.example.org'
+    @project_built.repo_url = 'https://containrrr/watchtower'
+    assert_not @project_built.valid?
+    assert @project_built.errors[:repo_url].any?
+  end
+
   test '#contains_url?' do
     assert Project.new.contains_url? 'https://www.example.org'
     assert Project.new.contains_url? 'http://www.example.org'
@@ -72,6 +83,19 @@ class ProjectTest < ActiveSupport::TestCase
     assert_not validator.url_acceptable?('http://google.com?hello')
     # We do allow fragments, e.g., #
     assert_not validator.url_acceptable?('http://google.com#hello')
+
+    # Security: Reject all IP addresses (IPv4 and IPv6) and malformed domains
+    assert_not validator.url_acceptable?('http://127.0.0.1')
+    assert_not validator.url_acceptable?('http://10.0.0.1')
+    assert_not validator.url_acceptable?('http://192.168.1.1')
+    assert_not validator.url_acceptable?('http://8.8.8.8')
+    assert_not validator.url_acceptable?('http://3.6.47.234')
+    assert_not validator.url_acceptable?('http://[::1]')
+    assert_not validator.url_acceptable?('http://localhost')
+    assert_not validator.url_acceptable?('http://127.1') # Shorthand
+    assert_not validator.url_acceptable?('http://0x7f000001') # Hex bypass
+    assert_not validator.url_acceptable?('http://2130706433') # Integer bypass
+    assert_not validator.url_acceptable?('https://containrrr/watchtower') # Missing dot
 
     # Accept U+0020 (space) and U+00E9 c3 a9 "LATIN SMALL LETTER E WITH ACUTE"
     assert validator.url_acceptable?('https://github.com/linuxfoundation/' \

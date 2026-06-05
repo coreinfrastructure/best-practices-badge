@@ -47,6 +47,18 @@ class EvidenceTest < ActiveSupport::TestCase
     assert_nil result2
   end
 
+  test 'get ignores dubious URLs' do
+    url = 'http://127.0.0.1'
+
+    # Should return nil for dubious URL
+    result = @evidence.get(url)
+    assert_nil result
+
+    # Should be cached as nil
+    result2 = @evidence.get(url)
+    assert_nil result2
+  end
+
   test 'get respects MAXREAD limit' do
     url = 'https://raw.githubusercontent.com/coreinfrastructure/' \
           'best-practices-badge/main/README.md'

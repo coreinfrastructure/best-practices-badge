@@ -5,6 +5,7 @@
 # SPDX-License-Identifier: MIT
 
 require 'open-uri'
+require 'security_utils'
 
 class Evidence
   # This class collects and caches all evidence gathered so far on a project.
@@ -28,8 +29,18 @@ class Evidence
   # TODO: Handle exceptions - turn into nothing useful.
   # TODO: Lock for parallel access. Possibly return while still reading.
   # TODO: Timeout on reads.
+  # rubocop:disable Metrics/MethodLength
   def get(url)
+    return if url.blank?
+
     unless @cached_data.key?(url)
+      # Security: Ignore dubious URLs (SSRF protection & professional standards)
+      if SecurityUtils.dubious_url?(url)
+        Rails.logger.warn "Ignoring dubious URL for evidence: #{url}"
+        @cached_data[url] = nil
+        return
+      end
+
       begin
         URI.parse(url).open('rb') do |file|
           @cached_data[url] = { meta: file.meta, body: file.read(MAXREAD) }
@@ -41,4 +52,5 @@ class Evidence
     end
     @cached_data[url]
   end
+  # rubocop:enable Metrics/MethodLength
 end

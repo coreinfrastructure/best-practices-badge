@@ -246,19 +246,35 @@ module ActiveSupport
     # rubocop:enable Metrics/MethodLength
 
     def scroll_to_see(id)
-      # From http://toolsqa.com/selenium-webdriver/scroll-element-view-selenium-javascript/
+      # Scroll element to the bottom of the viewport to clear
+      # the fixed top navbar, mirroring a realistic user action.
       execute_script("document.getElementById('#{id}').scrollIntoView(false);")
     end
 
     # Click a radio button and verify it becomes checked.
     # Scrolls into view first to avoid fixed headers intercepting the click.
     # Retries if the click doesn't take (a known Capybara/Selenium issue).
-    def ensure_choice(radio_button_id)
-      Timeout.timeout(Capybara.default_max_wait_time) do
+    # rubocop:disable Metrics/MethodLength
+    def ensure_choice(radio_button_id, wait_time: Capybara.default_max_wait_time)
+      Timeout.timeout(wait_time) do
         loop do
           scroll_to_see(radio_button_id)
-          choose radio_button_id
-          break if find("##{radio_button_id}")['checked']
+          # wait_for_jquery now includes animation and stability checks
+          wait_for_jquery
+
+          begin
+            choose radio_button_id
+          rescue Selenium::WebDriver::Error::ElementClickInterceptedError
+            # If intercepted, wait for UI to settle and retry
+            wait_for_jquery
+            choose radio_button_id
+          end
+
+          # Verify state. visible: :all is safe here because we've already
+          # successfully called 'choose' (which respects visibility).
+          # Some radio buttons are technically "hidden" while their labels
+          # are clicked; has_checked_field? handles this correctly.
+          break if has_checked_field?(radio_button_id, visible: :all, wait: 0.5)
 
           sleep 0.1
         end
@@ -267,6 +283,7 @@ module ActiveSupport
       raise Timeout::Error,
             "Timeout: radio button '#{radio_button_id}' never became checked"
     end
+    # rubocop:enable Metrics/MethodLength
 
     def user_logged_in?
       # Returns true if a test user is logged in.
@@ -278,21 +295,36 @@ module ActiveSupport
     # find(...), ensure_choice, clicking radio buttons, and filling in forms.
     # You should INSTEAD use wait_for_page_load after
     # a page navigation ("visit").
-    # rubocop:disable Metrics/MethodLength
+    # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
     def wait_for_jquery
       Timeout.timeout(Capybara.default_max_wait_time) do
-        # First, wait for jQuery to be loaded
+        # 1. Wait for jQuery and all AJAX requests to complete
         loop do
-          break if evaluate_script('typeof jQuery !== "undefined"')
+          break if evaluate_script('typeof jQuery !== "undefined"') &&
+                   finished_all_jquery_requests?
 
           sleep 0.05
         end
 
-        # Then wait for all jQuery AJAX requests to complete
-        loop do
-          break if finished_all_jquery_requests?
+        # 2. Wait for UI stability (animations and scrolling).
+        # We use separate loops to ensure each phase completes fully.
 
-          sleep 0.05 # Avoid busy-wait CPU burning
+        # 2a. Wait for Bootstrap transitions to finish (.collapsing class)
+        loop do
+          break unless page.has_css?('.collapsing', wait: 0)
+
+          sleep 0.05
+        end
+
+        # 2b. Wait for viewport/scroll position to stabilize
+        # This ensures we aren't trying to click a moving target.
+        last_pos = nil
+        loop do
+          current_pos = evaluate_script('window.pageYOffset')
+          break if current_pos == last_pos && !last_pos.nil?
+
+          last_pos = current_pos
+          sleep 0.05
         end
       end
     rescue Timeout::Error
@@ -311,7 +343,7 @@ module ActiveSupport
       raise Timeout::Error, "Timeout waiting for jQuery. jQuery defined: #{jquery_defined}, " \
                             "jQuery.active: #{jquery_active}"
     end
-    # rubocop:enable Metrics/MethodLength
+    # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
     def wait_for_url(url)
       Timeout.timeout(Capybara.default_max_wait_time) do

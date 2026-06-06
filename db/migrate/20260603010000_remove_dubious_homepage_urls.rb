@@ -38,6 +38,7 @@ class RemoveDubiousHomepageUrls < ActiveRecord::Migration[8.1]
   end
 
   def down
-    raise ActiveRecord::IrreversibleMigration
+    # Do not want to raise ActiveRecord::IrreversibleMigration
+    nil # intentionally do nothing
   end
 end

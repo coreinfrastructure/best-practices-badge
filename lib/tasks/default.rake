@@ -1039,51 +1039,6 @@ end
 #                    from {q, x, z, j} — uncommon in nearly all Latin-script
 #                    languages.
 #
-# Requires EMAIL_ENCRYPTION_KEY and EMAIL_BLIND_INDEX_KEY to decrypt emails.
-
-# Vowels including common accented Latin forms (U+0000-U+024F range).
-LATIN_VOWELS = /[aeiouyáéíóúàèìòùâêîôûäëïöüãõåæœ]/i
-# Characters outside Basic Latin + Latin Extended-A/B: flag as non-Latin script.
-NON_LATIN_SCRIPT = /[^ -ɏ]/
-
-def suspicious_activated_email?(email)
-  return false if email == 'CANNOT_DECRYPT'
-
-  local = email.split('@').first.to_s
-  local.split('.').count { |seg| seg.length <= 3 } >= 4
-end
-
-# rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-def suspicious_activated_name_reasons(name)
-  return [] if name.match?(NON_LATIN_SCRIPT)
-
-  letters = name.downcase.gsub(/[^a-záéíóúàèìòùâêîôûäëïöüãõåæœ]/, '')
-  return [] if letters.length <= 6
-
-  reasons = []
-  vowels = letters.scan(LATIN_VOWELS).length
-  reasons << 'low_vowels' if vowels.to_f / letters.length < 0.15
-
-  # Check each word separately so spaces don't create artificial consonant
-  # runs across word boundaries (e.g. "Scott R. Shinn" → "ttrsh").
-  consonant_run =
-    name.downcase.split.any? do |word|
-      word.gsub(/[^a-záéíóúàèìòùâêîôûäëïöüãõåæœ]/i, '')
-          .match?(/[^aeiouyáéíóúàèìòùâêîôûäëïöüãõåæœ]{5}/i)
-    end
-  reasons << 'consonant_run' if consonant_run
-
-  # Skip capitalised first letters before checking rare letters — they are
-  # conventional in proper names (Javier, Vázquez) and not a randomness signal.
-  inner = name.split
-              .map { |w| w.match?(/\A[[:upper:]]/) ? w[1..] : w }
-              .join.downcase.gsub(/[^a-záéíóúàèìòùâêîôûäëïöüãõåæœ]/, '')
-  rare = inner.scan(/[qxzj]/).length
-  reasons << 'rare_letters' if inner.length >= 4 &&
-                               rare.to_f / inner.length >= 0.35
-  reasons
-end
-# rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
 # Yields each suspicious activated user with their decrypted email and reasons.
 # rubocop:disable Metrics/MethodLength
@@ -1096,8 +1051,8 @@ def each_suspicious_activated_user
       .where.missing(:additional_rights)
       .find_each do |user|
     email = user.email_if_decryptable
-    reasons = suspicious_activated_name_reasons(user.name.to_s)
-    reasons << 'random_email' if suspicious_activated_email?(email)
+    reasons = SuspiciousUserUtils.name_suspicion_reasons(user.name.to_s)
+    reasons << 'random_email' if SuspiciousUserUtils.suspicious_email?(email)
     next if reasons.empty?
 
     yield user, email, reasons

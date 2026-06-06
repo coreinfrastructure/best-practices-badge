@@ -185,6 +185,9 @@ task :bundle_audit do
   end
   # rubocop:enable Metrics/MethodLength
 
+  # If SKIP_BUNDLE_AUDIT set, skip `bundle audit` to allow other checks.
+  next if ENV['SKIP_BUNDLE_AUDIT']
+
   apply_bundle_audit =
     if network_available?
       if verbose

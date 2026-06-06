@@ -34,7 +34,7 @@ class Evidence
     return if url.blank?
 
     unless @cached_data.key?(url)
-      # Security: Ignore dubious URLs (SSRF protection & professional standards)
+      # Security: Ignore dubious URLs (SSRF protection & possible attack)
       if SecurityUtils.dubious_url?(url)
         Rails.logger.warn "Ignoring dubious URL for evidence: #{url}"
         @cached_data[url] = nil

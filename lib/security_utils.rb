@@ -45,7 +45,7 @@ module SecurityUtils
       return true if host.exclude?('.')
 
       # Requirement: No IP addresses (IPv4 or IPv6)
-      # Professional public OSS projects use domain names.
+      # Normal public OSS projects use domain names.
       # This provides robust SSRF protection.
       begin
         IPAddr.new(host)

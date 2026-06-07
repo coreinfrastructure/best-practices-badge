@@ -722,7 +722,7 @@ class Project < ApplicationRecord
               Sections::BADGE_LEVEL_RANK[old_baseline_level]
           end
         end
-        project.save!(touch: false)
+        project.save(validate: false, touch: false)
       end
     end
     Project.skip_callbacks = false

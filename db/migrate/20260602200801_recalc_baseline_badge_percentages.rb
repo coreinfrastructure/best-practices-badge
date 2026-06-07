@@ -6,11 +6,9 @@
 
 class RecalcBaselineBadgePercentages < ActiveRecord::Migration[8.1]
   def change
-    # Baseline criteria set has changed (futures activated, obsoletes
-    # removed), so stored badge_percentage_baseline_* values are stale.
-    # Recalculate for all projects at all baseline levels.
-    # update_all_badge_percentages also calls FastlyRails.purge_all,
-    # so the CDN cache is cleared and badges update immediately.
-    Project.update_all_badge_percentages(Sections::BASELINE_LEVEL_NAMES)
+    # This migration originally called Project.update_all_badge_percentages,
+    # but it crashed in staging due to validation errors on existing data.
+    # It has been made a no-op here to protect production; the work is now
+    # handled by the subsequent 'fixed' migration.
   end
 end

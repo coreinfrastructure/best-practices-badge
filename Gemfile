@@ -135,6 +135,7 @@ gem 'sprockets-rails', '3.5.2' # Rails. Asset precompilation
 gem 'terser', '~> 1.1', require: false # Minify JavaScript
 gem 'sentry-ruby' # Support Sentry real-time crash reporting
 gem 'sentry-rails' # Support Sentry real-time crash reporting
+gem 'ssrf_filter' # Ensure external URLs don't resolve to invalid IP addrs
 
 group :development, :test do
   gem 'awesome_print' # Pretty print Ruby objects

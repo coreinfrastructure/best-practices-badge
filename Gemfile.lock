@@ -552,6 +552,7 @@ GEM
       actionpack (>= 6.1)
       activesupport (>= 6.1)
       sprockets (>= 3.0.0)
+    ssrf_filter (1.5.0)
     stringio (3.2.0)
     terser (1.2.7)
       execjs (>= 0.3.0, < 3)
@@ -686,6 +687,7 @@ DEPENDENCIES
   solid_queue (~> 1.1)
   spring (~> 4.1)
   sprockets-rails (= 3.5.2)
+  ssrf_filter
   terser (~> 1.1)
   translation (= 1.41)
   vcr (< 5.1)

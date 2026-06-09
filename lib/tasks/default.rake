@@ -977,6 +977,7 @@ task 'test:coverage_gaps' do
   end
 
   puts 'All files have 100% statement coverage.' unless gaps_found
+  raise StandardError, 'Has untested production code statements.' if gaps_found
 end
 
 # This is the task to run every day, e.g., to record statistics

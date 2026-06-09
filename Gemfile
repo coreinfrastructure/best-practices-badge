@@ -99,7 +99,7 @@ gem 'omniauth-github', '~> 2.0' # Authentication to GitHub (get project info)
 # However, using a git reference busts CI pipeline caching, slowing down
 # all testing, and over time we've become more comfortable that this is
 # the "standard way to resolve this issue".
-gem 'omniauth-rails_csrf_protection', '~> 1.0' # integrate omniauth with rails
+gem 'omniauth-rails_csrf_protection', '~> 2.0' # integrate omniauth with rails
 gem 'pagy', '~> 9.0' # Paginator for web pages
 gem 'paleta', '~> 0.3' # Color manipulation, used for badges
 gem 'paper_trail', '~> 17.0' # Record previous versions of project data

@@ -70,4 +70,53 @@ class EvidenceTest < ActiveSupport::TestCase
       assert result[:body].bytesize <= Evidence::MAXREAD
     end
   end
+
+  test 'get blocks SSRF resolving to private IP (offline-safe)' do
+    # nip.io is a service that resolves to the IP address in the subdomain.
+    # In this test we intercept the DNS request with a mock
+    # (so we don't actually do the lookup), but an attacker
+    # really *could* use a domain name like this to redirect to localhost.
+    url = 'http://127.0.0.1.nip.io'
+
+    # Mock resolver resolves our target to a private IP
+    mock_resolver =
+      lambda do |hostname|
+        hostname == '127.0.0.1.nip.io' ? [IPAddr.new('127.0.0.1')] : []
+      end
+
+    evidence_with_mock = Evidence.new(@project, resolver: mock_resolver)
+
+    result = evidence_with_mock.get(url)
+    assert_nil result
+  end
+
+  test 'get allows private IP if allow_private_ips is true' do
+    # We'll use a URL that is NOT dubious but resolves to a private IP.
+    url = 'http://private-target.local'
+
+    evidence_insecure = Evidence.new(@project, allow_private_ips: true)
+
+    # Mock the request using WebMock
+    stub_request(:get, url).to_return(
+      status: 200,
+      body: 'Insecure content',
+      headers: { 'Content-Type' => 'text/plain' }
+    )
+
+    result = evidence_insecure.get(url)
+    assert_not_nil result
+    assert_equal 'Insecure content', result[:body]
+    # In open-uri, meta returns a hash-like object.
+    # Our get_insecure uses file.meta directly.
+    assert_not_nil result[:meta]
+  end
+
+  test 'get_insecure handles errors gracefully' do
+    url = 'http://nonexistent.local'
+    evidence_insecure = Evidence.new(@project, allow_private_ips: true)
+
+    # URI.open will raise an error for nonexistent hosts
+    result = evidence_insecure.get(url)
+    assert_nil result
+  end
 end

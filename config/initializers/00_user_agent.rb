@@ -11,5 +11,5 @@
 USER_AGENT = ENV.fetch(
   'BADGEAPP_USER_AGENT',
   'OpenSSF-Best-Practices-Badge-App/1.1 ' \
-  '(+https://github.com/coreinfrastructure/best-practices-badge)'
+  '(+https://www.bestpractices.dev)'
 ).freeze

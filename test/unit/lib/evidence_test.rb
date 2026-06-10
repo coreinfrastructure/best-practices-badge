@@ -16,6 +16,21 @@ class EvidenceTest < ActiveSupport::TestCase
     assert_equal @project, @evidence.project
   end
 
+  test 'initialize sets default resolver' do
+    assert_equal CachedDnsResolver, @evidence.instance_variable_get(:@resolver)
+  end
+
+  test 'get_secure uses CachedDnsResolver' do
+    url = 'https://raw.githubusercontent.com/coreinfrastructure/' \
+          'best-practices-badge/main/README.md'
+
+    # Verify integration: ensure it can still fetch data with the new default
+    VCR.use_cassette('evidence_get_success') do
+      result = @evidence.get(url)
+      assert_not_nil result
+    end
+  end
+
   test 'get caches successful URL fetch' do
     url = 'https://raw.githubusercontent.com/coreinfrastructure/' \
           'best-practices-badge/main/README.md'

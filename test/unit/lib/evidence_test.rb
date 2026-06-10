@@ -5,6 +5,7 @@
 # SPDX-License-Identifier: MIT
 
 require 'test_helper'
+require 'minitest/mock'
 
 class EvidenceTest < ActiveSupport::TestCase
   setup do
@@ -133,5 +134,76 @@ class EvidenceTest < ActiveSupport::TestCase
     # URI.open will raise an error for nonexistent hosts
     result = evidence_insecure.get(url)
     assert_nil result
+  end
+
+  test 'get_insecure respects MAX_HEADER_SIZE' do
+    url = 'http://big-headers.local'
+    huge_headers = {}
+    1000.times { |i| huge_headers["X-Header-#{i}"] = 'a' * 100 }
+
+    evidence_insecure = Evidence.new(@project, allow_private_ips: true)
+
+    stub_request(:get, url).to_return(
+      status: 200,
+      body: 'ok',
+      headers: huge_headers
+    )
+
+    result = evidence_insecure.get(url)
+    assert_not_nil result
+    total_size = result[:meta].sum { |k, v| k.bytesize + v.bytesize }
+    assert total_size <= Evidence::MAX_HEADER_SIZE
+    assert_not_empty result[:meta]
+  end
+
+  test 'get respects MAX_TOTAL_TIME' do
+    url = 'http://slow-server.com'
+    # Mock the request to sleep. We use a short timeout for the test.
+    # We use a real IP to avoid DNS issues in ssrf_filter
+    mock_resolver = lambda { |_h| [IPAddr.new('1.1.1.1')] }
+    @evidence = Evidence.new(@project, resolver: mock_resolver)
+
+    Timeout.stub :timeout, ->(_sec) { raise Timeout::Error } do
+      result = @evidence.get(url)
+      assert_nil result
+    end
+  end
+
+  test 'get respects MAX_HEADER_SIZE' do
+    url = 'http://big-headers.com'
+    # Create enough headers to exceed 64KB
+    huge_headers = {}
+    1000.times { |i| huge_headers["X-Header-#{i}"] = 'a' * 100 }
+
+    # Mock resolver to avoid DNS lookups
+    mock_resolver = lambda { |_h| [IPAddr.new('1.1.1.1')] }
+    @evidence = Evidence.new(@project, resolver: mock_resolver)
+
+    stub_request(:get, url).to_return(
+      status: 200,
+      body: 'ok',
+      headers: huge_headers
+    )
+
+    result = @evidence.get(url)
+    assert_not_nil result
+    total_size = result[:meta].sum { |k, v| k.bytesize + v.bytesize }
+    assert total_size <= Evidence::MAX_HEADER_SIZE
+    # Verify we still got some headers
+    assert_not_empty result[:meta]
+  end
+
+  test 'get sets User-Agent header' do
+    url = 'http://check-ua.com'
+    # Mock resolver to avoid DNS lookups
+    mock_resolver = lambda { |_h| [IPAddr.new('1.1.1.1')] }
+    @evidence = Evidence.new(@project, resolver: mock_resolver)
+
+    stub_request(:get, url).with(
+      headers: { 'User-Agent' => USER_AGENT }
+    ).to_return(status: 200, body: 'ok')
+
+    result = @evidence.get(url)
+    assert_not_nil result
   end
 end

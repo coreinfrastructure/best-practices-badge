@@ -38,7 +38,7 @@ if !Rails.env.test? && fastly_api_key.present? && fastly_service_id.present?
   begin
     response = HTTParty.get(
       "https://api.fastly.com/service/#{fastly_service_id}",
-      headers: { 'Fastly-Key': fastly_api_key },
+      headers: { 'Fastly-Key': fastly_api_key, 'User-Agent': USER_AGENT },
       timeout: 5
     )
     if response.success?

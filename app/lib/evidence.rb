@@ -25,7 +25,7 @@ class Evidence
   #   ALLOW_PRIVATE_IPS environment variable.
   def initialize(
     project,
-    resolver: nil,
+    resolver: CachedDnsResolver,
     allow_private_ips: ENV['ALLOW_PRIVATE_IPS'] == 'true'
   )
     @project = project # ActiveRecord. Detectives should NOT change this.

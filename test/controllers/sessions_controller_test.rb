@@ -147,8 +147,13 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     # *threads* would need suite-wide locking for OmniAuth config changes.
     old_forgery_protection = ActionController::Base.allow_forgery_protection
     old_omniauth_test_mode = OmniAuth.config.test_mode
+    old_omniauth_logger = OmniAuth.config.logger
     ActionController::Base.allow_forgery_protection = true
     OmniAuth.config.test_mode = false
+    # Suppress OmniAuth logger because this test intentionally triggers
+    # an authentication failure (missing CSRF token), and we want to
+    # avoid noisy "ERROR" logs for a test that is expected to pass.
+    OmniAuth.config.logger = Logger.new(File::NULL)
 
     https!
     post '/auth/github', headers: {
@@ -165,6 +170,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   ensure
     ActionController::Base.allow_forgery_protection = old_forgery_protection
     OmniAuth.config.test_mode = old_omniauth_test_mode
+    OmniAuth.config.logger = old_omniauth_logger
   end
 
   test 'local login fails if deny_login' do

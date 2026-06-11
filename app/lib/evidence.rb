@@ -11,9 +11,27 @@ require 'timeout'
 # This class collects and caches all evidence gathered so far on a project.
 # This class is security-sensitive; here we gather evidence by doing a GET
 # of untrusted data via URLs derived from data from untrusted users.
+#
+# This is one of the more unusual security aspects of this program.
+# All web applications must protect themselves from untrusted data being
+# *directly* sent to the program. However, to gather evidence, we must *also*
+# go out and *retrieve* data, based on references (URLs) provided by
+# untrusted users. Going out to *other* sites like this *is* unusual,
+# but it's necessary for our functionality.
+#
 # As a result, this class must defend itself, e.g., from domain URLs that
 # map to reserved IP addresses, slowloris attacks, no/slow response, and
-# excessive data or header size.
+# excessive data or header size. We cache data so we don't need to keep
+# getting it.
+#
+# We use CachedDnsResolver to cache DNS queries. Our production
+# system doesn't have a built-in DNS query cache, we have to control
+# the resolver anyway for testing, and we already have a general cache, so
+# it makes sense to cache them. This ensures that we don't go keep making
+# DNS queries for *every* query to the same site, even if that external
+# site's DNS timeout is absurdly short. We have to wait for each DNS query
+# result before we can send the real request, so DNS resolver caching
+# is important to reduce overall latency.
 #
 # rubocop:disable Metrics/ClassLength
 class Evidence
@@ -196,6 +214,14 @@ class Evidence
   end
 
   # Limit headers by size and freeze them.
+  #
+  # This provides defense-in-depth against header-based DoS.
+  # While Net::HTTP must parse headers into memory before we can limit them,
+  # modern Ruby versions (3.2.1+) have internal limits of 1024 bytes for
+  # individual header keys and values. Combined with our MAX_HEADER_SIZE
+  # (which limits total saved memory) and our global MAX_TOTAL_TIME timeout
+  # (which cuts off "infinite" header streams), this is sufficient to
+  # prevent resource exhaustion.
   #
   # @param headers [Hash<String, String>] The raw headers.
   # @return [Hash<String, String>] The frozen metadata hash.

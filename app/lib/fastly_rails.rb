@@ -23,7 +23,7 @@ class FastlyRails
   FASTLY_BASE = 'https://api.fastly.com'
   FASTLY_API_KEY = ENV['FASTLY_API_KEY'].to_s
   FASTLY_OPTIONS = {
-    headers: { 'Fastly-Key': FASTLY_API_KEY },
+    headers: { 'Fastly-Key': FASTLY_API_KEY, 'User-Agent': USER_AGENT },
     timeout: 10 # seconds
   }.freeze
   FASTLY_SERVICE_ID = ENV['FASTLY_SERVICE_ID'].to_s

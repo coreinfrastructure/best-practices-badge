@@ -1,19 +1,39 @@
 # frozen_string_literal: true
 
-# Copyright 2015-2017, the Linux Foundation, IDA, and the
+# Copyright the Linux Foundation, IDA, and the
 # OpenSSF Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
 require 'ssrf_filter'
 require 'security_utils'
+require 'timeout'
 
 # This class collects and caches all evidence gathered so far on a project.
-# If parallel execution is possible, this class locks/unlocks so
-# parallel writing doesn't cause any harm.
-# It defends itself, e.g., from domain URLs that map to
-# reserved IP addresses.
+# This class is security-sensitive; here we gather evidence by doing a GET
+# of untrusted data via URLs derived from data from untrusted users.
 #
-# NOTE: The current plan is to remove this class, it's not helping much.
+# This is one of the more unusual security aspects of this program.
+# All web applications must protect themselves from untrusted data being
+# *directly* sent to the program. However, to gather evidence, we must *also*
+# go out and *retrieve* data, based on references (URLs) provided by
+# untrusted users. Going out to *other* sites like this *is* unusual,
+# but it's necessary for our functionality.
+#
+# As a result, this class must defend itself, e.g., from domain URLs that
+# map to reserved IP addresses, slowloris attacks, no/slow response, and
+# excessive data or header size. We cache data so we don't need to keep
+# getting it.
+#
+# We use CachedDnsResolver to cache DNS queries. Our production
+# system doesn't have a built-in DNS query cache, we have to control
+# the resolver anyway for testing, and we already have a general cache, so
+# it makes sense to cache them. This ensures that we don't go keep making
+# DNS queries for *every* query to the same site, even if that external
+# site's DNS timeout is absurdly short. We have to wait for each DNS query
+# result before we can send the real request, so DNS resolver caching
+# is important to reduce overall latency.
+#
+# rubocop:disable Metrics/ClassLength
 class Evidence
   # Initialize an Evidence collector for a project.
   #
@@ -22,7 +42,7 @@ class Evidence
   #   primarily for testing.
   # @param allow_private_ips [Boolean] If true, allow fetching from private
   #   IP addresses (e.g., for internal use). Defaults to the value of the
-  #   ALLOW_PRIVATE_IPS environment variable.
+  #   ALLOW_PRIVATE_IPS environment variable. Option for testing.
   def initialize(
     project,
     resolver: CachedDnsResolver,
@@ -40,44 +60,77 @@ class Evidence
   # this helps counter easy DoS attacks.
   MAXREAD = 1 * (2**20)
 
+  # Don't wait more than this many seconds for a response (connection + body).
+  MAX_TOTAL_TIME = 10
+
+  # Don't store more than this many bytes of HTTP headers.
+  MAX_HEADER_SIZE = 64 * 1024
+
   # Get contents of given URL and return it (cached).
   # Returns a hash with :meta (headers) and :body (content) if successful.
   #
   # @param url [String] The URL to fetch data from.
   # @return [Hash, nil] The fetched data or nil if the URL is invalid or the
   #   fetch fails.
-  #
-  # TODO: Handle exceptions - turn into nothing useful.
-  # TODO: Lock for parallel access. Possibly return while still reading.
-  # TODO: Timeout on reads.
-  # rubocop:disable Metrics/MethodLength
   def get(url)
     return if url.blank?
 
     unless @cached_data.key?(url)
-      # Security: Ignore dubious URLs (SSRF protection & possible attack)
+      # Security: Ignore dubious URLs (SSRF protection & possible attack).
+      # They *should* already have been rejected earlier when we did input
+      # validation, but we re-validate this here to *ensure* we ignore them.
+      # It's a quick check, so there's no real downside to
+      # re-performing the check here as well as during
+      # input validation earlier, and that way we *ensure* we ignore
+      # dubious URLs like `https://127.0.0.1`.
       if SecurityUtils.dubious_url?(url)
         Rails.logger.warn "Ignoring dubious URL for evidence: #{url}"
         @cached_data[url] = nil
-        return
+      else
+        fetch_url_with_timeout(url)
       end
+    end
+    @cached_data[url]
+  end
 
-      # We normally use ssrf_filter to ensure GET requests are not performed
-      # if the domain dynamically resolves to a reserved IP address.
-      # However, we allow this to be disabled (e.g., for internal use).
+  private
+
+  # Fetch data from the URL with a global timeout.
+  #
+  # @param url [String] The URL to fetch data from.
+  # @return [void]
+  def fetch_url_with_timeout(url)
+    Timeout.timeout(MAX_TOTAL_TIME) do
       if @allow_private_ips
         get_insecure(url)
       else
         get_secure(url)
       end
     end
-    @cached_data[url]
+  rescue StandardError => e
+    handle_fetch_error(url, e)
   end
-  # rubocop:enable Metrics/MethodLength
 
-  private
+  # Log error and mark the URL as failed in the cache.
+  #
+  # @param url [String] The URL that failed.
+  # @param error [StandardError] The error that occurred.
+  # @return [void]
+  def handle_fetch_error(url, error)
+    msg =
+      if error.is_a?(Timeout::Error)
+        "Timeout (> #{MAX_TOTAL_TIME}s)"
+      else
+        "Error: #{error.message}"
+      end
+    Rails.logger.warn "#{msg} fetching URL #{url}"
+    @cached_data[url] = nil
+  end
 
   # Extract the body from the response, respecting MAXREAD.
+  #
+  # @param res [Net::HTTPResponse] The response object.
+  # @return [String] The frozen body string.
   def extract_body(res)
     body = (+'').force_encoding('BINARY')
     res.read_body do |chunk|
@@ -85,50 +138,105 @@ class Evidence
       break if body.bytesize >= MAXREAD
     end
     # Truncate if we went over in the last chunk
-    body.byteslice(0, MAXREAD)
+    body.byteslice(0, MAXREAD).freeze
   end
 
-  # Perform a secure GET request using ssrf_filter.
+  # Extract and limit headers from the response to prevent resource exhaustion.
+  #
+  # @param res [Net::HTTPResponse] The response object.
+  # @return [Hash<String, String>] The frozen metadata hash.
+  def extract_meta(res)
+    limit_headers(res.to_hash.transform_values { |v| v.join(', ') })
+  end
+
+  # Perform a secure GET request using ssrf_filter, to prevent
+  # reserved (private) IP address use.
+  #
+  # @param url [String] The URL to fetch data from.
+  # @return [void]
   # rubocop:disable Metrics/MethodLength
   def get_secure(url)
     # Use ssrf_filter to ensure GET requests are not performed if the
     # domain dynamically resolves (possibly via redirects) to a
-    # reserved IP address (IPv4 or IPv6) like 127.0.0.1.
-    # Note that ssrf_filter checks on *every* request; attackers might
-    # dynamically switch DNS resolution between valid and invalid
-    # IP addresses, which we catch by checking each time.
-    options = {}
+    # reserved IP address (either IPv4 or IPv6) such as 127.0.0.1.
+    options = {
+      open_timeout: 5,
+      read_timeout: 5,
+      headers: { 'User-Agent' => USER_AGENT }
+    }
     options[:resolver] = @resolver if @resolver
     SsrfFilter.get(url, options) do |res|
       # Only process successful responses
-      if res.is_a?(Net::HTTPSuccess)
-        body = extract_body(res)
-        # meta in open-uri is a hash-like object of headers
-        # We convert Net::HTTP headers to a simple hash
-        meta = res.to_hash.transform_values { |v| v.join(', ') }
-        @cached_data[url] = { meta: meta, body: body }
-      else
-        @cached_data[url] = nil
-      end
+      @cached_data[url] =
+        if res.is_a?(Net::HTTPSuccess)
+          {
+            meta: extract_meta(res), body: extract_body(res)
+          }.freeze
+        end
     end
-  rescue SsrfFilter::Error, StandardError => e
-    # Skip if error - use what we have, if anything.
-    Rails.logger.warn "Error fetching URL #{url}: #{e.message}"
+  rescue SsrfFilter::Error => e
+    Rails.logger.warn "SSRF Filter error fetching URL #{url}: #{e.message}"
     @cached_data[url] ||= nil
   end
   # rubocop:enable Metrics/MethodLength
 
   # Perform an insecure GET request (allows private IPs) using open-uri.
   # This is only used if ALLOW_PRIVATE_IPS is set.
+  #
+  # @param url [String] The URL to fetch data from.
+  # @return [void]
+  # rubocop:disable Metrics/MethodLength
   def get_insecure(url)
     require 'open-uri'
-    begin
-      URI.parse(url).open('rb') do |file|
-        @cached_data[url] = { meta: file.meta, body: file.read(MAXREAD) }
-      end
-    rescue StandardError => e
-      Rails.logger.warn "Error fetching URL #{url} (insecure): #{e.message}"
-      @cached_data[url] ||= nil
+    URI.parse(url).open(
+      'rb',
+      'User-Agent' => USER_AGENT,
+      open_timeout: 5,
+      read_timeout: 5
+    ) do |file|
+      meta = extract_open_uri_meta(file)
+      @cached_data[url] = {
+        meta: meta, body: file.read(MAXREAD).freeze
+      }.freeze
     end
+  rescue StandardError => e
+    Rails.logger.warn "Error fetching URL #{url} (insecure): #{e.message}"
+    @cached_data[url] ||= nil
+  end
+  # rubocop:enable Metrics/MethodLength
+
+  # Extract headers from open-uri file result.
+  #
+  # @param file [StringIO, Tempfile] The file object from open-uri.
+  # @return [Hash<String, String>] The frozen metadata hash.
+  def extract_open_uri_meta(file)
+    limit_headers(file.meta)
+  end
+
+  # Limit headers by size and freeze them.
+  #
+  # This provides defense-in-depth against header-based DoS.
+  # While Net::HTTP must parse headers into memory before we can limit them,
+  # modern Ruby versions (3.2.1+) have internal limits of 1024 bytes for
+  # individual header keys and values. Combined with our MAX_HEADER_SIZE
+  # (which limits total saved memory) and our global MAX_TOTAL_TIME timeout
+  # (which cuts off "infinite" header streams), this is sufficient to
+  # prevent resource exhaustion.
+  #
+  # @param headers [Hash<String, String>] The raw headers.
+  # @return [Hash<String, String>] The frozen metadata hash.
+  def limit_headers(headers)
+    current_size = 0
+    headers.each_with_object({}) do |(k, v), hash|
+      val = v.freeze
+      item_size = k.bytesize + val.bytesize
+      if current_size + item_size > MAX_HEADER_SIZE
+        Rails.logger.warn 'Evidence: Headers > MAX_HEADER_SIZE; truncated.'
+        break hash.freeze
+      end
+      hash[k] = val
+      current_size += item_size
+    end.freeze
   end
 end
+# rubocop:enable Metrics/ClassLength

@@ -128,17 +128,7 @@ class Evidence
   # @param res [Net::HTTPResponse] The response object.
   # @return [Hash<String, String>] The frozen metadata hash.
   def extract_meta(res)
-    current_size = 0
-    res.to_hash.each_with_object({}) do |(k, v), hash|
-      val = v.join(', ').freeze
-      item_size = k.bytesize + val.bytesize
-      if current_size + item_size > MAX_HEADER_SIZE
-        Rails.logger.warn 'Evidence HTTP headers > MAX_HEADER_SIZE; truncated.'
-        break hash.freeze
-      end
-      hash[k] = val
-      current_size += item_size
-    end.freeze
+    limit_headers(res.to_hash.transform_values { |v| v.join(', ') })
   end
 
   # Perform a secure GET request using ssrf_filter, to prevent
@@ -202,14 +192,23 @@ class Evidence
   # @param file [StringIO, Tempfile] The file object from open-uri.
   # @return [Hash<String, String>] The frozen metadata hash.
   def extract_open_uri_meta(file)
+    limit_headers(file.meta)
+  end
+
+  # Limit headers by size and freeze them.
+  #
+  # @param headers [Hash<String, String>] The raw headers.
+  # @return [Hash<String, String>] The frozen metadata hash.
+  def limit_headers(headers)
     current_size = 0
-    file.meta.each_with_object({}) do |(k, v), hash|
-      item_size = k.bytesize + v.bytesize
+    headers.each_with_object({}) do |(k, v), hash|
+      val = v.freeze
+      item_size = k.bytesize + val.bytesize
       if current_size + item_size > MAX_HEADER_SIZE
-        Rails.logger.warn 'Evidence: Headers > MAX_HEADER_SIZE; truncating.'
+        Rails.logger.warn 'Evidence: Headers > MAX_HEADER_SIZE; truncated.'
         break hash.freeze
       end
-      hash[k] = v.freeze
+      hash[k] = val
       current_size += item_size
     end.freeze
   end

@@ -15,6 +15,7 @@ require 'timeout'
 # reserved IP addresses, slowloris attacks, no/slow response, and
 # excessive data or header size.
 #
+# rubocop:disable Metrics/ClassLength
 class Evidence
   # Initialize an Evidence collector for a project.
   #
@@ -60,42 +61,43 @@ class Evidence
     return if url.blank?
 
     unless @cached_data.key?(url)
-      # Security: Ignore dubious URLs (SSRF protection & possible attack)
+      # Security: Ignore dubious URLs (SSRF protection & possible attack).
       # They *should* already have been rejected earlier when we did input
-      # validation, but we re-validate here to *ensure* we ignore them.
-      # It's a quick check, so there's only upside to re-performing the check.
+      # validation, but we re-validate this here to *ensure* we ignore them.
+      # It's a quick check, so there's no real downside to
+      # re-performing the check here as well as during
+      # input validation earlier, and that way we *ensure* we ignore
+      # dubious URLs like `https://127.0.0.1`.
       if SecurityUtils.dubious_url?(url)
         Rails.logger.warn "Ignoring dubious URL for evidence: #{url}"
         @cached_data[url] = nil
-        return
-      end
-
-      # Wrap the entire fetch in a total timeout to prevent
-      # Slowloris/trickle DoS, in addition to other timeouts within the
-      # get requests.
-      begin
-        Timeout.timeout(MAX_TOTAL_TIME) do
-          # By default we don't allow private IPs like 127.0.0.1,
-          # and use get_secure to dynamically prevent them.
-          # However, we allow this to be disabled (e.g., for internal use).
-          if @allow_private_ips
-            get_insecure(url)
-          else
-            get_secure(url)
-          end
-        end
-      rescue Timeout::Error
-        Rails.logger.warn "Timeout fetching URL #{url} ( > #{MAX_TOTAL_TIME}s)"
-        @cached_data[url] = nil
-      rescue StandardError => e
-        Rails.logger.warn "Unexpected error fetching URL #{url}: #{e.message}"
-        @cached_data[url] = nil
+      else
+        fetch_url_with_timeout(url)
       end
     end
     @cached_data[url]
   end
 
   private
+
+  # Extract fetch logic to satisfy Metrics/MethodLength
+  def fetch_url_with_timeout(url)
+    Timeout.timeout(MAX_TOTAL_TIME) do
+      if @allow_private_ips
+        get_insecure(url)
+      else
+        get_secure(url)
+      end
+    end
+  rescue StandardError => e
+    handle_fetch_error(url, e)
+  end
+
+  def handle_fetch_error(url, error)
+    msg = error.is_a?(Timeout::Error) ? "Timeout (> #{MAX_TOTAL_TIME}s)" : "Error: #{error.message}"
+    Rails.logger.warn "#{msg} fetching URL #{url}"
+    @cached_data[url] = nil
+  end
 
   # Extract the body from the response, respecting MAXREAD.
   def extract_body(res)
@@ -138,13 +140,12 @@ class Evidence
     options[:resolver] = @resolver if @resolver
     SsrfFilter.get(url, options) do |res|
       # Only process successful responses
-      if res.is_a?(Net::HTTPSuccess)
-        @cached_data[url] = {
-          meta: extract_meta(res), body: extract_body(res)
-        }.freeze
-      else
-        @cached_data[url] = nil
-      end
+      @cached_data[url] =
+        if res.is_a?(Net::HTTPSuccess)
+          {
+            meta: extract_meta(res), body: extract_body(res)
+          }.freeze
+        end
     end
   rescue SsrfFilter::Error => e
     Rails.logger.warn "SSRF Filter error fetching URL #{url}: #{e.message}"
@@ -157,34 +158,35 @@ class Evidence
   # rubocop:disable Metrics/MethodLength
   def get_insecure(url)
     require 'open-uri'
-    begin
-      URI.parse(url).open(
-        'rb',
-        'User-Agent' => USER_AGENT,
-        open_timeout: 5,
-        read_timeout: 5
-      ) do |file|
-        # open-uri's file.meta returns a hash-like object of headers
-        # We limit the headers same as in extract_meta
-        current_size = 0
-        meta = {}
-        file.meta.each do |k, v|
-          item_size = k.bytesize + v.bytesize
-          if current_size + item_size > MAX_HEADER_SIZE
-            Rails.logger.warn 'Evidence: Headers > MAX_HEADER_SIZE; truncating.'
-            break
-          end
-          meta[k] = v.freeze
-          current_size += item_size
-        end
-        @cached_data[url] = {
-          meta: meta.freeze, body: file.read(MAXREAD).freeze
-        }.freeze
-      end
-    rescue StandardError => e
-      Rails.logger.warn "Error fetching URL #{url} (insecure): #{e.message}"
-      @cached_data[url] ||= nil
+    URI.parse(url).open(
+      'rb',
+      'User-Agent' => USER_AGENT,
+      open_timeout: 5,
+      read_timeout: 5
+    ) do |file|
+      meta = extract_open_uri_meta(file)
+      @cached_data[url] = {
+        meta: meta, body: file.read(MAXREAD).freeze
+      }.freeze
     end
+  rescue StandardError => e
+    Rails.logger.warn "Error fetching URL #{url} (insecure): #{e.message}"
+    @cached_data[url] ||= nil
   end
   # rubocop:enable Metrics/MethodLength
+
+  # Extract headers from open-uri file result
+  def extract_open_uri_meta(file)
+    current_size = 0
+    file.meta.each_with_object({}) do |(k, v), hash|
+      item_size = k.bytesize + v.bytesize
+      if current_size + item_size > MAX_HEADER_SIZE
+        Rails.logger.warn 'Evidence: Headers > MAX_HEADER_SIZE; truncating.'
+        break hash.freeze
+      end
+      hash[k] = v.freeze
+      current_size += item_size
+    end.freeze
+  end
 end
+# rubocop:enable Metrics/ClassLength

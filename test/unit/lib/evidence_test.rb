@@ -7,6 +7,7 @@
 require 'test_helper'
 require 'minitest/mock'
 
+# rubocop:disable Metrics/ClassLength
 class EvidenceTest < ActiveSupport::TestCase
   setup do
     @project = projects(:perfect)
@@ -160,7 +161,7 @@ class EvidenceTest < ActiveSupport::TestCase
     url = 'http://slow-server.com'
     # Mock the request to sleep. We use a short timeout for the test.
     # We use a real IP to avoid DNS issues in ssrf_filter
-    mock_resolver = lambda { |_h| [IPAddr.new('1.1.1.1')] }
+    mock_resolver = ->(_h) { [IPAddr.new('1.1.1.1')] }
     @evidence = Evidence.new(@project, resolver: mock_resolver)
 
     Timeout.stub :timeout, ->(_sec) { raise Timeout::Error } do
@@ -176,7 +177,7 @@ class EvidenceTest < ActiveSupport::TestCase
     1000.times { |i| huge_headers["X-Header-#{i}"] = 'a' * 100 }
 
     # Mock resolver to avoid DNS lookups
-    mock_resolver = lambda { |_h| [IPAddr.new('1.1.1.1')] }
+    mock_resolver = ->(_h) { [IPAddr.new('1.1.1.1')] }
     @evidence = Evidence.new(@project, resolver: mock_resolver)
 
     stub_request(:get, url).to_return(
@@ -196,7 +197,7 @@ class EvidenceTest < ActiveSupport::TestCase
   test 'get sets User-Agent header' do
     url = 'http://check-ua.com'
     # Mock resolver to avoid DNS lookups
-    mock_resolver = lambda { |_h| [IPAddr.new('1.1.1.1')] }
+    mock_resolver = ->(_h) { [IPAddr.new('1.1.1.1')] }
     @evidence = Evidence.new(@project, resolver: mock_resolver)
 
     stub_request(:get, url).with(
@@ -209,7 +210,7 @@ class EvidenceTest < ActiveSupport::TestCase
 
   test 'get returns frozen data' do
     url = 'http://frozen.example.com'
-    mock_resolver = lambda { |_h| [IPAddr.new('1.1.1.1')] }
+    mock_resolver = ->(_h) { [IPAddr.new('1.1.1.1')] }
     @evidence = Evidence.new(@project, resolver: mock_resolver)
 
     stub_request(:get, url).to_return(
@@ -244,3 +245,4 @@ class EvidenceTest < ActiveSupport::TestCase
     assert result[:body].frozen?
   end
 end
+# rubocop:enable Metrics/ClassLength

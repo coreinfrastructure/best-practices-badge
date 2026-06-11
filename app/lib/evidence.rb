@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Copyright 2015-2017, the Linux Foundation, IDA, and the
+# Copyright the Linux Foundation, IDA, and the
 # OpenSSF Best Practices badge contributors
 # SPDX-License-Identifier: MIT
 
@@ -10,9 +10,9 @@ require 'timeout'
 
 # This class collects and caches all evidence gathered so far on a project.
 # This class is security-sensitive; here we gather evidence by doing a GET
-# on URLs derived from data from untrusted users.
-# As a result, it must defend itself, e.g., from domain URLs that map to
-# reserved IP addresses, slowloris attacks, no/slow response, and
+# of untrusted data via URLs derived from data from untrusted users.
+# As a result, this class must defend itself, e.g., from domain URLs that
+# map to reserved IP addresses, slowloris attacks, no/slow response, and
 # excessive data or header size.
 #
 # rubocop:disable Metrics/ClassLength
@@ -54,9 +54,6 @@ class Evidence
   # @param url [String] The URL to fetch data from.
   # @return [Hash, nil] The fetched data or nil if the URL is invalid or the
   #   fetch fails.
-  #
-  # TODO: Handle exceptions - turn into nothing useful.
-  # TODO: Lock for parallel access. Possibly return while still reading.
   def get(url)
     return if url.blank?
 
@@ -80,7 +77,10 @@ class Evidence
 
   private
 
-  # Extract fetch logic to satisfy Metrics/MethodLength
+  # Fetch data from the URL with a global timeout.
+  #
+  # @param url [String] The URL to fetch data from.
+  # @return [void]
   def fetch_url_with_timeout(url)
     Timeout.timeout(MAX_TOTAL_TIME) do
       if @allow_private_ips
@@ -93,13 +93,26 @@ class Evidence
     handle_fetch_error(url, e)
   end
 
+  # Log error and mark the URL as failed in the cache.
+  #
+  # @param url [String] The URL that failed.
+  # @param error [StandardError] The error that occurred.
+  # @return [void]
   def handle_fetch_error(url, error)
-    msg = error.is_a?(Timeout::Error) ? "Timeout (> #{MAX_TOTAL_TIME}s)" : "Error: #{error.message}"
+    msg =
+      if error.is_a?(Timeout::Error)
+        "Timeout (> #{MAX_TOTAL_TIME}s)"
+      else
+        "Error: #{error.message}"
+      end
     Rails.logger.warn "#{msg} fetching URL #{url}"
     @cached_data[url] = nil
   end
 
   # Extract the body from the response, respecting MAXREAD.
+  #
+  # @param res [Net::HTTPResponse] The response object.
+  # @return [String] The frozen body string.
   def extract_body(res)
     body = (+'').force_encoding('BINARY')
     res.read_body do |chunk|
@@ -111,6 +124,9 @@ class Evidence
   end
 
   # Extract and limit headers from the response to prevent resource exhaustion.
+  #
+  # @param res [Net::HTTPResponse] The response object.
+  # @return [Hash<String, String>] The frozen metadata hash.
   def extract_meta(res)
     current_size = 0
     res.to_hash.each_with_object({}) do |(k, v), hash|
@@ -127,6 +143,9 @@ class Evidence
 
   # Perform a secure GET request using ssrf_filter, to prevent
   # reserved (private) IP address use.
+  #
+  # @param url [String] The URL to fetch data from.
+  # @return [void]
   # rubocop:disable Metrics/MethodLength
   def get_secure(url)
     # Use ssrf_filter to ensure GET requests are not performed if the
@@ -155,6 +174,9 @@ class Evidence
 
   # Perform an insecure GET request (allows private IPs) using open-uri.
   # This is only used if ALLOW_PRIVATE_IPS is set.
+  #
+  # @param url [String] The URL to fetch data from.
+  # @return [void]
   # rubocop:disable Metrics/MethodLength
   def get_insecure(url)
     require 'open-uri'
@@ -175,7 +197,10 @@ class Evidence
   end
   # rubocop:enable Metrics/MethodLength
 
-  # Extract headers from open-uri file result
+  # Extract headers from open-uri file result.
+  #
+  # @param file [StringIO, Tempfile] The file object from open-uri.
+  # @return [Hash<String, String>] The frozen metadata hash.
   def extract_open_uri_meta(file)
     current_size = 0
     file.meta.each_with_object({}) do |(k, v), hash|

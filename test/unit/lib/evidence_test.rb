@@ -206,4 +206,41 @@ class EvidenceTest < ActiveSupport::TestCase
     result = @evidence.get(url)
     assert_not_nil result
   end
+
+  test 'get returns frozen data' do
+    url = 'http://frozen.example.com'
+    mock_resolver = lambda { |_h| [IPAddr.new('1.1.1.1')] }
+    @evidence = Evidence.new(@project, resolver: mock_resolver)
+
+    stub_request(:get, url).to_return(
+      status: 200,
+      body: 'ok',
+      headers: { 'Content-Type' => 'text/plain' }
+    )
+
+    result = @evidence.get(url)
+    assert_not_nil result
+    assert result.frozen?
+    assert result[:meta].frozen?
+    assert result[:meta]['content-type'].frozen?
+    assert result[:body].frozen?
+  end
+
+  test 'get_insecure returns frozen data' do
+    url = 'http://insecure.example.com/frozen'
+    evidence_insecure = Evidence.new(@project, allow_private_ips: true)
+
+    stub_request(:get, url).to_return(
+      status: 200,
+      body: 'ok',
+      headers: { 'Content-Type' => 'text/plain' }
+    )
+
+    result = evidence_insecure.get(url)
+    assert_not_nil result
+    assert result.frozen?
+    assert result[:meta].frozen?
+    assert result[:meta]['Content-Type'].frozen?
+    assert result[:body].frozen?
+  end
 end

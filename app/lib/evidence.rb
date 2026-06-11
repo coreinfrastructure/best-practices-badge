@@ -105,22 +105,22 @@ class Evidence
       break if body.bytesize >= MAXREAD
     end
     # Truncate if we went over in the last chunk
-    body.byteslice(0, MAXREAD)
+    body.byteslice(0, MAXREAD).freeze
   end
 
   # Extract and limit headers from the response to prevent resource exhaustion.
   def extract_meta(res)
     current_size = 0
     res.to_hash.each_with_object({}) do |(k, v), hash|
-      val = v.join(', ')
+      val = v.join(', ').freeze
       item_size = k.bytesize + val.bytesize
       if current_size + item_size > MAX_HEADER_SIZE
         Rails.logger.warn 'Evidence HTTP headers > MAX_HEADER_SIZE; truncated.'
-        break hash
+        break hash.freeze
       end
       hash[k] = val
       current_size += item_size
-    end
+    end.freeze
   end
 
   # Perform a secure GET request using ssrf_filter, to prevent
@@ -139,7 +139,9 @@ class Evidence
     SsrfFilter.get(url, options) do |res|
       # Only process successful responses
       if res.is_a?(Net::HTTPSuccess)
-        @cached_data[url] = { meta: extract_meta(res), body: extract_body(res) }
+        @cached_data[url] = {
+          meta: extract_meta(res), body: extract_body(res)
+        }.freeze
       else
         @cached_data[url] = nil
       end
@@ -172,10 +174,12 @@ class Evidence
             Rails.logger.warn 'Evidence: Headers > MAX_HEADER_SIZE; truncating.'
             break
           end
-          meta[k] = v
+          meta[k] = v.freeze
           current_size += item_size
         end
-        @cached_data[url] = { meta: meta, body: file.read(MAXREAD) }
+        @cached_data[url] = {
+          meta: meta.freeze, body: file.read(MAXREAD).freeze
+        }.freeze
       end
     rescue StandardError => e
       Rails.logger.warn "Error fetching URL #{url} (insecure): #{e.message}"

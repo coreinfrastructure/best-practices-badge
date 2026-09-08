@@ -169,7 +169,7 @@ without touching `SECRET_KEY_BASE`.
   change, not optional cleanup: without it, a remember-me-restored session
   would have no matching row and `setup_authentication_state` would treat
   the user as logged out.
-- A rake task, e.g. `rake sessions:revoke[user_id]`, that deletes every
+- A rake task, e.g. `rake login_sessions:revoke[user_id]`, that deletes every
   `login_sessions` row for the given user id. Same `delete_all` call as the
   password-change flow above, exposed as an ops/incident-response tool: an
   admin can kill a specific user's sessions on report of suspected
@@ -377,7 +377,7 @@ request.
 
 ### 6.4. Not building a self-service "log out everywhere" UI
 
-The `rake sessions:revoke[user_id]` task in section 3 already covers the
+The `rake login_sessions:revoke[user_id]` task in section 3 already covers the
 operationally relevant case (an admin acting on a suspected-compromise
 report), and password change already self-serves the case where the user
 themselves takes action. A dedicated UI affordance for a user to revoke
@@ -402,6 +402,56 @@ because leaving it unchanged is an oversight.
 
 We don't expire passwords, so it seems consistent that we don't normally
 expire these either.
+
+### 6.6. Not reusing Rack's own bookkeeping session id
+
+It's tempting: Rack already puts a random `session_id` into the session
+hash on every request (`SESSION_BOOKKEEPING_KEYS`,
+application_controller.rb:45, already names it), so why generate a
+second random value instead of reusing that one as the `login_sessions`
+lookup key? Checked Rails' own cookie-store source
+(`actionpack-8.1.3.1/lib/action_dispatch/middleware/session/cookie_store.rb`)
+rather than assuming. One finding there is decisive on its own; the other
+two are weaker and shouldn't be read as carrying equal weight.
+
+**The decisive reason**: `delete_session` regenerates this id on every
+`reset_session` call: `new_sid = generate_sid unless options[:drop]`.
+This app calls `reset_session` for reasons unrelated to a login session
+starting or ending: `SessionsController#counter_fixation` calls it
+unconditionally at the top of *every* `POST /login`, success or failure
+(app/controllers/sessions_controller.rb:138), and
+`setup_authentication_state` calls it on idle-timeout expiry. Keying
+`login_sessions` off this value would mean unrelated `reset_session`
+calls elsewhere in the app silently rotate the very value a row's digest
+depends on, orphaning it, for events that have nothing to do with our
+login lifecycle. This alone rules it out; the two points below are
+context, not additional independent reasons.
+
+Two things that do *not*, by themselves, distinguish this from minting
+our own token, worth naming so a future reader doesn't mistake them for
+part of the case:
+
+- It's stored as a plain key inside the same encrypted cookie payload as
+  everything else (`persistent_session_id!`:
+  `data["session_id"] ||= sid || generate_sid.public_id`). That's true,
+  but it's equally true of a `login_session_id` we generate ourselves:
+  under `:cookie_store` there is only one cookie, and whatever holds the
+  id, ours or Rack's, ends up in that same encrypted blob. This fact
+  doesn't favor either option.
+- This codebase's own `SESSION_BOOKKEEPING_KEYS` already treats this key
+  as *not real content* (existence-checked only, to decide whether the
+  cookie can be dropped for CDN caching, never read for its value
+  anywhere in this app). That's a genuine signal about this app's own
+  intent, that the key is Rack-internal plumbing rather than data meant
+  to be consumed, but it's a convention, not a technical barrier; it
+  wouldn't by itself have stopped the reuse from working if the rotation
+  problem above didn't already rule it out.
+
+Minting our own token (`User.new_token`, already used for the "remember
+me" token, section 5) costs one line and gives a value with a lifecycle
+we fully control: created exactly at login, destroyed exactly at
+logout/revocation, immune to `reset_session` calls that happen for
+unrelated reasons elsewhere in the app.
 
 ## 7. Known trade-off to keep in mind while planning
 
@@ -431,15 +481,29 @@ A second, related cost: every successful login is currently free of
 server-side storage (it only ever writes a cookie); under this design it
 also writes a `login_sessions` row. A burst of successful logins (or of a
 script that logs in repeatedly without ever logging out) now has a
-storage/write cost it didn't have before, not just a read cost. This is
-already bounded by two things this design already includes: Rack::Attack's
-existing login throttling (`config/initializers/rack_attack.rb`), and the
-cleanup job (section 3). Worth being deliberate that the cleanup job's
-schedule needs to keep pace with the *shortest* relevant window (the
-48-hour idle timeout, not just the 30-day absolute cap), so the table
-doesn't grow unbounded between runs during sustained attack traffic; "a
-daily job" almost certainly suffices, but this is worth confirming
-explicitly during planning rather than assuming any schedule is fine.
+storage/write cost it didn't have before, not just a read cost. This
+extends beyond explicit logins too: a silent remember-me restoration
+(section 3's `try_remember_token_login` bullet) now writes a row as
+well, triggered by whatever request happens to be the next one from a
+browser holding a valid remember-me cookie, not only `POST /login`. This
+isn't a new attacker capability worth much weight on its own: reaching
+this path at all requires already possessing a working
+`remember_token`/`user_id` pair, a bcrypt-verified secret an attacker
+can only replay from a prior theft, never manufacture or guess: the same
+precondition that already grants full account access regardless of this
+project. It's a minor added write cost on an already-narrow, already
+accepted scenario (section 6.5), not a fresh path to abuse. To the
+extent it's worth bounding at all, `rack_attack.rb`'s two general
+per-IP throttles already do, since they apply to every request
+regardless of path: `req/ip` (600 per 5 minutes) and `nonbadge_req/ip`
+(31 per 15 seconds), both production-only. Those, together with the
+cleanup job (section 3), are what bound this cost. Worth being
+deliberate that the cleanup job's schedule needs to keep pace with the
+*shortest* relevant window (the 48-hour idle timeout, not just the
+30-day absolute cap), so the table doesn't grow unbounded between runs
+during sustained attack traffic; "a daily job" almost certainly
+suffices, but this is worth confirming explicitly during planning
+rather than assuming any schedule is fine.
 
 ## 8. Files and identifiers likely relevant to implementation
 
@@ -604,7 +668,7 @@ Here were some open questions that we believe are resolved
     forwarding treatment as one who explicitly re-logged-in. Reusing
     `log_in` likely fixes that gap as a side effect, not a risk.
 
-- Exact interface for `rake sessions:revoke[user_id]` (section 3): argument
+- Exact interface for `rake login_sessions:revoke[user_id]` (section 3): argument
   validation, what it prints/logs, and whether it errors on an unknown
   user id or just deletes zero rows silently.
   - Fail loudly on an unknown user id: matches this codebase's stated

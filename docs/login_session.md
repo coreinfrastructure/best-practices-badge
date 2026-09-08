@@ -1,14 +1,15 @@
-# Server-Side Login Sessions
+# Hardening Login Sessions
 
 <!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
 
-**Status: design discussion, not yet planned or implemented.** This document
-records what we've decided to do, what we've decided *not* to do, and why,
-before writing an implementation plan.
+This document describes our goal for hardening login sessions, by
+using session IDs in the session cookie instead of directly storing the
+user id in the session cookie.
 
 ## 1. Problem
 
-`config/initializers/session_store.rb` uses `:cookie_store`. `session[:user_id]`
+`config/initializers/session_store.rb` uses `:cookie_store`, which
+by itself is fine. Curreently `session[:user_id]`
 (set in `SessionsHelper#log_in`, app/helpers/sessions_helper.rb) lives entirely
 inside a cookie that Rails encrypts and signs using a key derived from
 `SECRET_KEY_BASE`. Anyone who obtains `SECRET_KEY_BASE` can forge a cookie
@@ -30,32 +31,46 @@ session id. The cookie holds only that random id. Compromising
 actual valid session id, which is never derivable from `SECRET_KEY_BASE` and
 is only ever handed to the legitimate browser.
 
-We're also raising the bar past the original ask: the new table stores a
-**keyed hash (HMAC) of the session id, not the session id itself**, so that
-an attacker who can only read the database (e.g., via SQL injection, a stolen
-backup, or insider access) *also* gains nothing usable. See section 5.
+The new table stores a **keyed hash (HMAC) of the session id, not the
+session id itself**, so that an attacker who can only read the database
+(e.g., via SQL injection, a stolen backup, or insider access) *also*
+gains nothing usable. See section 5.
 
 Side benefit: the new table gives us a place to see currently logged-in
 users, and a simple way to revoke one session (delete its row) or force a
-global logout (truncate the table) without touching `SECRET_KEY_BASE`.
+global logout of a specific user (delete that user's table rows)
+without touching `SECRET_KEY_BASE`.
 
 ## 3. What we ARE doing
 
 - Add a new table (name TBD, e.g. `login_sessions`) with roughly:
-  - a keyed-hash column of the session id (see section 5) — unique, indexed,
-    this is the lookup key
+  - a keyed-hash column of the session id (see section 5): unique, indexed,
+    this is the lookup key (hashed so attackers who can read the database
+    cannot log in to that session).
   - `user_id` (foreign key to `users`)
-  - `created_at` — also used for the absolute session age cap, below
-  - `last_used_at` (or reuse `updated_at`) — for the idle-timeout logic
-    currently done via `session[:time_last_used]`
-  - `ip_address` and, optionally, a user-agent string — recorded once at
+  - `created_at` (also used for the absolute session age cap, below),
+    essentially the login time for this session.
+  - `last_used_at` (or reuse `updated_at`): read on every logged-in
+    request as part of the same row fetch that resolves `user_id` (no
+    extra query; see below), but **written at most once per
+    `RESET_SESSION_TIMER` (1 hour) per active user, not once per
+    request**, reusing the exact throttle `update_session_timestamp`
+    already implements today for the cookie, just retargeted at this
+    column. Needed for two things the absolute cap (`created_at`) can't
+    give us on its own: letting the cleanup job reap idle/abandoned rows
+    around the existing 48-hour window instead of waiting up to 30 days,
+    and giving the "who's logged in" admin view (section 2) a real
+    recency signal instead of just a login timestamp. `session[:time_last_used]`
+    goes away from the cookie entirely; this column is now the sole
+    source of truth for it.
+  - `ip_address` and, optionally, a user-agent string, recorded once at
     creation, purely observational (no enforcement). Gives real forensic
     value after an incident and makes the "see who's logged in" admin view
     (section 2) show more than opaque ids and timestamps, for the cost of
     two columns. Worth noting: today the app only ever uses the client IP
     transiently (Rack::Attack throttling, the OAuth-failure log line in
     `SessionsController#failure`) via the existing `ClientIp`
-    (app/lib/client_ip.rb) helper; nothing persists it. This column is a
+    (`app/lib/client_ip.rb`) helper; nothing persists it. This column is a
     genuinely new, if small, category of stored personal data, not an
     extension of an existing pattern. It's bounded automatically by the
     row's own lifecycle (deleted on logout, the absolute cap, or idle
@@ -63,12 +78,12 @@ global logout (truncate the table) without touching `SECRET_KEY_BASE`.
     but it's worth being deliberate about, not just "cheap so why not."
     Use the existing `ClientIp` helper for extraction rather than
     `request.remote_ip` directly, for consistency with the rest of the app.
-- On login, generate a large random session id (128 bits — see the note on
+- On login, generate a large random session id (128 bits; see the note on
   bit length below), store its keyed hash plus `user_id` in the new table,
   and put the raw random id in the (still `cookie_store`-based) session
   cookie in place of `user_id`/`time_last_used`. This does not change what
   else lives in that cookie (`forwarding_url`, `locale`, `user_token`,
-  `github_name`, flash) — see section 6.1 on why `user_token` stays put.
+  `github_name`, flash); see section 6.1 on why `user_token` stays put.
 - **Absolute session age cap, independent of activity.** `SESSION_TTL`
   (48 hours) is an *idle* timeout: `RESET_SESSION_TIMER` refreshes it on
   activity, so a continuously-active session, legitimate or one an attacker
@@ -114,10 +129,16 @@ global logout (truncate the table) without touching `SECRET_KEY_BASE`.
   (app/controllers/application_controller.rb:624) looks up the session id's
   hash in the new table once, exactly the way it currently reads
   `session[:user_id]` once, and continues to set `@session_user_id` etc. the
-  same way. `current_user`'s memoization (`SessionsHelper#current_user`,
-  app/helpers/sessions_helper.rb:70) and `update_session_timestamp`
-  (app/controllers/application_controller.rb:658) are otherwise unaffected;
-  `last_used_at` moves from the cookie into the new table's row.
+  same way. That single row fetch also returns `last_used_at`, so the
+  48-hour idle-timeout check (today: compare `session[:time_last_used]`
+  against `SESSION_TTL`) costs nothing extra to move server-side: it's the
+  same query, just reading one more column from a row we already fetched.
+  `current_user`'s memoization (`SessionsHelper#current_user`,
+  app/helpers/sessions_helper.rb:70) is unaffected. `update_session_timestamp`
+  (app/controllers/application_controller.rb:658) keeps its existing
+  throttle logic unchanged; it now writes `last_used_at` on the row
+  instead of `session[:time_last_used]` in the cookie, still at most once
+  per `RESET_SESSION_TIMER`, not once per request.
 - `ApplicationController#try_remember_token_login`
   (app/controllers/application_controller.rb:729) currently logs a user back
   in from the "remember me" cookie by setting `session[:user_id]` and
@@ -159,7 +180,7 @@ stays contained to the items in section 3.
     e.g. `Project.attempt_notification(project, user, ...)`
     (app/models/project.rb:1397). The controller calls `current_user` once
     and passes the result in. Models have zero awareness of sessions,
-    cookies, or requests — they'd work identically from a rake task or
+    cookies, or requests: they'd work identically from a rake task or
     console.
 - **Views get identity for free, via two ordinary Rails mechanisms, not
   anything session-specific**:
@@ -194,7 +215,7 @@ We store `HMAC-SHA256(key, session_id)` in the table, not `session_id` itself.
   separate keys for separate purposes so one leaking doesn't cascade into
   the other. The new key must be **its own environment variable**, distinct
   from `SECRET_KEY_BASE`, `EMAIL_ENCRYPTION_KEY`, and
-  `EMAIL_BLIND_INDEX_KEY` — tentatively `SESSION_ID_HMAC_KEY`, following the
+  `EMAIL_BLIND_INDEX_KEY` (tentatively `SESSION_ID_HMAC_KEY`), following the
   same 256-bit-hex, `TEST_..._KEY` fallback, `self.foo_key_hex(env_test:)`
   pattern already established in `app/models/user.rb`.
 - **Why HMAC-SHA256, not bcrypt/scrypt/argon2**: those algorithms are
@@ -203,7 +224,7 @@ We store `HMAC-SHA256(key, session_id)` in the table, not `session_id` itself.
   infeasible to guess regardless of hash speed, and the lookup runs on every
   authenticated request, so a fast, standard, indexable keyed hash
   (`OpenSSL::HMAC`, or the `blind_index` gem's own hashing if it exposes it
-  without requiring the full `attr_encrypted` DSL — check before assuming)
+  without requiring the full `attr_encrypted` DSL, check before assuming)
   is the right tool, not the wrong one made to feel more secure.
 - **Why 128 bits of session id, not 256**: 128 bits is the OWASP Session
   Management Cheat Sheet's stated minimum for session identifiers, and is
@@ -229,13 +250,13 @@ We store `HMAC-SHA256(key, session_id)` in the table, not `session_id` itself.
   key), not just a `SECRET_KEY_BASE` leak, which is more than the original
   ask but costs little extra.
 - **Honest limit of this protection**: separate keys defend against
-  *partial* compromises — the database alone (SQL injection, a stolen
+  *partial* compromises: the database alone (SQL injection, a stolen
   backup) or one specific secret alone (a bug that discloses exactly
   `SECRET_KEY_BASE`, say). If the actual failure mode is "attacker reads
   the whole environment" (a dumped `.env`, a secrets-manager compromise, a
   container/memory dump), every key discussed here typically leaks
   together, and separating them buys nothing against that scenario
-  specifically — though the attacker still needs the database too, since
+  specifically, though the attacker still needs the database too, since
   none of these keys alone reveal a working session id. That's not a flaw
   in this design so much as a boundary worth stating plainly: this raises
   the number of distinct things that must go wrong at once, it doesn't
@@ -310,6 +331,17 @@ server-side and is what makes revocation possible; call it out explicitly
 because AGENTS.md emphasizes this site's production load and attack
 exposure.
 
+That read costs nothing extra to also carry `last_used_at`, but the write
+side is a separate question: raised and resolved during review, worth
+recording so it doesn't need re-deriving. Naively updating `last_used_at`
+on every logged-in request would turn a read-only trade-off into a
+write on every logged-in request too, real added load for no benefit.
+Section 3 avoids this by keeping the exact throttle
+`update_session_timestamp` already uses today (`RESET_SESSION_TIMER`,
+1 hour): the column is written at most once per active user per hour,
+not once per request, identical in shape to the cookie write it
+replaces.
+
 A second, related cost: every successful login is currently free of
 server-side storage (it only ever writes a cookie); under this design it
 also writes a `login_sessions` row. A burst of successful logins (or of a
@@ -318,48 +350,48 @@ storage/write cost it didn't have before, not just a read cost. This is
 already bounded by two things this design already includes: Rack::Attack's
 existing login throttling (`config/initializers/rack_attack.rb`), and the
 cleanup job (section 3). Worth being deliberate that the cleanup job's
-schedule needs to keep pace with the *shortest* relevant window — the
-48-hour idle timeout, not just the 30-day absolute cap — so the table
+schedule needs to keep pace with the *shortest* relevant window (the
+48-hour idle timeout, not just the 30-day absolute cap), so the table
 doesn't grow unbounded between runs during sustained attack traffic; "a
 daily job" almost certainly suffices, but this is worth confirming
 explicitly during planning rather than assuming any schedule is fine.
 
 ## 8. Files and identifiers likely relevant to implementation
 
-- `app/controllers/application_controller.rb` — `setup_authentication_state`,
+- `app/controllers/application_controller.rb`: `setup_authentication_state`,
   `update_session_timestamp`, `drop_unneeded_session_cookie`,
   `session_has_user_content?`, `try_remember_token_login`,
   `omit_session_cookie`, `SESSION_COOKIE_NAME`,
   `SESSION_BOOKKEEPING_KEYS`
-- `app/helpers/sessions_helper.rb` — `log_in`, `log_out`, `current_user`,
+- `app/helpers/sessions_helper.rb`: `log_in`, `log_out`, `current_user`,
   `logged_in?`, `remember`, `forget`, `SESSION_TTL`, `RESET_SESSION_TIMER`
-- `app/controllers/sessions_controller.rb` — `create`, `destroy`,
+- `app/controllers/sessions_controller.rb`: `create`, `destroy`,
   `omniauth_login`, `local_login_procedure`, `counter_fixation`
-- `app/controllers/users_controller.rb` — `update` (one of today's two
+- `app/controllers/users_controller.rb`: `update` (one of today's two
   password-change paths; needs a `forget(user)` call, see section 3)
-- `app/controllers/password_resets_controller.rb` — `update` (the other
+- `app/controllers/password_resets_controller.rb`: `update` (the other
   password-change path; same requirement)
-- `app/lib/client_ip.rb` — existing helper for extracting the client IP
+- `app/lib/client_ip.rb`: existing helper for extracting the client IP
   through Fastly correctly; use it for the new `ip_address` column instead
   of calling `request.remote_ip` directly
-- `config/initializers/rack_attack.rb` — existing login-attempt throttling,
+- `config/initializers/rack_attack.rb`: existing login-attempt throttling,
   relevant to the write-load trade-off in section 7
-- `app/models/user.rb` — `remember`, `forget`, `authenticated?`,
+- `app/models/user.rb`: `remember`, `forget`, `authenticated?`,
   `self.digest`, `self.new_token`, `remember_digest` column, and the
   existing key-management pattern (`DIGITS_OF_EMAIL_BLIND_INDEX_KEY`,
   `TEST_EMAIL_BLIND_INDEX_KEY`, `self.email_blind_index_key_hex`) to mirror
   for the new session HMAC key
-- `config/initializers/session_store.rb` — current cookie store config and
+- `config/initializers/session_store.rb`: current cookie store config and
   the documented (soon to be partly superseded) global-logout procedure
-- `docs/secrets-policy.md` — secret rotation procedure; will need an update
+- `docs/secrets-policy.md`: secret rotation procedure; will need an update
   once a session table gives us a better global-logout mechanism
-- `docs/cdn-cache-not-logged-in.md` — documents the invariant that anonymous
+- `docs/cdn-cache-not-logged-in.md`: documents the invariant that anonymous
   requests must never receive a `Set-Cookie`; the new design must not
   regress this
-- `test/integration/drop_session_cookie_test.rb` — pins the cookie-dropping
+- `test/integration/drop_session_cookie_test.rb`: pins the cookie-dropping
   behavior referenced above
-- Gemfile: `blind_index` gem (already a dependency, used for email) — model
-  for the keyed-hash approach in section 5
+- Gemfile: `blind_index` gem (already a dependency, used for email), the
+  model for the keyed-hash approach in section 5
 - Env vars: `SECRET_KEY_BASE`, `EMAIL_ENCRYPTION_KEY`,
   `EMAIL_BLIND_INDEX_KEY` (existing); a new one for the session HMAC key
   (tentatively `SESSION_ID_HMAC_KEY`)
@@ -383,11 +415,11 @@ explicitly during planning rather than assuming any schedule is fine.
   validation, what it prints/logs, and whether it errors on an unknown
   user id or just deletes zero rows silently.
 - Bigger, deliberately out of scope for now: `remember_digest`
-  ("remember me") tokens have no expiration at all today — they're valid
+  ("remember me") tokens have no expiration at all today; they're valid
   until an explicit logout/`forget` call. Adding `forget(user)` to
   password change (section 3) closes the one gap directly relevant to this
   project, but a stolen remember-me cookie is otherwise a standing,
   permanent credential regardless of this whole redesign. Giving remember
   tokens an absolute lifetime is a real, separate hardening step (a new
-  column, a check in `try_remember_token_login`) — noted here because this
+  column, a check in `try_remember_token_login`), noted here because this
   review surfaced it, not because it's part of this project's scope.

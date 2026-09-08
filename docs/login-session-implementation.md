@@ -214,12 +214,24 @@ deleting a user would leave orphaned `login_sessions` rows.
 `ApplicationController::SESSION_BOOKKEEPING_KEYS` (application_controller.rb:45)
 is already `%w[session_id flash]`, Rack's own internal session-id
 bookkeeping key, unrelated to our new value. **The cookie key for our raw
-session id must be named something else**, e.g. `:login_session_id`. If
-it were named `:session_id`, `session_has_user_content?`
-(application_controller.rb:719) would treat a logged-in user's cookie as
-carrying no real content (since `session_id` is in the exempt list), and
-`drop_unneeded_session_cookie` could incorrectly drop a logged-in user's
-cookie. Use `:login_session_id` throughout the steps below.
+session id must be named something else**, e.g. `:login_session_id`.
+
+The failure mode is not what it might first look like: `logged_in?` is
+checked before `session_has_user_content?` in `drop_unneeded_session_cookie`
+(application_controller.rb:699-704), so a genuinely logged-in user's
+cookie never reaches the bookkeeping-keys check at all, named `:session_id`
+or not. The real failure is the opposite case: a session that is *not*
+logged in (`@session_user_id` nil) but still carries a stale or
+just-revoked `login_session_id`, for example a cookie the admin
+(step 11) or the daily cleanup (step 13) invalidated server-side while
+the browser still holds it. If that key were named `:session_id` and
+therefore counted as bookkeeping, `session_has_user_content?` would see
+nothing but bookkeeping keys, and `drop_unneeded_session_cookie` would
+delete that cookie. Deleting it is harmless on its own (the row it
+pointed to is already gone), but it is exactly the kind of "looks
+unrelated, quietly changes what a name refers to" mistake worth naming
+precisely rather than describing by a scenario that cannot occur. Use
+`:login_session_id` throughout the steps below.
 
 This is a naming collision only; a related but separate question, reusing
 Rack's own bookkeeping session id *as our token* rather than minting our
@@ -1013,7 +1025,7 @@ mechanism this app already uses for `forwarding_url`
      if !logged_in?
        return redirect_to login_path(return_to: request.original_fullpath) if request.get?
 
-       if request.patch? && had_prior_session?
+       if request.patch? && had_prior_session? && params[:project].present?
          stash_pending_resubmission(request.path, project_params)
          return redirect_to login_path(return_to: request.original_fullpath)
        end
@@ -1033,7 +1045,7 @@ mechanism this app already uses for `forwarding_url`
    def redir_unless_logged_in
      return if logged_in?
 
-     if request.patch? && had_prior_session?
+     if request.patch? && had_prior_session? && params[:user].present?
        stash_pending_resubmission(request.path, compute_user_params)
        return redirect_to login_path(return_to: request.original_fullpath)
      end
@@ -1043,10 +1055,30 @@ mechanism this app already uses for `forwarding_url`
    end
    ```
 
-   A visitor with no `had_prior_session?` evidence falls through to
-   exactly today's existing plain discard, no regression for a
-   genuinely-never-visited anonymous submitter, since that's already
-   today's behavior for them.
+   **The `params[:project].present?` / `params[:user].present?` check
+   matters; it isn't defensive filler.** `project_params` and
+   `compute_user_params` both call `params.expect(...)`, and Rails 8's
+   `expect` raises `ActionController::ParameterMissing` when the named
+   top-level key is absent from the request entirely (a malformed or
+   hand-crafted PATCH with no `project`/`user` key at all, sent by a
+   browser with no valid session). Checked: `application_controller.rb`
+   has no `rescue_from ActionController::ParameterMissing`, so nothing in
+   this app currently catches that exception; `config/environments/test.rb`
+   sets `show_exceptions = :none`, so a test exercising this case raises
+   directly instead of failing gracefully. Without the presence check, a
+   request shaped that way would surface as a bare 400 error page in
+   production (and a raised exception in tests) instead of the existing
+   flash-and-redirect behavior every other malformed or unauthorized
+   request on this action already gets. With the check, that request
+   simply falls through to the same `flash[:danger]` branch at the bottom
+   it hits today, no regression for a shape of request that isn't a real
+   in-progress edit.
+
+   A visitor with no `had_prior_session?` evidence, or a request with no
+   `project`/`user` param to stash, falls through to exactly today's
+   existing plain discard, no regression for either a
+   genuinely-never-visited anonymous submitter or a malformed request,
+   since that's already today's behavior for both.
 
    Both stash unconditionally once past that gate, whether or not a
    sensitive field is present; `stash_pending_resubmission` handles that
@@ -1111,13 +1143,31 @@ mechanism this app already uses for `forwarding_url`
    write into a victim's session cookie without `SECRET_KEY_BASE`
    (design §1's whole premise).
 
+   **A second bug, found while re-reviewing the fix above, not the
+   original vulnerability itself**: an earlier draft of this action read
+   `session.delete(:pending_token)` unconditionally, before comparing it
+   to `params[:token]`, on the reasoning that the key is single-use
+   either way. That reasoning only holds when the token matches. If it
+   doesn't, for example a stale bookmarked link, a typo, or someone
+   simply poking at the URL, that unconditional delete destroys the
+   browser's own *real* `session[:pending_token]`, the one sitting there
+   waiting to be resumed, even though no matching row was ever found or
+   touched. The user is left with a generic "expired" flash and no way
+   back to a submission that was never actually lost, at the one endpoint
+   built specifically to prevent that. The fix is to read and compare
+   before deleting anything, and only clear the session keys on an actual
+   match:
+
    ```ruby
    class PendingResubmissionsController < ApplicationController
      def show
        token = params[:token]
-       expected = session.delete(:pending_token) # single-use either way
-       dropped = session.delete(:pending_sensitive_fields_dropped)
-       pending = PendingResubmission.find_by(token: token) if token.present? && token == expected
+       expected = session[:pending_token]
+       if token.present? && expected.present? && token == expected
+         session.delete(:pending_token) # single-use, only on a real match
+         dropped = session.delete(:pending_sensitive_fields_dropped)
+         pending = PendingResubmission.find_by(token: token)
+       end
        unless pending
          flash[:danger] = t('.expired')
          redirect_to root_url and return
@@ -1131,6 +1181,10 @@ mechanism this app already uses for `forwarding_url`
      end
    end
    ```
+
+   A mismatched or missing `params[:token]` now leaves
+   `session[:pending_token]` untouched, so the browser's real pending
+   submission, if it has one, stays reachable at its own correct URL.
 
    `flash.now`, not plain `flash`, since this action renders directly
    rather than redirecting; a plain `flash[:warning]=` here would linger
@@ -1147,13 +1201,16 @@ mechanism this app already uses for `forwarding_url`
 
    Paired view, e.g. `app/views/pending_resubmissions/show.html.erb`:
    one `form_with url: @resubmit_path, method: @resubmit_method` block,
-   `@fields.each` emitting a `hidden_field_tag` per key/value pair
-   (nested project/user param structure round-trips through
-   `to_json`/`JSON.parse` as a plain nested hash, so this needs to walk
-   it recursively, same shape as Rails' own nested-attribute hidden
-   field naming), and one visible submit button, e.g. "Resume saving
-   your changes." This view never needs to know it's a project or a
-   user; it echoes back opaque key/value pairs.
+   `@fields.each` emitting one `hidden_field_tag` per key/value pair, and
+   one visible submit button, e.g. "Resume saving your changes." Checked
+   `Project::PROJECT_PERMITTED_FIELDS` and `UsersController::PERMITTED_PARAMS`:
+   both are flat lists of scalar attributes (no nested or array-valued
+   fields on either), so the `to_json`/`JSON.parse` round trip always
+   produces a flat hash; a single non-recursive loop over `@fields` is
+   enough, and building anything more general than that would be
+   unneeded complexity for a shape of data that doesn't occur here. This
+   view never needs to know it's a project or a user; it echoes back
+   opaque key/value pairs.
 
 **Cleanup**: one more `.where('created_at < ?', 3.days.ago).delete_all`
 line added to `task daily` (step 13), alongside the `login_sessions`
@@ -1172,10 +1229,18 @@ step was rewritten to close**: visiting `/pending_resubmissions/:token`
 with a *valid* token but *without* the matching `session[:pending_token]`
 (simulating an attacker sending a victim a direct link) must be rejected,
 not shown the stashed content; a missing/expired/mismatched token
-redirects to root without error; a stash created from a password or
-email change never contains those fields, asserted directly against the
-stored row, not just indirectly through behavior; **a test for the
-silent-partial-loss fix**: a logged-out `UsersController#update`
+redirects to root without error; **a test for the second bug found while
+reviewing that fix**: a session genuinely holding
+`session[:pending_token] = "A"` that then visits
+`/pending_resubmissions/B` (a different, wrong token) must still find its
+own real submission at `/pending_resubmissions/A` afterward, that is, the
+mismatched visit must not have deleted `session[:pending_token]`; a
+PATCH with no `project`/`user` key at all from a logged-out browser
+(malformed or hand-crafted) falls through to the ordinary
+flash-and-redirect, not an unhandled `ActionController::ParameterMissing`;
+a stash created from a password or email change never contains those
+fields, asserted directly against the stored row, not just indirectly
+through behavior; **a test for the silent-partial-loss fix**: a logged-out `UsersController#update`
 submission that includes a non-blank `password` (or `email`) still
 creates a `PendingResubmission` row and still redirects to
 `/pending_resubmissions/:token` (name/locale intact in `params_json`,

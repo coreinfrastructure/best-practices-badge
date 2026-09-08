@@ -49,7 +49,7 @@ module with one method:
 
 ```ruby
 module HexKeyManagement
-  def hex_key_for(env_var:, test_value:, digits:, env_test: Rails.env.test?)
+  def hex_key_for(env_var:, test_value:, env_test: Rails.env.test?)
     return test_value if env_test
 
     ENV[env_var] || test_value
@@ -77,6 +77,19 @@ home instead of two.
   unused digit so a copy-paste error is easy to spot)
 - `LoginSession.session_id_hmac_key_hex(env_test: Rails.env.test?)`, same
   test/production split as the two existing methods
+- **A real bug to avoid, not just style**: step 3's `digest` method calls
+  `session_id_hmac_key` (no `_hex` suffix), but only
+  `session_id_hmac_key_hex` is defined above. The existing pattern always
+  converts the hex string to raw bytes before using it as key material
+  (`[email_blind_index_key_hex].pack('H*')`, passed as `blind_index`'s
+  `key:`); that conversion step is what's missing here. Add it
+  explicitly, e.g. `LoginSession.session_id_hmac_key` returning
+  `[session_id_hmac_key_hex].pack('H*')`, and have `digest` call *that*.
+  Skipping this wouldn't just fail loudly (`NoMethodError`); a careless
+  fix that passes the hex *string* straight to `OpenSSL::HMAC` instead of
+  the unpacked bytes would run without error while quietly using the
+  wrong key material, so name this precisely rather than leaving it to
+  be improvised during implementation.
 - Document `SESSION_ID_HMAC_KEY` alongside `EMAIL_ENCRYPTION_KEY` and
   `EMAIL_BLIND_INDEX_KEY` wherever those are documented for deployment
   (check `.env.example` or equivalent, and `docs/secrets-policy.md`,
@@ -136,6 +149,12 @@ class LoginSession < ApplicationRecord
   # try_remember_token_login) gets both the row and the cookie value from
   # one call, instead of creating a row and then querying it back.
   attr_reader :raw_session_id
+
+  def self.session_id_hmac_key
+    [session_id_hmac_key_hex].pack('H*') # hex string -> raw key bytes,
+    # matching how EMAIL_BLIND_INDEX_KEY is unpacked in app/models/user.rb
+  end
+  private_class_method :session_id_hmac_key
 
   def self.digest(session_id)
     OpenSSL::HMAC.hexdigest('SHA256', session_id_hmac_key, session_id)
@@ -306,6 +325,13 @@ New (shape, not final Ruby):
 def setup_authentication_state
   return if Rails.application.config.deny_login
 
+  # Forgery-proof evidence this browser once had *some* session, current
+  # format or the pre-rollout one, used only to gate step 15's
+  # preserve-and-resubmit flow against zero-credential anonymous abuse.
+  # Never used for authentication: presence only, value never trusted.
+  # Must be read here, before anything below might reset_session.
+  @had_prior_session = session[:login_session_id].present? || session[:user_id].present?
+
   login_session = LoginSession.find_by_session_id(session[:login_session_id])
 
   if login_session && (login_session.idle_expired? || login_session.absolutely_expired?)
@@ -332,6 +358,33 @@ Both the idle check (§3's absolute-cap bullet says "Check `created_at`
 ... in `setup_authentication_state`") and the pre-existing idle check now
 read off the one row already fetched. `try_remember_token_login`'s
 return shape changes here too; see step 8.
+
+**Why `@had_prior_session` checks both keys, not just
+`session[:login_session_id]`**: found while designing step 15's defense
+against zero-credential anonymous abuse (see that step for the full
+attack this closes). Checking `session[:login_session_id]` alone would
+be structurally correct after this project is fully rolled out, but
+wrong during the rollout itself: every legitimately logged-in user's
+cookie at deploy time carries the *old* `session[:user_id]` key, never
+`login_session_id` (which doesn't exist until this project ships). A
+check that only looked at the new key would treat that entire
+population, the single highest-volume case step 15 exists for, as
+"never had a session," silently withholding exactly the protection just
+built for them. Checking presence of *either* key, and trusting neither
+key's value for anything, covers both eras without reopening any
+authentication path through the legacy key.
+
+Expose it via a small method in `SessionsHelper`, next to `logged_in?`
+(sessions_helper.rb:82) and matching its exact shape, so the two gate
+methods in step 15 read as plainly as `logged_in?` itself, and so it's
+independently stubbable in a test rather than only reachable by poking
+at a bare instance variable:
+
+```ruby
+def had_prior_session?
+  @had_prior_session
+end
+```
 
 ## 7. Cutover: `ApplicationController#update_session_timestamp`
 
@@ -658,8 +711,28 @@ the rows from accumulating, not to enforce the expiry itself.
 
 ## 14. Tests
 
-AGENTS.md requires 100% statement coverage; each area below needs
-coverage, not just the happy path.
+AGENTS.md requires 100% statement coverage for production code, meaning
+everything this plan adds except the rake task in step 11 (`rake` tasks
+are exercised by the test named for them below, but aren't held to the
+same formal coverage gate the app's request/response and model code is).
+Each area below needs real coverage, not just the happy path: every
+branch this plan adds (idle vs. absolute expiry, matched vs. mismatched
+`pending_token`, sensitive-field-dropped vs. not) needs a test that
+actually distinguishes it from its sibling branch, not just one test
+that happens to touch the line.
+
+Write the new code with this in mind, not as an afterthought once it
+exists: prefer small, named methods with a single clear responsibility
+(`idle_expired?`, `sensitive_fields_present?`-shaped checks, the
+`stash_pending_resubmission`/`show` split already in this plan) over
+inlining logic into a large method, since a small method is something a
+test can call and assert on directly, while logic buried inside a large
+`before_action` or controller action can usually only be exercised
+indirectly, through whatever HTTP-level behavior happens to depend on
+it. This isn't a new principle for this codebase (`can_edit?` vs.
+`can_edit_else_redirect` already draw exactly this line), just worth
+stating as a goal for the new code specifically, given how much of this
+step involves adding new conditional branches to existing methods.
 
 - `test/models/login_session_test.rb`: `digest`/`find_by_session_id`
   round-trip; `idle_expired?`/`absolutely_expired?` boundary conditions;
@@ -765,9 +838,14 @@ local login too is less total code than building and maintaining two
 parallel preservation paths for the sake of avoiding one cheap row
 insert on the local-login side.
 
-**Design**: one small table, a token threaded through both login paths,
-reusing the exact mechanism this app already uses to carry `return_to`
-through both.
+**Design**: one small table, a token that lives in the session cookie,
+not in any URL, hidden field, or OmniAuth parameter (see the security
+note below for why that distinction matters), and, found during review,
+a gate (`had_prior_session?`, defined in step 6) restricting the whole
+mechanism to browsers with forgery-proof evidence of a genuine prior
+login, so it's never reachable by a visitor who has never authenticated
+at all, closing an anonymous, zero-credential abuse path this table
+would otherwise open (see flow step 1, below).
 
 - New table `pending_resubmissions`:
 
@@ -801,46 +879,81 @@ through both.
 - New route, `config/routes.rb`, alongside the other locale-scoped
   routes: `get 'pending_resubmissions/:token', to:
   'pending_resubmissions#show', as: :pending_resubmission`.
-- `stash_and_redirect_to_login` and `SENSITIVE_STASH_KEYS` (below) live
-  in `ApplicationController`, alongside `require_admin!` (step 12): both
+- `stash_pending_resubmission` and `SENSITIVE_STASH_KEYS` (below) live in
+  `ApplicationController`, alongside `require_admin!` (step 12): both
   `ProjectsController#can_edit_else_redirect` and
   `UsersController#redir_unless_logged_in` need to call it, and it needs
-  `request`, so it can't be a plain model or helper method. The method
-  name promises more than the code shown does: it only stashes and
-  returns the token; the actual `redirect_to` happens at each call site
-  (flow step 1 below), since the two call sites redirect to slightly
-  different `return_to` targets. Consider renaming to
-  `stash_pending_resubmission` to match what it actually does, or
-  folding the `redirect_to` into it and passing `return_to` in, either
-  is fine, just pick one rather than leaving the name overpromising.
-- **Token**: plain `SecureRandom.urlsafe_base64`, not hashed. Considered
-  and rejected hashing it (like `session_id_digest`, section 3): unlike
-  `login_sessions`, the sensitive thing here, the drafted content, is
-  stored directly in `params_json`, in the *same row* as the token. A
-  database-read attacker sees it by reading the row regardless of
-  whether the token column is hashed; they don't need to present
-  anything back to the app to compute or exploit a match. Hashing the
-  lookup key doesn't protect a payload sitting unencrypted right next to
-  it, so it would add a key and an HMAC call for no closed gap. The
-  actual requirement is that the token be unguessable, which
-  `SecureRandom` already provides without hashing.
-- **Sensitive fields are excluded from the stash entirely, not
-  encrypted**, applied unconditionally regardless of which controller
-  calls it:
+  `request`/`session`, so it can't be a plain model or helper method.
+- **Token**: plain `SecureRandom.urlsafe_base64`, not hashed at rest in
+  the *database*. Considered and rejected hashing it (like
+  `session_id_digest`, section 3): unlike `login_sessions`, the
+  sensitive thing here, the drafted content, is stored directly in
+  `params_json`, in the *same row* as the token. A database-read
+  attacker sees it by reading the row regardless of whether the token
+  column is hashed; they don't need to present anything back to the app
+  to compute or exploit a match. Hashing the lookup key doesn't protect
+  a payload sitting unencrypted right next to it, so it would add a key
+  and an HMAC call for no closed gap. The actual requirement is that the
+  token be unguessable, which `SecureRandom` already provides without
+  hashing.
+- **Security-critical: the token must never travel through anything an
+  attacker could construct and hand to someone else** (a URL, a hidden
+  field, an OmniAuth parameter). Caught during review, not something the
+  original design got right the first time: if `pending_token` travels
+  via `login_path(pending_token: ...)`, an attacker can trigger their
+  *own* rejected submission against any editable resource, with
+  whatever malicious content they choose, get back a token, and send a
+  link like `/pending_resubmissions/THEIR_TOKEN` directly to a victim,
+  logged in or not. `PendingResubmissionsController#show`, checking only
+  "does a row exist for this token," would show the victim a page that
+  looks like "here's your pending edit," pre-filled with the attacker's
+  content, targeting a resubmit path the attacker chose. A victim who
+  doesn't scrutinize it and clicks "Resume saving your changes" submits
+  the attacker's data as their own authorized edit. This isn't a CSRF
+  hole in the usual sense (the victim's browser genuinely submits a
+  same-origin, correctly-tokened form); the attacker is exploiting *what
+  the app displays as trustworthy*, not forging the request itself.
+  Design §5's "an unguessable value alone gives an attacker nothing"
+  reasoning for `login_session_id` doesn't transfer here, because that
+  value only ever travels inside the encrypted cookie; this one was
+  designed to travel through exactly the channels an attacker can hand
+  to someone else.
+
+  **The fix, which also simplifies the rest of this step**: bind the
+  token to the session cookie, the same way `forwarding_url` already is,
+  instead of passing it through URLs at all.
 
   ```ruby
   SENSITIVE_STASH_KEYS = %w[password password_confirmation email].freeze
 
-  def stash_and_redirect_to_login(resubmit_path, permitted_params)
+  def stash_pending_resubmission(resubmit_path, permitted_params)
     token = SecureRandom.urlsafe_base64
+    dropped = SENSITIVE_STASH_KEYS.any? { |key| permitted_params[key].present? }
     PendingResubmission.create!(
       token: token, resubmit_path: resubmit_path,
       resubmit_method: request.request_method,
       params_json: permitted_params.to_h.except(*SENSITIVE_STASH_KEYS).to_json
     )
-    token
+    session[:pending_token] = token
+    session[:pending_sensitive_fields_dropped] = true if dropped
   end
   ```
+
+  Because this now lives in the session cookie, it survives the GitHub
+  OAuth round trip for free: it's this app's own domain's cookie, sent
+  automatically by the browser on the callback request regardless of the
+  detour through github.com, with no need to thread it through
+  OmniAuth's `state`/`origin` mechanism at all. It does need one more
+  save/restore, exactly matching how `forwarding_url` is already
+  protected: `SessionsController#counter_fixation` must save both
+  `session[:pending_token]` and `session[:pending_sensitive_fields_dropped]`
+  before its `reset_session` call and restore them after, or a login
+  attempt would silently drop them. This also means none of the
+  following are needed anymore, and should be dropped from this step:
+  the `sessions/new.html.erb` hidden field and GitHub-URL query param,
+  and the `successful_login`/`local_login_procedure`/`omniauth_login`
+  signature changes originally planned, since `successful_login` can
+  just read `session[:pending_token]` itself.
 
   Checked `UsersController::PERMITTED_PARAMS` (users_controller.rb:22):
   it includes `email`, and this app already encrypts email at rest
@@ -850,19 +963,48 @@ through both.
   Rather than add a second encryption key to protect it (real
   protection, but a new key, a new encrypted column, another entry in
   `docs/secrets-policy.md`), just exclude it, the same way `password`/
-  `password_confirmation` already have to be excluded: a resubmitter
-  retypes their new email (or password) same as they'd have to retype a
-  password. `Project`'s permitted fields (criteria statuses,
-  justifications, repo info) have nothing comparably sensitive; that
-  content becomes public once saved anyway.
+  `password_confirmation` already have to be excluded. `Project`'s
+  permitted fields (criteria statuses, justifications, repo info) have
+  nothing comparably sensitive; that content becomes public once saved
+  anyway.
 
-**Flow**, extending the exact mechanism this app already uses for
-`return_to` (app/views/sessions/new.html.erb:14,44,77), not a new one:
+  Excluding these fields from the stash without saying so anywhere
+  would recreate the silent-partial-loss problem this step exists to
+  avoid: someone mid-password-change who gets bumped would see the
+  confirmation page with no password field at all, and if they click
+  "Resume saving your changes" without noticing, that change is
+  silently dropped while everything else succeeds, worse than a clean
+  total loss, since they might believe they're protected when they
+  aren't. `session[:pending_sensitive_fields_dropped]` (set above,
+  checked in step 4 below) is what closes this: a plain flash on the
+  confirmation page naming *both possible fields by name* ("your email
+  and/or password"), not which one specifically applies here. That's
+  not the dynamic-list problem it might look like: `SENSITIVE_STASH_KEYS`
+  is a fixed set of exactly two concepts (email, password), so "email
+  and/or password" is one static, translatable phrase, not a list
+  assembled at runtime, and naming them is strictly more useful to the
+  user than staying fully generic, while still preserving and
+  resubmitting everything else, rather than discarding
+  the whole submission just because one field in it was sensitive.
+
+**Flow**, extending the exact save/restore-around-`reset_session`
+mechanism this app already uses for `forwarding_url`
+(`SessionsController#counter_fixation`), not a new one:
 
 1. `can_edit_else_redirect` (projects_controller.rb:1105): only `update`
    submits a body worth stashing, so check the HTTP method, not just
    `logged_in?`, to avoid calling `project_params` on a GET where
-   `params[:project]` isn't present at all:
+   `params[:project]` isn't present at all. **Also gated on
+   `had_prior_session?`** (step 6): found during review that without
+   this, `stash_pending_resubmission` is reachable by anyone with no
+   credential of any kind at all, unlike every other write this app
+   allows an anonymous visitor to make (signup, password reset both
+   require at least a plausible-looking unique value and are separately
+   throttled in `rack_attack.rb`). `had_prior_session?` closes this
+   structurally, not heuristically: an attacker without `SECRET_KEY_BASE`
+   cannot make it return true without having genuinely logged in at
+   least once themselves, so this stops being a zero-cost action for a
+   never-authenticated visitor:
 
    ```ruby
    def can_edit_else_redirect
@@ -871,10 +1013,9 @@ through both.
      if !logged_in?
        return redirect_to login_path(return_to: request.original_fullpath) if request.get?
 
-       if request.patch?
-         token = stash_and_redirect_to_login(request.path, project_params)
-         return redirect_to login_path(return_to: request.original_fullpath,
-                                        pending_token: token)
+       if request.patch? && had_prior_session?
+         stash_pending_resubmission(request.path, project_params)
+         return redirect_to login_path(return_to: request.original_fullpath)
        end
      end
 
@@ -892,10 +1033,9 @@ through both.
    def redir_unless_logged_in
      return if logged_in?
 
-     if request.patch?
-       token = stash_and_redirect_to_login(request.path, compute_user_params)
-       return redirect_to login_path(return_to: request.original_fullpath,
-                                      pending_token: token)
+     if request.patch? && had_prior_session?
+       stash_pending_resubmission(request.path, compute_user_params)
+       return redirect_to login_path(return_to: request.original_fullpath)
      end
 
      flash[:danger] = t('users.please_log_in')
@@ -903,21 +1043,50 @@ through both.
    end
    ```
 
-   The token is small, so this redirect has no size problem the way
-   carrying the full data would.
-2. `sessions/new.html.erb`: mirror the two existing `return_to` lines
-   for `pending_token`, one hidden field for the local-login form, one
-   appended to the GitHub auth URL exactly like `return_to` is at
-   line 44, same privacy treatment (never leaks to GitHub via Referer).
-3. `successful_login` (sessions_controller.rb:113) gains a third,
-   optional parameter, checked before the existing `return_to_path`
-   branch:
+   A visitor with no `had_prior_session?` evidence falls through to
+   exactly today's existing plain discard, no regression for a
+   genuinely-never-visited anonymous submitter, since that's already
+   today's behavior for them.
+
+   Both stash unconditionally once past that gate, whether or not a
+   sensitive field is present; `stash_pending_resubmission` handles that
+   distinction itself (excluding the field from what's saved, flagging
+   it via `session[:pending_sensitive_fields_dropped]`), so the gate
+   methods don't need to know or care.
+
+   Note there's no `pending_token:` in either redirect: it's already in
+   `session[:pending_token]`, set inside `stash_pending_resubmission`.
+2. `counter_fixation` (sessions_controller.rb:138) must save and restore
+   both `session[:pending_token]` and
+   `session[:pending_sensitive_fields_dropped]` around `reset_session`,
+   next to the existing `forwarding_url` handling:
 
    ```ruby
-   def successful_login(user, return_to_path = nil, pending_token = nil)
+   def counter_fixation
+     ref_url = session[:forwarding_url]
+     pending_token = session[:pending_token]
+     pending_dropped = session[:pending_sensitive_fields_dropped]
+     I18n.locale = session[:locale]
+     reset_session
+     session[:forwarding_url] = ref_url
+     session[:pending_token] = pending_token
+     session[:pending_sensitive_fields_dropped] = pending_dropped if pending_dropped
+   end
+   ```
+
+   Without this, both would be silently wiped on every login attempt,
+   since `counter_fixation` runs unconditionally at the top of every
+   `POST /login`, success or failure.
+3. `successful_login` (sessions_controller.rb:113) checks
+   `session[:pending_token]` directly, no new parameter needed and no
+   change needed to either caller (`local_login_procedure`,
+   `omniauth_login`):
+
+   ```ruby
+   def successful_login(user, return_to_path = nil)
      log_in user
-     if pending_token.present?
-       redirect_to pending_resubmission_path(token: pending_token)
+     if session[:pending_token].present?
+       redirect_to pending_resubmission_path(token: session[:pending_token])
      elsif return_to_path.present? && valid_return_path?(return_to_path)
        redirect_to return_to_path, allow_other_host: false
      else
@@ -927,36 +1096,54 @@ through both.
    end
    ```
 
-   Both callers extract `pending_token` from their own source and pass
-   it through, exactly mirroring how each already extracts and passes
-   `return_to` today:
-   - `local_login_procedure`: `session_params[:pending_token]`.
-   - `omniauth_login`:
-     `request.env['omniauth.params']&.dig('pending_token')`.
-
-   No validation needed on `pending_token` itself the way
-   `valid_return_path?` validates `return_to_path`: it's an opaque
-   lookup key, not a URL, so there's no open-redirect-shaped risk to
-   guard against here; `PendingResubmissionsController#show` (next)
-   simply finds nothing for an invalid one and degrades gracefully.
-4. New `PendingResubmissionsController#show`:
+   This is also what makes GitHub OAuth login work with no OmniAuth
+   `state`/`origin` involvement at all: `session[:pending_token]` is
+   this app's own domain cookie, sent automatically by the browser on
+   the `/auth/github/callback` request regardless of the detour through
+   github.com in between; nothing needs to thread it through GitHub's
+   side of the flow.
+4. New `PendingResubmissionsController#show` **must verify the
+   requested token matches this browser's own session**, not just that
+   a database row exists for it. This is the check that actually closes
+   the vulnerability described above: even if the resulting URL is
+   guessed or shared, it only works for the one browser whose session
+   cookie says it's expecting that exact token, and an attacker cannot
+   write into a victim's session cookie without `SECRET_KEY_BASE`
+   (design §1's whole premise).
 
    ```ruby
    class PendingResubmissionsController < ApplicationController
      def show
-       pending = PendingResubmission.find_by(token: params[:token])
+       token = params[:token]
+       expected = session.delete(:pending_token) # single-use either way
+       dropped = session.delete(:pending_sensitive_fields_dropped)
+       pending = PendingResubmission.find_by(token: token) if token.present? && token == expected
        unless pending
          flash[:danger] = t('.expired')
          redirect_to root_url and return
        end
 
        pending.destroy # single-use
+       flash.now[:warning] = t('.sensitive_fields_dropped') if dropped
        @resubmit_path = pending.resubmit_path
        @resubmit_method = pending.resubmit_method
        @fields = JSON.parse(pending.params_json)
      end
    end
    ```
+
+   `flash.now`, not plain `flash`, since this action renders directly
+   rather than redirecting; a plain `flash[:warning]=` here would linger
+   and reappear on whatever page comes after this one, which isn't what
+   we want. The message names both possible fields rather than staying
+   fully generic, e.g. "Your email and/or password change couldn't be
+   restored here; please re-enter it separately if needed," since
+   `SENSITIVE_STASH_KEYS` is a fixed set of exactly two concepts, not a
+   variable-length list that would need locale-aware joining and
+   pluralization to name accurately. It doesn't say *which* of the two
+   applies to this specific case, just that it might be either, which is
+   still strictly more useful than a fully generic "some sensitive
+   information."
 
    Paired view, e.g. `app/views/pending_resubmissions/show.html.erb`:
    one `form_with url: @resubmit_path, method: @resubmit_method` block,
@@ -974,14 +1161,36 @@ cleanup already being added there. Single-use covers the common case
 (destroyed the moment it's displayed); the few-day window is only for
 ones nobody ever came back to.
 
-**Tests**: a submission rejected as logged-out redirects to login with a
-`pending_token`; both local login and GitHub OAuth login (mocked) carry
-it through to `/pending_resubmissions/:token`; that page shows the
-stashed values and successfully resubmits on click; the stash is
-single-use (a second visit to the same token finds nothing); a
-missing/expired token redirects to root without error; a stash created
-from a password or email change never contains those fields, asserted
-directly against the stored row, not just indirectly through behavior.
+**Tests**: a submission rejected as logged-out sets `session[:pending_token]`
+and redirects to login; both local login and GitHub OAuth login (mocked)
+carry it through `counter_fixation`'s `reset_session` intact and land on
+`/pending_resubmissions/:token`, which shows the stashed values and
+successfully resubmits on click; the stash is single-use (a second visit
+to the same token finds nothing, whether or not `session[:pending_token]`
+is also gone by then); **a test specifically for the vulnerability this
+step was rewritten to close**: visiting `/pending_resubmissions/:token`
+with a *valid* token but *without* the matching `session[:pending_token]`
+(simulating an attacker sending a victim a direct link) must be rejected,
+not shown the stashed content; a missing/expired/mismatched token
+redirects to root without error; a stash created from a password or
+email change never contains those fields, asserted directly against the
+stored row, not just indirectly through behavior; **a test for the
+silent-partial-loss fix**: a logged-out `UsersController#update`
+submission that includes a non-blank `password` (or `email`) still
+creates a `PendingResubmission` row and still redirects to
+`/pending_resubmissions/:token` (name/locale intact in `params_json`,
+stripped fields absent), but the resulting confirmation page carries
+the generic "sensitive information couldn't be restored" warning, while
+the same submission with only ordinary fields shows no such warning;
+**a test for `had_prior_session?`, the anonymous-abuse gate**: a
+logged-out PATCH from a browser with no session cookie at all (neither
+`login_session_id` nor the legacy `user_id`) creates no
+`PendingResubmission` row and falls back to today's plain discard, a
+rollout-shaped session (`session[:user_id]` present, `login_session_id`
+absent, matching a pre-deploy cookie) *does* get preserved, and a
+current-format session that expired mid-request (an idle- or
+absolute-expired `login_session_id`) also gets preserved, exercising
+all three of the causes design §3 lists, not just the rollout one.
 
 ## 16. Rollout note
 
@@ -995,6 +1204,21 @@ by this deploy instead of a deliberate secret rotation, and, with step 15
 in place, an in-progress edit's typed content survives it: the user is
 prompted to log back in and sees their draft, not an error page and lost
 work.
+
+A minor, self-healing residual effect worth knowing about, not worth
+building anything to prevent: leftover `session[:user_id]`/
+`session[:time_last_used]` keys from a pre-deploy cookie, and, separately,
+an abandoned `session[:pending_token]` from a bounced submission the
+user never returned to, both persist in that browser's session hash
+until `reset_session` next runs for any reason (any login attempt,
+success or failure, via `counter_fixation`, or an explicit logout). Until
+then, `session_has_user_content?` (application_controller.rb:719) sees
+these as "real content" and keeps the cookie alive, so that specific
+browser doesn't benefit from the CDN-caching optimization
+`drop_unneeded_session_cookie` provides for genuinely anonymous
+requests. This is a performance nit, not a security or correctness one,
+and resolves itself the next time that browser interacts with `/login`
+in any way.
 
 ## 17. Final checks before merging
 
@@ -1014,10 +1238,11 @@ work.
   plan should change anonymous-request behavior, but it's cheap to
   re-verify given how carefully that invariant is documented.
 - New user-facing strings this plan introduces (the `require_admin!`
-  flash, step 12; `PendingResubmissionsController`'s `.expired` flash
-  and the "Resume saving your changes" button text, step 15) need real
-  i18n keys, not placeholder English. Check for an existing equivalent
-  key before adding a new one (`require_admin!`'s code sketch already
-  flags this as unresolved). This app is translated into 6+ languages
-  via translation.io (AGENTS.md); confirm the usual workflow for adding
-  a new translatable string is followed, not just an `en.yml` edit.
+  flash, step 12; `PendingResubmissionsController`'s `.expired` flash,
+  the generic `.sensitive_fields_dropped` warning, and the "Resume
+  saving your changes" button text, step 15) need real i18n keys, not
+  placeholder English. Check for an existing equivalent key before
+  adding a new one (`require_admin!`'s code sketch already flags this
+  as unresolved). This app is translated into 6+ languages via
+  translation.io (AGENTS.md); confirm the usual workflow for adding a
+  new translatable string is followed, not just an `en.yml` edit.

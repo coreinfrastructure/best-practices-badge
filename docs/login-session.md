@@ -43,10 +43,30 @@ without touching `SECRET_KEY_BASE`.
 
 ## 3. What we ARE doing
 
-- Add a new table (name TBD, e.g. `login_sessions`) with roughly:
+- Add a new table, `login_sessions` (model `LoginSession`). Not just
+  `sessions`/`Session`: this app already has
+  `app/controllers/sessions_controller.rb` handling login (`create`) and
+  logout (`destroy`), so a new admin-listing controller can't also be
+  named `SessionsController`; Rails doesn't allow two same-named
+  controllers. `login_sessions` also stays clear of the *existing,
+  unrelated* use of "session" throughout this codebase for the Rack/
+  cookie-store session (`session[:...]`, `SessionsHelper`,
+  `config/initializers/session_store.rb`): a `login_sessions` row is a
+  persisted record of one login, not the request-scoped cookie session
+  itself.
+- The table has roughly these columns:
   - a keyed-hash column of the session id (see section 5): unique, indexed,
     this is the lookup key (hashed so attackers who can read the database
-    cannot log in to that session).
+    cannot log in to that session). Store it as a standard `string`
+    (hex-encoded), not `bytea`. `bytea` is PostgreSQL-specific, not
+    portable standard SQL, and every existing digest column in this
+    codebase (`activation_digest`, `password_digest`, `remember_digest`,
+    `reset_digest`, all in `db/schema.rb`) is already `t.string`. At this
+    table's scale, the size difference between a 32-byte binary value and
+    its 64-character hex form is a few tens of bytes per row, immaterial
+    for lookup speed or storage, so there's no real trade-off to make:
+    matching the existing convention and staying on portable SQL wins on
+    both counts.
   - `user_id` (foreign key to `users`)
   - `created_at` (also used for the absolute session age cap, below),
     essentially the login time for this session.
@@ -63,8 +83,8 @@ without touching `SECRET_KEY_BASE`.
     recency signal instead of just a login timestamp. `session[:time_last_used]`
     goes away from the cookie entirely; this column is now the sole
     source of truth for it.
-  - `ip_address` and, optionally, a user-agent string, recorded once at
-    creation, purely observational (no enforcement). Gives real forensic
+  - `ip_address` and the full `User-Agent` request header string, both
+    recorded once at creation, purely observational (no enforcement). Gives real forensic
     value after an incident and makes the "see who's logged in" admin view
     (section 2) show more than opaque ids and timestamps, for the cost of
     two columns. Worth noting: today the app only ever uses the client IP
@@ -155,12 +175,52 @@ without touching `SECRET_KEY_BASE`.
   admin can kill a specific user's sessions on report of suspected
   compromise, without waiting on that user to change their password. A few
   lines given the delete logic already exists for password change.
+- An admin-only page listing every row in `login_sessions`, at
+  `GET /:locale/login_sessions` (an `index` action on a
+  `LoginSessionsController`): a plain RESTful route named after the
+  resource, matching this app's i18n URL convention, rather than an
+  invented verb-phrase path like `/logged_in`. This also matches how
+  admin-facing listings are conventionally named elsewhere (Django's
+  built-in admin, ActiveAdmin, RailsAdmin all name a resource's admin
+  listing after the resource itself). Gated the same way other
+  admin-only behavior already is in this codebase:
+  an inline `current_user&.admin?` check (see `UsersController`,
+  app/controllers/users_controller.rb:45,69,112,189), not a dedicated
+  `admin` namespace or before_action, since none exists here yet. Shows
+  every column: `user_id` (as a link to the user), `ip_address`, the full
+  `User-Agent` string, `created_at`, `last_used_at`. Paginate with `pagy`,
+  matching its existing use in `UsersController`/`ProjectsController`,
+  since this list can grow to one row per currently-active session.
+  - **The session-id hash column is shown truncated**: the first several
+    hex characters plus `...`, not the full digest. This is a *display*
+    choice, not a security one: per section 5, the digest is one-way, so
+    showing the *entire* hash would still reveal nothing usable to log in
+    with (the actual bearer credential is the raw session id, which never
+    reaches the server again after the cookie was issued). Truncating is
+    purely so the admin has a short, still-effectively-unique label to
+    reference a specific row by (the same idea as a truncated git commit
+    SHA), instead of a 64-character string nobody can visually
+    distinguish from another at a glance.
+  - **`User-Agent` is attacker-controlled input rendered to an admin
+    audience**, a real stored-XSS vector if it were ever output
+    unescaped. Standard ERB (`<%= %>`) auto-escapes by default, which is
+    sufficient; this is a reminder to never use `raw`, `html_safe`, or
+    `<%== %>` on this column specifically, not a call for new escaping
+    machinery.
 - No `github_name` column on the new table: it's one join away via `user_id`
   to `users`, and duplicating it would violate 3NF for no benefit.
 - Clean up expired/stale rows the same way `User.purge_unactivated_accounts`
-  (app/models/user.rb:376) cleans up abandoned accounts: a scheduled job
-  (solid_queue), following the existing daily/monthly maintenance task
-  pattern.
+  (app/models/user.rb:376) is cleaned up: as one more step inside the
+  existing `task daily` (`lib/tasks/default.rake:1758`), not a new
+  solid_queue recurring job. Checked: `config/recurring.yml` exists but is
+  entirely commented-out example content, unused; the real mechanism for
+  this app's daily/monthly maintenance is `rake daily`/`rake monthly`,
+  triggered externally by a scheduler (Heroku Scheduler, per that task's
+  own comment), and `purge_unactivated_accounts` is already invoked from
+  inside `task daily`. Daily cadence comfortably keeps pace with the
+  48-hour idle window from above (an abandoned row lives at most about
+  72 hours: the 48-hour idle window plus up to 24 hours until the next
+  daily run).
 
 ## 4. Models and views never touch the session directly, and won't need to
 
@@ -223,9 +283,16 @@ We store `HMAC-SHA256(key, session_id)` in the table, not `session_id` itself.
   secret (a password). A session id is 128 bits of `SecureRandom`, already
   infeasible to guess regardless of hash speed, and the lookup runs on every
   authenticated request, so a fast, standard, indexable keyed hash
-  (`OpenSSL::HMAC`, or the `blind_index` gem's own hashing if it exposes it
-  without requiring the full `attr_encrypted` DSL, check before assuming)
-  is the right tool, not the wrong one made to feel more secure.
+  (`OpenSSL::HMAC`) is the right tool, not the wrong one made to feel more
+  secure. This also rules out the `blind_index` gem's own hashing for this
+  column: checked its source (`blind_index-2.8.1/lib/blind_index.rb`), and
+  `BlindIndex.generate_bidx` only offers `argon2id` (its default), `argon2i`,
+  `scrypt`, or `pbkdf2_sha256`, the exact family of deliberately-slow
+  algorithms this bullet is arguing against, with no fast-HMAC mode at all.
+  This app's own `blind_index :email` call (app/models/user.rb:80) uses that
+  default, `argon2id`, which is the right choice for a guessable email
+  address and the wrong one for an unguessable random session id checked on
+  every request. See section 9 for the full comparison.
 - **Why 128 bits of session id, not 256**: 128 bits is the OWASP Session
   Management Cheat Sheet's stated minimum for session identifiers, and is
   already what this codebase uses for the "remember me" token
@@ -318,6 +385,24 @@ their own other sessions would be real, separate code (a view, a
 controller action, a translated string) for a case those two already
 handle; not worth it unless it turns out users actually ask for it.
 
+### 6.5. Not giving `remember_digest` ("remember me") tokens an absolute expiration
+
+`remember_digest` tokens have no expiration at all today; they're valid
+until an explicit logout or `forget` call. Adding `forget(user)` to
+password change (section 3) closes the one gap directly relevant to this
+project, but a stolen remember-me cookie is otherwise a standing,
+permanent credential regardless of this whole redesign, and we are
+deliberately leaving that as-is here. Giving remember tokens an absolute
+lifetime is a real, separate hardening step (a new column, a check in
+`try_remember_token_login`); it's out of scope for this project, which is
+about the `SECRET_KEY_BASE`/database-read exposure of `user_id`, not about
+remember-me's own token lifetime. Noted here, deliberately, because this
+review surfaced it and it's worth a future project on its own merits, not
+because leaving it unchanged is an oversight.
+
+We don't expire passwords, so it seems consistent that we don't normally
+expire these either.
+
 ## 7. Known trade-off to keep in mind while planning
 
 Today, `logged_in?` and everything gated on `@session_user_id` cost zero
@@ -398,28 +483,149 @@ explicitly during planning rather than assuming any schedule is fine.
 
 ## 9. Open questions for the implementation plan
 
-- Exact table and column names.
+Here were some open questions that we believe are resolved
+(see the "recommended" sections for each):
+
+- Exact column name for the session-id hash (the table name itself,
+  `login_sessions`, and its other columns are already settled in
+  section 3).
+  - `session_id_digest`: matches this codebase's existing `_digest`
+    suffix convention exactly (`activation_digest`, `password_digest`,
+    `remember_digest`, `reset_digest`, all in `db/schema.rb`), so it
+    reads as "obviously the same kind of thing" to anyone who already
+    knows the `User` model. Slight downside: "digest" doesn't by itself
+    say *which* digest algorithm, but neither do the existing ones.
+  - `session_id_hash`: more generic, immediately clear to a reader
+    unfamiliar with this app's specific naming habit. Downside: breaks
+    from the `_digest` convention already used four times in this same
+    codebase for no real gain.
+  - `hashed_session_id`: reads naturally in a sentence. Downside: a third
+    naming style next to the two above, with no advantage over either.
+  - **Recommended: `session_id_digest`.** It matches the *dominant*
+    existing pattern (four uses, not one), and semantically it's the
+    closer match: `_digest` in this codebase already means "one-way
+    transform of a secret-like value, stored so the plaintext is never
+    retained," exactly our case, whereas `_hash` is used once
+    (`forbidden_hash`) for a different concept (checking membership in a
+    public breached-password corpus, not protecting a value of ours).
+
 - Whether to compute the HMAC via raw `OpenSSL::HMAC` or via a `blind_index`
-  gem helper (needs checking the gem's public API).
-- Digest column type: store as `bytea`/binary rather than hex or base64
-  text, to avoid encoding mismatches at comparison time and save space.
+  gem helper (needs checking the gem's public API; see section 5).
+  - Raw `OpenSSL::HMAC`: a one-line stdlib call
+    (`OpenSSL::HMAC.hexdigest('SHA256', key, session_id)`), no dependency
+    on `blind_index`'s attribute-level machinery, which is built around
+    pairing a hash with an `attr_encrypted` attribute we don't have here
+    (we never need to decrypt the session id back out).
+  - The `blind_index` gem's own hashing, if it exposes a plain function
+    without requiring the full encrypted-attribute DSL: reuses the exact
+    already-vetted, already-tested code path used for the email blind
+    index, maximizing consistency with existing infrastructure per
+    AGENTS.md.
+  - **Recommended: raw `OpenSSL::HMAC`, now confirmed, not just
+    suspected.** Read the gem's source
+    (`blind_index-2.8.1/lib/blind_index.rb`): `BlindIndex.generate_bidx`
+    *is* public and callable standalone, so the "unverified" downside
+    above turned out not to apply, but it only implements `argon2id`
+    (its default), `argon2i`, `scrypt`, and `pbkdf2_sha256`, the exact
+    family of deliberately-slow algorithms section 5 argues against, with
+    no fast-HMAC mode. Confirmed this app's own `blind_index :email` call
+    (app/models/user.rb:80) takes that `argon2id` default, correct for a
+    guessable email address, wrong for our unguessable session id checked
+    on every request. The gem is the wrong tool here, not just an
+    unexplored one.
+
 - Exact idle-timeout/cleanup job design (mirroring
   `User.purge_unactivated_accounts` vs. a different schedule).
-- Whether/how admins view the "currently logged in" list, and what fields
-  it exposes.
+  - **Recommended: mirror the *real*
+    mechanism instead of the one this document assumed.** Checked how
+    `purge_unactivated_accounts` actually runs: not solid_queue at all.
+    `config/recurring.yml` is entirely commented-out example content,
+    unused. The actual mechanism is `task daily` in
+    `lib/tasks/default.rake`, triggered externally by a scheduler (Heroku
+    Scheduler, per that task's own comment), and
+    `purge_unactivated_accounts` is already invoked right inside it. Add
+    the `login_sessions` cleanup as one more step in that same task: no
+    new scheduling infrastructure at all, and daily cadence already keeps
+    pace with the 48-hour window (an abandoned row lives at most about
+    72 hours). Section 3 has been corrected to reflect this.
+
+- How many hex characters to truncate the session-id hash to in the
+  `login_sessions` admin listing (section 3): enough to be
+  effectively-unique for eyeballing, short enough to be a clean label.
+  This is cosmetic, not a security decision (section 3), so "wrong" just
+  means "occasionally two rows look alike at a glance," self-resolved by
+  the adjacent `user_id`/`created_at` columns.
+  - 8 characters: compact; at this table's realistic scale (concurrent
+    sessions, not millions of rows), visually-identical prefixes across
+    different rows are unlikely.
+  - 12 characters: lower odds of two rows sharing a visible prefix as the
+    table grows, at the cost of a slightly longer label.
+  - Match git's familiar 7-character abbreviation: instantly recognizable
+    to anyone used to short SHAs. Downside: git's default works because
+    git auto-lengthens an abbreviation when it would collide; we'd have
+    no equivalent safety net, so borrowing "7" alone borrows the number
+    without the mechanism that makes it safe for git.
+  - **Recommended: 9 characters plus `...`, matching existing precedent
+    in this exact codebase.** `app/views/unsubscribe/edit.html.erb:27`
+    already does exactly this for a different security-relevant token:
+    `"#{@token[0..8]}..."`, read-only, for human recognition only, never
+    resubmitted. No reason to invent a different length or style when
+    this app already has one.
+
 - Exact mechanics of `try_remember_token_login` minting a new login-session
   row (section 3): does it reuse `SessionsHelper#log_in`, or need its own
   path? The password-change flow's "revoke all, then create one fresh row"
   (section 3) likely wants to share that same creation code path too.
+  - Reuse `log_in` directly: one entry point for "establish a session,"
+    matching this project's DRY/minimal-code emphasis (AGENTS.md); any
+    future change to session creation only needs to happen once.
+  - Extract a smaller shared method (e.g. `create_login_session(user)`)
+    used by both `log_in` and `try_remember_token_login`, leaving
+    `log_in`'s locale/forwarding-url side effects out of the silent
+    remember-me path: avoids duplicating the security-relevant row
+    creation while not dragging in login-specific side effects.
+    Downside: one more small private method, marginally more indirection
+    than a single shared entry point.
+  - **Recommended: reuse `log_in` directly; the "downside" listed for it
+    doesn't survive reading the actual code.** Read
+    `try_remember_token_login` in full
+    (app/controllers/application_controller.rb:729-749): it *already*
+    duplicates `log_in`'s `session[:user_id] = user.id`,
+    `session[:time_last_used] = ...`, and, tellingly,
+    `I18n.locale = user.preferred_locale.to_sym`, nearly verbatim. The
+    locale switch this bullet worried about "may not be wanted" is
+    already happening today, independently, in both places; reusing
+    `log_in` removes a duplication that already exists rather than
+    introducing new behavior. The one genuine difference is `log_in`'s
+    trailing `forwarding_url` relocalization, which `try_remember_token_login`
+    currently skips; that looks like a latent gap rather than an
+    intentional difference; a user whose session lapsed mid-visit and
+    gets silently restored via remember-me should arguably get the same
+    forwarding treatment as one who explicitly re-logged-in. Reusing
+    `log_in` likely fixes that gap as a side effect, not a risk.
+
 - Exact interface for `rake sessions:revoke[user_id]` (section 3): argument
   validation, what it prints/logs, and whether it errors on an unknown
   user id or just deletes zero rows silently.
-- Bigger, deliberately out of scope for now: `remember_digest`
-  ("remember me") tokens have no expiration at all today; they're valid
-  until an explicit logout/`forget` call. Adding `forget(user)` to
-  password change (section 3) closes the one gap directly relevant to this
-  project, but a stolen remember-me cookie is otherwise a standing,
-  permanent credential regardless of this whole redesign. Giving remember
-  tokens an absolute lifetime is a real, separate hardening step (a new
-  column, a check in `try_remember_token_login`), noted here because this
-  review surfaced it, not because it's part of this project's scope.
+  - Fail loudly on an unknown user id: matches this codebase's stated
+    preference for fail-fast checks over silent success (AGENTS.md), and
+    catches a likely typo immediately, important since this tool exists
+    specifically for urgent, possibly mid-incident use.
+  - Succeed silently with zero rows deleted, treating "no such user" the
+    same as "user exists, no active sessions": simpler, one code path.
+    Downside: masks a pasted-wrong-id typo as a false success, in exactly
+    the scenario (an admin urgently responding to a suspected compromise)
+    where believing you've revoked sessions when you haven't is worst.
+  - **Recommended: fail loudly, matching two existing precedents in this
+    exact codebase, not just general philosophy.** `UsersController#destroy`
+    (app/controllers/users_controller.rb:344) deliberately uses
+    `User.find` over `find_by`, with the comment "Exception raised if not
+    found," for the same shape of action (an admin operating on a
+    specific user id). Separately, the existing
+    `generate_unsubscribe_url` rake task
+    (`lib/tasks/default.rake:2207`) validates its argument explicitly and
+    calls `puts` plus `exit 1` with a usage message on bad input, rather
+    than continuing silently. Mirror both: validate the argument is
+    present, use `User.find(user_id)` (raises `ActiveRecord::RecordNotFound`
+    if missing) or an equivalent explicit check with a clear message and
+    `exit 1`.

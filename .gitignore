@@ -43,7 +43,6 @@
 /*.html
 doc/*.html
 docs/*.html
-license_okay
 tags
 papertrail-logs
 requested-paths-*.txt

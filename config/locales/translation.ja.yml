@@ -59,6 +59,10 @@ ja:
       few: スパム対策として、ログインできるまでに、アクティベーション後%{count}時間待つ必要があります。
       other: スパム対策として、ログインできるまでに、アクティベーション後%{count}時間待つ必要があります。
       many: スパム対策として、ログインできるまでに、アクティベーション後%{count}時間待つ必要があります。
+    link_invalid_or_used:
+    confirm_heading:
+    confirm_prompt:
+    confirm_button:
   password_resets:
     forgot_password: パスワードを忘れた方はこちら
     reset_password: パスワードをリセットしてください
@@ -93,6 +97,7 @@ ja:
     login_disabled: すべてのログインが一時的に無効になりました
     cannot_login_yet: >-
       申し訳ありませんが、まだログインできません。スパム対策として、ローカルアカウントをアクティベーションした後、ログインできるようになるまでに遅延があります。
+    login_failed:
   users:
     new:
       signup_header: サインアップ
@@ -320,6 +325,7 @@ ja:
         analysis_failed:
           one:
           other:
+      automation_hint_html:
     form_basics:
       project_name:
         description: プロジェクトの名前は何ですか？
@@ -664,6 +670,7 @@ ja:
     unsubscribe_notice_text:
     subject_warned_level:
     warned_level_message:
+    warned_level_message_no_date:
   user_mailer:
     account_activation:
       before_html: |-
@@ -1588,8 +1595,6 @@ ja:
       osps_br_01_01:
         description:
         details:
-      osps_br_01_02:
-        description:
       osps_br_03_01:
         description:
         details:
@@ -2155,3 +2160,6 @@ ja:
       field_value:
       array_match:
       comment_suffix:
+  pagination:
+    first:
+    last:

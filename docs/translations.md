@@ -69,6 +69,21 @@ rake translation:sync
 This sends updated English text to translation.io and retrieves
 any new human translations.
 
+**API key:**
+
+`rake translation:sync` needs the `TRANSLATION_IO_KEY` environment
+variable set, to authenticate to translation.io (see
+`config/initializers/translation.rb`). Without it, the task fails with
+"Could not find any project with this API key."
+
+To get the key: log in to translation.io, select the gear icon next to
+the project name, choose "All settings", and view the API key. Then
+pass it as an environment variable:
+
+```bash
+TRANSLATION_IO_KEY=...API_KEY... rake translation:sync
+```
+
 ## Machine Translations
 
 Machine translations provide fallback text when human translations

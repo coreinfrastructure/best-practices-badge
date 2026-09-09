@@ -69,7 +69,7 @@ executors:
       #
       # It runs as uid 1000 "heroku" with no sudo, so every step below
       # must work unelevated. That is why Ruby goes in $HOME.
-      - image: heroku/heroku:26-build@sha256:5a299f7e21e4ff7d17c4babd19725694b23feef17c40457d009fd652abf40a5d
+      - image: heroku/heroku:26-build@sha256:9af52c426fb90d49d90bbeb986eca6e20172f4ea1f455d05388757b62aaf05b4
         environment:
           PG_HOST: localhost
           PG_USER: ubuntu
@@ -129,7 +129,7 @@ executors:
       #
       # To watch a test in a browser instead, run your own container
       # without these two variables; see docs/testing.md.
-      - image: selenium/standalone-chrome:151.0.7922.108@sha256:cd778b6f38d99d1e14a05a767f576aff2face98d5202a2192d857614c265ec4d
+      - image: selenium/standalone-chrome:152.0.7977.82@sha256:11faf9d193dbdce26b4d7370f2d28e299515a00dd94453f154219469eb53b1a7
         environment:
           SE_START_XVFB: "false"
           SE_START_VNC: "false"
@@ -150,7 +150,7 @@ executors:
   # sharing the prepare_ruby command.
   ruby-only:
     docker:
-      - image: heroku/heroku:26-build@sha256:5a299f7e21e4ff7d17c4babd19725694b23feef17c40457d009fd652abf40a5d
+      - image: heroku/heroku:26-build@sha256:9af52c426fb90d49d90bbeb986eca6e20172f4ea1f455d05388757b62aaf05b4
         environment:
           RAILS_ENV: test
           RACK_ENV: test
@@ -577,11 +577,6 @@ jobs:
         path: /tmp/circleci-artifacts
     - store_artifacts:
         path: coverage
-    # license_finder_report.html is deliberately absent. Rendering it
-    # re-scans every gem, which doubled the cost of the licence check
-    # for a browsable copy of what 'license_okay' had just decided. The
-    # check still runs; the report is "rake license_finder_report.html"
-    # when someone wants to read it. See lib/tasks/default.rake.
     - store_artifacts:
         path: log/test.log
     - store_artifacts:

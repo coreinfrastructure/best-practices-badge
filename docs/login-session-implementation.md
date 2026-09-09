@@ -110,8 +110,31 @@ create_table :login_sessions do |t|
 end
 add_index :login_sessions, :session_id_digest, unique: true
 add_index :login_sessions, :user_id
+add_index :login_sessions, :last_used_at
+add_index :login_sessions, :created_at
 add_foreign_key :login_sessions, :users
 ```
+
+**`last_used_at`/`created_at` indexes, found while checking this plan's
+own queries against this table, not copied from elsewhere**: neither
+column would otherwise be indexed (`t.timestamps` doesn't add one), and
+both are queried directly: step 12's admin listing does
+`.order(last_used_at: :desc)` over every row, and step 13's cleanup job
+filters on `last_used_at < :idle OR created_at < :absolute`. Checked
+whether this codebase has a precedent for skipping such an index
+(`User.purgeable_unactivated_accounts`, app/models/user.rb:364, filters
+on unindexed `created_at` too) before adding one here anyway: that
+table's growth is bounded by signup-level friction (email verification,
+`signup/ip`); this one's isn't, by design §7's own account, only the
+loose general per-IP throttles bound it. A full-table scan getting
+slower as the table grows is a real problem specifically for the query
+whose job is to keep that same table from growing unbounded during
+sustained attack traffic, the exact scenario design §7 names. Two
+single-column indexes, not a composite one: `user_id` already has its
+own index for the "one user's sessions" queries (revoke, the rake task);
+these two serve the "every row, ordered or filtered by time" queries
+instead, and Postgres can combine them with a bitmap OR for the
+cleanup job's `OR` condition.
 
 Notes tied to earlier decisions:
 
@@ -585,11 +608,15 @@ relogging in, invalidate the target's remember-me capability directly via
 `user.forget` (database-only, touches no cookies) rather than the
 `forget(user)` helper, which is cookie-scoped to this browser.
 
-New shared method, `SessionsHelper#revoke_all_sessions_and_relogin(user, relogin:)`:
+New shared method, `SessionsHelper#revoke_all_sessions_and_relogin(user, relogin:)`,
+using the `has_many :login_sessions` association added to `User` in step
+3 rather than re-deriving the same `where(user_id: ...)` query a second
+time (the rake task in step 11 needs the identical revoke; both use the
+association instead of hand-writing the query twice):
 
 ```ruby
 def revoke_all_sessions_and_relogin(user, relogin:)
-  LoginSession.where(user_id: user.id).delete_all
+  user.login_sessions.delete_all
   if relogin
     forget(user)
     log_in(user)
@@ -611,7 +638,16 @@ dirty-tracking (already used the same way in this controller's
   change: this browser's session gets refreshed, as before); false when
   an admin edited someone else's (the target's sessions and remember-me
   are revoked; the admin's own session and cookies are left completely
-  untouched).
+  untouched). `relogin`'s condition (`current_user == @user`) is the same
+  test this method's existing code already uses just above it (`if
+  current_user == @user && preferred_locale`, guarding whether to switch
+  *this* request's `I18n.locale`) to decide whether an admin editing
+  someone else's locale should affect the admin's own session. `log_in`
+  (called when `relogin` is true) also sets `I18n.locale`, from
+  `user.preferred_locale`; since that only runs in the same case the
+  existing guard already allows a locale switch for, and using the same
+  value the existing guard would set it to, the two don't conflict, and
+  neither can fire when the other wouldn't.
 - `PasswordResetsController#update` (password_resets_controller.rb:50):
   after `@user.update(user_params)` succeeds,
   `revoke_all_sessions_and_relogin(@user, relogin: false)`. Always
@@ -651,7 +687,7 @@ namespace :login_sessions do
     end
 
     user = User.find(Integer(args.user_id, 10)) # raises if not found
-    count = LoginSession.where(user_id: user.id).delete_all
+    count = user.login_sessions.delete_all
     puts "Revoked #{count} session(s) for user #{user.id} (#{user.name})."
   end
 end
@@ -687,10 +723,18 @@ Design §3's admin-listing bullet.
   def require_admin!
     return if current_user&.admin?
 
-    flash[:danger] = t('errors.not_authorized') # or existing equivalent key
+    flash[:danger] = t('users.edit.inadequate_privileges')
     redirect_to root_url
   end
   ```
+
+  Checked `config/locales/en.yml:348` for an existing generic
+  access-denied string before adding a new one: `users.edit.inadequate_privileges`
+  ("Sorry, you are not allowed to do that.") is already there, already
+  translated into all of this app's languages, and reads naturally for
+  "you're not an admin" even though its key name mentions `edit`. Reusing
+  it means this step adds no new translatable string at all, not just a
+  smaller one; see step 17.
 
   Leave `UsersController`'s existing inline checks alone (tested,
   working code; migrating them is optional future cleanup, not this
@@ -704,7 +748,7 @@ Design §3's admin-listing bullet.
 
     def index
       @pagy, @login_sessions = pagy(
-        LoginSession.order(last_used_at: :desc).includes(:user)
+        :offset, LoginSession.order(last_used_at: :desc).includes(:user)
       )
     end
   end
@@ -941,6 +985,7 @@ isn't one.
     t.boolean :sensitive_fields_dropped, null: false, default: false
     t.timestamps
   end
+  add_index :pending_resubmissions, :created_at
   ```
 
   No `token` column, no unique index: the row is always looked up by its
@@ -953,8 +998,12 @@ isn't one.
   save/restore around `reset_session` alongside the row's identifier.
   Putting it on the row removes that duplication: whatever request looks
   the row up already has it, in the same read, at no extra cost.
-  `created_at` (from `t.timestamps`) is what step 13's cleanup line ages
-  out against.
+  `created_at` (from `t.timestamps`, now indexed for the same reason as
+  `login_sessions` above) is what step 13's cleanup line ages out
+  against; this table's growth is bounded by the same general throttles,
+  not a dedicated one (see the anonymous-abuse point below), so its
+  cleanup query deserves the same protection against scanning a growing
+  table.
 - New file `app/models/pending_resubmission.rb`:
 
   ```ruby
@@ -1159,6 +1208,25 @@ mechanism this app already uses for `forwarding_url`
    needing the same treatment is a one-line addition to
    `SESSION_KEYS_SURVIVING_RESET`, not a new save/restore pair to write
    and get right.
+
+   **One small, deliberate behavior change versus today's code, worth
+   naming so a reviewer diffing this against production isn't
+   surprised**: today, `session[:forwarding_url] = ref_url` runs
+   unconditionally, so a login attempt with no forwarding url to restore
+   still leaves that key present in the session, set to `nil`. The
+   `if value` guard here skips setting it in that case instead. Checked
+   every place `forwarding_url` is read (`sessions_helper.rb`, grep for
+   it): all of them check truthiness or `.present?`, none check
+   `session.key?`, so this is behaviorally invisible to every consumer.
+   It's also a small, incidental improvement: `session_has_user_content?`
+   (application_controller.rb:719) checks key presence, not value, so
+   today's unconditional assignment means a failed anonymous login
+   attempt leaves a spurious content-bearing key behind, blocking
+   `drop_unneeded_session_cookie`'s CDN-caching optimization for that
+   browser until something else resets the session. Not a fix this
+   project set out to make, just a side effect of generalizing the
+   save/restore worth being honest about rather than leaving for a
+   reviewer to puzzle out from the diff.
 3. `successful_login` (sessions_controller.rb:113) checks
    `session[:pending_resubmission_id]` directly, no new parameter needed
    and no change needed to either caller (`local_login_procedure`,
@@ -1311,12 +1379,10 @@ in any way.
   requests never receive a `Set-Cookie`) still holds; nothing in this
   plan should change anonymous-request behavior, but it's cheap to
   re-verify given how carefully that invariant is documented.
-- New user-facing strings this plan introduces (the `require_admin!`
-  flash, step 12; `PendingResubmissionsController`'s `.expired` flash,
-  the generic `.sensitive_fields_dropped` warning, and the "Resume
-  saving your changes" button text, step 15) need real i18n keys, not
-  placeholder English. Check for an existing equivalent key before
-  adding a new one (`require_admin!`'s code sketch already flags this
-  as unresolved). This app is translated into 6+ languages via
+- New user-facing strings this plan introduces (`PendingResubmissionsController`'s
+  `.expired` flash, the generic `.sensitive_fields_dropped` warning, and
+  the "Resume saving your changes" button text, step 15; `require_admin!`,
+  step 12, reuses an existing key, so it adds none) need real i18n keys,
+  not placeholder English. This app is translated into 6+ languages via
   translation.io (AGENTS.md); confirm the usual workflow for adding a
   new translatable string is followed, not just an `en.yml` edit.

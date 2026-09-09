@@ -350,22 +350,23 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     # EU General Data Protection Regulation (GDPR) requires users be able to
     # erase information about themselves.
     log_in_as(@other_user)
-    assert session.key?('user_id') # Current session has a user_id
-    assert @other_user.id, session['user_id']
+    assert session.key?('login_session_id') # Current session has a login
+    assert_equal @other_user.id, logged_in_user_id
     assert session.key?('session_id') # Current session has a user_id
     old_session_id = session['session_id']
     assert_difference('User.count', -1) do
       delete "/en/users/#{@other_user.id}"
     end
-    assert_not session.key?('user_id')
+    assert_not session.key?('login_session_id')
     # New session has been initiated
     assert_not_equal old_session_id, session['session_id']
     assert_redirected_to root_url
     get root_url
     my_assert_select '.alert-success', 'User deleted.'
-    assert_not session.key?('user_id')
+    assert_not session.key?('login_session_id')
     # TODO: The session key is restored here. It won't matter,
-    # since it lacks a user_id, but it's weird. Should fix in the long term.
+    # since it lacks a login_session_id, but it's weird. Should fix in
+    # the long term.
     # refute session.key?('session_id')
   end
 

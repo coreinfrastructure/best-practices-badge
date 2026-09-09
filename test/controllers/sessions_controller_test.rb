@@ -250,5 +250,50 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success # re-renders 'new'
     assert flash&.now && flash.now[:danger]
   end
+
+  test 'login creates exactly one LoginSession row with ip_address and user_agent' do
+    assert_difference('LoginSession.count', 1) do
+      post '/en/login', params: {
+        session: {
+          provider: 'local', email: @user.email, password: 'password1'
+        }
+      }, headers: { 'User-Agent' => 'BadgeAppTestAgent/1.0' }
+    end
+    login_session = LoginSession.last
+    assert_equal @user.id, login_session.user_id
+    assert_not_nil login_session.ip_address
+    assert_equal 'BadgeAppTestAgent/1.0', login_session.user_agent
+  end
+
+  test 'logout deletes only the current LoginSession row' do
+    # Log in once, simulating a first browser/session for this user.
+    log_in_as(@user, password: 'password1')
+    first_login_session_id = session[:login_session_id]
+    assert LoginSession.exists?(
+      session_id_digest: LoginSession.digest(first_login_session_id)
+    )
+
+    # Log in again as the same user, simulating a second, independent
+    # session (e.g. another browser); this creates a second LoginSession
+    # row without touching the first one.
+    log_in_as(@user, password: 'password1')
+    second_login_session_id = session[:login_session_id]
+    assert_not_equal first_login_session_id, second_login_session_id
+    assert_equal 2, @user.login_sessions.count
+
+    # Logging out (of the second session, the one this cookie jar now
+    # holds) must delete only that row, leaving the first session's row
+    # untouched -- this is design doc section 3's "ordinary logout only
+    # revokes the current session" property.
+    assert_difference('LoginSession.count', -1) do
+      delete logout_path, params: { locale: 'en' }
+    end
+    assert_not LoginSession.exists?(
+      session_id_digest: LoginSession.digest(second_login_session_id)
+    )
+    assert LoginSession.exists?(
+      session_id_digest: LoginSession.digest(first_login_session_id)
+    )
+  end
 end
 # rubocop:enable Metrics/ClassLength

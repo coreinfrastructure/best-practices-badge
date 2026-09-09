@@ -50,8 +50,20 @@ module SessionsHelper
   # @return [void]
   # rubocop:disable Metrics/AbcSize
   def log_in(user)
-    session[:user_id] = user.id
-    session[:time_last_used] = Time.now.utc
+    # session[:login_session_id] is OUR random session id (LoginSession),
+    # not Rack's own bookkeeping session_id; see design doc section 6.6.
+    @login_session = LoginSession.create_for(
+      user, ip_address: ClientIp.extract(request), user_agent: request.user_agent
+    )
+    session[:login_session_id] = @login_session.raw_session_id
+    # Keep @session_timestamp in sync with @login_session: a controller
+    # action (e.g. SessionsController#create) calls log_in directly,
+    # after setup_authentication_state's before_action already ran and
+    # left @session_timestamp nil (not logged in yet). Without this,
+    # update_session_timestamp's after_action would see a freshly-set
+    # @login_session paired with a stale nil @session_timestamp and crash
+    # comparing nil to a Time.
+    @session_timestamp = @login_session.last_used_at
     # Switch to user's preferred locale
     I18n.locale = user.preferred_locale.to_sym
     return unless session[:forwarding_url]
@@ -198,6 +210,7 @@ module SessionsHelper
   # @return [void]
   def log_out
     forget(current_user)
+    @login_session&.destroy
     reset_session
     @current_user = nil
   end

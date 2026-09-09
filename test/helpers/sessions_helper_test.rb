@@ -16,10 +16,11 @@ class SessionsHelperTest < ActionView::TestCase
   test 'current_user returns right user when session is nil' do
     # Simulate what setup_authentication_state does with remember cookies
     @session_user_id = @user.id
-    session[:user_id] = @user.id
-    session[:time_last_used] = Time.now.utc
+    session[:login_session_id] = LoginSession.create_for(
+      @user, ip_address: '127.0.0.1', user_agent: 'test-agent'
+    ).raw_session_id
     assert_equal @user, current_user
-    assert_not session[:time_last_used].nil?
+    assert_not session[:login_session_id].nil?
     assert user_logged_in?
   end
 

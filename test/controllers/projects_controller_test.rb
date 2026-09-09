@@ -1379,7 +1379,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test 'should not destroy project if logged in as different user' do
     log_in_as(@user2, password: 'password1')
     # Verify that we are actually logged in
-    assert_equal @user2.id, session[:user_id]
+    assert_equal @user2.id, logged_in_user_id
     assert_no_difference('Project.count',
                          ActionMailer::Base.deliveries.size) do
       delete "/en/projects/#{@project.id}" # calls controller method "destroy"
@@ -1410,7 +1410,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert @project_two.user.id, @user2.id # Check test fixtures
     log_in_as(@user2, password: 'password1')
     # Verify that we are actually logged in
-    assert_equal @user2.id, session[:user_id]
+    assert_equal @user2.id, logged_in_user_id
     new_repo_url = @project.repo_url + '_new'
     patch "/en/projects/#{@project_two.id}", params: {
       project: { repo_url:  new_repo_url }
@@ -1436,7 +1436,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal @project_two.user.id, @user2.id # Check test fixtures match
     log_in_as(@user2, password: 'password1')
     # Verify that we are actually logged in
-    assert_equal @user2.id, session[:user_id]
+    assert_equal @user2.id, logged_in_user_id
     old_repo_url = @project_two.repo_url
     new_repo_url = 'http://www.nasa.gov/mav'
     old_description = @project_two.description

@@ -90,62 +90,58 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test 'update_session_timestamp updates both session and cache when old' do
+  test 'update_session_timestamp updates both login_session and cache when old' do
     controller = ApplicationController.new
-
-    # Mock the session
-    mock_session = {}
-    controller.define_singleton_method(:session) { mock_session }
+    login_session = LoginSession.create_for(
+      users(:test_user), ip_address: '127.0.0.1', user_agent: 'test-agent'
+    )
 
     # Setup: user logged in with old timestamp
     old_time = 2.hours.ago.utc
-    controller.instance_variable_set(:@session_user_id, 123)
+    login_session.update_column(:last_used_at, old_time)
+    controller.instance_variable_set(:@login_session, login_session)
     controller.instance_variable_set(:@session_timestamp, old_time)
 
     # Call the method
     controller.send(:update_session_timestamp)
 
-    # Verify both session[:time_last_used] and @session_timestamp were updated
-    assert_not_nil mock_session[:time_last_used]
-    assert mock_session[:time_last_used] > old_time
+    # Verify both login_session.last_used_at and @session_timestamp were
+    # updated
+    assert login_session.reload.last_used_at > old_time
     new_timestamp = controller.instance_variable_get(:@session_timestamp)
-    assert_equal mock_session[:time_last_used], new_timestamp
+    assert_equal login_session.last_used_at, new_timestamp
   end
 
   test 'update_session_timestamp skips update when timestamp is recent' do
     controller = ApplicationController.new
-
-    # Mock the session
-    mock_session = {}
-    controller.define_singleton_method(:session) { mock_session }
+    login_session = LoginSession.create_for(
+      users(:test_user), ip_address: '127.0.0.1', user_agent: 'test-agent'
+    )
 
     # Setup: user logged in with recent timestamp (30 minutes ago)
     recent_time = 30.minutes.ago.utc
-    controller.instance_variable_set(:@session_user_id, 123)
+    login_session.update_column(:last_used_at, recent_time)
+    controller.instance_variable_set(:@login_session, login_session)
     controller.instance_variable_set(:@session_timestamp, recent_time)
 
     # Call the method
     controller.send(:update_session_timestamp)
 
-    # Verify session was NOT updated
-    assert_nil mock_session[:time_last_used]
+    # Verify login_session was NOT updated. assert_in_delta (not
+    # assert_equal) because the DB column truncates sub-microsecond
+    # precision, so a round-tripped Time is never bit-for-bit equal to
+    # the in-memory Ruby Time even when nothing changed.
+    assert_in_delta recent_time, login_session.reload.last_used_at, 1
   end
 
   test 'update_session_timestamp skips when no user logged in' do
     controller = ApplicationController.new
 
-    # Mock the session
-    mock_session = {}
-    controller.define_singleton_method(:session) { mock_session }
-
     # Setup: no user logged in
-    controller.instance_variable_set(:@session_user_id, nil)
+    controller.instance_variable_set(:@login_session, nil)
 
-    # Call the method
-    controller.send(:update_session_timestamp)
-
-    # Verify session was NOT updated
-    assert_nil mock_session[:time_last_used]
+    # Call the method: must not raise even without a mocked session
+    assert_nothing_raised { controller.send(:update_session_timestamp) }
   end
 
   test 'verify_origin_shielding blocks untrusted proxies' do

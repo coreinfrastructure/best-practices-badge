@@ -27,6 +27,7 @@ class ProjectsControllerSpecialTest < ActionDispatch::IntegrationTest
   test 'should stay logged in with old session if remember token valid' do
     # Log in WITH remember_me (the default)
     log_in_as(@project.user, remember_me: '1')
+    original_login_session_id = session[:login_session_id]
     # Time travel past session timeout (48 hours + 1 second)
     travel 49.hours do
       get "/en/projects/#{@project.id}/passing/edit"
@@ -34,8 +35,39 @@ class ProjectsControllerSpecialTest < ActionDispatch::IntegrationTest
       # so edit page should load successfully
       assert_response :success
       # Verify user is still logged in (session was recreated by remember token)
-      assert_not_nil session[:user_id]
-      assert_equal @project.user.id, session[:user_id]
+      assert_not_nil session[:login_session_id]
+      assert_equal @project.user.id, logged_in_user_id
+      # The idle-expired LoginSession row is destroyed, not revived: the
+      # silent remember-me restore creates a genuinely new one (design doc
+      # section 3/7's write-cost note), it does not reset the old row's
+      # last_used_at.
+      assert_not_equal original_login_session_id, session[:login_session_id]
+      assert_not LoginSession.exists?(
+        session_id_digest: LoginSession.digest(original_login_session_id)
+      )
+    end
+  end
+
+  test 'forwarding_url does not survive the idle-expiry + remember-me path' do
+    # Log in WITH remember_me, then visit a page that sets forwarding_url
+    # unconditionally (ProjectsController#new) so it's present in the
+    # session while the login is still nominally valid.
+    log_in_as(@project.user, remember_me: '1')
+    get '/en/projects/new'
+    assert_equal new_project_url(locale: :en), session[:forwarding_url]
+
+    # Time travel past session timeout (48 hours + 1 second): the login
+    # becomes idle-expired, so the next request's setup_authentication_state
+    # destroys it and calls reset_session (wiping forwarding_url) *before*
+    # falling through to try_remember_token_login/log_in. Confirm (rather
+    # than assume) that forwarding_url does NOT survive this path, unlike
+    # the ordinary POST /login path where log_in relocalizes a pre-existing
+    # one.
+    travel 49.hours do
+      get "/en/projects/#{@project.id}/passing/edit"
+      assert_response :success
+      assert_equal @project.user.id, logged_in_user_id
+      assert_nil session[:forwarding_url]
     end
   end
 end

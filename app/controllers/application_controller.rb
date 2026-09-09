@@ -629,27 +629,28 @@ class ApplicationController < ActionController::Base
   def setup_authentication_state
     return if Rails.application.config.deny_login
 
-    # Extract session data - decrypt cookie once
-    user_id = session[:user_id]
-    timestamp = session[:time_last_used]
+    # session[:login_session_id] is OUR random session id (LoginSession),
+    # not Rack's own bookkeeping session_id; see design doc section 6.6.
+    login_session = LoginSession.find_by_session_id(session[:login_session_id])
 
-    # Check timeout BEFORE setting instance variables
-    # This ensures instance variables always contain VALID auth state
-    # Reject sessions with missing or expired timestamps
-    if user_id && (!timestamp || timestamp < SessionsHelper::SESSION_TTL.ago.utc)
-      reset_session # Session expired or missing timestamp
-      user_id = nil
-      timestamp = nil
+    if login_session && (login_session.idle_expired? || login_session.absolutely_expired?)
+      login_session.destroy
+      login_session = nil
+      reset_session
     end
 
     # Handle remember token if no valid session
-    if user_id.nil?
-      user_id, timestamp = try_remember_token_login
-    end
+    login_session = try_remember_token_login if login_session.nil?
 
     # Set instance variables from the encrypted session cookie.
-    @session_user_id = user_id
-    @session_timestamp = timestamp
+    @session_user_id = login_session&.user_id
+    @session_timestamp = login_session&.last_used_at
+    # Redundant, not wrong, when login_session came from
+    # try_remember_token_login: log_in (SessionsHelper) already set
+    # @login_session. Still needed for the ordinary path above, where a
+    # valid login_session_id was found directly and log_in never ran
+    # this request.
+    @login_session = login_session
     @session_user_token = session[:user_token]
     @session_github_name = session[:github_name]
   end
@@ -661,15 +662,24 @@ class ApplicationController < ActionController::Base
   #
   # @return [void]
   def update_session_timestamp
-    return unless @session_user_id
+    return unless @login_session
 
-    old = !@session_timestamp ||
-          @session_timestamp < SessionsHelper::RESET_SESSION_TIMER.ago.utc
+    # last_used_at is null: false (LoginSession), so a found login_session
+    # can never yield a nil @session_timestamp here, unlike the old
+    # cookie-only design where a nil timestamp was (defensively) possible.
+    # This is not a bug fix candidate if this guard is ever restored.
+    old = @session_timestamp < SessionsHelper::RESET_SESSION_TIMER.ago.utc
 
     return unless old
 
-    session[:time_last_used] = Time.now.utc
-    @session_timestamp = session[:time_last_used] # Update cache
+    # update_column (not update!) deliberately skips validations/callbacks
+    # for this single-column, non-user-facing timestamp bump, matching
+    # SessionsController#successful_login's use of update_columns for
+    # last_login_at.
+    # rubocop: disable Rails/SkipsModelValidations
+    @login_session.update_column(:last_used_at, Time.now.utc)
+    # rubocop: enable Rails/SkipsModelValidations
+    @session_timestamp = @login_session.last_used_at # Update cache
   end
 
   # Actively expire the session cookie once it is carrying nothing useful,
@@ -727,32 +737,24 @@ class ApplicationController < ActionController::Base
 
   # Attempts to login using remember token cookies.
   # ONLY works for local users - GitHub users must re-authenticate via OAuth.
-  # Returns [user_id, timestamp] if successful, [nil, nil] otherwise.
   #
-  # @return [Array<Integer, Time>, Array<nil, nil>]
-  # rubocop:disable Metrics/AbcSize
+  # @return [LoginSession, nil] the newly created session, or nil if the
+  #   remember-me cookie is missing, invalid, or belongs to a GitHub user
   def try_remember_token_login
     cookie_user_id = cookies.signed[:user_id]
-    return [nil, nil] unless cookie_user_id
+    return unless cookie_user_id
 
     user = User.find_by(id: cookie_user_id)
-    return [nil, nil] unless user&.authenticated?(:remember, cookies[:remember_token])
+    return unless user&.authenticated?(:remember, cookies[:remember_token])
 
     # GitHub users should not use remember tokens - they must use OAuth
-    return [nil, nil] if user.provider == 'github'
+    return if user.provider == 'github'
 
-    # Valid remember token for local user - create new session
-    now = Time.now.utc
-    session[:user_id] = user.id
-    session[:time_last_used] = now
-
-    I18n.locale = user.preferred_locale.to_sym
+    log_in(user) # now the single entry point for "establish a session"
     # We found the user DB data, record it in case we need it later.
     @current_user = user
-
-    [user.id, now]
+    @login_session # set by log_in itself; no re-lookup needed
   end
-  # rubocop:enable Metrics/AbcSize
 
   include SessionsHelper
 end

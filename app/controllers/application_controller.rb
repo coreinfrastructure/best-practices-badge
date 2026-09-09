@@ -42,6 +42,11 @@ class ApplicationController < ActionController::Base
   # Rack's always-present session_id and the flash.
   # Method drop_unneeded_session_cookie
   # ignores these when deciding whether the session still holds anything.
+  #
+  # 'session_id' here is Rack's own internal bookkeeping key, unrelated to
+  # our LoginSession model or session[:login_session_id] (deliberately a
+  # different name, not just a different meaning for the same one; see
+  # docs/login-session.md section 6.6 for why the two must not collide).
   SESSION_BOOKKEEPING_KEYS = %w[session_id flash].freeze
 
   # Make criteria_level conversion methods available to views

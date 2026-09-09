@@ -11,6 +11,10 @@ require 'security_utils'
 module SessionsHelper
   SESSION_TTL = 48.hours # Automatically log off session if inactive this long
   RESET_SESSION_TIMER = 1.hour # Active sessions older than this reset timer
+  # Hard cap on a session's age, regardless of activity (LoginSession#
+  # absolutely_expired?, docs/login-session.md section 3). Kept here, not
+  # on LoginSession, so all three session-timing constants have one home.
+  ABSOLUTE_SESSION_AGE = 30.days
 
   # Matches paths that must not be used as post-login redirect destinations.
   # Covers /login and /signup (would create redirect loops) and /signout

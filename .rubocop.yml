@@ -57,7 +57,6 @@ AllCops:
     - 'node_modules/**/*'
     - 'railroader/**/*'
     - '.pryrc'
-    - 'license_okay'
     - ',*'
 
 # This will ALWAYS be disabled. We *want* to be able disable cops.

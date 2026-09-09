@@ -85,7 +85,7 @@ gem 'bootstrap_form', '~> 2.7' # DO NOT update unless updating bootstrap
 gem 'bundler' # Ensure it's available
 # Note: if webpacker is used, see chartkick website for added instructions
 gem 'chartkick', '~> 5.2' # Chart project_stats
-gem 'commonmarker', '~> 2.9.0' # Process markdown in textareas
+gem 'commonmarker', '~> 2.10.0' # Process markdown in textareas
 gem 'faraday-retry', '~> 2.1' # Force retry of faraday requests for reliability
 # We no longer use "fastly-rails"; it doesn't support Rails 6+.
 # They recommend switching to the "fastly" gem (aka "fastly-ruby"),
@@ -139,7 +139,7 @@ gem 'omniauth-github', '~> 2.0' # Authentication to GitHub (get project info)
 # all testing, and over time we've become more comfortable that this is
 # the "standard way to resolve this issue".
 gem 'omniauth-rails_csrf_protection', '~> 2.0' # integrate omniauth with rails
-gem 'pagy', '~> 43.5' # Paginator for web pages
+gem 'pagy', '~> 43.6' # Paginator for web pages
 gem 'paleta', '~> 0.3' # Color manipulation, used for badges
 gem 'paper_trail', '~> 17.0' # Record previous versions of project data
 gem 'pg', '~> 1.4' # PostgreSQL database, used for data storage
@@ -164,7 +164,7 @@ gem 'redcarpet', git: 'https://github.com/david-a-wheeler/redcarpet', branch: 'l
 gem 'sassc-rails' # compiles .scss (css replacement), replaces sass-rails
 gem 'scout_apm' # Monitor for memory leaks
 gem 'secure_headers', '~> 7' # Add hardening measures to HTTP headers
-gem 'solid_queue', '~> 1.1' # ActiveJob database backend
+gem 'solid_queue', '~> 1.7' # ActiveJob database backend
 # WARNING!!!!
 # CHECK DEPLOYMENT FIRST IF YOU UPDATE sprockets-rails.
 # The gem sprockets-rails version 3.4.1 (from 3.2.2) caused a regression
@@ -183,7 +183,6 @@ group :development, :test do
   gem 'dotenv', '~> 3.0' # Load env vars from .env files into Rails ENV
   gem 'eslintrb' # Linter for JavaScript code.
   gem 'json', '~> 2.16' # Process JSON format
-  gem 'license_finder', '~> 7.0', require: false # Acceptable sw licenses
   gem 'mdl', '0.13.0' # Markdownlint - linter for markdown format
   # Removed pronto gems - comprehensive linting now handled by rake default
   gem 'rails_best_practices', '~> 1.23', require: false # Code quality
@@ -271,7 +270,7 @@ group :test do
   # bundling the JSON formatter can't break us in a surprising way.
   gem 'simplecov', require: false
   gem 'simplecov_json_formatter', require: false
-  gem 'webmock', '~> 3.0', require: false # Mock HTTP requests for testing
+  gem 'webmock', '~> 3.26', require: false # Mock HTTP requests for testing
 end
 
 group :production do

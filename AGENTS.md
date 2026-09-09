@@ -71,7 +71,6 @@ tested have an increased risk of causing production failures.
 - `rake eslint` - JavaScript linting
 - `rake whitespace_check` - Check for trailing whitespace
 - `rake yaml_syntax_check` - YAML syntax validation
-- `rake license_okay` - License compliance check
 - `rake bundle_audit` - Security audit of gems
 
 For specific files:
@@ -125,6 +124,14 @@ GitHub runs Brakeman for static security analysis via
 `.github/workflows/brakeman.yml` (gating the main branch), and CodeQL where
 configured; this is not done on the local system. Brakeman's accepted
 findings are recorded in `config/brakeman.ignore`.
+
+GitHub also runs the OSS license check via
+`.github/workflows/license_finder.yml`, gating the main branch the same
+way. `license_finder` is not in the `Gemfile`: it's a CI-only analyzer, not
+an app dependency (installed standalone with `gem install`, like
+Brakeman), so its outdated `rubyzip` dependency (pinned to `< 3`, and thus
+vulnerable to CVE-2026-85396) never enters the app's dependency graph.
+Approved licenses are recorded in `docs/dependency_decisions.yml`.
 
 ### Development Server
 

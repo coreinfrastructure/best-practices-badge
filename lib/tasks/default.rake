@@ -89,7 +89,6 @@ STATIC_CHECKS = %w[
   rubocop
   markdownlint
   rails_best_practices
-  license_okay
   yaml_syntax_check
   circleci_config_check
   gitignore_check
@@ -103,12 +102,19 @@ STATIC_CHECKS = %w[
   report_code_statistics
 ].freeze
 
-# DYNAMIC: not settled by the commit. bundle_audit reads an advisory
-# database and percent_gems_up_to_date reads rubygems.org, both of which
-# move underneath an unchanged commit, so a gem set that was clean when
-# it merged can be vulnerable by the time it deploys. That is exactly
-# the moment we want to be told, so these run on every build, deploys
-# included.
+# DYNAMIC: not settled by the commit. percent_gems_up_to_date reads
+# rubygems.org, which moves underneath an unchanged commit, so it is a
+# fact about now rather than about the code. That is exactly the moment
+# we want to be told, so it runs on every build, deploys included.
+#
+# bundle_audit used to be here for the same reason: it also reads
+# something (an advisory database) that moves independently of the
+# commit. But that meant a newly disclosed vulnerability, unrelated to
+# whatever a pull request actually changed, could fail that pull
+# request's build, or an unrelated deploy. It now runs on its own daily
+# schedule instead, in .github/workflows/bundle_audit.yml, which files
+# or updates a GitHub issue rather than failing a build. "rake
+# bundle_audit" below still works for a manual, local check.
 #
 # The tests belong here for the same reason rather than by analogy: a
 # green suite is not a property of the commit alone. Re-running it is
@@ -118,7 +124,6 @@ STATIC_CHECKS = %w[
 # test:optimized runs the regular tests (parallelized) and then the
 # system tests (serial).
 DYNAMIC_CHECKS = %w[
-  bundle_audit
   percent_gems_up_to_date
   ruby_version_deployable
   test:optimized
@@ -397,32 +402,14 @@ task load_self_json: :no_rails do
   File.write('docs/self.json', pretty_contents)
 end
 
-# We use a file here because we do NOT want to run this check if there's
-# no need.  We use the file 'license_okay' as a marker to record that we
-# HAVE run this program locally.
-desc 'Examine licenses of reused components; see license_finder docs.'
-file 'license_okay' => ['Gemfile.lock', 'docs/dependency_decisions.yml'] do
-  sh 'bundle exec license_finder --decisions_file docs/dependency_decisions.yml && touch license_okay'
-end
-
-# NOT in the default list, deliberately. This renders the same scan
-# 'license_okay' has just done, as a browsable page, and license_finder
-# offers no way to get both from one pass: "action_items --format html"
-# gates correctly but emits 205 bytes saying everything is approved,
-# not the 340 KB report. So having both in 'rake default' meant
-# scanning every gem twice, about 40 seconds, for one scan's worth of
-# information.
-#
-# 'license_okay' is the check and it still runs everywhere. This is the
-# convenience, one command away when someone wants to read it:
-#     rake license_finder_report.html
-desc 'Create browsable license report (not part of "rake default")'
-file 'license_finder_report.html' => [
-  'Gemfile.lock',
-  'docs/dependency_decisions.yml'
-] do
-  sh 'bundle exec license_finder report --format html > license_finder_report.html'
-end
+# license_finder pins rubyzip to "< 3" (CVE-2026-85396 affects rubyzip
+# before 3.4.0), and has no release that relaxes that. Rather than force
+# our Gemfile to carry that stale constraint, license_finder is no longer
+# an app dependency at all: it runs standalone, installed with "gem
+# install" (not bundled), in .github/workflows/license_finder.yml. This
+# mirrors how Brakeman is handled (see that workflow and AGENTS.md): a
+# CI-only analyzer isn't an app dependency, so it doesn't belong in the
+# Gemfile. See docs/dependency_decisions.yml for approved licenses.
 
 desc 'Notice about proposal requirements (for AI)'
 task notice: :no_rails do
@@ -964,7 +951,10 @@ end
 #
 # DYNAMIC, not static: Heroku can withdraw a Ruby under an unchanged
 # tree, and the moment to hear about that is the deploy we were about
-# to do. Same argument as bundle_audit.
+# to do. Same argument as percent_gems_up_to_date: this one still gates
+# the build, though, rather than filing an issue like bundle_audit now
+# does, because an undeployable Ruby is not a risk to weigh, it is a
+# deploy that will not happen.
 #
 # NOT A MINITEST TEST. test/test_helper.rb disables outbound
 # connections, and WebMock's refusal is not a network error, so any

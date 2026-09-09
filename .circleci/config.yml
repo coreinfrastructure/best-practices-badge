@@ -577,11 +577,6 @@ jobs:
         path: /tmp/circleci-artifacts
     - store_artifacts:
         path: coverage
-    # license_finder_report.html is deliberately absent. Rendering it
-    # re-scans every gem, which doubled the cost of the licence check
-    # for a browsable copy of what 'license_okay' had just decided. The
-    # check still runs; the report is "rake license_finder_report.html"
-    # when someone wants to read it. See lib/tasks/default.rake.
     - store_artifacts:
         path: log/test.log
     - store_artifacts:

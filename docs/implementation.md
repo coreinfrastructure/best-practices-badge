@@ -1323,8 +1323,9 @@ and were researched separately:
 * colored: URL <https://github.com/defunkt/colored/blob/master/LICENSE> reveals this to be license MIT.
 
 For more on license decisions see docs/dependency_decisions.yml.
-You can also run 'rake license_finder_report.html' and read the
-report it generates.
+You can also run 'license_finder report --format html > license_finder_report.html'
+and read the report it generates; see CONTRIBUTING.md for how
+license_finder is installed and run.
 
 ## HTML link checking
 

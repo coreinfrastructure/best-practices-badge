@@ -89,7 +89,6 @@ STATIC_CHECKS = %w[
   rubocop
   markdownlint
   rails_best_practices
-  license_okay
   yaml_syntax_check
   circleci_config_check
   gitignore_check
@@ -397,32 +396,14 @@ task load_self_json: :no_rails do
   File.write('docs/self.json', pretty_contents)
 end
 
-# We use a file here because we do NOT want to run this check if there's
-# no need.  We use the file 'license_okay' as a marker to record that we
-# HAVE run this program locally.
-desc 'Examine licenses of reused components; see license_finder docs.'
-file 'license_okay' => ['Gemfile.lock', 'docs/dependency_decisions.yml'] do
-  sh 'bundle exec license_finder --decisions_file docs/dependency_decisions.yml && touch license_okay'
-end
-
-# NOT in the default list, deliberately. This renders the same scan
-# 'license_okay' has just done, as a browsable page, and license_finder
-# offers no way to get both from one pass: "action_items --format html"
-# gates correctly but emits 205 bytes saying everything is approved,
-# not the 340 KB report. So having both in 'rake default' meant
-# scanning every gem twice, about 40 seconds, for one scan's worth of
-# information.
-#
-# 'license_okay' is the check and it still runs everywhere. This is the
-# convenience, one command away when someone wants to read it:
-#     rake license_finder_report.html
-desc 'Create browsable license report (not part of "rake default")'
-file 'license_finder_report.html' => [
-  'Gemfile.lock',
-  'docs/dependency_decisions.yml'
-] do
-  sh 'bundle exec license_finder report --format html > license_finder_report.html'
-end
+# license_finder pins rubyzip to "< 3" (CVE-2026-85396 affects rubyzip
+# before 3.4.0), and has no release that relaxes that. Rather than force
+# our Gemfile to carry that stale constraint, license_finder is no longer
+# an app dependency at all: it runs standalone, installed with "gem
+# install" (not bundled), in .github/workflows/license_finder.yml. This
+# mirrors how Brakeman is handled (see that workflow and AGENTS.md): a
+# CI-only analyzer isn't an app dependency, so it doesn't belong in the
+# Gemfile. See docs/dependency_decisions.yml for approved licenses.
 
 desc 'Notice about proposal requirements (for AI)'
 task notice: :no_rails do

@@ -97,6 +97,45 @@ about it here:
   (check `.env.example` or equivalent, and `docs/secrets-policy.md`,
   design §8).
 
+**Set `SESSION_ID_HMAC_KEY` in staging and production now, as part of
+landing this step, not as a step 17 afterthought right before the
+cutover deploy.** This isn't just a good habit; skipping it is a silent,
+severe failure mode, not a loud one. Checked `HexKeyManagement.hex_key_for`
+(and the identical existing pattern it mirrors,
+`User.email_blind_index_key_hex`, app/models/user.rb:63): outside the
+`test` environment, a missing `ENV['SESSION_ID_HMAC_KEY']` falls back to
+`TEST_SESSION_ID_HMAC_KEY`, a fixed value spelled out in this very
+document. If steps 5 to 8's cutover ever runs in staging or production
+before that environment's real key is set, every `LoginSession` row it
+creates gets HMACed with a key any reader of this document already
+knows, silently defeating design §5's entire "safe even if the database
+leaks" property from the moment of deploy, with no error, no crash, and
+nothing in the running app to notice. Development is unaffected by this
+and needs no action: the same fallback there is intentional and already
+relied on for the two existing keys, not a gap.
+
+Concretely, generate and set a distinct value per environment (staging
+and production must not share one, the same as every other secret in
+`docs/secrets-policy.md`):
+
+```sh
+VAL=$(openssl rand -hex 32) # 32 bytes -> 64 hex digits -> 256-bit key,
+                             # matching DIGITS_OF_SESSION_ID_HMAC_KEY
+heroku config:set SESSION_ID_HMAC_KEY=$VAL --app $APP
+heroku config:get SESSION_ID_HMAC_KEY --app $APP # confirm before moving on
+```
+
+Run this against the staging app and, separately, the production app
+(each with its own freshly generated `$VAL`), while steps 1 to 4 are
+still the only things deployed there, additive and not yet read by
+anything (step 0 above). By the time steps 5 to 8's atomic cutover deploys
+to either environment, the real key is already in place and confirmed,
+not something to remember in the same breath as the cutover itself.
+This is a one-time provisioning step, separate from step 17's item
+(updating `docs/secrets-policy.md`'s rotation runbook so the key can be
+*rotated* later); do both, but they aren't the same action and this one
+comes first.
+
 ## 2. Migration: `login_sessions` table
 
 Design §3, and §9's now-resolved column-naming question.
@@ -999,6 +1038,16 @@ isn't one.
   add_index :pending_resubmissions, :created_at
   ```
 
+  No explicit `:id` column above; that's Rails' implicit, always-present
+  primary key, same as every other table in this schema, not something
+  this migration adds. It's worth naming that plainly here, since it's
+  easy to read this table's columns and wonder where
+  `session[:pending_resubmission_id]` (flow step 1 below) comes from:
+  that session key's value is simply `pending.id`, this implicit primary
+  key, under a more descriptive name chosen for the session hash. The
+  two names refer to the same value; `pending_resubmission_id` is not a
+  column.
+
   No `token` column, no unique index: the row is always looked up by its
   ordinary primary key, which Rails already indexes. No foreign key
   either, unlike `login_sessions`: a row here isn't tied to a known user
@@ -1270,10 +1319,23 @@ mechanism this app already uses for `forwarding_url`
    so reading and clearing it in one step is simply correct, not a
    single-use shortcut that needs a match check first.
 
+   **Do not add a `:id` (or `:token`) param to this route or read one
+   in this action, even though a conventional Rails `show` action reads
+   `params[:id]`.** `pending_resubmissions.id` is a plain sequential
+   primary key, easily guessed or enumerated; the *only* reason that's
+   safe is that nothing web-reachable ever accepts it as input; the
+   lookup key comes exclusively from this browser's own encrypted
+   session cookie. Adding an id param here, to match the usual `show`
+   idiom or to support some future feature, would let anyone who guesses
+   or enumerates a small integer view and destroy another browser's
+   stashed submission, silently reopening the exact
+   shareable-direct-link vulnerability an earlier, token-based draft of
+   this step had and was rewritten specifically to eliminate.
+
    ```ruby
    class PendingResubmissionsController < ApplicationController
      def show
-       pending_id = session.delete(:pending_resubmission_id)
+       pending_id = session.delete(:pending_resubmission_id) # never params
        pending = PendingResubmission.find_by(id: pending_id) if pending_id
        unless pending
          flash[:danger] = t('.expired')
@@ -1342,7 +1404,15 @@ warning, while the same submission with only ordinary fields shows no
 such warning and `sensitive_fields_dropped` false. No test is needed for
 the URL-shareable-link or delete-before-verify vulnerabilities earlier
 drafts had: there's no externally suppliable identifier left for either
-one to be *about*.
+one to be *about*. **A regression test worth keeping specifically
+because the vulnerability it guards is easy to reintroduce by accident**:
+create a `PendingResubmission` row belonging to a different (simulated)
+browser, visit `/pending_resubmissions?id=<that row's id>` (and
+`?pending_resubmission_id=<that row's id>`) with the current session's
+own `pending_resubmission_id` unset or pointing elsewhere, and assert
+the other browser's row is neither shown nor destroyed; this is the test
+that would fail the moment someone "fixes" `show` to also accept an id
+from `params`, the regression named above.
 
 ## 16. Rollout note
 
@@ -1385,7 +1455,11 @@ in any way.
   `SESSION_ID_HMAC_KEY` to the secret-rotation runbook, and to note that
   a session table now gives an additional global-logout mechanism
   (truncating `login_sessions`) alongside the existing
-  `SECRET_KEY_BASE`-rotation procedure.
+  `SECRET_KEY_BASE`-rotation procedure. This documents how to rotate the
+  key later; it's separate from, and comes after, actually provisioning
+  the key in staging and production, which step 1 already covers and
+  which needs to happen well before this point, not here for the first
+  time.
 - Confirm `docs/cdn-cache-not-logged-in.md`'s invariant (anonymous
   requests never receive a `Set-Cookie`) still holds; nothing in this
   plan should change anonymous-request behavior, but it's cheap to

@@ -113,28 +113,59 @@ without touching `SECRET_KEY_BASE`.
   used.
 - **On password change (and similarly sensitive account-security events:
   password reset, presumably 2FA changes if we ever add them): revoke every
-  existing session for that user and mint a fresh one for the request doing
-  the changing.** Concretely, delete all of that user's `login_sessions`
-  rows (`LoginSession.where(user_id: user.id).delete_all`) and immediately
-  create a new row + new cookie value, the same way login does, so the
-  browser making the change stays logged in on a freshly issued session
-  while every other previously-issued session id, including a stolen one an
-  attacker might be riding, stops working. This is standard practice (OWASP
-  recommends it) and is the highest-value item here relative to its cost:
-  one delete plus a call into the same login-session-creation code path.
-  This is a deliberate, narrow exception to the next point.
+  existing session for that user.** Concretely, delete all of that user's
+  `login_sessions` rows (`LoginSession.where(user_id: user.id).delete_all`),
+  so every previously-issued session id for that account, including a
+  stolen one an attacker might be riding, stops working. This is standard
+  practice (OWASP recommends it) and is the highest-value item here
+  relative to its cost: one delete call.
+  **Re-establishing a fresh session on top of that revocation is correct
+  only when the browser making this request already belongs to that same
+  account** (self-service password change). It is not correct for
+  password reset either, despite first appearances: checked
+  `PasswordResetsController#update` (app/controllers/
+  password_resets_controller.rb:50), and it redirects to `login_path` on
+  success today, expecting the user to log back in manually; it does not
+  auto-login. `SessionsController#new` (app/controllers/
+  sessions_controller.rb:31) already redirects an already-logged-in
+  visitor away from `login_path` with an "already logged in" flash.
+  Auto-logging in after reset, without also changing that redirect,
+  would silently replace the "your password was reset" flash with
+  "already logged in" before the user ever saw it, and auto-login itself
+  is a user-facing behavior change nobody asked for, beyond this
+  project's scope. **It is also not correct when an admin changes a
+  *different* user's password**: checked `UsersController#update`
+  (app/controllers/users_controller.rb:312) and its
+  `current_user_can_edit?` guard, and an admin can edit, including change
+  the password of, any user's account, not only their own. In that case
+  the person making the request and the account whose password changed
+  are different people; re-logging the *request* in as the *target*
+  account would silently switch the admin's own browser session to
+  authenticate as someone else, not the admin, which is both a real
+  account-confusion bug and an audit-trail integrity problem (whatever
+  that browser does next would be attributed to the wrong user). The
+  correct behavior is: always revoke the target's sessions; only
+  re-establish a session on *this* browser when this browser's own
+  account is the one whose password changed.
   **Must also call `SessionsHelper#forget(user)`** (app/helpers/
-  sessions_helper.rb:120) in the same flow. Checked while reviewing this
-  document: `UsersController#update` (app/controllers/users_controller.rb:
-  312) and `PasswordResetsController#update` (app/controllers/
-  password_resets_controller.rb:50), today's two password-change paths,
-  neither touches `remember_digest`. Without adding `forget(user)` here,
-  revoking every `login_sessions` row still leaves a permanent "remember
-  me" cookie (if the user, or an attacker, ever set one) able to silently
-  re-establish a brand-new session with no password needed, defeating the
-  point of this bullet. This isn't new to this project, but this feature
-  is the first place it's directly relevant, and closing it here is one
-  extra method call given `forget` already exists.
+  sessions_helper.rb:120) for that same user, but only in the
+  same "this browser's own account" case, for a parallel reason: `forget`
+  deletes the current response's own `:user_id`/`:remember_token` cookies,
+  which belong to whichever account this browser is currently logged in
+  as. Calling it for a *different* user (the admin-edits-someone-else
+  case) would silently delete the acting admin's own remember-me cookie,
+  not the target's; the target's remember-me capability still needs
+  invalidating in that case, just via `user.forget` directly (database
+  only, no cookie access), not the `forget(user)` helper. Checked while
+  reviewing this document: `UsersController#update` (app/controllers/
+  users_controller.rb:312) and `PasswordResetsController#update`
+  (app/controllers/password_resets_controller.rb:50), today's two
+  password-change paths, neither touches `remember_digest` today, so
+  without handling this, revoking every `login_sessions` row still leaves
+  a permanent "remember me" cookie (if the user, or an attacker, ever set
+  one) able to silently re-establish a brand-new session with no password
+  needed, defeating the point of this bullet. This isn't new to this
+  project, but this feature is the first place it's directly relevant.
 - **Ordinary logout affects only the current session, never all of a
   user's sessions.** `SessionsHelper#log_out`
   (app/helpers/sessions_helper.rb:195) deletes the one row matching the

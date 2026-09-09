@@ -567,13 +567,54 @@ Design §3's password-change bullet, and §3's `forget(user)` requirement.
 Both password-change paths need this, and it must fire only when the
 password actually changed, not on every profile edit.
 
-New shared method, `SessionsHelper#revoke_all_sessions_and_relogin(user)`:
+**Found during this review, not in the original draft**: `UsersController#update`
+lets an admin change a *different* user's password, not only their own
+(`current_user_can_edit?`, users_controller.rb:433, returns true for
+`current_user.admin?` regardless of whose record `@user` is; nothing in
+`compute_user_params` or the edit form special-cases admin-on-other-user).
+An earlier version of this method always called `log_in(user)` and
+`forget(user)` on the account whose password changed, unconditionally.
+That's correct only for the self-service case (a user changing their own
+password), where the account whose password changed and the browser
+making the request are the same. It is wrong for password reset (see the
+`PasswordResetsController` call site below: that browser isn't
+necessarily, and today isn't, logged in as anyone at all afterward) and
+wrong for the admin-edits-someone-else case: `log_in`
+writes `session[:login_session_id]` into *this request's own* session
+cookie, so calling it with the target user would silently switch the
+*admin's* browser to authenticate as the target, not the admin, an
+account-confusion bug and an audit-trail integrity problem
+(`user_for_paper_trail`, design §4, would attribute whatever that browser
+does next to the wrong user). `forget(user)` has the same flaw for a
+parallel reason: it deletes the *current response's* `:user_id`/
+`:remember_token` cookies, i.e. whichever account this browser is
+currently logged in as, so calling it for a different user would
+silently delete the *admin's own* remember-me cookie instead of the
+target's. Checked every existing call site of `log_in`/`forget` in this
+app (`log_out`; `sessions_controller.rb:197` during login itself): both
+are always called with the browser's own account today. This method is
+the first caller where that assumption can be false.
+
+**The fix**: only touch this browser's own session/cookies when this
+browser's own account is the one whose password changed. The target
+user's `login_sessions` rows are always revoked either way (that's the
+actual security goal: kill every session an attacker might be riding);
+only the "and also refresh *this* browser" part is conditional. When not
+relogging in, invalidate the target's remember-me capability directly via
+`user.forget` (database-only, touches no cookies) rather than the
+`forget(user)` helper, which is cookie-scoped to this browser.
+
+New shared method, `SessionsHelper#revoke_all_sessions_and_relogin(user, relogin:)`:
 
 ```ruby
-def revoke_all_sessions_and_relogin(user)
+def revoke_all_sessions_and_relogin(user, relogin:)
   LoginSession.where(user_id: user.id).delete_all
-  forget(user)
-  log_in(user)
+  if relogin
+    forget(user)
+    log_in(user)
+  else
+    user.forget
+  end
 end
 ```
 
@@ -582,14 +623,33 @@ dirty-tracking (already used the same way in this controller's
 `cleanup_changes`, `app/controllers/users_controller.rb:299`):
 
 - `UsersController#update` (users_controller.rb:312): after `@user.save`
-  succeeds, `revoke_all_sessions_and_relogin(@user) if
-  @user.saved_change_to_password_digest?`
+  succeeds,
+  `revoke_all_sessions_and_relogin(@user, relogin: current_user == @user)
+  if @user.saved_change_to_password_digest?`. `relogin` is true exactly
+  when the editor is editing their own account (self-service password
+  change: this browser's session gets refreshed, as before); false when
+  an admin edited someone else's (the target's sessions and remember-me
+  are revoked; the admin's own session and cookies are left completely
+  untouched).
 - `PasswordResetsController#update` (password_resets_controller.rb:50):
-  after `@user.update(user_params)` succeeds, same guard
+  after `@user.update(user_params)` succeeds,
+  `revoke_all_sessions_and_relogin(@user, relogin: false)`. Always
+  `false` here, on a second look: this controller's existing
+  `redirect_to login_path` (unchanged, right after) shows it was never
+  written to expect an already-authenticated browser, and
+  `SessionsController#new` (sessions_controller.rb:31) already redirects
+  an already-logged-in visitor away from `login_path` with its own
+  "already logged in" flash, which would silently clobber the "your
+  password was reset" flash before the user ever saw it. `relogin: false`
+  keeps today's UX exactly as it is (revoke every session, invalidate
+  remember-me, user logs back in manually with the new password), adds
+  no new user-facing behavior, and sidesteps that flash collision
+  entirely.
 
-The guard matters: without it, this would fire on *any* profile field
-change (locale, name, etc.), not just password changes, silently logging
-out every other session whenever a user updates their bio.
+The `saved_change_to_password_digest?` guard matters on its own too:
+without it, this would fire on *any* profile field change (locale, name,
+etc.), not just password changes, silently revoking sessions whenever a
+user updates their bio.
 
 ## 11. Ops tool: `rake login_sessions:revoke[user_id]`
 
@@ -767,11 +827,32 @@ step involves adding new conditional branches to existing methods.
   same user (a second-session-survives-logout test is the one that most
   directly proves design §3's "ordinary logout" bullet).
 - Password-change tests (`test/controllers/users_controller_test.rb`,
-  `test/controllers/password_resets_controller_test.rb`): changing the
-  password revokes other sessions and the current request stays logged
-  in; changing an unrelated field (e.g., locale) does *not* revoke
-  sessions, directly testing the `saved_change_to_password_digest?` guard
-  from step 10.
+  `test/controllers/password_resets_controller_test.rb`): a user changing
+  their own password revokes their other sessions and the current
+  request stays logged in as themselves; changing an unrelated field
+  (e.g., locale) does *not* revoke sessions, directly testing the
+  `saved_change_to_password_digest?` guard from step 10; a successful
+  password reset revokes the account's sessions and leaves the browser
+  logged out, redirected to `login_path` exactly as it is today
+  (`relogin: false`, confirming no accidental auto-login regression and
+  no flash collision with `SessionsController#new`'s "already logged in"
+  redirect).
+- **The test the `relogin:` guard exists for, exercising the full
+  end-to-end scenario, not just the admin's side of it**: log in as an
+  ordinary user in one session (creating a real `LoginSession` row for
+  them, simulating their own already-open browser tab), separately log
+  in as an admin in a second session, then have the admin change that
+  *same* user's password via `UsersController#update`. Assert, from the
+  ordinary user's own session: their pre-existing `LoginSession` row is
+  gone and their next authenticated request is treated as logged out
+  (the actual security property this step exists to deliver: an admin
+  password change really does kick the target out, not just revoke rows
+  nobody's checking). Assert, from the admin's session, in the same test:
+  the admin's own `LoginSession` row is untouched, `session[:login_session_id]`
+  in the admin's cookie still resolves to the admin's own account (not
+  the target's), and the admin's request stays authenticated as the
+  admin throughout, confirming `relogin: false` really did leave the
+  admin's own session alone rather than merely not crashing.
 - `test/lib/tasks/login_sessions_rake_test.rb` (matching however
   existing rake tasks are tested in this repo, check for a precedent
   file before inventing a new pattern): valid id revokes; unknown id

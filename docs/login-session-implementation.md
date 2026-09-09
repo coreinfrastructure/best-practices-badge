@@ -45,9 +45,13 @@ with a test-environment fallback" (`email_encryption_key_hex` and
 independent copies of the same four-line pattern is exactly what
 AGENTS.md's "if the same thing is written more than once, it's wrong"
 is about. Extract a small shared helper, e.g. a `HexKeyManagement`
-module with one method:
+module with one method, in a new file `app/lib/hex_key_management.rb`,
+alongside this app's other shared, non-model utility modules (matching
+`app/lib/client_ip.rb`'s existing precedent for where this kind of code
+lives, rather than inventing a new location):
 
 ```ruby
+# frozen_string_literal: true
 module HexKeyManagement
   def hex_key_for(env_var:, test_value:, env_test: Rails.env.test?)
     return test_value if env_test
@@ -67,33 +71,31 @@ ever happens.
 
 Also: keep all three session-timing constants together. `SESSION_TTL`
 and `RESET_SESSION_TIMER` already live in `SessionsHelper`; put the new
-`ABSOLUTE_SESSION_AGE` there too (not on `LoginSession`, despite step 3
-below sketching it that way first-draft), so session policy has one
-home instead of two.
+`ABSOLUTE_SESSION_AGE` there too, not on `LoginSession`, so session
+policy has one home instead of two. Step 3's code below already
+reflects this (`absolutely_expired?` references
+`SessionsHelper::ABSOLUTE_SESSION_AGE`).
 
-- `LoginSession::DIGITS_OF_SESSION_ID_HMAC_KEY = 256 / 8 * 2`
-- `LoginSession::TEST_SESSION_ID_HMAC_KEY = '3' * DIGITS_OF_SESSION_ID_HMAC_KEY`
-  (`'1'` and `'2'` are already used by the two existing email keys; pick an
-  unused digit so a copy-paste error is easy to spot)
-- `LoginSession.session_id_hmac_key_hex(env_test: Rails.env.test?)`, same
-  test/production split as the two existing methods
-- **A real bug to avoid, not just style**: step 3's `digest` method calls
-  `session_id_hmac_key` (no `_hex` suffix), but only
-  `session_id_hmac_key_hex` is defined above. The existing pattern always
-  converts the hex string to raw bytes before using it as key material
-  (`[email_blind_index_key_hex].pack('H*')`, passed as `blind_index`'s
-  `key:`); that conversion step is what's missing here. Add it
-  explicitly, e.g. `LoginSession.session_id_hmac_key` returning
-  `[session_id_hmac_key_hex].pack('H*')`, and have `digest` call *that*.
-  Skipping this wouldn't just fail loudly (`NoMethodError`); a careless
-  fix that passes the hex *string* straight to `OpenSSL::HMAC` instead of
-  the unpacked bytes would run without error while quietly using the
-  wrong key material, so name this precisely rather than leaving it to
-  be improvised during implementation.
+Full wiring shown in step 3's code below; two things worth calling out
+about it here:
+
+- `TEST_SESSION_ID_HMAC_KEY` uses `'3'` as its fill digit (`'1'` and
+  `'2'` are already used by the two existing email keys, so picking an
+  unused one makes a copy-paste error between the three easy to spot).
+- The hex-to-bytes conversion matters, not just as a style preference:
+  `session_id_hmac_key` (private, step 3) unpacks
+  `session_id_hmac_key_hex`'s hex string into raw key bytes before
+  passing it to `OpenSSL::HMAC`, the same way
+  `[email_blind_index_key_hex].pack('H*')` does for
+  `EMAIL_BLIND_INDEX_KEY`. Skipping that step wouldn't fail loudly: the
+  hex *string* itself still works as *some* HMAC key, just the wrong
+  one, silently using less entropy than intended with no error to catch
+  it. Step 3's code already includes this conversion; naming it here is
+  a reminder of why it's there, not a gap left to fill in.
 - Document `SESSION_ID_HMAC_KEY` alongside `EMAIL_ENCRYPTION_KEY` and
   `EMAIL_BLIND_INDEX_KEY` wherever those are documented for deployment
   (check `.env.example` or equivalent, and `docs/secrets-policy.md`,
-  design §8)
+  design §8).
 
 ## 2. Migration: `login_sessions` table
 
@@ -164,7 +166,12 @@ New file `app/models/login_session.rb`.
 ```ruby
 # frozen_string_literal: true
 class LoginSession < ApplicationRecord
+  extend HexKeyManagement
+
   belongs_to :user
+
+  DIGITS_OF_SESSION_ID_HMAC_KEY = 256 / 8 * 2
+  TEST_SESSION_ID_HMAC_KEY = '3' * DIGITS_OF_SESSION_ID_HMAC_KEY
 
   # The raw session id, set only right after #create_for and never
   # persisted (there is no session_id column, only session_id_digest).
@@ -172,6 +179,12 @@ class LoginSession < ApplicationRecord
   # try_remember_token_login) gets both the row and the cookie value from
   # one call, instead of creating a row and then querying it back.
   attr_reader :raw_session_id
+
+  def self.session_id_hmac_key_hex(env_test: Rails.env.test?)
+    hex_key_for(env_var: 'SESSION_ID_HMAC_KEY',
+                test_value: TEST_SESSION_ID_HMAC_KEY, env_test: env_test)
+  end
+  private_class_method :session_id_hmac_key_hex
 
   def self.session_id_hmac_key
     [session_id_hmac_key_hex].pack('H*') # hex string -> raw key bytes,
@@ -221,9 +234,7 @@ for `try_remember_token_login` (step 8): calling `log_in(user)` there
 now hands back the row it just created, with no second query to re-find
 what was already just made.
 
-(Illustrative, not final: key management per step 1 needs wiring into
-`digest`/`session_id_hmac_key`; exact method names are this plan's
-suggestion, not a requirement.) Add `has_many :login_sessions,
+Add `has_many :login_sessions,
 dependent: :destroy` to `User` (`app/models/user.rb`), matching the
 existing `has_many :projects, dependent: :destroy` /
 `has_many :additional_rights, dependent: :destroy` pattern there, and the
@@ -354,7 +365,7 @@ def setup_authentication_state
 end
 ```
 
-New (shape, not final Ruby):
+New:
 
 ```ruby
 def setup_authentication_state
@@ -476,7 +487,7 @@ def try_remember_token_login
 end
 ```
 
-New (shape):
+New:
 
 ```ruby
 def try_remember_token_login

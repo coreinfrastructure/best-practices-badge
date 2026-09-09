@@ -102,12 +102,19 @@ STATIC_CHECKS = %w[
   report_code_statistics
 ].freeze
 
-# DYNAMIC: not settled by the commit. bundle_audit reads an advisory
-# database and percent_gems_up_to_date reads rubygems.org, both of which
-# move underneath an unchanged commit, so a gem set that was clean when
-# it merged can be vulnerable by the time it deploys. That is exactly
-# the moment we want to be told, so these run on every build, deploys
-# included.
+# DYNAMIC: not settled by the commit. percent_gems_up_to_date reads
+# rubygems.org, which moves underneath an unchanged commit, so it is a
+# fact about now rather than about the code. That is exactly the moment
+# we want to be told, so it runs on every build, deploys included.
+#
+# bundle_audit used to be here for the same reason: it also reads
+# something (an advisory database) that moves independently of the
+# commit. But that meant a newly disclosed vulnerability, unrelated to
+# whatever a pull request actually changed, could fail that pull
+# request's build, or an unrelated deploy. It now runs on its own daily
+# schedule instead, in .github/workflows/bundle_audit.yml, which files
+# or updates a GitHub issue rather than failing a build. "rake
+# bundle_audit" below still works for a manual, local check.
 #
 # The tests belong here for the same reason rather than by analogy: a
 # green suite is not a property of the commit alone. Re-running it is
@@ -117,7 +124,6 @@ STATIC_CHECKS = %w[
 # test:optimized runs the regular tests (parallelized) and then the
 # system tests (serial).
 DYNAMIC_CHECKS = %w[
-  bundle_audit
   percent_gems_up_to_date
   ruby_version_deployable
   test:optimized
@@ -945,7 +951,10 @@ end
 #
 # DYNAMIC, not static: Heroku can withdraw a Ruby under an unchanged
 # tree, and the moment to hear about that is the deploy we were about
-# to do. Same argument as bundle_audit.
+# to do. Same argument as percent_gems_up_to_date: this one still gates
+# the build, though, rather than filing an issue like bundle_audit now
+# does, because an undeployable Ruby is not a risk to weigh, it is a
+# deploy that will not happen.
 #
 # NOT A MINITEST TEST. test/test_helper.rb disables outbound
 # connections, and WebMock's refusal is not a network error, so any

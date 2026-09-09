@@ -586,8 +586,6 @@ check the software:
 *   *bundle* - use bundle to check dependencies
     ("bundle check || bundle install")
 *   *bundle_doctor* - sanity check on Ruby gem configuration/installation
-*   *bundle_audit* - check for transitive gem dependencies with
-    known vulnerabilities
 *   *rubocop* - runs Rubocop, which checks Ruby code style against the
     [community Ruby style guide](https://github.com/bbatsov/ruby-style-guide)
 *   *markdownlint* - runs markdownlint, also known as mdl
@@ -876,12 +874,15 @@ over the exact versions used for each gem, and we
 can easily update our dependencies.
 That's important, because we transitively depend on over 150 gems.
 
-The default 'rake' task and the variant used by our
-continuous integration (CI) suite includes the rake 'bundle_audit' task.
-This reports if a Ruby gem we use has a publicly known
-vulnerability listed in the National Vulnerability Database (NVD).
-Thus, simply running 'rake' will immediately warn you if there is a
-publicly known vulnerability in the version of a gem we use.
+The rake 'bundle_audit' task reports if a Ruby gem we use has a publicly
+known vulnerability listed in the National Vulnerability Database (NVD).
+Run it directly with 'rake bundle_audit' for a manual, local check.
+It no longer runs as part of the default 'rake' task or the CI suite,
+because the vulnerability database it reads moves independently of our
+commits, so a failure there is unrelated to whatever a given commit or
+pull request changed. Instead, `.github/workflows/bundle_audit.yml` runs
+it on a daily schedule and files or updates a GitHub issue when it finds
+something.
 Obviously, if there is a known vulnerability you *definitely* need
 to update that gem.
 

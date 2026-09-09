@@ -325,6 +325,14 @@ class UsersController < ApplicationController
       if current_user == @user && preferred_locale
         I18n.locale = preferred_locale.to_sym
       end
+      # A password change must revoke every session an attacker riding the
+      # old password might hold. relogin is true exactly when the editor is
+      # editing their own account (this browser's session is refreshed);
+      # false when an admin edited someone else's (only the target's
+      # sessions/remember-me are revoked, this browser is left untouched).
+      if @user.saved_change_to_password_digest?
+        revoke_all_sessions_and_relogin(@user, relogin: current_user == @user)
+      end
       # Email user on every change.  That way, if the user did *not* initiate
       # the change (e.g., because it's by an admin or by someone who broke
       # into their account), the user will know about it.

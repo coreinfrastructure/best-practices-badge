@@ -139,6 +139,30 @@ module SessionsHelper
     cookies.delete(:remember_token)
   end
 
+  # Revokes every login_sessions row for `user` (e.g. after a password
+  # change: the actual security goal is killing every session an attacker
+  # might be riding). Only touches *this* browser's own session/cookies
+  # when `relogin` is true; otherwise `user`'s remember-me capability is
+  # invalidated directly on the model (database-only, no cookie writes),
+  # since `forget`/`log_in` are scoped to whichever account *this* browser
+  # is currently authenticated as, which is wrong to call for a different
+  # user (see docs/login-session-implementation.md section 10 for the
+  # admin-edits-someone-else account-confusion bug this avoids).
+  # @param user [User] the user whose sessions to revoke
+  # @param relogin [Boolean] whether to also refresh this browser's own
+  #   session (only correct when this browser is already authenticated as
+  #   `user`)
+  # @return [void]
+  def revoke_all_sessions_and_relogin(user, relogin:)
+    user.login_sessions.delete_all
+    if relogin
+      forget(user)
+      log_in(user)
+    else
+      user.forget
+    end
+  end
+
   # Return true iff the current user can edit the given url.
   #
   # The GitHub API documentation here:

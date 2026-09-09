@@ -143,6 +143,37 @@ class PasswordResetsControllerTest < ActionDispatch::IntegrationTest
   end
   # rubocop:enable Metrics/BlockLength
 
+  test 'successful password reset revokes existing sessions' do
+    # Simulate @user's own already-open browser tab, logged in elsewhere,
+    # before they request the reset (e.g. because they suspect their
+    # account is compromised).
+    other_session =
+      open_session do |sess|
+        sess.log_in_as(@user, password: 'password')
+      end
+    other_login_session_id = other_session.session[:login_session_id]
+    assert LoginSession.exists?(
+      session_id_digest: LoginSession.digest(other_login_session_id)
+    )
+
+    @user.create_reset_digest
+    put "/en/password_resets/#{@user.reset_token}", params: {
+      email: @user.email,
+      user: { password: 'foo1234!', password_confirmation: 'foo1234!' }
+    }
+
+    # Exactly today's UX (relogin: false): the browser making the reset
+    # request was never logged in as anyone and stays that way.
+    assert_not user_logged_in?
+    assert_redirected_to login_url(locale: :en)
+
+    # The account's pre-existing session, from the *other* browser, is
+    # revoked too -- the actual security goal of a password reset.
+    assert_not LoginSession.exists?(
+      session_id_digest: LoginSession.digest(other_login_session_id)
+    )
+  end
+
   test 'password reset silently skipped for unactivated account' do
     unactivated = users(:test_user_not_active)
     post '/en/password_resets',

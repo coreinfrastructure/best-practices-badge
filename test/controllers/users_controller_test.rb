@@ -626,5 +626,51 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes @response.body, 'Mark Watney'
     assert_not_includes @response.body, @user.name
   end
+
+  # This is the test the relogin: guard (SessionsHelper#
+  # revoke_all_sessions_and_relogin) exists for: an admin changing a
+  # *different* user's password must kick that user out everywhere,
+  # while leaving the admin's own, unrelated session completely alone.
+  test 'admin changing another users password revokes their sessions ' \
+       'but not the admin' do
+    # Simulate the target's own already-open browser tab, via a genuinely
+    # separate simulated browser (open_session), not just a second row.
+    target_session = open_session { |sess| sess.log_in_as(@user, password: 'password1') }
+    assert target_session.user_logged_in?
+    target_login_session_id = target_session.session[:login_session_id]
+
+    # This test's own session logs in separately, as the admin.
+    log_in_as(@admin)
+    admin_login_session_id = session[:login_session_id]
+
+    new_password = 'Agoodp@$$word2'
+    VCR.use_cassette('should_update_user_when_logged_in_as_admin') do
+      patch "/en/users/#{@user.id}", params: {
+        user: { password: new_password, password_confirmation: new_password }
+      }
+    end
+    follow_redirect!
+    my_assert_select '.alert-success', 'Profile updated'
+
+    # The admin's own session/cookie are completely untouched: relogin:
+    # false only revokes the TARGET's capability to stay logged in, it
+    # must never touch the acting admin's own browser or account.
+    assert user_logged_in?
+    assert_equal @admin.id, logged_in_user_id
+    assert_equal admin_login_session_id, session[:login_session_id]
+    assert LoginSession.exists?(
+      session_id_digest: LoginSession.digest(admin_login_session_id)
+    )
+
+    # The target's own pre-existing session is gone...
+    assert_not LoginSession.exists?(
+      session_id_digest: LoginSession.digest(target_login_session_id)
+    )
+    # ...and their browser's NEXT authenticated request is treated as
+    # logged out -- proving the revoke actually took effect server-side,
+    # not merely that the database row is gone while nobody checks it.
+    target_session.get edit_user_path(@user)
+    target_session.assert_redirected_to login_url(locale: :en)
+  end
 end
 # rubocop:enable Metrics/ClassLength

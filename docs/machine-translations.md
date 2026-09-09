@@ -66,12 +66,16 @@ This ensures:
 
 ## We use our human translations to guide machine translations
 
-Our approach takes batches of text to translate, selects as examples
-the most-relevant human translations for that text to translate,
-and provides an LLM with the batches and relevant human translation
-examples. This enables the human translations to guide the machine
-translations, especially when translating the many specialized technical
-terms we use (such as "version control").
+Our approach takes a batch of text to translate, finds the recurring
+technical terms in it (see below), and selects a small set of existing
+human translations that, together, cover as many of those terms as
+possible. Those human translations are the concrete starting point we
+hand the LLM alongside the text to translate: the LLM extends how a
+human already rendered "version control" or "multi-factor
+authentication" rather than inventing its own wording. This is what
+keeps machine translations consistent with the human translations we
+already have, especially for the many specialized technical terms
+we use.
 
 A reasonable question would be,
 "Why not just send English text directly to
@@ -158,16 +162,34 @@ When machine-translating text to a target language (e.g., French):
    - Acronyms (2+ consecutive capitals: MFA, HTTPS, CI/CD)
    - Proper nouns (capitalized words: GitHub, OpenSSF)
    - Technical compounds (hyphenated: multi-factor, version-control)
-   - Words or short phrases (1-3 words, HTML/URLs stripped first) that
-     recur in 2+ different English strings elsewhere in the app (e.g.,
-     "badge", "repository", "version control"). Frequency, not word
+   - Recurring 1-, 2-, and 3-word phrases (n-grams): every contiguous
+     word sequence of that length is a candidate, except one containing
+     a stopword ("the", "a", "and", "is", and similar grammatical or
+     generic words that can't head a meaningful phrase, and that any
+     competent translator already renders correctly without an
+     example). A candidate only counts as terminology once it recurs
+     in 2+ different English strings elsewhere in the app (e.g.,
+     "badge", "repository", "version control"): a term seen only once
+     has nothing else to be consistent with. Frequency, not word
      length, is what makes something "terminology" here, so this also
      catches short domain words a length cutoff would miss.
 
-3. **Find translation examples**: Search existing human translations for
-   entries containing those same technical terms. For example, if we're
-   translating text containing "multi-factor authentication", we find
-   human translations that already use that phrase.
+3. **Select covering examples**: Rather than picking one example per
+   term (which wastes example slots when several terms happen to
+   appear together in one existing sentence) or sorting by how often a
+   term recurs overall (which would crowd out a rare-but-real term in
+   favor of repeating whichever word is most common), we run a greedy
+   set-cover: repeatedly pick whichever already-human-translated entry
+   covers the most not-yet-covered terms, until we reach our example
+   budget (20-30 entries) or nothing left covers a new term. If budget
+   remains, we add entries that at least touch an already-covered term,
+   then fall back to our longest available human translations for
+   general style, so every batch gets real human-translated examples
+   even when term coverage runs out early. We also guarantee at least
+   one example for every distinct `%{placeholder}` the batch uses,
+   since different placeholders carry different grammatical roles
+   (`%{count}` needs number agreement; `%{project_name}` is a plain
+   substitution) that a term-based example might never demonstrate.
 
 4. **Create example files**: Generate two YAML files:
    - `examples_en_fr_*.yml`: English text with the identified terms
@@ -195,7 +217,7 @@ Suppose we need to translate this English text to French:
 Our system:
 
 1. Identifies technical terms: "multi-factor authentication", "MFA", "repository"
-2. Finds human translations containing these terms, such as:
+2. Selects human translations that together cover those terms, such as:
    - "Multi-factor authentication significantly improves security"
      → "L'authentification multifacteur améliore considérablement la sécurité"
    - "Contributors must have repository access"
@@ -709,7 +731,10 @@ Our machine translation approach balances quality, cost, and coverage:
 
 - **Human translations are primary**: Always used when available
 - **Machine translations fill gaps**: Provide immediate coverage
-- **Human examples guide quality**: Human translations guide the AI
+- **Human translations are the starting point**: We select, via n-gram
+  extraction and greedy set-cover, the human translations that most
+  directly cover the terminology in each batch, and hand the AI those
+  as the concrete basis to extend rather than inventing its own wording
 - **Terminology consistency**: Technical terms translated more uniformly
 - **Automatic staleness detection**: Keeps translations current
 - **Human override**: Easy path to replace machine with human translations

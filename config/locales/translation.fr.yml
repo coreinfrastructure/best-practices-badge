@@ -86,6 +86,7 @@ fr:
       Désolé, vous ne pouvez pas encore vous connecter. À titre
       de mesure anti-spam, il y a un délai après l'activation
       d'un compte local avant de pouvoir vous connecter.
+    login_failed:
   users:
     new:
       signup_header: S'inscrire
@@ -434,6 +435,7 @@ fr:
         analysis_failed:
           one:
           other:
+      automation_hint_html:
     form_basics:
       project_name:
         description: Quel est le nom intelligible du projet ?
@@ -845,6 +847,10 @@ fr:
       many: >-
         À titre de mesure anti-spam, vous devez attendre %{count}
         heures après l'activation avant de pouvoir vous connecter.
+    link_invalid_or_used:
+    confirm_heading:
+    confirm_prompt:
+    confirm_button:
   password_resets:
     forgot_password: Mot de passe oublié
     reset_password: Réinitialiser le mot de passe
@@ -1003,6 +1009,7 @@ fr:
     unsubscribe_notice_text:
     subject_warned_level:
     warned_level_message:
+    warned_level_message_no_date:
   project_name_unknown: "(Nom inconnu)"
   locale_name:
     en: Anglais
@@ -3169,8 +3176,6 @@ fr:
       osps_br_01_01:
         description:
         details:
-      osps_br_01_02:
-        description:
       osps_br_03_01:
         description:
         details:
@@ -4018,3 +4023,6 @@ fr:
       field_value:
       array_match:
       comment_suffix:
+  pagination:
+    first: Premier
+    last: Dernier

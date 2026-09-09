@@ -72,6 +72,10 @@ de:
       many: >-
         Als Anti-Spam-Maßnahme müssen Sie %{count} Stunden nach
         der Aktivierung warten, bevor Sie sich anmelden können.
+    link_invalid_or_used:
+    confirm_heading:
+    confirm_prompt:
+    confirm_button:
   password_resets:
     forgot_password: Passwort vergessen
     reset_password: Passwort zurücksetzen
@@ -120,6 +124,7 @@ de:
       Leider können Sie sich noch nicht anmelden. Als Anti-Spam-Maßnahme
       müssen Sie  nach der Aktivierung einige Zeit warten, bevor
       Sie sich anmelden können.
+    login_failed:
   users:
     new:
       signup_header: Anmelden
@@ -449,6 +454,7 @@ de:
         analysis_failed:
           one:
           other:
+      automation_hint_html:
     form_basics:
       project_name:
         description: Was ist der von Menschen lesbare Name des
@@ -947,6 +953,7 @@ de:
     unsubscribe_notice_text:
     subject_warned_level:
     warned_level_message:
+    warned_level_message_no_date:
   user_mailer:
     account_activation:
       before_html: |-
@@ -3040,8 +3047,6 @@ de:
       osps_br_01_01:
         description:
         details:
-      osps_br_01_02:
-        description:
       osps_br_03_01:
         description:
         details:
@@ -3614,3 +3619,6 @@ de:
       field_value:
       array_match:
       comment_suffix:
+  pagination:
+    first: "&laquo;"
+    last: "&raquo;"

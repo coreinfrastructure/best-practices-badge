@@ -73,6 +73,10 @@ sw:
         Kwa minajili ya kupambana na barua taka, lazima usubiri
         masaa %{count} baada ya uanzishaji kabla ya kuingia.
     failed_activation: Kiungo batili cha uanzishaji
+    link_invalid_or_used:
+    confirm_heading:
+    confirm_prompt:
+    confirm_button:
   password_resets:
     forgot_password:
     reset_password:
@@ -117,6 +121,7 @@ sw:
       Samahani, bado huwezi kuingia. Kama hatua ya kupambana na
       barua taka, kuna ucheleweshaji baada ya kufungua akaunti
       ya ndani kabla ya kuingia.
+    login_failed:
   static_pages:
     error_404:
       heading: 'Kosa 404: Ukurasa Haukupatikana'
@@ -409,6 +414,7 @@ sw:
         analysis_failed:
           one:
           other:
+      automation_hint_html:
     show:
       edit:
       delete:
@@ -573,6 +579,7 @@ sw:
     unsubscribe_notice_text:
     subject_warned_level:
     warned_level_message:
+    warned_level_message_no_date:
   user_mailer:
     account_activation:
       before_html: |-
@@ -1147,8 +1154,6 @@ sw:
       osps_br_01_01:
         description:
         details:
-      osps_br_01_02:
-        description:
       osps_br_03_01:
         description:
         details:
@@ -1532,3 +1537,6 @@ sw:
       field_value:
       array_match:
       comment_suffix:
+  pagination:
+    first:
+    last:

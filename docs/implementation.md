@@ -109,6 +109,13 @@ The application is configured by various environment variables:
   random 512-bit value; you can get that with `openssl rand -hex 128` or
   similar. Then run `rake update_bad_password_db` to load the database
   with the bad password list (it will take a few minutes to load them all).
+* SESSION_ID_HMAC_KEY: Key used to HMAC-SHA256 the random session id
+  minted for each login (see `LoginSession`). Only the HMAC digest is
+  stored (`login_sessions.session_id_digest`), never the raw session
+  id, so a database leak alone can't be used to forge or replay a
+  session. Hexadecimal string, must be 64 hex digits (==32 bytes==256
+  bits), the same format as EMAIL_ENCRYPTION_KEY and
+  EMAIL_BLIND_INDEX_KEY above.
 * BADGEAPP_DENY_LOGIN: If a non-blank value is set ("true" is recommended),
   then no on can log in, no one can create a new account (sign up),
   and no one can do anything that requires being logged (users are always

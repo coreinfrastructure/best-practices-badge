@@ -1,0 +1,173 @@
+# Copyright the Linux Foundation and the OpenSSF Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+
+name: Bundle audit
+
+# Check Gemfile.lock against the ruby-advisory-db for known vulnerabilities,
+# and track the result as a GitHub issue instead of a build status.
+#
+# THIS USED TO GATE THE BUILD. "rake bundle_audit" was part of
+# DYNAMIC_CHECKS in lib/tasks/default.rake, so it ran, and could fail,
+# on every pull request and every deploy. That is the wrong shape for
+# what it checks: the advisory database moves independently of our
+# commits, so a gem set that was clean when a pull request opened can
+# fail this check days later for a reason that pull request never
+# touched, and the same is true of an unrelated deploy. A notification
+# does not need to hold up work that has nothing to do with it. See
+# lib/tasks/default.rake for the reasoning that used to justify gating.
+# This workflow does not call "rake bundle_audit" itself; see below.
+#
+# ONE OPEN ISSUE AT A TIME, updated in place while the problem stands and
+# closed automatically once a run comes back clean, the same "don't let
+# a reminder become noise" reasoning as
+# .github/workflows/dependabot_review.yml. That one only ever files,
+# because an expired review date does not un-expire on its own; a
+# vulnerability finding can resolve itself (a later gem bump, or an
+# entry added to .bundler-audit.yml), so this one also closes.
+#
+# NO FULL "bundle install", so no "rake bundle_audit" either: that task
+# runs through "bundle exec", which needs the whole app bundle installed
+# via Bundler.setup, not just the bundler-audit gem. "pg" alone would
+# need libpq-dev on the runner to compile, for a check that only reads
+# Gemfile.lock and never touches an installed gem. Running bundle-audit
+# standalone instead, the way .github/workflows/brakeman.yml runs
+# Brakeman, skips all of that. Unlike Brakeman, though, bundler-audit IS
+# in our Gemfile (for "rake bundle_audit" locally), so this workflow
+# reads Gemfile.lock for which version to install rather than pinning
+# its own, which would be a second copy of that version free to drift
+# from the first.
+
+permissions:
+  contents: read
+
+on:
+  schedule:
+    # Daily: a new advisory can land any day, and the whole point of
+    # this check is to notice promptly rather than wait for the next
+    # pull request. Minute and hour chosen to miss every other
+    # scheduled job's slot; see .github/dependabot.yml for the list.
+    - cron: '17 7 * * *'
+  # So a human can ask without waiting for the schedule.
+  workflow_dispatch:
+
+jobs:
+  audit:
+    name: Check Gemfile.lock for known vulnerabilities
+    runs-on: ubuntu-latest
+
+    steps:
+      # Use harden-runner https://github.com/step-security/harden-runner
+      # presented at OpenSSF Best Practices WG 2022-03-15
+      - uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
+        with:
+          egress-policy: audit
+
+      - name: Checkout
+        # Pin to commit SHA to prevent supply chain attacks via tag mutation.
+        # Verify: curl -s https://api.github.com/repos/actions/checkout/git/ref/tags/v7.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # This job never pushes; nothing here should be able to.
+          persist-credentials: false
+
+      # OSPS-BR-01.02: Validate branch name before use in pipeline
+      - name: Validate branch name
+        run: script/validate_branch_name "$GITHUB_REF_NAME"
+
+      # Read the version bundler-audit resolves to in Gemfile.lock, so this
+      # workflow always installs the same version "rake bundle_audit" would
+      # use locally, kept current automatically by whatever bumps the
+      # Gemfile (Dependabot included) rather than by someone remembering to
+      # edit this file too.
+      - name: Read the bundler-audit version Gemfile.lock pins
+        id: version
+        run: |
+          set -euo pipefail
+          version="$(sed -n 's/^    bundler-audit (\([0-9.]*\)).*/\1/p' Gemfile.lock)"
+          if [ -z "$version" ]; then
+            echo '::error::bundler-audit not found in Gemfile.lock' >&2
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Install bundler-audit (standalone; no app bundle needed)
+        run: |
+          sudo gem install bundler-audit \
+            --version "${{ steps.version.outputs.version }}" --no-document
+
+      # bundle-audit reads .bundler-audit.yml from the working directory
+      # automatically, so accepted findings recorded there (with rationale)
+      # are already filtered out here, the same as in "rake bundle_audit".
+      - name: Check Gemfile.lock for known vulnerabilities
+        id: audit
+        run: |
+          set +e
+          output="$(bundle-audit check --update 2>&1)"
+          status=$?
+          set -e
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          {
+            echo 'report<<REPORT_EOF'
+            echo "$output"
+            echo 'REPORT_EOF'
+          } >> "$GITHUB_OUTPUT"
+          echo "$output"
+
+      - name: Mint a short-lived token from the App
+        id: app_token
+        uses: ./.github/actions/mint-app-token
+        with:
+          app-id: ${{ secrets.RENOVATE_APP_ID }}
+          private-key: ${{ secrets.RENOVATE_APP_PRIVATE_KEY }}
+          # Reading the open issues, and filing, editing, or closing one,
+          # is all this needs.
+          permission-issues: write
+
+      - name: File, update, or close the tracking issue
+        env:
+          GH_TOKEN: ${{ steps.app_token.outputs.token }}
+          REPO: ${{ github.repository }}
+          STATUS: ${{ steps.audit.outputs.status }}
+          REPORT: ${{ steps.audit.outputs.report }}
+          TITLE: bundle-audit found a known vulnerability
+        run: |
+          set -euo pipefail
+
+          # --limit 100: "gh issue list" defaults to 30, and this repo can
+          # have more than 30 open issues at once. Missing an
+          # already-open tracking issue here would defeat the ONE OPEN
+          # ISSUE AT A TIME invariant below by filing a duplicate.
+          issue_number="$(
+            gh issue list --repo "$REPO" --state open --limit 100 \
+              --json number,title |
+              jq -r --arg t "$TITLE" '.[] | select(.title == $t) | .number' |
+              head -n1
+          )"
+
+          if [ "$STATUS" != '0' ]; then
+            body="$(cat <<BODY_EOF
+          $REPORT
+
+          Raised by .github/workflows/bundle_audit.yml, on a daily schedule,
+          not by a pull request. If this isn't exploitable in how we use the
+          gem, record it with rationale in .bundler-audit.yml rather than
+          closing this issue by hand: the next scheduled run closes it once
+          the check agrees.
+          BODY_EOF
+            )"
+            if [ -n "$issue_number" ]; then
+              gh issue edit "$issue_number" --repo "$REPO" --body "$body"
+              echo "Updated issue #$issue_number."
+            else
+              gh issue create --repo "$REPO" --title "$TITLE" --body "$body" \
+                --label dependencies
+              echo 'Issue filed.'
+            fi
+          elif [ -n "$issue_number" ]; then
+            gh issue comment "$issue_number" --repo "$REPO" \
+              --body 'bundle-audit is clean again; closing.'
+            gh issue close "$issue_number" --repo "$REPO"
+            echo "Closed issue #$issue_number."
+          else
+            echo 'Clean; nothing open to close.'
+          fi

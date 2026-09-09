@@ -51,6 +51,10 @@ pt-BR:
       other:
       many:
     failed_activation:
+    link_invalid_or_used:
+    confirm_heading:
+    confirm_prompt:
+    confirm_button:
   password_resets:
     forgot_password:
     reset_password:
@@ -81,6 +85,7 @@ pt-BR:
     signed_out:
     no_login_time:
     cannot_login_yet:
+    login_failed:
   static_pages:
     error_404:
       heading:
@@ -351,6 +356,7 @@ pt-BR:
         analysis_failed:
           one:
           other:
+      automation_hint_html:
     show:
       edit:
       delete:
@@ -509,6 +515,7 @@ pt-BR:
     unsubscribe_notice_text:
     subject_warned_level:
     warned_level_message:
+    warned_level_message_no_date:
   user_mailer:
     account_activation:
       before_html: Olá
@@ -949,8 +956,6 @@ pt-BR:
       osps_br_01_01:
         description:
         details:
-      osps_br_01_02:
-        description:
       osps_br_03_01:
         description:
         details:
@@ -1334,3 +1339,6 @@ pt-BR:
       field_value:
       array_match:
       comment_suffix:
+  pagination:
+    first:
+    last:

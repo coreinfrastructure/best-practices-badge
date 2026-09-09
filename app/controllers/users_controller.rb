@@ -202,7 +202,7 @@ class UsersController < ApplicationController
 
   # rubocop: disable Metrics/MethodLength, Metrics/AbcSize
   def show
-    @user = User.find(params[:id])
+    @user = User.find(params.expect(:id))
     respond_to :html, :json
     # Paginate the list of user-owned projects.
     # Use "select_needed" to minimize the fields we extract
@@ -241,7 +241,7 @@ class UsersController < ApplicationController
   # rubocop: enable Metrics/MethodLength, Metrics/AbcSize
 
   def edit
-    @user = User.find(params[:id])
+    @user = User.find(params.expect(:id))
     # Force redirect if current_user cannot edit.  Otherwise, the process
     # of displaying the edit fields (with their defaults) could cause an
     # unauthorized exposure of an email address.
@@ -310,7 +310,7 @@ class UsersController < ApplicationController
 
   # rubocop: disable Metrics/AbcSize, Metrics/MethodLength
   def update
-    @user = User.find(params[:id])
+    @user = User.find(params.expect(:id))
     old_email = @user&.email_if_decryptable
     user_parameter_values = compute_user_params
     @user.assign_attributes(user_parameter_values)
@@ -436,7 +436,7 @@ class UsersController < ApplicationController
 
   # Confirm that this user can edit; sets @user to the user to process
   def redir_unless_current_user_can_edit
-    @user = User.find(params[:id])
+    @user = User.find(params.expect(:id))
     return if current_user_can_edit?(@user)
 
     flash[:danger] = t('users.edit.inadequate_privileges')

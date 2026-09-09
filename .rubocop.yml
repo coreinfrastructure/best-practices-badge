@@ -153,6 +153,18 @@ Style/MixinUsage:
   Enabled: false
 Rails/EnvironmentComparison:
   Enabled: false
+# Most flagged sites are initializers/rake tasks gating third-party setup
+# by deployment environment (config/initializers/*, lib/tasks/default.rake);
+# moving that into "config or a feature flag" as the cop suggests would
+# just relocate the same Rails.env coupling one file over, since an
+# environment-specific config file is itself environment-dependent. The
+# app/models/user.rb cases the cop's testability rationale actually targets
+# already solve that problem: email_encryption_key_hex/email_blind_index_key_hex
+# take an env_test: keyword specifically so tests can exercise the
+# production branch without touching RAILS_ENV, which is the dependency
+# injection the cop wants, just not via Rails config.
+Rails/Env:
+  Enabled: false
 Lint/MissingCopEnableDirective:
   Enabled: false
 Lint/NumberConversion:

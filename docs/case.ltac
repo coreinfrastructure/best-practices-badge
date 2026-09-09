@@ -65,7 +65,7 @@
         - Claim WeaknessAnalysis: Source code analyzed for weaknesses & all issues resolved
           - Evidence BrakemanEv: Brakeman source code weakness analyzer (../.github/workflows/main.yml)
         - Claim FLOSSVerif: All reused components are verified as FLOSS
-          - Evidence LicenseFinderEv: license_finder (../.circleci/config.yml)
+          - Evidence LicenseFinderEv: license_finder (../.github/workflows/license_finder.yml)
           - Evidence FOSSAEv: FOSSA check (https://github.com/ossf/best-practices-badge/settings/)
       - Claim DynamicVerif: Dynamic verifications are performed
         - Claim TestCoverage: Automated testing performed with excellent statement coverage

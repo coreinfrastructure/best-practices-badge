@@ -1,0 +1,102 @@
+# Copyright the Linux Foundation and the OpenSSF Best Practices badge contributors
+# SPDX-License-Identifier: MIT
+
+name: License Finder
+
+# Check that every reused component (Ruby gem, npm package, etc.) has an
+# OSS license we've approved, using license_finder.
+#
+# This is the project's authoritative license-check gate. It runs on every
+# pull request targeting main and on every push to main. Because the staging
+# and production branches are only ever advanced from main, gating main is
+# sufficient: code cannot reach a deployment branch without first passing
+# through main, and therefore through this check.
+# Make this a required status check in the branch protection rules for main
+# so a failing license check blocks the merge.
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+# Default to no permissions; grant only what each job needs.
+permissions: {}
+
+jobs:
+  license_finder:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read            # checkout (nothing else is needed: the
+                                # report is published as a public workflow
+                                # artifact, not to code scanning)
+
+    steps:
+      # Harden the runner and log egress (consistent with the other workflows).
+      # The install step below fetches the gem from rubygems.org, and
+      # license_finder itself queries rubygems.org and npmjs.org while
+      # scanning; that network access is recorded here.
+      - uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
+        with:
+          egress-policy: audit
+
+      # persist-credentials: false so a compromised later step cannot push code.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # OSPS-BR-01.02: validate the branch name before use in the pipeline.
+      - name: Validate branch name
+        run: script/validate_branch_name "$GITHUB_REF_NAME"
+
+      # Install license_finder using the runner's preinstalled Ruby, exactly
+      # as Brakeman is installed in .github/workflows/brakeman.yml (see that
+      # file's comment for why a version pin, not a hash pin, is enough
+      # here: RubyGems.org versions are immutable, and this job is isolated
+      # with no secrets and no production access).
+      #
+      # license_finder is deliberately NOT in the app's Gemfile. Its
+      # rubyzip dependency is pinned to "< 3" (rubyzip before 3.4.0 has
+      # CVE-2026-85396, a path-traversal bug), and license_finder has no
+      # release that relaxes that pin as of this writing -- see the open,
+      # unmerged pivotal/LicenseFinder PRs #1063, #1070, and #1072. Forcing
+      # our app's Gemfile.lock to satisfy that stale constraint would keep
+      # rubyzip vulnerable there too. Running license_finder standalone
+      # keeps its outdated rubyzip fully out of the app's dependency graph;
+      # it never affects the application or a developer's local bundle.
+      # To upgrade: bump the version here after reviewing the release notes
+      # at https://github.com/pivotal/LicenseFinder/releases, and check
+      # whether rubyzip 3.x support has landed.
+      - name: Install license_finder (version-pinned)
+        run: sudo gem install license_finder --version 7.2.1 --no-document
+
+      # Run license_finder over the source tree, checking dependencies
+      # against the licenses already approved in
+      # docs/dependency_decisions.yml. license_finder infers the correct
+      # package managers (bundler, npm) from the files present, and exits
+      # non-zero when it finds a dependency with a license we have not
+      # decided on.
+      - name: Check licenses of reused components
+        run: license_finder --decisions_file docs/dependency_decisions.yml
+
+      # Render the same scan as a browsable page. license_finder offers no
+      # way to gate and report in one pass (its HTML report always renders
+      # as approved, even when the gate above fails), so this is a second,
+      # separate scan -- run only when the gate passed, so a failing PR
+      # doesn't pay for a report nobody will read.
+      - name: Create browsable license report
+        if: success()
+        run: license_finder report --format html > license_finder_report.html
+
+      # Publish the report as a workflow artifact. On a public repository
+      # anyone can download run artifacts, so this is the public,
+      # human-readable record of what licenses this build relies on -- no
+      # GitHub Advanced Security or repo write access required.
+      - name: Publish license report (public artifact)
+        if: success()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: license-finder-report
+          path: license_finder_report.html
+          if-no-files-found: error
+          retention-days: 30

@@ -5645,10 +5645,10 @@ Referenced by: **[Package Verification](#package-verification)**
 
 Supports: **[Claim FLOSSVerif](#claim-flossverif)**
 
-External Reference: [../.circleci/config.yml](https://github.com/ossf/best-practices-badge/blob/main/docs/../.circleci/config.yml)
+External Reference: [../.github/workflows/license_finder.yml](https://github.com/ossf/best-practices-badge/blob/main/docs/../.github/workflows/license_finder.yml)
 <!-- end verocase -->
 
-`license_finder`. See [../.circleci/config.yml](../.circleci/config.yml).
+`license_finder`. See [../.github/workflows/license_finder.yml](../.github/workflows/license_finder.yml).
 
 <!-- verocase element FOSSAEv -->
 <!-- DO NOT EDIT text from here until "end verocase" -->

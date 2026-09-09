@@ -337,14 +337,28 @@ New (shape, not final Ruby):
 def setup_authentication_state
   return if Rails.application.config.deny_login
 
-  # Forgery-proof evidence this browser once had *some* session, current
-  # format or the pre-rollout one, used only to gate step 15's
-  # preserve-and-resubmit flow against zero-credential anonymous abuse.
-  # Never used for authentication: presence only, value never trusted.
-  # Must be read here, before anything below might reset_session.
-  @had_prior_session = session[:login_session_id].present? || session[:user_id].present?
-
   login_session = LoginSession.find_by_session_id(session[:login_session_id])
+
+  # Forgery-proof evidence this browser had a real session at some point,
+  # current format or the pre-rollout one, used only to gate step 15's
+  # preserve-and-resubmit flow against zero-credential anonymous abuse.
+  # Never used for authentication: existence only, value never trusted.
+  # Deliberately checks login_session (the lookup result: does a row
+  # still exist), not raw session[:login_session_id].present? (does the
+  # cookie merely carry that key); see the note below for why that
+  # distinction matters and isn't just a style choice.
+  #
+  # Ordering here is what makes the common case work: find_by_session_id
+  # doesn't check expiry, only whether a row with this digest still
+  # exists, so on the very request where an idle- or absolute-expired
+  # session is first noticed, the row is still found here (nothing has
+  # destroyed it yet), and this line runs BEFORE the block below destroys
+  # it and calls reset_session. A PATCH that arrives exactly when a
+  # session times out therefore still sees had_prior_session? true for
+  # the rest of *this* request, which is the case step 15 exists to
+  # protect. Read session[:login_session_id] (via this lookup) here, not
+  # later or from a fresh request, or this guarantee doesn't hold.
+  @had_prior_session = login_session.present? || session[:user_id].present?
 
   if login_session && (login_session.idle_expired? || login_session.absolutely_expired?)
     login_session.destroy
@@ -385,6 +399,45 @@ population, the single highest-volume case step 15 exists for, as
 built for them. Checking presence of *either* key, and trusting neither
 key's value for anything, covers both eras without reopening any
 authentication path through the legacy key.
+
+**A second, more serious problem with the new-format half of this check,
+found on a later review, not in the original draft**: an earlier version
+read `session[:login_session_id].present?` directly, the raw cookie key,
+rather than `login_session.present?`, the result of looking that key up.
+Those aren't the same thing, and the difference matters. A signed Rails
+`:cookie_store` value doesn't expire on its own; checked
+`config/initializers/session_store.rb`, and it sets no `expire_after` at
+all, so nothing server-side ever refuses to decode an old cookie for
+being stale, and a browser-side expiry (there isn't one set here either)
+wouldn't stop a deliberately replayed copy of the raw cookie bytes
+anyway, since that's enforced by the browser, not the server. That means
+an attacker who logs in exactly *once*, ever, with one real (if
+throwaway) account, can save that one `login_session_id` cookie value
+and replay it forever afterward: after they explicitly log out, after
+their `LoginSession` row idle-expires, after it's absolute-capped, after
+the daily cleanup deletes it, the raw cookie still decodes and its key is
+still present, so a check built on presence alone keeps saying "yes,
+this browser had a prior session" indefinitely, from a single one-time
+event. That defeats the goal stated for this gate: matching signup's
+per-attempt cost (`signup/ip` in `rack_attack.rb` throttles 20 attempts
+per 10 seconds per IP, but that throttle only slows down *repeated*
+signups; it does nothing once an attacker already has one working
+cookie to replay). The fix is to check the *lookup result* instead:
+`login_session.present?` is only true when a `LoginSession` row still
+actually exists for that cookie's session id, so once that row is
+gone, by explicit logout (immediately), idle/absolute expiry plus daily
+cleanup (within roughly the same ~72-hour bound design §3 already
+established for stale-row cleanup), or an admin/rake-task revoke
+(immediately), a replayed old cookie stops satisfying this check. This
+costs nothing extra: `login_session` is the exact same lookup this
+method already performs for authentication, just read before the block
+below might destroy or nil it out, not a second query. The legacy
+`session[:user_id]` half of the check is not affected by this same
+problem and doesn't need the same fix: no new cookie carrying that key
+can ever be minted once this project ships, so its exposure window is
+inherently bounded to the rollout transition, not perpetually
+replayable by any future attacker the way a live `login_session_id`
+cookie would otherwise be.
 
 Expose it via a small method in `SessionsHelper`, next to `logged_in?`
 (sessions_helper.rb:82) and matching its exact shape, so the two gate
@@ -815,7 +868,14 @@ step involves adding new conditional branches to existing methods.
 - `test/controllers/application_controller_test.rb` (or wherever
   `setup_authentication_state` is already tested): idle expiry,
   absolute-cap expiry, and the ordinary logged-in path, all via the new
-  table instead of cookie-only state.
+  table instead of cookie-only state; **the replay case `had_prior_session?`
+  was fixed to reject**: log in, capture the resulting
+  `session[:login_session_id]` cookie value, then destroy the
+  `LoginSession` row directly (simulating logout, expiry-plus-cleanup, or
+  an admin/rake-task revoke) without touching the cookie, and confirm a
+  request replaying that same old cookie value now gets
+  `had_prior_session?` false, not true, distinguishing "the row still
+  exists" from "the cookie still carries the key."
 - `test/integration/drop_session_cookie_test.rb`: rerun as-is first,
   since it pins the *outcome*, not the mechanism; it should still pass
   unmodified once `SESSION_BOOKKEEPING_KEYS` correctly treats
@@ -1097,7 +1157,15 @@ mechanism this app already uses for `forwarding_url`
    structurally, not heuristically: an attacker without `SECRET_KEY_BASE`
    cannot make it return true without having genuinely logged in at
    least once themselves, so this stops being a zero-cost action for a
-   never-authenticated visitor:
+   never-authenticated visitor. That's a one-time cost per attacker, not
+   a per-attempt one, since step 6 ties the check to whether a
+   `LoginSession` row still exists rather than to raw cookie-key
+   presence (step 6 explains why that distinction is necessary; an
+   earlier draft got this wrong and the check could otherwise have been
+   satisfied forever by replaying one old cookie). Requiring one real
+   signup, ever, is still a meaningfully higher bar than the
+   zero-credential status quo this gate replaced, even though it isn't
+   as strong as a cost incurred on every use:
 
    ```ruby
    def can_edit_else_redirect

@@ -541,7 +541,7 @@ class ProjectsController < ApplicationController
     # important because this common request is supposed to be quick.
     # Note: If the "find" fails this will raise an exception, which
     # will eventually lead (correctly) to a failure report.
-    @project = Project.select(BADGE_PROJECT_FIELDS).find(params[:id])
+    @project = Project.select(BADGE_PROJECT_FIELDS).find(params.expect(:id))
 
     respond_to do |format|
       format.svg do
@@ -571,7 +571,7 @@ class ProjectsController < ApplicationController
   # rubocop:disable Metrics/MethodLength
   def baseline_badge
     # Select only the fields we need for performance
-    @project = Project.select(BASELINE_BADGE_PROJECT_FIELDS).find(params[:id])
+    @project = Project.select(BASELINE_BADGE_PROJECT_FIELDS).find(params.expect(:id))
 
     respond_to do |format|
       format.svg do
@@ -1370,7 +1370,7 @@ class ProjectsController < ApplicationController
     # This will NOT match full URLs, but will match partial URLs.
     @projects = @projects.search_for(params[:q]) if params[:q].present?
     if params[:ids].present?
-      @projects = @projects.where(id: params[:ids].split(',').map do |x|
+      @projects = @projects.where(id: params.expect(:ids).split(',').map do |x|
                                         Integer(x)
                                       end)
     end
@@ -1440,12 +1440,12 @@ class ProjectsController < ApplicationController
   # Used as before_action to set @project for actions that need it.
   # @return [void] Sets @project instance variable
   def set_project_all_values
-    @project = Project.find(params[:id])
+    @project = Project.find(params.expect(:id))
   end
 
   # Load project data for limited fields.
   def set_project_for_limited_fields
-    @project = Project.select(PROJECT_LIMITED_FIELDS).find(params[:id])
+    @project = Project.select(PROJECT_LIMITED_FIELDS).find(params.expect(:id))
   end
 
   # Optimized project loading for section-based actions - loads only needed fields.
@@ -1466,10 +1466,10 @@ class ProjectsController < ApplicationController
     # Load project with selected fields, or all fields if section unknown
     @project =
       if fields_to_load
-        Project.select(fields_to_load).find(params[:id])
+        Project.select(fields_to_load).find(params.expect(:id))
       else
         # Unknown section - load all fields as fallback
-        Project.find(params[:id])
+        Project.find(params.expect(:id))
       end
   end
 

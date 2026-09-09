@@ -724,3 +724,70 @@ Here were some open questions that we believe are resolved
     present, use `User.find(user_id)` (raises `ActiveRecord::RecordNotFound`
     if missing) or an equivalent explicit check with a clear message and
     `exit 1`.
+
+## 10. The pattern behind the bugs this review process found
+
+Several review rounds of the implementation plan (`docs/login-session-implementation.md`)
+each turned up a real, previously-missed bug, not just style issues. Worth
+recording *why*, in this document rather than only the implementation
+one, since it's a property of the design change itself, not of any one
+step's code, and it's worth watching for in any future change to this
+area, not just during this project.
+
+**The pattern**: this whole project moves trust from "whatever's in the
+cookie is true" to "the cookie is just a lookup key; the database, and
+only the database, is truth." Nearly every bug found was new code that
+kept a habit from the old model without noticing the ground had shifted
+under it. Three concrete shapes it took:
+
+- **Treating presence as proof of current validity.** A cookie key, a
+  URL parameter, or a session value being *present* was repeatedly
+  treated as equivalent to the thing it refers to still being *valid* or
+  *current*, when the two can come apart: a signed Rails cookie doesn't
+  expire on its own, so a value legitimately received once can be
+  replayed long after whatever it pointed to is gone. This showed up
+  twice in the pending-resubmission mechanism (a token usable from a
+  URL an attacker could construct and hand to someone else; deleting a
+  session key before confirming it matched what was requested) and once
+  in `had_prior_session?` (checking a cookie key's presence rather than
+  whether the row it referred to still existed, letting one long-ago
+  login be replayed forever). The eventual fix for all three was the
+  same shape: stop treating presence as sufficient, check against the
+  thing that can actually go stale (a database row, an existing
+  session), or, better where possible, remove the second, externally
+  reachable value entirely so there's nothing left to merely check the
+  presence of.
+- **Conflating "who is authenticated on this request" with "the account
+  being acted on."** Most session-mutating code in this app has only
+  ever run with those two the same person, so nothing depended on
+  telling them apart. `revoke_all_sessions_and_relogin` broke that
+  assumption the first time a caller (an admin editing a *different*
+  user's password) could act on an account other than its own; calling
+  `log_in`/`forget` unconditionally would have silently switched the
+  *admin's* session to authenticate as the target. Any future code that
+  mutates `session`, cookies, or a `LoginSession` row on behalf of a
+  `user` argument needs to ask explicitly: is this always the browser's
+  own account, or can a privileged caller supply someone else's?
+- **Reusing an existing method at a new call site without re-deriving
+  its preconditions.** `project_params`/`compute_user_params` were
+  written assuming a normal, well-formed form submission, and calling
+  them from a new, adversarial-input-reachable path
+  (`can_edit_else_redirect`'s not-logged-in branch) surfaced a precondition
+  (the top-level params key must exist) that had never mattered before.
+  DRY reuse of working code is still the right default; the lesson is to
+  check what a reused method assumes about its caller, not just what it
+  does, especially when the new call site is reachable by less-trusted
+  input than the method's original callers.
+
+**What actually reduced the rate of new findings, more than any single
+fix**: the last review pass wasn't another instance-level fix. It
+removed the mechanism most of these findings clustered around (a
+separately generated, URL-carried token for pending resubmissions)
+entirely, replacing it with a value that's never readable or writable
+except through this app's own encrypted session cookie. Two of the bugs
+listed above stopped being fixable-but-recurring problems and became
+inexpressible: there was no longer a second, externally supplied value
+for a presence check or a match check to be wrong about. When the same
+shape of bug turns up more than once in one area, that's a signal to
+look for a design change that removes the shape entirely, not just a
+third careful fix.

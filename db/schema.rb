@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_03_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_09_205341) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -29,6 +29,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_03_120000) do
   create_table "bad_passwords", id: false, force: :cascade do |t|
     t.string "forbidden_hash"
     t.index ["forbidden_hash"], name: "index_bad_passwords_on_forbidden_hash"
+  end
+
+  create_table "login_sessions", comment: "One row per active login. Not Rack's own session bookkeeping; see docs/login-session.md.", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "ip_address", comment: "Client IP address at login"
+    t.datetime "last_used_at", null: false, comment: "Bumped at most once per RESET_SESSION_TIMER; idle sessions past SESSION_TTL are expired"
+    t.string "session_id_digest", null: false, comment: "HMAC-SHA256 of the raw session id; never the raw id itself"
+    t.datetime "updated_at", null: false
+    t.text "user_agent", comment: "Client User-Agent header at login; not size-limited to 255 chars like the default varchar column"
+    t.bigint "user_id", null: false, comment: "The user this login belongs to"
+    t.index ["created_at"], name: "index_login_sessions_on_created_at"
+    t.index ["last_used_at"], name: "index_login_sessions_on_last_used_at"
+    t.index ["session_id_digest"], name: "index_login_sessions_on_session_id_digest", unique: true
+    t.index ["user_id"], name: "index_login_sessions_on_user_id"
   end
 
   create_table "pg_search_documents", id: :serial, force: :cascade do |t|
@@ -936,6 +950,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_03_120000) do
 
   add_foreign_key "additional_rights", "projects"
   add_foreign_key "additional_rights", "users"
+  add_foreign_key "login_sessions", "users"
   add_foreign_key "projects", "users"
   add_foreign_key "solid_queue_blocked_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_claimed_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade

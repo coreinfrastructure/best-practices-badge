@@ -77,6 +77,7 @@ purpose, and where rotation is documented.
 | `SECRET_KEY_BASE` | Rails session and cookie signing/encryption | See [Rotating SECRET_KEY_BASE](#rotating-secret_key_base) below |
 | `EMAIL_ENCRYPTION_KEY` | AES-256-GCM encryption of stored user email addresses | See [Rotating email keys](#rotating-email-encryption-keys) below |
 | `EMAIL_BLIND_INDEX_KEY` | PBKDF2-HMAC-SHA256 blind index for privacy-preserving email search | See [Rotating email keys](#rotating-email-encryption-keys) below |
+| `SESSION_ID_HMAC_KEY` | HMAC-SHA256 key for `LoginSession`'s session id digest (`docs/login-session.md`) | Not yet documented; planned in `docs/login-session-implementation.md` |
 | `BADGEAPP_BADPWKEY` | HMAC-SHA512 key protecting the bad-password database | See [Rotating BADGEAPP_BADPWKEY](#rotating-badgeapp_badpwkey) below |
 | `GITHUB_KEY` | GitHub OAuth application client ID | Rotate via GitHub OAuth app settings; redeploy |
 | `GITHUB_SECRET` | GitHub OAuth application client secret | Rotate via GitHub OAuth app settings; redeploy |

@@ -109,6 +109,14 @@ Metrics/MethodLength:
 Rails/SkipsModelValidations:
   Exclude:
     - 'test/**/*.rb'
+# find_by_session_id is our own hand-written LoginSession class method
+# (it HMACs its argument before querying session_id_digest), not Rails'
+# dynamic-finder magic method; nothing to "convert" to find_by(...).
+Rails/DynamicFindBy:
+  AllowedMethods:
+    - find_by_sql
+    - find_by_token_for
+    - find_by_session_id
 Style/Copyright:
   Enabled: false
 Style/InlineComment:

@@ -60,6 +60,7 @@ zh-CN:
     login_automatic_signup: 如果需要，使用GitHub登录会自动执行注册。
     login_disabled: 所有登录暂时禁用
     cannot_login_yet: 抱歉，您还不能登录。作为一种反垃圾邮件措施，激活本地帐户后会有一定的延迟才能登录。
+    login_failed:
   users:
     new:
       signup_header: 注册
@@ -276,6 +277,7 @@ zh-CN:
         analysis_failed:
           one:
           other:
+      automation_hint_html:
     form_basics:
       project_name:
         description: 项目的人类可读的名称是什么？
@@ -494,6 +496,10 @@ zh-CN:
       few: 作为一种反垃圾邮件措施，您必须在激活后等待%{count}小时才能登录。
       other: 作为一种反垃圾邮件措施，您必须在激活后等待%{count}小时才能登录。
       many: 作为一种反垃圾邮件措施，您必须在激活后等待%{count}小时才能登录。
+    link_invalid_or_used:
+    confirm_heading:
+    confirm_prompt:
+    confirm_button:
   password_resets:
     forgot_password: 忘记密码
     reset_password: 重设密码
@@ -641,6 +647,7 @@ zh-CN:
     unsubscribe_notice_text:
     subject_warned_level:
     warned_level_message:
+    warned_level_message_no_date:
   project_name_unknown: "(未知名称)"
   locale_name:
     en: 英文
@@ -1335,8 +1342,6 @@ zh-CN:
       osps_br_01_01:
         description:
         details:
-      osps_br_01_02:
-        description:
       osps_br_03_01:
         description:
         details:
@@ -1826,3 +1831,6 @@ zh-CN:
       field_value:
       array_match:
       comment_suffix:
+  pagination:
+    first:
+    last:

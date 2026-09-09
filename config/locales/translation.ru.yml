@@ -78,6 +78,10 @@ ru:
       many: >-
         В связи с защитой от спама вам придется подождать %{count}
         часов после активации, прежде чем вы сможете войти в систему.
+    link_invalid_or_used:
+    confirm_heading:
+    confirm_prompt:
+    confirm_button:
   password_resets:
     forgot_password: Забыли пароль?
     reset_password: Сброс пароля
@@ -124,6 +128,7 @@ ru:
       сделать по закону.
     login_disabled:
     cannot_login_yet:
+    login_failed:
   static_pages:
     home:
       badge_program: Программа значков "Передовая практика OpenSSF"
@@ -545,6 +550,7 @@ ru:
         analysis_failed:
           one:
           other:
+      automation_hint_html:
     show:
       edit: Изменить
       delete: Удалить
@@ -1013,6 +1019,7 @@ ru:
     unsubscribe_notice_text:
     subject_warned_level:
     warned_level_message:
+    warned_level_message_no_date:
   user_mailer:
     account_activation:
       before_html: |-
@@ -3038,8 +3045,6 @@ ru:
       osps_br_01_01:
         description:
         details:
-      osps_br_01_02:
-        description:
       osps_br_03_01:
         description:
         details:
@@ -3497,3 +3502,6 @@ ru:
       field_value:
       array_match:
       comment_suffix:
+  pagination:
+    first:
+    last:

@@ -530,6 +530,26 @@ is a real and common leak shape. It does nothing for an attacker who
 steals the live credential and uses it immediately: rotation limits
 exposure *time*, it doesn't prevent exposure.
 
+A narrower idea, considered but not implemented: once the app's
+connection pool is established at boot, `ENV.delete("DATABASE_URL")`.
+Rails resolves the connection config once from `config/database.yml`
+at boot and reuses that cached hash for every later reconnect, so
+nothing downstream needs to reread the variable, and this wouldn't
+conflict with the rotation above: a config-var change already
+restarts the dyno, refreshing `ENV` cleanly at the next boot
+regardless of anything deleted in the old process. But it protects
+against a narrow vector only, a Ruby-level disclosure bug such as
+`ENV.inspect` reaching a debug or error page. It does *not* protect
+against an attacker with actual code execution: Linux's
+`/proc/self/environ` reflects the environment as of `execve()`, not
+later in-process `setenv`/`unsetenv` calls, so the value stays
+readable there regardless of what Ruby's `ENV` says afterward. It
+also does nothing against `heroku config:get DATABASE_URL` or any
+log or backup capture taken at boot time, since those read Heroku's
+own config-var store or the value as it existed at startup, not the
+running dyno's current process memory. Cheap defense in depth if it
+ever gets implemented; not something that closes this gap.
+
 So, precisely: steps 18 and 19 *prevent* the gap for `SECRET_KEY_BASE`
 (or any other application secret) leaking *without* `DATABASE_URL`,
 whatever that leak's actual shape turns out to be (a narrower-scoped

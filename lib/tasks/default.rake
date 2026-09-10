@@ -1752,6 +1752,7 @@ task daily: :environment do
   puts 'Purging never-activated local accounts older than ' \
        "#{User::UNACTIVATED_ACCOUNT_LIFETIME.inspect}."
   puts "Purged #{User.purge_unactivated_accounts} never-activated account(s)."
+  puts "Purged #{LoginSession.purge_stale} stale login session(s)."
   day_for_monthly = (ENV['BADGEAPP_DAY_FOR_MONTHLY'] || '5').to_i
   Rake::Task['monthly'].invoke if Time.now.utc.day == day_for_monthly
 end

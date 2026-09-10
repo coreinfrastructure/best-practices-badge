@@ -6,6 +6,7 @@
 
 require 'test_helper'
 
+# rubocop:disable Metrics/ClassLength
 class LoginSessionTest < ActiveSupport::TestCase
   setup do
     @user = users(:test_user)
@@ -90,6 +91,45 @@ class LoginSessionTest < ActiveSupport::TestCase
     assert_empty LoginSession.where(user_id: @user.id)
   end
 
+  test 'purge_stale deletes idle-expired rows but keeps rows just inside the window' do
+    fresh = LoginSession.create_for(
+      @user, ip_address: '127.0.0.1', user_agent: 'fresh'
+    )
+    fresh.update_columns(last_used_at: SessionsHelper::SESSION_TTL.ago.utc + 1.minute)
+
+    stale = LoginSession.create_for(
+      @user, ip_address: '127.0.0.1', user_agent: 'stale'
+    )
+    stale.update_columns(last_used_at: SessionsHelper::SESSION_TTL.ago.utc - 1.minute)
+
+    assert_equal 1, LoginSession.purge_stale
+    assert LoginSession.exists?(fresh.id)
+    assert_not LoginSession.exists?(stale.id)
+  end
+
+  test 'purge_stale deletes absolutely-expired rows even if recently used' do
+    fresh = LoginSession.create_for(
+      @user, ip_address: '127.0.0.1', user_agent: 'fresh'
+    )
+    fresh.update_columns(
+      created_at: SessionsHelper::ABSOLUTE_SESSION_AGE.ago.utc + 1.minute
+    )
+
+    stale = LoginSession.create_for(
+      @user, ip_address: '127.0.0.1', user_agent: 'stale'
+    )
+    # last_used_at stays at its just-created, recent value (not
+    # idle-expired), to isolate the absolute-cap branch of purge_stale's
+    # OR condition specifically, rather than the idle branch tested above.
+    stale.update_columns(
+      created_at: SessionsHelper::ABSOLUTE_SESSION_AGE.ago.utc - 1.minute
+    )
+
+    assert_equal 1, LoginSession.purge_stale
+    assert LoginSession.exists?(fresh.id)
+    assert_not LoginSession.exists?(stale.id)
+  end
+
   # session_id_hmac_key_hex / session_id_hmac_key
   # These private class methods have a production branch (env_test: false)
   # that is never reached during normal test runs; exercise it explicitly.
@@ -117,3 +157,4 @@ class LoginSessionTest < ActiveSupport::TestCase
     ENV['SESSION_ID_HMAC_KEY'] = saved
   end
 end
+# rubocop:enable Metrics/ClassLength

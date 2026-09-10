@@ -82,4 +82,19 @@ class LoginSession < ApplicationRecord
   def absolutely_expired?
     created_at < SessionsHelper::ABSOLUTE_SESSION_AGE.ago.utc
   end
+
+  # Deletes every idle-expired or absolutely-expired row (the same two
+  # conditions as #idle_expired?/#absolutely_expired?, expressed as SQL
+  # since this runs over every row, not one at a time). Live requests
+  # already reject both cases in
+  # ApplicationController#setup_authentication_state; this only stops
+  # the rows from accumulating, it doesn't enforce the expiry itself.
+  # @return [Integer] number of rows deleted
+  def self.purge_stale
+    where(
+      'last_used_at < :idle OR created_at < :absolute',
+      idle: SessionsHelper::SESSION_TTL.ago.utc,
+      absolute: SessionsHelper::ABSOLUTE_SESSION_AGE.ago.utc
+    ).delete_all
+  end
 end

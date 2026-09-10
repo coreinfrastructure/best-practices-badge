@@ -9,6 +9,7 @@
 # Manages session creation, destruction, and security measures like
 # session fixation protection.
 #
+# rubocop:disable Metrics/ClassLength
 class SessionsController < ApplicationController
   include SessionsHelper
 
@@ -112,11 +113,7 @@ class SessionsController < ApplicationController
   # @return [void]
   def successful_login(user, return_to_path = nil)
     log_in user
-    if return_to_path.present? && valid_return_path?(return_to_path)
-      redirect_to return_to_path, allow_other_host: false
-    else
-      redirect_back_or root_url
-    end
+    redirect_after_login(return_to_path)
 
     # Report last login time (this can help users detect problems)
     last_login = user.last_login_at
@@ -132,14 +129,31 @@ class SessionsController < ApplicationController
     # rubocop: enable Rails/SkipsModelValidations
   end
 
-  # Protects against session fixation while preserving forwarding URL.
+  # Picks where to send the user right after login: a stashed pending
+  # resubmission (docs/login-session-implementation.md section 15) takes
+  # priority over an explicit validated return_to, which takes priority
+  # over the ordinary forwarding_url-or-root fallback.
+  # @param return_to_path [String, nil] A pre-validated server-relative path
+  # @return [void]
+  def redirect_after_login(return_to_path)
+    if session[:pending_resubmission_id].present?
+      redirect_to pending_resubmission_path
+    elsif return_to_path.present? && valid_return_path?(return_to_path)
+      redirect_to return_to_path, allow_other_host: false
+    else
+      redirect_back_or root_url
+    end
+  end
+
+  # Protects against session fixation while preserving forwarding URL (and
+  # any other key in SessionsHelper::SESSION_KEYS_SURVIVING_RESET).
   # Resets the session but maintains the intended redirect destination.
   # @return [void]
   def counter_fixation
-    ref_url = session[:forwarding_url] # Save forwarding url
+    preserved = SessionsHelper::SESSION_KEYS_SURVIVING_RESET.index_with { |key| session[key] }
     I18n.locale = session[:locale]
     reset_session # Counter session fixation
-    session[:forwarding_url] = ref_url # Reload forwarding url
+    preserved.each { |key, value| session[key] = value if value }
   end
 
   # Handles local email/password authentication.
@@ -199,3 +213,4 @@ class SessionsController < ApplicationController
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 end
+# rubocop:enable Metrics/ClassLength

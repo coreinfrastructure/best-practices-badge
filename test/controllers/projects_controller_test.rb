@@ -741,7 +741,15 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       project_id: @project.id
     ).save!
     assert_equal 2, AdditionalRight.for_project(@project.id).count
-    log_in_as(users(:test_user_melissa))
+    # Pre-existing test bug found while chasing an unrelated failure: this
+    # omitted melissa's actual password ('password1', not the log_in_as
+    # default 'password'), so the login silently failed and every request
+    # below ran as an anonymous visitor. That went unnoticed because the
+    # pre-step-15 can_edit_else_redirect happened to send both "anonymous
+    # PATCH" and "logged-in-but-unauthorized PATCH" to the same
+    # project_section_path redirect. Step 15 gives anonymous PATCHes their
+    # own destination (stash + redirect to login), which exposed this.
+    log_in_as(users(:test_user_melissa), password: 'password1')
     # Run patch (the point of the test), which invokes the 'update' method
     patch "/en/projects/#{@project.id}", params: {
       project: { name: @project.name }, # *Something* so not empty.
@@ -958,19 +966,41 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     # NOTE: no log_in_as
     old_name = @project.name
     new_name = old_name + '_updated'
-    # Run patch (the point of the test), which invokes the 'update' method
-    patch "/en/projects/#{@project.id}", params: {
-      project: {
-        description: @project.description,
-        license: @project.license,
-        name: new_name,
-        repo_url: @project.repo_url,
-        homepage_url: @project.homepage_url
+    # Run patch (the point of the test), which invokes the 'update' method.
+    # Step 15: this now stashes the submission (a PendingResubmission row)
+    # rather than simply discarding it, and redirects to login with a
+    # return_to, instead of the "not authorized" flash.
+    assert_difference 'PendingResubmission.count', 1 do
+      patch "/en/projects/#{@project.id}", params: {
+        project: {
+          description: @project.description,
+          license: @project.license,
+          name: new_name,
+          repo_url: @project.repo_url,
+          homepage_url: @project.homepage_url
+        }
       }
-    }
+    end
+    assert_response :redirect
+    assert_match %r{/en/login\?return_to=}, response.location
     # Verify that we didn't really change the name
     @project.reload
     assert_equal @project.name, old_name
+    pending = PendingResubmission.last
+    assert_equal "/en/projects/#{@project.id}", pending.resubmit_path
+    assert_equal 'PATCH', pending.resubmit_method
+    assert_not pending.sensitive_fields_dropped?
+    fields = JSON.parse(pending.params_json)
+    assert_equal new_name, fields['project[name]']
+  end
+
+  test 'update when not logged in with no project param falls through to not_authorized flash' do
+    assert_no_difference 'PendingResubmission.count' do
+      patch "/en/projects/#{@project.id}", params: { bogus: 'value' }
+    end
+    assert_redirected_to project_section_path(@project, Sections::DEFAULT_SECTION)
+    follow_redirect!
+    assert_includes @response.body, 'You are not authorized to edit this project.'
   end
 
   test 'should fail to update project if providing bad URL' do

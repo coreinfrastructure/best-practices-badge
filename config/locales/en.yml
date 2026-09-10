@@ -130,6 +130,19 @@ en:
       Sorry, you cannot log in yet.
       As an anti-spam measure, there is a delay after activating
       a local account before you can log in.
+  pending_resubmissions:
+    show:
+      header: Resume your changes
+      explanation: >-
+        You were logged out before this could be saved. We kept what you
+        typed below so you don't have to retype it.
+      sensitive_fields_dropped: >-
+        Your email and/or password change couldn't be restored here;
+        please re-enter it separately if needed.
+      resume_button: Resume saving your changes
+      expired: >-
+        We couldn't find what you were saving; it may have expired.
+        Please try again.
   unsubscribe:
     header: Unsubscribe
     description: >-

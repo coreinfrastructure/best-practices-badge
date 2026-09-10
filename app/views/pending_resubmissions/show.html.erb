@@ -1,0 +1,10 @@
+<h1><%= t('.header') %></h1>
+
+<p><%= t('.explanation') %></p>
+
+<%= form_with url: @resubmit_path, method: @resubmit_method do %>
+  <% @fields.each do |name, value| %>
+    <%= hidden_field_tag name, value %>
+  <% end %>
+  <%= submit_tag t('.resume_button'), class: 'btn btn-lg btn-primary' %>
+<% end %>

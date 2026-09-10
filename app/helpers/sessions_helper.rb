@@ -16,6 +16,15 @@ module SessionsHelper
   # on LoginSession, so all three session-timing constants have one home.
   ABSOLUTE_SESSION_AGE = 30.days
 
+  # Session keys that must survive a login attempt's reset_session, success
+  # or failure (SessionsController#counter_fixation). Generalized to a list
+  # (rather than a hand-written save/restore pair per key) so a future key
+  # needing this treatment is a one-line addition here, not a new pair to
+  # write and get right. Without this, e.g. pending_resubmission_id would
+  # be silently wiped on every login attempt, since counter_fixation runs
+  # unconditionally at the top of every POST /login.
+  SESSION_KEYS_SURVIVING_RESET = %i[forwarding_url pending_resubmission_id].freeze
+
   # Matches paths that must not be used as post-login redirect destinations.
   # Covers /login and /signup (would create redirect loops) and /signout
   # (GET /signout destroys the session, so redirecting there would immediately

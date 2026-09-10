@@ -237,6 +237,11 @@ Rails.application.routes.draw do
 
     resources :users
     resources :login_sessions, only: [:index]
+    # No :id/:token segment: this always operates on *this browser's own*
+    # pending resubmission, determined only from the session, never the URL.
+    # See docs/login-session-implementation.md section 15.
+    get 'pending_resubmissions', to: 'pending_resubmissions#show',
+        as: :pending_resubmission
 
     # Handle "static" pages (get-only pages)
     get 'home' => 'static_pages#home'

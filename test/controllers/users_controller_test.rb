@@ -268,11 +268,40 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should redirect update when not logged in' do
-    # This becomes an 'update' on the users controller
+    # This becomes an 'update' on the users controller. Since it carries a
+    # real user param, step 15 stashes it instead of discarding it, then
+    # sends the submitter to log in with a return_to (rather than the old
+    # flash-and-redirect-with-no-return_to).
+    assert_difference 'PendingResubmission.count', 1 do
+      patch "/en/users/#{@user.id}", params: {
+        user: { name: @user.name, email: @user.email }
+      }
+    end
+    assert_response :redirect
+    assert_match %r{/en/login\?return_to=}, response.location
+  end
+
+  test 'update when not logged in stashes fields but drops email' do
+    new_name = @user.name + '_stashed'
     patch "/en/users/#{@user.id}", params: {
-      user: { name: @user.name, email: @user.email }
+      user: { name: new_name, email: @user.email }
     }
+    pending = PendingResubmission.last
+    assert_equal "/en/users/#{@user.id}", pending.resubmit_path
+    assert_equal 'PATCH', pending.resubmit_method
+    assert pending.sensitive_fields_dropped?
+    fields = JSON.parse(pending.params_json)
+    assert_equal new_name, fields['user[name]']
+    assert_not_includes fields.keys, 'user[email]'
+  end
+
+  test 'update when not logged in with no user param falls through to plain flash' do
+    assert_no_difference 'PendingResubmission.count' do
+      patch "/en/users/#{@user.id}", params: { bogus: 'value' }
+    end
     assert_redirected_to login_url
+    follow_redirect!
+    assert_includes @response.body, 'Please log in.'
   end
 
   test 'should redirect edit when logged in as wrong user' do

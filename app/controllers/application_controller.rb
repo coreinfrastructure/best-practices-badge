@@ -49,6 +49,13 @@ class ApplicationController < ActionController::Base
   # docs/login-session.md section 6.6 for why the two must not collide).
   SESSION_BOOKKEEPING_KEYS = %w[session_id flash].freeze
 
+  # Params excluded from a stashed pending resubmission (section 15 of
+  # docs/login-session-implementation.md). Email is encrypted at rest
+  # everywhere else (attr_encrypted :email); a naive stash would write a
+  # plaintext pending email change into pending_resubmissions, so it's
+  # excluded the same way password/password_confirmation already must be.
+  SENSITIVE_STASH_KEYS = %w[password password_confirmation email].freeze
+
   # Make criteria_level conversion methods available to views
   helper_method :criteria_level_to_internal, :normalize_criteria_level
 
@@ -766,6 +773,57 @@ class ApplicationController < ActionController::Base
 
     flash[:danger] = t('admin_only')
     redirect_to root_url
+  end
+
+  # Stashes a logged-out submitter's PATCH params so they aren't lost across
+  # a forced re-login, and records the stashed row's id in this browser's
+  # own session cookie -- the only place that id is ever written. See
+  # docs/login-session-implementation.md section 15 for why a database row
+  # keyed by its own primary key, identified only via the session, is safer
+  # than a URL-carried token.
+  #
+  # Field names are stored pre-bracketed (e.g. "project[name]"), not the
+  # bare field name (e.g. "name"): PendingResubmissionsController's view
+  # resubmits them as literal hidden field names, and the receiving
+  # action's project_params/compute_user_params both call
+  # params.expect(param_key: ...), which requires that wrapper key on the
+  # resubmitted request too. Prefixing here, once, means the view can stay
+  # fully agnostic and just echo back opaque key/value pairs, rather than
+  # needing to know it's rebuilding a "project" or "user" submission.
+  # @param resubmit_path [String] path to resubmit the stashed fields to
+  # @param param_key [Symbol] top-level params key the fields must be
+  #   wrapped back under on resubmission (e.g. :project, :user)
+  # @param permitted_params [ActionController::Parameters] params to stash
+  # @return [void]
+  def stash_pending_resubmission(resubmit_path, param_key, permitted_params)
+    fields = permitted_params.to_h
+    dropped = SENSITIVE_STASH_KEYS.any? { |key| fields[key].present? }
+    prefixed_fields =
+      fields.except(*SENSITIVE_STASH_KEYS)
+            .transform_keys { |key| "#{param_key}[#{key}]" }
+    pending = PendingResubmission.create!(
+      resubmit_path: resubmit_path,
+      resubmit_method: request.request_method,
+      params_json: prefixed_fields.to_json,
+      sensitive_fields_dropped: dropped
+    )
+    session[:pending_resubmission_id] = pending.id
+  end
+
+  # Shared shape for can_edit_else_redirect and redir_unless_logged_in: a
+  # logged-out PATCH with a real body to stash gets stashed before being
+  # sent to log in. Takes a block, not the computed params directly: both
+  # callers build their params via params.expect(...), which raises
+  # ActionController::ParameterMissing on a malformed request with no
+  # top-level key at all, and a plain argument would be evaluated (and so
+  # raise) before the params[param_key].present? guard below ever runs. A
+  # block is only evaluated via yield, inside the guarded branch.
+  # @param param_key [Symbol] top-level params key that must be present to
+  #   stash (e.g. :project, :user)
+  # @return [void]
+  def redirect_to_login_stashing(param_key)
+    stash_pending_resubmission(request.path, param_key, yield) if params[param_key].present?
+    redirect_to login_path(return_to: request.original_fullpath)
   end
 
   include SessionsHelper

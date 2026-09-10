@@ -1,0 +1,33 @@
+<h1>Login Sessions</h1>
+
+<p>Every currently active login session, most recently used first.
+Revoke a suspicious session with
+<code>rake login_sessions:revoke[user_id]</code>.</p>
+
+<table class='table-bordered table-striped'>
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>IP address</th>
+      <th>User agent</th>
+      <th>Created at</th>
+      <th>Last used at</th>
+      <th>Session digest</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @login_sessions.each do |login_session| %>
+      <tr>
+        <td><%= link_to login_session.user.name, user_path(login_session.user) %></td>
+        <td><%= login_session.ip_address %></td>
+        <td><%= login_session.user_agent %></td>
+        <td><%= login_session.created_at %></td>
+        <td><%= login_session.last_used_at %></td>
+        <td><%= truncate_token(login_session.session_id_digest) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= render 'shared/pagination', pagy: @pagy %>

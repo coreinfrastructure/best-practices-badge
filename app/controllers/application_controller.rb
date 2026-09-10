@@ -756,6 +756,18 @@ class ApplicationController < ActionController::Base
     @login_session # set by log_in itself; no re-lookup needed
   end
 
+  # Redirects non-admin users away from an admin-only action. Usable as a
+  # before_action (e.g. LoginSessionsController#index); leaves
+  # UsersController's own existing inline admin checks alone, those are
+  # tested, working code, not something this needs to touch.
+  # @return [void]
+  def require_admin!
+    return if current_user_is_admin?
+
+    flash[:danger] = t('admin_only')
+    redirect_to root_url
+  end
+
   include SessionsHelper
 end
 # rubocop: enable Metrics/ClassLength

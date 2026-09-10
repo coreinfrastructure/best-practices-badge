@@ -236,6 +236,7 @@ Rails.application.routes.draw do
     get 'signup' => 'users#new'
 
     resources :users
+    resources :login_sessions, only: [:index]
 
     # Handle "static" pages (get-only pages)
     get 'home' => 'static_pages#home'

@@ -78,8 +78,16 @@ class LoginSessionTest < ActiveSupport::TestCase
     login_session = LoginSession.create_for(
       @user, ip_address: '127.0.0.1', user_agent: 'test-agent'
     )
-    assert_difference('LoginSession.count', -1) { @user.destroy }
+    # Assert against this user's own rows specifically, not a global
+    # LoginSession.count delta: many other tests legitimately create
+    # LoginSession rows for this same fixture user (any test that calls
+    # log_in_as(users(:test_user)) does), so a global-count assertion is
+    # fragile to test order/parallelism even though transactional
+    # fixtures should isolate each test's own writes.
+    assert LoginSession.exists?(login_session.id)
+    @user.destroy
     assert_not LoginSession.exists?(login_session.id)
+    assert_empty LoginSession.where(user_id: @user.id)
   end
 
   # session_id_hmac_key_hex / session_id_hmac_key

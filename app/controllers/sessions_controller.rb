@@ -136,7 +136,7 @@ class SessionsController < ApplicationController
   # @param return_to_path [String, nil] A pre-validated server-relative path
   # @return [void]
   def redirect_after_login(return_to_path)
-    if session[:pending_resubmission_id].present?
+    if session[:pending_resubmission_token].present?
       redirect_to pending_resubmission_path
     elsif return_to_path.present? && valid_return_path?(return_to_path)
       redirect_to return_to_path, allow_other_host: false

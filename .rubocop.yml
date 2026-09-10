@@ -117,6 +117,7 @@ Rails/DynamicFindBy:
     - find_by_sql
     - find_by_token_for
     - find_by_session_id
+    - find_by_token
 Style/Copyright:
   Enabled: false
 Style/InlineComment:

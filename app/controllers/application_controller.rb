@@ -776,11 +776,16 @@ class ApplicationController < ActionController::Base
   end
 
   # Stashes a logged-out submitter's PATCH params so they aren't lost across
-  # a forced re-login, and records the stashed row's id in this browser's
-  # own session cookie -- the only place that id is ever written. See
-  # docs/login-session-implementation.md section 15 for why a database row
-  # keyed by its own primary key, identified only via the session, is safer
-  # than a URL-carried token.
+  # a forced re-login, and records the stashed row's raw random token in
+  # this browser's own session cookie: the only place that token is ever
+  # written. Only its HMAC digest is stored server-side
+  # (PendingResubmission.digest, keyed by PENDING_RESUBMISSION_HMAC_KEY).
+  # See docs/login-session-implementation.md section 15 for why this is
+  # identified only via the session, never a URL, and
+  # docs/login-session-18.md step 18 for why a random token's digest
+  # replaced the row's own guessable primary key: a SECRET_KEY_BASE leak
+  # alone must not be enough to forge a working identifier for someone
+  # else's row.
   #
   # Field names are stored pre-bracketed (e.g. "project[name]"), not the
   # bare field name (e.g. "name"): PendingResubmissionsController's view
@@ -801,13 +806,13 @@ class ApplicationController < ActionController::Base
     prefixed_fields =
       fields.except(*SENSITIVE_STASH_KEYS)
             .transform_keys { |key| "#{param_key}[#{key}]" }
-    pending = PendingResubmission.create!(
+    pending = PendingResubmission.stash_for(
       resubmit_path: resubmit_path,
       resubmit_method: request.request_method,
       params_json: prefixed_fields.to_json,
       sensitive_fields_dropped: dropped
     )
-    session[:pending_resubmission_id] = pending.id
+    session[:pending_resubmission_token] = pending.raw_token
   end
 
   # Shared shape for can_edit_else_redirect and redir_unless_logged_in: a

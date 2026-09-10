@@ -22,18 +22,18 @@ class PendingResubmissionTest < ActionDispatch::IntegrationTest
 
     patch "/en/projects/#{@project.id}", params: { project: { name: new_name } }
     assert_match %r{/en/login\?return_to=}, response.location
-    assert_not_nil session[:pending_resubmission_id]
+    assert_not_nil session[:pending_resubmission_token]
 
     post login_path, params: {
       session: { email: @user.email, password: 'password', provider: 'local' }
     }
-    # session[:pending_resubmission_id] takes priority over the login form's
-    # own return_to, per successful_login.
+    # session[:pending_resubmission_token] takes priority over the login
+    # form's own return_to, per successful_login.
     assert_redirected_to pending_resubmission_path
     # counter_fixation resets the session on every login attempt; confirm
-    # the pending resubmission id actually survived that reset rather than
-    # this redirect happening to be right for some other reason.
-    assert_not_nil session[:pending_resubmission_id]
+    # the pending resubmission token actually survived that reset rather
+    # than this redirect happening to be right for some other reason.
+    assert_not_nil session[:pending_resubmission_token]
 
     follow_redirect!
     assert_response :success
@@ -47,20 +47,20 @@ class PendingResubmissionTest < ActionDispatch::IntegrationTest
 
   test 'a failed login attempt does not lose the stash' do
     patch "/en/projects/#{@project.id}", params: { project: { name: 'attempt' } }
-    pending_id = session[:pending_resubmission_id]
-    assert_not_nil pending_id
+    pending_token = session[:pending_resubmission_token]
+    assert_not_nil pending_token
 
     post login_path, params: {
       session: { email: @user.email, password: 'wrong-password', provider: 'local' }
     }
     assert_response :success # re-renders the login form; login failed
-    assert_equal pending_id, session[:pending_resubmission_id]
-    assert PendingResubmission.exists?(pending_id)
+    assert_equal pending_token, session[:pending_resubmission_token]
+    assert PendingResubmission.exists?(hashed_random_id: PendingResubmission.digest(pending_token))
   end
 
   test 'github oauth login carries the stash across the round trip' do
     patch "/en/projects/#{@project.id}", params: { project: { name: 'via github' } }
-    assert_not_nil session[:pending_resubmission_id]
+    assert_not_nil session[:pending_resubmission_token]
 
     github_user = users(:github_user)
     OmniAuth.config.test_mode = true

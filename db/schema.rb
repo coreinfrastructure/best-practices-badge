@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_10_020746) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_10_180655) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -47,12 +47,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_10_020746) do
 
   create_table "pending_resubmissions", comment: "A stashed form submission awaiting re-login; see docs/login-session-implementation.md section 15.", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.string "hashed_random_id", null: false, comment: "HMAC-SHA256 of the raw random token in the browser's cookie; never the raw token itself"
     t.text "params_json", null: false, comment: "Stashed params as JSON, sensitive fields excluded"
     t.string "resubmit_method", null: false, comment: "HTTP method to resubmit with (e.g. PATCH)"
     t.string "resubmit_path", null: false, comment: "Path to resubmit the stashed params to"
     t.boolean "sensitive_fields_dropped", default: false, null: false, comment: "True if a password/email field was excluded from params_json"
     t.datetime "updated_at", null: false
     t.index ["created_at"], name: "index_pending_resubmissions_on_created_at"
+    t.index ["hashed_random_id"], name: "index_pending_resubmissions_on_hashed_random_id", unique: true
   end
 
   create_table "pg_search_documents", id: :serial, force: :cascade do |t|

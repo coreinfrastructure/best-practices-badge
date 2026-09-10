@@ -7,8 +7,9 @@
 require 'test_helper'
 
 # Tests PendingResubmissionsController#show (docs/login-session-implementation.md
-# section 15): stashed-submission lookup is keyed only by
-# session[:pending_resubmission_id], never by anything in params.
+# section 15, docs/login-session-18.md step 18): stashed-submission lookup
+# is keyed only by session[:pending_resubmission_token], never by
+# anything in params.
 class PendingResubmissionsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @project = projects(:one)
@@ -17,7 +18,7 @@ class PendingResubmissionsControllerTest < ActionDispatch::IntegrationTest
 
   # Triggers the real stash path (a logged-out PATCH to a project edit
   # action) rather than constructing a PendingResubmission by hand, so this
-  # exercises the actual session[:pending_resubmission_id] write too.
+  # exercises the actual session[:pending_resubmission_token] write too.
   def stash_a_pending_resubmission(new_name: 'Stashed name')
     patch "/en/projects/#{@project.id}", params: {
       project: { name: new_name }
@@ -91,30 +92,30 @@ class PendingResubmissionsControllerTest < ActionDispatch::IntegrationTest
 
   # Regression test: there is no :id/:token param on this route, and this
   # action must never read one. If a future change "fixes" show to accept
-  # an id from params, matching the usual Rails show idiom, this test
-  # fails -- catching the reintroduction of the exact
+  # an identifier from params, matching the usual Rails show idiom, this
+  # test fails, catching the reintroduction of the exact
   # shareable-direct-link vulnerability an earlier draft of this design had.
-  test 'a params-supplied id never shows or destroys another session\'s row' do
+  test 'a params-supplied identifier never shows or destroys another session\'s row' do
     other_pending = PendingResubmission.create!(
       resubmit_path: "/en/projects/#{@project.id}",
       resubmit_method: 'PATCH',
-      params_json: { 'project[name]' => 'Attacker cannot see this' }.to_json
+      params_json: { 'project[name]' => 'Attacker cannot see this' }.to_json,
+      hashed_random_id: PendingResubmission.digest(SecureRandom.urlsafe_base64)
     )
 
     # Hardcode the locale prefix here too (see the "no pending resubmission"
     # test above for why): otherwise the assertions below would pass
     # vacuously against an intermediate redirect's near-empty body rather
-    # than actually checking the final page.
-    get "/en/pending_resubmissions?id=#{other_pending.id}"
-    assert_response :redirect
-    follow_redirect!
-    assert_not_includes @response.body, 'Attacker cannot see this'
-    assert PendingResubmission.exists?(other_pending.id)
-
-    get "/en/pending_resubmissions?pending_resubmission_id=#{other_pending.id}"
-    assert_response :redirect
-    follow_redirect!
-    assert_not_includes @response.body, 'Attacker cannot see this'
-    assert PendingResubmission.exists?(other_pending.id)
+    # than actually checking the final page. Cover every identifier this
+    # row actually has (its own id, and its hashed_random_id) under every
+    # param name a "fixed" show might plausibly read.
+    %w[id hashed_random_id pending_resubmission_token].each do |param_name|
+      value = param_name == 'id' ? other_pending.id : other_pending.hashed_random_id
+      get "/en/pending_resubmissions?#{param_name}=#{value}"
+      assert_response :redirect
+      follow_redirect!
+      assert_not_includes @response.body, 'Attacker cannot see this'
+      assert PendingResubmission.exists?(other_pending.id)
+    end
   end
 end

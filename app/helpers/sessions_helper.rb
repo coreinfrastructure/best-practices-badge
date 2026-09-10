@@ -20,10 +20,10 @@ module SessionsHelper
   # or failure (SessionsController#counter_fixation). Generalized to a list
   # (rather than a hand-written save/restore pair per key) so a future key
   # needing this treatment is a one-line addition here, not a new pair to
-  # write and get right. Without this, e.g. pending_resubmission_id would
-  # be silently wiped on every login attempt, since counter_fixation runs
-  # unconditionally at the top of every POST /login.
-  SESSION_KEYS_SURVIVING_RESET = %i[forwarding_url pending_resubmission_id].freeze
+  # write and get right. Without this, e.g. pending_resubmission_token
+  # would be silently wiped on every login attempt, since counter_fixation
+  # runs unconditionally at the top of every POST /login.
+  SESSION_KEYS_SURVIVING_RESET = %i[forwarding_url pending_resubmission_token].freeze
 
   # Matches paths that must not be used as post-login redirect destinations.
   # Covers /login and /signup (would create redirect loops) and /signout

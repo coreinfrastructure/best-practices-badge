@@ -134,7 +134,14 @@ class LoginTest < ApplicationSystemTestCase
     wait_for_jquery
     refute_selector(:css, '#english')
 
+    # "Submit (and exit)" causes a real page navigation (redirect to the
+    # project's show page), unlike the AJAX-driven status changes above
+    # (which only need wait_for_jquery). Without waiting for the new page
+    # to finish loading, the *_enough icons' src attributes -- set by a
+    # $(document).ready handler in project-form.js -- may not be populated
+    # yet, intermittently finding an <img> with no src at all.
     click_on('Submit', match: :first)
+    wait_for_page_load
     assert_match X, find('#discussion_enough')['src']
   end
   # rubocop:enable Metrics/BlockLength

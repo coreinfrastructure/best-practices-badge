@@ -48,6 +48,37 @@ class ProjectsControllerSpecialTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test 'should fail to edit due to absolute session cap without remember token' do
+    # Log in without remember_me
+    log_in_as(@project.user, remember_me: '0')
+    # Backdate created_at past the 30-day absolute cap, while last_used_at
+    # stays recent -- isolates the absolute-cap branch of
+    # setup_authentication_state from the idle-timeout branch tested above.
+    LoginSession.find_by_session_id(session[:login_session_id])
+                .update_columns(created_at: SessionsHelper::ABSOLUTE_SESSION_AGE.ago.utc - 1.minute)
+    get "/en/projects/#{@project.id}/passing/edit"
+    assert_response :found
+    assert_match %r{/en/login\?return_to=}, response.location
+  end
+
+  test 'should stay logged in past absolute session cap if remember token valid' do
+    # Log in WITH remember_me (the default)
+    log_in_as(@project.user, remember_me: '1')
+    original_login_session_id = session[:login_session_id]
+    LoginSession.find_by_session_id(original_login_session_id)
+                .update_columns(created_at: SessionsHelper::ABSOLUTE_SESSION_AGE.ago.utc - 1.minute)
+    get "/en/projects/#{@project.id}/passing/edit"
+    # Remember token should auto-login the user despite the absolute cap,
+    # exactly as it does for an idle-timed-out session.
+    assert_response :success
+    assert_not_nil session[:login_session_id]
+    assert_equal @project.user.id, logged_in_user_id
+    assert_not_equal original_login_session_id, session[:login_session_id]
+    assert_not LoginSession.exists?(
+      session_id_digest: LoginSession.digest(original_login_session_id)
+    )
+  end
+
   test 'forwarding_url does not survive the idle-expiry + remember-me path' do
     # Log in WITH remember_me, then visit a page that sets forwarding_url
     # unconditionally (ProjectsController#new) so it's present in the

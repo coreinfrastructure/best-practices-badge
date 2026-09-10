@@ -77,7 +77,7 @@ purpose, and where rotation is documented.
 | `SECRET_KEY_BASE` | Rails session and cookie signing/encryption | See [Rotating SECRET_KEY_BASE](#rotating-secret_key_base) below |
 | `EMAIL_ENCRYPTION_KEY` | AES-256-GCM encryption of stored user email addresses | See [Rotating email keys](#rotating-email-encryption-keys) below |
 | `EMAIL_BLIND_INDEX_KEY` | PBKDF2-HMAC-SHA256 blind index for privacy-preserving email search | See [Rotating email keys](#rotating-email-encryption-keys) below |
-| `SESSION_ID_HMAC_KEY` | HMAC-SHA256 key for `LoginSession`'s session id digest (`docs/login-session.md`) | Not yet documented; planned in `docs/login-session-implementation.md` |
+| `SESSION_ID_HMAC_KEY` | HMAC-SHA256 key for `LoginSession`'s session id digest (`docs/login-session.md`) | See [Rotating SESSION_ID_HMAC_KEY](#rotating-session_id_hmac_key) below |
 | `BADGEAPP_BADPWKEY` | HMAC-SHA512 key protecting the bad-password database | See [Rotating BADGEAPP_BADPWKEY](#rotating-badgeapp_badpwkey) below |
 | `GITHUB_KEY` | GitHub OAuth application client ID | Rotate via GitHub OAuth app settings; redeploy |
 | `GITHUB_SECRET` | GitHub OAuth application client secret | Rotate via GitHub OAuth app settings; redeploy |
@@ -114,6 +114,13 @@ If you want to invalidate sessions without changing the secret
 (e.g., for a clean break after a deploy), change the cookie key name
 in `config/initializers/session_store.rb` from `_BadgeApp_session`
 to a new name (e.g., `_BadgeApp_session_v2`) and deploy.
+
+The `login_sessions` table (`docs/login-session.md`) gives a second,
+narrower global-logout mechanism that needs no redeploy: deleting its
+rows. See [Rotating SESSION_ID_HMAC_KEY](#rotating-session_id_hmac_key)
+below for how, and for the important caveat that it does not, by
+itself, invalidate remember-me tokens the way rotating
+`SECRET_KEY_BASE` does.
 
 ### Rotating Email Encryption Keys
 
@@ -154,6 +161,50 @@ heroku config:unset EMAIL_ENCRYPTION_KEY_OLD --app $APP
 # Bring the site back online.
 heroku maintenance:off --app $APP
 ~~~
+
+### Rotating `SESSION_ID_HMAC_KEY`
+
+`SESSION_ID_HMAC_KEY` computes `login_sessions.session_id_digest` from
+the raw session id in each user's cookie (`docs/login-session.md`); the
+raw id itself is never stored anywhere. Rotating the key makes every
+existing `login_sessions` row permanently unmatchable, so every
+logged-in user is treated as logged out on their next request -- the
+same *kind* of effect as rotating `SECRET_KEY_BASE` above, but it
+leaves `SECRET_KEY_BASE`-signed cookies, including remember-me tokens,
+intact. That distinction matters: a user with an active "Keep me
+logged in" token is silently logged back in on their very next request
+(`ApplicationController#try_remember_token_login`), creating a fresh
+row under the new key. For a logout that also covers those users,
+rotate `SECRET_KEY_BASE` instead, or additionally clear every stored
+remember-me token.
+
+~~~sh
+# Generate a fresh key and deploy it. Heroku restarts the app
+# automatically; every existing login_sessions row becomes unmatchable
+# immediately.
+VAL=$(openssl rand -hex 32)
+heroku config:set SESSION_ID_HMAC_KEY=$VAL --app $APP
+
+# The now-unmatchable rows can never be looked up again under any key;
+# delete them rather than waiting up to 30 days for the daily purge
+# task's absolute-age cleanup (docs/login-session.md) to catch them.
+heroku run rails runner "LoginSession.delete_all" --app $APP
+~~~
+
+#### Forcing re-authentication without rotating the key
+
+The delete above is, by itself, also a quick global-logout tool that
+needs no key change or redeploy -- useful when a specific session
+(not the key) is believed compromised, or you simply want everyone to
+re-authenticate right now:
+
+~~~sh
+heroku run rails runner "LoginSession.delete_all" --app $APP
+~~~
+
+The same remember-me caveat above applies: additionally run
+`heroku run rails runner "User.update_all(remember_digest: nil)" --app $APP`
+if remember-me tokens must be invalidated too.
 
 ### Rotating `BADGEAPP_BADPWKEY`
 

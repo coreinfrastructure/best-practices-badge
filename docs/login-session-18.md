@@ -473,6 +473,16 @@ other's.
   the existing manual `heroku pg:credentials:rotate` incident-response
   procedure for a suspected exposure that can't wait for the next
   scheduled run.
+- Implemented (added after the initial cut): the job self-heals the
+  one failure mode that can actually strand a rotation, a credential
+  left in Heroku's `rotating` state because some connection never
+  closed within the 30-minute drain window. It checks for that state
+  before every rotation attempt and force-completes it if found, so a
+  stuck rotation clears itself on the next scheduled run rather than
+  needing someone to notice and intervene. See
+  `docs/secrets-policy.md`'s "If a rotation fails" for the full
+  reasoning and what was checked against Heroku's own documentation
+  to get this right rather than guessed at.
 
 ## Honest limits, restated
 

@@ -37,9 +37,10 @@ code or committed to version control.
 
 Most production secrets are stored as **environment variables** on
 Heroku (the application tier).
-The one exception is `HEROKU_API_KEY`, which is stored in the
-CircleCI `heroku-deploy` context and is used only by the CI/CD pipeline
-to deploy the app automatically when staging or production testing passes.
+The one exception is `HEROKU_API_KEY`, which is stored in the CircleCI
+`bestpractices-heroku-deploy` context and is used only by the CI/CD
+pipeline to deploy the app automatically when staging or production
+testing passes.
 
 Development-only throwaway keys may be placed in `.env.local`, which
 is excluded from version control via `.gitignore`.
@@ -60,7 +61,8 @@ Access to production secrets is limited to personnel with system-level
 access to the hosting platforms:
 
 - **Heroku**: application environment variables (most secrets below)
-- **CircleCI**: `HEROKU_API_KEY`, stored in the `heroku-deploy` context
+- **CircleCI**: `HEROKU_API_KEY`, stored in the
+  `bestpractices-heroku-deploy` context
 - **Fastly dashboard**: required to generate a replacement `FASTLY_API_KEY`
   (the key itself is stored as a Heroku environment variable)
 
@@ -88,7 +90,7 @@ purpose, and where rotation is documented.
 | `BADGEAPP_SEND_EMAIL_USERNAME` | SMTP relay authentication username | Rotate via email provider dashboard; update Heroku config var |
 | `BADGEAPP_SEND_EMAIL_PASSWORD` | SMTP relay authentication password | Rotate via email provider dashboard; update Heroku config var |
 | `HEROKU_API_KEY` | Heroku API token used by CircleCI to deploy and manage the app | See [Rotating the CircleCI deploy token](#rotating-the-circleci-deploy-token) below |
-| `DATABASE_URL` | PostgreSQL connection string (set by Heroku automatically) | Managed by Heroku; rotated via `heroku pg:credentials:rotate --app $APP` |
+| `DATABASE_URL` | PostgreSQL connection string (set by Heroku automatically) | See [Rotating DATABASE_URL](#rotating-database_url) below |
 
 For full descriptions of each variable, see `docs/implementation.md`.
 
@@ -271,7 +273,7 @@ heroku config:set GITHUB_KEY=$NEW_GITHUB_KEY GITHUB_SECRET=$NEW_GITHUB_SECRET --
 ### Rotating the CircleCI Deploy Token
 
 CircleCI authenticates to Heroku using `HEROKU_API_KEY`, stored in the
-CircleCI `heroku-deploy` context.
+CircleCI `bestpractices-heroku-deploy` context.
 It is used both by the Heroku CLI (maintenance mode, migrations) and by
 `git push heroku` (via `~/.netrc`) during every deployment.
 If this key is exposed it needs to be rotated *immediately*; someone
@@ -280,7 +282,7 @@ with this token could deploy their own app to our site instead.
 To rotate it:
 
 1. Generate a new scoped Heroku API token (do not use the account-wide
-   "Regenerate API Key" in the Heroku dashboard — that invalidates all
+   "Regenerate API Key" in the Heroku dashboard; that invalidates all
    tools using that Heroku account's key):
 
    ~~~sh
@@ -288,8 +290,10 @@ To rotate it:
    # Note the token value printed; you will need it in the next step.
    ~~~
 
-2. Update the CircleCI `heroku-deploy` context with the new token value:
-   - Open **CircleCI → Organization Settings → Contexts → heroku-deploy**.
+2. Update the CircleCI `bestpractices-heroku-deploy` context with the
+   new token value:
+   - Open **CircleCI → Organization Settings → Contexts →
+     bestpractices-heroku-deploy**.
    - Delete the existing `HEROKU_API_KEY` environment variable and add it
      again with the new token value.
 
@@ -317,6 +321,117 @@ NEW_FASTLY_API_KEY=...
 heroku config:set FASTLY_API_KEY=$NEW_FASTLY_API_KEY --app $APP
 # Verify CDN purges still work.
 heroku run rake fastly:purge_all --app $APP
+~~~
+
+### Rotating `DATABASE_URL`
+
+`DATABASE_URL` grants direct database read and write access by itself,
+no other secret needed: on a leak, it's the most severe credential in
+this whole table (`docs/login-session-18.md` step 20's "Honest limits"
+section works through why nothing else here changes that). Two direct
+mitigations were considered and set aside as impractical for this
+app's current Heroku plans: restricting database network access to
+known IPs, and a least-privilege database role for the app separate
+from a migration/admin role. What's in place instead is automated
+daily rotation, so a stale leaked copy (an old log line, a forgotten
+backup, a stale secrets-manager snapshot) stays valid for at most a
+day rather than indefinitely. This does not help against an attacker
+who steals the live credential and uses it immediately; rotation
+bounds exposure *time*, it doesn't prevent exposure.
+
+The rotation itself runs from CircleCI's `bestpractices-heroku-deploy`
+context (`.circleci/config.yml`, jobs `rotate-db-credentials`,
+workflows `rotate-staging-db`/`rotate-production-db`), not from inside
+the app: rotating `DATABASE_URL` from the app's own dyno would need a
+Heroku credential capable of modifying config vars living in the exact
+environment this is trying to protect. Two CircleCI Scheduled Triggers,
+configured under the project's Triggers settings, named
+`rotate-staging-db` and `rotate-production-db` to match the workflow
+names, each daily, targeting `main`, drive this; they're configuration,
+not something in this repository.
+
+#### One-time setup: creating the CircleCI Scheduled Triggers
+
+Do this once, after this branch merges and deploys (the `when:`
+conditions in `.circleci/config.yml` need to already exist on `main`
+for a trigger to find them):
+
+1. In the CircleCI web app, open the project, then **Project
+   Settings → Triggers**.
+2. Add a trigger named `rotate-staging-db`: cron schedule once daily,
+   config source branch `main`, no pipeline parameters needed (the
+   workflow selects itself by trigger name via the `when:` condition
+   in `.circleci/config.yml`).
+3. Repeat for `rotate-production-db`.
+4. After creating both, trigger each manually once from the CircleCI
+   UI ("Trigger Pipeline" on the trigger's page) to confirm it runs
+   the `rotate-production-db`/`rotate-staging-db` workflow and only
+   that workflow, not `build-deploy` too.
+
+#### Choosing a rotation time
+
+Pick a time in each trigger's cron schedule with the lowest concurrent
+traffic you can find: `heroku pg:credentials:rotate` changes the
+`DATABASE_URL` config var, which Heroku treats like any other config
+change and restarts dynos for, so requests in flight at that moment
+can see a brief connection blip. Check Heroku Metrics (or whatever
+traffic data this project already has) for this app's actual
+low-traffic window rather than guessing; a plausible starting point,
+worth confirming against that data rather than trusting on its own,
+is somewhere in the 06:00 to 09:00 UTC range, since that's overnight
+for the Americas and early morning for Europe. Stagger the staging
+and production triggers a few minutes apart so a rotation problem
+shows up on staging first.
+
+#### If a rotation fails
+
+`heroku pg:credentials:rotate` rotates the existing credential's
+password in place; it doesn't create a second, separately-named
+credential (confirmed against Heroku's own Postgres Credentials
+documentation, since this is exactly the kind of assumption worth
+checking rather than guessing). If it errors before Heroku starts
+changing the password at all (an expired `HEROKU_API_KEY`, a network
+problem, a Heroku API outage), nothing changes, and the app keeps
+running on its current, still valid credential exactly as if the
+scheduled run had never fired.
+
+The one state that can actually get stuck: if a connection stays open
+through the full 30-minute drain window (a leaked connection-pool
+member that's never cycled, say), the credential is left in Heroku's
+`rotating` state rather than completing on its own. The
+`rotate-db-credentials` CircleCI job (`.circleci/config.yml`) checks
+for exactly this before every rotation attempt and, if found,
+force-completes it (`--force`, dropping the lingering connection)
+before proceeding, so a rotation stuck this way clears itself on the
+next scheduled run with no one needing to intervene. Heroku's docs
+don't say what a plain (non-forced) rotate call does against a
+credential already `rotating`, so that's deliberately not guessed at;
+detecting the state first and forcing only that specific, known-stuck
+case is safer than forcing every run.
+
+No automatic retry beyond that single self-heal step is built into
+the CircleCI job: a rotation that fails for some other reason just
+means tomorrow's scheduled run tries again, and the app is unaffected
+in the meantime. The remaining thing that actually needs building is
+visibility, so a rotation that keeps failing doesn't go unnoticed for
+weeks. This app's CircleCI config deliberately uses no orbs (see the
+comment at the top of `.circleci/config.yml`), so the fit here is one
+of CircleCI's own native, non-orb options rather than the community
+`circleci/slack` orb: personal email notifications (each CircleCI
+user can turn these on for themselves under their own account
+settings, no project config needed), or a project-level webhook
+(**Project Settings → Webhooks**) posting to wherever this team
+already watches for alerts, if anywhere does today. Which of those
+fits depends on what alerting this team already has, so that choice
+is left to whoever sets up the triggers above rather than fixed here.
+
+#### Manual rotation (incident response)
+
+For a suspected exposure that can't wait for the next scheduled run,
+rotate manually:
+
+~~~sh
+heroku pg:credentials:rotate --app $APP
 ~~~
 
 ## Incident Response

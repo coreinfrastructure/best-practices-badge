@@ -182,13 +182,43 @@ class SessionsController < ApplicationController
     user = User.find_by(provider: auth['provider'], uid: auth['uid']) ||
            User.create_with_omniauth(auth)
     session[:user_token] = auth['credentials']['token']
-    session[:github_name] = auth['info']['nickname']
+    update_github_nickname(user, auth['info']['nickname'])
     user.name ||= user.nickname
     return_to = request.env['omniauth.params']&.dig('return_to')
     return_to = nil unless valid_return_path?(return_to)
     successful_login(user, return_to)
   end
   # rubocop:enable Metrics/AbcSize
+
+  # Keeps User#nickname in sync with the GitHub username this login's OAuth
+  # payload carries. SessionsHelper#current_user_is_github_owner? trusts
+  # this DB column for real edit authorization
+  # (docs/login-session-18.md step 19); User.create_with_omniauth only
+  # sets it once, at account creation, so later logins need this to catch
+  # a real GitHub username change. Flashes the change so a user whose
+  # GitHub username changed is never left wondering why something that
+  # worked yesterday doesn't today.
+  # @param user [User] the user logging in
+  # @param new_nickname [String] GitHub nickname from this login's OAuth payload
+  # @return [void]
+  def update_github_nickname(user, new_nickname)
+    new_nickname = new_nickname&.slice(0, User::MAX_NICKNAME_LENGTH_GITHUB)
+    return if user.nickname == new_nickname
+
+    old_nickname = user.nickname
+    user.update(nickname: new_nickname)
+    return if old_nickname.blank? # first login after account creation; nothing changed
+
+    # Not flash.now: this method is only ever called from omniauth_login,
+    # which always ends in successful_login's redirect_to, never a
+    # render, so the notice must survive that redirect. RuboCop can't see
+    # across the two methods to confirm that.
+    # rubocop: disable Rails/ActionControllerFlashBeforeRender
+    flash[:info] = t('sessions.github_nickname_changed',
+                     old_nickname: old_nickname,
+                     new_nickname: new_nickname)
+    # rubocop: enable Rails/ActionControllerFlashBeforeRender
+  end
 
   # Validates account status and processes local login.
   # Checks for account activation, login restrictions, and remember-me option.

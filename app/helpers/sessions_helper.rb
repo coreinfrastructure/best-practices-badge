@@ -213,7 +213,7 @@ module SessionsHelper
   # @return [Boolean] true if the current user owns the GitHub repo
   def current_user_is_github_owner?(url)
     logged_in? && current_user.present? && current_user.provider == 'github' &&
-      @session_github_name == get_github_owner(url)
+      current_user.nickname == get_github_owner(url)
   end
 
   # Retrieve list of public GitHub projects for a user, used when displaying

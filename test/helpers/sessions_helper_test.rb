@@ -211,5 +211,29 @@ class SessionsHelperTest < ActionView::TestCase
     result = github_user_projects(StubOctokitErrorClient)
     assert_equal [], result
   end
+
+  # docs/login-session-18.md step 19: current_user_is_github_owner? must
+  # depend only on current_user.nickname (a DB column, gated behind
+  # login_session_id), never a session value someone could forge.
+  test 'current_user_is_github_owner? checks current_user.nickname' do
+    github_user = users(:github_user)
+    @session_user_id = github_user.id
+    session[:login_session_id] = LoginSession.create_for(
+      github_user, ip_address: '127.0.0.1', user_agent: 'test-agent'
+    ).raw_session_id
+
+    assert current_user_is_github_owner?(
+      "https://github.com/#{github_user.nickname}/repo"
+    )
+    assert_not current_user_is_github_owner?('https://github.com/someone-else/repo')
+
+    # There is nothing left to forge here (step 19 removed
+    # session[:github_name] entirely): setting a same-named session key
+    # has no effect on the decision above.
+    session[:github_name] = 'someone-else'
+    assert current_user_is_github_owner?(
+      "https://github.com/#{github_user.nickname}/repo"
+    )
+  end
 end
 # rubocop: enable Metrics/BlockLength, Metrics/ClassLength

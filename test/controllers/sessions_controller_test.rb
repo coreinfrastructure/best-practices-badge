@@ -295,5 +295,95 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
       session_id_digest: LoginSession.digest(first_login_session_id)
     )
   end
+
+  # docs/login-session-18.md step 19: SessionsController#update_github_nickname
+  # keeps User#nickname in sync with GitHub, since
+  # SessionsHelper#current_user_is_github_owner? now authorizes off that DB
+  # column rather than a forgeable session value.
+  #
+  # Both github-provider fixtures (github_user and blocked_github_user)
+  # leave :uid unset, i.e. NULL for both. That's fine for tests that
+  # don't care which one omniauth_login's User.find_by(provider:, uid:)
+  # resolves to, but these tests specifically need it to land on
+  # github_user, so give it a real, unique uid first rather than relying
+  # on nil to disambiguate two rows that share it.
+  test 'omniauth login with an unchanged github nickname sets no flash' do
+    github_user = users(:github_user)
+    github_user.update!(uid: 'github-test-uid')
+    OmniAuth.config.test_mode = true
+    OmniAuth.config.add_mock(:github, github_omniauth_hash(github_user))
+    get '/auth/github/callback'
+    assert_nil flash[:info]
+    assert_equal github_user.nickname, github_user.reload.nickname
+  ensure
+    OmniAuth.config.test_mode = false
+    OmniAuth.config.mock_auth[:github] = nil
+  end
+
+  test 'omniauth login with a changed github nickname updates it and flashes' do
+    github_user = users(:github_user)
+    github_user.update!(uid: 'github-test-uid')
+    old_nickname = github_user.nickname
+    new_nickname = "#{old_nickname}-renamed"
+    OmniAuth.config.test_mode = true
+    OmniAuth.config.add_mock(
+      :github, github_omniauth_hash(github_user, nickname: new_nickname)
+    )
+    get '/auth/github/callback'
+    assert_equal new_nickname, github_user.reload.nickname
+    assert_equal(
+      "Your GitHub username changed from #{old_nickname} to #{new_nickname}.",
+      flash[:info]
+    )
+  ensure
+    OmniAuth.config.test_mode = false
+    OmniAuth.config.mock_auth[:github] = nil
+  end
+
+  # A brand-new user's nickname is already set by User.create_with_omniauth
+  # from this same login's auth payload, so update_github_nickname's own
+  # comparison finds nothing changed: there's no prior value to have
+  # changed from, and no flash.
+  test 'omniauth login for a brand-new user sets no flash' do
+    OmniAuth.config.test_mode = true
+    OmniAuth.config.add_mock(
+      :github,
+      'provider' => 'github', 'uid' => 'brand-new-uid',
+      'credentials' => { 'token' => 'test_token' },
+      'info' => {
+        'name' => 'Brand New User', 'nickname' => 'brand-new-nickname',
+        'email' => 'brand-new@example.com'
+      }
+    )
+    assert_difference 'User.count', 1 do
+      get '/auth/github/callback'
+    end
+    assert_nil flash[:info]
+    assert_equal 'brand-new-nickname', User.find_by(uid: 'brand-new-uid').nickname
+  ensure
+    OmniAuth.config.test_mode = false
+    OmniAuth.config.mock_auth[:github] = nil
+  end
+
+  private
+
+  # Build an OmniAuth hash for a GitHub user fixture.
+  # @param user [User] GitHub user fixture
+  # @param nickname [String] GitHub nickname to report (default: the
+  #   user's current one, i.e. no change)
+  # @param token [String] OAuth token
+  # @return [Hash] OmniAuth-compatible auth hash
+  def github_omniauth_hash(user, nickname: user.nickname, token: 'test_token')
+    {
+      'provider' => 'github',
+      'uid' => user.uid || '12345',
+      'credentials' => { 'token' => token },
+      'info' => {
+        'name' => user.name,
+        'nickname' => nickname,
+        'email' => user.email
+      }
+    }
+  end
 end
 # rubocop:enable Metrics/ClassLength

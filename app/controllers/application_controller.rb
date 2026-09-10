@@ -607,7 +607,6 @@ class ApplicationController < ActionController::Base
   # - @session_user_id: User ID if logged in, nil otherwise
   # - @session_timestamp: Last activity time if logged in, nil otherwise
   # - @session_user_token: GitHub OAuth token if GitHub user, nil otherwise
-  # - @session_github_name: GitHub username if GitHub user, nil otherwise
   #
   # This typically does *not* check the database, so after this returns it's
   # possible that this user account was deleted after the session data was set.
@@ -659,7 +658,6 @@ class ApplicationController < ActionController::Base
     # this request.
     @login_session = login_session
     @session_user_token = session[:user_token]
-    @session_github_name = session[:github_name]
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 

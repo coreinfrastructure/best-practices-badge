@@ -130,6 +130,9 @@ en:
       Sorry, you cannot log in yet.
       As an anti-spam measure, there is a delay after activating
       a local account before you can log in.
+    github_nickname_changed: >-
+      Your GitHub username changed from %{old_nickname} to
+      %{new_nickname}.
   pending_resubmissions:
     show:
       header: Resume your changes

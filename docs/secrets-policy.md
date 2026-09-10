@@ -78,6 +78,7 @@ purpose, and where rotation is documented.
 | `EMAIL_ENCRYPTION_KEY` | AES-256-GCM encryption of stored user email addresses | See [Rotating email keys](#rotating-email-encryption-keys) below |
 | `EMAIL_BLIND_INDEX_KEY` | PBKDF2-HMAC-SHA256 blind index for privacy-preserving email search | See [Rotating email keys](#rotating-email-encryption-keys) below |
 | `SESSION_ID_HMAC_KEY` | HMAC-SHA256 key for `LoginSession`'s session id digest (`docs/login-session.md`) | See [Rotating SESSION_ID_HMAC_KEY](#rotating-session_id_hmac_key) below |
+| `PENDING_RESUBMISSION_HMAC_KEY` | HMAC-SHA256 key for `PendingResubmission`'s random-token digest (`docs/login-session-18.md` step 18) | See [Rotating PENDING_RESUBMISSION_HMAC_KEY](#rotating-pending_resubmission_hmac_key) below |
 | `BADGEAPP_BADPWKEY` | HMAC-SHA512 key protecting the bad-password database | See [Rotating BADGEAPP_BADPWKEY](#rotating-badgeapp_badpwkey) below |
 | `GITHUB_KEY` | GitHub OAuth application client ID | Rotate via GitHub OAuth app settings; redeploy |
 | `GITHUB_SECRET` | GitHub OAuth application client secret | Rotate via GitHub OAuth app settings; redeploy |
@@ -168,7 +169,7 @@ heroku maintenance:off --app $APP
 the raw session id in each user's cookie (`docs/login-session.md`); the
 raw id itself is never stored anywhere. Rotating the key makes every
 existing `login_sessions` row permanently unmatchable, so every
-logged-in user is treated as logged out on their next request -- the
+logged-in user is treated as logged out on their next request: the
 same *kind* of effect as rotating `SECRET_KEY_BASE` above, but it
 leaves `SECRET_KEY_BASE`-signed cookies, including remember-me tokens,
 intact. That distinction matters: a user with an active "Keep me
@@ -194,7 +195,7 @@ heroku run rails runner "LoginSession.delete_all" --app $APP
 #### Forcing re-authentication without rotating the key
 
 The delete above is, by itself, also a quick global-logout tool that
-needs no key change or redeploy -- useful when a specific session
+needs no key change or redeploy: useful when a specific session
 (not the key) is believed compromised, or you simply want everyone to
 re-authenticate right now:
 
@@ -205,6 +206,35 @@ heroku run rails runner "LoginSession.delete_all" --app $APP
 The same remember-me caveat above applies: additionally run
 `heroku run rails runner "User.update_all(remember_digest: nil)" --app $APP`
 if remember-me tokens must be invalidated too.
+
+### Rotating `PENDING_RESUBMISSION_HMAC_KEY`
+
+`PENDING_RESUBMISSION_HMAC_KEY` computes
+`pending_resubmissions.hashed_random_id` from the raw token in a
+logged-out submitter's cookie (`docs/login-session-18.md` step 18); the
+raw token itself is never stored anywhere. Rotating the key makes
+every existing `pending_resubmissions` row permanently unmatchable.
+Unlike `SESSION_ID_HMAC_KEY`, there's no remember-me-style caveat here:
+nothing auto-recreates a pending resubmission. The only user-visible
+effect is that anyone with a genuinely in-flight stash (stashed a form
+submission while logged out, hasn't yet logged back in to resume it)
+sees "may have expired" instead of their draft on their next login,
+the same experience as the stash simply aging out after three days.
+Low stakes; rotate freely.
+
+~~~sh
+# Generate a fresh key and deploy it. Heroku restarts the app
+# automatically; every existing pending_resubmissions row becomes
+# unmatchable immediately.
+VAL=$(openssl rand -hex 32)
+heroku config:set PENDING_RESUBMISSION_HMAC_KEY=$VAL --app $APP
+
+# The now-unmatchable rows can never be looked up again under any key;
+# delete them rather than waiting up to three days for the daily purge
+# task's age-based cleanup (docs/login-session-implementation.md
+# section 15) to catch them.
+heroku run rails runner "PendingResubmission.delete_all" --app $APP
+~~~
 
 ### Rotating `BADGEAPP_BADPWKEY`
 

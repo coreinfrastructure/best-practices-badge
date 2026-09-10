@@ -8,11 +8,6 @@ require 'test_helper'
 load 'Rakefile'
 
 class RemindersSummaryTest < ActionDispatch::IntegrationTest
-  # Turn off transactional fixtures for this test since we are loading
-  # the fixtures database anyway. This will prevent the timestamp change
-  # from spilling into other tests.
-  self.use_transactional_tests = false
-
   setup do
     @user = users(:test_user)
     @admin_user = users(:admin_user)

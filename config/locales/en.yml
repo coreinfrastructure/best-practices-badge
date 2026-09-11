@@ -115,6 +115,7 @@ en:
     login_custom: Log in using custom account
     no_custom: No custom account? Sign up now!
     already_logged_in: You are already logged in.
+    auto_logged_out: You were automatically logged out, please log in to continue.
     login_disabled: All logins temporarily disabled
     incorrect_login_info: Incorrect login information
     login_failed: >-

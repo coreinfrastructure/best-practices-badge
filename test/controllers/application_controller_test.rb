@@ -202,6 +202,23 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
     assert user_logged_in?
   end
 
+  # A session that dies for any reason (idle timeout here; setup_authentication_state
+  # treats a revoked/purged session the same way) used to bounce the user
+  # to a bare login page with no explanation and no way back to what they
+  # were doing.
+  test 'idle-expired session shows the auto_logged_out flash and a return_to' do
+    user = users(:test_user_melissa)
+    log_in_as(user, password: 'password1', remember_me: '0')
+    login_session = user.login_sessions.last
+    login_session.update_columns(last_used_at: SessionsHelper::SESSION_TTL.ago.utc - 1.minute)
+
+    get edit_user_path(user)
+    assert_redirected_to login_path(return_to: edit_user_path(user))
+    follow_redirect!
+    assert_includes @response.body,
+                    'You were automatically logged out, please log in to continue.'
+  end
+
   # docs/login-session-evaluation.md finding #3: a client that resends remember-me cookies on
   # every request while discarding Set-Cookie re-triggers a fresh
   # LoginSession INSERT each time; this bounds that per user_id, the same

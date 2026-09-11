@@ -427,18 +427,23 @@ class UsersController < ApplicationController
     user_params
   end
 
-  # Confirm this is logged-in user; redirect if not. A logged-out PATCH with
-  # a real user param to stash is stashed first (see
-  # ApplicationController#redirect_to_login_stashing) so it isn't lost
-  # across the forced login. A malformed PATCH with no user param at all
-  # has nothing to stash and falls through to the plain flash-and-redirect
-  # below, same as before this existed.
+  # Confirm this is logged-in user; redirect if not. A GET (edit, index) or
+  # a logged-out PATCH with a real user param to stash goes through
+  # redirect_to_login_stashing, preserving return_to (and stashing the
+  # PATCH's fields, plus the "you were automatically logged out" flash
+  # when that applies). Anything else (destroy, or a malformed PATCH with
+  # no user param) has nothing sensible to return to here, so it falls
+  # through to the plain flash-and-redirect below.
   def redir_unless_logged_in
     return if logged_in?
     return redirect_to_login_stashing(:user) { compute_user_params } if
-      request.patch? && params[:user].present?
+      request.get? || (request.patch? && params[:user].present?)
 
-    flash[:danger] = t('users.please_log_in')
+    if @auto_logged_out
+      flash[:warning] = t('sessions.auto_logged_out')
+    else
+      flash[:danger] = t('users.please_log_in')
+    end
     redirect_to login_path
   end
 

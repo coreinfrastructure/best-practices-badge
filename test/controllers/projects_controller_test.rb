@@ -961,6 +961,17 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
                  'Explicitly blank entry_locale should normalize to en'
   end
 
+  test 'GET edit while not logged in redirects to login with return_to, no flash' do
+    # No flash here: this visitor was never logged in in the first place,
+    # so there's nothing to explain (contrast an auto_logged_out session,
+    # covered in application_controller_test.rb). return_to sends them
+    # back to this same edit page once they do log in.
+    edit_path = "/en/projects/#{@project.id}/passing/edit"
+    get edit_path
+    assert flash.empty?
+    assert_redirected_to login_path(return_to: edit_path)
+  end
+
   # Negative test
   test 'should fail to update project if not logged in' do
     # NOTE: no log_in_as

@@ -648,6 +648,9 @@ class ApplicationController < ActionController::Base
 
     # session[:login_session_id] is OUR random session id (LoginSession),
     # not Rack's own bookkeeping session_id; see design doc section 6.6.
+    # Its presence is what "was logged in" means here: it's written only
+    # by SessionsHelper#log_in, nowhere else.
+    was_logged_in = session[:login_session_id].present?
     login_session = LoginSession.find_by_session_id(session[:login_session_id])
 
     if login_session && (login_session.idle_expired? || login_session.absolutely_expired?)
@@ -658,6 +661,15 @@ class ApplicationController < ActionController::Base
 
     # Handle remember token if no valid session
     login_session = try_remember_token_login if login_session.nil?
+
+    # True iff this browser believed it was logged in (it carried a
+    # login_session_id) but isn't, for any reason: idle/absolute expiry
+    # above, or the row simply being gone (revoked, password changed,
+    # purged). Used by redirect_to_login_stashing and
+    # redir_unless_logged_in to explain an otherwise-silent forced logout,
+    # rather than looking like a bare "please log in." False whenever
+    # try_remember_token_login just silently re-established the session.
+    @auto_logged_out = was_logged_in && login_session.nil?
 
     # Set instance variables from the encrypted session cookie.
     @session_user_id = login_session&.user_id
@@ -906,6 +918,7 @@ class ApplicationController < ActionController::Base
       login_params[:pending_resubmission_token] =
         stash_pending_resubmission(request.path, param_key, yield)
     end
+    flash[:warning] = t('sessions.auto_logged_out') if @auto_logged_out
     redirect_to login_path(**login_params)
   end
 

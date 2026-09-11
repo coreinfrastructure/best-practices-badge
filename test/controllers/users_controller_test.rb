@@ -227,9 +227,13 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should redirect edit when not logged in' do
+    # No flash here: this visitor was never logged in in the first place,
+    # so there's nothing to explain (contrast the auto_logged_out case
+    # below, "admin changing another users password..."). return_to sends
+    # them back to this same edit page once they do log in.
     get "/en/users/#{@user.id}/edit"
-    assert_not flash.empty?
-    assert_redirected_to login_url
+    assert flash.empty?
+    assert_redirected_to login_url(return_to: edit_user_path(@user))
   end
 
   test 'can create local user' do
@@ -360,6 +364,22 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
       delete "/en/users/#{@user.id}"
     end
     assert_redirected_to login_url
+    assert_equal I18n.t('users.please_log_in'), flash[:danger]
+  end
+
+  # destroy has no sensible page to return_to, so it stays on the plain
+  # flash-and-redirect fallback even when auto_logged_out; only the flash
+  # text (and its severity) changes to explain why.
+  test 'should redirect destroy with auto_logged_out flash after idle expiry' do
+    log_in_as(@user, password: 'password1', remember_me: '0')
+    login_session = @user.login_sessions.last
+    login_session.update_columns(last_used_at: SessionsHelper::SESSION_TTL.ago.utc - 1.minute)
+
+    assert_no_difference 'User.count' do
+      delete "/en/users/#{@user.id}"
+    end
+    assert_redirected_to login_url
+    assert_equal I18n.t('sessions.auto_logged_out'), flash[:warning]
   end
 
   test 'should redirect destroy when logged in as wrong non-admin user' do
@@ -699,10 +719,18 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
       session_id_digest: LoginSession.digest(target_login_session_id)
     )
     # ...and their browser's NEXT authenticated request is treated as
-    # logged out -- proving the revoke actually took effect server-side,
+    # logged out: this proves the revoke actually took effect server-side,
     # not merely that the database row is gone while nobody checks it.
+    # It also gets the "you were automatically logged out" flash and a
+    # return_to back to the edit page it asked for (finding: a silently
+    # revoked session used to bounce to a bare login page with neither).
     target_session.get edit_user_path(@user)
-    target_session.assert_redirected_to login_url(locale: :en)
+    target_session.assert_redirected_to(
+      login_url(locale: :en, return_to: edit_user_path(@user))
+    )
+    target_session.follow_redirect!
+    assert_includes target_session.response.body,
+                    'You were automatically logged out, please log in to continue.'
   end
 end
 # rubocop:enable Metrics/ClassLength

@@ -89,7 +89,7 @@ module SessionsHelper
   # rubocop:enable Metrics/AbcSize
 
   # Bounds how many times one user_id can be logged in per minute,
-  # regardless of source IP (see ,evaluation.md finding #3). Complements
+  # regardless of source IP (see docs/login-session-evaluation.md finding #3). Complements
   # the IP-based throttles in config/initializers/rack_attack.rb, which a
   # distributed attacker (many source IPs, one target account) bypasses
   # entirely; this one doesn't care how many IPs are involved. Reuses

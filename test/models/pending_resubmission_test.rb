@@ -25,7 +25,7 @@ class PendingResubmissionModelTest < ActiveSupport::TestCase
     assert_nil PendingResubmission.find_by_token('')
   end
 
-  # ,evaluation.md finding #4: purge_stale, not #show, is what eventually
+  # docs/login-session-evaluation.md finding #4: purge_stale, not #show, is what eventually
   # removes an abandoned stash, so it needs its own boundary coverage the
   # way LoginSession.purge_stale already has (test/models/login_session_test.rb).
   test 'purge_stale deletes rows older than STALE_LIFETIME but keeps newer ones' do

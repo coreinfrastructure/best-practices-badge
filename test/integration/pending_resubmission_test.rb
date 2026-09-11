@@ -50,7 +50,7 @@ class PendingResubmissionTest < ActionDispatch::IntegrationTest
     @project.reload
     assert_equal new_name, @project.name
 
-    # ,evaluation.md finding #4: resubmitting is what finally consumes the
+    # docs/login-session-evaluation.md finding #4: resubmitting is what finally consumes the
     # stash (ApplicationController#finalize_pending_resubmission), not the
     # earlier GET that rendered it.
     assert_not PendingResubmission.exists?(hashed_random_id: PendingResubmission.digest(token))
@@ -58,7 +58,7 @@ class PendingResubmissionTest < ActionDispatch::IntegrationTest
   end
 
   test 'revisiting after a closed tab (a fresh GET) still shows the stash' do
-    # ,evaluation.md finding #4: the old design destroyed the row and
+    # docs/login-session-evaluation.md finding #4: the old design destroyed the row and
     # session key on the first GET, so a closed tab (before ever clicking
     # "Resume") lost the edit for good. A second, independent GET (e.g.
     # "reopen closed tab", a fresh request, not a cached page) must work.

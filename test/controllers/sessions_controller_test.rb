@@ -312,7 +312,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'BadgeAppTestAgent/1.0', login_session.user_agent
   end
 
-  # ,evaluation.md finding #3: bound login attempts per user_id, not just
+  # docs/login-session-evaluation.md finding #3: bound login attempts per user_id, not just
   # per IP (config/initializers/rack_attack.rb's throttles), since a
   # distributed attacker spread across many IPs but targeting one account
   # sails right past IP-based limits. The check itself

@@ -202,7 +202,7 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
     assert user_logged_in?
   end
 
-  # ,evaluation.md finding #3: a client that resends remember-me cookies on
+  # docs/login-session-evaluation.md finding #3: a client that resends remember-me cookies on
   # every request while discarding Set-Cookie re-triggers a fresh
   # LoginSession INSERT each time; this bounds that per user_id, the same
   # protection successful_login gets (see

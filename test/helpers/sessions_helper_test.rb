@@ -236,7 +236,7 @@ class SessionsHelperTest < ActionView::TestCase
     )
   end
 
-  # ,evaluation.md finding #3: a distributed attacker (many source IPs, one
+  # docs/login-session-evaluation.md finding #3: a distributed attacker (many source IPs, one
   # target user_id) bypasses every IP-based throttle in rack_attack.rb, so
   # this needs its own, IP-independent limit.
   test 'login_rate_limited? is always false outside production' do

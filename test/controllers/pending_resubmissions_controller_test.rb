@@ -9,7 +9,7 @@ require 'test_helper'
 # Tests PendingResubmissionsController#show (docs/login-session-implementation.md
 # section 15, docs/login-session-18.md step 18): stashed-submission lookup
 # is keyed only by session[:pending_resubmission_token], never by
-# anything in params. Since ,evaluation.md finding #4, #show also no
+# anything in params. Since docs/login-session-evaluation.md finding #4, #show also no
 # longer destroys the row or clears that session key itself: it's only
 # ever consumed by ApplicationController#finalize_pending_resubmission,
 # once the resume form is actually resubmitted (see
@@ -79,7 +79,7 @@ class PendingResubmissionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'a second visit before resubmitting still shows the same stash' do
-    # Simulates the recovery path ,evaluation.md finding #4 exists for: a
+    # Simulates the recovery path docs/login-session-evaluation.md finding #4 exists for: a
     # closed tab, or back-then-forward, before ever clicking "Resume."
     stash_a_pending_resubmission(new_name: 'Resubmit me')
     get pending_resubmission_path

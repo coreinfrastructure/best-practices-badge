@@ -23,7 +23,7 @@
 # from the original design.)
 #
 # #show deliberately does NOT destroy the row or clear the session key
-# (,evaluation.md finding #4): the old single-use-on-view behavior meant a
+# (docs/login-session-evaluation.md finding #4): the old single-use-on-view behavior meant a
 # closed tab, dropped connection, or back-then-forward before clicking
 # "Resume" lost the stashed edit for good, with no way back. Revisiting
 # this page now just re-shows the same stash. A row is only ever consumed

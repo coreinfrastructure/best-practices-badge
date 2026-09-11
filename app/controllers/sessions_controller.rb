@@ -141,7 +141,7 @@ class SessionsController < ApplicationController
   end
 
   # Renders the "too many logins" response if user is rate-limited
-  # (SessionsHelper#login_rate_limited?, ,evaluation.md finding #3), so
+  # (SessionsHelper#login_rate_limited?, docs/login-session-evaluation.md finding #3), so
   # successful_login can bail out with one line instead of three.
   # @param user [User] the user attempting to log in
   # @return [Boolean] true if the rate-limited response was rendered

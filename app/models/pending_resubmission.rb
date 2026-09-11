@@ -77,7 +77,7 @@ class PendingResubmission < ApplicationRecord
 
   # How long an unconsumed stash is kept around before the daily purge task
   # (lib/tasks/default.rake's `daily` task) deletes it. Nothing else destroys
-  # a row anymore (,evaluation.md finding #4: destroying it as soon as
+  # a row anymore (docs/login-session-evaluation.md finding #4: destroying it as soon as
   # PendingResubmissionsController#show renders lost the stash for good if
   # the browser never actually completed the resubmission, e.g. a closed
   # tab); ApplicationController#finalize_pending_resubmission only destroys

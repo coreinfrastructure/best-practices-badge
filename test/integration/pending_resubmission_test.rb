@@ -29,12 +29,7 @@ class PendingResubmissionTest < ActionDispatch::IntegrationTest
     assert_not_nil token
     assert_nil session[:pending_resubmission_token] # not written until login succeeds
 
-    post login_path, params: {
-      session: {
-        email: @user.email, password: 'password', provider: 'local',
-        pending_resubmission_token: token
-      }
-    }
+    log_in_with_token(token)
     assert_redirected_to pending_resubmission_path
     # counter_fixation resets the session on every login attempt; confirm
     # the token actually survived via this login's own request param,
@@ -45,9 +40,40 @@ class PendingResubmissionTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_response :success
     assert_select "input[type='hidden'][name='project[name]'][value='#{new_name}']"
+    assert_select "input[type='hidden'][name='pending_resubmission_token'][value='#{token}']"
 
-    # Click "Resume saving your changes."
+    # Click "Resume saving your changes." (the token rides along as a
+    # hidden field, the same as the rendered form above.)
+    patch "/en/projects/#{@project.id}", params: {
+      project: { name: new_name }, pending_resubmission_token: token
+    }
+    @project.reload
+    assert_equal new_name, @project.name
+
+    # ,evaluation.md finding #4: resubmitting is what finally consumes the
+    # stash (ApplicationController#finalize_pending_resubmission), not the
+    # earlier GET that rendered it.
+    assert_not PendingResubmission.exists?(hashed_random_id: PendingResubmission.digest(token))
+    assert_nil session[:pending_resubmission_token]
+  end
+
+  test 'revisiting after a closed tab (a fresh GET) still shows the stash' do
+    # ,evaluation.md finding #4: the old design destroyed the row and
+    # session key on the first GET, so a closed tab (before ever clicking
+    # "Resume") lost the edit for good. A second, independent GET (e.g.
+    # "reopen closed tab", a fresh request, not a cached page) must work.
+    new_name = "#{@project.name}_resubmitted"
     patch "/en/projects/#{@project.id}", params: { project: { name: new_name } }
+    log_in_with_token(pending_resubmission_token_from_redirect)
+    follow_redirect! # first view of the resume page; tab "closes" here
+
+    get pending_resubmission_path
+    assert_response :success
+    assert_select "input[type='hidden'][name='project[name]'][value='#{new_name}']"
+
+    patch "/en/projects/#{@project.id}", params: {
+      project: { name: new_name }, pending_resubmission_token: session[:pending_resubmission_token]
+    }
     @project.reload
     assert_equal new_name, @project.name
   end
@@ -57,12 +83,7 @@ class PendingResubmissionTest < ActionDispatch::IntegrationTest
     token = pending_resubmission_token_from_redirect
     assert_not_nil token
 
-    post login_path, params: {
-      session: {
-        email: @user.email, password: 'wrong-password', provider: 'local',
-        pending_resubmission_token: token
-      }
-    }
+    log_in_with_token(token, password: 'wrong-password')
     assert_response :success # re-renders the login form; login failed
     # Login failed, so this never reached successful_login; the token
     # survives only because the re-rendered form echoes back this same
@@ -140,5 +161,16 @@ class PendingResubmissionTest < ActionDispatch::IntegrationTest
     Rack::Utils.parse_nested_query(URI.parse(response.location).query)[
       'pending_resubmission_token'
     ]
+  end
+
+  # Logs @user in locally, carrying the given pending_resubmission_token
+  # as this login request's own param (docs/login-session-18.md "Step 21").
+  def log_in_with_token(token, password: 'password')
+    post login_path, params: {
+      session: {
+        email: @user.email, password: password, provider: 'local',
+        pending_resubmission_token: token
+      }
+    }
   end
 end

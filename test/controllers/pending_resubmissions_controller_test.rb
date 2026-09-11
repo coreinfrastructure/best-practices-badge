@@ -9,7 +9,11 @@ require 'test_helper'
 # Tests PendingResubmissionsController#show (docs/login-session-implementation.md
 # section 15, docs/login-session-18.md step 18): stashed-submission lookup
 # is keyed only by session[:pending_resubmission_token], never by
-# anything in params.
+# anything in params. Since ,evaluation.md finding #4, #show also no
+# longer destroys the row or clears that session key itself: it's only
+# ever consumed by ApplicationController#finalize_pending_resubmission,
+# once the resume form is actually resubmitted (see
+# test/integration/pending_resubmission_test.rb for that full round trip).
 class PendingResubmissionsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @project = projects(:one)
@@ -74,21 +78,39 @@ class PendingResubmissionsControllerTest < ActionDispatch::IntegrationTest
     assert_select "form[action='#{pending.resubmit_path}']"
   end
 
-  test 'is single-use: a second visit finds nothing' do
-    stash_a_pending_resubmission
+  test 'a second visit before resubmitting still shows the same stash' do
+    # Simulates the recovery path ,evaluation.md finding #4 exists for: a
+    # closed tab, or back-then-forward, before ever clicking "Resume."
+    stash_a_pending_resubmission(new_name: 'Resubmit me')
     get pending_resubmission_path
     assert_response :success
 
     get pending_resubmission_path
-    assert_response :redirect
-    follow_redirect!
-    assert_includes @response.body, 'may have expired'
+    assert_response :success
+    assert_select "input[type='hidden'][name='project[name]'][value='Resubmit me']"
   end
 
-  test 'destroys the row on the first visit regardless of outcome' do
+  test 'a mere view does not destroy the row or clear the session token' do
     pending = stash_a_pending_resubmission
     get pending_resubmission_path
+    assert PendingResubmission.exists?(pending.id)
+    assert_not_nil session[:pending_resubmission_token]
+  end
+
+  test 'resubmitting the stash destroys it and clears the session token' do
+    pending = stash_a_pending_resubmission(new_name: 'Resubmit me')
+    get pending_resubmission_path
+    token = session[:pending_resubmission_token]
+
+    # This is what clicking "Resume" actually sends: the view's hidden
+    # pending_resubmission_token field alongside the stashed project
+    # fields, straight to the original resubmit_path/method, not back
+    # through PendingResubmissionsController at all.
+    patch pending.resubmit_path, params: {
+      project: { name: 'Resubmit me' }, pending_resubmission_token: token
+    }
     assert_not PendingResubmission.exists?(pending.id)
+    assert_nil session[:pending_resubmission_token]
   end
 
   test 'shows sensitive-fields-dropped warning when email/password were stripped' do
@@ -119,11 +141,17 @@ class PendingResubmissionsControllerTest < ActionDispatch::IntegrationTest
     assert_includes @response.body, '&lt;script&gt;alert(1)&lt;/script&gt;'
   end
 
-  # Regression test: there is no :id/:token param on this route, and this
-  # action must never read one. If a future change "fixes" show to accept
-  # an identifier from params, matching the usual Rails show idiom, this
-  # test fails, catching the reintroduction of the exact
-  # shareable-direct-link vulnerability an earlier draft of this design had.
+  # Regression test: there is no :id/:token param this action itself
+  # reads, and #show must never read one to decide what to *display*. If a
+  # future change "fixes" show to accept an identifier from params,
+  # matching the usual Rails show idiom, this test fails, catching the
+  # reintroduction of the exact shareable-direct-link vulnerability an
+  # earlier draft of this design had. (This is unrelated to
+  # ApplicationController#finalize_pending_resubmission, which does read a
+  # pending_resubmission_token param, but only to destroy a row, never to
+  # show one. 'pending_resubmission_token' here is also deliberately set
+  # to hashed_random_id, not the real raw token, so it can't match via
+  # that mechanism either.)
   test 'a params-supplied identifier never shows or destroys another session\'s row' do
     other_pending = PendingResubmission.create!(
       resubmit_path: "/en/projects/#{@project.id}",

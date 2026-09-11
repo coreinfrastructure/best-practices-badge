@@ -103,6 +103,11 @@ class ApplicationController < ActionController::Base
   after_action :update_session_timestamp
   after_action :drop_unneeded_session_cookie
 
+  # Consumes a stashed pending resubmission the moment it's actually
+  # resubmitted, wherever that request lands (not just
+  # PendingResubmissionsController). See #finalize_pending_resubmission.
+  before_action :finalize_pending_resubmission
+
   # For the PaperTrail gem. We must call this *after* the action
   # `setup_authentication_state`; this action calls
   # our method `user_for_paper_trail` which reads from @session_user_id.
@@ -762,7 +767,7 @@ class ApplicationController < ActionController::Base
     return if user.provider == 'github'
 
     # Bound how many LoginSession rows one user_id can generate in a short
-    # window, regardless of source IP (see ,evaluation.md finding #3: a
+    # window, regardless of source IP (a
     # client that resends remember-me cookies while discarding Set-Cookie
     # re-triggers a fresh LoginSession INSERT on every request; IP-based
     # throttles don't help if the requests are spread across many IPs).
@@ -836,6 +841,38 @@ class ApplicationController < ActionController::Base
       sensitive_fields_dropped: dropped
     )
     pending.raw_token
+  end
+
+  # Destroys a stashed pending resubmission once its resubmit form is
+  # actually submitted back, wherever that request lands (an ordinary
+  # controller action like ProjectsController#update, not
+  # PendingResubmissionsController's own #show, which reads only session
+  # and never this request's params). This is the ONLY place a row is
+  # destroyed in pending resubmissions in the normal application run; #show
+  # deliberately leaves it
+  # alone so revisiting the resume page after a closed tab or dropped
+  # connection still works, and an abandoned stash is instead swept up
+  # later by PendingResubmission.purge_stale.
+  #
+  # Reading the token from params here (rather than only from session, as
+  # PendingResubmissionsController's own comment insists on for *display*)
+  # is safe: this only destroys a row, never shows its contents, and the
+  # token a request carries here is never one the requester merely
+  # guessed (it's 128 bits of SecureRandom that only ever reached a
+  # browser by that browser first passing the session-gated check in
+  # PendingResubmissionsController#show). Whoever can present it here could
+  # already have replayed the stash's own params directly.
+  #
+  # A blank param is the overwhelmingly common case (an ordinary request
+  # never resubmits a stash), so this is a cheap early return on every
+  # other request in the app.
+  # @return [void]
+  def finalize_pending_resubmission
+    token = params[:pending_resubmission_token]
+    return if token.blank?
+
+    PendingResubmission.find_by_token(token)&.destroy
+    session.delete(:pending_resubmission_token) if session[:pending_resubmission_token] == token
   end
 
   # Shared shape for can_edit_else_redirect and redir_unless_logged_in: a

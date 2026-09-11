@@ -244,6 +244,11 @@ module SessionsHelper
   def log_out
     forget(current_user)
     @login_session&.destroy
+    # Clear the ivar, not just the DB row: update_session_timestamp's
+    # after_action runs after this action too, and would otherwise call
+    # update_column on the now-destroyed record whenever last_used_at was
+    # already more than RESET_SESSION_TIMER old, raising ActiveRecordError.
+    @login_session = nil
     reset_session
     @current_user = nil
   end

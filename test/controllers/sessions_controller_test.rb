@@ -296,6 +296,27 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     )
   end
 
+  test 'logout does not crash when the session is older than RESET_SESSION_TIMER' do
+    # Regression test: log_out used to destroy @login_session without
+    # clearing the ivar, so the after_action update_session_timestamp
+    # (which only bumps last_used_at when it is already stale) called
+    # update_column on the now-destroyed record and raised
+    # ActiveRecord::ActiveRecordError. Backdating last_used_at reproduces
+    # the "idle for over an hour, then log out" state that ordinary
+    # same-test login/logout timing never exercises.
+    log_in_as(@user, password: 'password1')
+    login_session = LoginSession.find_by_session_id(session[:login_session_id])
+    login_session.update_column(
+      :last_used_at, (SessionsHelper::RESET_SESSION_TIMER + 1.minute).ago.utc
+    )
+
+    assert_nothing_raised do
+      delete logout_path, params: { locale: 'en' }
+    end
+    assert_response :redirect
+    assert_not LoginSession.exists?(login_session.id)
+  end
+
   # docs/login-session-18.md step 19: SessionsController#update_github_nickname
   # keeps User#nickname in sync with GitHub, since
   # SessionsHelper#current_user_is_github_owner? now authorizes off that DB

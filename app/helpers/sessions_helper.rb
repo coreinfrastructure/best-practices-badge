@@ -88,6 +88,23 @@ module SessionsHelper
   end
   # rubocop:enable Metrics/AbcSize
 
+  # Resets the session (countering session fixation) while preserving any
+  # key in SESSION_KEYS_SURVIVING_RESET (currently just :forwarding_url).
+  # Must run, authenticating nothing itself, before *every* path that can
+  # turn an anonymous session into a logged-in one: the explicit
+  # password/OAuth login form (SessionsController#create) and the implicit
+  # remember-me-cookie path (ApplicationController#try_remember_token_login)
+  # both call this before calling log_in. The latter used to skip it
+  # entirely (docs/login-session-evaluation.md finding #6): a stale session
+  # id from before authentication would otherwise survive into the newly
+  # logged-in session on that path.
+  # @return [void]
+  def counter_fixation
+    preserved = SESSION_KEYS_SURVIVING_RESET.index_with { |key| session[key] }
+    reset_session
+    preserved.each { |key, value| session[key] = value if value }
+  end
+
   # Bounds how many times one user_id can be logged in per minute,
   # regardless of source IP (see docs/login-session-evaluation.md finding #3). Complements
   # the IP-based throttles in config/initializers/rack_attack.rb, which a

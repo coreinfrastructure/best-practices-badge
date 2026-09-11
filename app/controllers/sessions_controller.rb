@@ -47,6 +47,14 @@ class SessionsController < ApplicationController
   # @return [void]
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def create
+    # session[:locale] was stashed by store_location_and_locale when the
+    # login form was first shown (GET /login), so this POST's own response
+    # (after counter_fixation's reset_session wipes it) still renders in
+    # the locale the person was actually looking at, not whatever this
+    # POST's own URL/headers alone would derive (set_locale_to_best_available's
+    # earlier before_action already ran using only *this* request's own
+    # locale-less form submission).
+    I18n.locale = session[:locale] if session[:locale]
     counter_fixation # Counter session fixation (but save forwarding url)
     if Rails.application.config.deny_login
       flash.now[:danger] = t('sessions.login_disabled')
@@ -167,17 +175,6 @@ class SessionsController < ApplicationController
     else
       redirect_back_or root_url
     end
-  end
-
-  # Protects against session fixation while preserving forwarding URL (and
-  # any other key in SessionsHelper::SESSION_KEYS_SURVIVING_RESET).
-  # Resets the session but maintains the intended redirect destination.
-  # @return [void]
-  def counter_fixation
-    preserved = SessionsHelper::SESSION_KEYS_SURVIVING_RESET.index_with { |key| session[key] }
-    I18n.locale = session[:locale]
-    reset_session # Counter session fixation
-    preserved.each { |key, value| session[key] = value if value }
   end
 
   # Handles local email/password authentication.

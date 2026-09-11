@@ -756,6 +756,7 @@ class ApplicationController < ActionController::Base
   #
   # @return [LoginSession, nil] the newly created session, or nil if the
   #   remember-me cookie is missing, invalid, or belongs to a GitHub user
+  # rubocop:disable Metrics/MethodLength
   def try_remember_token_login
     cookie_user_id = cookies.signed[:user_id]
     return unless cookie_user_id
@@ -782,11 +783,17 @@ class ApplicationController < ActionController::Base
       return
     end
 
+    # docs/login-session-evaluation.md finding #6: this path used to call
+    # log_in directly, with no reset_session first, unlike the explicit
+    # login form (SessionsController#create). counter_fixation is the same
+    # call that path makes.
+    counter_fixation
     log_in(user) # now the single entry point for "establish a session"
     # We found the user DB data, record it in case we need it later.
     @current_user = user
     @login_session # set by log_in itself; no re-lookup needed
   end
+  # rubocop:enable Metrics/MethodLength
 
   # Redirects non-admin users away from an admin-only action. Usable as a
   # before_action (e.g. LoginSessionsController#index); leaves

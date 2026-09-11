@@ -648,9 +648,17 @@ class ApplicationController < ActionController::Base
 
     # session[:login_session_id] is OUR random session id (LoginSession),
     # not Rack's own bookkeeping session_id; see design doc section 6.6.
-    # Its presence is what "was logged in" means here: it's written only
-    # by SessionsHelper#log_in, nowhere else.
-    was_logged_in = session[:login_session_id].present?
+    # Its presence is what "was logged in" means here: current code
+    # writes it only in SessionsHelper#log_in, nowhere else. But this
+    # branch hasn't deployed yet: on the day it does, every already
+    # logged-in browser still carries the *old* cookie-only scheme's
+    # session[:user_id] (no login_session_id at all, since that key is
+    # new), and would otherwise be misread as having never logged in
+    # rather than as the auto-logout this feature exists to explain.
+    # session[:user_id] is dead weight once that transition window
+    # passes: nothing sets it anymore, and reset_session (on next login,
+    # logout, or the very expiry this method detects) clears it for good.
+    was_logged_in = session[:login_session_id].present? || session[:user_id].present?
     login_session = LoginSession.find_by_session_id(session[:login_session_id])
 
     if login_session && (login_session.idle_expired? || login_session.absolutely_expired?)

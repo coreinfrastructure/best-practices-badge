@@ -36,17 +36,21 @@ class LoginSession < ApplicationRecord
   end
   private_class_method :session_id_hmac_key_hex
 
-  def self.session_id_hmac_key
-    # Hex string -> raw key bytes, matching how EMAIL_BLIND_INDEX_KEY is
-    # unpacked in app/models/user.rb. Skipping this conversion wouldn't
-    # fail loudly: the hex string itself still works as *some* HMAC key,
-    # just with less entropy than intended, silently, with no error.
-    [session_id_hmac_key_hex].pack('H*')
-  end
-  private_class_method :session_id_hmac_key
+  # Raw key bytes, computed once here at class-load time rather than
+  # re-deriving them on every #digest call, matching how User's
+  # attr_encrypted/blind_index keys are only ever computed once
+  # (docs/login-session-evaluation.md finding #8):
+  # find_by_session_id runs from a before_action on every authenticated
+  # request, so re-reading ENV and re-running pack('H*') on every call
+  # would be on the hottest path in the app. Hex string -> raw key bytes,
+  # matching how EMAIL_BLIND_INDEX_KEY is unpacked in app/models/user.rb;
+  # skipping this conversion wouldn't fail loudly, the hex string itself
+  # still works as *some* HMAC key, just with less entropy than intended,
+  # silently, with no error.
+  SESSION_ID_HMAC_KEY = [session_id_hmac_key_hex].pack('H*')
 
   def self.digest(session_id)
-    OpenSSL::HMAC.hexdigest('SHA256', session_id_hmac_key, session_id)
+    OpenSSL::HMAC.hexdigest('SHA256', SESSION_ID_HMAC_KEY, session_id)
   end
 
   # @param user [User] the user this session belongs to

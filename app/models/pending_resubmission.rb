@@ -36,14 +36,14 @@ class PendingResubmission < ApplicationRecord
   end
   private_class_method :hmac_key_hex
 
-  def self.hmac_key
-    # Hex string -> raw key bytes, matching LoginSession.session_id_hmac_key.
-    [hmac_key_hex].pack('H*')
-  end
-  private_class_method :hmac_key
+  # Raw key bytes, computed once here at class-load time rather than
+  # re-deriving them on every #digest call; see
+  # LoginSession::SESSION_ID_HMAC_KEY for why
+  # (docs/login-session-evaluation.md finding #8).
+  PENDING_RESUBMISSION_HMAC_KEY = [hmac_key_hex].pack('H*')
 
   def self.digest(token)
-    OpenSSL::HMAC.hexdigest('SHA256', hmac_key, token)
+    OpenSSL::HMAC.hexdigest('SHA256', PENDING_RESUBMISSION_HMAC_KEY, token)
   end
 
   # @param resubmit_path [String] path to resubmit the stashed fields to

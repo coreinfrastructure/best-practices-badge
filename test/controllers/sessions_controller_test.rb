@@ -479,6 +479,29 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     OmniAuth.config.mock_auth[:github] = nil
   end
 
+  test 'omniauth login with a changed github nickname does not flash if the save fails' do
+    # docs/login-session-evaluation.md finding #5: `user.update` validates
+    # the whole record, not just :nickname, so give it an unrelated
+    # invalid column (update_column bypasses validations to get there)
+    # rather than trying to make the nickname itself invalid.
+    github_user = users(:github_user)
+    github_user.update!(uid: 'github-test-uid')
+    github_user.update_column(:name, '')
+    old_nickname = github_user.nickname
+    new_nickname = "#{old_nickname}-renamed"
+    OmniAuth.config.test_mode = true
+    OmniAuth.config.add_mock(
+      :github, github_omniauth_hash(github_user, nickname: new_nickname)
+    )
+    get '/auth/github/callback'
+    assert_response :redirect # login itself still succeeds
+    assert_equal old_nickname, github_user.reload.nickname
+    assert_nil flash[:info]
+  ensure
+    OmniAuth.config.test_mode = false
+    OmniAuth.config.mock_auth[:github] = nil
+  end
+
   # A brand-new user's nickname is already set by User.create_with_omniauth
   # from this same login's auth payload, so update_github_nickname's own
   # comparison finds nothing changed: there's no prior value to have

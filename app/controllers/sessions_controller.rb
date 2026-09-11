@@ -232,7 +232,14 @@ class SessionsController < ApplicationController
     return if user.nickname == new_nickname
 
     old_nickname = user.nickname
-    user.update(nickname: new_nickname)
+    # docs/login-session-evaluation.md finding #5: `update` validates the
+    # whole record, not just :nickname, so it can fail for reasons that
+    # have nothing to do with the nickname itself (e.g. some other column
+    # already held invalid data). Check the result: current_user_is_github_owner?
+    # keeps authorizing off the DB column, so a flash claiming the change
+    # took effect when it didn't would be actively misleading, not just
+    # cosmetic.
+    return log_nickname_update_failure(user) unless user.update(nickname: new_nickname)
     return if old_nickname.blank? # first login after account creation; nothing changed
 
     # Not flash.now: this method is only ever called from omniauth_login,
@@ -244,6 +251,19 @@ class SessionsController < ApplicationController
                      old_nickname: old_nickname,
                      new_nickname: new_nickname)
     # rubocop: enable Rails/ActionControllerFlashBeforeRender
+  end
+
+  # Logs a failed GitHub nickname update instead of silently proceeding as
+  # though it worked (docs/login-session-evaluation.md finding #5). Not a
+  # user-facing flash: this is a data problem (invalid state elsewhere on
+  # the user record), not something the person logging in can act on.
+  # @param user [User] the user whose nickname failed to update
+  # @return [void]
+  def log_nickname_update_failure(user)
+    Rails.logger.warn(
+      "Failed to update GitHub nickname for user id=#{user.id}: " \
+      "#{user.errors.full_messages.join('; ')}"
+    )
   end
 
   # Validates account status and processes local login.

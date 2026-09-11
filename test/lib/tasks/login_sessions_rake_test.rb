@@ -56,4 +56,20 @@ class LoginSessionsRakeTest < ActiveSupport::TestCase
       capture_io { Rake::Task['login_sessions:revoke'].invoke }
     end
   end
+
+  # docs/login-session-evaluation.md finding #10: a non-numeric id used to
+  # raise a raw ArgumentError with a full backtrace instead of exiting
+  # cleanly like the missing-argument case above. assert_raises must be
+  # the inner block: capture_io only returns captured output if its own
+  # block completes normally, and exit's SystemExit would otherwise
+  # propagate straight through it.
+  test 'exits nonzero with a friendly message on a non-numeric user id' do
+    out, =
+      capture_io do
+        assert_raises(SystemExit) do
+          Rake::Task['login_sessions:revoke'].invoke('not-a-number')
+        end
+      end
+    assert_match('user id must be numeric', out)
+  end
 end

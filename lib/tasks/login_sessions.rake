@@ -13,7 +13,15 @@ namespace :login_sessions do
       exit 1
     end
 
-    user = User.find(Integer(args.user_id, 10)) # raises if not found
+    begin
+      user_id = Integer(args.user_id, 10)
+    rescue ArgumentError
+      puts "Error: user id must be numeric (got #{args.user_id.inspect})"
+      puts 'Usage: rake login_sessions:revoke[123]'
+      exit 1
+    end
+
+    user = User.find(user_id) # raises if not found
     count = user.login_sessions.delete_all
     puts "Revoked #{count} session(s) for user #{user.id} (#{user.name})."
     # This does *not* also invalidate the user's remember-me token: this

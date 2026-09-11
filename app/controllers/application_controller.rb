@@ -58,6 +58,12 @@ class ApplicationController < ActionController::Base
 
   # Make criteria_level conversion methods available to views
   helper_method :criteria_level_to_internal, :normalize_criteria_level
+  # hash_param: safe nested-param access for views (e.g. sessions/new.html.erb
+  # reading a re-rendered login form's own submitted params), without each
+  # view needing its own copy of the "is this actually a Parameters object"
+  # guard a crafted request can defeat (params[:session] can arrive as a
+  # scalar; see the security/robustness tests in sessions_controller_test.rb).
+  helper_method :hash_param
 
   # Validate client IP address (if only some IP addresses are allowed);
   # counters cloud piercing.
@@ -774,16 +780,19 @@ class ApplicationController < ActionController::Base
   end
 
   # Stashes a logged-out submitter's PATCH params so they aren't lost across
-  # a forced re-login, and records the stashed row's raw random token in
-  # this browser's own session cookie: the only place that token is ever
-  # written. Only its HMAC digest is stored server-side
+  # a forced re-login, and returns the stashed row's raw random token to the
+  # caller, which threads it through the login redirect rather than writing
+  # it to session here. Only its HMAC digest is stored server-side
   # (PendingResubmission.digest, keyed by PENDING_RESUBMISSION_HMAC_KEY).
-  # See docs/login-session-implementation.md section 15 for why this is
-  # identified only via the session, never a URL, and
-  # docs/login-session-18.md step 18 for why a random token's digest
-  # replaced the row's own guessable primary key: a SECRET_KEY_BASE leak
+  # See docs/login-session-implementation.md section 15 for the original
+  # design, docs/login-session-18.md step 18 for why a random token's digest
+  # replaced the row's own guessable primary key (a SECRET_KEY_BASE leak
   # alone must not be enough to forge a working identifier for someone
-  # else's row.
+  # else's row), and docs/login-session-18.md's "Step 21" for why this
+  # stopped writing the token to session at stash time: session state set
+  # before a login is not scoped to *whoever ends up logging in*, so a
+  # second, unrelated login on the same browser could otherwise inherit
+  # the first person's stash.
   #
   # Field names are stored pre-bracketed (e.g. "project[name]"), not the
   # bare field name (e.g. "name"): PendingResubmissionsController's view
@@ -797,7 +806,7 @@ class ApplicationController < ActionController::Base
   # @param param_key [Symbol] top-level params key the fields must be
   #   wrapped back under on resubmission (e.g. :project, :user)
   # @param permitted_params [ActionController::Parameters] params to stash
-  # @return [void]
+  # @return [String] the stashed row's raw random token
   def stash_pending_resubmission(resubmit_path, param_key, permitted_params)
     fields = permitted_params.to_h
     dropped = SENSITIVE_STASH_KEYS.any? { |key| fields[key].present? }
@@ -810,7 +819,7 @@ class ApplicationController < ActionController::Base
       params_json: prefixed_fields.to_json,
       sensitive_fields_dropped: dropped
     )
-    session[:pending_resubmission_token] = pending.raw_token
+    pending.raw_token
   end
 
   # Shared shape for can_edit_else_redirect and redir_unless_logged_in: a
@@ -821,12 +830,23 @@ class ApplicationController < ActionController::Base
   # top-level key at all, and a plain argument would be evaluated (and so
   # raise) before the params[param_key].present? guard below ever runs. A
   # block is only evaluated via yield, inside the guarded branch.
+  #
+  # The stashed token, if any, rides on this specific redirect's own
+  # pending_resubmission_token query param, the same way return_to already
+  # rides on this one, rather than session: SessionsController#new and
+  # #create (both local and GitHub) thread it through from there, and only
+  # a successful login carrying it writes it to session. See
+  # docs/login-session-18.md's "Step 21".
   # @param param_key [Symbol] top-level params key that must be present to
   #   stash (e.g. :project, :user)
   # @return [void]
   def redirect_to_login_stashing(param_key)
-    stash_pending_resubmission(request.path, param_key, yield) if params[param_key].present?
-    redirect_to login_path(return_to: request.original_fullpath)
+    login_params = { return_to: request.original_fullpath }
+    if params[param_key].present?
+      login_params[:pending_resubmission_token] =
+        stash_pending_resubmission(request.path, param_key, yield)
+    end
+    redirect_to login_path(**login_params)
   end
 
   include SessionsHelper

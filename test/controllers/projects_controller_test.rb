@@ -982,7 +982,10 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       }
     end
     assert_response :redirect
-    assert_match %r{/en/login\?return_to=}, response.location
+    # Query param order isn't return_to-first once pending_resubmission_token
+    # also rides this redirect (Rails' route helper sorts extra params
+    # alphabetically), so this checks presence, not position.
+    assert_match %r{/en/login\?.*return_to=}, response.location
     # Verify that we didn't really change the name
     @project.reload
     assert_equal @project.name, old_name

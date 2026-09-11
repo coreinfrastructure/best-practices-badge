@@ -132,6 +132,35 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to root_url
   end
 
+  test 'local login with pending_resubmission_token sets session for resume' do
+    # docs/login-session-18.md "Step 21": pending_resubmission_token rides
+    # this login's own request params, not session, so this checks
+    # successful_login actually writes it to session once this specific
+    # login succeeds. Value doesn't need to be a real PendingResubmission
+    # row for this: that check happens later, in
+    # PendingResubmissionsController#show.
+    token = 'a-test-token-value'
+    post '/en/login', params: {
+      session: {
+        provider: 'local', email: 'test@example.org', password: 'password',
+        pending_resubmission_token: token
+      }
+    }
+    assert_response :redirect
+    assert_redirected_to pending_resubmission_path
+    assert_equal token, session[:pending_resubmission_token]
+  end
+
+  test 'local login without pending_resubmission_token does not set one' do
+    post '/en/login', params: {
+      session: {
+        provider: 'local', email: 'test@example.org', password: 'password'
+      }
+    }
+    assert_response :redirect
+    assert_nil session[:pending_resubmission_token]
+  end
+
   test 'login page with return_to includes it in github auth link and form' do
     destination = '/en/projects/1/passing/edit'
     get '/en/login', params: { return_to: destination }
@@ -139,6 +168,24 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     encoded = ERB::Util.url_encode(destination)
     assert_select "a[data-method='post'][href='/auth/github?locale=en&return_to=#{encoded}']"
     assert_select "input[type='hidden'][name='session[return_to]'][value='#{destination}']"
+  end
+
+  test 'login page with pending_resubmission_token includes it in github auth link and form' do
+    # docs/login-session-18.md "Step 21": the token rides this request's own
+    # params, mirroring return_to above, not session, so a login page load
+    # that never carried it must never echo one back either.
+    token = 'a-test-token-value'
+    get '/en/login', params: { pending_resubmission_token: token }
+    assert_response :success
+    assert_select "a[data-method='post'][href='/auth/github?locale=en&pending_resubmission_token=#{token}']"
+    assert_select "input[type='hidden'][name='session[pending_resubmission_token]'][value='#{token}']"
+  end
+
+  test 'login page without pending_resubmission_token omits it from github auth link and form' do
+    get '/en/login'
+    assert_response :success
+    assert_select "a[href*='pending_resubmission_token']", count: 0
+    assert_select "input[name='session[pending_resubmission_token]']", count: 0
   end
 
   test 'github auth request phase rejects missing csrf token' do
@@ -328,6 +375,46 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   # resolves to, but these tests specifically need it to land on
   # github_user, so give it a real, unique uid first rather than relying
   # on nil to disambiguate two rows that share it.
+  test 'omniauth login with pending_resubmission_token sets session for resume' do
+    # docs/login-session-18.md "Step 21": go through the real request
+    # phase (with the token as a query param, matching how the login
+    # page's own GitHub link builds it), rather than jumping straight to
+    # the callback, so OmniAuth's real session['omniauth.params'] round
+    # trip is what actually carries it across the redirect to GitHub and
+    # back, not something this test fakes directly.
+    github_user = users(:github_user)
+    github_user.update!(uid: 'github-test-uid')
+    token = 'a-test-token-value'
+    OmniAuth.config.test_mode = true
+    OmniAuth.config.add_mock(:github, github_omniauth_hash(github_user))
+    # POST, not GET (OmniAuth 2.x's default allowed_request_methods is
+    # [:post] only; a GET here 404s), and the token rides the URL's own
+    # query string, not params:, which Rails would put in the request
+    # body instead; OmniAuth reads request.GET (query string only).
+    post "/auth/github?pending_resubmission_token=#{token}"
+    assert_response :redirect
+    follow_redirect!
+    assert_redirected_to pending_resubmission_path
+    assert_equal token, session[:pending_resubmission_token]
+  ensure
+    OmniAuth.config.test_mode = false
+    OmniAuth.config.mock_auth[:github] = nil
+  end
+
+  test 'omniauth login without pending_resubmission_token does not set one' do
+    github_user = users(:github_user)
+    github_user.update!(uid: 'github-test-uid')
+    OmniAuth.config.test_mode = true
+    OmniAuth.config.add_mock(:github, github_omniauth_hash(github_user))
+    post '/auth/github'
+    assert_response :redirect
+    follow_redirect!
+    assert_nil session[:pending_resubmission_token]
+  ensure
+    OmniAuth.config.test_mode = false
+    OmniAuth.config.mock_auth[:github] = nil
+  end
+
   test 'omniauth login with an unchanged github nickname sets no flash' do
     github_user = users(:github_user)
     github_user.update!(uid: 'github-test-uid')

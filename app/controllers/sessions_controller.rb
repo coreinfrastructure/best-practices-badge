@@ -108,11 +108,20 @@ class SessionsController < ApplicationController
   # If return_to_path is given (already validated), redirects there;
   # otherwise falls back to the session-stored forwarding URL or root.
   #
+  # pending_resubmission_token, if given, is this specific login's own
+  # request param (see ApplicationController#redirect_to_login_stashing
+  # and docs/login-session-18.md's "Step 21"), not ambient session state;
+  # writing it to session here, now that this login has actually
+  # succeeded, is the only place that write happens.
   # @param user [User] The authenticated user
   # @param return_to_path [String, nil] A pre-validated server-relative path
+  # @param pending_resubmission_token [String, nil] This login's own
+  #   pending_resubmission_token param, if it carried one
   # @return [void]
-  def successful_login(user, return_to_path = nil)
+  def successful_login(user, return_to_path = nil, pending_resubmission_token = nil)
     log_in user
+    session[:pending_resubmission_token] = pending_resubmission_token if
+      pending_resubmission_token.present?
     redirect_after_login(return_to_path)
 
     # Report last login time (this can help users detect problems)
@@ -186,7 +195,9 @@ class SessionsController < ApplicationController
     user.name ||= user.nickname
     return_to = request.env['omniauth.params']&.dig('return_to')
     return_to = nil unless valid_return_path?(return_to)
-    successful_login(user, return_to)
+    pending_resubmission_token =
+      request.env['omniauth.params']&.dig('pending_resubmission_token')
+    successful_login(user, return_to, pending_resubmission_token)
   end
   # rubocop:enable Metrics/AbcSize
 
@@ -237,7 +248,7 @@ class SessionsController < ApplicationController
       session_params = hash_param(:session)
       return_to = session_params[:return_to]
       return_to = nil unless valid_return_path?(return_to)
-      successful_login(user, return_to)
+      successful_login(user, return_to, session_params[:pending_resubmission_token])
       session_params[:remember_me] == '1' ? remember(user) : forget(user)
     end
   end

@@ -10,7 +10,10 @@
 #
 # There is deliberately no :id/:token param on this route or read here: the
 # only identifier is session[:pending_resubmission_token], written solely by
-# this browser's own prior request (ApplicationController#stash_pending_resubmission).
+# SessionsController#successful_login, once, on a login that carried its
+# own pending_resubmission_token request param (docs/login-session-18.md
+# "Step 21"; ApplicationController#stash_pending_resubmission only creates
+# the row and returns the token, it doesn't touch session at all).
 # Reading anything from params instead would let anyone who guesses or
 # enumerates an identifier view and destroy another browser's stashed
 # submission; do not add one. (Since step 18, the token itself is also no

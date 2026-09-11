@@ -278,7 +278,10 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
       }
     end
     assert_response :redirect
-    assert_match %r{/en/login\?return_to=}, response.location
+    # Query param order isn't return_to-first once pending_resubmission_token
+    # also rides this redirect (Rails' route helper sorts extra params
+    # alphabetically), so this checks presence, not position.
+    assert_match %r{/en/login\?.*return_to=}, response.location
   end
 
   test 'update when not logged in stashes fields but drops email' do

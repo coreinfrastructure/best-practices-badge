@@ -17,13 +17,41 @@ class PendingResubmissionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   # Triggers the real stash path (a logged-out PATCH to a project edit
-  # action) rather than constructing a PendingResubmission by hand, so this
-  # exercises the actual session[:pending_resubmission_token] write too.
+  # action) rather than constructing a PendingResubmission by hand, then
+  # logs in for real carrying the resulting token, since that's the only
+  # place session[:pending_resubmission_token] gets written (docs/
+  # login-session-18.md "Step 21"). Deliberately not `session[key] =
+  # value` here: ActionDispatch::IntegrationTest does not reliably
+  # persist a direct session assignment made between requests, only
+  # mutations the application itself makes during an actual
+  # request/response cycle, so this file is about
+  # PendingResubmissionsController#show, and gets there through a real
+  # (if minimal) login rather than poking session directly. Stops right
+  # after the login's own redirect, without following it, so the token
+  # is present but not yet consumed, ready for the test's own first
+  # `get pending_resubmission_path`.
   def stash_a_pending_resubmission(new_name: 'Stashed name')
     patch "/en/projects/#{@project.id}", params: {
       project: { name: new_name }
     }
+    log_in_carrying_pending_resubmission_token
     PendingResubmission.last
+  end
+
+  def pending_resubmission_token_from_redirect
+    Rack::Utils.parse_nested_query(URI.parse(response.location).query)[
+      'pending_resubmission_token'
+    ]
+  end
+
+  def log_in_carrying_pending_resubmission_token
+    token = pending_resubmission_token_from_redirect
+    post login_path, params: {
+      session: {
+        email: @user.email, password: 'password', provider: 'local',
+        pending_resubmission_token: token
+      }
+    }
   end
 
   test 'no pending resubmission in session shows expired message' do
@@ -67,6 +95,7 @@ class PendingResubmissionsControllerTest < ActionDispatch::IntegrationTest
     patch "/en/users/#{@user.id}", params: {
       user: { name: @user.name, email: @user.email }
     }
+    log_in_carrying_pending_resubmission_token
     get pending_resubmission_path
     assert_response :success
     # Not "couldn't": t() output is HTML-escaped by ERB, so the rendered

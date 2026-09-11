@@ -1,4 +1,4 @@
-# Hardening Login Sessions: Proposed Steps 18, 19, and 20
+# Hardening Login Sessions: Proposed Steps 18 Through 21
 
 <!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
 
@@ -484,6 +484,113 @@ other's.
   reasoning and what was checked against Heroku's own documentation
   to get this right rather than guessed at.
 
+## Step 21: a stashed resubmission could leak to a different logged-in user
+
+Found during a full pre-merge review of this branch against `main`,
+not part of the original steps 18-20 proposal.
+
+### The problem
+
+Step 18 made `pending_resubmissions` identified by an unguessable
+HMAC-verified token instead of a guessable id, closing the
+`SECRET_KEY_BASE`-alone forgery path. It didn't close a different gap:
+`session[:pending_resubmission_token]` was in
+`SessionsHelper::SESSION_KEYS_SURVIVING_RESET`, so it deliberately
+survived `counter_fixation`'s `reset_session` on every login attempt.
+That's correct when the *same* person who stashed the edit later logs
+in to resume it, the entire point of the feature. It's wrong when a
+*different* person logs in on the same browser afterward.
+
+Both places that create a stash
+(`ProjectsController#can_edit_else_redirect`,
+`UsersController#redir_unless_logged_in`) only ever reach it when
+`!logged_in?`, so there's never a `current_user` to record at stash
+time. On a shared or kiosk browser: person A, logged out, edits a
+project, hits a validation error, and it gets stashed. A walks away
+without logging in. Person B later logs into *their own* account on
+that same browser. Because the token survived the reset, and
+`SessionsController#redirect_after_login` checked
+`session[:pending_resubmission_token].present?` unconditionally,
+ahead of anything specific to B's own login, B was redirected straight
+to `/pending_resubmissions` and shown A's stashed, non-sensitive
+fields, `resubmit_path`, and `resubmit_method`, under B's own session.
+
+A `user_id` column recording who was logged in at stash time, the
+obvious-looking fix, doesn't actually work: since stash time is always
+logged out, it would always be `nil`, and comparing it against
+`current_user&.id` would never reject anything.
+
+### Proposed solution
+
+Stop treating `pending_resubmission_token` as session state that
+outlives a single login attempt. Route it through request params
+instead, the same way `return_to` already works
+(`SessionsController#local_login_procedure` reads it from the
+submitted login form; `#omniauth_login` reads it from
+`request.env['omniauth.params']`, which OmniAuth itself round-trips
+through `session['omniauth.params']` across the redirect to GitHub and
+back, set fresh on every request-phase hit rather than persisted
+indefinitely). Only a *successful* login that carries the token as its
+own request param writes it to `session[:pending_resubmission_token]`,
+inside `SessionsController#successful_login`; a login that doesn't
+carry it, B's plain login in the scenario above, never touches that
+session key. `pending_resubmission_token` comes out of
+`SESSION_KEYS_SURVIVING_RESET`; it's never written to session before a
+login succeeds.
+
+This does mean the token becomes visible in the login page's URL and
+the GitHub auth link, where `return_to` already was, and therefore in
+browser history and server access logs, whereas before it was only
+ever inside the encrypted session cookie. The existing
+`<meta name="referrer" content="same-origin">` on the login page
+(already there to keep `return_to` off GitHub's Referer header) covers
+this too. The residual risk worth naming plainly: someone who already
+possesses a *valid* token (their own stash, or one they captured some
+other way) could craft a login link containing it and get a specific
+victim to view, and if they click "Resume," submit that stashed
+content. That's a narrower, higher-effort attack than today's
+zero-effort shared-browser case (it requires the attacker to already
+hold a real token and successfully target a specific person), and the
+receiving user still can't be forced into an action they're not
+otherwise authorized for: `PendingResubmissionsController#show`
+renders a plain form requiring an explicit click, and whatever it
+resubmits to still runs its own normal authorization check
+(`can_edit_else_redirect` or equivalent) when that happens.
+
+### Implementation notes
+
+- `app/controllers/application_controller.rb`:
+  `stash_pending_resubmission` now returns the raw token instead of
+  writing it to session; `redirect_to_login_stashing` puts it on the
+  `login_path` redirect as `pending_resubmission_token`, alongside the
+  existing `return_to`.
+- `app/helpers/sessions_helper.rb`: removed
+  `pending_resubmission_token` from `SESSION_KEYS_SURVIVING_RESET`.
+- `app/controllers/sessions_controller.rb`: `successful_login` takes a
+  third, optional `pending_resubmission_token` argument and writes it
+  to session itself, once, only on success. `omniauth_login` reads it
+  from `request.env['omniauth.params']`; `local_login_procedure` reads
+  it from the submitted form params, mirroring `return_to` in both
+  cases.
+- `app/views/sessions/new.html.erb`: threads
+  `params[:pending_resubmission_token]` onto the GitHub auth link and
+  into a login-form hidden field, mirroring the existing `return_to`
+  handling exactly.
+- Tests cover both paths: `test/controllers/sessions_controller_test.rb`
+  checks the rendered login page includes (or omits) the param on both
+  the GitHub link and the local form, and that a successful login of
+  each kind writes `session[:pending_resubmission_token]` only when its
+  own request carried one.
+  `test/integration/pending_resubmission_test.rb` exercises the full
+  round trip for both local and GitHub login, the GitHub case going
+  through OmniAuth's real request phase
+  (`get '/auth/github', params: { pending_resubmission_token: ... }`
+  then `follow_redirect!`) rather than jumping straight to the
+  callback, so its `session['omniauth.params']` handling is actually
+  exercised, not assumed. It also has the direct regression test: a
+  login that carries no `pending_resubmission_token` of its own must
+  never resume a stash left over from someone else's earlier attempt.
+
 ## Honest limits, restated
 
 **`DATABASE_URL` is the boundary this doc cannot move, and it's worth
@@ -561,12 +668,14 @@ actively-exploited `DATABASE_URL` leak survivable. That's the honest
 scope of what "even full revelation of the environment variables" can
 mean for this app today.
 
-## Implementation notes for all three steps
+## Implementation notes for all four steps
 
 Separate concerns, separate mechanisms, separate commits: step 18
 touches `pending_resubmissions` and its controller; step 19 touches
 `SessionsController`/`SessionsHelper`/`ApplicationController` and adds
 one new locale key; step 20 touches only `.circleci/config.yml` and
 `docs/secrets-policy.md`, and needs the two CircleCI Scheduled
-Triggers configured outside the repo. Land and test them
-independently.
+Triggers configured outside the repo; step 21 touches the same
+controllers as step 19 plus the login view, since it's a further
+refinement of the same `pending_resubmissions` flow step 18 secured
+the identifier for. Land and test them independently.

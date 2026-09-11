@@ -761,6 +761,22 @@ class ApplicationController < ActionController::Base
     # GitHub users should not use remember tokens - they must use OAuth
     return if user.provider == 'github'
 
+    # Bound how many LoginSession rows one user_id can generate in a short
+    # window, regardless of source IP (see ,evaluation.md finding #3: a
+    # client that resends remember-me cookies while discarding Set-Cookie
+    # re-triggers a fresh LoginSession INSERT on every request; IP-based
+    # throttles don't help if the requests are spread across many IPs).
+    # flash.now (not flash), and no redirect: this runs on arbitrary
+    # requests, including JSON/AJAX ones that don't skip
+    # setup_authentication_state, so a hard redirect here would hand back
+    # HTML where the caller expects JSON. The request still completes,
+    # just as an anonymous user, with an explanation on any HTML page it
+    # renders instead of a silent, mysterious logout.
+    if login_rate_limited?(user)
+      flash.now[:warning] = t('sessions.login_rate_limited')
+      return
+    end
+
     log_in(user) # now the single entry point for "establish a session"
     # We found the user DB data, record it in case we need it later.
     @current_user = user

@@ -88,6 +88,32 @@ module SessionsHelper
   end
   # rubocop:enable Metrics/AbcSize
 
+  # Bounds how many times one user_id can be logged in per minute,
+  # regardless of source IP (see ,evaluation.md finding #3). Complements
+  # the IP-based throttles in config/initializers/rack_attack.rb, which a
+  # distributed attacker (many source IPs, one target account) bypasses
+  # entirely; this one doesn't care how many IPs are involved. Reuses
+  # Rack::Attack's own cache store and counting primitive rather than its
+  # route-matching throttle DSL, since the two call sites (successful_login,
+  # try_remember_token_login) are the only places that already know a
+  # LoginSession INSERT is actually about to happen; re-deriving that from
+  # a bare Rack::Request in rack_attack.rb would duplicate real
+  # authentication logic there.
+  # @param user [User] the user about to be logged in
+  # @param production [Boolean] whether to enforce the limit; skipped
+  #   outside production like every throttle in rack_attack.rb. Overridable
+  #   so tests can exercise the true branch deterministically, matching
+  #   HexKeyManagement#hex_key_for's env_test: pattern.
+  # @return [Boolean] true if this user has already logged in too many
+  #   times in the current window
+  def login_rate_limited?(user, production: Rails.env.production?)
+    return false unless production
+
+    limit = (ENV['RATE_LOGINS_USER_LIMIT'] || 10).to_i
+    period = (ENV['RATE_LOGINS_USER_PERIOD'] || 60).to_i
+    Rack::Attack.cache.count("logins/user:#{user.id}", period) > limit
+  end
+
   # Returns the current User instance (db record) of the logged-in user,
   # or nil if the user is not logged in.
   # Lazy-loads from the database only when it's not already loaded.

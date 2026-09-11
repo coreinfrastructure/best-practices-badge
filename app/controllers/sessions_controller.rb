@@ -119,6 +119,8 @@ class SessionsController < ApplicationController
   #   pending_resubmission_token param, if it carried one
   # @return [void]
   def successful_login(user, return_to_path = nil, pending_resubmission_token = nil)
+    return if render_login_rate_limited?(user)
+
     log_in user
     session[:pending_resubmission_token] = pending_resubmission_token if
       pending_resubmission_token.present?
@@ -136,6 +138,19 @@ class SessionsController < ApplicationController
     # rubocop: disable Rails/SkipsModelValidations
     user.update_columns(last_login_at: Time.now.utc)
     # rubocop: enable Rails/SkipsModelValidations
+  end
+
+  # Renders the "too many logins" response if user is rate-limited
+  # (SessionsHelper#login_rate_limited?, ,evaluation.md finding #3), so
+  # successful_login can bail out with one line instead of three.
+  # @param user [User] the user attempting to log in
+  # @return [Boolean] true if the rate-limited response was rendered
+  def render_login_rate_limited?(user)
+    return false unless login_rate_limited?(user)
+
+    flash.now[:danger] = t('sessions.login_rate_limited')
+    render 'new', status: :too_many_requests
+    true
   end
 
   # Picks where to send the user right after login: a stashed pending

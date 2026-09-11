@@ -235,5 +235,53 @@ class SessionsHelperTest < ActionView::TestCase
       "https://github.com/#{github_user.nickname}/repo"
     )
   end
+
+  # ,evaluation.md finding #3: a distributed attacker (many source IPs, one
+  # target user_id) bypasses every IP-based throttle in rack_attack.rb, so
+  # this needs its own, IP-independent limit.
+  test 'login_rate_limited? is always false outside production' do
+    saved_limit = ENV.fetch('RATE_LOGINS_USER_LIMIT', nil)
+    ENV['RATE_LOGINS_USER_LIMIT'] = '1'
+    3.times { assert_not login_rate_limited?(@user) }
+  ensure
+    ENV['RATE_LOGINS_USER_LIMIT'] = saved_limit
+  end
+
+  test 'login_rate_limited? becomes true once the per-user limit is exceeded' do
+    saved_limit = ENV.fetch('RATE_LOGINS_USER_LIMIT', nil)
+    saved_period = ENV.fetch('RATE_LOGINS_USER_PERIOD', nil)
+    ENV['RATE_LOGINS_USER_LIMIT'] = '2'
+    ENV['RATE_LOGINS_USER_PERIOD'] = '60'
+    # The counter is a real, process-wide cache keyed by user_id and time
+    # bucket (Rack::Attack::Cache#count), so it survives between tests that
+    # share this fixture's user within the same 60-second window. Reset it
+    # first so this test starts from zero regardless of run order.
+    Rack::Attack.cache.reset_count("logins/user:#{@user.id}", 60)
+
+    assert_not login_rate_limited?(@user, production: true)
+    assert_not login_rate_limited?(@user, production: true)
+    assert login_rate_limited?(@user, production: true)
+  ensure
+    ENV['RATE_LOGINS_USER_LIMIT'] = saved_limit
+    ENV['RATE_LOGINS_USER_PERIOD'] = saved_period
+  end
+
+  test 'login_rate_limited? counts each user_id separately' do
+    saved_limit = ENV.fetch('RATE_LOGINS_USER_LIMIT', nil)
+    saved_period = ENV.fetch('RATE_LOGINS_USER_PERIOD', nil)
+    ENV['RATE_LOGINS_USER_LIMIT'] = '1'
+    ENV['RATE_LOGINS_USER_PERIOD'] = '60'
+    other_user = users(:test_user_not_active)
+    Rack::Attack.cache.reset_count("logins/user:#{@user.id}", 60)
+    Rack::Attack.cache.reset_count("logins/user:#{other_user.id}", 60)
+
+    assert_not login_rate_limited?(@user, production: true)
+    assert login_rate_limited?(@user, production: true)
+    # A different user_id has its own, still-fresh count.
+    assert_not login_rate_limited?(other_user, production: true)
+  ensure
+    ENV['RATE_LOGINS_USER_LIMIT'] = saved_limit
+    ENV['RATE_LOGINS_USER_PERIOD'] = saved_period
+  end
 end
 # rubocop: enable Metrics/BlockLength, Metrics/ClassLength

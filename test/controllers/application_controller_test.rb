@@ -185,5 +185,52 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
       ApplicationController.const_set(:ENFORCE_ORIGIN_SHIELDING, old_enforce)
     end
   end
+
+  # try_remember_token_login runs whenever the Rails session cookie is
+  # gone (e.g. a browser restart with a session-only cookie) but a
+  # remember-me cookie is still valid. Deleting just the session cookie,
+  # not the remember cookies, reproduces that: unlike log_in_as, no other
+  # existing test drives this path over real HTTP.
+  test 'try_remember_token_login re-establishes a session after the ' \
+       'session cookie is lost' do
+    log_in_as(users(:test_user_melissa), password: 'password1', remember_me: '1')
+    cookies.delete('_BadgeApp_session')
+
+    assert_difference('LoginSession.count', 1) do
+      get root_path
+    end
+    assert user_logged_in?
+  end
+
+  # ,evaluation.md finding #3: a client that resends remember-me cookies on
+  # every request while discarding Set-Cookie re-triggers a fresh
+  # LoginSession INSERT each time; this bounds that per user_id, the same
+  # protection successful_login gets (see
+  # test/controllers/sessions_controller_test.rb), but reached here via a
+  # passive relogin instead of a submitted login form.
+  test 'try_remember_token_login is blocked once the per-user limit is hit' do
+    user = users(:test_user_melissa)
+    saved_limit = ENV.fetch('RATE_LOGINS_USER_LIMIT', nil)
+    saved_env = Rails.env
+
+    # Log in (and lose the session cookie) BEFORE flipping to
+    # production/limit 0 below: otherwise the initial login itself,
+    # which also goes through login_rate_limited?, would be blocked too.
+    log_in_as(user, password: 'password1', remember_me: '1')
+    cookies.delete('_BadgeApp_session')
+
+    ENV['RATE_LOGINS_USER_LIMIT'] = '0'
+    Rack::Attack.cache.reset_count("logins/user:#{user.id}", 60)
+    Rails.env = 'production' # login_rate_limited? only enforces in production
+
+    assert_no_difference('LoginSession.count') do
+      get root_path
+    end
+    assert_not user_logged_in?
+    assert_equal I18n.t('sessions.login_rate_limited'), flash[:warning]
+  ensure
+    ENV['RATE_LOGINS_USER_LIMIT'] = saved_limit
+    Rails.env = saved_env
+  end
 end
 # rubocop:enable Metrics/ClassLength

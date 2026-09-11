@@ -312,6 +312,37 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'BadgeAppTestAgent/1.0', login_session.user_agent
   end
 
+  # ,evaluation.md finding #3: bound login attempts per user_id, not just
+  # per IP (config/initializers/rack_attack.rb's throttles), since a
+  # distributed attacker spread across many IPs but targeting one account
+  # sails right past IP-based limits. The check itself
+  # (SessionsHelper#login_rate_limited?) is unit-tested directly in
+  # test/helpers/sessions_helper_test.rb; this confirms the controller
+  # actually wires it in and responds correctly when tripped.
+  test 'successful_login blocks further logins once the per-user limit is hit' do
+    saved_limit = ENV.fetch('RATE_LOGINS_USER_LIMIT', nil)
+    saved_env = Rails.env
+    ENV['RATE_LOGINS_USER_LIMIT'] = '1'
+    Rack::Attack.cache.reset_count("logins/user:#{@user.id}", 60)
+    login_params = {
+      session: { provider: 'local', email: @user.email, password: 'password1' }
+    }
+    Rails.env = 'production' # login_rate_limited? only enforces in production
+
+    post '/en/login', params: login_params
+    assert_response :redirect
+    assert user_logged_in?
+
+    assert_no_difference('LoginSession.count') do
+      post '/en/login', params: login_params
+    end
+    assert_response :too_many_requests
+    assert_equal I18n.t('sessions.login_rate_limited'), flash.now[:danger]
+  ensure
+    ENV['RATE_LOGINS_USER_LIMIT'] = saved_limit
+    Rails.env = saved_env
+  end
+
   test 'logout deletes only the current LoginSession row' do
     # Log in once, simulating a first browser/session for this user.
     log_in_as(@user, password: 'password1')

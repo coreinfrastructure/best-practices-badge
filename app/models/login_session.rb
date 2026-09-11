@@ -28,26 +28,10 @@ class LoginSession < ApplicationRecord
   # one call, instead of creating a row and then querying it back.
   attr_reader :raw_session_id
 
-  # Returns the hex key for the session id HMAC. Same test/production
-  # split as User.email_blind_index_key_hex.
-  def self.session_id_hmac_key_hex(env_test: Rails.env.test?)
-    hex_key_for(env_var: 'SESSION_ID_HMAC_KEY',
-                test_value: TEST_SESSION_ID_HMAC_KEY, env_test: env_test)
-  end
-  private_class_method :session_id_hmac_key_hex
-
-  # Raw key bytes, computed once here at class-load time rather than
-  # re-deriving them on every #digest call, matching how User's
-  # attr_encrypted/blind_index keys are only ever computed once
-  # (docs/login-session-evaluation.md finding #8):
-  # find_by_session_id runs from a before_action on every authenticated
-  # request, so re-reading ENV and re-running pack('H*') on every call
-  # would be on the hottest path in the app. Hex string -> raw key bytes,
-  # matching how EMAIL_BLIND_INDEX_KEY is unpacked in app/models/user.rb;
-  # skipping this conversion wouldn't fail loudly, the hex string itself
-  # still works as *some* HMAC key, just with less entropy than intended,
-  # silently, with no error.
-  SESSION_ID_HMAC_KEY = [session_id_hmac_key_hex].pack('H*')
+  # Raw HMAC key bytes, computed once at class-load (see
+  # HexKeyManagement#hex_key: findings #8 and #9).
+  SESSION_ID_HMAC_KEY = hex_key(env_var: 'SESSION_ID_HMAC_KEY',
+                                test_value: TEST_SESSION_ID_HMAC_KEY)
 
   def self.digest(session_id)
     OpenSSL::HMAC.hexdigest('SHA256', SESSION_ID_HMAC_KEY, session_id)

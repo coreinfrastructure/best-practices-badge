@@ -28,19 +28,11 @@ class PendingResubmission < ApplicationRecord
   # querying it back.
   attr_reader :raw_token
 
-  # Returns the hex key for the random-token HMAC. Same test/production
-  # split as LoginSession.session_id_hmac_key_hex.
-  def self.hmac_key_hex(env_test: Rails.env.test?)
-    hex_key_for(env_var: 'PENDING_RESUBMISSION_HMAC_KEY',
-                test_value: TEST_PENDING_RESUBMISSION_HMAC_KEY, env_test: env_test)
-  end
-  private_class_method :hmac_key_hex
-
-  # Raw key bytes, computed once here at class-load time rather than
-  # re-deriving them on every #digest call; see
-  # LoginSession::SESSION_ID_HMAC_KEY for why
-  # (docs/login-session-evaluation.md finding #8).
-  PENDING_RESUBMISSION_HMAC_KEY = [hmac_key_hex].pack('H*')
+  # Raw HMAC key bytes, computed once at class-load (see
+  # HexKeyManagement#hex_key: findings #8 and #9).
+  PENDING_RESUBMISSION_HMAC_KEY = hex_key(
+    env_var: 'PENDING_RESUBMISSION_HMAC_KEY', test_value: TEST_PENDING_RESUBMISSION_HMAC_KEY
+  )
 
   def self.digest(token)
     OpenSSL::HMAC.hexdigest('SHA256', PENDING_RESUBMISSION_HMAC_KEY, token)

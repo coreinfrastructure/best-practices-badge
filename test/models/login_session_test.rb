@@ -130,29 +130,27 @@ class LoginSessionTest < ActiveSupport::TestCase
     assert_not LoginSession.exists?(stale.id)
   end
 
-  # session_id_hmac_key_hex / session_id_hmac_key
-  # These private class methods have a production branch (env_test: false)
-  # that is never reached during normal test runs; exercise it explicitly.
+  # hex_key_for (HexKeyManagement): production branch (env_test: false)
+  # is never reached during normal test runs; exercise it explicitly.
 
-  test 'session_id_hmac_key_hex returns test key in test mode' do
-    assert_equal LoginSession::TEST_SESSION_ID_HMAC_KEY,
-                 LoginSession.send(:session_id_hmac_key_hex)
-  end
-
-  test 'session_id_hmac_key_hex falls back to test key when env var absent' do
+  test 'hex_key_for falls back to test key when env var absent' do
     saved = ENV.delete('SESSION_ID_HMAC_KEY')
     assert_equal LoginSession::TEST_SESSION_ID_HMAC_KEY,
-                 LoginSession.send(:session_id_hmac_key_hex, env_test: false)
+                 LoginSession.send(:hex_key_for, env_var: 'SESSION_ID_HMAC_KEY',
+                                                  test_value: LoginSession::TEST_SESSION_ID_HMAC_KEY,
+                                                  env_test: false)
   ensure
     ENV['SESSION_ID_HMAC_KEY'] = saved if saved
   end
 
-  test 'session_id_hmac_key_hex uses SESSION_ID_HMAC_KEY env var when set' do
+  test 'hex_key_for uses SESSION_ID_HMAC_KEY env var when set' do
     fake_key = 'c' * LoginSession::DIGITS_OF_SESSION_ID_HMAC_KEY
     saved = ENV.fetch('SESSION_ID_HMAC_KEY', nil)
     ENV['SESSION_ID_HMAC_KEY'] = fake_key
     assert_equal fake_key,
-                 LoginSession.send(:session_id_hmac_key_hex, env_test: false)
+                 LoginSession.send(:hex_key_for, env_var: 'SESSION_ID_HMAC_KEY',
+                                                  test_value: LoginSession::TEST_SESSION_ID_HMAC_KEY,
+                                                  env_test: false)
   ensure
     ENV['SESSION_ID_HMAC_KEY'] = saved
   end

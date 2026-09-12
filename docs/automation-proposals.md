@@ -364,6 +364,17 @@ proposals:
    they are redirected to the project's show page with a flash
    message.
 
+This works through `return_to` (the full original URL, query string
+included), not through the separate mechanism that preserves an
+in-progress *form submission* across a forced re-login
+(`docs/login-session-implementation.md` section 15). A security review
+of that other mechanism (`docs/login-session-18.md` step 22) confirmed
+the two don't interact: automation proposal URLs use bare query
+parameters (`?floss_license_status=Met`), never the nested
+`project[...]=...` syntax the form-submission mechanism reacts to, and
+a fix made there checks specifically for a submitted PATCH, which an
+automation proposal's GET never is.
+
 ## Default Behaviour: Proposals Only Fill Blank Fields
 
 By default, automation proposals only modify fields whose current value

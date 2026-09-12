@@ -1160,7 +1160,10 @@ isn't one.
   of exact paths (`SIGNUP_PATHS`, `LOGIN_PATHS`,
   `PASSWORD_RESET_PATHS`); the paths that reach `stash_pending_resubmission`
   are PATCH requests to *any* project or user id
-  (`/:locale/projects/:id`, `/:locale/users/:id`), which would need new
+  (`/:locale/projects/:id`, `/:locale/users/:id`). (This "PATCH requests
+  only" premise was itself briefly violated by a later, unrelated
+  change and had to be restored; see `docs/login-session-18.md` step
+  22.) A path-based throttle would need new
   regex path-matching this app doesn't otherwise have, and, worse,
   `Rack::Attack` runs before Rails authenticates the request, so a
   path-based throttle can't distinguish an anonymous abuser from a

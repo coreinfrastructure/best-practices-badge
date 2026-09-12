@@ -1,4 +1,4 @@
-# Hardening Login Sessions: Proposed Steps 18 Through 21
+# Hardening Login Sessions: Proposed Steps 18 Through 22
 
 <!-- SPDX-License-Identifier: (MIT OR CC-BY-3.0+) -->
 
@@ -591,6 +591,70 @@ resubmits to still runs its own normal authorization check
   login that carries no `pending_resubmission_token` of its own must
   never resume a stash left over from someone else's earlier attempt.
 
+## Step 22: a GET could stash a pending resubmission for free
+
+Found during a later, separate UX change on this same branch (making a
+forced-logout redirect explain itself, and send the user back to the
+page they wanted), not part of the original steps 18-21 work above.
+
+### The problem
+
+That change made `ApplicationController#redirect_to_login_stashing`
+also run for a plain, unauthenticated GET (so it could preserve
+`return_to`), not just a PATCH with real data to stash. Its stash
+check, `params[param_key].present?`, never checked the HTTP verb, and
+Rails merges query-string params into `params` regardless of verb. So
+a bare, anonymous `GET .../edit?project[name]=x` (or
+`?user[name]=x`) stashed that attacker- or link-controlled text into a
+`PendingResubmission` row, tied to a `resubmit_method` of `"GET"` that
+could never actually change anything if resubmitted.
+
+This isn't a cosmetic bug: `docs/login-session-implementation.md`
+section 15 explicitly considered and rejected adding dedicated
+anonymous-abuse throttling for this exact stash, on the reasoning that
+"the paths that reach `stash_pending_resubmission` are PATCH requests"
+specifically, protected well enough by this app's general per-IP
+throttles. This GET path quietly broke that premise: it let anyone,
+from any single IP, create `pending_resubmissions` rows for free from
+a mere GET, for every controller action guarded by
+`can_edit_else_redirect` or `redir_unless_logged_in`, not the small,
+curated set section 15's own review rounds settled on.
+
+### Confirmed non-interference with automation proposals
+
+The obvious question: does requiring a real PATCH break
+`docs/automation-proposals.md`, which also relies on an unauthenticated
+GET carrying query params (`?floss_license_status=Met&...`)? No.
+Automation proposals never used the `PendingResubmission` stash at
+all; they work entirely through `return_to`, the full original URL
+(query string included), which `redirect_to_login_stashing` always
+sets, unconditionally, unaffected by this fix. After login, the
+visitor is sent back to that exact URL, where the edit action
+reprocesses the query params as proposals, exactly as documented.
+Separately, and by construction, automation proposal URLs use bare
+top-level params (`floss_license_status=Met`), never the nested
+`project[...]=...` syntax the bug required, so a real automation link
+was never actually able to trigger the stash even before this fix.
+Confirmed by running the existing dedicated suite,
+`test/integration/login_redirect_automation_test.rb` (9 tests
+covering the full redirect-to-login-and-back round trip, including the
+"not authorized" case), unchanged, against the fix below.
+
+### Fix
+
+Check `request.patch?` explicitly in `redirect_to_login_stashing`,
+alongside the existing `params[param_key].present?`, rather than
+relying on the param check alone to imply a genuine PATCH body.
+
+### Implementation notes
+
+- `app/controllers/application_controller.rb`: `redirect_to_login_stashing`'s
+  stash guard is now `request.patch? && params[param_key].present?`.
+- Regression tests added to `test/controllers/projects_controller_test.rb`
+  and `test/controllers/users_controller_test.rb`: each confirms a GET
+  carrying a matching query param (`?project[name]=...` /
+  `?user[name]=...`) creates no `PendingResubmission` row.
+
 ## Honest limits, restated
 
 **`DATABASE_URL` is the boundary this doc cannot move, and it's worth
@@ -668,7 +732,7 @@ actively-exploited `DATABASE_URL` leak survivable. That's the honest
 scope of what "even full revelation of the environment variables" can
 mean for this app today.
 
-## Implementation notes for all four steps
+## Implementation notes for all five steps
 
 Separate concerns, separate mechanisms, separate commits: step 18
 touches `pending_resubmissions` and its controller; step 19 touches
@@ -678,4 +742,7 @@ one new locale key; step 20 touches only `.circleci/config.yml` and
 Triggers configured outside the repo; step 21 touches the same
 controllers as step 19 plus the login view, since it's a further
 refinement of the same `pending_resubmissions` flow step 18 secured
-the identifier for. Land and test them independently.
+the identifier for; step 22 is a one-line guard in the same
+`redirect_to_login_stashing` step 21 already touches, found later, by
+a different change, reusing that flow rather than modifying it. Land
+and test them independently.

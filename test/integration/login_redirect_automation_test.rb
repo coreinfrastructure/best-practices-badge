@@ -214,5 +214,50 @@ class LoginRedirectAutomationTest < ActionDispatch::IntegrationTest
     assert_includes redirect_location, 'criterion_1_status=Met',
                     'automation params must be preserved through login'
   end
+
+  # return_to reaches omniauth_login via request.env['omniauth.params'],
+  # the same OmniAuth round-trip mechanism used for
+  # pending_resubmission_token (docs/login-session-18.md "Step 21"), not
+  # via session or a stash. This is the one existing test that actually
+  # completes a real GitHub OAuth round trip for an automation-proposal
+  # return_to specifically (other tests here only exercise local login;
+  # GitHub's is a materially different path, since it leaves the site
+  # entirely and back).
+  test 'automation proposal survives a real GitHub OAuth login round trip' do
+    github_user = users(:github_user)
+    github_user.update!(uid: 'github-test-uid') # fixture otherwise has none
+    edit_path = "/en/projects/#{@project.id}/passing/edit" \
+                '?floss_license_status=Met'
+
+    get edit_path
+    assert_response :redirect
+    return_to = CGI.unescape(URI.parse(response.location).query.split('return_to=').last)
+
+    OmniAuth.config.test_mode = true
+    OmniAuth.config.add_mock(
+      :github,
+      'provider' => 'github', 'uid' => github_user.uid,
+      'credentials' => { 'token' => 'test_token' },
+      'info' => {
+        'name' => github_user.name, 'nickname' => github_user.nickname,
+        'email' => github_user.email
+      }
+    )
+    # POST (OmniAuth 2.x's request phase default), the same way the login
+    # page's own GitHub link sends return_to as a query param, not a
+    # params: body field: OmniAuth reads request.GET, not the body.
+    post "/auth/github?return_to=#{ERB::Util.url_encode(return_to)}"
+    assert_response :redirect
+    follow_redirect!
+
+    redirect_location = response.location
+    assert_includes redirect_location, "projects/#{@project.id}/passing/edit",
+                    'must redirect back to edit page, not root'
+    assert_includes redirect_location, 'floss_license_status=Met',
+                    'automation params must be preserved through GitHub login'
+  ensure
+    OmniAuth.config.test_mode = false
+    OmniAuth.config.mock_auth[:github] = nil
+  end
 end
 # rubocop:enable Metrics/ClassLength

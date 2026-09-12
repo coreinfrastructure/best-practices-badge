@@ -686,9 +686,13 @@ dynos, standard Common Runtime rather than Private Spaces, don't have
 a stable outbound IP to allowlist without adding a static-IP add-on),
 and a least-privilege database role for the app separate from a
 migration/admin role (real, but it only blocks structural damage such
-as `DROP TABLE` or schema changes, not the two things this doc
-actually cares about, since the app's own normal operation already
-needs to read `users.encrypted_email` and set `role`). A practical
+as `DROP TABLE` or schema changes, not the `users.encrypted_email`
+read this doc actually cares about, since the app's own normal
+operation needs that regardless of role. It does *not* need to write
+`role`, though: checked directly, no controller path sets it;
+production admin promotion is a manual `psql` command against the
+database, not something the running app ever does. See the
+column-level idea below, which uses exactly that gap). A practical
 middle ground, proposed as step 20 below: **daily automated
 `DATABASE_URL` rotation** (`heroku pg:credentials:rotate`, already
 documented in `docs/secrets-policy.md` as a manual incident-response
@@ -720,6 +724,23 @@ log or backup capture taken at boot time, since those read Heroku's
 own config-var store or the value as it existed at startup, not the
 running dyno's current process memory. Cheap defense in depth if it
 ever gets implemented; not something that closes this gap.
+
+A third narrow idea, also considered but not implemented:
+`REVOKE UPDATE (role) ON users FROM` the app's own runtime database
+role. This is plausible in a way the general least-privilege role
+above isn't, precisely because the app never needs to write that
+column itself (confirmed above: production admin promotion is a
+manual `psql` command, not something the running app does), so
+revoking it wouldn't break anything the app does. But it isn't worth
+much either. It only blocks the one specific, memorable-looking
+escalation named at the top of this section
+(`UPDATE users SET role = 'admin' ...`); an attacker holding a live
+`DATABASE_URL` can still `UPDATE` every other column of every other
+table, including ones just as damaging (a project's badge level, who
+owns it, another user's `encrypted_email`/`email_bidx` to redirect
+their account). Removing one column-level write doesn't change what a
+live `DATABASE_URL` leak actually means for this app; it only closes
+one specific path while leaving the underlying access untouched.
 
 So, precisely: steps 18 and 19 *prevent* the gap for `SECRET_KEY_BASE`
 (or any other application secret) leaking *without* `DATABASE_URL`,

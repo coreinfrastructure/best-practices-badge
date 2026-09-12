@@ -904,12 +904,22 @@ class ApplicationController < ActionController::Base
 
   # Shared shape for can_edit_else_redirect and redir_unless_logged_in: a
   # logged-out PATCH with a real body to stash gets stashed before being
-  # sent to log in. Takes a block, not the computed params directly: both
-  # callers build their params via params.expect(...), which raises
+  # sent to log in. Also called for a plain GET (nothing to stash, just a
+  # return_to), which is why request.patch? is checked here explicitly,
+  # not left to params[param_key].present? alone: a GET's query string can
+  # populate params[param_key] too (e.g. ?project[name]=x), and stashing
+  # that would let anyone anonymously create pending_resubmissions rows
+  # for free, and under a resubmit_method of "GET" that could never
+  # actually change anything if resubmitted, exactly the free-row-creation
+  # docs/login-session-implementation.md section 15 says this design
+  # deliberately avoids.
+  #
+  # Takes a block, not the computed params directly: both callers build
+  # their params via params.expect(...), which raises
   # ActionController::ParameterMissing on a malformed request with no
   # top-level key at all, and a plain argument would be evaluated (and so
-  # raise) before the params[param_key].present? guard below ever runs. A
-  # block is only evaluated via yield, inside the guarded branch.
+  # raise) before the guard below ever runs. A block is only evaluated via
+  # yield, inside the guarded branch.
   #
   # The stashed token, if any, rides on this specific redirect's own
   # pending_resubmission_token query param, the same way return_to already
@@ -922,7 +932,7 @@ class ApplicationController < ActionController::Base
   # @return [void]
   def redirect_to_login_stashing(param_key)
     login_params = { return_to: request.original_fullpath }
-    if params[param_key].present?
+    if request.patch? && params[param_key].present?
       login_params[:pending_resubmission_token] =
         stash_pending_resubmission(request.path, param_key, yield)
     end

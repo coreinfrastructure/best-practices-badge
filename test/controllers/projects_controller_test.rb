@@ -972,6 +972,21 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to login_path(return_to: edit_path)
   end
 
+  # Regression test: redirect_to_login_stashing is now also called for a
+  # plain GET (to preserve return_to), and a GET's query string can
+  # populate params[:project] the same as a PATCH body would
+  # (?project[name]=x). Without an explicit request.patch? check, that
+  # would let anyone anonymously create a PendingResubmission row for
+  # free from a mere link click, exactly what this design otherwise
+  # avoids (docs/login-session-implementation.md section 15).
+  test 'GET edit with a project query param does not stash anything' do
+    assert_no_difference 'PendingResubmission.count' do
+      get "/en/projects/#{@project.id}/passing/edit", params: {
+        project: { name: 'Attacker Controlled Text' }
+      }
+    end
+  end
+
   # Negative test
   test 'should fail to update project if not logged in' do
     # NOTE: no log_in_as

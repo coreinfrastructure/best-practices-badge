@@ -236,6 +236,21 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to login_url(return_to: edit_user_path(@user))
   end
 
+  # Regression test: redirect_to_login_stashing is now also called for a
+  # plain GET (to preserve return_to), and a GET's query string can
+  # populate params[:user] the same as a PATCH body would
+  # (?user[name]=x). Without an explicit request.patch? check, that would
+  # let anyone anonymously create a PendingResubmission row for free from
+  # a mere link click, exactly what this design otherwise avoids
+  # (docs/login-session-implementation.md section 15).
+  test 'GET edit with a user query param does not stash anything' do
+    assert_no_difference 'PendingResubmission.count' do
+      get "/en/users/#{@user.id}/edit", params: {
+        user: { name: 'Attacker Controlled Text' }
+      }
+    end
+  end
+
   test 'can create local user' do
     # NOTE: We don't rate limit *creating* a local user, but we have
     # additional requirements for actual *activation* of local user accounts.

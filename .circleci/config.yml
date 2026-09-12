@@ -374,6 +374,114 @@ commands:
             bundle check ||
             bundle install --jobs=4 --retry=3
 
+  # docs/login-session-18.md step 20: extracted from the deploy job so
+  # rotate-db-credentials (below) doesn't carry a second copy of a
+  # supply-chain-security-relevant install step. Defined once for the
+  # same reason as prepare_ruby above: two copies would drift.
+  install_heroku_cli:
+    description: >
+      Installs a pinned, integrity-checked Heroku CLI into $HOME,
+      caching it by version.
+    steps:
+      - run:
+          name: Pin the Heroku CLI version
+          command: |
+            set -euo pipefail
+            # Single source of truth for the version. The cache key below
+            # hashes this file, so bumping the version invalidates the
+            # cache by itself and nothing needs remembering. The
+            # integrity hash lives beside it so the two cannot drift:
+            # bump one without the other and the SHA-512 check fails
+            # loudly rather than installing something unexpected.
+            echo '11.8.1' > /tmp/heroku-cli-version
+            {
+              echo "export HEROKU_VERSION='$(cat /tmp/heroku-cli-version)'"
+              echo "export HEROKU_INTEGRITY='sha512-FgNpd1CvHXrHDQnr59aK7DNY+1UbtX2QFPTMfEBODAk64WtlLX/d+yrbYowSoDfXxxN2zUCzAzgQdGKBEanrxg=='"
+            } >> "$BASH_ENV"
+      # The CLI is 592KB as a tarball but 381MB and 45,233 files once
+      # npm has installed it, which is why this step took 51 seconds.
+      # Cache it: we use exactly three of its commands.
+      - restore_cache:
+          keys:
+          - heroku-cli-v1-{{ arch }}-{{ checksum "/tmp/heroku-cli-version" }}
+      - run:
+          # Install the Heroku CLI at a pinned version with an independently
+          # hardcoded SHA-512 hash for integrity verification.
+          #
+          # We download the tarball directly from the npm registry, verify
+          # its SHA-512 against the hash we recorded when we set this pin,
+          # and only install if the hash matches.  This protects against:
+          #   - MITM attacks on the download
+          #   - A compromised npm registry that changes both the package
+          #     *and* the hash it reports (which a simple `npm install`
+          #     would not catch, since it trusts the registry's own hash)
+          #
+          # To upgrade the Heroku CLI:
+          #   1. Find the new version at https://github.com/heroku/cli/releases
+          #   2. Get its integrity hash:
+          #      npm view heroku@NEW_VERSION dist.integrity
+          #   3. Update HEROKU_VERSION and HEROKU_INTEGRITY below.
+          #
+          # These tools are only used to *transfer* the final build artifact
+          # to Heroku; they are not part of the deployed application.
+          # See: https://devcenter.heroku.com/articles/heroku-cli
+          name: Install Heroku CLI tools (to easily control maintenance mode)
+          command: |
+            set -uo pipefail
+            # Export for later steps, and also set it here: the CLI's
+            # own update check spawns "heroku" from PATH, so running it
+            # by absolute path logs "[ENOENT] Error: spawn heroku
+            # ENOENT". Harmless, but it looks like a real failure in a
+            # deploy log, which is the last place to put noise.
+            echo 'export PATH="$HOME/heroku-cli/bin:$PATH"' >> "$BASH_ENV"
+            export PATH="$HOME/heroku-cli/bin:$PATH"
+            # Skip everything below if the cache already delivered a
+            # working CLI at the version we asked for. Check by running
+            # it, not by testing for the directory, so a half-restored
+            # cache falls back to a clean install instead of failing
+            # later in a confusing way.
+            if [ -x "$HOME/heroku-cli/bin/heroku" ] && \
+               "$HOME/heroku-cli/bin/heroku" --version 2>/dev/null \
+                 | grep -q "heroku/${HEROKU_VERSION} "; then
+              echo "Heroku CLI ${HEROKU_VERSION} restored from cache."
+              exit 0
+            fi
+            echo "** Node version:"
+            node -v
+            echo "** npm version:"
+            npm -v
+            # Heroku CLI 10.x declared "engines: node 20.x", which would
+            # have tied this job to a Node release that is now end of
+            # life. 11.x declares ">=20", so we can track the current
+            # Node LTS instead. The commands we use here (git:remote,
+            # maintenance:on/off, run) are unchanged across that bump.
+            HEROKU_TARBALL_URL="https://registry.npmjs.org/heroku/-/heroku-${HEROKU_VERSION}.tgz"
+            # HEROKU_VERSION and HEROKU_INTEGRITY come from the pin step
+            # above. Obtain a new hash via:
+            #   npm view heroku@VERSION dist.integrity
+            # Strip the "sha512-" prefix to get the raw base64-encoded hash.
+            HEROKU_EXPECTED_HASH="${HEROKU_INTEGRITY#sha512-}"
+            echo "** Downloading Heroku CLI ${HEROKU_VERSION}"
+            wget -q "$HEROKU_TARBALL_URL" -O heroku.tgz
+            echo "** Verifying SHA-512 hash of downloaded tarball"
+            ACTUAL_HASH=$(openssl dgst -sha512 -binary heroku.tgz | openssl base64 -A)
+            if [ "$ACTUAL_HASH" != "$HEROKU_EXPECTED_HASH" ]; then
+              echo "ERROR: Heroku CLI tarball hash mismatch - possible supply chain attack"
+              echo "  Expected: $HEROKU_EXPECTED_HASH"
+              echo "  Actual:   $ACTUAL_HASH"
+              rm -f heroku.tgz
+              exit 1
+            fi
+            echo "** Hash verified. Installing Heroku CLI."
+            npm install -g --prefix ~/heroku-cli ./heroku.tgz
+            rm -f heroku.tgz
+            echo "** Heroku CLI version:"
+            "$HOME/heroku-cli/bin/heroku" --version
+      - save_cache:
+          key: heroku-cli-v1-{{ arch }}-{{ checksum "/tmp/heroku-cli-version" }}
+          paths:
+            - ~/heroku-cli
+
 jobs:
   # The checks that are settled by the commit, run beside the tests
   # rather than in front of them. They took roughly 200 seconds of the
@@ -657,104 +765,7 @@ jobs:
                 exit 1
                 ;;
             esac
-      - run:
-          name: Pin the Heroku CLI version
-          command: |
-            set -euo pipefail
-            # Single source of truth for the version. The cache key below
-            # hashes this file, so bumping the version invalidates the
-            # cache by itself and nothing needs remembering. The
-            # integrity hash lives beside it so the two cannot drift:
-            # bump one without the other and the SHA-512 check fails
-            # loudly rather than installing something unexpected.
-            echo '11.8.1' > /tmp/heroku-cli-version
-            {
-              echo "export HEROKU_VERSION='$(cat /tmp/heroku-cli-version)'"
-              echo "export HEROKU_INTEGRITY='sha512-FgNpd1CvHXrHDQnr59aK7DNY+1UbtX2QFPTMfEBODAk64WtlLX/d+yrbYowSoDfXxxN2zUCzAzgQdGKBEanrxg=='"
-            } >> "$BASH_ENV"
-      # The CLI is 592KB as a tarball but 381MB and 45,233 files once
-      # npm has installed it, which is why this step took 51 seconds.
-      # Cache it: we use exactly three of its commands.
-      - restore_cache:
-          keys:
-          - heroku-cli-v1-{{ arch }}-{{ checksum "/tmp/heroku-cli-version" }}
-      - run:
-          # Install the Heroku CLI at a pinned version with an independently
-          # hardcoded SHA-512 hash for integrity verification.
-          #
-          # We download the tarball directly from the npm registry, verify
-          # its SHA-512 against the hash we recorded when we set this pin,
-          # and only install if the hash matches.  This protects against:
-          #   - MITM attacks on the download
-          #   - A compromised npm registry that changes both the package
-          #     *and* the hash it reports (which a simple `npm install`
-          #     would not catch, since it trusts the registry's own hash)
-          #
-          # To upgrade the Heroku CLI:
-          #   1. Find the new version at https://github.com/heroku/cli/releases
-          #   2. Get its integrity hash:
-          #      npm view heroku@NEW_VERSION dist.integrity
-          #   3. Update HEROKU_VERSION and HEROKU_INTEGRITY below.
-          #
-          # These tools are only used to *transfer* the final build artifact
-          # to Heroku; they are not part of the deployed application.
-          # See: https://devcenter.heroku.com/articles/heroku-cli
-          name: Install Heroku CLI tools (to easily control maintenance mode)
-          command: |
-            set -uo pipefail
-            # Export for later steps, and also set it here: the CLI's
-            # own update check spawns "heroku" from PATH, so running it
-            # by absolute path logs "[ENOENT] Error: spawn heroku
-            # ENOENT". Harmless, but it looks like a real failure in a
-            # deploy log, which is the last place to put noise.
-            echo 'export PATH="$HOME/heroku-cli/bin:$PATH"' >> "$BASH_ENV"
-            export PATH="$HOME/heroku-cli/bin:$PATH"
-            # Skip everything below if the cache already delivered a
-            # working CLI at the version we asked for. Check by running
-            # it, not by testing for the directory, so a half-restored
-            # cache falls back to a clean install instead of failing
-            # later in a confusing way.
-            if [ -x "$HOME/heroku-cli/bin/heroku" ] && \
-               "$HOME/heroku-cli/bin/heroku" --version 2>/dev/null \
-                 | grep -q "heroku/${HEROKU_VERSION} "; then
-              echo "Heroku CLI ${HEROKU_VERSION} restored from cache."
-              exit 0
-            fi
-            echo "** Node version:"
-            node -v
-            echo "** npm version:"
-            npm -v
-            # Heroku CLI 10.x declared "engines: node 20.x", which would
-            # have tied this job to a Node release that is now end of
-            # life. 11.x declares ">=20", so we can track the current
-            # Node LTS instead. The commands we use here (git:remote,
-            # maintenance:on/off, run) are unchanged across that bump.
-            HEROKU_TARBALL_URL="https://registry.npmjs.org/heroku/-/heroku-${HEROKU_VERSION}.tgz"
-            # HEROKU_VERSION and HEROKU_INTEGRITY come from the pin step
-            # above. Obtain a new hash via:
-            #   npm view heroku@VERSION dist.integrity
-            # Strip the "sha512-" prefix to get the raw base64-encoded hash.
-            HEROKU_EXPECTED_HASH="${HEROKU_INTEGRITY#sha512-}"
-            echo "** Downloading Heroku CLI ${HEROKU_VERSION}"
-            wget -q "$HEROKU_TARBALL_URL" -O heroku.tgz
-            echo "** Verifying SHA-512 hash of downloaded tarball"
-            ACTUAL_HASH=$(openssl dgst -sha512 -binary heroku.tgz | openssl base64 -A)
-            if [ "$ACTUAL_HASH" != "$HEROKU_EXPECTED_HASH" ]; then
-              echo "ERROR: Heroku CLI tarball hash mismatch - possible supply chain attack"
-              echo "  Expected: $HEROKU_EXPECTED_HASH"
-              echo "  Actual:   $ACTUAL_HASH"
-              rm -f heroku.tgz
-              exit 1
-            fi
-            echo "** Hash verified. Installing Heroku CLI."
-            npm install -g --prefix ~/heroku-cli ./heroku.tgz
-            rm -f heroku.tgz
-            echo "** Heroku CLI version:"
-            "$HOME/heroku-cli/bin/heroku" --version
-      - save_cache:
-          key: heroku-cli-v1-{{ arch }}-{{ checksum "/tmp/heroku-cli-version" }}
-          paths:
-            - ~/heroku-cli
+      - install_heroku_cli
       - run:
           name: Decide whether this deploy needs maintenance mode
           command: |
@@ -1455,6 +1466,72 @@ jobs:
       # - run:
           # name: Test Fastly
           # command: script/fastly_test
+
+  # docs/login-session-18.md step 20: bounds how long a stale, leaked
+  # copy of DATABASE_URL stays valid, without adding any new credential
+  # anywhere. This job runs in the deploy-only executor, the one place
+  # HEROKU_API_KEY already lives (see that executor's own comment),
+  # rather than inside the app's own dyno: rotating DATABASE_URL from
+  # there would need a Heroku credential capable of modifying config
+  # vars sitting in the exact environment this is trying to shrink the
+  # blast radius of.
+  rotate-db-credentials:
+    executor: deploy-only
+    parameters:
+      app:
+        type: string
+    steps:
+      # No checkout, no .netrc/git remote setup: unlike deploy, this
+      # touches no code and pushes nothing, so it needs neither.
+      - install_heroku_cli
+      - run:
+          name: Unstick a rotation left over from a previous failed run
+          command: |
+            export PATH="$HOME/heroku-cli/bin:$PATH"
+            # A rotation only ever gets stuck one way: it's still
+            # waiting for a connection that never closed within its
+            # 30-minute drain window, leaving the credential in
+            # "rotating" state (Heroku Postgres Credentials docs). A
+            # plain rotate call against a credential already rotating
+            # isn't documented, so don't guess at it: detect that
+            # specific state and --force it to finish (drop the
+            # lingering connections) before today's rotation below.
+            #
+            # Capture the output first, then test it, rather than
+            # piping heroku straight into grep -q: grep -q exits the
+            # instant it finds a match, which can SIGPIPE a
+            # still-writing heroku process, and this shell's default
+            # pipefail would then report the whole pipeline as
+            # failed even though the match (the thing being checked
+            # for) was found. printf writes the already-captured
+            # string in one shot, with no live external producer for
+            # that race to happen against, and (unlike a herestring)
+            # is plain POSIX, not a bash-only construct.
+            #
+            # `pg:credentials` has no --json output for classic
+            # databases, so this greps its human-readable table; if
+            # Heroku ever changes that text, this check just misses
+            # and today's rotation proceeds exactly as if it weren't
+            # here, no worse than before this step existed.
+            creds="$(heroku pg:credentials --app "<< parameters.app >>")"
+            if printf '%s\n' "$creds" | grep -qi rotating; then
+              heroku pg:credentials:rotate \
+                --app "<< parameters.app >>" \
+                --confirm "<< parameters.app >>" \
+                --force
+            fi
+      - run:
+          name: Rotate DATABASE_URL for << parameters.app >>
+          command: |
+            export PATH="$HOME/heroku-cli/bin:$PATH"
+            # No --force: let Heroku wait (up to 30 minutes) for any
+            # in-progress transaction to finish naturally rather than
+            # killing connections outright. A routine daily rotation
+            # has no reason to be disruptive.
+            heroku pg:credentials:rotate \
+              --app "<< parameters.app >>" \
+              --confirm "<< parameters.app >>"
+
 workflows:
   version: 2
   build-deploy:
@@ -1493,3 +1570,33 @@ workflows:
               only:
                 - staging
                 - production
+
+  # docs/login-session-18.md step 20. Each workflow's "when" is doing
+  # real work, not decoration: a CircleCI Scheduled Pipeline trigger
+  # fires the whole pipeline, and by default every workflow in it would
+  # run. Without these conditions, an ordinary push-triggered pipeline
+  # would also try to run both rotations on every commit. Gating each
+  # on its own pipeline.schedule.name means a normal push runs only
+  # build-deploy above (neither pipeline.trigger_source nor
+  # pipeline.schedule.name match), and each scheduled trigger runs only
+  # its own rotation, never the other's.
+  #
+  # The triggers themselves (name, schedule, target branch) are
+  # configured outside this file, via the CircleCI UI or API (Project
+  # Settings -> Triggers): create two, named "rotate-staging-db" and
+  # "rotate-production-db" to match the names below, both daily,
+  # targeting main (staging and production are reached only by
+  # fast-forwarding it, so its config is what actually runs regardless
+  # of which branch's history the pipeline lists).
+  rotate-staging-db:
+    when: pipeline.trigger_source == "scheduled_pipeline" and pipeline.schedule.name == "rotate-staging-db"
+    jobs:
+      - rotate-db-credentials:
+          app: staging-bestpractices
+          context: bestpractices-heroku-deploy
+  rotate-production-db:
+    when: pipeline.trigger_source == "scheduled_pipeline" and pipeline.schedule.name == "rotate-production-db"
+    jobs:
+      - rotate-db-credentials:
+          app: production-bestpractices
+          context: bestpractices-heroku-deploy

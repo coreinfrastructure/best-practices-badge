@@ -6,6 +6,8 @@
 
 # rubocop:disable Metrics/ClassLength
 class User < ApplicationRecord
+  extend HexKeyManagement
+
   # Use Rails' "has_secure_password" so that local accounts' password is
   # is *only* stored as a bcrypt digest in password_digest
   # (an iterated per-use salted hash).  We want users to be able to edit
@@ -47,38 +49,19 @@ class User < ApplicationRecord
   TEST_EMAIL_ENCRYPTION_KEY = '1' * DIGITS_OF_EMAIL_ENCRYPTION_KEY
   TEST_EMAIL_BLIND_INDEX_KEY = '2' * DIGITS_OF_EMAIL_BLIND_INDEX_KEY
 
-  # Returns the hex key for email encryption.
-  # In test mode (the default), always returns TEST_EMAIL_ENCRYPTION_KEY so that
-  # tests are self-contained regardless of shell/CI environment variables.
-  # Pass env_test: false to exercise the production path (used in tests for
-  # coverage and to verify ENV fallback behaviour).
-  def self.email_encryption_key_hex(env_test: Rails.env.test?)
-    return TEST_EMAIL_ENCRYPTION_KEY if env_test
-
-    ENV['EMAIL_ENCRYPTION_KEY'] || TEST_EMAIL_ENCRYPTION_KEY
-  end
-  private_class_method :email_encryption_key_hex
-
-  # Returns the hex key for the email blind index.  Same test/production
-  # split as email_encryption_key_hex.
-  def self.email_blind_index_key_hex(env_test: Rails.env.test?)
-    return TEST_EMAIL_BLIND_INDEX_KEY if env_test
-
-    ENV['EMAIL_BLIND_INDEX_KEY'] || TEST_EMAIL_BLIND_INDEX_KEY
-  end
-  private_class_method :email_blind_index_key_hex
-
   # Email addresses are stored as encrypted values.
-  # Fixtures are encrypted with TEST_EMAIL_ENCRYPTION_KEY; the method above
-  # ensures that key is always used during tests.
+  # Fixtures are encrypted with TEST_EMAIL_ENCRYPTION_KEY (see
+  # HexKeyManagement#hex_key, docs/login-session-evaluation.md finding #9).
   attr_encrypted :email, algorithm: 'aes-256-gcm',
-                         key: [email_encryption_key_hex].pack('H*')
+                         key: hex_key(env_var: 'EMAIL_ENCRYPTION_KEY',
+                                      test_value: TEST_EMAIL_ENCRYPTION_KEY)
 
   # Email addresses are indexed as blind indexes of downcased email addresses,
   # so we can efficiently search for them while keeping them encrypted.
   # Usage: User.where(email: 'test@example.org')
   # or:    User.where(email: 'test@example.org', provider: 'local')
-  blind_index :email, key: [email_blind_index_key_hex].pack('H*'),
+  blind_index :email, key: hex_key(env_var: 'EMAIL_BLIND_INDEX_KEY',
+                                   test_value: TEST_EMAIL_BLIND_INDEX_KEY),
                       expression: ->(v) { v.try(:downcase) }
 
   scope :created_since, (

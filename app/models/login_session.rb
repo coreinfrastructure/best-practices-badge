@@ -28,25 +28,13 @@ class LoginSession < ApplicationRecord
   # one call, instead of creating a row and then querying it back.
   attr_reader :raw_session_id
 
-  # Returns the hex key for the session id HMAC. Same test/production
-  # split as User.email_blind_index_key_hex.
-  def self.session_id_hmac_key_hex(env_test: Rails.env.test?)
-    hex_key_for(env_var: 'SESSION_ID_HMAC_KEY',
-                test_value: TEST_SESSION_ID_HMAC_KEY, env_test: env_test)
-  end
-  private_class_method :session_id_hmac_key_hex
-
-  def self.session_id_hmac_key
-    # Hex string -> raw key bytes, matching how EMAIL_BLIND_INDEX_KEY is
-    # unpacked in app/models/user.rb. Skipping this conversion wouldn't
-    # fail loudly: the hex string itself still works as *some* HMAC key,
-    # just with less entropy than intended, silently, with no error.
-    [session_id_hmac_key_hex].pack('H*')
-  end
-  private_class_method :session_id_hmac_key
+  # Raw HMAC key bytes, computed once at class-load (see
+  # HexKeyManagement#hex_key: findings #8 and #9).
+  SESSION_ID_HMAC_KEY = hex_key(env_var: 'SESSION_ID_HMAC_KEY',
+                                test_value: TEST_SESSION_ID_HMAC_KEY)
 
   def self.digest(session_id)
-    OpenSSL::HMAC.hexdigest('SHA256', session_id_hmac_key, session_id)
+    OpenSSL::HMAC.hexdigest('SHA256', SESSION_ID_HMAC_KEY, session_id)
   end
 
   # @param user [User] the user this session belongs to
@@ -81,5 +69,20 @@ class LoginSession < ApplicationRecord
 
   def absolutely_expired?
     created_at < SessionsHelper::ABSOLUTE_SESSION_AGE.ago.utc
+  end
+
+  # Deletes every idle-expired or absolutely-expired row (the same two
+  # conditions as #idle_expired?/#absolutely_expired?, expressed as SQL
+  # since this runs over every row, not one at a time). Live requests
+  # already reject both cases in
+  # ApplicationController#setup_authentication_state; this only stops
+  # the rows from accumulating, it doesn't enforce the expiry itself.
+  # @return [Integer] number of rows deleted
+  def self.purge_stale
+    where(
+      'last_used_at < :idle OR created_at < :absolute',
+      idle: SessionsHelper::SESSION_TTL.ago.utc,
+      absolute: SessionsHelper::ABSOLUTE_SESSION_AGE.ago.utc
+    ).delete_all
   end
 end

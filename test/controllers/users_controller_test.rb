@@ -227,9 +227,28 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should redirect edit when not logged in' do
+    # No flash here: this visitor was never logged in in the first place,
+    # so there's nothing to explain (contrast the auto_logged_out case
+    # below, "admin changing another users password..."). return_to sends
+    # them back to this same edit page once they do log in.
     get "/en/users/#{@user.id}/edit"
-    assert_not flash.empty?
-    assert_redirected_to login_url
+    assert flash.empty?
+    assert_redirected_to login_url(return_to: edit_user_path(@user))
+  end
+
+  # Regression test: redirect_to_login_stashing is now also called for a
+  # plain GET (to preserve return_to), and a GET request's query string can
+  # populate params[:user] the same as a PATCH body would
+  # (?user[name]=x). Without an explicit request.patch? check, that would
+  # let anyone anonymously create a PendingResubmission row for free from
+  # a mere link click, exactly what this design otherwise avoids
+  # (docs/login-session-implementation.md section 15).
+  test 'GET edit with a user query param does not stash anything' do
+    assert_no_difference 'PendingResubmission.count' do
+      get "/en/users/#{@user.id}/edit", params: {
+        user: { name: 'Attacker Controlled Text' }
+      }
+    end
   end
 
   test 'can create local user' do
@@ -268,11 +287,43 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should redirect update when not logged in' do
-    # This becomes an 'update' on the users controller
+    # This becomes an 'update' on the users controller. Since it carries a
+    # real user param, step 15 stashes it instead of discarding it, then
+    # sends the submitter to log in with a return_to (rather than the old
+    # flash-and-redirect-with-no-return_to).
+    assert_difference 'PendingResubmission.count', 1 do
+      patch "/en/users/#{@user.id}", params: {
+        user: { name: @user.name, email: @user.email }
+      }
+    end
+    assert_response :redirect
+    # Query param order isn't return_to-first once pending_resubmission_token
+    # also rides this redirect (Rails' route helper sorts extra params
+    # alphabetically), so this checks presence, not position.
+    assert_match %r{/en/login\?.*return_to=}, response.location
+  end
+
+  test 'update when not logged in stashes fields but drops email' do
+    new_name = @user.name + '_stashed'
     patch "/en/users/#{@user.id}", params: {
-      user: { name: @user.name, email: @user.email }
+      user: { name: new_name, email: @user.email }
     }
+    pending = PendingResubmission.last
+    assert_equal "/en/users/#{@user.id}", pending.resubmit_path
+    assert_equal 'PATCH', pending.resubmit_method
+    assert pending.sensitive_fields_dropped?
+    fields = JSON.parse(pending.params_json)
+    assert_equal new_name, fields['user[name]']
+    assert_not_includes fields.keys, 'user[email]'
+  end
+
+  test 'update when not logged in with no user param falls through to plain flash' do
+    assert_no_difference 'PendingResubmission.count' do
+      patch "/en/users/#{@user.id}", params: { bogus: 'value' }
+    end
     assert_redirected_to login_url
+    follow_redirect!
+    assert_includes @response.body, 'Please log in.'
   end
 
   test 'should redirect edit when logged in as wrong user' do
@@ -328,6 +379,22 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
       delete "/en/users/#{@user.id}"
     end
     assert_redirected_to login_url
+    assert_equal I18n.t('users.please_log_in'), flash[:danger]
+  end
+
+  # destroy has no sensible page to return_to, so it stays on the plain
+  # flash-and-redirect fallback even when auto_logged_out; only the flash
+  # text (and its severity) changes to explain why.
+  test 'should redirect destroy with auto_logged_out flash after idle expiry' do
+    log_in_as(@user, password: 'password1', remember_me: '0')
+    login_session = @user.login_sessions.last
+    login_session.update_columns(last_used_at: SessionsHelper::SESSION_TTL.ago.utc - 1.minute)
+
+    assert_no_difference 'User.count' do
+      delete "/en/users/#{@user.id}"
+    end
+    assert_redirected_to login_url
+    assert_equal I18n.t('sessions.auto_logged_out'), flash[:warning]
   end
 
   test 'should redirect destroy when logged in as wrong non-admin user' do
@@ -350,22 +417,23 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     # EU General Data Protection Regulation (GDPR) requires users be able to
     # erase information about themselves.
     log_in_as(@other_user)
-    assert session.key?('user_id') # Current session has a user_id
-    assert @other_user.id, session['user_id']
+    assert session.key?('login_session_id') # Current session has a login
+    assert_equal @other_user.id, logged_in_user_id
     assert session.key?('session_id') # Current session has a user_id
     old_session_id = session['session_id']
     assert_difference('User.count', -1) do
       delete "/en/users/#{@other_user.id}"
     end
-    assert_not session.key?('user_id')
+    assert_not session.key?('login_session_id')
     # New session has been initiated
     assert_not_equal old_session_id, session['session_id']
     assert_redirected_to root_url
     get root_url
     my_assert_select '.alert-success', 'User deleted.'
-    assert_not session.key?('user_id')
+    assert_not session.key?('login_session_id')
     # TODO: The session key is restored here. It won't matter,
-    # since it lacks a user_id, but it's weird. Should fix in the long term.
+    # since it lacks a login_session_id, but it's weird. Should fix in
+    # the long term.
     # refute session.key?('session_id')
   end
 
@@ -624,6 +692,60 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes @response.body, 'French Test'
     assert_not_includes @response.body, 'Mark Watney'
     assert_not_includes @response.body, @user.name
+  end
+
+  # This is the test the relogin: guard (SessionsHelper#
+  # revoke_all_sessions_and_relogin) exists for: an admin changing a
+  # *different* user's password must kick that user out everywhere,
+  # while leaving the admin's own, unrelated session completely alone.
+  test 'admin changing another users password revokes their sessions ' \
+       'but not the admin' do
+    # Simulate the target's own already-open browser tab, via a genuinely
+    # separate simulated browser (open_session), not just a second row.
+    target_session = open_session { |sess| sess.log_in_as(@user, password: 'password1') }
+    assert target_session.user_logged_in?
+    target_login_session_id = target_session.session[:login_session_id]
+
+    # This test's own session logs in separately, as the admin.
+    log_in_as(@admin)
+    admin_login_session_id = session[:login_session_id]
+
+    new_password = 'Agoodp@$$word2'
+    VCR.use_cassette('should_update_user_when_logged_in_as_admin') do
+      patch "/en/users/#{@user.id}", params: {
+        user: { password: new_password, password_confirmation: new_password }
+      }
+    end
+    follow_redirect!
+    my_assert_select '.alert-success', 'Profile updated'
+
+    # The admin's own session/cookie are completely untouched: relogin:
+    # false only revokes the TARGET's capability to stay logged in, it
+    # must never touch the acting admin's own browser or account.
+    assert user_logged_in?
+    assert_equal @admin.id, logged_in_user_id
+    assert_equal admin_login_session_id, session[:login_session_id]
+    assert LoginSession.exists?(
+      session_id_digest: LoginSession.digest(admin_login_session_id)
+    )
+
+    # The target's own pre-existing session is gone...
+    assert_not LoginSession.exists?(
+      session_id_digest: LoginSession.digest(target_login_session_id)
+    )
+    # ...and their browser's NEXT authenticated request is treated as
+    # logged out: this proves the revoke actually took effect server-side,
+    # not merely that the database row is gone while nobody checks it.
+    # It also gets the "you were automatically logged out" flash and a
+    # return_to back to the edit page it asked for (finding: a silently
+    # revoked session used to bounce to a bare login page with neither).
+    target_session.get edit_user_path(@user)
+    target_session.assert_redirected_to(
+      login_url(locale: :en, return_to: edit_user_path(@user))
+    )
+    target_session.follow_redirect!
+    assert_includes target_session.response.body,
+                    'You were automatically logged out, please log in to continue.'
   end
 end
 # rubocop:enable Metrics/ClassLength

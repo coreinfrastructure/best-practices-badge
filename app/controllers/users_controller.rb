@@ -325,6 +325,14 @@ class UsersController < ApplicationController
       if current_user == @user && preferred_locale
         I18n.locale = preferred_locale.to_sym
       end
+      # A password change must revoke every session an attacker riding the
+      # old password might hold. relogin is true exactly when the editor is
+      # editing their own account (this browser's session is refreshed);
+      # false when an admin edited someone else's (only the target's
+      # sessions/remember-me are revoked, this browser is left untouched).
+      if @user.saved_change_to_password_digest?
+        revoke_all_sessions_and_relogin(@user, relogin: current_user == @user)
+      end
       # Email user on every change.  That way, if the user did *not* initiate
       # the change (e.g., because it's by an admin or by someone who broke
       # into their account), the user will know about it.
@@ -419,11 +427,23 @@ class UsersController < ApplicationController
     user_params
   end
 
-  # Confirm this is logged-in user; redirect if not
+  # Confirm this is logged-in user; redirect if not. A GET (edit, index) or
+  # a logged-out PATCH with a real user param to stash goes through
+  # redirect_to_login_stashing, preserving return_to (and stashing the
+  # PATCH's fields, plus the "you were automatically logged out" flash
+  # when that applies). Anything else (destroy, or a malformed PATCH with
+  # no user param) has nothing sensible to return to here, so it falls
+  # through to the plain flash-and-redirect below.
   def redir_unless_logged_in
     return if logged_in?
+    return redirect_to_login_stashing(:user) { compute_user_params } if
+      request.get? || (request.patch? && params[:user].present?)
 
-    flash[:danger] = t('users.please_log_in')
+    if @auto_logged_out
+      flash[:warning] = t('sessions.auto_logged_out')
+    else
+      flash[:danger] = t('users.please_log_in')
+    end
     redirect_to login_path
   end
 

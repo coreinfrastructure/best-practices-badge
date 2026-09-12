@@ -6,6 +6,7 @@
 
 require 'test_helper'
 
+# rubocop:disable Metrics/ClassLength
 class LoginSessionTest < ActiveSupport::TestCase
   setup do
     @user = users(:test_user)
@@ -78,34 +79,80 @@ class LoginSessionTest < ActiveSupport::TestCase
     login_session = LoginSession.create_for(
       @user, ip_address: '127.0.0.1', user_agent: 'test-agent'
     )
-    assert_difference('LoginSession.count', -1) { @user.destroy }
+    # Assert against this user's own rows specifically, not a global
+    # LoginSession.count delta: many other tests legitimately create
+    # LoginSession rows for this same fixture user (any test that calls
+    # log_in_as(users(:test_user)) does), so a global-count assertion is
+    # fragile to test order/parallelism even though transactional
+    # fixtures should isolate each test's own writes.
+    assert LoginSession.exists?(login_session.id)
+    @user.destroy
     assert_not LoginSession.exists?(login_session.id)
+    assert_empty LoginSession.where(user_id: @user.id)
   end
 
-  # session_id_hmac_key_hex / session_id_hmac_key
-  # These private class methods have a production branch (env_test: false)
-  # that is never reached during normal test runs; exercise it explicitly.
+  test 'purge_stale deletes idle-expired rows but keeps rows just inside the window' do
+    fresh = LoginSession.create_for(
+      @user, ip_address: '127.0.0.1', user_agent: 'fresh'
+    )
+    fresh.update_columns(last_used_at: SessionsHelper::SESSION_TTL.ago.utc + 1.minute)
 
-  test 'session_id_hmac_key_hex returns test key in test mode' do
-    assert_equal LoginSession::TEST_SESSION_ID_HMAC_KEY,
-                 LoginSession.send(:session_id_hmac_key_hex)
+    stale = LoginSession.create_for(
+      @user, ip_address: '127.0.0.1', user_agent: 'stale'
+    )
+    stale.update_columns(last_used_at: SessionsHelper::SESSION_TTL.ago.utc - 1.minute)
+
+    assert_equal 1, LoginSession.purge_stale
+    assert LoginSession.exists?(fresh.id)
+    assert_not LoginSession.exists?(stale.id)
   end
 
-  test 'session_id_hmac_key_hex falls back to test key when env var absent' do
+  test 'purge_stale deletes absolutely-expired rows even if recently used' do
+    fresh = LoginSession.create_for(
+      @user, ip_address: '127.0.0.1', user_agent: 'fresh'
+    )
+    fresh.update_columns(
+      created_at: SessionsHelper::ABSOLUTE_SESSION_AGE.ago.utc + 1.minute
+    )
+
+    stale = LoginSession.create_for(
+      @user, ip_address: '127.0.0.1', user_agent: 'stale'
+    )
+    # last_used_at stays at its just-created, recent value (not
+    # idle-expired), to isolate the absolute-cap branch of purge_stale's
+    # OR condition specifically, rather than the idle branch tested above.
+    stale.update_columns(
+      created_at: SessionsHelper::ABSOLUTE_SESSION_AGE.ago.utc - 1.minute
+    )
+
+    assert_equal 1, LoginSession.purge_stale
+    assert LoginSession.exists?(fresh.id)
+    assert_not LoginSession.exists?(stale.id)
+  end
+
+  # hex_key_for (HexKeyManagement): production branch (env_test: false)
+  # is never reached during normal test runs; exercise it explicitly.
+
+  test 'hex_key_for falls back to test key when env var absent' do
     saved = ENV.delete('SESSION_ID_HMAC_KEY')
     assert_equal LoginSession::TEST_SESSION_ID_HMAC_KEY,
-                 LoginSession.send(:session_id_hmac_key_hex, env_test: false)
+                 LoginSession.send(:hex_key_for, env_var: 'SESSION_ID_HMAC_KEY',
+                                                  test_value: LoginSession::TEST_SESSION_ID_HMAC_KEY,
+                                                  env_test: false)
   ensure
     ENV['SESSION_ID_HMAC_KEY'] = saved if saved
   end
 
-  test 'session_id_hmac_key_hex uses SESSION_ID_HMAC_KEY env var when set' do
+  test 'hex_key_for uses SESSION_ID_HMAC_KEY env var when set' do
     fake_key = 'c' * LoginSession::DIGITS_OF_SESSION_ID_HMAC_KEY
     saved = ENV.fetch('SESSION_ID_HMAC_KEY', nil)
     ENV['SESSION_ID_HMAC_KEY'] = fake_key
     assert_equal fake_key,
-                 LoginSession.send(:session_id_hmac_key_hex, env_test: false)
+                 LoginSession.send(:hex_key_for, env_var: 'SESSION_ID_HMAC_KEY',
+                                                  test_value: LoginSession::TEST_SESSION_ID_HMAC_KEY,
+                                                  env_test: false)
   ensure
     ENV['SESSION_ID_HMAC_KEY'] = saved
   end
 end
+# rubocop:enable Metrics/ClassLength

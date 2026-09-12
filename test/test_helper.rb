@@ -276,7 +276,16 @@ module ActiveSupport
 
     def user_logged_in?
       # Returns true if a test user is logged in.
-      !session[:user_id].nil?
+      !session[:login_session_id].nil?
+    end
+
+    # Returns the id of the user the current test session is logged in as,
+    # or nil if not logged in. Replaces the old direct
+    # session[:user_id] read, now that login state lives in the
+    # LoginSession table (session[:login_session_id] is our own random
+    # session id, not a user id).
+    def logged_in_user_id
+      LoginSession.find_by_session_id(session[:login_session_id])&.user_id
     end
 
     # rubocop:disable Metrics/MethodLength

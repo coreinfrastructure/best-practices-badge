@@ -9,6 +9,7 @@
 # Manages session creation, destruction, and security measures like
 # session fixation protection.
 #
+# rubocop:disable Metrics/ClassLength
 class SessionsController < ApplicationController
   include SessionsHelper
 
@@ -46,6 +47,14 @@ class SessionsController < ApplicationController
   # @return [void]
   # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def create
+    # session[:locale] was stashed by store_location_and_locale when the
+    # login form was first shown (GET /login), so this POST's own response
+    # (after counter_fixation's reset_session wipes it) still renders in
+    # the locale the person was actually looking at, not whatever this
+    # POST's own URL/headers alone would derive (set_locale_to_best_available's
+    # earlier before_action already ran using only *this* request's own
+    # locale-less form submission).
+    I18n.locale = session[:locale] if session[:locale]
     counter_fixation # Counter session fixation (but save forwarding url)
     if Rails.application.config.deny_login
       flash.now[:danger] = t('sessions.login_disabled')
@@ -107,16 +116,23 @@ class SessionsController < ApplicationController
   # If return_to_path is given (already validated), redirects there;
   # otherwise falls back to the session-stored forwarding URL or root.
   #
+  # pending_resubmission_token, if given, is this specific login's own
+  # request param (see ApplicationController#redirect_to_login_stashing
+  # and docs/login-session-18.md's "Step 21"), not ambient session state;
+  # writing it to session here, now that this login has actually
+  # succeeded, is the only place that write happens.
   # @param user [User] The authenticated user
   # @param return_to_path [String, nil] A pre-validated server-relative path
+  # @param pending_resubmission_token [String, nil] This login's own
+  #   pending_resubmission_token param, if it carried one
   # @return [void]
-  def successful_login(user, return_to_path = nil)
+  def successful_login(user, return_to_path = nil, pending_resubmission_token = nil)
+    return if render_login_rate_limited?(user)
+
     log_in user
-    if return_to_path.present? && valid_return_path?(return_to_path)
-      redirect_to return_to_path, allow_other_host: false
-    else
-      redirect_back_or root_url
-    end
+    session[:pending_resubmission_token] = pending_resubmission_token if
+      pending_resubmission_token.present?
+    redirect_after_login(return_to_path)
 
     # Report last login time (this can help users detect problems)
     last_login = user.last_login_at
@@ -132,14 +148,33 @@ class SessionsController < ApplicationController
     # rubocop: enable Rails/SkipsModelValidations
   end
 
-  # Protects against session fixation while preserving forwarding URL.
-  # Resets the session but maintains the intended redirect destination.
+  # Renders the "too many logins" response if user is rate-limited
+  # (SessionsHelper#login_rate_limited?, docs/login-session-evaluation.md finding #3), so
+  # successful_login can bail out with one line instead of three.
+  # @param user [User] the user attempting to log in
+  # @return [Boolean] true if the rate-limited response was rendered
+  def render_login_rate_limited?(user)
+    return false unless login_rate_limited?(user)
+
+    flash.now[:danger] = t('sessions.login_rate_limited')
+    render 'new', status: :too_many_requests
+    true
+  end
+
+  # Picks where to send the user right after login: a stashed pending
+  # resubmission (docs/login-session-implementation.md section 15) takes
+  # priority over an explicit validated return_to, which takes priority
+  # over the ordinary forwarding_url-or-root fallback.
+  # @param return_to_path [String, nil] A pre-validated server-relative path
   # @return [void]
-  def counter_fixation
-    ref_url = session[:forwarding_url] # Save forwarding url
-    I18n.locale = session[:locale]
-    reset_session # Counter session fixation
-    session[:forwarding_url] = ref_url # Reload forwarding url
+  def redirect_after_login(return_to_path)
+    if session[:pending_resubmission_token].present?
+      redirect_to pending_resubmission_path
+    elsif return_to_path.present? && valid_return_path?(return_to_path)
+      redirect_to return_to_path, allow_other_host: false
+    else
+      redirect_back_or root_url
+    end
   end
 
   # Handles local email/password authentication.
@@ -168,13 +203,65 @@ class SessionsController < ApplicationController
     user = User.find_by(provider: auth['provider'], uid: auth['uid']) ||
            User.create_with_omniauth(auth)
     session[:user_token] = auth['credentials']['token']
-    session[:github_name] = auth['info']['nickname']
+    update_github_nickname(user, auth['info']['nickname'])
     user.name ||= user.nickname
     return_to = request.env['omniauth.params']&.dig('return_to')
     return_to = nil unless valid_return_path?(return_to)
-    successful_login(user, return_to)
+    pending_resubmission_token =
+      request.env['omniauth.params']&.dig('pending_resubmission_token')
+    successful_login(user, return_to, pending_resubmission_token)
   end
   # rubocop:enable Metrics/AbcSize
+
+  # Keeps User#nickname in sync with the GitHub username this login's OAuth
+  # payload carries. SessionsHelper#current_user_is_github_owner? trusts
+  # this DB column for real edit authorization
+  # (docs/login-session-18.md step 19); User.create_with_omniauth only
+  # sets it once, at account creation, so later logins need this to catch
+  # a real GitHub username change. Flashes the change so a user whose
+  # GitHub username changed is never left wondering why something that
+  # worked yesterday doesn't today.
+  # @param user [User] the user logging in
+  # @param new_nickname [String] GitHub nickname from this login's OAuth payload
+  # @return [void]
+  def update_github_nickname(user, new_nickname)
+    new_nickname = new_nickname&.slice(0, User::MAX_NICKNAME_LENGTH_GITHUB)
+    return if user.nickname == new_nickname
+
+    old_nickname = user.nickname
+    # docs/login-session-evaluation.md finding #5: `update` validates the
+    # whole record, not just :nickname, so it can fail for reasons that
+    # have nothing to do with the nickname itself (e.g. some other column
+    # already held invalid data). Check the result: current_user_is_github_owner?
+    # keeps authorizing off the DB column, so a flash claiming the change
+    # took effect when it didn't would be actively misleading, not just
+    # cosmetic.
+    return log_nickname_update_failure(user) unless user.update(nickname: new_nickname)
+    return if old_nickname.blank? # first login after account creation; nothing changed
+
+    # Not flash.now: this method is only ever called from omniauth_login,
+    # which always ends in successful_login's redirect_to, never a
+    # render, so the notice must survive that redirect. RuboCop can't see
+    # across the two methods to confirm that.
+    # rubocop: disable Rails/ActionControllerFlashBeforeRender
+    flash[:info] = t('sessions.github_nickname_changed',
+                     old_nickname: old_nickname,
+                     new_nickname: new_nickname)
+    # rubocop: enable Rails/ActionControllerFlashBeforeRender
+  end
+
+  # Logs a failed GitHub nickname update instead of silently proceeding as
+  # though it worked (docs/login-session-evaluation.md finding #5). Not a
+  # user-facing flash: this is a data problem (invalid state elsewhere on
+  # the user record), not something the person logging in can act on.
+  # @param user [User] the user whose nickname failed to update
+  # @return [void]
+  def log_nickname_update_failure(user)
+    Rails.logger.warn(
+      "Failed to update GitHub nickname for user id=#{user.id}: " \
+      "#{user.errors.full_messages.join('; ')}"
+    )
+  end
 
   # Validates account status and processes local login.
   # Checks for account activation, login restrictions, and remember-me option.
@@ -193,9 +280,10 @@ class SessionsController < ApplicationController
       session_params = hash_param(:session)
       return_to = session_params[:return_to]
       return_to = nil unless valid_return_path?(return_to)
-      successful_login(user, return_to)
+      successful_login(user, return_to, session_params[:pending_resubmission_token])
       session_params[:remember_me] == '1' ? remember(user) : forget(user)
     end
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 end
+# rubocop:enable Metrics/ClassLength

@@ -1100,18 +1100,38 @@ class ProjectsController < ApplicationController
   # For GET requests from unauthenticated users, stores the full request URL
   # (preserving query params like automation proposals) and redirects to
   # login page so they can authenticate and return to the original page.
+  # For a logged-out PATCH with a real project param to stash, stashes it
+  # first (see ApplicationController#redirect_to_login_stashing) so it
+  # isn't lost across the forced login. A malformed PATCH with no project
+  # param at all has nothing to stash and falls through to the plain
+  # flash-and-redirect below, same as before this existed.
   # If logged in but not authorized, redirects to project show page.
   # @return [Boolean] True if user can edit, otherwise redirects
   def can_edit_else_redirect
     return true if can_edit?
-
-    if !logged_in? && request.get?
-      return redirect_to login_path(return_to: request.original_fullpath)
-    end
+    return true if !logged_in? && redirect_unauthenticated_edit_attempt?
 
     flash[:danger] = t('projects.edit.not_authorized')
     redirect_to project_section_path(@project,
                                      @criteria_level || Sections::DEFAULT_SECTION)
+  end
+
+  # For an unauthenticated GET, redirects to login (preserving return_to
+  # for the original page). For an unauthenticated PATCH with a real
+  # project param, also stashes it first, so it isn't lost across the
+  # forced login. Both go through redirect_to_login_stashing (which only
+  # stashes when there's actually a :project param to stash), so both
+  # also get the "you were automatically logged out" flash when that
+  # applies. Anything else (a malformed PATCH with nothing to stash) has
+  # nothing to redirect to here, so can_edit_else_redirect falls through
+  # to its own flash-and-redirect.
+  # @return [Boolean] True iff a redirect was issued
+  def redirect_unauthenticated_edit_attempt?
+    return false unless request.get? || request.patch?
+    return false if request.patch? && params[:project].blank?
+
+    redirect_to_login_stashing(:project) { project_params }
+    true
   end
 
   # Verifies that the current user can control the project or redirects to root.

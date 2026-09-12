@@ -16,6 +16,20 @@ module SessionsHelper
   # on LoginSession, so all three session-timing constants have one home.
   ABSOLUTE_SESSION_AGE = 30.days
 
+  # Session keys that must survive a login attempt's reset_session, success
+  # or failure (SessionsController#counter_fixation). Generalized to a list
+  # (rather than a hand-written save/restore pair per key) so a future key
+  # needing this treatment is a one-line addition here, not a new pair to
+  # write and get right.
+  #
+  # pending_resubmission_token deliberately does NOT belong here (see
+  # docs/login-session-18.md's "Step 21"): it used to, but session state
+  # set before a login isn't scoped to whoever ends up logging in, so on a
+  # shared browser a second, unrelated login could inherit the first
+  # person's stash. It now rides the login redirect's own request params
+  # instead, and only a successful login carrying it writes it to session.
+  SESSION_KEYS_SURVIVING_RESET = %i[forwarding_url].freeze
+
   # Matches paths that must not be used as post-login redirect destinations.
   # Covers /login and /signup (would create redirect loops) and /signout
   # (GET /signout destroys the session, so redirecting there would immediately
@@ -50,8 +64,20 @@ module SessionsHelper
   # @return [void]
   # rubocop:disable Metrics/AbcSize
   def log_in(user)
-    session[:user_id] = user.id
-    session[:time_last_used] = Time.now.utc
+    # session[:login_session_id] is OUR random session id (LoginSession),
+    # not Rack's own bookkeeping session_id; see design doc section 6.6.
+    @login_session = LoginSession.create_for(
+      user, ip_address: ClientIp.extract(request), user_agent: request.user_agent
+    )
+    session[:login_session_id] = @login_session.raw_session_id
+    # Keep @session_timestamp in sync with @login_session: a controller
+    # action (e.g. SessionsController#create) calls log_in directly,
+    # after setup_authentication_state's before_action already ran and
+    # left @session_timestamp nil (not logged in yet). Without this,
+    # update_session_timestamp's after_action would see a freshly-set
+    # @login_session paired with a stale nil @session_timestamp and crash
+    # comparing nil to a Time.
+    @session_timestamp = @login_session.last_used_at
     # Switch to user's preferred locale
     I18n.locale = user.preferred_locale.to_sym
     return unless session[:forwarding_url]
@@ -61,6 +87,49 @@ module SessionsHelper
     )
   end
   # rubocop:enable Metrics/AbcSize
+
+  # Resets the session (countering session fixation) while preserving any
+  # key in SESSION_KEYS_SURVIVING_RESET (currently just :forwarding_url).
+  # Must run, authenticating nothing itself, before *every* path that can
+  # turn an anonymous session into a logged-in one: the explicit
+  # password/OAuth login form (SessionsController#create) and the implicit
+  # remember-me-cookie path (ApplicationController#try_remember_token_login)
+  # both call this before calling log_in. The latter used to skip it
+  # entirely (docs/login-session-evaluation.md finding #6): a stale session
+  # id from before authentication would otherwise survive into the newly
+  # logged-in session on that path.
+  # @return [void]
+  def counter_fixation
+    preserved = SESSION_KEYS_SURVIVING_RESET.index_with { |key| session[key] }
+    reset_session
+    preserved.each { |key, value| session[key] = value if value }
+  end
+
+  # Bounds how many times one user_id can be logged in per minute,
+  # regardless of source IP (see docs/login-session-evaluation.md finding #3). Complements
+  # the IP-based throttles in config/initializers/rack_attack.rb, which a
+  # distributed attacker (many source IPs, one target account) bypasses
+  # entirely; this one doesn't care how many IPs are involved. Reuses
+  # Rack::Attack's own cache store and counting primitive rather than its
+  # route-matching throttle DSL, since the two call sites (successful_login,
+  # try_remember_token_login) are the only places that already know a
+  # LoginSession INSERT is actually about to happen; re-deriving that from
+  # a bare Rack::Request in rack_attack.rb would duplicate real
+  # authentication logic there.
+  # @param user [User] the user about to be logged in
+  # @param production [Boolean] whether to enforce the limit; skipped
+  #   outside production like every throttle in rack_attack.rb. Overridable
+  #   so tests can exercise the true branch deterministically, matching
+  #   HexKeyManagement#hex_key_for's env_test: pattern.
+  # @return [Boolean] true if this user has already logged in too many
+  #   times in the current window
+  def login_rate_limited?(user, production: Rails.env.production?)
+    return false unless production
+
+    limit = (ENV['RATE_LOGINS_USER_LIMIT'] || 10).to_i
+    period = (ENV['RATE_LOGINS_USER_PERIOD'] || 60).to_i
+    Rack::Attack.cache.count("logins/user:#{user.id}", period) > limit
+  end
 
   # Returns the current User instance (db record) of the logged-in user,
   # or nil if the user is not logged in.
@@ -127,6 +196,30 @@ module SessionsHelper
     cookies.delete(:remember_token)
   end
 
+  # Revokes every login_sessions row for `user` (e.g. after a password
+  # change: the actual security goal is killing every session an attacker
+  # might be riding). Only touches *this* browser's own session/cookies
+  # when `relogin` is true; otherwise `user`'s remember-me capability is
+  # invalidated directly on the model (database-only, no cookie writes),
+  # since `forget`/`log_in` are scoped to whichever account *this* browser
+  # is currently authenticated as, which is wrong to call for a different
+  # user (see docs/login-session-implementation.md section 10 for the
+  # admin-edits-someone-else account-confusion bug this avoids).
+  # @param user [User] the user whose sessions to revoke
+  # @param relogin [Boolean] whether to also refresh this browser's own
+  #   session (only correct when this browser is already authenticated as
+  #   `user`)
+  # @return [void]
+  def revoke_all_sessions_and_relogin(user, relogin:)
+    user.login_sessions.delete_all
+    if relogin
+      forget(user)
+      log_in(user)
+    else
+      user.forget
+    end
+  end
+
   # Return true iff the current user can edit the given url.
   #
   # The GitHub API documentation here:
@@ -168,7 +261,7 @@ module SessionsHelper
   # @return [Boolean] true if the current user owns the GitHub repo
   def current_user_is_github_owner?(url)
     logged_in? && current_user.present? && current_user.provider == 'github' &&
-      @session_github_name == get_github_owner(url)
+      current_user.nickname == get_github_owner(url)
   end
 
   # Retrieve list of public GitHub projects for a user, used when displaying
@@ -198,6 +291,12 @@ module SessionsHelper
   # @return [void]
   def log_out
     forget(current_user)
+    @login_session&.destroy
+    # Clear the ivar, not just the DB row: update_session_timestamp's
+    # after_action runs after this action too, and would otherwise call
+    # update_column on the now-destroyed record whenever last_used_at was
+    # already more than RESET_SESSION_TIMER old, raising ActiveRecordError.
+    @login_session = nil
     reset_session
     @current_user = nil
   end

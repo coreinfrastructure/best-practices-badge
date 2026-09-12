@@ -53,6 +53,12 @@ class PasswordResetsController < ApplicationController
       @user.errors.add(:password, t('password_resets.password_empty'))
       render 'edit'
     elsif @user.update(user_params)
+      # Revoke every session/remember-me token an attacker riding the old
+      # password might hold. relogin: false always: this browser isn't
+      # authenticated as @user (the reset flow works precisely because it
+      # isn't), and SessionsController#new's "already logged in" redirect
+      # would otherwise clobber the flash below anyway.
+      revoke_all_sessions_and_relogin(@user, relogin: false)
       flash[:success] = t('password_resets.password_reset')
       redirect_to login_path
     else

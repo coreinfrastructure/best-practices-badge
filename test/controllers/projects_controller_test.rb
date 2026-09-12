@@ -741,7 +741,15 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
       project_id: @project.id
     ).save!
     assert_equal 2, AdditionalRight.for_project(@project.id).count
-    log_in_as(users(:test_user_melissa))
+    # Pre-existing test bug found while chasing an unrelated failure: this
+    # omitted melissa's actual password ('password1', not the log_in_as
+    # default 'password'), so the login silently failed and every request
+    # below ran as an anonymous visitor. That went unnoticed because the
+    # pre-step-15 can_edit_else_redirect happened to send both "anonymous
+    # PATCH" and "logged-in-but-unauthorized PATCH" to the same
+    # project_section_path redirect. Step 15 gives anonymous PATCHes their
+    # own destination (stash + redirect to login), which exposed this.
+    log_in_as(users(:test_user_melissa), password: 'password1')
     # Run patch (the point of the test), which invokes the 'update' method
     patch "/en/projects/#{@project.id}", params: {
       project: { name: @project.name }, # *Something* so not empty.
@@ -953,24 +961,75 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
                  'Explicitly blank entry_locale should normalize to en'
   end
 
+  test 'GET edit while not logged in redirects to login with return_to, no flash' do
+    # No flash here: this visitor was never logged in in the first place,
+    # so there's nothing to explain (contrast an auto_logged_out session,
+    # covered in application_controller_test.rb). return_to sends them
+    # back to this same edit page once they do log in.
+    edit_path = "/en/projects/#{@project.id}/passing/edit"
+    get edit_path
+    assert flash.empty?
+    assert_redirected_to login_path(return_to: edit_path)
+  end
+
+  # Regression test: redirect_to_login_stashing is now also called for a
+  # plain GET (to preserve return_to), and a GET request's query string
+  # can populate params[:project] the same as a PATCH body would
+  # (?project[name]=x). Without an explicit request.patch? check, that
+  # would let anyone anonymously create a PendingResubmission row for
+  # free from a mere link click, exactly what this design otherwise
+  # avoids (docs/login-session-implementation.md section 15).
+  test 'GET edit with a project query param does not stash anything' do
+    assert_no_difference 'PendingResubmission.count' do
+      get "/en/projects/#{@project.id}/passing/edit", params: {
+        project: { name: 'Attacker Controlled Text' }
+      }
+    end
+  end
+
   # Negative test
   test 'should fail to update project if not logged in' do
     # NOTE: no log_in_as
     old_name = @project.name
     new_name = old_name + '_updated'
-    # Run patch (the point of the test), which invokes the 'update' method
-    patch "/en/projects/#{@project.id}", params: {
-      project: {
-        description: @project.description,
-        license: @project.license,
-        name: new_name,
-        repo_url: @project.repo_url,
-        homepage_url: @project.homepage_url
+    # Run patch (the point of the test), which invokes the 'update' method.
+    # Step 15: this now stashes the submission (a PendingResubmission row)
+    # rather than simply discarding it, and redirects to login with a
+    # return_to, instead of the "not authorized" flash.
+    assert_difference 'PendingResubmission.count', 1 do
+      patch "/en/projects/#{@project.id}", params: {
+        project: {
+          description: @project.description,
+          license: @project.license,
+          name: new_name,
+          repo_url: @project.repo_url,
+          homepage_url: @project.homepage_url
+        }
       }
-    }
+    end
+    assert_response :redirect
+    # Query param order isn't return_to-first once pending_resubmission_token
+    # also rides this redirect (Rails' route helper sorts extra params
+    # alphabetically), so this checks presence, not position.
+    assert_match %r{/en/login\?.*return_to=}, response.location
     # Verify that we didn't really change the name
     @project.reload
     assert_equal @project.name, old_name
+    pending = PendingResubmission.last
+    assert_equal "/en/projects/#{@project.id}", pending.resubmit_path
+    assert_equal 'PATCH', pending.resubmit_method
+    assert_not pending.sensitive_fields_dropped?
+    fields = JSON.parse(pending.params_json)
+    assert_equal new_name, fields['project[name]']
+  end
+
+  test 'update when not logged in with no project param falls through to not_authorized flash' do
+    assert_no_difference 'PendingResubmission.count' do
+      patch "/en/projects/#{@project.id}", params: { bogus: 'value' }
+    end
+    assert_redirected_to project_section_path(@project, Sections::DEFAULT_SECTION)
+    follow_redirect!
+    assert_includes @response.body, 'You are not authorized to edit this project.'
   end
 
   test 'should fail to update project if providing bad URL' do
@@ -1379,7 +1438,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   test 'should not destroy project if logged in as different user' do
     log_in_as(@user2, password: 'password1')
     # Verify that we are actually logged in
-    assert_equal @user2.id, session[:user_id]
+    assert_equal @user2.id, logged_in_user_id
     assert_no_difference('Project.count',
                          ActionMailer::Base.deliveries.size) do
       delete "/en/projects/#{@project.id}" # calls controller method "destroy"
@@ -1410,7 +1469,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert @project_two.user.id, @user2.id # Check test fixtures
     log_in_as(@user2, password: 'password1')
     # Verify that we are actually logged in
-    assert_equal @user2.id, session[:user_id]
+    assert_equal @user2.id, logged_in_user_id
     new_repo_url = @project.repo_url + '_new'
     patch "/en/projects/#{@project_two.id}", params: {
       project: { repo_url:  new_repo_url }
@@ -1436,7 +1495,7 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_equal @project_two.user.id, @user2.id # Check test fixtures match
     log_in_as(@user2, password: 'password1')
     # Verify that we are actually logged in
-    assert_equal @user2.id, session[:user_id]
+    assert_equal @user2.id, logged_in_user_id
     old_repo_url = @project_two.repo_url
     new_repo_url = 'http://www.nasa.gov/mav'
     old_description = @project_two.description

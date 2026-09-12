@@ -90,62 +90,58 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test 'update_session_timestamp updates both session and cache when old' do
+  test 'update_session_timestamp updates both login_session and cache when old' do
     controller = ApplicationController.new
-
-    # Mock the session
-    mock_session = {}
-    controller.define_singleton_method(:session) { mock_session }
+    login_session = LoginSession.create_for(
+      users(:test_user), ip_address: '127.0.0.1', user_agent: 'test-agent'
+    )
 
     # Setup: user logged in with old timestamp
     old_time = 2.hours.ago.utc
-    controller.instance_variable_set(:@session_user_id, 123)
+    login_session.update_column(:last_used_at, old_time)
+    controller.instance_variable_set(:@login_session, login_session)
     controller.instance_variable_set(:@session_timestamp, old_time)
 
     # Call the method
     controller.send(:update_session_timestamp)
 
-    # Verify both session[:time_last_used] and @session_timestamp were updated
-    assert_not_nil mock_session[:time_last_used]
-    assert mock_session[:time_last_used] > old_time
+    # Verify both login_session.last_used_at and @session_timestamp were
+    # updated
+    assert login_session.reload.last_used_at > old_time
     new_timestamp = controller.instance_variable_get(:@session_timestamp)
-    assert_equal mock_session[:time_last_used], new_timestamp
+    assert_equal login_session.last_used_at, new_timestamp
   end
 
   test 'update_session_timestamp skips update when timestamp is recent' do
     controller = ApplicationController.new
-
-    # Mock the session
-    mock_session = {}
-    controller.define_singleton_method(:session) { mock_session }
+    login_session = LoginSession.create_for(
+      users(:test_user), ip_address: '127.0.0.1', user_agent: 'test-agent'
+    )
 
     # Setup: user logged in with recent timestamp (30 minutes ago)
     recent_time = 30.minutes.ago.utc
-    controller.instance_variable_set(:@session_user_id, 123)
+    login_session.update_column(:last_used_at, recent_time)
+    controller.instance_variable_set(:@login_session, login_session)
     controller.instance_variable_set(:@session_timestamp, recent_time)
 
     # Call the method
     controller.send(:update_session_timestamp)
 
-    # Verify session was NOT updated
-    assert_nil mock_session[:time_last_used]
+    # Verify login_session was NOT updated. assert_in_delta (not
+    # assert_equal) because the DB column truncates sub-microsecond
+    # precision, so a round-tripped Time is never bit-for-bit equal to
+    # the in-memory Ruby Time even when nothing changed.
+    assert_in_delta recent_time, login_session.reload.last_used_at, 1
   end
 
   test 'update_session_timestamp skips when no user logged in' do
     controller = ApplicationController.new
 
-    # Mock the session
-    mock_session = {}
-    controller.define_singleton_method(:session) { mock_session }
-
     # Setup: no user logged in
-    controller.instance_variable_set(:@session_user_id, nil)
+    controller.instance_variable_set(:@login_session, nil)
 
-    # Call the method
-    controller.send(:update_session_timestamp)
-
-    # Verify session was NOT updated
-    assert_nil mock_session[:time_last_used]
+    # Call the method: must not raise even without a mocked session
+    assert_nothing_raised { controller.send(:update_session_timestamp) }
   end
 
   test 'verify_origin_shielding blocks untrusted proxies' do
@@ -188,6 +184,70 @@ class ApplicationControllerTest < ActionDispatch::IntegrationTest
       ApplicationController.send(:remove_const, :ENFORCE_ORIGIN_SHIELDING)
       ApplicationController.const_set(:ENFORCE_ORIGIN_SHIELDING, old_enforce)
     end
+  end
+
+  # try_remember_token_login runs whenever the Rails session cookie is
+  # gone (e.g. a browser restart with a session-only cookie) but a
+  # remember-me cookie is still valid. Deleting just the session cookie,
+  # not the remember cookies, reproduces that: unlike log_in_as, no other
+  # existing test drives this path over real HTTP.
+  test 'try_remember_token_login re-establishes a session after the ' \
+       'session cookie is lost' do
+    log_in_as(users(:test_user_melissa), password: 'password1', remember_me: '1')
+    cookies.delete('_BadgeApp_session')
+
+    assert_difference('LoginSession.count', 1) do
+      get root_path
+    end
+    assert user_logged_in?
+  end
+
+  # A session that dies for any reason (idle timeout here; setup_authentication_state
+  # treats a revoked/purged session the same way) used to bounce the user
+  # to a bare login page with no explanation and no way back to what they
+  # were doing.
+  test 'idle-expired session shows the auto_logged_out flash and a return_to' do
+    user = users(:test_user_melissa)
+    log_in_as(user, password: 'password1', remember_me: '0')
+    login_session = user.login_sessions.last
+    login_session.update_columns(last_used_at: SessionsHelper::SESSION_TTL.ago.utc - 1.minute)
+
+    get edit_user_path(user)
+    assert_redirected_to login_path(return_to: edit_user_path(user))
+    follow_redirect!
+    assert_includes @response.body,
+                    'You were automatically logged out, please log in to continue.'
+  end
+
+  # docs/login-session-evaluation.md finding #3: a client that resends remember-me cookies on
+  # every request while discarding Set-Cookie re-triggers a fresh
+  # LoginSession INSERT each time; this bounds that per user_id, the same
+  # protection successful_login gets (see
+  # test/controllers/sessions_controller_test.rb), but reached here via a
+  # passive relogin instead of a submitted login form.
+  test 'try_remember_token_login is blocked once the per-user limit is hit' do
+    user = users(:test_user_melissa)
+    saved_limit = ENV.fetch('RATE_LOGINS_USER_LIMIT', nil)
+    saved_env = Rails.env
+
+    # Log in (and lose the session cookie) BEFORE flipping to
+    # production/limit 0 below: otherwise the initial login itself,
+    # which also goes through login_rate_limited?, would be blocked too.
+    log_in_as(user, password: 'password1', remember_me: '1')
+    cookies.delete('_BadgeApp_session')
+
+    ENV['RATE_LOGINS_USER_LIMIT'] = '0'
+    Rack::Attack.cache.reset_count("logins/user:#{user.id}", 60)
+    Rails.env = 'production' # login_rate_limited? only enforces in production
+
+    assert_no_difference('LoginSession.count') do
+      get root_path
+    end
+    assert_not user_logged_in?
+    assert_equal I18n.t('sessions.login_rate_limited'), flash[:warning]
+  ensure
+    ENV['RATE_LOGINS_USER_LIMIT'] = saved_limit
+    Rails.env = saved_env
   end
 end
 # rubocop:enable Metrics/ClassLength

@@ -133,6 +133,16 @@ module ApplicationHelper
     cache_frozen_if(!condition, name, options, &)
   end
 
+  # Shortens a secret token/digest for display (e.g. an admin listing),
+  # showing just enough to distinguish rows without exposing the full
+  # value. Matches app/views/unsubscribe/edit.html.erb's existing
+  # "#{token[0..8]}..." literal.
+  # @param token [String] the token or digest to shorten
+  # @return [String] the first 9 characters, followed by "..."
+  def truncate_token(token)
+    "#{token[0..8]}..."
+  end
+
   private
 
   def cache_frozen_perform(name, options, &)

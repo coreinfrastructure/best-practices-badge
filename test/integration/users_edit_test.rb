@@ -6,6 +6,7 @@
 
 require 'test_helper'
 
+# rubocop:disable Metrics/ClassLength
 class UsersEditTest < ActionDispatch::IntegrationTest
   setup do
     @user = users(:test_user)
@@ -79,6 +80,11 @@ class UsersEditTest < ActionDispatch::IntegrationTest
 
   test 'successful edit - password' do
     log_in_as(@user)
+    original_login_session_id = session[:login_session_id]
+    # Simulate a second, already-open browser tab for this same user.
+    other_login_session = LoginSession.create_for(
+      @user, ip_address: '127.0.0.1', user_agent: 'other-tab'
+    )
     get edit_user_path(@user)
     assert_template 'users/edit'
     name  = 'Foo Bar'
@@ -98,5 +104,38 @@ class UsersEditTest < ActionDispatch::IntegrationTest
     @user.reload
     assert_equal name,  @user.name
     assert_equal email, @user.email
+
+    # A self-service password change revokes every OTHER session for this
+    # user (design doc section 3/10), but relogin: true means this browser
+    # stays logged in as itself, with a genuinely new LoginSession (not the
+    # one the original login created).
+    assert_not LoginSession.exists?(other_login_session.id)
+    assert user_logged_in?
+    assert_equal @user.id, logged_in_user_id
+    assert_not_equal original_login_session_id, session[:login_session_id]
+    assert_not LoginSession.exists?(
+      session_id_digest: LoginSession.digest(original_login_session_id)
+    )
+  end
+
+  test 'editing an unrelated field does not revoke other sessions' do
+    log_in_as(@user)
+    other_login_session = LoginSession.create_for(
+      @user, ip_address: '127.0.0.1', user_agent: 'other-tab'
+    )
+    VCR.use_cassette('successful_edit_-_name_email') do
+      patch user_path(@user), params: {
+        user: {
+          name: 'Foo Bar', email: 'foo@bar.com',
+          password: '', password_confirmation: ''
+        }
+      }
+    end
+    assert_redirected_to @user
+    # No password change happened, so the saved_change_to_password_digest?
+    # guard must leave every session, including the other tab's, alone.
+    assert LoginSession.exists?(other_login_session.id)
+    assert user_logged_in?
   end
 end
+# rubocop:enable Metrics/ClassLength

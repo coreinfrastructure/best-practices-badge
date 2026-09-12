@@ -8,11 +8,6 @@ require 'test_helper'
 load 'Rakefile'
 
 class MonthlyAnnouncementTest < ActionDispatch::IntegrationTest
-  # Turn off transactional fixtures for this test since we are loading
-  # the fixtures database anyway. This will prevent the timestamp change
-  # from spilling into other tests.
-  self.use_transactional_tests = false
-
   test 'monthly announcement runs' do
     # Test to see that we pick the right project(s).
     # Ensure the test db has its environment metadata set to test,

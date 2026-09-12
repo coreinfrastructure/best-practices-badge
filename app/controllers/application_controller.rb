@@ -49,8 +49,21 @@ class ApplicationController < ActionController::Base
   # docs/login-session.md section 6.6 for why the two must not collide).
   SESSION_BOOKKEEPING_KEYS = %w[session_id flash].freeze
 
+  # Params excluded from a stashed pending resubmission (section 15 of
+  # docs/login-session-implementation.md). Email is encrypted at rest
+  # everywhere else (attr_encrypted :email); a naive stash would write a
+  # plaintext pending email change into pending_resubmissions, so it's
+  # excluded the same way password/password_confirmation already must be.
+  SENSITIVE_STASH_KEYS = %w[password password_confirmation email].freeze
+
   # Make criteria_level conversion methods available to views
   helper_method :criteria_level_to_internal, :normalize_criteria_level
+  # hash_param: safe nested-param access for views (e.g. sessions/new.html.erb
+  # reading a re-rendered login form's own submitted params), without each
+  # view needing its own copy of the "is this actually a Parameters object"
+  # guard a crafted request can defeat (params[:session] can arrive as a
+  # scalar; see the security/robustness tests in sessions_controller_test.rb).
+  helper_method :hash_param
 
   # Validate client IP address (if only some IP addresses are allowed);
   # counters cloud piercing.
@@ -89,6 +102,11 @@ class ApplicationController < ActionController::Base
   before_action :setup_authentication_state
   after_action :update_session_timestamp
   after_action :drop_unneeded_session_cookie
+
+  # Consumes a stashed pending resubmission the moment it's actually
+  # resubmitted, wherever that request lands (not just
+  # PendingResubmissionsController). See #finalize_pending_resubmission.
+  before_action :finalize_pending_resubmission
 
   # For the PaperTrail gem. We must call this *after* the action
   # `setup_authentication_state`; this action calls
@@ -600,7 +618,6 @@ class ApplicationController < ActionController::Base
   # - @session_user_id: User ID if logged in, nil otherwise
   # - @session_timestamp: Last activity time if logged in, nil otherwise
   # - @session_user_token: GitHub OAuth token if GitHub user, nil otherwise
-  # - @session_github_name: GitHub username if GitHub user, nil otherwise
   #
   # This typically does *not* check the database, so after this returns it's
   # possible that this user account was deleted after the session data was set.
@@ -629,29 +646,49 @@ class ApplicationController < ActionController::Base
   def setup_authentication_state
     return if Rails.application.config.deny_login
 
-    # Extract session data - decrypt cookie once
-    user_id = session[:user_id]
-    timestamp = session[:time_last_used]
+    # session[:login_session_id] is OUR random session id (LoginSession),
+    # not Rack's own bookkeeping session_id; see design doc section 6.6.
+    # Its presence is what "was logged in" means here: current code
+    # writes it only in SessionsHelper#log_in, nowhere else. But this
+    # branch hasn't deployed yet: on the day it does, every already
+    # logged-in browser still carries the *old* cookie-only scheme's
+    # session[:user_id] (no login_session_id at all, since that key is
+    # new), and would otherwise be misread as having never logged in
+    # rather than as the auto-logout this feature exists to explain.
+    # session[:user_id] is dead weight once that transition window
+    # passes: nothing sets it anymore, and reset_session (on next login,
+    # logout, or the very expiry this method detects) clears it for good.
+    was_logged_in = session[:login_session_id].present? || session[:user_id].present?
+    login_session = LoginSession.find_by_session_id(session[:login_session_id])
 
-    # Check timeout BEFORE setting instance variables
-    # This ensures instance variables always contain VALID auth state
-    # Reject sessions with missing or expired timestamps
-    if user_id && (!timestamp || timestamp < SessionsHelper::SESSION_TTL.ago.utc)
-      reset_session # Session expired or missing timestamp
-      user_id = nil
-      timestamp = nil
+    if login_session && (login_session.idle_expired? || login_session.absolutely_expired?)
+      login_session.destroy
+      login_session = nil
+      reset_session
     end
 
     # Handle remember token if no valid session
-    if user_id.nil?
-      user_id, timestamp = try_remember_token_login
-    end
+    login_session = try_remember_token_login if login_session.nil?
+
+    # True iff this browser believed it was logged in (it carried a
+    # login_session_id) but isn't, for any reason: idle/absolute expiry
+    # above, or the row simply being gone (revoked, password changed,
+    # purged). Used by redirect_to_login_stashing and
+    # redir_unless_logged_in to explain an otherwise-silent forced logout,
+    # rather than looking like a bare "please log in." False whenever
+    # try_remember_token_login just silently re-established the session.
+    @auto_logged_out = was_logged_in && login_session.nil?
 
     # Set instance variables from the encrypted session cookie.
-    @session_user_id = user_id
-    @session_timestamp = timestamp
+    @session_user_id = login_session&.user_id
+    @session_timestamp = login_session&.last_used_at
+    # Redundant, not wrong, when login_session came from
+    # try_remember_token_login: log_in (SessionsHelper) already set
+    # @login_session. Still needed for the ordinary path above, where a
+    # valid login_session_id was found directly and log_in never ran
+    # this request.
+    @login_session = login_session
     @session_user_token = session[:user_token]
-    @session_github_name = session[:github_name]
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
@@ -661,15 +698,24 @@ class ApplicationController < ActionController::Base
   #
   # @return [void]
   def update_session_timestamp
-    return unless @session_user_id
+    return unless @login_session
 
-    old = !@session_timestamp ||
-          @session_timestamp < SessionsHelper::RESET_SESSION_TIMER.ago.utc
+    # last_used_at is null: false (LoginSession), so a found login_session
+    # can never yield a nil @session_timestamp here, unlike the old
+    # cookie-only design where a nil timestamp was (defensively) possible.
+    # This is not a bug fix candidate if this guard is ever restored.
+    old = @session_timestamp < SessionsHelper::RESET_SESSION_TIMER.ago.utc
 
     return unless old
 
-    session[:time_last_used] = Time.now.utc
-    @session_timestamp = session[:time_last_used] # Update cache
+    # update_column (not update!) deliberately skips validations/callbacks
+    # for this single-column, non-user-facing timestamp bump, matching
+    # SessionsController#successful_login's use of update_columns for
+    # last_login_at.
+    # rubocop: disable Rails/SkipsModelValidations
+    @login_session.update_column(:last_used_at, Time.now.utc)
+    # rubocop: enable Rails/SkipsModelValidations
+    @session_timestamp = @login_session.last_used_at # Update cache
   end
 
   # Actively expire the session cookie once it is carrying nothing useful,
@@ -727,32 +773,172 @@ class ApplicationController < ActionController::Base
 
   # Attempts to login using remember token cookies.
   # ONLY works for local users - GitHub users must re-authenticate via OAuth.
-  # Returns [user_id, timestamp] if successful, [nil, nil] otherwise.
   #
-  # @return [Array<Integer, Time>, Array<nil, nil>]
-  # rubocop:disable Metrics/AbcSize
+  # @return [LoginSession, nil] the newly created session, or nil if the
+  #   remember-me cookie is missing, invalid, or belongs to a GitHub user
+  # rubocop:disable Metrics/MethodLength
   def try_remember_token_login
     cookie_user_id = cookies.signed[:user_id]
-    return [nil, nil] unless cookie_user_id
+    return unless cookie_user_id
 
     user = User.find_by(id: cookie_user_id)
-    return [nil, nil] unless user&.authenticated?(:remember, cookies[:remember_token])
+    return unless user&.authenticated?(:remember, cookies[:remember_token])
 
     # GitHub users should not use remember tokens - they must use OAuth
-    return [nil, nil] if user.provider == 'github'
+    return if user.provider == 'github'
 
-    # Valid remember token for local user - create new session
-    now = Time.now.utc
-    session[:user_id] = user.id
-    session[:time_last_used] = now
+    # Bound how many LoginSession rows one user_id can generate in a short
+    # window, regardless of source IP (a
+    # client that resends remember-me cookies while discarding Set-Cookie
+    # re-triggers a fresh LoginSession INSERT on every request; IP-based
+    # throttles don't help if the requests are spread across many IPs).
+    # flash.now (not flash), and no redirect: this runs on arbitrary
+    # requests, including JSON/AJAX ones that don't skip
+    # setup_authentication_state, so a hard redirect here would hand back
+    # HTML where the caller expects JSON. The request still completes,
+    # just as an anonymous user, with an explanation on any HTML page it
+    # renders instead of a silent, mysterious logout.
+    if login_rate_limited?(user)
+      flash.now[:warning] = t('sessions.login_rate_limited')
+      return
+    end
 
-    I18n.locale = user.preferred_locale.to_sym
+    # docs/login-session-evaluation.md finding #6: this path used to call
+    # log_in directly, with no reset_session first, unlike the explicit
+    # login form (SessionsController#create). counter_fixation is the same
+    # call that path makes.
+    counter_fixation
+    log_in(user) # now the single entry point for "establish a session"
     # We found the user DB data, record it in case we need it later.
     @current_user = user
-
-    [user.id, now]
+    @login_session # set by log_in itself; no re-lookup needed
   end
-  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/MethodLength
+
+  # Redirects non-admin users away from an admin-only action. Usable as a
+  # before_action (e.g. LoginSessionsController#index); leaves
+  # UsersController's own existing inline admin checks alone, those are
+  # tested, working code, not something this needs to touch.
+  # @return [void]
+  def require_admin!
+    return if current_user_is_admin?
+
+    flash[:danger] = t('admin_only')
+    redirect_to root_url
+  end
+
+  # Stashes a logged-out submitter's PATCH params so they aren't lost across
+  # a forced re-login, and returns the stashed row's raw random token to the
+  # caller, which threads it through the login redirect rather than writing
+  # it to session here. Only its HMAC digest is stored server-side
+  # (PendingResubmission.digest, keyed by PENDING_RESUBMISSION_HMAC_KEY).
+  # See docs/login-session-implementation.md section 15 for the original
+  # design, docs/login-session-18.md step 18 for why a random token's digest
+  # replaced the row's own guessable primary key (a SECRET_KEY_BASE leak
+  # alone must not be enough to forge a working identifier for someone
+  # else's row), and docs/login-session-18.md's "Step 21" for why this
+  # stopped writing the token to session at stash time: session state set
+  # before a login is not scoped to *whoever ends up logging in*, so a
+  # second, unrelated login on the same browser could otherwise inherit
+  # the first person's stash.
+  #
+  # Field names are stored pre-bracketed (e.g. "project[name]"), not the
+  # bare field name (e.g. "name"): PendingResubmissionsController's view
+  # resubmits them as literal hidden field names, and the receiving
+  # action's project_params/compute_user_params both call
+  # params.expect(param_key: ...), which requires that wrapper key on the
+  # resubmitted request too. Prefixing here, once, means the view can stay
+  # fully agnostic and just echo back opaque key/value pairs, rather than
+  # needing to know it's rebuilding a "project" or "user" submission.
+  # @param resubmit_path [String] path to resubmit the stashed fields to
+  # @param param_key [Symbol] top-level params key the fields must be
+  #   wrapped back under on resubmission (e.g. :project, :user)
+  # @param permitted_params [ActionController::Parameters] params to stash
+  # @return [String] the stashed row's raw random token
+  def stash_pending_resubmission(resubmit_path, param_key, permitted_params)
+    fields = permitted_params.to_h
+    dropped = SENSITIVE_STASH_KEYS.any? { |key| fields[key].present? }
+    prefixed_fields =
+      fields.except(*SENSITIVE_STASH_KEYS)
+            .transform_keys { |key| "#{param_key}[#{key}]" }
+    pending = PendingResubmission.stash_for(
+      resubmit_path: resubmit_path,
+      resubmit_method: request.request_method,
+      params_json: prefixed_fields.to_json,
+      sensitive_fields_dropped: dropped
+    )
+    pending.raw_token
+  end
+
+  # Destroys a stashed pending resubmission once its resubmit form is
+  # actually submitted back, wherever that request lands (an ordinary
+  # controller action like ProjectsController#update, not
+  # PendingResubmissionsController's own #show, which reads only session
+  # and never this request's params). This is the ONLY place a row is
+  # destroyed in pending resubmissions in the normal application run; #show
+  # deliberately leaves it
+  # alone so revisiting the resume page after a closed tab or dropped
+  # connection still works, and an abandoned stash is instead swept up
+  # later by PendingResubmission.purge_stale.
+  #
+  # Reading the token from params here (rather than only from session, as
+  # PendingResubmissionsController's own comment insists on for *display*)
+  # is safe: this only destroys a row, never shows its contents, and the
+  # token a request carries here is never one the requester merely
+  # guessed (it's 128 bits of SecureRandom that only ever reached a
+  # browser by that browser first passing the session-gated check in
+  # PendingResubmissionsController#show). Whoever can present it here could
+  # already have replayed the stash's own params directly.
+  #
+  # A blank param is the overwhelmingly common case (an ordinary request
+  # never resubmits a stash), so this is a cheap early return on every
+  # other request in the app.
+  # @return [void]
+  def finalize_pending_resubmission
+    token = params[:pending_resubmission_token]
+    return if token.blank?
+
+    PendingResubmission.find_by_token(token)&.destroy
+    session.delete(:pending_resubmission_token) if session[:pending_resubmission_token] == token
+  end
+
+  # Shared shape for can_edit_else_redirect and redir_unless_logged_in: a
+  # logged-out PATCH with a real body to stash gets stashed before being
+  # sent to log in. Also called for a plain GET (nothing to stash, just a
+  # return_to), which is why request.patch? is checked here explicitly,
+  # not left to params[param_key].present? alone: a GET request's query
+  # string can populate params[param_key] too (e.g. ?project[name]=x),
+  # and stashing that would let anyone anonymously create
+  # pending_resubmissions rows for free, under a resubmit_method of "GET"
+  # that could never actually change anything if resubmitted, exactly
+  # the free-row-creation docs/login-session-implementation.md section
+  # 15 says this design deliberately avoids.
+  #
+  # Takes a block, not the computed params directly: both callers build
+  # their params via params.expect(...), which raises
+  # ActionController::ParameterMissing on a malformed request with no
+  # top-level key at all, and a plain argument would be evaluated (and so
+  # raise) before the guard below ever runs. A block is only evaluated via
+  # yield, inside the guarded branch.
+  #
+  # The stashed token, if any, rides on this specific redirect's own
+  # pending_resubmission_token query param, the same way return_to already
+  # rides on this one, rather than session: SessionsController#new and
+  # #create (both local and GitHub) thread it through from there, and only
+  # a successful login carrying it writes it to session. See
+  # docs/login-session-18.md's "Step 21".
+  # @param param_key [Symbol] top-level params key that must be present to
+  #   stash (e.g. :project, :user)
+  # @return [void]
+  def redirect_to_login_stashing(param_key)
+    login_params = { return_to: request.original_fullpath }
+    if request.patch? && params[param_key].present?
+      login_params[:pending_resubmission_token] =
+        stash_pending_resubmission(request.path, param_key, yield)
+    end
+    flash[:warning] = t('sessions.auto_logged_out') if @auto_logged_out
+    redirect_to login_path(**login_params)
+  end
 
   include SessionsHelper
 end

@@ -16,10 +16,11 @@ class SessionsHelperTest < ActionView::TestCase
   test 'current_user returns right user when session is nil' do
     # Simulate what setup_authentication_state does with remember cookies
     @session_user_id = @user.id
-    session[:user_id] = @user.id
-    session[:time_last_used] = Time.now.utc
+    session[:login_session_id] = LoginSession.create_for(
+      @user, ip_address: '127.0.0.1', user_agent: 'test-agent'
+    ).raw_session_id
     assert_equal @user, current_user
-    assert_not session[:time_last_used].nil?
+    assert_not session[:login_session_id].nil?
     assert user_logged_in?
   end
 
@@ -209,6 +210,78 @@ class SessionsHelperTest < ActionView::TestCase
     @session_user_token = 'fake_token'
     result = github_user_projects(StubOctokitErrorClient)
     assert_equal [], result
+  end
+
+  # docs/login-session-18.md step 19: current_user_is_github_owner? must
+  # depend only on current_user.nickname (a DB column, gated behind
+  # login_session_id), never a session value someone could forge.
+  test 'current_user_is_github_owner? checks current_user.nickname' do
+    github_user = users(:github_user)
+    @session_user_id = github_user.id
+    session[:login_session_id] = LoginSession.create_for(
+      github_user, ip_address: '127.0.0.1', user_agent: 'test-agent'
+    ).raw_session_id
+
+    assert current_user_is_github_owner?(
+      "https://github.com/#{github_user.nickname}/repo"
+    )
+    assert_not current_user_is_github_owner?('https://github.com/someone-else/repo')
+
+    # There is nothing left to forge here (step 19 removed
+    # session[:github_name] entirely): setting a same-named session key
+    # has no effect on the decision above.
+    session[:github_name] = 'someone-else'
+    assert current_user_is_github_owner?(
+      "https://github.com/#{github_user.nickname}/repo"
+    )
+  end
+
+  # docs/login-session-evaluation.md finding #3: a distributed attacker (many source IPs, one
+  # target user_id) bypasses every IP-based throttle in rack_attack.rb, so
+  # this needs its own, IP-independent limit.
+  test 'login_rate_limited? is always false outside production' do
+    saved_limit = ENV.fetch('RATE_LOGINS_USER_LIMIT', nil)
+    ENV['RATE_LOGINS_USER_LIMIT'] = '1'
+    3.times { assert_not login_rate_limited?(@user) }
+  ensure
+    ENV['RATE_LOGINS_USER_LIMIT'] = saved_limit
+  end
+
+  test 'login_rate_limited? becomes true once the per-user limit is exceeded' do
+    saved_limit = ENV.fetch('RATE_LOGINS_USER_LIMIT', nil)
+    saved_period = ENV.fetch('RATE_LOGINS_USER_PERIOD', nil)
+    ENV['RATE_LOGINS_USER_LIMIT'] = '2'
+    ENV['RATE_LOGINS_USER_PERIOD'] = '60'
+    # The counter is a real, process-wide cache keyed by user_id and time
+    # bucket (Rack::Attack::Cache#count), so it survives between tests that
+    # share this fixture's user within the same 60-second window. Reset it
+    # first so this test starts from zero regardless of run order.
+    Rack::Attack.cache.reset_count("logins/user:#{@user.id}", 60)
+
+    assert_not login_rate_limited?(@user, production: true)
+    assert_not login_rate_limited?(@user, production: true)
+    assert login_rate_limited?(@user, production: true)
+  ensure
+    ENV['RATE_LOGINS_USER_LIMIT'] = saved_limit
+    ENV['RATE_LOGINS_USER_PERIOD'] = saved_period
+  end
+
+  test 'login_rate_limited? counts each user_id separately' do
+    saved_limit = ENV.fetch('RATE_LOGINS_USER_LIMIT', nil)
+    saved_period = ENV.fetch('RATE_LOGINS_USER_PERIOD', nil)
+    ENV['RATE_LOGINS_USER_LIMIT'] = '1'
+    ENV['RATE_LOGINS_USER_PERIOD'] = '60'
+    other_user = users(:test_user_not_active)
+    Rack::Attack.cache.reset_count("logins/user:#{@user.id}", 60)
+    Rack::Attack.cache.reset_count("logins/user:#{other_user.id}", 60)
+
+    assert_not login_rate_limited?(@user, production: true)
+    assert login_rate_limited?(@user, production: true)
+    # A different user_id has its own, still-fresh count.
+    assert_not login_rate_limited?(other_user, production: true)
+  ensure
+    ENV['RATE_LOGINS_USER_LIMIT'] = saved_limit
+    ENV['RATE_LOGINS_USER_PERIOD'] = saved_period
   end
 end
 # rubocop: enable Metrics/BlockLength, Metrics/ClassLength

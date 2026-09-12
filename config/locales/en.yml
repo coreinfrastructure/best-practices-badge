@@ -115,10 +115,14 @@ en:
     login_custom: Log in using custom account
     no_custom: No custom account? Sign up now!
     already_logged_in: You are already logged in.
+    auto_logged_out: You were automatically logged out, please log in to continue.
     login_disabled: All logins temporarily disabled
     incorrect_login_info: Incorrect login information
     login_failed: >-
       Sorry, that login attempt could not be completed. Please try again.
+    login_rate_limited: >-
+      Too many recent logins for this account. Please wait a minute and
+      try again.
     invalid_combo: Invalid email/password combination
     signed_in: "Logged in! Last login: %{last_login_at}"
     not_activated: >-
@@ -130,6 +134,22 @@ en:
       Sorry, you cannot log in yet.
       As an anti-spam measure, there is a delay after activating
       a local account before you can log in.
+    github_nickname_changed: >-
+      Your GitHub username changed from %{old_nickname} to
+      %{new_nickname}.
+  pending_resubmissions:
+    show:
+      header: Resume your changes
+      explanation: >-
+        You were logged out before this could be saved. We kept what you
+        typed below so you don't have to retype it.
+      sensitive_fields_dropped: >-
+        Your email and/or password change couldn't be restored here;
+        please re-enter it separately if needed.
+      resume_button: Resume saving your changes
+      expired: >-
+        We couldn't find what you were saving; it may have expired.
+        Please try again.
   unsubscribe:
     header: Unsubscribe
     description: >-

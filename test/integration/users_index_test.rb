@@ -14,7 +14,7 @@ class UsersIndexTest < ActionDispatch::IntegrationTest
 
   test 'unsuccessful index without logging in' do
     get users_path(locale: :en)
-    assert_redirected_to login_url(locale: :en)
+    assert_redirected_to login_url(locale: :en, return_to: users_path(locale: :en))
   end
 
   test 'Can request index, but non-admins do not get email addresses' do

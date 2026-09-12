@@ -237,7 +237,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   # Regression test: redirect_to_login_stashing is now also called for a
-  # plain GET (to preserve return_to), and a GET's query string can
+  # plain GET (to preserve return_to), and a GET request's query string can
   # populate params[:user] the same as a PATCH body would
   # (?user[name]=x). Without an explicit request.patch? check, that would
   # let anyone anonymously create a PendingResubmission row for free from

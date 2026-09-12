@@ -906,13 +906,13 @@ class ApplicationController < ActionController::Base
   # logged-out PATCH with a real body to stash gets stashed before being
   # sent to log in. Also called for a plain GET (nothing to stash, just a
   # return_to), which is why request.patch? is checked here explicitly,
-  # not left to params[param_key].present? alone: a GET's query string can
-  # populate params[param_key] too (e.g. ?project[name]=x), and stashing
-  # that would let anyone anonymously create pending_resubmissions rows
-  # for free, and under a resubmit_method of "GET" that could never
-  # actually change anything if resubmitted, exactly the free-row-creation
-  # docs/login-session-implementation.md section 15 says this design
-  # deliberately avoids.
+  # not left to params[param_key].present? alone: a GET request's query
+  # string can populate params[param_key] too (e.g. ?project[name]=x),
+  # and stashing that would let anyone anonymously create
+  # pending_resubmissions rows for free, under a resubmit_method of "GET"
+  # that could never actually change anything if resubmitted, exactly
+  # the free-row-creation docs/login-session-implementation.md section
+  # 15 says this design deliberately avoids.
   #
   # Takes a block, not the computed params directly: both callers build
   # their params via params.expect(...), which raises

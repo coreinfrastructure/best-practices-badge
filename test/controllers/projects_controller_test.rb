@@ -973,8 +973,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
   end
 
   # Regression test: redirect_to_login_stashing is now also called for a
-  # plain GET (to preserve return_to), and a GET's query string can
-  # populate params[:project] the same as a PATCH body would
+  # plain GET (to preserve return_to), and a GET request's query string
+  # can populate params[:project] the same as a PATCH body would
   # (?project[name]=x). Without an explicit request.patch? check, that
   # would let anyone anonymously create a PendingResubmission row for
   # free from a mere link click, exactly what this design otherwise

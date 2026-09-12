@@ -8,6 +8,7 @@ Revoke a suspicious session with
   <thead>
     <tr>
       <th>User</th>
+      <th>Role</th>
       <th>IP address</th>
       <th>User agent</th>
       <th>Created at</th>
@@ -20,6 +21,12 @@ Revoke a suspicious session with
     <% @login_sessions.each do |login_session| %>
       <tr>
         <td><%= link_to login_session.user.name, user_path(login_session.user) %></td>
+        <%# Raw role string (blank for a normal user), not admin?'s
+            true/false: stays correct on its own if a role besides
+            'admin' is ever added. login_session.user is already
+            preloaded by index's .includes(:user), so this costs no
+            extra query. %>
+        <td><%= login_session.user.role %></td>
         <td><%= login_session.ip_address %></td>
         <td><%= login_session.user_agent %></td>
         <td><%= login_session.created_at %></td>

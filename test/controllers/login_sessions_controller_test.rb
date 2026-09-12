@@ -37,6 +37,18 @@ class LoginSessionsControllerTest < ActionDispatch::IntegrationTest
     assert_select "a[href='#{user_path(@admin)}']", text: @admin.name
   end
 
+  test 'shows the role column, blank for a normal user, admin for an admin' do
+    log_in_as(@admin) # creates a LoginSession row for the admin
+    LoginSession.create_for(@user, ip_address: '127.0.0.1', user_agent: 'a')
+    get '/en/login_sessions'
+    assert_response :success
+    doc = Nokogiri::HTML5(@response.body)
+    admin_row = doc.css('tr').find { |tr| tr.text.include?(@admin.name) }
+    user_row = doc.css('tr').find { |tr| tr.text.include?(@user.name) }
+    assert_includes admin_row.text, @admin.role
+    assert_not_includes user_row.text, 'admin'
+  end
+
   test 'user_agent renders escaped, not as raw HTML (stored XSS)' do
     log_in_as(@admin)
     LoginSession.create_for(

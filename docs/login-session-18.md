@@ -680,11 +680,9 @@ control) that a session-cookie hardening doc can't answer.
 
 Two direct mitigations were considered for `DATABASE_URL` specifically
 and set aside as impractical for this app right now: restricting
-database network access to known IPs (Heroku's IP-allowlist feature
-needs confirming per-plan, and even where available, this app's
-dynos, standard Common Runtime rather than Private Spaces, don't have
-a stable outbound IP to allowlist without adding a static-IP add-on),
-and a least-privilege database role for the app separate from a
+database network access to known IPs (confirmed below to be a dead
+end on this app's current plan, not merely impractical), and a
+least-privilege database role for the app separate from a
 migration/admin role (real, but it only blocks structural damage such
 as `DROP TABLE` or schema changes, not the `users.encrypted_email`
 read this doc actually cares about, since the app's own normal
@@ -741,6 +739,44 @@ owns it, another user's `encrypted_email`/`email_bidx` to redirect
 their account). Removing one column-level write doesn't change what a
 live `DATABASE_URL` leak actually means for this app; it only closes
 one specific path while leaving the underlying access untouched.
+
+A fourth idea, rejected outright rather than merely set aside:
+restrict *production's* database network access to known IPs even if
+that's not worth doing for staging, since production is the database
+that actually matters. Checked directly against Heroku's current
+documentation rather than assumed: this is a dead end on this app's
+plan, not just impractical. Heroku Postgres has no IP-based connection
+restriction at all outside a Private Space; Common Runtime databases
+(`Standard 0`, what production runs today) are exposed to the public
+internet with password authentication only, full stop
+([Heroku Postgres on Private and Shield Spaces](https://devcenter.heroku.com/articles/heroku-postgres-and-private-spaces)).
+The only way to get IP allowlisting on the database itself is moving
+Postgres into a Private Space, and even there, allowlisting for data
+services specifically is a beta feature gated behind a Heroku support
+ticket per space
+([Trusted IP Ranges for Private Spaces](https://devcenter.heroku.com/articles/private-spaces-trusted-ip-ranges)).
+Two of Heroku's own open roadmap requests confirm this gap is known
+and unresolved, not merely undocumented:
+["Provide basic firewall in front of dedicated Postgres instances (IP whitelisting)"](https://github.com/heroku/roadmap/issues/61)
+and
+["Make Postgres Standard and Premium plans optionally not open to connections from public internet"](https://github.com/heroku/roadmap/issues/141),
+both still open. A static outbound IP add-on for the app itself
+(QuotaGuard Static, Fixie, and similar) doesn't help either: it exists
+to let *third-party services* allowlist this app, and there is nothing
+on the Postgres side to point it at outside a Private Space
+([QuotaGuard Static IPs](https://elements.heroku.com/addons/quotaguardstatic)).
+Getting this at all would mean moving production into a Private Space:
+roughly $1,000/month base cost for a Standard Private Space, or up to
+$3,000/month for Shield, on top of everything already being paid
+([Heroku pricing explained: where it works, where it breaks](https://www.aptible.com/heroku-alternatives/heroku-pricing);
+Heroku's own pricing page lists Private/Shield dyno tiers but doesn't
+itemize the space's own base fee separately). For a project this size,
+that cost is disproportionate to what it buys: even with it, this
+protects only against a leaked credential used from outside the
+trusted IP, not an attacker with code execution on the dyno itself,
+which already has a legitimate connection from inside it. Rejected on
+cost versus benefit; worth revisiting only if the app's hosting
+situation changes for other reasons.
 
 So, precisely: steps 18 and 19 *prevent* the gap for `SECRET_KEY_BASE`
 (or any other application secret) leaking *without* `DATABASE_URL`,

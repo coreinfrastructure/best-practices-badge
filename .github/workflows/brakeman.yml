@@ -39,7 +39,7 @@ jobs:
       # Harden the runner and log egress (consistent with the other workflows).
       # The Brakeman install step below fetches the gem from rubygems.org;
       # that network access is recorded here.
-      - uses: step-security/harden-runner@351661ca32ac09a36dc5ee2d536e3128f2a3c8ed # v2.22.0
+      - uses: step-security/harden-runner@ccd8616d44fd3846e67624a50d5aad6d37bf2d25 # v2.22.1
         with:
           egress-policy: audit
 

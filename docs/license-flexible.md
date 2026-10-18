@@ -1,8 +1,11 @@
 # Flexible license file detection
 
-This document records the analysis behind making `license_location`
-detection more flexible, and the plan for implementing it. Work happens
-on branch `license-filename-alts`.
+This document records a mostly AI analysis behind making `license_location`
+detection more flexible, and a draft plan for implementing it.
+
+I asked an AI to develop this on a computer while traveling, but
+I now am switching to my "normal" machine. It's easier for me to
+commit this early draft as a commit, and then work from there.
 
 ## Goal
 

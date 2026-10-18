@@ -181,11 +181,9 @@ These were checked rather than assumed. Re-check before relying on them.
 
 `app/lib/github_content_access.rb` line 51 says "empty repos return 409
 Conflict, not 404". That is true of the *commits* endpoint, not the
-*contents* endpoint. Two confirmed empty repositories:
+*contents* endpoint. A confirmed empty repository:
 
 ```text
-QDuy2007/Fpt          size=0  /commits -> 409 "Git Repository is empty"
-                              /contents/ -> 404
 digitalxc1/sdgsdfew   size=0  /commits -> 409 "Git Repository is empty"
                               /contents/ -> 404
 ```
